@@ -225,10 +225,53 @@ class TransparencyMeetingItem(BaseModel):
     last_updated: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
-    body_txt: Optional[str] = Field(None, description="Plain-text body — the meeting subject (Transparency Register rows don't have narrative bodies).")
-    body_html: Optional[str] = Field(None, description="Null — Transparency Register entries are structured records, not documents.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body composed from the meeting record: subject + host + organisation met + location + representatives + policy areas.")
+    body_html: Optional[str] = Field(None, description="HTML rendering of the same composition (paragraphs + key:value rows).")
     meeting_start_date: Optional[date] = Field(None, description="The meeting date (alias of meeting_date — this IS a meeting endpoint).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
+
+
+def _compose_meeting_body(r) -> tuple:
+    """Build (body_txt, body_html) from a TransparencyMeeting row. Uses every
+    informative field on the record so partners get a meaningful body, not
+    just the subject line. No upstream HTTP — pure DB row composition.
+    """
+    import html as _html
+    lines_txt: list = []
+    lines_html: list = []
+    if r.subject:
+        lines_txt.append(r.subject)
+        lines_html.append(f"<p><strong>Subject:</strong> {_html.escape(r.subject)}</p>")
+    rows_kv: list = []
+    if r.meeting_date:
+        rows_kv.append(("Date", str(r.meeting_date)))
+    if r.location:
+        rows_kv.append(("Location", r.location))
+    host_label = " / ".join(filter(None, [r.host_name, r.host_role, r.host_dg]))
+    if host_label:
+        rows_kv.append(("Commission host", host_label))
+    if r.host_cabinet:
+        rows_kv.append(("Cabinet", r.host_cabinet))
+    if r.organisation_met:
+        rows_kv.append(("Organisation met", r.organisation_met))
+    if r.organisation_type:
+        rows_kv.append(("Organisation type", r.organisation_type))
+    if r.transparency_register_id:
+        rows_kv.append(("Transparency Register ID", r.transparency_register_id))
+    if r.representatives:
+        rows_kv.append(("Representatives", r.representatives))
+    if r.policy_areas:
+        rows_kv.append(("Policy areas", ", ".join(r.policy_areas)))
+    if r.related_celex:
+        rows_kv.append(("Related CELEX", ", ".join(r.related_celex)))
+    for k, v in rows_kv:
+        lines_txt.append(f"{k}: {v}")
+        lines_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    if not lines_txt:
+        return None, None
+    body_txt = "\n".join(lines_txt)
+    body_html = "<article>" + "".join(lines_html) + "</article>"
+    return body_txt, body_html
 
 
 @meetings_router.get(
@@ -282,8 +325,10 @@ async def list_meetings(
         query.order_by(TransparencyMeeting.meeting_date.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [
-        TransparencyMeetingItem(
+    data: list = []
+    for r in rows:
+        body_txt, body_html = _compose_meeting_body(r)
+        data.append(TransparencyMeetingItem(
             id=str(r.id), host_uuid=r.host_uuid, host_name=r.host_name,
             host_role=r.host_role, host_dg=r.host_dg, host_cabinet=r.host_cabinet,
             meeting_date=r.meeting_date, location=r.location, subject=r.subject,
@@ -295,13 +340,11 @@ async def list_meetings(
             related_celex=list(r.related_celex or []),
             last_updated=r.last_updated,
             public_url=r.source_url,
-            body_txt=r.subject,
-            body_html=None,
+            body_txt=body_txt,
+            body_html=body_html,
             meeting_start_date=r.meeting_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
-        )
-        for r in rows
-    ]
+        ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
@@ -325,6 +368,7 @@ async def get_meeting_detail(
             "resource": "transparency_meeting",
             "id": meeting_id,
         })
+    body_txt, body_html = _compose_meeting_body(r)
     return TransparencyMeetingItem(
         id=str(r.id), host_uuid=r.host_uuid, host_name=r.host_name,
         host_role=r.host_role, host_dg=r.host_dg, host_cabinet=r.host_cabinet,
@@ -334,8 +378,8 @@ async def get_meeting_detail(
         organisation_type=r.organisation_type,
         representatives=r.representatives, source_url=r.source_url,
         public_url=r.source_url,
-        body_txt=r.subject,
-        body_html=None,
+        body_txt=body_txt,
+        body_html=body_html,
         meeting_start_date=r.meeting_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
         policy_areas=list(r.policy_areas or []),

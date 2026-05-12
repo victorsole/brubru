@@ -34,14 +34,16 @@ class MEPItem(BaseModel):
     group: Optional[str] = None
     role: Optional[str] = None
     profile_url: Optional[str] = None
-    # The 5 mandatory Brubru v1 datapoints (MEPs are person records, not
-    # documents — public_url is the EP profile page; body fields are null;
-    # dates are null since EP Open Data doesn't surface mandate dates here).
-    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of profile_url — the EP MEP profile page).")
-    body_txt: Optional[str] = Field(None, description="Null — MEPs are person records, not documents.")
-    body_html: Optional[str] = Field(None, description="Null.")
-    document_date: Optional[date] = Field(None, description="Null — mandate start/end isn't returned by the EP Open Data list endpoint.")
-    creation_date: Optional[datetime] = Field(None, description="Time of this MEP list fetch (live endpoint, 6h cache).")
+    # The 5 mandatory Brubru v1 datapoints. MEPs are person records — public_url
+    # is the EP profile page; body fields are composed from the EP Open Data
+    # profile (name + citizenship + honorific + active political-group + role
+    # + first-elected date + membership history). document_date is the start
+    # of the MEP's most recent / active MEMBER_PARLIAMENT membership.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — the EP MEP profile page.")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: full name, citizenship, active political group + role, mandate start, membership history.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields. Includes the MEP portrait when available.")
+    document_date: Optional[date] = Field(None, description="Start date of the MEP's current/most-recent MEMBER_PARLIAMENT membership.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this MEP fetch (live endpoint, 6h cache).")
 
 
 def _cached(key: str):
@@ -253,20 +255,118 @@ def _identifier(raw: Dict[str, Any]) -> str:
     return str(raw.get("identifier") or raw.get("id", "").split("/")[-1] or "")
 
 
+def _compose_mep_body(raw: Dict[str, Any], full_name: Optional[str],
+                      country: Optional[str], group: Optional[str],
+                      role: Optional[str]) -> tuple:
+    """Compose body_txt + body_html + document_date from an EP profile blob.
+
+    Reads hasMembership (list of role/org/date entries) so the body carries
+    the MEP's affiliation history, not just the active group. document_date
+    is the start of the most recent MEMBER_PARLIAMENT membership.
+    """
+    import html as _html
+    parts_txt: list = []
+    parts_html: list = []
+    parts_html.append(f"<h2>{_html.escape(full_name or '?')}</h2>")
+    if full_name:
+        parts_txt.append(full_name)
+    kv = []
+    if raw.get("hasHonorificPrefix"):
+        prefix = str(raw["hasHonorificPrefix"]).rsplit("/", 1)[-1].replace("_", " ").title()
+        kv.append(("Title", prefix))
+    if country:
+        kv.append(("Country", country))
+    if role:
+        kv.append(("Role", role))
+    if group:
+        kv.append(("Active political group", group))
+    if raw.get("placeOfBirth"):
+        kv.append(("Place of birth", str(raw["placeOfBirth"])))
+    if raw.get("hasEmail"):
+        emails = raw["hasEmail"] if isinstance(raw["hasEmail"], list) else [raw["hasEmail"]]
+        kv.append(("Email", ", ".join(str(e).replace("mailto:", "") for e in emails)))
+    for k, v in kv:
+        parts_txt.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+
+    img = raw.get("img")
+    if img:
+        parts_html.insert(1, f'<img src="{_html.escape(str(img))}" alt="MEP portrait" />')
+
+    # Membership history → list
+    memberships = raw.get("hasMembership") or []
+    if isinstance(memberships, list) and memberships:
+        parts_txt.append("Membership history:")
+        parts_html.append("<h3>Membership history</h3><ul>")
+        # Sort by end date descending so most recent is first
+        def _key(m):
+            return ((m.get("memberDuring") or {}).get("endDate") or "9999-12-31")
+        for m in sorted(memberships, key=_key, reverse=True):
+            during = m.get("memberDuring") or {}
+            start = during.get("startDate") or ""
+            end = during.get("endDate") or "current"
+            org = str(m.get("organization") or "").rsplit("/", 1)[-1] or "?"
+            role_uri = str(m.get("role") or "").rsplit("/", 1)[-1] or "?"
+            cls = str(m.get("membershipClassification") or "").rsplit("/", 1)[-1] or ""
+            line = f"- {start} → {end} | {role_uri} @ {org}"
+            if cls:
+                line += f" ({cls})"
+            parts_txt.append(line)
+            parts_html.append(
+                f"<li><strong>{_html.escape(start)} → {_html.escape(end)}</strong> "
+                f"| {_html.escape(role_uri)} @ {_html.escape(org)}"
+                + (f" <em>({_html.escape(cls)})</em>" if cls else "")
+                + "</li>"
+            )
+        parts_html.append("</ul>")
+
+    # document_date = start of the most recent MEMBER_PARLIAMENT membership.
+    # MEMBER_PARLIAMENT is the role-URI tail (e.g. .../role/MEMBER_PARLIAMENT),
+    # NOT the membershipClassification (which is "EU_INSTITUTION" for the
+    # parliament-level entry). Filter on the role URI.
+    doc_date: Optional[date] = None
+    if isinstance(memberships, list):
+        latest_start = ""
+        for m in memberships:
+            role_uri = str(m.get("role") or "")
+            if "MEMBER_PARLIAMENT" not in role_uri:
+                continue
+            during = m.get("memberDuring") or {}
+            start = during.get("startDate") or ""
+            if start and start > latest_start:
+                latest_start = start
+        if latest_start:
+            try:
+                doc_date = date.fromisoformat(latest_start[:10])
+            except ValueError:
+                pass
+
+    body_txt = "\n".join(parts_txt) if parts_txt else None
+    body_html = "<article>" + "".join(parts_html) + "</article>" if parts_html else None
+    return body_txt, body_html, doc_date
+
+
 def _normalise(raw: Dict[str, Any]) -> MEPItem:
     ident = _identifier(raw)
     profile_url = EP_PROFILE_URL.format(id=ident) if ident else None
     # The /meps list endpoint returns identifier + label + givenName + familyName (no country/group).
     # /meps/{id} returns the full profile including hasMembership array — we surface membership count but not resolve orgs here (too slow for list view).
     full_name = raw.get("label") or f"{raw.get('givenName', '')} {raw.get('familyName', '')}".strip() or raw.get("fullName")
+    country = raw.get("country_of_representation") or raw.get("countryOfRepresentation") or None
+    group = raw.get("political_group") or raw.get("politicalGroup") or None
+    role = raw.get("role") or None
+    body_txt, body_html, doc_date = _compose_mep_body(raw, full_name, country, group, role)
     return MEPItem(
         id=ident or None,
         full_name=full_name or None,
-        country=raw.get("country_of_representation") or raw.get("countryOfRepresentation") or None,
-        group=raw.get("political_group") or raw.get("politicalGroup") or None,
-        role=raw.get("role") or None,
+        country=country,
+        group=group,
+        role=role,
         profile_url=profile_url,
         public_url=profile_url,
+        body_txt=body_txt,
+        body_html=body_html,
+        document_date=doc_date,
         creation_date=datetime.utcnow(),
     )
 
