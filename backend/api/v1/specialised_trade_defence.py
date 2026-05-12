@@ -16,7 +16,7 @@ Endpoints:
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -62,6 +62,11 @@ class TradeDefenceListItem(BaseModel):
     in_force: Optional[bool] = None
     eurlex_url: str
     has_body: bool = Field(False, description="False on list rows. Call the detail endpoint for the regulation text.")
+    # 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url (EUR-Lex page for this regulation).")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: title + measure type + duty status + target country + product + dates. Full body on the detail endpoint.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    creation_date: Optional[datetime] = Field(None, description="Time this row was last refreshed.")
 
 
 class TradeDefenceDetail(BaseModel):
@@ -92,6 +97,9 @@ class TradeDefenceDetail(BaseModel):
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[str] = None
+    # 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last fetched this regulation (alias of fetched_at).")
 
 
 class TypeCount(BaseModel):
@@ -191,8 +199,24 @@ async def list_trade_defence(
         {**params, "limit": limit, "offset": offset},
     ).mappings().all()
 
-    items = [
-        TradeDefenceListItem(
+    def _td_list_item(r):
+        import html as _html
+        title = r.get("title") or r["celex"]
+        lines = [title]
+        parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+        for k, v in [
+            ("CELEX", r["celex"]),
+            ("Measure type", r.get("measure_type")),
+            ("Duty status", r.get("duty_status")),
+            ("Target country", r.get("target_country")),
+            ("Product", r.get("product")),
+            ("Document date", r.get("document_date")),
+            ("In force", "Yes" if r.get("in_force") else ("No" if r.get("in_force") is False else None)),
+        ]:
+            if not v: continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        return TradeDefenceListItem(
             celex=r["celex"],
             title=r.get("title"),
             document_date=r.get("document_date"),
@@ -203,9 +227,14 @@ async def list_trade_defence(
             in_force=r.get("in_force"),
             eurlex_url=r["eurlex_url"],
             has_body=False,
+            # 5 mandatory datapoints
+            public_url=r["eurlex_url"],
+            body_txt="\n".join(lines),
+            body_html="<article>" + "".join(parts_html) + "</article>",
+            creation_date=r.get("fetched_at") or r.get("updated_at"),
         )
-        for r in rows
-    ]
+
+    items = [_td_list_item(r) for r in rows]
 
     return build_envelope(
         items=items, total=total, page=page, limit=limit,
@@ -348,4 +377,7 @@ async def get_trade_defence(
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=str(row.get("fetched_at")) if row.get("fetched_at") else None,
+        # 5 mandatory datapoints
+        public_url=row["eurlex_url"],
+        creation_date=row.get("fetched_at"),
     )

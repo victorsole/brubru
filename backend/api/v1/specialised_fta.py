@@ -21,7 +21,7 @@ Endpoints:
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -63,6 +63,11 @@ class FtaListItem(BaseModel):
     in_force: Optional[bool] = None
     eurlex_url: str
     has_body: bool = Field(False, description="True if this agreement has a stored body. List rows always show False; call the detail endpoint for the body itself.")
+    # 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url.")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: title + agreement type + partner + dates + in-force status. Full body on the detail endpoint.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    creation_date: Optional[datetime] = Field(None, description="Time this row was last refreshed.")
 
 
 class FtaDetail(BaseModel):
@@ -91,6 +96,10 @@ class FtaDetail(BaseModel):
     body_source: Optional[str] = Field(None, description="'xhtml' or 'pdf' depending on which Cellar manifestation produced the body.")
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[str] = None
+    # 5 mandatory Brubru v1 datapoints. eurlex_url is the citizen URL;
+    # document_date carries through; creation_date = fetched_at.
+    public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last fetched this agreement (alias of fetched_at).")
 
 
 class AgreementTypeCount(BaseModel):
@@ -186,8 +195,28 @@ async def list_fta(
         {**params, "limit": limit, "offset": offset},
     ).mappings().all()
 
-    items = [
-        FtaListItem(
+    def _compose_fta_list_body(r: dict) -> tuple:
+        import html as _html
+        title = r.get("title") or r["celex"]
+        lines = [title]
+        parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+        kv = [
+            ("CELEX", r["celex"]),
+            ("Agreement type", r.get("agreement_type")),
+            ("Partner", r.get("partner")),
+            ("Document date", r.get("document_date")),
+            ("In force", "Yes" if r.get("in_force") else ("No" if r.get("in_force") is False else None)),
+        ]
+        for k, v in kv:
+            if not v: continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        return "\n".join(lines), "<article>" + "".join(parts_html) + "</article>"
+
+    items = []
+    for r in rows:
+        bt, bh = _compose_fta_list_body(r)
+        items.append(FtaListItem(
             celex=r["celex"],
             title=r.get("title"),
             document_date=r.get("document_date"),
@@ -196,9 +225,12 @@ async def list_fta(
             in_force=r.get("in_force"),
             eurlex_url=r["eurlex_url"],
             has_body=False,  # list rows always advertise False
-        )
-        for r in rows
-    ]
+            # 5 mandatory datapoints
+            public_url=r["eurlex_url"],
+            body_txt=bt,
+            body_html=bh,
+            creation_date=r.get("fetched_at") or r.get("updated_at"),
+        ))
 
     return build_envelope(
         items=items,
@@ -349,4 +381,7 @@ async def get_fta(
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=str(row.get("fetched_at")) if row.get("fetched_at") else None,
+        # 5 mandatory datapoints
+        public_url=row["eurlex_url"],
+        creation_date=row.get("fetched_at"),
     )
