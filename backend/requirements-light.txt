@@ -21,11 +21,11 @@ python-dotenv==1.0.0
 stripe==10.0.0
 
 # AI SDKs (API-based, no local models)
-# Pinned: >=1.10 adds opentelemetry deps that conflict with chromadb.
-# Installed via VCS URL because the PyPI release of mistralai was quarantined
-# (pypi:project-status="quarantined" on the simple index → pip can't find any
-# version). GitHub tag v1.9.11 is the same code, fetchable from the public repo.
-mistralai @ git+https://github.com/mistralai/client-python.git@v1.9.11
+# mistralai==1.9.11 is installed in the Dockerfile from a local checkout of
+# the v1.9.11 tag (PyPI release quarantined; plain git+https install fails on
+# missing README-PYPI.md). See the Dockerfile RUN step above the COPY of
+# this file. When PyPI un-quarantines, restore the simple pin here and drop
+# the Dockerfile clone step.
 anthropic>=0.77.0
 openai>=2.0.0
 google-generativeai>=0.8.0

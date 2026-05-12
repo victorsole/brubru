@@ -20,7 +20,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy and install light requirements (no torch/transformers)
+# Install mistralai from a local checkout — the PyPI release was quarantined
+# (pypi:project-status="quarantined" on the simple index), and a straight
+# git+https install fails because mistralai's pyproject.toml references a
+# README-PYPI.md file that's only generated at PyPI publish time and isn't
+# in the git tree. Workaround: clone the v1.9.11 tag, touch the missing
+# readme stub, install from the local path, then clean up.
+RUN git clone --depth 1 --branch v1.9.11 \
+        https://github.com/mistralai/client-python.git /tmp/mistralai-src \
+    && touch /tmp/mistralai-src/README-PYPI.md \
+    && pip install --no-cache-dir /tmp/mistralai-src \
+    && rm -rf /tmp/mistralai-src
+
+# Copy and install light requirements (no torch/transformers; mistralai
+# is installed above from a local checkout — removed from this file).
 COPY requirements-light.txt .
 RUN pip install --no-cache-dir -r requirements-light.txt
 
