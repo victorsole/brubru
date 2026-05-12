@@ -1,11 +1,19 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
-**LATEST (Tuesday 12 May 2026)** — answering "what is the next EP plenary":
-- **CURRENT WEEK 20 (12 May 2026)**: BETWEEN PLENARIES. No plenary in session this week. EP committee + group week activity only.
-- **NEXT PLENARY: 18-21 May 2026, STRASBOURG** (UPCOMING). Draft agenda being prepared by Conference of Presidents; final agenda adopted in COP meeting on Thursday 14 May 2026. Verify against `europarl.europa.eu/doceo/document/` once published. Expected items based on EPRS May at-a-glance series (10-11 May 2026): EU-Cook Islands sustainable fisheries protocol (consent), EU-São Tomé and Príncipe fisheries agreement protocol (consent), **UN Convention against Cybercrime conclusion** (consent, 2025/0231(NLE)), global steel over-capacity regulation (provisional agreement vote), revised Victims' Rights Directive, European Order of Merit award ceremony, EU-Uzbekistan Enhanced Partnership and Cooperation Agreement (consent), Single European railway area, forest reproductive material, **Comprehensive AI strategy for EU trade** (INI), ECI 'Stop Destroying Videogames' (debate), Draghi/Letta investment-needs study tabling (BUDG).
+**LATEST (Tuesday 12 May 2026)** — answering "what is the next EP plenary" (verified against `memory/ep_calendar_2026.md` and the official EP 2026 Calendar of Parliamentary Activities PDF):
+
+| Week | Dates | Type |
+|------|-------|------|
+| 18 | 27 Apr-3 May 2026 | **Plenary Strasbourg (27-30 Apr)** — CONCLUDED |
+| 19 | 4-10 May 2026 | Committee week — Europe Day (Sat 9 May) |
+| **20** | **11-17 May 2026** | **Mon 11 May = Brussels mini-plenary (single day)** + rest of week = committee week |
+| 21 | 18-22 May 2026 | **Plenary Strasbourg (18-21 May)** — NEXT MULTI-DAY PLENARY |
+
+- **CURRENT week (12 May 2026)**: Brussels mini-plenary just concluded yesterday (Mon 11 May, single-day session). Tue-Fri this week = committee week.
+- **NEXT MULTI-DAY PLENARY: 18-21 May 2026, Strasbourg.** Draft agenda being prepared by Conference of Presidents (COP meeting Thursday 14 May 2026). Expected items based on EPRS May at-a-glance series (10-11 May 2026): EU-Cook Islands sustainable fisheries protocol (consent), EU-São Tomé and Príncipe fisheries agreement protocol (consent), **UN Convention against Cybercrime conclusion** (consent, 2025/0231(NLE)), global steel over-capacity regulation (provisional agreement vote), revised Victims' Rights Directive, EU-Uzbekistan Enhanced Partnership and Cooperation Agreement (consent), Single European railway area, forest reproductive material, **Comprehensive AI strategy for EU trade** (INI), ECI 'Stop Destroying Videogames' (debate), Draghi/Letta investment-needs study tabling (BUDG).
 - **AFTER 18-21 MAY**: 8-11 June 2026 Strasbourg (per EP 2026 calendar PDF).
-- **PREVIOUS PLENARY**: 5-7 May 2026, Strasbourg (CONCLUDED). Critical Medicines Act trilogue context fed into the 11 May political agreement.
+- **PREVIOUS PLENARY (multi-day)**: 27-30 April 2026 Strasbourg — concluded.
 LATEST SESSION: 25-26 March 2026, Brussels mini-plenary (NOT Strasbourg). CONCLUDED.
 Previous session: 9-12 March 2026, Strasbourg (CONCLUDED)
 April plenary (27-30 April 2026, Strasbourg): CONCLUDED.

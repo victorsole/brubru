@@ -1430,6 +1430,54 @@ class ContextBuilder:
                 logger.warning("[tr-meetings-block] failed: %s", e); return None
         post_tasks['transparency_meetings_block'] = _fetch_tr_meetings_safe()
 
+        # 3z. Commissioners list (Layer 2e — added 12 May 2026 after audit)
+        commissioners_intent = self._detect_commissioners_intent(user_message)
+        async def _fetch_commissioners_safe():
+            if not commissioners_intent: return None
+            try:
+                b = await self._fetch_commissioners_block(user_message)
+                if b: logger.info("[commissioners-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[commissioners-block] failed: %s", e); return None
+        post_tasks['commissioners_block'] = _fetch_commissioners_safe()
+
+        # 3aa. DG personnel — directors of DG X (Layer 2f — added 12 May 2026)
+        dg_personnel_intent = self._detect_dg_personnel_intent(user_message)
+        async def _fetch_dg_personnel_safe():
+            if not dg_personnel_intent: return None
+            try:
+                b = await self._fetch_dg_personnel_block(user_message, dg_personnel_intent)
+                if b: logger.info("[dg-personnel-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[dg-personnel-block] failed: %s", e); return None
+        post_tasks['dg_personnel_block'] = _fetch_dg_personnel_safe()
+
+        # 3bb. Procedure rapporteur — lead + shadows (Layer 2g — added 12 May 2026)
+        procedure_rapporteur_intent = self._detect_procedure_rapporteur_intent(user_message)
+        async def _fetch_procedure_rapporteur_safe():
+            if not procedure_rapporteur_intent: return None
+            try:
+                b = await self._fetch_procedure_rapporteur_block(user_message, procedure_rapporteur_intent)
+                if b: logger.info("[procedure-rapporteur-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[procedure-rapporteur-block] failed: %s", e); return None
+        post_tasks['procedure_rapporteur_block'] = _fetch_procedure_rapporteur_safe()
+
+        # 3cc. EP committee meeting agenda (Layer 2h — added 12 May 2026)
+        committee_agenda_intent = self._detect_committee_meeting_agenda_intent(user_message)
+        async def _fetch_committee_agenda_safe():
+            if not committee_agenda_intent: return None
+            try:
+                b = await self._fetch_committee_meeting_agenda_block(user_message, committee_agenda_intent)
+                if b: logger.info("[committee-agenda-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[committee-agenda-block] failed: %s", e); return None
+        post_tasks['committee_agenda_block'] = _fetch_committee_agenda_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -7319,79 +7367,743 @@ class ContextBuilder:
         "freeze", "asset", "sdn", "list", "cfsp", "frozen", "prohibited", "on", "the",
         "who", "what", "is", "are", "a", "an", "of", "in", "to", "for", "and", "or",
         "eu", "european", "union", "officials", "official", "from", "by",
+        # Expanded 12 May 2026 — yesterday's audit showed ILIKE on these words matched
+        # garbage rows like "Federal NEWS Agency LLC" for the query "the NEW sanctions
+        # package AGAINST Russia". The chatbot then distrusted the block and fabricated.
+        "new", "newest", "latest", "recent", "recently", "last", "most",
+        "package", "packages", "round", "tranche", "batch", "wave",
+        "against", "controls", "control", "export", "exports", "import", "imports",
+        "interact", "interacts", "interaction", "dual", "use",
+        "organisation", "organisations", "organization", "organizations", "org", "orgs",
+        "entity", "entities", "person", "persons", "people", "individuals", "individual",
+        "any", "all", "some", "few", "many", "much", "more", "less",
+        "fetch", "fetched", "info", "information", "data", "thanks",
+        "can", "could", "would", "should", "may", "might", "must", "shall",
+        "this", "that", "these", "those", "them", "their", "there",
+        "but", "however", "though", "although", "while",
+        "you", "your", "yours", "yourself", "i", "we", "our", "us", "me",
+        "repeat", "repeatedly", "again", "still", "again",
+        "commission", "council", "parliament", "members",
+        "names", "name", "first", "second", "third", "next", "previous",
+        "give", "tell", "show", "find", "search", "look", "looking",
     }
 
+    # Matches "latest / new / recent / last sanctions package" — temporal questions where
+    # the right answer is "the most recently adopted Council acts" rather than a keyword search.
+    _SANCTIONS_TEMPORAL_PATTERN = re.compile(
+        r"\b(latest|newest|new|recent|recently|last|most\s+recent|just\s+adopted|"
+        r"upcoming|newly\s+added|recently\s+added|new\s+package|recent\s+package|"
+        r"latest\s+package|last\s+package)\b",
+        re.I,
+    )
+
     async def _fetch_sanctions_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
-        """Pull top 10 sanctions rows matching the query (free-text on name + programme + citizenship)."""
+        """Pull sanctions rows matching the query.
+
+        Two modes:
+        - **Temporal** (query asks for "latest/new/recent/last [package]"): return the
+          most-recent OJ-published Council acts under sanctions regulations from
+          `commission_documents` PLUS the most-recent additions to the `eu_sanctions`
+          consolidated list. This matches the user's actual intent — "what's the new
+          package" — and avoids ILIKE-on-stopwords nonsense.
+        - **Entity** (query names a person/entity/programme): keyword ILIKE on
+          `eu_sanctions.full_name` and `.citizenships`, with the expanded stopword filter
+          above to avoid matching things like "Federal NEWS Agency LLC" on the word "NEW".
+        """
         from sqlalchemy import text
         try:
             db = SessionLocal()
             try:
-                params: Dict[str, Any] = {}
-                where: list[str] = []
-                # Per-term ILIKE OR (case-insensitive stopword filter), max 3 terms
-                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
-                         if t.lower() not in self._SANCTIONS_STOPWORDS]
-                terms = terms[:3]
-                if terms:
-                    name_clauses = []
-                    for i, t in enumerate(terms):
-                        name_clauses.append(
-                            f"(full_name ILIKE :nm{i} OR "
-                            f"EXISTS (SELECT 1 FROM unnest(citizenships) c WHERE c ILIKE :nm{i}))"
+                is_temporal = bool(self._SANCTIONS_TEMPORAL_PATTERN.search(query))
+
+                lines: list[str] = []
+
+                if is_temporal:
+                    # ---- Branch A: recent Council acts under sanctions regulations ----
+                    # commission_documents holds the OJ items we synced. Sanctions acts are
+                    # Council Implementing Regulations + Council CFSP Decisions. We filter
+                    # on title patterns + on doc_type ∈ {OJ, CFSP, COM (proposals)} and
+                    # order by reference recency (CELEX year ≫ document_date is sparse).
+                    title_filter = (
+                        "("
+                        "title ILIKE '%restrictive measures%' "
+                        "OR title ILIKE '%sanctions%' "
+                        "OR title ILIKE '%CFSP%' "
+                        "OR title ILIKE '%Council Implementing Regulation%'"
+                        ")"
+                    )
+                    prog_clause = ""
+                    if intent.get("programme") == "UKR":
+                        prog_clause = (
+                            " AND (title ILIKE '%Russia%' OR title ILIKE '%Ukraine%' "
+                            "OR title ILIKE '%269/2014%' OR title ILIKE '%833/2014%' "
+                            "OR title ILIKE '%2014/145%')"
                         )
-                        params[f"nm{i}"] = f"%{t}%"
-                    where.append("(" + " OR ".join(name_clauses) + ")")
-                if intent.get("eu_ref"):
-                    where.append("eu_ref_num = :eu_ref")
-                    params["eu_ref"] = intent["eu_ref"]
-                if intent.get("programme"):
-                    where.append("programme = :programme")
-                    params["programme"] = intent["programme"]
-                # If neither programme nor name terms, return top 10 most recent — useful for
-                # broad questions like "what's the EU sanctions list?"
-                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                    elif intent.get("programme") == "IRN":
+                        prog_clause = " AND (title ILIKE '%Iran%' OR title ILIKE '%Iranian%')"
+                    elif intent.get("programme") == "BLR":
+                        prog_clause = " AND (title ILIKE '%Belarus%' OR title ILIKE '%Belarusian%')"
+                    elif intent.get("programme") == "SYR":
+                        prog_clause = " AND (title ILIKE '%Syria%' OR title ILIKE '%Syrian%')"
+                    elif intent.get("programme") == "PRK":
+                        prog_clause = (
+                            " AND (title ILIKE '%North Korea%' OR title ILIKE '%DPRK%' "
+                            "OR title ILIKE '%Democratic People''s Republic of Korea%')"
+                        )
+                    elif intent.get("programme") == "MMR":
+                        prog_clause = " AND (title ILIKE '%Myanmar%' OR title ILIKE '%Burma%')"
 
-                rows = db.execute(text(f"""
-                    SELECT eu_ref_num, full_name, programme, subject_type, citizenships,
-                           legal_basis_title, date_file
-                      FROM eu_sanctions
-                      {where_sql}
-                     ORDER BY date_file DESC NULLS LAST, full_name
-                     LIMIT 10
-                """), params).mappings().all()
+                    recent_acts = db.execute(text(f"""
+                        SELECT reference, title, publication_date, doc_type
+                          FROM commission_documents
+                         WHERE {title_filter}{prog_clause}
+                         ORDER BY first_seen DESC NULLS LAST, reference DESC
+                         LIMIT 10
+                    """)).mappings().all()
 
-                if not rows:
-                    return None
+                    # ---- Branch B: most-recent additions to consolidated list ----
+                    san_params: Dict[str, Any] = {}
+                    san_where = ""
+                    if intent.get("programme"):
+                        san_where = "WHERE programme = :programme"
+                        san_params["programme"] = intent["programme"]
+                    recent_entries = db.execute(text(f"""
+                        SELECT eu_ref_num, full_name, programme, subject_type, citizenships,
+                               legal_basis_title, date_file
+                          FROM eu_sanctions
+                          {san_where}
+                         ORDER BY date_file DESC NULLS LAST, full_name
+                         LIMIT 5
+                    """), san_params).mappings().all()
 
-                lines = [
-                    "EU SANCTIONS / RESTRICTIVE MEASURES (from eu_sanctions; CFSP consolidated list):",
-                    f"Query keyword: '{intent.get('keyword')}'"
-                    + (f" | programme: {intent['programme']}" if intent.get("programme") else "")
-                    + (f" | EU ref: {intent['eu_ref']}" if intent.get("eu_ref") else ""),
-                    "",
-                ]
-                for r in rows:
-                    ref = r.get("eu_ref_num") or "—"
-                    name = r.get("full_name") or "—"
-                    prog = r.get("programme") or "?"
-                    st = "person" if r.get("subject_type") == "P" else "entity"
-                    citi = ", ".join(r.get("citizenships") or []) or "—"
-                    leba = (r.get("legal_basis_title") or "")[:70]
-                    dt = str(r.get("date_file") or "—")[:10]
-                    lines.append(f"  - {name} ({st}) | EU ref {ref} | programme {prog} | citizenship {citi} | "
-                                 f"legal basis {leba} | refreshed {dt}")
-                lines.append("")
-                lines.append("Source: webgate.ec.europa.eu/fsd/fsf (daily public CSV). "
-                             "Brubru endpoint: /api/v1/specialised/sanctions.")
+                    if not recent_acts and not recent_entries:
+                        return None
+
+                    lines = [
+                        "EU SANCTIONS / RESTRICTIVE MEASURES — recent acts and listings:",
+                        f"Query intent: temporal ('latest/new/recent/last')"
+                        + (f" | programme: {intent['programme']}" if intent.get("programme") else ""),
+                        "",
+                    ]
+
+                    if recent_acts:
+                        lines.append("RECENT COUNCIL ACTS (from commission_documents, OJ-published):")
+                        for r in recent_acts:
+                            ref = r.get("reference") or "—"
+                            title = (r.get("title") or "—")[:180]
+                            dt = str(r.get("publication_date") or "—")[:10]
+                            lines.append(f"  - {ref} | {title} | OJ date {dt}")
+                        lines.append("")
+
+                    if recent_entries:
+                        lines.append("MOST-RECENT ADDITIONS TO CONSOLIDATED LIST (from eu_sanctions):")
+                        for r in recent_entries:
+                            ref = r.get("eu_ref_num") or "—"
+                            name = r.get("full_name") or "—"
+                            prog = r.get("programme") or "?"
+                            st = "person" if r.get("subject_type") == "P" else "entity"
+                            citi = ", ".join(r.get("citizenships") or []) or "—"
+                            leba = (r.get("legal_basis_title") or "")[:70]
+                            dt = str(r.get("date_file") or "—")[:10]
+                            lines.append(
+                                f"  - {name} ({st}) | EU ref {ref} | programme {prog} "
+                                f"| citizenship {citi} | legal basis {leba} | refreshed {dt}"
+                            )
+                        lines.append("")
+
+                    lines.append(
+                        "NOTE: the EU does NOT formally number sanctions packages in legal text. "
+                        "Numbered package labels (e.g. '19th Russia package') are external press "
+                        "shorthand used by Politico / Reuters / Bloomberg. Do not assert a numbered "
+                        "package unless that number appears verbatim above."
+                    )
+                    lines.append(
+                        "Source: commission_documents (OJ) + eu_sanctions consolidated list. "
+                        "Brubru endpoints: /api/v1/specialised/sanctions, /api/v1/laws."
+                    )
+
+                else:
+                    # ---- Branch C: entity-name lookup with stopword filter ----
+                    params: Dict[str, Any] = {}
+                    where: list[str] = []
+                    terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                             if t.lower() not in self._SANCTIONS_STOPWORDS]
+                    terms = terms[:3]
+                    if terms:
+                        name_clauses = []
+                        for i, t in enumerate(terms):
+                            name_clauses.append(
+                                f"(full_name ILIKE :nm{i} OR "
+                                f"EXISTS (SELECT 1 FROM unnest(citizenships) c WHERE c ILIKE :nm{i}))"
+                            )
+                            params[f"nm{i}"] = f"%{t}%"
+                        where.append("(" + " OR ".join(name_clauses) + ")")
+                    if intent.get("eu_ref"):
+                        where.append("eu_ref_num = :eu_ref")
+                        params["eu_ref"] = intent["eu_ref"]
+                    if intent.get("programme"):
+                        where.append("programme = :programme")
+                        params["programme"] = intent["programme"]
+                    where_sql = "WHERE " + " AND ".join(where) if where else ""
+
+                    rows = db.execute(text(f"""
+                        SELECT eu_ref_num, full_name, programme, subject_type, citizenships,
+                               legal_basis_title, date_file
+                          FROM eu_sanctions
+                          {where_sql}
+                         ORDER BY date_file DESC NULLS LAST, full_name
+                         LIMIT 10
+                    """), params).mappings().all()
+
+                    if not rows:
+                        return None
+
+                    lines = [
+                        "EU SANCTIONS / RESTRICTIVE MEASURES (from eu_sanctions; CFSP consolidated list):",
+                        f"Query keyword: '{intent.get('keyword')}'"
+                        + (f" | programme: {intent['programme']}" if intent.get("programme") else "")
+                        + (f" | EU ref: {intent['eu_ref']}" if intent.get("eu_ref") else ""),
+                        "",
+                    ]
+                    for r in rows:
+                        ref = r.get("eu_ref_num") or "—"
+                        name = r.get("full_name") or "—"
+                        prog = r.get("programme") or "?"
+                        st = "person" if r.get("subject_type") == "P" else "entity"
+                        citi = ", ".join(r.get("citizenships") or []) or "—"
+                        leba = (r.get("legal_basis_title") or "")[:70]
+                        dt = str(r.get("date_file") or "—")[:10]
+                        lines.append(f"  - {name} ({st}) | EU ref {ref} | programme {prog} | citizenship {citi} | "
+                                     f"legal basis {leba} | refreshed {dt}")
+                    lines.append("")
+                    lines.append("Source: webgate.ec.europa.eu/fsd/fsf (daily public CSV). "
+                                 "Brubru endpoint: /api/v1/specialised/sanctions.")
+
                 block = "\n".join(lines)
-                if len(block) > 4000:
-                    block = block[:3900] + "\n[truncated — query the /sanctions endpoint for the full list]"
+                if len(block) > 4500:
+                    block = block[:4400] + "\n[truncated — query the /sanctions endpoint for the full list]"
                 return block
             finally:
                 db.close()
         except Exception as e:
             logger.warning("[sanctions-block] failed: %s", e)
+            return None
+
+    # ================================================================
+    # Layer 2e — Commissioners list (added 12 May 2026 after audit)
+    # ================================================================
+    _COMMISSIONERS_INTENT = re.compile(
+        r"\b(commissioners?|college\s+of\s+commissioners?|college\s+members?|"
+        r"(?:vice[\s\-]?)?presidents?|EVPs?|executive\s+vice[\s\-]?presidents?|"
+        r"who\s+(?:are|is)\s+the\s+commissioners?|"
+        r"list\s+(?:of|all)\s+commissioners?|portfolio\s+of\s+commissioners?|"
+        r"all\s+commissioners?|every\s+commissioner)\b",
+        re.I,
+    )
+
+    def _detect_commissioners_intent(self, query: str) -> bool:
+        if not query:
+            return False
+        return bool(self._COMMISSIONERS_INTENT.search(query))
+
+    async def _fetch_commissioners_block(self, query: str) -> Optional[str]:
+        """Return the canonical list of 27 College members with portfolios + countries."""
+        try:
+            from services.api_clients.commissioner_agenda_client import (
+                load_commissioner_profiles,
+            )
+            profiles = load_commissioner_profiles()
+            if not profiles:
+                return None
+
+            lines = [
+                "EU COLLEGE OF COMMISSIONERS (2024-2029 mandate, 27 members):",
+                "Source: commissioners.json (Brubru canonical) / commission.europa.eu",
+                "",
+            ]
+            # President + EVPs first (slug 'president' or portfolio starts with 'Executive Vice-President')
+            president = [p for p in profiles if p.slug == "president"]
+            evps = [p for p in profiles if "Executive Vice-President" in (p.portfolio or "")
+                    and p.slug != "president"]
+            rest = [p for p in profiles if p.slug != "president"
+                    and "Executive Vice-President" not in (p.portfolio or "")]
+
+            def fmt(p):
+                portfolio = (p.portfolio or "—").strip()
+                return f"  - {p.name} ({p.country}) — {portfolio} [slug: {p.slug}]"
+
+            if president:
+                lines.append("PRESIDENT:")
+                for p in president:
+                    lines.append(fmt(p))
+                lines.append("")
+            if evps:
+                lines.append(f"EXECUTIVE VICE-PRESIDENTS ({len(evps)}):")
+                for p in sorted(evps, key=lambda x: x.name):
+                    lines.append(fmt(p))
+                lines.append("")
+            if rest:
+                lines.append(f"COMMISSIONERS ({len(rest)}):")
+                for p in sorted(rest, key=lambda x: x.name):
+                    lines.append(fmt(p))
+
+            lines.append("")
+            lines.append(
+                f"Total: {len(profiles)} members. Brubru endpoints: "
+                "/api/v1/commissioners (all profiles), /api/v1/commissioners/{slug} (profile), "
+                "/api/v1/commissioners/{name}/agenda (live calendar)."
+            )
+
+            block = "\n".join(lines)
+            if len(block) > 6000:
+                block = block[:5900] + "\n[truncated — query /api/v1/commissioners for the full list]"
+            return block
+        except Exception as e:
+            logger.warning("[commissioners-block] failed: %s", e)
+            return None
+
+    # ================================================================
+    # Layer 2f — DG personnel (added 12 May 2026 after audit V11)
+    # ================================================================
+    _DG_PERSONNEL_INTENT = re.compile(
+        r"\b(directors?\s+(?:of|in)\s+DG|DG[\s\-_]?[A-Z]{2,6}\s+(?:directors?|personnel|director[\s\-]?general|"
+        r"deputy|head)|who\s+(?:heads?|leads?|runs?)\s+DG|director[\s\-]?general\s+of\s+DG|"
+        r"deputy\s+director[\s\-]?general|head\s+of\s+unit|"
+        r"organigramme?|org\s+chart\s+of\s+DG)\b",
+        re.I,
+    )
+
+    # Map common DG abbreviations to canonical org-chart filenames.
+    _DG_ALIASES = {
+        "REGIO": "DG REGIO", "regio": "DG REGIO",
+        "COMP": "DG COMP", "comp": "DG COMP",
+        "ENV": "DG ENV", "env": "DG ENV",
+        "CLIMA": "DG CLIMA", "clima": "DG CLIMA",
+        "ENER": "DG ENER", "ener": "DG ENER",
+        "MOVE": "DG MOVE", "move": "DG MOVE",
+        "EAC": "DG EAC", "eac": "DG EAC",
+        "SANTE": "DG SANTE", "sante": "DG SANTE",
+        "HOME": "DG HOME", "home": "DG HOME",
+        "JUST": "DG JUST", "just": "DG JUST",
+        "FISMA": "DG FISMA", "fisma": "DG FISMA",
+        "TRADE": "DG TRADE", "trade": "DG TRADE",
+        "TAXUD": "DG TAXUD", "taxud": "DG TAXUD",
+        "CNECT": "DG CNECT", "cnect": "DG CNECT", "connect": "DG CNECT",
+        "DEFIS": "DG DEFIS", "defis": "DG DEFIS",
+        "GROW": "DG GROW", "grow": "DG GROW",
+        "EMPL": "DG EMPL", "empl": "DG EMPL",
+        "AGRI": "DG AGRI", "agri": "DG AGRI",
+        "MARE": "DG MARE", "mare": "DG MARE",
+        "ECFIN": "DG ECFIN", "ecfin": "DG ECFIN",
+        "BUDG": "DG BUDG", "budg": "DG BUDG",
+        "NEAR": "DG NEAR", "near": "DG NEAR",
+        "INTPA": "DG INTPA", "intpa": "DG INTPA",
+        "ECHO": "DG ECHO", "echo": "DG ECHO",
+        "RTD": "DG RTD", "rtd": "DG RTD",
+        "REFORM": "DG REFORM", "reform": "DG REFORM",
+        "JRC": "JRC", "jrc": "JRC",
+        "EUROSTAT": "Eurostat", "eurostat": "Eurostat",
+    }
+
+    def _detect_dg_personnel_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query or not self._DG_PERSONNEL_INTENT.search(query):
+            return None
+        # Extract the DG name token
+        dg = None
+        for token, canonical in self._DG_ALIASES.items():
+            if re.search(rf"\bDG\s+{token}\b|\b{token}\b", query, re.I):
+                # Avoid matching dictionary words like "ENV" inside "ENVIRONMENT"; require exact token boundary
+                dg = canonical
+                break
+        return {"dg": dg} if dg else None
+
+    async def _fetch_dg_personnel_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Return Director-General + deputies + directors for the requested DG.
+
+        Data source: knowledge_base/ec_organigrammes/json/{CODE}.json (Brubru's canonical
+        org-chart, scraped from the EU Who-Is-Who portal).
+        """
+        try:
+            from pathlib import Path
+            import json as _json
+
+            dg = intent.get("dg")
+            if not dg:
+                return None
+            # Resolve DG code from "DG REGIO" → "REGIO"
+            dg_code = dg.replace("DG ", "").strip().upper()
+            org_path = Path(__file__).resolve().parents[2] / "knowledge_base" / "ec_organigrammes" / "json" / f"{dg_code}.json"
+            if not org_path.exists():
+                return (
+                    f"DG PERSONNEL — {dg}\n"
+                    f"No organigramme JSON found for {dg} at knowledge_base/ec_organigrammes/json/{dg_code}.json.\n"
+                    f"The chat MUST say 'no organigramme data on file for {dg}' rather than invent names. "
+                    f"User should be redirected to commission.europa.eu/about/organisation_en."
+                )
+
+            data = _json.loads(org_path.read_text(encoding="utf-8"))
+            lines = [
+                f"DG ORGANIGRAMME — {data.get('dg_name', dg)} ({dg_code}):",
+                f"Source: knowledge_base/ec_organigrammes/json/{dg_code}.json "
+                f"(scraped from {data.get('source', 'EU Who-Is-Who portal')}).",
+                "",
+            ]
+
+            commissioner = data.get("commissioner")
+            if commissioner:
+                lines.append(f"COMMISSIONER: {commissioner}")
+                lines.append("")
+
+            dg_name = data.get("director_general")
+            dg_email = data.get("director_general_email")
+            if dg_name:
+                lines.append("DIRECTOR-GENERAL:")
+                lines.append(f"  - {dg_name}" + (f" ({dg_email})" if dg_email else ""))
+                lines.append("")
+
+            deputies = data.get("deputy_directors_general") or []
+            if deputies:
+                lines.append(f"DEPUTY DIRECTOR(S)-GENERAL ({len(deputies)}):")
+                for d in deputies:
+                    name = d.get("name", "—")
+                    email = d.get("email", "")
+                    resp = (d.get("responsibilities") or "").strip()
+                    suffix = f" ({email})" if email else ""
+                    if resp:
+                        suffix += f" — {resp[:100]}"
+                    lines.append(f"  - {name}{suffix}")
+                lines.append("")
+
+            directorates = data.get("directorates") or []
+            if directorates:
+                lines.append(f"DIRECTORATES ({len(directorates)}):")
+                for dir_ in directorates:
+                    code = (dir_.get("code") or "").strip()
+                    name = (dir_.get("name") or "").strip()
+                    director = (dir_.get("director") or "").strip()
+                    director_email = (dir_.get("director_email") or "").strip()
+                    label = f"{code} — {name}" if code and name else (code or name or "—")
+                    if director:
+                        line = f"  - {label}: {director}"
+                        if director_email:
+                            line += f" ({director_email})"
+                    else:
+                        line = f"  - {label}: (director not listed)"
+                    lines.append(line)
+                    units = dir_.get("units") or []
+                    if units:
+                        for u in units[:4]:  # cap heads-of-unit per directorate
+                            uhead = (u.get("head") or "").strip()
+                            uname = (u.get("name") or "").strip()
+                            if uhead:
+                                lines.append(
+                                    f"      • {uname or '(unit)'}: {uhead}"
+                                )
+                        if len(units) > 4:
+                            lines.append(f"      • [+{len(units)-4} more heads of unit]")
+
+            num_directorates = data.get("num_directorates")
+            num_units = data.get("num_units")
+            if num_directorates or num_units:
+                lines.append("")
+                lines.append(f"Totals: {num_directorates or '?'} directorates, {num_units or '?'} units.")
+
+            lines.append("")
+            lines.append(
+                "CRITICAL: this block is the authoritative DG organigramme. If a role is not listed "
+                "above, the chat MUST say 'not in our organigramme' rather than invent a name."
+            )
+
+            block = "\n".join(lines)
+            if len(block) > 5500:
+                block = block[:5400] + "\n[truncated — full data at /api/v1/commission/register]"
+            return block
+        except Exception as e:
+            logger.warning("[dg-personnel-block] failed: %s", e)
+            return None
+
+    # ================================================================
+    # Layer 2g — Procedure rapporteur lookup (added 12 May 2026 after audit V12)
+    # ================================================================
+    _PROCEDURE_RAPPORTEUR_INTENT = re.compile(
+        r"\b(?:rapporteurs?|shadow\s+rapporteurs?|co[\s\-]?rapporteurs?|"
+        r"who\s+(?:is|are)\s+(?:the\s+)?rapporteurs?|"
+        r"lead\s+rapporteur|MEPs?\s+(?:on|for|leading|drafting))\b",
+        re.I,
+    )
+
+    # Quick alias map: act name → known procedure_ref. Used as a fallback to fuzzy title match.
+    _ACT_PROC_ALIASES = {
+        "ai act": "2021/0106(COD)",
+        "biotech act": "2025/0406(COD)",
+        "critical medicines act": None,  # ref pending
+        "mobility package": None,
+        "anti-corruption directive": "2023/0135(COD)",
+        "talent pool": "2023/0404(COD)",
+        "countemissions": "2023/0266(COD)",
+        "dma": "2020/0374(COD)",
+        "dsa": "2020/0361(COD)",
+        "digital networks act": "2026/0XXX",
+        "csrd": "2021/0104(COD)",
+        "csddd": "2022/0051(COD)",
+        "european chips act": "2022/0032(COD)",
+        "european health data space": "2022/0140(COD)",
+        "ehds": "2022/0140(COD)",
+        "european affordable housing plan": None,
+    }
+
+    def _detect_procedure_rapporteur_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query or not self._PROCEDURE_RAPPORTEUR_INTENT.search(query):
+            return None
+        # Try to extract an OEIL ref directly (NNNN/NNNN(COD|INI|NLE|...))
+        m = re.search(r"\b\d{4}/\d{4}\([A-Z]{2,5}\)\b", query)
+        if m:
+            return {"procedure_ref": m.group(0), "alias": None}
+        # Try alias match
+        q_lower = query.lower()
+        for alias, ref in self._ACT_PROC_ALIASES.items():
+            if alias in q_lower:
+                return {"procedure_ref": ref, "alias": alias}
+        # No procedure_ref but the user asked about rapporteurs — still return so the
+        # block can advise the user how to specify the file.
+        return {"procedure_ref": None, "alias": None}
+
+    async def _fetch_procedure_rapporteur_block(
+        self, query: str, intent: Dict[str, Any]
+    ) -> Optional[str]:
+        """Return the lead + shadow rapporteurs for the requested procedure."""
+        from sqlalchemy import text
+        try:
+            ref = intent.get("procedure_ref")
+            alias = intent.get("alias")
+            db = SessionLocal()
+            try:
+                row = None
+                if ref:
+                    row = db.execute(text("""
+                        SELECT oeil_procedure_ref, title, rapporteur_mep_id,
+                               oeil_procedure_data, lead_committee, committees,
+                               url, current_status
+                          FROM legislative_carriages
+                         WHERE oeil_procedure_ref = :ref
+                         LIMIT 1
+                    """), {"ref": ref}).mappings().first()
+                if not row and alias:
+                    # Title fuzzy fallback (covers cases where the procedure_ref
+                    # in our DB row is NULL but the title matches the alias)
+                    row = db.execute(text("""
+                        SELECT oeil_procedure_ref, title, rapporteur_mep_id,
+                               oeil_procedure_data, lead_committee, committees,
+                               url, current_status
+                          FROM legislative_carriages
+                         WHERE title ILIKE :al
+                         ORDER BY last_updated DESC NULLS LAST
+                         LIMIT 1
+                    """), {"al": f"%{alias}%"}).mappings().first()
+
+                if not row:
+                    return (
+                        "PROCEDURE RAPPORTEUR LOOKUP — no match.\n"
+                        "The user asked about rapporteur(s) but Brubru did not resolve the request to a "
+                        "specific OEIL procedure_ref in our legislative_carriages table.\n"
+                        "If the chat cannot identify the procedure, it MUST ask the user for the OEIL "
+                        "reference (e.g. 2021/0106(COD)) or the file's exact title, AND MUST NOT invent "
+                        "rapporteur names from memory."
+                    )
+
+                opd = row.get("oeil_procedure_data") or {}
+                if isinstance(opd, str):
+                    try:
+                        opd = json.loads(opd)
+                    except Exception:
+                        opd = {}
+
+                lines = [
+                    "PROCEDURE RAPPORTEUR LOOKUP:",
+                    f"OEIL ref: {row.get('oeil_procedure_ref')}",
+                    f"Title: {(row.get('title') or '—')[:200]}",
+                    f"Status: {row.get('current_status') or '—'}",
+                    f"Lead committee: {row.get('lead_committee') or '—'}",
+                ]
+                if row.get("url"):
+                    lines.append(f"OEIL URL: {row.get('url')}")
+                lines.append("")
+
+                rapporteurs = opd.get("rapporteurs") if isinstance(opd, dict) else None
+                shadows = opd.get("shadow_rapporteurs") if isinstance(opd, dict) else None
+                if rapporteurs:
+                    lines.append(f"LEAD RAPPORTEUR(S) ({len(rapporteurs)}):")
+                    for rp in rapporteurs[:8]:
+                        if isinstance(rp, dict):
+                            name = rp.get("name") or rp.get("fullName") or "—"
+                            group = rp.get("political_group") or rp.get("group") or "—"
+                            country = rp.get("country") or "—"
+                            committee = rp.get("committee") or "—"
+                            lines.append(f"  - {name} ({group}, {country}) — {committee}")
+                        else:
+                            lines.append(f"  - {rp}")
+                    lines.append("")
+                else:
+                    lines.append("LEAD RAPPORTEUR: not populated in our record.")
+                    lines.append("")
+
+                if shadows:
+                    lines.append(f"SHADOW RAPPORTEURS ({len(shadows)}):")
+                    for sh in shadows[:12]:
+                        if isinstance(sh, dict):
+                            name = sh.get("name") or sh.get("fullName") or "—"
+                            group = sh.get("political_group") or sh.get("group") or "—"
+                            country = sh.get("country") or "—"
+                            lines.append(f"  - {name} ({group}, {country})")
+                        else:
+                            lines.append(f"  - {sh}")
+                    lines.append("")
+                else:
+                    lines.append("SHADOW RAPPORTEURS: not populated in our record.")
+                    lines.append("")
+
+                lines.append(
+                    "CRITICAL: if a rapporteur or shadow field above says 'not populated', the chat "
+                    "MUST NOT invent a name. The correct response is to say 'Brubru's procedure record "
+                    "for [ref] does not yet list this field — check OEIL directly at the URL above'."
+                )
+                block = "\n".join(lines)
+                if len(block) > 4500:
+                    block = block[:4400] + "\n[truncated — query /api/v1/procedures/{ref} for full detail]"
+                return block
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[procedure-rapporteur-block] failed: %s", e)
+            return None
+
+    # ================================================================
+    # Layer 2h — EP committee meeting agenda (added 12 May 2026 after audit V3)
+    # ================================================================
+    _COMMITTEE_AGENDA_INTENT = re.compile(
+        r"\b(?:agenda|meeting|next\s+meeting|upcoming\s+meeting|"
+        r"draft\s+agenda|order\s+of\s+the\s+day)\s+(?:for\s+)?(?:of\s+)?(?:the\s+)?"
+        r"(AFET|DEVE|INTA|BUDG|CONT|ECON|EMPL|ENVI|ITRE|IMCO|TRAN|REGI|AGRI|PECH|CULT|"
+        r"JURI|LIBE|AFCO|FEMM|PETI|SEDE|DROI|FISC|AIDA|BECA|INGE|ANIT|COVI|TAX3|SANT|"
+        r"committee)\b|"
+        r"\b(AFET|DEVE|INTA|BUDG|CONT|ECON|EMPL|ENVI|ITRE|IMCO|TRAN|REGI|AGRI|PECH|CULT|"
+        r"JURI|LIBE|AFCO|FEMM|PETI|SEDE|DROI|FISC|AIDA|BECA|INGE|ANIT|COVI|TAX3|SANT)\s+"
+        r"(?:committee\s+)?(?:agenda|meeting|next\s+meeting|upcoming)",
+        re.I,
+    )
+
+    _COMMITTEES_CANONICAL = {
+        "AFET": "Foreign Affairs", "DEVE": "Development", "INTA": "International Trade",
+        "BUDG": "Budgets", "CONT": "Budgetary Control", "ECON": "Economic and Monetary Affairs",
+        "EMPL": "Employment and Social Affairs", "ENVI": "Environment, Climate and Food Safety",
+        "ITRE": "Industry, Research and Energy", "IMCO": "Internal Market and Consumer Protection",
+        "TRAN": "Transport and Tourism", "REGI": "Regional Development",
+        "AGRI": "Agriculture and Rural Development", "PECH": "Fisheries", "CULT": "Culture and Education",
+        "JURI": "Legal Affairs", "LIBE": "Civil Liberties, Justice and Home Affairs",
+        "AFCO": "Constitutional Affairs", "FEMM": "Women's Rights and Gender Equality",
+        "PETI": "Petitions", "SEDE": "Security and Defence (subcommittee)",
+        "DROI": "Human Rights (subcommittee)", "FISC": "Tax Matters (subcommittee)",
+        "SANT": "Public Health (subcommittee)",
+    }
+
+    def _detect_committee_meeting_agenda_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query or not self._COMMITTEE_AGENDA_INTENT.search(query):
+            return None
+        # Extract committee code
+        committee = None
+        for code in self._COMMITTEES_CANONICAL.keys():
+            if re.search(rf"\b{code}\b", query, re.I):
+                committee = code
+                break
+        return {"committee": committee}
+
+    async def _fetch_committee_meeting_agenda_block(
+        self, query: str, intent: Dict[str, Any]
+    ) -> Optional[str]:
+        """Return upcoming committee meetings and the latest tabled documents per committee."""
+        from sqlalchemy import text
+        try:
+            committee = intent.get("committee")
+            db = SessionLocal()
+            try:
+                # 1. Upcoming calendar events for this committee (eu_calendar_events)
+                cal_rows = []
+                if committee:
+                    cal_rows = db.execute(text("""
+                        SELECT title, start_date, end_date, description, event_type
+                          FROM eu_calendar_events
+                         WHERE institution = 'EP'
+                           AND start_date >= CURRENT_DATE
+                           AND (
+                                ep_committee_code = :c OR title ILIKE :cw OR description ILIKE :cw
+                           )
+                         ORDER BY start_date
+                         LIMIT 10
+                    """), {"c": committee, "cw": f"%{committee}%"}).mappings().all()
+
+                # 2. Latest tabled draft reports / opinions from committee_work_items
+                work_rows = []
+                if committee:
+                    work_rows = db.execute(text("""
+                        SELECT title, procedure_ref, procedure_type, rapporteur_name,
+                               status_text, last_updated
+                          FROM committee_work_items
+                         WHERE committee_code = :c
+                         ORDER BY last_updated DESC NULLS LAST
+                         LIMIT 10
+                    """), {"c": committee}).mappings().all()
+
+                if not cal_rows and not work_rows:
+                    return (
+                        f"EP COMMITTEE AGENDA — {committee or 'unspecified'}\n"
+                        f"No upcoming committee events or recent draft reports found in our records "
+                        f"for {committee or 'the requested committee'}.\n"
+                        f"Brubru's EP committee data is synced from europarl.europa.eu/committees/. "
+                        f"For the live agenda, see: "
+                        f"https://www.europarl.europa.eu/committees/en/{committee.lower() if committee else ''}/meetings."
+                    )
+
+                canonical_name = self._COMMITTEES_CANONICAL.get(committee, "")
+                lines = [
+                    f"EP COMMITTEE — {committee} ({canonical_name})" if committee
+                    else "EP COMMITTEE AGENDA (committee unspecified — showing best-effort match):",
+                    "",
+                ]
+
+                if cal_rows:
+                    lines.append(f"UPCOMING MEETINGS / EVENTS ({len(cal_rows)}):")
+                    for r in cal_rows:
+                        t = (r.get("title") or "—")[:150]
+                        sd = str(r.get("start_date") or "—")[:10]
+                        ed = str(r.get("end_date") or "")[:10]
+                        date_range = sd if not ed or sd == ed else f"{sd} → {ed}"
+                        et = r.get("event_type") or "—"
+                        lines.append(f"  - {date_range} [{et}] {t}")
+                    lines.append("")
+
+                if work_rows:
+                    lines.append(f"RECENT TABLED DRAFT REPORTS / OPINIONS ({len(work_rows)}):")
+                    for r in work_rows:
+                        title = (r.get("title") or "—")[:140]
+                        pref = r.get("procedure_ref") or "—"
+                        ptype = r.get("procedure_type") or "—"
+                        rapp = r.get("rapporteur_name") or "—"
+                        when = str(r.get("last_updated") or "—")[:10]
+                        lines.append(f"  - [{pref} {ptype}] {title} | rapp: {rapp} | last update {when}")
+                    lines.append("")
+
+                lines.append(
+                    f"Source: eu_calendar_events + committee_work_items (Brubru sync). "
+                    f"Brubru endpoints: /api/v1/committees, /api/v1/calendar."
+                )
+                block = "\n".join(lines)
+                if len(block) > 4500:
+                    block = block[:4400] + "\n[truncated — query /api/v1/committees for more]"
+                return block
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[committee-agenda-block] failed: %s", e)
             return None
 
     _TR_STOPWORDS = {
