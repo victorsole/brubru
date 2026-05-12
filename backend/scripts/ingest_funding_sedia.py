@@ -55,7 +55,10 @@ from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[2]
 ENV = ROOT / ".env"
-SEDIA_URL = "https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text=*"
+SEDIA_URL_TEMPLATE = (
+    "https://api.tech.ec.europa.eu/search-api/prod/rest/search"
+    "?apiKey=SEDIA&text={text}"
+)
 PORTAL_BASE = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details"
 USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0; +https://brubru.beresol.eu)"
 
@@ -87,15 +90,20 @@ def html_strip(html: str, max_len: int = 4000) -> str:
     return (text[:max_len] + "…") if len(text) > max_len else text
 
 
-def fetch_sedia_page(page: int, page_size: int = 100, status_filter: Optional[str] = None) -> Dict[str, Any]:
+def fetch_sedia_page(page: int, page_size: int = 100, status_filter: Optional[str] = None,
+                     text: str = "*") -> Dict[str, Any]:
     """One page of SEDIA results.
 
     Pagination MUST go in the URL — the API ignores pageNumber/pageSize in the
     POST body. The body can stay empty (or '{}'). status_filter is currently
     not effective at this layer (the API doesn't honour body-level filters
     either) — we filter client-side after parsing.
+
+    `text` is a SEDIA full-text query. Use '*' for all, '2026' to pull only
+    calls whose identifiers / descriptions reference 2026 (covers Horizon
+    2026 work programmes, EIC 2026, Digital Europe 2026, etc.).
     """
-    url = f"{SEDIA_URL}&pageNumber={page}&pageSize={page_size}"
+    url = SEDIA_URL_TEMPLATE.format(text=urllib_request.quote(text, safe="*")) + f"&pageNumber={page}&pageSize={page_size}"
     req = urllib_request.Request(
         url,
         data=b"{}",
@@ -208,12 +216,56 @@ def upsert(cur, row: Dict[str, Any]) -> None:
     )
 
 
+def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
+    """Mirror the same row into the sibling ft_calls_for_proposals table.
+
+    Schema parity: ft_calls_for_proposals has `framework_programme` where
+    funding_opportunities has `programme`, and no `short_summary` field.
+    All other columns line up 1:1, so we just rename + drop.
+    """
+    payload = dict(row)
+    payload["framework_programme"] = payload.pop("programme", None)
+    payload.pop("short_summary", None)
+    cur.execute(
+        """
+        INSERT INTO ft_calls_for_proposals
+            (topic_id, call_id, framework_programme, title, description, status,
+             type_of_action, deadline, deadline_secondary, indicative_budget,
+             budget_currency, source_url, documents_url, keywords, target_audience,
+             published_at, scraped_at, last_updated)
+        VALUES (%(topic_id)s, %(call_id)s, %(framework_programme)s, %(title)s,
+                %(description)s, %(status)s, %(type_of_action)s, %(deadline)s,
+                %(deadline_secondary)s, %(indicative_budget)s, %(budget_currency)s,
+                %(source_url)s, %(documents_url)s, %(keywords)s, %(target_audience)s,
+                %(published_at)s, NOW(), NOW())
+        ON CONFLICT (topic_id) DO UPDATE SET
+            call_id = EXCLUDED.call_id,
+            title = EXCLUDED.title,
+            description = EXCLUDED.description,
+            status = EXCLUDED.status,
+            type_of_action = EXCLUDED.type_of_action,
+            deadline = EXCLUDED.deadline,
+            keywords = EXCLUDED.keywords,
+            last_updated = NOW()
+        """,
+        payload,
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=200, help="Max rows to ingest (default 200)")
     ap.add_argument("--apply", action="store_true", help="Write to DB. Default is dry-run.")
     ap.add_argument("--page-size", type=int, default=100)
     ap.add_argument("--status", choices=["forthcoming", "open", "closed", "any"], default="any")
+    ap.add_argument("--text", default="*",
+                    help="SEDIA full-text query (default '*'). Use '2026' to pull "
+                         "only 2026 calls, '2025' for 2025, etc. SEDIA's body-level "
+                         "filters/sort aren't honoured by the search endpoint, so "
+                         "the text query is the reliable way to scope by year.")
+    ap.add_argument("--write-ft", action="store_true",
+                    help="Also write the same rows to ft_calls_for_proposals "
+                         "(the sibling table backing /api/v1/ft-calls-for-proposals).")
     args = ap.parse_args()
 
     db = get_env("DATABASE_URL")
@@ -232,7 +284,7 @@ def main():
     rows_written = 0
     page = 1
     while rows_seen < args.limit:
-        data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter)
+        data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter, text=args.text)
         if not data:
             break
         results = data.get("results") or []
@@ -247,6 +299,8 @@ def main():
             if args.apply:
                 try:
                     upsert(cur, row)
+                    if args.write_ft:
+                        upsert_ft_calls(cur, row)
                     rows_written += 1
                 except Exception as exc:  # noqa: BLE001
                     print(f"    [DB ERR] {exc}")

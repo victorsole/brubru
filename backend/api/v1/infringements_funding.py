@@ -297,9 +297,12 @@ async def list_funding_opportunities(
 
     total = query.count()
     rows = (
+        # Default: most recent deadlines first (2025-2026 before decade-old
+        # closed calls). Partners hit the endpoint to find opportunities they
+        # can still apply to, not historic data.
         query.order_by(
-            FundingOpportunity.deadline.asc().nullslast(),
-            FundingOpportunity.id.asc(),
+            FundingOpportunity.deadline.desc().nullslast(),
+            FundingOpportunity.id.desc(),
         )
         .offset((page - 1) * limit)
         .limit(limit)

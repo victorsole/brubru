@@ -140,7 +140,10 @@ async def list_calls_for_proposals(
 
     total = query.count()
     rows = (
-        query.order_by(FtCallForProposals.deadline.asc().nullslast(), FtCallForProposals.id.asc())
+        # Default: most recent deadlines first (2026 + open calls surface before
+        # historic closed calls). Partners exploring the endpoint should land
+        # on current opportunities, not on calls that closed a decade ago.
+        query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
@@ -270,7 +273,9 @@ async def list_calls_for_tenders(
 
     total = query.count()
     rows = (
-        query.order_by(FtCallForTenders.deadline.asc().nullslast(), FtCallForTenders.id.asc())
+        # Default: most recent deadlines first (2025-2026 published-at lines
+        # up well; partners want active tenders, not historic ones).
+        query.order_by(FtCallForTenders.deadline.desc().nullslast(), FtCallForTenders.id.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
