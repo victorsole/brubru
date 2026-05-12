@@ -56,7 +56,7 @@ class IdentifyResult(BaseModel):
 )
 async def identify_one(
     request: Request,
-    q: str = Query(..., min_length=1, description="Identifier string"),
+    q: str = Query(..., min_length=1, description="Identifier string", example="32016R0679"),
     user: User = Depends(api_user_with_rate_limit),
 ) -> IdentifyResult:
     match = recognise(q)
@@ -91,7 +91,7 @@ async def identify_one(
 )
 async def identify_scan(
     request: Request,
-    text: str = Query(..., min_length=2, description="Free text to scan"),
+    text: str = Query(..., min_length=2, description="Free text to scan", example="See Regulation (EU) 2016/679 and Directive 2002/58/EC."),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[IdentifyResult]:
     matches = parse_all(text)

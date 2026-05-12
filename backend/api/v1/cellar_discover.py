@@ -128,7 +128,7 @@ def _to_date(s: Optional[str]) -> Optional[date]:
 )
 async def recent_cellar_acts(
     request: Request,
-    published_from: date = Query(..., description="Lower bound (YYYY-MM-DD)"),
+    published_from: date = Query(..., description="Lower bound (YYYY-MM-DD)", example="2026-04-01"),
     published_to: Optional[date] = Query(None, description="Upper bound (YYYY-MM-DD); defaults to today"),
     sectors: Optional[str] = Query(
         None,
@@ -325,7 +325,7 @@ async def cellar_celex_languages(
 )
 async def search_eurovoc(
     request: Request,
-    q: str = Query(..., min_length=2, description="Free-text search term"),
+    q: str = Query(..., min_length=2, description="Free-text search term", example="artificial intelligence"),
     language: str = Query("en", description="ISO-2 language code for labels"),
     limit: int = Query(20, ge=1, le=100),
     user: User = Depends(api_user_with_rate_limit),
