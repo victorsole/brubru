@@ -21,7 +21,11 @@ python-dotenv==1.0.0
 stripe==10.0.0
 
 # AI SDKs (API-based, no local models)
-mistralai==1.9.11  # Pinned: >=1.10 adds opentelemetry deps that conflict with chromadb
+# Pinned: >=1.10 adds opentelemetry deps that conflict with chromadb.
+# Installed via VCS URL because the PyPI release of mistralai was quarantined
+# (pypi:project-status="quarantined" on the simple index → pip can't find any
+# version). GitHub tag v1.9.11 is the same code, fetchable from the public repo.
+mistralai @ git+https://github.com/mistralai/client-python.git@v1.9.11
 anthropic>=0.77.0
 openai>=2.0.0
 google-generativeai>=0.8.0
