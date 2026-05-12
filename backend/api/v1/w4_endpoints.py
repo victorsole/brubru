@@ -517,11 +517,27 @@ def _secondary_act_to_item(
     r: SecondaryAct,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> SecondaryActItem:
-    body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
-    # Derive canonical citizen URL: EUR-Lex CELEX URL when we have a CELEX,
-    # else direct pdf_url, else source_url.
+    # Prefer the cached HTML body when present (Cellar XHTML manifestation,
+    # backfilled by scripts/backfill_secondary_acts_body.py); fall back to
+    # composing one from text_body for PDF-only sources.
+    cached_html = (r.body_html or "").strip() or None
+    if cached_html:
+        body_html = cached_html
+        body_text = r.text_body
+        has_body = bool(body_text and len(body_text) >= body_threshold)
+    else:
+        body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
+    # Derive canonical citizen URL. Preference ladder:
+    #   1) EUR-Lex CELEX page when CELEX is known (citizen-friendly canonical).
+    #   2) Specific regdel record page (webgate /regdel/#/delegatedActs/<id>).
+    #      This lands on the act's scrutiny status / metadata page, NOT the
+    #      generic search results.
+    #   3) Direct PDF URL.
+    #   4) Original scrape URL (often the regdel search URL — fallback only).
     if r.celex:
         public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex}"
+    elif getattr(r, "regdel_id", None):
+        public_url = f"https://webgate.ec.europa.eu/regdel/#/delegatedActs/{r.regdel_id}?lang=en"
     elif r.pdf_url:
         public_url = r.pdf_url
     else:

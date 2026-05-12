@@ -234,6 +234,13 @@ class SecondaryAct(Base):
     # Body text backfilled from Cellar (migration 051). XHTML-stripped plain
     # text or PDF-extracted text for adopted CELEXes.
     text_body = Column(Text, nullable=True)
+    # HTML body backfilled from Cellar XHTML manifestation (migration 071).
+    body_html = Column(Text, nullable=True)
+    body_fetched_at = Column(DateTime, nullable=True)
+    # Internal record id in the Interinstitutional Register of Delegated Acts.
+    # Lets the v1 endpoint build a specific /delegatedActs/{regdel_id}?lang=en
+    # citizen URL instead of a generic search URL (migration 071).
+    regdel_id = Column(Integer, nullable=True)
 
     policy_areas = Column(ARRAY(String), default=list)
 
