@@ -246,6 +246,18 @@ async def _enrich_country_group(items: List["MEPItem"]) -> List["MEPItem"]:
             role = _extract_role(profile)
             if role:
                 item.role = role
+        # Re-compose body + document_date from the FULL profile (the list
+        # endpoint only carried label + id, so the initial composition was
+        # one-line). Hydration is cached 6h so this stays free after warmup.
+        body_txt, body_html, doc_date = _compose_mep_body(
+            profile, item.full_name, item.country, item.group, item.role,
+        )
+        if body_txt:
+            item.body_txt = body_txt
+        if body_html:
+            item.body_html = body_html
+        if doc_date and not item.document_date:
+            item.document_date = doc_date
         return item
 
     return await asyncio.gather(*[_hydrate(it) for it in items])
