@@ -6,6 +6,7 @@ combines XGBoost ML models with baseline heuristics over OEIL data.
 """
 
 import logging
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -43,6 +44,17 @@ class OutcomePrediction(BaseModel):
     most_likely_outcome: Optional[str] = None
     confidence: Optional[float] = None
     model_version: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. A prediction is derived analytical
+    # content — public_url is the OEIL procedure-file page (where partners
+    # can see the underlying data the prediction reads); body_txt and
+    # body_html summarise the outcome probabilities in human form; document_date
+    # is null (a prediction has no publication date); creation_date is when
+    # the model produced this response.
+    public_url: Optional[str] = Field(None, description="OEIL procedure-file URL for the underlying procedure.")
+    body_txt: Optional[str] = Field(None, description="Plain-text summary of the predicted outcomes + probabilities.")
+    body_html: Optional[str] = Field(None, description="HTML rendering of the prediction breakdown.")
+    document_date: Optional[date] = Field(None, description="Null — predictions are not dated documents.")
+    creation_date: Optional[datetime] = Field(None, description="Time the prediction was generated.")
 
 
 @router.get(
@@ -138,13 +150,45 @@ async def get_outcome(
         # ML upgrade that renames fields back doesn't break the v1 surface.
         outcomes_src = getattr(pred, "outcomes", None) or getattr(pred, "probabilities", None) or []
         most_likely = getattr(pred, "most_likely_outcome", None) or getattr(pred, "predicted_outcome", None)
+        probs = [OutcomeProbability(outcome=o.outcome, probability=o.probability) for o in outcomes_src]
+        # Compose a human body summarising the prediction
+        lines_txt = [f"Outcome prediction for {pred.procedure_ref}"]
+        if pred.current_status:
+            lines_txt.append(f"Current status: {pred.current_status}")
+        if most_likely:
+            lines_txt.append(f"Most likely outcome: {most_likely}")
+        if pred.confidence is not None:
+            lines_txt.append(f"Confidence: {pred.confidence:.2%}")
+        if probs:
+            lines_txt.append("Probabilities:")
+            for op in probs:
+                lines_txt.append(f"  - {op.outcome}: {op.probability:.2%}")
+        body_txt = "\n".join(lines_txt)
+        body_html = (
+            "<article>"
+            f"<h2>Outcome prediction for {pred.procedure_ref}</h2>"
+            + (f"<p><strong>Current status:</strong> {pred.current_status}</p>" if pred.current_status else "")
+            + (f"<p><strong>Most likely outcome:</strong> {most_likely}</p>" if most_likely else "")
+            + (f"<p><strong>Confidence:</strong> {pred.confidence:.2%}</p>" if pred.confidence is not None else "")
+            + ("<h3>Probabilities</h3><ul>"
+                + "".join(f"<li><strong>{op.outcome}:</strong> {op.probability:.2%}</li>" for op in probs)
+                + "</ul>" if probs else "")
+            + "</article>"
+        )
+        # OEIL procedure-file URL as the canonical citizen URL
+        oeil_url = f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={pred.procedure_ref}"
         return OutcomePrediction(
             procedure_ref=pred.procedure_ref,
             current_status=pred.current_status,
-            outcomes=[OutcomeProbability(outcome=o.outcome, probability=o.probability) for o in outcomes_src],
+            outcomes=probs,
             most_likely_outcome=most_likely,
             confidence=pred.confidence,
             model_version=getattr(pred, "model_version", "baseline"),
+            # 5 mandatory datapoints
+            public_url=oeil_url,
+            body_txt=body_txt,
+            body_html=body_html,
+            creation_date=datetime.utcnow(),
         )
     except HTTPException:
         raise

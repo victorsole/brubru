@@ -731,6 +731,32 @@ async def list_opinions(
     data = []
     for r in rows:
         fallback = f"{AD_TYPE_MAP.get(r.document_type, 'opinion')} for {r.procedure_reference} ({r.committee_code})"
+        title = _enrich_doc_title(fallback, r.procedure_reference, lc_lookup)
+        # Compose body from the structured row. The full PDF body lives on
+        # the amendment_documents/{id} detail surface — partners hitting
+        # /opinions get the metadata view with a readable summary.
+        body_lines = [title]
+        if r.committee_code:
+            body_lines.append(f"Committee: {r.committee_code}")
+        if r.rapporteur_name:
+            body_lines.append(f"Rapporteur: {r.rapporteur_name}")
+        if r.procedure_reference:
+            body_lines.append(f"Procedure: {r.procedure_reference}")
+        if r.pe_reference:
+            body_lines.append(f"PE reference: {r.pe_reference}")
+        if r.document_date:
+            body_lines.append(f"Document date: {r.document_date}")
+        if r.total_amendments is not None:
+            body_lines.append(f"Total amendments: {r.total_amendments}")
+        if r.doceo_url:
+            body_lines.append(f"Source: {r.doceo_url}")
+        body_txt = "\n".join(body_lines)
+        body_html = (
+            "<article><h2>" + title + "</h2>"
+            + "".join(f"<p><strong>{k}:</strong> {v}</p>" for line in body_lines[1:]
+                      for k, v in [line.split(": ", 1)] if ": " in line)
+            + "</article>"
+        )
         data.append(EPDocumentItem(
             id=str(r.id),
             source="amendment_document",
@@ -738,12 +764,17 @@ async def list_opinions(
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
+            title=title,
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
             total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
+            # 5 mandatory datapoints
+            public_url=r.doceo_url,
+            body_txt=body_txt,
+            body_html=body_html,
+            creation_date=r.scraped_at,
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to)

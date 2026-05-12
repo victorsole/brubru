@@ -74,6 +74,12 @@ class ParliamentaryQuestionItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. public_url is the doceo
+    # question page (citizen-facing); document_date is the submission
+    # date; creation_date is when Brubru first ingested the row.
+    public_url: Optional[str] = Field(None, description="Citizen URL — alias of source_url (the doceo question page).")
+    document_date: Optional[date] = Field(None, description="The question's submission date (alias of submitted_date).")
+    creation_date: Optional[datetime] = Field(None, description="Time the row was first ingested (alias of last_updated for now).")
 
 
 def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> ParliamentaryQuestionItem:
@@ -106,6 +112,10 @@ def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Parl
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,
+        # 5 mandatory datapoints
+        public_url=r.source_url,
+        document_date=r.submitted_date,
+        creation_date=r.last_updated,
     )
 
 

@@ -157,6 +157,57 @@ class OfficialItem(BaseModel):
     policy_areas: list = Field(default_factory=list)
     is_active: bool = True
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints. Officials are person records,
+    # not documents — public_url is the bio page; body_txt/html are composed
+    # from name + title + role + institution + DG + cabinet + portfolio +
+    # contact details; document_date is null (people aren't dated);
+    # creation_date stamps the API call.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — the bio page (or Whoiswho profile).")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: name + title + role + institution + DG + cabinet + portfolio + contact details.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields. Includes the photo when available.")
+    document_date: Optional[date] = Field(None, description="Null — officials are not dated documents.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this fetch.")
+
+
+def _compose_official_body(r) -> tuple:
+    """Compose body_txt + body_html from an EUOfficial row. No upstream HTTP."""
+    import html as _html
+    parts_txt: list = []
+    parts_html: list = []
+    parts_html.append(f"<h2>{_html.escape(r.name or '?')}</h2>")
+    if r.photo_url:
+        parts_html.append(f'<img src="{_html.escape(r.photo_url)}" alt="Official portrait" />')
+    if r.name:
+        parts_txt.append(r.name)
+    kv = []
+    if r.title:
+        kv.append(("Title", r.title))
+    if r.role:
+        kv.append(("Role", r.role))
+    if r.institution_slug:
+        kv.append(("Institution", r.institution_slug))
+    if r.dg:
+        kv.append(("Directorate-General", r.dg))
+    if r.cabinet:
+        kv.append(("Cabinet", r.cabinet))
+    if r.portfolio:
+        kv.append(("Portfolio", r.portfolio))
+    if r.country:
+        kv.append(("Country", r.country))
+    if r.city:
+        kv.append(("City", r.city))
+    if r.email:
+        kv.append(("Email", r.email))
+    if r.phone:
+        kv.append(("Phone", r.phone))
+    if r.policy_areas:
+        kv.append(("Policy areas", ", ".join(r.policy_areas)))
+    for k, v in kv:
+        parts_txt.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    body_txt = "\n".join(parts_txt) if parts_txt else None
+    body_html = "<article>" + "".join(parts_html) + "</article>" if parts_html else None
+    return body_txt, body_html
 
 
 @officials_router.get(
@@ -228,17 +279,23 @@ async def list_officials(
 
     total = query.count()
     rows = query.order_by(EUOfficial.name.asc()).offset((page - 1) * limit).limit(limit).all()
-    data = [
-        OfficialItem(
+    now = datetime.utcnow()
+    data: list = []
+    for r in rows:
+        body_txt, body_html = _compose_official_body(r)
+        data.append(OfficialItem(
             id=str(r.id), slug=r.slug, name=r.name, title=r.title, role=r.role,
             institution_slug=r.institution_slug, dg=r.dg, cabinet=r.cabinet,
             country=r.country, city=r.city, email=r.email, phone=r.phone,
             bio_url=r.bio_url, photo_url=r.photo_url,
             portfolio=r.portfolio, policy_areas=list(r.policy_areas or []),
             is_active=bool(r.is_active), last_updated=r.last_updated,
-        )
-        for r in rows
-    ]
+            # 5 mandatory datapoints
+            public_url=r.bio_url,
+            body_txt=body_txt,
+            body_html=body_html,
+            creation_date=now,
+        ))
     return build_envelope(data, total=total, page=page, limit=limit, updated_from=updated_from)
 
 
@@ -256,6 +313,7 @@ async def get_official_detail(
             "resource": "official",
             "id": slug,
         })
+    body_txt, body_html = _compose_official_body(r)
     return OfficialItem(
         id=str(r.id), slug=r.slug, name=r.name, title=r.title, role=r.role,
         institution_slug=r.institution_slug, dg=r.dg, cabinet=r.cabinet,
@@ -263,6 +321,10 @@ async def get_official_detail(
         bio_url=r.bio_url, photo_url=r.photo_url,
         portfolio=r.portfolio, policy_areas=list(r.policy_areas or []),
         is_active=bool(r.is_active), last_updated=r.last_updated,
+        public_url=r.bio_url,
+        body_txt=body_txt,
+        body_html=body_html,
+        creation_date=datetime.utcnow(),
     )
 
 
