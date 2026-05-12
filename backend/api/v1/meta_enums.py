@@ -88,6 +88,7 @@ async def meta_enums(
         ).all() if row[0]
     ]
 
+    now = datetime.utcnow().isoformat() + "Z"
     return {
         "datasets": list(HTTP_METHODS_BY_DATASET.keys()),
         "methods_by_dataset": HTTP_METHODS_BY_DATASET,
@@ -103,5 +104,13 @@ async def meta_enums(
         "countries_iso3_sample": [
             "BEL", "FRA", "DEU", "ESP", "ITA", "NLD", "POL", "ROU", "SWE", "GBR", "USA",
         ],
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": now,
+        # The 5 mandatory Brubru v1 datapoints (this is a meta/enums endpoint
+        # — pure reference data, so url and body and date are null; only
+        # creation_date is meaningful, equal to generated_at).
+        "public_url": None,
+        "body_txt": None,
+        "body_html": None,
+        "document_date": None,
+        "creation_date": now,
     }

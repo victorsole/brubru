@@ -6,6 +6,7 @@ Proxies https://data.europarl.europa.eu/api/v2/meps with 6h in-memory cache.
 
 import logging
 import time
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
 import httpx
@@ -33,6 +34,14 @@ class MEPItem(BaseModel):
     group: Optional[str] = None
     role: Optional[str] = None
     profile_url: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints (MEPs are person records, not
+    # documents — public_url is the EP profile page; body fields are null;
+    # dates are null since EP Open Data doesn't surface mandate dates here).
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of profile_url — the EP MEP profile page).")
+    body_txt: Optional[str] = Field(None, description="Null — MEPs are person records, not documents.")
+    body_html: Optional[str] = Field(None, description="Null.")
+    document_date: Optional[date] = Field(None, description="Null — mandate start/end isn't returned by the EP Open Data list endpoint.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this MEP list fetch (live endpoint, 6h cache).")
 
 
 def _cached(key: str):
@@ -257,6 +266,8 @@ def _normalise(raw: Dict[str, Any]) -> MEPItem:
         group=raw.get("political_group") or raw.get("politicalGroup") or None,
         role=raw.get("role") or None,
         profile_url=profile_url,
+        public_url=profile_url,
+        creation_date=datetime.utcnow(),
     )
 
 

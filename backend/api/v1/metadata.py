@@ -10,7 +10,7 @@ Rule: every record returned has at minimum a stable `slug`, a human `name`,
 and a `type` label. NO field is NULL when we can avoid it.
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends
@@ -467,10 +467,19 @@ class _GenericListResponse(BaseModel):
     total: int
     data: List[Dict[str, Any]]
     generated_at: datetime = Field(default_factory=datetime.utcnow)
+    # The 5 mandatory Brubru v1 datapoints (envelope-level — these are
+    # metadata/reference lookups, not document responses, so url is null
+    # and dates are null. creation_date is the API call time.)
+    public_url: Optional[str] = Field(None, description="Null for metadata endpoints — these are enumerations, not documents.")
+    body_txt: Optional[str] = Field(None, description="Null for metadata endpoints — see `data` for the enumeration.")
+    body_html: Optional[str] = Field(None, description="Null for metadata endpoints.")
+    document_date: Optional[date] = Field(None, description="Null for metadata endpoints — reference data is not dated.")
+    creation_date: Optional[datetime] = Field(None, description="When this API call was served (alias of generated_at).")
 
 
 def _shape(items: List[Dict[str, Any]]) -> _GenericListResponse:
-    return _GenericListResponse(total=len(items), data=items)
+    now = datetime.utcnow()
+    return _GenericListResponse(total=len(items), data=items, generated_at=now, creation_date=now)
 
 
 # ============================================================================

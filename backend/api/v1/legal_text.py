@@ -8,6 +8,7 @@ Customers get the same primitives Brubru uses internally.
 """
 
 import logging
+from datetime import date, datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
@@ -28,6 +29,12 @@ router = APIRouter(prefix="/legal-text", tags=["v1-legal-text"])
 class RecitalArticleMapResponse(BaseModel):
     celex: str
     map: dict = Field(..., description="Article -> [{recital_number, score, snippet}, ...] (top-3)")
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL of the parent law (EUR-Lex CELEX URL).")
+    body_txt: Optional[str] = Field(None, description="Null — call /api/v1/laws/{celex}/text for the parent law's body.")
+    body_html: Optional[str] = Field(None, description="Null — same.")
+    document_date: Optional[date] = Field(None, description="Null on this derived endpoint — fetch /api/v1/laws/{celex} for the parent's date.")
+    creation_date: Optional[datetime] = Field(None, description="When the recital-article map was last computed.")
 
 
 class DefinedTermsResponse(BaseModel):
@@ -35,10 +42,14 @@ class DefinedTermsResponse(BaseModel):
     terms: dict = Field(..., description="Term -> {term, definition, article, point}")
     # Body fields composed from the concatenated definitions, useful as a
     # standalone glossary view of the law. body_html is a semantic <dl> with
-    # one <dt>/<dd> pair per term; body_text is a plain-text rendering.
+    # one <dt>/<dd> pair per term; body_txt is a plain-text rendering.
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL of the parent law (EUR-Lex CELEX URL).")
+    document_date: Optional[date] = Field(None, description="Null on this derived endpoint — fetch /api/v1/laws/{celex} for the parent's date.")
+    creation_date: Optional[datetime] = Field(None, description="When the defined-terms cache was last computed.")
 
 
 def _compose_definitions_body(terms: dict, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
@@ -146,7 +157,12 @@ def recital_article_map(
                 "hint": "Use /api/v1/laws/{celex}/text to get the full text via the EUR-Lex Cellar fallback",
             },
         )
-    return RecitalArticleMapResponse(celex=celex, map=mapping)
+    return RecitalArticleMapResponse(
+        celex=celex,
+        map=mapping,
+        public_url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}",
+        creation_date=datetime.utcnow(),
+    )
 
 
 @router.get(
@@ -188,6 +204,8 @@ def defined_terms(
     return DefinedTermsResponse(
         celex=celex, terms=mapping,
         has_body=has_body, body_html=body_html, body_txt=body_text,
+        public_url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}",
+        creation_date=datetime.utcnow(),
     )
 
 
@@ -220,7 +238,24 @@ def resolve_references(
 
     if payload.annotate_html:
         return {"html": annotate_html(payload.text)}
-    return {"refs": resolve_references_json(payload.text)}
+    refs = resolve_references_json(payload.text)
+    # Augment each ref with public_url (its EUR-Lex URL is already in r["url"])
+    # and the 5 mandatory v1 datapoints at envelope level.
+    for r in refs:
+        r["public_url"] = r.get("url")
+        r["body_txt"] = None
+        r["body_html"] = None
+        r["document_date"] = None
+        r["creation_date"] = datetime.utcnow().isoformat()
+    return {
+        "refs": refs,
+        # Envelope-level v1 datapoints
+        "public_url": None,
+        "body_txt": payload.text,           # the resolver's input IS the body
+        "body_html": None,
+        "document_date": None,
+        "creation_date": datetime.utcnow().isoformat(),
+    }
 
 
 @router.post(

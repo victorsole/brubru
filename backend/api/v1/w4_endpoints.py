@@ -223,6 +223,12 @@ class TransparencyMeetingItem(BaseModel):
     policy_areas: list = Field(default_factory=list)
     related_celex: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body — the meeting subject (Transparency Register rows don't have narrative bodies).")
+    body_html: Optional[str] = Field(None, description="Null — Transparency Register entries are structured records, not documents.")
+    meeting_start_date: Optional[date] = Field(None, description="The meeting date (alias of meeting_date — this IS a meeting endpoint).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 @meetings_router.get(
@@ -288,6 +294,11 @@ async def list_meetings(
             policy_areas=list(r.policy_areas or []),
             related_celex=list(r.related_celex or []),
             last_updated=r.last_updated,
+            public_url=r.source_url,
+            body_txt=r.subject,
+            body_html=None,
+            meeting_start_date=r.meeting_date,
+            creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
         )
         for r in rows
     ]
@@ -322,6 +333,11 @@ async def get_meeting_detail(
         transparency_register_id=r.transparency_register_id,
         organisation_type=r.organisation_type,
         representatives=r.representatives, source_url=r.source_url,
+        public_url=r.source_url,
+        body_txt=r.subject,
+        body_html=None,
+        meeting_start_date=r.meeting_date,
+        creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
         policy_areas=list(r.policy_areas or []),
         related_celex=list(r.related_celex or []),
         last_updated=r.last_updated,
