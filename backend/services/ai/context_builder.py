@@ -8417,8 +8417,8 @@ class ContextBuilder:
     # ─── Transparency Register meetings (#44-45) ───
     _TR_MEETINGS_INTENT = re.compile(
         r"\b(transparency\s+(?:initiative|register)\s+meeting(?:s)?|"
-        r"commissioner\s+meet(?:ing|s|ings)?|cabinet\s+meet(?:ing|s|ings)?|"
-        r"DG\s+(?:meeting(?:s)?|met\s+with)|"
+        # Commissioner / DG / Cabinet + optional name (1-3 words) + meet/meeting(s)
+        r"(?:commissioner|DG|cabinet)\s+(?:[A-Z][a-zÀ-ſ]+\s+){0,3}(?:meet(?:ing(?:s)?|s)?|met\s+with)|"
         r"who\s+(?:did|met|has)\s+.+(?:meet|lobby)|"
         r"lobbyist(?:s)?\s+met|"
         r"meeting(?:s)?\s+with\s+(?:Commissioner|Cabinet|DG))\b",
