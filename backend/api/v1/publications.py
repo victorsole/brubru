@@ -51,6 +51,10 @@ class PublicationItem(BaseModel):
     body_txt: Optional[str] = None
     # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — alias of url.")
+    document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 @router.get(
@@ -190,6 +194,9 @@ async def list_publications(
             body_html=body_html,
             body_txt=body_text,
             body=deprecated_body(body_text, body_html),
+            public_url=r.url,
+            document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
+            creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
         ))
 
     return build_envelope(
@@ -209,6 +216,15 @@ class SourceItem(BaseModel):
     institution_slug: str
     count: int
     category: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. /publications/sources is a
+    # reference enumeration over institutional_publications.source_slug —
+    # not a document — so the 4 content fields stay null. creation_date
+    # is the response time.
+    public_url: Optional[str] = Field(None, description="Null — sources are aggregations, not documents.")
+    body_txt: Optional[str] = Field(None, description="Null — see /publications?source_slug=<slug> for documents.")
+    body_html: Optional[str] = Field(None, description="Null.")
+    document_date: Optional[date] = Field(None, description="Null — reference data is not dated.")
+    creation_date: Optional[datetime] = Field(None, description="Response generation time.")
 
 
 # IMPORTANT: /sources MUST be declared BEFORE /{publication_id}, otherwise
@@ -249,6 +265,7 @@ async def list_sources(
         )
         .all()
     )
+    now = datetime.utcnow()
     return {
         "total_sources": len(rows),
         "sources": sorted(
@@ -265,6 +282,13 @@ async def list_sources(
             key=lambda s: (s["count"] or 0),
             reverse=True,
         ),
+        # The 5 mandatory Brubru v1 datapoints. /publications/sources is a
+        # reference enumeration — public_url/body/document_date are null.
+        "public_url": None,
+        "body_txt": None,
+        "body_html": None,
+        "document_date": None,
+        "creation_date": now.isoformat(),
     }
 
 
@@ -319,4 +343,7 @@ async def get_publication_detail(
         body_html=body_html,
         body_txt=body_text,
         body=deprecated_body(body_text, body_html),
+        public_url=r.url,
+        document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
+        creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
     )

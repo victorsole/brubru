@@ -59,6 +59,10 @@ class TextItem(BaseModel):
     # has_full_text → has_body.
     has_full_text: bool = False
     full_text: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(None, description="Citizen URL — full_text_url / pdf_url / source_url fallback chain.")
+    document_date: Optional[date] = Field(None, description="Adoption date (date-only view of adoption_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
 
 
 def _row_to_item(
@@ -91,6 +95,10 @@ def _row_to_item(
         # Deprecated aliases kept one release.
         has_full_text=has_body,
         full_text=body_text,
+        # 5 mandatory datapoints
+        public_url=r.full_text_url or r.pdf_url or r.source_url,
+        document_date=r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None,
+        creation_date=r.last_updated,
     )
 
 

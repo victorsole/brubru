@@ -559,6 +559,10 @@ class PressReleaseItem(BaseModel):
     body_txt: Optional[str] = None
     # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — alias of url (the press-release page on the institutional site).")
+    document_date: Optional[date] = Field(None, description="Publication date of the press release (date-only view of published_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 @press_releases_router.get(
@@ -632,6 +636,10 @@ async def list_press_releases(
             body_html=body_html,
             body_txt=body_text,
             body=deprecated_body(body_text, body_html),
+            # 5 mandatory datapoints
+            public_url=r.url,
+            document_date=r.published_date.date() if hasattr(r.published_date, "date") and r.published_date else None,
+            creation_date=getattr(r, "fetched_at", None) or getattr(r, "first_seen", None),
         ))
     return build_envelope(
         data, total=total, page=page, limit=limit,

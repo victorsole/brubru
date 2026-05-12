@@ -54,6 +54,38 @@ class ResolutionItem(BaseModel):
     text_url: Optional[str] = None
     has_commission_followup: bool = False
     updated_at: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — text_url (the doceo text) when present, else oeil_url.")
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: title + procedure + lead committee + rapporteur + dates + vote tally + summary.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="Adoption date if set, else the plenary vote date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of updated_at).")
+
+
+def _compose_resolution_body(r) -> tuple:
+    """Plain text + HTML composition from the resolution row."""
+    import html as _html
+    lines_txt: list = [r.title or "?"]
+    parts_html: list = [f"<h2>{_html.escape(r.title or '?')}</h2>"]
+    kv: list = []
+    if r.procedure_ref: kv.append(("Procedure", r.procedure_ref))
+    if r.resolution_type:
+        kv.append(("Type", r.resolution_type.value if hasattr(r.resolution_type, "value") else str(r.resolution_type)))
+    if r.lead_committee: kv.append(("Lead committee", r.lead_committee))
+    if r.rapporteur: kv.append(("Rapporteur", r.rapporteur))
+    if r.vote_date: kv.append(("Vote date", str(r.vote_date)))
+    if r.adoption_date: kv.append(("Adoption date", str(r.adoption_date)))
+    if r.vote_total:
+        kv.append(("Vote tally",
+                   f"{int(r.vote_for or 0)} for, {int(r.vote_against or 0)} against, {int(r.vote_abstention or 0)} abstentions (total {int(r.vote_total)})"))
+    if r.summary:
+        kv.append(("Summary", r.summary))
+    for k, v in kv:
+        lines_txt.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    body_txt = "\n".join(lines_txt)
+    body_html = "<article>" + "".join(parts_html) + "</article>"
+    return body_txt, body_html
 
 
 def _build_key_events(r: EPResolution) -> list:
@@ -105,6 +137,13 @@ def _build_key_events(r: EPResolution) -> list:
 
 
 def _row_to_item(r: EPResolution) -> ResolutionItem:
+    body_txt, body_html = _compose_resolution_body(r)
+    # Document date: prefer adoption_date, else vote_date (as date).
+    doc_date = None
+    if r.adoption_date:
+        doc_date = r.adoption_date if isinstance(r.adoption_date, date) else None
+    elif r.vote_date:
+        doc_date = r.vote_date.date() if hasattr(r.vote_date, "date") else None
     return ResolutionItem(
         id=str(r.id),
         procedure_ref=r.procedure_ref,
@@ -126,6 +165,12 @@ def _row_to_item(r: EPResolution) -> ResolutionItem:
         text_url=r.text_url,
         has_commission_followup=bool(r.has_commission_followup),
         updated_at=r.updated_at,
+        # 5 mandatory datapoints
+        public_url=r.text_url or r.oeil_url,
+        body_txt=body_txt,
+        body_html=body_html,
+        document_date=doc_date,
+        creation_date=r.updated_at,
     )
 
 

@@ -30,6 +30,13 @@ class TimelinePrediction(BaseModel):
     upper_bound_75: Optional[int] = None
     model_version: Optional[str] = None
     prediction_method: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. A timeline prediction is derived
+    # analytical content — same shape as /outcome but with timeline numbers.
+    public_url: Optional[str] = Field(None, description="OEIL procedure-file URL for the underlying procedure.")
+    body_txt: Optional[str] = Field(None, description="Plain-text summary of the timeline prediction.")
+    body_html: Optional[str] = Field(None, description="HTML rendering of the timeline prediction.")
+    document_date: Optional[date] = Field(None, description="Null — predictions are not dated documents.")
+    creation_date: Optional[datetime] = Field(None, description="Time the prediction was generated.")
 
 
 class OutcomeProbability(BaseModel):
@@ -81,6 +88,37 @@ async def get_timeline(
     use_ml: bool = Query(True),
     user: User = Depends(api_user_with_rate_limit),
 ) -> TimelinePrediction:
+    def _compose(pred, *, days_remaining, lower=None, upper=None, model_ver=None, method=None) -> dict:
+        """Common body composition for both ML + baseline timeline predictions."""
+        lines = [f"Timeline prediction for {pred.procedure_ref}"]
+        if pred.current_status:
+            lines.append(f"Current status: {pred.current_status}")
+        if pred.days_in_status is not None:
+            lines.append(f"Days in current status: {pred.days_in_status}")
+        if days_remaining is not None:
+            lines.append(f"Predicted days remaining: {days_remaining}")
+        if lower is not None and upper is not None:
+            lines.append(f"Range (25th - 75th percentile): {lower} - {upper} days")
+        if pred.confidence is not None:
+            lines.append(f"Confidence: {pred.confidence:.2%}")
+        body_txt = "\n".join(lines)
+        body_html = (
+            "<article>"
+            f"<h2>Timeline prediction for {pred.procedure_ref}</h2>"
+            + (f"<p><strong>Current status:</strong> {pred.current_status}</p>" if pred.current_status else "")
+            + (f"<p><strong>Days in current status:</strong> {pred.days_in_status}</p>" if pred.days_in_status is not None else "")
+            + (f"<p><strong>Predicted days remaining:</strong> {days_remaining}</p>" if days_remaining is not None else "")
+            + (f"<p><strong>Range:</strong> {lower}–{upper} days (25th–75th percentile)</p>" if lower is not None and upper is not None else "")
+            + (f"<p><strong>Confidence:</strong> {pred.confidence:.2%}</p>" if pred.confidence is not None else "")
+            + "</article>"
+        )
+        return {
+            "public_url": f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={pred.procedure_ref}",
+            "body_txt": body_txt,
+            "body_html": body_html,
+            "creation_date": datetime.utcnow(),
+        }
+
     try:
         if use_ml:
             from services.predictions import get_ml_timeline_predictor
@@ -96,6 +134,9 @@ async def get_timeline(
                 upper_bound_75=pred.upper_bound_75,
                 model_version=pred.model_version,
                 prediction_method="ml_xgboost" if not pred.used_fallback else (pred.fallback_reason or "fallback"),
+                **_compose(pred, days_remaining=pred.predicted_days_remaining,
+                           lower=pred.lower_bound_25, upper=pred.upper_bound_75,
+                           model_ver=pred.model_version, method="ml"),
             )
         from services.predictions import get_timeline_predictor
         predictor = get_timeline_predictor()
@@ -110,6 +151,8 @@ async def get_timeline(
             confidence=pred.confidence,
             model_version="baseline",
             prediction_method=pred.based_on,
+            **_compose(pred, days_remaining=pred.predicted_days_remaining or 0,
+                       model_ver="baseline", method=pred.based_on),
         )
     except HTTPException:
         raise

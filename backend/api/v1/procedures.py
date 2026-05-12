@@ -7,7 +7,7 @@ procedure reference, status, committee, last-update date range.
 """
 
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -81,6 +81,41 @@ class ProcedureItem(BaseModel):
     expected_completion: Optional[datetime] = None
     enriched_at: Optional[datetime] = None
     enrichment_quality: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. A procedure is an OEIL file —
+    # public_url is the OEIL procedure-file page; body_txt/html surface the
+    # cached OEIL body (same source as /committees/{code}/work-items uses);
+    # document_date is the most recent OEIL key-event date; creation_date
+    # is when Brubru first ingested the carriage row.
+    public_url: Optional[str] = Field(None, description="OEIL procedure-file URL — citizen-facing canonical page for the procedure.")
+    body_txt: Optional[str] = Field(None, description="Plain-text of the OEIL procedure-file page (description + key events).")
+    body_html: Optional[str] = Field(None, description="HTML of the OEIL procedure-file page.")
+    document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage (alias of first_seen).")
+
+
+def _oeil_url(oeil_ref: Optional[str]) -> Optional[str]:
+    if not oeil_ref:
+        return None
+    return f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={oeil_ref}"
+
+
+def _latest_event_date(events) -> Optional[date]:
+    """Return the most recent date from oeil_key_events (or oeil_timeline)."""
+    if not events or not isinstance(events, list):
+        return None
+    latest = ""
+    for ev in events:
+        if not isinstance(ev, dict):
+            continue
+        d = ev.get("date") or ev.get("event_date") or ""
+        if isinstance(d, str) and d > latest:
+            latest = d
+    if latest:
+        try:
+            return date.fromisoformat(latest[:10])
+        except ValueError:
+            return None
+    return None
 
 
 def _law_tracker_url(oeil_ref: Optional[str]) -> Optional[str]:
@@ -196,6 +231,12 @@ async def list_procedures(
             expected_completion=r.expected_completion,
             enriched_at=r.enriched_at,
             enrichment_quality=r.enrichment_quality,
+            # 5 mandatory datapoints
+            public_url=_oeil_url(r.oeil_procedure_ref),
+            body_txt=getattr(r, "oeil_text_body", None),
+            body_html=getattr(r, "oeil_html_body", None),
+            document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
+            creation_date=r.first_seen,
         )
         for r in rows
     ]
@@ -226,6 +267,12 @@ class ProcedureDetail(BaseModel):
     is_blocked: bool = False
     days_in_current_status: Optional[int] = None
     text_type: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints (see ProcedureItem for the contract).
+    public_url: Optional[str] = Field(None, description="OEIL procedure-file URL.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body sourced from the cached OEIL page.")
+    body_html: Optional[str] = Field(None, description="HTML body sourced from the cached OEIL page.")
+    document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage.")
 
     # Committees + rapporteurs
     lead_committee: Optional[str] = None
@@ -321,6 +368,12 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         expected_completion=r.expected_completion,
         enriched_at=r.enriched_at,
         enrichment_quality=r.enrichment_quality,
+        # 5 mandatory datapoints
+        public_url=_oeil_url(r.oeil_procedure_ref),
+        body_txt=getattr(r, "oeil_text_body", None),
+        body_html=getattr(r, "oeil_html_body", None),
+        document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
+        creation_date=r.first_seen,
     )
 
 
