@@ -437,6 +437,51 @@ class AIService:
         logger.info("Post-processing response with legislation acronyms")
         assistant_message = self._linkify_legislation(assistant_message)
 
+        # Workstream 1: response validator -- shadow mode by default. Validates
+        # the final user-facing response against the retrieved context for
+        # hallucination / completeness / negation violations. Logs to the
+        # chat_validations table for the 7-day measurement window before any
+        # regeneration is enabled. See memory/project_chat_ai_architecture_evolution.md.
+        try:
+            from services.ai.validator_settings import (
+                VALIDATOR_ENABLED,
+                VALIDATOR_SHADOW_MODE,
+            )
+            if VALIDATOR_ENABLED and use_context:
+                from services.ai.response_validator import get_response_validator
+                _validator = get_response_validator()
+                if _validator.is_available:
+                    _validation = await _validator.validate(
+                        query=user_message,
+                        context_blocks=context_str,
+                        response=assistant_message,
+                    )
+                    logger.info(
+                        "[VALIDATOR] passed=%s severity=%s violations=%d latency_ms=%d error=%s",
+                        _validation.passed,
+                        _validation.severity,
+                        len(_validation.violations),
+                        _validation.latency_ms,
+                        _validation.error or "-",
+                    )
+                    asyncio.create_task(
+                        self._log_chat_validation(
+                            query=user_message,
+                            response=assistant_message,
+                            context_length=len(context_str),
+                            generator=provider_used,
+                            language=_detect_query_language(user_message),
+                            result=_validation,
+                            shadow_mode=VALIDATOR_SHADOW_MODE,
+                            user_id=user_id,
+                        )
+                    )
+                    # Shadow mode never modifies the response. Regeneration will
+                    # gate on _validation.has_critical in a later commit, once
+                    # the measurement window has produced data.
+        except Exception as _e:  # noqa: BLE001
+            logger.warning("validator pass failed (non-fatal): %s", _e)
+
         total_time_ms = (datetime.now() - start_time).total_seconds() * 1000
 
         logger.info(
@@ -2496,6 +2541,64 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         except Exception as e:
             logger.error(f"Error in _log_analytics: {e}")
+
+    async def _log_chat_validation(
+        self,
+        query: str,
+        response: str,
+        context_length: int,
+        generator: Optional[str],
+        language: Optional[str],
+        result,
+        shadow_mode: bool,
+        user_id: Optional[str],
+    ) -> None:
+        """
+        Persist one validator pass to chat_validations.
+
+        Fail-soft: any DB error is logged but never propagated. The validator
+        is observability; it must not break the chat path. Workstream 1
+        (memory/project_chat_ai_architecture_evolution.md).
+        """
+        try:
+            from services.ai.validator_settings import (
+                VALIDATOR_QUERY_TRUNCATE,
+                VALIDATOR_RESPONSE_TRUNCATE,
+            )
+            from models.chat_validation import ChatValidation
+
+            def _save_validation():
+                db = SessionLocal()
+                try:
+                    row = ChatValidation(
+                        query=(query or "")[:VALIDATOR_QUERY_TRUNCATE],
+                        response_excerpt=(response or "")[:VALIDATOR_RESPONSE_TRUNCATE],
+                        validator_model=result.validator_model,
+                        generator=generator,
+                        language=(language or "").lower()[:8] or None,
+                        passed=result.passed,
+                        severity=result.severity,
+                        violation_count=len(result.violations),
+                        violations=[v.to_dict() for v in result.violations],
+                        latency_ms=result.latency_ms,
+                        context_length=context_length,
+                        shadow_mode=shadow_mode,
+                        error=result.error,
+                        user_id=user_id if user_id else None,
+                    )
+                    db.add(row)
+                    db.commit()
+                except Exception as exc:  # noqa: BLE001
+                    logger.error(f"Failed to log chat validation: {exc}")
+                    db.rollback()
+                finally:
+                    db.close()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, _save_validation)
+
+        except Exception as e:  # noqa: BLE001
+            logger.error(f"Error in _log_chat_validation: {e}")
 
 
 # Global singleton
