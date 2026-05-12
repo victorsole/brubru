@@ -18,7 +18,7 @@ Endpoints:
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -54,6 +54,12 @@ class SanctionListItem(BaseModel):
     legal_basis_url: Optional[str] = None
     citizenships: list[str] = Field(default_factory=list)
     date_file: Optional[date] = Field(None, description="Date this row was last refreshed in the upstream consolidated list.")
+    # 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen URL — the legal basis URL (EUR-Lex page for the sanctions regulation listing this entity).")
+    body_txt: Optional[str] = Field(None, description="Plain-text row composition (full_name + programme + legal basis + citizenships + date).")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="legal_basis_publication_date (the date the listing legal act was published).")
+    creation_date: Optional[datetime] = Field(None, description="Date this row was last refreshed in the upstream consolidated list (alias of date_file).")
 
 
 class SanctionDetail(BaseModel):
@@ -88,6 +94,10 @@ class SanctionDetail(BaseModel):
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text or body_html.")
+    # 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen URL — the legal basis URL (EUR-Lex page for the listing regulation).")
+    document_date: Optional[date] = Field(None, description="Publication date of the legal basis act.")
+    creation_date: Optional[datetime] = Field(None, description="Date this row was last refreshed in the upstream consolidated list.")
 
 
 class ProgrammeCount(BaseModel):
@@ -101,6 +111,31 @@ class ProgrammeCount(BaseModel):
 
 
 def _row_to_list_item(row: dict) -> SanctionListItem:
+    # Compose minimal body from list-level fields (full_name + programme +
+    # legal basis + citizenships). Lists carry less data than the detail
+    # endpoint, so this body is shorter; partners wanting the full record
+    # should hit /sanctions/{eu_ref_num}.
+    import html as _html
+    parts_txt: list = []
+    parts_html: list = []
+    name = row.get("full_name") or f"EU ref {row.get('eu_ref_num') or row['entity_logical_id']}"
+    parts_txt.append(name)
+    parts_html.append(f"<h2>{_html.escape(name)}</h2>")
+    kv = [
+        ("EU reference", row.get("eu_ref_num")),
+        ("Type", "Natural person" if row.get("subject_type") == "P" else "Legal entity / vessel / aircraft"),
+        ("Programme", row.get("programme")),
+        ("Citizenships", ", ".join(row.get("citizenships") or []) or None),
+        ("Legal basis", row.get("legal_basis_title")),
+        ("Published", row.get("legal_basis_publication_date")),
+        ("Last refreshed", row.get("date_file")),
+    ]
+    for k, v in kv:
+        if not v: continue
+        parts_txt.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    body_txt = "\n".join(parts_txt)
+    body_html = "<article>" + "".join(parts_html) + "</article>"
     return SanctionListItem(
         entity_logical_id=row["entity_logical_id"],
         eu_ref_num=row.get("eu_ref_num"),
@@ -112,6 +147,12 @@ def _row_to_list_item(row: dict) -> SanctionListItem:
         legal_basis_url=row.get("legal_basis_url"),
         citizenships=row.get("citizenships") or [],
         date_file=row.get("date_file"),
+        # 5 mandatory datapoints
+        public_url=row.get("legal_basis_url"),
+        body_txt=body_txt,
+        body_html=body_html,
+        document_date=row.get("legal_basis_publication_date"),
+        creation_date=row.get("date_file"),
     )
 
 
@@ -418,4 +459,7 @@ async def get_sanction(
         body_html=body_html,
         body_txt=body_text,
         body=deprecated_body(body_text, body_html),
+        public_url=record.get("legal_basis_url"),
+        document_date=record.get("legal_basis_publication_date"),
+        creation_date=record.get("date_file"),
     )

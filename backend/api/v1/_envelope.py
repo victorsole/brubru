@@ -97,6 +97,18 @@ class PaginatedResponse(BaseModel, Generic[T]):
         description="OP Core Metadata block (Dublin-Core-derived). Populated by build_envelope() unless suppressed.",
     )
 
+    # The 5 mandatory Brubru v1 datapoints at envelope level. Item-level
+    # values still take precedence — these envelope fields are the contract
+    # answer for reference / enumeration endpoints (countries, types,
+    # categories, etc.) where individual items aren't documents. For
+    # document-list endpoints they default to null and partners should read
+    # the per-item values inside `data[]`.
+    public_url: Optional[str] = Field(None, description="Envelope-level citizen URL — usually null on list endpoints (see per-item public_url inside data[]).")
+    body_txt: Optional[str] = Field(None, description="Envelope-level plain text — null for paginated lists; populated only for reference-data hubs.")
+    body_html: Optional[str] = Field(None, description="Envelope-level HTML — null for paginated lists.")
+    document_date: Optional[date] = Field(None, description="Envelope-level document date — null for paginated lists.")
+    creation_date: Optional[datetime] = Field(None, description="When this API response was generated (server time).")
+
     data: list[T]
 
 
@@ -163,5 +175,13 @@ def build_envelope(
         updated_end=updated_to,
         detail_level=detail_level,
         op_core=op_core,
+        # 5 mandatory v1 datapoints at envelope level. creation_date is
+        # always set; the others stay null for document-list endpoints
+        # (callers read per-item values from data[]).
+        public_url=None,
+        body_txt=None,
+        body_html=None,
+        document_date=None,
+        creation_date=datetime.utcnow(),
         data=items,
     )
