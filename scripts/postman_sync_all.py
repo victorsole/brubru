@@ -70,10 +70,26 @@ def normalise_path(p: str) -> str:
     return s
 
 
-def build_postman_item(path: str, method: str, op: dict) -> dict:
-    """Convert one OpenAPI operation into a Postman item dict."""
+def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict] = None) -> dict:
+    """Convert one OpenAPI operation into a Postman item dict.
+
+    `existing` is the previously-saved Postman item (if any) — used to
+    preserve hand-edited example values that partners rely on. We only
+    overwrite empty placeholder values; non-empty values stay.
+    """
     summary = op.get("summary") or f"{method.upper()} {path}"
     description = op.get("description") or ""
+
+    # Index existing path/query var values so we can preserve them
+    existing_path: Dict[str, str] = {}
+    existing_query: Dict[str, str] = {}
+    if existing and existing.get("request"):
+        for v in existing["request"].get("url", {}).get("variable", []) or []:
+            if v.get("key") and v.get("value"):
+                existing_path[v["key"]] = v["value"]
+        for v in existing["request"].get("url", {}).get("query", []) or []:
+            if v.get("key") and v.get("value"):
+                existing_query[v["key"]] = v["value"]
 
     # Build the URL parts (Postman uses path segments with :param notation)
     raw = path.lstrip("/")
@@ -83,22 +99,45 @@ def build_postman_item(path: str, method: str, op: dict) -> dict:
         parts.append(f":{m.group(1)}" if m else seg)
     raw_url = "{{baseUrl}}/" + raw
 
-    # Extract path + query parameters
+    # Extract path + query parameters. Preference order for example value:
+    #   1) existing non-empty value in Postman (hand-edited)
+    #   2) OpenAPI `example` field on schema
+    #   3) OpenAPI `examples` first entry
+    #   4) empty string
+    def _example_from_op(param: dict) -> str:
+        schema = param.get("schema") or {}
+        if schema.get("example") not in (None, ""):
+            return str(schema["example"])
+        if param.get("example") not in (None, ""):
+            return str(param["example"])
+        examples = param.get("examples") or {}
+        for v in examples.values():
+            if isinstance(v, dict) and v.get("value") not in (None, ""):
+                return str(v["value"])
+        return ""
+
     path_vars = []
     query_vars = []
     for param in op.get("parameters", []) or []:
+        name = param["name"]
         if param.get("in") == "path":
+            value = existing_path.get(name) or _example_from_op(param)
             path_vars.append({
-                "key": param["name"],
-                "value": param.get("schema", {}).get("example", ""),
+                "key": name,
+                "value": value,
                 "description": param.get("description", "") or None,
             })
         elif param.get("in") == "query":
+            value = existing_query.get(name) or _example_from_op(param)
+            required = bool(param.get("required", False))
+            # If required and we still have no value, leave it ENABLED with empty
+            # value so partners notice it. If optional and no value, disable it.
+            disabled = False if required else (not value)
             query_vars.append({
-                "key": param["name"],
-                "value": "",
+                "key": name,
+                "value": value,
                 "description": param.get("description", "") or None,
-                "disabled": not param.get("required", False),
+                "disabled": disabled,
             })
 
     headers = [{"key": "X-API-Key", "value": "{{api_key}}", "type": "text"}]
@@ -194,16 +233,16 @@ def main():
             if method not in {"get", "post", "put", "delete", "patch"}:
                 continue
             key = (normalise_path(path), method.upper())
-            new_item = build_postman_item(path, method, op)
-            if key in existing:
+            existing_item = existing.get(key)
+            new_item = build_postman_item(path, method, op, existing=existing_item)
+            if existing_item is not None:
                 # Update the existing item in place — keep its parent folder
-                target = existing[key]
-                target["name"] = new_item["name"]
-                target["request"] = new_item["request"]
-                # Keep target["response"] (saved examples)
+                # and any saved example responses. build_postman_item already
+                # preserved hand-edited query/path values.
+                existing_item["name"] = new_item["name"]
+                existing_item["request"] = new_item["request"]
                 counts["updated"] += 1
             else:
-                # New endpoint — collect for the "Recently Synced" folder
                 new_items_for_folder.append(new_item)
                 counts["added"] += 1
 

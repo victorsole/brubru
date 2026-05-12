@@ -471,7 +471,13 @@ async def verify_citation(
 )
 async def verify_citation_q(
     request: Request,
-    q: str = Query(..., min_length=1, max_length=128, description="The reference to verify (CELEX, COM, OEIL)"),
+    q: str = Query(
+        ...,
+        min_length=1,
+        max_length=128,
+        description="The reference to verify (CELEX, COM, OEIL)",
+        example="32016R0679",
+    ),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> VerifyCitationResponse:
