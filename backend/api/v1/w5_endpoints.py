@@ -170,16 +170,12 @@ class OfficialItem(BaseModel):
 
 
 def _official_public_url(r) -> Optional[str]:
-    """Return the citizen URL for an official. Prefer the cached bio_url; fall
-    back to a Whoiswho search URL keyed on the name (always lands on a useful
-    EU directory page that lists the person). Returns None only when even the
-    name is missing — a defensive edge case for noise rows."""
-    if r.bio_url:
-        return r.bio_url
-    if not r.name:
-        return None
-    from urllib.parse import quote_plus
-    return f"https://op.europa.eu/en/web/who-is-who/search?text={quote_plus(r.name)}"
+    """Return the citizen URL for an official. ONLY the cached bio_url —
+    we don't synthesise fallbacks because every alternative we tried just
+    lands on the generic Whoiswho landing page (the SPA is fully JS-rendered
+    and the search query string is decorative on first load). Honest null
+    until a Whoiswho re-scrape populates bio_url for every official."""
+    return r.bio_url or None
 
 
 def _compose_official_body(r) -> tuple:
