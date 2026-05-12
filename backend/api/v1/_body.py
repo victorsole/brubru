@@ -148,12 +148,12 @@ def compose_html_from_sections(
 
 
 def deprecated_body(body_txt: Optional[str], body_html: Optional[str]) -> Optional[str]:
-    """One-release back-compat alias. Returns body_text if present, else body_html.
+    """One-release back-compat alias. Returns body_txt if present, else body_html.
 
-    Clients must migrate to the explicit body_text / body_html pair before
+    Clients must migrate to the explicit body_txt / body_html pair before
     we drop this in the next minor release.
     """
-    return body_text or body_html
+    return body_txt or body_html
 
 
 # ---------------------------------------------------------------------------
