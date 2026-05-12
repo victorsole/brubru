@@ -13,7 +13,7 @@ follow `api_endpoint` to fetch the actual rows directly from Socrata.
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -47,6 +47,11 @@ class CohesionListItem(BaseModel):
     public_url: Optional[str] = None
     api_endpoint: Optional[str] = None
     has_body: bool = False
+    # 5 mandatory Brubru v1 datapoints (public_url already present).
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: name + category + tags + counts + last_updated.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="Last update date (date-only view of last_updated_at).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row.")
 
 
 class CohesionDetail(BaseModel):
@@ -73,6 +78,9 @@ class CohesionDetail(BaseModel):
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias.")
     fetched_at: Optional[datetime] = None
+    # 5 mandatory Brubru v1 datapoints (public_url already present above).
+    document_date: Optional[date] = Field(None, description="Dataset last-update date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last fetched this dataset (alias of fetched_at).")
 
 
 class CohesionCategoryCount(BaseModel):
@@ -151,8 +159,33 @@ async def list_cohesion(
         {**params, "limit": limit, "offset": offset},
     ).mappings().all()
 
-    items = [
-        CohesionListItem(
+    def _coh_body(r):
+        import html as _html
+        name = r.get("name") or r["socrata_id"]
+        lines = [name]
+        parts_html = [f"<h2>{_html.escape(name)}</h2>"]
+        if r.get("description"):
+            d = r["description"][:600]
+            lines.append(d)
+            parts_html.append(f"<p>{_html.escape(d)}</p>")
+        for k, v in [
+            ("Socrata ID", r["socrata_id"]),
+            ("Category", r.get("category")),
+            ("Tags", ", ".join(r.get("tags") or []) or None),
+            ("Downloads", r.get("download_count")),
+            ("Views", r.get("view_count")),
+            ("Last updated", r.get("last_updated_at")),
+        ]:
+            if v is None or v == "": continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        return "\n".join(lines), "<article>" + "".join(parts_html) + "</article>"
+
+    items = []
+    for r in rows:
+        bt, bh = _coh_body(r)
+        lu = r.get("last_updated_at")
+        items.append(CohesionListItem(
             socrata_id=r["socrata_id"],
             name=r.get("name"),
             description=(r.get("description") or "")[:300] or None,
@@ -160,13 +193,15 @@ async def list_cohesion(
             tags=r.get("tags") or [],
             download_count=r.get("download_count"),
             view_count=r.get("view_count"),
-            last_updated_at=r.get("last_updated_at"),
+            last_updated_at=lu,
             public_url=r.get("public_url"),
             api_endpoint=r.get("api_endpoint"),
             has_body=False,
-        )
-        for r in rows
-    ]
+            body_txt=bt,
+            body_html=bh,
+            document_date=lu.date() if hasattr(lu, "date") and lu else None,
+            creation_date=r.get("fetched_at") or lu,
+        ))
 
     return build_envelope(
         items=items, total=total, page=page, limit=limit,
@@ -273,4 +308,7 @@ async def get_cohesion(
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=row.get("fetched_at"),
+        # 5 mandatory datapoints
+        document_date=row.get("last_updated_at").date() if hasattr(row.get("last_updated_at"), "date") and row.get("last_updated_at") else None,
+        creation_date=row.get("fetched_at"),
     )

@@ -108,6 +108,11 @@ class CompetitionCaseItem(BaseModel):
     primary_attachment_url: Optional[str] = None
     public_url: Optional[str] = None
     has_body: bool = False
+    # 5 mandatory Brubru v1 datapoints (public_url already present).
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: title + instrument + DG + member state + aid category + objectives + dates.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="Last update date (date-only).")
+    creation_date: Optional[datetime] = Field(None, description="Initiation date.")
 
 
 def _flatten(meta_value: Any) -> Optional[str]:
@@ -146,9 +151,28 @@ def _to_bool(s: Any) -> Optional[bool]:
 def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
     meta = hit.get("metadata") or {}
     case_number = _flatten(meta.get("caseNumber") or [hit.get("groupById")])
+    title = _flatten(meta.get("caseTitle")) or _flatten(meta.get("caseOriginalTitle"))
+    last_upd = _to_dt(meta.get("caseLastUpdateDate"))
+    initiation = _to_dt(meta.get("caseInitiationDate"))
+    import html as _html
+    lines = [title or case_number or "?"]
+    parts_html = [f"<h2>{_html.escape(title or case_number or '?')}</h2>"]
+    for k, v in [
+        ("Case number", case_number),
+        ("Instrument", _flatten(meta.get("caseInstrument"))),
+        ("DG", _flatten(meta.get("caseDg"))),
+        ("Member state", _flatten(meta.get("caseMemberState"))),
+        ("Aid category", _flatten(meta.get("caseAidCategory"))),
+        ("Objectives", ", ".join(meta.get("caseObjectives") or []) if isinstance(meta.get("caseObjectives"), list) else None),
+        ("Initiation date", initiation),
+        ("Last update", last_upd),
+    ]:
+        if not v: continue
+        lines.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
     return CompetitionCaseItem(
         case_number=case_number,
-        case_title=_flatten(meta.get("caseTitle")) or _flatten(meta.get("caseOriginalTitle")),
+        case_title=title,
         case_instrument=_flatten(meta.get("caseInstrument")),
         case_dg=_flatten(meta.get("caseDg")),
         member_state=_flatten(meta.get("caseMemberState")),
@@ -156,14 +180,19 @@ def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
         case_objectives=meta.get("caseObjectives") if isinstance(meta.get("caseObjectives"), list) else None,
         case_simplified_procedure=_to_bool(meta.get("caseSimplifiedProcedure")),
         case_cartel=_to_bool(meta.get("caseCartel")),
-        case_initiation_date=_to_dt(meta.get("caseInitiationDate")),
+        case_initiation_date=initiation,
         case_notification_date=_to_dt(meta.get("caseNotificationDate")),
         case_measure_start_date=_to_dt(meta.get("caseMeasureStartDate")),
-        case_last_update_date=_to_dt(meta.get("caseLastUpdateDate")),
+        case_last_update_date=last_upd,
         primary_attachment_reference=hit.get("reference"),
         primary_attachment_url=_flatten(meta.get("attachmentLink")),
         public_url=CASE_FRONTEND_TPL.format(case_number=case_number) if case_number else None,
         has_body=False,
+        # 5 mandatory datapoints
+        body_txt="\n".join(lines),
+        body_html="<article>" + "".join(parts_html) + "</article>",
+        document_date=last_upd.date() if last_upd else None,
+        creation_date=initiation or last_upd,
     )
 
 

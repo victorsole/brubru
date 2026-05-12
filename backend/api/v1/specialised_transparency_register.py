@@ -55,6 +55,11 @@ class TrListItem(BaseModel):
     last_update_date: Optional[datetime] = None
     public_url: Optional[str] = None
     has_body: bool = False
+    # 5 mandatory Brubru v1 datapoints (public_url already present above).
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: name + acronym + category + country + city + FTE + costs + dates.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="Registration date (date-only).")
+    creation_date: Optional[datetime] = Field(None, description="Last update of this registrant (alias of last_update_date).")
 
 
 class TrDetail(BaseModel):
@@ -117,6 +122,9 @@ class TrDetail(BaseModel):
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[datetime] = None
+    # 5 mandatory Brubru v1 datapoints (public_url already present above).
+    document_date: Optional[date] = Field(None, description="Registration date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row (alias of fetched_at).")
 
 
 class CategoryCount(BaseModel):
@@ -214,8 +222,34 @@ async def list_tr(
         {**params, "limit": limit, "offset": offset},
     ).mappings().all()
 
-    items = [
-        TrListItem(
+    def _tr_body(r):
+        import html as _html
+        name = r.get("original_name") or r["identification_code"]
+        lines = [name]
+        parts_html = [f"<h2>{_html.escape(name)}</h2>"]
+        for k, v in [
+            ("Identification code", r["identification_code"]),
+            ("Acronym", r.get("acronym")),
+            ("Category", r.get("registration_category")),
+            ("Country", r.get("head_office_country")),
+            ("City", r.get("head_office_city")),
+            ("Website", r.get("website_url")),
+            ("EP-accredited representatives", r.get("ep_accredited_number")),
+            ("Lobbyists (FTE)", r.get("members_fte")),
+            ("Max declared costs", r.get("costs_max")),
+            ("Registered", r.get("registration_date")),
+            ("Last updated", r.get("last_update_date")),
+        ]:
+            if v is None or v == "": continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        return "\n".join(lines), "<article>" + "".join(parts_html) + "</article>"
+
+    items = []
+    for r in rows:
+        bt, bh = _tr_body(r)
+        rd = r.get("registration_date")
+        items.append(TrListItem(
             identification_code=r["identification_code"],
             original_name=r.get("original_name"),
             acronym=r.get("acronym"),
@@ -226,13 +260,15 @@ async def list_tr(
             ep_accredited_number=r.get("ep_accredited_number"),
             members_fte=float(r["members_fte"]) if r.get("members_fte") is not None else None,
             costs_max=float(r["costs_max"]) if r.get("costs_max") is not None else None,
-            registration_date=r.get("registration_date"),
+            registration_date=rd,
             last_update_date=r.get("last_update_date"),
             public_url=r.get("public_url"),
             has_body=False,
-        )
-        for r in rows
-    ]
+            body_txt=bt,
+            body_html=bh,
+            document_date=rd.date() if hasattr(rd, "date") and rd else None,
+            creation_date=r.get("last_update_date"),
+        ))
 
     return build_envelope(
         items=items, total=total, page=page, limit=limit,
@@ -393,4 +429,7 @@ async def get_tr(
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=row.get("fetched_at"),
+        # 5 mandatory datapoints
+        document_date=row.get("registration_date").date() if hasattr(row.get("registration_date"), "date") and row.get("registration_date") else None,
+        creation_date=row.get("fetched_at") or row.get("last_update_date"),
     )

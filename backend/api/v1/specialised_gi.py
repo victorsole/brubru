@@ -59,6 +59,11 @@ class GiListItem(BaseModel):
     public_url: Optional[str] = None
     source: str = Field(..., description="eambrosia / giview / merged")
     has_body: bool = False
+    # 5 mandatory Brubru v1 datapoints (public_url already present above).
+    body_txt: Optional[str] = Field(None, description="Plain-text composition: protected names + type + countries + product + protection date + status.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the same fields.")
+    document_date: Optional[date] = Field(None, description="EU protection date (alias of eu_protection_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row.")
 
 
 class GiDetail(BaseModel):
@@ -114,6 +119,9 @@ class GiDetail(BaseModel):
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[datetime] = None
+    # 5 mandatory Brubru v1 datapoints (public_url already present above).
+    document_date: Optional[date] = Field(None, description="EU protection date (alias of eu_protection_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru last refreshed this row (alias of fetched_at).")
 
 
 class GiTypeCount(BaseModel):
@@ -214,8 +222,29 @@ async def list_gi(
         {**params, "limit": limit, "offset": offset},
     ).mappings().all()
 
-    items = [
-        GiListItem(
+    def _gi_body(r):
+        import html as _html
+        names = ", ".join(r.get("protected_names") or []) or r["gi_identifier"]
+        lines = [names]
+        parts_html = [f"<h2>{_html.escape(names)}</h2>"]
+        for k, v in [
+            ("GI identifier", r["gi_identifier"]),
+            ("Type", r.get("gi_type")),
+            ("Product type", r.get("product_type")),
+            ("Countries", ", ".join(r.get("countries") or []) or None),
+            ("EU protection date", r.get("eu_protection_date")),
+            ("Status", r.get("status")),
+            ("Source", r.get("source")),
+        ]:
+            if not v: continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        return "\n".join(lines), "<article>" + "".join(parts_html) + "</article>"
+
+    items = []
+    for r in rows:
+        bt, bh = _gi_body(r)
+        items.append(GiListItem(
             gi_identifier=r["gi_identifier"],
             protected_names=r.get("protected_names") or [],
             file_number=r.get("file_number"),
@@ -228,10 +257,12 @@ async def list_gi(
             eurlex_url=r.get("eurlex_url"),
             public_url=r.get("public_url"),
             source=r["source"],
-            has_body=False,  # list rows always advertise False
-        )
-        for r in rows
-    ]
+            has_body=False,
+            body_txt=bt,
+            body_html=bh,
+            document_date=r.get("eu_protection_date"),
+            creation_date=r.get("fetched_at") or r.get("updated_at"),
+        ))
 
     return build_envelope(
         items=items, total=total, page=page, limit=limit,
@@ -383,4 +414,7 @@ async def get_gi(
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=row.get("fetched_at"),
+        # 5 mandatory datapoints
+        document_date=row.get("eu_protection_date"),
+        creation_date=row.get("fetched_at"),
     )
