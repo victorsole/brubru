@@ -1,9 +1,10 @@
 # Emissions Accounting in Transport Services -- CountEmissions EU
 
 ## QUICK FACTS
+- **LATEST (29 April 2026, published in OJ Monday 11 May 2026)**: **CountEmissions EU Regulation ADOPTED** as **Regulation (EU) 2026/1030** (CELEX **32026R1030**). Full title: "Regulation (EU) 2026/1030 of the European Parliament and of the Council of 29 April 2026 on the greenhouse gas emissions accounting of transport services (Text with EEA relevance)". The Regulation is directly applicable; ISO 14083:2023 anchors the methodology; transition periods 2-year (most operators) / 4-year (SMEs). Brubru Comply candidate: any transport service provider communicating emissions data (B2B logistics, B2C MaaS, freight forwarders) needs to align scope-3 reporting + ISO 14083 datasets. Status flip in Brubru Legislative Tracker: file 2023/0266(COD) → **ADOPTED**.
 - Topic: Standardised methodology to calculate and report greenhouse-gas emissions from passenger and freight transport services
 - Proposal: CountEmissions EU -- Proposal for a Regulation on the accounting of greenhouse gas emissions from transport services, COM(2023) 441 final
-- Procedure: 2023/0266(COD) -- ordinary legislative procedure, first reading
+- Procedure: 2023/0266(COD) -- ordinary legislative procedure, first reading -- **ADOPTED 29 April 2026**
 - Legal basis: Article 91 + Article 100(2) TFEU (transport); Article 192 TFEU (environment)
 - Lead DG: DG MOVE (Mobility and Transport), Unit A.4 (sustainable mobility policy)
 - Responsible Commissioner: Apostolos Tzitzikostas (Sustainable Transport and Tourism)

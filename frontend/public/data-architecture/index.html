@@ -632,8 +632,8 @@
     <h1 class="hero__title">What <span>Brubru</span> knows</h1>
     <p class="hero__subtitle">Brubru is an AI-powered EU policy assistant. This page explains, in plain language, what data we collect from EU institutions, how we store and process it, and how it powers the chatbot and tools.</p>
     <div class="hero__meta">
-      <span><i class="mdi mdi-update"></i> Last updated: April 2026</span>
-      <span><i class="mdi mdi-database-outline"></i> PostgreSQL + Supabase</span>
+      <span><i class="mdi mdi-update"></i> Last updated: 11 May 2026</span>
+      <span><i class="mdi mdi-database-outline"></i> PostgreSQL + Supabase (120 tables)</span>
       <span><i class="mdi mdi-brain"></i> Claude Sonnet 4 (primary AI)</span>
     </div>
   </div>
@@ -649,12 +649,12 @@
       <div class="figure-card__label">news sources scraped daily</div>
     </div>
     <div class="figure-card fc-purple">
-      <div class="figure-card__number" data-count="227">0</div>
+      <div class="figure-card__number" data-count="229">0</div>
       <div class="figure-card__label">expert knowledge guides</div>
     </div>
     <div class="figure-card fc-amber">
-      <div class="figure-card__number" data-count="72">0</div>
-      <div class="figure-card__label">database tables</div>
+      <div class="figure-card__number" data-count="120">0</div>
+      <div class="figure-card__label">database tables (incl. 10 specialised EC sources)</div>
     </div>
   </div>
 
@@ -664,6 +664,8 @@
     <div class="toc__grid stagger-children reveal">
       <a href="#sources" class="toc__link"><i class="mdi mdi-web"></i> Data sources</a>
       <a href="#legislation" class="toc__link"><i class="mdi mdi-scale-balance"></i> EU legislation database</a>
+      <a href="#data-provider-api" class="toc__link"><i class="mdi mdi-api"></i> Brubru API (data provider)</a>
+      <a href="#specialised-ec-databases" class="toc__link"><i class="mdi mdi-database-search-outline"></i> Specialised EC databases (10 surfaces, May 2026)</a>
       <a href="#legislative-tracking" class="toc__link"><i class="mdi mdi-train"></i> Legislative tracking</a>
       <a href="#knowledge" class="toc__link"><i class="mdi mdi-brain"></i> Knowledge base</a>
       <a href="#news" class="toc__link"><i class="mdi mdi-newspaper"></i> News and RSS</a>
@@ -852,7 +854,7 @@
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-api"></i></div>
       <h2 class="section__title">Brubru API &mdash; the data provider vertical</h2>
     </div>
-    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 227 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
+    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 229 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">Authentication (/api/v1/*)</div>
@@ -1057,16 +1059,84 @@
     </div>
   </div>
 
+  <!-- Section: Specialised EC Databases -->
+  <div class="section" id="specialised-ec-databases">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-database-search-outline"></i></div>
+      <h2 class="section__title">Specialised EC databases &mdash; 10 institutional surfaces wired into chat + API (May 2026)</h2>
+    </div>
+    <p class="section__intro reveal">Through May 2026 Brubru cracked ten EU institutional data sources that no other vendor surfaces through a single API key. Each cluster ships with a v1 endpoint under <code>/api/v1/specialised/*</code> AND a context-builder block in the chatbot &mdash; when a user asks about sanctions, lobbying, comitology, geographical indications, trade agreements, anti-dumping duties, competition cases, JRC scientific datasets, cohesion open data, or Combined Nomenclature tariff sections, the chat retrieves directly from these tables. Total specialised rows ingested: <strong>119,542</strong> (plus two live pass-throughs to upstream APIs).</p>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">The 10 clusters at a glance</div>
+      <div class="info-card__content">
+        <table class="data-table">
+          <thead>
+            <tr><th>Cluster</th><th>Backing table / source</th><th>Live rows</th><th>v1 endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sanctions / CFSP restrictive measures</td><td><code>eu_sanctions</code> (CFSP consolidated list)</td><td class="count">6,002</td><td><code>/specialised/sanctions</code></td></tr>
+            <tr><td>Transparency Register (lobbyists)</td><td><code>eu_transparency_register</code> (daily Joint Secretariat XML)</td><td class="count">17,247</td><td><code>/specialised/transparency-register</code></td></tr>
+            <tr><td>Comitology documents</td><td><code>eu_comitology_documents</code> (Playwright-cracked SPA)</td><td class="count">83,807</td><td><code>/specialised/comitology</code></td></tr>
+            <tr><td>Geographical Indications (PDO/PGI/TSG)</td><td><code>eu_geographical_indications</code> (eAmbrosia + GIview merged)</td><td class="count">5,917</td><td><code>/specialised/gi</code></td></tr>
+            <tr><td>International agreements (FTA / EPA / AA / PCA)</td><td><code>eu_trade_agreements</code> (Cellar SPARQL, sector 2 type A)</td><td class="count">900</td><td><code>/specialised/fta</code></td></tr>
+            <tr><td>Trade defence (anti-dumping / countervailing / safeguard)</td><td><code>eu_trade_defence_measures</code> (Cellar SPARQL, sector-3 type-R)</td><td class="count">675</td><td><code>/specialised/trade-defence</code></td></tr>
+            <tr><td>DG COMP competition cases</td><td>Live pass-through to <code>api.tech.ec.europa.eu</code> (~250k cases)</td><td class="count">live</td><td><code>/specialised/competition-cases</code></td></tr>
+            <tr><td>JRC Data Catalogue</td><td><code>eu_jrc_datasets</code> (data.europa.eu federation)</td><td class="count">3,543</td><td><code>/specialised/jrc-datasets</code></td></tr>
+            <tr><td>DG REGIO cohesion open data</td><td><code>eu_cohesion_datasets</code> (Socrata catalogue)</td><td class="count">1,451</td><td><code>/specialised/cohesion-datasets</code></td></tr>
+            <tr><td>Combined Nomenclature / CN sections</td><td>Live pass-through to <code>webgate.ec.europa.eu/nomen</code></td><td class="count">live</td><td><code>/specialised/access2markets/products</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">SPA-cracking via Playwright headless Chromium</div>
+      <div class="info-card__text">Five EU sites that previously rejected scrapers (Imperva WAF, Angular SPA opacity, server-side rendering only) were cracked over the same window by running Playwright headless Chromium against the real browser TLS handshake and capturing the underlying network calls. The recovered API paths are now consumed directly by Brubru's backfill scripts:</div>
+      <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
+        <li><strong>Comitology Register</strong> &rarr; <code>/core/api/front/*</code> JSON path discovered via network capture. 83,807 documents catalogued.</li>
+        <li><strong>DG COMP competition cases</strong> &rarr; <code>api.tech.ec.europa.eu/search-api</code> with public <code>CS_PROD_ODSE_PROD</code> key (EU Corporate Search backend). ~250k cases reachable.</li>
+        <li><strong>Access2Markets</strong> &rarr; <code>webgate.ec.europa.eu/flows</code> (statistics) + <code>nomen</code> (Combined Nomenclature). Live pass-through, no local mirror needed.</li>
+        <li><strong>JRC Data Catalogue</strong> &rarr; Imperva blocks all <code>/api/*</code> paths and RDF distributions; cracked by using the <code>data.europa.eu</code> federated harvest (<code>/api/hub/repo/catalogues/jrc/datasets</code>) as the upstream source instead.</li>
+        <li><strong>eAmbrosia</strong> &rarr; <code>webgate.ec.europa.eu/eambrosia-api</code> (DG AGRI). 5,917 EU-protected names harvested + merged with EUIPO GIview union register.</li>
+      </ul>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Per-row contract: <code>has_body</code> + <code>body_threshold</code> + <code>body_source</code></div>
+      <div class="info-card__text">Every specialised row exposes a uniform body contract so partners can decide at query time whether to receive metadata-only rows or full-text rows. <code>has_body</code> is a boolean; <code>body_threshold</code> is a query param (<code>?body_threshold=200</code> returns only rows with at least 200 chars of <code>body_text</code>); <code>body_source</code> documents provenance (<code>cellar_xhtml</code> &rarr; preferred, <code>cellar_pdf</code> &rarr; fallback for proposals, <code>scrape</code> &rarr; legacy). The two live pass-through clusters (DG COMP cases, Access2Markets) skip this contract because rows are fetched on demand from the upstream API at request time.</div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Chatbot integration &mdash; Layer 1 (shipped 11 May 2026)</div>
+      <div class="info-card__text">Each of the 10 clusters has a context-builder block in <code>backend/services/ai/context_builder.py</code> that fires when the user's query matches the cluster's intent regex. Blocks are capped at 4 kB per CLAUDE.md and injected at the TOP of the system prompt so they survive the 32 k truncation cap. End-to-end verified before deploy: <strong>10/10 positive queries</strong> surface relevant cluster data; <strong>0/6 negative queries</strong> trigger any of the 10 specialised intents (correct scoping).</div>
+      <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
+        <li>"EU sanctions on Iranian officials" &rarr; 6 IRN-programme entities from <code>eu_sanctions</code></li>
+        <li>"Does Amazon lobby in Brussels?" &rarr; Amazon Europe Core SARL (&euro;9.99M declared, 9 EP passes)</li>
+        <li>"Latest SCoPAFF vote on glyphosate" &rarr; C20407 PAFF committee voting sheets</li>
+        <li>"Italian PDO cheeses" &rarr; "Salamini italiani alla cacciatora" + more</li>
+        <li>"EU FTA with Japan" &rarr; sector-2 type-A agreements with Japan partner</li>
+        <li>"Anti-dumping on Chinese e-bikes" &rarr; bicycle anti-dumping cases against China (with demonym + product-synonym expansion)</li>
+        <li>"Latest state aid case for Italy" &rarr; SA.117255 (Italy, 2024-12-19) from live DG COMP search</li>
+        <li>"JRC dataset on air pollution PM25" &rarr; JRC EDGAR-FOOD + Copernicus rapid-mapping datasets</li>
+        <li>"ESF+ employment programmes dataset" &rarr; 8 ESF+ Socrata-catalogued rows</li>
+        <li>"CN code for olive oil" &rarr; Section III (animal/vegetable fats and oils, chapters 15-15)</li>
+      </ul>
+    </div>
+
+    <p class="section__intro reveal" style="font-size: 0.95rem; font-style: italic;">Reference: <code>docs/applications/specialised_ec_databases.md</code> (9-wave roadmap + Layer 1 chatbot integration table). Commits <code>630d3db7</code> (sanctions + TR + comitology) and <code>0f91afe3</code> (the remaining 7) shipped to Railway 11 May 2026.</p>
+  </div>
+
   <!-- Section 3: Legislative tracking -->
   <div class="section" id="legislative-tracking">
     <div class="section__header reveal-left">
       <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-train"></i></div>
       <h2 class="section__title">Legislative tracking (the "train")</h2>
     </div>
-    <p class="section__intro reveal">Brubru tracks all 1,274 legislative files under the ordinary legislative procedure, from Commission proposal to final adoption. Every proposal is monitored automatically.</p>
+    <p class="section__intro reveal">Brubru tracks all 1,717 legislative files under the ordinary legislative procedure, from Commission proposal to final adoption. Every proposal is monitored automatically.</p>
 
     <div class="info-card reveal">
-      <div class="info-card__title">legislative_carriages table (1,274 files)</div>
+      <div class="info-card__title">legislative_carriages table (1,717 files)</div>
       <div class="info-card__text">Each "carriage" represents one legislative proposal on its journey through the EU institutions. We track its status, committee assignments, rapporteur, timeline of key events, and links to OEIL and EUR-Lex documents. The full pipeline is monitored: from the moment the Commission announces a proposal through committee work, trilogue, adoption, and even withdrawal.</div>
     </div>
 
@@ -1126,14 +1196,14 @@
       </div>
     </div>
 
-    <p class="section__intro reveal" style="font-size: 0.95rem; font-style: italic; margin-top: 0.5rem;">These are just 4 out of 1,274 files. Brubru tracks every proposal under the ordinary legislative procedure across all Commission priorities and EP committees.</p>
+    <p class="section__intro reveal" style="font-size: 0.95rem; font-style: italic; margin-top: 0.5rem;">These are just 4 out of 1,717 files. Brubru tracks every proposal under the ordinary legislative procedure across all Commission priorities and EP committees.</p>
 
     <table class="data-table reveal">
       <thead>
         <tr><th>What we track</th><th>Source</th><th>Records</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Legislative files</strong>: proposals, status, committees, rapporteurs</td><td><span class="source-tag">Legislative Train</span> <span class="source-tag source-tag--purple">OEIL</span></td><td class="count">1,274</td></tr>
+        <tr><td><strong>Legislative files</strong>: proposals, status, committees, rapporteurs</td><td><span class="source-tag">Legislative Train</span> <span class="source-tag source-tag--purple">OEIL</span></td><td class="count">1,717</td></tr>
         <tr><td><strong>Legislative packages</strong>: grouped proposals under Commission priorities</td><td><span class="source-tag">Legislative Train</span></td><td class="count">166</td></tr>
         <tr><td><strong>Committee work items</strong>: draft reports, opinions, amendments in progress</td><td><span class="source-tag source-tag--purple">EP committees</span></td><td class="count">359</td></tr>
         <tr><td><strong>Texts adopted</strong>: final EP plenary votes, adopted positions</td><td><span class="source-tag source-tag--purple">EP plenary</span></td><td class="count">66</td></tr>
@@ -1153,12 +1223,12 @@
     <p class="section__intro reveal">Hand-curated expert knowledge that the AI uses to answer questions accurately. This is what makes Brubru different from a generic chatbot.</p>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">227 expert knowledge guides</h3>
+      <h3 class="subsection__title">229 expert knowledge guides</h3>
       <p class="subsection__text">Each guide covers one EU policy domain (e.g., AI Act, CBAM, Common Fisheries Policy) with: quick reference facts, CELEX numbers for relevant legislation, institutional contacts (Commissioner, DG, EP committee, rapporteur), procedure status, and key dates. Guides are written and maintained by EU policy specialists, not auto-generated.</p>
     </div>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">7,599 keyword triggers in 6 languages</h3>
+      <h3 class="subsection__title">7,687 keyword triggers in 6 languages</h3>
       <p class="subsection__text">A multilingual index (English, French, Dutch, Spanish, Catalan, Italian) that routes user queries to the right knowledge guide. For example, "CBAM," "mecanismo de ajuste en frontera," and "koolstofgrensheffing" all route to the same trade policy guide.</p>
     </div>
 

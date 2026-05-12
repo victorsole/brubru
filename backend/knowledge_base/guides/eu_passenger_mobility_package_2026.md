@@ -17,12 +17,13 @@
 - **Legal basis**: expected to be **Article 91 TFEU** (common transport policy) + **Article 114 TFEU** (internal market harmonisation) for MDMS / SDBT
 - **Type**: 3 separate **Regulations** (directly applicable) — confirmed via SEC(2026)2564 framing as "Mobility Package"
 
-**STATUS as of 11 May 2026 (T-2 from adoption)**:
-- Tentative agenda confirms 13 May 2026 College adoption (Fitto)
+**STATUS as of 12 May 2026 (T-1 from adoption)**:
+- Tentative agenda still confirms 13 May 2026 College adoption (Fitto)
 - Proposals NOT yet published — COM(2026) reference numbers will be assigned at adoption
 - OEIL procedure references (`2026/0XXX(COD)`) NOT yet assigned
 - CELEX numbers will become available shortly after adoption when OJ publishes
 - Once published, the three procedures will become trackable via OEIL + Brubru Legislative Tracker
+- **EPRS context (10 May 2026)**: **At a Glance — "Single European railway area"** (Ref: EPRS_ATA(2026)785749) — the briefing positions the Rail Passengers' Rights revision inside the broader single-rail-area framework, with cross-links to the 4th Railway Package, ERTMS deployment Decision 2023/1095, and the TEN-T Regulation 2024/1679. The Mobility Package Rail Passengers' Rights revision will plug into the existing single-rail-area governance rather than create a parallel regime.
 
 ## Overview
 

@@ -8264,6 +8264,127 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     '2026/2013(ini)': ['afco_institutional_framework_review'],
     '2026/2014(ini)': ['afco_institutional_framework_review'],
     'afco draft reports may 2026': ['afco_institutional_framework_review'],
+
+    # ============================================================
+    # EU Talent Pool Regulation (adopted 29 Apr 2026, OJ 11 May 2026)
+    # ============================================================
+    'eu talent pool': ['eu_talent_pool_regulation_2026'],
+    'talent pool regulation': ['eu_talent_pool_regulation_2026'],
+    'talent pool eu': ['eu_talent_pool_regulation_2026'],
+    'talent pool platform': ['eu_talent_pool_regulation_2026'],
+    'eu jobseeker platform': ['eu_talent_pool_regulation_2026'],
+    'european talent pool': ['eu_talent_pool_regulation_2026'],
+    '32026r1047': ['eu_talent_pool_regulation_2026'],
+    '2026/1047': ['eu_talent_pool_regulation_2026'],
+    'regulation 2026/1047': ['eu_talent_pool_regulation_2026'],
+    '2023/0404(cod)': ['eu_talent_pool_regulation_2026'],
+    '2023/0404': ['eu_talent_pool_regulation_2026'],
+    'com(2023)716': ['eu_talent_pool_regulation_2026'],
+    'com(2023) 716': ['eu_talent_pool_regulation_2026'],
+    'skills and talent mobility package': ['eu_talent_pool_regulation_2026'],
+    'shortage occupations eu': ['eu_talent_pool_regulation_2026'],
+    'reservoir de talents': ['eu_talent_pool_regulation_2026'],
+    'reservoir de talents ue': ['eu_talent_pool_regulation_2026'],
+    'pool de talentos': ['eu_talent_pool_regulation_2026'],
+    'pool de talentos ue': ['eu_talent_pool_regulation_2026'],
+    'pool di talenti': ['eu_talent_pool_regulation_2026'],
+    'talenten pool': ['eu_talent_pool_regulation_2026'],
+    'talenten-pool': ['eu_talent_pool_regulation_2026'],
+    'eu-talentenpool': ['eu_talent_pool_regulation_2026'],
+    'pool de talents ue': ['eu_talent_pool_regulation_2026'],
+
+    # ============================================================
+    # EU-Syria Cooperation Agreement re-activation (11 May 2026)
+    # ============================================================
+    'eu syria cooperation': ['eu_syria_cooperation_agreement_2026'],
+    'eu-syria cooperation agreement': ['eu_syria_cooperation_agreement_2026'],
+    'syria cooperation agreement': ['eu_syria_cooperation_agreement_2026'],
+    'eu syria agreement': ['eu_syria_cooperation_agreement_2026'],
+    'eu-syria relations': ['eu_syria_cooperation_agreement_2026'],
+    'syria reconstruction eu': ['eu_syria_cooperation_agreement_2026'],
+    'syria sanctions lifted': ['eu_syria_cooperation_agreement_2026'],
+    'decision 2011/523': ['eu_syria_cooperation_agreement_2026'],
+    '32011d0523': ['eu_syria_cooperation_agreement_2026'],
+    '32026d1087': ['eu_syria_cooperation_agreement_2026'],
+    '2026/1087': ['eu_syria_cooperation_agreement_2026'],
+    'council decision 2026/1087': ['eu_syria_cooperation_agreement_2026'],
+    'accord de cooperation syrie': ['eu_syria_cooperation_agreement_2026'],
+    'accord de cooperation ue syrie': ['eu_syria_cooperation_agreement_2026'],
+    'reconstruccion siria ue': ['eu_syria_cooperation_agreement_2026'],
+    'acuerdo cooperacion siria': ['eu_syria_cooperation_agreement_2026'],
+    'ricostruzione siria ue': ['eu_syria_cooperation_agreement_2026'],
+    'samenwerkingsovereenkomst syrie': ['eu_syria_cooperation_agreement_2026'],
+    'cooperacio ue siria': ['eu_syria_cooperation_agreement_2026'],
+
+    # ============================================================
+    # 11 May 2026 sanctions wave (CELEX hooks)
+    # ============================================================
+    '32026r1055': ['eu_sanctions_implementation_framework'],
+    '2026/1055': ['eu_sanctions_implementation_framework'],
+    '32026d1072': ['eu_sanctions_implementation_framework'],
+    '2026/1072': ['eu_sanctions_implementation_framework'],
+    '32026r1078': ['eu_sanctions_implementation_framework'],
+    '2026/1078': ['eu_sanctions_implementation_framework'],
+    '32026d1079': ['eu_sanctions_implementation_framework'],
+    '2026/1079': ['eu_sanctions_implementation_framework'],
+    '32026d1083': ['eu_sanctions_implementation_framework'],
+    '2026/1083': ['eu_sanctions_implementation_framework'],
+    'cyber sanctions extension': ['eu_sanctions_implementation_framework'],
+    'cyber attacks restrictive measures': ['eu_sanctions_implementation_framework'],
+    'cyber-attacks restrictive measures eu': ['eu_sanctions_implementation_framework'],
+    'euam ukraine extension': ['eu_sanctions_implementation_framework'],
+    'putin shadow fleet sanctions': ['eu_sanctions_implementation_framework'],
+    'russia shadow fleet eu': ['eu_sanctions_implementation_framework'],
+
+    # ============================================================
+    # CountEmissions EU adopted as Reg 2026/1030 (29 Apr 2026)
+    # ============================================================
+    '32026r1030': ['emissions_accounting_transport_services'],
+    '2026/1030': ['emissions_accounting_transport_services'],
+    'regulation 2026/1030': ['emissions_accounting_transport_services'],
+    'countemissions eu adopted': ['emissions_accounting_transport_services'],
+    'ghg accounting transport services regulation': ['emissions_accounting_transport_services'],
+    'iso 14083 eu regulation': ['emissions_accounting_transport_services'],
+
+    # ============================================================
+    # Anti-Corruption Directive adopted (29 Apr 2026)
+    # ============================================================
+    '32026l1021': ['anti_corruption_directive'],
+    '2026/1021': ['anti_corruption_directive'],
+    'directive 2026/1021': ['anti_corruption_directive'],
+    'anti-corruption directive adopted': ['anti_corruption_directive'],
+    'eu corruption directive in force': ['anti_corruption_directive'],
+
+    # ============================================================
+    # Critical Medicines Act political agreement (11 May 2026)
+    # ============================================================
+    'critical medicines act political agreement': ['critical_medicines_act'],
+    'critical medicines act deal': ['critical_medicines_act'],
+    'critical medicines act trilogue closed': ['critical_medicines_act'],
+    'critical medicines act ip 26 1017': ['critical_medicines_act'],
+    'ip/26/1017': ['critical_medicines_act'],
+
+    # ============================================================
+    # ETS benchmarks consultation (11 May 2026)
+    # ============================================================
+    'ets benchmarks consultation': ['european_climate_law'],
+    'eu ets benchmarks revision': ['european_climate_law'],
+    'updated ets benchmarks': ['european_climate_law'],
+    'eu ets free allocation benchmarks': ['european_climate_law'],
+    'ip/26/1044': ['european_climate_law'],
+    'valeurs de reference seqe': ['european_climate_law'],
+    'benchmarks regime sceqe': ['european_climate_law'],
+    'valori di riferimento ets': ['european_climate_law'],
+    'valores de referencia rceue': ['european_climate_law'],
+
+    # ============================================================
+    # Budapest Convention third-party accessions proposal (11 May 2026)
+    # ============================================================
+    '52026pc0186': ['un_cybercrime_convention'],
+    'com(2026)186': ['un_cybercrime_convention'],
+    'com(2026) 186': ['un_cybercrime_convention'],
+    'budapest convention third party accessions': ['un_cybercrime_convention'],
+    'eu position budapest convention': ['un_cybercrime_convention'],
 }
 
 

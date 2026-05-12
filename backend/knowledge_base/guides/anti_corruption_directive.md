@@ -1,6 +1,7 @@
 # Anti-Corruption Directive
 
 ## QUICK FACTS
+- **LATEST (29 April 2026, published in OJ Monday 11 May 2026)**: **Anti-Corruption Directive ADOPTED** as **Directive (EU) 2026/1021** (CELEX **32026L1021**). Full title: "Directive (EU) 2026/1021 of the European Parliament and of the Council of 29 April 2026 on combatting corruption, replacing Council Framework Decision 2003/568/JHA and the Convention on the fight against corruption involving officials of the European Communities or officials of Member States of the European Union and amending Directive (EU) 2017/1371". First EU-wide criminal anti-corruption framework. Transposition window now opens — typical 24-month deadline (transposition date to be confirmed against OJ publication date). Brubru Comply candidate: every EU-active corporate compliance programme should update its anti-bribery + asset-disclosure controls to align with the harmonised offence list.
 - Proposal: COM(2023)234, 3 May 2023
 - Procedure: 2023/0135(COD), ordinary legislative procedure
 - EP lead committee: LIBE (Civil Liberties, Justice and Home Affairs)

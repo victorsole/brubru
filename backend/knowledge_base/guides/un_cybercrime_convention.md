@@ -1,6 +1,8 @@
 # UN Convention against Cybercrime
 
 ## QUICK FACTS
+- **LATEST (Monday 11 May 2026)**: **Commission proposal on Budapest Convention third-party accessions** — COM **52026PC0186**: "Proposal for a Council Decision determining the criteria and the procedure for establishing the position to be taken on behalf of the European Union within the Council of Europe as regards the requests for accession of third parties to the Council of Europe Convention on Cybercrime ('Budapest Convention')". The proposal sets the EU's coordinated position on which non-CoE states can accede to the Budapest Convention — complementary to (not in competition with) the UN Convention against Cybercrime ratification track. Cross-link: `dark_web_cybersecurity`, `eu_sanctions_implementation_framework` (cyber sanctions 11 May).
+- **EPRS at a Glance (10 May 2026)**: "Conclusion of the United Nations Convention against Cybercrime" (Ref: EPRS_ATA(2026)785746) — briefs the May plenary on the EP consent vote, the human-rights safeguards built into the Council Decision, and the relationship with the Budapest Convention. EU Council still must adopt the Decision on the EU's conclusion of the UN Convention after the EP consent vote.
 - Full title: United Nations Convention against Cybercrime
 - Adopted: UN General Assembly, 24 December 2024 (resolution A/RES/79/243)
 - EU procedure: 2025/0231(NLE) -- consent procedure

@@ -1,6 +1,7 @@
 # Critical Medicines Act
 
 ## QUICK FACTS
+- **LATEST (Monday 11 May 2026)**: **Commission welcomes political agreement on the Critical Medicines Act** (press release IP/26/1017). Trilogue between EP, Council and Commission closed yesterday; the provisional agreement now goes to LIBE/SANT vote then plenary (expected June 2026 Strasbourg). Headline elements confirmed in the deal: the Union list of critical medicines, the Critical Medicines Alliance, the Strategic Projects designation, the Public Procurement for Resilience criteria, and the International Strategic Partnerships pillar — all four pillars survive the negotiation. Source: ec.europa.eu/commission/presscorner/detail/en/ip_26_1017 (11 May 2026). Cross-link `eu_pharmaceutical_legislation_reform`, `eu_rare_diseases_policy`, `eu_beating_cancer_plan`.
 - Full name: Regulation on establishing a framework for ensuring the long-term supply of critical medicines (Critical Medicines Act)
 - Commission proposal: COM(2025)102, 11 March 2025
 - Procedure: [2025/0102(COD)](https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD))
