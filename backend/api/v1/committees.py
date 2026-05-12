@@ -285,6 +285,72 @@ def _committee_documents_url(code: str) -> str:
     return f"https://www.europarl.europa.eu/committees/en/{code.lower()}/documents/latest-documents"
 
 
+def _clean_event_description(s: Optional[str]) -> Optional[str]:
+    """OEIL scrapes occasionally capture page chrome ('Key events / pdf / Date /
+    Event / Reference / Summary / \\n…') in the event description. Strip the
+    chrome and collapse whitespace so body_txt stays readable."""
+    if not s:
+        return None
+    txt = re.sub(r"(?i)\b(key events|date|event|reference|summary|pdf)\b", "", s)
+    txt = re.sub(r"\s+", " ", txt).strip()
+    return txt or None
+
+
+def _compose_oeil_body(lc) -> Tuple[Optional[str], Optional[str]]:
+    """Build body_txt and body_html from already-cached legislative_carriages
+    data. Pulls from lc.description (procedure summary) and lc.oeil_key_events
+    (timeline). No upstream HTTP — pure DB join. Returns (None, None) when the
+    carriage row is missing or all source fields are empty.
+    """
+    if lc is None:
+        return None, None
+    desc = (getattr(lc, "description", None) or "").strip() or None
+    events_raw = getattr(lc, "oeil_key_events", None) or []
+    events: list = []
+    if isinstance(events_raw, list):
+        for ev in events_raw:
+            if not isinstance(ev, dict):
+                continue
+            d = ev.get("date") or ""
+            t = ev.get("event_type") or ev.get("type") or ""
+            descr = _clean_event_description(ev.get("description") or "")
+            if not (d or t or descr):
+                continue
+            events.append({"date": d, "type": t, "description": descr})
+    if not desc and not events:
+        return None, None
+
+    # Plain text
+    parts_txt: list = []
+    if desc:
+        parts_txt.append(desc)
+    if events:
+        parts_txt.append("Key events:")
+        for ev in events:
+            line = f"- {ev['date']}: {ev['type']}" if ev["date"] or ev["type"] else "-"
+            if ev["description"]:
+                line += f" — {ev['description']}"
+            parts_txt.append(line)
+    body_txt = "\n\n".join(parts_txt) if parts_txt else None
+
+    # HTML
+    import html as _html
+    parts_html: list = []
+    if desc:
+        parts_html.append(f"<p>{_html.escape(desc)}</p>")
+    if events:
+        parts_html.append("<h3>Key events</h3>")
+        lis = []
+        for ev in events:
+            head = f"<strong>{_html.escape(ev['date'])}</strong>" if ev["date"] else ""
+            mid = f" — {_html.escape(ev['type'])}" if ev["type"] else ""
+            tail = f": {_html.escape(ev['description'])}" if ev["description"] else ""
+            lis.append(f"<li>{head}{mid}{tail}</li>")
+        parts_html.append("<ul>" + "".join(lis) + "</ul>")
+    body_html = "<article>" + "".join(parts_html) + "</article>" if parts_html else None
+    return body_txt, body_html
+
+
 class CommitteeWorkEnvelope(PaginatedResponse["CommitteeWorkOut"]):
     committee_code: str
     streaming_url: str
@@ -492,6 +558,10 @@ async def list_committee_work(
         # rapporteur_mep_id: fall back to LC when CWI is null.
         rap_mep = r.rapporteur_mep_id or (lc.rapporteur_mep_id if lc else None)
 
+        # Compose body_txt / body_html from cached OEIL data (description +
+        # key events). Done once per row; both fields share the work.
+        oeil_body_txt, oeil_body_html = _compose_oeil_body(lc)
+
         # ---- Tier A: rapporteur enrichment with provenance ----
         # Path 1 (preferred): parse CWI rapporteur_name for "(GROUP)" suffix.
         # Path 2 (fallback): read LC oeil_procedure_data.key_players blob.
@@ -563,10 +633,12 @@ async def list_committee_work(
                 documents_source=docs_source,
                 celex_status=celex_status,
                 vote_date_source=vote_date_src,
-                # 5 mandatory datapoints
+                # 5 mandatory datapoints — body_txt / body_html composed from
+                # already-cached legislative_carriages data (description +
+                # key events). No upstream fetch; pure DB join.
                 public_url=_oeil_url_for_ref(r.procedure_ref),
-                body_txt=None,
-                body_html=None,
+                body_txt=oeil_body_txt,
+                body_html=oeil_body_html,
                 meeting_start_date=vote_date_out,
                 creation_date=getattr(r, "first_seen", None),
             )
