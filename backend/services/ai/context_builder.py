@@ -7653,6 +7653,13 @@ class ContextBuilder:
                 "/api/v1/commissioners (all profiles), /api/v1/commissioners/{slug} (profile), "
                 "/api/v1/commissioners/{name}/agenda (live calendar)."
             )
+            lines.append("")
+            lines.append(
+                "CRITICAL FOR THE LLM: when the user asks 'who are the commissioners of the EU' or "
+                "any general list query, your answer MUST include ALL of the names above (President + "
+                f"all {len(profiles) - 1} EVPs and Commissioners). Do not abbreviate to 'Key Commissioners "
+                "include' or list only 5-7 — the user asked for the canonical list, and you have it here."
+            )
 
             block = "\n".join(lines)
             if len(block) > 6000:
@@ -8095,6 +8102,15 @@ class ContextBuilder:
                 lines.append(
                     f"Source: eu_calendar_events + committee_work_items (Brubru sync). "
                     f"Brubru endpoints: /api/v1/committees, /api/v1/calendar."
+                )
+                lines.append("")
+                lines.append(
+                    f"CRITICAL FOR THE LLM ANSWERING ABOUT {committee or 'this committee'}: "
+                    f"the block above IS the answer to 'what is the next meeting / agenda of {committee}'. "
+                    f"You MUST NOT say 'I don't have it' or 'doesn't contain upcoming meetings'. "
+                    f"You MUST surface the dates + the recent draft reports listed above so the user knows "
+                    f"what the committee is actively working on. The EP committee calendar at week granularity "
+                    f"IS the agenda format — the EP does not publish per-meeting agendas more than 2-3 days in advance."
                 )
                 block = "\n".join(lines)
                 if len(block) > 4500:
