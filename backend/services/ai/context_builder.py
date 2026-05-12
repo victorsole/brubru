@@ -635,6 +635,9 @@ class ContextData:
     council_documents_block: Optional[str] = None
     infringements_block: Optional[str] = None
 
+    # Layer 2d (May 2026 batch #41-50 follow-up): Transparency Register meetings
+    transparency_meetings_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1415,6 +1418,18 @@ class ContextBuilder:
                 logger.warning("[infringement-block] failed: %s", e); return None
         post_tasks['infringements_block'] = _fetch_infring_safe()
 
+        # 3y. Commission Transparency Register meetings (Layer 2d)
+        tr_meetings_intent = self._detect_tr_meetings_intent(user_message)
+        async def _fetch_tr_meetings_safe():
+            if not tr_meetings_intent: return None
+            try:
+                b = await self._fetch_tr_meetings_block(user_message, tr_meetings_intent)
+                if b: logger.info("[tr-meetings-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[tr-meetings-block] failed: %s", e); return None
+        post_tasks['transparency_meetings_block'] = _fetch_tr_meetings_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1518,6 +1533,7 @@ class ContextBuilder:
         eu_funding_block = post_map.get('eu_funding_block')
         council_documents_block = post_map.get('council_documents_block')
         infringements_block = post_map.get('infringements_block')
+        transparency_meetings_block = post_map.get('transparency_meetings_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1606,6 +1622,7 @@ class ContextBuilder:
             eu_funding_block=eu_funding_block,
             council_documents_block=council_documents_block,
             infringements_block=infringements_block,
+            transparency_meetings_block=transparency_meetings_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -8397,6 +8414,77 @@ class ContextBuilder:
                     ms = code; break
         return {"keyword": m.group(0), "member_state": ms}
 
+    # ─── Transparency Register meetings (#44-45) ───
+    _TR_MEETINGS_INTENT = re.compile(
+        r"\b(transparency\s+(?:initiative|register)\s+meeting(?:s)?|"
+        r"commissioner\s+meet(?:ing|s|ings)?|cabinet\s+meet(?:ing|s|ings)?|"
+        r"DG\s+(?:meeting(?:s)?|met\s+with)|"
+        r"who\s+(?:did|met|has)\s+.+(?:meet|lobby)|"
+        r"lobbyist(?:s)?\s+met|"
+        r"meeting(?:s)?\s+with\s+(?:Commissioner|Cabinet|DG))\b",
+        re.IGNORECASE,
+    )
+    _TR_MEETINGS_STOP = {"transparency","initiative","register","meeting","meetings","commissioner",
+                         "cabinet","dg","met","meet","with","who","did","has","lobbyist","lobbyists",
+                         "the","a","an","of","in","to","on","for","by","and","or","european","eu"}
+
+    def _detect_tr_meetings_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._TR_MEETINGS_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    async def _fetch_tr_meetings_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._TR_MEETINGS_STOP][:3]
+                where = ["true"]
+                if terms:
+                    cl = []
+                    for i, t in enumerate(terms):
+                        cl.append(f"(host_name ILIKE :tm{i} OR organisation_met ILIKE :tm{i} OR subject ILIKE :tm{i} OR host_dg ILIKE :tm{i})")
+                        params[f"tm{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(cl) + ")")
+                where_sql = " AND ".join(where)
+                rows = db.execute(text(f"""
+                    SELECT host_name, host_role, host_dg, host_cabinet, meeting_date,
+                           subject, organisation_met, source_url
+                      FROM transparency_meetings
+                     WHERE {where_sql}
+                     ORDER BY meeting_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "COMMISSION TRANSPARENCY MEETINGS (from transparency_meetings):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    host = r.get("host_name") or "?"
+                    role = r.get("host_role") or "?"
+                    dg = r.get("host_dg") or ""
+                    cab = r.get("host_cabinet") or ""
+                    dt = str(r.get("meeting_date") or "?")[:10]
+                    subj = (r.get("subject") or "")[:90]
+                    org = (r.get("organisation_met") or "?")[:60]
+                    lines.append(f"  - {dt} | {host} ({role}, {dg or cab})")
+                    lines.append(f"      with {org} — {subj}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/transparencyinitiative/meetings. "
+                             "Brubru endpoint: /api/v1/meetings.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[tr-meetings-block] failed: %s", e)
+            return None
+
     async def _fetch_infringement_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
         from sqlalchemy import text
         try:
@@ -8838,6 +8926,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'infringements_block', None):
             sections.append(context_data.infringements_block)
+            sections.append("")
+        if getattr(context_data, 'transparency_meetings_block', None):
+            sections.append(context_data.transparency_meetings_block)
             sections.append("")
 
         # Drafting mode signal (action intent detected)
