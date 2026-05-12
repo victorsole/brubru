@@ -298,12 +298,30 @@ def _clean_event_description(s: Optional[str]) -> Optional[str]:
 
 def _compose_oeil_body(lc) -> Tuple[Optional[str], Optional[str]]:
     """Build body_txt and body_html from already-cached legislative_carriages
-    data. Pulls from lc.description (procedure summary) and lc.oeil_key_events
-    (timeline). No upstream HTTP — pure DB join. Returns (None, None) when the
-    carriage row is missing or all source fields are empty.
+    data. Two tiers:
+
+    Tier 1 (preferred) — cached full OEIL page via backfill_oeil_body.py:
+        lc.oeil_text_body / lc.oeil_html_body. Populated by the OEIL scraper
+        on a background job; covers the full procedure-file page (sections
+        Basic info, Key players, Key events, Technical info, Documentation
+        gateway, Additional info). The cleanest body for partners.
+
+    Tier 2 (fallback) — description + oeil_key_events composition:
+        Used when the OEIL body backfill hasn't reached this carriage yet,
+        or when OEIL itself is offline. Cheaper to compute but missing the
+        full procedure content.
+
+    Returns (None, None) when the carriage row is missing or every tier is
+    empty.
     """
     if lc is None:
         return None, None
+    # Tier 1 — full cached body
+    cached_txt = (getattr(lc, "oeil_text_body", None) or "").strip() or None
+    cached_html = (getattr(lc, "oeil_html_body", None) or "").strip() or None
+    if cached_txt or cached_html:
+        return cached_txt, cached_html
+    # Tier 2 — composition
     desc = (getattr(lc, "description", None) or "").strip() or None
     events_raw = getattr(lc, "oeil_key_events", None) or []
     events: list = []

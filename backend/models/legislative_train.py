@@ -208,6 +208,12 @@ class LegislativeCarriage(Base):
 
     # AI-generated enrichment (Hugging Face)
     ai_summary = Column(Text)  # British English summary
+
+    # OEIL page body cache — populated by backend/scripts/backfill_oeil_body.py
+    # Read by /api/v1/committees/{code}/work-items to serve body_txt/body_html.
+    oeil_html_body = Column(Text)
+    oeil_text_body = Column(Text)
+    oeil_body_fetched_at = Column(DateTime)
     ai_entities = Column(JSON, default=[])  # Extracted MEPs, committees, legislation
     ai_policy_classifications = Column(JSON, default=[])  # {"label": "...", "score": 0.9}
 
