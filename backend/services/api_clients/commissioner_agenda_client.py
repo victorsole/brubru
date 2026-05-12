@@ -197,6 +197,21 @@ def find_profile(query: str, profiles: Optional[List[CommissionerProfile]] = Non
         for p in profiles:
             if q in _strip_accents(p.name.lower()) or q_dehyphen in _strip_accents(p.name.lower()):
                 return p
+    # close-match fallback for transliteration variants of Slavic / non-Latin
+    # surnames (e.g. "Šefčovič" → "Sefcovic" / "Sefkovic"). difflib's ratio is
+    # cheap (27 profiles max). Threshold 0.85 catches single-letter typos in
+    # longer surnames while rejecting unrelated names.
+    import difflib
+    candidates = [(_strip_accents((p.slug or "").lower()), _strip_accents(p.name.lower()), p) for p in profiles]
+    haystack = []
+    for cs, cn, p in candidates:
+        haystack.append(cs); haystack.append(cn)
+    close = difflib.get_close_matches(q, haystack, n=1, cutoff=0.85)
+    if close:
+        target = close[0]
+        for cs, cn, p in candidates:
+            if cs == target or cn == target:
+                return p
     return None
 
 
