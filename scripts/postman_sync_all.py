@@ -70,7 +70,8 @@ def normalise_path(p: str) -> str:
     return s
 
 
-def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict] = None) -> dict:
+def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict] = None,
+                       spec_components: Optional[dict] = None) -> dict:
     """Convert one OpenAPI operation into a Postman item dict.
 
     `existing` is the previously-saved Postman item (if any) — used to
@@ -161,30 +162,25 @@ def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict
             mode = existing_body.get("mode")
             if mode == "raw":
                 cur = existing_body.get("raw") or ""
-                # Treat empty / whitespace / "{}" as "not yet edited" so we can fill it in.
                 stripped = cur.strip()
                 if stripped and stripped not in {"{}", "null"}:
                     chosen_raw = cur
         # 2) OpenAPI example on the media-type
         if not chosen_raw and content.get("example") is not None:
             chosen_raw = json.dumps(content["example"], indent=2)
-        # 3) examples
+        # 3) media-type examples
         if not chosen_raw:
             for v in (content.get("examples") or {}).values():
                 if isinstance(v, dict) and v.get("value") is not None:
                     chosen_raw = json.dumps(v["value"], indent=2)
                     break
-        # 4) Synthesise from schema.properties (best-effort, only required fields
-        # to keep the body minimal and partner-runnable)
+        # 4) Resolve the schema $ref → components and synthesise from properties.
         if not chosen_raw:
             schema = content.get("schema") or {}
-            # Resolve a single-level $ref if present
-            if "$ref" in schema:
-                ref = schema["$ref"].split("/")[-1]
-                # We don't have the components map here; the route-level example
-                # is usually richer than the schema. Just emit "{}" so partners
-                # see the field exists.
-                pass
+            # Dereference one level of $ref using the spec's components map.
+            if "$ref" in schema and spec_components:
+                ref_name = schema["$ref"].split("/")[-1]
+                schema = spec_components.get(ref_name, {})
             if schema.get("example") is not None:
                 chosen_raw = json.dumps(schema["example"], indent=2)
             elif schema.get("properties"):
@@ -193,8 +189,14 @@ def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict
                 stub = {}
                 for fname in required:
                     fschema = props.get(fname, {})
-                    if "example" in fschema:
-                        stub[fname] = fschema["example"]
+                    # Pydantic v2 places `Field(..., examples=[...])` into the
+                    # generated schema as `examples: [...]` (plural list). Try
+                    # singular first, then list, then type default.
+                    ex = fschema.get("example")
+                    if ex is None and isinstance(fschema.get("examples"), list) and fschema["examples"]:
+                        ex = fschema["examples"][0]
+                    if ex is not None:
+                        stub[fname] = ex
                     elif fschema.get("type") == "string":
                         stub[fname] = "string"
                     elif fschema.get("type") == "integer":
@@ -314,7 +316,11 @@ def main():
                 continue
             key = (normalise_path(path), method.upper())
             existing_item = existing.get(key)
-            new_item = build_postman_item(path, method, op, existing=existing_item)
+            new_item = build_postman_item(
+                path, method, op,
+                existing=existing_item,
+                spec_components=(spec.get("components") or {}).get("schemas") or {},
+            )
             if existing_item is not None:
                 # Update the existing item in place — keep its parent folder
                 # and any saved example responses. build_postman_item already
