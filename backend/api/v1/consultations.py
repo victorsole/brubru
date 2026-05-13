@@ -395,12 +395,12 @@ async def list_consultations(
         "**What it does:** returns a single Have Your Say consultation / call for "
         "evidence by its `initiative_id`.\n\n"
         "**How to obtain an `initiative_id`:** call `/api/v1/consultations` (LIST) and "
-        "grab the `initiative_id` field. This route accepts BOTH numeric IDs "
-        "(e.g. `13693`) and slug IDs (e.g. `eu-aviation-aeronautics-strategy-2026`).\n\n"
+        "grab the `initiative_id` field. Always numeric — the underlying table has a "
+        "CHECK constraint that forbids non-numeric values, so any consultation in "
+        "Brubru has a numeric id (e.g. `13693`).\n\n"
         "**Try it:**\n"
         "- `GET /api/v1/consultations/13693` (Cooking appliances energy labelling)\n"
-        "- `GET /api/v1/consultations/13687` (Solid-fuel local space heaters)\n"
-        "- `GET /api/v1/consultations/eu-aviation-aeronautics-strategy-2026` (EU Aviation Strategy)"
+        "- `GET /api/v1/consultations/13687` (Solid-fuel local space heaters)"
     ),
 )
 async def get_consultation_detail(
