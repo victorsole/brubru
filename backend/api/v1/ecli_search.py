@@ -70,13 +70,36 @@ class ECLIResolution(BaseModel):
 @router.get(
     "/{ecli:path}",
     response_model=ECLIResolution,
-    summary="Look up an EU court ruling by case-law identifier",
-    description=(
-        "Hand it any European Case Law Identifier (e.g. "
-        "ECLI:EU:C:2014:317 — the Google Spain ruling) and get back the "
-        "parsed components plus deep-links to the e-Justice search "
-        "engine and (for CJEU rulings) InforCuria."
-    ),
+    summary="Look up an EU court ruling by ECLI — parsed components + citizen URLs",
+    description="""**What it does**
+Hand it any European Case Law Identifier and get back the parsed components (country / court / year / ordinal), plus deep-links to the e-Justice search engine and (for CJEU rulings) InforCuria.
+
+**Where to find ECLIs to test**
+There is no master list of ECLIs (the universe spans every national court + the CJEU, millions of rulings). Three practical sources:
+
+1. **CJEU landmark cases** — copy-paste any of these worked examples:
+   - `ECLI:EU:C:2014:317`  — Google Spain (right to be forgotten)
+   - `ECLI:EU:C:2020:559`  — Schrems II (EU-US data flows)
+   - `ECLI:EU:C:2018:117`  — Achmea (intra-EU BITs)
+   - `ECLI:EU:C:2019:772`  — Glawischnig-Piesczek (Facebook content removal)
+   - `ECLI:EU:C:2024:1`    — pick any current-year CJEU ruling
+2. **EUR-Lex case-law search** — every CJEU judgment listed on `eur-lex.europa.eu/collection/eu-law/eu-case-law.html` carries its ECLI in the metadata header.
+3. **e-Justice ECLI search** — for national-court rulings, the EU's e-Justice portal at `e-justice.europa.eu` indexes ECLIs from 17+ Member States; you can browse by court and copy the identifier.
+
+**ECLI format**
+`ECLI:<country>:<court>:<year>:<ordinal>` — five colon-separated segments, no spaces.
+
+**Input**
+- `ecli` (path) — the ECLI string.
+
+**Try it**
+```
+GET /api/v1/discover/ecli/ECLI:EU:C:2014:317
+GET /api/v1/discover/ecli/ECLI:EU:C:2020:559
+```
+
+**You get back**
+An `ECLIResolution` object with parsed parts, `is_cjeu` flag, `e_justice_url` (always set), and `inforcuria_url` (set for CJEU rulings). `public_url` is the InforCuria URL for CJEU, otherwise the e-Justice deep-link.""",
 )
 async def resolve_ecli(
     request: Request,

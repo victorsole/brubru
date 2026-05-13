@@ -398,11 +398,38 @@ async def project_funding(
     "/organisations/{org_name}/projects",
     response_model=PaginatedResponse[ResearchProjectItem],
     summary="Research projects an organisation participated in",
-    description=(
-        "Find every CORDIS project where the named organisation appears in the "
-        "consortium (any role: coordinator, participant, third-party). Match is "
-        "case-insensitive substring on the organisation name."
-    ),
+    description="""**What it does**
+Returns every CORDIS project where the named organisation appears in the consortium (any role: coordinator, participant, third-party). Match is **case-insensitive substring** on the organisation name — you don't need to know the exact legal name.
+
+**Where to find an `org_name` to test**
+The CORDIS data uses the organisation's full legal name (often ALL CAPS, sometimes localised). Three ways to discover one:
+
+1. **Worked examples (top EU research orgs, copy-paste ready)** — each has 1,000+ projects in the DB:
+   - `CNRS` — Centre National de la Recherche Scientifique (4,798 projects)
+   - `Fraunhofer` — German applied-research society (2,989)
+   - `CSIC` — Spanish CSIC (2,387)
+   - `CNR` — Italian CNR (1,980)
+   - `Max-Planck` — German Max Planck Society (1,825)
+   - `Leuven` — KU Leuven (1,798)
+   - `Cambridge` — University of Cambridge (1,772)
+   - `Oxford` — University of Oxford (1,760)
+   - `Imperial College` — Imperial College London (1,492)
+2. **Pick one from /discover/eurio/projects** — call `/api/v1/discover/eurio/projects?topic=<your-topic>` and read any project's `organisations[]` array; copy the `name` field.
+3. **Use a partial match** — the route accepts any substring, so `Sapienza` matches "SAPIENZA UNIVERSITÀ DI ROMA", `Karolinska` matches "KAROLINSKA INSTITUTET", etc. Lowercase works too.
+
+**Input**
+- `org_name` (path) — full or partial organisation name, case-insensitive.
+- `framework` — HORIZON / H2020 / FP7 (optional).
+- `limit` (1-200, default 50), `page` (default 1).
+
+**Try it**
+```
+GET /api/v1/discover/eurio/organisations/CNRS/projects?limit=20
+GET /api/v1/discover/eurio/organisations/Karolinska/projects?framework=HORIZON
+```
+
+**You get back**
+Paginated envelope of `ResearchProjectItem` rows. Each row has `public_url` pointing to the project's CORDIS page.""",
 )
 async def org_projects(
     request: Request,
