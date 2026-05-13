@@ -232,33 +232,64 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
     get().fetchEvents();
   },
 
-  // Toggle institution filter
+  // Toggle institution filter.
+  //
+  // Semantics: an EMPTY set means "no filter, show every institution"
+  // (this is how the UI renders all chips as active on first load). The
+  // first click while empty therefore populates the set with everything
+  // *except* the clicked code (the user is deselecting one). Symmetric
+  // collapse: if a click would result in a full set, clear it instead so
+  // we return to the "all-active default" state.
   toggleInstitution: (code: InstitutionType) => {
     const { activeInstitutions } = get();
-    const updated = new Set(activeInstitutions);
-    if (updated.has(code)) {
-      updated.delete(code);
+    const all = PHASE1_INSTITUTIONS;
+    let updated: Set<InstitutionType>;
+    if (activeInstitutions.size === 0) {
+      // From "all active" → deselect the clicked one.
+      updated = new Set(all.filter((c) => c !== code));
     } else {
-      updated.add(code);
+      updated = new Set(activeInstitutions);
+      if (updated.has(code)) {
+        updated.delete(code);
+      } else {
+        updated.add(code);
+      }
+      // If the user has re-selected everything, collapse back to empty
+      // ("all-active default") so we don't send a redundant filter.
+      if (updated.size === all.length) {
+        updated = new Set<InstitutionType>();
+      }
     }
     set({ activeInstitutions: updated });
     get().fetchEvents();
   },
 
-  // Toggle policy area filter
+  // Toggle policy area filter. Same semantics as institutions.
   togglePolicyArea: (code: string) => {
     const { activePolicyAreas } = get();
-    const updated = new Set(activePolicyAreas);
-    if (updated.has(code)) {
-      updated.delete(code);
+    const all = POLICY_AREA_CODES;
+    let updated: Set<string>;
+    if (activePolicyAreas.size === 0) {
+      updated = new Set(all.filter((c) => c !== code));
     } else {
-      updated.add(code);
+      updated = new Set(activePolicyAreas);
+      if (updated.has(code)) {
+        updated.delete(code);
+      } else {
+        updated.add(code);
+      }
+      if (updated.size === all.length) {
+        updated = new Set<string>();
+      }
     }
     set({ activePolicyAreas: updated });
     get().fetchEvents();
   },
 
-  // Toggle committee filter
+  // Toggle committee filter. Committees stay off by default (the row only
+  // appears when EP is in the active institutions), so we keep the
+  // simpler "click to add / click to remove" toggle without the
+  // empty-means-all rule.
   toggleCommittee: (code: string) => {
     const { activeCommittees } = get();
     const updated = new Set(activeCommittees);
@@ -329,10 +360,11 @@ export function getActiveInstitutionCodes(events: CalendarEvent[]): InstitutionT
 }
 
 /**
- * All available institution filter options (Phase 1: EP, Council, Eur. Council, Commission)
+ * All available institution filter options. THIRD_PARTY surfaces euagenda.eu
+ * events (think tanks, conferences, webinars, training) added 22 April 2026.
  */
 export const PHASE1_INSTITUTIONS: InstitutionType[] = [
-  'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB',
+  'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB', 'THIRD_PARTY',
 ];
 
 /**

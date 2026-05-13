@@ -58,6 +58,9 @@ class UserUpdate(BaseModel):
     organization: Optional[str] = Field(None, max_length=200)
     country: Optional[str] = Field(None, max_length=2)
     policy_interests: Optional[str] = None  # JSON string of policy areas
+    # P1b — Monitoring overhaul (May 2026)
+    role_title: Optional[str] = Field(None, max_length=120)
+    sectors: Optional[list[str]] = None  # sector slugs from controlled vocab
     # Personalisation fields
     first_name: Optional[str] = Field(None, max_length=100)
     preferred_name: Optional[str] = Field(None, max_length=100)
@@ -80,6 +83,8 @@ class UserResponse(BaseModel):
     avatar_url: Optional[str]
     country: Optional[str]
     policy_interests: Optional[str]
+    role_title: Optional[str] = None
+    sectors: Optional[list[str]] = None
     background_preference: Optional[str]
     subscription_tier: str
     subscription_expires_at: Optional[datetime]

@@ -1,0 +1,122 @@
+.proactive-opener {
+  margin: 0 0 1.25rem 0;
+}
+
+.proactive-opener--dashboard {
+  margin-top: 0;
+}
+
+.proactive-opener__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.proactive-opener__header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.proactive-opener__cards {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (min-width: 1024px) {
+  .proactive-opener__cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+.proactive-opener__card {
+  position: relative;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 147, 227, 0.06),
+    rgba(108, 92, 231, 0.05)
+  );
+  border: 1px solid rgba(6, 147, 227, 0.22);
+  border-radius: 10px;
+}
+
+.proactive-opener__card-tag {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  padding: 0.12rem 0.55rem;
+  background: rgba(6, 147, 227, 0.18);
+  color: #0570a8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+.proactive-opener__card-title {
+  margin: 0 0 0.3rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+
+.proactive-opener__card-summary {
+  margin: 0 0 0.6rem 0;
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.45;
+}
+
+.proactive-opener__card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.proactive-opener__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  background: #0693e3;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.proactive-opener__cta:hover {
+  background: #057bc3;
+}
+
+.proactive-opener__cta--secondary {
+  background: transparent;
+  color: #0570a8;
+  border: 1px solid rgba(6, 147, 227, 0.4);
+}
+
+.proactive-opener__cta--secondary:hover {
+  background: rgba(6, 147, 227, 0.08);
+}
+
+.proactive-opener__dismiss {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.proactive-opener__dismiss:hover {
+  color: #444;
+  background: rgba(0, 0, 0, 0.05);
+}

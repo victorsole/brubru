@@ -1,0 +1,34 @@
+.talk-to-brubru {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(90deg, #0693e3, #6c5ce7);
+  border: none;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.12s ease, transform 0.12s ease;
+  white-space: nowrap;
+}
+
+.talk-to-brubru:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.talk-to-brubru:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 2px;
+}
+
+.talk-to-brubru--inline {
+  margin-left: auto;
+}
+
+.talk-to-brubru--pill {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+}

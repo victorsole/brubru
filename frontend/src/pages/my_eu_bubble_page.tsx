@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth, mdiScaleBalance } from '@mdi/js';
+import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth, mdiScaleBalance, mdiCompareHorizontal } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
@@ -17,14 +17,16 @@ import { PredictionsTab } from '../components/bubble/predictions_tab';
 import { EUCalendarTab } from '../components/bubble/eu_calendar_tab';
 import { EUCalendarCTA } from '../components/bubble/eu_calendar_cta';
 import { PositionAnalysisTab } from '../components/bubble/position_analysis_tab';
+import { ComparatorTab } from '../components/bubble/comparator_tab';
 import { NewsSidebar } from '../components/bubble/news_sidebar';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
+import { TalkToBrubruButton } from '../components/shared/talk_to_brubru_button';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'my_files' | 'position_analysis' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType = 'dashboard' | 'my_files' | 'position_analysis' | 'comparator' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
 
 const VALID_TABS: TabType[] = [
-  'dashboard', 'my_files', 'position_analysis', 'eu_calendar', 'predictions', 'consultations',
+  'dashboard', 'my_files', 'position_analysis', 'comparator', 'eu_calendar', 'predictions', 'consultations',
   'documents', 'amendments', 'analytics', 'legislative',
 ];
 
@@ -49,10 +51,28 @@ export const MyEUBubblePage = () => {
     }
   }, [searchParams]);
 
+  // Tab-specific Chat hand-off prompts. Each one is a question Brubru is
+  // already able to answer from the user's profile + tracked files; the
+  // /main?q=...&autofire=1 navigation streams the answer immediately.
+  const CHAT_HANDOFF_PROMPTS: Record<TabType, string> = {
+    dashboard: "Brief me on what's new this week across my policy areas and tracked files, and what I should act on first.",
+    my_files: 'Summarise the legislative files I track and what to watch this week.',
+    position_analysis: 'Walk me through the positions on the files I track and which are likely to survive trilogue.',
+    comparator: 'Compare the files I have selected — where do they overlap and where do they conflict?',
+    eu_calendar: 'Summarise the EU institutional events in the next 7 days that touch my policy areas or tracked files.',
+    predictions: 'Predict the outcome of the files I track and explain the key variables driving each prediction.',
+    consultations: 'Which open EC public consultations close soon for my policy areas, and what is the strongest angle for my response?',
+    documents: 'Help me draft a position paper on the file I am viewing — start with the key arguments and likely counter-positions.',
+    amendments: 'Summarise the amendments tabled on my tracked files in the last week and tell me which articles are most affected.',
+    legislative: 'Walk me through where my tracked legislative files sit in the pipeline and the next procedural milestones.',
+    analytics: 'Which of my tracked files are gaining momentum and what does my Brubru usage tell me about my priorities?',
+  };
+
   const tabs = [
     { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
     { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
     { id: 'position_analysis' as TabType, label: t('bubble.tabs.positionAnalysis', 'Position Analysis'), icon: mdiScaleBalance },
+    { id: 'comparator' as TabType, label: 'Comparator', icon: mdiCompareHorizontal },
     { id: 'eu_calendar' as TabType, label: t('bubble.tabs.euCalendar', 'My EU Calendar'), icon: mdiCalendarMonth },
     { id: 'predictions' as TabType, label: t('bubble.tabs.predictions', 'Predictions'), icon: mdiCrystalBall, isPredictions: true },
     { id: 'consultations' as TabType, label: t('bubble.tabs.consultations', 'EC Consultations'), icon: mdiCalendarCollapseHorizontal },
@@ -70,6 +90,8 @@ export const MyEUBubblePage = () => {
         return <MyTrackedFilesTab />;
       case 'position_analysis':
         return <PositionAnalysisTab />;
+      case 'comparator':
+        return <ComparatorTab />;
       case 'eu_calendar':
         // Show CTA for White tier users, full calendar for Yellow+ tiers
         if (!user || user.subscription_tier === 'white') {
@@ -139,6 +161,11 @@ export const MyEUBubblePage = () => {
       <div className="my-eu-bubble-page__layout">
         {/* Main Content Area */}
         <div className="my-eu-bubble-page__main">
+          {/* Talk to Brubru — tab-specific Chat hand-off */}
+          <div className="my-eu-bubble-page__chat-handoff">
+            <TalkToBrubruButton prompt={CHAT_HANDOFF_PROMPTS[activeTab]} />
+          </div>
+
           {/* Tab Navigation */}
           <nav className="my-eu-bubble-page__tabs">
             {tabs.map(tab => {

@@ -13,6 +13,10 @@ interface User {
   avatar_url: string | null;
   country: string | null;
   policy_interests: string | null;
+  /** P1b — Monitoring overhaul (May 2026) */
+  role_title: string | null;
+  /** P1b — sectors as string slugs from the controlled vocab */
+  sectors: string[] | null;
   background_preference: string | null;
   subscription_tier: string;
   subscription_expires_at: string | null;

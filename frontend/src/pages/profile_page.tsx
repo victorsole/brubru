@@ -6,6 +6,7 @@ import { useSubscription } from '../hooks/use_subscription';
 import { Link } from 'react-router-dom';
 import { PolicyPreferencesSelector } from '../components/profile/policy_preferences_selector';
 import { BackgroundSelector } from '../components/profile/background_selector';
+import { SectorsSelector } from '../components/profile/sectors_selector';
 import { FeedbackForm } from '../components/feedback/feedback_form';
 import { TrainerStarRing, TrainerShieldBadge, TrainerNameGlow } from '../components/shared/trainer_badge';
 import Icon from '@mdi/react';
@@ -14,6 +15,7 @@ import {
   mdiAccountOutline,
   mdiCreditCardOutline,
   mdiBookmarkMultipleOutline,
+  mdiBriefcaseOutline,
   mdiImageOutline,
   mdiMessageTextOutline,
   mdiCogOutline,
@@ -30,7 +32,7 @@ import {
 } from '@mdi/js';
 import './profile_page.css';
 
-type Section = 'overview' | 'personal' | 'billing' | 'policies' | 'background' | 'feedback' | 'account';
+type Section = 'overview' | 'personal' | 'billing' | 'policies' | 'sectors' | 'background' | 'feedback' | 'account';
 
 interface NavItem {
   id: Section;
@@ -80,15 +82,19 @@ export const ProfilePage = () => {
   const [formData, setFormData] = useState({
     full_name: user?.full_name || '',
     organization: user?.organization || '',
-    country: user?.country || ''
+    country: user?.country || '',
+    role_title: user?.role_title || '',
   });
   const [policyInterests, setPolicyInterests] = useState<string[]>([]);
+  const [sectors, setSectors] = useState<string[]>([]);
   const [backgroundPreference, setBackgroundPreference] = useState<string>('default');
   const [saved, setSaved] = useState(false);
   const [preferencesSaved, setPreferencesSaved] = useState(false);
+  const [sectorsSaved, setSectorsSaved] = useState(false);
   const [backgroundSaved, setBackgroundSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [preferencesLoading, setPreferencesLoading] = useState(false);
+  const [sectorsLoading, setSectorsLoading] = useState(false);
   const [backgroundLoading, setBackgroundLoading] = useState(false);
 
   useEffect(() => {
@@ -102,9 +108,19 @@ export const ProfilePage = () => {
         setPolicyInterests([]);
       }
     }
+    if (user?.sectors) {
+      const arr = Array.isArray(user.sectors) ? user.sectors : [];
+      setSectors(arr);
+    } else {
+      setSectors([]);
+    }
     if (user?.background_preference) {
       setBackgroundPreference(user.background_preference);
     }
+    setFormData((prev) => ({
+      ...prev,
+      role_title: user?.role_title || prev.role_title,
+    }));
   }, [user]);
 
   useEffect(() => {
@@ -126,6 +142,7 @@ export const ProfilePage = () => {
     { id: 'personal', label: t('profile.personalInfo'), icon: mdiAccountOutline },
     { id: 'billing', label: 'Billing', icon: mdiCreditCardOutline },
     { id: 'policies', label: t('profile.policyInterests'), icon: mdiBookmarkMultipleOutline },
+    { id: 'sectors', label: 'Sectors', icon: mdiBriefcaseOutline },
     { id: 'background', label: 'Background', icon: mdiImageOutline },
     { id: 'feedback', label: t('profile.feedback'), icon: mdiMessageTextOutline },
     { id: 'account', label: t('profile.accountSettings'), icon: mdiCogOutline },
@@ -161,6 +178,20 @@ export const ProfilePage = () => {
       console.error('Failed to update preferences', err);
     } finally {
       setPreferencesLoading(false);
+    }
+  };
+
+  const handleSectorsUpdate = async (next: string[]) => {
+    setSectors(next);
+    setSectorsLoading(true);
+    try {
+      await updateProfile({ sectors: next });
+      setSectorsSaved(true);
+      setTimeout(() => setSectorsSaved(false), 3000);
+    } catch (err) {
+      console.error('Failed to update sectors', err);
+    } finally {
+      setSectorsLoading(false);
     }
   };
 
@@ -357,6 +388,21 @@ export const ProfilePage = () => {
         </div>
 
         <div className="profile-dashboard__field">
+          <label htmlFor="role_title">Role / Title</label>
+          <input
+            id="role_title"
+            name="role_title"
+            type="text"
+            value={formData.role_title}
+            onChange={handleChange}
+            disabled={loading}
+            placeholder="e.g. Policy officer, In-house counsel, EU affairs consultant"
+            maxLength={120}
+          />
+          <small>How you describe your professional role. Brubru tailors answers based on this.</small>
+        </div>
+
+        <div className="profile-dashboard__field">
           <label htmlFor="country">{t('profile.country')}</label>
           <select
             id="country"
@@ -541,6 +587,30 @@ export const ProfilePage = () => {
     </div>
   );
 
+  const renderSectors = () => (
+    <div className="profile-dashboard__card">
+      <div className="profile-dashboard__card-header">
+        <h3 className="profile-dashboard__card-title">Your sectors</h3>
+        <div>
+          {sectorsLoading && (
+            <span className="profile-dashboard__loading">{t('profile.saving')}</span>
+          )}
+          {sectorsSaved && (
+            <span className="profile-dashboard__saved">
+              <Icon path={mdiCheck} size={0.7} /> {t('profile.saved')}
+            </span>
+          )}
+        </div>
+      </div>
+      <p className="profile-dashboard__card-description">
+        Pick the EU economic-activity sectors you work in. These power the
+        Dashboard's Voice opportunities, Compliance signals, and New this
+        week tiles.
+      </p>
+      <SectorsSelector selectedSectors={sectors} onUpdate={handleSectorsUpdate} />
+    </div>
+  );
+
   const renderBackground = () => (
     <div className="profile-dashboard__card">
       <div className="profile-dashboard__card-header">
@@ -630,6 +700,7 @@ export const ProfilePage = () => {
     personal: renderPersonalInfo,
     billing: renderBilling,
     policies: renderPolicies,
+    sectors: renderSectors,
     background: renderBackground,
     feedback: renderFeedback,
     account: renderAccount,
@@ -640,6 +711,7 @@ export const ProfilePage = () => {
     personal: t('profile.personalInfo'),
     billing: 'Billing',
     policies: t('profile.policyInterests'),
+    sectors: 'Sectors',
     background: 'Background',
     feedback: t('profile.feedback'),
     account: t('profile.accountSettings'),
@@ -647,9 +719,10 @@ export const ProfilePage = () => {
 
   const sectionSubtitles: Record<Section, string> = {
     overview: 'Your Brubru dashboard at a glance',
-    personal: 'Update your name, organisation, and country',
+    personal: 'Update your name, role, organisation, and country',
     billing: 'Manage your subscription and billing',
     policies: 'Select the EU policy areas you follow',
+    sectors: 'Pick your industry sectors so Brubru can personalise',
     background: 'Personalise your page backgrounds',
     feedback: 'Share your feedback and suggestions',
     account: 'Account details and settings',

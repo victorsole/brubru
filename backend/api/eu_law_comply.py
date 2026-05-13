@@ -1010,3 +1010,64 @@ async def get_user_analysis_history(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve analysis history"
         )
+
+
+# ============================================================================
+# Future-Comply preview (P6 — May 2026)
+# ============================================================================
+
+from models.legislative_train import LegislativeCarriage  # noqa: E402
+from services.compliance.proposal_preview import (  # noqa: E402
+    compose_future_comply_preview,
+)
+
+
+@router.get(
+    "/future-preview/{procedure_ref:path}",
+    summary="Future-Comply preview for an in-flight proposal",
+    description=(
+        "**What it does**\n\n"
+        "Returns a structured 'what to prepare for if this passes as drafted' "
+        "preview for an in-flight EU legislative proposal, grounded in the "
+        "carriage's real data (status, policy areas, AI summary, days in "
+        "stage). When the file is already adopted, it points the user at the "
+        "existing gap-analysis flow rather than fabricating obligations.\n\n"
+        "**When to use it**\n\n"
+        "Call from the legislative file detail modal or from the EU Law "
+        "Comply page when the user enters an OEIL procedure reference for an "
+        "in-flight file. Pair with the Personalised Impact endpoint for a "
+        "fuller picture.\n\n"
+        "**Input**\n\n"
+        "URL path parameter `procedure_ref` — OEIL procedure reference. "
+        "Authentication via Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/future-preview/2024%2F0176%28COD%29` with "
+        "the Bearer token.\n\n"
+        "**You get back**\n\n"
+        "`stage` (proposal | adopted | other), `headline`, `summary`, "
+        "`likely_obligation_areas`, `recommended_next_steps`, plus a "
+        "`deferred_to_adopted_flow` flag when the file is already adopted. "
+        "Never fabricates obligations — every label is grounded in the file's "
+        "real classification."
+    ),
+)
+async def get_future_comply_preview(
+    procedure_ref: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    carriage = (
+        db.query(LegislativeCarriage)
+        .filter(LegislativeCarriage.oeil_procedure_ref == procedure_ref)
+        .first()
+    )
+    if not carriage:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=(
+                f"No legislative file found with procedure_ref={procedure_ref}"
+            ),
+        )
+
+    preview = compose_future_comply_preview(current_user, carriage)
+    return preview.to_dict()

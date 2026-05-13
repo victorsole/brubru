@@ -13,6 +13,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 import httpx
 import hashlib
+import json as _json
 
 from core.database import get_db
 from core.config import settings
@@ -342,7 +343,22 @@ async def update_user_profile(
     if update_data.country is not None:
         current_user.country = update_data.country
     if update_data.policy_interests is not None:
-        current_user.policy_interests = update_data.policy_interests
+        # Frontend sends JSON.stringify([...]), but the column is JSONB.
+        # Parse first so we store as a proper JSON array (not a JSON-encoded
+        # string). Falls back to the raw value if it doesn't parse.
+        raw = update_data.policy_interests
+        try:
+            parsed = _json.loads(raw) if isinstance(raw, str) else raw
+            current_user.policy_interests = (
+                parsed if isinstance(parsed, list) else raw
+            )
+        except (_json.JSONDecodeError, ValueError, TypeError):
+            current_user.policy_interests = raw
+    # P1b — Monitoring overhaul (May 2026)
+    if update_data.role_title is not None:
+        current_user.role_title = update_data.role_title
+    if update_data.sectors is not None:
+        current_user.sectors = update_data.sectors
     # Personalisation fields
     if update_data.first_name is not None:
         current_user.first_name = update_data.first_name

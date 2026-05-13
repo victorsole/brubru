@@ -12,6 +12,7 @@ import { useBubble } from '../../hooks/use_bubble';
 import { useAuth } from '../../hooks/use_auth';
 import { TenderatorWidget } from './tenderator_widget';
 import { LegislativeUpdatesWidget } from './legislative_updates_widget';
+import { DashboardCockpit } from './dashboard_cockpit';
 import './dashboard_tab.css';
 
 export const DashboardTab = () => {
@@ -110,8 +111,11 @@ export const DashboardTab = () => {
       {/* Welcome Section */}
       <div className="dashboard-tab__welcome">
         <h2>Welcome to Your EU Bubble</h2>
-        <p>Your personalized EU policy intelligence hub</p>
+        <p>Your personalised EU policy cockpit</p>
       </div>
+
+      {/* Monitoring cockpit — the six-tile front door of My EU Bubble. */}
+      <DashboardCockpit />
 
       {/* Quick Stats */}
       <div className="dashboard-tab__stats-grid">

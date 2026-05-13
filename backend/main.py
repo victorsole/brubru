@@ -34,7 +34,7 @@ from api import (
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
     whatsapp, positions, archive, amendator_examples, public_analytics,
-    datasets_dcat, comparator,
+    datasets_dcat, comparator, dashboard, proactive, impact,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -212,6 +212,9 @@ app.include_router(daily_brief.router, tags=["Daily Brief"])
 app.include_router(catalan_translations.router, tags=["Catalan Translations"])
 app.include_router(whatsapp.router, tags=["WhatsApp"])
 app.include_router(positions.router, tags=["Position Analysis"])
+app.include_router(dashboard.router, tags=["Dashboard"])
+app.include_router(proactive.router, tags=["Proactive Chat"])
+app.include_router(impact.router, tags=["Personalised Impact"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 # Data Provider API v1 (public paid surface, /api/v1/*)

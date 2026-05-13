@@ -5,6 +5,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { Sidebar } from '../components/shared/sidebar';
 import { ChatInterface } from '../components/chat/chat_interface';
 import { DocumentUpload } from '../components/chat/document_upload';
+import { ProactiveOpener } from '../components/shared/proactive_opener';
 import { useAuth } from '../hooks/use_auth';
 import './main_page.css';
 
@@ -190,6 +191,7 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
       </Sidebar>
 
       <main className={`main-page__main ${isSidebarOpen ? 'main-page__main--sidebar-open' : ''}`}>
+        {isAuthenticated && <ProactiveOpener surface="chat" />}
         <ChatInterface
           initialQuestion={queryParam || state?.initialQuestion}
           documentIds={uploadedDocumentIds}

@@ -8,6 +8,7 @@ import { MessageList } from './message_list';
 import { DailyBrief } from './daily_brief';
 import { OnboardingTour } from './onboarding_tour';
 import { EmailCapture } from './email_capture';
+import { BrubruIcon } from '../../icons/brubru_icon';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { trackPreUserEvent, getAbVariant } from '../../services/preuser_tracker';
@@ -105,7 +106,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const [messages, setMessages] = useState<Message[]>([]);
   // Read ?q= param directly from URL as well as initialQuestion prop
   const urlQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') : null;
+  const urlAutofire = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('autofire') : null;
   const [inputValue, setInputValue] = useState(initialQuestion || urlQuery || '');
+  const autofirePendingRef = useRef<boolean>(urlAutofire === '1' && !!(initialQuestion || urlQuery));
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [thinkingStatus, setThinkingStatus] = useState<string | null>(null);
@@ -219,6 +222,36 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
       initialQuestionConsumed.current = true;
     }
   }, [initialQuestion]);
+
+  // Auto-fire the chat when /main?q=...&autofire=1 (used by the Dashboard
+  // tile + ProactiveOpener "Tell me more" CTA). We call the send function
+  // directly with the explicit text so we don't depend on the state-closure
+  // having flushed. The ref + sessionStorage key together dedupe across
+  // React StrictMode's double-invocation in dev.
+  const autofireFiredRef = useRef(false);
+  useEffect(() => {
+    if (!autofirePendingRef.current || autofireFiredRef.current) return;
+    const text = (initialQuestion || urlQuery || '').trim();
+    if (!text) return;
+    if (isLoading || isStreaming) return;
+    const dedupeKey = `brubru_autofire:${text}`;
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(dedupeKey) === '1') {
+      autofireFiredRef.current = true;
+      autofirePendingRef.current = false;
+      return;
+    }
+    autofireFiredRef.current = true;
+    autofirePendingRef.current = false;
+    try {
+      sessionStorage.setItem(dedupeKey, '1');
+      // Clear after a short window so the same prompt can fire again on a
+      // later visit if the user genuinely re-triggers it.
+      setTimeout(() => sessionStorage.removeItem(dedupeKey), 4000);
+    } catch {
+      /* ignore sessionStorage failures (e.g. private mode) */
+    }
+    void handleSendMessageStreaming(text);
+  }, [initialQuestion, urlQuery, isLoading, isStreaming]);
 
   // Load messages when activeChatId changes (clicking a previous conversation)
   useEffect(() => {
@@ -381,13 +414,17 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     }
   };
 
-  const handleSendMessageStreaming = async () => {
-    if (!inputValue.trim() || isLoading || isStreaming) return;
+  const handleSendMessageStreaming = async (overrideText?: string) => {
+    // Allow callers (e.g. the autofire effect) to bypass the inputValue
+    // closure when they already know the text. Falls back to the state
+    // when called from the Send button or Enter-key handler.
+    const messageText = (overrideText !== undefined ? overrideText : inputValue);
+    if (!messageText.trim() || isLoading || isStreaming) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: inputValue,
+      content: messageText,
       timestamp: new Date(),
     };
 
@@ -413,7 +450,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     }
 
     setMessages((prev) => [...prev, userMessage]);
-    const currentInput = inputValue;
+    const currentInput = messageText;
     setInputValue('');
     setIsStreaming(true);
     setError(null);
@@ -689,6 +726,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
       <div className="chat-interface__messages">
         {messages.length === 0 ? (
           <div className="chat-interface__empty">
+            <BrubruIcon size={3} color="var(--color-primary)" className="chat-interface__empty-icon" />
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
 
             {/* Dashboard grid: headlines + example prompts + stats */}
@@ -791,7 +829,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
           ) : (
             <button
               className="chat-interface__send-button button button-primary"
-              onClick={handleSendMessageStreaming}
+              onClick={() => handleSendMessageStreaming()}
               disabled={!inputValue.trim()}
               title="Send message (Enter)"
             >

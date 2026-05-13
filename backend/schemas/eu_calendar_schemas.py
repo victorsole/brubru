@@ -30,6 +30,11 @@ class InstitutionType(str, Enum):
     EIOPA = "EIOPA"
     COR = "COR"
     EESC = "EESC"
+    # Added 22 April 2026 to mirror the model enum after euagenda.eu
+    # integration (think tanks, conferences, webinars). Missing this value
+    # made every response containing a THIRD_PARTY row fail Pydantic
+    # validation and 500 the whole calendar response — fixed 13 May 2026.
+    THIRD_PARTY = "THIRD_PARTY"
 
 
 class EventType(str, Enum):
@@ -50,6 +55,13 @@ class EventType(str, Enum):
     COMITOLOGY_MEETING = "comitology_meeting"
     EXPERT_GROUP_MEETING = "expert_group_meeting"
     GRANT_DEADLINE = "grant_deadline"
+    # Third-party (euagenda.eu) event types — same root cause as
+    # THIRD_PARTY institution above. Mirror the model enum.
+    CONFERENCE = "conference"
+    WEBINAR = "webinar"
+    ROUNDTABLE = "roundtable"
+    TRAINING = "training"
+    WORKSHOP = "workshop"
 
 
 class EventStatus(str, Enum):

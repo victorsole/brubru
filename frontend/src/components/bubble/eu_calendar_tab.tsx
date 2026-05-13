@@ -261,8 +261,18 @@ function CalendarFilters() {
 
   const hasFilters = activeInstitutions.size > 0 || activePolicyAreas.size > 0 || activeCommittees.size > 0;
 
-  // Show committee filter row when EP is in active institutions
-  const showCommitteeFilter = activeInstitutions.has('EP');
+  // Empty set = "all selected" (we send no filter to the backend, so every
+  // event in the window shows). The first click while empty kicks the user
+  // into explicit-selection mode and deselects the clicked chip.
+  const isInstitutionActive = (code: string) =>
+    activeInstitutions.size === 0 || activeInstitutions.has(code as never);
+  const isPolicyAreaActive = (code: string) =>
+    activePolicyAreas.size === 0 || activePolicyAreas.has(code);
+
+  // Show committee filter row when EP is in the visible-institutions set.
+  // Using isInstitutionActive so the row also appears in the default
+  // "everything selected" state.
+  const showCommitteeFilter = isInstitutionActive('EP');
 
   return (
     <div className="eu-calendar-tab__filters">
@@ -271,7 +281,7 @@ function CalendarFilters() {
         <span className="eu-calendar-tab__filter-label">Institutions</span>
         {PHASE1_INSTITUTIONS.map((code) => {
           const config = INSTITUTION_CONFIG[code];
-          const isActive = activeInstitutions.has(code);
+          const isActive = isInstitutionActive(code);
           return (
             <span
               key={code}
@@ -295,7 +305,7 @@ function CalendarFilters() {
         {POLICY_AREA_CODES.map((code) => {
           const config = POLICY_AREA_CONFIG[code];
           if (!config) return null;
-          const isActive = activePolicyAreas.has(code);
+          const isActive = isPolicyAreaActive(code);
           return (
             <span
               key={code}
@@ -831,16 +841,26 @@ function formatDateISO(d: Date): string {
 // Main Component
 // ============================================================================
 
+// Module-level guard so we only reset filters on the FIRST visit to the
+// Calendar tab per page load. Subsequent re-mounts (e.g. the user toggled
+// to a different sub-tab and came back) preserve any filters they set.
+let _calendarFiltersResetForSession = false;
+
 export const EUCalendarTab = () => {
-  const { viewMode, isLoading, fetchEvents } = useEUCalendar();
+  const { viewMode, isLoading, fetchEvents, clearFilters } = useEUCalendar();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
 
   useEffect(() => {
-    // Wait for auth to hydrate from localStorage before fetching
-    if (isAuthenticated) {
+    // Wait for auth to hydrate from localStorage before fetching.
+    if (!isAuthenticated) return;
+    if (!_calendarFiltersResetForSession) {
+      _calendarFiltersResetForSession = true;
+      // clearFilters() already triggers fetchEvents internally.
+      clearFilters();
+    } else {
       fetchEvents();
     }
-  }, [fetchEvents, isAuthenticated]);
+  }, [fetchEvents, clearFilters, isAuthenticated]);
 
   const renderView = () => {
     if (isLoading) {

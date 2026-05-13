@@ -231,3 +231,17 @@
     transform: scale(1.2);
   }
 }
+
+/* P0 — Chat hand-off row sits between the page header and the tab nav,
+   right-aligned. Hidden when no prompt (handled inside the button). */
+.my-eu-bubble-page__chat-handoff {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 0.85rem 0;
+}
+
+@media (max-width: 768px) {
+  .my-eu-bubble-page__chat-handoff {
+    justify-content: center;
+  }
+}

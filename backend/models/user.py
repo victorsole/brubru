@@ -45,6 +45,11 @@ class User(Base):
     country = Column(String(2), nullable=True)  # ISO 3166-1 alpha-2
     policy_interests = Column(JSONB, nullable=True)  # JSON array
 
+    # P1b — Monitoring overhaul (May 2026). Drives Dashboard personalisation
+    # and per-user affinity scoring. Both nullable; users skip-friendly.
+    role_title = Column(String(120), nullable=True)
+    sectors = Column(JSONB, nullable=True)  # JSON array of sector slugs
+
     # User preferences (tour progress, UI settings, etc.)
     preferences = Column(JSONB, nullable=True, default=dict)
 
