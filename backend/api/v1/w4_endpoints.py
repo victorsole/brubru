@@ -612,18 +612,34 @@ def _secondary_act_to_item(
     # Derive canonical citizen URL. Preference ladder:
     #   1) EUR-Lex CELEX page when CELEX is known (citizen-friendly canonical).
     #   2) Specific regdel record page (webgate /regdel/#/delegatedActs/<id>).
-    #      This lands on the act's scrutiny status / metadata page, NOT the
-    #      generic search results.
-    #   3) Direct PDF URL.
-    #   4) Original scrape URL (often the regdel search URL — fallback only).
+    #      Lands on the act's scrutiny status / metadata page.
+    #   3) Direct PDF URL — only if it's NOT a Cellar /resource/celex/ URL
+    #      whose CELEX has been nulled (those 404). Same for source_url.
+    #   4) Last resort: EUR-Lex search-by-reference (always 200; lets the
+    #      citizen find the act once Cellar has indexed it).
+    def _is_dead_celex_url(u: str) -> bool:
+        return bool(u) and (
+            "eur-lex.europa.eu/legal-content/" in u and "CELEX:" in u
+            or "publications.europa.eu/resource/celex/" in u
+        )
+
     if r.celex:
         public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex}"
     elif getattr(r, "regdel_id", None):
         public_url = f"https://webgate.ec.europa.eu/regdel/#/delegatedActs/{r.regdel_id}?lang=en"
-    elif r.pdf_url:
+    elif r.pdf_url and not _is_dead_celex_url(r.pdf_url):
         public_url = r.pdf_url
-    else:
+    elif r.source_url and not _is_dead_celex_url(r.source_url):
         public_url = r.source_url
+    else:
+        # Search EUR-Lex by the C-number reference (e.g. C(2026)1567). The
+        # search page always loads; if Cellar has indexed the act by the
+        # time the citizen clicks, the top hit is the published regulation.
+        from urllib.parse import quote
+        public_url = (
+            f"https://eur-lex.europa.eu/search.html?text={quote(r.reference or r.title or '')}"
+            if (r.reference or r.title) else None
+        )
     return SecondaryActItem(
         id=str(r.id),
         act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
