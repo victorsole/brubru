@@ -25,7 +25,13 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 
 router = APIRouter(tags=["v1-metadata"])
-# Aliases under /meta/* — what the public docs and Postman advertise. Same handlers.
+# meta_router (prefix=/meta) was a back-compat shim for the deprecated
+# /api/v1/meta/<alias> paths. All aliases removed 13 May 2026 on Jordi's
+# recommendation — nobody was consuming them and they duplicated the
+# canonical /api/v1/<path> routes. The /meta/enums route lives separately
+# in meta_enums.py. Keeping an empty router here so the existing
+# include_router(meta_router) call in __init__.py still imports cleanly;
+# remove on the next breaking-API bump.
 meta_router = APIRouter(prefix="/meta", tags=["v1-metadata"])
 
 
@@ -645,30 +651,11 @@ async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> 
     return _shape(sorted(items, key=lambda x: x["name"]))
 
 
-# ============================================================================
-# /meta/* aliases — what the public docs and Postman advertise.
-# Same handlers, registered on meta_router so /api/v1/meta/dgs etc. resolve.
-# ============================================================================
-
-# Deprecated aliases under /meta/* — same handlers as /{path} above.
-# Kept for back-compat with anyone who built against the original advertised paths.
-# Marked deprecated=True so they appear with a strikethrough in the OpenAPI docs.
-_DEPRECATED_NOTE = (
-    "DEPRECATED ALIAS — same response as the top-level path "
-    "(`/api/v1/{path}`). Prefer the canonical form going forward; this alias "
-    "is kept only for back-compat with consumers built against the original docs."
-)
-meta_router.add_api_route("/institutions",        list_institutions,        methods=["GET"], response_model=_GenericListResponse, summary="EU institutions, agencies, and bodies (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/committees",          list_committees,          methods=["GET"], response_model=_GenericListResponse, summary="EP committees (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/directorates-general", list_dgs,                methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/dgs",                 list_dgs,                 methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs short alias (deprecated)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/political-groups",    list_political_groups,    methods=["GET"], response_model=_GenericListResponse, summary="EP political groups (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/countries",           list_countries,           methods=["GET"], response_model=_GenericListResponse, summary="EU + EEA countries (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/languages",           list_languages,           methods=["GET"], response_model=_GenericListResponse, summary="24 official EU languages (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/procedure-types",     list_procedure_types,     methods=["GET"], response_model=_GenericListResponse, summary="Procedure types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/legal-bases",         list_legal_bases,         methods=["GET"], response_model=_GenericListResponse, summary="TFEU/TEU legal bases (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/procedure-statuses",  list_procedure_statuses,  methods=["GET"], response_model=_GenericListResponse, summary="Procedure status enum (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/event-types",         list_event_types,         methods=["GET"], response_model=_GenericListResponse, summary="Calendar event types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/document-types",      list_document_types,      methods=["GET"], response_model=_GenericListResponse, summary="OJ document types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/policy-areas",        list_policy_areas,        methods=["GET"], response_model=_GenericListResponse, summary="Policy areas (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
-meta_router.add_api_route("/commissioners",       list_commissioners,       methods=["GET"], response_model=_GenericListResponse, summary="College of Commissioners (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+# /meta/* duplicate aliases removed on Jordi's recommendation (13 May 2026):
+# nobody was consuming them, they only duplicated the canonical /api/v1/{path}
+# routes (e.g. /api/v1/commissioners, /api/v1/committees, /api/v1/countries,
+# /api/v1/directorates-general, /api/v1/document-types, /api/v1/policy-areas,
+# /api/v1/political-groups, /api/v1/procedure-types, /api/v1/procedure-statuses,
+# /api/v1/event-types, /api/v1/languages, /api/v1/legal-bases, /api/v1/institutions).
+# A clean surface beats a forgiving one. The /meta/enums route still lives at
+# api/v1/meta_enums.py and is the only meta_router member that wasn't a duplicate.
