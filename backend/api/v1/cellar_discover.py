@@ -370,7 +370,28 @@ async def cellar_celex_languages(
 @router.get(
     "/eurovoc",
     response_model=PaginatedResponse[EuroVocConcept],
-    summary="Search the EU subject thesaurus",
+    summary="Search the EU subject thesaurus (EuroVoc) — find concept IDs to feed /eurovoc/{concept_id}/acts",
+    description="""**What it does**
+Free-text search against the EuroVoc thesaurus — the EU's official multilingual subject vocabulary. Returns matching concepts with their `concept_uri`, human-readable `label`, and a deep-link to the concept page on ShowVoc (op.europa.eu).
+
+**When to use it**
+- Discover the **concept_id** to feed `/api/v1/discover/cellar/eurovoc/{concept_id}/acts`. The id is the trailing digits of `concept_uri` (e.g. `http://eurovoc.europa.eu/3030` → `3030`).
+- Translate a topic in plain English into the EU's canonical subject tag.
+- Build a topic picker / autocomplete.
+
+**Input**
+- `q` — search term (min 2 chars; multilingual matching).
+- `language` — ISO-2 (default `en`).
+- `limit` (1-100, default 20).
+
+**Try it**
+```
+GET /api/v1/discover/cellar/eurovoc?q=artificial%20intelligence
+GET /api/v1/discover/cellar/eurovoc?q=data%20protection&language=fr
+```
+
+**You get back**
+Paginated envelope of `EuroVocConcept` rows. The trailing digits of each `concept_uri` are the IDs you pass to the `/acts` route.""",
 )
 async def search_eurovoc(
     request: Request,
@@ -406,11 +427,41 @@ async def search_eurovoc(
 @router.get(
     "/eurovoc/{concept_id}/acts",
     response_model=PaginatedResponse[CellarRecentItem],
-    summary="Acts tagged with a subject (e.g. data protection, climate)",
+    summary="EU acts tagged with one EuroVoc concept (e.g. AI, data protection, climate)",
+    description="""**What it does**
+Returns every EU legal act in the Cellar metadata graph that is tagged with the given EuroVoc subject concept. Driven by `cdm:work_is_about_concept_eurovoc`. Optional date floor + language.
+
+**How to obtain a `concept_id`**
+- Call `/api/v1/discover/cellar/eurovoc?q=<topic>` to search EuroVoc by free text. The trailing digits of each `concept_uri` are the IDs you pass here.
+- Or paste the full URI directly — both forms are accepted (`3030` or `http://eurovoc.europa.eu/3030`).
+
+**Worked examples (real, live)**
+| concept_id | EuroVoc label |
+|---|---|
+| `3030`  | artificial intelligence |
+| `5181`  | data protection |
+| `5482`  | climate change |
+| `2836`  | consumer protection |
+| `754`   | renewable energy |
+
+**Input**
+- `concept_id` (path) — digits (e.g. `3030`) or full EuroVoc URI.
+- `published_from` (optional) — lower bound on `cdm:work_date_document`.
+- `language` (default `ENG`) — ISO-3 for the act title.
+- `limit` (1-200, default 50).
+
+**Try it**
+```
+GET /api/v1/discover/cellar/eurovoc/3030/acts?limit=5
+GET /api/v1/discover/cellar/eurovoc/5181/acts?published_from=2024-01-01
+```
+
+**You get back**
+Paginated envelope of `CellarRecentItem` rows (celex, work_uri, document_date, title, eurlex_url). Each row's `public_url` deep-links to the act on EUR-Lex.""",
 )
 async def acts_by_eurovoc(
     request: Request,
-    concept_id: str = Path(..., description="EuroVoc concept ID (digits) or full URI"),
+    concept_id: str = Path(..., description="EuroVoc concept ID (digits, e.g. `3030`) or full URI (e.g. `http://eurovoc.europa.eu/3030`). Discover IDs via /api/v1/discover/cellar/eurovoc?q=..."),
     published_from: Optional[date] = Query(None, description="Lower bound on document date"),
     language: str = Query("ENG", description="ISO-3 language code for titles"),
     limit: int = Query(50, ge=1, le=200),
