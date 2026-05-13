@@ -212,6 +212,33 @@ def _tender_to_item(
     body_html, body_text, has_body = compose_html_from_sections([
         ("Description", r.description),
     ], threshold=body_threshold)
+    # Tier-2 fallback when the F&T portal didn't ship a description in the
+    # call payload (very common — the portal exposes a stub on the listing
+    # page and the full text only inside the downloadable docs URL). Compose
+    # a structured metadata body from the row so the contract never returns
+    # empty body_txt/body_html.
+    if not body_text:
+        import html as _html
+        title = r.title or r.tender_reference or "(untitled call for tenders)"
+        lines = [title]
+        parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+        for k, v in [
+            ("Reference", r.tender_reference),
+            ("Contracting authority", r.contracting_authority),
+            ("Contract type", r.contract_type),
+            ("Status", r.status),
+            ("Estimated value", f"{r.estimated_value:,.0f} {r.value_currency or 'EUR'}" if r.estimated_value else None),
+            ("Deadline", r.deadline),
+            ("Published", r.published_at),
+            ("CPV codes", ", ".join(r.cpv_codes or []) or None),
+            ("Documents", r.documents_url),
+        ]:
+            if v in (None, ""):
+                continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        body_text = "\n".join(lines)
+        body_html = "<article>" + "".join(parts_html) + "</article>"
     return FtCallTenderItem(
         id=str(r.id), tender_reference=r.tender_reference,
         contracting_authority=r.contracting_authority, title=r.title,

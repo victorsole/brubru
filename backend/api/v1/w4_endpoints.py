@@ -581,6 +581,34 @@ def _secondary_act_to_item(
         has_body = bool(body_text and len(body_text) >= body_threshold)
     else:
         body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
+    # Tier-2 fallback: draft delegated/implementing acts that haven't been
+    # published in OJ yet (no CELEX, no text_body) — compose a structured
+    # metadata body so the contract never returns empty.
+    if not body_text:
+        import html as _html
+        title = r.title or r.reference or "(untitled delegated act)"
+        lines = [title]
+        parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+        for k, v in [
+            ("Reference", r.reference),
+            ("Type", r.act_type.value if hasattr(r.act_type, "value") else r.act_type),
+            ("Status", r.status.value if hasattr(r.status, "value") else r.status),
+            ("Parent CELEX", r.parent_celex),
+            ("Parent procedure", r.parent_procedure_ref),
+            ("Proposing DG", r.proposing_dg),
+            ("Published", r.publication_date),
+            ("Objection deadline", r.objection_deadline),
+            ("Policy areas", ", ".join(r.policy_areas or []) or None),
+        ]:
+            if v in (None, ""):
+                continue
+            lines.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        if r.description:
+            lines.append(r.description[:1000])
+            parts_html.append(f"<p>{_html.escape(r.description[:1000])}</p>")
+        body_text = "\n".join(lines)
+        body_html = "<article>" + "".join(parts_html) + "</article>"
     # Derive canonical citizen URL. Preference ladder:
     #   1) EUR-Lex CELEX page when CELEX is known (citizen-friendly canonical).
     #   2) Specific regdel record page (webgate /regdel/#/delegatedActs/<id>).
