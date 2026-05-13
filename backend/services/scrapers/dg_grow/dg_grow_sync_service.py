@@ -26,6 +26,10 @@ from models.dg_grow import (
     TradeBarrierNotification,
     IndustrialEcosystemData,
 )
+# TRIS data is written into the canonical `tris_notifications` table that
+# backs /api/v1/tris-notifications. The legacy `technical_regulations` table
+# is retained only for `/api/dg_grow/*` reads + alert matching (cpv_mapping).
+from models.w4_entities import TRISNotification
 from services.scrapers.dg_grow.nando_scraper import NANDOScraper
 from services.scrapers.dg_grow.tris_scraper import TRISScraper
 from services.scrapers.dg_grow.tbt_scraper import TBTScraper
@@ -166,6 +170,10 @@ class DGGrowSyncService:
         """
         Sync TRIS technical regulation notifications.
 
+        Writes into the canonical `tris_notifications` table that backs
+        /api/v1/tris-notifications. Also mirrors into `technical_regulations`
+        so the legacy /api/dg_grow/* surface + CPV alert matching keep working.
+
         Args:
             days: Look back period (default: 7)
             country: Optional country filter
@@ -183,13 +191,16 @@ class DGGrowSyncService:
 
         for notif in notifications:
             try:
-                number = notif.get("notification_number")
+                # The TRIS scraper emits TWO identifiers:
+                #   - `reference`           — human-readable, e.g. "2026/0115/CZ"
+                #   - `notification_number` — upstream's internal integer id
+                # The canonical key is the reference (matches what citizens see
+                # on the TRIS portal and what `/api/v1/tris-notifications`
+                # exposes as `notification_number` in the response).
+                number = notif.get("reference") or notif.get("notification_number")
                 if not number:
                     continue
-
-                existing = self.db.query(TechnicalRegulation).filter(
-                    TechnicalRegulation.notification_number == number
-                ).first()
+                number = str(number)  # tris_notifications.notification_number is varchar
 
                 # Parse dates
                 notification_date = None
@@ -207,27 +218,99 @@ class DGGrowSyncService:
                     except (ValueError, TypeError):
                         pass
 
-                if existing:
-                    existing.title = notif.get("title", existing.title)
-                    existing.country = notif.get("country", existing.country)
-                    existing.country_name = notif.get("country_name", existing.country_name)
+                country_alpha2 = notif.get("country") or notif.get("notifying_country") or "??"
+                title_value = notif.get("title") or number
+
+                # 1) Canonical write into tris_notifications (the v1 API table).
+                existing_tris = self.db.query(TRISNotification).filter(
+                    TRISNotification.notification_number == number
+                ).first()
+                now = datetime.utcnow()
+                if existing_tris:
+                    existing_tris.notifying_country = country_alpha2
+                    existing_tris.title = title_value
+                    existing_tris.short_summary = notif.get("description") or existing_tris.short_summary
                     if notification_date:
-                        existing.notification_date = notification_date
+                        existing_tris.notification_date = notification_date.date() if hasattr(notification_date, "date") else notification_date
                     if standstill_end:
-                        existing.standstill_end_date = standstill_end
-                    existing.cpv_mapping = notif.get("cpv_mapping", existing.cpv_mapping)
-                    existing.status = notif.get("status", existing.status)
+                        existing_tris.standstill_until = standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
+                    existing_tris.sector = notif.get("product_sector") or existing_tris.sector
+                    existing_tris.products_or_services = notif.get("product_description") or existing_tris.products_or_services
+                    existing_tris.source_url = notif.get("source_url") or existing_tris.source_url
+                    existing_tris.pdf_url = notif.get("document_url") or existing_tris.pdf_url
+                    related = notif.get("related_eu_legislation")
+                    if related is not None:
+                        existing_tris.related_celex = related if isinstance(related, list) else [related]
+                    existing_tris.last_updated = now
                     stats["updated"] += 1
                 else:
-                    new_reg = TechnicalRegulation(
+                    self.db.add(TRISNotification(
                         notification_number=number,
-                        reference=notif.get("reference"),
-                        title=notif.get("title", ""),
+                        notifying_country=country_alpha2,
+                        title=title_value,
+                        short_summary=notif.get("description"),
+                        notification_date=(
+                            notification_date.date()
+                            if hasattr(notification_date, "date")
+                            else (notification_date or now.date())
+                        ),
+                        standstill_until=(
+                            standstill_end.date() if hasattr(standstill_end, "date") else standstill_end
+                        ),
+                        sector=notif.get("product_sector"),
+                        products_or_services=notif.get("product_description"),
+                        source_url=notif.get("source_url") or (
+                            "https://technical-regulation-information-system.ec.europa.eu/"
+                            + number.replace("/", "-")
+                        ),
+                        pdf_url=notif.get("document_url"),
+                        related_celex=(
+                            notif.get("related_eu_legislation")
+                            if isinstance(notif.get("related_eu_legislation"), list)
+                            else ([notif["related_eu_legislation"]] if notif.get("related_eu_legislation") else [])
+                        ),
+                        scraped_at=now,
+                        first_seen=now,
+                        last_updated=now,
+                    ))
+                    stats["new"] += 1
+
+                # 2) Mirror into technical_regulations so the legacy
+                # /api/dg_grow/* read path + CPV alert matching keep working.
+                existing_tr = self.db.query(TechnicalRegulation).filter(
+                    TechnicalRegulation.reference == number
+                ).first()
+                if existing_tr:
+                    existing_tr.title = title_value
+                    existing_tr.country = country_alpha2
+                    existing_tr.country_name = notif.get("country_name", existing_tr.country_name)
+                    if notification_date:
+                        existing_tr.notification_date = notification_date
+                    if standstill_end:
+                        existing_tr.standstill_end_date = standstill_end
+                    existing_tr.cpv_mapping = notif.get("cpv_mapping", existing_tr.cpv_mapping)
+                    existing_tr.status = notif.get("status", existing_tr.status)
+                else:
+                    # technical_regulations.notification_number is an INTEGER
+                    # NOT NULL upstream id (legacy schema). Reuse the raw
+                    # numeric id when the scraper provides one; otherwise
+                    # synth a hash from the reference so the mirror still
+                    # inserts (alert matching still works via cpv_mapping).
+                    legacy_id = notif.get("notification_number")
+                    if not isinstance(legacy_id, int):
+                        try:
+                            legacy_id = int(legacy_id) if legacy_id is not None else abs(hash(number)) % 2_000_000_000
+                        except (TypeError, ValueError):
+                            legacy_id = abs(hash(number)) % 2_000_000_000
+                    self.db.add(TechnicalRegulation(
+                        notification_number=legacy_id,
+                        reference=number,
+                        title=title_value,
                         description=notif.get("description"),
                         product_sector=notif.get("product_sector"),
-                        country=notif.get("country", ""),
+                        country=country_alpha2,
                         country_name=notif.get("country_name"),
-                        notification_date=notification_date or datetime.utcnow(),
+                        notification_date=notification_date or now,
                         standstill_end_date=standstill_end,
                         status=notif.get("status", "notified"),
                         has_detailed_opinion=notif.get("has_detailed_opinion", False),
@@ -236,9 +319,7 @@ class DGGrowSyncService:
                         cpv_mapping=notif.get("cpv_mapping"),
                         source_url=notif.get("source_url"),
                         raw_data=notif.get("raw_data"),
-                    )
-                    self.db.add(new_reg)
-                    stats["new"] += 1
+                    ))
 
                 stats["synced"] += 1
 
