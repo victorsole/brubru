@@ -133,6 +133,14 @@ def build_envelope(
     op_core_identifier: Optional[str] = None,
     op_core_language: str = "en",
     op_core_referenced_by: Optional[list[str]] = None,
+    # Envelope-level 5 datapoint overrides. Default null for list endpoints;
+    # opt in on hub-style responses (e.g. /relationships exposes the parent
+    # act's body so callers don't need a second round-trip).
+    public_url: Optional[str] = None,
+    body_txt: Optional[str] = None,
+    body_html: Optional[str] = None,
+    document_date: Optional[date] = None,
+    creation_date: Optional[datetime] = None,
 ) -> PaginatedResponse[T]:
     """Populate all pagination fields consistently.
 
@@ -177,11 +185,11 @@ def build_envelope(
         op_core=op_core,
         # 5 mandatory v1 datapoints at envelope level. creation_date is
         # always set; the others stay null for document-list endpoints
-        # (callers read per-item values from data[]).
-        public_url=None,
-        body_txt=None,
-        body_html=None,
-        document_date=None,
-        creation_date=datetime.utcnow(),
+        # unless the caller explicitly opts in via the kwargs above.
+        public_url=public_url,
+        body_txt=body_txt,
+        body_html=body_html,
+        document_date=document_date,
+        creation_date=creation_date or datetime.utcnow(),
         data=items,
     )

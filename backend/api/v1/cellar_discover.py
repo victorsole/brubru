@@ -245,14 +245,54 @@ async def cellar_celex_metadata(
     "/celex/{celex}/relationships",
     response_model=PaginatedResponse[CellarRelation],
     summary="Acts that amend, repeal, or are amended by an act",
+    description="""**What it does**
+Returns the directed legal-relationship graph around one CELEX: outgoing edges (this act amends / repeals / is based on …) and incoming edges (other acts that amend / repeal / cite this one). Each row is one edge — `relation` is the CDM predicate URI, `related_celex` is the other act, `direction` tells you which way the arrow points.
+
+The envelope itself carries the PARENT act's body (body_txt + body_html composed from the Cellar XHTML manifestation in English) so callers don't need a second round-trip to read what this act actually says before walking its graph.
+
+**When to use it**
+- Render an amendment-tree visualisation around a regulation.
+- Find every act that cites or supersedes a given law.
+- Drive an "is this law still in force, or has it been amended by X?" check.
+
+**Input**
+- `celex` (path) — e.g. `32025R2158`.
+
+**Try it**
+```
+GET /api/v1/discover/cellar/celex/32025R2158/relationships
+```
+
+**You get back**
+A paginated envelope of `CellarRelation` edges + the parent act's body in the envelope-level fields (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`). Each edge row has its own `public_url` pointing to the related act on EUR-Lex.""",
 )
 async def cellar_celex_relationships(
     request: Request,
     celex: str = Path(...),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[CellarRelation]:
+    # The body fetch + relationship discovery are independent, so kick them
+    # off concurrently to keep latency similar to the metadata-only version.
+    import asyncio as _asyncio
+    from api.v1.citations import _fetch_cellar_xhtml, _strip_html_to_text
+
+    async def _body_pair() -> tuple[Optional[str], Optional[str]]:
+        try:
+            html = await _fetch_cellar_xhtml(celex)
+        except Exception as exc:  # pragma: no cover — defensive
+            logger.warning("[relationships] body fetch failed for %s: %s", celex, exc)
+            return None, None
+        if not html:
+            return None, None
+        return html, _strip_html_to_text(html)
+
     async with CellarSPARQLClient() as client:
-        rows = await client.get_related_acts(celex)
+        rows_task = _asyncio.create_task(client.get_related_acts(celex))
+        meta_task = _asyncio.create_task(client.get_celex_metadata(celex, language="ENG"))
+        body_task = _asyncio.create_task(_body_pair())
+        rows = await rows_task
+        meta = await meta_task
+        body_html, body_txt = await body_task
 
     _now = datetime.utcnow()
     items = [
@@ -266,7 +306,16 @@ async def cellar_celex_relationships(
         for r in rows
         if r.get("relation") and r.get("relatedCelex")
     ]
-    return build_envelope(items=items, total=len(items), page=1, limit=max(1, len(items)), coverage_complete=False)
+    doc_date = _to_date((meta or {}).get("date"))
+    return build_envelope(
+        items=items, total=len(items), page=1, limit=max(1, len(items)),
+        coverage_complete=False,
+        public_url=_eurlex_url(celex),
+        body_txt=body_txt,
+        body_html=body_html,
+        document_date=doc_date,
+        creation_date=_now,
+    )
 
 
 @router.get(
