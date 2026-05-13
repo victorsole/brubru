@@ -49,8 +49,8 @@ class CellarRecentItem(BaseModel):
     # request — use /api/v1/citations/verify or /api/v1/laws/{celex}/text to
     # pull body for a specific CELEX).
     public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
-    body_txt: Optional[str] = Field(None, description="Null on list endpoints. Use /api/v1/citations/verify for body.")
-    body_html: Optional[str] = Field(None, description="Null on list endpoints.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body. Null by default; populated when /recent is called with include_body=true (other list endpoints stay metadata-only — use /api/v1/citations/verify for body on demand).")
+    body_html: Optional[str] = Field(None, description="HTML body (Cellar XHTML manifestation). Null by default; populated when /recent is called with include_body=true.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
 
 
@@ -120,11 +120,36 @@ def _to_date(s: Optional[str]) -> Optional[date]:
     "/recent",
     response_model=PaginatedResponse[CellarRecentItem],
     summary="Recently published EU acts (live)",
-    description=(
-        "Live discovery of EU acts published in a date range. Queries the Publications "
-        "Office Cellar SPARQL endpoint directly — covers the full 3.79M-work corpus, "
-        "including case law and proposals not in the local eu_laws table."
-    ),
+    description="""**What it does**
+Live discovery of EU acts published in a date range. Queries the EU Publications Office Cellar SPARQL endpoint directly — covers the full 3.79M-work corpus, including case law and proposals that are NOT in the local `eu_laws` table.
+
+By default the endpoint returns metadata-only rows (celex, title, document_date, eurlex_url) — body fields are null. The metadata call is one SPARQL round-trip and returns fast. Bodies require one Cellar XHTML fetch per CELEX, so fetching them for a 50-row page would take 30-150s sequentially.
+
+Pass `include_body=true` to opt into a concurrent body fetch (`limit` is forced down to ≤ 10 when this flag is on to keep total latency under ~15s).
+
+**When to use it**
+- Daily polling of newly-published EU acts.
+- Sector-scoped discovery (regulation/directive vs proposal vs case law).
+- Quickly listing what landed on EUR-Lex since a given date.
+
+**Input**
+- `published_from` — lower bound on `cdm:work_date_document` (required).
+- `published_to` — upper bound (defaults to today).
+- `sectors` — comma-separated CELEX sector codes (e.g. `3,5` for legislation in force + proposals).
+- `language` — ISO-3 (default `ENG`) for titles.
+- `limit` (1-200, default 50). Forced to ≤ 10 when `include_body=true`.
+- `page` (default 1).
+- `include_body` — when `true`, also fetch each row's Cellar XHTML body + plain-text strip. Default `false` for performance.
+
+**Try it**
+```
+GET /api/v1/discover/cellar/recent?published_from=2026-05-01
+GET /api/v1/discover/cellar/recent?published_from=2026-05-01&sectors=3&limit=20
+GET /api/v1/discover/cellar/recent?published_from=2026-05-01&limit=5&include_body=true
+```
+
+**You get back**
+Paginated envelope of `CellarRecentItem` rows. With `include_body=true`, each row's `body_txt` + `body_html` are populated from the Cellar XHTML manifestation in English. Each row's `public_url` deep-links to EUR-Lex.""",
 )
 async def recent_cellar_acts(
     request: Request,
@@ -141,6 +166,10 @@ async def recent_cellar_acts(
     language: str = Query("ENG", description="ISO-3 language code (uppercase) for titles"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    include_body: bool = Query(
+        False,
+        description="If true, fetch each row's Cellar XHTML body + plain-text strip concurrently. Limit is capped at 10 when this flag is on to bound latency. Default false (fast metadata-only).",
+    ),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[CellarRecentItem]:
     if published_to is None:
@@ -150,6 +179,10 @@ async def recent_cellar_acts(
             status_code=422,
             detail={"error": "published_from must be <= published_to", "reason_code": "invalid_range"},
         )
+
+    # When body fetch is on, keep the per-page work bounded.
+    if include_body and limit > 10:
+        limit = 10
 
     sector_list = [s.strip() for s in sectors.split(",")] if sectors else None
     offset = (page - 1) * limit
@@ -165,19 +198,47 @@ async def recent_cellar_acts(
         )
 
     _now = datetime.utcnow()
-    items = [
-        CellarRecentItem(
-            celex=r["celex"],
+    # Optional concurrent body fetch — uses the same Cellar XHTML path
+    # /citations/verify and /discover/relationships use, with 4-attempt
+    # retry on 202/503. We fan out via asyncio.gather and tolerate failures
+    # (any single row that 5xxs falls back to None body).
+    body_by_celex: dict[str, tuple[Optional[str], Optional[str]]] = {}
+    if include_body and rows:
+        import asyncio as _asyncio
+        from api.v1.citations import _fetch_cellar_xhtml, _strip_html_to_text
+
+        async def _one(celex: str) -> tuple[str, Optional[str], Optional[str]]:
+            try:
+                html = await _fetch_cellar_xhtml(celex)
+            except Exception as exc:  # pragma: no cover — defensive
+                logger.warning("[recent] body fetch failed for %s: %s", celex, exc)
+                return celex, None, None
+            if not html:
+                return celex, None, None
+            return celex, html, _strip_html_to_text(html)
+
+        celexes = [r["celex"] for r in rows if r.get("celex")]
+        results = await _asyncio.gather(*(_one(c) for c in celexes), return_exceptions=False)
+        for celex, html, txt in results:
+            body_by_celex[celex] = (html, txt)
+
+    items = []
+    for r in rows:
+        celex = r.get("celex")
+        if not celex:
+            continue
+        body_html, body_txt = body_by_celex.get(celex, (None, None))
+        items.append(CellarRecentItem(
+            celex=celex,
             work_uri=r.get("work"),
             document_date=_to_date(r.get("date")),
             title=r.get("title"),
-            eurlex_url=_eurlex_url(r["celex"]),
-            public_url=_eurlex_url(r["celex"]),
+            eurlex_url=_eurlex_url(celex),
+            public_url=_eurlex_url(celex),
+            body_txt=body_txt,
+            body_html=body_html,
             creation_date=_now,
-        )
-        for r in rows
-        if r.get("celex")
-    ]
+        ))
 
     # SPARQL doesn't give us a cheap exact total. We use the page size as a hint.
     total = offset + len(items) + (limit if len(items) == limit else 0)
