@@ -274,13 +274,27 @@ async def find_projects(
 @router.get(
     "/projects/{cordis_id}/consortium",
     response_model=ConsortiumPayload,
-    summary="Who's in a research project (organisations + roles)",
-    description=(
-        "Returns the consortium of a CORDIS project — every organisation, its "
-        "country, role (coordinator / participant / third-party), and EC contribution. "
-        "`{cordis_id}` is the numeric CORDIS project ID, e.g. 101131342. Find one "
-        "via `/discover/eurio/projects` first."
-    ),
+    summary="Project consortium — WHO is in the project (orgs, roles, countries)",
+    description="""**What it does**
+Returns the CORDIS project's consortium: every participating organisation, its country, role (coordinator / participant / third-party), short name, EC contribution, and total cost. Built from `ft_funded_projects.organisations` (JSONB).
+
+**How this differs from the sibling routes**
+- `/consortium` — **who** is in the project (this endpoint).
+- `/deliverables` — **what** the project has published (CORDIS web links).
+- `/funding` — **how much money** flows where (totals + per-org breakdown + legal basis).
+
+The three routes share project-level headers (cordis_id, title, project_acronym, public_url, body_txt, body_html, document_date) because they all describe the same project, but each carries a different primary payload — `organisations[]` here, `web_links[]` on /deliverables, `total_cost` + `eu_contribution` on /funding.
+
+**Input**
+- `cordis_id` (path) — numeric CORDIS project ID (e.g. `101131342`). Discover one via `/api/v1/discover/eurio/projects?topic=<your-topic>`.
+
+**Try it**
+```
+GET /api/v1/discover/eurio/projects/101131342/consortium
+```
+
+**You get back**
+A `ConsortiumPayload` object — see `organisations[]` for the per-org records, `coordinator_name` / `coordinator_country` for the lead, `organisation_count` for the size.""",
 )
 async def project_consortium(
     request: Request,
@@ -310,14 +324,30 @@ async def project_consortium(
 @router.get(
     "/projects/{cordis_id}/deliverables",
     response_model=DeliverablesPayload,
-    summary="What a research project produced",
-    description=(
-        "Returns CORDIS-published web links / deliverables for a project. "
-        "Note: CORDIS exposes web links (e.g. project websites, public reports) "
-        "in the `webLink` table; full per-deliverable metadata isn't part of "
-        "the standard quarterly dump. Where a project has no published links "
-        "yet, `web_links` is an empty array."
-    ),
+    summary="Project deliverables — WHAT the project has published (web links)",
+    description="""**What it does**
+Returns the CORDIS-published web links for a project: project website, public reports, dissemination URLs. Sourced from CORDIS's `webLink` table inside `ft_funded_projects.web_links` (JSONB).
+
+**Important caveat**
+CORDIS does NOT publish per-deliverable metadata in its quarterly bulk dump. The "deliverables" you get here are the **published-output web links** the consortium chose to share via the CORDIS portal — typically a handful of URLs, often empty for in-progress projects. The route's `note` field explains this when `web_links` is empty.
+
+**How this differs from the sibling routes**
+- `/consortium` — **who** is in the project.
+- `/deliverables` — **what** the project has published (this endpoint).
+- `/funding` — **how much money** flows where.
+
+Shared project-level headers (cordis_id, title, project_acronym, public_url, body_txt, body_html, document_date) are identical across all three because it's the same project; the primary payload differs.
+
+**Input**
+- `cordis_id` (path) — numeric CORDIS project ID. Discover one via `/api/v1/discover/eurio/projects?topic=<your-topic>`.
+
+**Try it**
+```
+GET /api/v1/discover/eurio/projects/101131342/deliverables
+```
+
+**You get back**
+A `DeliverablesPayload` — see `web_links[]` for the published URLs and `note` for context when the list is empty.""",
 )
 async def project_deliverables(
     request: Request,
@@ -351,12 +381,27 @@ async def project_deliverables(
 @router.get(
     "/projects/{cordis_id}/funding",
     response_model=FundingPayload,
-    summary="Funding breakdown of a research project",
-    description=(
-        "Total cost + EC contribution headline figures, plus a per-organisation "
-        "breakdown when CORDIS published it. The `legal_basis` array names the "
-        "Horizon / H2020 / FP7 programme part(s) the funding came from."
-    ),
+    summary="Project funding — HOW MUCH MONEY flows where (totals + per-org + legal basis)",
+    description="""**What it does**
+Returns the funding picture for one CORDIS project: total project cost + EU contribution headline figures, currency, per-organisation breakdown (when CORDIS published it), and the `legal_basis[]` array naming the Horizon / H2020 / FP7 programme part(s) the funding comes from (e.g. `HORIZON.1.2` = MSCA, `HORIZON.2.4` = Digital, Industry and Space).
+
+**How this differs from the sibling routes**
+- `/consortium` — **who** is in the project (organisations[]).
+- `/deliverables` — **what** the project has published (web_links[]).
+- `/funding` — **how much money** flows where (this endpoint).
+
+Shared project-level headers (cordis_id, title, project_acronym, public_url, body_txt, body_html, document_date) are identical across all three because it's the same project; the primary payload differs — `total_cost`, `eu_contribution`, `cost_currency`, `legal_basis[]`, `by_organisation[]` are unique to this route.
+
+**Input**
+- `cordis_id` (path) — numeric CORDIS project ID. Discover one via `/api/v1/discover/eurio/projects?topic=<your-topic>`.
+
+**Try it**
+```
+GET /api/v1/discover/eurio/projects/101131342/funding
+```
+
+**You get back**
+A `FundingPayload` — see `eu_contribution` for the headline figure, `legal_basis[]` for the programme part, `by_organisation[]` for the per-org allocation.""",
 )
 async def project_funding(
     request: Request,
