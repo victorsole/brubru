@@ -40,8 +40,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _specialised_helpers import ChunkedDb  # noqa: E402
 
 BASE = "https://ec.europa.eu/transparency/comitology-register/core/api/front"
-PUBLIC_DOC_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/documents/{reference}"
-PUBLIC_COM_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/committees/{code}"
+# The Comitology Register is an Angular SPA. /screen/documents/{ref} on its own
+# loads the SPA shell which then routes to the home screen unless the action
+# segment (/consult) + language query are present. The "/consult?lang=en" form
+# is the SPA's own deep-link convention — it's what the search UI navigates to
+# when a user clicks a result. /committees/{code}/consult?lang=en mirrors the
+# pattern for the committee detail view.
+PUBLIC_DOC_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/documents/{reference}/consult?lang=en"
+PUBLIC_COM_URL_TPL = "https://ec.europa.eu/transparency/comitology-register/screen/committees/{code}/consult?lang=en"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 PAGE_SIZE = 100
 THROTTLE_S = 0.15
