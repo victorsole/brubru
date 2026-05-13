@@ -245,12 +245,115 @@ class VoteItem(BaseModel):
     result: Optional[str] = None
     texts_adopted_reference: Optional[str] = None
     updated_at: Optional[datetime] = None
+    # 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(
+        None,
+        description="Citizen URL — HowTheyVote vote page (https://howtheyvote.eu/votes/{htv_id}) — real, specific.",
+    )
+    body_txt: Optional[str] = Field(
+        None,
+        description="Plain-text composition: title + reference + procedure + tallies + result.",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description="HTML composition of the same fields.",
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="Vote date (date-only view of timestamp).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru last refreshed this vote (alias of updated_at).",
+    )
+
+
+def _vote_row_to_item(r: "EPVote") -> "VoteItem":
+    """Build a VoteItem with the 5 mandatory v1 datapoints populated."""
+    import html as _html
+    title = r.display_title or (r.reference or "")
+    lines = [title]
+    parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+    for k, v in [
+        ("HowTheyVote ID", r.htv_id),
+        ("Reference", r.reference),
+        ("Procedure", r.procedure_reference),
+        ("Stage", r.procedure_stage),
+        ("Amendment", r.amendment_number),
+        ("For", r.count_for),
+        ("Against", r.count_against),
+        ("Abstention", r.count_abstention),
+        ("Did not vote", r.count_did_not_vote),
+        ("Result", r.result.value if hasattr(r.result, "value") else r.result),
+        ("Texts adopted", r.texts_adopted_reference),
+        ("Vote timestamp", r.timestamp),
+    ]:
+        if v in (None, "", 0) and k not in ("For", "Against", "Abstention", "Did not vote"):
+            continue
+        lines.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+    public_url = f"https://howtheyvote.eu/votes/{r.htv_id}" if r.htv_id else None
+    return VoteItem(
+        id=str(r.id),
+        htv_id=r.htv_id,
+        timestamp=r.timestamp,
+        display_title=r.display_title,
+        reference=r.reference,
+        description=r.description,
+        procedure_reference=r.procedure_reference,
+        procedure_type=r.procedure_type.value if hasattr(r.procedure_type, "value") else (str(r.procedure_type) if r.procedure_type else None),
+        procedure_stage=r.procedure_stage,
+        amendment_number=r.amendment_number,
+        is_main=bool(r.is_main),
+        count_for=int(r.count_for or 0),
+        count_against=int(r.count_against or 0),
+        count_abstention=int(r.count_abstention or 0),
+        count_did_not_vote=int(r.count_did_not_vote or 0),
+        result=r.result.value if hasattr(r.result, "value") else (str(r.result) if r.result else None),
+        texts_adopted_reference=r.texts_adopted_reference,
+        updated_at=r.updated_at,
+        # 5 mandatory datapoints
+        public_url=public_url,
+        body_txt="\n".join(lines),
+        body_html="<article>" + "".join(parts_html) + "</article>",
+        document_date=r.timestamp.date() if hasattr(r.timestamp, "date") and r.timestamp else None,
+        creation_date=r.updated_at or r.timestamp,
+    )
 
 
 @votes_router.get(
     "",
     response_model=PaginatedResponse[VoteItem],
-    summary="EP roll-call votes (HowTheyVote)",
+    summary="EP roll-call votes — plenary results with tallies (HowTheyVote)",
+    description="""**What it does**
+Roll-call vote results from European Parliament plenary sittings, sourced from HowTheyVote.eu (the open-source civic-tech mirror of the EP's official register of votes). Each row carries the vote title, procedure reference, EP committee report number, FOR/AGAINST/ABSTENTION/DID-NOT-VOTE tallies, ADOPTED/REJECTED result, and the timestamp.
+
+Filterable by procedure, vote reference, main-vote-only, result, full-text search, and incremental sync.
+
+**When to use it**
+- Track how a specific legislative file was voted in plenary.
+- Aggregate vote tallies by procedure or rapporteur.
+- Build dashboards of EP plenary activity.
+- Link to per-MEP voting positions via `/api/v1/votes/{vote_id}/records`.
+
+**Input**
+- `procedure_reference` — e.g. `2024/0123(COD)`.
+- `reference` — e.g. `A10-0142/2026` (the EP committee report being voted on).
+- `is_main` — true to exclude amendment-level votes.
+- `result` — `ADOPTED | REJECTED | UNKNOWN`.
+- `q` — substring on `display_title`.
+- `published_from` / `published_to` — timestamp range.
+- `updated_from` — incremental-sync upper-bound.
+- `limit` (1–100, default 50), `page` (default 1).
+
+**Try it**
+```
+GET /api/v1/votes?procedure_reference=2024%2F0106(COD)
+GET /api/v1/votes?is_main=true&result=ADOPTED&limit=20
+```
+
+**You get back**
+Paginated `VoteItem` envelope. `public_url` points to the specific HowTheyVote vote page (`https://howtheyvote.eu/votes/{htv_id}`). All 5 mandatory v1 datapoints present per row.""",
 )
 async def list_votes(
     request: Request,
@@ -293,29 +396,7 @@ async def list_votes(
 
     total = query.count()
     rows = query.order_by(EPVote.timestamp.desc()).offset((page - 1) * limit).limit(limit).all()
-    data = [
-        VoteItem(
-            id=str(r.id),
-            htv_id=r.htv_id,
-            timestamp=r.timestamp,
-            display_title=r.display_title,
-            reference=r.reference,
-            description=r.description,
-            procedure_reference=r.procedure_reference,
-            procedure_type=r.procedure_type.value if hasattr(r.procedure_type, "value") else (str(r.procedure_type) if r.procedure_type else None),
-            procedure_stage=r.procedure_stage,
-            amendment_number=r.amendment_number,
-            is_main=bool(r.is_main),
-            count_for=int(r.count_for or 0),
-            count_against=int(r.count_against or 0),
-            count_abstention=int(r.count_abstention or 0),
-            count_did_not_vote=int(r.count_did_not_vote or 0),
-            result=r.result.value if hasattr(r.result, "value") else (str(r.result) if r.result else None),
-            texts_adopted_reference=r.texts_adopted_reference,
-            updated_at=r.updated_at,
-        )
-        for r in rows
-    ]
+    data = [_vote_row_to_item(r) for r in rows]
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
@@ -328,12 +409,57 @@ class MemberVoteItem(BaseModel):
     position: str
     country_code: str
     group_code: str
+    # 5 mandatory Brubru v1 datapoints. /votes/{vote_id}/records is a per-MEP
+    # subview of a single vote; the vote-level URL applies to every row.
+    public_url: Optional[str] = Field(
+        None,
+        description="The parent vote's HowTheyVote page (so each row links back to the vote context).",
+    )
+    body_txt: Optional[str] = Field(
+        None,
+        description="Plain-text composition: MEP id + position + country + group.",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description="HTML composition.",
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="Date of the parent vote.",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When the parent vote was last refreshed.",
+    )
 
 
 @votes_router.get(
     "/{vote_id}/records",
     response_model=PaginatedResponse[MemberVoteItem],
-    summary="Per-MEP voting records for a single vote",
+    summary="Per-MEP voting records for a single roll-call vote",
+    description="""**What it does**
+Per-MEP vote positions (FOR / AGAINST / ABSTENTION / DID_NOT_VOTE) for one specific roll-call vote. Joins `ep_member_votes` to `ep_votes` so callers can see exactly how each named MEP voted, with their country and political-group code at the moment of the vote.
+
+**When to use it**
+- Build a "how did my MEP vote?" widget for any specific roll-call.
+- Aggregate per-group or per-country breakdowns.
+- Feed group-cohesion analysis or position-prediction models.
+
+**Input**
+- `vote_id` (path) — `ep_votes.id` (UUID).
+- `group` — EP group code (e.g. `EPP`, `S&D`, `Renew`).
+- `country` — ISO-2 (e.g. `DE`, `FR`).
+- `position` — `FOR | AGAINST | ABSTENTION | DID_NOT_VOTE`.
+- `limit` (1–500, default 100), `page` (default 1).
+
+**Try it**
+```
+GET /api/v1/votes/{vote_id}/records?group=EPP
+GET /api/v1/votes/{vote_id}/records?country=DE&position=AGAINST
+```
+
+**You get back**
+Paginated `MemberVoteItem` envelope. `public_url` on each row points to the parent vote's HowTheyVote page. All 5 mandatory v1 datapoints present per row.""",
 )
 async def list_member_votes(
     vote_id: str,
@@ -360,19 +486,56 @@ async def list_member_votes(
         query = query.filter(EPMemberVote.position == position.upper())
     total = query.count()
     rows = query.offset((page - 1) * limit).limit(limit).all()
-    data = [
-        MemberVoteItem(
+    parent_url = f"https://howtheyvote.eu/votes/{vote.htv_id}" if vote.htv_id else None
+    parent_date = vote.timestamp.date() if hasattr(vote.timestamp, "date") and vote.timestamp else None
+    import html as _html
+    data = []
+    for r in rows:
+        position = r.position.value if hasattr(r.position, "value") else str(r.position)
+        lines = [
+            f"MEP {r.member_id}",
+            f"Position: {position}",
+            f"Country: {r.country_code}",
+            f"Group: {r.group_code}",
+        ]
+        parts_html = [
+            f"<p><strong>MEP id:</strong> {_html.escape(str(r.member_id))}</p>",
+            f"<p><strong>Position:</strong> {_html.escape(position)}</p>",
+            f"<p><strong>Country:</strong> {_html.escape(r.country_code or '')}</p>",
+            f"<p><strong>Group:</strong> {_html.escape(r.group_code or '')}</p>",
+        ]
+        data.append(MemberVoteItem(
             member_id=str(r.member_id),
-            position=r.position.value if hasattr(r.position, "value") else str(r.position),
+            position=position,
             country_code=r.country_code,
             group_code=r.group_code,
-        )
-        for r in rows
-    ]
+            public_url=parent_url,
+            body_txt="\n".join(lines),
+            body_html="<article>" + "".join(parts_html) + "</article>",
+            document_date=parent_date,
+            creation_date=vote.updated_at,
+        ))
     return build_envelope(data, total=total, page=page, limit=limit)
 
 
-@votes_router.get("/{vote_id}", response_model=VoteItem, summary="Single EP vote detail")
+@votes_router.get(
+    "/{vote_id}",
+    response_model=VoteItem,
+    summary="Single EP roll-call vote detail",
+    description="""**What it does**
+Returns full metadata for one EP roll-call vote, including title, procedure, committee report, tallies, result, and the citizen-facing HowTheyVote URL.
+
+**Input**
+- `vote_id` (path) — `ep_votes.id` (UUID).
+
+**Try it**
+```
+GET /api/v1/votes/{vote_id}
+```
+
+**You get back**
+A `VoteItem` with all 5 mandatory v1 datapoints. `public_url` resolves to `https://howtheyvote.eu/votes/{htv_id}` — the public vote page with per-MEP breakdown, country chart, and group cohesion.""",
+)
 async def get_vote_detail(
     vote_id: str,
     user: User = Depends(api_user_with_rate_limit),
@@ -384,20 +547,7 @@ async def get_vote_detail(
             "error": f"Vote {vote_id} not found", "reason_code": "not_found",
             "resource": "vote", "id": vote_id,
         })
-    return VoteItem(
-        id=str(r.id), htv_id=r.htv_id, timestamp=r.timestamp,
-        display_title=r.display_title, reference=r.reference, description=r.description,
-        procedure_reference=r.procedure_reference,
-        procedure_type=r.procedure_type.value if hasattr(r.procedure_type, "value") else (str(r.procedure_type) if r.procedure_type else None),
-        procedure_stage=r.procedure_stage, amendment_number=r.amendment_number,
-        is_main=bool(r.is_main), count_for=int(r.count_for or 0),
-        count_against=int(r.count_against or 0),
-        count_abstention=int(r.count_abstention or 0),
-        count_did_not_vote=int(r.count_did_not_vote or 0),
-        result=r.result.value if hasattr(r.result, "value") else (str(r.result) if r.result else None),
-        texts_adopted_reference=r.texts_adopted_reference,
-        updated_at=r.updated_at,
-    )
+    return _vote_row_to_item(r)
 
 
 # ============================================================================

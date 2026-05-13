@@ -48,9 +48,53 @@ class WebstreamItem(BaseModel):
     related_procedure_refs: list = Field(default_factory=list)
     transcribed_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    # 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(
+        None,
+        description="Citizen URL — the multimedia.europarl.europa.eu page for the meeting (alias of multimedia_url).",
+    )
+    body_txt: Optional[str] = Field(
+        None,
+        description="Plain-text composition: title + committee + meeting date + duration + speaker count + status + related procedures.",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description="HTML composition of the same fields.",
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="Meeting date (date-only view of meeting_date).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru last refreshed this row (alias of last_updated).",
+    )
+    meeting_start_date: Optional[datetime] = Field(
+        None,
+        description="Canonical meeting-start timestamp (alias of meeting_date) — the v1 contract uses this name for meeting-bearing endpoints.",
+    )
 
 
 def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
+    import html as _html
+    title = r.title or f"{r.committee_code or 'Committee'} meeting"
+    lines = [title]
+    parts_html = [f"<h2>{_html.escape(title)}</h2>"]
+    for k, v in [
+        ("Committee", r.committee_code),
+        ("Meeting date", r.meeting_date),
+        ("Duration", f"{r.duration_seconds // 60} min" if r.duration_seconds else None),
+        ("Speakers", r.speaker_count),
+        ("Words", r.word_count),
+        ("Status", r.status),
+        ("Language", r.language),
+        ("Procedures", ", ".join(r.related_procedure_refs) if r.related_procedure_refs else None),
+        ("Event id", r.event_id),
+    ]:
+        if v is None or v == "":
+            continue
+        lines.append(f"{k}: {v}")
+        parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
     return WebstreamItem(
         id=str(r.id),
         committee_code=r.committee_code,
@@ -67,22 +111,48 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         related_procedure_refs=list(r.related_procedure_refs or []),
         transcribed_at=r.transcribed_at,
         last_updated=r.last_updated,
+        # 5 mandatory datapoints
+        public_url=r.multimedia_url,
+        body_txt="\n".join(lines),
+        body_html="<article>" + "".join(parts_html) + "</article>",
+        document_date=r.meeting_date.date() if hasattr(r.meeting_date, "date") and r.meeting_date else None,
+        creation_date=r.last_updated,
+        meeting_start_date=r.meeting_date,
     )
 
 
 @router.get(
     "",
     response_model=PaginatedResponse[WebstreamItem],
-    summary="EP committee webstreams (multimedia.europarl.europa.eu)",
-    description=(
-        "Every EP committee meeting webstream URL discovered by the daily "
-        "scrape of multimedia.europarl.europa.eu/en/webstreaming. Filter "
-        "by committee, date range, status (PENDING / COMPLETED / FAILED / "
-        "NOT_AVAILABLE), and incremental sync via updated_from. Transcript "
-        "text is included when Whisper has been run; otherwise the row "
-        "stays as PENDING and the URL is enough for partners to fetch the "
-        "stream themselves."
-    ),
+    summary="EP committee webstreams — meeting URLs + transcripts (multimedia.europarl.europa.eu)",
+    description="""**What it does**
+Every EP committee meeting webstream URL discovered by Brubru's daily scrape of `multimedia.europarl.europa.eu/en/webstreaming`. Each row carries the multimedia landing-page URL (`public_url`), the direct video URL when extracted, the meeting date, the committee code (LIBE, ENVI, ECON, …), and — when Whisper has run — the transcript metadata (duration, speaker count, word count).
+
+**When to use it**
+- Build per-committee streaming dashboards.
+- Track which committee meetings already have a Brubru transcript.
+- Filter to meetings linked to a specific OEIL procedure file.
+- Drive incremental sync with `updated_from`.
+
+**Input**
+- `committee` — EP committee code (LIBE, ENVI, ECON, IMCO, …).
+- `status` — `PENDING | COMPLETED | FAILED | NOT_AVAILABLE` (transcription status, not the meeting itself).
+- `has_transcript` — true to filter to rows with a transcript already extracted.
+- `procedure_ref` — OEIL reference (e.g. `2024/0123(COD)`) to filter to meetings discussing that file.
+- `q` — substring on title.
+- `published_from` / `published_to` — meeting-date range.
+- `updated_from` / `updated_to` — incremental sync.
+- `limit` (1–100, default 50), `page` (default 1).
+
+**Try it**
+```
+GET /api/v1/webstreams?committee=LIBE&has_transcript=true
+GET /api/v1/webstreams?procedure_ref=2024%2F0123(COD)
+GET /api/v1/webstreams?updated_from=2026-05-01
+```
+
+**You get back**
+Paginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.""",
 )
 async def list_webstreams(
     request: Request,
@@ -160,7 +230,20 @@ async def list_webstreams(
 @router.get(
     "/{stream_id}",
     response_model=WebstreamItem,
-    summary="Single webstream by id",
+    summary="Single EP committee webstream by id",
+    description="""**What it does**
+Returns full metadata for one committee-meeting webstream, including the multimedia landing page (`public_url`), direct video URL, meeting date, transcript status, and (when COMPLETED) duration / speaker / word counts.
+
+**Input**
+- `stream_id` (path) — `committee_meeting_transcripts.id` (UUID).
+
+**Try it**
+```
+GET /api/v1/webstreams/{stream_id}
+```
+
+**You get back**
+A `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.""",
 )
 async def get_webstream_detail(
     stream_id: str,
@@ -181,12 +264,21 @@ async def get_webstream_detail(
 @router.get(
     "/by-procedure/{procedure_ref:path}/transcript",
     response_model=PaginatedResponse[WebstreamItem],
-    summary="Webstreams linked to a specific procedure",
-    description=(
-        "All webstreams whose related_procedure_refs array includes the given "
-        "OEIL reference. Useful for tracking every committee debate of a "
-        "specific legislative file."
-    ),
+    summary="Webstreams linked to a specific OEIL procedure file",
+    description="""**What it does**
+Returns every committee-meeting webstream whose `related_procedure_refs` array contains the given OEIL reference. Useful for tracking every committee debate of a specific legislative file end-to-end.
+
+**Input**
+- `procedure_ref` (path) — OEIL reference, e.g. `2024/0123(COD)`.
+- `limit` (1–100, default 50), `page` (default 1).
+
+**Try it**
+```
+GET /api/v1/webstreams/by-procedure/2024%2F0123(COD)/transcript
+```
+
+**You get back**
+Paginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.""",
 )
 async def get_webstreams_for_procedure(
     procedure_ref: str,
