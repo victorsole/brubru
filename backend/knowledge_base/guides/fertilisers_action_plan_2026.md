@@ -1,8 +1,9 @@
-# Fertilisers Action Plan (forthcoming, College tentative 13 May 2026)
+# Fertilisers Action Plan (College of Commissioners, 13 May 2026)
 
 ## QUICK FACTS
-- **Title**: Communication on a Fertilisers Action Plan (working title — final wording will land on adoption)
-- **Status (29 April 2026)**: **Forthcoming**, scheduled for College adoption **Wednesday 13 May 2026** per SEC(2026) 2564 tentative agenda. Earlier industry and press reports (Reuters, 22 April; Brussels Signal, 24 April) cited 19 May as the date — the Secretariat-General moved it forward to 13 May per the latest tentative agenda. Date subject to confirmation as 13 May approaches.
+- **LATEST (Wednesday 13 May 2026 — ADOPTED TODAY)**: **College of Commissioners adopted the Fertilisers Action Plan** at the 2565th meeting (Brussels, 10:00 CET) under Commissioner **Christophe Hansen** (Agriculture and Food, LU) / FITTO date-block. Communication adopted in package with the Passenger Mobility Package + Global Health Resilience Initiative. COM reference will be assigned within 24h. Brubru should refresh this guide with the COM number, the actual pillars adopted, the consolidated text of the Communication, and any legislative follow-up flagged in the Annex once the text publishes.
+- **Title**: Communication on a Fertilisers Action Plan (final wording confirmed at adoption)
+- **Status (13 May 2026)**: **ADOPTED** at College today after SEC(2026)2564 tentative-agenda confirmation. Earlier industry and press reports (Reuters, 22 April; Brussels Signal, 24 April) cited 19 May as the date — the Secretariat-General moved it forward to 13 May per the latest tentative agenda. Date subject to confirmation as 13 May approaches.
 - **Lead Commissioner**: Christophe Hansen (Agriculture and Food, Luxembourg). The SEC(2026)2564 attribution layout was ambiguous in our parsed output (Fertilisers Action Plan appears in the same date block as the Passenger Package which is Fitto-led); industry reporting and AGRI portfolio responsibility point clearly to Hansen.
 - **Lead DG**: DG AGRI (Agriculture and Rural Development), with cross-cuts to DG ENER, DG CLIMA, DG GROW, DG TAXUD (CBAM)
 - **Council configuration**: AGRIFISH

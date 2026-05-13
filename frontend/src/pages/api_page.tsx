@@ -140,7 +140,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?q=AI+Act+simplification+omnibus&limit=5"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?q=Passenger+Mobility+Package&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -200,8 +200,8 @@ export const ApiPage = () => {
 API_KEY = "brubru_live_..."
 BASE    = "https://brubru.beresol.eu/api/v1"
 
-# Search laws by keyword (today's hot topic: AI Act simplification omnibus 7 May 2026 deal -- proposal 2025/0359(COD))
-resp = requests.get(f"{BASE}/laws", params={"q": "AI Act simplification omnibus", "limit": 5},
+# Search laws by keyword (today's hot topic: Passenger Mobility Package adopted by College 13 May 2026 -- MDMS + SDBT + Rail Rights revision)
+resp = requests.get(f"{BASE}/laws", params={"q": "Passenger Mobility Package", "limit": 5},
                     headers={"Authorization": f"Bearer {API_KEY}"})
 for law in resp.json()["data"]:
     print(f'{law["celex"]}  {law["title"][:80]}')`}</code></pre>
@@ -210,7 +210,7 @@ for law in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v1";
 
-const res = await fetch(\`\${BASE}/laws?q=AI+Act+simplification+omnibus&limit=5\`, {
+const res = await fetch(\`\${BASE}/laws?q=Passenger+Mobility+Package&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();

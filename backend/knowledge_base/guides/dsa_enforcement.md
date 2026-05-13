@@ -1,6 +1,8 @@
 # Digital Services Act: Enforcement and Cases
 
 ## QUICK FACTS
+- **LATEST (12 May 2026, DG CNECT)**: **Children's protection online is high priority for 92% of Europeans** — Eurobarometer survey result released by DG CNECT on 12 May 2026 underlines public-opinion mandate for the **EU Age Verification scheme** (companion to the 29 April 2026 DSA Meta preliminary finding IP/26/920), the **2025 DSA Guidelines on the protection of minors**, and the wider DSA Article 28 (protection of minors) + Article 34 systemic-risk obligations enforcement. The 92% figure is the highest cross-Member-State convergence on a digital-policy topic in the past two years. Commission framing: removes "we don't have democratic legitimacy to act" pushback from platform lobbying. Cross-link: `eu_age_verification_recommendation`, `csam_regulation_online`, `ai_act_amendments_2026` (CSAM-AI provisions). Source: digital-strategy.ec.europa.eu/en/news.
+- **LATEST (12 May 2026, EC press)**: **Keynote address by President von der Leyen at the European Summit on Artificial Intelligence and Children** — frames the political alignment between the Age Verification scheme + AI Act Article 5 prohibited practices + DSA Article 28 minors-protection obligations as a coordinated minors-online-safety stack. Source: ec.europa.eu/commission/presscorner.
 - Full name: Digital Services Act
 - Reference: Regulation (EU) 2022/2065
 - CELEX: 32022R2065
