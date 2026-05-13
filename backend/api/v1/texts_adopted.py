@@ -93,11 +93,18 @@ def _row_to_item(
     # public_url ladder. EUR-Lex CELEX page when available is the safest
     # choice — no CloudFront WAF challenge (doceo URLs typically return 202
     # to server-side anonymous requests). Falls back to full_text_url / pdf_url
-    # / source_url.
+    # / source_url. Last-resort: the texts-submitted listing page itself,
+    # which always 200s, so a citizen click never lands on the EP "URL does
+    # not exist" fallback.
     if r.celex_number:
         public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex_number}"
     else:
-        public_url = r.full_text_url or r.pdf_url or r.source_url
+        public_url = (
+            r.full_text_url
+            or r.pdf_url
+            or r.source_url
+            or "https://www.europarl.europa.eu/plenary/en/texts-submitted.html"
+        )
     return TextItem(
         id=str(r.id),
         ta_reference=r.ta_reference,

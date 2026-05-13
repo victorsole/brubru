@@ -50,7 +50,11 @@ def fetch_html() -> str:
         return r.read().decode("utf-8", errors="replace")
 
 
-A_REF = re.compile(r"A(\d{1,2})-(\d{4})-(\d{4})")  # e.g. A-10-2026-0022
+# Match the canonical doceo URL form `A-{term}-{year}-{num}_EN.{ext}`.
+# Anchored on `/A-` + `_EN.` so we DON'T accidentally pick up EP's internal
+# `report-details.html?reference=A10-NNNN-YYYY` anchors — those use the
+# inverted num-then-year order and would silently flip the year/num bindings.
+A_REF = re.compile(r"/A-(\d{1,2})-(\d{4})-(\d{4})_EN\.")
 
 
 def main():
@@ -67,7 +71,8 @@ def main():
     html = fetch_html()
     soup = BeautifulSoup(html, "html.parser")
 
-    # Pull all A-NN-YYYY-XXXX_EN.html links and infer titles from surrounding text
+    # Pull all doceo A-{term}-{year}-{num}_EN.{html,pdf,docx} links and infer
+    # titles from surrounding text.
     rows = []
     seen = set()
     for a in soup.find_all("a", href=True):
@@ -76,7 +81,7 @@ def main():
         if not m:
             continue
         term, year, num = m.group(1), m.group(2), m.group(3)
-        ta_ref = f"A{term}/{int(num)}/{year}"
+        ta_ref = f"A{term}/{year}/{num}"
         if ta_ref in seen:
             continue
         seen.add(ta_ref)
