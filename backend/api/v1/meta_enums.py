@@ -69,7 +69,29 @@ CALENDAR_INSTITUTIONS = [
 ]
 
 
-@router.get("/enums", summary="All valid enum values for v1 filters")
+@router.get(
+    "/enums",
+    summary="All valid enum values for v1 filters — call once, cache forever",
+    description="""**What it does**
+Returns the canonical list of valid values for every enum-style filter across the v1 API in a single response: datasets + their HTTP methods, document types, policy areas, EP committees, procedure statuses, stakeholder user types, detail levels, EPRS publication types, calendar institutions, languages, and a sample of ISO-3 country codes.
+
+**When to use it**
+Call this ONCE at integration time, cache the result client-side, and refresh on schema bumps (compare `generated_at`). Eliminates the entire "what values does filter X accept?" support-ticket class — no more guessing at whether the EP code is `LIBE` or `libe` or whether the procedure status is `tabled` or `proposed`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/meta/enums
+```
+
+**You get back**
+A JSON object with `datasets`, `methods_by_dataset`, `doc_types` (live from `eu_laws`), `policy_areas` (live from `eu_laws`), `ep_committees` (static), `procedure_statuses` (static), `stakeholder_user_types`, `detail_levels`, `eprs_publication_types`, `calendar_institutions`, `languages`, `countries_iso3_sample`, `generated_at` (ISO timestamp), plus the 5 envelope-level datapoints (all null except `creation_date = generated_at`).
+
+**Data freshness**
+Mostly static (the lists are hardcoded in `backend/api/v1/meta_enums.py`). Two fields are live from the DB: `doc_types` and `policy_areas` are aggregated from the `eu_laws` table on each request — so they grow as the EUR-Lex sync (hot tier, every 6h) adds new acts.""",
+)
 async def meta_enums(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

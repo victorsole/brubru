@@ -144,12 +144,33 @@ def _resolve_source_url(
 @router.get(
     "/events",
     response_model=PaginatedResponse[CalendarEventItem],
-    summary="Unified EU institutional calendar",
-    description=(
-        "Events from EP plenary, EP committees, Council configurations, Commission college, "
-        "and decentralised agencies. ~400+ events indexed. Filter by institution, event type, "
-        "committee, DG, and date range."
-    ),
+    summary="Unified EU institutional calendar — plenary, committees, Council, College, agencies",
+    description="""**What it does**
+Returns the unified EU institutional calendar — plenary sessions + committee meetings + group weeks + recess weeks (EP); ministerial meetings (Council configurations + informal Council); summits (European Council); College meetings (Commission); CJEU hearings; ECB Governing Council; agency events (ESMA, EMA, EBA, EIOPA, etc.); plus third-party events from euagenda.eu (conferences, webinars, training, roundtables). Each row carries title, description, dates, institution + event type, the relevant committee / DG / Council configuration, policy-area tags, related procedure refs, status, and three URLs: the source page, the meeting agenda, and (when known) the webstream URL.
+
+**When to use it**
+The canonical "what's happening in Brussels this week" surface. Drive a weekly calendar UI, find every plenary day in 2026, filter Council Energy configurations, or pull `updated_from=<last_check>` for incremental sync. Combine with `/api/v1/calendar/events/{id}` for the deep-link.
+
+**Input**
+- `institution` — `EP` / `COUNCIL` / `EUROPEAN_COUNCIL` / `COMMISSION` / `ECJ` / `ECB` / `ESMA` / `EMA` / `EBA` / `EIOPA` / `COR` / `EESC`.
+- `event_type` — `PLENARY` / `COMMITTEE_MEETING` / `COUNCIL_MEETING` / `COLLEGE_MEETING` / `EUROPEAN_COUNCIL_SUMMIT` / `CONFERENCE` / `WEBINAR` / etc.
+- `committee` — 4-letter EP committee code.
+- `commission_dg` — DG code.
+- `date_from`, `date_to` — `start_date` filter.
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync on `last_updated`.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/calendar/events?institution=EP&date_from=2026-05-01&date_to=2026-05-31
+GET /api/v1/calendar/events?committee=ENVI&event_type=COMMITTEE_MEETING
+```
+
+**You get back**
+A `PaginatedResponse[CalendarEventItem]` envelope. Each item carries `institution`, `event_type`, `title`, `description`, `start_date`, `end_date`, `all_day`, `council_configuration`, `ep_activity_type`, `ep_committee_code`, `commission_dg`, `policy_areas`, `procedure_refs`, `status`, `source_url`, `agenda_url`, `webstream_url`.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 6+ sources: EP calendar, EP committee agendas, Council meetings, College agenda (SEC/OJ/PV), euagenda third-party events, and ad-hoc commissioner agendas. Calendar staleness is a conversion-killer for Brubru, so this is the most aggressively refreshed surface.""",
 )
 async def list_calendar_events(
     request: Request,
@@ -259,7 +280,26 @@ async def list_calendar_events(
 @router.get(
     "/events/{event_id}",
     response_model=CalendarEventItem,
-    summary="Single calendar event detail by id (UUID)",
+    summary="Look up one calendar event by its Brubru-internal UUID",
+    description="""**What it does**
+Fetches a single calendar event by its Brubru-internal UUID. Returns the same shape as the list endpoint, including the resolved source URL + the webstream URL when applicable.
+
+**When to use it**
+After locating an event via the list endpoint, use this when you want to deep-link into a specific event in a calendar UI or embed it in a chat answer.
+
+**Input**
+- `event_id` (path) — Brubru UUID (returned in `id` from the list endpoint).
+
+**Try it**
+```
+GET /api/v1/calendar/events/<uuid>
+```
+
+**You get back**
+A single `CalendarEventItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 6 hours from 6+ calendar sources.""",
 )
 async def get_calendar_event_detail(
     event_id: str,

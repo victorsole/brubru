@@ -60,14 +60,36 @@ class PublicationItem(BaseModel):
 @router.get(
     "",
     response_model=PaginatedResponse[PublicationItem],
-    summary="Unified feed of EU institutional publications",
-    description=(
-        "Searchable, paginated feed of press releases, reports, and news items "
-        "from across EU institutions and decentralised agencies. Powered by the "
-        "Brubru RSS ingestion pipeline (26+ sources today, growing). Filters: "
-        "institution_slug, source_slug, category, policy_area, q (full-text), "
-        "published_from, published_to."
-    ),
+    summary="Unified feed of EU institutional publications — Commission, EP, Council, ECB, agencies",
+    description="""**What it does**
+Returns a searchable, paginated feed of press releases, reports, communications, and news items from across the EU institutional ecosystem. Aggregates 26+ official feeds today (growing) — Commission press corner + DG newsrooms, EP press service, Council, ECB, EMA, EFSA, ECHA, ENISA, FRA, Frontex, etc. Each row carries the institution + source feed slug, title + summary, the canonical URL, publication date, policy-area tags, and (when ingested) the full body in HTML + plain text.
+
+**When to use it**
+The single most useful endpoint for "what is the EU saying right now" — used by Brubru's chat for grounding answers in fresh institutional output, and by partners building monitoring dashboards. Filter by `institution_slug` for a single institution, `policy_area` for a topic, or use the incremental-sync pattern `updated_from=<last_check>` to poll deltas. For first-class filtered subsets see `/api/v1/press-releases` (category=press_release) and `/api/v1/eprs` (EPRS think-tank).
+
+**Input**
+- `q` — full-text search on title + summary.
+- `institution_slug` — e.g. `european_commission`, `european_parliament`, `ecb`, `ema`, `frontex`.
+- `source_slug` — narrower than institution (e.g. `ec_press`, `ecb_press`, `ema_news`).
+- `category` — `press_release` / `report` / `consultation` / `agenda` / ...
+- `policy_area` — single policy area tag.
+- `published_from`, `published_to` (and `published_end` as alias for `published_to`).
+- `updated_from`, `updated_to` (and `updated_end` as alias) — incremental sync on `fetched_at`.
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/publications?institution_slug=european_commission&limit=20
+GET /api/v1/publications?q=AI%20Act&updated_from=2026-05-14T00:00:00
+GET /api/v1/publications?policy_area=environment&published_from=2026-05-01
+```
+
+**You get back**
+A `PaginatedResponse[PublicationItem]` envelope. Each item carries `institution_slug`, `source_slug`, `title`, `summary`, `url`, `language`, `published_date`, `policy_areas`, `tags`, `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints (`public_url = url`, `document_date = published_date`, `creation_date = fetched_at`).
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 26+ institutional RSS feeds. Press releases typically appear in the feed within minutes of being posted on the institutional site; the 6h sync cadence catches them inside a quarter-day.""",
 )
 async def list_publications(
     request: Request,
@@ -232,19 +254,26 @@ class SourceItem(BaseModel):
 # returns 500. Static routes must precede param routes for correct dispatch.
 @router.get(
     "/sources",
-    summary="List all ingested sources with item counts",
-    description=(
-        "**What it does:** returns every RSS / institutional source Brubru ingests, with "
-        "the per-source article count and the timestamp of the most recent ingested item.\n\n"
-        "**When to use it:** discover which institutional feeds your subscription covers "
-        "before filtering the unified `/api/v1/publications` endpoint by `source_slug`. "
-        "Also useful for monitoring — if `latest` is more than a few days old on a feed "
-        "that should be daily, the upstream source is likely down.\n\n"
-        "**Try it:** `GET /api/v1/publications/sources` → "
-        "`{total_sources: 26, sources: [{source_slug:'ec_press', count: 4823, "
-        "latest:'2026-05-02T...'}, ...]}`. Then filter: "
-        "`/api/v1/publications?source_slug=ec_press`."
-    ),
+    summary="List every institutional source Brubru ingests, with item counts + freshness",
+    description="""**What it does**
+Returns every RSS / institutional source Brubru ingests, with the per-source article count and the timestamp of the most recent ingested item. Grouped by source_slug + institution_slug + category.
+
+**When to use it**
+Discover which institutional feeds your subscription covers before filtering the unified `/api/v1/publications` endpoint by `source_slug`. Also useful for monitoring — if `latest` is more than a few days old on a feed that should be daily, the upstream source is likely down (a real signal we use to alert on sync failures).
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/publications/sources
+```
+
+**You get back**
+A JSON object with `total_sources` (integer) and `sources` (array of `{source_slug, institution_slug, category, count, latest}`), sorted by `count` descending. The 5 envelope-level datapoints are null (this is a reference enumeration). `creation_date` is the API call time.
+
+**Data freshness**
+Live aggregate query over the `institutional_publications` table — recomputed on each request. Reflects what's currently in the DB; updated by the publications sync every 6 hours.""",
 )
 async def list_sources(
     user: User = Depends(api_user_with_rate_limit),
@@ -295,7 +324,26 @@ async def list_sources(
 @router.get(
     "/{publication_id}",
     response_model=PublicationItem,
-    summary="Single publication detail by id (UUID)",
+    summary="Look up one publication by its Brubru-internal UUID",
+    description="""**What it does**
+Fetches a single publication by its Brubru-internal UUID. Returns the same shape as the list endpoint's `data[i]`.
+
+**When to use it**
+After locating a publication via the list endpoint, use this when you want to fetch the full record (including the parsed body HTML/text) for a specific UUID in a deep-link context. For URL-based lookup, prefer the list endpoint's `q` search rather than constructing UUIDs manually.
+
+**Input**
+- `publication_id` (path) — Brubru UUID (returned in `id` from the list endpoint).
+
+**Try it**
+```
+GET /api/v1/publications/<uuid>
+```
+
+**You get back**
+A single `PublicationItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 6 hours from 26+ institutional RSS feeds.""",
 )
 async def get_publication_detail(
     publication_id: str,

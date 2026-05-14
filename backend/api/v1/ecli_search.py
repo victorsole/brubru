@@ -70,9 +70,12 @@ class ECLIResolution(BaseModel):
 @router.get(
     "/{ecli:path}",
     response_model=ECLIResolution,
-    summary="Look up an EU court ruling by ECLI — parsed components + citizen URLs",
+    summary="Look up an EU court ruling by its case-law identifier — parsed components + citizen URLs",
     description="""**What it does**
 Hand it any European Case Law Identifier and get back the parsed components (country / court / year / ordinal), plus deep-links to the e-Justice search engine and (for CJEU rulings) InforCuria.
+
+**When to use it**
+Whenever you have a case-law citation and want a working URL — common pattern: a legal memo cites a court ID like `ECLI:EU:C:2014:317`, you call this endpoint, you get back the InforCuria page where the full judgment text + AG opinion live. Also useful for parsing the country / court / year from the identifier without writing your own regex.
 
 **Where to find ECLIs to test**
 There is no master list of ECLIs (the universe spans every national court + the CJEU, millions of rulings). Three practical sources:

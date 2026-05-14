@@ -53,11 +53,32 @@ def _eurlex_url(celex: Optional[str]) -> Optional[str]:
 @router.get(
     "",
     response_model=PaginatedResponse[LawItem],
-    summary="Search adopted EU legislation",
-    description=(
-        "Full-text search across 28,500+ adopted EU laws. Filters by CELEX, doc type, "
-        "policy area, and publication-date range. Powered by PostgreSQL TSVECTOR."
-    ),
+    summary="Search adopted EU legislation — 8,710 distinct laws across 28,513 OJ publications",
+    description="""**What it does**
+Full-text search over Brubru's mirror of adopted EU legislation — the LEG_2025-11 bulk export from the Publications Office, covering 8,710 distinct laws across 28,513 Official Journal publications. Each row carries the EU's legal identifier, the document type (regulation / directive / decision / recommendation / opinion / communication / agreement), the title + subject matter, the policy area, the publication date, the CELEX number, and a link to the EUR-Lex canonical URL.
+
+**When to use it**
+The single highest-traffic Brubru endpoint — used to find specific acts (e.g. "the AI Act"), enumerate laws by topic (e.g. all environment regulations from 2024), or build a partner integration that needs the live adopted-legislation corpus. Pair with `/api/v1/laws/{celex}/text` for the full legal text body. For procedures still in negotiation, use `/api/v1/procedures` instead.
+
+**Input**
+- `q` — full-text search on title + subject matter (PostgreSQL TSVECTOR).
+- `celex` — exact match on the legal identifier (the CELEX number).
+- `doc_type` — `regulation` / `directive` / `decision` / `recommendation` / `opinion` / etc. See `/api/v1/document-types` for the live distinct list.
+- `policy_area` — single tag (see `/api/v1/policy-areas`).
+- `published_from`, `published_to` — date filter on `published_date`.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/laws?q=AI%20Act&limit=10
+GET /api/v1/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01
+```
+
+**You get back**
+A `PaginatedResponse[LawItem]` envelope. Each item carries `celex`, `title`, `doc_type`, `subject_matter`, `policy_area`, `published_date`, `eur_lex_url`, `oj_reference`, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3 (secondary acts). New regulations + directives published in the Official Journal L-series appear in our mirror within the same day they hit EUR-Lex.""",
 )
 async def list_laws(
     request: Request,
@@ -211,13 +232,27 @@ async def list_laws(
 @router.get(
     "/{celex}",
     response_model=LawItem,
-    summary="EU law metadata detail by CELEX",
-    description=(
-        "Returns the full metadata for one EU law identified by CELEX. "
-        "Companion to /laws/{celex}/text which returns the full body. "
-        "Use this when you only need bibliographic fields (title, doc_type, "
-        "policy_area, legal_basis, oj_reference, adoption date)."
-    ),
+    summary="Look up one adopted EU law by its legal identifier — metadata only (no body)",
+    description="""**What it does**
+Returns the bibliographic metadata for one adopted EU law identified by its CELEX (the EU's stable legal identifier — e.g. `32024R1689` for the AI Act). Returns title, document type, adoption date, OJ reference, policy area, legal basis array, EUR-Lex URL, and a relative URL to the text endpoint.
+
+**When to use it**
+When you only need bibliographic fields (title, doc_type, policy_area, legal_basis, oj_reference, adoption date) and not the full body — significantly faster than `/{celex}/text` because it doesn't fetch the body. Pair with `/api/v1/laws/{celex}/text` when you need the actual legal text.
+
+**Input**
+- `celex` (path) — the EU legal identifier. Case-insensitive; we uppercase internally. Format: 5 digits + 1-2 letters + 4 digits (e.g. `32024R1689`, `52026PC0321`).
+
+**Try it**
+```
+GET /api/v1/laws/32024R1689
+GET /api/v1/laws/32016R0679
+```
+
+**You get back**
+A `LawItem` with `celex`, `title`, `doc_type` (normalised), `adopted_on`, `oj_reference`, `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url` (relative URL to the text endpoint), plus the 5 envelope-level datapoints. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",
 )
 async def get_law_detail(
     celex: str,
@@ -292,13 +327,28 @@ class LawTextResponse(BaseModel):
 @router.get(
     "/{celex}/text",
     response_model=LawTextResponse,
-    summary="Full text of a specific EU law",
-    description=(
-        "Returns the full text of an adopted EU law by CELEX identifier. "
-        "Tries local Formex XML cache first; falls back to EUR-Lex Cellar API "
-        "(publications.europa.eu/resource/celex/{celex}). "
-        "Default format is 'plain' (whitespace-normalised); pass ?format=xml for raw markup."
-    ),
+    summary="Full text of one adopted EU law — plain text or raw XML",
+    description="""**What it does**
+Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (28,513 files from the LEG_2025-11 bulk export); falls back to live fetch from Cellar (`publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`). Returns the body as either whitespace-normalised plain text (default) or raw markup.
+
+**When to use it**
+When you need the actual legal text — for citation, full-text analysis, or feeding into a downstream LLM context. The local Formex cache is fast (~50ms); Cellar fallback is slower (~2-3s) but always works for any post-1952 CELEX. For pre-parsed structured access (recital ↔ article mapping, definition extraction), use the `/api/v1/legal-text/*` endpoints instead.
+
+**Input**
+- `celex` (path) — EU legal identifier (case-insensitive).
+- `format` — `plain` (default, whitespace-normalised) or `xml` (raw Formex markup).
+
+**Try it**
+```
+GET /api/v1/laws/32024R1689/text
+GET /api/v1/laws/32016R0679/text?format=xml
+```
+
+**You get back**
+A `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content` (the actual text), `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).
+
+**Data freshness**
+Live pass-through (the local Formex cache is regenerated quarterly from the LEG_YYYY-MM bulk export). For acts NOT in the local cache, the live Cellar fetch always reflects the latest published text — but the Publications Office is the slow-changing authoritative source: once an act is published in the OJ, its text doesn't change (only consolidations get new CELEX numbers).""",
 )
 async def get_law_text(
     celex: str,
