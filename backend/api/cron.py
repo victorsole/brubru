@@ -371,10 +371,10 @@ async def cron_sync_hot_6h(
     results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
 
     # Script-based syncs (no service wrapper yet)
-    results["texts_submitted"] = _run_script("texts_submitted", "scripts/ingest_texts_submitted.py", [], timeout=600)
+    results["texts_submitted"] = _run_script("texts_submitted", "scripts/ingest_texts_submitted.py", ["--apply"], timeout=600)
     results["college_agendas"] = _run_script("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
     results["calendar"] = _run_script("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
-    results["cellar_recent"] = _run_script("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--recent"], timeout=600)
+    results["cellar_recent"] = _run_script("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
 
     logger.info(f"[CRON] hot-6h tier sync complete: {results}")
     return {"status": "success", "tier": "hot_6h", "results": results}
@@ -421,16 +421,16 @@ async def cron_sync_daily(
     results = {}
 
     results["consultations"] = _run_script("consultations", "scripts/sync_consultations.py", [], timeout=900)
-    results["comitology"] = _run_script("comitology", "scripts/backfill_eu_comitology.py", ["--days", "7"], timeout=900)
-    results["tris"] = _run_script("tris", "scripts/sync_dg_grow.py", [], timeout=600)
-    results["sanctions"] = _run_script("sanctions", "scripts/backfill_eu_sanctions.py", ["--days", "7"], timeout=600)
-    results["transparency_register"] = _run_script("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--delta"], timeout=900)
-    results["jrc"] = _run_script("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--days", "7"], timeout=600)
-    results["infringements"] = _run_script("infringements", "scripts/backfill_infringement_summary.py", [], timeout=600)
-    results["eesc"] = _run_script("eesc", "scripts/backfill_eu_eesc.py", ["--days", "7"], timeout=600)
-    results["cor"] = _run_script("cor", "scripts/backfill_eu_cor.py", ["--days", "7"], timeout=600)
+    results["comitology"] = _run_script("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
+    results["tris"] = _run_script("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
+    results["sanctions"] = _run_script("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
+    results["transparency_register"] = _run_script("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
+    results["jrc"] = _run_script("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)
+    results["infringements"] = _run_script("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
+    results["eesc"] = _run_script("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
+    results["cor"] = _run_script("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
     results["euagenda"] = _run_script("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
-    results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--limit", "200"], timeout=900)
+    results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
 
     logger.info(f"[CRON] daily tier sync complete: {results}")
     return {"status": "success", "tier": "daily", "results": results}
@@ -448,11 +448,11 @@ async def cron_sync_weekly(
     _verify_cron_secret(authorization)
     results = {}
 
-    results["fta"] = _run_script("fta", "scripts/backfill_eu_trade_agreements.py", [], timeout=1800)
-    results["trade_defence"] = _run_script("trade_defence", "scripts/backfill_eu_trade_defence.py", [], timeout=1800)
-    results["gi"] = _run_script("gi", "scripts/backfill_eu_gi.py", [], timeout=900)
-    results["cohesion"] = _run_script("cohesion", "scripts/backfill_eu_cohesion_datasets.py", [], timeout=900)
-    results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", [], timeout=600)
+    results["fta"] = _run_script("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
+    results["trade_defence"] = _run_script("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
+    results["gi"] = _run_script("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
+    results["cohesion"] = _run_script("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
+    results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
 
     logger.info(f"[CRON] weekly tier sync complete: {results}")
     return {"status": "success", "tier": "weekly", "results": results}
@@ -470,7 +470,7 @@ async def cron_sync_monthly(
     _verify_cron_secret(authorization)
     results = {}
 
-    results["officials"] = _run_script("officials", "scripts/backfill_officials_country.py", [], timeout=1800)
+    results["officials"] = _run_script("officials", "scripts/backfill_officials_country.py", ["--apply"], timeout=1800)
     results["euvoc_releases"] = _run_script("euvoc_releases", "scripts/check_euvoc_releases.py", [], timeout=600)
     results["authority_labels_freshness"] = _run_script("authority_labels_freshness", "scripts/check_authority_labels_freshness.py", [], timeout=300)
 
