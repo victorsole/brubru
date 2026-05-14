@@ -493,57 +493,310 @@ def _shape(items: List[Dict[str, Any]]) -> _GenericListResponse:
 # ============================================================================
 
 
-@router.get("/institutions", response_model=_GenericListResponse, summary="EU institutions, agencies, and bodies")
+@router.get(
+    "/institutions",
+    response_model=_GenericListResponse,
+    summary="EU institutions, agencies, and bodies",
+    description="""**What it does**
+Returns the canonical list of EU institutions — the 7 treaty institutions (Parliament, European Council, Council of the EU, Commission, Court of Justice, ECB, Court of Auditors), the advisory and financial bodies (EESC, Committee of the Regions, EIB, EIF, Ombudsman, EEAS), and the decentralised agencies (EMA, EFSA, ECHA, ENISA, FRA, Europol, etc.) — each with a stable slug, a short code, the city + country of its seat, and a website URL.
+
+**When to use it**
+When you want to drive an institution dropdown in a UI, label data in your own pipeline with a consistent slug, or look up where an agency sits. The same slugs are used as filters across `/api/v1/publications?institution_slug=...`, `/api/v1/eprs`, and `/api/v1/calendar?institution_slug=...`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/institutions
+```
+
+**You get back**
+A `_GenericListResponse` with `total` (currently 37) and `data` — each item has `slug`, `short` (acronym), `name`, `city`, `country` (ISO-2), `type` (treaty_institution / advisory_body / financial_body / service / agency), and `website`. The 5 envelope-level datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`) are null because this is a reference enumeration, not a document.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. Refreshed on Brubru deploy whenever a new agency is created or an existing institution moves seat.""",
+)
 async def list_institutions(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(INSTITUTIONS)
 
 
-@router.get("/committees", response_model=_GenericListResponse, summary="EP committees with full names")
+@router.get(
+    "/committees",
+    response_model=_GenericListResponse,
+    summary="European Parliament committees + subcommittees",
+    description="""**What it does**
+Returns the 26 EP committees of the current parliamentary term — the 20 standing committees (AFCO, AFET, AGRI, ENVI, IMCO, LIBE, ECON, ITRE, etc.), the 4 subcommittees (SEDE, DROI, SANT, FISC), and the 2 special temporary committees (HOUS on the housing crisis, EUDS on the European Democracy Shield). Each carries a slug, the 4-letter code, the full name, the type, and three working URLs: homepage, webstreaming page, and latest-documents page.
+
+**When to use it**
+To label committee references in your own data, drive a committee filter in a UI, or compose deep-links to the EP committee work pages. The slugs are reused as filters in `/api/v1/committees/{code}/work-items`, `/api/v1/committees/{code}/minutes`, `/api/v1/calendar?committee_slug=...`, and `/api/v1/webstreams?committee_slug=...`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/committees
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 26` and `data` — each item has `slug`, `code` (uppercase 4 letters), `name` (full committee name), `type` (`standing` / `subcommittee` / `special_temporary`), `homepage`, `streaming_url`, `documents_url`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. Refreshed on Brubru deploy whenever the EP creates a new special temporary committee or restructures subcommittees (typically once per parliamentary term).""",
+)
 async def list_committees(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(EP_COMMITTEES_FULL)
 
 
-@router.get("/directorates-general", response_model=_GenericListResponse, summary="Commission DGs")
+@router.get(
+    "/directorates-general",
+    response_model=_GenericListResponse,
+    summary="Commission Directorates-General + service departments",
+    description="""**What it does**
+Returns the Commission's Directorates-General + service departments — policy DGs (AGRI, CLIMA, COMP, ENER, ENVI, FISMA, GROW, HOME, JUST, MARE, MOVE, SANTE, TRADE, TAXUD, REGIO, RTD, EAC, NEAR, INTPA, ECFIN, EMPL, DEFIS, CNECT, ECHO, BUDG), service DGs (COMM, DIGIT, HR, SG, SJ, REFORM, EPPO, OLAF, ESTAT), and the research DG (JRC). Each carries website + Twitter + LinkedIn + YouTube where verified.
+
+**When to use it**
+To label "which DG owns this" on a piece of legislation, drive a DG dropdown in a UI, or compose deep-links to a DG's homepage / Twitter. The slugs are reused as the `responsible_dg` field on legislation and consultations.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/directorates-general
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 35` and `data` — each item has `slug` (`dg-comp`, `dg-clima`, etc.), `code` (uppercase: `COMP`, `CLIMA`, etc.), `name`, `type` (`policy_dg` / `service_dg` / `research_dg`), `website`, `twitter`, `linkedin`, `youtube`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. URLs verified on 30 April 2026. Refreshed on Brubru deploy whenever Commission restructures (typically a portfolio reshuffle once per Von der Leyen term + ad-hoc when a DG renames / merges).""",
+)
 async def list_dgs(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(DGS)
 
 
-@router.get("/political-groups", response_model=_GenericListResponse, summary="EP political groups")
+@router.get(
+    "/political-groups",
+    response_model=_GenericListResponse,
+    summary="European Parliament political groups (10th term)",
+    description="""**What it does**
+Returns the 9 EP political groups of the 10th term (2024-2029) — EPP, S&D, Renew Europe, Greens/EFA, ECR, Patriots for Europe, Europe of Sovereign Nations, The Left (GUE/NGL), and the Non-attached Members category. Each carries a slug, the official code, the full name, and an ideological tag.
+
+**When to use it**
+To label which group an MEP or rapporteur belongs to, drive a political-group dropdown in a UI, or filter votes / amendments by group. The slugs are reused as the `political_group_slug` filter in `/api/v1/votes`, `/api/v1/amendments`, and `/api/v1/meps`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/political-groups
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 9` and `data` — each item has `slug` (`epp`, `sd`, `renew`, `greens-efa`, `ecr`, `pfe`, `esn`, `left`, `ni`), `code` (the EP-internal acronym), `name` (full name), `type: "ep_group"`, and `ideology` label. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. The 10th-term composition reflects post-9 June 2024 election + September 2024 constitutive session. Refreshed on Brubru deploy whenever a group reorganises mid-term (e.g. PFE formed from ID split, June 2024).""",
+)
 async def list_political_groups(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(POLITICAL_GROUPS)
 
 
-@router.get("/countries", response_model=_GenericListResponse, summary="EU + EEA countries with ISO codes")
+@router.get(
+    "/countries",
+    response_model=_GenericListResponse,
+    summary="EU + EEA countries with ISO codes and accession dates",
+    description="""**What it does**
+Returns 31 countries — the 27 EU member states, the 3 non-EU EEA members (Iceland, Liechtenstein, Norway), and the United Kingdom (former member, with `eu_member_until`). Each row carries ISO-3166-1 alpha-2 + alpha-3 codes, the accession date, and a stable `slug`.
+
+**When to use it**
+To label nationality / Member State on MEPs, rapporteurs, or trade-defence cases; drive a country dropdown; or filter `/api/v1/meps?country=...` and `/api/v1/transparency-register?country=...`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/countries
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 31` and `data` — each item has `slug` (lowercase ISO-2: `at`, `be`, …, `gb`), `iso2`, `iso3`, `name`, `eu_member` (bool), `joined` (date), plus optional `eea_member` (true for IS / LI / NO) or `eu_member_until` (2020-01-31 for GB). The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. Updated on Brubru deploy whenever a country accedes (next likely: Albania / Moldova / North Macedonia / Montenegro / Serbia / Ukraine post-2027) or the EEA composition changes.""",
+)
 async def list_countries(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(COUNTRIES)
 
 
-@router.get("/languages", response_model=_GenericListResponse, summary="24 official EU languages with ISO-639 codes")
+@router.get(
+    "/languages",
+    response_model=_GenericListResponse,
+    summary="24 official EU languages with ISO-639 codes",
+    description="""**What it does**
+Returns the 24 official languages of the European Union (the languages in which EU legislation is published in the Official Journal). Each row carries ISO-639-1 (2-letter) and ISO-639-3 (3-letter) codes, the English name, and the native name in the language itself.
+
+**When to use it**
+To present a language picker, request a translation of an act in a specific language (`/api/v1/laws/{celex}/text?language=fr`), or label which language version of a publication you are reading. Brubru's chat surface supports a subset of these (EN, FR, NL, ES, CA, IT — note Catalan is NOT an official EU language but is a Brubru-supported chat language); use the `language` parameter on the `/api/v1/cellar/celex/{celex}/languages` endpoint to see which translations Cellar holds for any given act.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/languages
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 24` and `data` — each item has `slug` (lowercase ISO-639-1), `iso639_1`, `iso639_3`, `name` (English), `native_name`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. The list changes only on EU enlargement; last change was Croatian (HR) added on 1 July 2013. Refreshed on Brubru deploy if and when the next member state's language is recognised.""",
+)
 async def list_languages(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(LANGUAGES)
 
 
-@router.get("/procedure-types", response_model=_GenericListResponse, summary="Legislative procedure types (COD, NLE, INI, ...)")
+@router.get(
+    "/procedure-types",
+    response_model=_GenericListResponse,
+    summary="EU legislative procedure types (co-decision, consent, consultation, own-initiative…)",
+    description="""**What it does**
+Returns the 12 procedure-type codes used in the EP's procedure register (OEIL). The most common: ordinary legislative procedure (co-decision, code `COD`), non-legislative consent (`NLE`), consultation (`CNS`), own-initiative (`INI`), legislative initiative (`INL`), and the budget/discharge/immunity variants. Each row carries the 3-letter code, the human name, `binding` (whether the act has legal force), and `trilogue` (whether it goes to inter-institutional trilogue negotiation).
+
+**When to use it**
+To decode a procedure reference like `2026/0419(COD)` — the `(COD)` suffix is the procedure type. Useful when filtering `/api/v1/procedures?procedure_type=COD` or rendering a procedure-status timeline that depends on whether trilogue is required.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/procedure-types
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 12` and `data` — each item has `slug` (lowercase 3-letter), `code` (uppercase 3-letter), `name` (descriptive), `binding` (bool), `trilogue` (bool). The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. The set is fixed by the EP rules of procedure + the Treaties — changes only at a treaty revision (last: Lisbon 2009). Effectively never changes during a parliamentary term.""",
+)
 async def list_procedure_types(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(PROCEDURE_TYPES)
 
 
-@router.get("/legal-bases", response_model=_GenericListResponse, summary="TFEU/TEU legal bases (selected)")
+@router.get(
+    "/legal-bases",
+    response_model=_GenericListResponse,
+    summary="Treaty legal bases (selected high-frequency TFEU + TEU articles)",
+    description="""**What it does**
+Returns a curated list of the Treaty articles that are most commonly used as legal bases for EU legislation: internal market (TFEU 114), environment (TFEU 191 + 192), social policy (TFEU 153), public health (TFEU 168), CAP (TFEU 43), transport (TFEU 91 + 100), energy (TFEU 194), migration / asylum / justice (TFEU 77, 78, 83), data protection (TFEU 16), trade (TFEU 207), the flexibility clause (TFEU 352), and CFSP (TEU 31).
+
+**When to use it**
+To decode the legal-basis field on a proposal (e.g. "Article 192(1) TFEU" → environment legislation), drive a legal-basis filter when searching legislation, or build a "what would change if X were proposed under Y article" simulator. Note this is a curated subset — not exhaustive (the full Treaty has hundreds of potential bases). For complete coverage, query the procedure file directly via `/api/v1/procedures/{procedure_ref}`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/legal-bases
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 16` and `data` — each item has `slug` (e.g. `tfeu-art-114`), `treaty` (`TFEU` / `TEU`), `article` (number as string), `name` (human description), and `policy_areas` (array of slugs). The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. The Treaty articles themselves change only at a treaty revision (last: Lisbon 2009). Refreshed on Brubru deploy when a less-common Treaty basis becomes load-bearing (e.g. TFEU 122 for emergency-pandemic instruments).""",
+)
 async def list_legal_bases(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(LEGAL_BASES)
 
 
-@router.get("/procedure-statuses", response_model=_GenericListResponse, summary="Procedure status enumeration")
+@router.get(
+    "/procedure-statuses",
+    response_model=_GenericListResponse,
+    summary="Procedure status enumeration (announced → tabled → adopted | withdrawn | blocked)",
+    description="""**What it does**
+Returns the 8 procedure-status labels Brubru uses to describe where a legislative file sits in its lifecycle: `announced`, `legislative_initiative`, `tabled`, `close_to_adoption`, `completed`, `adopted`, `blocked`, `withdrawn`. The label set is curated for the typical EP workflow — it is an interpretation of OEIL's raw stage codes, not a 1:1 mirror.
+
+**When to use it**
+To drive a status badge / filter in a UI, or as a discrete state variable in a forecasting model. The same slugs appear as the `status` field on `/api/v1/procedures` rows.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/procedure-statuses
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 8` and `data` — each item has `slug`, `name`, `description`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. Refreshed on Brubru deploy if a new stage label is added (e.g. when we differentiate first-reading vs second-reading adoption more finely).""",
+)
 async def list_procedure_statuses(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(PROCEDURE_STATUSES)
 
 
-@router.get("/event-types", response_model=_GenericListResponse, summary="Calendar event types")
+@router.get(
+    "/event-types",
+    response_model=_GenericListResponse,
+    summary="EU institutional calendar event types (plenary, College, Council, agency, third-party)",
+    description="""**What it does**
+Returns the 22 event-type slugs used across the EU calendar surface: EP plenary / committee / group / recess weeks; Council and informal Council meetings; European Council summits; Eurogroup; Commission College meetings; CJEU hearings; ECB Governing Council meetings; agency events; comitology + expert group meetings; third-party conferences / webinars / roundtables / training / workshops; special dates and grant deadlines.
+
+**When to use it**
+To filter the calendar (`/api/v1/calendar?event_type=plenary_session`), label events with a consistent type, or build a colour-coded calendar UI.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/event-types
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 22` and `data` — each item has `slug` (e.g. `plenary_session`, `college_meeting`, `conference`), `name` (human label), and `institution` (the owning institution: `EP` / `COUNCIL` / `EUROPEAN_COUNCIL` / `COMMISSION` / `ECJ` / `ECB` / `AGENCY` / `THIRD_PARTY` / `EU`). The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Static reference data hardcoded in `backend/api/v1/metadata.py`. Refreshed on Brubru deploy when we onboard a new event source or break out a finer-grained category (e.g. distinguishing trilogue meetings from regular Council).""",
+)
 async def list_event_types(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
     return _shape(EVENT_TYPES)
 
 
-@router.get("/document-types", response_model=_GenericListResponse, summary="OJ document types (live from eu_laws)")
+@router.get(
+    "/document-types",
+    response_model=_GenericListResponse,
+    summary="Official Journal document types currently present in the Brubru legislation mirror (live)",
+    description="""**What it does**
+Returns the distinct `doc_type` values present in the `eu_laws` table — regulation, directive, decision, recommendation, opinion, communication, etc. — each with a normalised slug, the original human-readable label, and the count of acts of that type currently in Brubru's mirror.
+
+**When to use it**
+To build a "type of act" facet on a legislation search UI, or to know how many regulations vs directives Brubru has indexed at any given time. Useful for partner integrations to verify our mirror covers the document types they care about.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/document-types
+```
+
+**You get back**
+A `_GenericListResponse` with `total: ~15-20` (varies as the mirror grows) and `data` — each item has `slug` (lowercased + underscored), `name` (original label), `count` (integer). The 5 envelope-level datapoints are null — this is an aggregation, not a document.
+
+**Data freshness**
+Live aggregate query over the `eu_laws` table. Reflects whatever is currently in the DB; recomputed on every request. As the EUR-Lex sync (hot tier, every 6h) adds new acts, the counts shift accordingly.""",
+)
 async def list_document_types(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -561,7 +814,30 @@ async def list_document_types(
     return _shape(items)
 
 
-@router.get("/policy-areas", response_model=_GenericListResponse, summary="Policy areas (live from eu_laws)")
+@router.get(
+    "/policy-areas",
+    response_model=_GenericListResponse,
+    summary="Policy area tags currently present in the Brubru legislation mirror (live)",
+    description="""**What it does**
+Returns the distinct `policy_area` values present in the `eu_laws` table — environment, internal market, justice, transport, energy, trade, agriculture, data protection, etc. — each with a normalised slug, the original label, and the count of acts tagged with that area.
+
+**When to use it**
+To build a "policy area" facet on a legislation search UI, or to scope a partner integration to acts in a specific area (e.g. `/api/v1/laws?policy_area=environment`). The slug values are reused as filters across `/api/v1/laws`, `/api/v1/publications`, `/api/v1/consultations`, `/api/v1/eprs`, and `/api/v1/predictions`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/policy-areas
+```
+
+**You get back**
+A `_GenericListResponse` with `total: ~30-50` (varies as the mirror grows) and `data` — each item has `slug` (lowercased + underscored), `name` (original label), `count` (integer). The 5 envelope-level datapoints are null — this is an aggregation, not a document.
+
+**Data freshness**
+Live aggregate query over the `eu_laws` table. Reflects whatever is currently in the DB; recomputed on every request. As the EUR-Lex sync (hot tier, every 6h) tags new acts, the counts shift accordingly.""",
+)
 async def list_policy_areas(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -579,20 +855,31 @@ async def list_policy_areas(
     return _shape(items)
 
 
-@router.get("/commissioners", response_model=_GenericListResponse, summary="College of Commissioners (27 members)")
+@router.get(
+    "/commissioners",
+    response_model=_GenericListResponse,
+    summary="College of Commissioners with portfolios + meeting-agenda URLs (live)",
+    description="""**What it does**
+Returns all 27 members of the Von der Leyen II College — for each commissioner: a stable slug, full name, portfolio title, country, the bio page on commission.europa.eu, and three working URLs to their meeting agenda: a filtered view of the unified calendar (per-commissioner), the always-working unified-calendar entry point, and a slot for a PDF agenda (most commissioners don't publish one).
+
+**When to use it**
+To drive a commissioner dropdown in a UI, fetch a specific commissioner's meeting calendar, or label which commissioner owns a given policy file. The slugs are reused as the `commissioner_slug` filter on `/api/v1/publications`, `/api/v1/calendar`, and `/api/v1/commissioners/{slug}/agenda`.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/commissioners
+```
+
+**You get back**
+A `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) — each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`. The 5 envelope-level datapoints are null because this is a reference enumeration.
+
+**Data freshness**
+Reads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration to resolve each commissioner's `leader_id` for the filtered-calendar URL (24h cached client-side). Reshuffles or portfolio changes apply on Brubru redeploy after manual JSON update. Typically refreshed weekly via the Friday sweep.""",
+)
 async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> _GenericListResponse:
-    """List all 27 Commissioners with name, slug, portfolio, country, bio_url,
-    and the canonical sources for their meeting agendas:
-
-    - `agenda_url` — HTML calendar page on commission.europa.eu
-    - `agenda_pdf_url` — direct PDF agenda when the commissioner publishes one
-    - `unified_calendar_url` — single page listing meetings of all 27
-    - `transparency_register_meetings_url` — TR meetings register filtered to
-      this commissioner's host UUID (when known)
-
-    Reads from commissioners.json via load_commissioner_profiles() — same source
-    used by /commissioners/{name}/agenda.
-    """
     import asyncio
     from services.api_clients.commissioner_agenda_client import (
         get_commissioner_agenda_client,
