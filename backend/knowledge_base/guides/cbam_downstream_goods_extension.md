@@ -1,6 +1,7 @@
 # CBAM Scope Extension to Downstream Goods + Anti-Circumvention
 
 ## QUICK FACTS
+- **LATEST (Wednesday 13 May 2026, DG TAXUD)**: **Carbon price paid in third countries** — DG TAXUD published a clarifying note on how the CBAM credit for a carbon price effectively paid in the country of origin is calculated for declarants under Reg (EU) 2023/956 Art. 9. The note specifies (a) which third-country schemes are recognised (operating cap-and-trade or carbon tax with documentation chain), (b) the conversion methodology between local-currency carbon price and EUR-per-tonne CO2-equivalent, (c) the supporting documents importers must hold. Lands inside the 2026 definitive-period reporting cycle and gives downstream-goods extension drafters (Chahim ENVI report + Salini ITRE opinion) a concrete enforcement reference. Source: taxation-customs.ec.europa.eu/news
 - Procedure: 2025/0419(COD) -- ordinary legislative procedure, first reading
 - Commission proposal: COM(2025) 989 final (December 2025)
 - Amends: Regulation (EU) 2023/956 (CBAM Regulation, CELEX 32023R0956)

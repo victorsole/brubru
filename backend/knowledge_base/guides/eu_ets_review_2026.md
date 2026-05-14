@@ -1,6 +1,7 @@
 # EU Emissions Trading System Review (2026)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 13 May 2026, Eurostat)**: **EU economy greenhouse gas emissions rose +0.9% in Q4 2025** (Eurostat quarterly indicator, 13 May 2026). First quarterly uptick after seven consecutive quarters of decline; driven by power-sector emissions during the cold-snap weeks of late 2025. The Q4 2025 +0.9% data point is a politically salient input into the 7 July 2026 ETS Review Communication — it stress-tests the Linear Reduction Factor trajectory toward the 90% net 2040 target (Reg (EU) 2026/667). Source: ec.europa.eu/eurostat/web/products-eurostat-news
 - **LATEST (12 May 2026, DG CLIMA)**: **Revised 2026 EU ETS auction calendars published** — DG CLIMA published the revised 2026 auction calendars for both the **EU ETS** (covering power + industry + intra-EEA aviation + maritime) and the **ETS2** (covering buildings, road transport and small industry from 2027 with monitoring already running). Calendar revisions reflect Article 10a + Article 30b adjustments under Directive (EU) 2023/959 (ETS revision in the Fit for 55 package). Source: climate.ec.europa.eu/news.
 - **Forthcoming**: **ETS Review** (Commission Communication / legislative review preparing the 2030 → 2040 transition) — College tentative adoption **Tuesday 7 July 2026 (Strasbourg)** per SEC(2026)2564, attributed to **EVP RIBERA** (Clean, Just and Competitive Transition).
 - **Current legal framework**: **Directive 2003/87/EC** (consolidated) establishing the EU ETS (CELEX **32003L0087**) as substantially amended by:

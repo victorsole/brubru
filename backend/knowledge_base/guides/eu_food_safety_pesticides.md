@@ -1,6 +1,7 @@
 # EU Food Safety and Pesticide Regulation
 
 ## QUICK FACTS
+- **LATEST (Wednesday 13 May 2026, Eurostat)**: **EU pesticide sales rebounded by +8% in 2024** (Eurostat data release, 13 May 2026). The 8% year-on-year increase reverses the multi-year downward trend observed under the Farm to Fork Strategy and the 50% pesticide-reduction headline target (Reg (EU) 2024/590 SUR final architecture). Eurostat attributes the rebound to (a) wet 2024 growing season raising fungicide demand, (b) Member State emergency authorisations under Art. 53 of Reg 1107/2009, (c) post-Bromadiolone-class re-approvals. Source: ec.europa.eu/eurostat/web/products-eurostat-news
 - Key legislation: Regulation (EC) No 1107/2009 (plant protection products) + Regulation (EC) No 396/2005 (maximum residue levels)
 - CELEX (PPP Regulation): 32009R1107
 - CELEX (MRL Regulation): 32005R0396

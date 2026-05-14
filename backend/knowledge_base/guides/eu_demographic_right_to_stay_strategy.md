@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Wednesday 13 May 2026)**: **DG REGIO press relaunch + Fitto Czechia visit** — DG REGIO ran a second-wave promotion of the Right to Stay Strategy on 13 May 2026 with an emphasised landing page ("European Commission Launches landmark 'Right to Stay' Strategy") and a parallel Fitto visit to Czechia on cohesion-policy implementation. The relaunch coincided with Eurostat's 13 May 2026 release that **23.4% of EU households had children in 2025** — a data point that reinforces the demographic narrative (households-with-children share has been declining across many right-to-stay-priority regions). Eurostat ref: ec.europa.eu/eurostat/web/products-eurostat-news
 - Initiative: Commission strategy on the "right to stay" -- targeted package for EU regions experiencing depopulation, brain drain, or economic decline
 - Date launched: **6 May 2026** (DG REGIO press release)
 - Lead Commissioner: **Raffaele Fitto (EVP, Cohesion and Reforms, Italy)**

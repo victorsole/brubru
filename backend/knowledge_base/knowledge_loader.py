@@ -8294,6 +8294,58 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'pool de talents ue': ['eu_talent_pool_regulation_2026'],
 
     # ============================================================
+    # EU Protection of Migrant Workers + Employer Sanctions (13 May 2026)
+    # ============================================================
+    'employer sanctions directive': ['eu_migrant_workers_employer_sanctions'],
+    'employers sanctions directive': ['eu_migrant_workers_employer_sanctions'],
+    '2009/52/ec': ['eu_migrant_workers_employer_sanctions'],
+    '32009l0052': ['eu_migrant_workers_employer_sanctions'],
+    'illegal employment eu': ['eu_migrant_workers_employer_sanctions'],
+    'illegal employment migrant workers': ['eu_migrant_workers_employer_sanctions'],
+    'irregularly employed migrant workers': ['eu_migrant_workers_employer_sanctions'],
+    'fight illegal employment': ['eu_migrant_workers_employer_sanctions'],
+    'migrant workers protection eu': ['eu_migrant_workers_employer_sanctions'],
+    'protect migrant workers': ['eu_migrant_workers_employer_sanctions'],
+    'seasonal workers directive': ['eu_migrant_workers_employer_sanctions'],
+    '2014/36/eu': ['eu_migrant_workers_employer_sanctions'],
+    '32014l0036': ['eu_migrant_workers_employer_sanctions'],
+    'amif specific action': ['eu_migrant_workers_employer_sanctions'],
+    'amif/2026/sa/2.4.1': ['eu_migrant_workers_employer_sanctions'],
+    'asylum migration integration fund call': ['eu_migrant_workers_employer_sanctions'],
+    'amif call 2026': ['eu_migrant_workers_employer_sanctions'],
+    'employer sanctions evaluation': ['eu_migrant_workers_employer_sanctions'],
+    'european labour authority mandate': ['eu_migrant_workers_employer_sanctions'],
+    'ela mandate review': ['eu_migrant_workers_employer_sanctions'],
+    'undeclared work eu': ['eu_migrant_workers_employer_sanctions'],
+    'high-risk sectors migrants': ['eu_migrant_workers_employer_sanctions'],
+    'agriculture construction care hospitality migrants': ['eu_migrant_workers_employer_sanctions'],
+    'talent partnerships third countries': ['eu_migrant_workers_employer_sanctions'],
+    # FR
+    'directive sanctions employeurs': ['eu_migrant_workers_employer_sanctions'],
+    'travailleurs migrants protection': ['eu_migrant_workers_employer_sanctions'],
+    'emploi illegal ue': ['eu_migrant_workers_employer_sanctions'],
+    'travailleurs saisonniers directive': ['eu_migrant_workers_employer_sanctions'],
+    # IT
+    'direttiva sanzioni datori di lavoro': ['eu_migrant_workers_employer_sanctions'],
+    'lavoratori migranti protezione': ['eu_migrant_workers_employer_sanctions'],
+    'lavoro illegale ue': ['eu_migrant_workers_employer_sanctions'],
+    'lavoratori stagionali direttiva': ['eu_migrant_workers_employer_sanctions'],
+    # ES
+    'directiva sanciones empleadores': ['eu_migrant_workers_employer_sanctions'],
+    'trabajadores migrantes proteccion': ['eu_migrant_workers_employer_sanctions'],
+    'empleo ilegal ue': ['eu_migrant_workers_employer_sanctions'],
+    'trabajadores temporeros directiva': ['eu_migrant_workers_employer_sanctions'],
+    # CA
+    'directiva sancions ocupadors': ['eu_migrant_workers_employer_sanctions'],
+    'treballadors migrants proteccio': ['eu_migrant_workers_employer_sanctions'],
+    'ocupacio illegal ue': ['eu_migrant_workers_employer_sanctions'],
+    # NL
+    'richtlijn sancties werkgevers': ['eu_migrant_workers_employer_sanctions'],
+    'arbeidsmigranten bescherming': ['eu_migrant_workers_employer_sanctions'],
+    'illegale tewerkstelling eu': ['eu_migrant_workers_employer_sanctions'],
+    'seizoenarbeiders richtlijn': ['eu_migrant_workers_employer_sanctions'],
+
+    # ============================================================
     # EU-Syria Cooperation Agreement re-activation (11 May 2026)
     # ============================================================
     'eu syria cooperation': ['eu_syria_cooperation_agreement_2026'],
