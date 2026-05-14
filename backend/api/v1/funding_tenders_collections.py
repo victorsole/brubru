@@ -99,12 +99,33 @@ def _proposal_to_item(
 @calls_router.get(
     "",
     response_model=PaginatedResponse[FtCallProposalItem],
-    summary="EU Funds & Tenders — calls for proposals (Horizon, EU4Health, Digital Europe, etc.)",
-    description=(
-        "Open + forthcoming + closed funding calls from the F&T Portal. "
-        "Source: ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals. "
-        "is_test=True rows are filtered out."
-    ),
+    summary="EU funding calls for proposals — Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+",
+    description="""**What it does**
+Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (open / forthcoming / closed / under-evaluation), the deadline, the budget, and a body composed from title + objective + scope.
+
+**When to use it**
+For consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see "what's been funded under this programme" → "what's currently open". Default ordering puts most recent deadlines first so partners land on actionable opportunities.
+
+**Input**
+- `framework_programme` — substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).
+- `status` — `open` / `forthcoming` / `closed` / `under-evaluation`.
+- `type_of_action` — substring (e.g. `RIA`, `IA`, `CSA`).
+- `q` — substring search on title + description.
+- `deadline_from`, `deadline_to` — deadline window (use to find calls closing in your bidding-feasible range).
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open
+GET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01
+```
+
+**You get back**
+A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page).
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time.""",
 )
 async def list_calls_for_proposals(
     request: Request,
@@ -152,7 +173,26 @@ async def list_calls_for_proposals(
 @calls_router.get(
     "/{topic_id:path}",
     response_model=FtCallProposalItem,
-    summary="Single call-for-proposals detail by topic_id",
+    summary="Look up one funding call for proposals by its EU topic_id",
+    description="""**What it does**
+Fetches a single call for proposals by its EU topic identifier. Returns the same shape as the list endpoint, with the full body composed from title + objective + scope + expected outcome.
+
+**When to use it**
+After locating a call via the list endpoint, use this for the full record — particularly when you want to embed call details in a bid-tracker or render the scope text in a UI.
+
+**Input**
+- `topic_id` (path) — the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`. The `:path` matcher accepts hyphens + dots verbatim, no URL-encoding needed.
+
+**Try it**
+```
+GET /api/v1/calls-for-proposals/HORIZON-CL5-2026-D2-01-01
+```
+
+**You get back**
+A single `FtCallProposalItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` (also returned if the row is flagged `is_test=true`).
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from the F&T Portal.""",
 )
 async def get_call_for_proposals(
     topic_id: str,
@@ -259,12 +299,33 @@ def _tender_to_item(
 @tenders_router.get(
     "",
     response_model=PaginatedResponse[FtCallTenderItem],
-    summary="EU Funds & Tenders — calls for tenders (public procurement)",
-    description=(
-        "Public procurement opportunities published by EU institutions/agencies. "
-        "Source: ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-tenders. "
-        "Note: TED notices live on a separate /tenders endpoint; this is the F&T-portal-specific view."
-    ),
+    summary="EU public-procurement tenders from the F&T Portal — distinct from the /tenders TED view",
+    description="""**What it does**
+Returns calls for tenders (public procurement) published by EU institutions and agencies on the Funding & Tenders Portal. Each row carries the tender_reference, the contracting authority (which institution / agency is buying), the contract type, the status, the deadline, the budget, and a body composed from title + description.
+
+**When to use it**
+For service providers, consultancies, and contractors bidding on EU institutional procurement. This is the F&T Portal-specific view; for the broader TED (Tenders Electronic Daily) feed which covers Member State buyers as well, see `/api/v1/tenders`. The two surfaces overlap for some Commission contracts but TED is the authoritative legal source.
+
+**Input**
+- `contracting_authority` — substring (e.g. `European Commission`, `Frontex`, `EMA`).
+- `status` — F&T tender status enum.
+- `contract_type` — substring (e.g. `services`, `supplies`, `works`).
+- `q` — substring search on title + description.
+- `deadline_from`, `deadline_to` — submission window.
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open
+GET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01
+```
+
+**You get back**
+A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page).
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time.""",
 )
 async def list_calls_for_tenders(
     request: Request,
@@ -311,7 +372,26 @@ async def list_calls_for_tenders(
 @tenders_router.get(
     "/{tender_reference:path}",
     response_model=FtCallTenderItem,
-    summary="Single call-for-tenders detail",
+    summary="Look up one F&T Portal tender by its tender_reference",
+    description="""**What it does**
+Fetches a single F&T Portal call for tenders by its EU tender_reference. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating a tender via the list endpoint, use this for the full record. The `:path` matcher accepts the reference verbatim including any slashes / dots / hyphens.
+
+**Input**
+- `tender_reference` (path) — the EU's tender identifier as published on the F&T Portal.
+
+**Try it**
+```
+GET /api/v1/calls-for-tenders/<tender_reference>
+```
+
+**You get back**
+A single `FtCallTenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from the F&T Portal.""",
 )
 async def get_call_for_tenders(
     tender_reference: str,
@@ -403,12 +483,34 @@ def _project_to_item(
 @projects_router.get(
     "",
     response_model=PaginatedResponse[FtFundedProjectItem],
-    summary="EU Funds & Tenders — funded grant projects (project results)",
-    description=(
-        "Active and completed EU-funded grant projects. "
-        "Source: ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results. "
-        "Each row's source_url points to the project's portal page."
-    ),
+    summary="EU grant-funded projects — active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)",
+    description="""**What it does**
+Returns EU-funded grant projects from the Funding & Tenders Portal — both active and completed projects across all framework programmes (Horizon Europe, Horizon 2020, FP7, sectoral programmes like Digital Europe, EU4Health, LIFE, Creative Europe). Each row carries the project_id (e.g. `101082345`), the title, the framework programme, the type of action, the coordinator name + country, the consortium size, the start/end dates, the EU contribution, the total cost, the objective summary, and the project portal URL.
+
+**When to use it**
+For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v1/calls-for-proposals` to see the call → project pipeline.
+
+**Input**
+- `framework_programme` — substring (e.g. `Horizon Europe`, `Horizon 2020`).
+- `coordinator_country` — ISO-2 (2 chars exact).
+- `type_of_action` — substring (`RIA`, `IA`, `CSA`).
+- `status` — F&T project status enum.
+- `q` — substring search on title + objective.
+- `start_from`, `end_to` — start-date / end-date window.
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL
+GET /api/v1/funded-projects?q=climate&type_of_action=IA
+```
+
+**You get back**
+A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `title`, `framework_programme`, `type_of_action`, `coordinator_name`, `coordinator_country`, `consortium_size`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal project page).
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results. CORDIS (the more comprehensive research-results portal) is reachable separately via `/api/v1/discover/eurio`. is_test=True seed rows are filtered out at query time.""",
 )
 async def list_funded_projects(
     request: Request,
@@ -456,7 +558,26 @@ async def list_funded_projects(
 @projects_router.get(
     "/{project_id:path}",
     response_model=FtFundedProjectItem,
-    summary="Single funded-project detail",
+    summary="Look up one EU-funded project by its grant project_id (numeric)",
+    description="""**What it does**
+Fetches a single EU-funded project by its grant project_id. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating a project via the list endpoint, use this for the full record. For richer project metadata (deliverables, consortium members, publications), cross-reference via `/api/v1/discover/eurio/projects/{cordis_id}/consortium` etc.
+
+**Input**
+- `project_id` (path) — the EU grant project id (typically a numeric identifier, e.g. `101082345`).
+
+**Try it**
+```
+GET /api/v1/funded-projects/101082345
+```
+
+**You get back**
+A single `FtFundedProjectItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — weekly Sunday 05:00 UTC sync from the F&T Portal projects-results page.""",
 )
 async def get_funded_project(
     project_id: str,
