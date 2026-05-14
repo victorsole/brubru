@@ -260,13 +260,28 @@ async def recent_cellar_acts(
 @router.get(
     "/celex/{celex}",
     response_model=CellarMetadata,
-    summary="Look up an EU act by reference (full metadata)",
-    description=(
-        "Live SPARQL fetch: title, ELI, resource type (with English label), in-force "
-        "status, validity dates, available languages, and EuroVoc concepts attached "
-        "to the work. Useful when /api/v1/laws/{celex} returns nothing (act outside "
-        "Brubru's cached corpus)."
-    ),
+    summary="Look up any EU act in the Publications Office knowledge graph — live metadata from Cellar",
+    description="""**What it does**
+Live fetch of full metadata for any EU act by its legal identifier — title, ELI URI, resource type (with English label), in-force status, validity dates, available language versions, and EuroVoc subject concepts attached to the work. Queries the Publications Office Cellar SPARQL endpoint directly, so coverage spans the full 3.79M-work corpus (much wider than Brubru's local `eu_laws` cache).
+
+**When to use it**
+When `/api/v1/laws/{celex}` returns 404 (the act is outside Brubru's local cache — typically case law, very recent acts, or non-mainstream resource types). This endpoint always has the answer if the act exists on Cellar at all. Higher latency than the local cache (~2-3s vs ~50ms).
+
+**Input**
+- `celex` (path) — legal identifier (5 digits + 1-2 letters + 4 digits).
+- `language` (query, default `ENG`) — ISO-3 language code uppercase for the returned title.
+
+**Try it**
+```
+GET /api/v1/discover/cellar/celex/32016R0679
+GET /api/v1/discover/cellar/celex/62022CJ0511?language=FRA
+```
+
+**You get back**
+A `CellarMetadata` object with `celex`, `work_uri`, `title`, `document_date`, `eli_uri`, `resource_type_uri`, `resource_type_label`, `in_force`, `validity_start_date`, `validity_end_date`, `languages[]`, `eurovoc_concepts[]`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Live pass-through (no cache; hits the Cellar SPARQL endpoint on every request). The Publications Office is the authoritative source — anything Cellar says is canonical.""",
 )
 async def cellar_celex_metadata(
     request: Request,
@@ -389,17 +404,26 @@ async def cellar_celex_relationships(
 
 @router.get(
     "/celex/{celex}/languages",
-    summary="All language versions and download formats of an act",
-    description=(
-        "Returns every (language, format, URL) tuple for the act, sourced "
-        "directly from the Cellar metadata graph via SPARQL. Useful for "
-        "picking a specific language version in FMX4 (canonical structured "
-        "XML), XHTML, PDF/A-1a, PDF/A-2a, or DOCX.\n\n"
-        "Note: this endpoint queries the Cellar SPARQL endpoint directly. "
-        "It used to fetch the Formex notice via EUR-Lex's HTTP endpoint, "
-        "which routinely returned HTTP 202 (still building) and timed out. "
-        "The SPARQL path is faster and more reliable."
-    ),
+    summary="Every language version + download format of an EU act — direct download URLs",
+    description="""**What it does**
+Returns every `(language, format, URL)` tuple for one EU act — sourced directly from the Cellar metadata graph via SPARQL. The Publications Office holds each act in up to 24 EU languages × multiple formats (FMX4 canonical structured XML, XHTML, PDF/A-1a, PDF/A-2a, DOCX).
+
+**When to use it**
+When you need a specific-language or specific-format version of an act — e.g. the French XHTML of GDPR for a downstream parser, the German DOCX for a translation memory, the Catalan version (which is NOT among the 24 official languages, so you'd find it via `/api/v1/catalan-translations` instead).
+
+**Input**
+- `celex` (path) — legal identifier.
+
+**Try it**
+```
+GET /api/v1/discover/cellar/celex/32016R0679/languages
+```
+
+**You get back**
+A JSON object with `manifestations[]` — each entry has `language` (ISO-3 uppercase), `format` (FMX4 / XHTML / PDF / DOCX), `url` (direct download). Plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Live pass-through (SPARQL query on every call). Historical note: this endpoint used to fetch the Formex notice via EUR-Lex's HTTP endpoint which routinely returned HTTP 202 and timed out; the SPARQL path is faster and more reliable.""",
 )
 async def cellar_celex_languages(
     request: Request,
@@ -503,6 +527,9 @@ async def search_eurovoc(
     summary="EU acts tagged with one EuroVoc concept (e.g. AI, data protection, climate)",
     description="""**What it does**
 Returns every EU legal act in the Cellar metadata graph that is tagged with the given EuroVoc subject concept. Driven by `cdm:work_is_about_concept_eurovoc`. Optional date floor + language.
+
+**When to use it**
+To enumerate "every EU act about X" where X is a curated EuroVoc subject — e.g. all acts about artificial intelligence (concept 3030), all acts about data protection (5181), all acts about renewable energy (754). More precise than free-text search because EuroVoc is the EU's authoritative subject thesaurus assigned by Publications Office cataloguers.
 
 **How to obtain a `concept_id`**
 - Call `/api/v1/discover/cellar/eurovoc?q=<topic>` to search EuroVoc by free text. The trailing digits of each `concept_uri` are the IDs you pass here.

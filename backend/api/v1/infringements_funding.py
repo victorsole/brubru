@@ -84,13 +84,32 @@ def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
 @infringements_router.get(
     "",
     response_model=PaginatedResponse[InfringementItem],
-    summary="Commission infringement procedure decisions",
-    description=(
-        "Decisions adopted by the College in the monthly infringement packages: "
-        "letters of formal notice, reasoned opinions, referrals to the Court of "
-        "Justice, closures. Source: ec.europa.eu/commission/presscorner. "
-        "Fixture rows (is_test=True) are filtered out."
-    ),
+    summary="Commission infringement decisions — Member State legal proceedings (LFN, reasoned opinion, CJEU referral, closure)",
+    description="""**What it does**
+Returns the infringement decisions adopted by the College of Commissioners in the monthly infringement packages — letters of formal notice (LFN, the first warning), reasoned opinions (the second warning), referrals to the Court of Justice (CJEU litigation), and closures (Member State complied). Each row carries the INF reference, the Member State, the procedure stage, the sector, dates, and the decision summary.
+
+**When to use it**
+For compliance + risk-monitoring work: which Member States have open infringements on a topic, what stages of proceedings the Commission has reached, and what risks of CJEU litigation exist. Filter by `member_state` for one country, by `sector` for a topic.
+
+**Input**
+- `member_state` — ISO-2 (exact 2 chars).
+- `procedure_stage` — substring on stage name (e.g. `formal notice`, `reasoned opinion`).
+- `sector` — substring on sector.
+- `q` — substring on title + summary.
+- `decision_from`, `decision_to` — decision_date filter.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/infringements?member_state=PL&procedure_stage=reasoned%20opinion
+GET /api/v1/infringements?sector=environment&decision_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[InfringementItem]` envelope. Each item carries `inf_reference`, `title`, `summary`, `member_state`, `procedure_stage`, `sector`, `decision_date`, `source_url`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/commission/presscorner. The Commission adopts infringement packages monthly + ad-hoc; daily sync catches them within 24h of adoption. is_test=True fixture rows are filtered out at query time.""",
 )
 async def list_infringements(
     request: Request,
@@ -146,7 +165,26 @@ async def list_infringements(
 @infringements_router.get(
     "/{inf_reference:path}",
     response_model=InfringementItem,
-    summary="Single infringement decision detail by INF reference",
+    summary="Look up one infringement decision by its INF reference",
+    description="""**What it does**
+Fetches a single infringement decision by its INF reference. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating an infringement via the list endpoint, use this for the full record + body composition.
+
+**Input**
+- `inf_reference` (path) — INF reference (e.g. `INF(2026)123`). The `:path` matcher accepts parentheses verbatim.
+
+**Try it**
+```
+GET /api/v1/infringements/INF(2026)123
+```
+
+**You get back**
+A single `InfringementItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from ec.europa.eu/commission/presscorner.""",
 )
 async def get_infringement(
     inf_reference: str,
@@ -252,13 +290,33 @@ def _funding_to_item(
 @funding_router.get(
     "",
     response_model=PaginatedResponse[FundingItem],
-    summary="EU Funds & Tenders opportunities",
-    description=(
-        "Calls for proposals across EU programmes (Horizon Europe, Digital Europe, "
-        "CEF, EU4Health, Erasmus+, etc.) from the Funding & Tenders Portal. "
-        "Source: ec.europa.eu/info/funding-tenders/opportunities/portal. "
-        "Fixture rows (is_test=True) are filtered out."
-    ),
+    summary="EU funding opportunities — open + forthcoming calls across programmes (alternate view)",
+    description="""**What it does**
+Returns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.
+
+**When to use it**
+Same domain as `/api/v1/calls-for-proposals` but a slightly different surface — this one is broader (includes some opportunities not in the calls-for-proposals export). For most use cases, `/api/v1/calls-for-proposals` is the recommended endpoint. This one is preserved for backwards compatibility + a different filtering surface.
+
+**Input**
+- `programme` — substring (e.g. `Horizon`, `CEF`, `Digital Europe`).
+- `status` — `open` / `forthcoming` / `closed` / `under-evaluation`.
+- `type_of_action` — substring.
+- `q` — substring on title + short_summary.
+- `deadline_from`, `deadline_to` — deadline window.
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/funding?programme=Horizon&status=open
+GET /api/v1/funding?q=AI&deadline_from=2026-06-01
+```
+
+**You get back**
+A `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `programme`, `title`, `short_summary`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `source_url`, `documents_url`, `keywords`, `target_audience`, `published_at`, `last_updated`, body fields + the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal. is_test=True fixture rows are filtered out at query time.""",
 )
 async def list_funding_opportunities(
     request: Request,
@@ -317,7 +375,26 @@ async def list_funding_opportunities(
 @funding_router.get(
     "/{topic_id:path}",
     response_model=FundingItem,
-    summary="Single funding opportunity detail by topic_id",
+    summary="Look up one EU funding opportunity by its topic_id",
+    description="""**What it does**
+Fetches a single EU funding opportunity by its topic_id. Returns the same shape as the list endpoint, with the full description + body composition.
+
+**When to use it**
+After locating an opportunity via the list endpoint, use this for the full record before drafting a bid.
+
+**Input**
+- `topic_id` (path) — the EU's topic identifier (e.g. `HORIZON-CL5-2026-D2-01-01`). The `:path` matcher accepts hyphens + dots verbatim.
+
+**Try it**
+```
+GET /api/v1/funding/HORIZON-CL5-2026-D2-01-01
+```
+
+**You get back**
+A single `FundingItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from the F&T Portal.""",
 )
 async def get_funding_opportunity(
     topic_id: str,

@@ -15,6 +15,26 @@ router = APIRouter(tags=["v1-docs"])
 @router.get(
     "/openapi.json",
     include_in_schema=False,
+    summary="OpenAPI 3.1 spec for the v1 API — filtered to /api/v1/* paths only",
+    description="""**What it does**
+Returns the OpenAPI 3.1 specification for the v1 API, filtered to only include `/api/v1/*` operations. Internal Brubru routes are excluded. This is the source spec that powers the Scalar docs viewer at `/api/docs` and that partners can import into Postman / Insomnia / their own SDK generators.
+
+**When to use it**
+For OpenAPI tooling — import into Postman to auto-generate a collection, generate a client SDK with openapi-generator, or render an alternative docs viewer (Swagger UI, RapiDoc, Redoc). Internal endpoint hidden from the public schema.
+
+**Input**
+No parameters. The endpoint hides itself from the OpenAPI spec (`include_in_schema=False`).
+
+**Try it**
+```
+GET /api/v1/openapi.json
+```
+
+**You get back**
+A standard OpenAPI 3.1 JSON spec with `info`, `servers`, `paths` (only `/api/v1/*`), `components`, `tags` (only `v1-*`).
+
+**Data freshness**
+Live — auto-generated from the FastAPI router at request time. Reflects whatever code is deployed.""",
 )
 def v1_openapi(request: Request) -> JSONResponse:
     """OpenAPI spec filtered to /api/v1/* paths only.
@@ -73,8 +93,27 @@ _SCALAR_HTML = """<!doctype html>
 @router.get(
     "/docs",
     response_class=HTMLResponse,
-    summary="Scalar API reference page for /api/v1/*",
+    summary="Interactive API reference page for /api/v1/* — powered by Scalar",
     include_in_schema=False,
+    description="""**What it does**
+Renders a Scalar-powered HTML reference page for the v1 API. Scalar is a modern OpenAPI viewer (lighter + nicer than Swagger UI) that lets developers browse endpoints, try them inline, and view request/response schemas.
+
+**When to use it**
+The recommended discovery surface for partners exploring Brubru's API. Bookmarkable URL: `https://brubru-production.up.railway.app/api/docs`. For programmatic access to the underlying OpenAPI spec, hit `/api/v1/openapi.json` instead.
+
+**Input**
+No parameters. Returns HTML.
+
+**Try it**
+```
+GET /api/docs
+```
+
+**You get back**
+A complete HTML page that loads the Scalar viewer from CDN and points it at `/api/v1/openapi.json`. The viewer renders client-side.
+
+**Data freshness**
+Static HTML shell (changes only on Brubru redeploy). The OpenAPI spec it loads is auto-generated live per request.""",
 )
 def scalar_docs() -> HTMLResponse:
     return HTMLResponse(content=_SCALAR_HTML)

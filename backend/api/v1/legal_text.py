@@ -110,22 +110,29 @@ class ResolveAliasesRequest(BaseModel):
 @router.get(
     "/{celex}/recital-article-map",
     response_model=RecitalArticleMapResponse,
-    summary="Recital-to-article mapping (TF-IDF cosine, top-3 per article)",
-    description=(
-        "**What it does:** for a given EU law (CELEX), returns a mapping of each article "
-        "to its top-3 most semantically related recitals, computed via TF-IDF cosine similarity.\n\n"
-        "**When to use it:** when interpreting a specific article and you need its "
-        "explanatory recitals automatically — instead of skimming the full preamble.\n\n"
-        "**Production cache state (2 May 2026):** 5 implementing acts cached "
-        "(`32025D2208`, `32025R2149`, `32025R2158`, `32025R2226`). Backfill for the "
-        "flagship laws (DSA, GDPR, AI Act, DORA) is queued behind CC-2(b) — the "
-        "TF-IDF computation requires Formex XML which is not deployed on Railway "
-        "for size reasons.\n\n"
-        "**Try it:** `GET /api/v1/legal-text/32025R2149/recital-article-map` returns "
-        "the live cached mapping.\n\n"
-        "**Errors:** 404 with `reason_code=not_found` means the cache hasn't been "
-        "computed yet for this CELEX — pass `?force_recompute=true` if running locally."
-    ),
+    summary="Recital-to-article semantic mapping — which recitals explain each article",
+    description="""**What it does**
+For a given EU law, returns a mapping of each article to its top-3 most semantically related recitals, computed via TF-IDF cosine similarity over the act's preamble + body. The mapping lets you jump from "article 22" to the 3 recitals that explain its drafter's intent — saving you from skimming hundreds of recitals every time.
+
+**When to use it**
+When interpreting a specific article and you need its explanatory recitals automatically. Particularly useful for compliance teams reading GDPR / DSA / AI Act, where the preamble is hundreds of recitals long and only a handful are relevant to each operative article.
+
+**Input**
+- `celex` (path) — legal identifier of the act.
+- `force_recompute` (query, default false) — set true (local dev only) to bypass the cache and recompute.
+
+**Try it**
+```
+GET /api/v1/legal-text/32025R2149/recital-article-map
+```
+
+**You get back**
+A `RecitalArticleMapResponse` with `celex`, `map` (dict: article_number → list of [recital_number, similarity_score] tuples), `public_url` (EUR-Lex), and `creation_date`.
+
+**Production cache state (2 May 2026):** 5 implementing acts cached (`32025D2208`, `32025R2149`, `32025R2158`, `32025R2226`). Backfill for flagship laws (DSA, GDPR, AI Act, DORA) is queued — the TF-IDF computation requires Formex XML which is not deployed on Railway for size reasons. 404 with `reason_code=not_found` means the cache hasn't been computed yet for this CELEX.
+
+**Data freshness**
+Cached at computation time; deterministic for a given act (the underlying text doesn't change after adoption). New entries land when an act is added to the cache.""",
 )
 def recital_article_map(
     celex: str,
@@ -176,22 +183,31 @@ def recital_article_map(
 @router.get(
     "/{celex}/defined-terms",
     response_model=DefinedTermsResponse,
-    summary="Article 3/4-style definitions extracted from a law",
-    description=(
-        "**What it does:** extracts the formal Article 3 (or Article 4) definitions "
-        "from an EU law — the terms the law itself defines authoritatively for its "
-        "own scope.\n\n"
-        "**When to use it:** when you need to know exactly how a law defines terms "
-        "like 'very large online platform', 'AI system', 'personal data' — without "
-        "reading the full text.\n\n"
-        "**Try it:** `GET /api/v1/legal-text/32022R2065/defined-terms` returns 23 "
-        "DSA definitions (~7.9 KB) including 'online platform', 'recipient of the "
-        "service', 'illegal content', etc.\n\n"
-        "**Production cache state (2 May 2026):** the DSA (`32022R2065`) is fully "
-        "cached. Other flagship laws (GDPR, AI Act, DORA) compute on first request, "
-        "but the underlying Formex XML isn't deployed to Railway — backfill happens "
-        "as part of CC-2(b)."
-    ),
+    summary="Legal definitions from one EU act — terms the law itself defines authoritatively",
+    description="""**What it does**
+Extracts the formal definitions article (typically Article 3 or Article 4) from an EU law — the terms the law defines authoritatively for its own scope. Returns each defined term + its authoritative definition text, parsed from the Formex XML.
+
+**When to use it**
+When you need to know exactly how a law defines terms like "very large online platform" (DSA), "AI system" (AI Act), "personal data" (GDPR) — without reading the full text. Critical for compliance analysis where the definitions determine the scope of obligations.
+
+**Input**
+- `celex` (path) — legal identifier of the act.
+- `force_recompute` (query, default false) — set true locally to bypass the cache.
+- `body_threshold` (default 500) — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/legal-text/32022R2065/defined-terms
+```
+Returns 23 DSA definitions (~7.9 KB) including "online platform", "recipient of the service", "illegal content".
+
+**You get back**
+A `DefinedTermsResponse` with `celex`, `terms` (dict: term → definition text), `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.
+
+**Production cache state (2 May 2026):** DSA (`32022R2065`) fully cached. GDPR, AI Act, DORA compute on first request but the underlying Formex XML isn't deployed to Railway — backfill queued.
+
+**Data freshness**
+Cached deterministically (the underlying definitions don't change after adoption). New entries land when an act is added to the cache.""",
 )
 def defined_terms(
     celex: str,
@@ -219,21 +235,27 @@ def defined_terms(
 
 @router.post(
     "/resolve-references",
-    summary="Resolve inline EU legal citations in plain text (READ-ONLY)",
-    description=(
-        "**What it does:** scans a block of free text and extracts every embedded "
-        "EU legal citation (e.g. 'Article 7 of Regulation (EU) 2024/1234'), returning "
-        "a structured list with the matched CELEX identifier and canonical EUR-Lex URL. "
-        "Pass `annotate_html=true` to receive the original text with each citation wrapped "
-        "in an `<a href=...>` link instead.\n\n"
-        "**When to use it:** auto-link EU citations in opinion pieces, briefings, AI-"
-        "generated answers, or when converting Word documents into HTML.\n\n"
-        "**Why POST:** request body carries free text that can exceed URL length limits. "
-        "Idempotent — does NOT modify any server-side data.\n\n"
-        "**Try it:** `POST /api/v1/legal-text/resolve-references` with body "
-        "`{\"text\":\"Article 5 of Regulation (EU) 2022/2065 prohibits...\"}` → "
-        "returns `{refs: [{celex:\"32022R2065\", url:\"https://eur-lex.europa.eu/...\"}]}`."
-    ),
+    summary="Resolve inline EU legal citations in free text — extract every embedded reference",
+    description="""**What it does**
+Scans a block of free text and extracts every embedded EU legal citation (e.g. "Article 7 of Regulation (EU) 2024/1234"), returning a structured list with the matched legal identifier and canonical EUR-Lex URL. Pass `annotate_html=true` to receive the original text with each citation wrapped in an `<a href=...>` link instead of a separate refs list.
+
+**When to use it**
+Auto-link EU citations in opinion pieces, briefings, AI-generated answers, or when converting Word documents into HTML. Idempotent — does NOT modify any server-side data (POST is used only because the request body carries free text that can exceed URL length limits).
+
+**Input**
+JSON body: `{ "text": "<free text>", "annotate_html": false }`. `text` is the input to scan; `annotate_html` switches return shape.
+
+**Try it**
+```
+POST /api/v1/legal-text/resolve-references
+{ "text": "Article 5 of Regulation (EU) 2022/2065 prohibits..." }
+```
+
+**You get back**
+With `annotate_html=false` (default): `{ refs: [{ alias, celex, url, public_url, ... }], plus envelope datapoints }`. With `annotate_html=true`: `{ html: "<text with inserted <a> links>" }`.
+
+**Data freshness**
+Live pass-through (pure regex extraction + URL composition; no upstream HTTP call needed).""",
 )
 def resolve_references(
     payload: ResolveRefsRequest,
@@ -268,21 +290,27 @@ def resolve_references(
 
 @router.post(
     "/resolve-aliases",
-    summary="Resolve human names (GDPR, DSA, AI Act, ...) to CELEX (READ-ONLY)",
-    description=(
-        "**What it does:** scans free text for known human names of EU laws — GDPR, "
-        "DSA, AI Act, CBAM, DORA, Solvency II, CRR, MiFID II, and 680+ more aliases — "
-        "and returns each match with its CELEX identifier, canonical title, and the "
-        "character offset where it was matched.\n\n"
-        "**When to use it:** when your users type 'GDPR' but you need `32016R0679` to "
-        "feed into other Brubru endpoints. Or to extract every law referenced in a "
-        "policy paper.\n\n"
-        "**Why POST:** body carries free text. Idempotent — does NOT modify server data.\n\n"
-        "**Try it:** `POST /api/v1/legal-text/resolve-aliases` with body "
-        "`{\"text\":\"Comparing GDPR and the AI Act on automated decisions\"}` → "
-        "returns `{aliases: [{alias:\"GDPR\", celex:\"32016R0679\"}, "
-        "{alias:\"AI Act\", celex:\"32024R1689\"}]}`."
-    ),
+    summary="Resolve human names of EU laws (GDPR, DSA, AI Act, CBAM, ...) to their legal identifiers",
+    description="""**What it does**
+Scans free text for known human names of EU laws — GDPR, DSA, AI Act, CBAM, DORA, Solvency II, CRR, MiFID II, and 680+ more aliases — and returns each match with its legal identifier, canonical title, and the character offset where it was matched.
+
+**When to use it**
+When your users type "GDPR" but you need `32016R0679` to feed into other Brubru endpoints. Or to extract every law referenced in a policy paper, opinion piece, or chat message. Pairs with `/api/v1/legal-text/resolve-references` (which catches the verbose "Regulation (EU) 2016/679" form) to cover both human-friendly and formal citation styles.
+
+**Input**
+JSON body: `{ "text": "<free text>" }`.
+
+**Try it**
+```
+POST /api/v1/legal-text/resolve-aliases
+{ "text": "Comparing GDPR and the AI Act on automated decisions" }
+```
+
+**You get back**
+`{ aliases: [{ alias, celex, title, offset, public_url, ... }], plus envelope datapoints }`.
+
+**Data freshness**
+Live pass-through (pure regex matching against a curated alias dictionary of 680+ EU-law nicknames; no upstream HTTP call). The alias dictionary is updated when new flagship laws are adopted (e.g. AI Act in 2024).""",
 )
 def resolve_aliases(
     payload: ResolveAliasesRequest,
