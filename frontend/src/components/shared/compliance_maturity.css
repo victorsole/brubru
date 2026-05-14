@@ -1,0 +1,220 @@
+.compliance-maturity {
+  position: relative;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem 1.45rem;
+  margin: 0 0 1.5rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.compliance-maturity--loading {
+  background: rgba(0, 0, 0, 0.025);
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem 1.2rem;
+}
+
+.compliance-maturity__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.compliance-maturity__header-text {
+  flex: 1;
+}
+
+.compliance-maturity__header-text h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.compliance-maturity__header-text p {
+  margin: 0.15rem 0 0 0;
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.compliance-maturity__score {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  font-weight: 700;
+}
+
+.compliance-maturity__score-value {
+  font-size: 2.4rem;
+  line-height: 1;
+  font-feature-settings: 'tnum';
+}
+
+.compliance-maturity__score-max {
+  font-size: 1rem;
+  opacity: 0.65;
+}
+
+.compliance-maturity__tier-badge {
+  display: inline-block;
+  margin: 0.35rem 0 1.1rem 0;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.compliance-maturity__axes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1.4rem;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .compliance-maturity__axes {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compliance-maturity__axis-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.3rem;
+}
+
+.compliance-maturity__axis-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.compliance-maturity__axis-score {
+  font-size: 0.8rem;
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+
+.compliance-maturity__bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.compliance-maturity__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.compliance-maturity__axis-rationale {
+  margin-top: 0.3rem;
+  font-size: 0.76rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.compliance-maturity__recommendations {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.compliance-maturity__recommendations h3 {
+  margin: 0 0 0.65rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.compliance-maturity__recommendations ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.compliance-maturity__recommendations li {
+  padding: 0.65rem 0.85rem;
+  background: rgba(86, 62, 163, 0.04);
+  border: 1px solid rgba(86, 62, 163, 0.15);
+  border-radius: 10px;
+}
+
+.compliance-maturity__rec-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
+}
+
+.compliance-maturity__rec-lift {
+  background: #563ea3;
+  color: #fff;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.compliance-maturity__rec-head strong {
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.compliance-maturity__rec-rationale {
+  margin: 0.2rem 0 0.45rem 0;
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.45;
+}
+
+.compliance-maturity__rec-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.8rem;
+  background: transparent;
+  border: 1px solid #563ea3;
+  color: #563ea3;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.compliance-maturity__rec-cta:hover {
+  background: #563ea3;
+  color: #fff;
+}
+
+.compliance-maturity__perfect {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(46, 125, 50, 0.08);
+  border-radius: 8px;
+  color: #2e7d32;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.compliance-maturity__intro {
+  margin-top: 1rem;
+  padding: 0.7rem 0.85rem;
+  background: rgba(6, 147, 227, 0.05);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.45;
+}

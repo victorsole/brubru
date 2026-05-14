@@ -7,6 +7,7 @@ import { ComplianceReport } from '../components/eu_comply/compliance_report';
 import { ActionPlanTimeline } from '../components/eu_comply/action_plan_timeline';
 import { UsageHistory } from '../components/eu_comply/usage_history';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
+import { ComplianceMaturity } from '../components/shared/compliance_maturity';
 import { useAuth } from '../hooks/use_auth';
 import './eu_comply_page.css';
 
@@ -283,6 +284,10 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               </button>
             </div>
           </div>
+
+        {/* Compliance Maturity card — only on the selection landing view,
+            so it does not clutter the analysis flow. */}
+        {viewState === 'select' && <ComplianceMaturity />}
 
         {/* Main Content */}
         {viewState === 'select' && (

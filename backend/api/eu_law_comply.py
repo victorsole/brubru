@@ -1071,3 +1071,104 @@ async def get_future_comply_preview(
 
     preview = compose_future_comply_preview(current_user, carriage)
     return preview.to_dict()
+
+
+# ============================================================================
+# Regulatory Cascade (P3 — May 2026)
+# ============================================================================
+
+from services.compliance.regulatory_cascade import (  # noqa: E402
+    compose_regulatory_cascade,
+)
+
+
+@router.get(
+    "/cascade/{procedure_ref:path}",
+    summary="Regulatory cascade for a legislative file",
+    description=(
+        "**What it does**\n\n"
+        "Returns the tree of regulatory work that hangs off a primary EU "
+        "act: implementing acts, delegated acts, and related in-flight "
+        "files in the same policy areas. Lets users move from a one-act "
+        "Comply view to a tier-2+ view of everything the file triggers.\n\n"
+        "**When to use it**\n\n"
+        "Call from the legislative file detail modal alongside Personalised "
+        "Impact and Future-Comply. Or from the EU Law Comply page when the "
+        "user wants to see the broader regulatory neighbourhood.\n\n"
+        "**Input**\n\n"
+        "URL path parameter `procedure_ref` (OEIL ref e.g. `2024/0176(COD)`). "
+        "Authentication via Bearer JWT.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/cascade/2024%2F0176%28COD%29`.\n\n"
+        "**You get back**\n\n"
+        "Per-branch counts, the implementing + delegated act lists (with "
+        "status, dates, source URLs), the related in-flight files, and "
+        "honest absence flags for transposition + CEN data we don't yet "
+        "ingest. Never fabricates — empty branches stay empty."
+    ),
+)
+async def get_regulatory_cascade(
+    procedure_ref: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    carriage = (
+        db.query(LegislativeCarriage)
+        .filter(LegislativeCarriage.oeil_procedure_ref == procedure_ref)
+        .first()
+    )
+    if not carriage:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=(
+                f"No legislative file found with procedure_ref={procedure_ref}"
+            ),
+        )
+
+    cascade = compose_regulatory_cascade(db, carriage)
+    return cascade.to_dict()
+
+
+# ============================================================================
+# Compliance Maturity Assessment (P6 — May 2026)
+# ============================================================================
+
+from services.compliance.maturity_assessment import (  # noqa: E402
+    compose_maturity_assessment,
+)
+
+
+@router.get(
+    "/maturity",
+    summary="Compliance maturity assessment for the authenticated user",
+    description=(
+        "**What it does**\n\n"
+        "Scores the user 0-100 across four axes: awareness (do they track "
+        "the right files?), impact analysis (do they take positions and "
+        "compare files?), advocacy (do they draft amendments and "
+        "documents?), and follow-through (do they close compliance loops?). "
+        "Each axis tops out at 25. The result includes a tier (beginner / "
+        "intermediate / advanced / expert), per-axis signal counts, and the "
+        "three highest-lift recommendations for next steps.\n\n"
+        "**When to use it**\n\n"
+        "Call from the EU Law Comply landing page so the user lands on a "
+        "personalised maturity card. Shareable: the user can screenshot it "
+        "as a one-page benchmark.\n\n"
+        "**Input**\n\n"
+        "Authentication via Bearer JWT. No parameters.\n\n"
+        "**Try it**\n\n"
+        "`GET /api/eu-law-comply/maturity` with `Authorization: Bearer <token>`.\n\n"
+        "**You get back**\n\n"
+        "Total `score` (0-100), `tier`, `tier_label`, four `axes` "
+        "(name, score, signals, rationale), top-3 `recommendations` (axis, "
+        "action, rationale, expected_lift), plus `profile_complete` and "
+        "`has_any_activity` flags so the frontend can render honest "
+        "empty-state messaging when the user is brand new."
+    ),
+)
+async def get_compliance_maturity(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    assessment = compose_maturity_assessment(db, current_user)
+    return assessment.to_dict()

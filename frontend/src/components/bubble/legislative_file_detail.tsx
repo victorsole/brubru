@@ -33,6 +33,7 @@ import { StagePipeline } from './stage_pipeline';
 import { TrackFileButton } from '../shared/track_file_button';
 import { PersonalisedImpact } from '../shared/personalised_impact';
 import { FutureComplyPreview } from '../shared/future_comply_preview';
+import { RegulatoryCascade } from '../shared/regulatory_cascade';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
 
@@ -177,6 +178,11 @@ export const LegislativeFileDetail = () => {
             {/* Future-Comply preview — for in-flight proposals */}
             {selectedFile.oeil_procedure_ref && (
               <FutureComplyPreview procedureRef={selectedFile.oeil_procedure_ref} />
+            )}
+
+            {/* Regulatory cascade — secondary acts + related in-flight files */}
+            {selectedFile.oeil_procedure_ref && (
+              <RegulatoryCascade procedureRef={selectedFile.oeil_procedure_ref} />
             )}
 
             {/* Status */}
