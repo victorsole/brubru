@@ -67,21 +67,30 @@ class OutcomePrediction(BaseModel):
 @router.get(
     "/{procedure_ref:path}/timeline",
     response_model=TimelinePrediction,
-    summary="Predicted days remaining to adoption/closure",
-    description=(
-        "**What it does:** given an OEIL procedure reference, predicts how many days "
-        "remain until the procedure closes (adopted, rejected, or withdrawn). Combines "
-        "an XGBoost ML model with a baseline heuristic. Confidence is `[0.0, 1.0]`.\n\n"
-        "**How to obtain a `procedure_ref`:** call `/api/v1/procedures` (or `/api/v1/laws`) "
-        "and grab the `oeil_procedure_ref` field from any item. Format: `YYYY/NNNN(COD)`, "
-        "`(CNS)`, `(APP)`, etc.\n\n"
-        "**Try it:** `GET /api/v1/predictions/2025/0232(COD)/timeline` (Workers from "
-        "carcinogens directive — close to adoption).\n\n"
-        "**Service status (2 May 2026):** XGBoost model loading on Railway is currently "
-        "degraded — calls may return 502 with `reason_code=upstream_error`. As a "
-        "workaround, `GET /api/v1/procedures/{ref}` returns the same upstream OEIL data "
-        "(`current_status`, `oeil_key_events`, `expected_completion`) without the ML layer."
-    ),
+    summary="Predicted days until a legislative procedure adopts, rejects, or withdraws",
+    description="""**What it does**
+Given a procedure reference, predicts how many days remain until the procedure closes (adopted / rejected / withdrawn). Combines an XGBoost ML model trained on historical procedure timelines with a baseline heuristic. Confidence is `[0.0, 1.0]`. The 25th-75th percentile range gives you the prediction uncertainty.
+
+**When to use it**
+For advocacy timing — knowing whether a file is ~30 days from adoption vs ~9 months can determine whether to push amendments now or wait. Use the confidence + range together: high confidence + narrow range = trustworthy prediction; low confidence or wide range = treat as rough estimate.
+
+**Input**
+- `procedure_ref` (path) — procedure reference (e.g. `2025/0232(COD)`). Format: `YYYY/NNNN(COD)` / `(CNS)` / `(APP)` / etc. Obtain via `/api/v1/procedures` or `/api/v1/laws`.
+- `use_ml` — boolean (default true). Set false to skip the ML layer and use baseline-only.
+
+**Try it**
+```
+GET /api/v1/predictions/2025/0232(COD)/timeline
+GET /api/v1/predictions/2024/0079(COD)/timeline?use_ml=false
+```
+
+**You get back**
+A `TimelinePrediction` with `procedure_ref`, `current_status`, `days_in_status`, `predicted_days_remaining`, `confidence`, `lower_bound_25`, `upper_bound_75`, `model_version`, `prediction_method`, plus the 5 envelope-level datapoints (`public_url` = the OEIL procedure-file URL).
+
+**Service status (2 May 2026):** XGBoost model loading on Railway is currently degraded — calls may return 502 with `reason_code=upstream_error`. Workaround: `GET /api/v1/procedures/{ref}` returns the upstream OEIL state without the ML layer.
+
+**Data freshness**
+Computed on-demand from the live OEIL state at request time (no cache for the procedure data). The ML model itself is retrained quarterly on closed procedures; the current model version is reported in `model_version`.""",
 )
 async def get_timeline(
     procedure_ref: str,
@@ -167,16 +176,29 @@ async def get_timeline(
 @router.get(
     "/{procedure_ref:path}/outcome",
     response_model=OutcomePrediction,
-    summary="Predicted outcome probabilities (adopted / rejected / withdrawn / pending)",
-    description=(
-        "**What it does:** predicts the probability of each possible outcome for an "
-        "ongoing legislative procedure: adopted, rejected, withdrawn, pending.\n\n"
-        "**How to obtain a `procedure_ref`:** see `/timeline` above — same identifier.\n\n"
-        "**Try it:** `GET /api/v1/predictions/2025/0232(COD)/outcome`.\n\n"
-        "**Service status (2 May 2026):** as with `/timeline`, the ML layer is currently "
-        "degraded on Railway. Workaround: `GET /api/v1/procedures/{ref}` returns the live "
-        "OEIL state (status, key events) without the predicted probabilities."
-    ),
+    summary="Predicted outcome probabilities — adopted, rejected, withdrawn, pending",
+    description="""**What it does**
+Predicts the probability of each possible outcome for an ongoing legislative procedure: adopted, rejected, withdrawn, pending. Returns a probability distribution that sums to 1.0, plus the highest-probability outcome as the headline prediction.
+
+**When to use it**
+For risk assessment — a 70% rejected probability tells you to invest amendment energy elsewhere; a 90% adopted probability tells you it's time to focus on the final form. Combined with `/timeline`, gives you a what + when picture.
+
+**Input**
+- `procedure_ref` (path) — procedure reference (same identifier as `/timeline`).
+
+**Try it**
+```
+GET /api/v1/predictions/2025/0232(COD)/outcome
+GET /api/v1/predictions/2024/0079(COD)/outcome
+```
+
+**You get back**
+An `OutcomePrediction` with `procedure_ref`, `outcome_probabilities` (dict mapping each outcome to its probability), `predicted_outcome` (highest-probability label), `confidence`, plus the 5 envelope-level datapoints.
+
+**Service status (2 May 2026):** ML layer is currently degraded on Railway — may return 502. Workaround: use `/api/v1/procedures/{ref}` for the live OEIL state without predicted probabilities.
+
+**Data freshness**
+Computed on-demand from the live OEIL state at request time.""",
 )
 async def get_outcome(
     procedure_ref: str,

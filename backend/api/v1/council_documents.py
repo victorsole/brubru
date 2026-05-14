@@ -159,14 +159,32 @@ def _derive_consilium_url(
 @router.get(
     "",
     response_model=PaginatedResponse[CouncilDocumentItem],
-    summary="Council of the EU document register",
-    description=(
-        "Council of the EU + European Council documents and meetings. "
-        "Today the surface unions institutional_publications (council-tagged) "
-        "with eu_calendar_events for COUNCIL / EUROPEAN_COUNCIL. A dedicated "
-        "Council document register scraper (working-party + COREPER docs + "
-        "Council conclusions full text) is queued for week 4."
-    ),
+    summary="Council of the EU documents — press releases, conclusions, meeting agendas, summits",
+    description="""**What it does**
+Returns a unified feed of Council of the EU + European Council documents and meetings — press releases, Council conclusions, meeting agendas, summit outcomes. Today the surface unions `institutional_publications` (Council-tagged rows) with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL events. A dedicated Council document register scraper (working-party + COREPER docs + Council conclusions full text) is queued.
+
+**When to use it**
+For tracking Council positions on legislative files (the "other half" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.
+
+**Input**
+- `q` — substring search.
+- `document_type` — `press_release` / `conclusions` / `meeting_agenda` / etc.
+- `policy_area` — single policy area tag.
+- `published_from`, `published_to` (and `published_end` alias).
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/council-documents?document_type=conclusions&published_from=2026-01-01
+GET /api/v1/council-documents?policy_area=energy
+```
+
+**You get back**
+A `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries reference, title, document_type, policy_area, dates, source URL, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) for now — will move to dedicated 6h scraper once the Council document register scraper ships. Meanwhile, this surface unions data from the publications sync (every 6h) and the calendar sync (every 6h).""",
 )
 async def list_council_documents(
     request: Request,

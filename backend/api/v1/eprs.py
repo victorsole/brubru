@@ -48,12 +48,34 @@ class EPRSItem(BaseModel):
 @router.get(
     "",
     response_model=PaginatedResponse[EPRSItem],
-    summary="Search EPRS publications",
-    description=(
-        "European Parliamentary Research Service studies, briefings, in-depth analyses, "
-        "EU legislation in progress updates, and more. Filters by type, committee, "
-        "procedure reference, CELEX, publication-date range, full-text search."
-    ),
+    summary="EPRS think-tank publications — Parliament's research service (briefings, studies, in-depth)",
+    description="""**What it does**
+Returns publications from EPRS — the European Parliamentary Research Service, the EP's in-house think-tank. Covers briefings, studies, in-depth analyses, at-a-glance notes, "EU legislation in progress" tracker entries, initial appraisals, ex-post evaluations, and historical archives. Each row carries the publication ID + type, authors, summary, policy areas, related procedure refs and legal IDs, HTML + PDF URLs, and (when ingested) word + page counts.
+
+**When to use it**
+EPRS publications are the highest-quality non-partisan policy briefings on EU files — used by MEPs (and their staff) to understand legislation. Filter by `committee` to find what's been written for the LIBE committee, by `procedure_ref` for everything related to one file, or by `q` for free-text search.
+
+**Input**
+- `q` — substring on title + summary.
+- `publication_type` — `BRIEFING` / `STUDY` / `IN_DEPTH_ANALYSIS` / `AT_A_GLANCE` / `EU_LEGISLATION_IN_PROGRESS` / `INITIAL_APPRAISAL` / `EX_POST_EVALUATION` / etc.
+- `committee` — committee code.
+- `procedure_ref` — OEIL reference.
+- `celex` — legal identifier cross-link.
+- `published_from`, `published_to` (and `published_end` alias).
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/eprs?committee=ENVI&publication_type=BRIEFING
+GET /api/v1/eprs?q=CBAM&published_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[EPRSItem]` envelope. Each item carries `publication_id` (e.g. `EPRS_BRI(2026)762322`), `title`, `publication_type`, `publication_date`, `authors`, `summary`, `policy_areas`, `committees`, `related_celex_numbers`, `related_procedures`, `html_url`, `pdf_url`, `word_count`, `page_count`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) from the EP Think Tank portal RSS (EPRS + ECTI + CASP) + the WordPress blog RSS as secondary source. EPRS publishes throughout the day; 12h sync catches new pieces inside a half-day.""",
 )
 async def list_eprs(
     request: Request,
@@ -184,7 +206,26 @@ async def list_eprs(
 @router.get(
     "/{publication_id}",
     response_model=EPRSItem,
-    summary="EPRS publication detail by publication_id (e.g. EPRS_BRI(2026)762322)",
+    summary="Look up one EPRS publication by its publication_id — full metadata + links",
+    description="""**What it does**
+Fetches a single EPRS publication by its publication_id. Returns the same shape as the list endpoint, including HTML + PDF URLs for the full text and the related procedures / legal IDs the publication cross-references.
+
+**When to use it**
+After locating an EPRS publication via the list endpoint, use this to deep-link into a specific publication. The HTML URL is the canonical EP Think Tank page; the PDF URL is the direct download.
+
+**Input**
+- `publication_id` (path) — EPRS publication ID (e.g. `EPRS_BRI(2026)762322`). The `:path` matcher accepts parentheses verbatim.
+
+**Try it**
+```
+GET /api/v1/eprs/EPRS_BRI(2026)762322
+```
+
+**You get back**
+A single `EPRSItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 12 hours from the EP Think Tank portal.""",
 )
 async def get_eprs_detail(
     publication_id: str,

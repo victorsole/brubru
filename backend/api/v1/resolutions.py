@@ -185,12 +185,35 @@ def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
 @router.get(
     "",
     response_model=PaginatedResponse[ResolutionItem],
-    summary="List EP resolutions (INL / INI / RSP)",
-    description=(
-        "Non-legislative EP outputs: legislative initiative (INL), own-initiative "
-        "reports (INI), and resolutions (RSP). Filter by type, lead committee, "
-        "rapporteur, adoption date, and incremental sync via updated_from."
-    ),
+    summary="EP non-legislative resolutions — own-initiative reports, legislative initiatives, topical resolutions",
+    description="""**What it does**
+Returns EP non-legislative outputs — files where the Parliament expresses a position WITHOUT directly amending EU law. Covers: `INL` (legislative initiative reports — EP asks the Commission to propose), `INI` (own-initiative reports — EP positions on horizontal themes), `RSP` (topical resolutions — urgent matters of EU concern, e.g. human rights, foreign policy). Each row carries the procedure ref, title, type, lead committee, rapporteur, adoption date, vote tallies, Commission follow-up status, and full text URL.
+
+**When to use it**
+EP resolutions don't have legal force but signal political direction — useful for advocacy work tracking what the EP demands of the Commission, urgent geopolitical positions, or thematic priorities. Filter by `has_commission_followup=true` to find resolutions where the Commission has actually responded.
+
+**Input**
+- `q` — substring on title + summary.
+- `resolution_type` — `INL` / `INI` / `RSP` / `OTHER`.
+- `lead_committee` — 4-letter committee code.
+- `rapporteur` — name substring.
+- `procedure_ref` — OEIL reference.
+- `has_commission_followup` — boolean.
+- `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/resolutions?resolution_type=INL&lead_committee=ENVI
+GET /api/v1/resolutions?q=Ukraine&resolution_type=RSP
+```
+
+**You get back**
+A `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. Resolutions are adopted at EP plenary sittings; the post-plenary sync catches them inside hours.""",
 )
 async def list_resolutions(
     request: Request,
@@ -290,7 +313,26 @@ async def list_resolutions(
 @router.get(
     "/{procedure_ref:path}",
     response_model=ResolutionItem,
-    summary="Single resolution detail by procedure_ref",
+    summary="Look up one EP resolution by its procedure reference",
+    description="""**What it does**
+Fetches a single EP resolution by its procedure reference. Returns the same shape as the list endpoint, with the full text URL + adoption details + Commission follow-up status.
+
+**When to use it**
+After locating a resolution via the list endpoint, use this for the full record — common pattern in chat answers when a user references a specific INI / RSP / INL number.
+
+**Input**
+- `procedure_ref` (path) — procedure reference (e.g. `2025/2125(INI)`, `2025/2887(RSP)`). The `:path` matcher accepts slashes + parentheses verbatim.
+
+**Try it**
+```
+GET /api/v1/resolutions/2025/2125(INI)
+```
+
+**You get back**
+A single `ResolutionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 6 hours from OEIL XML feeds.""",
 )
 async def get_resolution_detail(
     procedure_ref: str,

@@ -501,7 +501,31 @@ class CommitteeMinutesOut(BaseModel):
 @router.get(
     "/{code}/work-items",
     response_model=CommitteeWorkEnvelope,
-    summary="Work items tracked by an EP committee",
+    summary="Legislative files an EP committee is currently working on — with stage + status",
+    description="""**What it does**
+Returns every legislative file an EP committee is currently working on, with the file's title, rapporteur, current stage (e.g. `awaiting_committee_vote`, `in_trilogue`), status, and any CELEX numbers cross-referenced from the underlying `legislative_carriages` table. Each row enriches the committee_work_items scrape with canonical legislation data via an outer join.
+
+**When to use it**
+The fastest way to answer "what is committee X working on?" Use to drive a committee dashboard, build a rapporteur-tracking UI, or feed a chatbot answer about a specific committee's caseload.
+
+**Input**
+- `code` (path) — EP committee 4-letter code (e.g. `LIBE`, `ENVI`).
+- `q` — substring on title.
+- `status` — work-item status.
+- `stage` — work-item stage.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/committees/LIBE/work-items
+GET /api/v1/committees/ENVI/work-items?stage=in_trilogue
+```
+
+**You get back**
+A `CommitteeWorkEnvelope` with paginated work items. Each row carries the procedure ref, title (enriched), rapporteur, stage, status, dates, source URL, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) from europarl.europa.eu/committees/<code>/work. Committee work items move on EP committee meeting cadences; 12h sync catches stage transitions.""",
 )
 async def list_committee_work(
     request: Request,
@@ -674,7 +698,29 @@ async def list_committee_work(
 @router.get(
     "/{code}/minutes",
     response_model=CommitteeMinutesEnvelope,
-    summary="Minutes of a committee's meetings",
+    summary="EP committee meeting minutes — votes, decisions, attendance, decisions taken",
+    description="""**What it does**
+Returns minutes of a specific EP committee's meetings. Each row carries the meeting date, agenda items, votes (with for/against/abstention tallies), decisions taken, MEPs present, and the doceo URL for the official minutes document.
+
+**When to use it**
+To audit what actually happened at a committee meeting — particularly useful for understanding why a file's status changed (e.g. a vote was postponed, an amendment was withdrawn, a rapporteur was reappointed). The official minutes are the authoritative record.
+
+**Input**
+- `code` (path) — EP committee 4-letter code (e.g. `LIBE`, `ENVI`).
+- `published_from`, `published_to` (aliased as `date_from`, `date_to`) — meeting_date filter.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/committees/LIBE/minutes?date_from=2026-01-01
+GET /api/v1/committees/ENVI/minutes
+```
+
+**You get back**
+A `CommitteeMinutesEnvelope` with paginated minutes rows. Each row carries the meeting date, agenda items, votes, decisions, attendance, and the doceo URL.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via `backend/scripts/sync_committee_minutes.py`. Committee minutes are typically published on doceo within a few days of the meeting; 12h sync catches them as soon as they appear.""",
 )
 async def list_committee_minutes(
     request: Request,
