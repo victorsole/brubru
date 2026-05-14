@@ -105,7 +105,10 @@ GET /api/v1/specialised/access2markets/countries?eu_ms_only=true
 ```
 
 **You get back**
-A paginated envelope of `CountryItem` rows.""",
+A paginated envelope of `CountryItem` rows.
+
+**Data freshness**
+Live pass-through (no cache; hits webgate.ec.europa.eu/flows/public/v1/countries on every request). DG TAXUD updates this list rarely (when a new partner country is added to EU trade statistics).""",
 )
 async def list_countries(
     request: Request,
@@ -168,7 +171,10 @@ GET /api/v1/specialised/access2markets/products?q=wine&level=4
 ```
 
 **You get back**
-A paginated envelope of `ProductItem` rows.""",
+A paginated envelope of `ProductItem` rows.
+
+**Data freshness**
+Live pass-through (no cache; hits webgate.ec.europa.eu/nomen/public/v2/nomenclature/products on every request). The Combined Nomenclature is updated annually by DG TAXUD (a new CN regulation each year, applicable from 1 January).""",
 )
 async def list_products(
     request: Request,
@@ -211,14 +217,26 @@ async def list_products(
 @router.get(
     "/last-update",
     response_model=FreshnessInfo,
-    summary="Access2Markets data freshness",
+    summary="Access2Markets data freshness — timestamp of the last upstream refresh",
     description="""**What it does**
-Returns the timestamp of the most recent data refresh in the Access2Markets backend.
+Returns the timestamp of the most recent data refresh in the Access2Markets backend (the EU's trade-flows + tariffs platform run by DG TRADE + DG TAXUD).
+
+**When to use it**
+Before running a batch of trade-flow queries, hit this to confirm the upstream data is current. Helpful for time-sensitive analyses where stale data would produce misleading conclusions.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
 
 **Try it**
 ```
 GET /api/v1/specialised/access2markets/last-update
-```""",
+```
+
+**You get back**
+A `FreshnessInfo` object with `last_update` (ISO-8601 timestamp string).
+
+**Data freshness**
+Live pass-through (no cache; hits webgate.ec.europa.eu/flows/public/v1/lastupdate on every request).""",
 )
 async def last_update(
     request: Request,

@@ -205,13 +205,32 @@ def _project_or_404(db: Session, cordis_id: str):
 @router.get(
     "/projects",
     response_model=PaginatedResponse[ResearchProjectItem],
-    summary="Search EU-funded research projects by topic",
-    description=(
-        "Free-text search over the ft_funded_projects table populated from "
-        "CORDIS quarterly bulk exports. Covers Horizon Europe (2021–present), "
-        "H2020 (2014–2020), and FP7 (2007–2013). Filter by `framework` to "
-        "restrict to a single programme."
-    ),
+    summary="Search EU-funded research projects by topic, framework, country, status",
+    description="""**What it does**
+Free-text search over EU-funded research projects sourced from CORDIS — the Commission's authoritative research-results database. Covers Horizon Europe (2021-present), Horizon 2020 (2014-2020), and FP7 (2007-2013) — roughly 80,000 projects in total. Each row carries the project id + acronym + title + objective + keywords + coordinator + consortium summary + EU contribution + total cost + start/end dates + EuroSciVoc topic tags.
+
+**When to use it**
+For research-org competitive intelligence: "what's been funded on quantum networking in the last 5 years?", "find Spanish coordinators of MSCA fellowships", "what's the EU contribution range for IA actions on circular economy?". Combine with `/api/v1/discover/eurio/projects/{cordis_id}/consortium` for the full org breakdown.
+
+**Input**
+- `topic` — free-text full-text search on title + objective + keywords (min 2 chars).
+- `framework` — `HORIZON` / `H2020` / `FP7`.
+- `country` — ISO-2 coordinator country.
+- `status` — `signed` / `closed` / `terminated`.
+- `limit` (default 50, max 200), `page` (1-indexed).
+- `body_threshold` — minimum body chars for `has_body=true`.
+
+**Try it**
+```
+GET /api/v1/discover/eurio/projects?topic=quantum&framework=HORIZON
+GET /api/v1/discover/eurio/projects?country=NL&status=signed
+```
+
+**You get back**
+A `PaginatedResponse[ResearchProjectItem]` envelope. Each item carries `cordis_id`, `title`, `project_acronym`, `framework_programme`, `type_of_action`, `objective`, `keywords`, `coordinator_name`, `coordinator_country`, `organisation_count`, `eu_contribution`, `total_cost`, `start_date`, `end_date`, `status`, body fields + the 5 envelope-level datapoints (`public_url` = the CORDIS project page).
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) from CORDIS quarterly bulk exports (https://cordis.europa.eu/data/cordis-{HORIZON,h2020,fp7}projects-csv.zip). The CORDIS bulk-export cadence is the upstream limit; we re-pull weekly to catch any inter-quarter updates.""",
 )
 async def find_projects(
     request: Request,
@@ -278,6 +297,9 @@ async def find_projects(
     description="""**What it does**
 Returns the CORDIS project's consortium: every participating organisation, its country, role (coordinator / participant / third-party), short name, EC contribution, and total cost. Built from `ft_funded_projects.organisations` (JSONB).
 
+**When to use it**
+After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/funded-projects`), use this to understand who is working on it — useful for partnership-mapping, competitor analysis, or finding a research group active in your area.
+
 **How this differs from the sibling routes**
 - `/consortium` — **who** is in the project (this endpoint).
 - `/deliverables` — **what** the project has published (CORDIS web links).
@@ -331,6 +353,9 @@ async def project_consortium(
     summary="Project deliverables — WHAT the project has published (web links)",
     description="""**What it does**
 Returns the CORDIS-published web links for a project: project website, public reports, dissemination URLs. Sourced from CORDIS's `webLink` table inside `ft_funded_projects.web_links` (JSONB).
+
+**When to use it**
+After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/funded-projects`), use this to find the project's public outputs — useful for citing in policy work, finding research papers / datasets / methodologies that an EU-funded consortium has published.
 
 **Important caveat**
 CORDIS does NOT publish per-deliverable metadata in its quarterly bulk dump. The "deliverables" you get here are the **published-output web links** the consortium chose to share via the CORDIS portal — typically a handful of URLs, often empty for in-progress projects. The route's `note` field explains this when `web_links` is empty.
@@ -392,6 +417,9 @@ async def project_deliverables(
     summary="Project funding — HOW MUCH MONEY flows where (totals + per-org + legal basis)",
     description="""**What it does**
 Returns the funding picture for one CORDIS project: total project cost + EU contribution headline figures, currency, per-organisation breakdown (when CORDIS published it), and the `legal_basis[]` array naming the Horizon / H2020 / FP7 programme part(s) the funding comes from (e.g. `HORIZON.1.2` = MSCA, `HORIZON.2.4` = Digital, Industry and Space).
+
+**When to use it**
+After locating a project, use this to understand the budget structure — useful for competitive intelligence on past awards ("what is the typical EU contribution for IA actions in your area?"), or to verify the per-org share when assessing your own future bid's likely partner-shares.
 
 **How this differs from the sibling routes**
 - `/consortium` — **who** is in the project (organisations[]).
@@ -457,6 +485,9 @@ async def project_funding(
     summary="Research projects an organisation participated in",
     description="""**What it does**
 Returns every CORDIS project where the named organisation appears in the consortium (any role: coordinator, participant, third-party). Match is **case-insensitive substring** on the organisation name — you don't need to know the exact legal name.
+
+**When to use it**
+To audit a partner / competitor / target organisation's EU-funding track record. Common patterns: "which Polish universities have run Horizon projects on AI?", "is this consortium member experienced or new?", "what's the typical project budget for an org of this size?".
 
 **Where to find an `org_name` to test**
 The CORDIS data uses the organisation's full legal name (often ALL CAPS, sometimes localised). Three ways to discover one:
