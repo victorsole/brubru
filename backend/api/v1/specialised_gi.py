@@ -165,7 +165,11 @@ GET /api/v1/specialised/gi?gi_type=PDO&product_type=WINE&country=FR
 ```
 
 **You get back**
-A paginated envelope of `GiListItem` rows: GI identifier, protected names, file number, countries, classification, status, EU protection date, source register, EUR-Lex link to the founding regulation, public-facing URL.""",
+A paginated envelope of `GiListItem` rows: GI identifier, protected names, file number, countries, classification, status, EU protection date, source register, EUR-Lex link to the founding regulation, public-facing URL.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
+""",
 )
 async def list_gi(
     request: Request,
@@ -299,7 +303,11 @@ GET /api/v1/specialised/gi/types
 ```
 
 **You get back**
-A flat list of `GiTypeCount` objects sorted by count descending.""",
+A flat list of `GiTypeCount` objects sorted by count descending.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
+""",
 )
 async def list_types(
     request: Request,
@@ -349,7 +357,11 @@ GET /api/v1/specialised/gi/EUGI00000000021
 ```
 
 **You get back**
-A `GiDetail` object with all stored fields plus body fields when a summary sheet has been fetched and parsed.""",
+A `GiDetail` object with all stored fields plus body fields when a summary sheet has been fetched and parsed.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
+""",
 )
 async def get_gi(
     request: Request,

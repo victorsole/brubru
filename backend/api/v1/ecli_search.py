@@ -99,7 +99,11 @@ GET /api/v1/discover/ecli/ECLI:EU:C:2020:559
 ```
 
 **You get back**
-An `ECLIResolution` object with parsed parts, `is_cjeu` flag, `e_justice_url` (always set), and `inforcuria_url` (set for CJEU rulings). `public_url` is the InforCuria URL for CJEU, otherwise the e-Justice deep-link.""",
+An `ECLIResolution` object with parsed parts, `is_cjeu` flag, `e_justice_url` (always set), and `inforcuria_url` (set for CJEU rulings). `public_url` is the InforCuria URL for CJEU, otherwise the e-Justice deep-link.
+
+**Data freshness**
+Live pass-through (no cache; hits upstream on every request). We compose URLs from the ECLI string; no local cache.
+""",
 )
 async def resolve_ecli(
     request: Request,

@@ -149,7 +149,11 @@ GET /api/v1/discover/cellar/recent?published_from=2026-05-01&limit=5&include_bod
 ```
 
 **You get back**
-Paginated envelope of `CellarRecentItem` rows. With `include_body=true`, each row's `body_txt` + `body_html` are populated from the Cellar XHTML manifestation in English. Each row's `public_url` deep-links to EUR-Lex.""",
+Paginated envelope of `CellarRecentItem` rows. With `include_body=true`, each row's `body_txt` + `body_html` are populated from the Cellar XHTML manifestation in English. Each row's `public_url` deep-links to EUR-Lex.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from Cellar SPARQL (latest entries across all sectors). Cellar publishes throughout the day.
+""",
 )
 async def recent_cellar_acts(
     request: Request,
@@ -325,7 +329,11 @@ GET /api/v1/discover/cellar/celex/32025R2158/relationships
 ```
 
 **You get back**
-A paginated envelope of `CellarRelation` edges + the parent act's body in the envelope-level fields (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`). Each edge row has its own `public_url` pointing to the related act on EUR-Lex.""",
+A paginated envelope of `CellarRelation` edges + the parent act's body in the envelope-level fields (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`). Each edge row has its own `public_url` pointing to the related act on EUR-Lex.
+
+**Data freshness**
+Live pass-through (no cache; hits upstream on every request). Per-CELEX fetches are live (cached in eu_laws after first fetch). /recent is precomputed every 6h.
+""",
 )
 async def cellar_celex_relationships(
     request: Request,
@@ -452,7 +460,11 @@ GET /api/v1/discover/cellar/eurovoc?q=data%20protection&language=fr
 ```
 
 **You get back**
-Paginated envelope of `EuroVocConcept` rows. The trailing digits of each `concept_uri` are the IDs you pass to the `/acts` route.""",
+Paginated envelope of `EuroVocConcept` rows. The trailing digits of each `concept_uri` are the IDs you pass to the `/acts` route.
+
+**Data freshness**
+Live pass-through (no cache; hits upstream on every request). Per-CELEX fetches are live (cached in eu_laws after first fetch). /recent is precomputed every 6h.
+""",
 )
 async def search_eurovoc(
     request: Request,
@@ -518,7 +530,11 @@ GET /api/v1/discover/cellar/eurovoc/5181/acts?published_from=2024-01-01
 ```
 
 **You get back**
-Paginated envelope of `CellarRecentItem` rows (celex, work_uri, document_date, title, eurlex_url). Each row's `public_url` deep-links to the act on EUR-Lex.""",
+Paginated envelope of `CellarRecentItem` rows (celex, work_uri, document_date, title, eurlex_url). Each row's `public_url` deep-links to the act on EUR-Lex.
+
+**Data freshness**
+Live pass-through (no cache; hits upstream on every request). Per-CELEX fetches are live (cached in eu_laws after first fetch). /recent is precomputed every 6h.
+""",
 )
 async def acts_by_eurovoc(
     request: Request,

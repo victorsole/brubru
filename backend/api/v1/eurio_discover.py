@@ -294,7 +294,11 @@ GET /api/v1/discover/eurio/projects/101131342/consortium
 ```
 
 **You get back**
-A `ConsortiumPayload` object — see `organisations[]` for the per-org records, `coordinator_name` / `coordinator_country` for the lead, `organisation_count` for the size.""",
+A `ConsortiumPayload` object — see `organisations[]` for the per-org records, `coordinator_name` / `coordinator_country` for the lead, `organisation_count` for the size.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
+""",
 )
 async def project_consortium(
     request: Request,
@@ -347,7 +351,11 @@ GET /api/v1/discover/eurio/projects/101131342/deliverables
 ```
 
 **You get back**
-A `DeliverablesPayload` — see `web_links[]` for the published URLs and `note` for context when the list is empty.""",
+A `DeliverablesPayload` — see `web_links[]` for the published URLs and `note` for context when the list is empty.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
+""",
 )
 async def project_deliverables(
     request: Request,
@@ -401,7 +409,11 @@ GET /api/v1/discover/eurio/projects/101131342/funding
 ```
 
 **You get back**
-A `FundingPayload` — see `eu_contribution` for the headline figure, `legal_basis[]` for the programme part, `by_organisation[]` for the per-org allocation.""",
+A `FundingPayload` — see `eu_contribution` for the headline figure, `legal_basis[]` for the programme part, `by_organisation[]` for the per-org allocation.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
+""",
 )
 async def project_funding(
     request: Request,
@@ -474,7 +486,11 @@ GET /api/v1/discover/eurio/organisations/Karolinska/projects?framework=HORIZON
 ```
 
 **You get back**
-Paginated envelope of `ResearchProjectItem` rows. Each row has `public_url` pointing to the project's CORDIS page.""",
+Paginated envelope of `ResearchProjectItem` rows. Each row has `public_url` pointing to the project's CORDIS page.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
+""",
 )
 async def org_projects(
     request: Request,

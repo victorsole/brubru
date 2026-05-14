@@ -248,6 +248,236 @@ async def cron_sync_all(
     return {"status": "success", "results": results}
 
 
+# ---------------------------------------------------------------------------
+# Tiered cron endpoints (14 May 2026 onwards) — driven by sync_cadence.json
+# ---------------------------------------------------------------------------
+#
+# Each tier endpoint runs a curated set of sync services / scripts in sequence,
+# fail-soft per source. Called by the single Railway service `brubru-cron-sync`
+# via `scripts/cron_dispatch.py`, which decides which tier(s) to fire based on
+# the current UTC time.
+#
+# Cadence (from backend/config/sync_cadence.json):
+#   hot_6h   → 00:00 / 06:00 / 12:00 / 18:00 UTC  (calendar, OEIL, EUR-Lex, plenary)
+#   warm_12h → 02:00 / 14:00 UTC                  (committees, EPRS)
+#   daily    → 04:00 UTC                          (consultations, comitology, specialised mirrors)
+#   weekly   → Sunday 05:00 UTC                   (slow universes — FTAs, GIs, vocabs, research)
+#   monthly  → 1st of month 02:00 UTC             (officials whoiswho, NAL releases check)
+
+
+def _run_service(name: str, fn):
+    """Run a sync coroutine with a fresh DB session. Fail-soft + log."""
+    import asyncio as _asyncio
+    db = SessionLocal()
+    try:
+        logger.info(f"[CRON] Tier sync: {name} started")
+        out = _asyncio.run(fn(db)) if _asyncio.iscoroutinefunction(fn) else fn(db)
+        added = (out or {}).get("added", 0) if isinstance(out, dict) else 0
+        updated = (out or {}).get("updated", 0) if isinstance(out, dict) else 0
+        logger.info(f"[CRON] Tier sync: {name} done (added={added}, updated={updated})")
+        return {"status": "success", "added": added, "updated": updated}
+    except Exception as e:
+        logger.error(f"[CRON] Tier sync: {name} failed: {e}")
+        return {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+
+async def _run_async_service(name: str, coro_fn):
+    """Async variant — awaits the coroutine in the current event loop."""
+    db = SessionLocal()
+    try:
+        logger.info(f"[CRON] Tier sync: {name} started")
+        out = await coro_fn(db)
+        added = (out or {}).get("added", 0) if isinstance(out, dict) else 0
+        updated = (out or {}).get("updated", 0) if isinstance(out, dict) else 0
+        logger.info(f"[CRON] Tier sync: {name} done (added={added}, updated={updated})")
+        return {"status": "success", "added": added, "updated": updated}
+    except Exception as e:
+        logger.error(f"[CRON] Tier sync: {name} failed: {e}")
+        return {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+
+def _run_script(name: str, script_relpath: str, args: list[str] | None = None, timeout: int = 600):
+    """Run a CLI sync script as a subprocess. Fail-soft + log."""
+    import subprocess
+    import sys
+    import os
+    args = args or []
+    backend_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    script_path = os.path.join(backend_root, script_relpath)
+    if not os.path.exists(script_path):
+        logger.warning(f"[CRON] Tier sync: {name} script not found at {script_path}, skipping")
+        return {"status": "skipped", "reason": "script_not_found"}
+    try:
+        logger.info(f"[CRON] Tier sync: {name} started ({script_relpath})")
+        proc = subprocess.run(
+            [sys.executable, script_path, *args],
+            capture_output=True, text=True, timeout=timeout,
+            cwd=backend_root,
+        )
+        if proc.returncode == 0:
+            logger.info(f"[CRON] Tier sync: {name} done")
+            return {"status": "success", "stdout_tail": (proc.stdout or "")[-500:]}
+        logger.error(f"[CRON] Tier sync: {name} exited {proc.returncode}: {(proc.stderr or '')[-300:]}")
+        return {"status": "failed", "returncode": proc.returncode, "stderr_tail": (proc.stderr or "")[-500:]}
+    except subprocess.TimeoutExpired:
+        logger.error(f"[CRON] Tier sync: {name} timed out after {timeout}s")
+        return {"status": "failed", "error": f"timeout_{timeout}s"}
+    except Exception as e:
+        logger.error(f"[CRON] Tier sync: {name} crashed: {e}")
+        return {"status": "failed", "error": str(e)}
+
+
+@router.post("/sync/hot-6h")
+async def cron_sync_hot_6h(
+    authorization: str = Header(...),
+    days: int = Query(default=2, ge=1, le=30, description="Lookback window for delta sync"),
+):
+    """
+    Hot-tier sync (every 6 hours): OEIL + EUR-Lex + Texts Adopted/Submitted + Commission Docs +
+    College agendas + Calendar + Cellar /recent.
+
+    Cadence: 00:00 / 06:00 / 12:00 / 18:00 UTC. Sources where same-day freshness is a conversion lever.
+    """
+    _verify_cron_secret(authorization)
+    results = {}
+
+    async def _oeil(db):
+        from services.scrapers.oeil_sync_service import OEILSyncService
+        return await OEILSyncService(db=db).sync_all(
+            procedures_days=days, documents_days=days, reports_days=30, skip_existing=True,
+        )
+
+    async def _eurlex(db):
+        from services.scrapers.eurlex_sync_service import EURLexSyncService
+        return await EURLexSyncService(db=db).sync_all(
+            legislation_days=days, proposals_days=days, skip_existing=True,
+        )
+
+    async def _texts_adopted(db):
+        from services.scrapers.texts_adopted_sync_service import TextsAdoptedSyncService
+        return await TextsAdoptedSyncService(db=db).sync_rss(skip_existing=True)
+
+    async def _commission_docs(db):
+        from services.scrapers.commission_doc_sync_service import CommissionDocSyncService
+        return await CommissionDocSyncService(db=db).sync_all(days=days, skip_existing=True)
+
+    results["oeil"] = await _run_async_service("oeil", _oeil)
+    results["eurlex"] = await _run_async_service("eurlex", _eurlex)
+    results["texts_adopted"] = await _run_async_service("texts_adopted", _texts_adopted)
+    results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
+
+    # Script-based syncs (no service wrapper yet)
+    results["texts_submitted"] = _run_script("texts_submitted", "scripts/ingest_texts_submitted.py", [], timeout=600)
+    results["college_agendas"] = _run_script("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
+    results["calendar"] = _run_script("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
+    results["cellar_recent"] = _run_script("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--recent"], timeout=600)
+
+    logger.info(f"[CRON] hot-6h tier sync complete: {results}")
+    return {"status": "success", "tier": "hot_6h", "results": results}
+
+
+@router.post("/sync/warm-12h")
+async def cron_sync_warm_12h(
+    authorization: str = Header(...),
+):
+    """
+    Warm-tier sync (every 12 hours): EP committee work + EPRS + committee minutes + committee agendas + transcripts.
+
+    Cadence: 02:00 / 14:00 UTC. Sources that move daily but where half-day lag is acceptable.
+    """
+    _verify_cron_secret(authorization)
+    results = {}
+
+    async def _committee_work(db):
+        from services.scrapers.committee_work_sync_service import CommitteeWorkSyncService
+        return await CommitteeWorkSyncService(db=db).sync_all(skip_existing=True)
+
+    results["committee_work"] = await _run_async_service("committee_work", _committee_work)
+    results["eprs_publications"] = _run_script("eprs_publications", "scripts/sync_eprs_publications.py", ["--days", "3"], timeout=900)
+    results["eprs_legislation"] = _run_script("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
+    results["committee_minutes"] = _run_script("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
+    results["committee_agendas"] = _run_script("committee_agendas", "scripts/sync_committee_agendas.py", [], timeout=600)
+    results["committee_transcripts"] = _run_script("committee_transcripts", "scripts/sync_committee_transcripts.py", ["--days", "30", "--max", "50"], timeout=900)
+
+    logger.info(f"[CRON] warm-12h tier sync complete: {results}")
+    return {"status": "success", "tier": "warm_12h", "results": results}
+
+
+@router.post("/sync/daily")
+async def cron_sync_daily(
+    authorization: str = Header(...),
+):
+    """
+    Daily sync (04:00 UTC): consultations + delegated/implementing acts + TRIS + EU sanctions +
+    transparency register + comitology + JRC + infringements + EESC + CoR + euagenda.
+
+    Cadence: once per day. Sources that move a few times per week.
+    """
+    _verify_cron_secret(authorization)
+    results = {}
+
+    results["consultations"] = _run_script("consultations", "scripts/sync_consultations.py", [], timeout=900)
+    results["comitology"] = _run_script("comitology", "scripts/backfill_eu_comitology.py", ["--days", "7"], timeout=900)
+    results["tris"] = _run_script("tris", "scripts/sync_dg_grow.py", [], timeout=600)
+    results["sanctions"] = _run_script("sanctions", "scripts/backfill_eu_sanctions.py", ["--days", "7"], timeout=600)
+    results["transparency_register"] = _run_script("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--delta"], timeout=900)
+    results["jrc"] = _run_script("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--days", "7"], timeout=600)
+    results["infringements"] = _run_script("infringements", "scripts/backfill_infringement_summary.py", [], timeout=600)
+    results["eesc"] = _run_script("eesc", "scripts/backfill_eu_eesc.py", ["--days", "7"], timeout=600)
+    results["cor"] = _run_script("cor", "scripts/backfill_eu_cor.py", ["--days", "7"], timeout=600)
+    results["euagenda"] = _run_script("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
+    results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--limit", "200"], timeout=900)
+
+    logger.info(f"[CRON] daily tier sync complete: {results}")
+    return {"status": "success", "tier": "daily", "results": results}
+
+
+@router.post("/sync/weekly")
+async def cron_sync_weekly(
+    authorization: str = Header(...),
+):
+    """
+    Weekly sync (Sunday 05:00 UTC): FTAs + GIs + cohesion datasets + trade defence + commissioners.
+
+    Cadence: once per week. Slow-moving universes.
+    """
+    _verify_cron_secret(authorization)
+    results = {}
+
+    results["fta"] = _run_script("fta", "scripts/backfill_eu_trade_agreements.py", [], timeout=1800)
+    results["trade_defence"] = _run_script("trade_defence", "scripts/backfill_eu_trade_defence.py", [], timeout=1800)
+    results["gi"] = _run_script("gi", "scripts/backfill_eu_gi.py", [], timeout=900)
+    results["cohesion"] = _run_script("cohesion", "scripts/backfill_eu_cohesion_datasets.py", [], timeout=900)
+    results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", [], timeout=600)
+
+    logger.info(f"[CRON] weekly tier sync complete: {results}")
+    return {"status": "success", "tier": "weekly", "results": results}
+
+
+@router.post("/sync/monthly")
+async def cron_sync_monthly(
+    authorization: str = Header(...),
+):
+    """
+    Monthly sync (1st of month 02:00 UTC): officials whoiswho + EU Vocabularies releases check.
+
+    Cadence: once per month. Corpora and release cycles.
+    """
+    _verify_cron_secret(authorization)
+    results = {}
+
+    results["officials"] = _run_script("officials", "scripts/backfill_officials_country.py", [], timeout=1800)
+    results["euvoc_releases"] = _run_script("euvoc_releases", "scripts/check_euvoc_releases.py", [], timeout=600)
+    results["authority_labels_freshness"] = _run_script("authority_labels_freshness", "scripts/check_authority_labels_freshness.py", [], timeout=300)
+
+    logger.info(f"[CRON] monthly tier sync complete: {results}")
+    return {"status": "success", "tier": "monthly", "results": results}
+
+
 @router.post("/sync/authority-labels")
 async def cron_sync_authority_labels(
     authorization: str = Header(...),

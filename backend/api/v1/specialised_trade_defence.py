@@ -142,7 +142,11 @@ GET /api/v1/specialised/trade-defence?measure_type=anti_dumping&target_country=C
 ```
 
 **You get back**
-A paginated envelope of `TradeDefenceListItem` rows: CELEX, title, document_date, measure_type, duty_status, target_country, product, in_force flag, EUR-Lex URL.""",
+A paginated envelope of `TradeDefenceListItem` rows: CELEX, title, document_date, measure_type, duty_status, target_country, product, in_force flag, EUR-Lex URL.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
+""",
 )
 async def list_trade_defence(
     request: Request,
@@ -272,7 +276,11 @@ GET /api/v1/specialised/trade-defence/types
 ```
 
 **You get back**
-A flat list of `TypeCount` objects, sorted by total descending.""",
+A flat list of `TypeCount` objects, sorted by total descending.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
+""",
 )
 async def list_types(
     request: Request,
@@ -328,7 +336,11 @@ GET /api/v1/specialised/trade-defence/32024R3193
 ```
 
 **You get back**
-A `TradeDefenceDetail` object with all metadata plus body fields.""",
+A `TradeDefenceDetail` object with all metadata plus body fields.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
+""",
 )
 async def get_trade_defence(
     request: Request,

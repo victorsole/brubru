@@ -353,7 +353,11 @@ GET /api/v1/votes?is_main=true&result=ADOPTED&limit=20
 ```
 
 **You get back**
-Paginated `VoteItem` envelope. `public_url` points to the specific HowTheyVote vote page (`https://howtheyvote.eu/votes/{htv_id}`). All 5 mandatory v1 datapoints present per row.""",
+Paginated `VoteItem` envelope. `public_url` points to the specific HowTheyVote vote page (`https://howtheyvote.eu/votes/{htv_id}`). All 5 mandatory v1 datapoints present per row.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+""",
 )
 async def list_votes(
     request: Request,
@@ -459,7 +463,11 @@ GET /api/v1/votes/{vote_id}/records?country=DE&position=AGAINST
 ```
 
 **You get back**
-Paginated `MemberVoteItem` envelope. `public_url` on each row points to the parent vote's HowTheyVote page. All 5 mandatory v1 datapoints present per row.""",
+Paginated `MemberVoteItem` envelope. `public_url` on each row points to the parent vote's HowTheyVote page. All 5 mandatory v1 datapoints present per row.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+""",
 )
 async def list_member_votes(
     vote_id: str,
@@ -534,7 +542,11 @@ GET /api/v1/votes/{vote_id}
 ```
 
 **You get back**
-A `VoteItem` with all 5 mandatory v1 datapoints. `public_url` resolves to `https://howtheyvote.eu/votes/{htv_id}` — the public vote page with per-MEP breakdown, country chart, and group cohesion.""",
+A `VoteItem` with all 5 mandatory v1 datapoints. `public_url` resolves to `https://howtheyvote.eu/votes/{htv_id}` — the public vote page with per-MEP breakdown, country chart, and group cohesion.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md.
+""",
 )
 async def get_vote_detail(
     vote_id: str,

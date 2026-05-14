@@ -263,7 +263,11 @@ GET /api/v1/specialised/sanctions?programme=UKR&limit=20
 ```
 
 **You get back**
-A paginated envelope of `SanctionListItem` rows: entity logical id, EU reference number, subject type, programme, primary name, legal basis (title + publication date + URL), citizenships array, last refresh date.""",
+A paginated envelope of `SanctionListItem` rows: entity logical id, EU reference number, subject type, programme, primary name, legal basis (title + publication date + URL), citizenships array, last refresh date.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
+""",
 )
 async def list_sanctions(
     request: Request,
@@ -353,7 +357,11 @@ GET /api/v1/specialised/sanctions/programmes
 ```
 
 **You get back**
-A flat list of `ProgrammeCount` objects: programme, persons, entities, total. Sorted by total descending.""",
+A flat list of `ProgrammeCount` objects: programme, persons, entities, total. Sorted by total descending.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
+""",
 )
 async def list_programmes(
     request: Request,
@@ -406,7 +414,11 @@ GET /api/v1/specialised/sanctions/EU.27.28
 ```
 
 **You get back**
-A `SanctionDetail` object with all canonical fields plus the JSON arrays for aliases / addresses / birth details / IDs / citizenships, the legal basis, the upstream remark, and the body fields composed from the structured data.""",
+A `SanctionDetail` object with all canonical fields plus the JSON arrays for aliases / addresses / birth details / IDs / citizenships, the legal basis, the upstream remark, and the body fields composed from the structured data.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
+""",
 )
 async def get_sanction(
     request: Request,

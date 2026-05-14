@@ -105,7 +105,11 @@ GET /api/v1/specialised/comitology/documents?document_type_letter=V&limit=20
 ```
 
 **You get back**
-A paginated envelope of `ComitologyDocItem` rows.""",
+A paginated envelope of `ComitologyDocItem` rows.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from Comitology Register (ec.europa.eu/transparency/comitology-register) — Angular SPA. Committee meetings scheduled in advance; documents posted within days.
+""",
 )
 async def list_documents(
     request: Request,
@@ -194,7 +198,11 @@ GET /api/v1/specialised/comitology/committees?dg_code=SANTE
 ```
 
 **You get back**
-A paginated envelope of `CommitteeItem` rows.""",
+A paginated envelope of `CommitteeItem` rows.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from Comitology Register (ec.europa.eu/transparency/comitology-register) — Angular SPA. Committee meetings scheduled in advance; documents posted within days.
+""",
 )
 async def list_committees(
     request: Request,

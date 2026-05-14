@@ -1,0 +1,452 @@
+{
+  "$schema_version": "1.0",
+  "$generated_by": "manual (14 May 2026, Victor + Claude) — single source of truth for endpoint sync cadence",
+  "$how_to_use": "Each entry maps a v1 endpoint path prefix to its upstream data source, the sync script that refreshes it, and the cadence tier. The audit_endpoint_docs.py script uses this file to inject a 'Data freshness' line into every endpoint description. brubru-cron-sync (Railway) reads this file to dispatch the right script at the right time.",
+
+  "tiers": {
+    "live_passthrough": {
+      "description": "No cache — the endpoint hits the upstream source on every request.",
+      "cron": null,
+      "freshness_label": "Live pass-through (no cache; hits upstream on every request)."
+    },
+    "hot_6h": {
+      "description": "Refreshed 4 times per day. For time-sensitive sources where same-day freshness is a conversion lever.",
+      "cron": "0 0,6,12,18 * * *",
+      "freshness_label": "Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from {source}."
+    },
+    "warm_12h": {
+      "description": "Refreshed twice a day. For sources that move daily but where half-day lag is acceptable.",
+      "cron": "0 2,14 * * *",
+      "freshness_label": "Synced every 12 hours (02:00 / 14:00 UTC) from {source}."
+    },
+    "daily": {
+      "description": "Refreshed once per night. For sources that move a few times per week.",
+      "cron": "0 4 * * *",
+      "freshness_label": "Synced once per day at 04:00 UTC from {source}."
+    },
+    "weekly": {
+      "description": "Refreshed once per week. For slow-moving universes (FTAs, GIs, vocabularies).",
+      "cron": "0 3 * * 0",
+      "freshness_label": "Synced once per week (Sunday 03:00 UTC) from {source}."
+    },
+    "monthly": {
+      "description": "Refreshed once per month. For corpora and release cycles (LEG bulk, EU Vocabularies releases).",
+      "cron": "0 2 1 * *",
+      "freshness_label": "Synced once per month (1st of month, 02:00 UTC) from {source}."
+    },
+    "manual": {
+      "description": "No automated sync. Backfilled on user request via CLI.",
+      "cron": null,
+      "freshness_label": "Backfilled manually via CLI (no automated cron). Last full backfill: see ingestion notes."
+    }
+  },
+
+  "endpoints": [
+    {
+      "path_prefix": "/api/v1/publications",
+      "source": "EU institutional RSS feeds (26+ portals)",
+      "script": "services/rss/rss_scheduler.py (in-process)",
+      "tier": "hot_6h",
+      "notes": "In-process scheduler in main backend, not brubru-cron-sync. Will migrate."
+    },
+    {
+      "path_prefix": "/api/v1/laws",
+      "source": "Cellar SPARQL (sector-3 secondary acts) + EUR-Lex RSS",
+      "script": "scripts/sync_eurlex_via_sparql.py + scripts/sync_eurlex_feeds.py",
+      "tier": "hot_6h",
+      "notes": "Currently triggered via /api/cron/sync/all daily; should move to 6h."
+    },
+    {
+      "path_prefix": "/api/v1/procedures",
+      "source": "OEIL XML procedure feeds (oeil.secure.europarl.europa.eu)",
+      "script": "scripts/sync_oeil_feeds.py",
+      "tier": "hot_6h",
+      "notes": "Currently triggered via /api/cron/sync/all daily; should move to 6h. Critical for legislative tracker freshness."
+    },
+    {
+      "path_prefix": "/api/v1/texts-adopted",
+      "source": "EP plenary RSS (europarl.europa.eu/plenary/en/texts-adopted)",
+      "script": "scripts/sync_texts_adopted.py",
+      "tier": "hot_6h",
+      "notes": "EP plenary days produce a burst of adopted texts within hours."
+    },
+    {
+      "path_prefix": "/api/v1/texts-submitted",
+      "source": "EP doceo (europarl.europa.eu/doceo)",
+      "script": "scripts/ingest_texts_submitted.py",
+      "tier": "hot_6h",
+      "notes": "EP report submissions appear on doceo within hours of committee adoption."
+    },
+    {
+      "path_prefix": "/api/v1/commission-register",
+      "source": "Commission Transparency Register (PV/OJ/SEC files)",
+      "script": "scripts/sync_college_agendas.py",
+      "tier": "hot_6h",
+      "notes": "College tentative agendas (SEC) update frequently; PV/OJ post-meeting daily."
+    },
+    {
+      "path_prefix": "/api/v1/commission-documents",
+      "source": "EUR-Lex Cellar COM/JOIN documents",
+      "script": "scripts/sync_commission_docs.py",
+      "tier": "hot_6h",
+      "notes": "Commission proposals + communications appear on Cellar within hours of College adoption."
+    },
+    {
+      "path_prefix": "/api/v1/calendar",
+      "source": "Multi-source: EP + Council + Commission + euagenda + College",
+      "script": "scripts/sync_eu_calendar.py + scripts/sync_euagenda.py + scripts/sync_committee_agendas.py + scripts/sync_commission_calendar_urls_all.py",
+      "tier": "hot_6h",
+      "notes": "Calendar staleness is a conversion-killer. 6h cadence is minimum acceptable."
+    },
+    {
+      "path_prefix": "/api/v1/committees",
+      "source": "EP committee work (draft reports, amendments, agendas, minutes, transcripts)",
+      "script": "scripts/sync_committee_work.py + sync_committee_minutes.py + sync_committee_agendas.py + sync_committee_transcripts.py",
+      "tier": "warm_12h",
+      "notes": "Committee meetings happen on a known schedule; 12h sync catches new docs within half a day."
+    },
+    {
+      "path_prefix": "/api/v1/eprs",
+      "source": "EP Think Tank portal (EPRS + ECTI + CASP RSS)",
+      "script": "scripts/sync_eprs_publications.py + sync_eprs_legislation_in_progress.py",
+      "tier": "warm_12h",
+      "notes": "EPRS publishes throughout the day; 12h is enough."
+    },
+    {
+      "path_prefix": "/api/v1/council-documents",
+      "source": "Council of the EU public document register",
+      "script": "scripts/sync_commission_docs.py (Council mode) — TODO dedicated sync_council_docs.py",
+      "tier": "warm_12h",
+      "notes": "Council documents move on summit + Council formation cadence."
+    },
+    {
+      "path_prefix": "/api/v1/consultations",
+      "source": "EC HaveYourSay (ec.europa.eu/info/law/better-regulation/have-your-say)",
+      "script": "scripts/sync_consultations.py",
+      "tier": "daily",
+      "notes": "Consultations open/close on a known multi-week schedule; daily is sufficient."
+    },
+    {
+      "path_prefix": "/api/v1/meps",
+      "source": "EP MEP API (data.europarl.europa.eu)",
+      "script": "Direct API call (no local cache for live MEP data)",
+      "tier": "live_passthrough",
+      "notes": "MEP changes are rare; we hit the EP API directly and don't cache."
+    },
+    {
+      "path_prefix": "/api/v1/commissioners",
+      "source": "Commission College composition + DG mapping (manual + sync_commission_calendar_urls_all.py)",
+      "script": "scripts/backfill_commissioner_agenda_bodies.py",
+      "tier": "weekly",
+      "notes": "College composition only changes at cabinet reshuffles."
+    },
+    {
+      "path_prefix": "/api/v1/predictions",
+      "source": "Computed on demand from OEIL + EP committee + GroupVotePredictor + CouncilPositionInferrer",
+      "script": "Computed at request time; cached in file_position_snapshots",
+      "tier": "live_passthrough",
+      "notes": "Cached predictions invalidated weekly on Friday (manual)."
+    },
+    {
+      "path_prefix": "/api/v1/resolutions",
+      "source": "EP plenary RSS (resolutions track)",
+      "script": "scripts/sync_oeil_feeds.py (also pulls EP resolutions)",
+      "tier": "hot_6h",
+      "notes": "Same source as procedures."
+    },
+    {
+      "path_prefix": "/api/v1/amendments",
+      "source": "EP committee work — amendments tabled (doceo + committee meeting docs)",
+      "script": "scripts/sync_committee_work.py + backfill_amendments_oeil.py",
+      "tier": "warm_12h",
+      "notes": "Amendments appear on doceo within hours of committee tabling deadlines."
+    },
+    {
+      "path_prefix": "/api/v1/votes",
+      "source": "HowTheyVote.eu (howtheyvote.eu) + EP plenary votes",
+      "script": "TODO sync_howtheyvote.py (currently seed data only)",
+      "tier": "hot_6h",
+      "notes": "HowTheyVote importer blocked on ep_political_groups.short_label collision — see CLAUDE.md."
+    },
+    {
+      "path_prefix": "/api/v1/webstreams",
+      "source": "EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming)",
+      "script": "scripts/sync_committee_transcripts.py (discovery)",
+      "tier": "warm_12h",
+      "notes": "Transcription fires on-demand when chatbot query hits transcript intent."
+    },
+    {
+      "path_prefix": "/api/v1/parliamentary-questions",
+      "source": "EP parliamentary questions (europarl.europa.eu/doceo/document/E)",
+      "script": "scripts/backfill_parl_question_text.py + backfill_parl_question_answers.py",
+      "tier": "daily",
+      "notes": "PQs filed throughout the day; daily catch-up acceptable."
+    },
+    {
+      "path_prefix": "/api/v1/meetings",
+      "source": "MEP meetings with lobbyists (europarl.europa.eu/meps/en/.../meetings)",
+      "script": "TODO sync_mep_meetings.py (currently part of meps sync)",
+      "tier": "daily",
+      "notes": "Transparency disclosure cycle is monthly per MEP."
+    },
+    {
+      "path_prefix": "/api/v1/rsb",
+      "source": "Regulatory Scrutiny Board opinions (ec.europa.eu/info/law/.../regulatory-scrutiny-board)",
+      "script": "TODO sync_rsb.py",
+      "tier": "weekly",
+      "notes": "RSB publishes a handful of opinions per month."
+    },
+    {
+      "path_prefix": "/api/v1/delegated-acts",
+      "source": "Comitology Register + EUR-Lex C-series for delegated acts",
+      "script": "scripts/backfill_eu_comitology.py",
+      "tier": "daily",
+      "notes": "New delegated acts published on a steady drumbeat — daily catches them."
+    },
+    {
+      "path_prefix": "/api/v1/implementing-acts",
+      "source": "Comitology Register + EUR-Lex C-series for implementing acts",
+      "script": "scripts/backfill_eu_comitology.py",
+      "tier": "daily",
+      "notes": "Same source + cadence as delegated acts."
+    },
+    {
+      "path_prefix": "/api/v1/tris-notifications",
+      "source": "TRIS Database (technical regulations notifications, ec.europa.eu/growth/tools-databases/tris)",
+      "script": "services/scrapers/dg_grow/dg_grow_sync_service.py — sync_tris()",
+      "tier": "daily",
+      "notes": "Member States notify TRIS throughout the day; daily is fine."
+    },
+    {
+      "path_prefix": "/api/v1/research",
+      "source": "STOA + JRC + Council ART (3 portals)",
+      "script": "Mostly manual via /news Step 1d; TODO sync_research.py",
+      "tier": "weekly",
+      "notes": "STOA + JRC + ART publish a handful of pieces per week."
+    },
+    {
+      "path_prefix": "/api/v1/officials",
+      "source": "EU Officials Whoiswho (op.europa.eu/en/web/who-is-who)",
+      "script": "scripts/backfill_officials_country.py",
+      "tier": "monthly",
+      "notes": "Senior officials change at cabinet reshuffles + a handful of mid-cycle moves."
+    },
+    {
+      "path_prefix": "/api/v1/tenders",
+      "source": "TED (Tenders Electronic Daily, ted.europa.eu)",
+      "script": "scripts/backfill_tenders_description.py",
+      "tier": "daily",
+      "notes": "TED publishes daily by definition."
+    },
+    {
+      "path_prefix": "/api/v1/discover/cellar",
+      "source": "Cellar SPARQL endpoint (publications.europa.eu/webapi/rdf/sparql)",
+      "script": "On-demand fetcher (services/comparator/structure_extractor.py); /recent uses scripts/sync_eurlex_via_sparql.py",
+      "tier": "live_passthrough",
+      "notes": "Per-CELEX fetches are live (cached in eu_laws after first fetch). /recent is precomputed every 6h."
+    },
+    {
+      "path_prefix": "/api/v1/discover/cellar/recent",
+      "source": "Cellar SPARQL (latest entries across all sectors)",
+      "script": "scripts/sync_eurlex_via_sparql.py",
+      "tier": "hot_6h",
+      "notes": "Cellar publishes throughout the day."
+    },
+    {
+      "path_prefix": "/api/v1/discover/eurio",
+      "source": "EURIO Cellar SPARQL (research projects, organisations, deliverables)",
+      "script": "On-demand fetcher + scripts/sync_eurio.py (TODO — currently DB seed)",
+      "tier": "weekly",
+      "notes": "Horizon Europe results update on a slower cadence than legislation."
+    },
+    {
+      "path_prefix": "/api/v1/discover/ecli",
+      "source": "e-Justice ECLI + InforCuria (CJEU) — live URL composition",
+      "script": "(no script — pure URL builder)",
+      "tier": "live_passthrough",
+      "notes": "We compose URLs from the ECLI string; no local cache."
+    },
+    {
+      "path_prefix": "/api/v1/vocabularies",
+      "source": "EU Vocabularies SKOS RDF (op.europa.eu/en/web/eu-vocabularies)",
+      "script": "scripts/sync_eu_authority_labels.py (via cron /api/cron/sync/authority-labels)",
+      "tier": "daily",
+      "notes": "Already wired into brubru-cron-sync at 03:00 UTC. NAL releases checked monthly via check_euvoc_releases.py."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/sanctions",
+      "source": "EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series",
+      "script": "scripts/backfill_eu_sanctions.py",
+      "tier": "daily",
+      "notes": "Council adopts sanctions packages on quarterly cycles + ad-hoc."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/transparency-register",
+      "source": "Joint Transparency Register XML (transparency-register.europa.eu)",
+      "script": "scripts/backfill_eu_transparency_register.py",
+      "tier": "daily",
+      "notes": "Daily XML dump from the Joint Secretariat."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/comitology",
+      "source": "Comitology Register (ec.europa.eu/transparency/comitology-register) — Angular SPA",
+      "script": "scripts/backfill_eu_comitology.py",
+      "tier": "daily",
+      "notes": "Committee meetings scheduled in advance; documents posted within days."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/gi",
+      "source": "eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register)",
+      "script": "scripts/backfill_eu_gi.py",
+      "tier": "weekly",
+      "notes": "DG AGRI adds a handful of PDO/PGI/TSG entries per month."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/fta",
+      "source": "Cellar SPARQL sector-2 (international agreements)",
+      "script": "scripts/backfill_eu_trade_agreements.py",
+      "tier": "weekly",
+      "notes": "New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/trade-defence",
+      "source": "OJ L-series for anti-dumping / CV / safeguard regulations",
+      "script": "scripts/backfill_eu_trade_defence.py",
+      "tier": "daily",
+      "notes": "DG TRADE publishes definitive duties + reviews on a steady cadence."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/competition",
+      "source": "DG COMP cases live API (api.tech.ec.europa.eu)",
+      "script": "(no script — live pass-through)",
+      "tier": "live_passthrough",
+      "notes": "DG COMP exposes a public API; we proxy it directly."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/jrc",
+      "source": "JRC Publications Repository + data.europa.eu (JRC datasets)",
+      "script": "scripts/backfill_eu_jrc_datasets.py",
+      "tier": "daily",
+      "notes": "JRC publishes a steady stream of technical reports + datasets."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/cohesion",
+      "source": "DG REGIO + ESF+ Socrata catalogues",
+      "script": "scripts/backfill_eu_cohesion_datasets.py",
+      "tier": "weekly",
+      "notes": "Cohesion datasets move slowly; weekly is enough."
+    },
+    {
+      "path_prefix": "/api/v1/specialised/a2m",
+      "source": "Combined Nomenclature (webgate.ec.europa.eu/nomen) — live pass-through",
+      "script": "(no script — live pass-through)",
+      "tier": "live_passthrough",
+      "notes": "CN codes are computed live from the official API."
+    },
+    {
+      "path_prefix": "/api/v1/infringements",
+      "source": "DG SG Infringements (ec.europa.eu/atwork/applying-eu-law/infringements-proceedings)",
+      "script": "scripts/backfill_infringement_summary.py + backfill_infringements_enrichment.py",
+      "tier": "daily",
+      "notes": "DG SG publishes monthly infringements packages + ad-hoc updates."
+    },
+    {
+      "path_prefix": "/api/v1/funding",
+      "source": "Funding & Tenders Portal (ec.europa.eu/info/funding-tenders) — Horizon, EIC, EIT, Erasmus, Creative Europe",
+      "script": "scripts/backfill_tenders_description.py (calls/topics) + cordis services (projects)",
+      "tier": "daily",
+      "notes": "Funding calls open/close on a known schedule; daily refresh catches new topics + deadlines."
+    },
+    {
+      "path_prefix": "/api/v1/calls-for-tenders",
+      "source": "Funding & Tenders Portal (tenders track)",
+      "script": "scripts/backfill_tenders_description.py",
+      "tier": "daily",
+      "notes": "Same source as /funding."
+    },
+    {
+      "path_prefix": "/api/v1/funded-projects",
+      "source": "CORDIS (cordis.europa.eu) + Funding & Tenders Portal",
+      "script": "scripts/sync_eurio.py (TODO)",
+      "tier": "weekly",
+      "notes": "CORDIS publishes new project metadata weekly."
+    },
+    {
+      "path_prefix": "/api/v1/press-releases",
+      "source": "EP press releases RSS (europarl.europa.eu/news)",
+      "script": "Part of /api/v1/publications via RSS",
+      "tier": "hot_6h",
+      "notes": "Shares the publications cadence."
+    },
+    {
+      "path_prefix": "/api/v1/ep-documents",
+      "source": "EP doceo document register",
+      "script": "Part of /api/v1/texts-adopted + texts-submitted",
+      "tier": "hot_6h",
+      "notes": "Shares the doceo cadence."
+    },
+    {
+      "path_prefix": "/api/v1/reports",
+      "source": "EP committee draft reports (doceo)",
+      "script": "Part of /api/v1/committees via committee_work sync",
+      "tier": "warm_12h",
+      "notes": "Shares the committee cadence."
+    },
+    {
+      "path_prefix": "/api/v1/opinions",
+      "source": "EP committee opinions + EESC + CoR opinions",
+      "script": "scripts/backfill_eu_eesc.py + backfill_eu_cor.py",
+      "tier": "daily",
+      "notes": "EESC + CoR plenary cycles are monthly; committee opinions are weekly."
+    },
+    {
+      "path_prefix": "/api/v1/knowledge-guides",
+      "source": "Brubru knowledge base (backend/knowledge_base/guides/*.md)",
+      "script": "Files-on-disk; updated by /morning Phase 3D and /audit-queries",
+      "tier": "manual",
+      "notes": "Not an external sync — Brubru-curated content."
+    },
+    {
+      "path_prefix": "/api/v1/catalan-translations",
+      "source": "Brubru-generated Catalan translations of EU acquis",
+      "script": "scripts/sync_catalan_disk_to_db.py",
+      "tier": "manual",
+      "notes": "Not an external sync — Brubru-generated content via /catalan skill."
+    },
+    {
+      "path_prefix": "/api/v1/legal-text",
+      "source": "Computed on demand from Cellar XHTML + PDF fallback",
+      "script": "On-demand fetcher (services/parsers/eurlex_fetcher.py + services/comparator/structure_extractor.py)",
+      "tier": "live_passthrough",
+      "notes": "Per-CELEX parses cached in eu_laws.extra_metadata after first fetch."
+    },
+    {
+      "path_prefix": "/api/v1/citations",
+      "source": "Computed on demand from Cellar XHTML",
+      "script": "On-demand fetcher (api/v1/citations.py)",
+      "tier": "live_passthrough",
+      "notes": "Per-CELEX citation extraction cached in citations_cache."
+    },
+    {
+      "path_prefix": "/api/v1/identify",
+      "source": "Pattern-matching service (no external source)",
+      "script": "(no script — pure pattern recognition)",
+      "tier": "live_passthrough",
+      "notes": "Pure compute on the input string."
+    },
+    {
+      "path_prefix": "/api/v1/meta",
+      "source": "Computed from Brubru DB joins (institutions, committees, etc.)",
+      "script": "(no script — DB queries on the fly)",
+      "tier": "live_passthrough",
+      "notes": "Meta enums + reference data resolved from DB on each request."
+    },
+    {
+      "path_prefix": "/api/v1/docs",
+      "source": "OpenAPI schema (auto-generated from FastAPI)",
+      "script": "(no script — generated at import time)",
+      "tier": "live_passthrough",
+      "notes": "Updated whenever the codebase is redeployed."
+    }
+  ]
+}

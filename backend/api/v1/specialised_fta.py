@@ -141,7 +141,11 @@ GET /api/v1/specialised/fta?agreement_type=FTA&in_force=true
 ```
 
 **You get back**
-A paginated envelope of `FtaListItem` rows: CELEX, title, document_date, agreement_type, partner, in_force flag, EUR-Lex URL. `has_body=false` on every list row by design; the detail endpoint returns the agreement text itself.""",
+A paginated envelope of `FtaListItem` rows: CELEX, title, document_date, agreement_type, partner, in_force flag, EUR-Lex URL. `has_body=false` on every list row by design; the detail endpoint returns the agreement text itself.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
+""",
 )
 async def list_fta(
     request: Request,
@@ -272,7 +276,11 @@ GET /api/v1/specialised/fta/types
 ```
 
 **You get back**
-A flat list of `AgreementTypeCount` objects sorted by total descending.""",
+A flat list of `AgreementTypeCount` objects sorted by total descending.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
+""",
 )
 async def list_types(
     request: Request,
@@ -326,7 +334,11 @@ GET /api/v1/specialised/fta/22018A1227(01)
 ```
 
 **You get back**
-An `FtaDetail` object with the agreement title, work URI, resource type, in-force flag, validity dates, available languages, EuroVoc concepts, EUR-Lex URL, and the body fields.""",
+An `FtaDetail` object with the agreement title, work URI, resource type, in-force flag, validity dates, available languages, EuroVoc concepts, EUR-Lex URL, and the body fields.
+
+**Data freshness**
+Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
+""",
 )
 async def get_fta(
     request: Request,

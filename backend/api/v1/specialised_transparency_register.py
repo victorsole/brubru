@@ -166,7 +166,11 @@ GET /api/v1/specialised/transparency-register?country=BELGIUM&interest=climate&m
 ```
 
 **You get back**
-A paginated envelope of `TrListItem` rows: identification code, name, acronym, category, head-office country/city, website, EP-accredited count, FTE, costs ceiling, registration / update timestamps, public URL.""",
+A paginated envelope of `TrListItem` rows: identification code, name, acronym, category, head-office country/city, website, EP-accredited count, FTE, costs ceiling, registration / update timestamps, public URL.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from Joint Transparency Register XML (transparency-register.europa.eu). Daily XML dump from the Joint Secretariat.
+""",
 )
 async def list_tr(
     request: Request,
@@ -305,7 +309,11 @@ GET /api/v1/specialised/transparency-register/categories
 ```
 
 **You get back**
-A flat list of `CategoryCount` objects sorted by organisation count descending.""",
+A flat list of `CategoryCount` objects sorted by organisation count descending.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from Joint Transparency Register XML (transparency-register.europa.eu). Daily XML dump from the Joint Secretariat.
+""",
 )
 async def list_categories(
     request: Request,
@@ -359,7 +367,11 @@ GET /api/v1/specialised/transparency-register/880143435725-46
 ```
 
 **You get back**
-A `TrDetail` object with all stored fields plus body_html / body_text composed from goals + EU legislative proposals + communication activities + intergroup activities + member info + structure + complementary info.""",
+A `TrDetail` object with all stored fields plus body_html / body_text composed from goals + EU legislative proposals + communication activities + intergroup activities + member info + structure + complementary info.
+
+**Data freshness**
+Synced once per day at 04:00 UTC from Joint Transparency Register XML (transparency-register.europa.eu). Daily XML dump from the Joint Secretariat.
+""",
 )
 async def get_tr(
     request: Request,

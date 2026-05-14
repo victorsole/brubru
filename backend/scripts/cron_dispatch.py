@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""
+Railway Cron Dispatcher (single-service pattern, set 14 May 2026).
+
+Replaces the per-tier Railway cron services with ONE service that wakes up every
+hour (CRON_SCHEDULE = "0 * * * *") and decides which tier(s) to fire based on
+the current UTC time.
+
+Why a single dispatcher: Railway bills per service. Five tier services = five
+service minimums. One dispatcher service that wakes hourly = one minimum.
+
+Schedule (from backend/config/sync_cadence.json):
+
+    hot_6h    → hours 00, 06, 12, 18 UTC                 (every 6h)
+    warm_12h  → hours 02, 14 UTC                          (every 12h)
+    daily     → hour 04 UTC                               (every day)
+    weekly    → Sunday hour 05 UTC                        (once per week)
+    monthly   → 1st of month hour 02 UTC                  (once per month)
+    daily-brief         → hour 11 UTC                     (Brubru Brief email)
+    authority-labels    → hour 03 UTC                     (NAL sync)
+
+Each fire is a POST to the main backend (BACKEND_URL) at
+    /api/cron/sync/<tier>
+or
+    /api/cron/<dedicated-endpoint>
+with `Authorization: Bearer $CRON_SECRET`. The backend runs the sync and
+returns a JSON summary.
+
+Fail-soft: one tier failing doesn't stop the next. The dispatcher logs and
+continues. Exit code 0 even on partial failure — the operator reads the log.
+
+Usage:
+    BACKEND_URL=https://brubru-production.up.railway.app \\
+    CRON_SECRET=... \\
+    python scripts/cron_dispatch.py
+"""
+
+import datetime
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+
+
+BACKEND_URL = os.environ.get("BACKEND_URL", "https://brubru-production.up.railway.app")
+CRON_SECRET = os.environ.get("CRON_SECRET", "")
+
+
+def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
+    """POST to a backend cron endpoint with the Bearer token. Returns response dict or error."""
+    url = f"{BACKEND_URL}{endpoint_path}"
+    headers = {"Authorization": f"Bearer {CRON_SECRET}"}
+    print(f"[FIRE] {url}", flush=True)
+    try:
+        req = urllib.request.Request(url, method="POST", headers=headers)
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read().decode()
+            try:
+                data = json.loads(body)
+                print(f"[OK]   {endpoint_path} → status={data.get('status', '?')}", flush=True)
+                return data
+            except json.JSONDecodeError:
+                print(f"[OK]   {endpoint_path} → non-JSON response (len={len(body)})", flush=True)
+                return {"status": "success", "raw": body[:500]}
+    except urllib.error.HTTPError as e:
+        print(f"[ERR]  {endpoint_path} → HTTP {e.code}: {e.reason}", flush=True)
+        return {"status": "failed", "http_code": e.code, "reason": str(e.reason)}
+    except urllib.error.URLError as e:
+        print(f"[ERR]  {endpoint_path} → URL error: {e.reason}", flush=True)
+        return {"status": "failed", "error": str(e.reason)}
+    except Exception as e:
+        print(f"[ERR]  {endpoint_path} → {type(e).__name__}: {e}", flush=True)
+        return {"status": "failed", "error": str(e)}
+
+
+def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
+    """
+    Given a UTC timestamp, return the list of (label, endpoint_path) to fire.
+
+    Pure function — easy to unit-test.
+    """
+    fires: list[tuple[str, str]] = []
+    hour = now.hour
+    weekday = now.weekday()  # Mon=0 ... Sun=6
+    day = now.day
+
+    # Hot tier: every 6 hours
+    if hour in (0, 6, 12, 18):
+        fires.append(("hot_6h", "/api/cron/sync/hot-6h"))
+
+    # Warm tier: every 12 hours (02 + 14 UTC, offset from hot tier)
+    if hour in (2, 14):
+        fires.append(("warm_12h", "/api/cron/sync/warm-12h"))
+
+    # Authority labels: 03:00 UTC daily
+    if hour == 3:
+        fires.append(("authority_labels", "/api/cron/sync/authority-labels"))
+
+    # Daily tier: 04:00 UTC daily
+    if hour == 4:
+        fires.append(("daily", "/api/cron/sync/daily"))
+
+    # Brubru Brief: 11:00 UTC daily
+    if hour == 11:
+        fires.append(("daily_brief", "/api/cron/daily-brief"))
+
+    # Weekly tier: Sunday 05:00 UTC
+    if weekday == 6 and hour == 5:
+        fires.append(("weekly", "/api/cron/sync/weekly"))
+
+    # Monthly tier: 1st of month 02:00 UTC (offset to 02:30 conceptually but we wake on minute 0)
+    # Avoid collision with warm-12h (also at 02:00) by using a different hour for monthly: 01.
+    # Actually keep at 02 — let both fire in sequence. They use separate endpoints anyway.
+    if day == 1 and hour == 2:
+        fires.append(("monthly", "/api/cron/sync/monthly"))
+
+    return fires
+
+
+def main():
+    if not CRON_SECRET:
+        print("[ERROR] CRON_SECRET environment variable not set", flush=True)
+        sys.exit(1)
+    if not BACKEND_URL:
+        print("[ERROR] BACKEND_URL environment variable not set", flush=True)
+        sys.exit(1)
+
+    now = datetime.datetime.utcnow()
+    weekday_name = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][now.weekday()]
+    print(
+        f"[CRON-DISPATCH] {now.isoformat()}Z ({weekday_name} hour={now.hour:02d} day={now.day:02d})",
+        flush=True,
+    )
+
+    fires = decide_tiers(now)
+    if not fires:
+        print(f"[CRON-DISPATCH] No tiers due at hour {now.hour:02d} UTC. Exiting.", flush=True)
+        sys.exit(0)
+
+    print(f"[CRON-DISPATCH] Firing {len(fires)} tier(s): {[label for label, _ in fires]}", flush=True)
+
+    results = {}
+    for label, endpoint in fires:
+        results[label] = _fire(endpoint)
+
+    # Summary line for log scraping
+    succeeded = sum(1 for r in results.values() if r.get("status") == "success")
+    failed = sum(1 for r in results.values() if r.get("status") == "failed")
+    print(
+        f"[CRON-DISPATCH] Done. fired={len(fires)} succeeded={succeeded} failed={failed}",
+        flush=True,
+    )
+
+    # Exit 0 even on partial failure — operator reads the log
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

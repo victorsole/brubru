@@ -152,7 +152,11 @@ GET /api/v1/webstreams?updated_from=2026-05-01
 ```
 
 **You get back**
-Paginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.""",
+Paginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+""",
 )
 async def list_webstreams(
     request: Request,
@@ -243,7 +247,11 @@ GET /api/v1/webstreams/{stream_id}
 ```
 
 **You get back**
-A `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.""",
+A `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+""",
 )
 async def get_webstream_detail(
     stream_id: str,
@@ -278,7 +286,11 @@ GET /api/v1/webstreams/by-procedure/2024%2F0123(COD)/transcript
 ```
 
 **You get back**
-Paginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.""",
+Paginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+""",
 )
 async def get_webstreams_for_procedure(
     procedure_ref: str,
