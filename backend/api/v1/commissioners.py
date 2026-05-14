@@ -117,12 +117,27 @@ def _build_profile_out(profile) -> CommissionerProfileOut:
 @router.get(
     "/{slug}",
     response_model=CommissionerProfileOut,
-    summary="Commissioner profile (no agenda — see /agenda for events)",
-    description=(
-        "Profile-only view of one Commission college member. Same shape as the "
-        "rows returned by GET /commissioners. To get the events / meetings for "
-        "this commissioner, call GET /commissioners/{slug}/agenda."
-    ),
+    summary="Look up one Commissioner profile by slug — bio + portfolio + agenda URLs",
+    description="""**What it does**
+Profile-only view of one Commission College member. Returns the same shape as a row from `GET /commissioners` — name, portfolio, country, bio URL, plus three working URLs to their meeting agenda (filtered unified-calendar URL, agenda PDF, unified-calendar entry point). Does NOT return the agenda items themselves — for that, call `GET /commissioners/{slug}/agenda`.
+
+**When to use it**
+After locating a commissioner via the list endpoint, use this for the profile-only view (no agenda fetch overhead). Useful when embedding a commissioner card without needing the full meeting list.
+
+**Input**
+- `slug` (path) — commissioner slug (stable kebab-case form of their name).
+
+**Try it**
+```
+GET /api/v1/commissioners/von-der-leyen
+GET /api/v1/commissioners/ribera
+```
+
+**You get back**
+A single `CommissionerProfileOut` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Reads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration (24h client cache). Refreshed on Brubru redeploy after manual JSON updates.""",
 )
 async def get_profile(
     request: Request,
@@ -157,13 +172,29 @@ async def get_profile(
 @router.get(
     "/{name}/agenda",
     response_model=PaginatedResponse[AgendaItemOut],
-    summary="Commissioner agenda — events only (no profile fields)",
-    description=(
-        "Live calendar items for a Commission college member. Name resolution is "
-        "accent-insensitive and accepts full name, slug, or known nickname (27 members). "
-        "Returns ONLY the agenda data envelope — for the profile, call "
-        "GET /commissioners/{slug}."
-    ),
+    summary="Calendar events for one Commissioner — meetings, speeches, College sessions",
+    description="""**What it does**
+Returns the live calendar of meeting events for one Commission College member — meetings with lobbyists / industry / NGOs, public speeches, College sessions, summit attendance. Name resolution is accent-insensitive and accepts the full name, the slug, or known nicknames (e.g. `ribera` → Teresa Ribera).
+
+**When to use it**
+For lobbying-transparency work: "who did Ribera meet last month?", "what speeches did the President give in May?", or "show me Hoekstra's upcoming public events". Combined with `/api/v1/meetings`, gives you a full picture of a Commissioner's engagement.
+
+**Input**
+- `name` (path) — full name, slug, or nickname (accent-insensitive).
+- `date_from`, `date_to` — date filter on agenda items.
+- `limit` (default 50, max 200), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/commissioners/ribera/agenda?date_from=2026-05-01
+GET /api/v1/commissioners/Von der Leyen/agenda
+```
+
+**You get back**
+A `PaginatedResponse[AgendaItemOut]` envelope. Each item carries the meeting date/time, title, location, type (meeting / speech / college session), and participants where available.
+
+**Data freshness**
+Live pull from the Commission's calendar items page (commission.europa.eu/about/organisation/college-commissioners/calendar-items-president-and-commissioners_en), with a 24h client cache per commissioner. Commissioners' agendas are updated by their Cabinet within hours of confirmation.""",
 )
 async def get_agenda(
     request: Request,

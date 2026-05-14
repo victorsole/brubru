@@ -155,16 +155,35 @@ def _row_to_item(
 @router.get(
     "",
     response_model=PaginatedResponse[CommissionRegisterItem],
-    summary="Commission Document Register (COM, SWD, OJ, PV, agendas, opinions)",
-    description=(
-        "All documents from the Commission Transparency Register, including "
-        "College of Commissioners agendas (AGENDA_COM_MEETING), tentative "
-        "agendas (TENTAT_AGENDA_COM_MEETING), College minutes (PV), RSB "
-        "opinions on impact assessments, and the underlying COM/SWD/JOIN "
-        "files. Each row exposes the direct PDF URL where available, "
-        "falling back to the Cellar resolver for adopted acts with a CELEX "
-        "(returns the canonical EN PDF)."
-    ),
+    summary="Commission Transparency Register — College agendas, minutes, COM proposals, SWD, impact assessments",
+    description="""**What it does**
+Returns documents from the Commission Transparency Register — College of Commissioners agendas (tentative + final), College minutes (PV), Commission proposals (COM), staff working documents (SWD), inter-service consultations (SEC), joint proposals (JOIN), and Regulatory Scrutiny Board opinions on impact assessments. Each row exposes the direct PDF URL where available, falling back to the Cellar resolver for adopted acts with a CELEX (returns the canonical EN PDF).
+
+**When to use it**
+The single most useful surface for College-of-Commissioners tracking. Filter by `document_register_category=TENTAT_AGENDA_COM_MEETING` to see the upcoming tentative College agendas (which signal what's about to be adopted); by `PV` to see the post-meeting minutes (which confirm what WAS adopted); by `OPIN_IMPACT_ASSESS` to see RSB scrutiny on the file before it lands.
+
+**Input**
+- `q` — substring on title + reference.
+- `doc_type` — `COM` / `SWD` / `SEC` / `C` / `JOIN` / `OJ` / `PV`.
+- `document_register_category` — `AGENDA_COM_MEETING` / `TENTAT_AGENDA_COM_MEETING` / `PV` / `OPIN_IMPACT_ASSESS` / `IMPACT_ASSESS` / `OJ`.
+- `dg_responsible` — DG code.
+- `procedure_ref` — OEIL reference for cross-linked documents.
+- `celex` — legal identifier cross-link.
+- `has_pdf` — boolean; restrict to rows with a PDF URL.
+- `published_from`, `published_to` (and `published_end` alias).
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/commission-register?document_register_category=TENTAT_AGENDA_COM_MEETING
+GET /api/v1/commission-register?q=AI%20Act&doc_type=COM
+```
+
+**You get back**
+A `PaginatedResponse[CommissionRegisterItem]` envelope. Each item carries reference, title, doc_type, register category, DG, procedure_ref, celex, pdf_url, source_url, dates, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from ec.europa.eu/transparency/documents-register/. Critical for College tracking — Secretariat-General updates the tentative agenda continuously, and PV minutes appear within days of each College meeting.""",
 )
 async def list_commission_register_documents(
     request: Request,
@@ -253,7 +272,27 @@ async def list_commission_register_documents(
 @router.get(
     "/{reference:path}",
     response_model=CommissionRegisterItem,
-    summary="Single Commission document by reference (e.g. COM(2025) 87)",
+    summary="Look up one Commission Register document by its reference (e.g. COM(2025) 87)",
+    description="""**What it does**
+Fetches a single document from the Commission Transparency Register by its reference (COM, SWD, SEC, JOIN, OJ, or PV number). Returns the same shape as the list endpoint, including the direct PDF URL when available.
+
+**When to use it**
+After locating a document via the list endpoint, use this for the deep-link. Common pattern: chat user asks about "COM(2025)87", you call this, get back the PDF URL + body, and embed it in the answer.
+
+**Input**
+- `reference` (path) — Commission document reference (e.g. `COM(2025) 87`, `SWD(2024) 123`, `SEC(2026) 2564`, `OJ(2026) 2565`, `PV(2026) 2562`). The `:path` matcher accepts parentheses + spaces verbatim — no URL-encoding needed.
+
+**Try it**
+```
+GET /api/v1/commission-register/COM(2025) 87
+GET /api/v1/commission-register/SEC(2026) 2564
+```
+
+**You get back**
+A single `CommissionRegisterItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 6 hours from ec.europa.eu/transparency/documents-register/.""",
 )
 async def get_commission_register_detail(
     reference: str,

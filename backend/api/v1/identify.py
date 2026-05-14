@@ -46,13 +46,28 @@ class IdentifyResult(BaseModel):
 @router.get(
     "",
     response_model=IdentifyResult,
-    summary="Recognise a single standard identifier",
-    description=(
-        "Hand it any EU standard identifier (CELEX, ECLI, ELI URI, ISBN, "
-        "ISSN, DOI, OJ ref, catalogue number, authority URI, EuroVoc URI) "
-        "and get back its type, canonical EU URL, Brubru endpoint, and "
-        "ShowVoc deep-link. Per OP Standards v4.0.0 §2."
-    ),
+    summary="Recognise any single EU identifier — legal IDs, case-law IDs, DOIs, ISBNs, OJ refs",
+    description="""**What it does**
+Hand it any EU standard identifier and get back its recognised type, the canonical EU URL where the resource lives, the Brubru v1 endpoint (where one exists), and a deep-link to the EU Vocabularies ShowVoc browser. Single entry point that ties together every identifier-shape regex in Brubru so chat / partner integrations / Tenderator can all use one unified resolver. Supports: CELEX legal IDs, ECLI case-law IDs, ELI URIs, ISBN, ISSN, DOI, Official Journal references, Publications Office catalogue numbers, EU authority URIs, EuroVoc URIs.
+
+**When to use it**
+When you have an identifier of unknown type and want one call that says "this is an X, here's where to find it". Common pattern in chat: user pastes an identifier, you call this, get back the canonical URL + Brubru endpoint, and you know how to follow up.
+
+**Input**
+- `q` — the identifier string (any of the supported types).
+
+**Try it**
+```
+GET /api/v1/identify?q=32016R0679
+GET /api/v1/identify?q=ECLI:EU:C:2014:317
+GET /api/v1/identify?q=10.1016/j.foo.2024.123
+```
+
+**You get back**
+An `IdentifyResult` with `kind` (the recognised type), `value` (normalised identifier), `canonical_url` (where the resource lives officially), `brubru_url` (the matching v1 endpoint if any), `showvoc_url` (EU Vocabularies deep-link), `parts` (per-type structured breakdown). HTTP 422 with `reason_code: unknown_identifier` if no type matches.
+
+**Data freshness**
+Live pass-through (pure pattern recognition + URL composition; no upstream HTTP call needed).""",
 )
 async def identify_one(
     request: Request,
@@ -82,12 +97,26 @@ async def identify_one(
 @router.get(
     "/scan",
     response_model=PaginatedResponse[IdentifyResult],
-    summary="Find every embedded identifier in a longer string",
-    description=(
-        "Scans free text for every embedded EU identifier and returns "
-        "the list. Useful for chat / partner integrations that ingest a "
-        "paragraph mixing CELEX + ECLI + DOI + ISSN."
-    ),
+    summary="Scan free text and extract every embedded EU identifier — list of recognised matches",
+    description="""**What it does**
+Scans any free-text string and returns every embedded EU standard identifier it can recognise — CELEX legal IDs, ECLI case-law IDs, ELI URIs, ISBN, ISSN, DOI, OJ refs, catalogue numbers. Each match comes back as a fully-resolved `IdentifyResult` (same shape as `/identify`).
+
+**When to use it**
+When you have a chunk of free text (a news article, an email, a chat message) and you want every identifier in it extracted + resolved in one call. Typical use: bulk-import a partner's brief, extract all CELEX numbers, fetch their metadata. The order of returned matches reflects the order of appearance in the input text.
+
+**Input**
+- `text` — the free-text string to scan (min 2 chars).
+
+**Try it**
+```
+GET /api/v1/identify/scan?text=See%20Regulation%20(EU)%202016/679%20and%20Directive%202002/58/EC.
+```
+
+**You get back**
+A `PaginatedResponse[IdentifyResult]` envelope. Each item is one match with the same fields as the `/identify` response.
+
+**Data freshness**
+Live pass-through (pure pattern recognition; no upstream HTTP call).""",
 )
 async def identify_scan(
     request: Request,

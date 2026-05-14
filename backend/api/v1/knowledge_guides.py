@@ -59,12 +59,29 @@ def _loader():
 @router.get(
     "",
     response_model=PaginatedResponse[KnowledgeGuideItem],
-    summary="Search or list Brubru knowledge guides",
-    description=(
-        "Curated EU policy explainers. Each guide has a QUICK FACTS block and keyword "
-        "triggers the chatbot uses for context matching. Pass ?q= for keyword-based "
-        "search, omit q to paginate everything."
-    ),
+    summary="Brubru's curated EU policy guides — what the chatbot uses to ground answers",
+    description="""**What it does**
+Returns Brubru's curated knowledge-base guides — the same markdown explainers that the chatbot uses to ground answers. Each guide is a 100-300-line domain explainer for one policy area (e.g. AI Act, CBAM downstream extension, MFF 2028-2034, Right to Stay Strategy). Every guide has a QUICK FACTS block at the top (latest news, key dates, actors), a body, and a set of keyword triggers used for retrieval.
+
+**When to use it**
+For partners who want to ground their own LLM in Brubru's curated EU-policy knowledge — fetch the guides relevant to a topic with `q=<topic>`, embed them as context, and your LLM gets the same grounding the Brubru chatbot uses. Pass `detail_level=Full` to get the complete markdown body (vs the 500-char preview for `Summary`).
+
+**Input**
+- `q` — keyword query (e.g. `GDPR`, `AI Act`, `CBAM`, `housing crisis`).
+- `detail_level` — `Summary` (default, 500-char preview) or `Full` (complete markdown body).
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/knowledge-guides?q=AI%20Act&detail_level=Full
+GET /api/v1/knowledge-guides?limit=100
+```
+
+**You get back**
+A `PaginatedResponse[KnowledgeGuideItem]` envelope. Each item carries `id`, `title`, `quick_facts` (the leading QUICK FACTS section parsed out), `triggers` (up to 50 keyword triggers), `content` (Full or 500-char preview based on `detail_level`), `content_preview`, `full_content_chars` (total body length).
+
+**Data freshness**
+Brubru-curated content (not synced from external sources). Updated by `/morning` Phase 3D (new guides created from news), `/audit-queries` (gap fills from user query analysis), and ad-hoc edits. Approximately 200+ guides as of May 2026.""",
 )
 async def list_knowledge_guides(
     request: Request,
@@ -120,7 +137,26 @@ async def list_knowledge_guides(
 @router.get(
     "/{guide_id}",
     response_model=KnowledgeGuideItem,
-    summary="Get a single knowledge guide (full markdown content)",
+    summary="Look up one knowledge guide by its filename slug — full markdown body",
+    description="""**What it does**
+Returns the full markdown content of one Brubru knowledge guide by its filename slug. Always returns the complete body — no truncation. Same content the chatbot injects into Claude/Mistral context for grounded answers.
+
+**When to use it**
+After locating a guide via the list endpoint (or because you already know the slug from a previous response), use this to fetch the full markdown — useful for embedding the explainer in your own UI, or for feeding into a downstream LLM as context.
+
+**Input**
+- `guide_id` (path) — the guide's filename slug (without `.md` extension), e.g. `ai_act_regulation`, `cbam_downstream_goods_extension`, `mff_2028_2034`.
+
+**Try it**
+```
+GET /api/v1/knowledge-guides/ai_act_regulation
+```
+
+**You get back**
+A single `KnowledgeGuideItem` with `id`, `title`, `quick_facts`, `triggers[]`, full `content` markdown, `full_content_chars`. HTTP 404 with `reason_code: not_found` if no guide with that slug exists.
+
+**Data freshness**
+Brubru-curated content. Guides are updated by `/morning` Phase 3D + ad-hoc edits when major legislative developments warrant a refresh.""",
 )
 async def get_knowledge_guide(
     guide_id: str,

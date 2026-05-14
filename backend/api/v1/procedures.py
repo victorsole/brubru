@@ -136,11 +136,33 @@ def _law_tracker_url(oeil_ref: Optional[str]) -> Optional[str]:
 @router.get(
     "",
     response_model=PaginatedResponse[ProcedureItem],
-    summary="Search EU legislative procedures",
-    description=(
-        "1,200+ legislative files tracked from Commission proposal to adoption. "
-        "Filters by OEIL reference, lead committee, status, and last-updated date range."
-    ),
+    summary="Search EU legislative procedures in negotiation — proposed but not yet adopted",
+    description="""**What it does**
+Returns EU legislative files that are currently in the institutional pipeline (proposed by the Commission, in EP committee, in Council negotiation, in trilogue, or recently adopted but not yet published). 1,200+ files tracked, sourced from OEIL — the EP's authoritative procedure file register. Each row carries the procedure reference (e.g. `2025/0726(COD)`), the title, the procedure type, the lead committee, the rapporteur, the current status, dates, and policy-area tags.
+
+**When to use it**
+The companion to `/api/v1/laws` (which covers adopted legislation). Use this surface for "what's coming next" advocacy work — tracking a file from proposal to adoption, monitoring rapporteur appointments, identifying procedures stuck in blocked status, or building a legislative-tracker dashboard. For procedures already adopted, the CELEX-keyed `/api/v1/laws` is faster.
+
+**Input**
+- `q` — substring match on title.
+- `reference` — exact OEIL procedure reference (e.g. `2025/0726(COD)`).
+- `committee` — lead committee code (e.g. `LIBE`, `ENVI`).
+- `rapporteur_mep_id` — filter to procedures rapporteured by a specific MEP.
+- `status` — procedure status enum (see `/api/v1/procedure-statuses`).
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `limit`, `page`.
+
+**Try it**
+```
+GET /api/v1/procedures?committee=ENVI&status=in_trilogue
+GET /api/v1/procedures?reference=2024/0079(COD)
+```
+
+**You get back**
+A `PaginatedResponse[ProcedureItem]` envelope. Each item carries the procedure metadata + envelope datapoints.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds (oeil.secure.europarl.europa.eu). Procedure stages move on EP committee + Council cadences; 6h sync catches stage transitions inside a quarter-day.""",
 )
 async def list_procedures(
     request: Request,
@@ -380,13 +402,27 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
 @router.get(
     "/{reference:path}",
     response_model=ProcedureDetail,
-    summary="Full procedure detail by OEIL reference or file_id",
-    description=(
-        "Returns the complete legislative carriage including OEIL timeline, key events, "
-        "rapporteurs, committees, EPRS-matched briefings, EUR-Lex documents, and AI "
-        "enrichment. Accepts either the OEIL procedure_ref (e.g. '2021/0106(COD)') "
-        "or the internal file_id."
-    ),
+    summary="Look up one legislative procedure by its reference — full timeline + rapporteurs + briefings",
+    description="""**What it does**
+Returns the complete legislative carriage for one procedure — the full OEIL timeline (every event from Commission proposal to adoption with dates + actors), rapporteurs by committee, committee assignments, EPRS-matched briefings, EUR-Lex linked documents, and AI-enriched summary. The richest single-procedure surface in the v1 API.
+
+**When to use it**
+When you need the complete picture of a legislative file in one call — for an advocacy briefing, a chat answer about "where is the AI Act now", or a legislative-tracker UI deep-link. The endpoint accepts either the OEIL procedure_ref (most common: `2025/0419(COD)`) or Brubru's internal file_id.
+
+**Input**
+- `reference` (path) — either OEIL procedure ref (e.g. `2021/0106(COD)`) or Brubru file_id. The `:path` matcher accepts slashes + parentheses verbatim; no URL-encoding needed.
+
+**Try it**
+```
+GET /api/v1/procedures/2024/0079(COD)
+GET /api/v1/procedures/2021/0106(COD)
+```
+
+**You get back**
+A `ProcedureDetail` object with `oeil_procedure_ref`, `file_id`, `title`, `procedure_type`, `procedure_stage`, `lead_committee`, full `events[]` timeline, `rapporteurs[]`, EPRS briefings, EUR-Lex documents, AI summary, and the 5 envelope-level datapoints. HTTP 404 with `reason_code: not_found` if no procedure matches.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds.""",
 )
 async def get_procedure_detail(
     reference: str,

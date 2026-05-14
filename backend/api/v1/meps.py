@@ -386,11 +386,31 @@ def _normalise(raw: Dict[str, Any]) -> MEPItem:
 @router.get(
     "",
     response_model=PaginatedResponse[MEPItem],
-    summary="List / search Members of the European Parliament",
-    description=(
-        "Live from europarl.europa.eu Open Data REST API v2. Filters: country (ISO-2 e.g. ES), "
-        "group (e.g. EPP, S-D, RENEW), name substring. 6-hour cache."
-    ),
+    summary="Members of the European Parliament — list / search by country, group, name, term",
+    description="""**What it does**
+Live list of MEPs from the European Parliament's Open Data REST API v2. Each MEP carries the EP-internal id, full name, party of origin + EU political group, country, parliamentary term, photo, bio URL, committee assignments, and (when hydrated) email + social media handles. Both current and historical MEPs are searchable via `term`.
+
+**When to use it**
+Drive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to one political group (`group=EPP`), or look up an MEP by name (`name=Sarri`). For historical research, set `term=9` for the 2019-2024 parliament. Per-MEP profile hydration (country / group / role) runs concurrently when the cache is warm — first cold call may take ~3-5s.
+
+**Input**
+- `country` — ISO-3166-1 alpha-2 (exact 2 chars).
+- `group` — political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) — both are accepted.
+- `name` — substring on full name.
+- `term` — parliamentary term (default 10 = current, valid range 1-10).
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/meps?country=ES&group=RENEW
+GET /api/v1/meps?name=Sarri
+```
+
+**You get back**
+A `PaginatedResponse[MEPItem]` envelope. Each item carries `mep_id`, `full_name`, `country`, `political_group`, `party_national`, `term`, `photo_url`, `bio_url`, `committee_assignments[]`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Live pass-through to data.europarl.europa.eu (the EP's Open Data REST API v2), with a 6-hour in-process cache. MEP changes are rare (election cycles + occasional resignations); the 6h cache balances freshness against EP API rate limits.""",
 )
 async def list_meps(
     request: Request,
@@ -440,7 +460,26 @@ async def list_meps(
 @router.get(
     "/{mep_id}",
     response_model=MEPItem,
-    summary="MEP profile by ID",
+    summary="Look up one MEP by their EP-internal id — full profile + body composition",
+    description="""**What it does**
+Fetches a single MEP by their EP-internal id (a 5-7 digit numeric identifier visible on europarl.europa.eu URLs like `/meps/en/197488/...`). Returns the full profile including biographical info, committee assignments, declared meetings (when available), and the composed body (name + group + country + roles + contact details as a readable contact card).
+
+**When to use it**
+After locating an MEP via the list endpoint, use this for the full record — particularly when embedding an MEP card in a chat answer or building an MEP profile page. The body composition gives you a ready-to-render HTML/text card.
+
+**Input**
+- `mep_id` (path) — EP-internal MEP id (e.g. `197488`).
+
+**Try it**
+```
+GET /api/v1/meps/197488
+```
+
+**You get back**
+A single `MEPItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Live pass-through to data.europarl.europa.eu with a 6-hour in-process cache.""",
 )
 async def get_mep(
     mep_id: str,
