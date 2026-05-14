@@ -104,7 +104,26 @@ class AmendmentItem(BaseModel):
 @amendments_router.get(
     "/{amendment_id}",
     response_model=AmendmentItem,
-    summary="Single EP amendment by id (UUID)",
+    summary="Look up one EP committee amendment by its internal UUID",
+    description="""**What it does**
+Fetches a single EP committee amendment by its Brubru-internal UUID. Returns the original text being amended, the proposed text, the justification, the author MEPs, the political group context (or whether tabled on behalf of a group), and the doceo URL.
+
+**When to use it**
+After locating an amendment via the list endpoint, use this to fetch the full record (with original + proposed text for diff rendering) — particularly useful for embedding in a comparison view in Amendator or in an advocacy briefing.
+
+**Input**
+- `amendment_id` (path) — Brubru UUID (returned in `id` from the list endpoint).
+
+**Try it**
+```
+GET /api/v1/amendments/<uuid>
+```
+
+**You get back**
+A single `AmendmentItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 12 hours (02:00 / 14:00 UTC, warm tier) from EP doceo committee meeting documents.""",
 )
 async def get_amendment_detail(
     amendment_id: str,
@@ -136,7 +155,36 @@ async def get_amendment_detail(
 @amendments_router.get(
     "",
     response_model=PaginatedResponse[AmendmentItem],
-    summary="EP committee amendments (scraped from doceo)",
+    summary="EP committee amendments — what MEPs propose to change in a draft regulation",
+    description="""**What it does**
+Returns the individual amendments tabled by MEPs in EP committee meetings — the building blocks of co-decision negotiation. Each amendment carries the procedure reference, the committee, the document PE reference, the amendment number, the author MEPs + political group context, the element being amended (recital/article/paragraph), and crucially the side-by-side text: `original_text` (what's currently proposed) + `proposed_text` (the MEPs' alternative) + `justification`.
+
+**When to use it**
+This is the canonical surface for amendment-tracking advocacy. Common patterns: filter by `procedure_reference` to see all amendments on the AI Act, by `political_group` + `procedure_reference` to see what the Greens want to change, or by `committee` to follow ENVI's amendment activity. The `amendment_type` filter (`modification` / `suppression` / `addition`) lets you isolate where MEPs want to delete text vs add new provisions.
+
+**Input**
+- `procedure_reference` — OEIL reference (e.g. `2025/0419(COD)`).
+- `committee` — 4-letter committee code (e.g. `ENVI`).
+- `political_group` — code (e.g. `EPP`, `S&D`).
+- `pe_reference` — EP document PE reference.
+- `amendment_type` — `modification` / `suppression` / `addition`.
+- `element_type` — `recital` / `article` / `paragraph` / `subparagraph`.
+- `q` — substring search on element_reference + proposed_text.
+- `published_from`, `published_to` — date filter on `document_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/amendments?procedure_reference=2025/0419(COD)&committee=ENVI&limit=50
+GET /api/v1/amendments?political_group=S%26D&q=CBAM
+```
+
+**You get back**
+A `PaginatedResponse[AmendmentItem]` envelope. Each item carries `procedure_reference`, `committee_code`, `pe_reference`, `amendment_number`, `author_names`, `political_group`, `on_behalf_of_group`, `element_type`, `element_number`, `element_reference`, `amendment_type`, `original_text`, `proposed_text`, `justification`, `source_url`, `document_date`.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) from EP doceo committee meeting documents. Amendments appear on doceo within hours of committee tabling deadlines; 12h sync catches them inside the half-day window.""",
 )
 async def list_amendments(
     request: Request,
@@ -529,9 +577,12 @@ async def list_member_votes(
 @votes_router.get(
     "/{vote_id}",
     response_model=VoteItem,
-    summary="Single EP roll-call vote detail",
+    summary="Look up one EP roll-call vote by its internal ID — full tallies + HowTheyVote link",
     description="""**What it does**
 Returns full metadata for one EP roll-call vote, including title, procedure, committee report, tallies, result, and the citizen-facing HowTheyVote URL.
+
+**When to use it**
+After locating a vote via the list endpoint, use this to fetch the full record (with all tallies + ADOPTED/REJECTED result) for embedding in an analysis or a chat answer. To get the per-MEP breakdown of the same vote, follow up with `/api/v1/votes/{vote_id}/records`.
 
 **Input**
 - `vote_id` (path) — `ep_votes.id` (UUID).
@@ -590,12 +641,33 @@ class EPDocumentItem(BaseModel):
 @ep_documents_router.get(
     "",
     response_model=PaginatedResponse[EPDocumentItem],
-    summary="Cross-committee unified EP documents view",
-    description=(
-        "Unifies the four EP document streams: committee_work (work items), "
-        "amendment_documents (PR/AM/RD/AD/PA), and texts_adopted. Filter "
-        "across all of them by committee, procedure, document type, and date."
-    ),
+    summary="Unified view of all EP committee output — work items + amendments + adopted texts",
+    description="""**What it does**
+Returns a unified, cross-committee view that merges three separate document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur), (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion), and (3) `texts_adopted` (the formal plenary outputs). Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across the three.
+
+**When to use it**
+When you want "everything that happened on file X across all stages" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering "what is the LIBE committee working on this week?".
+
+**Input**
+- `committee` — 4-letter code (e.g. `LIBE`).
+- `procedure_reference` — OEIL reference.
+- `document_type` — normalised: `draft_report` / `report` / `amendments` / `opinion` / `minutes` / `resolution`.
+- `q` — substring search across titles.
+- `published_from`, `published_to` — date filter.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/ep-documents?committee=LIBE&document_type=draft_report
+GET /api/v1/ep-documents?procedure_reference=2025/0419(COD)
+```
+
+**You get back**
+A `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences.""",
 )
 async def list_ep_documents(
     request: Request,
@@ -730,12 +802,33 @@ class PressReleaseItem(BaseModel):
 @press_releases_router.get(
     "",
     response_model=PaginatedResponse[PressReleaseItem],
-    summary="EU institutional press releases (first-class)",
-    description=(
-        "First-class endpoint over institutional_publications filtered to "
-        "category=press_release / news. Wraps the same data as "
-        "/publications?category=press_release but with a stable name."
-    ),
+    summary="EU institutional press releases (Commission, EP, Council, ECB, agencies)",
+    description="""**What it does**
+Returns press releases + news items from across the EU institutional ecosystem — Commission press corner + DG newsrooms, EP press service, Council, ECB, decentralised agencies. Each row carries the institution, the source feed slug, the title + summary, the publication URL, the policy-area tags, and (when ingested) the full body in both HTML and plain text.
+
+**When to use it**
+A first-class semantic alias over `/api/v1/publications?category=press_release`. Use this when you want the "what's the EU saying today" stream without thinking about the underlying publication taxonomy. Common pattern: poll `updated_from=<last_check>` every 6 hours to ingest deltas.
+
+**Input**
+- `institution_slug` — e.g. `european_commission`, `european_parliament`, `ecb`, `ema`.
+- `q` — substring search on title + summary.
+- `policy_area` — single policy area tag.
+- `published_from`, `published_to` — date filter.
+- `updated_from` — incremental sync (rows where `fetched_at >= value`).
+- `limit` (default 50, max 100), `page` (1-indexed).
+- `body_threshold` — int, minimum body chars for `has_body=true` (defaults to module default).
+
+**Try it**
+```
+GET /api/v1/press-releases?institution_slug=european_commission&limit=20
+GET /api/v1/press-releases?q=AI%20Act&updated_from=2026-05-14T00:00:00
+```
+
+**You get back**
+A `PaginatedResponse[PressReleaseItem]` envelope. Each item carries `institution_slug`, `source_slug`, `title`, `summary`, `url`, `language`, `published_date`, `policy_areas`, `tags`, `has_body`, `body_html`, `body_txt`, `body` (legacy alias), plus the 5 envelope-level datapoints (`public_url = url`).
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 26+ institutional RSS feeds. Same backing data as `/api/v1/publications`; this endpoint is just a filtered view restricted to category ∈ {press_release, news, press}.""",
 )
 async def list_press_releases(
     request: Request,
@@ -818,7 +911,30 @@ async def list_press_releases(
 @reports_router.get(
     "",
     response_model=PaginatedResponse[EPDocumentItem],
-    summary="EP committee reports (draft + final)",
+    summary="EP committee reports — draft reports + draft recommendations",
+    description="""**What it does**
+Returns EP committee reports — both `draft_report` (document type PR) and `draft_recommendation` (RD). These are the rapporteur's first written articulation of the EP's position on a legislative file, before amendments are tabled. Each row carries the procedure reference, the lead committee, the PE document reference, the rapporteur's name, the document date, and the doceo URL.
+
+**When to use it**
+Reports are the most quoted EP documents in advocacy work — they set the framing for the committee's negotiation. Use this endpoint to find "the latest report on the AI Act", "all draft reports by rapporteur X", or "all ENVI reports this year". The title is enriched with the procedure's plain-language alias (e.g. "draft_report for 2024/0079(COD) (ENVI)" becomes "draft_report for CBAM Downstream Extension (ENVI)").
+
+**Input**
+- `committee` — 4-letter committee code.
+- `procedure_reference` — OEIL reference.
+- `published_from`, `published_to` — date filter on `document_date`.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/reports?committee=ENVI&published_from=2026-01-01
+GET /api/v1/reports?procedure_reference=2025/0419(COD)
+```
+
+**You get back**
+A `PaginatedResponse[EPDocumentItem]` envelope, semantic-aliased subset of `/api/v1/ep-documents` filtered to `document_type ∈ {PR, RD}`. Each item carries `source="amendment_document"`, `document_type` (`draft_report` or `draft_recommendation`), `committee_code`, `procedure_reference`, `pe_reference`, enriched `title`, `rapporteur_name`, `document_date`, `document_url`, `total_amendments`, `last_updated`.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work + amendment_documents syncs from EP doceo.""",
 )
 async def list_reports(
     request: Request,
@@ -870,7 +986,30 @@ async def list_reports(
 @opinions_router.get(
     "",
     response_model=PaginatedResponse[EPDocumentItem],
-    summary="EP committee opinions (AD + PA)",
+    summary="EP associated-committee opinions — what other committees say about a lead committee's file",
+    description="""**What it does**
+Returns EP committee opinions — both `opinion` (document type AD, the formal adopted opinion) and `draft_opinion` (PA, the rapporteur for opinion's first draft). An opinion is what an associated committee says to the lead committee on a legislative file: e.g. ITRE's opinion to ENVI on the CBAM file. They are non-binding but influence the lead committee's report.
+
+**When to use it**
+To find which side-committees are weighing in on a file (e.g. all opinions on the AI Act → CULT, IMCO, JURI, LIBE), to track a specific committee's opinion-rapporteur output, or to assemble a procedure's full inter-committee picture. The `procedure_reference` filter scopes to one file.
+
+**Input**
+- `committee` — 4-letter committee code (the OPINIONING committee, not the lead).
+- `procedure_reference` — OEIL reference.
+- `published_from`, `published_to` — date filter on `document_date`.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/opinions?procedure_reference=2024/0079(COD)
+GET /api/v1/opinions?committee=ITRE&published_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[EPDocumentItem]` envelope, semantic-aliased subset of `/api/v1/ep-documents` filtered to `document_type ∈ {AD, PA}`. Same shape as `/api/v1/reports`.
+
+**Data freshness**
+Synced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work + amendment_documents syncs from EP doceo.""",
 )
 async def list_opinions(
     request: Request,
