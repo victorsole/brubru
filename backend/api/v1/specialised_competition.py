@@ -226,7 +226,10 @@ GET /api/v1/specialised/competition-cases?q=microsoft
 ```
 
 **You get back**
-A paginated envelope of `CompetitionCaseItem` rows: case_number, case_title, instrument, DG, Member State, aid category, dates, primary attachment URL, public case URL. `has_body` is False on list rows.""",
+A paginated envelope of `CompetitionCaseItem` rows: case_number, case_title, instrument, DG, Member State, aid category, dates, primary attachment URL, public case URL. `has_body` is False on list rows.
+
+**Data freshness**
+Live pass-through (no cache; hits api.tech.ec.europa.eu/search-api/prod/rest/search on every request). DG COMP updates the search index continuously as case statuses move; live queries always reflect the latest state.""",
 )
 async def list_cases(
     request: Request,
@@ -258,17 +261,26 @@ async def list_cases(
 @router.get(
     "/{case_number}",
     response_model=CompetitionCaseItem,
-    summary="Single competition case by case number",
+    summary="Look up one DG COMP competition case by its case number (e.g. SA.105841)",
     description="""**What it does**
-Returns the case-level metadata for a specific DG COMP case (e.g. `SA.105841`, `M.10999`, `AT.40437`). Live pass-through query that filters the search backend by `caseNumber`.
+Returns the case-level metadata for a specific DG COMP case. The case-number prefix indicates the instrument: `SA.` = state aid, `M.` = merger control, `AT.` = antitrust. Live pass-through query that filters the search backend by `caseNumber`.
+
+**When to use it**
+After locating a case via the list endpoint, use this for the canonical view of one case — useful when embedding a case reference in a brief or compliance memo.
 
 **Input**
-- `case_number` (path) — e.g. `SA.105841`.
+- `case_number` (path) — e.g. `SA.105841` (state aid), `M.10999` (merger), `AT.40437` (antitrust).
 
 **Try it**
 ```
 GET /api/v1/specialised/competition-cases/SA.105841
-```""",
+```
+
+**You get back**
+A `CompetitionCaseItem` with the same shape as a list-endpoint row. HTTP 404 with `reason_code: not_found` if the case is not in the search backend.
+
+**Data freshness**
+Live pass-through (no cache; hits api.tech.ec.europa.eu/search-api/prod/rest/search on every request).""",
 )
 async def get_case(
     request: Request,

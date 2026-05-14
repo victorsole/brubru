@@ -92,7 +92,10 @@ GET /api/v1/specialised/jrc-datasets?q=fire&limit=20
 ```
 
 **You get back**
-A paginated envelope of `JrcDatasetItem` rows. Follow `public_url` for the canonical JRC dataset page.""",
+A paginated envelope of `JrcDatasetItem` rows. Follow `public_url` for the canonical JRC dataset page.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) via Playwright DOM-scraping of data.jrc.ec.europa.eu. The JRC publishes a steady stream of technical reports + datasets; daily sync catches them. Backed by `backend/scripts/backfill_eu_jrc_datasets.py`.""",
 )
 async def list_datasets(
     request: Request,
@@ -142,18 +145,27 @@ async def list_datasets(
 @router.get(
     "/{uuid}",
     response_model=JrcDatasetDetail,
-    summary="Single JRC dataset by UUID",
+    summary="Look up one JRC dataset by its UUID — full metadata + distributions",
     description="""**What it does**
 Returns the stored record for one JRC dataset. When the per-dataset detail scrape has run, the response also includes description, distributions list, publisher and dates. Until then, only the catalog-listing fields (title + URL) are populated.
 
+**When to use it**
+After locating a dataset in the catalogue, use this for the full metadata + the `distributions` array which lists the actual download URLs (CSV, JSON, NetCDF, GeoTIFF, etc.) for the dataset's contents.
+
 **Input**
-- `uuid` (path) — JRC dataset UUID (visible in the public URL).
-- `body_threshold` (int, default 500).
+- `uuid` (path) — JRC dataset UUID (visible in the public URL after `/dataset/`).
+- `body_threshold` (int, default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/specialised/jrc-datasets/fe46e164-241f-40c0-9614-442c6e25d380
-```""",
+```
+
+**You get back**
+A `JrcDatasetDetail` object with all metadata + body composition + distributions array. HTTP 404 with `reason_code: not_found` if no dataset with that UUID is stored.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from data.jrc.ec.europa.eu.""",
 )
 async def get_dataset(
     request: Request,

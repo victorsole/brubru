@@ -115,7 +115,10 @@ GET /api/v1/specialised/cohesion-datasets?category=2021%20%2F%202027%20Indicator
 ```
 
 **You get back**
-A paginated envelope of `CohesionListItem` rows — each is a dataset, with the Socrata API endpoint to follow for actual rows.""",
+A paginated envelope of `CohesionListItem` rows — each is a dataset, with the Socrata API endpoint to follow for actual rows.
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) from cohesiondata.ec.europa.eu. DG REGIO updates the catalogue when new datasets are published or refreshed; weekly sync is appropriate. Backed by `backend/scripts/backfill_eu_cohesion_datasets.py`.""",
 )
 async def list_cohesion(
     request: Request,
@@ -218,12 +221,15 @@ async def list_cohesion(
 @router.get(
     "/categories",
     response_model=list[CohesionCategoryCount],
-    summary="Cohesion datasets by category",
+    summary="Cohesion Open Data dataset counts by category — quick browseable index",
     description="""**What it does**
-Returns each Cohesion Open Data category with the count of datasets in it.
+Returns each Cohesion Open Data category (e.g. `2021 / 2027 Indicators`, `2014-2020 Categorisation`, `Mid-term Review`) with the count of datasets in it.
+
+**When to use it**
+To build a category facet / sidebar before drilling into the main dataset list. Gives partners a quick view of where the bulk of Cohesion data lives without paginating the full catalogue.
 
 **Input**
-None.
+None. Requires an `X-API-Key` header.
 
 **Try it**
 ```
@@ -231,7 +237,10 @@ GET /api/v1/specialised/cohesion-datasets/categories
 ```
 
 **You get back**
-A flat list of `CohesionCategoryCount` objects, sorted by dataset count descending.""",
+A flat list of `CohesionCategoryCount` objects, sorted by dataset count descending.
+
+**Data freshness**
+Live aggregate query over the `eu_cohesion_datasets` table — recomputed on each request. The underlying mirror is synced weekly (Sunday 05:00 UTC, weekly tier) from cohesiondata.ec.europa.eu.""",
 )
 async def list_categories(
     request: Request,
@@ -252,13 +261,16 @@ async def list_categories(
 @router.get(
     "/{socrata_id}",
     response_model=CohesionDetail,
-    summary="Single Cohesion dataset (full metadata + body)",
+    summary="Look up one Cohesion Open Data dataset by its Socrata id — full schema + body",
     description="""**What it does**
 Returns the full metadata for one Cohesion dataset, including its column schema, tags, attribution, download / view counts, and the composed body that combines description + tags + columns into a readable article.
 
+**When to use it**
+After discovering a dataset in the catalogue, use this for the full metadata before deciding whether to ingest its rows (which can be in the millions). The body provides a human-readable summary of what the dataset contains.
+
 **Input**
 - `socrata_id` (path) — the Socrata dataset 4x4 ID, e.g. `7twf-r3rc`.
-- `body_threshold` (int, default 500).
+- `body_threshold` (int, default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
@@ -266,7 +278,10 @@ GET /api/v1/specialised/cohesion-datasets/7twf-r3rc
 ```
 
 **You get back**
-A `CohesionDetail` object with all metadata plus the body. Follow `api_endpoint` to fetch the actual rows from Socrata.""",
+A `CohesionDetail` object with all metadata plus the body. Follow `api_endpoint` to fetch the actual rows from Socrata.
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) from cohesiondata.ec.europa.eu.""",
 )
 async def get_cohesion(
     request: Request,

@@ -247,18 +247,27 @@ async def list_committees(
 @router.get(
     "/documents/{reference}",
     response_model=ComitologyDocDetail,
-    summary="Single Comitology document by reference",
+    summary="Look up one comitology document by its register reference (e.g. 115543)",
     description="""**What it does**
-Returns the full record for one comitology document, identified by its document reference (e.g. `115543`).
+Returns the full record for one comitology document, identified by its document reference. Returns the document's title, type (agenda / summary record / voting sheet / draft implementing act / urgency letter), the issuing committee, the meeting date, the public URLs, and the composed body text when ingested.
+
+**When to use it**
+After locating a document via the list endpoint, use this for the full record — useful for embedding a voting sheet (e.g. a SCoPAFF glyphosate vote outcome) into a compliance analysis or chat answer.
 
 **Input**
-- `reference` (path) — comitology document reference.
-- `body_threshold` (int, default 500).
+- `reference` (path) — comitology document reference (numeric, e.g. `115543`).
+- `body_threshold` (int, default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
 ```
 GET /api/v1/specialised/comitology/documents/115543
-```""",
+```
+
+**You get back**
+A `ComitologyDocDetail` object with full metadata + body composition. HTTP 404 with `reason_code: not_found` if no document with that reference is stored.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from ec.europa.eu/transparency/comitology-register/.""",
 )
 async def get_document(
     request: Request,

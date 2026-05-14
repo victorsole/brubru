@@ -234,9 +234,12 @@ async def list_webstreams(
 @router.get(
     "/{stream_id}",
     response_model=WebstreamItem,
-    summary="Single EP committee webstream by id",
+    summary="Look up one EP committee webstream by its internal id — metadata + transcript status",
     description="""**What it does**
 Returns full metadata for one committee-meeting webstream, including the multimedia landing page (`public_url`), direct video URL, meeting date, transcript status, and (when COMPLETED) duration / speaker / word counts.
+
+**When to use it**
+After locating a webstream via the list endpoint, use this for the full record — particularly to check transcript status before requesting transcription, or to deep-link into a specific committee meeting in an analysis.
 
 **Input**
 - `stream_id` (path) — `committee_meeting_transcripts.id` (UUID).
@@ -272,12 +275,15 @@ async def get_webstream_detail(
 @router.get(
     "/by-procedure/{procedure_ref:path}/transcript",
     response_model=PaginatedResponse[WebstreamItem],
-    summary="Webstreams linked to a specific OEIL procedure file",
+    summary="Webstreams linked to a specific legislative procedure — every committee debate end-to-end",
     description="""**What it does**
-Returns every committee-meeting webstream whose `related_procedure_refs` array contains the given OEIL reference. Useful for tracking every committee debate of a specific legislative file end-to-end.
+Returns every committee-meeting webstream whose `related_procedure_refs` array contains the given procedure reference (OEIL identifier). Useful for tracking every committee debate of a specific legislative file end-to-end.
+
+**When to use it**
+To assemble a "complete debate timeline" for an advocacy brief on a specific file — pull every meeting where the file appeared, sorted by date, with deep-links to the multimedia replays. Combine with `/api/v1/amendments?procedure_reference=X` for the amendments tabled at each meeting.
 
 **Input**
-- `procedure_ref` (path) — OEIL reference, e.g. `2024/0123(COD)`.
+- `procedure_ref` (path) — procedure reference, e.g. `2024/0123(COD)`. URL-encode the slash as `%2F` or use the `:path` matcher which accepts it verbatim.
 - `limit` (1–100, default 50), `page` (default 1).
 
 **Try it**
