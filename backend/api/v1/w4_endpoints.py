@@ -122,12 +122,36 @@ def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Parl
 @parl_q_router.get(
     "",
     response_model=PaginatedResponse[ParliamentaryQuestionItem],
-    summary="EP parliamentary questions (written + oral) with answers",
-    description=(
-        "EP parliamentary questions submitted to Commission/Council and their "
-        "answers. Source: europarl.europa.eu/plenary/en/parliamentary-questions.html. "
-        "Scraper queued; endpoint returns empty until ingested."
-    ),
+    summary="European Parliament questions to Commission, Council or ECB — with answers",
+    description="""**What it does**
+Returns parliamentary questions submitted by MEPs to the Commission, Council, or ECB — written questions, oral questions, priority questions, and Question Time. Each row includes the original question text, the answering institution's reply when published, the asking MEPs, the answering commissioner (when applicable), related procedure/CELEX cross-references, and the canonical citizen URL on doceo.
+
+**When to use it**
+To track what MEPs are asking on a given policy area, find the official Commission position on an emerging topic before formal legislation drops, or build a "what's been asked about X" timeline. The `procedure_ref` filter lets you scope to questions related to a specific legislative file.
+
+**Input**
+- `q` — substring search on subject + question text + answer text.
+- `question_type` — `written` / `oral` / `priority` / `question_time`.
+- `parliamentary_term` — integer (current: 10).
+- `asking_mep_id` — filter to questions asked by a specific MEP.
+- `answering_institution` — `COMMISSION` / `COUNCIL` / `ECB`.
+- `procedure_ref` — OEIL reference (e.g. `2026/0419(COD)`).
+- `committee` — 4-letter committee code (e.g. `ENVI`).
+- `published_from`, `published_to` — date filter on `submitted_date`.
+- `updated_from` — incremental sync (rows where `last_updated >= value`).
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/parliamentary-questions?q=AI%20Act&limit=10
+GET /api/v1/parliamentary-questions?committee=ENVI&published_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[ParliamentaryQuestionItem]` envelope. Each item carries `question_reference` (e.g. `E-001234/2026`), `question_type`, `subject`, `text_question`, `text_answer`, dates, asking-MEP arrays, `procedure_ref`, `related_celex`, `policy_areas`, `source_url`, `answer_url`, `body_txt` + `body_html` (semantic article with Question + Answer sections), plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from europarl.europa.eu/plenary/en/parliamentary-questions.html. New questions appear on doceo within hours of being tabled; answers can take days to weeks (Commission has up to 6 weeks under Rule 138). Scraper queued; endpoint returns empty result until ingestion completes.""",
 )
 async def list_parliamentary_questions(
     request: Request,
@@ -191,7 +215,26 @@ async def list_parliamentary_questions(
 @parl_q_router.get(
     "/{question_reference:path}",
     response_model=ParliamentaryQuestionItem,
-    summary="Single parliamentary question by reference (e.g. E-001234/2026)",
+    summary="Look up one parliamentary question by its reference (e.g. E-001234/2026)",
+    description="""**What it does**
+Fetches a single parliamentary question by its reference. Returns the same shape as the list endpoint, including the original question text, the official answer when published, and the citizen URL on doceo.
+
+**When to use it**
+After locating a question via the list endpoint, use this to get the full text + answer in a deeper-link context (e.g. embedding in a chat response). Common pattern: `q` search → pick a reference → fetch detail.
+
+**Input**
+- `question_reference` (path) — e.g. `E-001234/2026` for a written question or `O-000123/2026` for an oral question. Format: `<TYPE>-<NUMBER>/<YEAR>` where TYPE ∈ {E, O, P, QT}.
+
+**Try it**
+```
+GET /api/v1/parliamentary-questions/E-001234/2026
+```
+
+**You get back**
+A single `ParliamentaryQuestionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` if no question with that reference exists in our mirror.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from europarl.europa.eu. If a question exists on doceo but not in our DB, it means it hasn't been picked up by the latest sync yet (max ~24h lag).""",
 )
 async def get_parl_question_detail(
     question_reference: str,
@@ -287,12 +330,34 @@ def _compose_meeting_body(r) -> tuple:
 @meetings_router.get(
     "",
     response_model=PaginatedResponse[TransparencyMeetingItem],
-    summary="Commission Transparency Initiative meetings register",
-    description=(
-        "Meetings between Commission cabinet/DG officials and external interest "
-        "representatives. Source: ec.europa.eu/transparencyinitiative/meetings/. "
-        "Seed host UUIDs from Marcadors: ca175ad3..., a2c7c963..., 9fd4662a...."
-    ),
+    summary="Commission officials' meetings with interest representatives (Transparency Initiative)",
+    description="""**What it does**
+Returns the meetings between Commission officials (Commissioners, Heads of Cabinet, Directors-General) and external interest representatives — lobbyists, NGOs, trade bodies, member-state representatives — as published under the Transparency Initiative. Each row carries the host (UUID + name + role + DG/cabinet), the meeting date + location + subject, the organisation met, its Transparency Register ID, the participating representatives, and policy-area + related-CELEX tags.
+
+**When to use it**
+To audit who lobbied which Commissioner on a given topic, build a "meetings on Topic X" view for an advocacy campaign, or cross-reference a known lobbyist against the meetings register. Combined with `/api/v1/specialised/transparency-register`, it lets you trace lobbying activity end-to-end (who is registered → who they met → what was discussed).
+
+**Input**
+- `host_uuid` — filter to a specific Commissioner/Cabinet host (UUID from commission.europa.eu).
+- `host_dg` — filter to a specific DG (e.g. `COMP`, `CLIMA`).
+- `organisation_met` — substring match on the organisation name (e.g. `Microsoft`).
+- `transparency_register_id` — filter to a specific registered entity.
+- `q` — substring search on the meeting subject.
+- `published_from`, `published_to` — date filter on `meeting_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/meetings?host_dg=COMP&q=AI
+GET /api/v1/meetings?organisation_met=BusinessEurope&limit=20
+```
+
+**You get back**
+A `PaginatedResponse[TransparencyMeetingItem]` envelope. Each item carries `host_uuid`, `host_name`, `host_role`, `host_dg`, `host_cabinet`, `meeting_date`, `location`, `subject`, `organisation_met`, `transparency_register_id`, `organisation_type`, `representatives` (array of names), `source_url`, `policy_areas`, `related_celex`, plus a composed `body_txt`/`body_html` (subject + participants + organisation) and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/transparencyinitiative/meetings/. Cabinet officials are required to publish meetings within ~2 weeks; daily sync catches them inside that window. Seed host UUIDs: ca175ad3... (President), a2c7c963... (Ribera), 9fd4662a... (Hoekstra).""",
 )
 async def list_meetings(
     request: Request,
@@ -363,7 +428,26 @@ async def list_meetings(
 @meetings_router.get(
     "/{meeting_id}",
     response_model=TransparencyMeetingItem,
-    summary="Single Transparency Initiative meeting by id (UUID)",
+    summary="Look up one Transparency Initiative meeting by its internal UUID",
+    description="""**What it does**
+Fetches a single Transparency Initiative meeting record by its Brubru-internal UUID. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating a meeting via the list endpoint, use this to deep-link into a specific record (e.g. embedded in an advocacy report or a chat answer).
+
+**Input**
+- `meeting_id` (path) — Brubru UUID of the meeting (returned in `id` from the list endpoint).
+
+**Try it**
+```
+GET /api/v1/meetings/<uuid>
+```
+
+**You get back**
+A single `TransparencyMeetingItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` if no meeting with that UUID exists.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from ec.europa.eu/transparencyinitiative/meetings/.""",
 )
 async def get_meeting_detail(
     meeting_id: str,
@@ -423,12 +507,34 @@ class RSBOpinionItem(BaseModel):
 @rsb_router.get(
     "",
     response_model=PaginatedResponse[RSBOpinionItem],
-    summary="Regulatory Scrutiny Board opinions on Commission impact assessments",
-    description=(
-        "RSB opinions on impact assessments / evaluations / fitness checks. "
-        "Source: commission.europa.eu/law/law-making-process/regulatory-scrutiny-board/. "
-        "Verdict can be positive | positive_with_reservations | negative."
-    ),
+    summary="Regulatory Scrutiny Board opinions on Commission impact assessments + evaluations",
+    description="""**What it does**
+Returns opinions of the Regulatory Scrutiny Board — the independent body within the Commission that scrutinises impact assessments, evaluations, and fitness checks before they're submitted to the College. Each opinion carries the target initiative (the proposed regulation being assessed), the target DG, the procedure reference, the opinion type (`impact_assessment` / `evaluation` / `fitness_check`), and the verdict (`positive` / `positive_with_reservations` / `negative`).
+
+**When to use it**
+A negative RSB opinion is a red flag that a forthcoming proposal has methodological gaps — often a leading indicator that the College will delay adoption, send the file back for re-work, or amend the impact assessment. Use this endpoint to monitor RSB output on the policy files you care about, or to filter for "all negative opinions on environment files in 2026" as a quality signal.
+
+**Input**
+- `target_dg` — DG code (e.g. `CLIMA`, `ENVI`).
+- `procedure_ref` — OEIL reference.
+- `verdict` — `positive` / `positive_with_reservations` / `negative` / `unknown`.
+- `opinion_type` — `impact_assessment` / `evaluation` / `fitness_check`.
+- `q` — substring search on title + summary.
+- `published_from`, `published_to` — date filter on `opinion_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/rsb-opinions?verdict=negative&target_dg=CLIMA
+GET /api/v1/rsb-opinions?q=AI%20Act
+```
+
+**You get back**
+A `PaginatedResponse[RSBOpinionItem]` envelope. Each item carries `opinion_reference`, `title`, `target_initiative`, `target_dg`, `procedure_ref`, `opinion_type`, `verdict`, `opinion_date`, `summary`, `pdf_url`, `source_url`, `policy_areas`, `last_updated`.
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) from commission.europa.eu/law/law-making-process/regulatory-scrutiny-board/. RSB publishes a handful of opinions per month; weekly sync is appropriate. Scraper queued; endpoint returns empty until ingestion completes.""",
 )
 async def list_rsb_opinions(
     request: Request,
@@ -493,7 +599,26 @@ async def list_rsb_opinions(
 @rsb_router.get(
     "/{opinion_reference}",
     response_model=RSBOpinionItem,
-    summary="Single RSB opinion by reference",
+    summary="Look up one Regulatory Scrutiny Board opinion by its reference",
+    description="""**What it does**
+Fetches a single RSB opinion by its reference. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating an RSB opinion via the list endpoint, use this to deep-link into a specific record. Common pattern: list with `verdict=negative` to surface red-flag opinions, then drill into each one.
+
+**Input**
+- `opinion_reference` (path) — the RSB opinion reference (format varies; check the list endpoint for examples in the current data).
+
+**Try it**
+```
+GET /api/v1/rsb-opinions/<reference>
+```
+
+**You get back**
+A single `RSBOpinionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — weekly Sunday 05:00 UTC sync from commission.europa.eu/law/law-making-process/regulatory-scrutiny-board/.""",
 )
 async def get_rsb_detail(
     opinion_reference: str,
@@ -704,7 +829,33 @@ def _list_secondary_acts(
 @delegated_router.get(
     "",
     response_model=PaginatedResponse[SecondaryActItem],
-    summary="Commission delegated acts (RegDel register)",
+    summary="Commission delegated acts — secondary legislation under Article 290 TFEU",
+    description="""**What it does**
+Returns Commission delegated acts — secondary legislation adopted by the Commission under powers delegated by a basic legislative act (Article 290 TFEU). Each row carries the act reference (e.g. `C(2026)1234`), the parent CELEX (the basic act granting the delegation), the parent procedure reference, the status, the proposing DG, the publication date, the EP/Council objection deadline (typically 2-3 months), the EP scrutiny status, the Council scrutiny status, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.
+
+**When to use it**
+To monitor secondary legislation flowing from a flagship regulation (e.g. all delegated acts under the AI Act), track the EP/Council objection window for delegated acts you might want to scrutinise, or audit which DGs are most active in delegated-act production. The `parent_celex` filter scopes to a specific parent act.
+
+**Input**
+- `parent_celex` — CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).
+- `proposing_dg` — DG code.
+- `status` — `proposed` / `scrutiny` / `adopted` / `objected` / `withdrawn` (status enum).
+- `q` — substring search on title + description.
+- `published_from`, `published_to` — date filter on `publication_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/delegated-acts?parent_celex=32024R1689&limit=20
+GET /api/v1/delegated-acts?proposing_dg=CNECT&status=scrutiny
+```
+
+**You get back**
+A `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `objection_deadline`, `ep_scrutiny` (dict with EP rapporteur / motion status), `council_scrutiny` (dict), `celex` (if adopted), `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex C-series. New delegated acts appear on a steady drumbeat; daily sync catches them. Backed by `backend/scripts/backfill_eu_comitology.py`.""",
 )
 async def list_delegated_acts(
     request: Request,
@@ -744,7 +895,26 @@ def _secondary_act_detail(
 @delegated_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="Single delegated act by reference (e.g. C(2026)1234)",
+    summary="Look up one delegated act by its Commission reference (e.g. C(2026)1234)",
+    description="""**What it does**
+Fetches a single delegated act by its Commission reference. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.
+
+**When to use it**
+After locating a delegated act via the list endpoint, use this to fetch the full record (including body text + scrutiny details) in a deeper-link context.
+
+**Input**
+- `reference` (path) — the Commission reference, format `C(YYYY)NNNN`. The `:path` matcher means the parentheses are accepted verbatim — no URL-encoding needed.
+
+**Try it**
+```
+GET /api/v1/delegated-acts/C(2026)1234
+```
+
+**You get back**
+A single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from the RegDel register + EUR-Lex C-series.""",
 )
 async def get_delegated_detail(
     reference: str,
@@ -758,7 +928,26 @@ async def get_delegated_detail(
 @implementing_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="Single implementing act by reference (e.g. C(2026)0234)",
+    summary="Look up one implementing act by its Commission reference (e.g. C(2026)0234)",
+    description="""**What it does**
+Fetches a single Commission implementing act by its reference. Implementing acts (Article 291 TFEU) lay down uniform conditions for the implementation of EU legislation across Member States. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.
+
+**When to use it**
+After locating an implementing act via the list endpoint, use this to fetch the full record in a deeper-link context. Note: the difference between delegated acts (Art. 290, modify or supplement the basic act) and implementing acts (Art. 291, uniform implementation) is constitutionally significant for legal-affairs work.
+
+**Input**
+- `reference` (path) — the Commission reference, format `C(YYYY)NNNN`. Path-matching accepts parentheses verbatim.
+
+**Try it**
+```
+GET /api/v1/implementing-acts/C(2026)0234
+```
+
+**You get back**
+A single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from the Comitology Register + EUR-Lex C-series.""",
 )
 async def get_implementing_detail(
     reference: str,
@@ -772,7 +961,33 @@ async def get_implementing_detail(
 @implementing_router.get(
     "",
     response_model=PaginatedResponse[SecondaryActItem],
-    summary="Commission implementing acts (comitology register)",
+    summary="Commission implementing acts — uniform implementation of EU law (Article 291 TFEU)",
+    description="""**What it does**
+Returns Commission implementing acts — secondary legislation adopted by the Commission under Article 291 TFEU to ensure uniform conditions for implementation of EU law (typically with a comitology committee opinion). Each row carries the act reference (e.g. `C(2026)0234`), the parent CELEX, the parent procedure reference, the status, the proposing DG, the publication date, the comitology examination/advisory procedure outcome, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.
+
+**When to use it**
+To monitor secondary legislation flowing from a flagship regulation (e.g. all implementing acts under MDR, REACH, CRR), track comitology committee outcomes (e.g. SCoPAFF votes on pesticides), or audit which DGs are most active in implementing-act production. The `parent_celex` filter scopes to a specific parent act.
+
+**Input**
+- `parent_celex` — CELEX of the parent (basic) act (e.g. `32016R0679` for GDPR).
+- `proposing_dg` — DG code.
+- `status` — implementing-act status enum.
+- `q` — substring search on title + description.
+- `published_from`, `published_to` — date filter on `publication_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/implementing-acts?proposing_dg=SANTE&q=glyphosate
+GET /api/v1/implementing-acts?parent_celex=32016R0679&limit=20
+```
+
+**You get back**
+A `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `ep_scrutiny`, `council_scrutiny`, `celex`, `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR-Lex C-series.""",
 )
 async def list_implementing_acts(
     request: Request,
@@ -885,13 +1100,32 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
 @tris_router.get(
     "",
     response_model=PaginatedResponse[TRISNotificationItem],
-    summary="TRIS notifications (Member State technical regulations)",
-    description=(
-        "Member State notifications under Directive 2015/1535 of national "
-        "technical regulations affecting the Single Market. Source: "
-        "technical-regulation-information-system.ec.europa.eu/. Critical for "
-        "anyone tracking single-market barriers in member states."
-    ),
+    summary="Member State notifications of national technical regulations (TRIS, Directive 2015/1535)",
+    description="""**What it does**
+Returns notifications submitted by EU Member States under Directive 2015/1535 — the obligation to notify the Commission of draft national technical regulations that could create barriers to the Single Market (in goods and information-society services). Each row carries the notification reference (e.g. `2026/0123/FR`), the notifying country, the sector, the title + short summary + main content, the standstill period, and the Commission's reaction (detailed opinion / comment / no-reaction).
+
+**When to use it**
+Critical for anyone tracking single-market barriers — a French draft law on packaging waste, a German tax on plastic bags, a Polish ban on a specific chemical — all surface here BEFORE they become national law. The 3-month standstill window gives industry and other Member States time to flag incompatibilities. Trade associations, single-market advocates, and product-compliance teams should monitor this continuously.
+
+**Input**
+- `notifying_country` — ISO-3166-1 alpha-2 (e.g. `FR`, `DE`).
+- `sector` — TRIS sector code (substring).
+- `q` — substring search on title + short summary + main content.
+- `published_from`, `published_to` — date filter on `notification_date`.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/tris-notifications?notifying_country=FR&q=packaging
+GET /api/v1/tris-notifications?sector=N40&published_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[TRISNotificationItem]` envelope. Each item carries `notification_number`, `notifying_country`, `sector`, `title`, `short_summary`, `main_content`, `notification_date`, `standstill_period`, `commission_reaction`, `source_url`, `pdf_url`, `policy_areas`, `related_celex`, body fields, and the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from technical-regulation-information-system.ec.europa.eu/. Member States submit notifications throughout the day; daily sync catches them. Backed by `services/scrapers/dg_grow/dg_grow_sync_service.py::sync_tris()`.""",
 )
 async def list_tris_notifications(
     request: Request,
@@ -943,7 +1177,26 @@ async def list_tris_notifications(
 @tris_router.get(
     "/{notification_number:path}",
     response_model=TRISNotificationItem,
-    summary="Single TRIS notification by number (e.g. 2026/0123/FR)",
+    summary="Look up one TRIS notification by its number (e.g. 2026/0123/FR)",
+    description="""**What it does**
+Fetches a single TRIS notification by its reference. Returns the same shape as the list endpoint.
+
+**When to use it**
+After locating a TRIS notification via the list endpoint, use this to fetch the full record (including the main content of the draft national regulation) in a deeper-link context — useful for compliance teams analysing whether a specific national draft impacts their product.
+
+**Input**
+- `notification_number` (path) — the TRIS reference, format `YYYY/NNNN/CC` where CC is the ISO country code (e.g. `2026/0123/FR`).
+
+**Try it**
+```
+GET /api/v1/tris-notifications/2026/0123/FR
+```
+
+**You get back**
+A single `TRISNotificationItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from TRIS.""",
 )
 async def get_tris_detail(
     notification_number: str,
