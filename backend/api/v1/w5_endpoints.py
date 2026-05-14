@@ -59,13 +59,35 @@ class ResearchPublicationItem(BaseModel):
 @research_router.get(
     "",
     response_model=PaginatedResponse[ResearchPublicationItem],
-    summary="Unified EU institutional research publications (EPRS + STOA + JRC + ART + ECA)",
-    description=(
-        "EPRS today, STOA/JRC/ART/ECA queued. The `source` filter selects between "
-        "European Parliamentary Research Service (eprs), STOA Panel for the Future "
-        "of Science and Technology (stoa), Joint Research Centre (jrc), Council "
-        "Analysis and Research Team (art), or European Court of Auditors (eca)."
-    ),
+    summary="EU in-house research publications — Parliament, Commission, Council, Court of Auditors",
+    description="""**What it does**
+Returns a unified feed of research publications from the five major EU in-house research services: (1) EPRS — the European Parliament's Research Service, (2) STOA — Panel for the Future of Science and Technology (also EP), (3) JRC — Joint Research Centre (Commission's in-house science service), (4) ART — Analysis and Research Team (Council Secretariat), (5) ECA — European Court of Auditors. Each row carries the source, the publication title and type, the authors, the summary, the policy-area tags, related procedures + CELEX cross-references, and both HTML + PDF URLs.
+
+**When to use it**
+Research outputs from these five services are the highest-quality input into EU policymaking before formal proposals drop — they signal what the EP / Commission / Council think is policy-relevant. Use this endpoint to monitor a specific service (filter by `source`), search for research on a topic (`q`), or cross-reference a regulation (`celex`) with the research that anticipated it.
+
+**Input**
+- `source` — `eprs` / `stoa` / `jrc` / `art` / `eca`.
+- `q` — substring search on title + summary.
+- `publication_type` — service-specific (e.g. `briefing`, `study`, `at-a-glance`, `in-depth_analysis`).
+- `committee` — 4-letter EP committee code (for EPRS/STOA, the requesting committee).
+- `procedure_ref` — OEIL reference for cross-linked publications.
+- `celex` — CELEX cross-link.
+- `published_from`, `published_to` — date filter.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/research-publications?source=jrc&q=climate
+GET /api/v1/research-publications?committee=ENVI&published_from=2026-01-01
+```
+
+**You get back**
+A `PaginatedResponse[ResearchPublicationItem]` envelope. Each item carries `source`, `publication_id`, `title`, `publication_type`, `publication_date`, `authors`, `summary`, `policy_areas`, `committees`, `related_celex_numbers`, `related_procedures`, `html_url`, `pdf_url`, `last_updated`.
+
+**Data freshness**
+Synced once per week (Sunday 05:00 UTC, weekly tier) — STOA/JRC/ART publish a handful of pieces per week each. EPRS is currently fully populated; STOA/JRC/ART/ECA are tracked via the `source` field as ingestion ships. Backed by `backend/scripts/sync_eprs_publications.py` + future `sync_research.py`.""",
 )
 async def list_research_publications(
     request: Request,
@@ -222,12 +244,34 @@ def _compose_official_body(r) -> tuple:
 @officials_router.get(
     "",
     response_model=PaginatedResponse[OfficialItem],
-    summary="EU officials registry (Who is Who)",
-    description=(
-        "Officials registry across institutions: heads of unit, directors, "
-        "directors-general, cabinet members, etc. Source: op.europa.eu/en/web/who-is-who. "
-        "Scraper queued; endpoint returns empty until ingested."
-    ),
+    summary="EU officials directory — who runs each institution, DG, cabinet (Whoiswho)",
+    description="""**What it does**
+Returns a directory of EU officials across the institutional landscape — Commissioners, Heads of Cabinet, Directors-General, Deputy DGs, Directors, Heads of Unit — sourced from the Publications Office's Whoiswho directory. Each row carries the official's name, title, role, institution / DG / cabinet, country of nationality, posting city, contact details (email / phone when public), bio page URL, photo, portfolio, and active-status flag. Scrape-noise rows (filter-bar labels, postal-address artifacts, alternate-script duplicates) are filtered out at query time.
+
+**When to use it**
+To find the right contact for an outreach campaign ("who heads the AI unit in DG CNECT?"), build an org-chart visualisation, or look up who recently moved to a new role. The bio URLs deep-link to the official's Whoiswho page where the full posting history is available.
+
+**Input**
+- `institution_slug` — e.g. `european-commission`, `european-parliament`.
+- `dg` — DG code uppercased (e.g. `COMP`, `CLIMA`).
+- `cabinet` — cabinet name (e.g. `Ribera`).
+- `country` — ISO-2 of nationality.
+- `is_active` — boolean (defaults to true; pass `false` to include retired officials).
+- `q` — substring search on name + role + title.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/officials?dg=COMP&q=director
+GET /api/v1/officials?institution_slug=european-parliament&country=NL
+```
+
+**You get back**
+A `PaginatedResponse[OfficialItem]` envelope sorted alphabetically by name. Each item carries `slug`, `name`, `title`, `role`, `institution_slug`, `dg`, `cabinet`, `country`, `city`, `email`, `phone`, `bio_url`, `photo_url`, `portfolio`, `policy_areas`, `is_active`, plus a composed `body_txt`/`body_html` (full contact-card) and the 5 envelope-level datapoints (`public_url = bio_url`).
+
+**Data freshness**
+Synced once per month (1st of month, 02:00 UTC, monthly tier) from op.europa.eu/en/web/who-is-who. Senior officials change at cabinet reshuffles (once per Von der Leyen term) + a handful of mid-cycle moves; monthly sync is enough. Scraper queued for full re-ingest; current data reflects a partial backfill.""",
 )
 async def list_officials(
     request: Request,
@@ -308,7 +352,30 @@ async def list_officials(
     return build_envelope(data, total=total, page=page, limit=limit, updated_from=updated_from)
 
 
-@officials_router.get("/{slug}", response_model=OfficialItem, summary="Single official by slug")
+@officials_router.get(
+    "/{slug}",
+    response_model=OfficialItem,
+    summary="Look up one EU official by their slug — full contact card with photo + portfolio",
+    description="""**What it does**
+Fetches a single EU official by their stable slug. Returns the same shape as the list endpoint, including the composed contact-card body and the link to their Whoiswho bio page.
+
+**When to use it**
+After locating an official via the list endpoint, use this to fetch the full record (with photo + composed body) for embedding in a contact card or briefing note.
+
+**Input**
+- `slug` (path) — stable slug for the official (returned in `slug` from the list endpoint, derived from name + role).
+
+**Try it**
+```
+GET /api/v1/officials/jean-eric-paquet-director-general-dg-rtd
+```
+
+**You get back**
+A single `OfficialItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — monthly 1st-of-month 02:00 UTC sync from op.europa.eu/en/web/who-is-who.""",
+)
 async def get_official_detail(
     slug: str,
     user: User = Depends(api_user_with_rate_limit),
@@ -372,12 +439,37 @@ class TenderItem(BaseModel):
 @tenders_router.get(
     "",
     response_model=PaginatedResponse[TenderItem],
-    summary="EU public-procurement tenders (TED)",
-    description=(
-        "Tender notices from Tenders Electronic Daily. Filterable by buyer "
-        "country, CPV codes, procedure type, contract nature, value range, "
-        "publication and submission dates."
-    ),
+    summary="EU public procurement tenders (TED — Tenders Electronic Daily)",
+    description="""**What it does**
+Returns public-procurement tender notices from TED (Tenders Electronic Daily) — the EU's official journal for procurement, where every supplement to the OJ for above-threshold contracts is published. Covers tenders from the Commission, EP, Council, agencies, and Member State buyers obliged to publish at EU level. Each row carries the publication number, the title + description, the buying authority, the procedure type, the CPV codes (Common Procurement Vocabulary), the estimated value, the publication date, the submission deadline, lots information, and an SME-suitability score.
+
+**When to use it**
+For consultancies / SMEs looking for EU funding opportunities — filter by `cpv_main` for your sector, set `min_value` / `max_value` for relevant contract sizes, and use `deadline_from` / `deadline_to` to scope to bidding-feasible windows. The `sme_suitability_score` (0-1) is Brubru's heuristic on how SME-friendly a tender is based on value + lots + complexity.
+
+**Input**
+- `q` — substring search on title + description + summary.
+- `buyer_country` — ISO-2.
+- `procedure_type` — TED procedure type code.
+- `contract_nature` — `works` / `supplies` / `services`.
+- `cpv_main`, `cpv_code` — CPV filter.
+- `form_type` — TED form code (F02 / F03 / F14 / etc).
+- `min_value`, `max_value` — estimated-value range in EUR.
+- `deadline_from`, `deadline_to` — submission_deadline window.
+- `published_from`, `published_to` — publication date window.
+- `updated_from` — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/tenders?cpv_main=72000000&min_value=50000
+GET /api/v1/tenders?buyer_country=BE&contract_nature=services
+```
+
+**You get back**
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `title`, `description`, `official_name`, `buyer_country`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
 )
 async def list_tenders(
     request: Request,
@@ -464,7 +556,26 @@ async def list_tenders(
 @tenders_router.get(
     "/{tender_id}",
     response_model=TenderItem,
-    summary="Single tender detail by id",
+    summary="Look up one TED tender by its internal numeric id",
+    description="""**What it does**
+Fetches a single TED tender by its Brubru-internal integer id. Returns the same shape as the list endpoint, including CPV codes + lot details + the TED URL for the official notice.
+
+**When to use it**
+After locating a tender via the list endpoint, use this to fetch the full record (with description + all CPV codes) for embedding in a bid-tracker UI.
+
+**Input**
+- `tender_id` (path) — Brubru integer id (returned in `id` from the list endpoint).
+
+**Try it**
+```
+GET /api/v1/tenders/12345
+```
+
+**You get back**
+A single `TenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — daily 04:00 UTC sync from ted.europa.eu.""",
 )
 async def get_tender_detail(
     tender_id: int,
