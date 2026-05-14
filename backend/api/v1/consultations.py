@@ -122,19 +122,27 @@ class FeedbackEnvelope(PaginatedResponse[FeedbackItem]):
 @router.get(
     "/by-initiative/{initiative_id}/feedback",
     response_model=FeedbackEnvelope,
-    summary="Stakeholder feedback on a Have Your Say initiative (live, paginated)",
-    description=(
-        "**What it does:** returns the live stakeholder feedback submitted to the EC "
-        "Have Your Say portal for one initiative, plus summary aggregates (totals per "
-        "country, per stakeholder type) in the same payload.\n\n"
-        "**How to obtain an `initiative_id`:** call `/api/v1/consultations` (LIST) and "
-        "grab the `initiative_id` field. This sub-route requires the **numeric** form "
-        "(initiatives that accept feedback always have one — slug-style call-for-evidence "
-        "IDs return 422).\n\n"
-        "**Try it:** `GET /api/v1/consultations/by-initiative/13693/feedback?limit=10` "
-        "(Cooking appliances energy labelling).\n\n"
-        "**Cache:** upstream HYS portal cached for 6 hours."
-    ),
+    summary="Stakeholder feedback on a HaveYourSay consultation — live, paginated, with aggregates",
+    description="""**What it does**
+Returns the stakeholder feedback submitted to the EC HaveYourSay portal for one initiative, plus summary aggregates (totals per country, per stakeholder type) in the same payload — so you get analytics + detail in a single round-trip.
+
+**When to use it**
+For consultation-tracking work: "who submitted feedback on the housing-crisis call?", "what's the country breakdown of responses to the AI Act?", or "which industry associations have weighed in?". The aggregates give you the macro view; the paginated feedback array gives you per-response detail.
+
+**Input**
+- `initiative_id` (path) — numeric initiative ID. Slug-style call-for-evidence IDs return 422 — only initiatives that accept feedback have numeric IDs.
+- Pagination + filter params for the feedback list.
+
+**Try it**
+```
+GET /api/v1/consultations/by-initiative/13693/feedback?limit=10
+```
+
+**You get back**
+A `FeedbackEnvelope` extending the standard paginated response, with an additional `aggregates` field carrying totals_by_country, totals_by_stakeholder_type, and overall counts. Each feedback row carries the submitter org/individual, country, stakeholder type, position summary, attachment URLs, and submission date.
+
+**Data freshness**
+Live pass-through to the EC HaveYourSay portal, with a 6-hour in-process cache. Feedback closes when the consultation window ends; once closed, the dataset is stable (cache TTL is purely about reducing upstream load).""",
 )
 async def get_feedback_by_initiative(
     request: Request,
@@ -277,12 +285,31 @@ def _consultation_body(r: PublicConsultation, threshold: int = DEFAULT_HAS_BODY_
 @router.get(
     "",
     response_model=PaginatedResponse[ConsultationItem],
-    summary="List EC Have Your Say consultations / initiatives",
-    description=(
-        "Searchable, paginated list of EC public consultations, calls for evidence, "
-        "and Have Your Say initiatives. For per-initiative stakeholder feedback, use "
-        "/by-initiative/{id}/feedback."
-    ),
+    summary="EC HaveYourSay consultations + calls for evidence — open, upcoming, closed, outcome-published",
+    description="""**What it does**
+Returns the EC's public consultations from HaveYourSay (ec.europa.eu/info/law/better-regulation/have-your-say) — public consultations, calls for evidence, feedback periods, roadmaps, and inception initiatives. Each row carries the initiative_id, title, status, consultation type, the policy area, the responsible DG, the open + close dates, and the URLs to the consultation page + feedback summary.
+
+**When to use it**
+For advocacy planning — find open consultations to submit feedback on, track upcoming ones for your sector, or audit which DGs are most consultation-heavy. For per-consultation stakeholder feedback (who responded and what they said), follow up with `/by-initiative/{id}/feedback`.
+
+**Input**
+- `q` — substring on title + description.
+- `status` — `open` / `upcoming` / `closed` / `outcome_published` / `withdrawn`.
+- `consultation_type` — `public_consultation` / `call_for_evidence` / `feedback` / `roadmap` / `initiative`.
+- Date + DG filters as standard.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/consultations?status=open&consultation_type=public_consultation
+GET /api/v1/consultations?q=AI%20Act
+```
+
+**You get back**
+A `PaginatedResponse[ConsultationItem]` envelope. Each item carries `initiative_id` (numeric), `title`, `status`, `consultation_type`, `responsible_dg`, `policy_area`, `open_date`, `close_date`, `feedback_count`, `outcome_summary`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/law/better-regulation/have-your-say. Consultations open and close on known schedules; daily sync is sufficient.""",
 )
 async def list_consultations(
     request: Request,
@@ -390,18 +417,27 @@ async def list_consultations(
 @router.get(
     "/{initiative_id}",
     response_model=ConsultationItem,
-    summary="Single consultation detail by initiative_id",
-    description=(
-        "**What it does:** returns a single Have Your Say consultation / call for "
-        "evidence by its `initiative_id`.\n\n"
-        "**How to obtain an `initiative_id`:** call `/api/v1/consultations` (LIST) and "
-        "grab the `initiative_id` field. Always numeric — the underlying table has a "
-        "CHECK constraint that forbids non-numeric values, so any consultation in "
-        "Brubru has a numeric id (e.g. `13693`).\n\n"
-        "**Try it:**\n"
-        "- `GET /api/v1/consultations/13693` (Cooking appliances energy labelling)\n"
-        "- `GET /api/v1/consultations/13687` (Solid-fuel local space heaters)"
-    ),
+    summary="Look up one HaveYourSay consultation by its initiative_id — full description + dates",
+    description="""**What it does**
+Returns a single HaveYourSay consultation / call for evidence by its initiative_id. Includes the full description (objectives, scope, target group, outcome summary), dates, responsible DG, status, plus the composed body for embedding.
+
+**When to use it**
+After locating a consultation via the list endpoint, use this for the full record — particularly when drafting a feedback submission and you need the consultation's stated objectives + scope in front of you.
+
+**Input**
+- `initiative_id` (path) — numeric initiative ID (e.g. `13693`). Always numeric — the underlying table has a CHECK constraint that forbids non-numeric values.
+
+**Try it**
+```
+GET /api/v1/consultations/13693
+GET /api/v1/consultations/13687
+```
+
+**You get back**
+A single `ConsultationItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced once per day at 04:00 UTC.""",
 )
 async def get_consultation_detail(
     initiative_id: str,

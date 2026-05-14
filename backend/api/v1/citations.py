@@ -44,19 +44,26 @@ citations_router = APIRouter(prefix="/citations", tags=["v1-citations"])
 
 @citations_router.get(
     "",
-    summary="Citations hub — what this folder does",
-    description=(
-        "Index endpoint for the Citations folder. Verifying a reference (CELEX, "
-        "COM number, OEIL procedure number, etc.) requires either:\n\n"
-        "- **GET `/api/v1/citations/verify?q=<ref>`** — quick verify via query "
-        "string. Easiest from Postman; example value is pre-filled.\n"
-        "- **GET `/api/v1/citations/<ref>`** — same verify but with the "
-        "reference in the path (URL-encode parentheses and spaces).\n\n"
-        "Both return the same `VerifyCitationItem` shape with the canonical "
-        "EUR-Lex public_url, body_txt, body_html, document_date, and creation_date. "
-        "This bare-prefix endpoint is a discovery aid only; it does not verify "
-        "anything itself."
-    ),
+    summary="Citation verification hub — discovery aid pointing to the verify endpoints",
+    description="""**What it does**
+Returns a JSON object describing the two ways to verify an EU citation (CELEX, COM number, OEIL procedure ref, etc.). This bare-prefix endpoint is a discovery aid only — it does NOT verify anything itself. It tells you which sub-endpoint to hit.
+
+**When to use it**
+For partners exploring the API in Postman — hit this once to see the available verify routes + example URLs. Subsequent calls go to the actual verifiers.
+
+**Input**
+No parameters. Requires an `X-API-Key` header.
+
+**Try it**
+```
+GET /api/v1/citations
+```
+
+**You get back**
+A JSON object with `endpoint`, `purpose`, `sub_endpoints[]` listing the two verify routes (`/verify?q=` and `/{ref}`), plus the 5 envelope-level datapoints (all null at the hub level — this is a discovery doc, not a document response).
+
+**Data freshness**
+Static discovery aid; the only dynamic field is `creation_date` which reflects the API call time.""",
 )
 async def citations_index(
     request: Request,
@@ -437,39 +444,32 @@ async def _enrich(
 # ─────────────────────── Handlers ────────────────────────────────────────
 
 
-_OPENAPI_DESC = (
-    "**What it does:** given any EU legal reference, tells you whether it "
-    "points at a real document on EUR-Lex / OEIL, and returns the canonical "
-    "URLs plus the document's body and dates.\n\n"
-    "**When to use it:** ground your own AI's citations, validate a regulatory "
-    "feed, or detect hallucinated CELEX numbers before showing them to your "
-    "users. The body fields let you skip a separate fetch for downstream "
-    "processing.\n\n"
-    "**Accepted forms:**\n"
-    "- CELEX — `32024R1689` (AI Act)\n"
-    "- COM reference — `COM(2021) 206` (auto-converted to CELEX)\n"
-    "- OEIL procedure — `2021/0106(COD)`\n\n"
-    "**Try it:** `GET /api/v1/verify-citation/32016R0679` → returns "
-    "`status=ok`, `public_url=https://eur-lex.europa.eu/legal-content/EN/"
-    "TXT/?uri=CELEX:32016R0679`, the full GDPR text in `body_text` + "
-    "`body_html`, plus `creation_date` (when we ingested it) and "
-    "`document_date` (27 April 2016).\n\n"
-    "**Two URL fields:**\n"
-    "- `public_url` — the citizen-facing EUR-Lex page (humans share this)\n"
-    "- `resolved_url` — the Cellar manifestation `cellar/<UUID>/DOC_1` URL "
-    "the verifier hit (machines consume this)\n\n"
-    "**Body fetch:** populated on first call from Cellar XHTML (English "
-    "manifestation), cached alongside the verification result. Subsequent "
-    "calls are sub-millisecond from cache.\n\n"
-    "**Cache:** 30 days on success, 24h on broken refs, 1h on transient "
-    "errors."
-)
+_OPENAPI_DESC = """**What it does**
+Given any EU legal reference, tells you whether it points at a real document on EUR-Lex / OEIL, and returns the canonical URLs plus the document's body and dates. Accepts CELEX (`32024R1689` = AI Act), COM number (`COM(2021) 206` — auto-converted to CELEX), or OEIL procedure (`2021/0106(COD)`).
+
+**When to use it**
+Ground your own AI's citations, validate a regulatory feed, or detect hallucinated legal-identifier numbers before showing them to your users. The body fields let you skip a separate fetch for downstream processing. Returns two URLs: `public_url` (citizen-facing EUR-Lex page, humans share this) and `resolved_url` (Cellar manifestation `cellar/<UUID>/DOC_1`, machines consume this).
+
+**Input**
+The reference can be passed either as a path parameter (`/verify-citation/<ref>`) or as a `?q=` query parameter (`/citations/verify?q=<ref>`). The query-string form is friendlier for refs containing slashes or parentheses.
+
+**Try it**
+```
+GET /api/v1/verify-citation/32016R0679
+GET /api/v1/citations/verify?q=COM(2021) 206
+```
+
+**You get back**
+A `VerifyCitationResponse` with `data` (a `VerifyCitationItem`) containing `ref`, `kind` (celex / com_as_celex / oeil / unknown), `status` (ok / broken / unknown), `public_url`, `resolved_url`, `http_status`, `latency_ms`, `original_form`, `from_cache`, `body_txt` + `body_html` (Cellar XHTML), `creation_date` (when Brubru ingested it), `document_date` (the act's adoption / publication date).
+
+**Data freshness**
+Cached 30 days on success, 24h on broken refs, 1h on transient errors. The body fetch is populated on first call from Cellar XHTML (English manifestation) and cached alongside the verification result; subsequent calls are sub-millisecond from cache. The cache key is the normalised reference, so different forms of the same reference share a cache entry."""
 
 
 @router.get(
     "/{ref:path}",
     response_model=VerifyCitationResponse,
-    summary="Verify a CELEX, COM or OEIL reference + return the document's body and dates",
+    summary="Verify any EU legal reference — confirm it exists + return its full body and dates",
     description=_OPENAPI_DESC,
 )
 async def verify_citation(
@@ -509,13 +509,8 @@ async def verify_citation(
 @citations_router.get(
     "/verify",
     response_model=VerifyCitationResponse,
-    summary="Verify a citation by query string + return the document's body and dates",
-    description=(
-        "Same as `/verify-citation/{ref}` (and returns the same 13-field "
-        "envelope including body + dates) but accepts the reference as a "
-        "`?q=` query parameter, which is friendlier for refs that include "
-        "slashes or parentheses (CELEX, COM, OEIL). Cached identically."
-    ),
+    summary="Verify any EU legal reference via query string — friendlier for slashes / parentheses",
+    description=_OPENAPI_DESC,
 )
 async def verify_citation_q(
     request: Request,

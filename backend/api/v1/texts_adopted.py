@@ -166,12 +166,35 @@ def _validate_date_params(
 @texts_adopted_router.get(
     "",
     response_model=PaginatedResponse[TextItem],
-    summary="EP texts adopted (plenary)",
-    description=(
-        "Resolutions, legislative resolutions, decisions, and recommendations adopted "
-        "by the European Parliament in plenary. Filterable by text type, procedure ref, "
-        "term, committee, rapporteur, adoption-date, and incremental sync via updated_from."
-    ),
+    summary="EP plenary texts that have been adopted — resolutions, legislative resolutions, decisions",
+    description="""**What it does**
+Returns every text adopted by the European Parliament in plenary session — legislative resolutions (the EP's formal positions on legislation), non-legislative resolutions (own-initiative + topical), decisions, recommendations. Each row carries the TA reference (e.g. `P10_TA(2025)0042`), the title, text type, procedure ref + parliamentary term, lead committee, rapporteur, adoption date, vote tallies, and the full-text URL.
+
+**When to use it**
+The authoritative record of what the EP has decided in plenary. Use to track positions on co-decision files (legislative_resolution), trace the EP's stance on a topic (resolution), or build a plenary outcomes dashboard. Pair with `/api/v1/texts-submitted` to see the pipeline from tabled → adopted.
+
+**Input**
+- `q` — substring on title + description.
+- `text_type` — `resolution` / `legislative_resolution` / `decision` / `recommendation` / `other`.
+- `procedure_ref` — OEIL reference.
+- `parliamentary_term` — EP term (e.g. 10 for current, 9 for 2019-2024).
+- `committee` — lead committee code.
+- `rapporteur_mep_id` — filter to one rapporteur's adopted texts.
+- `published_from`, `published_to` (and `published_end` alias) — adoption_date filter.
+- `updated_from`, `updated_to` (and `updated_end` alias) — incremental sync.
+- `limit` (default 50, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v1/texts-adopted?text_type=legislative_resolution&committee=ENVI
+GET /api/v1/texts-adopted?procedure_ref=2024/0079(COD)
+```
+
+**You get back**
+A `PaginatedResponse[TextItem]` envelope. Each item carries `ta_reference`, `title`, `text_type`, `procedure_ref`, `parliamentary_term`, `committees`, `rapporteur_mep_id`, `rapporteur_name`, `adoption_date`, vote tallies, `full_text_url`, plus the 5 envelope-level datapoints.
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) via RSS from europarl.europa.eu/plenary/en/texts-adopted.html. Texts appear within hours of plenary adoption.""",
 )
 async def list_texts_adopted(
     request: Request,
@@ -242,7 +265,26 @@ async def list_texts_adopted(
 @texts_adopted_router.get(
     "/{ta_reference}",
     response_model=TextItem,
-    summary="Single adopted text by TA reference (e.g. P10_TA(2025)0042)",
+    summary="Look up one EP plenary-adopted text by its TA reference (e.g. P10_TA(2025)0042)",
+    description="""**What it does**
+Fetches a single EP plenary-adopted text by its TA reference. Returns the same shape as the list endpoint, including the full-text URL and body composition.
+
+**When to use it**
+After locating a text via the list endpoint, use this for the deep-link. Common pattern in chat answers when a user references a specific P10_TA number.
+
+**Input**
+- `ta_reference` (path) — the TA reference (format: `P<TERM>_TA(<YEAR>)<NUMBER>`, e.g. `P10_TA(2025)0042`). The `:path` matcher accepts parentheses verbatim.
+
+**Try it**
+```
+GET /api/v1/texts-adopted/P10_TA(2025)0042
+```
+
+**You get back**
+A single `TextItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Same as the list endpoint — synced every 6 hours from europarl.europa.eu/plenary/en/texts-adopted.html.""",
 )
 async def get_text_adopted_detail(
     ta_reference: str,
@@ -264,12 +306,27 @@ async def get_text_adopted_detail(
 @texts_submitted_router.get(
     "",
     response_model=PaginatedResponse[TextItem],
-    summary="EP texts submitted (tabled for plenary, not yet adopted)",
-    description=(
-        "EP plenary texts that have been tabled but not yet adopted "
-        "(no adoption_date). Sibling endpoint to /texts-adopted for partners "
-        "tracking the plenary pipeline. Source: europarl.europa.eu/plenary/en/texts-submitted.html"
-    ),
+    summary="EP plenary texts tabled but NOT YET adopted — the upcoming-vote pipeline",
+    description="""**What it does**
+Returns EP plenary texts that have been formally tabled for vote but not yet adopted (no adoption_date). Sibling endpoint to `/texts-adopted` — the same row "moves" from submitted to adopted when the plenary vote concludes. Each row carries the procedure ref, title, text type, parliamentary term, lead committee, rapporteur, the tabling date, and the doceo URL.
+
+**When to use it**
+For advocacy work focused on upcoming plenary votes — see what's coming next week, identify which committees have files in the pipeline, or filter by rapporteur to track an MEP's pending plenary texts. Pair with `/api/v1/calendar?event_type=PLENARY` to know WHEN each text is expected to be voted.
+
+**Input**
+Same shape as `/texts-adopted` — `q`, `text_type`, `procedure_ref`, `parliamentary_term`, `committee`, `rapporteur_mep_id`, date filters, incremental sync, pagination.
+
+**Try it**
+```
+GET /api/v1/texts-submitted?committee=LIBE&parliamentary_term=10
+GET /api/v1/texts-submitted?text_type=legislative_resolution
+```
+
+**You get back**
+A `PaginatedResponse[TextItem]` envelope — same shape as `/texts-adopted`'s response, but with `adoption_date` null on every row (texts are pre-adoption).
+
+**Data freshness**
+Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from europarl.europa.eu/plenary/en/texts-submitted.html. New tablings appear on doceo within hours; the 6h sync catches them.""",
 )
 async def list_texts_submitted(
     request: Request,

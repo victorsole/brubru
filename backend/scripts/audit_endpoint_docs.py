@@ -60,19 +60,22 @@ JARGON_TOKENS = [
 ROUTER_METHODS = {"get", "post", "put", "delete", "patch"}
 
 
-def _get_keyword(call: ast.Call, name: str) -> Optional[str]:
+def _get_keyword(call: ast.Call, name: str, module_consts: Optional[dict] = None) -> Optional[str]:
     """Extract a string keyword argument from a Call AST node."""
     for kw in call.keywords:
         if kw.arg != name:
             continue
-        return _const_to_str(kw.value)
+        return _const_to_str(kw.value, module_consts=module_consts)
     return None
 
 
-def _const_to_str(node: ast.AST) -> Optional[str]:
-    """Best-effort resolve an AST node to a string literal."""
+def _const_to_str(node: ast.AST, module_consts: Optional[dict] = None) -> Optional[str]:
+    """Best-effort resolve an AST node to a string literal. Follows module-level
+    Name references when module_consts is provided."""
     if isinstance(node, ast.Constant) and isinstance(node.value, str):
         return node.value
+    if isinstance(node, ast.Name) and module_consts and node.id in module_consts:
+        return module_consts[node.id]
     if isinstance(node, ast.JoinedStr):
         out = []
         for v in node.values:
@@ -82,14 +85,29 @@ def _const_to_str(node: ast.AST) -> Optional[str]:
                 return None
         return "".join(out)
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
-        left = _const_to_str(node.left)
-        right = _const_to_str(node.right)
+        left = _const_to_str(node.left, module_consts=module_consts)
+        right = _const_to_str(node.right, module_consts=module_consts)
         if left is not None and right is not None:
             return left + right
     if isinstance(node, ast.Call):
         # Sometimes wrapped as f"...".format(...) — give up cleanly
         return None
     return None
+
+
+def _collect_module_consts(tree: ast.Module) -> dict:
+    """Find every module-level `NAME = "..."` assignment so we can resolve
+    Name references in @router.get(description=NAME) later."""
+    consts: dict = {}
+    for node in tree.body:  # only direct module-level, not nested
+        if isinstance(node, ast.Assign):
+            value = _const_to_str(node.value)
+            if value is None:
+                continue
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    consts[target.id] = value
+    return consts
 
 
 def _decorator_route(deco: ast.AST) -> Optional[tuple[str, str]]:
@@ -117,12 +135,14 @@ def _decorator_route(deco: ast.AST) -> Optional[tuple[str, str]]:
 
 
 def _check_sections(description: str) -> tuple[set[str], set[str]]:
-    """Return (present_sections, missing_sections) checked against REQUIRED_SECTIONS."""
+    """Return (present_sections, missing_sections) checked against REQUIRED_SECTIONS.
+
+    Accepts `**Section**`, `**Section.**`, `**Section:**`, `**Section.** ` — minor
+    punctuation variants are fine."""
     present = set()
     for section in REQUIRED_SECTIONS:
-        # Match **Section** or **Section ...** (allowing some trailing words like
-        # "**Where to find ECLIs to test**" is a free-form heading and doesn't count).
-        pattern = rf"\*\*{re.escape(section)}\*\*"
+        # Allow trailing period/colon inside the bold delimiters.
+        pattern = rf"\*\*{re.escape(section)}[.:]?\*\*"
         if re.search(pattern, description, re.IGNORECASE):
             present.add(section)
     missing = set(REQUIRED_SECTIONS) - present
@@ -148,6 +168,8 @@ def audit_file(path: Path) -> list[dict]:
     except SyntaxError as e:
         return [{"file": str(path.relative_to(REPO_ROOT)), "error": f"SyntaxError: {e}"}]
 
+    module_consts = _collect_module_consts(tree)
+
     records = []
     for node in ast.walk(tree):
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -157,8 +179,8 @@ def audit_file(path: Path) -> list[dict]:
             if route is None:
                 continue
             method, route_path = route
-            summary = _get_keyword(deco, "summary") or ""
-            description = _get_keyword(deco, "description") or ""
+            summary = _get_keyword(deco, "summary", module_consts=module_consts) or ""
+            description = _get_keyword(deco, "description", module_consts=module_consts) or ""
             present, missing = _check_sections(description)
             jargon = _check_summary_jargon(summary)
             records.append({
