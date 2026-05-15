@@ -1,6 +1,7 @@
 # EU Recovery and Resilience Facility (RRF) and National Recovery Plans (NRRPs)
 
 ## QUICK FACTS
+- **LATEST (Thursday 14 May 2026)**: **Romania's 4th NextGenerationEU payment of EUR 2.62 billion approved by the Commission** (REFORM Task Force, 14 May 2026). The Commission greenlit Romania's 4th payment request under its National Recovery and Resilience Plan, releasing approximately EUR 2.62 billion in grants and loans against the milestones and targets satisfactorily fulfilled. This brings Romania's cumulative RRF disbursements past the half-way mark on the EUR 28.5 billion total Romanian NRRP envelope. Pattern: positive assessment by DG ECFIN → EFC opinion → Commission decision → disbursement. Cumulative RRF disbursements EU-wide now approximate EUR 320+ billion (≈40% of the EUR 806.9 billion current-prices envelope).
 - Regulation: Regulation (EU) 2021/241 (CELEX: 32021R0241), OJ L 57, 18.2.2021, amended by Regulation (EU) 2024/795 (STEP, CELEX: 32024R0795)
 - Full name: Recovery and Resilience Facility (RRF)
 - Parent framework: NextGenerationEU (NGEU), Regulation (EU) 2020/2094 (CELEX: 32020R2094)

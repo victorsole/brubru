@@ -33,6 +33,11 @@ CREATE POLICY "Public read amendator featured examples"
     FOR SELECT
     USING (TRUE);
 
+-- Explicit Data API grants (Supabase default revoked for new tables from 30 Oct 2026).
+-- Amendator example list is shown to logged-out visitors, so anon needs SELECT.
+GRANT SELECT ON public.amendator_featured_examples TO anon, authenticated;
+GRANT ALL ON public.amendator_featured_examples TO service_role;
+
 -- Seed: 10 hot files from the recent /news cycles (April 2026 Strasbourg trio + companions)
 INSERT INTO public.amendator_featured_examples
     (celex, eurlex_url, title, description, source, position, is_active)

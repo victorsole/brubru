@@ -93,6 +93,12 @@ CREATE POLICY user_calendar_event_archives_owner_delete
     ON user_calendar_event_archives FOR DELETE
     USING (user_id = auth.uid());
 
+-- 4b. Explicit Data API grants (Supabase default revoked for new tables from 30 Oct 2026).
+-- anon: no access (user-specific data). authenticated: gated further by RLS policies above.
+GRANT SELECT, INSERT, DELETE ON user_calendar_event_archives TO authenticated;
+GRANT ALL ON user_calendar_event_archives TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE user_calendar_event_archives_id_seq TO authenticated, service_role;
+
 -- 5. View helper for "active items per user across My EU Bubble"
 CREATE OR REPLACE VIEW v_user_active_track_counts AS
 SELECT

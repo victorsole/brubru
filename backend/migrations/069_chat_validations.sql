@@ -84,3 +84,11 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN
     EXECUTE 'CREATE POLICY allow_write_chat_validations ON chat_validations FOR INSERT WITH CHECK (true)';
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- Explicit Data API grants (Supabase default revoked for new tables from 30 Oct 2026).
+-- Pattern C: backend-only observability. Contains raw query text + response excerpts
+-- across all users — must NOT be exposed via anon/authenticated, even though the RLS
+-- policy above is permissive. Backend reads via direct Postgres connection (SQLAlchemy)
+-- using the service_role grant; anon/authenticated get no Data API access.
+GRANT ALL ON chat_validations TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE chat_validations_id_seq TO service_role;

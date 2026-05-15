@@ -1,6 +1,7 @@
 # Gender Equality Strategy 2026-2030
 
 ## QUICK FACTS
+- **LATEST (Thursday-Friday 14-15 May 2026)**: **EPRS Ask EP dual publication** — two coordinated EPRS Ask EP citizens'-enquiry briefings landed on the EP Think Tank: (a) **"EU action on gender equality"** (14 May 2026) — overview of EU-level legislative + policy instruments under the Gender Equality Strategy 2026-2030; (b) **"European Parliament action to advance gender equality"** (15 May 2026) — focuses on the EP's contribution through resolutions, FEMM-committee legislative work, and political action on violence against women, equal pay, online abuse, representation in decision-making, and women's rights in conflict settings. Both target citizens'-enquiry use cases (the Ask EP service). Useful chatbot context for "how does the EU/EP act on gender equality" queries — direct grounding rather than the generic-strategy overview. Refs: blog URLs on epthinktank.eu (BLOG category, EP Answers).
 - Full name: Gender Equality Strategy 2026-2030
 - Adopted: 5 March 2026
 - Type: Communication (non-legislative)

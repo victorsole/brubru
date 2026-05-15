@@ -8693,6 +8693,53 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'andes hantavirus eu': ['eu_global_health_resilience_initiative_2026'],
     'health security committee opinion hantavirus': ['eu_global_health_resilience_initiative_2026'],
     'hsc opinion hantavirus': ['eu_global_health_resilience_initiative_2026'],
+
+    # Fri 15 May 2026 — Right to Stay third-wave promotion (EURegionsWeek + PSLF + Bilbao Cities Forum + Fitto Czechia)
+    'right to stay relaunch': ['eu_demographic_right_to_stay_strategy'],
+    'right to stay third wave': ['eu_demographic_right_to_stay_strategy'],
+    'euregionsweek 2026 call': ['eu_demographic_right_to_stay_strategy'],
+    'pslf just transition platform results': ['eu_demographic_right_to_stay_strategy'],
+    'cities forum 2027 bilbao': ['eu_demographic_right_to_stay_strategy'],
+    'fitto czechia cohesion': ['eu_demographic_right_to_stay_strategy'],
+
+    # Thu 14 May 2026 — Romania 4th NextGenerationEU payment EUR 2.62 billion
+    'romania 4th nextgenerationeu payment': ['eu_recovery_resilience_facility'],
+    'romania 2.62 billion rrf': ['eu_recovery_resilience_facility'],
+    'romania ngeu payment may 2026': ['eu_recovery_resilience_facility'],
+    'romania pago recuperacion ngeu': ['eu_recovery_resilience_facility'],
+    'romania quarta richiesta ngeu': ['eu_recovery_resilience_facility'],
+    'commission greenlights romania': ['eu_recovery_resilience_facility'],
+    'commission approves romania payment': ['eu_recovery_resilience_facility'],
+    'romania nrrp payment': ['eu_recovery_resilience_facility'],
+    'romania recovery plan payment': ['eu_recovery_resilience_facility'],
+
+    # Wed 13 May 2026 — MFF post-2027 EPRS Briefing (May 2026)
+    'background information post 2027 mff': ['mff_2028_2034'],
+    'eprs briefing mff may 2026': ['mff_2028_2034'],
+    'post 2027 mff briefing': ['mff_2028_2034'],
+
+    # Thu-Fri 14-15 May 2026 — EPRS Ask EP gender equality dual blog
+    'european parliament action gender equality': ['gender_equality_strategy'],
+    'eu action on gender equality ask ep': ['gender_equality_strategy'],
+    'ask ep gender equality': ['gender_equality_strategy'],
+    'ep action gender equality 2026': ['gender_equality_strategy'],
+
+    # Sun 11 May 2026 — NEW guide: EU private credit market structure (EPRS Briefing 11 May)
+    'private credit eu': ['eu_private_credit_market_structure'],
+    'private credit market structure': ['eu_private_credit_market_structure'],
+    'private credit financial stability eu': ['eu_private_credit_market_structure'],
+    'private credit aifmd ii': ['eu_private_credit_market_structure'],
+    'private credit eltif 2.0': ['eu_private_credit_market_structure'],
+    'aifmd ii loan origination': ['eu_private_credit_market_structure'],
+    'eltif 2.0 retail private credit': ['eu_private_credit_market_structure'],
+    'nbfi private credit eu': ['eu_private_credit_market_structure'],
+    'eprs briefing private credit': ['eu_private_credit_market_structure'],
+    'private credit eprs may 2026': ['eu_private_credit_market_structure'],
+    'mercado credito privado ue': ['eu_private_credit_market_structure'],
+    'crédit privé union européenne': ['eu_private_credit_market_structure'],
+    'credito privato unione europea': ['eu_private_credit_market_structure'],
+    'private kredit eu markt': ['eu_private_credit_market_structure'],
+    'crèdit privat unió europea': ['eu_private_credit_market_structure'],
 }
 
 
