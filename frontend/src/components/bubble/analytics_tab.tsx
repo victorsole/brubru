@@ -6,11 +6,12 @@
  */
 
 import { useEffect, useState, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox,
   mdiOpenInNew, mdiBookOpenPageVariantOutline, mdiChevronDown, mdiChevronUp,
-  mdiLinkVariant,
+  mdiLinkVariant, mdiLibraryShelves,
 } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
@@ -19,6 +20,7 @@ import { TopicSpikesPanel } from './topic_spikes_panel';
 import './analytics_tab.css';
 
 export const AnalyticsTab = () => {
+  const { t } = useTranslation();
   const { data: coverage } = useCoverageStats();
   const {
     userStats,
@@ -110,7 +112,7 @@ export const AnalyticsTab = () => {
 
   return (
     <div className="analytics-tab">
-      <h2>Analytics & Insights</h2>
+      <h2>{t('analyticsTab.title')}</h2>
 
       {/* ---- 0. TOPIC SPIKES (live, last 7 days) ---- */}
       <TopicSpikesPanel />
@@ -119,10 +121,10 @@ export const AnalyticsTab = () => {
       <div className="analytics-tab__section analytics-tab__section--hero">
         <h3>
           <Icon path={mdiBookOpenPageVariantOutline} size={0.9} />
-          {' '}Brubru Deep Dive Library
+          {' '}{t('analyticsTab.deepDiveLibrary')}
         </h3>
         <p className="analytics-tab__section-subtitle">
-          Article-by-article analysis of major EU legislative proposals, with impact assessment figures and official sources.
+          {t('analyticsTab.deepDiveSubtitle')}
         </p>
         <div className="analytics-tab__deep-dive-grid">
           {DEEP_DIVES.map((dd, idx) => (
@@ -133,7 +135,7 @@ export const AnalyticsTab = () => {
                 </span>
                 <span className="analytics-tab__deep-dive-ref">{dd.comReference}</span>
                 {idx === newestIdx && (
-                  <span className="analytics-tab__deep-dive-badge">NEW</span>
+                  <span className="analytics-tab__deep-dive-badge">{t('analyticsTab.newBadge')}</span>
                 )}
               </div>
               <h4 className="analytics-tab__deep-dive-title">{dd.title}</h4>
@@ -160,17 +162,29 @@ export const AnalyticsTab = () => {
                 style={{ backgroundColor: dd.color }}
               >
                 <Icon path={mdiOpenInNew} size={0.7} />
-                Read analysis
+                {t('analyticsTab.readAnalysis')}
               </a>
             </div>
           ))}
         </div>
+        {/* Link to the EU Canon library (public deep-dive index, SEO-only surface) */}
+        <a
+          href="/eucanon/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="analytics-tab__eucanon-link"
+          aria-label={t('analyticsTab.euCanonLinkCta')}
+        >
+          <Icon path={mdiLibraryShelves} size={0.8} />
+          <span>{t('analyticsTab.euCanonLink')}</span>
+          <Icon path={mdiOpenInNew} size={0.7} />
+        </a>
       </div>
 
       {/* ---- 2. EU LAW ANALYTICS (static charts) ---- */}
       <div className="analytics-tab__section">
         <h3>
-          EU Law Analytics (Regulations & Directives)
+          {t('analyticsTab.euLawAnalytics')}
           <a
             href="/analytics/eu_law_linguistics.html"
             target="_blank"
@@ -178,38 +192,38 @@ export const AnalyticsTab = () => {
             className="analytics-tab__linguistics-link"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            Linguistic Patterns
+            {t('analyticsTab.linguisticPatterns')}
           </a>
         </h3>
         <div className="analytics-tab__static-grid">
           <div className="analytics-tab__static-card">
-            <h4>By Year</h4>
+            <h4>{t('analyticsTab.byYear')}</h4>
             <button
               className="analytics-tab__img-button"
-              onClick={() => setLightbox({ src: '/analytics/eu_law_by_year.svg', title: 'EU Law by Year' })}
-              aria-label="Enlarge EU law by year chart"
+              onClick={() => setLightbox({ src: '/analytics/eu_law_by_year.svg', title: t('analyticsTab.altByYear') })}
+              aria-label={t('analyticsTab.enlargeByYear')}
             >
-              <img src="/analytics/eu_law_by_year.svg" alt="EU law by year" />
+              <img src="/analytics/eu_law_by_year.svg" alt={t('analyticsTab.altByYear')} />
             </button>
           </div>
           <div className="analytics-tab__static-card">
-            <h4>By Policy Area (All)</h4>
+            <h4>{t('analyticsTab.byPolicyArea')}</h4>
             <button
               className="analytics-tab__img-button"
-              onClick={() => setLightbox({ src: '/analytics/eu_law_by_policy_area.svg', title: 'EU Law by Policy Area' })}
-              aria-label="Enlarge EU law by policy area chart"
+              onClick={() => setLightbox({ src: '/analytics/eu_law_by_policy_area.svg', title: t('analyticsTab.altByArea') })}
+              aria-label={t('analyticsTab.enlargeByArea')}
             >
-              <img src="/analytics/eu_law_by_policy_area.svg" alt="EU law by policy area" />
+              <img src="/analytics/eu_law_by_policy_area.svg" alt={t('analyticsTab.altByArea')} />
             </button>
           </div>
           <div className="analytics-tab__static-card">
-            <h4>Heatmap</h4>
+            <h4>{t('analyticsTab.heatmap')}</h4>
             <button
               className="analytics-tab__img-button"
-              onClick={() => setLightbox({ src: '/analytics/eu_law_heatmap.svg', title: 'EU Law Heatmap' })}
-              aria-label="Enlarge EU law heatmap"
+              onClick={() => setLightbox({ src: '/analytics/eu_law_heatmap.svg', title: t('analyticsTab.altHeatmap') })}
+              aria-label={t('analyticsTab.enlargeHeatmap')}
             >
-              <img src="/analytics/eu_law_heatmap.svg" alt="EU law heatmap" />
+              <img src="/analytics/eu_law_heatmap.svg" alt={t('analyticsTab.altHeatmap')} />
             </button>
           </div>
         </div>
@@ -220,17 +234,15 @@ export const AnalyticsTab = () => {
         <div className="analytics-tab__section">
           <h3>
             <Icon path={mdiLinkVariant} size={0.9} style={{ marginRight: 6, verticalAlign: 'middle' }} />
-            Legal-Text Intelligence Coverage
+            {t('analyticsTab.legalTextIntelligence')}
           </h3>
           <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: 0 }}>
-            How many EU laws Brubru has parsed for recital-to-article links
-            (TF-IDF cosine) and statutory definitions (Articles 3/4). The chatbot,
-            Amendator, and Catalan landing pages all consume this layer.
+            {t('analyticsTab.legalTextSubtitle')}
           </p>
 
           <div className="analytics-tab__static-grid">
             <div className="analytics-tab__static-card">
-              <h4>Tracked laws</h4>
+              <h4>{t('analyticsTab.trackedLaws')}</h4>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: '#0693e3', lineHeight: 1.1 }}>
                 {coverage.tracked.with_recital_map}
                 <span style={{ fontSize: '0.95rem', fontWeight: 400, color: '#6b7280' }}>
@@ -238,15 +250,15 @@ export const AnalyticsTab = () => {
                 </span>
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
-                with recital-article maps cached
+                {t('analyticsTab.withRecitalMapsCached')}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
-                {coverage.tracked.with_defined_terms} / {coverage.tracked.total} with statutory definitions extracted
+                {t('analyticsTab.withStatutoryDefs', { n: coverage.tracked.with_defined_terms, total: coverage.tracked.total })}
               </div>
             </div>
 
             <div className="analytics-tab__static-card">
-              <h4>All EU laws (28K corpus)</h4>
+              <h4>{t('analyticsTab.allLaws')}</h4>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: '#059669', lineHeight: 1.1 }}>
                 {coverage.global.with_recital_map.toLocaleString()}
                 <span style={{ fontSize: '0.95rem', fontWeight: 400, color: '#6b7280' }}>
@@ -254,23 +266,23 @@ export const AnalyticsTab = () => {
                 </span>
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
-                with recital-article maps
+                {t('analyticsTab.withRecitalMaps')}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
-                {coverage.global.with_defined_terms.toLocaleString()} with definitions
+                {t('analyticsTab.withDefinitions', { n: coverage.global.with_defined_terms.toLocaleString() })}
               </div>
             </div>
 
             <div className="analytics-tab__static-card">
-              <h4>Aggregate links</h4>
+              <h4>{t('analyticsTab.aggregateLinks')}</h4>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: '#9b51e0', lineHeight: 1.1 }}>
                 {coverage.aggregates.total_recital_links.toLocaleString()}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
-                semantic recital-article links computed
+                {t('analyticsTab.semanticLinks')}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
-                {coverage.aggregates.total_defined_terms.toLocaleString()} statutory terms indexed
+                {t('analyticsTab.statutoryTermsIndexed', { n: coverage.aggregates.total_defined_terms.toLocaleString() })}
               </div>
             </div>
           </div>
@@ -278,7 +290,7 @@ export const AnalyticsTab = () => {
           {coverage.top_laws_by_links.length > 0 && (
             <div style={{ marginTop: '1rem' }}>
               <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                Most-linked laws
+                {t('analyticsTab.mostLinkedLaws')}
               </h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem' }}>
                 {coverage.top_laws_by_links.map((law) => (
@@ -311,7 +323,7 @@ export const AnalyticsTab = () => {
                         textAlign: 'right',
                       }}
                     >
-                      {law.link_count} links
+                      {law.link_count} {t('analyticsTab.linksLabel')}
                     </span>
                   </li>
                 ))}
@@ -329,9 +341,9 @@ export const AnalyticsTab = () => {
             onClick={() => setPolicyOpen(!policyOpen)}
             aria-expanded={policyOpen}
           >
-            <h3>Policy Areas Explorer</h3>
+            <h3>{t('analyticsTab.policyExplorer')}</h3>
             <span className="analytics-tab__collapsible-summary">
-              {euSnapshot.policy_areas.length} policy areas, {totalActs.toLocaleString()} acts
+              {t('analyticsTab.policyAreasSummary', { areas: euSnapshot.policy_areas.length, acts: totalActs.toLocaleString() })}
             </span>
             <Icon path={policyOpen ? mdiChevronUp : mdiChevronDown} size={1} />
           </button>
@@ -341,8 +353,8 @@ export const AnalyticsTab = () => {
               <div className="analytics-tab__selector">
                 <div>
                   <div className="analytics-tab__selector-actions">
-                    <button onClick={() => setSelectedAreas(euSnapshot.policy_areas)}>Select All</button>
-                    <button onClick={() => setSelectedAreas([])}>Clear All</button>
+                    <button onClick={() => setSelectedAreas(euSnapshot.policy_areas)}>{t('analyticsTab.selectAll')}</button>
+                    <button onClick={() => setSelectedAreas([])}>{t('analyticsTab.clearAll')}</button>
                   </div>
                   <div className="analytics-tab__selector-list">
                     {(euSnapshot.policy_areas || []).map((a) => (
@@ -372,14 +384,14 @@ export const AnalyticsTab = () => {
                       <div
                         className="analytics-tab__barrow-fill"
                         style={{ width: `${row.pct}%` }}
-                        title={`${row.total} acts`}
+                        title={t('analyticsTab.actsCount', { n: row.total })}
                       />
                     </div>
                     <div className="analytics-tab__barrow-value">{row.total}</div>
                   </div>
                 ))}
                 {visibleRows.length === 0 && (
-                  <div className="analytics-tab__chart-empty">No policy areas selected</div>
+                  <div className="analytics-tab__chart-empty">{t('analyticsTab.noPolicyAreas')}</div>
                 )}
               </div>
             </>
@@ -403,7 +415,7 @@ export const AnalyticsTab = () => {
                 ref={closeBtnRef}
                 className="analytics-tab__lightbox-close"
                 onClick={() => setLightbox(null)}
-                aria-label="Close"
+                aria-label={t('common.close')}
               >
                 ✕
               </button>
@@ -418,7 +430,7 @@ export const AnalyticsTab = () => {
       {/* ---- 4. YOUR ACTIVITY (only if user has data) ---- */}
       {hasActivity ? (
         <div className="analytics-tab__section">
-          <h3>Your Activity</h3>
+          <h3>{t('analyticsTab.yourActivity')}</h3>
           <div className="analytics-tab__metrics-grid">
             {(documentStats?.total_documents || 0) > 0 && (
               <div className="analytics-tab__metric-card">
@@ -428,7 +440,7 @@ export const AnalyticsTab = () => {
                 <div className="analytics-tab__metric-value">
                   {documentStats?.total_documents || 0}
                 </div>
-                <div className="analytics-tab__metric-label">Total Documents</div>
+                <div className="analytics-tab__metric-label">{t('analyticsTab.totalDocuments')}</div>
               </div>
             )}
 
@@ -440,7 +452,7 @@ export const AnalyticsTab = () => {
                 <div className="analytics-tab__metric-value">
                   {userStats?.total_reads || 0}
                 </div>
-                <div className="analytics-tab__metric-label">Articles Read</div>
+                <div className="analytics-tab__metric-label">{t('analyticsTab.articlesRead')}</div>
               </div>
             )}
 
@@ -452,7 +464,7 @@ export const AnalyticsTab = () => {
                 <div className="analytics-tab__metric-value">
                   {readingTimeMinutes}m
                 </div>
-                <div className="analytics-tab__metric-label">Avg. Reading Time</div>
+                <div className="analytics-tab__metric-label">{t('analyticsTab.avgReadingTime')}</div>
               </div>
             )}
 
@@ -464,7 +476,7 @@ export const AnalyticsTab = () => {
                 <div className="analytics-tab__metric-value">
                   {documentStats?.total_word_count?.toLocaleString() || 0}
                 </div>
-                <div className="analytics-tab__metric-label">Total Words Written</div>
+                <div className="analytics-tab__metric-label">{t('analyticsTab.totalWordsWritten')}</div>
               </div>
             )}
           </div>
@@ -473,7 +485,7 @@ export const AnalyticsTab = () => {
           <div className="analytics-tab__charts-grid">
             {documentStats && Object.keys(documentStats.by_type || {}).length > 0 && (
               <div className="analytics-tab__chart-card">
-                <h3 className="analytics-tab__chart-title">Documents by Type</h3>
+                <h3 className="analytics-tab__chart-title">{t('analyticsTab.documentsByType')}</h3>
                 <div className="analytics-tab__chart">
                   <div className="analytics-tab__bar-chart">
                     {Object.entries(documentStats.by_type || {}).map(([type, count]) => {
@@ -499,7 +511,7 @@ export const AnalyticsTab = () => {
 
             {documentStats && Object.keys(documentStats.by_policy_area || {}).length > 0 && (
               <div className="analytics-tab__chart-card">
-                <h3 className="analytics-tab__chart-title">Top Policy Areas</h3>
+                <h3 className="analytics-tab__chart-title">{t('analyticsTab.topPolicyAreas')}</h3>
                 <div className="analytics-tab__chart">
                   <div className="analytics-tab__policy-list">
                     {Object.entries(documentStats.by_policy_area || {})
@@ -522,7 +534,7 @@ export const AnalyticsTab = () => {
           <div className="analytics-tab__activity-grid" style={{ marginTop: '1rem' }}>
             {(userStats?.active_subscriptions || 0) > 0 && (
               <div className="analytics-tab__activity-card">
-                <div className="analytics-tab__activity-label">Active Subscriptions</div>
+                <div className="analytics-tab__activity-label">{t('analyticsTab.activeSubscriptions')}</div>
                 <div className="analytics-tab__activity-value">
                   {userStats?.active_subscriptions || 0}
                   <span className="analytics-tab__activity-total">
@@ -533,7 +545,7 @@ export const AnalyticsTab = () => {
             )}
             {(userStats?.total_saves || 0) > 0 && (
               <div className="analytics-tab__activity-card">
-                <div className="analytics-tab__activity-label">Saved Articles</div>
+                <div className="analytics-tab__activity-label">{t('analyticsTab.savedArticles')}</div>
                 <div className="analytics-tab__activity-value">
                   {userStats?.total_saves || 0}
                 </div>
@@ -544,7 +556,7 @@ export const AnalyticsTab = () => {
           {/* Favorite Sources */}
           {userStats && userStats.favorite_sources.length > 0 && (
             <div className="analytics-tab__favorites">
-              <h4>Your Favorite News Sources</h4>
+              <h4>{t('analyticsTab.favouriteSources')}</h4>
               <div className="analytics-tab__source-chips">
                 {userStats.favorite_sources.map((source, idx) => (
                   <div key={idx} className="analytics-tab__source-chip">
@@ -558,7 +570,7 @@ export const AnalyticsTab = () => {
           {/* Most Read Categories */}
           {userStats && userStats.most_read_categories.length > 0 && (
             <div className="analytics-tab__favorites">
-              <h4>Most Read Categories</h4>
+              <h4>{t('analyticsTab.mostReadCategories')}</h4>
               <div className="analytics-tab__source-chips">
                 {userStats.most_read_categories.map((category, idx) => (
                   <div key={idx} className="analytics-tab__category-chip">
@@ -572,25 +584,25 @@ export const AnalyticsTab = () => {
       ) : (
         <div className="analytics-tab__section">
           <div className="analytics-tab__empty-state">
-            <h3>Your Activity</h3>
-            <p>Start tracking files in My EU Bubble, reading articles, and generating documents to see your personalised analytics here.</p>
+            <h3>{t('analyticsTab.yourActivity')}</h3>
+            <p>{t('analyticsTab.emptyActivityHint')}</p>
           </div>
         </div>
       )}
 
       {/* ---- 5. EXPORT (only if user has data) ---- */}
       <div className={`analytics-tab__export ${!hasActivity ? 'analytics-tab__export--disabled' : ''}`}>
-        <h3>Export Your Data</h3>
-        <p>Download your documents and reading history</p>
+        <h3>{t('analyticsTab.exportData')}</h3>
+        <p>{t('analyticsTab.exportSubtitle')}</p>
         <div className="analytics-tab__export-buttons">
           <button className="analytics-tab__export-btn" disabled={!hasActivity}>
-            Export Documents (PDF)
+            {t('analyticsTab.exportDocsPdf')}
           </button>
           <button className="analytics-tab__export-btn" disabled={!hasActivity}>
-            Export Reading List (CSV)
+            {t('analyticsTab.exportReadingCsv')}
           </button>
           <button className="analytics-tab__export-btn" disabled={!hasActivity}>
-            Export Analytics Report
+            {t('analyticsTab.exportAnalyticsReport')}
           </button>
         </div>
       </div>

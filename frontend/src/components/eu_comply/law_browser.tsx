@@ -1,7 +1,9 @@
 // frontend/src/components/eu_comply/law_browser.tsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import type { LawCluster } from '../../pages/eu_comply_page';
+import { getEucanonUrl } from '../../utils/eucanon_map';
 import './law_browser.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -11,6 +13,7 @@ interface LawBrowserProps {
 }
 
 export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const [clusters, setClusters] = useState<LawCluster[]>([]);
   const [filteredClusters, setFilteredClusters] = useState<LawCluster[]>([]);
@@ -42,9 +45,9 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setError('Please log in to access EU Law Comply');
+          setError(t('comply.browser.errorLogin'));
         } else {
-          setError('Failed to fetch clusters');
+          setError(t('comply.browser.errorFetch'));
         }
         setClusters([]);
         setFilteredClusters([]);
@@ -56,7 +59,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
       setFilteredClusters(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching clusters:', err);
-      setError('Failed to load compliance packages. Please try again.');
+      setError(t('comply.browser.errorLoad'));
       setClusters([]);
       setFilteredClusters([]);
     } finally {
@@ -103,7 +106,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
     return (
       <div className="law-browser law-browser--loading">
         <span className="mdi mdi-loading mdi-spin"></span>
-        <p>Loading compliance packages...</p>
+        <p>{t('comply.browser.loading')}</p>
       </div>
     );
   }
@@ -113,7 +116,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
       <div className="law-browser law-browser--error">
         <span className="mdi mdi-alert-circle"></span>
         <p>{error}</p>
-        <button onClick={fetchClusters}>Try Again</button>
+        <button onClick={fetchClusters}>{t('comply.browser.tryAgain')}</button>
       </div>
     );
   }
@@ -126,7 +129,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
           <span className="mdi mdi-magnify"></span>
           <input
             type="text"
-            placeholder="Search: DSA, GDPR, AI Act, FinTech..."
+            placeholder={t('comply.browser.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="law-browser__search-input"
@@ -136,7 +139,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
         <div className="law-browser__filter">
           <label htmlFor="policy-area-filter">
             <span className="mdi mdi-filter-variant"></span>
-            Policy Area:
+            {t('comply.browser.policyArea')}
           </label>
           <select
             id="policy-area-filter"
@@ -144,7 +147,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
             onChange={(e) => setSelectedPolicyArea(e.target.value)}
             className="law-browser__filter-select"
           >
-            <option value="all">All Areas</option>
+            <option value="all">{t('comply.browser.allAreas')}</option>
             {getPolicyAreas().map(area => (
               <option key={area} value={area}>{area}</option>
             ))}
@@ -154,7 +157,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
 
       {/* Results Count */}
       <div className="law-browser__results-count">
-        Showing {filteredClusters.length} of {clusters.length} compliance packages
+        {t('comply.browser.showing', { filtered: filteredClusters.length, total: clusters.length })}
       </div>
 
       {/* Popular Clusters Section */}
@@ -162,7 +165,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
         <div className="law-browser__section">
           <h2 className="law-browser__section-title">
             <span className="mdi mdi-fire"></span>
-            Popular Compliance Packages
+            {t('comply.browser.popular')}
           </h2>
           <div className="law-browser__grid">
             {filteredClusters
@@ -185,7 +188,7 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
         {searchQuery === '' && selectedPolicyArea === 'all' && (
           <h2 className="law-browser__section-title">
             <span className="mdi mdi-view-list"></span>
-            All Compliance Packages
+            {t('comply.browser.allPackages')}
           </h2>
         )}
         <div className="law-browser__grid">
@@ -203,9 +206,9 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
       {filteredClusters.length === 0 && (
         <div className="law-browser__no-results">
           <span className="mdi mdi-file-search-outline"></span>
-          <p>No compliance packages found matching your search.</p>
+          <p>{t('comply.browser.noResults')}</p>
           <button onClick={() => { setSearchQuery(''); setSelectedPolicyArea('all'); }}>
-            Clear filters
+            {t('comply.browser.clearFilters')}
           </button>
         </div>
       )}
@@ -220,6 +223,7 @@ interface ClusterCardProps {
 }
 
 const ClusterCard = ({ cluster, onSelect, priorityIcon }: ClusterCardProps) => {
+  const { t } = useTranslation();
   return (
     <div
       className="cluster-card"
@@ -249,20 +253,35 @@ const ClusterCard = ({ cluster, onSelect, priorityIcon }: ClusterCardProps) => {
       <div className="cluster-card__stats">
         <div className="cluster-card__stat">
           <span className="mdi mdi-file-document-multiple-outline"></span>
-          <span>{cluster.law_count} laws</span>
+          <span>{cluster.law_count} {t('comply.browser.laws')}</span>
         </div>
         <div className="cluster-card__stat">
           <span className="mdi mdi-gavel"></span>
-          <span>{cluster.requirement_count} requirements</span>
+          <span>{cluster.requirement_count} {t('comply.browser.requirements')}</span>
         </div>
       </div>
 
       <div className="cluster-card__applicability">
-        <strong>Applies to:</strong> {cluster.applicability}
+        <strong>{t('comply.appliesTo')}</strong> {cluster.applicability}
       </div>
 
+      {getEucanonUrl(cluster) && (
+        <a
+          href={getEucanonUrl(cluster) as string}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cluster-card__eucanon-link"
+          onClick={(e) => e.stopPropagation()}
+          aria-label={t('comply.browser.eucanonAria') as string}
+        >
+          <span className="mdi mdi-book-open-variant-outline"></span>
+          <span>{t('comply.browser.eucanonReminder')}</span>
+          <span className="mdi mdi-open-in-new"></span>
+        </a>
+      )}
+
       <div className="cluster-card__action">
-        <span>Select Package</span>
+        <span>{t('comply.browser.selectPackage')}</span>
         <span className="mdi mdi-arrow-right"></span>
       </div>
     </div>

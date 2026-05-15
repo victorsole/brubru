@@ -34,6 +34,12 @@ Brubru serves EU policy professionals, lobbyists, advocacy organisations, think 
 - [EC Register of Documents](https://ec.europa.eu/transparency/documents-register/): Commission documents (COM, SWD, SEC, OJ)
 - [EPRS](https://epthinktank.eu/): European Parliament Research Service briefings and studies
 
+## EU Canon (public explainers)
+
+The EU Canon is Brubru's growing library of plain-language deep-dives on binding EU laws. Each page synthesises a single regulation or directive into an article-by-article explainer with glossary, family tree, official-source links, and structured-data (JSON-LD Legislation) for indexing. Aimed at non-specialists who want to understand a specific EU law in plain English without wading through EUR-Lex.
+
+- [Capital Requirements Regulation (CRR, Regulation (EU) No 575/2013)](https://brubru.beresol.eu/eucanon/2013-575_crr/index.html): EU implementation of Basel III for credit institutions and investment firms — own funds, capital ratios (CET1 4.5% / Tier 1 6% / Total 8%), credit risk Standardised + IRB, large exposures, liquidity (LCR / NSFR), leverage ratio, Pillar 3 disclosure, SME Supporting Factor 0.7619; with full lineage Basel I → CRR III (Basel IV)
+
 ## Subscription Plans
 
 Brubru offers a 14-day free trial. There is no permanent free tier. Annual billing is also available on each plan.

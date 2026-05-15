@@ -272,6 +272,32 @@
   transition: transform 0.2s;
 }
 
+.cluster-card__eucanon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(90deg, rgba(6, 147, 227, 0.06), rgba(155, 81, 224, 0.06));
+  border: 1px dashed rgba(6, 147, 227, 0.35);
+  border-radius: 8px;
+  color: #0693e3;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.cluster-card__eucanon-link:hover {
+  border-color: rgba(6, 147, 227, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(6, 147, 227, 0.1);
+}
+
+.cluster-card__eucanon-link span:nth-child(2) {
+  flex: 1;
+}
+
 .cluster-card:hover .cluster-card__action {
   transform: translateX(4px);
 }

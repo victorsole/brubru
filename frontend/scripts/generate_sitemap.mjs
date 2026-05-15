@@ -56,6 +56,8 @@ const ROUTE_META = {
   '/csam-regulation/':              { priority: 0.9, changefreq: 'weekly'  },
   '/late-payments/':                { priority: 0.9, changefreq: 'weekly'  },
   '/pharma-laws/':                  { priority: 0.8, changefreq: 'weekly'  },
+  '/eucanon/':                      { priority: 0.6, changefreq: 'weekly'  },
+  '/eucanon/2013-575_crr/':         { priority: 0.9, changefreq: 'monthly' },
   '/legislacio-ue-catala/':         { priority: 0.9, changefreq: 'daily'   },
   '/main/':                         { priority: 0.9, changefreq: 'daily'   },
   '/my-eu-bubble/':                 { priority: 0.9, changefreq: 'daily'   },
@@ -75,6 +77,9 @@ function metaFor(urlPath) {
   if (ROUTE_META[urlPath]) return ROUTE_META[urlPath];
   if (urlPath.startsWith('/legislacio-ue-catala/')) {
     return { priority: 0.6, changefreq: 'monthly' };
+  }
+  if (urlPath.startsWith('/eucanon/')) {
+    return { priority: 0.8, changefreq: 'monthly' };
   }
   const langMatch = urlPath.match(/^\/([^/]+)\/([a-z]{2})\.html$/);
   if (langMatch && DEEP_DIVE_DIRS.includes(langMatch[1])) {

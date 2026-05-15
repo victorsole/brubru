@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRR Explicado: Reglamento sobre Requisitos de Capital de la UE | Brubru</title>
+  <meta name="description" content="Guía completa del Reglamento (UE) n° 575/2013 (CRR): aplicación de Basilea III en la UE, ratios de capital, CET1, fondos propios, riesgo de crédito, enfoque IRB. Análisis artículo por artículo con fuentes oficiales.">
+  <meta property="og:title" content="CRR Explicado: Reglamento sobre Requisitos de Capital de la UE 575/2013 | Brubru">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:description" content="Marco de Basilea III de la UE en lenguaje sencillo: ratios de capital (CET1 4,5 %, nivel 1 6 %, Total 8 %), fondos propios, grandes exposiciones, liquidez (LCR/NSFR), apalancamiento y divulgación del Pilar 3.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2013-575_crr/index.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/19995590/pexels-photo-19995590.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CRR Explicado: Reglamento sobre Requisitos de Capital de la UE | Brubru">
+  <meta name="twitter:description" content="Basilea III en la UE: CET1 4,5 %, nivel 1 6 %, capital total 8 %. Fondos propios, IRB, LCR, apalancamiento y Pilar 3 explicados en lenguaje sencillo.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/19995590/pexels-photo-19995590.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2013-575_crr/es.html">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2013-575_crr/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2013-575_crr/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2013-575_crr/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2013-575_crr/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2013-575_crr/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2013-575_crr/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2013-575_crr/index.html">
+<link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Regulation (EU) No 575/2013: Capital Requirements Regulation (CRR)",
+    "alternateName": "CRR",
+    "identifier": "CELEX:32013R0575",
+    "legislationIdentifier": "32013R0575",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0575",
+    "datePublished": "2013-06-27",
+    "dateModified": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Basel III EU implementation, prudential requirements for credit institutions"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image {
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(220,38,38,0.04) 100%);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .green-cell { color: var(--color-green); font-weight: 600; }
+    .amber-cell { color: var(--color-amber); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* 3-card ratio grid */
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ratio-card {
+      background: var(--color-bg);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .ratio-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .ratio-card__num {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .ratio-card__label { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .ratio-card__sub { font-size: 0.82rem; color: var(--color-secondary); }
+    .ratio-card__art { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.5rem; }
+
+    /* 5-card coverage grid: 3 on top + 2 centred */
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .coverage-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+      grid-column: span 2;
+    }
+    .coverage-card:nth-child(4) { grid-column: 2 / span 2; }
+    .coverage-card:nth-child(5) { grid-column: 4 / span 2; }
+    .coverage-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.08); }
+    .coverage-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .coverage-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .coverage-card__desc { font-size: 0.82rem; color: var(--color-secondary); }
+
+    /* Risk weight sub-grid: 2x3 */
+    .rw-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .rw-card {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .rw-card__pct {
+      font-size: 1.5rem;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: center;
+    }
+    .rw-card__label { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.4; }
+
+    /* Glossary: 4x2 */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      margin-bottom: 0.35rem;
+    }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Two-column comparison */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .two-col-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .two-col-card__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .two-col-card p { font-size: 0.9rem; color: var(--color-secondary); margin-bottom: 0.4rem; }
+
+    /* 3-card liquidity grid */
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .three-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .three-card:hover { border-color: var(--color-green); }
+    .three-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .three-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .three-card__value { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .three-card__sub { font-size: 0.82rem; color: var(--color-secondary); }
+
+    /* Lineage timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Brubru CTA features grid: 3x2 */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .ratio-grid { grid-template-columns: repeat(3, 1fr); }
+      .coverage-grid { grid-template-columns: repeat(2, 1fr); }
+      .coverage-card { grid-column: span 1 !important; }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .ratio-grid { grid-template-columns: 1fr; }
+      .coverage-grid { grid-template-columns: 1fr; }
+      .coverage-card { grid-column: span 1 !important; }
+      .two-col { grid-template-columns: 1fr; }
+      .three-grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .rw-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">CRR Explicado</div>
+    <div class="header__subtitle">Reglamento (UE) n° 575/2013</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language">
+    <option value="index.html">Inglés</option>
+    <option value="fr.html">Francés</option>
+    <option value="es.html" selected>Español</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Neerlandés</option>
+    <option value="ca.html">Catalán</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Prueba Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0575" target="_blank" rel="noopener">CELEX 32013R0575</a>
+    &nbsp;|&nbsp; OJ L 176/1, 27 June 2013
+  </div>
+  <h1 class="hero__title">El Reglamento de <span>Requisitos de Capital</span> de la UE</h1>
+  <p class="hero__subtitle">
+    Cómo la UE convirtió los estándares globales de Basilea III en una ley directamente aplicable: una guía en lenguaje sencillo del Reglamento 575/2013, que abarca fondos propios, riesgo de crédito, grandes exposiciones, liquidez, apalancamiento y divulgación del Pilar 3.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-check"></i> 27 June 2013</span>
+    <span><i class="mdi mdi-scale-balance"></i> Regulation (directly applicable)</span>
+    <span><i class="mdi mdi-domain"></i> DG FISMA</span>
+    <span><i class="mdi mdi-bank-outline"></i> EBA Single Rulebook</span>
+    <span><i class="mdi mdi-gavel"></i> Art 114 TFEU</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/19995590/pexels-photo-19995590.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    alt="European Central Bank at dusk, Frankfurt"
+    loading="lazy"
+  >
+  <figcaption>
+    Photo: <a href="https://www.pexels.com/@masood-aslami" target="_blank" rel="noopener">Masood Aslami</a>
+    via <a href="https://www.pexels.com/photo/the-european-central-bank-at-dusk-frankfurt-germany-19995590/" target="_blank" rel="noopener">Pexels</a>
+    | European Central Bank, Frankfurt
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">8%</div>
+    <div class="figure-card__label">total capital ratio</div>
+    <div class="figure-card__context">minimum own funds as a share of risk-weighted assets (Art 92)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">4.5%</div>
+    <div class="figure-card__label">CET1 ratio</div>
+    <div class="figure-card__context">the highest-quality capital: common equity tier 1 (Art 92)</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">25%</div>
+    <div class="figure-card__label">large-exposure limit</div>
+    <div class="figure-card__context">maximum exposure per client or connected group (Art 395)</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">0.7619</div>
+    <div class="figure-card__label">SME supporting factor</div>
+    <div class="figure-card__context">capital requirement multiplier for SME exposures under EUR 1.5M (Art 501)</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#coverage" class="toc__link"><i class="mdi mdi-view-grid-outline"></i> What CRR covers</a>
+    <a href="#ratios" class="toc__link"><i class="mdi mdi-percent"></i> Capital ratios</a>
+    <a href="#ownfunds" class="toc__link"><i class="mdi mdi-bank-outline"></i> Own funds (CET1/AT1/T2)</a>
+    <a href="#creditrisk" class="toc__link"><i class="mdi mdi-shield-half-full"></i> Credit risk approaches</a>
+    <a href="#default" class="toc__link"><i class="mdi mdi-alert-circle-outline"></i> Definition of default</a>
+    <a href="#largeexp" class="toc__link"><i class="mdi mdi-chart-bar"></i> Large exposures</a>
+    <a href="#liquidity" class="toc__link"><i class="mdi mdi-water-outline"></i> Liquidity, leverage, Pillar 3</a>
+    <a href="#sme" class="toc__link"><i class="mdi mdi-store-outline"></i> SME supporting factor</a>
+    <a href="#lineage" class="toc__link"><i class="mdi mdi-timeline-outline"></i> CRR family tree</a>
+    <a href="#scope" class="toc__link"><i class="mdi mdi-account-group-outline"></i> Who CRR applies to</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-book-open-outline"></i> Jargon explained</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-clock-outline"></i> Legislative timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+    <a href="#footer" class="toc__link"><i class="mdi mdi-information"></i> About this page</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">¿Qué es el Reglamento sobre Requisitos de Capital?</h2>
+  </div>
+  <p class="section__subtitle">Basilea III en la ley de la UE: el Código normativo único para el capital bancario</p>
+
+  <div class="card">
+    <p>El Reglamento sobre Requisitos de Capital (CRR, Reglamento (UE) n° 575/2013) es la piedra angular de la ley prudencial de la UE para bancos y empresas de servicios de inversión. Traduce los estándares internacionales de Basilea III en legislación de la UE directamente aplicable, lo que significa que todas las entidades de crédito y empresas de servicios de inversión incluidas en los 27 Estados miembros están sujetas a las mismas normas desde el primer día, sin necesidad de un paso de transposición nacional.</p>
+    <p>El CRR fue adoptado el 26 de junio de 2013 y se ha aplicado desde el 1 de enero de 2014. Sustituyó las antiguas Directivas bancarias 2006/48/CE y 2006/49/CE, que permitían variaciones nacionales excesivas que la crisis financiera había demostrado que eran peligrosas. La elección de un Reglamento (en lugar de una Directiva) fue deliberada: el Considerando 12 explica que la armonización máxima requiere una forma que elimine la fragmentación entre los Estados miembros.</p>
+    <p>CRR always comes as a twin with <strong>Directive 2013/36/EU (CRD IV)</strong>. The split is functional: CRR handles the quantitative prudential requirements (capital ratios, liquidity ratios, large exposures, reporting, disclosure), while CRD IV covers the qualitative requirements (governance, fit-and-proper assessments, supervisory review, and capital buffer add-ons such as the capital conservation buffer, countercyclical capital buffer, and G-SII/O-SII buffers). Both must be understood together to see the full regulatory picture for EU banks.</p>
+    <p>The regulation is structured in ten Parts spanning 525 articles and 136 recitals. It contains 139 definitions in Article 4, making it one of the most technically detailed EU legislative acts. The Single Rulebook is administered by the European Banking Authority (EBA), which issues binding technical standards and Q&amp;A to ensure consistent interpretation across Member States.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 2: WHAT CRR COVERS
+     ========================================================= -->
+<section class="section" id="coverage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-view-grid-outline"></i></div>
+    <h2 class="section__title">Qué cubre realmente el CRR</h2>
+  </div>
+  <p class="section__subtitle">Cinco áreas fundamentales en el artículo 1 del reglamento</p>
+
+  <div class="coverage-grid">
+    <div class="coverage-card">
+      <i class="mdi mdi-bank-transfer" style="color: var(--color-blue);"></i>
+      <div class="coverage-card__title">Requisitos de fondos propios</div>
+      <div class="coverage-card__desc">Ratios de capital para riesgo de crédito, riesgo de mercado, riesgo operacional, riesgo de ajuste de valor del crédito (CVA) y riesgo de liquidación. Partes dos y tres. El ratio de capital total del 8 % se encuentra aquí.</div>
+    </div>
+    <div class="coverage-card">
+      <i class="mdi mdi-chart-bar" style="color: var(--color-purple);"></i>
+      <div class="coverage-card__title">Límites de grandes exposiciones</div>
+      <div class="coverage-card__desc">Tope del 25 % de fondos propios admisibles por cliente o grupo conectado. Parte cuatro. Previene el riesgo de concentración peligrosa hacia contrapartes individuales.</div>
+    </div>
+    <div class="coverage-card">
+      <i class="mdi mdi-water-outline" style="color: var(--color-green);"></i>
+      <div class="coverage-card__title">Requisitos de liquidez</div>
+      <div class="coverage-card__desc">Marco del Requisito de Cobertura de Liquidez (LCR) y Requisito de Financiación Estable Neta (NSFR). Parte seis. Garantiza que los bancos puedan sobrevivir a un escenario de tensión de 30 días.</div>
+    </div>
+    <div class="coverage-card">
+      <i class="mdi mdi-file-chart-outline" style="color: var(--color-amber);"></i>
+      <div class="coverage-card__title">Informes (incl. apalancamiento)</div>
+      <div class="coverage-card__desc">Obligaciones de información supervisora y marco del ratio de apalancamiento. Partes siete y nueve. El ratio de apalancamiento vinculante del 3 % fue añadido por CRR II.</div>
+    </div>
+    <div class="coverage-card">
+      <i class="mdi mdi-eye-outline" style="color: var(--color-red);"></i>
+      <div class="coverage-card__title">Divulgación pública (Pilar 3)</div>
+      <div class="coverage-card__desc">Obligaciones de divulgación anual que cubren la estructura de capital, gestión del riesgo, remuneración e indicadores de IMS. Parte ocho. Permite la disciplina de mercado.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-swap-horizontal"></i> What CRR does NOT cover (but CRD IV does)</h3>
+    <p>CRR deliberately excludes matters that require national supervisory flexibility: institution governance, fit-and-proper assessments for managers, the supervisory review and evaluation process (SREP, Pillar 2), authorisation requirements, remuneration governance, and the capital buffer add-ons (capital conservation buffer at 2.5%, countercyclical buffer 0-2.5%, G-SII buffer up to 3.5%, O-SII buffer up to 2%, systemic risk buffer). These all live in CRD IV (Directive 2013/36/EU). In practice, a bank's actual capital target is the CRR minimum plus the relevant CRD IV buffers plus any Pillar 2 requirement set by its supervisor.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 3: CAPITAL RATIOS
+     ========================================================= -->
+<section class="section" id="ratios">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-percent"></i></div>
+    <h2 class="section__title">Headline capital ratios (Article 92)</h2>
+  </div>
+  <p class="section__subtitle">The three binding minimums at the heart of Basel III EU implementation</p>
+
+  <div class="ratio-grid">
+    <div class="ratio-card">
+      <div class="ratio-card__num" style="color: var(--color-blue);">4.5%</div>
+      <div class="ratio-card__label">Common Equity Tier 1 (CET1)</div>
+      <div class="ratio-card__sub">CET1 capital divided by total risk exposure amount (TREA). Paid-in equity, retained earnings, and accumulated OCI only.</div>
+      <div class="ratio-card__art">Article 92(1)(a) CRR</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__num" style="color: var(--color-purple);">6%</div>
+      <div class="ratio-card__label">Tier 1 capital</div>
+      <div class="ratio-card__sub">CET1 plus Additional Tier 1 (AT1) perpetual hybrids divided by TREA. AT1 provides the "buffer" between CET1 and total capital.</div>
+      <div class="ratio-card__art">Article 92(1)(b) CRR</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__num" style="color: var(--color-green);">8%</div>
+      <div class="ratio-card__label">Total capital (own funds)</div>
+      <div class="ratio-card__sub">Tier 1 plus Tier 2 (subordinated debt, min 5-year maturity) divided by TREA. The headline Basel III ratio.</div>
+      <div class="ratio-card__art">Article 92(1)(c) CRR</div>
+    </div>
+  </div>
+
+  <div class="info-box--green info-box">
+    <h3><i class="mdi mdi-calculator-variant-outline"></i> How total risk exposure amount (TREA) is calculated</h3>
+    <p>TREA sums six components: credit risk and dilution risk RWAs from the non-trading book; trading-book position risk and large-exposure excess; foreign exchange, settlement, and commodities risk; credit valuation adjustment (CVA) risk on OTC derivatives; operational risk; and counterparty credit risk on trading-book derivatives, repos, securities lending, and margin lending. Non-credit own funds requirements (market risk, op risk, CVA) are multiplied by 12.5 to convert them into RWA-equivalent amounts. The 12.5 multiplier is the reciprocal of the 8% headline ratio.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 4: OWN FUNDS COMPOSITION
+     ========================================================= -->
+<section class="section" id="ownfunds">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Own funds composition (Part Two, Articles 25-91)</h2>
+  </div>
+  <p class="section__subtitle">Three tiers of capital, with different loss-absorption qualities</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tier</th>
+        <th>Instruments</th>
+        <th>Perpetual?</th>
+        <th>Loss absorption</th>
+        <th>Distribution flexibility</th>
+        <th>Key condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">CET1</td>
+        <td>Ordinary shares, retained earnings, OCI, reserves</td>
+        <td class="green-cell">Yes</td>
+        <td>First loss; lowest ranking in insolvency</td>
+        <td>Fully discretionary; restricted if ratio too low</td>
+        <td>13 conditions (Art 28): paid-up, perpetual, equity-classified, no preferential dividend</td>
+      </tr>
+      <tr>
+        <td class="amber-cell">AT1</td>
+        <td>Perpetual contingent convertible bonds (CoCos)</td>
+        <td class="green-cell">Yes</td>
+        <td>Write-down or equity conversion when CET1 &lt; 5.125%</td>
+        <td>Non-cumulative; fully discretionary cancellation</td>
+        <td>No incentive to redeem; first call option not before year 5 (Art 52)</td>
+      </tr>
+      <tr>
+        <td>T2</td>
+        <td>Subordinated debt, general provisions (SA only)</td>
+        <td class="dim-cell">No (min 5 years)</td>
+        <td>Ranks below senior creditors; no acceleration except insolvency</td>
+        <td>Contractual; coupon/principal payments standard</td>
+        <td>Linear amortisation in final 5 years (Art 64); no step-ups (Art 63)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-minus-circle-outline"></i> Key deductions from CET1 (Article 36)</h3>
+    <p>Certain items reduce CET1 rather than sitting in the risk-weight framework: current-year losses, intangible assets (including goodwill), deferred tax assets reliant on future profitability, the IRB shortfall (when expected losses exceed provisions), defined benefit pension fund assets, own CET1 holdings, and reciprocal cross-holdings in financial sector entities. Significant holdings above 10% in another financial sector entity (Art 36(1)(i)) are generally deducted, but a 15% threshold exemption in Article 48 allows the excess to remain, risk-weighted at 250% instead.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 5: CREDIT RISK APPROACHES
+     ========================================================= -->
+<section class="section" id="creditrisk">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-half-full"></i></div>
+    <h2 class="section__title">The two approaches to credit risk (Part Three)</h2>
+  </div>
+  <p class="section__subtitle">Standardised approach (default) versus internal ratings-based approach (with supervisor permission)</p>
+
+  <div class="two-col">
+    <div class="two-col-card">
+      <div class="two-col-card__title"><i class="mdi mdi-table-large" style="color: var(--color-blue);"></i> Standardised Approach (SA)</div>
+      <p>The default method for all institutions (Art 107, Chapter 2). Risk weights are set by regulation, based on 17 exposure classes and ECAI credit quality steps (CQS). No supervisor permission needed.</p>
+      <p>Simple and comparable across institutions. CRR III (2024/1623, the Basel IV implementation) significantly revised the SA risk weights to reduce reliance on external ratings for residential property and corporate exposures.</p>
+      <p>CAs can raise residential mortgage risk weights (above 35%) and commercial mortgage risk weights (above 50%) for financial-stability reasons under Art 124.</p>
+    </div>
+    <div class="two-col-card">
+      <div class="two-col-card__title"><i class="mdi mdi-function-variant" style="color: var(--color-purple);"></i> Internal Ratings-Based (IRB)</div>
+      <p>Banks with supervisor permission (Art 143) and at least three years of validated experience (Art 145) may use their own estimates of probability of default (PD) and, under advanced IRB (A-IRB), their own loss-given-default (LGD) and conversion factors.</p>
+      <p>F-IRB uses the regulator's LGD (45% senior unsecured, 75% subordinated, 11.25% covered bonds). A-IRB uses the bank's own LGD subject to floors (10% residential LGD, 15% commercial LGD on average). PD floor: 0.03% for all portfolios.</p>
+      <p>CRR III introduced the output floor: from 1 January 2025, total IRB-based RWAs cannot fall below 72.5% of the SA-calculated equivalent (transitional phase-in to 2030).</p>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Key standardised risk weights (headline figures)</h3>
+  <div class="rw-grid">
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-green);">10%</div>
+      <div class="rw-card__label">Covered bonds (CQS1, Art 129): lowest corporate-sector weight, reflecting strong collateral structures and strict issuance criteria</div>
+    </div>
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-blue);">35%</div>
+      <div class="rw-card__label">Residential mortgage loans (LTV up to 80%): preferential treatment for private house purchases, subject to CA override for financial stability</div>
+    </div>
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-blue);">75%</div>
+      <div class="rw-card__label">Retail exposures (natural persons or SMEs up to EUR 1 million): broad category covering consumer credit, credit cards, SME revolving facilities</div>
+    </div>
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-amber);">100%</div>
+      <div class="rw-card__label">Unrated corporates (or sovereign floor, whichever is higher): the standard weight for plain corporate lending without an ECAI rating</div>
+    </div>
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-red);">150%</div>
+      <div class="rw-card__label">Default exposures (unsecured, credit risk adjustment below 20%) and particularly high-risk items: VC, PE, speculative real estate</div>
+    </div>
+    <div class="rw-card">
+      <div class="rw-card__pct" style="color: var(--color-green);">0%</div>
+      <div class="rw-card__label">EU sovereign exposures in own currency, ECB, listed MDBs (EIB, IBRD), international organisations (EU, IMF, BIS, EFSF, ESM): no capital charge</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 6: DEFINITION OF DEFAULT
+     ========================================================= -->
+<section class="section" id="default">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-alert-circle-outline"></i></div>
+    <h2 class="section__title">Definition of default (Article 178)</h2>
+  </div>
+  <p class="section__subtitle">The trigger for elevated capital charges across credit risk models</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-clock-alert-outline"></i> Article 178: two independent triggers</h3>
+    <p><strong>Trigger A (unlikely to pay):</strong> the institution considers it unlikely that the obligor will repay in full without recourse to realising collateral. Indicators include: placing the obligation on non-accrual, making a significant credit-related write-down, selling at a material economic loss, agreeing distressed restructuring (forgiveness or postponement likely to reduce present value), filing for or being subject to bankruptcy, or any significant decline in the credit risk adjustment.</p>
+    <p><strong>Trigger B (90 days past due):</strong> any material credit obligation is more than 90 days overdue. Member States may extend this to 180 days for residential mortgages, SME commercial real estate exposures treated as retail, and public-sector entity (PSE) exposures. EBA regulatory technical standards define materiality thresholds to prevent de minimis technical overdrafts triggering default.</p>
+    <p>Once in default, the exposure attracts a 150% risk weight under the standardised approach (if unsecured and credit risk adjustment below 20%) and a forced LGD minimum under IRB. The cure condition requires the institution to reassess once no further trigger applies; re-default is counted as a new default event for model validation.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 7: LARGE EXPOSURES
+     ========================================================= -->
+<section class="section" id="largeexp">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">The 25% large-exposures rule (Article 395)</h2>
+  </div>
+  <p class="section__subtitle">Concentration limits to prevent single-counterparty blow-ups</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-percent-outline"></i> The core limit and its practical meaning</div>
+    <p>Article 395(1) prohibits any institution from incurring an exposure to a single client or group of connected clients that, after applying credit risk mitigation, exceeds <strong>25% of its eligible capital</strong>. For exposures to other institutions (banks), the limit is the higher of 25% of eligible capital or EUR 150 million.</p>
+    <p>An exposure becomes a "large exposure" once it reaches or exceeds <strong>10% of eligible capital</strong> (Art 392), triggering reporting obligations. Large exposures must be reported at least semi-annually, covering the top 20 largest consolidated exposures plus the top 10 to other institutions and top 10 to unregulated financial entities.</p>
+    <p>Example: a bank with EUR 1 billion of eligible capital may not lend more than EUR 250 million (net of collateral) to a single company or group of companies that are economically interconnected under Art 4(1)(39), meaning that failure of one would likely cause failure of the others.</p>
+    <p>Article 400 provides mandatory exemptions (sovereigns, central banks, intragroup, CCPs) and discretionary exemptions that national competent authorities may grant (covered bonds, network central body, certain short-term intragroup claims). Trading-book excess is permitted within limits, but attracts a progressive additional capital charge of 200-900% (Art 397).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 8: LIQUIDITY / LEVERAGE / PILLAR 3
+     ========================================================= -->
+<section class="section" id="liquidity">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-water-outline"></i></div>
+    <h2 class="section__title">Liquidity, leverage, and Pillar 3 disclosure</h2>
+  </div>
+  <p class="section__subtitle">The three non-capital pillars of prudential regulation</p>
+
+  <div class="three-grid">
+    <div class="three-card">
+      <i class="mdi mdi-water" style="color: var(--color-blue);"></i>
+      <div class="three-card__title">Liquidity Coverage Ratio (LCR)</div>
+      <div class="three-card__value" style="color: var(--color-blue);">100%</div>
+      <div class="three-card__sub">High-quality liquid assets must cover net outflows over a 30-day stress scenario. Phased in from 60% (2015) to 100% (January 2018). Framework in Art 412; detailed calibration in Delegated Act 2015/61.</div>
+    </div>
+    <div class="three-card">
+      <i class="mdi mdi-scale-balance" style="color: var(--color-green);"></i>
+      <div class="three-card__title">Leverage Ratio</div>
+      <div class="three-card__value" style="color: var(--color-green);">3%</div>
+      <div class="three-card__sub">Tier 1 capital divided by a non-risk-based total exposure measure (Art 429). The 3% binding minimum was introduced by CRR II in June 2021, with a further G-SII surcharge. No credit risk mitigation or netting benefit applies: the leverage ratio is a backstop to the risk-based framework.</div>
+    </div>
+    <div class="three-card">
+      <i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i>
+      <div class="three-card__title">Pillar 3 Disclosure</div>
+      <div class="three-card__value" style="color: var(--color-purple);">Annual</div>
+      <div class="three-card__sub">Public disclosure in Part Eight (Arts 431-455) covering capital structure, risk management, counterparty risk, unencumbered assets, remuneration (including all staff earning EUR 1 million or more), and leverage. Enables market discipline alongside supervisory requirements.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-finance"></i> Net Stable Funding Ratio (NSFR)</h3>
+    <p>The original CRR contained a placeholder (Art 413) for a Net Stable Funding Ratio. CRR II (Regulation (EU) 2019/876) made the NSFR binding at 100% from June 2021. The NSFR requires institutions to match long-term obligations with stable funding sources, preventing excessive reliance on short-term wholesale funding. Available Stable Funding (ASF) divided by Required Stable Funding (RSF) must be at least 100%. Different RSF factors apply by asset class and remaining maturity.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 9: SME SUPPORTING FACTOR
+     ========================================================= -->
+<section class="section" id="sme">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-store-outline"></i></div>
+    <h2 class="section__title">The SME Supporting Factor (Article 501)</h2>
+  </div>
+  <p class="section__subtitle">A deliberate policy choice to reduce capital charges on lending to small businesses</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-tag-multiple-outline"></i> Factor 0.7619: approximately 24% capital reduction</h3>
+    <p>For SME exposures (whether classified as retail, corporate, or real-estate-secured) where the total exposure to the obligor or its group does not exceed <strong>EUR 1.5 million</strong>, the capital requirement is multiplied by <strong>0.7619</strong>. This reduces the effective capital charge by approximately 23.81%.</p>
+    <p>Recital 44 of CRR explains the policy intent directly: SMEs are the backbone of the EU economy, employing the majority of the working population. The financial crisis hit SME access to credit disproportionately hard. Reducing capital charges on SME lending aims to incentivise banks to maintain or increase credit supply to these borrowers. CRR II later expanded the supporting factor to all SME exposures above EUR 1.5 million (using a different formula) and added an infrastructure supporting factor. The Covid quick-fix Regulation (2020/873) further expanded both factors temporarily.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 10: CRR FAMILY TREE / LINEAGE
+     ========================================================= -->
+<section class="section" id="lineage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">CRR family tree: from Basel I to Basel IV</h2>
+  </div>
+  <p class="section__subtitle">How the global Basel standards became EU law, in four generations</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">1988 (Basel I)</div>
+      <div class="timeline__text">Basel Committee on Banking Supervision (BCBS) at the Bank for International Settlements publishes the first Basel Accord: an 8% total capital ratio against risk-weighted assets, with four crude risk buckets. EU implements via the Own Funds Directive and the Solvency Ratio Directive. Source: <a href="https://www.bis.org/bcbs/" target="_blank" rel="noopener">BCBS, BIS</a>.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2004 (Basel II)</div>
+      <div class="timeline__text">Basel II replaces Basel I with three pillars: Pillar 1 (minimum capital, including the IRB approach), Pillar 2 (supervisory review), and Pillar 3 (market discipline). EU implements via the Capital Requirements Directives (CRD I, 2006/48/EC and 2006/49/EC) from 2007.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2010-2011 (Basel III)</div>
+      <div class="timeline__text">The 2008 global financial crisis exposes severe under-capitalisation. BCBS introduces Basel III: higher CET1 minimum (4.5%), leverage ratio, LCR, NSFR, and capital buffers. EU Commission proposes implementation via CRR + CRD IV (procedure <a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2011/0202(COD)" target="_blank" rel="noopener">2011/0202(COD)</a>).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">27 June 2013 (CRR original, CELEX 32013R0575)</div>
+      <div class="timeline__text"><strong><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0575" target="_blank" rel="noopener">CRR adopted (OJ L 176/1)</a>.</strong> 525 articles, 136 recitals, 139 definitions. Application from 1 January 2014. Replaces Directives 2006/48/EC and 2006/49/EC. Introduces CET1 4.5%, T1 6%, Total 8%, LCR placeholder, leverage ratio reporting (non-binding), large-exposure 25% limit.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">7 June 2019 (CRR II, CELEX 32019R0876)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0876" target="_blank" rel="noopener">CRR II enters into force.</a> Key changes: binding 3% leverage ratio (from June 2021) with G-SII buffer of 50% of applicable G-SII buffer; binding NSFR 100% (from June 2021); FRTB market risk preview; tighter large-exposure limits for G-SIIs; investment firm carve-out for firms not dealing on own account (paving way for IFR/IFD Regulation 2019/2033 + Directive 2019/2034).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">27 March 2020 (Covid quick fix, CELEX 32020R0873)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0873" target="_blank" rel="noopener">Targeted amendments to ease Covid-19 pressures:</a> SME supporting factor expanded to all SME exposures; new infrastructure supporting factor (0.7500); IFRS 9 transitional provisions extended; leverage ratio buffer postponed; acceleration of favourable treatment for NPE-backed software assets.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 June 2024 (CRR III / Basel IV, CELEX 32024R1623)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1623" target="_blank" rel="noopener">CRR III enters into force</a> (most provisions from 1 January 2025). This is the "Basel III finalisation" or "Basel IV" package: output floor of 72.5% of standardised RWAs (phased in from 50% in 2025 to 72.5% by 2030), revised standardised credit risk weights for real estate and corporates, Standardised Measurement Approach (SMA) replacing AMA for operational risk, final FRTB implementation for market risk. Legislative Train: <a href="https://www.europarl.europa.eu/legislative-train/theme-an-economy-that-works-for-people/file-implementation-of-basel-iii-banking-reform" target="_blank" rel="noopener">EP Legislative Train (Basel III implementation)</a>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 11: WHO CRR APPLIES TO
+     ========================================================= -->
+<section class="section" id="scope">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Who CRR applies to</h2>
+  </div>
+  <p class="section__subtitle">Credit institutions, large investment firms, and the IFR/IFD carve-out for smaller investment firms</p>
+
+  <div class="two-col">
+    <div class="two-col-card">
+      <div class="two-col-card__title"><i class="mdi mdi-bank" style="color: var(--color-blue);"></i> In scope: "Institutions" under CRR</div>
+      <p>CRR uses the term <strong>"institutions"</strong> to mean: (a) credit institutions (any entity whose business is taking deposits or other repayable funds from the public and granting credit for its own account, including banks and building societies); and (b) investment firms that deal on own account or underwrite financial instruments.</p>
+      <p>Both are subject to the full CRR framework: capital ratios, large exposures, liquidity, leverage, and Pillar 3. Prudential consolidation extends the requirements to a banking group's consolidated position, with subsidiary and parent calculations both required in many cases.</p>
+      <p>CRR applies across the 27 EU Member States and, through the European Economic Area agreement, also in Norway, Iceland, and Liechtenstein.</p>
+    </div>
+    <div class="two-col-card">
+      <div class="two-col-card__title"><i class="mdi mdi-swap-horizontal" style="color: var(--color-purple);"></i> IFR/IFD carve-out for smaller investment firms</div>
+      <p>CRR II created the legislative space; CRR III confirmed that <strong>investment firms that do not deal on own account</strong> (so-called "non-systemic" or "Class 2/3" firms) should leave the CRR/CRD IV framework and instead apply the bespoke <strong>Investment Firms Regulation (IFR, Regulation (EU) 2019/2033)</strong> and Investment Firms Directive (IFD, Directive (EU) 2019/2034).</p>
+      <p>IFR introduces K-factors (capital requirements tied to risk-to-client, risk-to-market, and risk-to-firm activities) as an alternative to the Basel risk-weight approach. Only investment firms that are systemically important (dealing on own account with balance sheet over EUR 15 billion) remain in CRR.</p>
+      <p>The practical effect: most MiFID II-licensed investment firms (asset managers, brokers, advisers) moved to IFR/IFD from 26 June 2021, simplifying their prudential requirements substantially compared to CRR.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 12: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-open-outline"></i></div>
+    <h2 class="section__title">Common jargon explained</h2>
+  </div>
+  <p class="section__subtitle">Eight key terms from the CRR, defined in plain language</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">CET1</div>
+      <div class="glossary-card__def">Common Equity Tier 1: the highest-quality capital, composed mainly of ordinary shares and retained earnings. Minimum 4.5% of risk-weighted assets. First to absorb losses in a crisis.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">AT1</div>
+      <div class="glossary-card__def">Additional Tier 1: perpetual hybrid instruments (CoCos) that convert to equity or are written down when the issuer's CET1 ratio falls below 5.125%. Fills the gap between the 4.5% CET1 and 6% Tier 1 minima.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">RWA</div>
+      <div class="glossary-card__def">Risk-Weighted Assets: each asset is multiplied by a risk weight (0-1250%) to produce a risk-adjusted figure. The capital ratios are calculated as capital divided by total RWAs. Higher-risk assets demand more capital.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">LCR</div>
+      <div class="glossary-card__def">Liquidity Coverage Ratio: high-quality liquid assets divided by net cash outflows in a 30-day stress scenario. Must be at least 100%. Ensures banks can survive a short-term liquidity crisis without central bank support.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">NSFR</div>
+      <div class="glossary-card__def">Net Stable Funding Ratio: available stable funding divided by required stable funding. Must be at least 100% (binding since June 2021 under CRR II). Addresses structural liquidity risk over a one-year horizon.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">IRB</div>
+      <div class="glossary-card__def">Internal Ratings-Based approach: banks use their own statistical models to estimate the probability of default (and under A-IRB, loss-given-default) rather than supervisory tables. Requires supervisor approval and at least 3 years of data.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ECAI</div>
+      <div class="glossary-card__def">External Credit Assessment Institution: a credit rating agency recognised by the EBA (Fitch, Moody's, S&amp;P, DBRS, etc.). Under the standardised approach, ECAI ratings map to Credit Quality Steps (CQS 1-6) that determine risk weights.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">SREP</div>
+      <div class="glossary-card__def">Supervisory Review and Evaluation Process: the supervisor's annual assessment of a bank's risks, leading to an institution-specific Pillar 2 capital requirement (P2R) and guidance (P2G). Governed by CRD IV, not CRR. The total capital demand = CRR minimum + CRD IV buffers + P2R + P2G.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 13: LEGISLATIVE PROCEDURE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-clock-outline"></i></div>
+    <h2 class="section__title">Legislative procedure timeline</h2>
+  </div>
+  <p class="section__subtitle">From the global financial crisis to Basel IV</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">20 July 2011</div>
+      <div class="timeline__text">European Commission adopts the CRR + CRD IV legislative package, procedures <a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2011/0202(COD)" target="_blank" rel="noopener">2011/0202(COD)</a> (CRR) and 2011/0203(COD) (CRD IV). Lead committee: ECON. Responsible Commissioner: Michel Barnier (DG Internal Market/FISMA precursor).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 May 2012</div>
+      <div class="timeline__text">EP ECON committee adopts its report. Rapporteur: Othmar Karas (EPP). 1,000+ amendments tabled by MEPs, reflecting intense lobbying from banking sector on IRB models, leverage ratio, and SME supporting factor.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 April 2013</div>
+      <div class="timeline__text">European Parliament votes at first reading. Council reaches its position. Inter-institutional negotiations (trilogue) conclude in agreement on the final text.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 June 2013</div>
+      <div class="timeline__text"><strong>CRR and CRD IV adopted and signed by EP President and Council Presidency.</strong> Published in OJ L 176/1 on 27 June 2013. CRR enters into force on 28 June 2013. Application begins 1 January 2014.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">1 January 2014 to 2017</div>
+      <div class="timeline__text">Transitional period: phased deduction of CET1 items (20%-40%-60%-80%-100%), grandfathering of pre-2012 capital instruments with declining caps (Arts 484-486), phased-in LCR from 60% to 100% over 2015-2018.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 May 2019 (CRR II published)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0876" target="_blank" rel="noopener">Regulation (EU) 2019/876 (CRR II)</a> published. Binding leverage 3% and binding NSFR 100% apply from 28 June 2021. IFR/IFD investment firm carve-out also applies from 26 June 2021.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">24 March 2020 (Covid quick fix)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0873" target="_blank" rel="noopener">Regulation (EU) 2020/873</a> adopts targeted CRR and CRD IV amendments to support bank lending during the pandemic.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 June 2024 (CRR III / Basel IV)</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1623" target="_blank" rel="noopener">Regulation (EU) 2024/1623 (CRR III)</a> published. Basel III finalisation package: output floor 72.5%, revised SA credit risk, SMA for op risk, FRTB. Phase-in from 1 January 2025 to 2030.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 14: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">All authoritative documents and databases referenced in this analysis</p>
+
+  <div class="card">
+    <p><strong>CRR (original):</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0575" target="_blank" rel="noopener">Regulation (EU) No 575/2013 on EUR-Lex (CELEX 32013R0575)</a></p>
+    <p><strong>Twin directive CRD IV:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013L0036" target="_blank" rel="noopener">Directive 2013/36/EU on EUR-Lex (CELEX 32013L0036)</a></p>
+    <p><strong>OEIL procedure (CRR):</strong> <a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2011/0202(COD)" target="_blank" rel="noopener">2011/0202(COD) on EP OEIL procedure file</a></p>
+    <p><strong>CRR II:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0876" target="_blank" rel="noopener">Regulation (EU) 2019/876 on EUR-Lex (CELEX 32019R0876)</a></p>
+    <p><strong>CRR Covid quick fix:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0873" target="_blank" rel="noopener">Regulation (EU) 2020/873 on EUR-Lex (CELEX 32020R0873)</a></p>
+    <p><strong>CRR III (Basel IV):</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1623" target="_blank" rel="noopener">Regulation (EU) 2024/1623 on EUR-Lex (CELEX 32024R1623)</a></p>
+    <p><strong>IFR (investment firms):</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2033" target="_blank" rel="noopener">Regulation (EU) 2019/2033 on EUR-Lex (CELEX 32019R2033)</a></p>
+    <p><strong>EBA Single Rulebook (CRR/CRD interactive Q&amp;A and RTS):</strong> <a href="https://eba.europa.eu/regulation-and-policy" target="_blank" rel="noopener">eba.europa.eu/regulation-and-policy</a></p>
+    <p><strong>ECB Banking Supervision (SSM):</strong> <a href="https://www.bankingsupervision.europa.eu" target="_blank" rel="noopener">bankingsupervision.europa.eu</a></p>
+    <p><strong>BCBS (Basel III origin):</strong> <a href="https://www.bis.org/bcbs/" target="_blank" rel="noopener">bis.org/bcbs</a></p>
+    <p><strong>EP Legislative Train (Basel III/CRR III):</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-an-economy-that-works-for-people/file-implementation-of-basel-iii-banking-reform" target="_blank" rel="noopener">EP Legislative Train Schedule</a></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore CRR with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track, and work with EU capital requirements legislation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask any question about CRR, Basel III, capital ratios, or the EBA Single Rulebook. Get instant answers grounded in official sources.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Draft, analyse, and track amendments to CRR III or CRD VI. Load the EUR-Lex text and generate amendment language directly.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Track CRR-related procedures, get news from EBA, ECB, and ECOFIN, and monitor the Basel IV implementation calendar.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a compliance gap analysis against CRR and CRD IV requirements. See where your organisation's policies may need updating for CRR III.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Find EU and Member State procurement opportunities related to banking supervision, financial regulation, and compliance tooling.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatic access to EU legislation data, procedure tracking, and calendar events via the Brubru v1 REST API. Build your own compliance workflows.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">View API Docs</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__logos">
+      <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol">
+    </div>
+    <div class="footer__text">
+      <p>Produced by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol BV</a>.</p>
+      <p>Analysis based on Regulation (EU) No 575/2013 as amended by Regulations (EU) 2019/876, 2020/873, and 2024/1623.</p>
+      <p>This is an independent analysis and is not an official EU document. All facts traced to official EUR-Lex sources.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

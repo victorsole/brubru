@@ -108,6 +108,41 @@ LAW_PACKAGES = {
         'date_from': 2012
     },
 
+    'crr_capital_requirements': {
+        'name': 'CRR / CRD IV - Bank Prudential Requirements',
+        'primary_celex': '32013R0575',  # CRR
+        'description': (
+            'Capital Requirements Regulation (575/2013) and twin Directive 2013/36/EU (CRD IV) - '
+            'the EU Single Rulebook implementation of Basel III for credit institutions and '
+            'investment firms. Covers own funds (CET1/AT1/T2), capital ratios (4.5% / 6% / 8%), '
+            'credit risk Standardised + IRB approaches, market risk, operational risk, CVA, large '
+            'exposures (25% limit), liquidity (LCR 100% / NSFR), leverage ratio (3% binding under '
+            'CRR II), Pillar 3 disclosure, and the SME Supporting Factor (0.7619). Amended by CRR '
+            'II (Regulation (EU) 2019/876) and CRR III (Regulation (EU) 2024/1623, Basel IV).'
+        ),
+        'applicability': (
+            'EU-authorised credit institutions and investment firms (CRR Article 4(1)(3)); '
+            'consolidated supervision of banking groups (CRR Title II of Part One); financial '
+            'holding companies and mixed financial holding companies. Investment firms partially '
+            'carved out by IFR/IFD (Regulation (EU) 2019/2033 + Directive (EU) 2019/2034).'
+        ),
+        'policy_area': 'Economic and Financial Affairs',
+        'priority_level': 'high',
+        'keywords': [
+            'crr', 'crd iv', 'capital requirements', 'basel iii', 'basel iv', 'prudential',
+            'own funds', 'cet1', 'tier 1', 'tier 2', 'risk-weighted assets', 'rwa',
+            'standardised approach', 'irb', 'internal ratings based',
+            'large exposures', '25%', 'leverage ratio', 'lcr', 'nsfr',
+            'covered bonds', 'sme supporting factor', '0.7619',
+            'single rulebook', 'pillar 1', 'pillar 3', '575/2013', '2013/36',
+            '32013r0575', '32013l0036', '2019/876', '2024/1623',
+            'credit institution', 'investment firm', 'eba', 'ecb', 'ssm',
+            'cva', 'counterparty credit risk', 'wrong-way risk',
+            'g-sii', 'o-sii', 'capital buffer', 'countercyclical buffer'
+        ],
+        'date_from': 2013
+    },
+
     'capital_markets_union': {
         'name': 'Capital Markets Union Package',
         'primary_celex': None,

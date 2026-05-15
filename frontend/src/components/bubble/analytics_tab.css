@@ -556,6 +556,32 @@
   gap: 1.25rem;
 }
 
+.analytics-tab__eucanon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(90deg, rgba(6, 147, 227, 0.06), rgba(155, 81, 224, 0.06));
+  border: 1px dashed rgba(6, 147, 227, 0.35);
+  border-radius: 10px;
+  color: #0693e3;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analytics-tab__eucanon-link:hover {
+  border-color: rgba(6, 147, 227, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(6, 147, 227, 0.12);
+}
+
+.analytics-tab__eucanon-link span {
+  flex: 1;
+}
+
 .analytics-tab__deep-dive-card {
   background: #fff;
   border: 1px solid #e5e7eb;
