@@ -4,6 +4,7 @@
 - Procedure: **2026/0059(COD)** -- ordinary legislative procedure, first reading
 - Commission proposal: **COM(2026) 102 final**, accompanying staff working document **SEC(2026) 102** (26 February 2026)
 - Status (29 April 2026): **TABLED** -- Commission proposal of 26 February 2026; rapporteur appointed in LIBE 20 April 2026; LIBE draft report announced in EP committees portal 29 April 2026
+- Status (Monday 18 May 2026, Strasbourg plenary week): **LIBE draft report visible again on the LIBE committee portal**. File is the firearms trafficking proposal — confirmed by the OEIL procedure number `2026/0059(COD)`. Note: the 30 April 2026 Amendator incident mis-derived a CELEX (`52026PC0059`) for an unrelated Council Implementing Decision on Greek financial assistance from this OEIL reference; the correct COM number for the firearms trafficking proposal is **COM(2026) 102 final** and its CELEX is **52026PC0102**. Always look up the COM number explicitly — never derive CELEX from OEIL digits.
 - Lead committee: **LIBE** (Civil Liberties, Justice and Home Affairs)
 - Rapporteur: **Evin Incir (S&D, Sweden)** -- appointed 20 April 2026
 - Legal basis: Article 83(1) TFEU (areas of particularly serious crime with cross-border dimension)

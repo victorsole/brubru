@@ -55,6 +55,8 @@ Present the suggested items and ask the user to confirm or edit them.
 
 ## Step 3: Send Test Email
 
+**CLI flags do NOT compose**: in `send_daily_brief.py::main()` the `elif` chain orders `--list` → `--verify-urls` → `--test` → `--send`. Passing both `--test` and `--verify-urls` short-circuits at `--verify-urls` and the test email NEVER sends. The `--test` branch already calls `verify_headline_urls(db)` internally before sending. Always pass only ONE of `{--verify-urls, --test, --send}`. (Set 7 May 2026 after the test email failed to deliver because both `--test` and `--verify-urls` were passed together.)
+
 Send the daily brief ONLY to hello@beresol.eu for review:
 
 ```bash
