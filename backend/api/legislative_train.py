@@ -332,54 +332,8 @@ async def predict_carriage_timeline(
 
 # ===== User Tracking Endpoints =====
 
-@router.post(
-    "/track/{carriage_id}",
-    summary="Track legislative file by ID",
-    description="Subscribe to status updates for a legislative file by carriage UUID"
-)
-async def track_carriage(
-    carriage_id: UUID,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """Track a legislative file for updates"""
-    try:
-        # Check if carriage exists
-        carriage = db.query(LegislativeCarriage).filter(
-            LegislativeCarriage.id == carriage_id
-        ).first()
-
-        if not carriage:
-            raise HTTPException(status_code=404, detail="Carriage not found")
-
-        # Check if already tracking
-        existing = db.query(UserCarriageTrack).filter(
-            UserCarriageTrack.user_id == current_user.id,
-            UserCarriageTrack.carriage_id == carriage_id
-        ).first()
-
-        if existing:
-            return {"message": "Already tracking this file"}
-
-        # Create tracking record
-        track = UserCarriageTrack(
-            user_id=current_user.id,
-            carriage_id=carriage_id
-        )
-
-        db.add(track)
-        db.commit()
-
-        return {"message": "Now tracking legislative file", "carriage_id": str(carriage_id)}
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Failed to track carriage: {str(e)}")
-        db.rollback()
-        raise HTTPException(status_code=500, detail="Failed to track file")
-
-
+# NOTE: literal-path routes MUST be declared before /track/{carriage_id} so FastAPI
+# doesn't match "by-procedure" as the UUID path parameter. Same for DELETE.
 @router.post(
     "/track/by-procedure",
     summary="Track legislative file by procedure reference",
@@ -441,6 +395,47 @@ async def track_carriage_by_procedure(
 
 
 @router.post(
+    "/track/{carriage_id}",
+    summary="Track legislative file by ID",
+    description="Subscribe to status updates for a legislative file by carriage UUID"
+)
+async def track_carriage(
+    carriage_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Track a legislative file for updates"""
+    try:
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        existing = db.query(UserCarriageTrack).filter(
+            UserCarriageTrack.user_id == current_user.id,
+            UserCarriageTrack.carriage_id == carriage_id
+        ).first()
+        if existing:
+            return {"message": "Already tracking this file"}
+
+        track = UserCarriageTrack(
+            user_id=current_user.id,
+            carriage_id=carriage_id
+        )
+        db.add(track)
+        db.commit()
+        return {"message": "Now tracking legislative file", "carriage_id": str(carriage_id)}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to track carriage: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to track file")
+
+
+@router.post(
     "/track-by-celex",
     summary="Track legislative file by CELEX number",
     description="Find a legislative carriage whose celex_numbers array contains this CELEX, then track it."
@@ -476,39 +471,6 @@ async def track_carriage_by_celex(
         logger.error(f"Failed to track by CELEX {celex}: {e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to track: {e}")
-
-
-@router.delete(
-    "/track/{carriage_id}",
-    summary="Untrack legislative file",
-    description="Unsubscribe from status updates"
-)
-async def untrack_carriage(
-    carriage_id: UUID,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """Stop tracking a legislative file"""
-    try:
-        track = db.query(UserCarriageTrack).filter(
-            UserCarriageTrack.user_id == current_user.id,
-            UserCarriageTrack.carriage_id == carriage_id
-        ).first()
-
-        if not track:
-            raise HTTPException(status_code=404, detail="Not tracking this file")
-
-        db.delete(track)
-        db.commit()
-
-        return {"message": "Stopped tracking legislative file"}
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Failed to untrack carriage: {str(e)}")
-        db.rollback()
-        raise HTTPException(status_code=500, detail="Failed to untrack file")
 
 
 @router.delete(
@@ -555,6 +517,36 @@ async def untrack_carriage_by_procedure(
         raise
     except Exception as e:
         logger.error(f"Failed to untrack carriage by procedure: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to untrack file")
+
+
+@router.delete(
+    "/track/{carriage_id}",
+    summary="Untrack legislative file",
+    description="Unsubscribe from status updates"
+)
+async def untrack_carriage(
+    carriage_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Stop tracking a legislative file"""
+    try:
+        track = db.query(UserCarriageTrack).filter(
+            UserCarriageTrack.user_id == current_user.id,
+            UserCarriageTrack.carriage_id == carriage_id
+        ).first()
+        if not track:
+            raise HTTPException(status_code=404, detail="Not tracking this file")
+        db.delete(track)
+        db.commit()
+        return {"message": "Stopped tracking legislative file"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to untrack carriage: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Failed to untrack file")
 
@@ -1105,11 +1097,22 @@ async def get_carriage_key_players(
                         "photo_url": None,
                     })
 
+            # Dedupe by (name, role) — OEIL sometimes lists the same person under
+            # multiple opinion committees or repeats the Commission DG entry.
+            seen_keys = set()
+            deduped = []
+            for p in key_players_list:
+                key = ((p.get("name") or "").strip().lower(), (p.get("role") or "").strip().lower())
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                deduped.append(p)
+
             return {
                 "carriage_id": str(carriage_id),
                 "carriage_title": carriage.title,
                 "oeil_procedure_ref": carriage.oeil_procedure_ref,
-                "key_players": key_players_list,
+                "key_players": deduped,
             }
 
         finally:
