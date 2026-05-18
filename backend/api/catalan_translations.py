@@ -154,6 +154,18 @@ async def get_subcategories(
 async def get_stats(db: Session = Depends(get_db)):
     """Get overall translation statistics."""
     total = db.query(func.count(CatalanTranslation.id)).scalar() or 0
+    total_main = (
+        db.query(func.count(CatalanTranslation.id))
+        .filter(CatalanTranslation.file_type == 'main')
+        .scalar()
+        or 0
+    )
+    total_annex = (
+        db.query(func.count(CatalanTranslation.id))
+        .filter(CatalanTranslation.file_type == 'annex')
+        .scalar()
+        or 0
+    )
     total_articles = db.query(func.sum(CatalanTranslation.articles_count)).scalar() or 0
     total_recitals = db.query(func.sum(CatalanTranslation.recitals_count)).scalar() or 0
     total_size = db.query(func.sum(CatalanTranslation.html_size_bytes)).scalar() or 0
@@ -161,6 +173,8 @@ async def get_stats(db: Session = Depends(get_db)):
 
     return {
         'total_translations': total,
+        'total_main': total_main,
+        'total_annex': total_annex,
         'total_articles': total_articles,
         'total_recitals': total_recitals,
         'total_size_mb': round(total_size / (1024 * 1024), 1),
