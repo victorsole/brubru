@@ -30,14 +30,17 @@ class TextAdoptedSummary(BaseModel):
     ta_reference: str
     title: str
     text_type: TextType
-    adoption_date: datetime
+    # Optional: some texts are listed before an adoption_date is populated
+    # (draft / working items). Without this, the full /items endpoint 500s
+    # because a subset of rows have NULL here.
+    adoption_date: Optional[datetime] = None
     procedure_ref: Optional[str] = None
     parliamentary_term: int
     committees: List[str] = Field(default_factory=list)
     rapporteur_name: Optional[str] = None
     source_url: Optional[str] = None
     full_text_url: Optional[str] = None
-    last_updated: datetime
+    last_updated: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -50,7 +53,7 @@ class TextAdoptedDetailResponse(BaseModel):
     title: str
     description: Optional[str] = None
     text_type: TextType
-    adoption_date: datetime
+    adoption_date: Optional[datetime] = None
     procedure_ref: Optional[str] = None
     parliamentary_term: int
 
@@ -74,8 +77,8 @@ class TextAdoptedDetailResponse(BaseModel):
     legislative_carriage_id: Optional[UUID] = None
 
     # Temporal
-    first_seen: datetime
-    last_updated: datetime
+    first_seen: Optional[datetime] = None
+    last_updated: Optional[datetime] = None
     scraped_at: Optional[datetime] = None
 
     # Tracking info (populated per-user)
