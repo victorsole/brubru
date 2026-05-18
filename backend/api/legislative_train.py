@@ -1097,16 +1097,48 @@ async def get_carriage_key_players(
                         "photo_url": None,
                     })
 
-            # Dedupe by (name, role) — OEIL sometimes lists the same person under
-            # multiple opinion committees or repeats the Commission DG entry.
-            seen_keys = set()
-            deduped = []
-            for p in key_players_list:
-                key = ((p.get("name") or "").strip().lower(), (p.get("role") or "").strip().lower())
-                if key in seen_keys:
-                    continue
-                seen_keys.add(key)
-                deduped.append(p)
+            # Dedupe by MEP identity, not (name, role). OEIL returns the same
+            # person multiple times because:
+            #  (a) `name` sometimes carries a "(Group)" suffix and sometimes doesn't
+            #      ("METZ Tilly (Greens/EFA)" vs "METZ Tilly"),
+            #  (b) the same MEP appears under "rapporteur" AND "shadow_rapporteurs"
+            #      in OEIL when the source page conflates roles.
+            # Identity key: mep_id when present, else normalised name. Keep the most
+            # senior role per person (Rapporteur > Shadow > Opinion > other).
+            import re as _re
+            ROLE_PRIORITY = {"rapporteur": 0, "shadow rapporteur": 1, "opinion rapporteur": 2}
+
+            def _role_rank(role: str) -> int:
+                r = (role or "").lower()
+                for k, v in ROLE_PRIORITY.items():
+                    if r.startswith(k):
+                        return v
+                return 99
+
+            NAME_GROUP_RE = _re.compile(r"\s*\(([^)]+)\)\s*$")
+
+            def _normalise(p: dict) -> dict:
+                # Strip trailing "(Group)" from name; if political_group is missing,
+                # lift the parenthetical into political_group.
+                p = dict(p)
+                name = (p.get("name") or "").strip()
+                m = NAME_GROUP_RE.search(name)
+                if m:
+                    parenthetical = m.group(1).strip()
+                    p["name"] = NAME_GROUP_RE.sub("", name).strip()
+                    if not p.get("political_group"):
+                        p["political_group"] = parenthetical
+                return p
+
+            by_identity: dict[str, dict] = {}
+            for raw in key_players_list:
+                p = _normalise(raw)
+                key = str(p.get("mep_id") or p.get("name", "").lower() or p.get("role", "").lower())
+                existing = by_identity.get(key)
+                if existing is None or _role_rank(p.get("role", "")) < _role_rank(existing.get("role", "")):
+                    by_identity[key] = p
+
+            deduped = list(by_identity.values())
 
             return {
                 "carriage_id": str(carriage_id),
