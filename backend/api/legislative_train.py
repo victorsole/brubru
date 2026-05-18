@@ -1115,6 +1115,7 @@ async def get_carriage_key_players(
                         return v
                 return 99
 
+            from services.mep_groups_cache import enrich_political_group
             NAME_GROUP_RE = _re.compile(r"\s*\(([^)]+)\)\s*$")
 
             def _normalise(p: dict) -> dict:
@@ -1133,6 +1134,8 @@ async def get_carriage_key_players(
             by_identity: dict[str, dict] = {}
             for raw in key_players_list:
                 p = _normalise(raw)
+                # Authoritative enrichment from EP profile cache (no fabrication).
+                enrich_political_group(p)
                 key = str(p.get("mep_id") or p.get("name", "").lower() or p.get("role", "").lower())
                 existing = by_identity.get(key)
                 if existing is None or _role_rank(p.get("role", "")) < _role_rank(existing.get("role", "")):
