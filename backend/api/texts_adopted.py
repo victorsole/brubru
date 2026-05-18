@@ -122,12 +122,14 @@ async def get_items(
         # Get total count
         total = query.count()
 
-        # Sort
+        # Sort — push NULLs to the end so meaningful rows (with adoption_date,
+        # title, etc.) lead. Otherwise 18 NULL-adoption_date "Amendments" rows
+        # crowd the top of the default list.
         sort_column = getattr(TextAdopted, sort_by, TextAdopted.adoption_date)
         if sort_desc:
-            query = query.order_by(sort_column.desc())
+            query = query.order_by(sort_column.desc().nullslast())
         else:
-            query = query.order_by(sort_column.asc())
+            query = query.order_by(sort_column.asc().nullslast())
 
         # Paginate
         items = query.offset(offset).limit(limit).all()
