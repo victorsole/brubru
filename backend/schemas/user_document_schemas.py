@@ -66,8 +66,8 @@ class AmendmentResponse(AmendmentCreate):
     user_id: UUID
     amendment_target: Optional[str] = None
     amendment_justification: Optional[str] = None
-    version: int
-    view_count: int
+    version: int = 1
+    view_count: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -96,8 +96,8 @@ class AnalysisResponse(AnalysisCreate):
     methodology: Optional[str] = None
     conclusions: Optional[str] = None
     recommendations: Optional[str] = None
-    version: int
-    view_count: int
+    version: int = 1
+    view_count: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -126,8 +126,8 @@ class StrategyResponse(StrategyCreate):
     action_plan: Optional[str] = None
     timeline: Optional[str] = None
     stakeholders: Optional[List[str]] = None
-    version: int
-    view_count: int
+    version: int = 1
+    view_count: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -150,8 +150,8 @@ class NoteResponse(NoteCreate):
     id: UUID
     user_id: UUID
     doc_metadata: Optional[Dict[str, Any]] = None
-    version: int
-    view_count: int
+    version: int = 1
+    view_count: int = 0
     created_at: datetime
     updated_at: datetime
 
