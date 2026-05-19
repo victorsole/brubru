@@ -141,8 +141,11 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     const fetchGreeting = async () => {
       try {
         if (!isAuthenticated) {
-          trackPreUserEvent(getPreUserId(), 'page_load');
-          const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting/public`);
+          const preUserId = getPreUserId();
+          trackPreUserEvent(preUserId, 'page_load');
+          const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting/public`, {
+            params: { pre_user_id: preUserId },
+          });
           setPersonalizedGreeting(response.data?.message || null);
           setPolicyHooks(response.data?.policy_hooks || []);
           return;
@@ -720,10 +723,10 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
 
             {policyHooks.length > 0 && (
-              <div className="chat-interface__hooks" role="group" aria-label="Brubru has something for you">
+              <div className="chat-interface__hooks" role="group" aria-label={t('chat.brubruNoticed')}>
                 <div className="chat-interface__hooks-lede">
                   <span className="mdi mdi-bell-ring-outline" aria-hidden="true" />
-                  <span>Brubru noticed</span>
+                  <span>{t('chat.brubruNoticed')}</span>
                 </div>
                 {policyHooks.map((hook, idx) => (
                   <button
@@ -741,7 +744,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                     <span className="mdi mdi-message-text-outline chat-interface__hook-icon" aria-hidden="true" />
                     <span className="chat-interface__hook-body">
                       <span className="chat-interface__hook-spoken">{hook.spoken}</span>
-                      <span className="chat-interface__hook-cta">Tell me more</span>
+                      <span className="chat-interface__hook-cta">{t('chat.tellMeMore')}</span>
                     </span>
                     <span className="mdi mdi-arrow-right chat-interface__hook-arrow" aria-hidden="true" />
                   </button>

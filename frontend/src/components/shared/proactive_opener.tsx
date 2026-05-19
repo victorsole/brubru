@@ -31,6 +31,8 @@ const TRIGGER_LABEL: Record<ProactiveTriggerSource, string> = {
   tracked_file_movement: 'Your tracked files',
   amendment_surge: 'Amendment surge',
   learn_about_you: 'Set up your watchlist',
+  conversation_recall: 'Pick up where you left off',
+  weekly_digest: 'Your week on Brubru',
 };
 
 const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
@@ -39,6 +41,8 @@ const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
   tracked_file_movement: 'Open My Files',
   amendment_surge: 'Open Amendments',
   learn_about_you: 'Open profile',
+  conversation_recall: 'Open chat history',
+  weekly_digest: 'Open dashboard',
 };
 
 interface ProactiveOpenerProps {

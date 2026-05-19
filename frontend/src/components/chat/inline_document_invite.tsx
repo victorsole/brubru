@@ -10,6 +10,7 @@
 
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import { trackPreUserEvent } from '../../services/preuser_tracker';
 import './inline_document_invite.css';
@@ -45,6 +46,7 @@ const formatBytes = (bytes: number): string => {
 
 export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -63,7 +65,7 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
 
   const uploadOne = async (file: File) => {
     if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage(`${file.name} is too large (max 10 MB).`);
+      setErrorMessage(t('chat.docInviteTooLarge', { filename: file.name }));
       return;
     }
     setErrorMessage(null);
@@ -78,7 +80,7 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
         body: formData,
       });
       if (!response.ok) {
-        setErrorMessage(`Upload failed for ${file.name}.`);
+        setErrorMessage(t('chat.docInviteUploadFailed', { filename: file.name }));
         return;
       }
       const data = await response.json();
@@ -88,7 +90,7 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
       }
     } catch (e) {
       console.error('Inline upload failed:', e);
-      setErrorMessage('Upload failed. Please try again.');
+      setErrorMessage(t('chat.docInviteUploadFailedGeneric'));
     } finally {
       setIsUploading(false);
     }
@@ -140,16 +142,12 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        title="Sign up to upload a document"
+        title={t('chat.docInvitePreuserSub')}
       >
         <span className="mdi mdi-file-upload-outline inline-doc-invite__icon" aria-hidden="true" />
         <span className="inline-doc-invite__body">
-          <span className="inline-doc-invite__title">
-            Got a draft, position paper, or briefing?
-          </span>
-          <span className="inline-doc-invite__subtitle">
-            Sign up free and I will read your PDF and find the EU-law touchpoints.
-          </span>
+          <span className="inline-doc-invite__title">{t('chat.docInviteTitle')}</span>
+          <span className="inline-doc-invite__subtitle">{t('chat.docInvitePreuserSub')}</span>
         </span>
         <span className="mdi mdi-arrow-right inline-doc-invite__arrow" aria-hidden="true" />
       </button>
@@ -163,10 +161,10 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
         <span className="mdi mdi-check-circle inline-doc-invite__icon" aria-hidden="true" />
         <span className="inline-doc-invite__body">
           <span className="inline-doc-invite__title">
-            Got it. {justUploaded.name} is loaded.
+            {t('chat.docInviteLoadedTitle', { filename: justUploaded.name })}
           </span>
           <span className="inline-doc-invite__subtitle">
-            {formatBytes(justUploaded.size)}. Ask me anything about it and I will reference it in my answer.
+            {t('chat.docInviteLoadedSub', { size: formatBytes(justUploaded.size) })}
           </span>
         </span>
       </div>
@@ -190,7 +188,7 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
           triggerPicker();
         }
       }}
-      aria-label="Drop a document for Brubru to read"
+      aria-label={t('chat.docInviteTitle')}
     >
       <input
         ref={fileInputRef}
@@ -203,21 +201,17 @@ export const InlineDocumentInvite = ({ onUpload }: InlineDocumentInviteProps) =>
       <span className="mdi mdi-file-upload-outline inline-doc-invite__icon" aria-hidden="true" />
       <span className="inline-doc-invite__body">
         <span className="inline-doc-invite__title">
-          {isUploading
-            ? 'Reading your document...'
-            : 'Got a draft, position paper, or briefing?'}
+          {isUploading ? t('chat.docInviteUploading') : t('chat.docInviteTitle')}
         </span>
         <span className="inline-doc-invite__subtitle">
-          {isUploading
-            ? 'One moment.'
-            : 'Drop a PDF or DOCX here and I will reference it in my next answer.'}
+          {isUploading ? t('chat.docInviteOneMoment') : t('chat.docInviteAuthedSub')}
         </span>
         {errorMessage && (
           <span className="inline-doc-invite__error">{errorMessage}</span>
         )}
       </span>
       {!isUploading && (
-        <span className="inline-doc-invite__cta">Browse files</span>
+        <span className="inline-doc-invite__cta">{t('chat.docInviteBrowse')}</span>
       )}
     </div>
   );

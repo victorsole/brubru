@@ -17,7 +17,9 @@ export type ProactiveTriggerSource =
   | 'new_file_match'
   | 'tracked_file_movement'
   | 'amendment_surge'
-  | 'learn_about_you';
+  | 'learn_about_you'
+  | 'conversation_recall'
+  | 'weekly_digest';
 
 export interface ProactiveBriefing {
   trigger_source: ProactiveTriggerSource;
