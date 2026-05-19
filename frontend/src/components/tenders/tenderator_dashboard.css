@@ -1,0 +1,630 @@
+/* tenderator_dashboard.css
+   Brubru aesthetic: Adobe Caslon Pro for the title, blue/purple gradient
+   accents, MDI icons, light app shell. No background image. */
+
+.tenderator-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Header */
+.tenderator-dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.tenderator-dashboard__header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tenderator-dashboard__header-icon {
+  font-size: 2rem;
+  color: var(--color-accent-gold, #d97706);
+  background: rgba(217, 119, 6, 0.1);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tenderator-dashboard__title {
+  font-family: 'Adobe Caslon Pro', 'Adobe Caslon Pro Bold', Georgia, serif;
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+.tenderator-dashboard__subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.tenderator-dashboard__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tenderator-dashboard__icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+}
+
+.tenderator-dashboard__icon-button:hover {
+  background: rgba(6, 147, 227, 0.06);
+  border-color: rgba(6, 147, 227, 0.4);
+  transform: translateY(-1px);
+}
+
+.tenderator-dashboard__tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* KPI strip */
+.tenderator-dashboard__kpis {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.85rem;
+}
+
+.tenderator-dashboard__kpi {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 110px;
+}
+
+.tenderator-dashboard__kpi--primary {
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.06), rgba(155, 81, 224, 0.04));
+  border-color: rgba(6, 147, 227, 0.25);
+}
+
+.tenderator-dashboard__kpi--urgent {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.05), rgba(217, 119, 6, 0.04));
+  border-color: rgba(220, 38, 38, 0.22);
+}
+
+.tenderator-dashboard__kpi-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.tenderator-dashboard__kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.1;
+}
+
+.tenderator-dashboard__kpi-meta {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.tenderator-dashboard__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.tenderator-dashboard__delta--up { color: #059669; }
+.tenderator-dashboard__delta--down { color: #dc2626; }
+.tenderator-dashboard__delta--flat { color: var(--color-text-secondary, #6b7280); }
+
+/* Source filter chips */
+.tenderator-dashboard__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+}
+
+.tenderator-dashboard__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.tenderator-dashboard__chip:hover {
+  background: rgba(6, 147, 227, 0.06);
+  border-color: rgba(6, 147, 227, 0.35);
+}
+
+.tenderator-dashboard__chip--active {
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.14), rgba(155, 81, 224, 0.1));
+  border-color: rgba(6, 147, 227, 0.55);
+  color: #0b3954;
+}
+
+.tenderator-dashboard__chip--matches {
+  border-color: rgba(217, 119, 6, 0.4);
+  background: rgba(217, 119, 6, 0.05);
+}
+
+.tenderator-dashboard__chip--matches.tenderator-dashboard__chip--active {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(220, 38, 38, 0.08));
+  border-color: rgba(217, 119, 6, 0.65);
+  color: #7c2d12;
+}
+
+.tenderator-dashboard__chip--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.tenderator-dashboard__chip--disabled:hover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.tenderator-dashboard__chip-count {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tenderator-dashboard__chip--active .tenderator-dashboard__chip-count {
+  background: rgba(6, 147, 227, 0.18);
+  color: #0b3954;
+}
+
+/* Sub-source chip strip (shown inside the matches feed) */
+.tenderator-dashboard__sub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  background: rgba(217, 119, 6, 0.04);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  border-radius: 10px;
+  margin-bottom: 0.7rem;
+}
+
+.tenderator-dashboard__sub-chips-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c2d12;
+  padding-right: 0.3rem;
+}
+
+.tenderator-dashboard__sub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.tenderator-dashboard__sub-chip:hover {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+.tenderator-dashboard__sub-chip--active {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.18), rgba(220, 38, 38, 0.06));
+  border-color: rgba(217, 119, 6, 0.55);
+  color: #7c2d12;
+  font-weight: 600;
+}
+
+/* Error banner */
+.tenderator-dashboard__error {
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: #7f1d1d;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tenderator-dashboard__error button {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: #7f1d1d;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Grid */
+.tenderator-dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.25rem;
+}
+
+.tenderator-dashboard__main {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  min-width: 0;
+}
+
+.tenderator-dashboard__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Brubru Brief (right rail companion gesture) */
+.tenderator-dashboard__brief {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.tenderator-dashboard__brief-lede {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primary, #0693e3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tenderator-dashboard__brief-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(6, 147, 227, 0.22);
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.06), rgba(155, 81, 224, 0.04));
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: #111827;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+}
+
+.tenderator-dashboard__brief-card:hover {
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.12), rgba(155, 81, 224, 0.08));
+  border-color: rgba(6, 147, 227, 0.45);
+  transform: translateY(-1px);
+}
+
+.tenderator-dashboard__brief-spoken {
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.tenderator-dashboard__brief-cta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primary, #0693e3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tenderator-dashboard__brief-quiet {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #6b7280);
+  line-height: 1.45;
+}
+
+/* Urgency widget */
+.tenderator-dashboard__urgency {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.tenderator-dashboard__urgency-header {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #dc2626;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.tenderator-dashboard__urgency-empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #6b7280);
+  line-height: 1.45;
+}
+
+.tenderator-dashboard__urgency-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tenderator-dashboard__urgency-item {
+  border-radius: 10px;
+  border-left: 3px solid;
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.tenderator-dashboard__urgency-item--red { border-left-color: #dc2626; background: rgba(220, 38, 38, 0.06); }
+.tenderator-dashboard__urgency-item--amber { border-left-color: #d97706; background: rgba(217, 119, 6, 0.06); }
+.tenderator-dashboard__urgency-item--green { border-left-color: #059669; background: rgba(5, 150, 105, 0.06); }
+
+.tenderator-dashboard__urgency-button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0.6rem 0.75rem;
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.tenderator-dashboard__urgency-days {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tenderator-dashboard__urgency-title {
+  font-size: 0.85rem;
+  color: #111827;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tenderator-dashboard__urgency-value {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #6b7280);
+  font-weight: 600;
+}
+
+/* By-source counts */
+.tenderator-dashboard__sources {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.tenderator-dashboard__sources-header {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.tenderator-dashboard__sources-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tenderator-dashboard__sources-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: #374151;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+}
+
+.tenderator-dashboard__sources-list li:last-child { border-bottom: none; }
+
+.tenderator-dashboard__sources-list li > span:last-child {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Responsive */
+/* CLAUDE.md mandatory breakpoint ladder.
+   >1024px: full 5-col / 2-col grids.
+   <=1280px: 5-col KPI drops to 3.
+   <=1024px: 4-col grids drop to 2-col, main+rail stacks.
+   <=900px:  any remaining 3-col grid drops to 2.
+   <=767px:  stack everything to 1-col, hero font <=1.9rem, padding 1.25rem.
+   <=400px:  iPhone-SE safety: smaller KPI values + chip text. */
+
+@media (max-width: 1280px) {
+  .tenderator-dashboard__kpis {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .tenderator-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+  .tenderator-dashboard__rail {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .tenderator-dashboard__brief,
+  .tenderator-dashboard__urgency,
+  .tenderator-dashboard__sources {
+    flex: 1 1 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tenderator-dashboard__kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tenderator-dashboard__header {
+    padding: 1rem 1.15rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .tenderator-dashboard {
+    padding: 1rem 1.25rem 2rem;
+  }
+  .tenderator-dashboard__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.15rem;
+  }
+  .tenderator-dashboard__header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .tenderator-dashboard__title {
+    font-size: 1.55rem;
+  }
+  .tenderator-dashboard__subtitle {
+    font-size: 0.85rem;
+  }
+  .tenderator-dashboard__kpis {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+  .tenderator-dashboard__kpi {
+    padding: 0.85rem 0.9rem;
+    min-height: 92px;
+  }
+  .tenderator-dashboard__kpi-value {
+    font-size: 1.5rem;
+  }
+  .tenderator-dashboard__chips,
+  .tenderator-dashboard__sub-chips {
+    padding: 0.5rem;
+  }
+  .tenderator-dashboard__chip,
+  .tenderator-dashboard__sub-chip {
+    font-size: 0.8rem;
+  }
+  .tenderator-dashboard__rail {
+    flex-direction: column;
+  }
+  .tenderator-dashboard__brief,
+  .tenderator-dashboard__urgency,
+  .tenderator-dashboard__sources {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 400px) {
+  /* iPhone SE safety net. Avoid any horizontal scroll. */
+  .tenderator-dashboard {
+    padding: 0.85rem 0.85rem 2rem;
+  }
+  .tenderator-dashboard__kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .tenderator-dashboard__kpi-value {
+    font-size: 1.35rem;
+  }
+  .tenderator-dashboard__kpi-label {
+    font-size: 0.7rem;
+  }
+  .tenderator-dashboard__title {
+    font-size: 1.35rem;
+  }
+  .tenderator-dashboard__sub-chips-label {
+    width: 100%;
+  }
+}

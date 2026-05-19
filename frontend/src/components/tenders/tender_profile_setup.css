@@ -136,6 +136,25 @@
   margin-bottom: 1.5rem;
 }
 
+/* Success Message */
+.tender-profile-setup__success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.35);
+  border-radius: 10px;
+  color: #065f46;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.tender-profile-setup__success .mdi {
+  color: #059669;
+  font-size: 1.3rem;
+}
+
 /* Content */
 .tender-profile-setup__content {
   min-height: 400px;

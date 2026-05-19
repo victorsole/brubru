@@ -24,7 +24,7 @@ export interface Citation {
 }
 
 export interface ChatAction {
-  action_type: 'track_file' | 'generate_document' | 'open_amendator' | 'view_prediction' | 'view_calendar';
+  action_type: 'track_file' | 'generate_document' | 'open_amendator' | 'view_prediction' | 'view_calendar' | 'open_tenderator';
   label: string;
   icon: string;
   colour: string;
@@ -678,6 +678,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
       case 'open_amendator':
       case 'view_prediction':
       case 'view_calendar':
+      case 'open_tenderator':
         if (action.route) {
           navigate(action.route);
         }

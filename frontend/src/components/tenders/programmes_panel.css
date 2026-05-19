@@ -1,0 +1,145 @@
+/* programmes_panel.css */
+
+.programmes-panel {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.programmes-panel__header {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.programmes-panel__loading {
+  text-align: center;
+  padding: 0.5rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.programmes-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.programmes-panel__item-button {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  font-family: inherit;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 0.6rem;
+  align-items: center;
+  text-align: left;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+}
+
+.programmes-panel__item-button:hover {
+  background: rgba(6, 147, 227, 0.04);
+  border-color: rgba(6, 147, 227, 0.35);
+  transform: translateY(-1px);
+}
+
+.programmes-panel__code {
+  font-family: 'SF Mono', Menlo, Monaco, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.programmes-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.programmes-panel__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.programmes-panel__meta {
+  font-size: 0.74rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.programmes-panel__period {
+  font-family: 'SF Mono', Menlo, Monaco, monospace;
+  font-size: 0.72rem;
+}
+
+.programmes-panel__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.5rem;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.programmes-panel__toggle:hover {
+  background: rgba(6, 147, 227, 0.04);
+  border-color: rgba(6, 147, 227, 0.4);
+  color: var(--color-primary, #0693e3);
+}
+
+@media (max-width: 767px) {
+  .programmes-panel {
+    padding: 0.85rem;
+  }
+  .programmes-panel__item-button {
+    grid-template-columns: 52px 1fr;
+    padding: 0.5rem 0.6rem;
+    gap: 0.5rem;
+  }
+  .programmes-panel__code {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.35rem;
+  }
+  .programmes-panel__name {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .programmes-panel__name {
+    /* Avoid horizontal overflow at iPhone-SE width. */
+    font-size: 0.8rem;
+  }
+}

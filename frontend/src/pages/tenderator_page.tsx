@@ -1,14 +1,13 @@
 // frontend/src/pages/tenderator_page.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TenderFeed } from '../components/tenders/tender_feed';
+import { useTranslation } from 'react-i18next';
 import { TenderDetail } from '../components/tenders/tender_detail';
 import { BidChecklist } from '../components/tenders/bid_checklist';
 import { TenderCalendar } from '../components/tenders/tender_calendar';
 import { TenderProfileSetup } from '../components/tenders/tender_profile_setup';
-import { TenderStats } from '../components/tenders/tender_stats';
+import { TenderatorDashboard } from '../components/tenders/tenderator_dashboard';
 import { useAuth } from '../hooks/use_auth';
-import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './tenderator_page.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -89,7 +88,7 @@ export interface UserTenderStats {
   matches_this_week: number;
 }
 
-type ViewState = 'feed' | 'detail' | 'checklist' | 'calendar' | 'profile';
+type ViewState = 'dashboard' | 'detail' | 'checklist' | 'calendar' | 'profile';
 
 interface TenderatorPageProps {
   isSidebarOpen?: boolean;
@@ -97,9 +96,10 @@ interface TenderatorPageProps {
 }
 
 export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPageProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { token } = useAuth();
-  const [viewState, setViewState] = useState<ViewState>('feed');
+  const [viewState, setViewState] = useState<ViewState>('dashboard');
   const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
   const [selectedMatch, setSelectedMatch] = useState<TenderMatch | null>(null);
   const [userProfile, setUserProfile] = useState<TenderProfile | null>(null);
@@ -146,7 +146,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
       }
     } catch (err) {
       console.error('Error fetching user data:', err);
-      setError('Failed to load your Tenderator data');
+      setError(t('tenderator.errorLoad'));
     } finally {
       setIsLoading(false);
     }
@@ -166,7 +166,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
   const handleBackToFeed = () => {
     setSelectedTender(null);
     setSelectedMatch(null);
-    setViewState('feed');
+    setViewState('dashboard');
   };
 
   const handleSaveMatch = async (matchId: number) => {
@@ -221,7 +221,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
 
   const handleProfileCreated = (profile: TenderProfile) => {
     setUserProfile(profile);
-    setViewState('feed');
+    setViewState('dashboard');
     fetchUserData();
   };
 
@@ -245,34 +245,29 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
                 className="tenderator-page__mascot"
               />
               <div>
-                <h1 className="tenderator-page__title">Tenderator</h1>
-                <p className="tenderator-page__subtitle">
-                  EU Public Procurement Monitor for SMEs
-                </p>
+                <h1 className="tenderator-page__title">{t('tenderator.title')}</h1>
+                <p className="tenderator-page__subtitle">{t('tenderator.subtitle')}</p>
               </div>
             </div>
           </div>
 
           <div className="tenderator-page__upgrade-card">
             <span className="mdi mdi-lock-outline tenderator-page__upgrade-icon"></span>
-            <h2>Professional Plan Required</h2>
-            <p>
-              Tenderator is a premium feature available with the Professional plan.
-              Subscribe now to access:
-            </p>
+            <h2>{t('tenderator.upgradeTitle')}</h2>
+            <p>{t('tenderator.upgradeBody')}</p>
             <ul>
-              <li><span className="mdi mdi-check"></span> Personalized tender matching</li>
-              <li><span className="mdi mdi-check"></span> SME suitability scoring</li>
-              <li><span className="mdi mdi-check"></span> AI-powered bid guidance</li>
-              <li><span className="mdi mdi-check"></span> ESPD document checklists</li>
-              <li><span className="mdi mdi-check"></span> Weekly tender alerts</li>
+              <li><span className="mdi mdi-check"></span> {t('tenderator.upgradeFeature1')}</li>
+              <li><span className="mdi mdi-check"></span> {t('tenderator.upgradeFeature2')}</li>
+              <li><span className="mdi mdi-check"></span> {t('tenderator.upgradeFeature3')}</li>
+              <li><span className="mdi mdi-check"></span> {t('tenderator.upgradeFeature4')}</li>
+              <li><span className="mdi mdi-check"></span> {t('tenderator.upgradeFeature5')}</li>
             </ul>
             <button
               className="tenderator-page__upgrade-button"
               onClick={() => navigate('/subscription')}
             >
               <span className="mdi mdi-arrow-up-circle"></span>
-              Get Professional Plan
+              {t('tenderator.upgradeButton')}
             </button>
           </div>
         </div>
@@ -281,166 +276,115 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
   }
 
   return (
-    <div className="tenderator-page">
-      {/* Background */}
-      <img
-        className="tenderator-page__background-image"
-        src="/assets/euro_money.jpg"
-        alt="EU Tenders"
-      />
-      <div className="tenderator-page__background-overlay"></div>
+    <div className="tenderator-page tenderator-page--dashboard">
+      {/* Loading state */}
+      {isLoading && (
+        <div className="tenderator-page__loading">
+          <span className="mdi mdi-loading mdi-spin"></span>
+          {t('tenderator.loading')}
+        </div>
+      )}
 
-      <div className="tenderator-page__layout">
-        <div className="tenderator-page__container">
-          {/* Header */}
-          <div className="tenderator-page__header">
-            <div className="tenderator-page__header-content">
-              <img
-                src="/assets/brubru_tenderator.png"
-                alt="Tenderator"
-                className="tenderator-page__mascot"
-              />
-              <div>
-                <h1 className="tenderator-page__title">Tenderator</h1>
-                <p className="tenderator-page__subtitle">
-                  EU Public Procurement Monitor for SMEs
-                </p>
-              </div>
-            </div>
-            <div className="tenderator-page__header-actions">
-              <div className="tenderator-page__tier-badge">
-                <span className="mdi mdi-star-circle"></span>
-                Professional
-              </div>
-            </div>
-          </div>
+      {/* Error state */}
+      {error && (
+        <div className="tenderator-page__error">
+          <span className="mdi mdi-alert-circle"></span>
+          {error}
+          <button onClick={() => { setError(null); fetchUserData(); }}>
+            {t('tenderator.retry')}
+          </button>
+        </div>
+      )}
 
-          {/* Navigation Tabs */}
-          <div className="tenderator-page__tabs">
-            <button
-              className={`tenderator-page__tab ${viewState === 'feed' ? 'tenderator-page__tab--active' : ''}`}
-              onClick={() => setViewState('feed')}
-            >
-              <span className="mdi mdi-view-list"></span>
-              Tenders
-            </button>
-            <button
-              className={`tenderator-page__tab ${viewState === 'calendar' ? 'tenderator-page__tab--active' : ''}`}
-              onClick={() => setViewState('calendar')}
-            >
-              <span className="mdi mdi-calendar"></span>
-              Calendar
-            </button>
-            <button
-              className={`tenderator-page__tab ${viewState === 'profile' ? 'tenderator-page__tab--active' : ''}`}
-              onClick={() => setViewState('profile')}
-            >
-              <span className="mdi mdi-account-cog"></span>
-              Profile
-            </button>
-          </div>
-
-          {/* Loading State */}
-          {isLoading && (
-            <div className="tenderator-page__loading">
-              <span className="mdi mdi-loading mdi-spin"></span>
-              Loading your Tenderator data...
-            </div>
-          )}
-
-          {/* Error State */}
-          {error && (
-            <div className="tenderator-page__error">
-              <span className="mdi mdi-alert-circle"></span>
-              {error}
-              <button onClick={() => { setError(null); fetchUserData(); }}>
-                Retry
+      {!isLoading && !error && (
+        <>
+          {/* No profile yet: route the user straight to profile setup, the
+              dashboard needs profile data to render the matched feed. */}
+          {!userProfile && viewState !== 'profile' && (
+            <div className="tenderator-page__setup-prompt">
+              <span className="mdi mdi-account-question"></span>
+              <h3>{t('tenderator.setupTitle')}</h3>
+              <p>{t('tenderator.setupBody')}</p>
+              <button onClick={() => setViewState('profile')}>
+                <span className="mdi mdi-account-plus"></span>
+                {t('tenderator.createProfile')}
               </button>
             </div>
           )}
 
-          {/* Main Content */}
-          {!isLoading && !error && (
-            <>
-              {/* Profile Setup (if no profile) */}
-              {!userProfile && viewState !== 'profile' && (
-                <div className="tenderator-page__setup-prompt">
-                  <span className="mdi mdi-account-question"></span>
-                  <h3>Set Up Your Tender Profile</h3>
-                  <p>
-                    Create your company profile to get personalized tender matches
-                    tailored to your business.
-                  </p>
-                  <button onClick={() => setViewState('profile')}>
-                    <span className="mdi mdi-account-plus"></span>
-                    Create Profile
-                  </button>
-                </div>
-              )}
-
-              {/* Feed View */}
-              {viewState === 'feed' && userProfile && (
-                <TenderFeed
-                  onSelectTender={handleSelectTender}
-                  onViewChecklist={handleViewChecklist}
-                  userProfile={userProfile}
-                />
-              )}
-
-              {/* Detail View */}
-              {viewState === 'detail' && selectedTender && (
-                <TenderDetail
-                  tender={selectedTender}
-                  match={selectedMatch}
-                  onBack={handleBackToFeed}
-                  onSave={selectedMatch ? () => handleSaveMatch(selectedMatch.id) : undefined}
-                  onDismiss={selectedMatch ? () => handleDismissMatch(selectedMatch.id) : undefined}
-                  onViewChecklist={() => handleViewChecklist(selectedTender)}
-                  onAskChatbot={(question) => handleAskChatbot(selectedTender, question)}
-                />
-              )}
-
-              {/* Checklist View */}
-              {viewState === 'checklist' && selectedTender && (
-                <BidChecklist
-                  tender={selectedTender}
-                  onBack={handleBackToFeed}
-                  onAskChatbot={(question) => handleAskChatbot(selectedTender, question)}
-                />
-              )}
-
-              {/* Calendar View */}
-              {viewState === 'calendar' && (
-                <TenderCalendar
-                  onSelectTender={handleSelectTender}
-                  userProfile={userProfile}
-                />
-              )}
-
-              {/* Profile View */}
-              {viewState === 'profile' && (
-                <TenderProfileSetup
-                  existingProfile={userProfile}
-                  onProfileSaved={handleProfileCreated}
-                  onBack={userProfile ? handleBackToFeed : undefined}
-                />
-              )}
-            </>
-          )}
-        </div>
-
-        {/* Stats Sidebar */}
-        {userProfile && userStats && viewState === 'feed' && (
-          <div className="tenderator-page__stats-sidebar">
-            <TenderStats stats={userStats} cpvCode={userProfile.cpv_categories?.[0]} />
-            <FeedbackInvitation
-              featureName="Tenderator"
-              featureDescription="Help us improve Tenderator. Your feedback on tender matching and SME tools is valuable."
-              variant="sidebar"
+          {/* Dashboard cockpit (default landing view) */}
+          {viewState === 'dashboard' && userProfile && (
+            <TenderatorDashboard
+              userProfile={userProfile}
+              onSelectTender={handleSelectTender}
+              onViewChecklist={handleViewChecklist}
+              onOpenProfile={() => setViewState('profile')}
+              onOpenCalendar={() => setViewState('calendar')}
             />
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* Detail view */}
+          {viewState === 'detail' && selectedTender && (
+            <TenderDetail
+              tender={selectedTender}
+              match={selectedMatch}
+              onBack={handleBackToFeed}
+              onSave={selectedMatch ? () => handleSaveMatch(selectedMatch.id) : undefined}
+              onDismiss={selectedMatch ? () => handleDismissMatch(selectedMatch.id) : undefined}
+              onViewChecklist={() => handleViewChecklist(selectedTender)}
+              onAskChatbot={(question) => handleAskChatbot(selectedTender, question)}
+            />
+          )}
+
+          {/* Checklist view */}
+          {viewState === 'checklist' && selectedTender && (
+            <BidChecklist
+              tender={selectedTender}
+              onBack={handleBackToFeed}
+              onAskChatbot={(question) => handleAskChatbot(selectedTender, question)}
+            />
+          )}
+
+          {/* Calendar full-screen view (accessible via header icon) */}
+          {viewState === 'calendar' && userProfile && (
+            <div className="tenderator-page__modal-shell">
+              <button
+                type="button"
+                className="tenderator-page__modal-back"
+                onClick={handleBackToFeed}
+              >
+                <span className="mdi mdi-arrow-left"></span>
+                Back to dashboard
+              </button>
+              <TenderCalendar
+                onSelectTender={handleSelectTender}
+                userProfile={userProfile}
+              />
+            </div>
+          )}
+
+          {/* Profile setup */}
+          {viewState === 'profile' && (
+            <div className="tenderator-page__modal-shell">
+              {userProfile && (
+                <button
+                  type="button"
+                  className="tenderator-page__modal-back"
+                  onClick={handleBackToFeed}
+                >
+                  <span className="mdi mdi-arrow-left"></span>
+                  Back to dashboard
+                </button>
+              )}
+              <TenderProfileSetup
+                existingProfile={userProfile}
+                onProfileSaved={handleProfileCreated}
+                onBack={userProfile ? handleBackToFeed : undefined}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

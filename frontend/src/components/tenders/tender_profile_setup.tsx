@@ -92,6 +92,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [savedAt, setSavedAt] = useState<string | null>(null);
 
   // Form state
   const [companyName, setCompanyName] = useState(existingProfile?.company_name || '');
@@ -186,7 +187,11 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
       }
 
       const savedProfile = await response.json();
-      onProfileSaved(savedProfile);
+      setSavedAt(new Date().toISOString());
+      // Brief delay so the success state is visible before navigating away.
+      setTimeout(() => {
+        onProfileSaved(savedProfile);
+      }, 800);
     } catch (err: any) {
       console.error('Failed to save profile:', err);
       setError(err.message || 'Failed to save profile');
@@ -239,6 +244,14 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         <div className="tender-profile-setup__error">
           <span className="mdi mdi-alert-circle"></span>
           {error}
+        </div>
+      )}
+
+      {/* Success Message */}
+      {savedAt && !error && (
+        <div className="tender-profile-setup__success" role="status">
+          <span className="mdi mdi-check-circle" aria-hidden="true"></span>
+          Profile saved. Brubru is matching opportunities against your new criteria.
         </div>
       )}
 

@@ -20,54 +20,71 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
   const [selectedDayMatches, setSelectedDayMatches] = useState<TenderMatch[] | null>(null);
   const [selectedDayDate, setSelectedDayDate] = useState<string>('');
 
-  // Fetch user matches with deadlines, or all tenders if no profile
+  // Phase 2 calendar: pull deadlines from all 3 live sources (TED, F&T
+  // calls for proposals, F&T calls for tenders) via the unified endpoint.
   useEffect(() => {
-    const fetchTenders = async () => {
+    const fetchDeadlines = async () => {
       setIsLoading(true);
       try {
-        // First try to get matched tenders
-        const matchResponse = await fetch(`${API_URL}/api/tenders/matches?page_size=100`, {
+        const res = await fetch(`${API_URL}/api/tenders/calendar-deadlines?months_ahead=6`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-
-        if (matchResponse.ok) {
-          const data = await matchResponse.json();
-          const matchesWithDeadlines = data.matches.filter(
-            (m: TenderMatch) => m.tender.submission_deadline
-          );
-
-          if (matchesWithDeadlines.length > 0) {
-            setMatches(matchesWithDeadlines);
-            setIsLoading(false);
-            return;
-          }
+        if (!res.ok) {
+          console.error('Failed to fetch calendar deadlines:', res.status);
+          setIsLoading(false);
+          return;
         }
-
-        // If no matches or no profile, fetch all tenders
-        const allTendersResponse = await fetch(`${API_URL}/api/tenders/?page=1&page_size=100`, {
-          headers: { 'Authorization': `Bearer ${token}` },
+        const data = await res.json();
+        // Map every deadline to a TenderMatch-shaped row so the existing
+        // render code keeps working. F&T items synthesise an id of 0 (a
+        // sentinel meaning "no persisted match row").
+        const mapped: TenderMatch[] = (data.items || []).map((item: any, idx: number) => {
+          const idNum = item.source === 'ted' && /^ted:\d+$/.test(item.id)
+            ? Number(item.id.split(':')[1])
+            : -1 - idx; // negative ids for F&T (won't clash with real tenders.id)
+          const pseudoTender: Tender = {
+            id: idNum,
+            publication_number: item.ref || item.id,
+            title: item.title,
+            buyer_name: '',
+            buyer_country: item.country || '',
+            estimated_value: item.budget,
+            currency: item.currency || 'EUR',
+            cpv_main: '',
+            cpv_codes: [],
+            procedure_type: '',
+            submission_deadline: item.deadline,
+            publication_date: '',
+            status: 'open',
+            sme_suitability_score: null,
+            ted_url: item.source_url,
+          };
+          return {
+            id: -1 - idx,
+            tender_id: idNum,
+            user_id: '',
+            match_score: 0,
+            match_reasons: [item.source, item.programme].filter(Boolean) as string[],
+            match_details: null,
+            is_viewed: false,
+            is_saved: false,
+            is_dismissed: false,
+            is_applied: false,
+            user_notes: null,
+            user_rating: null,
+            created_at: '',
+            tender: pseudoTender,
+          } as TenderMatch;
         });
-
-        if (allTendersResponse.ok) {
-          const data = await allTendersResponse.json();
-          // Convert tenders to match format for calendar display
-          const pseudoMatches = data.tenders
-            .filter((t: Tender) => t.submission_deadline)
-            .map((t: Tender) => ({
-              tender: t,
-              match_score: 0,
-              score_breakdown: {},
-            }));
-          setMatches(pseudoMatches);
-        }
+        setMatches(mapped);
       } catch (err) {
-        console.error('Failed to fetch tenders:', err);
+        console.error('Failed to fetch tender calendar deadlines:', err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchTenders();
+    fetchDeadlines();
   }, [token]);
 
   // Calendar helpers
