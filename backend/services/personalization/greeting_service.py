@@ -8,9 +8,9 @@ Season's greetings window, New Year. Time-of-day greetings follow business norms
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     from zoneinfo import ZoneInfo  # Python 3.9+
@@ -27,6 +27,90 @@ except ImportError:
 class GreetingResult:
     message: str
     metadata: Dict[str, str]
+    policy_hooks: List[Dict[str, str]] = field(default_factory=list)
+
+
+# Hard cap on hooks shown under the greeting. Two keeps the empty state calm.
+MAX_GREETING_HOOKS = 2
+
+
+def _shorten(text: str, max_len: int = 90) -> str:
+    """Trim a label to keep the chip on a single visual line."""
+    if not text:
+        return ""
+    cleaned = " ".join(str(text).split())
+    if len(cleaned) <= max_len:
+        return cleaned
+    return cleaned[: max_len - 1].rstrip() + "…"
+
+
+def compose_hooks_from_briefings(
+    briefings: List[Any], max_hooks: int = MAX_GREETING_HOOKS
+) -> List[Dict[str, str]]:
+    """
+    Turn ProactiveBriefing objects (or dicts) into greeting chips.
+
+    Each chip is ``{label, suggested_query, source}``. Order is preserved
+    from the input list, which is already prioritised by trigger_engine.
+    """
+    hooks: List[Dict[str, str]] = []
+    for b in briefings or []:
+        if len(hooks) >= max_hooks:
+            break
+        title = getattr(b, "title", None) or (b.get("title") if isinstance(b, dict) else None)
+        query = getattr(b, "suggested_query", None) or (
+            b.get("suggested_query") if isinstance(b, dict) else None
+        )
+        source = getattr(b, "trigger_source", None) or (
+            b.get("trigger_source") if isinstance(b, dict) else None
+        )
+        summary = getattr(b, "summary", None) or (
+            b.get("summary") if isinstance(b, dict) else None
+        )
+        if not title or not query:
+            continue
+        # The spoken line is the summary when available, otherwise the title.
+        # The label (short pill text) is always the title.
+        hooks.append(
+            {
+                "label": _shorten(title),
+                "spoken": _shorten(str(summary or title), max_len=180),
+                "suggested_query": str(query).strip(),
+                "source": str(source or "proactive"),
+            }
+        )
+    return hooks
+
+
+def compose_hooks_from_brief_headlines(
+    items: List[Any], max_hooks: int = MAX_GREETING_HOOKS
+) -> List[Dict[str, str]]:
+    """
+    Pre-user fallback. Turn daily_brief rows or dicts into greeting chips.
+    """
+    hooks: List[Dict[str, str]] = []
+    for item in items or []:
+        if len(hooks) >= max_hooks:
+            break
+        headline = getattr(item, "headline", None) or (
+            item.get("headline") if isinstance(item, dict) else None
+        )
+        if not headline:
+            continue
+        suggested = getattr(item, "suggested_query", None) or (
+            item.get("suggested_query") if isinstance(item, dict) else None
+        )
+        if not suggested:
+            suggested = f"Tell me about: {headline}"
+        hooks.append(
+            {
+                "label": _shorten(headline),
+                "spoken": _shorten(str(headline), max_len=180),
+                "suggested_query": str(suggested).strip(),
+                "source": "daily_brief",
+            }
+        )
+    return hooks
 
 
 def _get_local_now(user_timezone: Optional[str]) -> datetime:

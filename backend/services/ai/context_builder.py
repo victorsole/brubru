@@ -106,6 +106,29 @@ def get_source_tier(source_type: str) -> int:
     return SOURCE_TIERS.get(source_type, 4)  # Default to Tier 4
 
 
+def _resolve_event_location(institution: Optional[str], title: Optional[str], week_type: Optional[str]) -> str:
+    """
+    Resolve an EU institutional event's city for the TODAY BLOCK.
+
+    Precedence:
+      1. Explicit city mention in the event title (Strasbourg / Luxembourg / Brussels).
+      2. EP and Commission default to Strasbourg during plenary weeks, Brussels otherwise.
+      3. Council, European Council, and any other institution default to Brussels.
+
+    This is shown verbatim to the LLM so it does not have to infer where a
+    same-day Council meeting happens just because the College is in Strasbourg.
+    """
+    title_lower = (title or "").lower()
+    for city in ("strasbourg", "luxembourg", "brussels"):
+        if city in title_lower:
+            return city.capitalize()
+    inst = (institution or "").upper()
+    is_plenary = "plenary" in (week_type or "").lower()
+    if inst in ("EP", "COMMISSION"):
+        return "Strasbourg" if is_plenary else "Brussels"
+    return "Brussels"
+
+
 # Policy topic keywords -> DG codes mapping
 # Used to resolve "who should I contact about X?" queries to real EC personnel
 POLICY_TO_DG = {
@@ -580,6 +603,13 @@ class ContextData:
     # On-demand: TODAY block (current date + EP week type + 3-day calendar window + recent Commission docs)
     # Triggered by "today"/"hoy"/"avui"/"aujourd'hui"/"oggi"/"vandaag"/"heute"/"this week"/"esta semana"...
     today_block: Optional[str] = None
+
+    # On-demand: Legal-text article block (W1b, 12 May 2026)
+    # Triggered by "Article N (paragraph M) of <CELEX|alias>", "Recital N of <CELEX|alias>",
+    # in 6 languages (EN/FR/ES/CA/IT/NL). Pulls cached recital-article map + defined terms
+    # from the legal-text intelligence layer + composes a high-priority context block with
+    # the EUR-Lex URL. See memory/project_chat_ai_architecture_evolution.md (W1b).
+    legal_text_article_block: Optional[str] = None
 
     # On-demand: Cellar SPARQL discovery block (live retrieval from publications.europa.eu/webapi/rdf/sparql)
     # Triggered by "what was published since/this/last <period>", "list/find/show me recent <regs|directives|decisions>",
@@ -1205,6 +1235,29 @@ class ContextBuilder:
 
         post_tasks['cellar_discovery_block'] = _fetch_cellar_discovery_safe()
 
+        # 3g-bis. On-demand: Legal-text article / recital block (W1b, 12 May 2026).
+        # Triggered by "Article N (paragraph M) of <CELEX|alias>" or "Recital N of <CELEX|alias>"
+        # across EN/FR/ES/CA/IT/NL. See memory/project_chat_ai_architecture_evolution.md (W1b).
+        legal_text_intent = self._detect_legal_text_article_intent(user_message)
+        async def _fetch_legal_text_safe():
+            if not legal_text_intent:
+                return None
+            try:
+                block = await self._fetch_legal_text_article_block(db, legal_text_intent)
+                if block:
+                    logger.info(
+                        "[legal-text-article] Injected block (%d chars, type=%s, num=%s, celex=%s)",
+                        len(block),
+                        legal_text_intent.get("type"),
+                        legal_text_intent.get("number"),
+                        legal_text_intent.get("celex"),
+                    )
+                return block
+            except Exception as e:  # noqa: BLE001
+                logger.warning("[legal-text-article] Failed: %s", e)
+                return None
+        post_tasks['legal_text_article_block'] = _fetch_legal_text_safe()
+
         # 3h. On-demand: EU Sanctions block
         sanctions_intent = self._detect_sanctions_intent(user_message)
         async def _fetch_sanctions_safe():
@@ -1563,6 +1616,7 @@ class ContextBuilder:
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
         today_block = post_map.get('today_block')
+        legal_text_article_block = post_map.get('legal_text_article_block')
         cellar_discovery_block = post_map.get('cellar_discovery_block')
         sanctions_block = post_map.get('sanctions_block')
         transparency_register_block = post_map.get('transparency_register_block')
@@ -1652,6 +1706,7 @@ class ContextBuilder:
             position_block=position_block,
             committee_transcript_block=committee_transcript_block,
             today_block=today_block,
+            legal_text_article_block=legal_text_article_block,
             cellar_discovery_block=cellar_discovery_block,
             sanctions_block=sanctions_block,
             transparency_register_block=transparency_register_block,
@@ -5891,12 +5946,21 @@ class ContextBuilder:
                 db.close()
             if events:
                 lines.append("Institutional events (today - 1 / today / today + 1, verified DB):")
+                lines.append(
+                    "(each event line shows its OWN location after 'in'. Two events"
+                    " on the same day are in the SAME location ONLY if both lines"
+                    " say the same city.)"
+                )
                 for e in events:
                     time_str = str(e.start_time)[:5] if e.start_time else "--:--"
                     inst = e.institution or "EU"
                     committee = f" ({e.ep_committee_code})" if e.ep_committee_code else ""
                     title = (e.title or "")[:160]
-                    lines.append(f"- {e.start_date.isoformat()} {time_str} [{inst}{committee}] {title}")
+                    location = _resolve_event_location(inst, title, week_type)
+                    lines.append(
+                        f"- {e.start_date.isoformat()} {time_str} [{inst}{committee}] "
+                        f"{title} in {location}"
+                    )
             else:
                 lines.append("(no institutional events recorded in eu_calendar_events for today +/- 1 day)")
         except Exception as e:
@@ -7318,6 +7382,192 @@ class ContextBuilder:
         r"voting\s+sheet|draft\s+implementing|comitology\s+(?:document|register))\b",
         re.IGNORECASE,
     )
+
+    # W1b (12 May 2026): legal-text article intent detector + fetcher.
+    # Recognises "Article N (paragraph M / point a) of <CELEX|alias>" in 6 languages
+    # (EN/FR/ES/CA/IT/NL), with a separate slot for "Recital N of <CELEX|alias>".
+    # On match, the fetcher resolves the alias to a CELEX and pulls the cached
+    # recital-article map + defined terms from the legal-text intelligence layer.
+    # Fail-soft: if neither cache is populated for the CELEX, the block still
+    # ships the resolution + EUR-Lex URL so the model has something concrete to
+    # cite. See memory/project_chat_ai_architecture_evolution.md (W1b).
+    _LEGAL_TEXT_ARTICLE_RE = re.compile(
+        r"(?ix)"
+        r"\b(?P<kw>article|art\.|articolo|art[íi]culo|artikel|recital|consid[eé]rant|considerando|overweging)"
+        r"\s+(?P<num>\d{1,3})(?P<sub>[a-z])?"
+        r"(?:\s*\(\s*(?P<para>\d{1,2})\s*\))?"
+        r"(?:\s*[,\(]?\s*(?:paragraph|paragraphe|p[áa]rrafo|apartado|paragrafo|comma|par[àa]graf|apartat|lid)\s+(?P<para2>\d{1,2}))?"
+        r"(?:\s*\(\s*(?P<point>[a-z])\s*\))?"
+    )
+
+    def _detect_legal_text_article_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect "Article N (paragraph M, point X) of <CELEX|alias>" or
+        "Recital N of <CELEX|alias>" in 6 languages.
+        Returns {type, number, paragraph, point, celex, alias_used, raw_match} or None.
+        """
+        if not query:
+            return None
+        m = self._LEGAL_TEXT_ARTICLE_RE.search(query)
+        if not m:
+            return None
+
+        kw = (m.group("kw") or "").lower()
+        # Map keyword to canonical type
+        recital_kws = ("recital", "considerant", "considérant", "considerando", "overweging")
+        type_ = "recital" if any(rk in kw for rk in recital_kws) else "article"
+
+        number = m.group("num")
+        sub = m.group("sub") or ""  # e.g. "a" in "Article 3a"
+        paragraph = m.group("para") or m.group("para2")
+        point = m.group("point")
+
+        # Resolve the law reference from the same query string.
+        try:
+            from services.parsers.law_alias_resolver import (
+                find_alias_matches as _find_alias_matches,
+                resolve_law_reference as _resolve_law_reference,
+            )
+        except Exception:  # noqa: BLE001
+            return None
+
+        celex = None
+        alias_used = None
+        hits = _find_alias_matches(query)
+        if hits:
+            celex = hits[0].celex
+            alias_used = hits[0].alias
+        else:
+            # Fall back to the broader resolver (handles "Regulation (EU) YYYY/N" forms)
+            ref = _resolve_law_reference(query)
+            if ref:
+                celex = ref
+                alias_used = ref
+
+        if not celex:
+            return None
+
+        return {
+            "type": type_,
+            "number": (number + sub) if sub else number,
+            "paragraph": paragraph,
+            "point": point,
+            "celex": celex,
+            "alias_used": alias_used,
+            "raw_match": m.group(0),
+        }
+
+    async def _fetch_legal_text_article_block(
+        self, db, intent: Dict[str, Any]
+    ) -> Optional[str]:
+        """
+        Compose a legal-text intelligence context block for the matched
+        Article / Recital reference. Fail-soft on every store lookup.
+        """
+        celex = intent.get("celex")
+        if not celex:
+            return None
+
+        type_ = intent.get("type", "article")
+        number = str(intent.get("number") or "").strip()
+        paragraph = intent.get("paragraph")
+        point = intent.get("point")
+        alias_used = intent.get("alias_used") or celex
+
+        # Best-effort: cached recital-article map (only ~5 acts cached today; flagship
+        # laws compute on first request when the Formex XML is present).
+        recital_map = None
+        try:
+            from services.parsers.recital_article_store import get_or_compute_map as _get_ram
+            recital_map = _get_ram(db, celex)
+        except Exception as e:  # noqa: BLE001
+            logger.debug("[legal-text] recital_article_store lookup failed for %s: %s", celex, e)
+
+        # Best-effort: cached defined-terms map.
+        defined_terms = None
+        try:
+            from services.parsers.definition_store import get_or_compute_map as _get_defs
+            defined_terms = _get_defs(db, celex)
+        except Exception as e:  # noqa: BLE001
+            logger.debug("[legal-text] definition_store lookup failed for %s: %s", celex, e)
+
+        # Find linked recitals for this article number (only meaningful when type=article).
+        article_recitals: List[Dict[str, Any]] = []
+        if type_ == "article" and recital_map and isinstance(recital_map, dict):
+            target_keys = {number, f"article {number}", f"art. {number}", f"art {number}", f"Article {number}"}
+            for k, v in recital_map.items():
+                if str(k).strip().lower() in {tk.lower() for tk in target_keys}:
+                    if isinstance(v, list):
+                        article_recitals = v[:3]
+                    break
+
+        # Find definitions whose article matches the queried article.
+        article_definitions: List[Dict[str, Any]] = []
+        if type_ == "article" and defined_terms and isinstance(defined_terms, dict):
+            for term, entry in defined_terms.items():
+                if not isinstance(entry, dict):
+                    continue
+                entry_article = str(entry.get("article") or "").strip().lower()
+                if entry_article in (number, f"article {number}", f"art. {number}", f"art {number}"):
+                    article_definitions.append({
+                        "term": entry.get("term") or term,
+                        "definition": (entry.get("definition") or "")[:600],
+                        "point": entry.get("point"),
+                    })
+                    if len(article_definitions) >= 8:
+                        break
+
+        # Compose the block.
+        eurlex_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+        lines: List[str] = []
+        header = f"=== LEGAL TEXT INTELLIGENCE -- {type_.upper()} {number}"
+        if paragraph:
+            header += f"({paragraph})"
+        if point:
+            header += f", point ({point})"
+        header += f" of CELEX {celex} ==="
+        lines.append(header)
+
+        if alias_used and alias_used != celex:
+            lines.append(f"Alias resolved: '{alias_used}' -> {celex}")
+        lines.append(f"EUR-Lex URL: {eurlex_url}")
+        lines.append(f"Raw user reference: {intent.get('raw_match', '')}")
+
+        if type_ == "article":
+            if article_recitals:
+                lines.append("")
+                lines.append(f"Top-3 linked recitals (TF-IDF cosine) for Article {number}:")
+                for r in article_recitals[:3]:
+                    rn = r.get("recital_number") or r.get("recital") or "?"
+                    score = r.get("score")
+                    score_str = f"{score:.2f}" if isinstance(score, (int, float)) else "n/a"
+                    snippet = (r.get("snippet") or "")[:400]
+                    lines.append(f"  - Recital {rn} (score={score_str}): {snippet}")
+            else:
+                lines.append("")
+                lines.append(f"Linked recitals for Article {number}: not yet cached for {celex}.")
+                lines.append("  (TF-IDF cosine map computes on demand when Formex XML is available.)")
+
+            if article_definitions:
+                lines.append("")
+                lines.append(f"Statutory definitions in Article {number}:")
+                for d in article_definitions:
+                    pt = f"point ({d['point']})" if d.get("point") else ""
+                    lines.append(f"  - '{d['term']}' {pt}: {d['definition']}")
+            else:
+                lines.append("")
+                lines.append(f"Statutory definitions in Article {number}: none cached.")
+        else:  # recital
+            lines.append("")
+            lines.append(f"Recital {number} of {celex}: see EUR-Lex URL above for the verbatim text.")
+            lines.append("  (Brubru caches article-to-recital cosine links; the verbatim recital text is available on demand via /api/v1/laws/{celex}/text.)")
+
+        lines.append("")
+        lines.append("**Rule:** Brubru MUST ground its answer in this block and cite the EUR-Lex URL.")
+        lines.append("Do NOT invent article text not present here. If asked for verbatim text and it is not")
+        lines.append("in this block, say so honestly and point to the EUR-Lex URL.")
+
+        return "\n".join(lines)
 
     def _detect_sanctions_intent(self, query: str) -> Optional[Dict[str, Any]]:
         if not query:
@@ -9593,6 +9843,13 @@ class ContextBuilder:
         # ("today", "hoy", "this week", "esta semana") in a verified context.
         if getattr(context_data, 'today_block', None):
             sections.append(context_data.today_block)
+
+        # LEGAL-TEXT ARTICLE BLOCK (W1b, 12 May 2026) — also near TOP so the
+        # article/recital reference survives 32k truncation. Triggered by
+        # "Article N of <CELEX|alias>", "Recital N of <CELEX|alias>" in 6 langs.
+        if getattr(context_data, 'legal_text_article_block', None):
+            sections.append(context_data.legal_text_article_block)
+            sections.append("")
 
         # CELLAR DISCOVERY BLOCK (on-demand, live SPARQL) — also injected near top
         # so it survives the 32k truncation cap. Triggered by corpus-wide questions

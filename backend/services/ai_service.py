@@ -695,12 +695,33 @@ class AIService:
         # Signal context building done, AI composing
         yield json.dumps({"type": "status", "message": "Composing response..."})
 
+        # Load uploaded documents (parity with non-streaming path). Without
+        # this, the frontend can attach document_ids but the user's question
+        # never receives the document content as a Claude content block, so
+        # the model answers as if no document had been uploaded.
+        document_content: List[Dict[str, Any]] = []
+        if document_ids:
+            try:
+                logger.info(
+                    f"[stream] Loading {len(document_ids)} document(s): {document_ids}"
+                )
+                document_content = await self._load_documents(document_ids)
+                logger.info(
+                    f"[stream] Loaded {len(document_content)} of {len(document_ids)} document(s)"
+                )
+            except Exception as exc:
+                logger.warning(
+                    f"[stream] Document loading failed (continuing without docs): {exc}"
+                )
+                document_content = []
+
         # Build prompts
         system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)
         messages = self._build_messages(
             user_message=user_message,
             context=context_str,
-            conversation_history=conversation_history
+            conversation_history=conversation_history,
+            documents=document_content or None,
         )
 
         # Stream response
@@ -816,6 +837,35 @@ CRITICAL - Accuracy over confidence:
 CRITICAL - GROUNDING STEP (do this before every answer):
 Before composing your response, mentally identify the exact names, dates, CELEX numbers, procedure references, and legal act numbers found in the EU CONTEXT provided below. Your answer must ONLY use these verified references. Do not supplement with outside knowledge for specific facts like case numbers, fine amounts, deadlines, or personnel names. If a fact is not in the context, either omit it or say you do not have it.
 
+CRITICAL - No invented co-location:
+Two events that occur on the same date are NOT in the same place unless the EU CONTEXT explicitly says so. When the context states a location for one event and is silent for another, you MUST treat the second event's location as unknown. Do not borrow the first event's location for the second.
+
+BANNED CONSTRUCTIONS (do not write any variation of these):
+- "<event A> is meeting today, alongside <event B>"
+- "<event A> is taking place alongside <event B>"
+- "<event A> in parallel with <event B>"
+- "<event A> co-located with <event B>"
+- "<event A> at the same venue as <event B>"
+- "<event A> meeting today, alongside <event B> in <place from event B>"
+
+REQUIRED PATTERN when both events share a date:
+- "<event A> is meeting today. Separately, <event B> is meeting in <location>."
+- Or simply state each event as its own bullet with its own institution and location.
+
+The Council of the EU sits in Brussels. The European Parliament sits in Brussels and Strasbourg. The College of Commissioners normally sits in Brussels but moves to Strasbourg during plenary weeks. Same-day plenary-week alignment between the College and the EP does NOT extend to Council formations.
+
+CRITICAL - No invented meeting agendas:
+Do not assert what an upcoming or in-progress meeting will discuss unless the EU CONTEXT explicitly provides that meeting's agenda. If the context contains a calendar row with only a title (e.g. "General Affairs Council"), you may report that the meeting is taking place; you may NOT report which files or topics are on its agenda. Do not write "today's <body> is focusing on <topic>" without an explicit agenda source. Adjacent news items (sanctions, outbreaks, summits) are NOT evidence that the body will discuss them today.
+
+CRITICAL - Never invent the day of the week:
+The EU CONTEXT will include a TODAY BLOCK with the verified day-of-week and date. Use it verbatim. Never compute or guess the weekday yourself. If the TODAY BLOCK is not present, write the date only (e.g. "19 May 2026") and omit the weekday.
+
+CRITICAL - Regulatory artefacts need an anchor:
+If you name a specific regulatory artefact (a State aid framework, a joint guidance note, a Council framework, an implementing decision, a Commission communication, a ministerial letter), the artefact MUST correspond to an item in the EU CONTEXT with a CELEX number, a COM reference, a daily_brief headline, or a calendar event row. If you do not have an anchor, describe the policy topic in general terms without naming the artefact or assigning it a date. Never invent a date, a DG combination, or a document type to make a topic sound official.
+
+CRITICAL - Outlet attribution requires a source:
+Never attribute a statement, story, or quote to a named news outlet, agency, wire service, or publication unless that outlet's name appears verbatim in the EU CONTEXT or in the user's message. If the topic exists but the source is not in the context, write "according to recent reporting" or omit the attribution. Do not invent reporter names, publication names, or interview dates.
+
 UPLOADED DOCUMENTS:
 When the user has uploaded a document (PDF, DOCX), it will appear as content in their message. Treat it as a primary source:
 - Summarise, analyse, or cross-reference the document as requested
@@ -911,6 +961,14 @@ When you mention a COM document, CELEX number, regulation, directive, or procedu
 - Procedure references: [2022/0095(COD)](https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0095(COD))
 URL patterns: EUR-Lex CELEX = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}. COM = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:{year}:{number}:FIN. OEIL = https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={ref}.
 NEVER cite a regulation or directive as plain text when you know the CELEX number. Bare references without links are useless to professionals.
+
+CRITICAL -- LEGAL TEXT INTELLIGENCE BLOCK (W1b, 12 May 2026):
+If a "=== LEGAL TEXT INTELLIGENCE -- ARTICLE/RECITAL N of CELEX X ===" block is present in the context, the user asked about a specific article, paragraph, point or recital of a specific EU law. Treat that block as authoritative for the resolution. Rules:
+- Cite the CELEX and the EUR-Lex URL from that block verbatim. Do NOT rewrite or invent a different URL.
+- If the block lists "Top-3 linked recitals" for the article, quote them when the user asks about purpose, intent, or legislative reasoning. Cite the recital number.
+- If the block lists "Statutory definitions in Article N", reproduce them verbatim when relevant. They are the law's own authoritative definitions.
+- If the block says "not yet cached" for recitals or definitions, say so honestly and point the user to the EUR-Lex URL. Do NOT invent recital numbers, definitions, or article text not present in the block.
+- Resolution chain: if the block says "Alias resolved: 'GDPR' -> 32016R0679", repeat that resolution in your answer so the user sees the link between their colloquial term and the official identifier.
 
 CRITICAL -- LEGAL ANCHORING (required for every substantive response about EU law):
 When a query concerns a specific EU law, regulation, directive, proposal, or legislative file -- whether the user asks for information, analysis, drafting, comparison, or impact assessment -- you MUST include the legal anchor in your response.

@@ -41,6 +41,7 @@ TriggerSource = Literal[
     "new_file_match",
     "tracked_file_movement",
     "amendment_surge",
+    "learn_about_you",
 ]
 
 
@@ -49,6 +50,31 @@ AMENDMENT_SURGE_THRESHOLD = 5
 NEW_FILE_WINDOW_DAYS = 7
 TRACKED_MOVEMENT_WINDOW_DAYS = 7
 AMENDMENT_SURGE_WINDOW_HOURS = 24
+
+
+# Human-readable labels for the raw institution enum values stored in
+# eu_calendar_events.institution. Anything not in this map falls back to
+# a sentence-cased version of the enum.
+INSTITUTION_LABELS = {
+    "EP": "The European Parliament",
+    "COMMISSION": "The European Commission",
+    "COUNCIL": "The Council of the EU",
+    "EUROPEAN_COUNCIL": "The European Council",
+    "ECB": "The European Central Bank",
+    "COR": "The Committee of the Regions",
+    "EESC": "The European Economic and Social Committee",
+    "CJEU": "The Court of Justice of the EU",
+    "THIRD_PARTY": "A Brussels policy event",
+}
+
+
+def _humanise_institution(raw: Optional[str]) -> str:
+    if not raw:
+        return "An EU institution"
+    key = str(raw).strip().upper()
+    if key in INSTITUTION_LABELS:
+        return INSTITUTION_LABELS[key]
+    return key.replace("_", " ").title()
 
 
 @dataclass
@@ -281,7 +307,10 @@ def _briefing_morning(
     """
     interests = _policy_interests(user)
 
-    # Pull one calendar event for today (institution-level), prefer policy match
+    # Pull one calendar event for today. Always prefer real EU institutional
+    # events (EP / COMMISSION / COUNCIL / EUROPEAN_COUNCIL / ECB / COR / etc.)
+    # over THIRD_PARTY euagenda.eu listings, then prefer those that match the
+    # user's policy interests.
     today_event = None
     try:
         if interests:
@@ -293,6 +322,7 @@ def _briefing_morning(
                         FROM eu_calendar_events
                         WHERE start_date = :today
                           AND status != 'cancelled'
+                          AND institution != 'THIRD_PARTY'
                           AND EXISTS (
                       SELECT 1 FROM unnest(policy_areas) AS area_v
                       WHERE EXISTS (
@@ -313,6 +343,28 @@ def _briefing_morning(
             )
             today_event = row
         if not today_event:
+            # Any real EU institutional event today.
+            row = (
+                db.execute(
+                    text(
+                        """
+                        SELECT title, institution, source_url
+                        FROM eu_calendar_events
+                        WHERE start_date = :today
+                          AND status != 'cancelled'
+                          AND institution != 'THIRD_PARTY'
+                        ORDER BY start_time ASC NULLS LAST
+                        LIMIT 1
+                        """
+                    ),
+                    {"today": today},
+                )
+                .mappings()
+                .first()
+            )
+            today_event = row
+        if not today_event:
+            # Final fallback: third-party Brussels events. Better than nothing.
             row = (
                 db.execute(
                     text(
@@ -340,25 +392,63 @@ def _briefing_morning(
     if not today_event:
         return None
 
-    institution = (
-        str(today_event["institution"]).replace("_", " ")
-        if today_event.get("institution")
-        else "An EU institution"
-    )
-    summary = (
-        f"{institution} has on its agenda today: {today_event['title']}."
+    institution = _humanise_institution(today_event.get("institution"))
+    event_title = str(today_event["title"]).strip()
+    summary = f"{institution} has on its agenda today: {event_title}."
+
+    # The follow-through query matches what the panel actually said: ask
+    # about the specific event, not a generic "what is on today's agenda".
+    suggested_query = (
+        f"Brief me on today's {event_title}: agenda, who is meeting, "
+        "and what to watch."
     )
 
     return ProactiveBriefing(
         trigger_source="morning_brief",
         title="Your EU briefing for today",
         summary=summary,
-        suggested_query=(
-            "Brief me on the EU institutional events scheduled today and "
-            "what to watch."
-        ),
+        suggested_query=suggested_query,
         evidence_refs=[],
         drill_down_path="/my-eu-bubble?tab=eu_calendar",
+    )
+
+
+def _briefing_learn_about_you(
+    db: Session, user: User
+) -> Optional[ProactiveBriefing]:
+    """
+    Fired only when Brubru has nothing else to say AND the user has not
+    told it what they care about. Companion ask-to-learn move.
+    """
+    interests = _policy_interests(user)
+    if interests:
+        return None
+
+    try:
+        count = db.execute(
+            text("SELECT COUNT(*) FROM user_carriage_tracks WHERE user_id = :uid"),
+            {"uid": str(user.id)},
+        ).scalar()
+    except Exception as exc:
+        logger.debug("learn_about_you count query failed: %s", exc)
+        db.rollback()
+        return None
+
+    if count and int(count) > 0:
+        return None
+
+    return ProactiveBriefing(
+        trigger_source="learn_about_you",
+        title="Tell me what you follow",
+        summary=(
+            "I do not know your portfolio yet. Tell me one EU file or topic "
+            "you care about and I will keep an eye on it for you."
+        ),
+        suggested_query=(
+            "I follow the following EU files and topics: "
+        ),
+        evidence_refs=[],
+        drill_down_path="/profile",
     )
 
 
@@ -383,6 +473,7 @@ def compute_pending_briefings(
         lambda: _briefing_tracked_file_movement(db, user),
         lambda: _briefing_new_file_match(db, user),
         lambda: _briefing_morning(db, user, today),
+        lambda: _briefing_learn_about_you(db, user),
     ):
         if len(briefings) >= MAX_BRIEFINGS_PER_REQUEST:
             break
