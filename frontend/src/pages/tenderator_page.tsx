@@ -103,7 +103,6 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
   const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
   const [selectedMatch, setSelectedMatch] = useState<TenderMatch | null>(null);
   const [userProfile, setUserProfile] = useState<TenderProfile | null>(null);
-  const [userStats, setUserStats] = useState<UserTenderStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasBlueAccess, setHasBlueAccess] = useState(true);
@@ -138,12 +137,9 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
         setUserProfile(null);
       }
 
-      // Fetch stats
-      const statsRes = await fetch(`${API_URL}/api/tenders/statistics/me`, { headers });
-      if (statsRes.ok) {
-        const statsData = await statsRes.json();
-        setUserStats(statsData);
-      }
+      // Note: the dashboard cockpit fetches its own KPIs directly from
+      // /api/tenders/dashboard-stats. We no longer need the page-level
+      // statistics call here.
     } catch (err) {
       console.error('Error fetching user data:', err);
       setError(t('tenderator.errorLoad'));
