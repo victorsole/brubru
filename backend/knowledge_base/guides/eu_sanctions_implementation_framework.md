@@ -1,6 +1,12 @@
 # EU Sanctions Implementation Framework
 
 ## QUICK FACTS
+- **LATEST (Monday 18 May 2026)**: **3 Syria-restrictive-measures acts adopted by the Council and published in OJ L on 19 May 2026**:
+  - **Council Decision (CFSP) 2026/1105** (CELEX **32026D1105**) — amending Decision 2013/255/CFSP concerning restrictive measures in view of the situation in Syria
+  - **Council Implementing Regulation (EU) 2026/1107** (CELEX **32026R1107**) — implementing Regulation (EU) No 36/2012 concerning restrictive measures in view of the situation in Syria
+  - **Council Implementing Decision (CFSP) 2026/1106** (CELEX **32026D1106**) — implementing Decision 2013/255/CFSP
+  - Companion OJ-C notices: **52026XG02808** (data subjects notice) + **52026XG02809** (persons/entities notice).
+  - Context: this is a calibrated adjustment of the Syria restrictive-measures regime, NOT a full lifting. It follows the 11 May 2026 Council Decision (EU) 2026/1087 (CELEX 32026D1087) which formally repealed Decision 2011/523/EU (partial suspension of the EU-Syria Cooperation Agreement) — see `eu_syria_cooperation_agreement_2026.md`. The remaining Syria restrictive measures continue to apply to specifically listed individuals + entities and to certain sectors; the 18 May acts re-tune the listings and implement targeted technical changes consistent with the post-Assad transitional engagement framework.
 - **LATEST (Monday 11 May 2026)**: **6 sanctions acts adopted in a single Council session** — densest sanctions Monday since the 18th Russia package. Six Council acts published in OJ L on 11 May 2026:
   - **Council Implementing Regulation (EU) 2026/1055** (CELEX **32026R1055**) — implementing Regulation (EU) 269/2014 concerning restrictive measures in respect of actions undermining or threatening the territorial integrity, sovereignty and independence of Ukraine (new individual / entity listings against Russia)
   - **Council Decision (CFSP) 2026/1072** (CELEX **32026D1072**) — amending Decision 2014/145/CFSP concerning Russia restrictive measures (CFSP companion to 2026/1055)

@@ -1,6 +1,7 @@
 # EU Occupational Health and Safety
 
 ## QUICK FACTS
+- **LATEST (Wednesday 20 May 2026)**: **EP plenary debate on workplace safety and reducing work-related accidents and deaths** scheduled for the Strasbourg session of 18-21 May 2026. The debate revisits the EU Strategic Framework on Health and Safety at Work 2021-2027 (Commission Communication COM(2021) 323) midway through its implementation period, with a focus on the "Vision Zero" approach to work-related deaths, the integration of psychosocial-risk hazards under the Framework Directive 89/391/EEC, the upcoming CMRD revisions (carcinogens, mutagens, reprotoxic substances), and the cross-cutting application of the OSH acquis to platform workers under Directive (EU) 2024/2831 (Platform Work Directive). Source: EP plenary agenda `europarl.europa.eu/news/en/agenda/plenary-news/2026-05-18`.
 - Framework Directive: Directive 89/391/EEC (CELEX 31989L0391) on occupational safety and health (OSH)
 - Carcinogens, Mutagens and Reprotoxic Substances Directive: Directive 2004/37/EC as amended (CELEX 32004L0037)
 - 6th revision (CMD6): Directive (EU) 2022/431 (CELEX 32022L0431), added reprotoxic substances

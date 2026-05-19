@@ -1,6 +1,7 @@
 # EU Anti-Poverty Strategy 2026
 
 ## QUICK FACTS
+- **LATEST (Wednesday 20 May 2026)**: **EP plenary debate on the EU Anti-Poverty Strategy** scheduled for the Strasbourg session of 18-21 May 2026 — the first plenary reading after the College's 6 May 2026 adoption. The debate is the political reception of the Strategy's headline goal to "end poverty in the EU by 2050" and probes the operational deliverables (the next steps after the Communication: legislative proposals on minimum income coordination, child guarantee strengthening, energy + housing poverty integration, in-work poverty action). EVP Roxana Mînzatu is the Commission spokesperson. Source: EP plenary agenda `europarl.europa.eu/news/en/agenda/plenary-news/2026-05-18`.
 - Topic: EU's first dedicated Anti-Poverty Strategy, adopted as part of the **Social Package** by the College of Commissioners on **Wednesday 6 May 2026** (Brussels)
 - Responsible EVP: Roxana Mînzatu (EVP for People, Skills and Preparedness, Romania)
 - Lead DG: DG EMPL (Employment, Social Affairs and Inclusion)

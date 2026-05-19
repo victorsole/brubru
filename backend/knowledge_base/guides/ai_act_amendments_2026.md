@@ -1,6 +1,7 @@
 # AI Act Amendments 2026 -- Simplification Omnibus (Nudifier Ban + High-Risk Delay)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 19 May 2026)**: **EP plenary debate on cyber-capable / frontier AI models and security risks** (Strasbourg, 18-21 May session). MEPs assess the security implications of advanced general-purpose AI models with cyber-offensive capabilities — including jailbreak-resistant exploitation, autonomous reconnaissance, and dual-use risks to critical-infrastructure operators. The debate links the **AI Act systemic-risk regime** for general-purpose AI models with systemic risk (Article 51-55 AI Act + Annex XIII threshold of 10^25 FLOPs training compute) to the **NIS2 Directive** (Directive (EU) 2022/2555) and the **Cyber Resilience Act** (Regulation (EU) 2024/2847). It also probes whether the upcoming Code of Practice for GPAI Models (under DG CNECT + AI Office) needs an explicit cyber-capability evaluation chapter. Source: EP plenary agenda 18-21 May 2026.
 - Base regulation: Regulation (EU) 2024/1689 (AI Act), CELEX 32024R1689
 - Amendment proposal: 2025/0359(COD) ("AI Act simplification omnibus")
 - Procedure: ordinary legislative procedure

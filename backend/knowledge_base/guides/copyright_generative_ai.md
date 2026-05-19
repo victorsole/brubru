@@ -1,6 +1,7 @@
 # Copyright and Generative AI: EP Report
 
 ## QUICK FACTS
+- **LATEST (Monday 18 May 2026)**: **Commission seeks views on the review of EU copyright rules** — DG CNECT launched a public consultation on the comprehensive review of the EU copyright acquis (Information Society Directive 2001/29/EC, DSM Directive (EU) 2019/790, Rental and Lending Rights Directive, Database Directive, etc.). Consultation is open on HaveYourSay. Scope: assess fitness for the GenAI era (Article 4 DSM text-and-data-mining exception, Article 17 platform-liability regime, transparency obligations on GPAI providers under Article 53(1)(c) AI Act, remuneration of rightholders), territoriality and cross-border licensing, AI-training data provenance, and possible new exceptions or remuneration models. Source: `digital-strategy.ec.europa.eu/en/news/commission-seeks-views-review-eu-copyright-rules` (18 May 2026). This is the consultation that will feed the Commission's 2026-2027 copyright-omnibus proposal.
 Report: A10-0019/2026
 Procedure: 2025/2058(INI) (own-initiative report)
 Committee: JURI (Legal Affairs)

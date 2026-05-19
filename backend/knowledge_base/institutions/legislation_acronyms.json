@@ -36,13 +36,6 @@
       "year": 2010,
       "source_file": "L_2010117EN.01006001.xml"
     },
-    "EEC": {
-      "celex": "32658R0087",
-      "full_title": "Commission Regulation (EC) No 204/2009 of 16 March 2009 amending Council Regulation (EC) No 32/2000 as regards the extension of the Community tariff quotas for jute and coconut-fibre products and to t",
-      "type": "Regulation",
-      "year": 2009,
-      "source_file": "L_2009071EN.01001301.xml"
-    },
     "ECB/2021/2": {
       "celex": "32021R0379",
       "full_title": "Regulation (EU) 2021/379 of the European Central Bank of 22 January 2021 on the balance sheet items of credit institutions and of the monetary financial institutions sector (recast) (ECB/2021/2)",
@@ -728,13 +721,6 @@
       "type": "Decision",
       "year": 2018,
       "source_file": "L_2018306EN.01005001.xml"
-    },
-    "GATT": {
-      "celex": "32658R0087",
-      "full_title": "Council Regulation (EC) No 838/2006 of 20 March 2006 concerning the implementation of the Agreement in the form of an Exchange of Letters between the European Community and the People's Republic of Ch",
-      "type": "Regulation",
-      "year": 2006,
-      "source_file": "L_2006154EN.01000101.xml"
     },
     "FLEGT": {
       "celex": "32025R0530",

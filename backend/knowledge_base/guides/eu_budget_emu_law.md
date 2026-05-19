@@ -1,6 +1,8 @@
 # EU Budget and Economic & Monetary Union Law
 
 ## QUICK FACTS
+- **LATEST (Monday 18 May 2026)**: **Commission proposes EUR 144 million from the EU Solidarity Fund (EUSF) for Spain, Romania and Cyprus** to recover from climate disasters (presscorner IP/26/1092, DG REGIO). The EUSF (Council Regulation (EU) 2012/2002 as amended; legal basis Article 175 TFEU + 222 TFEU) supports Member States and accession countries hit by major natural disasters. The 18 May package covers: floods and storms in Spain (2024-2025), wildfires and floods in Romania, and storms in Cyprus. The Commission proposal now requires EP + Council co-decision approval to mobilise the funds. Source: `ec.europa.eu/commission/presscorner/detail/en/ip_26_1092`.
+- **LATEST (Monday 18 May 2026)**: **Commission greenlights Lithuania's sixth payment request for EUR 178 million under NextGenerationEU** (presscorner IP/26/1091, REFORM Task Force). Confirms the Recovery and Resilience Facility's milestone-based disbursement model is operational into 2026; Lithuania has now received 6 instalments of its EUR 3.85B RRF allocation.
 - Topic: EU budgetary framework, own resources, financial governance, anti-fraud, and EMU instruments
 - Legal basis: TFEU Part Six, Title II (Articles 310-325)
 - MFF 2021-2027: EUR 1,211 billion (2018 prices) across 7 headings -- Regulation (EU, Euratom) 2020/2093

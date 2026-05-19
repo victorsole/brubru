@@ -1,6 +1,12 @@
 # EU Pharmaceutical Legal Framework
 
 ## QUICK FACTS
+- **LATEST (Monday 18 May 2026)**: **DG SANTE publishes updated guidance on Health Technology Assessment (HTA) Joint Clinical Assessment (JCA)** and adopts **new Implementing Regulation setting out uniform requirements for conformity assessment and notified bodies**. Three concurrent DG SANTE releases:
+  - Updated **Q&A on general methodological and procedural issues for Joint Clinical Assessments** under Regulation (EU) 2021/2282 (HTA Regulation, CELEX **32021R2282**) — clarifies how JCAs published since the Regulation's 12 January 2025 application date should be interpreted, how Member State HTA bodies should integrate JCAs into national reimbursement decisions, and how health technology developers (medicinal products + medical devices) should engage with the Member State Coordination Group on HTA.
+  - **New Frequently Asked Questions on the publication of the JCA report** — covers timing, redaction of confidential business information, language regime, and stakeholder access.
+  - **New Implementing Regulation on conformity assessment and notified bodies** — sets uniform Union-wide requirements (entered the formal adoption pipeline; CELEX to confirm once published in OJ L). This is a key building-block for completing the Medical Device Regulation (MDR, (EU) 2017/745) + In Vitro Diagnostic Regulation (IVDR, (EU) 2017/746) implementation, addressing the long-running notified-body bottleneck that has slowed CE-marking for medical devices.
+  - **HTA Member State Coordination Group adopts guiding principles on data transparency** (companion governance step).
+  - Source: DG SANTE latest-updates page, all dated 2026-05-18.
 - Core Directive: Directive 2001/83/EC (Community code for human medicines, CELEX 32001L0083)
 - Core Regulation: Regulation (EC) 726/2004 (centralised procedure + EMA, CELEX 32004R0726)
 - Orphan medicines: Regulation (EC) 141/2000 (CELEX 32000R0141)

@@ -1,6 +1,8 @@
 # Common Agricultural Policy (CAP) 2023-2027
 
 ## QUICK FACTS
+- **LATEST (Tuesday 19 May 2026)**: **EP plenary debate on the EU Fertilisers Strategy / Action Plan** (Strasbourg, 18-21 May session). The Commission presented its action plan on rising fertiliser prices and EU dependence on imported nitrogen-based fertilisers (notably from Russia and Belarus, both under restrictive-measures regimes). The plenary debate covers price-volatility mitigation, recycling of nitrogen and phosphorus from cow manure and other organic streams, and acceleration of bio-based fertiliser registration under Reg (EU) 2019/1009 (Fertilising Products Regulation). Politico 18 May 2026 framed the file as "EU looks to cow manure to keep food prices down" (`politico.eu/article/eu-fertilizer-crisis-brussels-cow-manure-recycling-plan`). The Strategy sits alongside the CAP Strategic Plans (Reg 2021/2115) as a sector-input pillar, and links to DG AGRI's 18 May 2026 farming-resilience study (`agriculture.ec.europa.eu/media/news/strengthening-eu-farming-resilience-study-confirms-key-adaptation-pathways-2026-05-18_en`).
+- **LATEST (Monday 18 May 2026)**: **DG AGRI publishes "Strengthening EU farming resilience" study** confirming key adaptation pathways for climate-, market-, and input-shock exposure. Cross-input to the Fertilisers Strategy plenary debate.
 - CAP Strategic Plans Regulation: Regulation (EU) 2021/2115 (CELEX 32021R2115)
 - CAP Financing Regulation: Regulation (EU) 2021/2116 (CELEX 32021R2116)
 - Common Market Organisation: Regulation (EU) 2021/2117 (CELEX 32021R2117)

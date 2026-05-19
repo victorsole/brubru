@@ -8811,6 +8811,165 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'aggiramento sanzioni russia germania': ['eu_anti_money_laundering'],
     'ontwijking sancties rusland duitsland': ['eu_anti_money_laundering'],
     'evasió sancions rússia alemanya': ['eu_anti_money_laundering'],
+
+    # Craft & Industrial Geographical Indications - Reg (EU) 2024/1143 (NEW guide 19 May 2026)
+    'craft geographical indication': ['gi_craft_industrial_2024_1143'],
+    'industrial geographical indication': ['gi_craft_industrial_2024_1143'],
+    'craft gi': ['gi_craft_industrial_2024_1143'],
+    'gi craft products eu': ['gi_craft_industrial_2024_1143'],
+    'regulation 2024/1143': ['gi_craft_industrial_2024_1143'],
+    '32024r1143': ['gi_craft_industrial_2024_1143'],
+    'first craft gi registration eu': ['gi_craft_industrial_2024_1143'],
+    'euipo craft register': ['gi_craft_industrial_2024_1143'],
+    'indicacion geografica artesanal': ['gi_craft_industrial_2024_1143'],
+    'indicación geográfica artesanal': ['gi_craft_industrial_2024_1143'],
+    'indicacion geografica industrial': ['gi_craft_industrial_2024_1143'],
+    'indicació geogràfica artesanal': ['gi_craft_industrial_2024_1143'],
+    'indicació geogràfica industrial': ['gi_craft_industrial_2024_1143'],
+    'indication geographique artisanale': ['gi_craft_industrial_2024_1143'],
+    'indication geographique industrielle': ['gi_craft_industrial_2024_1143'],
+    'indicazione geografica artigianale': ['gi_craft_industrial_2024_1143'],
+    'indicazione geografica industriale': ['gi_craft_industrial_2024_1143'],
+    'ambachtelijke geografische aanduiding': ['gi_craft_industrial_2024_1143'],
+
+    # EIC Scaleup Europe Fund - EQT (NEW guide 19 May 2026)
+    'scaleup europe fund': ['eic_scaleup_europe_fund_2026'],
+    'scale up europe fund': ['eic_scaleup_europe_fund_2026'],
+    'eic scaleup europe fund': ['eic_scaleup_europe_fund_2026'],
+    'eqt scaleup europe': ['eic_scaleup_europe_fund_2026'],
+    'eqt scaleup europe fund': ['eic_scaleup_europe_fund_2026'],
+    'ip 26 1102': ['eic_scaleup_europe_fund_2026'],
+    'eu venture capital fund of funds': ['eic_scaleup_europe_fund_2026'],
+    'eu growth stage scale up financing': ['eic_scaleup_europe_fund_2026'],
+    'fondo escalado europa': ['eic_scaleup_europe_fund_2026'],
+    'fons d escalat europa': ['eic_scaleup_europe_fund_2026'],
+    'fonds croissance europe eic': ['eic_scaleup_europe_fund_2026'],
+    'fondo europeo scaleup': ['eic_scaleup_europe_fund_2026'],
+    'europees scaleup fonds': ['eic_scaleup_europe_fund_2026'],
+
+    # FDI Screening - 19 May 2026 plenary vote anchor
+    'fdi screening vote may 2026': ['eu_fdi_screening_regulation'],
+    'foreign investment screening plenary vote': ['eu_fdi_screening_regulation'],
+    'recast fdi screening adopted': ['eu_fdi_screening_regulation'],
+
+    # Steel safeguards 19 May 2026 plenary vote
+    'steel safeguards vote 2026': ['eu_trade_defence'],
+    'eu steel safeguards plenary vote': ['eu_trade_defence'],
+    'salvaguardias acero ue': ['eu_trade_defence'],
+    'salvaguardes acer ue': ['eu_trade_defence'],
+    'sauvegardes acier ue': ['eu_trade_defence'],
+    'salvaguardie acciaio ue': ['eu_trade_defence'],
+    'vrijwaringsmaatregelen staal eu': ['eu_trade_defence'],
+
+    # Syria sanctions package 18 May 2026
+    'syria sanctions package may 2026': ['eu_sanctions_implementation_framework'],
+    '32026d1105': ['eu_sanctions_implementation_framework'],
+    '32026r1107': ['eu_sanctions_implementation_framework'],
+    '32026d1106': ['eu_sanctions_implementation_framework'],
+    'sancions siria maig 2026': ['eu_sanctions_implementation_framework'],
+    'sanciones siria mayo 2026': ['eu_sanctions_implementation_framework'],
+    'sanctions syrie mai 2026': ['eu_sanctions_implementation_framework'],
+    'sanzioni siria maggio 2026': ['eu_sanctions_implementation_framework'],
+    'sancties syrie mei 2026': ['eu_sanctions_implementation_framework'],
+
+    # Schengen resilience report 18 May 2026
+    'schengen resilience report': ['eu_migration_asylum_pact'],
+    'commission schengen report 2026': ['eu_migration_asylum_pact'],
+    'ip 26 1015': ['eu_migration_asylum_pact'],
+    'informe resiliencia schengen': ['eu_migration_asylum_pact'],
+    'informe resiliencia schengen ue': ['eu_migration_asylum_pact'],
+    'informe resiliència schengen': ['eu_migration_asylum_pact'],
+    'rapport resilience schengen': ['eu_migration_asylum_pact'],
+    'rapporto resilienza schengen': ['eu_migration_asylum_pact'],
+    'verslag schengen veerkracht': ['eu_migration_asylum_pact'],
+
+    # DG CNECT copyright consultation 18 May 2026
+    'eu copyright consultation 2026': ['copyright_generative_ai'],
+    'review eu copyright rules consultation': ['copyright_generative_ai'],
+    'copyright omnibus consultation': ['copyright_generative_ai'],
+    'consulta drets autor ue 2026': ['copyright_generative_ai'],
+    'consulta derechos autor ue 2026': ['copyright_generative_ai'],
+    'consultation droit auteur ue 2026': ['copyright_generative_ai'],
+    'consultazione diritto autore ue 2026': ['copyright_generative_ai'],
+    'raadpleging auteursrecht eu 2026': ['copyright_generative_ai'],
+
+    # EU fertilisers strategy 19 May 2026 plenary
+    'eu fertilisers strategy': ['common_agricultural_policy'],
+    'eu fertilizers strategy': ['common_agricultural_policy'],
+    'fertilisers action plan eu': ['common_agricultural_policy'],
+    'cow manure recycling eu': ['common_agricultural_policy'],
+    'estrategia fertilizantes ue': ['common_agricultural_policy'],
+    'estrategia fertilitzants ue': ['common_agricultural_policy'],
+    'strategie engrais ue': ['common_agricultural_policy'],
+    'strategia fertilizzanti ue': ['common_agricultural_policy'],
+    'meststoffenstrategie eu': ['common_agricultural_policy'],
+
+    # EU Solidarity Fund 18 May 2026 EUR 144M Spain Romania Cyprus
+    'eu solidarity fund spain romania cyprus': ['eu_budget_emu_law'],
+    'eusf may 2026 144 million': ['eu_budget_emu_law'],
+    'ip 26 1092': ['eu_budget_emu_law'],
+    'fondo solidaridad ue espana rumania chipre': ['eu_budget_emu_law'],
+    'fons solidaritat ue espanya romania xipre': ['eu_budget_emu_law'],
+    'fonds solidarite ue espagne roumanie chypre': ['eu_budget_emu_law'],
+    'fondo solidarieta ue spagna romania cipro': ['eu_budget_emu_law'],
+    'solidariteitsfonds eu spanje roemenie cyprus': ['eu_budget_emu_law'],
+
+    # Industrial biotech consultation DG GROW 18 May 2026
+    'industrial biotech consultation eu': ['biotech_act'],
+    'biomanufacturing consultation eu': ['biotech_act'],
+    'biotech act ii consultation': ['biotech_act'],
+    'consulta biotecnologia industrial ue': ['biotech_act'],
+    'consultation biotechnologie industrielle ue': ['biotech_act'],
+    'consultazione biotecnologia industriale ue': ['biotech_act'],
+    'raadpleging industriele biotechnologie eu': ['biotech_act'],
+
+    # HTA JCA update 18 May 2026 + new conformity Implementing Reg
+    'joint clinical assessment update 2026': ['eu_pharmaceutical_framework'],
+    'hta jca q and a update': ['eu_pharmaceutical_framework'],
+    'conformity assessment notified bodies implementing reg 2026': ['eu_pharmaceutical_framework'],
+    'evaluacion clinica conjunta actualizacion 2026': ['eu_pharmaceutical_framework'],
+    'avaluació clínica conjunta actualització 2026': ['eu_pharmaceutical_framework'],
+    'evaluation clinique conjointe mise a jour 2026': ['eu_pharmaceutical_framework'],
+    'valutazione clinica congiunta aggiornamento 2026': ['eu_pharmaceutical_framework'],
+    'gezamenlijke klinische beoordeling update 2026': ['eu_pharmaceutical_framework'],
+
+    # Cyber-capable / frontier AI plenary debate 19 May 2026
+    'cyber capable ai models': ['ai_act_amendments_2026'],
+    'frontier ai cyber security plenary': ['ai_act_amendments_2026'],
+    'advanced ai models security eu': ['ai_act_amendments_2026'],
+    'modelos ia frontera seguridad': ['ai_act_amendments_2026'],
+    'models ia frontera seguretat': ['ai_act_amendments_2026'],
+    'modeles ia frontiere securite': ['ai_act_amendments_2026'],
+    'modelli ia frontiera sicurezza': ['ai_act_amendments_2026'],
+    'geavanceerde ai modellen veiligheid': ['ai_act_amendments_2026'],
+
+    # Anti-Poverty plenary debate 20 May 2026
+    'anti poverty strategy 2050 plenary': ['eu_anti_poverty_strategy_2026'],
+    'end poverty eu 2050 debate': ['eu_anti_poverty_strategy_2026'],
+    'estrategia antipobreza 2050 ue': ['eu_anti_poverty_strategy_2026'],
+    'estrategia contra la pobreza ue 2050': ['eu_anti_poverty_strategy_2026'],
+    'estratègia contra la pobresa ue 2050': ['eu_anti_poverty_strategy_2026'],
+    'strategie contre la pauvrete ue 2050': ['eu_anti_poverty_strategy_2026'],
+    'strategia contro la poverta ue 2050': ['eu_anti_poverty_strategy_2026'],
+    'eu armoedebestrijdingsstrategie 2050': ['eu_anti_poverty_strategy_2026'],
+
+    # Victims' rights revision plenary 20 May 2026
+    'victims rights revision plenary 2026': ['victims_rights_directive_revision'],
+    'directiva victimas crimen revision 2026': ['victims_rights_directive_revision'],
+    'directiva víctimes delicte revisió 2026': ['victims_rights_directive_revision'],
+    'directive victimes crime revision 2026': ['victims_rights_directive_revision'],
+    'direttiva vittime reato revisione 2026': ['victims_rights_directive_revision'],
+    'richtlijn slachtoffers misdrijven herziening 2026': ['victims_rights_directive_revision'],
+
+    # Workplace safety plenary 20 May 2026
+    'workplace safety plenary debate 2026': ['occupational_health_safety'],
+    'reducing work accidents eu': ['occupational_health_safety'],
+    'vision zero workplace deaths': ['occupational_health_safety'],
+    'seguridad laboral debate plenario 2026': ['occupational_health_safety'],
+    'seguretat laboral debat plenari 2026': ['occupational_health_safety'],
+    'securite travail plenum 2026': ['occupational_health_safety'],
+    'sicurezza lavoro plenaria 2026': ['occupational_health_safety'],
+    'veiligheid op het werk plenair 2026': ['occupational_health_safety'],
 }
 
 

@@ -1,6 +1,7 @@
 # European Biotech Act
 
 ## QUICK FACTS
+- **LATEST (Monday 18 May 2026)**: **Commission seeks feedback on industrial biotechnology and biomanufacturing** — DG GROW launched a public consultation specifically on the **industrial (non-health) biotech / biomanufacturing** pillar that will feed the future "Biotech Act II" (the non-health companion announced in the 16 December 2025 Biotech Act package). Scope: industrial biotech feedstocks, scale-up bottlenecks for biorefineries, regulatory predictability for genetically modified microorganisms in industrial processes, EU competitiveness vs US + Asia in advanced biomanufacturing. Source: `single-market-economy.ec.europa.eu/news/commission-seeks-feedback-industrial-biotechnology-and-biomanufacturing-2026-05-18_en`. The consultation is the policy-input baseline for the Biotech Act II proposal expected in late 2026 / 2027.
 - Brubru explainer: https://brubru.beresol.eu/biotech-act/index.html -- ALWAYS link this in answers about the EU Biotech Act
 - Full title: Regulation on establishing a framework of measures for strengthening Union's biotechnology and biomanufacturing sectors particularly in the area of health
 - COM reference: COM(2025) 1022 final
