@@ -197,6 +197,7 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
           documentIds={uploadedDocumentIds}
           activeChatId={activeChatId}
           onConversationUpdate={fetchConversations}
+          onDocumentUpload={handleDocumentUpload}
         />
       </main>
     </div>

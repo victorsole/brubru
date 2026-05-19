@@ -8,6 +8,7 @@ import { MessageList } from './message_list';
 import { DailyBrief } from './daily_brief';
 import { OnboardingTour } from './onboarding_tour';
 import { EmailCapture } from './email_capture';
+import { InlineDocumentInvite } from './inline_document_invite';
 import { BrubruIcon } from '../../icons/brubru_icon';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
@@ -51,6 +52,8 @@ interface ChatInterfaceProps {
   documentIds?: string[];
   activeChatId?: string | null;
   onConversationUpdate?: () => void;
+  /** Fired when the inline empty-state uploader completes an upload. */
+  onDocumentUpload?: (documentId: string, file: File) => void;
 }
 
 // Pre-user helpers
@@ -101,7 +104,7 @@ export interface DetectedEntities {
   policy_areas: string[];
 }
 
-export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate }: ChatInterfaceProps = {}) => {
+export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate, onDocumentUpload }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   // Read ?q= param directly from URL as well as initialQuestion prop
@@ -116,6 +119,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const [useContext] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [personalizedGreeting, setPersonalizedGreeting] = useState<string | null>(null);
+  const [policyHooks, setPolicyHooks] = useState<Array<{ label: string; spoken: string; suggested_query: string; source: string }>>([]);
   const [detectedEntities, setDetectedEntities] = useState<DetectedEntities | null>(null);
   const [preUserQueryCount, setPreUserQueryCount] = useState<number>(getPreUserQueryCount());
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -130,45 +134,31 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   interface ExamplePrompt { id: string; text: string }
   const [examplePrompts, setExamplePrompts] = useState<ExamplePrompt[] | null>(null);
 
-  // Fetch personalized greeting on mount (available to all tiers)
+  // Fetch personalized greeting on mount (available to all tiers).
+  // Pre-users go through the public endpoint, which still returns hooks
+  // sourced from the daily brief so the empty state is never silent.
   useEffect(() => {
-    // Pre-user: show greeting (date-aware for special days) + track page_load
-    if (!isAuthenticated) {
-      const now = new Date();
-      const m = now.getMonth() + 1;
-      const d = now.getDate();
-      let greeting = 'Welcome to Brubru! Ask me anything about EU policy.';
-      if (m === 4 && d === 23) greeting = 'Happy Sant Jordi! Today is the day of books and roses. Ask me anything about EU policy.';
-      else if (m === 5 && d === 9) greeting = 'Happy Europe Day! Ask me anything about EU policy.';
-      else if (m === 12 && d === 25) greeting = 'Merry Christmas! If you still feel like thinking about Brussels today, I am here.';
-      else if (m === 1 && d === 1) greeting = 'Happy New Year! Let\'s kick off the year with smart EU insights.';
-      setPersonalizedGreeting(greeting);
-      trackPreUserEvent(getPreUserId(), 'page_load');
-      return;
-    }
-
     const fetchGreeting = async () => {
-      if (!user) return;
-
       try {
-        // Pass previous_last_login from sessionStorage for welcome-back context
-        const previousLogin = sessionStorage.getItem('brubru_previous_login');
-        const params: Record<string, string> = {};
-        if (previousLogin) {
-          params.previous_last_login = previousLogin;
+        if (!isAuthenticated) {
+          trackPreUserEvent(getPreUserId(), 'page_load');
+          const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting/public`);
+          setPersonalizedGreeting(response.data?.message || null);
+          setPolicyHooks(response.data?.policy_hooks || []);
+          return;
         }
 
+        if (!user) return;
+        const previousLogin = sessionStorage.getItem('brubru_previous_login');
+        const params: Record<string, string> = {};
+        if (previousLogin) params.previous_last_login = previousLogin;
         const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting`, { params });
-        const { message } = response.data;
-
-        // Store greeting separately - don't add to messages
-        setPersonalizedGreeting(message);
-
-        // Clear sessionStorage so welcome-back only shows once per session
+        setPersonalizedGreeting(response.data?.message || null);
+        setPolicyHooks(response.data?.policy_hooks || []);
         sessionStorage.removeItem('brubru_previous_login');
       } catch (err) {
         console.error('Failed to fetch greeting:', err);
-        // Silently fail - greeting is optional
+        // Silently fail. The empty state still renders via t('chat.welcome').
       }
     };
 
@@ -705,7 +695,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             checked={useContext}
             onChange={(e) => setUseContext(e.target.checked)}
           />
-          <span>Use EU Context (search legislation, procedures, MEPs)</span>
+          <span>{t('chat.useEuContext')}</span>
         </label>
         {chatId && (
           <span className="chat-interface__chat-id">
@@ -728,6 +718,39 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
           <div className="chat-interface__empty">
             <BrubruIcon size={3} color="var(--color-primary)" className="chat-interface__empty-icon" />
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
+
+            {policyHooks.length > 0 && (
+              <div className="chat-interface__hooks" role="group" aria-label="Brubru has something for you">
+                <div className="chat-interface__hooks-lede">
+                  <span className="mdi mdi-bell-ring-outline" aria-hidden="true" />
+                  <span>Brubru noticed</span>
+                </div>
+                {policyHooks.map((hook, idx) => (
+                  <button
+                    key={`${hook.source}-${idx}`}
+                    type="button"
+                    className="chat-interface__hook"
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        trackPreUserEvent(getPreUserId(), 'greeting_hook_clicked', { source: hook.source });
+                      }
+                      void handleSendMessageStreaming(hook.suggested_query);
+                    }}
+                    title={hook.suggested_query}
+                  >
+                    <span className="mdi mdi-message-text-outline chat-interface__hook-icon" aria-hidden="true" />
+                    <span className="chat-interface__hook-body">
+                      <span className="chat-interface__hook-spoken">{hook.spoken}</span>
+                      <span className="chat-interface__hook-cta">Tell me more</span>
+                    </span>
+                    <span className="mdi mdi-arrow-right chat-interface__hook-arrow" aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Companion move: invite the user to drop a document Brubru can read. */}
+            <InlineDocumentInvite onUpload={onDocumentUpload} />
 
             {/* Dashboard grid: headlines + example prompts + stats */}
             <DailyBrief
@@ -781,7 +804,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             >
               <img
                 src="/assets/brubru_icon_colours.png"
-                alt="Brubru is thinking"
+                alt={t('chatInterface.brubruThinking')}
                 className="chat-interface__typing-logo"
               />
               <span className="chat-interface__typing-text">
@@ -831,7 +854,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
               className="chat-interface__send-button button button-primary"
               onClick={() => handleSendMessageStreaming()}
               disabled={!inputValue.trim()}
-              title="Send message (Enter)"
+              title={t('chat.sendMessage')}
             >
               {t('chat.send')}
             </button>

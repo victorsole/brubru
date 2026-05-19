@@ -5,6 +5,7 @@ import { marked } from 'marked';
 import Icon from '@mdi/react';
 import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdiClose } from '@mdi/js';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import type { Message, Citation, DetectedEntities, ChatAction } from './chat_interface';
 import { ActionButtons } from './action_buttons';
 import { getEultUrl } from '../../utils/eu_links';
@@ -63,35 +64,43 @@ const extractFollowUps = (content: string): { cleanContent: string; followUps: s
   return { cleanContent: cleanLines.join('\n'), followUps };
 };
 
-// Generate smart suggestion buttons based on detected entities
+// Deterministic follow-up offers based on entities the backend already
+// detected for this turn. Always rendered under the last assistant message,
+// independent of A/B variant or query count. Distinct from ActionButtons
+// (deep-links) and from regex-scraped follow-ups (model prose).
 const generateSmartSuggestions = (entities: DetectedEntities | null | undefined): string[] => {
-  if (!entities) return [];
   const suggestions: string[] = [];
-
-  if (entities.mep_names.length > 0) {
-    suggestions.push('Show me which MEPs are working on this');
+  if (!entities) {
+    suggestions.push('Walk me through what this means for my work.');
+    return suggestions.slice(0, 3);
   }
+
   if (entities.procedure_references.length > 0) {
     const ref = entities.procedure_references[0];
     suggestions.push(`What is the current status of ${ref}?`);
   }
+  if (entities.celex_numbers.length > 0) {
+    const celex = entities.celex_numbers[0];
+    suggestions.push(`Show me the key articles of ${celex}.`);
+  }
+  if (entities.mep_names.length > 0) {
+    suggestions.push('Who else is working on this file?');
+  }
   if (entities.committee_codes.length > 0) {
     const code = entities.committee_codes[0];
-    suggestions.push(`Who are the key members of the ${code} committee?`);
+    suggestions.push(`What is on the ${code} committee agenda this month?`);
   }
-  if (entities.policy_areas.length > 0) {
-    suggestions.push('Draft a quick briefing on this topic');
+  if (suggestions.length < 3 && entities.policy_areas.length > 0) {
+    suggestions.push('Draft a one-page brief on this for me.');
   }
-
-  // Fallback if no specific entities detected
   if (suggestions.length === 0) {
-    suggestions.push('What EU legislation is most relevant to this topic?');
+    suggestions.push('Walk me through what this means for my work.');
   }
-
   return suggestions.slice(0, 3);
 };
 
-export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, preUserQueryCount, onSmartSuggestionClick, onActionClick }: MessageListProps) => {
+export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, onSmartSuggestionClick, onActionClick }: MessageListProps) => {
+  const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expandedSources, setExpandedSources] = useState<Set<string>>(new Set());
   const [feedbackGiven, setFeedbackGiven] = useState<Map<string, 'positive' | 'negative' | 'hallucination'>>(new Map());
@@ -358,7 +367,11 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 // so the accumulated text has proper markdown structure.
                 const { cleanContent, followUps } = extractFollowUps(message.content);
                 const isLastAssistant = message === [...messages].reverse().find(m => m.role === 'assistant');
-                const showSmartSuggestions = abVariant === 'B' && preUserQueryCount === 1 && isLastAssistant;
+                // Always offer smart suggestions on the last assistant turn.
+                // Pre-users still pay the 3-query cap on click, but the offers
+                // themselves are deterministic from the entities the backend
+                // already detected for this answer.
+                const showSmartSuggestions = !!isLastAssistant && !message.isStreaming;
                 const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities) : [];
                 return (
                   <>
@@ -386,7 +399,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                     )}
                     {smartSuggestions.length > 0 && onSmartSuggestionClick && (
                       <div className="message-list__smart-suggestions">
-                        <span className="message-list__smart-suggestions-label">Explore further:</span>
+                        <span className="message-list__smart-suggestions-label">{t('chat.exploreFurther')}</span>
                         {smartSuggestions.map((text, idx) => (
                           <button
                             key={idx}
@@ -433,7 +446,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
               message.citations.length > 0 &&
               expandedSources.has(message.id) && (
                 <div className="message-list__citations">
-                  <h4 className="message-list__citations-title">Sources</h4>
+                  <h4 className="message-list__citations-title">{t('chat.sources')}</h4>
                   <div className="message-list__citations-list">
                     {message.citations.map((citation) => (
                       <div key={citation.id} className="message-list__citation">
@@ -489,7 +502,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
             {/* Feedback Buttons */}
             {message.role === 'assistant' && (
               <div className="message-list__feedback">
-                <span className="message-list__feedback-label">Was this helpful?</span>
+                <span className="message-list__feedback-label">{t('chat.wasThisHelpful')}</span>
                 <div className="message-list__feedback-buttons">
                   <button
                     className={`message-list__feedback-button ${
@@ -497,7 +510,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                     }`}
                     onClick={() => handleFeedback(message.id, 'positive', message.content)}
                     disabled={feedbackLoading.has(message.id) || feedbackGiven.has(message.id)}
-                    title="This was helpful"
+                    title={t('messageList.thisWasHelpful')}
                   >
                     <Icon path={mdiMedalOutline} size={0.8} />
                   </button>
@@ -507,7 +520,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                     }`}
                     onClick={() => handleFeedback(message.id, 'negative', message.content)}
                     disabled={feedbackLoading.has(message.id) || feedbackGiven.has(message.id)}
-                    title="This was not helpful"
+                    title={t('messageList.thisWasNotHelpful')}
                   >
                     <Icon path={mdiEmoticonConfusedOutline} size={0.8} />
                   </button>
@@ -517,7 +530,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                     } ${showHallucinationInput === message.id ? 'message-list__feedback-button--expanded' : ''}`}
                     onClick={() => handleHallucinationClick(message.id)}
                     disabled={feedbackLoading.has(message.id) || feedbackGiven.has(message.id)}
-                    title="Report incorrect information"
+                    title={t('messageList.reportIncorrect')}
                   >
                     <Icon path={mdiAlertCircleOutline} size={0.8} />
                   </button>
@@ -534,18 +547,18 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 {showHallucinationInput === message.id && !feedbackGiven.has(message.id) && (
                   <div className="message-list__hallucination-input">
                     <div className="message-list__hallucination-header">
-                      <span>What was incorrect? (optional)</span>
+                      <span>{t('chat.whatWasIncorrect')}</span>
                       <button
                         className="message-list__hallucination-close"
                         onClick={() => setShowHallucinationInput(null)}
-                        title="Cancel"
+                        title={t('messageList.cancel')}
                       >
                         <Icon path={mdiClose} size={0.6} />
                       </button>
                     </div>
                     <textarea
                       className="message-list__hallucination-textarea"
-                      placeholder="e.g., The fine amount is wrong - GDPR fines are up to €20M, not €50M"
+                      placeholder={t('chat.feedbackPlaceholder')}
                       value={hallucinationText}
                       onChange={(e) => setHallucinationText(e.target.value)}
                       rows={2}

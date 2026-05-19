@@ -30,6 +30,7 @@ const TRIGGER_LABEL: Record<ProactiveTriggerSource, string> = {
   new_file_match: 'New for you',
   tracked_file_movement: 'Your tracked files',
   amendment_surge: 'Amendment surge',
+  learn_about_you: 'Set up your watchlist',
 };
 
 const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
@@ -37,6 +38,7 @@ const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
   new_file_match: 'Open My Files',
   tracked_file_movement: 'Open My Files',
   amendment_surge: 'Open Amendments',
+  learn_about_you: 'Open profile',
 };
 
 interface ProactiveOpenerProps {

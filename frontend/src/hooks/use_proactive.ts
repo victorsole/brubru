@@ -16,7 +16,8 @@ export type ProactiveTriggerSource =
   | 'morning_brief'
   | 'new_file_match'
   | 'tracked_file_movement'
-  | 'amendment_surge';
+  | 'amendment_surge'
+  | 'learn_about_you';
 
 export interface ProactiveBriefing {
   trigger_source: ProactiveTriggerSource;
