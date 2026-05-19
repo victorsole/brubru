@@ -42,6 +42,8 @@ TriggerSource = Literal[
     "tracked_file_movement",
     "amendment_surge",
     "learn_about_you",
+    "conversation_recall",
+    "weekly_digest",
 ]
 
 
@@ -413,6 +415,210 @@ def _briefing_morning(
     )
 
 
+def _briefing_weekly_digest(
+    db: Session, user: User, since: datetime
+) -> Optional[ProactiveBriefing]:
+    """
+    Synthesise a "while you were away" digest for users returning after a
+    multi-day absence. Combines tracked-file movements, new files matching
+    interests, and amendment surges across the gap window into one hook.
+
+    Only fires when the gap is at least 5 days. The actual gap is encoded
+    in the spoken summary so the user sees "Since Friday" or "Since 5 May"
+    rather than a generic "this week".
+    """
+    if not since:
+        return None
+    now = datetime.now(since.tzinfo) if since.tzinfo else datetime.utcnow()
+    gap_days = (now - since).days
+    if gap_days < 5:
+        return None
+
+    interests = _policy_interests(user)
+    moves = 0
+    move_titles: List[str] = []
+    new_matches = 0
+    new_match_titles: List[str] = []
+    surges = 0
+
+    try:
+        rows = db.execute(
+            text(
+                """
+                SELECT lc.title, h.status, h.changed_at
+                FROM user_carriage_tracks uct
+                JOIN legislative_carriages lc ON lc.id = uct.carriage_id
+                JOIN carriage_status_history h ON h.carriage_id = lc.id
+                WHERE uct.user_id = :uid
+                  AND h.changed_at > :since
+                ORDER BY h.changed_at DESC
+                LIMIT 10
+                """
+            ),
+            {"uid": str(user.id), "since": since},
+        ).mappings().all()
+        moves = len(rows)
+        move_titles = [r["title"] for r in rows[:3]]
+    except Exception as exc:
+        logger.debug("weekly_digest moves query failed: %s", exc)
+        db.rollback()
+
+    if interests:
+        try:
+            rows = db.execute(
+                text(
+                    """
+                    SELECT title FROM legislative_carriages
+                    WHERE first_seen > :since
+                      AND EXISTS (
+                          SELECT 1 FROM unnest(policy_areas) AS area_v
+                          WHERE EXISTS (
+                              SELECT 1 FROM unnest(CAST(:interests AS text[])) AS interest_v
+                              WHERE LOWER(area_v) = LOWER(interest_v)
+                                 OR LOWER(area_v) LIKE '%' || LOWER(interest_v) || '%'
+                                 OR LOWER(interest_v) LIKE '%' || LOWER(area_v) || '%'
+                          )
+                      )
+                    ORDER BY first_seen DESC
+                    LIMIT 10
+                    """
+                ),
+                {"since": since, "interests": interests},
+            ).mappings().all()
+            new_matches = len(rows)
+            new_match_titles = [r["title"] for r in rows[:3]]
+        except Exception as exc:
+            logger.debug("weekly_digest new_files query failed: %s", exc)
+            db.rollback()
+
+    try:
+        row = db.execute(
+            text(
+                """
+                SELECT COUNT(*) AS surge_count
+                FROM (
+                    SELECT lc.id
+                    FROM user_carriage_tracks uct
+                    JOIN legislative_carriages lc ON lc.id = uct.carriage_id
+                    JOIN mep_amendments ma
+                      ON ma.procedure_reference = lc.oeil_procedure_ref
+                    WHERE uct.user_id = :uid
+                      AND ma.document_date > :since
+                    GROUP BY lc.id
+                    HAVING COUNT(ma.id) >= :threshold
+                ) s
+                """
+            ),
+            {
+                "uid": str(user.id),
+                "since": since,
+                "threshold": AMENDMENT_SURGE_THRESHOLD,
+            },
+        ).first()
+        surges = int(row[0]) if row and row[0] else 0
+    except Exception as exc:
+        logger.debug("weekly_digest surges query failed: %s", exc)
+        db.rollback()
+
+    if moves == 0 and new_matches == 0 and surges == 0:
+        return None
+
+    if gap_days < 7:
+        anchor = since.strftime("%A")  # e.g. "Friday"
+    else:
+        anchor = since.strftime("%-d %B")  # e.g. "5 May"
+
+    parts: List[str] = []
+    if moves:
+        if moves == 1:
+            parts.append(f"1 of your tracked files moved ({move_titles[0]})")
+        else:
+            parts.append(f"{moves} of your tracked files moved")
+    if new_matches:
+        if new_matches == 1:
+            parts.append(f"1 new file appeared in your interests ({new_match_titles[0]})")
+        else:
+            parts.append(f"{new_matches} new files appeared in your interests")
+    if surges:
+        parts.append(
+            f"{surges} tracked file{'s' if surges > 1 else ''} saw an amendment surge"
+        )
+
+    body = "; ".join(parts) + "."
+    summary = f"While you were away (since {anchor}): {body}"
+
+    return ProactiveBriefing(
+        trigger_source="weekly_digest",
+        title="Your week on Brubru",
+        summary=summary,
+        suggested_query=(
+            f"Walk me through what moved on my watch since {anchor}: "
+            "the file status changes, new matches, and any amendment surges. "
+            "Group them by topic and tell me what to read first."
+        ),
+        evidence_refs=[],
+        drill_down_path="/my-eu-bubble?tab=my_files",
+    )
+
+
+def _briefing_conversation_recall(
+    db: Session, user: User
+) -> Optional[ProactiveBriefing]:
+    """
+    Surface a hook for the user's most recent unfinished conversation
+    when it was within the last 14 days but NOT today. The companion
+    move that says "I remember what we were talking about last time".
+
+    Skipped when the gap is less than 1 day (same-day chats do not need
+    a recall hook) or more than 14 days (cold trail, would feel weird).
+    """
+    try:
+        row = db.execute(
+            text(
+                """
+                SELECT id, title, last_message_at
+                FROM chats
+                WHERE user_id = :uid
+                  AND last_message_at IS NOT NULL
+                  AND last_message_at::date < CURRENT_DATE
+                  AND last_message_at > (NOW() - INTERVAL '14 days')
+                  AND title IS NOT NULL
+                  AND title != ''
+                ORDER BY last_message_at DESC
+                LIMIT 1
+                """
+            ),
+            {"uid": str(user.id)},
+        ).mappings().first()
+    except Exception as exc:
+        logger.debug("conversation_recall query failed: %s", exc)
+        db.rollback()
+        return None
+
+    if not row:
+        return None
+
+    raw_title = str(row["title"]).strip().rstrip(".?!")
+    topic = raw_title
+    if len(topic) > 90:
+        topic = topic[:87].rstrip() + "..."
+
+    return ProactiveBriefing(
+        trigger_source="conversation_recall",
+        title="Pick up where we left off",
+        summary=(
+            f"Last time you asked about: {topic}. "
+            "Want to pick up where we left off?"
+        ),
+        suggested_query=(
+            f"Where did we leave off on '{topic}'? Walk me through what "
+            "we discussed and what to do next."
+        ),
+        evidence_refs=[str(row["id"])],
+        drill_down_path=None,
+    )
+
+
 def _briefing_learn_about_you(
     db: Session, user: User
 ) -> Optional[ProactiveBriefing]:
@@ -456,11 +662,19 @@ def compute_pending_briefings(
     db: Session,
     user: User,
     today: Optional[date] = None,
+    previous_last_login: Optional[datetime] = None,
 ) -> List[ProactiveBriefing]:
     """
     Compute up to ``MAX_BRIEFINGS_PER_REQUEST`` briefings for the user.
-    Order of priority: amendment surge → tracked-file movement →
-    new-file match → morning brief.
+
+    Priority order:
+      1. weekly_digest      (only when previous_last_login gap is >= 5 days)
+      2. amendment_surge    (last 24h on a tracked file)
+      3. tracked_file_movement
+      4. new_file_match
+      5. conversation_recall
+      6. morning_brief
+      7. learn_about_you    (only when portfolio is empty)
     """
     if not user or not user.is_active:
         return []
@@ -468,13 +682,19 @@ def compute_pending_briefings(
     today = today or date.today()
     briefings: List[ProactiveBriefing] = []
 
-    for fn in (
+    fns = []
+    if previous_last_login is not None:
+        fns.append(lambda: _briefing_weekly_digest(db, user, previous_last_login))
+    fns.extend([
         lambda: _briefing_amendment_surge(db, user),
         lambda: _briefing_tracked_file_movement(db, user),
         lambda: _briefing_new_file_match(db, user),
+        lambda: _briefing_conversation_recall(db, user),
         lambda: _briefing_morning(db, user, today),
         lambda: _briefing_learn_about_you(db, user),
-    ):
+    ])
+
+    for fn in fns:
         if len(briefings) >= MAX_BRIEFINGS_PER_REQUEST:
             break
         try:

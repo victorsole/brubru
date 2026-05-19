@@ -632,20 +632,50 @@ class AIService:
             entities = self.context_builder.extract_entities(user_message)
             drafting = detect_drafting_intent(user_message)
 
-            # Always start with "Searching EU legislation..."
-            yield json.dumps({"type": "status", "message": "Searching EU legislation..."})
+            # Companion status messages: name what we are actually looking up
+            # so the wait does not feel generic. Felt-latency is half the
+            # battle. Cap each entity string so the chip stays one line.
+            def _trim(s: str, n: int = 40) -> str:
+                s = " ".join((s or "").split())
+                return s if len(s) <= n else s[: n - 1].rstrip() + "..."
 
-            # Entity-specific statuses
-            if entities.mep_names:
-                yield json.dumps({"type": "status", "message": "Looking up MEP data..."})
+            # Opening status. If we detected a recognisable law alias or
+            # policy area in the user message, surface it instead of the
+            # generic "Searching EU legislation...".
+            opening_label = None
+            if entities.celex_numbers:
+                opening_label = f"Looking up CELEX {_trim(entities.celex_numbers[0], 20)}..."
+            elif entities.procedure_references:
+                opening_label = f"Checking procedure {_trim(entities.procedure_references[0], 24)}..."
+            elif entities.policy_areas:
+                opening_label = f"Searching {_trim(entities.policy_areas[0], 28)} files..."
+            yield json.dumps({"type": "status", "message": opening_label or "Searching EU legislation..."})
+
+            # Subsequent entity-specific statuses, each naming what we found.
+            # Filter mep_names against a known set of institutional acronyms
+            # the extractor sometimes mis-classifies as people (CELEX, COM,
+            # OEIL, ECLI, etc.). A real MEP name contains a space or lowercase.
+            _MEP_NOISE = {"CELEX", "COM", "OEIL", "ECLI", "EUR-LEX", "OJ", "PE", "CFSP"}
+            mep_clean = [m for m in entities.mep_names
+                         if m and m.upper() not in _MEP_NOISE
+                         and (" " in m or any(c.islower() for c in m))]
+            if mep_clean:
+                first = _trim(mep_clean[0], 28)
+                more = f" (+{len(mep_clean) - 1} more)" if len(mep_clean) > 1 else ""
+                yield json.dumps({"type": "status", "message": f"Looking up {first}{more}..."})
             if entities.committee_codes:
-                yield json.dumps({"type": "status", "message": "Fetching committee information..."})
-            if entities.procedure_references or entities.celex_numbers:
-                yield json.dumps({"type": "status", "message": "Checking legislative progress..."})
+                code = _trim(entities.committee_codes[0], 12)
+                yield json.dumps({"type": "status", "message": f"Fetching {code} committee work..."})
+            if entities.procedure_references and not opening_label:
+                # Already surfaced if opening_label used it; emit only if not.
+                ref = _trim(entities.procedure_references[0], 24)
+                yield json.dumps({"type": "status", "message": f"Checking procedure {ref}..."})
             if document_ids:
-                yield json.dumps({"type": "status", "message": "Analysing your document..."})
+                yield json.dumps({"type": "status", "message": "Reading your document..."})
             if drafting.is_drafting_query:
-                yield json.dumps({"type": "status", "message": "Consulting knowledge base..."})
+                doc_type = getattr(drafting, "document_type", "") or "document"
+                label = str(doc_type).replace("_", " ").title()
+                yield json.dumps({"type": "status", "message": f"Preparing to draft your {label.lower()}..."})
 
             # Emit detected entities for pre-users (used by smart suggestions)
             if is_pre_user:
@@ -664,15 +694,30 @@ class AIService:
         if use_context:
             status_queue: asyncio.Queue = asyncio.Queue()
 
+            # Pick a topic noun for the knowledge-base / ranking statuses so
+            # the wait does not feel generic. Order of priority mirrors what
+            # the user is most likely thinking about.
+            topic = None
+            if entities.celex_numbers:
+                topic = f"CELEX {entities.celex_numbers[0]}"
+            elif entities.procedure_references:
+                topic = f"procedure {entities.procedure_references[0]}"
+            elif entities.policy_areas:
+                topic = entities.policy_areas[0]
+            elif entities.committee_codes:
+                topic = f"the {entities.committee_codes[0]} committee"
+
+            kb_message = f"Searching {topic} in the knowledge base..." if topic else "Searching knowledge base..."
+            rank_message = f"Ranking sources on {topic}..." if topic else "Ranking sources..."
+
             async def _build_context_with_progress():
                 """Run context building and emit progress events to queue."""
-                # Emit progress before the heavy gather
-                await status_queue.put("Searching knowledge base...")
+                await status_queue.put(kb_message)
                 context, citations = await self.context_builder.build_context_with_citations(
                     user_message=user_message,
                     conversation_history=self._convert_to_dict(conversation_history)
                 )
-                await status_queue.put("Ranking sources...")
+                await status_queue.put(rank_message)
                 await status_queue.put(None)  # Signal completion
                 return context, citations
 

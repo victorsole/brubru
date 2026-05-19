@@ -38,7 +38,11 @@ class MetadataExtractor:
         'celex': re.compile(r'\b[0-9]{5}[A-Z][0-9]{4,}\b'),
 
         # Procedure reference: 2021/0106(COD)
-        'procedure': re.compile(r'\b\d{4}/\d{4}\([A-Z]{2,5}\)\b'),
+        # Note: no trailing \b. The closing `)` is already a non-word
+        # character; adding \b would require a following word character,
+        # so `2024/0079(COD)` at end of string or before punctuation never
+        # matched. Bug caught 19 May 2026 during action-strip debugging.
+        'procedure': re.compile(r'\b\d{4}/\d{4}\([A-Z]{2,5}\)'),
 
         # Article reference: "Article 5", "Art. 12", "Articles 3-7"
         'article': re.compile(r'\b(?:Article|Art\.?)\s+(\d+(?:\s*[-–]\s*\d+)?)\b', re.IGNORECASE),

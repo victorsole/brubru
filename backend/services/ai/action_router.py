@@ -105,16 +105,27 @@ def compute_actions(
             pre_user_label="Sign up to generate documents",
         ))
 
-    # --- Priority 3a: Open Amendator (CELEX + article refs, not drafting) ---
-    if not is_drafting and celex_nums and article_refs and len(actions) < MAX_ACTIONS:
+    # --- Priority 3a: Open Amendator (CELEX detected, not drafting).
+    # Previously gated behind article_refs, which produced an empty actions
+    # strip whenever the user cited a CELEX without naming an article. The
+    # Amendator opens fine on the whole act, so the gate is unnecessary
+    # and was actively dropping value on the floor.
+    if not is_drafting and celex_nums and len(actions) < MAX_ACTIONS:
         celex = celex_nums[0]
+        article_hint = article_refs[0] if article_refs else None
+        label = f"Open Article {article_hint}" if article_hint else f"Open in Amendator"
+        params = {"celex": celex}
+        route = f"/amendator?celex={celex}"
+        if article_hint:
+            params["article"] = article_hint
+            route = f"/amendator?celex={celex}&article={article_hint}"
         actions.append(ChatAction(
             action_type="open_amendator",
-            label=f"Open in Amendator",
+            label=label,
             icon="mdi-scale-balance",
             colour="#059669",
-            route=f"/amendator?celex={celex}",
-            params={"celex": celex},
+            route=route,
+            params=params,
             requires_auth=True,
             pre_user_label="Sign up to use Amendator",
         ))
