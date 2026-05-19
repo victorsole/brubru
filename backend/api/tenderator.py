@@ -17,7 +17,7 @@ Endpoints:
 """
 
 import logging
-from typing import Optional, List
+from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, Query, Depends, status, BackgroundTasks
@@ -476,6 +476,1093 @@ async def get_my_statistics(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get statistics: {str(e)}"
         )
+
+
+# ============================================================================
+# Unified calendar deadlines (TED + F&T proposals + F&T tenders)
+# ============================================================================
+
+@router.get(
+    "/calendar-deadlines",
+    summary="Unified deadlines feed for the Tenderator calendar",
+    description=(
+        "Returns submission/application deadlines from all three live "
+        "sources (TED tenders, F&T calls for proposals, F&T calls for "
+        "tenders) in a single shape so the calendar widget can render "
+        "any source on the right day. Blue tier only."
+    ),
+)
+async def get_calendar_deadlines(
+    months_ahead: int = Query(6, ge=1, le=12, description="How many months ahead to include"),
+    only_open: bool = Query(True, description="When true, exclude already-closed items"),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from datetime import timedelta
+    from models.funding_tenders import FtCallForProposals, FtCallForTenders
+
+    now = datetime.utcnow()
+    horizon = now + timedelta(days=30 * months_ahead)
+    items: List[Dict[str, Any]] = []
+
+    # --- TED ---
+    try:
+        qry = db.query(Tender).filter(Tender.submission_deadline != None)  # noqa: E711
+        if only_open:
+            qry = qry.filter(Tender.submission_deadline >= now)
+        qry = qry.filter(Tender.submission_deadline <= horizon)
+        for t in qry.order_by(Tender.submission_deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ted:{t.id}",
+                "source": "ted",
+                "ref": t.publication_number,
+                "title": t.title,
+                "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+                "budget": float(t.estimated_value) if t.estimated_value else None,
+                "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+                "country": t.buyer_country,
+                "programme": None,
+                "source_url": getattr(t, "ted_url", None) or "",
+            })
+    except Exception as exc:
+        logger.warning(f"calendar TED query failed: {exc}")
+        db.rollback()
+
+    # --- F&T proposals ---
+    try:
+        qry = db.query(FtCallForProposals).filter(
+            FtCallForProposals.is_test == False,  # noqa: E712
+            FtCallForProposals.deadline != None,  # noqa: E711
+        )
+        if only_open:
+            qry = qry.filter(FtCallForProposals.deadline >= now)
+        qry = qry.filter(FtCallForProposals.deadline <= horizon)
+        for p in qry.order_by(FtCallForProposals.deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ft_proposals:{p.id}",
+                "source": "ft_proposals",
+                "ref": p.topic_id,
+                "title": p.title,
+                "deadline": p.deadline.isoformat() if p.deadline else None,
+                "budget": float(p.indicative_budget) if p.indicative_budget else None,
+                "currency": p.budget_currency or "EUR",
+                "country": None,
+                "programme": p.framework_programme,
+                "source_url": p.source_url,
+            })
+    except Exception as exc:
+        logger.warning(f"calendar F&T proposals query failed: {exc}")
+        db.rollback()
+
+    # --- F&T tenders ---
+    try:
+        qry = db.query(FtCallForTenders).filter(
+            FtCallForTenders.is_test == False,  # noqa: E712
+            FtCallForTenders.deadline != None,  # noqa: E711
+        )
+        if only_open:
+            qry = qry.filter(FtCallForTenders.deadline >= now)
+        qry = qry.filter(FtCallForTenders.deadline <= horizon)
+        for ftt in qry.order_by(FtCallForTenders.deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ft_tenders:{ftt.id}",
+                "source": "ft_tenders",
+                "ref": ftt.tender_reference,
+                "title": ftt.title,
+                "deadline": ftt.deadline.isoformat() if ftt.deadline else None,
+                "budget": float(ftt.estimated_value) if ftt.estimated_value else None,
+                "currency": ftt.value_currency or "EUR",
+                "country": None,
+                "programme": None,
+                "source_url": ftt.source_url,
+            })
+    except Exception as exc:
+        logger.warning(f"calendar F&T tenders query failed: {exc}")
+        db.rollback()
+
+    # Sort by deadline ascending for the frontend
+    items.sort(key=lambda x: x.get("deadline") or "9999-12-31")
+
+    return {
+        "months_ahead": months_ahead,
+        "only_open": only_open,
+        "total": len(items),
+        "by_source": {
+            "ted": sum(1 for i in items if i["source"] == "ted"),
+            "ft_proposals": sum(1 for i in items if i["source"] == "ft_proposals"),
+            "ft_tenders": sum(1 for i in items if i["source"] == "ft_tenders"),
+        },
+        "items": items,
+        "generated_at": now.isoformat(),
+    }
+
+
+# ============================================================================
+# Phase 5: EU Programmes catalogue
+# ============================================================================
+
+@router.get(
+    "/programmes",
+    summary="EU funding programmes catalogue",
+    description=(
+        "Returns the list of seeded EU funding programmes (Horizon Europe, "
+        "LIFE, CEF, Digital Europe Programme, EU4Health, Erasmus+, EIC, "
+        "etc.) with budget, period, and source URL. Blue tier only."
+    ),
+)
+async def list_programmes(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    try:
+        rows = db.execute(
+            text(
+                """
+                SELECT programme_code, name, parent_framework, budget_total,
+                       budget_currency, period_start, period_end, description,
+                       source_url
+                FROM ft_programmes
+                WHERE is_test = FALSE
+                ORDER BY
+                    CASE parent_framework
+                        WHEN 'MFF 2021-2027' THEN 1
+                        WHEN 'Horizon Europe pillar' THEN 2
+                        WHEN 'MFF 2014-2020' THEN 3
+                        WHEN 'MFF 2007-2013' THEN 4
+                        ELSE 5
+                    END,
+                    budget_total DESC NULLS LAST
+                """
+            )
+        ).mappings().all()
+    except Exception as exc:
+        logger.error(f"programmes query failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Programmes query failed: {exc}")
+
+    items = []
+    for r in rows:
+        items.append({
+            "programme_code": r["programme_code"],
+            "name": r["name"],
+            "parent_framework": r["parent_framework"],
+            "budget_total": float(r["budget_total"]) if r["budget_total"] else None,
+            "budget_currency": r["budget_currency"],
+            "period_start": r["period_start"].isoformat() if r["period_start"] else None,
+            "period_end": r["period_end"].isoformat() if r["period_end"] else None,
+            "description": r["description"],
+            "source_url": r["source_url"],
+        })
+    return {"items": items, "total": len(items)}
+
+
+# Pull text + datetime locally for the SQL above (already imported globally)
+from sqlalchemy import text
+
+
+# ============================================================================
+# Phase 3: AI brief + similar-projects endpoints
+# ============================================================================
+
+from pydantic import BaseModel as _PydanticBaseModel
+
+
+class BriefRequest(_PydanticBaseModel):
+    """Request body for the AI-generated tender brief."""
+    opportunity_id: str  # "ted:123" / "ft_proposals:<uuid>" / "ft_tenders:<uuid>" / "ft_projects:<uuid>"
+
+
+@router.post(
+    "/brief",
+    summary="AI-extracted one-page brief for an opportunity",
+    description=(
+        "Reads the call's body (title + description + objective + scope + "
+        "expected_outcome + eligibility) and asks the AI to extract a "
+        "structured 7-field brief: scope, eligible_applicants, "
+        "budget_per_project, trl_range, key_dates, evaluation_criteria, "
+        "first_steps. Returns plain text fields; the frontend renders a "
+        "side-by-side card next to the raw description. Blue tier only."
+    ),
+)
+async def generate_opportunity_brief(
+    request: BriefRequest,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    # Resolve opportunity to a body string we can pass to the AI
+    try:
+        kind, raw_id = request.opportunity_id.split(":", 1)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="opportunity_id must be of the form '<source>:<id>'",
+        )
+
+    body_parts: List[str] = []
+    title = ""
+    programme = ""
+    deadline = None
+
+    try:
+        if kind == "ted":
+            row = db.query(Tender).filter(Tender.id == int(raw_id)).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Tender not found")
+            title = row.title or ""
+            body_parts.append(f"Title: {title}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.official_name:
+                body_parts.append(f"Buyer: {row.official_name}")
+            if row.cpv_main:
+                body_parts.append(f"CPV main code: {row.cpv_main}")
+            deadline = row.submission_deadline.isoformat() if row.submission_deadline else None
+        elif kind == "ft_proposals":
+            row = db.query(FtCallForProposals).filter(FtCallForProposals.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Call for proposals not found")
+            title = row.title or ""
+            programme = row.framework_programme or ""
+            body_parts.append(f"Title: {title}")
+            if row.framework_programme:
+                body_parts.append(f"Framework programme: {row.framework_programme}")
+            if row.type_of_action:
+                body_parts.append(f"Type of action: {row.type_of_action}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.indicative_budget:
+                body_parts.append(f"Indicative budget: {row.indicative_budget} {row.budget_currency or 'EUR'}")
+            deadline = row.deadline.isoformat() if row.deadline else None
+        elif kind == "ft_tenders":
+            row = db.query(FtCallForTenders).filter(FtCallForTenders.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Call for tenders not found")
+            title = row.title or ""
+            body_parts.append(f"Title: {title}")
+            if row.contracting_authority:
+                body_parts.append(f"Contracting authority: {row.contracting_authority}")
+            if row.contract_type:
+                body_parts.append(f"Contract type: {row.contract_type}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.estimated_value:
+                body_parts.append(f"Estimated value: {row.estimated_value} {row.value_currency or 'EUR'}")
+            deadline = row.deadline.isoformat() if row.deadline else None
+        elif kind == "ft_projects":
+            row = db.query(FtFundedProject).filter(FtFundedProject.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Funded project not found")
+            title = row.title or ""
+            programme = row.framework_programme or ""
+            body_parts.append(f"Title: {title}")
+            if row.framework_programme:
+                body_parts.append(f"Framework programme: {row.framework_programme}")
+            if row.type_of_action:
+                body_parts.append(f"Type of action: {row.type_of_action}")
+            if row.objective:
+                body_parts.append(f"Objective: {row.objective}")
+            if row.coordinator_name:
+                body_parts.append(f"Coordinator: {row.coordinator_name} ({row.coordinator_country or '?'})")
+            if row.eu_contribution:
+                body_parts.append(f"EU contribution: {row.eu_contribution} {row.cost_currency or 'EUR'}")
+        else:
+            raise HTTPException(status_code=400, detail=f"Unknown opportunity source: {kind}")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error(f"brief resolve failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Could not resolve opportunity: {exc}")
+
+    if not body_parts:
+        raise HTTPException(status_code=422, detail="Opportunity has no body to summarise")
+
+    body_text = "\n\n".join(body_parts)[:8000]
+
+    # Ask the AI service for a structured 7-field brief
+    try:
+        from services.ai_service import get_ai_service
+        ai_service = get_ai_service()
+        prompt = (
+            "You are summarising one EU funding opportunity for a public-affairs professional. "
+            "Read the opportunity body below and extract a 7-field brief. Each field is a single "
+            "short sentence. Do NOT invent facts. If a field is not present in the body, write "
+            "exactly: 'Not stated in the call.'. Never use em-dashes. Output strict JSON with "
+            "these keys and no other text:\n\n"
+            "{\n"
+            '  "scope": "...",\n'
+            '  "eligible_applicants": "...",\n'
+            '  "budget_per_project": "...",\n'
+            '  "trl_range": "...",\n'
+            '  "key_dates": "...",\n'
+            '  "evaluation_criteria": "...",\n'
+            '  "first_steps": "..."\n'
+            "}\n\n"
+            "Opportunity body:\n" + body_text
+        )
+        # Use the non-streaming chat path with minimal context
+        response = await ai_service.chat(
+            user_message=prompt,
+            conversation_history=[],
+            user_id=str(current_user.id),
+            use_context=False,
+            stream=False,
+            is_pre_user=False,
+        )
+        ai_text = response.message
+    except Exception as exc:
+        logger.error(f"brief AI call failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"AI brief generation failed: {str(exc)}",
+        )
+
+    # Parse the JSON envelope. Fall back to a single-field summary if the
+    # model returned unstructured text (the system prompt asks for JSON).
+    import json as _json
+    import re as _re
+    parsed: dict = {}
+    try:
+        # The model sometimes wraps JSON in a code fence. Strip it.
+        cleaned = _re.sub(r"^```(?:json)?\s*|\s*```$", "", ai_text.strip(), flags=_re.MULTILINE)
+        parsed = _json.loads(cleaned)
+    except Exception:
+        parsed = {
+            "scope": ai_text.strip()[:300],
+            "eligible_applicants": "Not stated in the call.",
+            "budget_per_project": "Not stated in the call.",
+            "trl_range": "Not stated in the call.",
+            "key_dates": "Not stated in the call.",
+            "evaluation_criteria": "Not stated in the call.",
+            "first_steps": "Not stated in the call.",
+        }
+
+    return {
+        "opportunity_id": request.opportunity_id,
+        "title": title,
+        "programme": programme,
+        "deadline": deadline,
+        "brief": {
+            "scope": parsed.get("scope", "Not stated in the call."),
+            "eligible_applicants": parsed.get("eligible_applicants", "Not stated in the call."),
+            "budget_per_project": parsed.get("budget_per_project", "Not stated in the call."),
+            "trl_range": parsed.get("trl_range", "Not stated in the call."),
+            "key_dates": parsed.get("key_dates", "Not stated in the call."),
+            "evaluation_criteria": parsed.get("evaluation_criteria", "Not stated in the call."),
+            "first_steps": parsed.get("first_steps", "Not stated in the call."),
+        },
+        "generated_at": datetime.utcnow().isoformat(),
+    }
+
+
+@router.get(
+    "/similar-projects",
+    summary="Past grantees on similar calls",
+    description=(
+        "Returns up to 10 ft_funded_projects that share a framework programme "
+        "and/or type_of_action with the requested opportunity. Helps the user "
+        "see who has won similar funding so they can map potential consortium "
+        "partners. Blue tier only."
+    ),
+)
+async def get_similar_projects(
+    opportunity_id: str = Query(..., description="<source>:<id>"),
+    limit: int = Query(10, ge=1, le=50),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtFundedProject,
+    )
+
+    try:
+        kind, raw_id = opportunity_id.split(":", 1)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="opportunity_id must be of the form '<source>:<id>'",
+        )
+
+    programme: Optional[str] = None
+    type_of_action: Optional[str] = None
+    title_anchor: str = ""
+
+    if kind == "ft_proposals":
+        row = db.query(FtCallForProposals).filter(FtCallForProposals.id == raw_id).first()
+        if row:
+            programme = row.framework_programme
+            type_of_action = row.type_of_action
+            title_anchor = row.title or ""
+    elif kind == "ft_projects":
+        row = db.query(FtFundedProject).filter(FtFundedProject.id == raw_id).first()
+        if row:
+            programme = row.framework_programme
+            type_of_action = row.type_of_action
+            title_anchor = row.title or ""
+    elif kind == "ted":
+        # TED tenders have no programme. We return an empty similar list with
+        # a hint, rather than 404, so the UI degrades gracefully.
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": ""},
+            "items": [],
+            "note": "TED tenders are not part of the framework-programme pipeline; no similar projects to surface.",
+        }
+    else:
+        # ft_tenders has no programme either; same degradation.
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": ""},
+            "items": [],
+            "note": "This source is not linked to ft_funded_projects.",
+        }
+
+    if not programme and not type_of_action:
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": title_anchor},
+            "items": [],
+            "note": "Anchor opportunity has no programme or type_of_action; cannot match.",
+        }
+
+    # The two tables store programme + type_of_action under different
+    # conventions:
+    #   - ft_calls_for_proposals: "2021 - 2027" / "Research and Innovation action"
+    #   - ft_funded_projects:     "HORIZON" / "RIA"
+    # Map period strings to the project-table codes and expand action names
+    # to their canonical abbreviations.
+    PROGRAMME_PERIOD_TO_CODES = {
+        "2021 - 2027": ["HORIZON"],
+        "2014 - 2020": ["H2020", "FP7"],
+        "2007 - 2013": ["FP7"],
+    }
+    TOA_ALIASES = {
+        "research and innovation action": "RIA",
+        "innovation action": "IA",
+        "coordination and support action": "CSA",
+    }
+
+    programme_codes = PROGRAMME_PERIOD_TO_CODES.get(programme or "", [programme] if programme else [])
+    toa_code = TOA_ALIASES.get((type_of_action or "").lower(), type_of_action)
+
+    qry = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+    if programme_codes:
+        qry = qry.filter(FtFundedProject.framework_programme.in_(programme_codes))
+    if toa_code:
+        qry = qry.filter(FtFundedProject.type_of_action == toa_code)
+
+    # Exclude the anchor row itself when the anchor IS an ft_project
+    if kind == "ft_projects":
+        qry = qry.filter(FtFundedProject.id != raw_id)
+
+    try:
+        rows = (
+            qry.order_by(FtFundedProject.start_date.desc().nullslast())
+            .limit(limit)
+            .all()
+        )
+    except Exception as exc:
+        logger.error(f"similar-projects query failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Query failed: {exc}")
+
+    items = [
+        {
+            "id": str(r.id),
+            "project_id": r.project_id,
+            "acronym": r.project_acronym,
+            "title": r.title,
+            "objective": (r.objective or "")[:400] if r.objective else None,
+            "framework_programme": r.framework_programme,
+            "type_of_action": r.type_of_action,
+            "coordinator_name": r.coordinator_name,
+            "coordinator_country": r.coordinator_country,
+            "start_date": r.start_date.isoformat() if r.start_date else None,
+            "end_date": r.end_date.isoformat() if r.end_date else None,
+            "eu_contribution": float(r.eu_contribution) if r.eu_contribution else None,
+            "cost_currency": r.cost_currency or "EUR",
+            "source_url": r.source_url,
+        }
+        for r in rows
+    ]
+
+    return {
+        "opportunity_id": opportunity_id,
+        "anchor": {
+            "programme": programme,
+            "type_of_action": type_of_action,
+            "title": title_anchor,
+        },
+        "items": items,
+    }
+
+
+# ============================================================================
+# Unified F&T feed for the dashboard cockpit
+#
+# The Tenderator dashboard exposes 4 sources behind a single list view:
+# TED tenders + F&T calls for proposals + F&T calls for tenders + F&T
+# funded projects. Each source has its own table with its own column
+# names. This endpoint normalises them to one shape so the frontend can
+# render any source through one component.
+# ============================================================================
+
+@router.get(
+    "/unified-feed",
+    summary="Mixed-source opportunity feed for the dashboard",
+    description=(
+        "Returns a paginated list of opportunities from one of: ted, "
+        "ft_proposals, ft_tenders, ft_projects, or all. Normalises each "
+        "source to a common shape: {id, source, external_id, title, "
+        "description, status, deadline, budget, currency, source_url, "
+        "organisation, country, programme, published_at}. Blue tier only."
+    ),
+)
+async def get_unified_feed(
+    source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | matches | all"),
+    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders"),
+    q: Optional[str] = Query(None, description="Substring match on title + description"),
+    status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
+    limit: int = Query(20, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects"}
+    if source not in valid_sources:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"source must be one of {sorted(valid_sources)}",
+        )
+
+    offset = (page - 1) * limit
+    items: List[dict] = []
+    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0}
+    now = datetime.utcnow()
+
+    def _ted_query():
+        qry = db.query(Tender)
+        if status_filter == "open":
+            qry = qry.filter((Tender.submission_deadline > now) | (Tender.submission_deadline.is_(None)))
+        elif status_filter == "closed":
+            qry = qry.filter(Tender.submission_deadline < now)
+        if q:
+            qry = qry.filter(Tender.title.ilike(f"%{q}%"))
+        return qry
+
+    def _proposals_query():
+        qry = db.query(FtCallForProposals).filter(FtCallForProposals.is_test == False)  # noqa: E712
+        if status_filter:
+            qry = qry.filter(FtCallForProposals.status == status_filter.lower())
+        if q:
+            qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
+        return qry
+
+    def _tenders_query():
+        qry = db.query(FtCallForTenders).filter(FtCallForTenders.is_test == False)  # noqa: E712
+        if status_filter:
+            qry = qry.filter(FtCallForTenders.status == status_filter.lower())
+        if q:
+            qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
+        return qry
+
+    def _projects_query():
+        qry = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+        if q:
+            qry = qry.filter(FtFundedProject.title.ilike(f"%{q}%"))
+        return qry
+
+    def _serialise_ted(t):
+        return {
+            "id": f"ted:{t.id}",
+            "source": "ted",
+            "external_id": t.publication_number,
+            "title": t.title,
+            "description": (t.description or "")[:600] if t.description else None,
+            "status": t.status,
+            "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+            "budget": float(t.estimated_value) if t.estimated_value else None,
+            "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+            "source_url": getattr(t, "ted_url", None) or "",
+            "organisation": getattr(t, "official_name", None),
+            "country": t.buyer_country,
+            "programme": None,
+            "published_at": t.publication_date.isoformat() if t.publication_date else None,
+        }
+
+    def _serialise_proposal(p):
+        return {
+            "id": f"ft_proposals:{p.id}",
+            "source": "ft_proposals",
+            "external_id": p.topic_id,
+            "title": p.title,
+            "description": (p.description or "")[:600] if p.description else None,
+            "status": p.status,
+            "deadline": p.deadline.isoformat() if p.deadline else None,
+            "budget": float(p.indicative_budget) if p.indicative_budget else None,
+            "currency": p.budget_currency or "EUR",
+            "source_url": p.source_url,
+            "organisation": None,
+            "country": None,
+            "programme": p.framework_programme,
+            "published_at": p.published_at.isoformat() if p.published_at else None,
+        }
+
+    def _serialise_tender_ft(t):
+        return {
+            "id": f"ft_tenders:{t.id}",
+            "source": "ft_tenders",
+            "external_id": t.tender_reference,
+            "title": t.title,
+            "description": (t.description or "")[:600] if t.description else None,
+            "status": t.status,
+            "deadline": t.deadline.isoformat() if t.deadline else None,
+            "budget": float(t.estimated_value) if t.estimated_value else None,
+            "currency": t.value_currency or "EUR",
+            "source_url": t.source_url,
+            "organisation": t.contracting_authority,
+            "country": None,
+            "programme": None,
+            "published_at": t.published_at.isoformat() if t.published_at else None,
+        }
+
+    def _serialise_project(p):
+        return {
+            "id": f"ft_projects:{p.id}",
+            "source": "ft_projects",
+            "external_id": p.project_id,
+            "title": p.title,
+            "description": (p.objective or "")[:600] if p.objective else None,
+            "status": p.status,
+            "deadline": p.end_date.isoformat() if p.end_date else None,
+            "budget": float(p.eu_contribution) if p.eu_contribution else (float(p.total_cost) if p.total_cost else None),
+            "currency": p.cost_currency or "EUR",
+            "source_url": p.source_url,
+            "organisation": p.coordinator_name,
+            "country": p.coordinator_country,
+            "programme": p.framework_programme,
+            "published_at": p.start_date.isoformat() if p.start_date else None,
+        }
+
+    try:
+        # NEW: "matches" source. Returns three sub-feeds, each scored:
+        #   - TED:           pulled from tender_matches (persisted score)
+        #   - F&T proposals: on-the-fly score (keyword + country overlap)
+        #   - F&T tenders:   on-the-fly score (CPV + keyword + country overlap)
+        # `match_source` narrows to one (ted, ft_proposals, ft_tenders) or
+        # "all" (the default) which interleaves all three.
+        if source == "matches":
+            try:
+                from models.tender import TenderProfile
+                from models.funding_tenders import FtCallForProposals, FtCallForTenders
+
+                profile = (
+                    db.query(TenderProfile)
+                    .filter(TenderProfile.user_id == current_user.id)
+                    .first()
+                )
+                kw_lower = [k.lower() for k in (profile.keywords or [])] if profile else []
+                cpv_two = set((c[:2] for c in (profile.cpv_categories or []) if c)) if profile else set()
+                countries = set(profile.countries_of_interest or []) if profile else set()
+
+                total_ted_matches = 0
+                total_proposal_matches = 0
+                total_tender_matches = 0
+
+                bucket_ted: List[Dict[str, Any]] = []
+                bucket_proposals: List[Dict[str, Any]] = []
+                bucket_tenders: List[Dict[str, Any]] = []
+
+                # --- TED via persisted tender_matches ---
+                if match_source in ("all", "ted"):
+                    qry_ted = (
+                        db.query(TenderMatch, Tender)
+                        .join(Tender, Tender.id == TenderMatch.tender_id)
+                        .filter(TenderMatch.user_id == current_user.id)
+                        .filter(TenderMatch.is_dismissed == False)  # noqa: E712
+                    )
+                    if q:
+                        qry_ted = qry_ted.filter(Tender.title.ilike(f"%{q}%"))
+                    total_ted_matches = qry_ted.count()
+                    if match_source == "ted":
+                        ted_limit = limit
+                        ted_offset = offset
+                    else:
+                        ted_limit = max(1, limit // 3)
+                        ted_offset = 0
+                    rows_ted = (
+                        qry_ted.order_by(TenderMatch.match_score.desc())
+                        .offset(ted_offset)
+                        .limit(ted_limit)
+                        .all()
+                    )
+                    bucket_ted = [
+                        {
+                            **_serialise_ted(t),
+                            "match_score": float(m.match_score) if m.match_score else None,
+                            "is_saved": bool(m.is_saved),
+                            "is_applied": bool(m.is_applied),
+                            "match_id": m.id,
+                        }
+                        for m, t in rows_ted
+                    ]
+
+                # --- F&T proposals: on-the-fly keyword scoring ---
+                if match_source in ("all", "ft_proposals"):
+                    qry_prop = db.query(FtCallForProposals).filter(
+                        FtCallForProposals.is_test == False  # noqa: E712
+                    )
+                    if q:
+                        qry_prop = qry_prop.filter(FtCallForProposals.title.ilike(f"%{q}%"))
+                    rows_prop = qry_prop.all() if kw_lower else []
+                    scored: List[Tuple[float, Any]] = []
+                    for p in rows_prop:
+                        title_l = (p.title or "").lower()
+                        desc_l = (p.description or "").lower()
+                        score = 0.0
+                        for kw in kw_lower:
+                            if kw in title_l:
+                                score += 40
+                            elif kw in desc_l:
+                                score += 20
+                        # Open status earns bonus
+                        if p.status and p.status.lower() == "open":
+                            score += 10
+                        if score >= 20:
+                            scored.append((score, p))
+                    scored.sort(key=lambda x: x[0], reverse=True)
+                    total_proposal_matches = len(scored)
+                    take_offset = offset if match_source == "ft_proposals" else 0
+                    take_limit = limit if match_source == "ft_proposals" else max(1, limit // 3)
+                    bucket_proposals = [
+                        {
+                            **_serialise_proposal(p),
+                            "match_score": float(score),
+                            "is_saved": False,
+                            "is_applied": False,
+                        }
+                        for (score, p) in scored[take_offset : take_offset + take_limit]
+                    ]
+
+                # --- F&T tenders: on-the-fly CPV + keyword + country scoring ---
+                if match_source in ("all", "ft_tenders"):
+                    qry_tend = db.query(FtCallForTenders).filter(
+                        FtCallForTenders.is_test == False  # noqa: E712
+                    )
+                    if q:
+                        qry_tend = qry_tend.filter(FtCallForTenders.title.ilike(f"%{q}%"))
+                    rows_tend = qry_tend.all() if (kw_lower or cpv_two or countries) else []
+                    scored: List[Tuple[float, Any]] = []
+                    for ftt in rows_tend:
+                        title_l = (ftt.title or "").lower()
+                        desc_l = (ftt.description or "").lower()
+                        cpv_list = ftt.cpv_codes or []
+                        score = 0.0
+                        if cpv_two:
+                            for c in cpv_list:
+                                if c and c[:2] in cpv_two:
+                                    score += 40
+                                    break
+                        for kw in kw_lower:
+                            if kw in title_l:
+                                score += 30
+                            elif kw in desc_l:
+                                score += 15
+                        # Country boost via contracting_authority text
+                        if countries and ftt.contracting_authority:
+                            ca_lower = ftt.contracting_authority.lower()
+                            if any(c.lower() in ca_lower for c in countries):
+                                score += 10
+                        if score >= 20:
+                            scored.append((score, ftt))
+                    scored.sort(key=lambda x: x[0], reverse=True)
+                    total_tender_matches = len(scored)
+                    take_offset = offset if match_source == "ft_tenders" else 0
+                    take_limit = limit if match_source == "ft_tenders" else max(1, limit // 3)
+                    bucket_tenders = [
+                        {
+                            **_serialise_tender_ft(t),
+                            "match_score": float(score),
+                            "is_saved": False,
+                            "is_applied": False,
+                        }
+                        for (score, t) in scored[take_offset : take_offset + take_limit]
+                    ]
+
+                if match_source == "ted":
+                    items = bucket_ted
+                elif match_source == "ft_proposals":
+                    items = bucket_proposals
+                elif match_source == "ft_tenders":
+                    items = bucket_tenders
+                else:
+                    # "all" inside matches: interleave the three buckets, sort
+                    # by match_score desc, take top `limit`.
+                    combined = bucket_ted + bucket_proposals + bucket_tenders
+                    combined.sort(key=lambda x: (x.get("match_score") or 0), reverse=True)
+                    items = combined[:limit]
+
+                return {
+                    "source": source,
+                    "match_source": match_source,
+                    "page": page,
+                    "limit": limit,
+                    "totals": {
+                        "ted": total_ted_matches,
+                        "ft_proposals": total_proposal_matches,
+                        "ft_tenders": total_tender_matches,
+                        "ft_projects": 0,
+                    },
+                    "items": items,
+                }
+            except Exception as exc:
+                logger.error(f"matches feed failed: {exc}")
+                import traceback
+                traceback.print_exc()
+                raise HTTPException(status_code=500, detail=f"Matches query failed: {exc}")
+
+        if source == "ted" or source == "all":
+            qry = _ted_query()
+            totals["ted"] = qry.count()
+            if source == "ted":
+                rows = qry.order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_ted(t) for t in rows)
+        if source == "ft_proposals" or source == "all":
+            qry = _proposals_query()
+            totals["ft_proposals"] = qry.count()
+            if source == "ft_proposals":
+                rows = qry.order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_proposal(p) for p in rows)
+        if source == "ft_tenders" or source == "all":
+            qry = _tenders_query()
+            totals["ft_tenders"] = qry.count()
+            if source == "ft_tenders":
+                rows = qry.order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_tender_ft(t) for t in rows)
+        if source == "ft_projects" or source == "all":
+            qry = _projects_query()
+            totals["ft_projects"] = qry.count()
+            if source == "ft_projects":
+                rows = qry.order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_project(p) for p in rows)
+
+        # 'all' mode: interleave the top N from each source so the user sees
+        # the variety. Cap each source to limit/4 + remainder.
+        if source == "all":
+            per_source = max(1, limit // 4)
+            slot_ted = _ted_query().order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_prop = _proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_tend = _tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_proj = _projects_query().order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(per_source).all()
+            items = []
+            items.extend(_serialise_ted(t) for t in slot_ted)
+            items.extend(_serialise_proposal(p) for p in slot_prop)
+            items.extend(_serialise_tender_ft(t) for t in slot_tend)
+            items.extend(_serialise_project(p) for p in slot_proj)
+    except Exception as exc:
+        logger.error(f"unified-feed query failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Feed query failed: {str(exc)}",
+        )
+
+    return {
+        "source": source,
+        "page": page,
+        "limit": limit,
+        "totals": totals,
+        "items": items,
+    }
+
+
+# ============================================================================
+# Dashboard cockpit endpoint
+# ============================================================================
+
+@router.get(
+    "/dashboard-stats",
+    summary="Cockpit metrics for the Tenderator dashboard",
+    description=(
+        "Returns the 5 top-strip KPIs plus the closing-soon urgency list "
+        "and per-source counts. Pure aggregation over `tenders`, "
+        "`tender_matches`, and the three F&T tables. Blue tier only."
+    ),
+)
+async def get_dashboard_stats(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    """
+    KPI strip cards consumed by tenderator_dashboard.tsx:
+      - open_opportunities: open tenders across all sources
+      - closing_7d:         count of saved or matched items whose deadline
+                            falls in the next 7 days
+      - your_matches:       total tender_matches for this user
+      - your_saved:         saved tender_matches for this user
+      - applied_ytd:        applied tender_matches for this user this year
+
+    Plus:
+      - deltas_week_over_week for matches and saved
+      - closing_soon: top 5 deadlines in the next 14 days
+      - by_source: { ted, ft_proposals, ft_tenders, ft_projects }
+    """
+    from datetime import timedelta
+    from sqlalchemy import func
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    user_id = current_user.id
+    now = datetime.utcnow()
+    week_ago = now - timedelta(days=7)
+    two_weeks_ago = now - timedelta(days=14)
+    in_7_days = now + timedelta(days=7)
+    in_14_days = now + timedelta(days=14)
+    year_start = datetime(now.year, 1, 1)
+
+    def _safe(query_fn, default=0):
+        try:
+            return query_fn()
+        except Exception as exc:
+            logger.warning("dashboard-stats sub-query failed: %s", exc)
+            db.rollback()
+            return default
+
+    # --- per-source open-opportunity counts ---
+    ted_open = _safe(lambda: db.query(Tender).filter(
+        (Tender.submission_deadline > now) | (Tender.submission_deadline.is_(None))
+    ).count())
+    ft_proposals_open = _safe(lambda: db.query(FtCallForProposals).filter(
+        FtCallForProposals.is_test == False,
+        (FtCallForProposals.deadline > now) | (FtCallForProposals.deadline.is_(None)),
+    ).count())
+    ft_tenders_open = _safe(lambda: db.query(FtCallForTenders).filter(
+        FtCallForTenders.is_test == False,
+        (FtCallForTenders.deadline > now) | (FtCallForTenders.deadline.is_(None)),
+    ).count())
+    ft_projects_total = _safe(lambda: db.query(FtFundedProject).filter(
+        FtFundedProject.is_test == False,
+    ).count())
+
+    open_opportunities = ted_open + ft_proposals_open + ft_tenders_open
+
+    # --- per-user pipeline counts ---
+    total_matches = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id
+    ).count())
+    your_saved = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+    ).count())
+    applied_ytd = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_applied == True,
+        TenderMatch.created_at >= year_start,
+    ).count())
+
+    matches_this_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.created_at >= week_ago,
+    ).count())
+    matches_prev_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.created_at >= two_weeks_ago,
+        TenderMatch.created_at < week_ago,
+    ).count())
+
+    saved_this_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+        TenderMatch.created_at >= week_ago,
+    ).count())
+    saved_prev_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+        TenderMatch.created_at >= two_weeks_ago,
+        TenderMatch.created_at < week_ago,
+    ).count())
+
+    # --- closing in next 7d (saved or matched) ---
+    closing_7d_q = (
+        db.query(TenderMatch, Tender)
+        .join(Tender, Tender.id == TenderMatch.tender_id)
+        .filter(TenderMatch.user_id == user_id)
+        .filter(Tender.submission_deadline != None)
+        .filter(Tender.submission_deadline >= now)
+        .filter(Tender.submission_deadline <= in_7_days)
+    )
+    closing_7d_count = _safe(lambda: closing_7d_q.count())
+
+    closing_soon = []
+    try:
+        rows = (
+            db.query(TenderMatch, Tender)
+            .join(Tender, Tender.id == TenderMatch.tender_id)
+            .filter(TenderMatch.user_id == user_id)
+            .filter(Tender.submission_deadline != None)
+            .filter(Tender.submission_deadline >= now)
+            .filter(Tender.submission_deadline <= in_14_days)
+            .order_by(Tender.submission_deadline.asc())
+            .limit(5)
+            .all()
+        )
+        for m, t in rows:
+            # Normalise tz so the subtraction does not blow up. The DB column
+            # is tz-aware; `now = datetime.utcnow()` is tz-naive.
+            deadline = t.submission_deadline
+            if deadline.tzinfo is not None:
+                deadline = deadline.replace(tzinfo=None)
+            days_left = max(0, (deadline - now).days)
+            closing_soon.append({
+                "tender_id": t.id,
+                "match_id": m.id,
+                "publication_number": t.publication_number,
+                "title": (t.title or "")[:120],
+                "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+                "days_left": days_left,
+                "estimated_value": float(t.estimated_value) if t.estimated_value else None,
+                "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+                "source": "ted",
+            })
+    except Exception as exc:
+        logger.warning("dashboard-stats closing_soon failed: %s", exc)
+        db.rollback()
+
+    return {
+        "kpis": {
+            "open_opportunities": open_opportunities,
+            "closing_7d": closing_7d_count,
+            "your_matches": total_matches,
+            "your_saved": your_saved,
+            "applied_ytd": applied_ytd,
+        },
+        "deltas": {
+            "matches_wow": matches_this_week - matches_prev_week,
+            "saved_wow": saved_this_week - saved_prev_week,
+            "matches_this_week": matches_this_week,
+            "saved_this_week": saved_this_week,
+        },
+        "by_source": {
+            "ted": ted_open,
+            "ft_proposals": ft_proposals_open,
+            "ft_tenders": ft_tenders_open,
+            "ft_projects": ft_projects_total,
+        },
+        "closing_soon": closing_soon,
+        "generated_at": now.isoformat(),
+    }
 
 
 # ============================================================================

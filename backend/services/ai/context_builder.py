@@ -17,7 +17,7 @@ import re
 import asyncio
 from typing import List, Dict, Any, Optional, Set, Tuple
 from datetime import date, datetime, timedelta
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from services.search.hybrid_search import HybridSearch, get_hybrid_search
 from services.indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
@@ -104,6 +104,60 @@ SOURCE_TIERS = {
 def get_source_tier(source_type: str) -> int:
     """Get the authority tier for a source type (1=highest, 5=lowest)"""
     return SOURCE_TIERS.get(source_type, 4)  # Default to Tier 4
+
+
+# Phase 4: Tenderator bridge entity extractors. Small enough to stay
+# inline (no separate module). All regexes are compiled lazily.
+_TOPIC_ID_RE = re.compile(
+    r"\b(?:HORIZON|HE|DIGITAL|DEP|LIFE|CEF|EU4H|EU4HEALTH|ERASMUS|EIC|CREA|JTM|AMIF|ISF|BMVI)"
+    r"[-_][A-Z0-9]+(?:[-_][A-Z0-9]+){2,8}\b",
+    re.IGNORECASE,
+)
+
+_PROGRAMME_ALIASES = [
+    # (canonical, [regex aliases])
+    ("HORIZON", re.compile(r"\b(?:horizon\s+europe|horizon)\b", re.IGNORECASE)),
+    ("LIFE", re.compile(r"\b(?:LIFE\s+programme|LIFE)\b")),
+    ("CEF", re.compile(r"\b(?:connecting\s+europe\s+facility|CEF)\b", re.IGNORECASE)),
+    ("DEP", re.compile(r"\b(?:digital\s+europe\s+programme|digital\s+europe|DEP)\b", re.IGNORECASE)),
+    ("EU4H", re.compile(r"\b(?:EU4Health|EU\s*for\s*Health)\b", re.IGNORECASE)),
+    ("ERASMUS", re.compile(r"\b(?:erasmus\s*\+|erasmus\s*plus|erasmus)\b", re.IGNORECASE)),
+    ("CREA", re.compile(r"\b(?:creative\s+europe|CREA)\b", re.IGNORECASE)),
+    ("EIC", re.compile(r"\b(?:european\s+innovation\s+council|EIC\s+accelerator|EIC)\b", re.IGNORECASE)),
+    ("H2020", re.compile(r"\bH2020\b")),
+    ("FP7", re.compile(r"\bFP7\b")),
+]
+
+
+def _extract_funding_topic_ids(text: str) -> List[str]:
+    """Pull EU funding topic_ids out of free-form chat text. e.g.
+    HORIZON-CL4-2026-DIGITAL-EMERGING-01-01."""
+    if not text:
+        return []
+    seen = set()
+    out: List[str] = []
+    for m in _TOPIC_ID_RE.finditer(text):
+        token = m.group(0).upper()
+        if token not in seen and "-" in token and len(token) >= 12:
+            seen.add(token)
+            out.append(token)
+    return out[:5]
+
+
+def _extract_funding_programmes(text: str) -> List[str]:
+    """Canonical programme codes named in the text. Returns a stable
+    ordered list with duplicates removed."""
+    if not text:
+        return []
+    out: List[str] = []
+    seen = set()
+    for code, regex in _PROGRAMME_ALIASES:
+        if code in seen:
+            continue
+        if regex.search(text):
+            seen.add(code)
+            out.append(code)
+    return out
 
 
 def _resolve_event_location(institution: Optional[str], title: Optional[str], week_type: Optional[str]) -> str:
@@ -492,6 +546,9 @@ class ExtractedEntities:
     policy_areas: List[str]
     dg_codes: List[str]  # Commission DG codes (e.g., GROW, CLIMA)
     assistant_intent: bool = False  # True if user asks about MEP assistants
+    # Phase 4: Tenderator bridge entities
+    funding_topic_ids: List[str] = field(default_factory=list)  # e.g. HORIZON-CL4-2026-DIGITAL-EMERGING-01-01
+    funding_programmes: List[str] = field(default_factory=list)  # canonical codes: HORIZON, LIFE, CEF, DEP, EU4H, ERASMUS
 
 
 @dataclass
@@ -1776,6 +1833,10 @@ class ContextBuilder:
         # Detect assistant intent
         assistant_intent = self.metadata_extractor.detect_assistant_intent(text)
 
+        # Phase 4: Tenderator bridge entities
+        funding_topic_ids = _extract_funding_topic_ids(text)
+        funding_programmes = _extract_funding_programmes(text)
+
         return ExtractedEntities(
             celex_numbers=extracted['celex_numbers'],
             procedure_references=extracted['procedure_references'],
@@ -1784,7 +1845,9 @@ class ContextBuilder:
             article_references=extracted['articles'],
             policy_areas=policy_areas,
             dg_codes=dg_codes,
-            assistant_intent=assistant_intent
+            assistant_intent=assistant_intent,
+            funding_topic_ids=funding_topic_ids,
+            funding_programmes=funding_programmes,
         )
 
     def _extract_dg_codes(self, text: str) -> List[str]:

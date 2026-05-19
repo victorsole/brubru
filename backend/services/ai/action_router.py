@@ -59,6 +59,9 @@ def compute_actions(
     celex_nums = getattr(entities, 'celex_numbers', []) or []
     article_refs = getattr(entities, 'article_references', []) or []
     committee_codes = getattr(entities, 'committee_codes', []) or []
+    # Phase 4: Tenderator bridge entities
+    funding_topic_ids = getattr(entities, 'funding_topic_ids', []) or []
+    funding_programmes = getattr(entities, 'funding_programmes', []) or []
 
     is_drafting = drafting_intent and getattr(drafting_intent, 'is_drafting_query', False)
 
@@ -142,6 +145,28 @@ def compute_actions(
             params={"procedure_ref": ref},
             requires_auth=True,
             pre_user_label="Sign up for predictions",
+        ))
+
+    # --- Priority 3c: Open Tenderator when funding context is detected ---
+    # If the user mentioned a topic_id or a programme acronym, the action
+    # router surfaces a deep link straight into the Tenderator. The link
+    # carries a `q=` query so the dashboard pre-filters the unified feed.
+    if (funding_topic_ids or funding_programmes) and len(actions) < MAX_ACTIONS:
+        if funding_topic_ids:
+            q_token = funding_topic_ids[0]
+            label = f"Open {q_token[:32]}{'...' if len(q_token) > 32 else ''} in Tenderator"
+        else:
+            q_token = funding_programmes[0]
+            label = f"Open {q_token} in Tenderator"
+        actions.append(ChatAction(
+            action_type="open_tenderator",
+            label=label,
+            icon="mdi-piggy-bank-outline",
+            colour="#d97706",
+            route=f"/tenderator?q={q_token}",
+            params={"q": q_token, "programme": funding_programmes[0] if funding_programmes else None},
+            requires_auth=True,
+            pre_user_label="Sign up to use the Tenderator",
         ))
 
     # --- Priority 4: View calendar (committee codes, only if room) ---

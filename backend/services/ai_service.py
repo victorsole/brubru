@@ -639,11 +639,17 @@ class AIService:
                 s = " ".join((s or "").split())
                 return s if len(s) <= n else s[: n - 1].rstrip() + "..."
 
-            # Opening status. If we detected a recognisable law alias or
-            # policy area in the user message, surface it instead of the
-            # generic "Searching EU legislation...".
+            # Opening status. If we detected a recognisable law alias,
+            # funding context, or policy area in the user message, surface
+            # it instead of the generic "Searching EU legislation...".
             opening_label = None
-            if entities.celex_numbers:
+            funding_topic_ids = getattr(entities, "funding_topic_ids", []) or []
+            funding_programmes = getattr(entities, "funding_programmes", []) or []
+            if funding_topic_ids:
+                opening_label = f"Looking up funding topic {_trim(funding_topic_ids[0], 32)}..."
+            elif funding_programmes:
+                opening_label = f"Searching {_trim(funding_programmes[0], 24)} opportunities..."
+            elif entities.celex_numbers:
                 opening_label = f"Looking up CELEX {_trim(entities.celex_numbers[0], 20)}..."
             elif entities.procedure_references:
                 opening_label = f"Checking procedure {_trim(entities.procedure_references[0], 24)}..."
