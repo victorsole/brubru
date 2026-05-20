@@ -22,6 +22,7 @@ from schemas.auth_schemas import (
     UserCreate, UserLogin, UserResponse, Token, UserUpdate,
     GoogleAuthRequest, LinkedInAuthRequest, LinkedInCallbackRequest
 )
+from services.outreach import auto_link_user_if_match
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -117,6 +118,12 @@ async def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
+    # Outreach auto-link: if this email's domain matches an active campaign,
+    # flip private_guide_status='ready' and point at the matching slug.
+    # Safe no-op if no match; never blocks signup (errors are swallowed).
+    auto_link_user_if_match(db, new_user.id, new_user.email)
+    db.refresh(new_user)
+
     return new_user
 
 
@@ -197,6 +204,7 @@ async def google_auth(
 
     previous_last_login = None
 
+    is_new_user = user is None
     if not user:
         # Create new user
         user = User(
@@ -218,6 +226,10 @@ async def google_auth(
 
     db.commit()
     db.refresh(user)
+
+    if is_new_user:
+        auto_link_user_if_match(db, user.id, user.email)
+        db.refresh(user)
 
     # Create access token
     access_token = create_access_token(
@@ -285,6 +297,7 @@ async def linkedin_callback(
 
     previous_last_login = None
 
+    is_new_user = user is None
     if not user:
         user = User(
             email=email,
@@ -305,6 +318,10 @@ async def linkedin_callback(
 
     db.commit()
     db.refresh(user)
+
+    if is_new_user:
+        auto_link_user_if_match(db, user.id, user.email)
+        db.refresh(user)
 
     # Create access token
     access_token = create_access_token(
