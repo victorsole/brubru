@@ -20,6 +20,20 @@
       "year": 2016,
       "full_name": "General Data Protection Regulation"
     },
+    "RGPD": {
+      "celex": "32016R0679",
+      "full_title": "Reglamento (UE) 2016/679 relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales (Reglamento General de Protección de Datos)",
+      "type": "Regulation",
+      "year": 2016,
+      "full_name": "Reglamento General de Protección de Datos / Règlement général sur la protection des données / Reglament general de protecció de dades"
+    },
+    "AVG": {
+      "celex": "32016R0679",
+      "full_title": "Verordening (EU) 2016/679 betreffende de bescherming van natuurlijke personen in verband met de verwerking van persoonsgegevens (Algemene Verordening Gegevensbescherming)",
+      "type": "Regulation",
+      "year": 2016,
+      "full_name": "Algemene Verordening Gegevensbescherming"
+    },
     "AI Act": {
       "celex": "32024R1689",
       "full_title": "Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence",

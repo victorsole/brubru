@@ -1,6 +1,7 @@
 # EU Cybersecurity Act and Proposed Revision
 
 ## QUICK FACTS
+- **LATEST (Tuesday 19 May 2026)**: **ECCC opens recruitment of cybersecurity experts to manage major funding programmes** — DG CNECT announcement "ECCC seeks cybersecurity experts for major funding programmes" (digital-strategy.ec.europa.eu/en/news, 19 May 2026). The European Cybersecurity Industrial, Technology and Research Competence Centre (ECCC, based in Bucharest, Regulation (EU) 2021/887) is hiring contract agents and seconded national experts to run the EU's main cybersecurity funding pipelines: **Digital Europe Programme (cybersecurity work programme)**, **Horizon Europe Cluster 3 (Civil Security for Society)**, and the **Connecting Europe Facility — Digital** cybersecurity strand. Open to applications from the National Coordination Centres in Member States + EU agencies + the ENISA staff pool. Cross-link: National Coordination Centres (Article 6 of Reg 2021/887), Cybersecurity Skills Academy (DG CNECT), Cyber Resilience Act (Reg (EU) 2024/2847) compliance pipeline. Source: digital-strategy.ec.europa.eu/en/news/eccc-seeks-cybersecurity-experts-major-funding-programmes.
 - Original act: Regulation (EU) 2019/881 (Cybersecurity Act), adopted 17 April 2019
 - CELEX: 32019R0881
 - Published: OJ L 151, 7.6.2019, pp. 15-69
