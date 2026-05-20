@@ -78,3 +78,13 @@ at4am-project/
 
 # Personal files
 victor.JPG
+
+# Private user-specific knowledge guides (20 May 2026).
+# Per-user/per-org bespoke briefing material loaded into chat context for the
+# authenticated user. NEVER commit — these contain confidential prospect data,
+# uploaded documents, scraped EUTR profiles, and bespoke positioning notes.
+# Only the README explaining the convention is tracked.
+backend/knowledge_base/private_guides/*
+!backend/knowledge_base/private_guides/README.md
+# Private guides index HTML — generated locally for review, never deployed.
+frontend/public/guides/private/

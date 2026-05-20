@@ -725,6 +725,13 @@ class ContextData:
     # Layer 2d (May 2026 batch #41-50 follow-up): Transparency Register meetings
     transparency_meetings_block: Optional[str] = None
 
+    # Private user/org bespoke knowledge bundle (20 May 2026).
+    # Always-on for the authenticated user when users.private_guide_status='ready'.
+    # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
+    # Rendered FIRST in format_context_for_ai so the "Brubru already knows you"
+    # framing survives 32k truncation. Hook for high-value prospects + clients.
+    private_guide_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1669,6 +1676,44 @@ class ContextBuilder:
         except Exception as e:
             logger.warning("[tier3] Calendar backstop failed: %s", e)
 
+        # Private user bundle (per-user gitignored knowledge guides).
+        # Resolves users.private_guide_slug + status='ready' via the DB, then
+        # loads from backend/knowledge_base/private_guides/{slug}/*.md. Fail-soft:
+        # any error returns None so chat falls back to the standard retrieval.
+        private_guide_block = None
+        if user_id:
+            try:
+                from core.database import SessionLocal as _PG_SessionLocal
+                from models.user import User as _PG_User
+                from knowledge_base.knowledge_loader import (
+                    get_knowledge_loader as _pg_get_loader,
+                )
+                _pg_db = _PG_SessionLocal()
+                try:
+                    _pg_user = _pg_db.query(_PG_User).filter(
+                        _PG_User.id == user_id
+                    ).first()
+                    if (
+                        _pg_user
+                        and _pg_user.private_guide_slug
+                        and _pg_user.private_guide_status in ("ready", "locked")
+                    ):
+                        _pg_loader = _pg_get_loader()
+                        private_guide_block = _pg_loader.format_private_guides_block(
+                            _pg_user.private_guide_slug
+                        )
+                        if private_guide_block:
+                            logger.info(
+                                "[private-guide] Injected bundle for slug=%s status=%s (%d chars)",
+                                _pg_user.private_guide_slug,
+                                _pg_user.private_guide_status,
+                                len(private_guide_block),
+                            )
+                finally:
+                    _pg_db.close()
+            except Exception as _pg_err:
+                logger.warning("[private-guide] Lookup failed (fail-soft): %s", _pg_err)
+
         commissioner_agenda_block = post_map.get('commissioner_agenda')
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
@@ -1783,6 +1828,7 @@ class ContextBuilder:
             council_documents_block=council_documents_block,
             infringements_block=infringements_block,
             transparency_meetings_block=transparency_meetings_block,
+            private_guide_block=private_guide_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -7333,7 +7379,13 @@ class ContextBuilder:
         max_docs: int = 3
     ) -> List[Dict[str, Any]]:
         """
-        Fetch user's uploaded documents marked for AI context inclusion.
+        Fetch user's documents marked for AI context inclusion.
+
+        Previously restricted to ``document_type == 'uploaded'`` rows; now any
+        user document (uploads, notes, analyses, strategies, AI-generated
+        position papers / MEP briefings / talking points / resolutions /
+        EP questions / consultation responses) is eligible as long as the
+        user has flagged it with ``include_in_ai_context = True``.
         Scores by keyword relevance to the query and returns top matches.
         """
         if not user_id:
@@ -7345,10 +7397,9 @@ class ContextBuilder:
             db = SessionLocal()
             docs = db.query(UserDocument).filter(
                 UserDocument.user_id == user_id,
-                UserDocument.document_type == 'uploaded',
                 UserDocument.include_in_ai_context == True,
                 UserDocument.content != None,
-            ).order_by(UserDocument.updated_at.desc()).limit(10).all()
+            ).order_by(UserDocument.updated_at.desc()).limit(15).all()
 
             if not docs:
                 db.close()
@@ -7363,13 +7414,23 @@ class ContextBuilder:
                 title_lower = (doc.title or '').lower()
                 score = sum(1 for w in query_words if w in content_lower or w in title_lower)
 
+                # Label the source so the system prompt can reason about it.
+                if doc.document_type == 'uploaded':
+                    src = 'user_uploaded'
+                else:
+                    src = f"user_document_{doc.document_type}"
+
                 results.append({
                     'id': str(doc.id),
                     'title': doc.title,
+                    'document_type': doc.document_type,
+                    'tags': list(doc.tags or []),
                     'original_filename': doc.original_filename,
+                    'celex_number': doc.celex_number,
+                    'procedure_reference': doc.procedure_reference,
                     'content_excerpt': (doc.content or '')[:2000],
                     'relevance_score': score,
-                    'source_type': 'user_uploaded',
+                    'source_type': src,
                 })
 
             results.sort(key=lambda x: x['relevance_score'], reverse=True)
@@ -7377,7 +7438,10 @@ class ContextBuilder:
 
             selected = results[:max_docs]
             if selected:
-                logger.info(f"Found {len(selected)} relevant user uploaded documents for context")
+                logger.info(
+                    f"Found {len(selected)} relevant user documents for context "
+                    f"(types: {sorted({r['document_type'] for r in selected})})"
+                )
             return selected
 
         except Exception as e:
@@ -9901,9 +9965,18 @@ class ContextBuilder:
         """
         sections = []
 
-        # TODAY BLOCK (on-demand, date-anchored) — injected FIRST so it survives
-        # the 32k truncation cap and forces the model to ground relative dates
-        # ("today", "hoy", "this week", "esta semana") in a verified context.
+        # PRIVATE USER CONTEXT (20 May 2026) — bespoke per-user/per-org bundle.
+        # Injected FIRST (before TODAY, before everything else) so the
+        # "Brubru already knows you" framing survives 32k truncation cap.
+        # Always-on for the authenticated user when status in ('ready', 'locked').
+        if getattr(context_data, 'private_guide_block', None):
+            sections.append(context_data.private_guide_block)
+            sections.append("")
+
+        # TODAY BLOCK (on-demand, date-anchored) — injected near the top so it
+        # survives the 32k truncation cap and forces the model to ground
+        # relative dates ("today", "hoy", "this week", "esta semana") in a
+        # verified context.
         if getattr(context_data, 'today_block', None):
             sections.append(context_data.today_block)
 

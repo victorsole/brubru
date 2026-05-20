@@ -61,6 +61,13 @@ class User(Base):
     stripe_customer_id = Column(String(255), nullable=True, unique=True)
     stripe_subscription_id = Column(String(255), nullable=True)
 
+    # Private guides (20 May 2026) — per-user bespoke knowledge bundle in
+    # backend/knowledge_base/private_guides/{slug}/, gitignored, injected
+    # near the top of the chat context for that user only.
+    private_guide_slug = Column(String(120), nullable=True)
+    private_guide_status = Column(String(20), nullable=True)  # draft | ready | locked
+    private_guide_updated_at = Column(DateTime(timezone=True), nullable=True)
+
     # Metadata
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
