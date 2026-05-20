@@ -606,3 +606,145 @@ async def export_document(
         media_type=media,
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+# ---------------------------------------------------------------------------
+# Presentation export: markdown slides -> PPTX
+# ---------------------------------------------------------------------------
+
+def _render_pptx_from_slides_markdown(title: str, markdown: str) -> bytes:
+    """
+    Parse the slide-by-slide markdown produced by the presentation generator
+    (## Slide N: <title> followed by bullets) into a python-pptx Presentation.
+    """
+    import io
+    import re
+    from pptx import Presentation
+    from pptx.util import Inches, Pt
+    from pptx.enum.text import PP_ALIGN
+    from pptx.dml.color import RGBColor
+
+    pres = Presentation()
+    pres.slide_width = Inches(13.333)
+    pres.slide_height = Inches(7.5)
+
+    blank_layout = pres.slide_layouts[6]  # truly blank
+
+    def add_slide(slide_title: str, bullets: List[str], notes: str = "") -> None:
+        slide = pres.slides.add_slide(blank_layout)
+        # Title
+        title_box = slide.shapes.add_textbox(Inches(0.6), Inches(0.4), Inches(12.0), Inches(1.0))
+        tf = title_box.text_frame
+        tf.text = slide_title
+        for p in tf.paragraphs:
+            p.alignment = PP_ALIGN.LEFT
+            for r in p.runs:
+                r.font.size = Pt(28)
+                r.font.bold = True
+                r.font.color.rgb = RGBColor(0x0F, 0x17, 0x2A)
+        # Bullets
+        body_box = slide.shapes.add_textbox(Inches(0.7), Inches(1.7), Inches(11.9), Inches(5.0))
+        bf = body_box.text_frame
+        bf.word_wrap = True
+        if not bullets:
+            bullets = [""]
+        for i, b in enumerate(bullets):
+            para = bf.paragraphs[0] if i == 0 else bf.add_paragraph()
+            para.text = b
+            para.level = 0
+            for r in para.runs:
+                r.font.size = Pt(18)
+                r.font.color.rgb = RGBColor(0x37, 0x41, 0x51)
+        # Speaker notes
+        if notes:
+            slide.notes_slide.notes_text_frame.text = notes
+
+    lines = markdown.replace("\r\n", "\n").split("\n")
+    current_title = title
+    current_bullets: List[str] = []
+    current_notes = ""
+    slide_count = 0
+    slide_heading_re = re.compile(r"^##\s*Slide\s*\d+\s*:\s*(.+)$", re.IGNORECASE)
+    bullet_re = re.compile(r"^[-*]\s+(.+)$")
+    notes_re = re.compile(r"^\s*Notes:\s*(.+)$", re.IGNORECASE)
+
+    def flush() -> None:
+        nonlocal current_bullets, current_notes, slide_count
+        if current_bullets or current_notes or slide_count == 0:
+            # Strip inline markdown emphasis chars for the PPTX text
+            clean = [re.sub(r"\*\*|__|`", "", b).strip() for b in current_bullets if b.strip()]
+            add_slide(current_title, clean, current_notes)
+            slide_count += 1
+        current_bullets = []
+        current_notes = ""
+
+    for raw in lines:
+        line = raw.rstrip()
+        if not line.strip():
+            continue
+        m_h = slide_heading_re.match(line)
+        if m_h:
+            flush()
+            current_title = m_h.group(1).strip().rstrip(".")
+            continue
+        m_n = notes_re.match(line)
+        if m_n:
+            current_notes = (current_notes + " " + m_n.group(1).strip()).strip()
+            continue
+        m_b = bullet_re.match(line)
+        if m_b:
+            current_bullets.append(m_b.group(1).strip())
+            continue
+        # plain line: treat as a bullet so nothing is dropped
+        if line.startswith("#"):
+            # ignore stray top-level headings
+            continue
+        current_bullets.append(line.strip())
+
+    # Final slide
+    if current_bullets or current_notes:
+        flush()
+    # Safety: at least one slide
+    if slide_count == 0:
+        add_slide(title, ["(empty deck)"], "")
+
+    buffer = io.BytesIO()
+    pres.save(buffer)
+    return buffer.getvalue()
+
+
+@router.get(
+    "/{document_id}/export-pptx",
+    summary="Export presentation as PPTX",
+    description="Render a saved presentation (tagged 'presentation') as a real .pptx file",
+)
+async def export_document_pptx(
+    document_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    document = db.query(UserDocument).filter(
+        and_(
+            UserDocument.id == document_id,
+            UserDocument.user_id == current_user.id,
+        )
+    ).first()
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
+
+    try:
+        payload = _render_pptx_from_slides_markdown(document.title or "Presentation", document.content or "")
+    except Exception as exc:
+        logger.exception("Failed to render PPTX for %s", document_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to export PPTX: {exc}",
+        ) from exc
+
+    import io
+    filename = _safe_filename(document.title or "presentation", "pptx")
+    return StreamingResponse(
+        io.BytesIO(payload),
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

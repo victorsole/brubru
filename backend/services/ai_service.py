@@ -136,6 +136,7 @@ class ChatResponse:
     search_time_ms: float
     total_time_ms: float
     actions: List[Dict[str, Any]] = None
+    drafted_document: Optional[Dict[str, Any]] = None
 
 
 class AIService:
@@ -591,6 +592,78 @@ class AIService:
             except Exception as e:
                 logger.warning(f"Action routing failed (non-critical): {e}")
 
+        # --- Agentic draft: if the user asked to PRODUCE a document we can
+        # auto-draft (one-pager / stakeholder map / resolution / EP question
+        # / talking points), generate it, persist it as a user_documents row,
+        # and attach a preview + edit URL to the response. The chat UI will
+        # render an inline draft card with an "Open in Documents" button.
+        drafted_dict = None
+        if (
+            use_context
+            and context_data is not None
+            and user_id is not None
+            and not is_pre_user
+            and getattr(context_data.drafting_intent, "is_drafting_query", False)
+        ):
+            try:
+                from services.ai.document_drafter import (
+                    draft_from_chat_query,
+                    pick_autodraft_subtype,
+                )
+                from models.user import User as _UserModel
+                import uuid as _uuid_mod
+                if pick_autodraft_subtype(context_data.drafting_intent) is not None:
+                    _drafter_db = SessionLocal()
+                    try:
+                        try:
+                            _uid = _uuid_mod.UUID(user_id)
+                        except Exception:
+                            _uid = user_id  # already a UUID
+                        _user = _drafter_db.query(_UserModel).filter(_UserModel.id == _uid).first()
+                        drafted = await draft_from_chat_query(
+                            query=user_message,
+                            drafting_intent=context_data.drafting_intent,
+                            user=_user,
+                            db=_drafter_db,
+                        )
+                        if drafted is not None:
+                            drafted_dict = drafted.to_dict()
+                            # Replace the generic "generate_document" wizard
+                            # action with an "open_document" action that takes
+                            # the user straight to the just-drafted document.
+                            replaced = False
+                            for a in action_dicts:
+                                if a.get("action_type") == "generate_document":
+                                    a["action_type"] = "open_document"
+                                    a["label"] = f"Open in Documents"
+                                    a["icon"] = "mdi-file-document-edit-outline"
+                                    a["colour"] = "#0d9488"
+                                    a["route"] = drafted.edit_url
+                                    a["params"] = {
+                                        "document_id": drafted.document_id,
+                                        "document_subtype": drafted.document_subtype,
+                                    }
+                                    replaced = True
+                                    break
+                            if not replaced:
+                                action_dicts.insert(0, {
+                                    "action_type": "open_document",
+                                    "label": "Open in Documents",
+                                    "icon": "mdi-file-document-edit-outline",
+                                    "colour": "#0d9488",
+                                    "route": drafted.edit_url,
+                                    "params": {
+                                        "document_id": drafted.document_id,
+                                        "document_subtype": drafted.document_subtype,
+                                    },
+                                    "requires_auth": True,
+                                    "pre_user_label": "Sign up to open drafted documents",
+                                })
+                    finally:
+                        _drafter_db.close()
+            except Exception as e:
+                logger.warning(f"Chat-side auto-draft failed (non-critical): {e}")
+
         return ChatResponse(
             message=assistant_message,
             citations=citations,
@@ -599,6 +672,7 @@ class AIService:
             search_time_ms=search_time_ms,
             total_time_ms=total_time_ms,
             actions=action_dicts,
+            drafted_document=drafted_dict,
         )
 
     async def chat_stream(

@@ -62,6 +62,9 @@ class ChatMessageResponse(BaseModel):
     total_time_ms: float
     timestamp: str
     actions: List[Dict[str, Any]] = []
+    # When the user asked for a draft that we auto-produced and persisted to
+    # My EU Bubble → Documents, this carries the just-saved row.
+    drafted_document: Optional[Dict[str, Any]] = None
 
 
 class ConversationHistoryResponse(BaseModel):
@@ -436,6 +439,7 @@ async def send_message(
             total_time_ms=response.total_time_ms,
             timestamp=datetime.now().isoformat(),
             actions=response.actions or [],
+            drafted_document=getattr(response, "drafted_document", None),
         )
 
     except Exception as e:

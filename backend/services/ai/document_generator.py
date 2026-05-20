@@ -69,6 +69,13 @@ Quality Standards:
 - Support arguments with evidence or examples
 - Include clear, actionable recommendations
 - Maintain professional credibility
+
+HARD TYPOGRAPHIC RULES (NON-NEGOTIABLE) -- APPLIES TO EVERY OUTPUT:
+- NEVER use em-dashes (the Unicode character U+2014, "—").
+- NEVER use en-dashes (the Unicode character U+2013, "–") as sentence connectors.
+- Use a comma, a period, parentheses, a colon, or a regular hyphen-minus ("-") instead.
+- If you are tempted to write "—" or "–" between clauses, rewrite the sentence.
+- This is a Brubru style rule. Drafts containing em-dashes are rejected.
 """
 
     POSITION_PAPER_PROMPT = """Generate a professional EU advocacy position paper.
@@ -462,6 +469,91 @@ In the light of the above:
 NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
 """
 
+    EU_EMAIL_PROMPT = """Generate a Brussels-style EU email or letter in the exact diplomatic register used inside the EU bubble.
+
+RECIPIENT:
+- Name: {recipient_name}
+- Title/role: {recipient_title}
+- Role category: {recipient_role}
+- Institution: {recipient_institution}
+- Unit/Committee/DG: {recipient_unit}
+
+SENDER:
+- Name: {sender_name}
+- Title: {sender_title}
+- Organisation: {sender_org}
+- Email: {sender_email}
+- Phone: {sender_phone}
+- EU Transparency Register ID: {transparency_register_id}
+
+INTENT:
+- Purpose: {purpose}
+- The ask (concrete request, in plain language): {the_ask}
+- Subject-line hint (use it if useful, otherwise invent a better one): {subject_hint}
+- Policy file / procedure / EUR-Lex reference: {policy_file_reference}
+- Background and context to weave in: {context_notes}
+- Time anchor (deadline, meeting window, vote): {deadline_or_date}
+
+REGISTER:
+- Tone: {tone}
+- Relationship with recipient: {relationship} (cold = no prior contact / formal "Dear [Title] [Last name],"; warm = met once or twice; established = first-name basis)
+- Output language: {language_label}
+
+STRUCTURE -- 6 BLOCKS, EXACTLY:
+
+1. SUBJECT LINE
+   Plain text, no Markdown prefix. Format: "<Action verb / topic> -- <policy file or meeting reference>".
+   Example: "Request for a brief exchange: DG ENVI -- Ecodesign implementation"
+   Example: "RE: Stakeholder consultation on the EU AI Act -- follow-up and next steps"
+   Render as a line starting with "Subject: ".
+
+2. GREETING
+   Match the relationship and role:
+   - cold + commissioner/director_general/ambassador: "Dear Commissioner [Last name]," / "Dear Director-General [Last name]," / "Dear Ambassador [Last name],"
+   - cold + mep: "Dear Member of the European Parliament," then "Dear Mr/Ms [Last name],"
+   - cold + other: "Dear Mr/Ms [Last name],"
+   - warm: "Dear [First name] [Last name],"
+   - established: "Dear [First name],"
+   - Multiple recipients: "Dear Colleagues,"
+
+3. THE BRUSSELS SANDWICH HOOK (2 to 3 sentences)
+   Open with a polite, warm sentence. Then thank the recipient for something specific (a past meeting, a recent speech, their work on the file). Then transition into the reason for writing. Do NOT be sycophantic; keep it grounded in a real detail from the context_notes if possible.
+
+4. CORE MESSAGE (1 to 3 short paragraphs)
+   Euro-English. Process-oriented vocabulary where it fits naturally: "level playing field", "interoperability", "trilogue", "horizontal approach", "stakeholder mapping", "future-proof", "co-decision", "in-built safeguards". Do not stuff them; use only what makes sense.
+   State the policy context, the concern or interest, and the specific ask. Reference Article numbers, recital numbers, procedure references (e.g., 2021/0106(COD)) if the input supplies them.
+
+5. THE "I'M SO BUSY" SIGN-OFF (1 to 2 sentences)
+   Time-constrained, action-oriented. Examples:
+   - "As my agenda is particularly packed this week, would you be available for a brief 15-minute call on [date]?"
+   - "I look forward to your feedback at your earliest convenience. Should you require any further clarification, please do not hesitate to reach out."
+   Then a polite closing line: "With kind regards," or "Bien cordialement," (French) on its own line.
+
+6. SIGNATURE BLOCK
+   Plain text, one item per line:
+     [Sender name]
+     [Sender title] | [Sender organisation]
+     [Sender email] | [Sender phone]
+   Then a blank line, then the GDPR + Transparency Register footer in 9-10 small print:
+     "This message and any attachments are confidential and intended solely for the named recipient(s). If you have received this in error, please notify the sender and delete it. Personal data is processed in accordance with Regulation (EU) 2016/679 (GDPR). [Organisation] is registered in the EU Transparency Register under ID [transparency_register_id]."
+   If transparency_register_id is empty, omit the Transparency Register clause.
+
+STYLE FOR THIS EMAIL TYPE:
+- Hyper-polite but action-oriented. Brussels register, not American directness.
+- Sentences readable by non-native English speakers across 27 Member States.
+- No exclamation marks. No emojis. No marketing language.
+- Acronyms on first use spelled out, then abbreviated.
+- Keep the whole email under 350 words including the signature.
+- If the language is "fr", produce the entire email in French using equivalent formal French register ("Madame la Commissaire,", "Bien cordialement,", "Conformément au règlement (UE) 2016/679", etc.).
+
+{style_guidelines}
+
+OUTPUT FORMAT:
+Return the email as plain text (no Markdown). Begin with "Subject: ", then a blank line, then the greeting, then the body, then the closing, then the signature block. Nothing else. No commentary outside the email.
+
+NOW WRITE THE EMAIL.
+"""
+
     def __init__(
         self,
         max_tokens: int = 4000,
@@ -798,6 +890,765 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
             language=request.language,
             legislative_context=legislative_context,
             editable_sections=list(sections.keys())
+        )
+
+    async def generate_eu_email(
+        self,
+        request,  # GenerateEUEmailRequest (typed in caller)
+    ):
+        """
+        Generate a Brussels-style EU email/letter.
+
+        Returns a GeneratedDocument whose content is a plain-text email body
+        (Subject line, greeting, body, sign-off, signature block, GDPR + EU
+        Transparency Register footer). The 6-section template follows the
+        Brussels diplomatic register laid out in EU_EMAIL_PROMPT.
+        """
+        logger.info(
+            f"Generating EU email for {request.recipient_name} ({request.recipient_role}) "
+            f"from {request.sender_name} ({request.sender_org})"
+        )
+
+        language_label = {
+            "en": "English (British)",
+            "fr": "French",
+        }.get(request.language, "English (British)")
+
+        prompt = self.EU_EMAIL_PROMPT.format(
+            recipient_name=request.recipient_name or "[Recipient]",
+            recipient_title=request.recipient_title or "(not specified)",
+            recipient_role=request.recipient_role,
+            recipient_institution=request.recipient_institution,
+            recipient_unit=request.recipient_unit or "(not specified)",
+            sender_name=request.sender_name,
+            sender_title=request.sender_title or "(not specified)",
+            sender_org=request.sender_org,
+            sender_email=request.sender_email or "(not provided)",
+            sender_phone=request.sender_phone or "(not provided)",
+            transparency_register_id=request.sender_transparency_register_id or "",
+            purpose=request.purpose,
+            the_ask=request.the_ask,
+            subject_hint=request.subject_hint or "(none, invent one)",
+            policy_file_reference=request.policy_file_reference or "(not specified)",
+            context_notes=request.context_notes or "(none provided)",
+            deadline_or_date=request.deadline_or_date or "(not specified)",
+            tone=request.tone,
+            relationship=request.relationship,
+            language_label=language_label,
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+
+        content = await self._generate(prompt)
+
+        # Defence in depth: strip em-dashes and en-dashes the model may have
+        # slipped in despite the prompt. Replace with comma + space.
+        content = (
+            content.replace("—", ", ")
+            .replace("–", ", ")
+            .replace(" , ", ", ")
+        )
+
+        # Pull the subject line for the document title.
+        subject = ""
+        for line in content.splitlines():
+            stripped = line.strip()
+            if stripped.lower().startswith("subject:"):
+                subject = stripped[len("subject:"):].strip()
+                break
+        if not subject:
+            subject = f"Email to {request.recipient_name}"
+
+        sections = self._parse_sections(content)
+
+        return GeneratedDocument(
+            document_type="eu_email",
+            title=f"Email to {request.recipient_name}: {subject[:140]}",
+            content=content,
+            sections=sections or {"email": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"email": content}).keys()),
+        )
+
+    # =====================================================================
+    # Shared helpers for the 6 new document types
+    # =====================================================================
+
+    @staticmethod
+    def _scrub_dashes(text: str) -> str:
+        """Belt-and-braces removal of em-dashes / en-dashes left in by the model."""
+        if not text:
+            return text
+        return (
+            text.replace("—", ", ")
+                .replace("–", ", ")
+                .replace(" , ", ", ")
+        )
+
+    @staticmethod
+    def _read_style_reference(storage_id: Optional[str]) -> str:
+        """Pull a short excerpt from a user-uploaded style reference. Returns
+        '(no style reference uploaded)' on miss so the prompt still formats."""
+        if not storage_id:
+            return "(no style reference uploaded)"
+        try:
+            from services.storage.document_storage import get_document_storage
+            storage = get_document_storage()
+            doc = storage.get_document(storage_id)
+            if not doc or not doc.get('has_processed_content'):
+                return "(uploaded style reference has no processed content)"
+            processed = doc.get('processed_content') or {}
+            text = (processed.get('text') or '').strip()
+            if not text:
+                return "(uploaded style reference is empty)"
+            return text[:3500]
+        except Exception as exc:
+            logger.warning(f"Failed to load style reference {storage_id}: {exc}")
+            return "(unable to load style reference)"
+
+    @staticmethod
+    def _format_branding_block(branding) -> str:
+        if not branding:
+            return "(no branding supplied)"
+        parts = []
+        if getattr(branding, "organisation_name", None):
+            parts.append(f"Organisation: {branding.organisation_name}")
+        if getattr(branding, "organisation_url", None):
+            parts.append(f"URL: {branding.organisation_url}")
+        if getattr(branding, "contact_email", None):
+            parts.append(f"Email: {branding.contact_email}")
+        if getattr(branding, "contact_phone", None):
+            parts.append(f"Phone: {branding.contact_phone}")
+        if getattr(branding, "transparency_register_id", None):
+            parts.append(f"EU Transparency Register: {branding.transparency_register_id}")
+        return "\n".join(parts) if parts else "(no branding supplied)"
+
+    # =====================================================================
+    # #3 Position paper one-pager
+    # =====================================================================
+
+    ONE_PAGER_PROMPT = """Generate a strict ONE-PAGE EU position paper.
+
+TOPIC: {topic}
+PROCEDURE: {procedure_reference}
+CELEX: {celex_number}
+
+ORGANISATION: {organisation_name}
+ORGANISATION PITCH: {organisation_pitch}
+
+POSITION: {position}
+HEADLINE ASK: {headline_ask}
+KEY ASKS:
+{key_asks_block}
+
+SUPPORTING EVIDENCE:
+{supporting_evidence}
+
+TONE: {tone}
+LANGUAGE: {language_label}
+
+STYLE REFERENCE (from a user-uploaded one-pager):
+{style_reference}
+
+BRANDING:
+{branding_block}
+
+{style_guidelines}
+
+OUTPUT (strict, must fit on one A4 page, ~500-600 words MAX):
+
+# {headline_ask}
+
+**{organisation_name}** | Position on {topic}
+
+> One-sentence positioning paragraph stating WHAT the paper asks and WHY it matters NOW.
+
+## Key asks
+- 2-5 short, sharp bullets (each ≤ 25 words). Reference Articles where relevant.
+
+## Why this matters
+2 to 3 short paragraphs combining context, evidence, and the cost of inaction. Cite specific numbers from the supporting evidence above.
+
+## What we recommend
+Restate the headline ask in a single short paragraph with the named addressee (Commission, EP rapporteur, Council).
+
+## About {organisation_name}
+2 sentences using the organisation pitch.
+
+---
+Contact: [email] | [URL] | EU Transparency Register: [ID if present]
+
+NOW WRITE THE ONE-PAGER. NO em-dashes. NO marketing fluff. NO emojis.
+"""
+
+    async def generate_one_pager(self, request):
+        logger.info(f"Generating one-pager on {request.topic}")
+        key_asks_block = "\n".join(f"- {a}" for a in request.key_asks) if request.key_asks \
+            else "(no key asks pre-supplied; infer from topic + position)"
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.ONE_PAGER_PROMPT.format(
+            topic=request.topic,
+            procedure_reference=request.procedure_reference or "(not supplied)",
+            celex_number=request.celex_number or "(not supplied)",
+            organisation_name=request.organisation_name,
+            organisation_pitch=request.organisation_pitch or "(not supplied)",
+            position=request.position,
+            headline_ask=request.headline_ask,
+            key_asks_block=key_asks_block,
+            supporting_evidence=request.supporting_evidence or "(none provided)",
+            tone=request.tone,
+            language_label=language_label,
+            style_reference=self._read_style_reference(request.style_reference_storage_id),
+            branding_block=self._format_branding_block(request.branding),
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="one_pager",
+            title=f"One-pager: {request.headline_ask[:140]}",
+            content=content,
+            sections=sections or {"one_pager": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"one_pager": content}).keys()),
+        )
+
+    # =====================================================================
+    # #7 EU press release
+    # =====================================================================
+
+    PRESS_RELEASE_PROMPT = """Generate an EU-format press release in the {institution_label} house style.
+
+HEADLINE: {headline}
+SUB-HEADLINE: {sub_headline}
+DATELINE: {dateline_city}, {dateline_date}
+
+LEAD PARAGRAPH (set in stone, do not alter): {lead_paragraph}
+
+KEY POINTS:
+{key_points_block}
+
+QUOTE: {quote_text}
+ATTRIBUTED TO: {quote_attribution}
+
+BACKGROUND:
+{background}
+
+NEXT STEPS:
+{next_steps}
+
+PRESS CONTACTS:
+{contacts}
+
+BRANDING:
+{branding_block}
+
+LANGUAGE: {language_label}
+
+{style_guidelines}
+
+HOUSE STYLE RULES FOR {institution_label}:
+
+If Commission (IP/XX/XXXX style):
+- Headline in sentence case.
+- "(Brussels, [date])" inline dateline.
+- 3 to 5 short paragraphs.
+- One direct quote attributed to a Commissioner or DG official.
+- "For more information" footer with links.
+- "Background" section at the end.
+
+If European Parliament:
+- Headline in title case.
+- Dateline "Brussels, [date] -- " (single hyphen for the en-dash REPLACEMENT, never use --).
+- Quote from the lead rapporteur or committee chair.
+- Note the legislative procedure reference (e.g., 2021/0106(COD)).
+- "Next steps" paragraph indicates the next vote / institution.
+
+If Council:
+- Headline in sentence case, neutral and factual.
+- "(Brussels)" inline city.
+- Reference Council formation (Foreign Affairs Council, ECOFIN, ...).
+- "Background" + "Member State positions" if relevant.
+- Conservative, diplomatic, never editorialising.
+
+If Agency:
+- Compact, technical tone.
+- Headline in sentence case.
+- Quote from the agency executive director.
+- Agency acronym in the dateline.
+
+OUTPUT FORMAT (markdown):
+
+# {headline}
+{sub_headline_block}
+
+**{dateline_city}, {dateline_date}**
+
+[Lead paragraph here, expanded to 2 short sentences max.]
+
+## Key points
+- Bullets from KEY POINTS, polished.
+
+> "{quote_text_inline}"
+> -- {quote_attribution_or_blank}
+
+## Background
+[Background paragraph in 3-5 sentences.]
+
+## Next steps
+[1 short paragraph on what happens next and when.]
+
+## Press contacts
+[Contacts block, one per line.]
+
+NOW WRITE THE PRESS RELEASE. NO em-dashes. NO promotional adjectives.
+"""
+
+    async def generate_eu_press_release(self, request):
+        logger.info(f"Generating EU press release in {request.institution_style} style: {request.headline}")
+        institution_label = {
+            "commission": "European Commission",
+            "parliament": "European Parliament",
+            "council": "Council of the EU",
+            "agency": "EU Agency",
+        }.get(request.institution_style, "European Commission")
+        from datetime import date
+        date_str = request.dateline_date or date.today().strftime("%d %B %Y")
+        key_points = "\n".join(f"- {p}" for p in request.key_points) if request.key_points else "(none supplied)"
+        sub_headline_block = f"_{request.sub_headline}_" if request.sub_headline else ""
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.PRESS_RELEASE_PROMPT.format(
+            institution_label=institution_label,
+            headline=request.headline,
+            sub_headline=request.sub_headline or "(no sub-headline)",
+            sub_headline_block=sub_headline_block,
+            dateline_city=request.dateline_city,
+            dateline_date=date_str,
+            lead_paragraph=request.lead_paragraph,
+            key_points_block=key_points,
+            quote_text=request.quote_text or "(no quote supplied; invent one in line with the lead paragraph)",
+            quote_text_inline=(request.quote_text or "...")[:280],
+            quote_attribution=request.quote_attribution or "(unspecified)",
+            quote_attribution_or_blank=request.quote_attribution or "spokesperson",
+            background=request.background or "(none supplied; infer from headline and key points)",
+            next_steps=request.next_steps or "(infer 1 short paragraph)",
+            contacts=request.contacts or "(none supplied; insert a placeholder press contact line)",
+            branding_block=self._format_branding_block(request.branding),
+            language_label=language_label,
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="press_release",
+            title=f"{institution_label} press release: {request.headline[:120]}",
+            content=content,
+            sections=sections or {"press_release": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"press_release": content}).keys()),
+        )
+
+    # =====================================================================
+    # #5 Stakeholder mapping & analysis
+    # =====================================================================
+
+    STAKEHOLDER_MAP_PROMPT = """Generate a structured EU stakeholder map and analysis.
+
+POLICY TOPIC: {policy_topic}
+PROCEDURE: {procedure_reference}
+CELEX: {celex_number}
+SCOPE: {scope}
+SECTOR: {sector}
+
+USER OBJECTIVES:
+{objectives}
+
+INSTITUTIONS TO COVER: {institutions_to_cover_block}
+KNOWN STAKEHOLDERS TO INCLUDE: {known_stakeholders_block}
+TARGET COUNT: {target_count} stakeholders
+
+LANGUAGE: {language_label}
+
+{style_guidelines}
+
+OUTPUT FORMAT (markdown):
+
+# Stakeholder map: {policy_topic}
+
+## Executive overview
+2 short paragraphs on the political landscape, the contested lines, and the
+biggest leverage points.
+
+## Stakeholder table
+A markdown table with {target_count} rows and these EXACT columns:
+
+| Stakeholder | Institution / Org | Role | Position (support / amend / oppose / undecided) | Influence (high / medium / low) | Recommended approach |
+|---|---|---|---|---|---|
+
+Populate every row with a real person where known (use the known list); otherwise
+fill with named roles (e.g., "Lead rapporteur, IMCO committee"). Mix:
+- 1 to 3 EU Commission contacts (Commissioner / cabinet / DG / unit)
+- 3 to 6 European Parliament contacts (rapporteur, shadows, committee chair, group advisors)
+- 1 to 3 Council contacts (presidency attaché, COREPER, relevant Council working party)
+- 1 to 2 agency contacts (if relevant)
+- 1 to 3 stakeholder-side contacts (allied trade associations, NGOs, think tanks)
+
+## Engagement priorities
+A numbered list (3 to 5 items) of the most strategic next moves, each as a short paragraph linking back to a row in the table.
+
+## Risk map
+3 to 5 short bullets describing political / procedural risks to watch.
+
+NOW WRITE. NO em-dashes. Use British English. Be specific, not generic.
+"""
+
+    async def generate_stakeholder_map(self, request):
+        logger.info(f"Generating stakeholder map for {request.policy_topic}")
+        institutions_block = ", ".join(request.institutions_to_cover) or "European Commission, European Parliament, Council of the EU"
+        known_block = "\n".join(f"- {s}" for s in request.known_stakeholders) if request.known_stakeholders \
+            else "(none supplied; invent named roles)"
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.STAKEHOLDER_MAP_PROMPT.format(
+            policy_topic=request.policy_topic,
+            procedure_reference=request.procedure_reference or "(not supplied)",
+            celex_number=request.celex_number or "(not supplied)",
+            scope=request.scope,
+            sector=request.sector or "(not specified)",
+            objectives=request.objectives,
+            institutions_to_cover_block=institutions_block,
+            known_stakeholders_block=known_block,
+            target_count=request.target_count,
+            language_label=language_label,
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="stakeholder_map",
+            title=f"Stakeholder map: {request.policy_topic[:140]}",
+            content=content,
+            sections=sections or {"stakeholder_map": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"stakeholder_map": content}).keys()),
+        )
+
+    # =====================================================================
+    # #6 Commission-style impact assessment
+    # =====================================================================
+
+    IMPACT_ASSESSMENT_PROMPT = """Generate a European Commission style Impact Assessment following the Better Regulation template.
+
+INITIATIVE: {initiative_title}
+POLICY AREA: {policy_area}
+
+PROBLEM DEFINITION:
+{problem_definition}
+
+DRIVERS:
+{drivers_block}
+
+OBJECTIVES (GENERAL):
+{objectives_general}
+
+OBJECTIVES (SPECIFIC):
+{objectives_specific_block}
+
+BASELINE (no further EU action):
+{baseline_scenario}
+
+POLICY OPTIONS TO COMPARE:
+{policy_options_block}
+
+IMPACT DIMENSIONS TO SCORE: {impact_dimensions_block}
+PREFERRED OPTION HINT: {preferred_option_hint}
+LANGUAGE: {language_label}
+
+STYLE REFERENCE (from a user-uploaded IA):
+{style_reference}
+
+{style_guidelines}
+
+STRUCTURE (follow EXACTLY -- this is the Commission Better Regulation IA template):
+
+# Impact Assessment: {initiative_title}
+
+## 1. Problem definition
+1.1. What is the problem? (use the input above; cite drivers)
+1.2. Who is affected and how?
+1.3. How likely is the problem to persist or worsen under the baseline?
+
+## 2. Why should the EU act?
+2.1. Legal basis (cite the Treaty article range where appropriate)
+2.2. Subsidiarity and proportionality
+
+## 3. Objectives
+3.1. General objective
+3.2. Specific objectives (bullet list)
+
+## 4. Policy options
+A numbered list of the supplied options. For each option:
+- One short paragraph describing the intervention.
+- Bullet expected mechanism.
+
+## 5. Impacts of the options
+A markdown table comparing options against the impact dimensions:
+
+| Option | Economic | Social | Environmental | Fundamental rights | SMEs / Competitiveness | Administrative burden |
+|---|---|---|---|---|---|---|
+
+Fill each cell with a short qualitative score ("positive / neutral / negative / mixed") followed by one sentence of reasoning. Use only the dimensions actually requested.
+
+## 6. Comparison of options
+2 short paragraphs that synthesise the impact table and explain which option scores best on which criterion.
+
+## 7. Preferred option and justification
+1 paragraph naming the preferred option and the trade-offs accepted.
+
+## 8. Monitoring and evaluation
+Short bullet list of indicators and review cadence.
+
+NOW WRITE THE IA. NO em-dashes. Avoid hedging like "may possibly contribute"; be specific.
+"""
+
+    async def generate_impact_assessment(self, request):
+        logger.info(f"Generating impact assessment for {request.initiative_title}")
+        drivers_block = "\n".join(f"- {d}" for d in request.drivers) if request.drivers else "(none supplied)"
+        objs_specific = "\n".join(f"- {o}" for o in request.objectives_specific) if request.objectives_specific \
+            else "(none supplied)"
+        options_block = "\n".join(f"{i+1}. {o}" for i, o in enumerate(request.policy_options))
+        dims_block = ", ".join(request.impact_dimensions)
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.IMPACT_ASSESSMENT_PROMPT.format(
+            initiative_title=request.initiative_title,
+            policy_area=request.policy_area or "(not specified)",
+            problem_definition=request.problem_definition,
+            drivers_block=drivers_block,
+            objectives_general=request.objectives_general or "(infer from the problem)",
+            objectives_specific_block=objs_specific,
+            baseline_scenario=request.baseline_scenario or "(infer 1 paragraph)",
+            policy_options_block=options_block,
+            impact_dimensions_block=dims_block,
+            preferred_option_hint=request.preferred_option_hint or "(no hint; pick based on the analysis)",
+            language_label=language_label,
+            style_reference=self._read_style_reference(request.style_reference_storage_id),
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="impact_assessment",
+            title=f"Impact Assessment: {request.initiative_title[:140]}",
+            content=content,
+            sections=sections or {"impact_assessment": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"impact_assessment": content}).keys()),
+        )
+
+    # =====================================================================
+    # #2 EU institutions presentation
+    # =====================================================================
+
+    PRESENTATION_PROMPT = """Generate a slide-by-slide outline for an EU-institution presentation.
+
+TITLE: {title}
+SUBTITLE: {subtitle}
+AUDIENCE: {audience_label} ({audience})
+PURPOSE: {purpose}
+
+KEY MESSAGES:
+{key_messages_block}
+
+SECTIONS REQUESTED:
+{sections_block}
+
+TARGET SLIDE COUNT: {num_slides}
+LANGUAGE: {language_label}
+
+STYLE REFERENCE (from a user-uploaded deck):
+{style_reference}
+
+BRANDING:
+{branding_block}
+
+{style_guidelines}
+
+OUTPUT FORMAT (strict, slide-by-slide markdown):
+
+For each slide, produce exactly:
+
+## Slide N: <slide title>
+- 3 to 5 short bullets, each ≤ 14 words.
+- Optional 1-line speaker note prefixed with "Notes: " on the last line.
+
+Slides 1 and 2:
+- Slide 1 = Title slide ("{title}" + "{subtitle}").
+- Slide 2 = Agenda (one bullet per section).
+
+Final slide:
+- Slide N = "Thank you" + contact line built from BRANDING.
+
+Stay STRICTLY within {num_slides} slides. NO em-dashes. NO emojis. NO clip-art instructions.
+"""
+
+    async def generate_presentation(self, request):
+        logger.info(f"Generating EU presentation: {request.title} ({request.num_slides} slides)")
+        key_messages = "\n".join(f"- {m}" for m in request.key_messages) if request.key_messages else "(none supplied)"
+        sections_block = "\n".join(f"- {s}" for s in request.sections) if request.sections else "(use the default outline)"
+        audience_label = request.audience_label or {
+            "commission_official": "European Commission policy officials",
+            "commission_cabinet": "Commissioner cabinet members",
+            "mep_office": "MEP office",
+            "ep_committee_staff": "European Parliament committee staff",
+            "council_attache": "Council attaché",
+            "permrep": "Permanent Representation",
+            "academic": "Academic audience",
+            "industry": "Industry stakeholders",
+            "press": "Press / journalists",
+            "general": "General audience",
+        }.get(request.audience, "European Commission policy officials")
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.PRESENTATION_PROMPT.format(
+            title=request.title,
+            subtitle=request.subtitle or "",
+            audience=request.audience,
+            audience_label=audience_label,
+            purpose=request.purpose,
+            key_messages_block=key_messages,
+            sections_block=sections_block,
+            num_slides=request.num_slides,
+            language_label=language_label,
+            style_reference=self._read_style_reference(request.style_reference_storage_id),
+            branding_block=self._format_branding_block(request.branding),
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="presentation",
+            title=f"Presentation: {request.title[:140]}",
+            content=content,
+            sections=sections or {"presentation": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"presentation": content}).keys()),
+        )
+
+    # =====================================================================
+    # #4 Event poster
+    # =====================================================================
+
+    POSTER_PROMPT = """Generate copy for a single-page event poster on an EU policy topic.
+
+EVENT TITLE: {event_title}
+TAGLINE: {event_tagline}
+TYPE: {event_type}
+DATE: {event_date}
+LOCATION: {event_location}
+
+HOSTS:
+{hosts_block}
+
+SPEAKERS:
+{speakers_block}
+
+AGENDA POINTS:
+{agenda_block}
+
+REGISTRATION URL: {registration_url}
+CONTACT INFO: {contact_info}
+
+FORMAT: {format_label}
+ACCENT COLOR: {accent_color}
+LANGUAGE: {language_label}
+
+STYLE REFERENCE (from a user-uploaded poster):
+{style_reference}
+
+BRANDING:
+{branding_block}
+
+{style_guidelines}
+
+OUTPUT FORMAT (markdown, one-page poster copy, no slide markers):
+
+# {event_title}
+**{event_tagline}**
+
+📅 {event_date}   📍 {event_location}
+
+## About the event
+1 short paragraph (~50 words) describing the event purpose.
+
+## Programme
+- 4 to 8 short agenda bullets (each ≤ 14 words).
+
+## Speakers
+- Format each speaker as "**Name** -- Title, Organisation" (a single hyphen, never an em-dash).
+
+## Hosted by
+- One host per line.
+
+## Register
+[Registration URL or "Email [contact] to attend"]
+
+---
+Contact: [contact info]
+
+NOW WRITE THE POSTER COPY. NO em-dashes. NO emojis other than the date/location pin above. Keep it visual-design-ready.
+"""
+
+    async def generate_event_poster(self, request):
+        logger.info(f"Generating event poster: {request.event_title}")
+        hosts_block = "\n".join(f"- {h}" for h in request.hosts) if request.hosts else "(none supplied)"
+        speakers_block = "\n".join(f"- {s}" for s in request.speakers) if request.speakers else "(none supplied; suggest 3 plausible profiles)"
+        agenda_block = "\n".join(f"- {p}" for p in request.agenda_points) if request.agenda_points else "(none supplied; suggest a typical agenda)"
+        format_label = {
+            "a4_portrait": "A4 portrait",
+            "a4_landscape": "A4 landscape",
+            "a3_portrait": "A3 portrait",
+            "instagram_square": "Instagram square (1080x1080)",
+            "linkedin_landscape": "LinkedIn landscape (1200x627)",
+        }.get(request.format, "A4 portrait")
+        language_label = {"en": "British English", "fr": "French"}.get(request.language, "British English")
+        prompt = self.POSTER_PROMPT.format(
+            event_title=request.event_title,
+            event_tagline=request.event_tagline or "",
+            event_type=request.event_type,
+            event_date=request.event_date,
+            event_location=request.event_location,
+            hosts_block=hosts_block,
+            speakers_block=speakers_block,
+            agenda_block=agenda_block,
+            registration_url=request.registration_url or "(none supplied)",
+            contact_info=request.contact_info or "(none supplied)",
+            format_label=format_label,
+            accent_color=request.accent_color,
+            language_label=language_label,
+            style_reference=self._read_style_reference(request.style_reference_storage_id),
+            branding_block=self._format_branding_block(request.branding),
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+        content = self._scrub_dashes(await self._generate(prompt))
+        sections = self._parse_sections(content)
+        return GeneratedDocument(
+            document_type="event_poster",
+            title=f"Event poster: {request.event_title[:140]}",
+            content=content,
+            sections=sections or {"poster": content},
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=None,
+            editable_sections=list((sections or {"poster": content}).keys()),
         )
 
     def _format_ep_resolution(self, text: str) -> str:

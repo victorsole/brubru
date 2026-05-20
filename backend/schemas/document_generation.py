@@ -23,6 +23,293 @@ class KeyAsk(BaseModel):
     article_reference: Optional[str] = Field(None, description="Specific article/recital reference")
 
 
+# EU email/letter generation
+EUInstitution = Literal[
+    "european_commission",
+    "european_parliament",
+    "council_eu",
+    "permanent_representation",
+    "eeas",
+    "agency",
+    "other",
+]
+EURoleCategory = Literal[
+    "commissioner",
+    "cabinet_member",
+    "director_general",
+    "director",
+    "head_of_unit",
+    "policy_officer",
+    "mep",
+    "apa",
+    "ep_group_advisor",
+    "ep_committee_staff",
+    "council_attache",
+    "permrep_counsellor",
+    "ambassador",
+    "other",
+]
+EUEmailPurpose = Literal[
+    "meeting_request",
+    "follow_up",
+    "position_input",
+    "invitation",
+    "thanks",
+    "information_request",
+    "amendment_input",
+    "other",
+]
+EUEmailTone = Literal["standard", "warm", "urgent", "formal"]
+EUEmailRelationship = Literal["cold", "warm", "established"]
+
+
+class GenerateEUEmailRequest(BaseModel):
+    """Request to generate a Brussels-style EU email or letter"""
+
+    # Recipient
+    recipient_name: str = Field(..., min_length=1, max_length=200,
+                                description="Full name of the recipient (e.g., 'Margrethe Vestager')")
+    recipient_title: Optional[str] = Field(None, max_length=200,
+                                           description="Recipient's formal title or role")
+    recipient_role: EURoleCategory = Field(default="policy_officer",
+                                           description="Category that drives the salutation/register")
+    recipient_institution: EUInstitution = Field(default="european_commission")
+    recipient_unit: Optional[str] = Field(None, max_length=200,
+                                          description="DG / Committee / Unit (e.g., 'DG ENVI', 'IMCO')")
+
+    # Email body / intent
+    purpose: EUEmailPurpose = Field(default="meeting_request",
+                                    description="What this email is for")
+    subject_hint: Optional[str] = Field(None, max_length=200,
+                                        description="If empty, the model invents a Brussels-style subject line")
+    policy_file_reference: Optional[str] = Field(
+        None, max_length=200,
+        description="The legislative file / procedure / EUR-Lex reference the email is about (e.g., 'AI Act trilogue', '2021/0106(COD)')")
+    the_ask: str = Field(..., min_length=1, max_length=1000,
+                         description="The concrete request, in plain language")
+    context_notes: Optional[str] = Field(None, max_length=4000,
+                                         description="Background, reasons, prior exchanges, evidence to weave in")
+    deadline_or_date: Optional[str] = Field(None, max_length=120,
+                                            description="Time anchor (e.g., 'before the IMCO vote on 12 June', 'next Tuesday')")
+
+    # Style / register
+    tone: EUEmailTone = Field(default="standard")
+    relationship: EUEmailRelationship = Field(default="cold",
+                                              description="How well the sender knows the recipient")
+    language: Literal["en", "fr"] = Field(default="en")
+
+    # Sender
+    sender_name: str = Field(..., min_length=1, max_length=200)
+    sender_title: Optional[str] = Field(None, max_length=200,
+                                        description="Role / title within the sender's organisation")
+    sender_org: str = Field(..., min_length=1, max_length=200)
+    sender_email: Optional[str] = Field(None, max_length=200)
+    sender_phone: Optional[str] = Field(None, max_length=80)
+    sender_transparency_register_id: Optional[str] = Field(
+        None, max_length=80,
+        description="EU Transparency Register identification number, included in the GDPR footer")
+
+    # Branding (uploaded earlier via /api/documents/upload)
+    logo_storage_id: Optional[str] = Field(
+        None, max_length=80,
+        description="storage_document_id returned by /api/documents/upload; embedded in DOCX export")
+
+
+# -----------------------------------------------------------------------------
+# Shared branding / style-reference block used by the new doc types (3, 7, 5, 6, 2, 4)
+# -----------------------------------------------------------------------------
+
+class BrandingBlock(BaseModel):
+    """Organisation branding to render in DOCX/PDF/PPTX exports."""
+    organisation_name: Optional[str] = Field(None, max_length=200)
+    organisation_url: Optional[str] = Field(None, max_length=300)
+    contact_email: Optional[str] = Field(None, max_length=200)
+    contact_phone: Optional[str] = Field(None, max_length=80)
+    transparency_register_id: Optional[str] = Field(None, max_length=80)
+    logo_storage_id: Optional[str] = Field(
+        None, max_length=80,
+        description="storage_document_id returned by /api/documents/upload")
+
+
+# -----------------------------------------------------------------------------
+# #3 Position paper one-pager
+# -----------------------------------------------------------------------------
+
+class GenerateOnePagerRequest(BaseModel):
+    """One-page position paper, strict 600-word ceiling, single-sheet layout."""
+    topic: str = Field(..., min_length=1, max_length=300,
+                       description="Topic or legislative file the one-pager is about")
+    procedure_reference: Optional[str] = Field(None, max_length=120)
+    celex_number: Optional[str] = Field(None, max_length=40)
+    organisation_name: str = Field(..., min_length=1, max_length=200)
+    organisation_pitch: Optional[str] = Field(
+        None, max_length=500,
+        description="One- or two-sentence elevator pitch for the organisation")
+    position: PositionStance = Field(default="support_with_amendments")
+    headline_ask: str = Field(..., min_length=1, max_length=300,
+                              description="The single most important ask, rendered as the H1")
+    key_asks: List[str] = Field(default_factory=list, max_length=5,
+                                description="2-5 short bullet asks")
+    supporting_evidence: Optional[str] = Field(
+        None, max_length=2000,
+        description="Data, citations, numbers to ground the asks")
+    tone: DocumentTone = Field(default="constructive")
+    language: Literal["en", "fr"] = Field(default="en")
+    style_reference_storage_id: Optional[str] = Field(
+        None, max_length=80,
+        description="storage_document_id of a user-uploaded one-pager to learn style from")
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
+# -----------------------------------------------------------------------------
+# #7 EU press release (Commission / EP / Council styles)
+# -----------------------------------------------------------------------------
+
+PressReleaseInstitution = Literal["commission", "parliament", "council", "agency"]
+
+class GenerateEUPressReleaseRequest(BaseModel):
+    """EU-format press release in Commission / EP / Council house style."""
+    institution_style: PressReleaseInstitution = Field(default="commission")
+    headline: str = Field(..., min_length=1, max_length=240,
+                          description="Press release headline")
+    sub_headline: Optional[str] = Field(None, max_length=300,
+                                        description="One-line strap below the headline")
+    dateline_city: str = Field(default="Brussels", max_length=80)
+    dateline_date: Optional[str] = Field(None, max_length=40,
+                                         description="Free-text date (e.g. '20 May 2026'); blank = today")
+    lead_paragraph: str = Field(..., min_length=1, max_length=1500,
+                                description="The first paragraph (who/what/where/when/why)")
+    key_points: List[str] = Field(default_factory=list, max_length=10,
+                                  description="3-8 fact bullets to expand in the body")
+    quote_text: Optional[str] = Field(None, max_length=600)
+    quote_attribution: Optional[str] = Field(None, max_length=200,
+                                             description="e.g. 'Margrethe Vestager, Executive Vice-President'")
+    background: Optional[str] = Field(None, max_length=2000)
+    next_steps: Optional[str] = Field(None, max_length=1000)
+    contacts: Optional[str] = Field(None, max_length=600,
+                                    description="Press contact block, one contact per line")
+    language: Literal["en", "fr"] = Field(default="en")
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
+# -----------------------------------------------------------------------------
+# #5 Stakeholder mapping & analysis
+# -----------------------------------------------------------------------------
+
+class GenerateStakeholderMapRequest(BaseModel):
+    """Structured stakeholder mapping for an EU policy file."""
+    policy_topic: str = Field(..., min_length=1, max_length=300)
+    procedure_reference: Optional[str] = Field(None, max_length=120)
+    celex_number: Optional[str] = Field(None, max_length=40)
+    scope: Literal["eu", "national", "both"] = Field(default="eu")
+    sector: Optional[str] = Field(None, max_length=120,
+                                  description="Sector / industry context (e.g. 'medtech', 'fintech')")
+    objectives: str = Field(..., min_length=1, max_length=1000,
+                            description="What the user wants to achieve on this file")
+    known_stakeholders: List[str] = Field(default_factory=list, max_length=30,
+                                          description="Pre-seeded names to include in the map")
+    institutions_to_cover: List[str] = Field(
+        default_factory=lambda: ["European Commission", "European Parliament", "Council of the EU"],
+        max_length=10)
+    target_count: int = Field(default=12, ge=4, le=40,
+                              description="How many stakeholder rows the AI should produce")
+    language: Literal["en", "fr"] = Field(default="en")
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
+# -----------------------------------------------------------------------------
+# #6 Commission-style Impact Assessment
+# -----------------------------------------------------------------------------
+
+class GenerateImpactAssessmentRequest(BaseModel):
+    """Impact assessment in the European Commission Better Regulation template."""
+    initiative_title: str = Field(..., min_length=1, max_length=300)
+    policy_area: Optional[str] = Field(None, max_length=200,
+                                       description="DG / policy area (e.g. 'DG ENVI', 'Digital Single Market')")
+    problem_definition: str = Field(..., min_length=1, max_length=3000,
+                                    description="Plain-language description of the problem")
+    drivers: List[str] = Field(default_factory=list, max_length=10,
+                               description="Causal drivers of the problem")
+    objectives_general: Optional[str] = Field(None, max_length=2000)
+    objectives_specific: List[str] = Field(default_factory=list, max_length=10)
+    baseline_scenario: Optional[str] = Field(None, max_length=2000,
+                                             description="What happens if EU takes no further action")
+    policy_options: List[str] = Field(
+        default_factory=lambda: ["Option 0: Baseline (no EU action)"],
+        max_length=8,
+        description="Policy options to compare (option 0 = baseline)")
+    impact_dimensions: List[str] = Field(
+        default_factory=lambda: ["economic", "social", "environmental", "fundamental_rights", "smes"],
+        max_length=10,
+        description="Dimensions to score in the impact table")
+    preferred_option_hint: Optional[str] = Field(None, max_length=400)
+    language: Literal["en", "fr"] = Field(default="en")
+    style_reference_storage_id: Optional[str] = Field(None, max_length=80)
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
+# -----------------------------------------------------------------------------
+# #2 Presentation for EU institutions (renders to PPTX)
+# -----------------------------------------------------------------------------
+
+PresentationAudience = Literal[
+    "commission_official", "commission_cabinet", "mep_office", "ep_committee_staff",
+    "council_attache", "permrep", "academic", "industry", "press", "general",
+]
+
+class GenerateEUPresentationRequest(BaseModel):
+    """Slide deck for an EU-institution audience. Renders to PPTX + PDF."""
+    title: str = Field(..., min_length=1, max_length=200)
+    subtitle: Optional[str] = Field(None, max_length=240)
+    audience: PresentationAudience = Field(default="commission_official")
+    audience_label: Optional[str] = Field(None, max_length=200,
+                                          description="Free-text refinement, e.g. 'DG ENVI Unit B3'")
+    purpose: str = Field(..., min_length=1, max_length=600,
+                         description="What this presentation is meant to achieve")
+    key_messages: List[str] = Field(default_factory=list, max_length=8,
+                                    description="3-7 messages to anchor the deck")
+    sections: List[str] = Field(
+        default_factory=lambda: ["Context", "Analysis", "Recommendation", "Next steps"],
+        max_length=10,
+        description="Section headings the deck should follow")
+    num_slides: int = Field(default=10, ge=4, le=30)
+    language: Literal["en", "fr"] = Field(default="en")
+    style_reference_storage_id: Optional[str] = Field(
+        None, max_length=80,
+        description="storage_document_id of a user-uploaded PPTX/PDF to learn style from")
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
+# -----------------------------------------------------------------------------
+# #4 Event poster (renders to single-page HTML + PDF + PNG)
+# -----------------------------------------------------------------------------
+
+PosterFormat = Literal["a4_portrait", "a4_landscape", "a3_portrait", "instagram_square", "linkedin_landscape"]
+
+class GenerateEventPosterRequest(BaseModel):
+    """Single-page event poster on an EU-policy topic."""
+    event_title: str = Field(..., min_length=1, max_length=200)
+    event_tagline: Optional[str] = Field(None, max_length=200)
+    event_date: str = Field(..., min_length=1, max_length=80,
+                            description="Human-readable date / time")
+    event_location: str = Field(..., min_length=1, max_length=160,
+                                description="Venue + city")
+    event_type: Literal["conference", "panel", "webinar", "roundtable", "workshop", "launch", "other"] = "panel"
+    hosts: List[str] = Field(default_factory=list, max_length=8,
+                             description="Hosting organisations")
+    speakers: List[str] = Field(default_factory=list, max_length=20,
+                                description="One per line: 'Name -- Title, Organisation'")
+    agenda_points: List[str] = Field(default_factory=list, max_length=12)
+    registration_url: Optional[str] = Field(None, max_length=400)
+    contact_info: Optional[str] = Field(None, max_length=300)
+    format: PosterFormat = Field(default="a4_portrait")
+    accent_color: str = Field(default="#0066cc", max_length=12,
+                              description="Hex colour for the poster's brand accent")
+    language: Literal["en", "fr"] = Field(default="en")
+    style_reference_storage_id: Optional[str] = Field(None, max_length=80)
+    branding: BrandingBlock = Field(default_factory=BrandingBlock)
+
+
 class GeneratePositionPaperRequest(BaseModel):
     """Request to generate a position paper"""
     # Legislative file reference
