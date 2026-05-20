@@ -16,17 +16,20 @@ Endpoints:
 """
 
 import logging
+import re
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query, Depends, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_, func
 
 from models.user import User
 from models.user_document import UserDocument
 from models.amendment import Amendment
+from services.document_generation.document_exporter import export_docx, export_pdf
 from schemas.user_document_schemas import (
     UserDocumentCreate,
     UserDocumentUpdate,
@@ -541,3 +544,65 @@ async def get_document_stats(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get statistics: {str(e)}"
         )
+
+
+# ============================================================================
+# Export (DOCX / PDF)
+# ============================================================================
+
+_SLUG_RE = re.compile(r"[^A-Za-z0-9._-]+")
+
+
+def _safe_filename(title: str, ext: str) -> str:
+    base = _SLUG_RE.sub("_", (title or "document").strip())[:80].strip("_") or "document"
+    return f"{base}.{ext}"
+
+
+@router.get(
+    "/{document_id}/export",
+    summary="Export document",
+    description="Download a saved document as DOCX or PDF"
+)
+async def export_document(
+    document_id: UUID,
+    fmt: str = Query("docx", alias="format", pattern="^(docx|pdf)$"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Stream a user document as a DOCX or PDF attachment."""
+    document = db.query(UserDocument).filter(
+        and_(
+            UserDocument.id == document_id,
+            UserDocument.user_id == current_user.id,
+        )
+    ).first()
+
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
+
+    title = document.title or "Document"
+    content = document.content or ""
+
+    try:
+        if fmt == "docx":
+            payload = export_docx(title, content)
+            media = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            filename = _safe_filename(title, "docx")
+        else:
+            payload = export_pdf(title, content)
+            media = "application/pdf"
+            filename = _safe_filename(title, "pdf")
+    except Exception as exc:
+        logger.exception("Failed to render export for %s", document_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to export document: {exc}",
+        ) from exc
+
+    import io
+
+    return StreamingResponse(
+        io.BytesIO(payload),
+        media_type=media,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

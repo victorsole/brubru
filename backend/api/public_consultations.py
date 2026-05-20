@@ -874,6 +874,65 @@ async def generate_proposals(
             user_documents=user_documents,
         )
 
+        # Persist the proposal set back as a UserDocument so the draft does not
+        # vanish when the user closes the consultation page. Lives under the
+        # "consultation_response" tag and is filterable in My EU Bubble →
+        # Documents. Failing here must not break the API response.
+        try:
+            from models.user_document import UserDocument as _UserDocument
+
+            body_parts: List[str] = []
+            if proposal_set.overall_strategy:
+                body_parts.append(f"## Overall strategy\n\n{proposal_set.overall_strategy}\n")
+            if proposal_set.recommended_tone:
+                body_parts.append(f"**Recommended tone:** {proposal_set.recommended_tone}\n")
+            if proposal_set.key_messages:
+                body_parts.append("## Key messages\n")
+                for msg in proposal_set.key_messages:
+                    body_parts.append(f"- {msg}")
+                body_parts.append("")
+            for idx, p in enumerate(proposal_set.proposals, start=1):
+                body_parts.append(f"## Q{idx}. {p.question_addressed}\n")
+                body_parts.append(p.proposed_response or "")
+                if p.supporting_arguments:
+                    body_parts.append("\n**Supporting arguments**")
+                    for arg in p.supporting_arguments:
+                        body_parts.append(f"- {arg}")
+                if p.evidence_citations:
+                    body_parts.append("\n**Evidence**")
+                    for cit in p.evidence_citations:
+                        body_parts.append(f"- {cit}")
+                body_parts.append("")
+
+            saved_doc = _UserDocument(
+                user_id=current_user.id,
+                document_type="note",
+                title=f"Consultation response — {consultation.short_title or consultation.title}"[:480],
+                content="\n".join(body_parts).strip() or None,
+                celex_number=getattr(consultation, 'celex_number', None),
+                procedure_reference=getattr(consultation, 'initiative_id', None),
+                policy_areas=list(consultation.policy_areas or []),
+                tags=["consultation_response", "generated"],
+                doc_metadata={
+                    "generated": True,
+                    "consultation_id": str(consultation.id),
+                    "initiative_id": consultation.initiative_id,
+                    "tokens_used": proposal_set.tokens_used,
+                    "num_proposals": len(proposal_set.proposals),
+                },
+            )
+            db.add(saved_doc)
+            db.commit()
+            logger.info(
+                f"Persisted consultation response draft as user_document {saved_doc.id} "
+                f"for consultation {consultation_id}"
+            )
+        except Exception as persist_err:
+            logger.warning(
+                f"Failed to persist consultation response for {consultation_id}: {persist_err}"
+            )
+            db.rollback()
+
         return ProposalsResponse(
             consultation_id=consultation.id,
             overall_strategy=proposal_set.overall_strategy,

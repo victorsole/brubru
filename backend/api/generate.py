@@ -349,26 +349,37 @@ async def export_document(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Export a generated document to Word or PDF format.
+    Export an unsaved markdown draft to DOCX or PDF.
 
-    Currently supports DOCX export. PDF support coming soon.
+    For documents already persisted in My EU Bubble, use
+    GET /api/documents/{id}/export?format=docx|pdf instead.
     """
+    from fastapi.responses import StreamingResponse
+    import io, re
+    from services.document_generation.document_exporter import export_docx, export_pdf
+
+    logger.info(
+        f"User {current_user.id} exporting draft '{request.document_title}' as {request.export_format}"
+    )
+
     try:
-        logger.info(f"User {current_user.id} exporting document: {request.document_title}")
-
         if request.export_format == "pdf":
-            raise HTTPException(
-                status_code=501,
-                detail="PDF export not yet implemented. Please use DOCX format."
-            )
+            payload = export_pdf(request.document_title, request.document_content)
+            media = "application/pdf"
+            ext = "pdf"
+        else:
+            payload = export_docx(request.document_title, request.document_content)
+            media = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ext = "docx"
 
-        # TODO: Implement DOCX export using python-docx
-        # For now, return the markdown content
-        raise HTTPException(
-            status_code=501,
-            detail="Document export feature coming soon. Please copy the content manually."
+        slug = re.sub(r"[^A-Za-z0-9._-]+", "_", request.document_title.strip())[:80] or "document"
+        filename = f"{slug}.{ext}"
+
+        return StreamingResponse(
+            io.BytesIO(payload),
+            media_type=media,
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
         )
-
     except HTTPException:
         raise
     except Exception as e:

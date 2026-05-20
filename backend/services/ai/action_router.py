@@ -86,24 +86,43 @@ def compute_actions(
         doc_type = getattr(drafting_intent, 'document_type', '') or 'position_paper'
         topic = getattr(drafting_intent, 'topic', '') or ''
 
-        # Human-readable label
+        # Map legacy / chat-side names to the wizard's document types.
+        # The wizard handles: position_paper, mep_briefing, talking_points,
+        # resolution, ep_question. Any other intent falls back to position_paper.
+        wizard_aliases = {
+            'briefing': 'mep_briefing',
+            'mep_briefing': 'mep_briefing',
+            'talking_points': 'talking_points',
+            'resolution': 'resolution',
+            'ep_question': 'ep_question',
+            'position_paper': 'position_paper',
+        }
+        wizard_type = wizard_aliases.get(doc_type, 'position_paper')
+
         doc_type_labels = {
             'position_paper': 'Position paper',
-            'briefing': 'MEP briefing',
+            'mep_briefing': 'MEP briefing',
             'talking_points': 'Talking points',
-            'justification': 'Amendment justification',
-            'letter': 'Letter',
-            'press_release': 'Press release',
+            'resolution': 'EP resolution',
+            'ep_question': 'EP question',
         }
-        label = f"Generate {doc_type_labels.get(doc_type, doc_type.replace('_', ' '))}"
+        label = f"Generate {doc_type_labels.get(wizard_type, wizard_type.replace('_', ' '))}"
+
+        # Route directly into the Documents tab with the wizard pre-opened so
+        # the chat hand-off does not land on a dead /main state.
+        route = (
+            f"/my-eu-bubble?tab=documents&openWizard=1"
+            f"&docType={wizard_type}"
+            + (f"&topic={topic}" if topic else "")
+        )
 
         actions.append(ChatAction(
             action_type="generate_document",
             label=label,
             icon="mdi-file-edit-outline",
             colour="#0693e3",
-            route="/main",
-            params={"document_type": doc_type, "topic": topic},
+            route=route,
+            params={"document_type": wizard_type, "topic": topic},
             requires_auth=True,
             pre_user_label="Sign up to generate documents",
         ))
