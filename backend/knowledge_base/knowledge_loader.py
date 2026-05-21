@@ -9450,6 +9450,8 @@ class KnowledgeLoader:
             finally:
                 db.close()
             if rows:
+                # Skip non-content rows (e.g. _meta.json, which lives in
+                # private_guides only so /api/tenders can read meta_json).
                 return [
                     {
                         "filename": r[0],
@@ -9458,6 +9460,7 @@ class KnowledgeLoader:
                         "mtime": r[3],
                     }
                     for r in rows
+                    if r[0] and r[0].endswith('.md')
                 ]
         except Exception as e:
             logger.warning("[private-guide] DB lookup failed for slug=%s: %s (falling back to disk)", slug, e)

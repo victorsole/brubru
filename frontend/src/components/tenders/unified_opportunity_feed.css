@@ -343,3 +343,43 @@
     white-space: nowrap;
   }
 }
+
+/* Layer 2: client pursuits filter toggle */
+.tenderator-feed__client-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  margin: 0.3rem 0 0.5rem;
+  background: linear-gradient(135deg, rgba(6,147,227,0.06), rgba(155,81,224,0.04));
+  border: 1px solid rgba(6,147,227,0.18);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+}
+.tenderator-feed__client-filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+.tenderator-feed__client-filter-toggle input {
+  cursor: pointer;
+}
+.tenderator-feed__client-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.55rem;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.tenderator-feed__client-filter-badge--inactive {
+  background: rgba(0,0,0,0.08);
+  color: #555;
+}

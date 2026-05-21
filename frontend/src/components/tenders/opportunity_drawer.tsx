@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/use_auth';
 import type { UnifiedOpportunity } from './unified_opportunity_feed';
+import { ClientScorecardPanel } from './client_scorecard_panel';
 import './opportunity_drawer.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -279,6 +280,17 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
               <p className="opportunity-drawer__description">{opportunity.description}</p>
             </section>
           )}
+
+          {/* Client win-rate scorecard (Layer 3) — renders nothing if the
+              user has no private guide / no submissions data on file. */}
+          <ClientScorecardPanel
+            opportunity={{
+              title: opportunity.title,
+              organisation: opportunity.organisation,
+              country: opportunity.country,
+              programme: opportunity.programme,
+            }}
+          />
 
           {/* AI Brief */}
           <section className="opportunity-drawer__section">

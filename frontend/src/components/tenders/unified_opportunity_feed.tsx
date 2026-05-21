@@ -82,6 +82,11 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [pendingQuery, setPendingQuery] = useState(initialQuery);
   const [page, setPage] = useState(1);
+  const [clientFilter, setClientFilter] = useState<boolean>(() => {
+    try { return localStorage.getItem('tenderator_client_filter') === '1'; } catch { return false; }
+  });
+  const [clientFilterApplied, setClientFilterApplied] = useState<boolean>(false);
+  const [clientFilterSlug, setClientFilterSlug] = useState<string | null>(null);
 
   // If the URL ?q= changes (deep-link from Chat), pick it up.
   useEffect(() => {
@@ -106,6 +111,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         params.set('match_source', matchSubSource);
       }
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
+      if (clientFilter) params.set('client_filter', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -117,6 +123,8 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       }
       const data = await res.json();
       setItems(data.items || []);
+      setClientFilterApplied(Boolean(data.client_filter_applied));
+      setClientFilterSlug(data.client_filter_slug || null);
     } catch (e) {
       console.error('unified-feed fetch failed:', e);
       setError('Could not load opportunities.');
@@ -124,7 +132,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery]);
+  }, [token, source, matchSubSource, page, searchQuery, clientFilter]);
 
   useEffect(() => {
     setPage(1);
@@ -163,6 +171,35 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
           >
             <span className="mdi mdi-close" aria-hidden="true" />
           </button>
+        )}
+      </div>
+
+      {/* Client-pursuits filter toggle (Layer 2) — only useful for users
+          with a configured private guide; harmless if no filter is set. */}
+      <div className="tenderator-feed__client-filter">
+        <label className="tenderator-feed__client-filter-toggle">
+          <input
+            type="checkbox"
+            checked={clientFilter}
+            onChange={(e) => {
+              const v = e.target.checked;
+              setClientFilter(v);
+              try { localStorage.setItem('tenderator_client_filter', v ? '1' : '0'); } catch (_) { /* ignore */ }
+            }}
+          />
+          <span>Filter to my pursuits</span>
+        </label>
+        {clientFilter && clientFilterApplied && clientFilterSlug && (
+          <span className="tenderator-feed__client-filter-badge">
+            <span className="mdi mdi-filter-check-outline" aria-hidden="true" />
+            Filtered to {clientFilterSlug}
+          </span>
+        )}
+        {clientFilter && !clientFilterApplied && (
+          <span className="tenderator-feed__client-filter-badge tenderator-feed__client-filter-badge--inactive">
+            <span className="mdi mdi-information-outline" aria-hidden="true" />
+            No pursuits filter configured — showing all
+          </span>
         )}
       </div>
 

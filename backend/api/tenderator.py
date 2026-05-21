@@ -1027,6 +1027,7 @@ async def get_unified_feed(
     match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders"),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
+    client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
     current_user: User = Depends(require_blue_tier),
@@ -1037,6 +1038,84 @@ async def get_unified_feed(
         FtCallForTenders,
         FtFundedProject,
     )
+    from sqlalchemy import or_, text as _sql_text
+
+    # === Layer 2: per-client pursuits pre-filter ===
+    # When client_filter=true and the user has a private_guide_slug with
+    # meta_json.pursuits_filter, we narrow every source by keyword / CA /
+    # country / programme to the client's eligible scope. Fail-soft: if no
+    # filter is configured, the call behaves as if client_filter=false.
+    pursuits = None
+    if client_filter and getattr(current_user, "private_guide_slug", None):
+        try:
+            row = db.execute(
+                _sql_text(
+                    "SELECT meta_json FROM private_guides "
+                    "WHERE slug=:slug AND filename='_meta.json' AND meta_json IS NOT NULL LIMIT 1"
+                ),
+                {"slug": current_user.private_guide_slug},
+            ).fetchone()
+            if row and row[0]:
+                meta = row[0]
+                pursuits = meta.get("pursuits_filter") if isinstance(meta, dict) else None
+        except Exception as exc:
+            logger.warning("[client-filter] meta_json lookup failed for slug=%s: %s",
+                           current_user.private_guide_slug, exc)
+            pursuits = None
+
+    def _apply_pursuits_filter_ted(qry):
+        if not pursuits: return qry
+        kws = pursuits.get("keywords") or []
+        cas = pursuits.get("contracting_authorities") or []
+        cs = pursuits.get("countries") or []
+        ored = []
+        for kw in kws:
+            ored.append(Tender.title.ilike(f"%{kw}%"))
+            ored.append(Tender.description.ilike(f"%{kw}%"))
+        for ca in cas:
+            ored.append(Tender.official_name.ilike(f"%{ca}%"))
+        for c in cs:
+            ored.append(Tender.buyer_country == c)
+        return qry.filter(or_(*ored)) if ored else qry
+
+    def _apply_pursuits_filter_proposals(qry):
+        if not pursuits: return qry
+        kws = pursuits.get("keywords") or []
+        progs = pursuits.get("programmes") or []
+        ored = []
+        for kw in kws:
+            ored.append(FtCallForProposals.title.ilike(f"%{kw}%"))
+            ored.append(FtCallForProposals.description.ilike(f"%{kw}%"))
+        for p in progs:
+            ored.append(FtCallForProposals.framework_programme.ilike(f"%{p}%"))
+        return qry.filter(or_(*ored)) if ored else qry
+
+    def _apply_pursuits_filter_tenders(qry):
+        if not pursuits: return qry
+        kws = pursuits.get("keywords") or []
+        cas = pursuits.get("contracting_authorities") or []
+        ored = []
+        for kw in kws:
+            ored.append(FtCallForTenders.title.ilike(f"%{kw}%"))
+            ored.append(FtCallForTenders.description.ilike(f"%{kw}%"))
+        for ca in cas:
+            ored.append(FtCallForTenders.contracting_authority.ilike(f"%{ca}%"))
+        return qry.filter(or_(*ored)) if ored else qry
+
+    def _apply_pursuits_filter_projects(qry):
+        if not pursuits: return qry
+        kws = pursuits.get("keywords") or []
+        progs = pursuits.get("programmes") or []
+        cs = pursuits.get("countries") or []
+        ored = []
+        for kw in kws:
+            ored.append(FtFundedProject.title.ilike(f"%{kw}%"))
+            ored.append(FtFundedProject.objective.ilike(f"%{kw}%"))
+        for p in progs:
+            ored.append(FtFundedProject.framework_programme.ilike(f"%{p}%"))
+        for c in cs:
+            ored.append(FtFundedProject.coordinator_country == c)
+        return qry.filter(or_(*ored)) if ored else qry
 
     valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects"}
     if source not in valid_sources:
@@ -1058,6 +1137,7 @@ async def get_unified_feed(
             qry = qry.filter(Tender.submission_deadline < now)
         if q:
             qry = qry.filter(Tender.title.ilike(f"%{q}%"))
+        qry = _apply_pursuits_filter_ted(qry)
         return qry
 
     def _proposals_query():
@@ -1066,6 +1146,7 @@ async def get_unified_feed(
             qry = qry.filter(FtCallForProposals.status == status_filter.lower())
         if q:
             qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
+        qry = _apply_pursuits_filter_proposals(qry)
         return qry
 
     def _tenders_query():
@@ -1074,12 +1155,14 @@ async def get_unified_feed(
             qry = qry.filter(FtCallForTenders.status == status_filter.lower())
         if q:
             qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
+        qry = _apply_pursuits_filter_tenders(qry)
         return qry
 
     def _projects_query():
         qry = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
         if q:
             qry = qry.filter(FtFundedProject.title.ilike(f"%{q}%"))
+        qry = _apply_pursuits_filter_projects(qry)
         return qry
 
     def _serialise_ted(t):
@@ -1382,6 +1465,8 @@ async def get_unified_feed(
         "limit": limit,
         "totals": totals,
         "items": items,
+        "client_filter_applied": bool(pursuits),
+        "client_filter_slug": current_user.private_guide_slug if (client_filter and pursuits) else None,
     }
 
 
@@ -2515,3 +2600,157 @@ async def get_tender_legal_requirements(
             detail=f"Failed to retrieve legal requirements: {str(e)}"
         )
 
+
+# ============================================================================
+# Layer 3: Client scorecard endpoint
+# ============================================================================
+
+@router.get(
+    "/client-scorecard",
+    summary="Win-rate and lookalike-bid intel for the authenticated client",
+    description=(
+        "Returns the user's private win-rate scorecard, decorated against the "
+        "opportunity context they're viewing. Reads client_submissions rows "
+        "keyed on private_guide_slug. Requires a configured private guide."
+        "\n\n"
+        "**Inputs (all optional, used to find lookalikes):** ca, country, "
+        "programme, lot, keyword.\n\n"
+        "**Returns:** overall counters, win-rate by leading partner, win-rate "
+        "by CA, top-N lookalike past bids with outcome and comments. Blue tier."
+    ),
+)
+async def get_client_scorecard(
+    ca: Optional[str] = Query(None, description="Contracting authority substring"),
+    country: Optional[str] = Query(None),
+    programme: Optional[str] = Query(None),
+    lot: Optional[str] = Query(None),
+    keyword: Optional[str] = Query(None, description="Substring on project_title"),
+    lookalike_limit: int = Query(3, ge=1, le=10),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from sqlalchemy import text as _sql_text
+
+    slug = getattr(current_user, "private_guide_slug", None)
+    if not slug:
+        return {
+            "slug": None,
+            "scorecard_available": False,
+            "reason": "User has no private_guide_slug; no scorecard data.",
+        }
+
+    overall = db.execute(_sql_text(
+        "SELECT outcome, COUNT(*) FROM client_submissions "
+        "WHERE slug=:slug AND is_test=FALSE GROUP BY outcome"
+    ), {"slug": slug}).fetchall()
+    overall_map = {r[0]: int(r[1]) for r in overall}
+    total = sum(overall_map.values())
+    if total == 0:
+        return {
+            "slug": slug,
+            "scorecard_available": False,
+            "reason": "No client_submissions on file for this slug.",
+        }
+
+    awarded = overall_map.get("awarded", 0)
+    lost = overall_map.get("not_awarded", 0)
+    pending = overall_map.get("pending", 0)
+    cancelled = overall_map.get("cancelled", 0)
+    decided = awarded + lost
+    overall_win_rate_pct = round(awarded / decided * 100, 1) if decided else None
+
+    by_lead = db.execute(_sql_text(
+        "SELECT leading_partner, "
+        "SUM(CASE WHEN outcome='awarded' THEN 1 ELSE 0 END) AS awarded, "
+        "SUM(CASE WHEN outcome='not_awarded' THEN 1 ELSE 0 END) AS lost, "
+        "SUM(CASE WHEN outcome='pending' THEN 1 ELSE 0 END) AS pending "
+        "FROM client_submissions "
+        "WHERE slug=:slug AND is_test=FALSE AND leading_partner IS NOT NULL "
+        "GROUP BY leading_partner "
+        "ORDER BY awarded + lost DESC "
+        "LIMIT 12"
+    ), {"slug": slug}).fetchall()
+    lead_rows = []
+    for r in by_lead:
+        a, l, p = int(r[1] or 0), int(r[2] or 0), int(r[3] or 0)
+        d = a + l
+        lead_rows.append({
+            "leading_partner": r[0],
+            "awarded": a, "lost": l, "pending": p,
+            "win_rate_pct": round(a/d*100, 1) if d else None,
+        })
+
+    by_ca = db.execute(_sql_text(
+        "SELECT contracting_authority, "
+        "SUM(CASE WHEN outcome='awarded' THEN 1 ELSE 0 END) AS awarded, "
+        "SUM(CASE WHEN outcome='not_awarded' THEN 1 ELSE 0 END) AS lost, "
+        "SUM(CASE WHEN outcome='pending' THEN 1 ELSE 0 END) AS pending "
+        "FROM client_submissions "
+        "WHERE slug=:slug AND is_test=FALSE AND contracting_authority IS NOT NULL "
+        "GROUP BY contracting_authority "
+        "ORDER BY awarded + lost DESC"
+    ), {"slug": slug}).fetchall()
+    ca_rows = []
+    for r in by_ca:
+        a, l, p = int(r[1] or 0), int(r[2] or 0), int(r[3] or 0)
+        d = a + l
+        ca_rows.append({
+            "contracting_authority": r[0],
+            "awarded": a, "lost": l, "pending": p,
+            "win_rate_pct": round(a/d*100, 1) if d else None,
+        })
+
+    conds = ["slug=:slug", "is_test=FALSE"]
+    params = {"slug": slug, "lim": lookalike_limit}
+    if ca:
+        conds.append("contracting_authority ILIKE :ca"); params["ca"] = f"%{ca}%"
+    if country:
+        conds.append("country ILIKE :country"); params["country"] = f"%{country}%"
+    if programme:
+        conds.append("programme ILIKE :programme"); params["programme"] = f"%{programme}%"
+    if lot:
+        conds.append("lot ILIKE :lot"); params["lot"] = f"%{lot}%"
+    if keyword:
+        conds.append("project_title ILIKE :keyword"); params["keyword"] = f"%{keyword}%"
+
+    sql = (
+        "SELECT id, project_title, contracting_authority, country, programme, lot, "
+        "outcome, comments, submission_date, leading_partner, budget_eur "
+        "FROM client_submissions WHERE " + " AND ".join(conds) + " "
+        "ORDER BY submission_date DESC NULLS LAST LIMIT :lim"
+    )
+    lookalike_rows = db.execute(_sql_text(sql), params).fetchall()
+    lookalikes = [
+        {
+            "id": str(r[0]),
+            "project_title": r[1],
+            "contracting_authority": r[2],
+            "country": r[3],
+            "programme": r[4],
+            "lot": r[5],
+            "outcome": r[6],
+            "comments": r[7],
+            "submission_date": r[8].isoformat() if r[8] else None,
+            "leading_partner": r[9],
+            "budget_eur": float(r[10]) if r[10] is not None else None,
+        }
+        for r in lookalike_rows
+    ]
+
+    return {
+        "slug": slug,
+        "scorecard_available": True,
+        "overall": {
+            "total": total,
+            "awarded": awarded,
+            "not_awarded": lost,
+            "pending": pending,
+            "cancelled": cancelled,
+            "decided": decided,
+            "win_rate_pct": overall_win_rate_pct,
+        },
+        "by_leading_partner": lead_rows,
+        "by_contracting_authority": ca_rows,
+        "lookalikes": lookalikes,
+        "filters_used": {k: v for k, v in {"ca": ca, "country": country, "programme": programme, "lot": lot, "keyword": keyword}.items() if v},
+    }
