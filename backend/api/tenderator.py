@@ -2676,7 +2676,7 @@ async def _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike
         "FROM client_submissions "
         "WHERE slug=:slug AND is_test=FALSE AND leading_partner IS NOT NULL "
         "GROUP BY leading_partner "
-        "ORDER BY awarded + lost DESC "
+        "ORDER BY COUNT(*) DESC "
         "LIMIT 12"
     ), {"slug": slug}).fetchall()
     lead_rows = []
@@ -2697,7 +2697,7 @@ async def _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike
         "FROM client_submissions "
         "WHERE slug=:slug AND is_test=FALSE AND contracting_authority IS NOT NULL "
         "GROUP BY contracting_authority "
-        "ORDER BY awarded + lost DESC"
+        "ORDER BY COUNT(*) DESC"
     ), {"slug": slug}).fetchall()
     ca_rows = []
     for r in by_ca:
