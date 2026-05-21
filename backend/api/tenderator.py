@@ -2763,3 +2763,4 @@ async def _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike
         "lookalikes": lookalikes,
         "filters_used": {k: v for k, v in {"ca": ca, "country": country, "programme": programme, "lot": lot, "keyword": keyword}.items() if v},
     }
+# Layer 3 deploy trigger 1779390536
