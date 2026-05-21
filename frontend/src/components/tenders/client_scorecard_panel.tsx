@@ -104,7 +104,7 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
     params.set('lookalike_limit', '3');
 
     setLoading(true);
-    fetch(`${API_URL}/api/tenders/client-scorecard?${params.toString()}`, {
+    fetch(`${API_URL}/api/tenders/scorecard/client?${params.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
       signal: ctrl.signal,
     })

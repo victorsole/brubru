@@ -2606,7 +2606,7 @@ async def get_tender_legal_requirements(
 # ============================================================================
 
 @router.get(
-    "/client-scorecard",
+    "/scorecard/client",
     summary="Win-rate and lookalike-bid intel for the authenticated client",
     description=(
         "Returns the user's private win-rate scorecard, decorated against the "
