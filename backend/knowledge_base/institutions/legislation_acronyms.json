@@ -1814,13 +1814,6 @@
       "year": 2016,
       "source_file": "L_2016114EN.01001401.xml"
     },
-    "ACP": {
-      "celex": "31980R0098",
-      "full_title": "Commission Regulation (EC) No 1980/98 of 17 September 1998 opening and providing for the administration of Community tariff quotas and tariff ceilings and establishing a Community surveillance in the ",
-      "type": "Regulation",
-      "year": null,
-      "source_file": "L_1998256EN.01000301.xml"
-    },
     "RESTORE": {
       "celex": "32024R3236",
       "full_title": "Regulation (EU) 2024/3236 of the European Parliament and of the Council of 19 December 2024 amending Regulations (EU) 2021/1057 and (EU) 2021/1058 as regards Regional Emergency Support to Reconstructi",
@@ -3215,10 +3208,10 @@
       "source_file": "L_2014179EN.01007201.xml"
     },
     "EEIG": {
-      "celex": "32137R0085",
+      "celex": "31985R2137",
       "full_title": "Council Regulation (EEC) No 2137/85 of 25 July 1985 on the European Economic Interest Grouping (EEIG)",
       "type": "Regulation",
-      "year": null,
+      "year": 1985,
       "source_file": "L_1985199EN.01000101.xml"
     },
     "ECB/2021/8": {

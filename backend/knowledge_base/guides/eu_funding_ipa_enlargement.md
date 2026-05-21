@@ -1,6 +1,7 @@
 # EU Funding for Enlargement Countries: IPA III, Reform and Growth Facility, IPARD
 
 ## QUICK FACTS
+- **LATEST (Wednesday 20 May 2026, DG NEAR)**: **EUR 158.9 million disbursement under the EU Growth Plan for the Western Balkans** — DG NEAR released EUR 158.9M to Albania, Montenegro and North Macedonia under the Reform and Growth Facility (RGF, Reg (EU) 2024/1449). This is the third tranche under the RGF since entry into force on 25 May 2024 and is conditional on the three countries meeting their Reform Agenda milestones (rule of law, anti-corruption, single-market alignment, green and digital transitions). Albania receives the largest share, reflecting accession-cluster acceleration. Source: neighbourhood-enlargement.ec.europa.eu/news.
 - IPA III regulation: Regulation (EU) 2021/1529 (CELEX: 32021R1529), OJ L 330, 20.9.2021
 - IPA III budget: EUR 14.162 billion for 2021-2027 (EUR 14.99B total incl. contributions)
 - IPA III supplemented by: Delegated Regulation (EU) 2021/2128 (thematic priorities), Implementing Regulation (EU) 2021/2236
