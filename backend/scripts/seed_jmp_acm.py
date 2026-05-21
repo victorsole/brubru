@@ -523,12 +523,12 @@ def upsert_user(db, apply: bool) -> str:
                 """
                 INSERT INTO users (
                     id, email, password_hash, full_name, first_name, preferred_name,
-                    organization, role_title, country, language, timezone,
+                    organization, role, role_title, country, language, timezone,
                     policy_interests, subscription_tier, subscription_expires_at,
                     is_active, is_verified, created_at, updated_at
                 ) VALUES (
                     :id, :email, :pw, :full_name, :first_name, :preferred_name,
-                    :org, :role_title, :country, :language, :tz,
+                    :org, 'user', :role_title, :country, :language, :tz,
                     CAST(:interests AS JSONB), :tier, :expires_at,
                     true, true, NOW(), NOW()
                 )
