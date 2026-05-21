@@ -2629,6 +2629,15 @@ async def get_client_scorecard(
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
 ):
+    try:
+        return await _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike_limit, current_user, db)
+    except Exception as exc:
+        import traceback
+        logger.error("client-scorecard 500: %s\n%s", exc, traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"client-scorecard failed: {type(exc).__name__}: {str(exc)[:300]}")
+
+
+async def _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike_limit, current_user, db):
     from sqlalchemy import text as _sql_text
 
     slug = getattr(current_user, "private_guide_slug", None)
