@@ -33,14 +33,12 @@ from models.chat import Chat, Message
 
 
 def _extract_user_id_from_jwt(authorization: Optional[str]) -> Optional[str]:
-    """Best-effort JWT decode for the chat path.
+    """JWT decode for the chat path. Returns the verified `sub` claim or None.
 
-    The chat endpoint historically read user_id from the request body, which
-    means a logged-in user could send no user_id (race / refresh / pre-user
-    fallback in the FE) and the chat would silently fall back to anonymous
-    mode — losing the private-guide bundle. This helper decodes the bearer
-    token if present and returns the `sub` claim. Fail-soft: any error
-    returns None and the caller falls back to body / pre_user_id.
+    Used to derive the AUTHORITATIVE user_id for chat operations. The request
+    body's `user_id` field is NEVER trusted on its own — that was a tenant
+    isolation flaw (any party who learned a UUID could read/write that user's
+    chats and trigger their private-guide injection).
     """
     if not authorization:
         return None
@@ -58,6 +56,29 @@ def _extract_user_id_from_jwt(authorization: Optional[str]) -> Optional[str]:
         return None
     except Exception:
         return None
+
+
+def _chat_owned_by(chat: "Chat", jwt_user_id: Optional[str], pre_user_id: Optional[str]) -> bool:
+    """Authorisation check for accessing a single Chat row.
+
+    Rules (in order):
+    - Anonymous chat (chat.pre_user_id is set): only the same pre_user_id can access.
+    - Authenticated chat (chat.user_id is set, no pre_user_id): only the matching
+      JWT-derived user_id can access. The body cannot stand in for the JWT.
+    - Synthetic anon path (legacy: chat.user_id is the uuid5(pre_user_id) but
+      pre_user_id is null on the row): treated as opaque — deny unless JWT matches.
+
+    Callers should 404 on failure (don't leak chat existence to attackers).
+    """
+    if chat is None:
+        return False
+    # Anonymous chat path — pre_user_id is the only legitimate key.
+    if chat.pre_user_id:
+        return bool(pre_user_id) and pre_user_id == chat.pre_user_id
+    # Authenticated chat path — JWT user_id is the only legitimate key.
+    if chat.user_id is None:
+        return False
+    return bool(jwt_user_id) and jwt_user_id == str(chat.user_id)
 
 logger = logging.getLogger(__name__)
 
@@ -309,8 +330,39 @@ def _delete_chat(chat_id_str: str) -> bool:
         db.close()
 
 
-def _list_chats(user_id: Optional[str] = None, limit: int = 50) -> Dict[str, Any]:
-    """List recent chats, optionally filtered by user."""
+def _load_chat_for_owner(chat_id_str: str, jwt_user_id: Optional[str], pre_user_id: Optional[str]) -> Optional["Chat"]:
+    """Load a chat row and verify ownership in one step.
+
+    Returns the Chat object if the caller owns it, None otherwise. Callers should
+    treat None uniformly as 404 — do not leak whether the chat existed at all.
+    """
+    db = SessionLocal()
+    try:
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+        except (ValueError, AttributeError):
+            return None
+        chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+        if not chat:
+            return None
+        if not _chat_owned_by(chat, jwt_user_id, pre_user_id):
+            logger.warning(
+                "chat ownership rejected: chat_id=%s jwt_user=%s pre_user=%s chat.user_id=%s chat.pre_user_id=%s",
+                chat_id_str, jwt_user_id, pre_user_id, chat.user_id, chat.pre_user_id,
+            )
+            return None
+        return chat
+    finally:
+        db.close()
+
+
+def _list_chats(user_id: Optional[str] = None, limit: int = 50, pre_user_id: Optional[str] = None) -> Dict[str, Any]:
+    """List recent chats, filtered by user_id OR pre_user_id.
+
+    Callers must pass exactly one of (user_id, pre_user_id). The route enforces
+    that at least one is present and that user_id is JWT-derived (never
+    user-supplied) — see list_conversations().
+    """
     db = SessionLocal()
     try:
         query = db.query(Chat).filter(Chat.is_active == True)
@@ -320,7 +372,14 @@ def _list_chats(user_id: Optional[str] = None, limit: int = 50) -> Dict[str, Any
                 user_uuid = uuid_mod.UUID(user_id)
                 query = query.filter(Chat.user_id == user_uuid)
             except (ValueError, AttributeError):
-                pass
+                # Bad UUID → return empty rather than the whole table.
+                return {'conversations': [], 'total': 0}
+        elif pre_user_id:
+            query = query.filter(Chat.pre_user_id == pre_user_id)
+        else:
+            # Defence in depth: if both are None, return empty rather than
+            # leaking the whole platform.
+            return {'conversations': [], 'total': 0}
 
         chats = query.order_by(Chat.last_message_at.desc().nullslast()).limit(limit).all()
 
@@ -370,13 +429,17 @@ async def send_message(
     """
     start_time = datetime.now()
 
-    # Trust the JWT over the request body. Historically the FE passed user_id
-    # in the body, but a race / refresh / pre-user fallback could leave it
-    # None for an authenticated user and silently disable the private-guide
-    # bundle. Derive from the bearer token whenever possible.
+    # AUTHORISATION: derive user_id from the JWT only. The body's `user_id`
+    # field is logged for forensics (a mismatch is an attack signal) but never
+    # trusted as authority. Anonymous flow continues to work through
+    # `pre_user_id` when no JWT is present.
     jwt_user_id = _extract_user_id_from_jwt(authorization)
-    if jwt_user_id:
-        request.user_id = jwt_user_id
+    if request.user_id and request.user_id != jwt_user_id:
+        logger.warning(
+            "chat /message body user_id=%s mismatched JWT user_id=%s — body ignored",
+            request.user_id, jwt_user_id,
+        )
+    request.user_id = jwt_user_id  # the only authoritative source
 
     try:
         # Get or create chat (runs in executor to not block async)
@@ -496,9 +559,14 @@ async def stream_message(
     Stream AI response.
     """
     try:
+        # AUTHORISATION: see /message — JWT is the only authoritative source.
         jwt_user_id = _extract_user_id_from_jwt(authorization)
-        if jwt_user_id:
-            request.user_id = jwt_user_id
+        if request.user_id and request.user_id != jwt_user_id:
+            logger.warning(
+                "chat /stream body user_id=%s mismatched JWT user_id=%s — body ignored",
+                request.user_id, jwt_user_id,
+            )
+        request.user_id = jwt_user_id
 
         loop = asyncio.get_event_loop()
 
@@ -569,14 +637,24 @@ async def stream_message(
 
 
 @router.get("/history/{chat_id}", response_model=ConversationHistoryResponse)
-async def get_history(chat_id: str):
-    """
-    Get conversation history.
-    """
+async def get_history(
+    chat_id: str,
+    pre_user_id: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+):
+    """Get conversation history. Requires ownership (JWT or matching pre_user_id)."""
     try:
+        jwt_user_id = _extract_user_id_from_jwt(authorization)
         loop = asyncio.get_event_loop()
-        messages = await loop.run_in_executor(None, _get_chat_messages, chat_id)
 
+        # Ownership check first — 404 on miss to avoid leaking existence.
+        chat = await loop.run_in_executor(
+            None, _load_chat_for_owner, chat_id, jwt_user_id, pre_user_id
+        )
+        if chat is None:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        messages = await loop.run_in_executor(None, _get_chat_messages, chat_id)
         if messages is None:
             raise HTTPException(status_code=404, detail="Conversation not found")
 
@@ -594,14 +672,23 @@ async def get_history(chat_id: str):
 
 
 @router.get("/citations/{chat_id}", response_model=CitationsResponse)
-async def get_citations(chat_id: str):
-    """
-    Get citations for conversation.
-    """
+async def get_citations(
+    chat_id: str,
+    pre_user_id: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+):
+    """Get citations for conversation. Requires ownership."""
     try:
+        jwt_user_id = _extract_user_id_from_jwt(authorization)
         loop = asyncio.get_event_loop()
-        citations = await loop.run_in_executor(None, _get_chat_citations, chat_id)
 
+        chat = await loop.run_in_executor(
+            None, _load_chat_for_owner, chat_id, jwt_user_id, pre_user_id
+        )
+        if chat is None:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        citations = await loop.run_in_executor(None, _get_chat_citations, chat_id)
         if citations is None:
             raise HTTPException(status_code=404, detail="Conversation not found")
 
@@ -619,19 +706,27 @@ async def get_citations(chat_id: str):
 
 
 @router.delete("/{chat_id}")
-async def delete_conversation(chat_id: str):
-    """
-    Delete conversation.
-    """
+async def delete_conversation(
+    chat_id: str,
+    pre_user_id: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+):
+    """Delete conversation. Requires ownership."""
     try:
+        jwt_user_id = _extract_user_id_from_jwt(authorization)
         loop = asyncio.get_event_loop()
-        deleted = await loop.run_in_executor(None, _delete_chat, chat_id)
 
+        chat = await loop.run_in_executor(
+            None, _load_chat_for_owner, chat_id, jwt_user_id, pre_user_id
+        )
+        if chat is None:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        deleted = await loop.run_in_executor(None, _delete_chat, chat_id)
         if not deleted:
             raise HTTPException(status_code=404, detail="Conversation not found")
 
-        logger.info(f"Deleted conversation {chat_id}")
-
+        logger.info(f"Deleted conversation {chat_id} (owner jwt_user_id={jwt_user_id} pre_user_id={pre_user_id})")
         return {"status": "deleted", "chat_id": chat_id}
 
     except HTTPException:
@@ -642,15 +737,36 @@ async def delete_conversation(chat_id: str):
 
 
 @router.get("/list")
-async def list_conversations(limit: int = 50, user_id: Optional[str] = None):
-    """
-    List recent conversations.
+async def list_conversations(
+    limit: int = 50,
+    pre_user_id: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+):
+    """List recent conversations for the caller.
+
+    Authorisation:
+    - JWT bearer token → list that user's chats (the body / query `user_id`
+      that older clients used to send is now ignored).
+    - No JWT but `pre_user_id` query string → list that anon session's chats.
+    - Neither → 401.
+
+    Admins still call /api/chat/list with a Bearer token but use the dedicated
+    admin endpoints when they need to inspect another user's history.
     """
     try:
+        jwt_user_id = _extract_user_id_from_jwt(authorization)
+        if not jwt_user_id and not pre_user_id:
+            raise HTTPException(status_code=401, detail="Authentication required")
+
+        # Authenticated path wins. Otherwise filter by pre_user_id (anon).
         loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(None, _list_chats, user_id, limit)
+        result = await loop.run_in_executor(
+            None, _list_chats, jwt_user_id, limit, None if jwt_user_id else pre_user_id
+        )
         return result
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to list conversations: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

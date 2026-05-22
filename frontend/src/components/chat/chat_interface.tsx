@@ -24,7 +24,14 @@ export interface Citation {
 }
 
 export interface ChatAction {
-  action_type: 'track_file' | 'generate_document' | 'open_amendator' | 'view_prediction' | 'view_calendar' | 'open_tenderator';
+  action_type:
+    | 'track_file'
+    | 'generate_document'
+    | 'open_document'
+    | 'open_amendator'
+    | 'view_prediction'
+    | 'view_calendar'
+    | 'open_tenderator';
   label: string;
   icon: string;
   colour: string;
@@ -32,6 +39,16 @@ export interface ChatAction {
   params: Record<string, any>;
   requires_auth: boolean;
   pre_user_label?: string;
+}
+
+export interface DraftedDocument {
+  document_id: string;
+  document_subtype: string;
+  title: string;
+  content: string;
+  preview: string;
+  edit_url: string;
+  word_count: number;
 }
 
 export interface Message {
@@ -44,6 +61,7 @@ export interface Message {
   searchTimeMs?: number;
   contextsUsed?: number;
   actions?: ChatAction[];
+  draftedDocument?: DraftedDocument;
   isStreaming?: boolean;
 }
 
@@ -124,7 +142,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const [preUserQueryCount, setPreUserQueryCount] = useState<number>(getPreUserQueryCount());
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, token } = useAuth();
   const navigate = useNavigate();
 
   // API base URL - configure this in your environment
@@ -333,6 +351,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           message: currentInput,
@@ -380,6 +399,17 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         searchTimeMs: data.search_time_ms,
         contextsUsed: data.citations?.length || 0,
         actions: data.actions || [],
+        draftedDocument: data.drafted_document
+          ? {
+              document_id: data.drafted_document.document_id,
+              document_subtype: data.drafted_document.document_subtype,
+              title: data.drafted_document.title,
+              content: data.drafted_document.content,
+              preview: data.drafted_document.preview,
+              edit_url: data.drafted_document.edit_url,
+              word_count: data.drafted_document.word_count,
+            }
+          : undefined,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
@@ -459,6 +489,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           message: currentInput,
@@ -666,15 +697,26 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         }
         break;
       }
-      case 'generate_document':
-        navigate('/main', {
-          state: {
-            openDocGenerator: true,
-            docType: action.params.document_type,
-            topic: action.params.topic,
-          },
+      case 'generate_document': {
+        // The action carries an already-formed route to /my-eu-bubble; honour
+        // it when present so the Documents tab can pop the wizard.
+        const params = new URLSearchParams({
+          tab: 'documents',
+          openWizard: '1',
         });
+        if (action.params.document_type) params.set('docType', String(action.params.document_type));
+        if (action.params.topic) params.set('topic', String(action.params.topic));
+        navigate(action.route || `/my-eu-bubble?${params.toString()}`);
         break;
+      }
+      case 'open_document': {
+        // Chat auto-drafted a document; route the user to that exact row in
+        // the Documents tab so they can edit it.
+        const docId = action.params.document_id;
+        const route = action.route || `/my-eu-bubble?tab=documents&docId=${docId}`;
+        navigate(route);
+        break;
+      }
       case 'open_amendator':
       case 'view_prediction':
       case 'view_calendar':
