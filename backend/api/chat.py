@@ -17,9 +17,10 @@ import logging
 import uuid as uuid_mod
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timezone
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, Header
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+from jose import JWTError, jwt
 import asyncio
 
 from services.ai_service import AIService, ChatMessage, get_ai_service
@@ -27,7 +28,36 @@ from services.ai.context_builder import get_context_builder
 from services.ai.citation_tracker import CitationTracker
 from services.ai.hybrid_legal_assistant import HybridLegalAssistant, get_hybrid_assistant
 from core.database import SessionLocal
+from core.config import settings as _app_settings
 from models.chat import Chat, Message
+
+
+def _extract_user_id_from_jwt(authorization: Optional[str]) -> Optional[str]:
+    """Best-effort JWT decode for the chat path.
+
+    The chat endpoint historically read user_id from the request body, which
+    means a logged-in user could send no user_id (race / refresh / pre-user
+    fallback in the FE) and the chat would silently fall back to anonymous
+    mode — losing the private-guide bundle. This helper decodes the bearer
+    token if present and returns the `sub` claim. Fail-soft: any error
+    returns None and the caller falls back to body / pre_user_id.
+    """
+    if not authorization:
+        return None
+    parts = authorization.split(" ", 1)
+    if len(parts) != 2 or parts[0].lower() != "bearer":
+        return None
+    token = parts[1].strip()
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, _app_settings.SECRET_KEY, algorithms=["HS256"])
+        sub = payload.get("sub")
+        return str(sub) if sub else None
+    except JWTError:
+        return None
+    except Exception:
+        return None
 
 logger = logging.getLogger(__name__)
 
@@ -332,12 +362,21 @@ def _count_chats() -> int:
 @router.post("/message", response_model=ChatMessageResponse)
 async def send_message(
     request: ChatMessageRequest,
-    background_tasks: BackgroundTasks
+    background_tasks: BackgroundTasks,
+    authorization: Optional[str] = Header(None),
 ):
     """
     Send message and get AI response with EU context.
     """
     start_time = datetime.now()
+
+    # Trust the JWT over the request body. Historically the FE passed user_id
+    # in the body, but a race / refresh / pre-user fallback could leave it
+    # None for an authenticated user and silently disable the private-guide
+    # bundle. Derive from the bearer token whenever possible.
+    jwt_user_id = _extract_user_id_from_jwt(authorization)
+    if jwt_user_id:
+        request.user_id = jwt_user_id
 
     try:
         # Get or create chat (runs in executor to not block async)
@@ -449,11 +488,18 @@ async def send_message(
 
 
 @router.post("/stream")
-async def stream_message(request: ChatMessageRequest):
+async def stream_message(
+    request: ChatMessageRequest,
+    authorization: Optional[str] = Header(None),
+):
     """
     Stream AI response.
     """
     try:
+        jwt_user_id = _extract_user_id_from_jwt(authorization)
+        if jwt_user_id:
+            request.user_id = jwt_user_id
+
         loop = asyncio.get_event_loop()
 
         if request.chat_id:
