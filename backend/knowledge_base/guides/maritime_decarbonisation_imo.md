@@ -1,6 +1,7 @@
 # Maritime Decarbonisation -- EU Policy and IMO MEPC 84
 
 ## QUICK FACTS
+- **LATEST (Thursday 21 May 2026 — EUROPEAN MARITIME DAY 2026 OPENS IN LIMASSOL, CYPRUS)**: Commissioner **Costas Kadis** (Fisheries and Oceans, Cyprus) delivered the **opening remarks at European Maritime Day 2026 in Limassol, Cyprus** (21-22 May 2026). Source: EC Press Corner SPEECH (21 May 2026). European Maritime Day is the EU's flagship annual conference on **integrated maritime policy**, **sustainable blue economy**, and **ocean governance**. The Limassol 2026 edition focuses on: Mediterranean basin cooperation; small-island and outermost-region maritime resilience; sustainable shipping decarbonisation roadmap; ocean climate-action integration; maritime-spatial-planning interoperability. Closes 22 May 2026, coinciding with the EP plenary part-session 18-22 May closing day.
 - Topic: Decarbonisation of maritime transport -- EU instruments (ETS for shipping, FuelEU Maritime) and International Maritime Organization (IMO) framework (Marine Environment Protection Committee sessions)
 - EPRS Briefing (20 April 2026): "On the path towards decarbonisation of maritime transport -- Key issues at stake at the IMO MEPC 84" -- EPRS analysis ahead of MEPC 84 session. Ref: EPRS_UNK_863c37a1ac87
 - IMO MEPC 84: Marine Environment Protection Committee 84th session, scheduled spring 2026, London

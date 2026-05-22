@@ -1,6 +1,7 @@
 # European Public Prosecutor's Office (EPPO)
 
 ## QUICK FACTS
+- **LATEST (Thursday 21 May 2026 — LIBE TABLES NLE DRAFT ON APPOINTMENT OF CHIEF PROSECUTOR)**: The Committee on Civil Liberties, Justice and Home Affairs (LIBE) tabled the draft report on procedure **2025/0803(NLE)** "Appointment of the European Chief Prosecutor". Source: EP committees portal — LIBE Draft Report listing (21 May 2026). The NLE procedure (consent procedure) covers the next-term appointment of EPPO's head following Laura Codruța Kövesi's seven-year non-renewable term that started in October 2019. The appointment requires **Council common accord with the European Parliament's consent** (Article 14 of Regulation (EU) 2017/1939 setting up the EPPO). Selection process: independent selection panel of 7-12 persons (former CJEU judges, members of national supreme courts, public prosecutors of acknowledged competence) draws up a shortlist, Council and Parliament then exchange views and decide by mutual agreement. The LIBE consent vote will follow the committee scrutiny phase.
 - Full name: European Public Prosecutor's Office
 - Founding regulation: Council Regulation (EU) 2017/1939 of 12 October 2017 implementing enhanced cooperation on the establishment of the EPPO
 - CELEX: 32017R1939

@@ -1,0 +1,78 @@
+# ePrivacy CSAM Derogation Extension (Reg 2021/1232 amendment — 2025/0429(COD))
+
+## QUICK FACTS
+- **LATEST (Thursday 21 May 2026 — LIBE DRAFT REPORT TABLED)**: The Committee on Civil Liberties, Justice and Home Affairs (LIBE) **tabled the draft report** on procedure 2025/0429(COD). Source: EP committees portal — LIBE Draft Report listing (21 May 2026, europarl.europa.eu/committees/en/libe). The procedure amends **Regulation (EU) 2021/1232** to **extend its period of application** — the regulation provides a temporary derogation from certain provisions of Directive 2002/58/EC (the ePrivacy Directive) to allow online service providers to use technologies to voluntarily detect, report, and remove **online child sexual abuse material (CSAM)** and detect grooming on their services. The **temporary derogation expired on 3 April 2026**, creating a legal-certainty gap; the proposal extends application while the long-term CSAM Regulation negotiation (separate, 2022/0155(COD)) remains unresolved. The next step is the **LIBE committee vote on 26 May 2026 (TBC)**, then plenary vote in June 2026.
+- **Procedure**: **2025/0429(COD)** — Ordinary Legislative Procedure
+- **Commission proposal**: **COM(2025) 797**
+- **Lead committee**: **LIBE** (Civil Liberties, Justice and Home Affairs)
+- **Rapporteur**: **Birgit Sippel** (S&D, Germany) — long-standing LIBE figure on data-protection and ePrivacy files
+- **Lead DG**: DG HOME (Migration and Home Affairs)
+- **Commissioner**: Magnus Brunner (Internal Affairs and Migration, Austria)
+- **Legal basis**: Article 16(2) TFEU (data protection), Article 114(1) TFEU (internal market), Article 294 TFEU (ordinary legislative procedure)
+- **Amends**: **Regulation (EU) 2021/1232** of the European Parliament and of the Council of 14 July 2021 on a temporary derogation from certain provisions of Directive 2002/58/EC as regards the use of technologies by providers of number-independent interpersonal communications services for the processing of personal and other data for the purpose of combating online child sexual abuse (CELEX **32021R1232**)
+- **Related (separate) procedure**: **2022/0155(COD)** — Proposal for a Regulation laying down rules to prevent and combat child sexual abuse (the "CSAM Regulation", COM(2022) 209) — the long-term legislative file that has been blocked in Council since 2023-2024 over the "detection orders" mass-scanning controversy
+- **EP procedural stage**: awaiting Council's 1st reading position (per OEIL); LIBE first-reading vote then plenary vote expected June 2026
+
+## Why this extension is being negotiated under urgency
+
+The 2021 derogation was designed as a temporary bridge: it allowed platforms to **continue voluntary scanning** of communications for known CSAM hashes + grooming detection while the EU legislator finalised the long-term CSAM Regulation (the "Chat Control" file COM(2022) 209). The 2021 derogation had a sunset clause (Article 10 of Reg 2021/1232) that originally expired in 2024; it was already extended once. The latest extension lapsed on **3 April 2026** without a successor framework in place.
+
+Until the LIBE-Council co-decision concludes:
+- Platforms that previously scanned voluntarily under the 2021 derogation **lose their legal basis** under EU law for that processing (the ePrivacy Directive's confidentiality rules apply by default)
+- This affects services like Gmail, Facebook Messenger, WhatsApp (for the metadata-scanning component), Instagram DM, Snapchat, Discord, and a number of smaller services
+- **NCMEC reporting volumes from EU platforms drop** during any gap window
+- The Commission has issued informal guidance (May 2026) on enforcement priorities — primarily a stay-the-course signal pending the urgent extension
+
+## What the extension proposal does
+
+Per the LIBE draft report (Sippel) tabled 21 May 2026:
+- Extends the period of application of Regulation (EU) 2021/1232 by **a further fixed period** (the precise number of months will be confirmed in the adopted text; typically 24-36 months extensions in this file family)
+- **Retroactive effect** from 3 April 2026 to close the gap window — Commission proposal explicitly includes retroactivity
+- **No change to the substantive scope** of the derogation: the file is purely about extending application, not about adding obligations
+- Sippel's draft adds **transparency reporting obligations** on platforms using the derogation (annual reports to national Data Protection Authorities + EDPB)
+- Sippel's draft adds **expiry mechanism conditional on the long-term CSAM Regulation entering into force** — i.e. the extended derogation lapses automatically once 2022/0155(COD) becomes binding
+
+## The political fault lines
+
+This file is treated under urgency procedure because of the **expired derogation** issue, but it sits inside a wider political war:
+
+| Side | Position |
+|---|---|
+| **Mainstream coalition (EPP+S&D+Renew majority)** | Extension is a necessary safety net for child-safety reporting until 2022/0155(COD) concludes; voluntary scanning is rights-compatible if narrowly scoped |
+| **The Left + Greens (mostly)** | Even the voluntary regime risks "creeping surveillance" of private communications; would prefer no extension or much stricter safeguards |
+| **PfE + ECR (variable)** | Generally support extension on child-safety grounds; some MS-driven push for going further into mandatory detection (which is the 2022/0155 fight) |
+| **EDPS + EDPB** | EDPB Opinion 4/2022 was sharply critical of the voluntary scanning regime's proportionality; the extension faces continued DPA scrutiny |
+| **NGOs (EDRi, Bits of Freedom, Wikimedia Europe)** | Strong opposition — argue the temporary derogation has become semi-permanent and was never properly reviewed for effectiveness |
+| **NGOs (NSPCC, ECPAT, Internet Watch Foundation, MissingChildren EU)** | Strong support — argue the gap window is causing real CSAM to remain undetected |
+
+## Trilogue outlook
+
+- **Council position**: Council adopted its position on the original 2021 derogation and the first extension; on the May 2026 extension proposal, Council has been signalling broad support but with concern over Sippel's added transparency-reporting language
+- **EP first reading vote**: expected June 2026 plenary (Strasbourg part-session 15-18 June 2026)
+- **Trilogue**: short trilogue expected because the substantive scope is unchanged; agreement targeted for July or early autumn 2026
+- **Entry into force**: retroactive to 3 April 2026
+
+## Risk register for stakeholders
+
+- **Platforms providing in-scope services** (number-independent interpersonal communications): must prepare to resume voluntary scanning under the extended derogation; meanwhile, those that had paused since 3 April should assess legal-risk windows
+- **National DPAs**: prepare for transparency-report intake once the extension enters into force
+- **Hotlines (Inhope members, NCMEC)**: expect normalisation of EU-origin reports
+- **MEP scrutiny**: shadow rapporteurs from S&D, Renew, EPP, Greens, The Left, ECR are publishing tabling amendments through the LIBE coordinator window
+
+## Sources used
+
+- EP committees portal — LIBE Draft Report listing (21 May 2026)
+- OEIL procedure-file: 2025/0429(COD)
+- Regulation (EU) 2021/1232 (CELEX 32021R1232) — base instrument
+- Commission proposal: COM(2025) 797
+- Brubru news scraper output (22 May 2026 morning)
+
+## Cross-links
+
+- `csam_regulation_2022_0155` — the long-term CSAM Regulation (separate procedure)
+- `eprivacy_directive_2002_58` — the underlying ePrivacy framework being temporarily derogated from
+- `gdpr_general_data_protection_regulation` — companion data-protection framework
+- `digital_services_act` — DSA Article 28 child-safety obligations (separate but related)
+- `eu_child_rights_strategy` — Commission Strategy on the Rights of the Child + EU Strategy for a Better Internet for Children (BIK+)
+- `eu_data_protection_supervisor` — EDPS competence
+- `european_data_protection_board` — EDPB Opinion 4/2022 reference

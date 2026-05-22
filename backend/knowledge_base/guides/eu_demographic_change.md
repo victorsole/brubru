@@ -1,6 +1,13 @@
 # EU Demographic Change and Population Projections
 
 ## QUICK FACTS
+- **LATEST (Thursday 21 May 2026 — EUROSTAT DEMOGRAPHY OF EUROPE 2026 EDITION PUBLISHED)**: Eurostat released its annual flagship publication **"Demography of Europe — 2026 edition"** — the authoritative single-source compendium on EU population structure, fertility, mortality, migration, ageing, household composition, and urban-rural split. Source: Eurostat news release (21 May 2026, ec.europa.eu/eurostat). The publication is the canonical reference for Member State policy authorities, demography researchers, social-policy stakeholders, and pension reform negotiators. It feeds directly into:
+  - The Commission's **Demographic Toolbox** (COM(2023) 577)
+  - The **Long-Term Vision for Rural Areas** + Right to Stay strategy (`eu_demographic_right_to_stay_strategy`)
+  - The next **Anti-Poverty Strategy** implementation (`eu_anti_poverty_strategy_2026`)
+  - The **Care Society** policy debate (`eu_gender_care_gap_society` — adopted P10_TA(2026)0190 the same day)
+  - The reformed **Stability and Growth Pact** Medium-Term Fiscal-Structural Plans (debt-sustainability under demographic pressure)
+  - The **Spring 2026 Economic Forecast** (`eu_spring_economic_forecast_2026`) — old-age dependency ratio assumption
 - Topic: EU demographic trends -- population decline, ageing, migration, fertility, policy response
 - Latest Eurostat projection (April 2026): **EU population projected to drop by 11.7% by 2100** (from ~450 million in 2026 to ~397 million by 2100)
 - Eurostat publication (16 April 2026): EUROPOP 2026 projection release; European Statistical Monitor -- April edition

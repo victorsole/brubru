@@ -1,6 +1,7 @@
 # EU Waste Shipment Regulation (WSR) and DIWASS Digital System
 
 ## QUICK FACTS
+- **LATEST (Thursday 21 May 2026 — DIWASS GO-LIVE + NEW WSR APPLYING)**: DG ENV announced today that the new Waste Shipment Regulation (EU) 2024/1157 is now **fully applying across the EU** and that the **DIWASS Digital Waste Shipment System** is **operational** as the single mandatory channel for waste shipment notifications and Annex VII forms. Source: DG ENV news item "New Waste Shipment Regulation and DIWASS platform go live" (21 May 2026, ec.europa.eu/environment). Operators shipping waste cross-border within the EU OR for export/import must use DIWASS from this date; the legacy paper / national-portal channels are no longer accepted (subject to limited Annex VII transitional rules). Annex VII forms must reach the system **at least two working days before** the start of the shipment. The 8-association industry letter of 28 January 2026 requesting a 1-year transition was not accommodated; SME-targeted guidance has been published in parallel.
 - **Full name**: Regulation (EU) 2024/1157 on shipments of waste, amending Regulations (EU) 1257/2013 and 2020/1056 and repealing Regulation (EC) 1013/2006
 - **CELEX**: 32024R1157
 - **EUR-Lex**: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157

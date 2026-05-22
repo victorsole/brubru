@@ -1,12 +1,17 @@
 // frontend/src/pages/api_page.tsx
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../hooks/use_auth';
+import { ApiKeysPanel } from '../components/api/api_keys_panel';
+import '../components/api/api_keys.css';
 import './policy_pages.css';
 import './api_page.css';
 
 export const ApiPage = () => {
   const { t } = useTranslation();
-  const [activeSection, setActiveSection] = useState('endpoints');
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  const [activeSection, setActiveSection] = useState('your-keys');
 
   // Public landing surface — only GET endpoints are listed here.
   // POST endpoints (legal-text/resolve-*) are documented in /api/docs/endpoints
@@ -32,6 +37,7 @@ export const ApiPage = () => {
   ];
 
   const navItems = [
+    { id: 'your-keys',      label: t('api.keys.title') },
     { id: 'endpoints',      label: t('api.sections.whatYouGet') },
     { id: 'quickstart',     label: t('api.sections.quickstart') },
     { id: 'authentication', label: t('api.sections.authentication') },
@@ -99,6 +105,9 @@ export const ApiPage = () => {
             <a className="api-page__cta api-page__cta--primary" href="/api/docs">
               <span className="mdi mdi-book-open-variant" /> {t('api.cta.reference')}
             </a>
+            <Link to="/mcp" className="api-page__cta api-page__cta--secondary">
+              <span className="mdi mdi-connection" /> {t('api.cta.mcp')}
+            </Link>
             <a className="api-page__cta api-page__cta--secondary" href="/subscription">
               <span className="mdi mdi-rocket-launch" /> {t('api.cta.trial')}
             </a>
@@ -106,6 +115,26 @@ export const ApiPage = () => {
               <span className="mdi mdi-email" /> {t('api.cta.contact')}
             </a>
           </div>
+
+          {/* Your API keys (Phase A — 21 May 2026)
+              Logged-in users see ApiKeysPanel; logged-out users see a sign-in CTA. */}
+          {isAuthenticated ? (
+            <ApiKeysPanel />
+          ) : (
+            <section className="api-keys-signin-cta" id="your-keys" style={{ margin: '3rem 0' }}>
+              <span className="mdi mdi-key-outline api-keys-signin-cta__icon" aria-hidden="true" />
+              <h2 className="api-keys-signin-cta__title">{t('api.keys.signedOut.title')}</h2>
+              <p className="api-keys-signin-cta__body">{t('api.keys.signedOut.body')}</p>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link to="/login" className="api-keys-btn api-keys-btn--primary">
+                  <span className="mdi mdi-login" aria-hidden="true" /> {t('api.keys.signedOut.cta')}
+                </Link>
+                <Link to="/signup" className="api-keys-btn api-keys-btn--secondary">
+                  {t('api.keys.signedOut.signup')}
+                </Link>
+              </div>
+            </section>
+          )}
 
           {/* Endpoints */}
           <section className="policy-page__section" id="endpoints">
@@ -140,7 +169,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?q=EU+China+WTO+Article+XXVIII&limit=5"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?q=victims+rights+directive&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -210,7 +239,7 @@ for law in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v1";
 
-const res = await fetch(\`\${BASE}/laws?q=EU+China+WTO+Article+XXVIII&limit=5\`, {
+const res = await fetch(\`\${BASE}/laws?q=EU+US+trade+deal+tariff&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();
