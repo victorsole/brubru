@@ -1,0 +1,1 @@
+{"celex": "32008R0549", "issues": [{"celex": "32008R0549", "rule_id": "untranslated_member_state", "severity": "high", "count": 2, "why": "Untranslated 'Member State(s)'", "suggestion": "Estat membre / Estats membres", "samples": ["Member State", "Member State"]}]}
