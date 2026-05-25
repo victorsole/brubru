@@ -14,10 +14,11 @@ identifier-shape regex.
 from __future__ import annotations
 
 import logging
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from models.user import User
 from services.api_clients.showvoc_client import deep_link as showvoc_deep_link
@@ -41,6 +42,14 @@ class IdentifyResult(BaseModel):
     brubru_url: Optional[str] = None
     showvoc_url: Optional[str] = None
     parts: Optional[dict] = None
+    # The 5 mandatory Brubru v1 datapoints. An identifier match is not a
+    # document, so body/date fields are null by design; public_url aliases the
+    # canonical EU URL and creation_date is the resolution time.
+    public_url: Optional[str] = Field(None, description="Canonical EU URL for the identifier (alias of canonical_url).")
+    body_txt: Optional[str] = Field(None, description="Null — an identifier match has no body.")
+    body_html: Optional[str] = Field(None, description="Null — an identifier match has no body.")
+    document_date: Optional[date] = Field(None, description="Null — identifiers are not dated documents.")
+    creation_date: Optional[datetime] = Field(None, description="When this identifier was resolved (server time).")
 
 
 @router.get(
@@ -91,6 +100,8 @@ async def identify_one(
         brubru_url=match.brubru_url,
         showvoc_url=sv,
         parts=match.parts,
+        public_url=match.canonical_url,
+        creation_date=datetime.utcnow(),
     )
 
 
@@ -124,6 +135,7 @@ async def identify_scan(
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[IdentifyResult]:
     matches = parse_all(text)
+    _now = datetime.utcnow()
     items = [
         IdentifyResult(
             kind=m.kind.value,
@@ -132,6 +144,8 @@ async def identify_scan(
             brubru_url=m.brubru_url,
             showvoc_url=showvoc_deep_link(m.canonical_url or m.value),
             parts=m.parts,
+            public_url=m.canonical_url,
+            creation_date=_now,
         )
         for m in matches
     ]

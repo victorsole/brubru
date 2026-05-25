@@ -12,7 +12,7 @@ status formatting stay identical to the OEIL surface.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -26,7 +26,7 @@ from models.user import User
 
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
-from api.v1.procedures import _enum_str, _law_tracker_url, _oeil_url
+from api.v1.procedures import _enum_str, _latest_event_date, _law_tracker_url, _oeil_url
 
 router = APIRouter(prefix="/legislative-train", tags=["v2-legislative-train"])
 
@@ -46,7 +46,12 @@ class TrainCarriage(BaseModel):
     status_history: list = Field(default_factory=list)
     oeil_key_events: list = Field(default_factory=list)
     law_tracker_url: Optional[str] = None
-    public_url: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints (same mapping as v1 ProcedureItem).
+    public_url: Optional[str] = Field(None, description="OEIL procedure-file URL.")
+    body_txt: Optional[str] = Field(None, description="Plain-text of the cached OEIL procedure page.")
+    body_html: Optional[str] = Field(None, description="HTML of the cached OEIL procedure page.")
+    document_date: Optional[date] = Field(None, description="Date of the latest OEIL key event.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this carriage (alias of first_seen).")
 
 
 def _coerce_list(v) -> list:
@@ -72,6 +77,10 @@ def _to_train(r: LegislativeCarriage, *, with_timeline: bool = False) -> TrainCa
         oeil_key_events=_coerce_list(getattr(r, "oeil_key_events", None)) if with_timeline else [],
         law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
         public_url=_oeil_url(r.oeil_procedure_ref),
+        body_txt=getattr(r, "oeil_text_body", None),
+        body_html=getattr(r, "oeil_html_body", None),
+        document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
+        creation_date=r.first_seen,
     )
 
 

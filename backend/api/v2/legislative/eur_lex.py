@@ -69,6 +69,24 @@ def _eurlex(celex: str) -> str:
     return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
 
 
+def _law_created_at(db: Session, celex: str):
+    """eu_laws.created_at for a CELEX (the 5th mandatory datapoint), or None."""
+    try:
+        return db.query(EULaw.created_at).filter(EULaw.celex == celex).scalar()
+    except Exception:
+        return None
+
+
+class _DataPoints(BaseModel):
+    """The 5 mandatory Brubru v1 datapoints, mixed into every native v2 model
+    so the response contract matches v1 (fields present, even when null)."""
+    public_url: Optional[str] = Field(None, description="Citizen-facing canonical EU URL.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body (null when the resource has no inline body).")
+    body_html: Optional[str] = Field(None, description="HTML body (null when the resource has no inline body).")
+    document_date: Optional[date] = Field(None, description="The resource's document date, when applicable.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru generated/ingested this (server time).")
+
+
 # ---------------------------------------------------------------------------
 # law_xref cache (best-effort — endpoints work even if the table is absent)
 # ---------------------------------------------------------------------------
@@ -152,7 +170,7 @@ def _nativise_law_links(item: LawItem) -> LawItem:
 # Registered BEFORE /laws/{celex} so the literal /laws/resolve wins routing.
 # ---------------------------------------------------------------------------
 
-class ResolveResult(BaseModel):
+class ResolveResult(_DataPoints):
     input: str
     recognised_kind: Optional[str] = Field(None, description="Identifier type recognised from the input (celex, eli, ecli, oj, alias, oeil_ref, ...).")
     resolved_via: str = Field(..., description="How the CELEX was reached: celex | eli | alias | oeil | unresolved.")
@@ -293,6 +311,8 @@ async def resolve_identifier(
         in_force=in_force,
         canonical_url=canonical,
         brubru_url=brubru,
+        public_url=canonical or (_eurlex(celex) if celex else None),
+        creation_date=datetime.utcnow(),
     )
 
 
@@ -301,12 +321,11 @@ async def resolve_identifier(
 # literal /laws/summaries wins routing.
 # ---------------------------------------------------------------------------
 
-class SummaryItem(BaseModel):
+class SummaryItem(_DataPoints):
     summary_id: Optional[str] = None
     celex: Optional[str] = None
     title: Optional[str] = None
     lsu_url: Optional[str] = Field(None, description="EUR-Lex Legislative Summary (LSU) view URL.")
-    public_url: Optional[str] = None
 
 
 def _lsu_url(celex: str) -> str:
@@ -360,6 +379,7 @@ async def list_summaries(
                 title=r.get("title"),
                 lsu_url=_lsu_url(celex) if celex else None,
                 public_url=_lsu_url(celex) if celex else r.get("work"),
+                creation_date=datetime.utcnow(),
             )
         )
     return build_envelope(
@@ -414,9 +434,9 @@ async def get_summary(
                 title = meta.get("title")
         except Exception:
             pass
-        return SummaryItem(summary_id=sid.upper(), celex=sid.upper(), title=title, lsu_url=url, public_url=url)
+        return SummaryItem(summary_id=sid.upper(), celex=sid.upper(), title=title, lsu_url=url, public_url=url, creation_date=datetime.utcnow())
     url = f"https://eur-lex.europa.eu/legal-content/EN/LSU/?uri=LEGISSUM:{sid}"
-    return SummaryItem(summary_id=sid, celex=None, title=None, lsu_url=url, public_url=url)
+    return SummaryItem(summary_id=sid, celex=None, title=None, lsu_url=url, public_url=url, creation_date=datetime.utcnow())
 
 
 # ---------------------------------------------------------------------------
@@ -973,9 +993,13 @@ class XrefResult(BaseModel):
     relation_counts: dict = Field(default_factory=dict, description="Edge counts keyed by '{relation}:{direction}' (e.g. 'amendment:incoming').")
     relation_total: int = 0
     eurlex_url: Optional[str] = None
-    public_url: Optional[str] = None
     cached: bool = Field(False, description="True when served from the law_xref cache; false when freshly computed.")
     computed_at: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints.
+    public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
+    body_txt: Optional[str] = Field(None, description="Null — call /laws/{celex}/text for the body.")
+    body_html: Optional[str] = Field(None, description="Null — call /laws/{celex}/text for the body.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
 
 
 @router.get(
@@ -1020,6 +1044,7 @@ async def law_xref(
                 cached=True,
                 eurlex_url=_eurlex(celex),
                 public_url=_eurlex(celex),
+                creation_date=_law_created_at(db, celex),
                 **cached,
             )
 
@@ -1098,6 +1123,7 @@ async def law_xref(
         eurlex_url=_eurlex(celex),
         public_url=_eurlex(celex),
         computed_at=datetime.utcnow(),
+        creation_date=row.created_at if row else None,
         **result,
     )
 
@@ -1106,13 +1132,12 @@ async def law_xref(
 # Permanent links, lifecycle, consolidated (PROPOSED — native v2)
 # ---------------------------------------------------------------------------
 
-class ViewsResult(BaseModel):
+class ViewsResult(_DataPoints):
     celex: str
     eli: Optional[str] = None
     views: dict = Field(..., description="EUR-Lex permanent-link views keyed by code (txt, all, his, nim, lsu, pdf).")
     xml_notice: str
     cellar_resource: str
-    public_url: str
 
 
 @router.get(
@@ -1163,17 +1188,16 @@ async def law_views(
         xml_notice=f"https://publications.europa.eu/resource/celex/{celex}?language=eng",
         cellar_resource=f"http://publications.europa.eu/resource/celex/{celex}",
         public_url=views["txt"],
+        creation_date=datetime.utcnow(),
     )
 
 
-class LifecycleResult(BaseModel):
+class LifecycleResult(_DataPoints):
     celex: str
     in_force: Optional[bool] = None
     date_in_force: Optional[str] = None
     date_end_validity: Optional[str] = None
-    document_date: Optional[date] = None
     repealed_or_expired: Optional[bool] = Field(None, description="True when an end-of-validity date is set.")
-    public_url: Optional[str] = None
 
 
 @router.get(
@@ -1227,15 +1251,15 @@ async def law_lifecycle(
         document_date=row.date if row else None,
         repealed_or_expired=bool(end_validity) if end_validity is not None else None,
         public_url=_eurlex(celex),
+        creation_date=row.created_at if row else None,
     )
 
 
-class ConsolidatedResult(BaseModel):
+class ConsolidatedResult(_DataPoints):
     base_celex: str
     count: int
     latest: Optional[dict] = None
     versions: list = Field(default_factory=list, description="All consolidated versions, newest first: {celex, date, uri}.")
-    public_url: str
 
 
 @router.get(
@@ -1285,6 +1309,7 @@ async def law_consolidated(
         latest=versions[0] if versions else None,
         versions=versions,
         public_url=_eurlex(celex),
+        creation_date=datetime.utcnow(),
     )
 
 

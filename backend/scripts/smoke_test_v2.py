@@ -108,15 +108,26 @@ def main() -> int:
                     except Exception:
                         note = r.text[:120]
                 else:
-                    # sanity: is the body shaped right?
+                    # sanity: is the body shaped right + does it carry the
+                    # 5 mandatory datapoints (present, even if null)?
                     try:
                         j = r.json()
+                        if isinstance(j.get("data"), list):
+                            probe = j["data"][0] if j["data"] else {}
+                        elif isinstance(j.get("data"), dict):
+                            probe = j["data"]  # single-object envelope (e.g. verify-citation)
+                        else:
+                            probe = j
+                        five = ["public_url", "body_txt", "body_html", "document_date", "creation_date"]
+                        missing = [d for d in five if isinstance(probe, dict) and d not in probe]
                         if "data" in j:
                             note = f"list total={j.get('total')}"
                         elif "celex" in j:
                             note = f"celex={j.get('celex')}"
                         elif "input" in j:
                             note = f"resolved={j.get('celex')}"
+                        if missing and probe:  # empty {} (empty list) is not a real gap
+                            note += f"  [MISSING datapoints: {','.join(missing)}]"
                     except Exception:
                         note = "non-json 200"
                 results.append((code, method, orig, note))
