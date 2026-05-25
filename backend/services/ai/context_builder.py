@@ -2388,7 +2388,7 @@ class ContextBuilder:
                         'rapporteur': procedure.get('rapporteur', ''),
                         'shadows': procedure.get('shadow_rapporteurs', [])
                     },
-                    'url': f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+                    'url': f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}"
                 }
 
                 # Phase 3: Auto-include EPRS explainers (prioritize "At a Glance")

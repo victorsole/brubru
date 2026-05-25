@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiFire, mdiPlus, mdiOpenInNew, mdiLoading } from '@mdi/js';
 import axios from 'axios';
@@ -70,6 +71,7 @@ const formatRelative = (iso: string | null): string => {
 };
 
 export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisWeekWidgetProps) => {
+  const { t } = useTranslation();
   const [items, setItems] = useState<HotItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -121,9 +123,9 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
     <div className="hot-this-week-widget">
       <h3 className="hot-this-week-widget__title">
         <Icon path={mdiFire} size={0.9} />
-        Hot files this week
+        {t('hotWeek.title')}
         <span className="hot-this-week-widget__subtitle">
-          {items.length} file{items.length === 1 ? '' : 's'} with activity in the last 14 days
+          {t('hotWeek.subtitle')}
         </span>
       </h3>
 
@@ -159,19 +161,19 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
                   disabled={trackingId === item.carriage_id}
                 >
                   {trackingId === item.carriage_id ? (
-                    <><Icon path={mdiLoading} size={0.6} spin /> Tracking…</>
+                    <><Icon path={mdiLoading} size={0.6} spin /> {t('hotWeek.tracking')}</>
                   ) : (
-                    <><Icon path={mdiPlus} size={0.6} /> Track</>
+                    <><Icon path={mdiPlus} size={0.6} /> {t('hotWeek.track')}</>
                   )}
                 </button>
               )}
               {item.oeil_procedure_ref && (
                 <a
                   className="hot-this-week-widget__open-btn"
-                  href={`https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=${encodeURIComponent(item.oeil_procedure_ref)}`}
+                  href={`https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.oeil_procedure_ref)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="Open in OEIL"
+                  title={t('hotWeek.openInOeil')}
                 >
                   <Icon path={mdiOpenInNew} size={0.6} /> OEIL
                 </a>

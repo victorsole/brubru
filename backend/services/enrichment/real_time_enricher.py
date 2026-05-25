@@ -231,7 +231,7 @@ class RealTimeEnricher:
                 'rapporteur': procedure.get('rapporteur', ''),
                 'shadow_rapporteurs': procedure.get('shadow_rapporteurs', []),
                 'timeline': procedure.get('events', [])[:5],  # Last 5 events
-                'url': f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+                'url': f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}"
             }
 
             # Cache result

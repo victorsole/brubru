@@ -36,7 +36,7 @@
     "tryAsking": "Prova a chiedere:",
     "example1": "Cosa c'è all'ordine del giorno della plenaria del PE questa settimana a Strasburgo?",
     "example2": "Cosa dice il rapporto sul diritto d'autore e l'IA generativa?",
-    "example3": "Parlami del rapporto sulla crisi abitativa nell'UE",
+    "example3": "L'UE e il Messico hanno firmato un accordo commerciale? Cosa copre l'Accordo globale modernizzato?",
     "example4": "Cosa contiene il pacchetto energia della Commissione sugli SMR e l'energia pulita?",
     "placeholder": "Chiedi informazioni sulla legislazione UE, procedure o analisi politiche...",
     "send": "Invia",
@@ -689,7 +689,8 @@
       "contact": "Contatta vendite",
       "openRef": "Apri il riferimento",
       "ping": "/api/v1/ping (pubblico)",
-      "openFullDocs": "Apri documentazione completa"
+      "openFullDocs": "Apri documentazione completa",
+      "mcp": "Usa in Claude / ChatGPT / IDE (MCP)"
     },
     "sections": {
       "whatYouGet": "Cosa ottieni",
@@ -750,6 +751,156 @@
     },
     "fullDocs": {
       "lede": "La documentazione completa dell'API vive su un microsite dedicato: introduzione, autenticazione, involucro di risposta, errori, limiti, ogni endpoint documentato con parametri ed esempi curl, matrice delle istituzioni UE coperte, glossario degli acronimi, casi d'uso per ruolo, changelog datato."
+    },
+    "keys": {
+      "title": "Le tue chiavi API",
+      "lede": "Crea, elenca e revoca le chiavi che le tue applicazioni usano per chiamare l'API dati di Brubru.",
+      "activeCount": "{{active}} di {{max}} attive",
+      "createCta": "Crea chiave",
+      "loading": "Caricamento delle chiavi…",
+      "empty": {
+        "title": "Nessuna chiave ancora",
+        "body": "Crea la tua prima chiave API per iniziare a chiamare /api/v1/* dalla tua applicazione, terminale o notebook.",
+        "cta": "Crea la prima chiave API"
+      },
+      "cap": {
+        "reached": "Hai raggiunto il limite di 3 chiavi API attive. Revoca una chiave inutilizzata per crearne una nuova."
+      },
+      "signedOut": {
+        "title": "Accedi per creare una chiave API",
+        "body": "Le chiavi API si creano dal tuo account Brubru. Accedi o creane uno per iniziare.",
+        "cta": "Accedi",
+        "signup": "Crea un account"
+      },
+      "list": {
+        "name": "Nome",
+        "prefix": "Prefisso",
+        "scopes": "Ambiti",
+        "lastUsed": "Ultimo uso",
+        "expires": "Scade",
+        "status": "Stato",
+        "revoke": "Revoca",
+        "never": "Mai",
+        "statusLabels": {
+          "active": "Attiva",
+          "revoked": "Revocata",
+          "expired": "Scaduta"
+        }
+      },
+      "create": {
+        "title": "Crea chiave API",
+        "subtitle": "Scegli gli ambiti necessari e la finestra di scadenza.",
+        "nameLabel": "Nome",
+        "namePlaceholder": "Produzione, Locale, Integrazione GovClipping…",
+        "nameHint": "Tra 3 e 100 caratteri. Visibile solo a te.",
+        "scopesLabel": "Cosa può fare questa chiave?",
+        "scopesHint": "Ogni ambito sblocca un gruppo di endpoint /api/v1/*. Spunta ciò che ti serve; lascia il resto.",
+        "loadingScopes": "Caricamento del catalogo degli ambiti…",
+        "expiryLabel": "Scade dopo",
+        "expiryHint": "Trascorsa questa finestra la chiave smette di funzionare. Puoi crearne una nuova in qualsiasi momento.",
+        "expiryOptions": {
+          "30": "30 giorni",
+          "90": "90 giorni",
+          "180": "180 giorni (consigliato)",
+          "365": "365 giorni"
+        },
+        "submit": "Crea chiave",
+        "submitting": "Creazione…",
+        "cancel": "Annulla",
+        "errors": {
+          "nameLength": "Il nome deve essere tra 3 e 100 caratteri.",
+          "scopesRequired": "Scegli almeno un ambito.",
+          "invalid_scopes": "Uno degli ambiti scelti non è ammesso. Scegli solo dalla lista.",
+          "invalid_expiry": "Scegli una finestra di scadenza valida.",
+          "key_cap_reached": "Hai già 3 chiavi attive. Revoca una chiave inutilizzata per crearne una nuova.",
+          "mint_rate_limited": "Troppe chiavi create nell'ultima ora. Riprova più tardi.",
+          "validation_error": "Uno dei campi non è valido. Verifica e riprova.",
+          "unknown": "Non siamo riusciti a creare la chiave. Riprova o scrivi a hello@beresol.eu."
+        }
+      },
+      "reveal": {
+        "title": "Salva questa chiave ora",
+        "warning": "Questa è l'unica volta in cui mostreremo questa chiave. Copiala e archiviala in un posto sicuro: gestore di password, secret CI, file .env. Se la perdi, revocala e creane una nuova.",
+        "copy": "Copia negli appunti",
+        "copied": "Copiata",
+        "done": "L'ho salvata"
+      },
+      "revoke": {
+        "title": "Revocare questa chiave?",
+        "body": "Qualsiasi applicazione che usa «{{name}}» smetterà di funzionare immediatamente. Non si può annullare.",
+        "cancel": "Annulla",
+        "confirm": "Revoca",
+        "working": "Revoca in corso…"
+      },
+      "manageCredits": "Gestisci crediti"
+    },
+    "billing": {
+      "titlePre": "Fatturazione",
+      "titleAccent": "API",
+      "lede": "Ricarica il tuo saldo in euro, controlla ogni chiamata e configura la ricarica automatica perché la tua integrazione non rimanga mai senza credito.",
+      "loading": "Caricamento del saldo…",
+      "backToApi": "Torna a /api",
+      "signedOut": {
+        "title": "Accedi per vedere il tuo saldo API",
+        "body": "La fatturazione API è legata al tuo account Brubru. Accedi per ricaricare, consultare l'uso e configurare la ricarica automatica."
+      },
+      "balance": {
+        "title": "Saldo",
+        "empty": "Il saldo è vuoto — ricarica per iniziare a chiamare /api/v1/*.",
+        "calls": "~{{count}} chiamate leggere rimanenti"
+      },
+      "banner": {
+        "success": "Grazie — la ricarica è in elaborazione. Il saldo si aggiorna non appena Stripe conferma il pagamento (di solito pochi secondi).",
+        "cancelled": "Ricarica annullata. Nessun addebito."
+      },
+      "topup": {
+        "cta": "Ricarica",
+        "title": "Ricarica in euro",
+        "lede": "Scegli un importo predefinito o inseriscine uno personalizzato. Minimo 1 EUR. Verrai reindirizzato su Stripe per pagare.",
+        "customLabel": "Importo personalizzato (EUR)",
+        "customPlaceholder": "es. 25",
+        "checkout": "Vai al pagamento",
+        "submitting": "Reindirizzamento…",
+        "minHint": "Minimo 1 EUR. Nessun credito gratuito alla registrazione — il sandbox pubblico (in /api/docs) copre la valutazione.",
+        "callsApprox": "~{{count}} chiamate",
+        "errors": {
+          "topup_below_minimum": "La ricarica minima è 1 EUR.",
+          "topup_above_maximum": "Per importi sopra i 5.000 EUR, contatta hello@beresol.eu.",
+          "stripe_error": "Impossibile avviare il pagamento. Riprova o contatta hello@beresol.eu.",
+          "unknown": "Impossibile avviare il pagamento. Riprova."
+        }
+      },
+      "autoTopup": {
+        "title": "Ricarica automatica",
+        "lede": "Quando il saldo scende sotto la soglia, Brubru addebita il tuo metodo di pagamento Stripe predefinito. Disattivata per impostazione predefinita.",
+        "enableLabel": "Ricarica automatica attiva",
+        "thresholdLabel": "Quando il saldo scende sotto (EUR)",
+        "thresholdHint": "Una ricarica si attiva la prossima volta che scendi sotto questo valore.",
+        "amountLabel": "Importo di ricarica (EUR)",
+        "amountHint": "Minimo 1 EUR. L'importo aggiunto ogni ciclo.",
+        "save": "Salva",
+        "saving": "Salvataggio…",
+        "saved": "Salvato"
+      },
+      "usage": {
+        "title": "Uso recente",
+        "empty": "Nessuna chiamata a pagamento ancora. Le chiamate verso /api/v1/* compariranno qui non appena effettuate.",
+        "when": "Quando",
+        "endpoint": "Endpoint",
+        "method": "Metodo",
+        "cost": "Costo",
+        "status": "Stato",
+        "refunded": "Rimborsato"
+      },
+      "history": {
+        "title": "Cronologia ricariche",
+        "status": {
+          "pending": "In sospeso",
+          "succeeded": "Completata",
+          "failed": "Fallita",
+          "refunded": "Rimborsata"
+        }
+      }
     }
   },
   "auth": {
@@ -2052,5 +2203,123 @@
     "kindTalkingPoints": "punti chiave",
     "kindResolution": "risoluzione",
     "kindEpQuestion": "interrogazione scritta"
+  },
+  "mcp": {
+    "eyebrow": "MCP — Model Context Protocol",
+    "titlePre": "Brubru dentro",
+    "titleAccent": "Claude, ChatGPT e il tuo IDE",
+    "lede": "Collega Brubru a qualsiasi client compatibile con MCP — Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, GPT personalizzati di ChatGPT. Stessa API key, stesso saldo in euro. Sei strumenti oggi, altri in arrivo.",
+    "sidebar": {
+      "onThisPage": "In questa pagina"
+    },
+    "nav": {
+      "what": "Cos'è MCP",
+      "quickstart": "Avvio rapido",
+      "claude": "Claude Desktop",
+      "cursor": "Cursor",
+      "cline": "Cline",
+      "continue": "Continue",
+      "vscode": "VS Code",
+      "chatgpt": "ChatGPT",
+      "gemini": "Gemini",
+      "tools": "Strumenti",
+      "pricing": "Prezzi"
+    },
+    "cta": {
+      "mintKey": "Crea una API key",
+      "topUp": "Ricarica saldo",
+      "signIn": "Accedi",
+      "protocolSpec": "Spec MCP"
+    },
+    "copyBtn": {
+      "copy": "Copia",
+      "copied": "Copiato"
+    },
+    "what": {
+      "title": "Cos'è MCP?",
+      "body1": "Model Context Protocol è uno standard aperto che permette agli assistenti IA di scoprire e chiamare strumenti esterni. Brubru fa girare un server MCP così che qualsiasi client compatibile — Claude Desktop, Cursor, Cline, Continue, GPT personalizzati ChatGPT — possa interrogare Brubru su politica UE, legislazione, eventi del calendario, eurodeputati e commissioni senza che tu debba copiare contesto.",
+      "body2": "L'autenticazione usa la tua chiave API Brubru. Ogni chiamata a uno strumento addebita il tuo saldo in euro allo stesso prezzo dell'API REST. Gli strumenti che richiedono accesso più ampio (read:ep, read:commission) funzionano solo se la chiave è stata creata con quell'ambito: il tuo raggio d'impatto è esattamente l'insieme di ambiti scelto."
+    },
+    "quickstart": {
+      "title": "Avvio rapido (3 passi)",
+      "step1Title": "Crea una chiave API Brubru",
+      "step1": "Accedi e crea una chiave a",
+      "step2Title": "Ricarica il saldo",
+      "step2": "Aggiungi almeno 1 € di credito a",
+      "step2b": "Ogni chiamata MCP costa 0,005 €.",
+      "step3Title": "Incolla la configurazione nel tuo client",
+      "step3": "Scegli il tuo client qui sotto e incolla il JSON. Riavvia il client — i sei strumenti Brubru diventano disponibili all'IA.",
+      "curlLabel": "Verifica con curl"
+    },
+    "claude": {
+      "title": "Claude Desktop",
+      "body": "Claude Desktop legge i server MCP da un file JSON. Aggiungi Brubru così.",
+      "s1": "Apri Claude Desktop → Settings → Developer → Edit config.",
+      "s2": "Incolla il JSON sotto. Sostituisci YOUR_KEY con il testo che hai copiato a brubru.beresol.eu/api.",
+      "s3": "Salva e riavvia Claude Desktop.",
+      "s4": "Chiedi a Claude: «Con Brubru, qual è lo stato dell'AI Act?» — search_eu_legislation o get_procedure_status dovrebbe partire."
+    },
+    "cursor": {
+      "title": "Cursor",
+      "body": "Cursor legge i server MCP da `.cursor/mcp.json` nella root del progetto.",
+      "s1": "Crea o apri `.cursor/mcp.json` nel tuo progetto.",
+      "s2": "Incolla il JSON sotto, sostituendo YOUR_KEY.",
+      "s3": "Riavvia Cursor. Apri il Composer e fai una domanda con sapore Brubru."
+    },
+    "cline": {
+      "title": "Cline (estensione VS Code)",
+      "body": "Cline (ex Claude Dev) legge i server MCP dalle impostazioni dell'estensione.",
+      "s1": "VS Code → estensione Cline → Settings → MCP Servers.",
+      "s2": "Modifica il file JSON (`cline_mcp_settings.json`) e incolla il blocco sotto.",
+      "s3": "Ricarica VS Code. Gli strumenti Brubru appaiono nella lista di Cline."
+    },
+    "continue": {
+      "title": "Continue",
+      "body": "Continue (continue.dev) ti permette di collegare server MCP al suo contesto di assistente.",
+      "s1": "Modifica `~/.continue/config.json` (o il `.continue/config.json` del progetto).",
+      "s2": "Aggiungi Brubru sotto la chiave `mcpServers` come sotto, poi riavvia Continue."
+    },
+    "vscode": {
+      "title": "VS Code (Claude Cowork / estensione Anthropic)",
+      "body": "Se usi Claude Cowork di Anthropic o l'estensione Claude Code per VS Code, Brubru può essere aggiunto come server MCP.",
+      "s1": "Apri il pannello delle impostazioni MCP dell'estensione.",
+      "s2": "Incolla il JSON sotto nella config utente o di progetto.",
+      "s3": "Ricarica la finestra — i sei strumenti Brubru appaiono nella lista dell'assistente."
+    },
+    "chatgpt": {
+      "title": "ChatGPT (GPT personalizzato)",
+      "body": "ChatGPT non parla MCP nativamente da maggio 2026, ma puoi collegare Brubru via una Action di GPT personalizzato.",
+      "bodyMoaning": "Ti serve un account ChatGPT Plus o Teams per creare GPT personalizzati. La configurazione richiede circa tre minuti.",
+      "s1": "In ChatGPT, vai a Explore GPTs → Create.",
+      "s2": "In Configure → Actions, aggiungi una nuova action.",
+      "s3": "Imposta l'URL sotto come endpoint e Authentication = Bearer Token con la tua chiave Brubru.",
+      "s4": "Aggiungi una breve istruzione che dica al GPT che può chiamare gli strumenti MCP di Brubru per domande di politica UE.",
+      "actionUrl": "Endpoint dell'action"
+    },
+    "gemini": {
+      "title": "Gemini (e altri LLM)",
+      "body": "L'API di tool-calling di Gemini può chiamare direttamente l'endpoint HTTP di Brubru. Fornisci l'URL e l'header Authorization: Bearer nel tuo SDK Gemini; lo schema degli strumenti rispecchia la risposta di MCP `tools/list`.",
+      "bodySecondary": "Se usi un altro provider — Mistral, strumenti basati su Llama, o il tuo framework di agenti — puntalo allo stesso endpoint /api/mcp. Il protocollo è JSON-RPC aperto; non serve un SDK Brubru specifico."
+    },
+    "tools": {
+      "title": "Strumenti disponibili oggi",
+      "lede": "Sei strumenti, mappati 1:1 agli endpoint /api/v1/* rilevanti. Ogni chiamata costa 0,005 € dal tuo saldo.",
+      "descs": {
+        "ask_brubru": "Domanda aperta di politica UE. Restituisce le 3 guide di conoscenza curate più pertinenti.",
+        "search_eu_legislation": "Ricerca full-text su 28 710 leggi UE per CELEX, titolo o keyword.",
+        "search_knowledge_guides": "Cerca nelle guide di conoscenza curate da Brubru (200+ argomenti).",
+        "get_procedure_status": "Stato in tempo reale di una procedura legislativa UE per riferimento OEIL.",
+        "get_calendar_events": "Prossimi eventi del calendario Parlamento, Consiglio e Commissione.",
+        "search_eprs": "Pubblicazioni del Servizio Ricerca del PE (briefing, studi)."
+      }
+    },
+    "pricing": {
+      "title": "Promemoria prezzi",
+      "body": "Le chiamate agli strumenti MCP di Brubru sono fatturate come l'API REST:",
+      "b1": "Ogni chiamata costa 0,005 € (5 000 micro-euro), addebitati dal tuo saldo.",
+      "b2": "Nessun credito gratuito alla registrazione; ricarica minima 1 €. Il sandbox pubblico copre la valutazione.",
+      "b3": "Se una chiamata fallisce (errore server), il costo viene rimborsato automaticamente.",
+      "b4": "Il controllo degli ambiti si applica sempre — una chiave solo con read:laws non può chiamare ask_brubru (serve read:knowledge)."
+    }
   }
 }

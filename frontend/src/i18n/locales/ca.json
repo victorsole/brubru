@@ -36,7 +36,7 @@
     "tryAsking": "Prova a preguntar:",
     "example1": "Què hi ha a l'agenda del ple del PE aquesta setmana a Estrasburg?",
     "example2": "Què diu l'informe sobre drets d'autor i IA generativa?",
-    "example3": "Explica'm l'informe sobre la crisi de l'habitatge a la UE",
+    "example3": "Han signat la UE i Mèxic un acord comercial? Què abasta l'Acord Global modernitzat?",
     "example4": "Què conté el paquet energètic de la Comissió sobre SMR i energia neta?",
     "placeholder": "Pregunta sobre legislació de la UE, procediments o anàlisi de polítiques...",
     "send": "Enviar",
@@ -689,7 +689,8 @@
       "contact": "Parlar amb vendes",
       "openRef": "Obrir la referència",
       "ping": "/api/v1/ping (públic)",
-      "openFullDocs": "Obrir documentació completa"
+      "openFullDocs": "Obrir documentació completa",
+      "mcp": "Usar a Claude / ChatGPT / IDE (MCP)"
     },
     "sections": {
       "whatYouGet": "Què obtens",
@@ -750,6 +751,156 @@
     },
     "fullDocs": {
       "lede": "La documentació completa de l'API viu en un microsite propi: introducció, autenticació, envoltori de resposta, errors, límits, cada endpoint amb paràmetres i exemples curl, matriu d'institucions UE cobertes, glossari d'acrònims, casos d'ús per rol, i changelog datat."
+    },
+    "keys": {
+      "title": "Les teves claus API",
+      "lede": "Crea, llista i revoca les claus que les teves aplicacions fan servir per cridar l'API de dades de Brubru.",
+      "activeCount": "{{active}} de {{max}} actives",
+      "createCta": "Crear clau",
+      "loading": "Carregant les teves claus…",
+      "empty": {
+        "title": "Encara no tens claus",
+        "body": "Crea la teva primera clau API per començar a cridar /api/v1/* des de l'aplicació, terminal o notebook.",
+        "cta": "Crea la primera clau API"
+      },
+      "cap": {
+        "reached": "Has arribat al màxim de 3 claus API actives. Revoca una clau no utilitzada per crear-ne una de nova."
+      },
+      "signedOut": {
+        "title": "Inicia sessió per crear una clau API",
+        "body": "Les claus API es creen des del teu compte de Brubru. Inicia sessió o crea'n un per començar.",
+        "cta": "Iniciar sessió",
+        "signup": "Crear compte"
+      },
+      "list": {
+        "name": "Nom",
+        "prefix": "Prefix",
+        "scopes": "Àmbits",
+        "lastUsed": "Últim ús",
+        "expires": "Caduca",
+        "status": "Estat",
+        "revoke": "Revocar",
+        "never": "Mai",
+        "statusLabels": {
+          "active": "Activa",
+          "revoked": "Revocada",
+          "expired": "Caducada"
+        }
+      },
+      "create": {
+        "title": "Crear clau API",
+        "subtitle": "Tria els àmbits que aquesta clau necessita i la finestra de caducitat.",
+        "nameLabel": "Nom",
+        "namePlaceholder": "Producció, Local, Integració GovClipping…",
+        "nameHint": "Entre 3 i 100 caràcters. Només la veus tu.",
+        "scopesLabel": "Què pot fer aquesta clau?",
+        "scopesHint": "Cada àmbit desbloqueja un grup d'endpoints /api/v1/*. Marca el que necessitis; deixa la resta sense marcar.",
+        "loadingScopes": "Carregant el catàleg d'àmbits…",
+        "expiryLabel": "Caduca al cap de",
+        "expiryHint": "Passada aquesta finestra la clau deixa de funcionar. Pots rotar-la quan vulguis.",
+        "expiryOptions": {
+          "30": "30 dies",
+          "90": "90 dies",
+          "180": "180 dies (recomanat)",
+          "365": "365 dies"
+        },
+        "submit": "Crear clau",
+        "submitting": "Creant…",
+        "cancel": "Cancel·lar",
+        "errors": {
+          "nameLength": "El nom ha de tenir entre 3 i 100 caràcters.",
+          "scopesRequired": "Tria almenys un àmbit.",
+          "invalid_scopes": "Algun dels àmbits triats no és permès. Tria només els de la llista.",
+          "invalid_expiry": "Tria una finestra de caducitat vàlida.",
+          "key_cap_reached": "Ja tens 3 claus actives. Revoca'n una de no utilitzada per crear-ne una de nova.",
+          "mint_rate_limited": "Massa claus creades a l'última hora. Torna-ho a provar més tard.",
+          "validation_error": "Algun camp no és vàlid. Revisa'l i torna-ho a provar.",
+          "unknown": "No hem pogut crear la clau. Torna-ho a provar o escriu a hello@beresol.eu."
+        }
+      },
+      "reveal": {
+        "title": "Desa aquesta clau ara",
+        "warning": "És l'única vegada que et mostrarem aquesta clau. Copia-la i desa-la en un lloc segur: gestor de contrasenyes, secret de CI o fitxer .env. Si la perds, revoca-la i crea'n una de nova.",
+        "copy": "Copiar al porta-retalls",
+        "copied": "Copiada",
+        "done": "Ja l'he desada"
+      },
+      "revoke": {
+        "title": "Revocar aquesta clau?",
+        "body": "Qualsevol aplicació que faci servir «{{name}}» deixarà de funcionar a l'instant. No es pot desfer.",
+        "cancel": "Cancel·lar",
+        "confirm": "Revocar",
+        "working": "Revocant…"
+      },
+      "manageCredits": "Gestionar crèdits"
+    },
+    "billing": {
+      "titlePre": "Facturació",
+      "titleAccent": "de l'API",
+      "lede": "Recarrega el teu saldo en euros, segueix cada trucada i configura la recàrrega automàtica perquè la teva integració mai es quedi sense saldo.",
+      "loading": "Carregant el teu saldo…",
+      "backToApi": "Tornar a /api",
+      "signedOut": {
+        "title": "Inicia sessió per veure el teu saldo API",
+        "body": "La facturació API està lligada al teu compte de Brubru. Inicia sessió per recarregar, consultar l'ús i configurar la recàrrega automàtica."
+      },
+      "balance": {
+        "title": "Saldo",
+        "empty": "El teu saldo està buit — recarrega per començar a cridar /api/v1/*.",
+        "calls": "~{{count}} trucades lleugeres restants"
+      },
+      "banner": {
+        "success": "Gràcies — la recàrrega s'està processant. El teu saldo s'actualitzarà tan aviat com Stripe confirmi el pagament (normalment segons).",
+        "cancelled": "Recàrrega cancel·lada. No s'ha carregat res."
+      },
+      "topup": {
+        "cta": "Recarregar",
+        "title": "Recarregar amb euros",
+        "lede": "Tria un preset o introdueix un import personalitzat. Mínim 1 EUR. Et portarem a Stripe per pagar.",
+        "customLabel": "Import personalitzat (EUR)",
+        "customPlaceholder": "p. ex. 25",
+        "checkout": "Continuar al pagament",
+        "submitting": "Redirigint…",
+        "minHint": "Mínim 1 EUR. No donem crèdit gratuït en registrar-se — però el sandbox públic (a /api/docs) cobreix l'avaluació.",
+        "callsApprox": "~{{count}} trucades",
+        "errors": {
+          "topup_below_minimum": "La recàrrega mínima és 1 EUR.",
+          "topup_above_maximum": "Per imports superiors a 5.000 EUR, contacta hello@beresol.eu.",
+          "stripe_error": "No s'ha pogut iniciar el pagament. Torna-ho a provar o contacta hello@beresol.eu.",
+          "unknown": "No s'ha pogut iniciar el pagament. Torna-ho a provar."
+        }
+      },
+      "autoTopup": {
+        "title": "Recàrrega automàtica",
+        "lede": "Quan el teu saldo cau per sota del llindar, Brubru cobra el teu mètode de pagament de Stripe per recarregar. Desactivada per defecte.",
+        "enableLabel": "Recàrrega automàtica activada",
+        "thresholdLabel": "Quan el saldo cau per sota de (EUR)",
+        "thresholdHint": "Disparem una recàrrega la pròxima vegada que caiguis per sota d'aquest valor.",
+        "amountLabel": "Import de recàrrega (EUR)",
+        "amountHint": "Mínim 1 EUR. L'import afegit a cada cicle.",
+        "save": "Desar",
+        "saving": "Desant…",
+        "saved": "Desat"
+      },
+      "usage": {
+        "title": "Ús recent",
+        "empty": "Encara no hi ha trucades de pagament. Les trucades contra /api/v1/* apareixeran aquí tan bon punt es facin.",
+        "when": "Quan",
+        "endpoint": "Endpoint",
+        "method": "Mètode",
+        "cost": "Cost",
+        "status": "Estat",
+        "refunded": "Reemborsat"
+      },
+      "history": {
+        "title": "Històric de recàrregues",
+        "status": {
+          "pending": "Pendent",
+          "succeeded": "Completada",
+          "failed": "Fallida",
+          "refunded": "Reemborsada"
+        }
+      }
     }
   },
   "auth": {
@@ -2052,5 +2203,123 @@
     "kindTalkingPoints": "punts clau",
     "kindResolution": "resolució",
     "kindEpQuestion": "pregunta escrita"
+  },
+  "mcp": {
+    "eyebrow": "MCP — Model Context Protocol",
+    "titlePre": "Brubru dins de",
+    "titleAccent": "Claude, ChatGPT i el teu IDE",
+    "lede": "Connecta Brubru amb qualsevol client compatible amb MCP — Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, GPTs personalitzats de ChatGPT. Mateixa API key, mateix saldo en euros. Sis eines avui, més en camí.",
+    "sidebar": {
+      "onThisPage": "En aquesta pàgina"
+    },
+    "nav": {
+      "what": "Què és MCP",
+      "quickstart": "Inici ràpid",
+      "claude": "Claude Desktop",
+      "cursor": "Cursor",
+      "cline": "Cline",
+      "continue": "Continue",
+      "vscode": "VS Code",
+      "chatgpt": "ChatGPT",
+      "gemini": "Gemini",
+      "tools": "Eines",
+      "pricing": "Preus"
+    },
+    "cta": {
+      "mintKey": "Crear una API key",
+      "topUp": "Recarregar saldo",
+      "signIn": "Iniciar sessió",
+      "protocolSpec": "Spec MCP"
+    },
+    "copyBtn": {
+      "copy": "Copiar",
+      "copied": "Copiat"
+    },
+    "what": {
+      "title": "Què és MCP?",
+      "body1": "Model Context Protocol és un estàndard obert que permet als assistents d'IA descobrir i cridar eines externes. Brubru fa servir un servidor MCP perquè qualsevol client compatible — Claude Desktop, Cursor, Cline, Continue, GPTs personalitzats — pugui preguntar a Brubru sobre política UE, legislació, esdeveniments del calendari, eurodiputats i comissions sense que hagis de copiar context.",
+      "body2": "L'autenticació va amb la teva clau API de Brubru. Cada crida a una eina debita el teu saldo en euros al mateix preu que l'API REST. Les eines que necessiten un accés més ampli (per exemple read:ep, read:commission) només funcionen si la clau es va crear amb aquell àmbit: el teu radi d'impacte és exactament el conjunt d'àmbits que vas triar."
+    },
+    "quickstart": {
+      "title": "Inici ràpid (3 passos)",
+      "step1Title": "Crea una clau API de Brubru",
+      "step1": "Inicia sessió i crea una clau a",
+      "step2Title": "Recarrega el teu saldo",
+      "step2": "Afegeix almenys 1 € de crèdit a",
+      "step2b": "Cada crida a una eina MCP costa 0,005 €.",
+      "step3Title": "Enganxa la configuració al teu client",
+      "step3": "Tria el teu client a sota i enganxa el JSON. Reinicia el client — les sis eines de Brubru queden disponibles per a la IA.",
+      "curlLabel": "Verificació amb curl"
+    },
+    "claude": {
+      "title": "Claude Desktop",
+      "body": "Claude Desktop llegeix els seus servidors MCP d'un fitxer JSON. Afegeix Brubru així.",
+      "s1": "Obre Claude Desktop → Ajustaments → Developer → Edit config.",
+      "s2": "Enganxa el JSON de sota. Substitueix YOUR_KEY amb el text pla que vas copiar a brubru.beresol.eu/api.",
+      "s3": "Desa i reinicia Claude Desktop.",
+      "s4": "Pregunta a Claude: «Usant Brubru, quin és l'estat de la AI Act?» — s'ha de disparar search_eu_legislation o get_procedure_status."
+    },
+    "cursor": {
+      "title": "Cursor",
+      "body": "Cursor llegeix servidors MCP de `.cursor/mcp.json` a l'arrel del projecte.",
+      "s1": "Crea o obre `.cursor/mcp.json` al teu projecte.",
+      "s2": "Enganxa el JSON de sota, substituint YOUR_KEY.",
+      "s3": "Reinicia Cursor. Obre el Composer i fes una pregunta amb gust a Brubru."
+    },
+    "cline": {
+      "title": "Cline (extensió de VS Code)",
+      "body": "Cline (abans Claude Dev) llegeix servidors MCP dels ajustaments de l'extensió.",
+      "s1": "VS Code → extensió Cline → Settings → MCP Servers.",
+      "s2": "Edita el fitxer JSON (`cline_mcp_settings.json`) i enganxa el bloc de sota.",
+      "s3": "Recarrega VS Code. Les eines de Brubru apareixen a la llista de Cline."
+    },
+    "continue": {
+      "title": "Continue",
+      "body": "Continue (continue.dev) et permet connectar servidors MCP al seu context d'assistent.",
+      "s1": "Edita `~/.continue/config.json` (o el `.continue/config.json` del projecte).",
+      "s2": "Afegeix Brubru sota la clau `mcpServers` com a sota i reinicia Continue."
+    },
+    "vscode": {
+      "title": "VS Code (Claude Cowork / extensió Anthropic)",
+      "body": "Si fas servir Claude Cowork d'Anthropic o l'extensió de Claude Code per a VS Code, Brubru es pot afegir com a servidor MCP.",
+      "s1": "Obre el panell d'ajustaments MCP de l'extensió.",
+      "s2": "Enganxa el JSON de sota a la configuració d'usuari o de projecte.",
+      "s3": "Recarrega la finestra — les sis eines de Brubru apareixen a la llista d'eines de l'assistent."
+    },
+    "chatgpt": {
+      "title": "ChatGPT (GPT personalitzat)",
+      "body": "ChatGPT no parla MCP de manera nativa el maig del 2026, però pots connectar Brubru via una Action de GPT personalitzat.",
+      "bodyMoaning": "Necessites un compte ChatGPT Plus o Teams per crear GPTs personalitzats. La configuració triga uns tres minuts.",
+      "s1": "A ChatGPT, ves a Explore GPTs → Create.",
+      "s2": "A Configure → Actions, afegeix una nova action.",
+      "s3": "Posa la URL de sota com a endpoint i Authentication = Bearer Token amb la teva clau de Brubru.",
+      "s4": "Afegeix una instrucció breu dient al GPT que pot cridar les eines MCP de Brubru per preguntes de política UE.",
+      "actionUrl": "Endpoint de l'action"
+    },
+    "gemini": {
+      "title": "Gemini (i altres LLMs)",
+      "body": "L'API de tool-calling de Gemini pot cridar directament l'endpoint HTTP de Brubru. Proporciona la URL de l'endpoint i la capçalera Authorization: Bearer al teu SDK de Gemini; l'esquema d'eines reflecteix la resposta de MCP `tools/list`.",
+      "bodySecondary": "Si fas servir un altre proveïdor — Mistral, eines basades en Llama, o el teu propi framework d'agents — apunta'l al mateix endpoint /api/mcp. El protocol és JSON-RPC obert; no cal un SDK específic de Brubru."
+    },
+    "tools": {
+      "title": "Eines disponibles avui",
+      "lede": "Sis eines, mapejades 1:1 als endpoints /api/v1/* rellevants. Cada crida costa 0,005 € del teu saldo.",
+      "descs": {
+        "ask_brubru": "Pregunta oberta de política UE. Retorna les 3 guies de coneixement curades que millor encaixen.",
+        "search_eu_legislation": "Cerca de text complet sobre 28 710 lleis UE per CELEX, títol o paraula clau.",
+        "search_knowledge_guides": "Cerca a les guies de coneixement curades per Brubru (200+ temes de política).",
+        "get_procedure_status": "Estat en directe d'un procediment legislatiu UE per referència OEIL.",
+        "get_calendar_events": "Pròxims esdeveniments del calendari del Parlament, Consell i Comissió.",
+        "search_eprs": "Publicacions del Servei d'Estudis del PE (informes, estudis)."
+      }
+    },
+    "pricing": {
+      "title": "Recordatori de preus",
+      "body": "Les crides a eines MCP de Brubru es facturen igual que l'API REST:",
+      "b1": "Cada crida a una eina costa 0,005 € (5 000 micro-euros), debitats del teu saldo.",
+      "b2": "Sense crèdit gratuït de registre; recàrrega mínima 1 €. El sandbox públic cobreix els avaluadors.",
+      "b3": "Si una crida falla (error de servidor), el cost es reemborsa automàticament.",
+      "b4": "El control d'àmbits segueix aplicant-se — una clau només amb read:laws no pot cridar ask_brubru (cal read:knowledge)."
+    }
   }
 }

@@ -9,7 +9,7 @@
 - Lead committee: **AFCO** (Constitutional Affairs)
 - Legal basis: Article 295 TFEU (interinstitutional cooperation), Article 17(7) TEU (EC nomination procedure)
 - Existing instrument being revised: **Framework Agreement of 20 October 2010** between the EP and the Commission (OJ L 304, 20.11.2010, p. 47), itself revising earlier 2005 and 2000 framework agreements
-- Source: oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2025/2243(ACI)
+- Source: oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2025/2243(ACI)
 
 ## What the Framework Agreement governs
 The 2010 Framework Agreement is the operational backbone of EP-Commission relations. It covers:

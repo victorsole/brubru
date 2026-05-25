@@ -5,7 +5,7 @@
 - Reference: Directive (EU) 2024/1760
 - CELEX: 32024L1760
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1760
-- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0051(COD)
+- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0051(COD)
 - Procedure: 2022/0051(COD) -- Ordinary legislative procedure (COD)
 - Legal basis: Articles 50(1), 50(2)(g) and 114 TFEU
 - Published in OJ: 5 July 2024 (OJ L 2024/1760)

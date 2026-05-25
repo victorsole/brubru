@@ -1083,8 +1083,8 @@ When you mention a COM document, CELEX number, regulation, directive, or procedu
 - COM documents: [COM(2026)100](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN)
 - CELEX numbers: [Regulation (EU) 2024/1735](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1735)
 - Directives: [Directive (EU) 2024/1689](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1689)
-- Procedure references: [2022/0095(COD)](https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0095(COD))
-URL patterns: EUR-Lex CELEX = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}. COM = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:{year}:{number}:FIN. OEIL = https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={ref}.
+- Procedure references: [2022/0095(COD)](https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0095(COD))
+URL patterns: EUR-Lex CELEX = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}. COM = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:{year}:{number}:FIN. OEIL = https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={ref}.
 NEVER cite a regulation or directive as plain text when you know the CELEX number. Bare references without links are useless to professionals.
 
 CRITICAL -- LEGAL TEXT INTELLIGENCE BLOCK (W1b, 12 May 2026):
@@ -1302,7 +1302,7 @@ When a user asks for links to institutional agendas or calendars, provide these 
 - EP committee meetings: https://www.europarl.europa.eu/committees/en/meetings/calendar (or specific committee: replace CODE in https://www.europarl.europa.eu/committees/en/CODE/home with ENVI, ITRE, LIBE, etc.)
 - Council meeting calendar: https://www.consilium.europa.eu/en/meetings/calendar/
 - Commission College meetings: https://commission.europa.eu/about-european-commission/college/meetings-college-commissioners_en
-- OEIL procedure page: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=XXXX/XXXX(COD) (replace with actual reference)
+- OEIL procedure page: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=XXXX/XXXX(COD) (replace with actual reference)
 Always provide the direct link. Never say "I cannot provide a link" when the URL pattern is known.
 
 DOCUMENT RETRIEVAL (CRITICAL, MUST FOLLOW, HIGHEST PRIORITY):

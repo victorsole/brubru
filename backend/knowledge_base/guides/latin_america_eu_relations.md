@@ -20,15 +20,16 @@
 | Country / Bloc | Agreement | Status | CELEX / OJ |
 |----------------|-----------|--------|------------|
 | Mercosur (AR, BR, PY, UY) | Interim Trade Agreement | **Provisional application from 1 May 2026** | CELEX 22026A00184 |
-| Mexico | Modernised Global Agreement | Negotiations concluded January 2025; ratification ongoing; AFET+INTA amendments PE787.714 + PE787.663 (April 2026) | TBC |
+| Mexico | Modernised Global Agreement + Interim Trade Agreement | **SIGNED 22 May 2026, Mexico City** (von der Leyen + Costa + Sheinbaum); now requires EP consent + Council + national ratification (mixed agreement) before full entry into force | TBC |
 | Chile | Modernised Advanced Framework Agreement | Signed 13 December 2023; provisional application of trade pillar 2024-2025; full ratification ongoing | OJ L 2024/... |
 | Andean Community (Colombia, Peru, Ecuador) | Trade Agreement | In force (Colombia + Peru since 2013, Ecuador since 2017) | CELEX 22012A1221 |
 | Central America (CA-6) | Association Agreement (political + cooperation + trade) | In force; trade pillar since 2013 | CELEX 22012A1215 |
 | Caribbean (CARIFORUM) | Economic Partnership Agreement | In force since 2008 | CELEX 22008A1030 |
 | Cuba | Political Dialogue and Cooperation Agreement | In force since 2017; trade dimension limited | CELEX 22016A1212 |
 
-## Mexico: Modernised Global Agreement (April 2026 update)
+## Mexico: Modernised Global Agreement (updated 22 May 2026)
 
+- **LATEST (Friday 22 May 2026 — AGREEMENTS SIGNED IN MEXICO CITY)**: at the first EU-Mexico Summit in over a decade, Commission President von der Leyen, European Council President António Costa and Mexican President Claudia Sheinbaum **signed both the Modernised Global Agreement and the Interim Trade Agreement** in Mexico City. Costa called it "a true geopolitical statement"; both sides framed it explicitly as **diversifying trade away from US dependence** amid Trump-era tariffs. EU trade lead: Commissioner Maroš Šefčovič; Mexican side: Economy Secretary Marcelo Ebrard. Accompanying deliverables: a **joint declaration on trade and gender equality**, six new projects worth **€4 million** to combat violence against women and girls in Mexico, and EU **Global Gateway** backing for Mexico's "Plan México" investment agenda. Original EU-Mexico FTA in force since 2000; bilateral goods trade has grown >300% (combined trade ~US$94.5 bn in 2025). **Status note**: signature is not entry into force — the agreements still require **European Parliament consent + Council conclusion**, and the mixed Global Agreement also needs **national-parliament ratification**. The Interim Trade Agreement is the fast-track trade pillar (EP consent route PE787.663, rapporteur Javi López). Sources: EC Presscorner statements 26_1147/1148/1149 + Q&A; Reuters 22 May 2026.
 - **AFET + INTA joint amendments PE787.714v01-00** (April 2026) tabled. Rapporteur Borja Giménez Larraz (EPP, ES) for AFET; co-amendments from INTA.
 - **INTA amendments on the Interim Trade Agreement PE787.663v02-00** -- rapporteur Javi López (S&D, ES).
 - Modernisation triggered by 2025 Trump tariffs on Mexico (USMCA tensions); EU positioned as alternative trade partner.

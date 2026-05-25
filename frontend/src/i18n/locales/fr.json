@@ -36,7 +36,7 @@
     "tryAsking": "Essayez de demander:",
     "example1": "Qu'y a-t-il à l'ordre du jour de la plénière du PE cette semaine à Strasbourg?",
     "example2": "Que dit le rapport sur le droit d'auteur et l'IA générative?",
-    "example3": "Parlez-moi du rapport sur la crise du logement dans l'UE",
+    "example3": "L'UE et le Mexique ont-ils signé un accord commercial, et que couvre l'accord global modernisé?",
     "example4": "Que contient le paquet énergie de la Commission sur les SMR et l'énergie propre?",
     "placeholder": "Posez vos questions sur la législation européenne, les procédures ou l'analyse politique...",
     "send": "Envoyer",
@@ -689,7 +689,8 @@
       "contact": "Parler aux ventes",
       "openRef": "Ouvrir la référence",
       "ping": "/api/v1/ping (public)",
-      "openFullDocs": "Ouvrir la documentation complète"
+      "openFullDocs": "Ouvrir la documentation complète",
+      "mcp": "Utiliser dans Claude / ChatGPT / IDE (MCP)"
     },
     "sections": {
       "whatYouGet": "Ce que vous obtenez",
@@ -750,6 +751,156 @@
     },
     "fullDocs": {
       "lede": "La documentation complète de l'API vit sur son propre microsite : introduction, authentification, enveloppe de réponse, erreurs, limites, chaque endpoint documenté avec paramètres et exemples curl, matrice des institutions UE couvertes, glossaire des acronymes, cas d'usage par rôle, changelog daté."
+    },
+    "keys": {
+      "title": "Vos clés API",
+      "lede": "Créez, listez et révoquez les clés que vos applications utilisent pour appeler l'API de données Brubru.",
+      "activeCount": "{{active}} sur {{max}} actives",
+      "createCta": "Créer une clé",
+      "loading": "Chargement de vos clés…",
+      "empty": {
+        "title": "Pas encore de clé",
+        "body": "Créez votre première clé API pour commencer à appeler /api/v1/* depuis votre application, terminal ou notebook.",
+        "cta": "Créer ma première clé API"
+      },
+      "cap": {
+        "reached": "Vous avez atteint le maximum de 3 clés API actives. Révoquez une clé inutilisée pour en créer une autre."
+      },
+      "signedOut": {
+        "title": "Connectez-vous pour créer une clé API",
+        "body": "Les clés API se créent depuis votre compte Brubru. Connectez-vous ou créez-en un pour commencer.",
+        "cta": "Se connecter",
+        "signup": "Créer un compte"
+      },
+      "list": {
+        "name": "Nom",
+        "prefix": "Préfixe",
+        "scopes": "Périmètres",
+        "lastUsed": "Dernière utilisation",
+        "expires": "Expire",
+        "status": "Statut",
+        "revoke": "Révoquer",
+        "never": "Jamais",
+        "statusLabels": {
+          "active": "Active",
+          "revoked": "Révoquée",
+          "expired": "Expirée"
+        }
+      },
+      "create": {
+        "title": "Créer une clé API",
+        "subtitle": "Choisissez les périmètres dont cette clé a besoin et la fenêtre d'expiration.",
+        "nameLabel": "Nom",
+        "namePlaceholder": "Production, Local, Intégration GovClipping…",
+        "nameHint": "Entre 3 et 100 caractères. Visible uniquement par vous.",
+        "scopesLabel": "Que peut faire cette clé ?",
+        "scopesHint": "Chaque périmètre débloque un groupe d'endpoints /api/v1/*. Cochez ce dont vous avez besoin ; laissez le reste décoché.",
+        "loadingScopes": "Chargement du catalogue de périmètres…",
+        "expiryLabel": "Expire après",
+        "expiryHint": "Passée cette fenêtre, la clé ne fonctionne plus. Vous pouvez en générer une nouvelle à tout moment.",
+        "expiryOptions": {
+          "30": "30 jours",
+          "90": "90 jours",
+          "180": "180 jours (recommandé)",
+          "365": "365 jours"
+        },
+        "submit": "Créer la clé",
+        "submitting": "Création…",
+        "cancel": "Annuler",
+        "errors": {
+          "nameLength": "Le nom doit contenir entre 3 et 100 caractères.",
+          "scopesRequired": "Choisissez au moins un périmètre.",
+          "invalid_scopes": "L'un des périmètres choisis n'est pas autorisé. Choisissez uniquement dans la liste.",
+          "invalid_expiry": "Choisissez une fenêtre d'expiration valide.",
+          "key_cap_reached": "Vous avez déjà 3 clés actives. Révoquez-en une inutilisée pour en créer une nouvelle.",
+          "mint_rate_limited": "Trop de clés créées dans la dernière heure. Réessayez plus tard.",
+          "validation_error": "Un des champs est invalide. Vérifiez et réessayez.",
+          "unknown": "Nous n'avons pas pu créer la clé. Réessayez ou contactez hello@beresol.eu."
+        }
+      },
+      "reveal": {
+        "title": "Enregistrez cette clé maintenant",
+        "warning": "C'est la seule fois où nous afficherons cette clé. Copiez-la et stockez-la en lieu sûr : gestionnaire de mots de passe, secret CI, fichier .env. Si vous la perdez, révoquez-la et créez-en une autre.",
+        "copy": "Copier dans le presse-papiers",
+        "copied": "Copiée",
+        "done": "C'est enregistré"
+      },
+      "revoke": {
+        "title": "Révoquer cette clé ?",
+        "body": "Toute application utilisant « {{name}} » cessera immédiatement de fonctionner. C'est irréversible.",
+        "cancel": "Annuler",
+        "confirm": "Révoquer",
+        "working": "Révocation…"
+      },
+      "manageCredits": "Gérer les crédits"
+    },
+    "billing": {
+      "titlePre": "Facturation",
+      "titleAccent": "de l'API",
+      "lede": "Rechargez votre solde en euros, suivez chaque appel et configurez la recharge automatique pour que votre intégration ne tombe jamais à court.",
+      "loading": "Chargement de votre solde…",
+      "backToApi": "Retour vers /api",
+      "signedOut": {
+        "title": "Connectez-vous pour voir votre solde API",
+        "body": "La facturation API est liée à votre compte Brubru. Connectez-vous pour recharger, consulter l'utilisation et configurer la recharge automatique."
+      },
+      "balance": {
+        "title": "Solde",
+        "empty": "Votre solde est vide — rechargez pour commencer à appeler /api/v1/*.",
+        "calls": "~{{count}} appels légers restants"
+      },
+      "banner": {
+        "success": "Merci — votre recharge est en cours. Votre solde se met à jour dès que Stripe confirme le paiement (quelques secondes en général).",
+        "cancelled": "Recharge annulée. Aucun débit n'a été effectué."
+      },
+      "topup": {
+        "cta": "Recharger",
+        "title": "Recharger en euros",
+        "lede": "Choisissez un montant prédéfini ou saisissez un montant personnalisé. Minimum 1 EUR. Vous serez redirigé vers Stripe pour payer.",
+        "customLabel": "Montant personnalisé (EUR)",
+        "customPlaceholder": "ex. 25",
+        "checkout": "Continuer vers le paiement",
+        "submitting": "Redirection…",
+        "minHint": "Minimum 1 EUR. Aucun crédit gratuit à l'inscription — le sandbox public (dans /api/docs) couvre l'évaluation.",
+        "callsApprox": "~{{count}} appels",
+        "errors": {
+          "topup_below_minimum": "La recharge minimum est de 1 EUR.",
+          "topup_above_maximum": "Pour des montants au-delà de 5 000 EUR, contactez hello@beresol.eu.",
+          "stripe_error": "Impossible de démarrer le paiement. Réessayez ou contactez hello@beresol.eu.",
+          "unknown": "Impossible de démarrer le paiement. Réessayez."
+        }
+      },
+      "autoTopup": {
+        "title": "Recharge automatique",
+        "lede": "Lorsque votre solde passe sous le seuil, Brubru débite votre moyen de paiement Stripe par défaut pour recharger. Désactivée par défaut.",
+        "enableLabel": "Recharge automatique activée",
+        "thresholdLabel": "Lorsque le solde passe sous (EUR)",
+        "thresholdHint": "Une recharge se déclenche la prochaine fois que vous passez sous ce seuil.",
+        "amountLabel": "Montant de recharge (EUR)",
+        "amountHint": "Minimum 1 EUR. Le montant ajouté à chaque cycle.",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "saved": "Enregistré"
+      },
+      "usage": {
+        "title": "Utilisation récente",
+        "empty": "Aucun appel payant pour l'instant. Les appels vers /api/v1/* apparaîtront ici dès qu'ils seront effectués.",
+        "when": "Quand",
+        "endpoint": "Endpoint",
+        "method": "Méthode",
+        "cost": "Coût",
+        "status": "Statut",
+        "refunded": "Remboursé"
+      },
+      "history": {
+        "title": "Historique des recharges",
+        "status": {
+          "pending": "En attente",
+          "succeeded": "Réussie",
+          "failed": "Échouée",
+          "refunded": "Remboursée"
+        }
+      }
     }
   },
   "auth": {
@@ -2052,5 +2203,123 @@
     "kindTalkingPoints": "éléments de langage",
     "kindResolution": "résolution",
     "kindEpQuestion": "question écrite"
+  },
+  "mcp": {
+    "eyebrow": "MCP — Model Context Protocol",
+    "titlePre": "Brubru dans",
+    "titleAccent": "Claude, ChatGPT et votre IDE",
+    "lede": "Connectez Brubru à tout client compatible MCP — Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, GPTs personnalisés ChatGPT. Même clé API, même solde en euros. Six outils aujourd'hui, davantage en route.",
+    "sidebar": {
+      "onThisPage": "Sur cette page"
+    },
+    "nav": {
+      "what": "Qu'est-ce que MCP",
+      "quickstart": "Démarrage rapide",
+      "claude": "Claude Desktop",
+      "cursor": "Cursor",
+      "cline": "Cline",
+      "continue": "Continue",
+      "vscode": "VS Code",
+      "chatgpt": "ChatGPT",
+      "gemini": "Gemini",
+      "tools": "Outils",
+      "pricing": "Tarification"
+    },
+    "cta": {
+      "mintKey": "Créer une clé API",
+      "topUp": "Recharger le solde",
+      "signIn": "Se connecter",
+      "protocolSpec": "Spec MCP"
+    },
+    "copyBtn": {
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "what": {
+      "title": "Qu'est-ce que MCP ?",
+      "body1": "Model Context Protocol est un standard ouvert qui permet aux assistants IA de découvrir et d'appeler des outils externes. Brubru fait tourner un serveur MCP afin que tout client compatible — Claude Desktop, Cursor, Cline, Continue, GPTs personnalisés ChatGPT — puisse interroger Brubru sur la politique UE, la législation, l'agenda, les eurodéputés et les commissions sans copier-coller de contexte.",
+      "body2": "L'authentification utilise votre clé API Brubru. Chaque appel d'outil débite votre solde en euros au même tarif que l'API REST. Les outils qui requièrent un accès plus large (read:ep, read:commission, ...) ne fonctionnent que si la clé a été créée avec ce périmètre : votre rayon d'impact correspond exactement aux périmètres choisis."
+    },
+    "quickstart": {
+      "title": "Démarrage rapide (3 étapes)",
+      "step1Title": "Créez une clé API Brubru",
+      "step1": "Connectez-vous et créez une clé à",
+      "step2Title": "Rechargez votre solde",
+      "step2": "Ajoutez au moins 1 € de crédit à",
+      "step2b": "Chaque appel d'outil MCP coûte 0,005 €.",
+      "step3Title": "Collez la configuration dans votre client",
+      "step3": "Choisissez votre client ci-dessous et collez le JSON. Redémarrez le client — les six outils Brubru deviennent disponibles pour l'IA.",
+      "curlLabel": "Vérification avec curl"
+    },
+    "claude": {
+      "title": "Claude Desktop",
+      "body": "Claude Desktop lit ses serveurs MCP depuis un fichier JSON. Ajoutez Brubru ainsi.",
+      "s1": "Ouvrez Claude Desktop → Settings → Developer → Edit config.",
+      "s2": "Collez le JSON ci-dessous. Remplacez YOUR_KEY par le texte que vous avez copié à brubru.beresol.eu/api.",
+      "s3": "Enregistrez et redémarrez Claude Desktop.",
+      "s4": "Demandez à Claude : « Avec Brubru, quel est le statut de l'AI Act ? » — search_eu_legislation ou get_procedure_status devrait se déclencher."
+    },
+    "cursor": {
+      "title": "Cursor",
+      "body": "Cursor lit les serveurs MCP depuis `.cursor/mcp.json` à la racine du projet.",
+      "s1": "Créez ou ouvrez `.cursor/mcp.json` dans votre projet.",
+      "s2": "Collez le JSON ci-dessous, en remplaçant YOUR_KEY.",
+      "s3": "Redémarrez Cursor. Ouvrez le Composer et posez une question saveur Brubru."
+    },
+    "cline": {
+      "title": "Cline (extension VS Code)",
+      "body": "Cline (anciennement Claude Dev) lit les serveurs MCP depuis les paramètres de son extension.",
+      "s1": "VS Code → extension Cline → Settings → MCP Servers.",
+      "s2": "Éditez le fichier JSON (`cline_mcp_settings.json`) et collez le bloc ci-dessous.",
+      "s3": "Rechargez VS Code. Les outils Brubru apparaissent dans la liste de Cline."
+    },
+    "continue": {
+      "title": "Continue",
+      "body": "Continue (continue.dev) permet de brancher des serveurs MCP dans son contexte d'assistant.",
+      "s1": "Éditez `~/.continue/config.json` (ou le `.continue/config.json` du projet).",
+      "s2": "Ajoutez Brubru sous la clé `mcpServers` comme ci-dessous, puis redémarrez Continue."
+    },
+    "vscode": {
+      "title": "VS Code (Claude Cowork / extension Anthropic)",
+      "body": "Si vous utilisez Claude Cowork d'Anthropic ou l'extension Claude Code pour VS Code, Brubru peut être ajouté comme serveur MCP.",
+      "s1": "Ouvrez le panneau de paramètres MCP de l'extension.",
+      "s2": "Collez le JSON ci-dessous dans la config utilisateur ou projet.",
+      "s3": "Rechargez la fenêtre — les six outils Brubru apparaissent dans la liste de l'assistant."
+    },
+    "chatgpt": {
+      "title": "ChatGPT (GPT personnalisé)",
+      "body": "ChatGPT ne parle pas MCP nativement en mai 2026, mais vous pouvez brancher Brubru via une Action de GPT personnalisé.",
+      "bodyMoaning": "Il faut un compte ChatGPT Plus ou Teams pour créer des GPTs personnalisés. La configuration prend environ trois minutes.",
+      "s1": "Dans ChatGPT, allez à Explore GPTs → Create.",
+      "s2": "Dans Configure → Actions, ajoutez une nouvelle action.",
+      "s3": "Mettez l'URL ci-dessous comme endpoint et Authentication = Bearer Token avec votre clé Brubru.",
+      "s4": "Ajoutez une brève instruction indiquant au GPT qu'il peut appeler les outils MCP Brubru pour des questions de politique UE.",
+      "actionUrl": "Endpoint de l'action"
+    },
+    "gemini": {
+      "title": "Gemini (et autres LLMs)",
+      "body": "L'API de tool-calling de Gemini peut appeler directement l'endpoint HTTP de Brubru. Fournissez l'URL et l'en-tête Authorization: Bearer dans votre SDK Gemini ; le schéma d'outils reflète la réponse MCP `tools/list`.",
+      "bodySecondary": "Pour un autre fournisseur — Mistral, outils Llama, ou votre propre framework d'agents — pointez-le vers le même endpoint /api/mcp. Le protocole est JSON-RPC ouvert ; pas de SDK Brubru spécifique nécessaire."
+    },
+    "tools": {
+      "title": "Outils disponibles aujourd'hui",
+      "lede": "Six outils, mappés 1:1 aux endpoints /api/v1/* pertinents. Chaque appel coûte 0,005 € de votre solde.",
+      "descs": {
+        "ask_brubru": "Question ouverte de politique UE. Renvoie les 3 guides de connaissance curatés les plus pertinents.",
+        "search_eu_legislation": "Recherche plein texte sur 28 710 lois UE par CELEX, titre ou mot-clé.",
+        "search_knowledge_guides": "Recherche dans les guides de connaissance curatés par Brubru (200+ sujets).",
+        "get_procedure_status": "Statut en direct d'une procédure législative UE par référence OEIL.",
+        "get_calendar_events": "Prochains événements d'agenda Parlement, Conseil et Commission.",
+        "search_eprs": "Publications du Service d'études du PE (briefings, études)."
+      }
+    },
+    "pricing": {
+      "title": "Rappel tarifaire",
+      "body": "Les appels d'outils MCP Brubru sont facturés comme l'API REST :",
+      "b1": "Chaque appel coûte 0,005 € (5 000 micro-euros), débités de votre solde.",
+      "b2": "Pas de crédit gratuit à l'inscription ; recharge minimum 1 €. Le sandbox public couvre l'évaluation.",
+      "b3": "Si un appel échoue (erreur serveur), le coût est remboursé automatiquement.",
+      "b4": "Le contrôle de périmètre s'applique toujours — une clé read:laws ne peut pas appeler ask_brubru (besoin read:knowledge)."
+    }
   }
 }

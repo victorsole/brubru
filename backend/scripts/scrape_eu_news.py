@@ -686,7 +686,7 @@ def fetch_committee_work_items(hours: int = 48) -> List[NewsItem]:
             if proc_ref:
                 headline += f" [{proc_ref}]"
 
-            url = ep_url or oeil_url or f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+            url = ep_url or oeil_url or f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}"
             date_str = last_updated.strftime('%Y-%m-%d') if last_updated else None
 
             items.append(NewsItem(
@@ -715,7 +715,7 @@ def fetch_committee_work_items(hours: int = 48) -> List[NewsItem]:
             proc_ref, pe_ref, doc_date, doceo_url, am_count = row
             headline = f"EP Amendments: {am_count} amendments filed on {proc_ref} ({pe_ref})"
             date_str = doc_date.strftime('%Y-%m-%d') if doc_date else None
-            url = doceo_url or f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+            url = doceo_url or f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}"
 
             items.append(NewsItem(
                 title=headline,

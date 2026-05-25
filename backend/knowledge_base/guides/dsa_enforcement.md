@@ -7,7 +7,7 @@
 - Reference: Regulation (EU) 2022/2065
 - CELEX: 32022R2065
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2065
-- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2020/0361(COD)
+- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2020/0361(COD)
 - Procedure: 2020/0361(COD) -- Ordinary legislative procedure
 - Legal basis: Article 114 TFEU (internal market)
 - Type: Regulation (directly applicable in all Member States)

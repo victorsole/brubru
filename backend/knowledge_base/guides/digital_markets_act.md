@@ -5,7 +5,7 @@
 - Reference: Regulation (EU) 2022/1925
 - CELEX: 32022R1925
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925
-- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0003(COD)
+- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0003(COD)
 - Procedure: 2022/0003(COD) -- Ordinary legislative procedure
 - Legal basis: Articles 114 TFEU (internal market)
 - Entered into force: 1 November 2022
@@ -230,7 +230,7 @@ The consultation is open to stakeholders and will shape the final guidelines exp
 - DMA official portal: https://digital-markets-act.ec.europa.eu/
 - DMA designated gatekeepers: https://digital-markets-act.ec.europa.eu/gatekeepers_en
 - DMA compliance templates: https://digital-markets-act.ec.europa.eu/legislation_en
-- OEIL procedure 2022/0003(COD): https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0003(COD)
+- OEIL procedure 2022/0003(COD): https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0003(COD)
 - EPRS_ATA(2025)772826: "Digital Markets Act enforcement -- state of play" by Polona Car (April 2025)
 - DG CNECT news (9 March 2026): Updated gatekeeper compliance reports published
 

@@ -109,5 +109,5 @@ The framing suggests that the extension of 2021/1232 -- while narrowly about CSA
 - Regulation (EU) 2021/1232: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1232
 - Regulation (EU) 2024/1307 (first extension): https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1307
 - EP LIBE committee page: https://www.europarl.europa.eu/committees/en/libe
-- OEIL procedure 2025/0429(COD): https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2025/0429(COD)
+- OEIL procedure 2025/0429(COD): https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0429(COD)
 - Politico EU 21 April 2026 (German): "Das Gespenst Vorratsdatenspeicherung ist zurück"

@@ -1,6 +1,7 @@
 # AI Act Harmonised Standards — M/613 + M/606 Programme
 
 ## QUICK FACTS
+- **LATEST (Friday 22 May 2026 — TRANSPARENCY CODE OF PRACTICE, 3rd WG ROUND)**: DG CNECT held the **third round of working-group meetings** on the **AI Act transparency Code of Practice** (the Article 50 instrument on labelling AI-generated/manipulated content — deepfakes, synthetic media — distinct from the M/613 harmonised standards tracked in this guide). It is a separate soft-law deliverable accompanying the Article 50 transparency obligations that apply from **August 2026**. Source: digital-strategy.ec.europa.eu (22 May 2026). Cross-link: `ai_act_regulation.md` for the Article 50 timeline; this guide tracks the M/613 + M/606 harmonised-standards stream.
 - Topic: EU Commission Standardisation Requests that operationalise the AI Act's and Cyber Resilience Act's essential requirements
 - Standardisation Requests: **M/613** (AI Act) to CEN/CENELEC JTC 21, and **M/606** (CRA) to CEN/CENELEC
 - Legal function: harmonised standards create a **presumption of conformity** with AI Act essential requirements (Chapters III + V) for high-risk systems and GPAI models

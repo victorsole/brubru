@@ -233,7 +233,7 @@ class OEILProcedure(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "source_url": "https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2024/0176(COD)&l=en",
+                "source_url": "https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2024/0176(COD)&l=en",
                 "basic_info": {
                     "reference": "2024/0176(COD)",
                     "title": "Artificial intelligence act, amendment",

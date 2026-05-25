@@ -36,7 +36,7 @@
     "tryAsking": "Try asking:",
     "example1": "What's on the EP plenary agenda this week in Strasbourg?",
     "example2": "What does the Copyright and Generative AI report say?",
-    "example3": "Tell me about the EU Housing Crisis report",
+    "example3": "Did the EU and Mexico sign a trade deal, and what does the modernised Global Agreement cover?",
     "example4": "What's in the Commission's Energy Package on SMRs and clean energy?",
     "placeholder": "Ask about EU legislation, procedures, or policy analysis...",
     "send": "Send",
@@ -689,7 +689,8 @@
       "contact": "Contact sales",
       "openRef": "Open the reference",
       "ping": "/api/v1/ping (public)",
-      "openFullDocs": "Open full docs"
+      "openFullDocs": "Open full docs",
+      "mcp": "Use in Claude / ChatGPT / IDE (MCP)"
     },
     "sections": {
       "whatYouGet": "What you get",
@@ -750,6 +751,156 @@
     },
     "fullDocs": {
       "lede": "The full API reference lives on its own microsite: introduction, authentication, response envelope, errors, rate limits, every endpoint documented with parameters and curl examples, a matrix of every EU institution we ingest from, a glossary for every acronym, role-specific use cases, and a dated changelog."
+    },
+    "keys": {
+      "title": "Your API keys",
+      "lede": "Mint, list and revoke the keys your applications use to call the Brubru Data Provider API.",
+      "activeCount": "{{active}} of {{max}} active",
+      "createCta": "Create key",
+      "loading": "Loading your keys…",
+      "empty": {
+        "title": "No keys yet",
+        "body": "Create your first API key to start calling /api/v1/* from your application, command line or notebook.",
+        "cta": "Create your first API key"
+      },
+      "cap": {
+        "reached": "You have reached the maximum of 3 active API keys. Revoke an unused key to create a new one."
+      },
+      "signedOut": {
+        "title": "Sign in to mint an API key",
+        "body": "Self-serve API keys are minted from your Brubru account. Sign in or create one to get started.",
+        "cta": "Sign in",
+        "signup": "Create an account"
+      },
+      "list": {
+        "name": "Name",
+        "prefix": "Key prefix",
+        "scopes": "Scopes",
+        "lastUsed": "Last used",
+        "expires": "Expires",
+        "status": "Status",
+        "revoke": "Revoke",
+        "never": "Never",
+        "statusLabels": {
+          "active": "Active",
+          "revoked": "Revoked",
+          "expired": "Expired"
+        }
+      },
+      "create": {
+        "title": "Create API key",
+        "subtitle": "Pick the scopes this key needs and choose an expiry window.",
+        "nameLabel": "Name",
+        "namePlaceholder": "Production, Local dev, GovClipping integration…",
+        "nameHint": "3–100 characters. Visible only to you.",
+        "scopesLabel": "What can this key do?",
+        "scopesHint": "Each scope unlocks a related group of /api/v1/* endpoints. Tick what you need; leave the rest off.",
+        "loadingScopes": "Loading the scope catalogue…",
+        "expiryLabel": "Expires after",
+        "expiryHint": "After this window the key stops working. You can rotate to a new one at any time.",
+        "expiryOptions": {
+          "30": "30 days",
+          "90": "90 days",
+          "180": "180 days (recommended)",
+          "365": "365 days"
+        },
+        "submit": "Create key",
+        "submitting": "Creating…",
+        "cancel": "Cancel",
+        "errors": {
+          "nameLength": "Name must be between 3 and 100 characters.",
+          "scopesRequired": "Pick at least one scope.",
+          "invalid_scopes": "One of the chosen scopes is not allowed. Pick only scopes from the list.",
+          "invalid_expiry": "Pick a valid expiry window from the dropdown.",
+          "key_cap_reached": "You already have 3 active keys. Revoke an unused one to create a new one.",
+          "mint_rate_limited": "Too many keys minted in the last hour. Try again later.",
+          "validation_error": "One of the fields is invalid. Please review and try again.",
+          "unknown": "We could not create the key. Please try again or contact hello@beresol.eu."
+        }
+      },
+      "reveal": {
+        "title": "Save this key now",
+        "warning": "This is the only time we will show this key. Copy it and store it somewhere safe — a password manager, a CI secret store, an env file. If you lose it, revoke and mint a new one.",
+        "copy": "Copy to clipboard",
+        "copied": "Copied",
+        "done": "I've saved it"
+      },
+      "revoke": {
+        "title": "Revoke this key?",
+        "body": "Any application using \"{{name}}\" will stop working immediately. This cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Revoke",
+        "working": "Revoking…"
+      },
+      "manageCredits": "Manage credits"
+    },
+    "billing": {
+      "titlePre": "API",
+      "titleAccent": "billing",
+      "lede": "Top up your euro balance, watch every call you make against it, and configure auto-top-up so your integration never runs dry.",
+      "loading": "Loading your balance…",
+      "backToApi": "Back to /api",
+      "signedOut": {
+        "title": "Sign in to view your API balance",
+        "body": "API billing is tied to your Brubru account. Sign in to top up, check usage and set auto-top-up."
+      },
+      "balance": {
+        "title": "Balance",
+        "empty": "Your balance is empty — top up to start calling /api/v1/*.",
+        "calls": "~{{count}} lightweight calls remaining"
+      },
+      "banner": {
+        "success": "Thanks — your top-up is processing. Your balance updates as soon as Stripe confirms the payment (usually a few seconds).",
+        "cancelled": "Top-up cancelled. No charge was made."
+      },
+      "topup": {
+        "cta": "Top up",
+        "title": "Top up with euros",
+        "lede": "Pick a preset or enter a custom amount. Minimum 1 EUR. You'll be redirected to Stripe to pay.",
+        "customLabel": "Custom amount (EUR)",
+        "customPlaceholder": "e.g. 25",
+        "checkout": "Continue to checkout",
+        "submitting": "Redirecting…",
+        "minHint": "Minimum 1 EUR. We don't issue free signup credit — but our public sandbox (in /api/docs) covers evaluation.",
+        "callsApprox": "~{{count}} calls",
+        "errors": {
+          "topup_below_minimum": "Minimum top-up is 1 EUR.",
+          "topup_above_maximum": "For amounts above 5,000 EUR, contact hello@beresol.eu.",
+          "stripe_error": "Could not start checkout. Please try again or contact hello@beresol.eu.",
+          "unknown": "Could not start checkout. Please try again."
+        }
+      },
+      "autoTopup": {
+        "title": "Automatic top-up",
+        "lede": "When your balance drops below the threshold, Brubru charges your default Stripe payment method to top up. Disabled by default.",
+        "enableLabel": "Auto-top-up enabled",
+        "thresholdLabel": "When balance drops below (EUR)",
+        "thresholdHint": "We trigger a top-up the next time you fall below this.",
+        "amountLabel": "Top-up amount (EUR)",
+        "amountHint": "Minimum 1 EUR. The amount added each cycle.",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved"
+      },
+      "usage": {
+        "title": "Recent usage",
+        "empty": "No paid calls yet. Calls against /api/v1/* will appear here as soon as they land.",
+        "when": "When",
+        "endpoint": "Endpoint",
+        "method": "Method",
+        "cost": "Cost",
+        "status": "Status",
+        "refunded": "Refunded"
+      },
+      "history": {
+        "title": "Top-up history",
+        "status": {
+          "pending": "Pending",
+          "succeeded": "Succeeded",
+          "failed": "Failed",
+          "refunded": "Refunded"
+        }
+      }
     }
   },
   "auth": {
@@ -1905,6 +2056,20 @@
     "typeResolutionDesc": "European Parliament resolution with having regards, whereas recitals, and numbered resolution points",
     "typeEpQuestionTitle": "EP Written Question",
     "typeEpQuestionDesc": "Written parliamentary question from the EP to the European Commission, Council, or VP/HR",
+    "typeEuEmailTitle": "EU email / letter",
+    "typeEuEmailDesc": "Brussels-style diplomatic email to Commission, EP, Council, PermRep or agency contacts",
+    "typeOnePagerTitle": "Position paper one-pager",
+    "typeOnePagerDesc": "Strict single-page summary with a headline ask, 2-5 bullets and supporting evidence",
+    "typePressReleaseTitle": "EU press release",
+    "typePressReleaseDesc": "Press release in Commission / EP / Council / Agency house style with quote and contacts",
+    "typeStakeholderMapTitle": "Stakeholder mapping",
+    "typeStakeholderMapDesc": "Structured map of EU stakeholders with positions, influence and recommended approach",
+    "typeImpactAssessmentTitle": "Impact assessment",
+    "typeImpactAssessmentDesc": "Commission Better Regulation IA template with options comparison and preferred option",
+    "typePresentationTitle": "EU presentation",
+    "typePresentationDesc": "Slide-by-slide deck for an EU-institution audience, exportable as PPTX",
+    "typeEventPosterTitle": "Event poster",
+    "typeEventPosterDesc": "Single-page event poster for an EU policy event with agenda and speakers",
     "positionPaperDetails": "Position Paper Details",
     "legislationTitle": "Legislation Title *",
     "egAiAct": "e.g., Artificial Intelligence Act",
@@ -2051,6 +2216,131 @@
     "kindMepBriefing": "MEP briefing",
     "kindTalkingPoints": "talking points",
     "kindResolution": "resolution",
-    "kindEpQuestion": "written question"
+    "kindEpQuestion": "written question",
+    "kindEuEmail": "EU email",
+    "kindOnePager": "one-pager",
+    "kindPressRelease": "press release",
+    "kindStakeholderMap": "stakeholder map",
+    "kindImpactAssessment": "impact assessment",
+    "kindPresentation": "presentation",
+    "kindEventPoster": "event poster"
+  },
+  "mcp": {
+    "eyebrow": "MCP — Model Context Protocol",
+    "titlePre": "Brubru inside",
+    "titleAccent": "Claude, ChatGPT and your IDE",
+    "lede": "Connect Brubru to any MCP-capable client — Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, ChatGPT custom GPTs. Same API key, same euro balance. Six tools today, more on the way.",
+    "sidebar": {
+      "onThisPage": "On this page"
+    },
+    "nav": {
+      "what": "What is MCP",
+      "quickstart": "Quickstart",
+      "claude": "Claude Desktop",
+      "cursor": "Cursor",
+      "cline": "Cline",
+      "continue": "Continue",
+      "vscode": "VS Code",
+      "chatgpt": "ChatGPT",
+      "gemini": "Gemini",
+      "tools": "Tools",
+      "pricing": "Pricing"
+    },
+    "cta": {
+      "mintKey": "Mint an API key",
+      "topUp": "Top up balance",
+      "signIn": "Sign in",
+      "protocolSpec": "MCP spec"
+    },
+    "copyBtn": {
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "what": {
+      "title": "What is MCP?",
+      "body1": "Model Context Protocol is an open standard that lets AI assistants discover and call external tools. Brubru runs an MCP server so any compatible client — Claude Desktop, Cursor, Cline, Continue, ChatGPT custom GPTs — can ask Brubru about EU policy, legislation, calendar events, MEPs and committees without you copy-pasting context.",
+      "body2": "Authentication is by your Brubru API key. Each tool call debits your euro balance against the same pricing as the REST API. Tools that need broader access (e.g. read:ep, read:commission) only work if the key was minted with that scope — your blast radius is exactly the scope set you chose."
+    },
+    "quickstart": {
+      "title": "Quickstart (3 steps)",
+      "step1Title": "Mint a Brubru API key",
+      "step1": "Sign in and mint a key at",
+      "step2Title": "Top up your balance",
+      "step2": "Add at least €1 of credit at",
+      "step2b": "Each MCP tool call costs €0.005.",
+      "step3Title": "Paste the config into your client",
+      "step3": "Pick your client below and paste the JSON. Restart the client — Brubru's six tools become available to the AI.",
+      "curlLabel": "Sanity-check with curl"
+    },
+    "claude": {
+      "title": "Claude Desktop",
+      "body": "Claude Desktop reads its MCP servers from a JSON config file. Add Brubru like this.",
+      "s1": "Open Claude Desktop → Settings → Developer → Edit config.",
+      "s2": "Paste the JSON below. Replace YOUR_KEY with the plaintext you copied at brubru.beresol.eu/api.",
+      "s3": "Save and restart Claude Desktop.",
+      "s4": "Ask Claude: \"Using Brubru, what's the status of the AI Act?\" — the search_eu_legislation or get_procedure_status tool should fire."
+    },
+    "cursor": {
+      "title": "Cursor",
+      "body": "Cursor reads MCP servers from `.cursor/mcp.json` at the project root.",
+      "s1": "Create or open `.cursor/mcp.json` in your project.",
+      "s2": "Paste the JSON below, replacing YOUR_KEY.",
+      "s3": "Restart Cursor. Open the Composer and ask a Brubru-flavoured question."
+    },
+    "cline": {
+      "title": "Cline (VS Code extension)",
+      "body": "Cline (formerly Claude Dev) reads MCP servers from its extension settings.",
+      "s1": "VS Code → Cline extension → Settings → MCP Servers.",
+      "s2": "Edit the JSON file (`cline_mcp_settings.json`) and paste the block below.",
+      "s3": "Reload VS Code. Brubru's tools appear in Cline's tool list."
+    },
+    "continue": {
+      "title": "Continue",
+      "body": "Continue (continue.dev) lets you wire MCP servers into its assistant context.",
+      "s1": "Edit `~/.continue/config.json` (or the project-level `.continue/config.json`).",
+      "s2": "Add Brubru under the `mcpServers` key as below, then restart Continue."
+    },
+    "vscode": {
+      "title": "VS Code (Claude Cowork / Anthropic extension)",
+      "body": "If you use Anthropic's Claude Cowork or the Claude Code VS Code extension, Brubru can be added as an MCP server.",
+      "s1": "Open the extension's MCP settings panel.",
+      "s2": "Paste the JSON below into the user or project MCP config.",
+      "s3": "Reload the window — the six Brubru tools appear in the assistant's tool list."
+    },
+    "chatgpt": {
+      "title": "ChatGPT (custom GPT)",
+      "body": "ChatGPT doesn't speak MCP natively as of May 2026, but you can wire Brubru in via a custom GPT Action.",
+      "bodyMoaning": "You'll need a ChatGPT Plus or Teams account to create custom GPTs. The setup takes about three minutes.",
+      "s1": "In ChatGPT, go to Explore GPTs → Create.",
+      "s2": "In Configure → Actions, add a new action.",
+      "s3": "Set the URL below as the action endpoint and Authentication = Bearer Token with your Brubru key.",
+      "s4": "Add a brief instruction telling the GPT it can call Brubru's MCP tools for EU policy questions.",
+      "actionUrl": "Action endpoint"
+    },
+    "gemini": {
+      "title": "Gemini (and other LLMs)",
+      "body": "Gemini's tool-calling API can hit Brubru's HTTP endpoint directly. Provide the endpoint URL and the Authorization: Bearer header in your Gemini SDK setup; the tool schema mirrors the MCP `tools/list` response.",
+      "bodySecondary": "If you use a different provider — Mistral, Llama-based tools, or your own agent framework — point it at the same /api/mcp endpoint. The protocol is open JSON-RPC; no Brubru-specific SDK needed."
+    },
+    "tools": {
+      "title": "Tools available today",
+      "lede": "Six tools, mapped 1:1 to the relevant /api/v1/* endpoints. Each call is metered at €0.005 against your balance.",
+      "descs": {
+        "ask_brubru": "Open-ended EU policy question. Returns the top 3 matching curated knowledge guides.",
+        "search_eu_legislation": "Full-text search across 28,710 EU laws by CELEX, title or keyword.",
+        "search_knowledge_guides": "Search Brubru's curated knowledge guides (200+ policy topics).",
+        "get_procedure_status": "Live status of an EU legislative procedure by OEIL reference.",
+        "get_calendar_events": "Upcoming Parliament, Council and Commission calendar events.",
+        "search_eprs": "European Parliamentary Research Service publications (briefings, studies)."
+      }
+    },
+    "pricing": {
+      "title": "Pricing reminder",
+      "body": "Brubru's MCP tool calls are priced the same way as the REST API:",
+      "b1": "Every tool call costs €0.005 (5 000 micro-euros), debited from your euro balance.",
+      "b2": "No free signup credit; minimum top-up is €1. Public sandbox covers evaluators.",
+      "b3": "If a tool call crashes (server error), the cost is refunded automatically.",
+      "b4": "Per-key scope check still applies — a key with only read:laws can't call ask_brubru (needs read:knowledge)."
+    }
   }
 }

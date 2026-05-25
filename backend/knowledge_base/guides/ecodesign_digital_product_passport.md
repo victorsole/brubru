@@ -5,7 +5,7 @@
 - Reference: Regulation (EU) 2024/1781
 - CELEX: 32024R1781
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1781
-- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0095(COD)
+- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0095(COD)
 - Procedure: 2022/0095(COD) -- Ordinary legislative procedure
 - Legal basis: Article 114 TFEU (internal market)
 - Responsible DGs: DG ENV (ecodesign requirements), DG GROW (DPP infrastructure)

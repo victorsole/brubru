@@ -12,7 +12,7 @@
 - Responsible DG: DG HOME
 - Council configuration: JHA (Justice and Home Affairs)
 - Companion files: Firearms Directive recast 2021/555/EU (currently in force); Regulation (EU) 258/2012 on import/export of firearms; ATT (Arms Trade Treaty) implementation; Schengen Information System (SIS II)
-- Source URL: oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2026/0059(COD)
+- Source URL: oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0059(COD)
 
 ## Why this proposal
 The Commission's 2020-2025 EU Action Plan on Firearms Trafficking (COM(2020) 608) identified persistent gaps in cross-border investigation, ballistic-data sharing, and de-activation standards. Reactivated weapons remain the dominant source of firearms used in serious organised crime in several Member States. The new Regulation aims to harmonise criminal-law definitions and minimum penalties for firearms-related offences (illicit manufacturing, trafficking, possession of converted weapons, fraud in marking and tracing) and strengthen Europol/Eurojust operational support.

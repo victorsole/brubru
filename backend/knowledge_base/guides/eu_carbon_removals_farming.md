@@ -166,4 +166,4 @@ CRCF creates **tradable certified removal units**:
 - Regulation (EU) 2024/3012: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R3012
 - CRCF Commission portal: https://climate.ec.europa.eu/eu-action/carbon-removals-and-carbon-farming_en
 - EPRS briefing EPRS_UNK_923b0e8adb0a (16 April 2026): "Certifying EU permanent carbon removals: State of play in implementing the EU's Carbon Removal and Carbon Farming Regulation"
-- OEIL procedure 2022/0394(COD): https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0394(COD)
+- OEIL procedure 2022/0394(COD): https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0394(COD)

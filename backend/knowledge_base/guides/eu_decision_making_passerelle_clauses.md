@@ -5,7 +5,7 @@
 - Title: "Enhanced EU decision-making through means provided for in the EU treaties"
 - Status (29 April 2026): **TABLED** -- AFCO draft report announcement 29 April 2026; committee referral 12 February 2026
 - Lead committee: **AFCO** (Constitutional Affairs)
-- Source: oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2026/2012(INI)
+- Source: oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2026/2012(INI)
 - Legal basis: AFCO own-initiative under Rule 54 of EP Rules of Procedure
 - Companion file: 2026/2013(INI) (titled separately, AFCO INI)
 

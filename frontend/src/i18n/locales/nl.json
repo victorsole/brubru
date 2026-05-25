@@ -36,7 +36,7 @@
     "tryAsking": "Probeer te vragen:",
     "example1": "Wat staat er op de agenda van de EP-plenaire deze week in Straatsburg?",
     "example2": "Wat staat er in het verslag over auteursrecht en generatieve AI?",
-    "example3": "Vertel me over het verslag over de huisvestingscrisis in de EU",
+    "example3": "Hebben de EU en Mexico een handelsakkoord ondertekend, en wat omvat de gemoderniseerde Globale Overeenkomst?",
     "example4": "Wat bevat het energiepakket van de Commissie over SMR's en schone energie?",
     "placeholder": "Vraag over EU-wetgeving, procedures of beleidsanalyse...",
     "send": "Verstuur",
@@ -689,7 +689,8 @@
       "contact": "Neem contact op",
       "openRef": "Open de referentie",
       "ping": "/api/v1/ping (publiek)",
-      "openFullDocs": "Volledige documentatie openen"
+      "openFullDocs": "Volledige documentatie openen",
+      "mcp": "Gebruik in Claude / ChatGPT / IDE (MCP)"
     },
     "sections": {
       "whatYouGet": "Wat je krijgt",
@@ -750,6 +751,156 @@
     },
     "fullDocs": {
       "lede": "De volledige API-documentatie staat op een eigen microsite: introductie, authenticatie, responsenvelop, fouten, limieten, elk endpoint gedocumenteerd met parameters en curl-voorbeelden, matrix van EU-instellingen, woordenlijst, use cases per rol, en gedateerd changelog."
+    },
+    "keys": {
+      "title": "Jouw API-sleutels",
+      "lede": "Maak, bekijk en trek API-sleutels in die je applicaties gebruiken om de Brubru-data-API aan te roepen.",
+      "activeCount": "{{active}} van {{max}} actief",
+      "createCta": "Sleutel aanmaken",
+      "loading": "Sleutels worden geladen…",
+      "empty": {
+        "title": "Nog geen sleutels",
+        "body": "Maak je eerste API-sleutel aan om /api/v1/* aan te roepen vanuit je applicatie, terminal of notebook.",
+        "cta": "Maak je eerste API-sleutel"
+      },
+      "cap": {
+        "reached": "Je hebt het maximum van 3 actieve API-sleutels bereikt. Trek een ongebruikte sleutel in om een nieuwe te maken."
+      },
+      "signedOut": {
+        "title": "Log in om een API-sleutel aan te maken",
+        "body": "API-sleutels worden vanuit je Brubru-account aangemaakt. Log in of maak er een om te beginnen.",
+        "cta": "Inloggen",
+        "signup": "Account aanmaken"
+      },
+      "list": {
+        "name": "Naam",
+        "prefix": "Prefix",
+        "scopes": "Scopes",
+        "lastUsed": "Laatst gebruikt",
+        "expires": "Verloopt",
+        "status": "Status",
+        "revoke": "Intrekken",
+        "never": "Nooit",
+        "statusLabels": {
+          "active": "Actief",
+          "revoked": "Ingetrokken",
+          "expired": "Verlopen"
+        }
+      },
+      "create": {
+        "title": "API-sleutel aanmaken",
+        "subtitle": "Kies de scopes die deze sleutel nodig heeft en de geldigheidsperiode.",
+        "nameLabel": "Naam",
+        "namePlaceholder": "Productie, Lokaal, GovClipping-integratie…",
+        "nameHint": "3–100 tekens. Alleen jij ziet dit.",
+        "scopesLabel": "Wat mag deze sleutel doen?",
+        "scopesHint": "Elke scope geeft toegang tot een groep /api/v1/*-endpoints. Vink aan wat je nodig hebt; laat de rest staan.",
+        "loadingScopes": "Scope-catalogus wordt geladen…",
+        "expiryLabel": "Verloopt na",
+        "expiryHint": "Na deze periode werkt de sleutel niet meer. Je kunt altijd een nieuwe aanmaken.",
+        "expiryOptions": {
+          "30": "30 dagen",
+          "90": "90 dagen",
+          "180": "180 dagen (aanbevolen)",
+          "365": "365 dagen"
+        },
+        "submit": "Sleutel aanmaken",
+        "submitting": "Bezig met aanmaken…",
+        "cancel": "Annuleren",
+        "errors": {
+          "nameLength": "Naam moet tussen 3 en 100 tekens zijn.",
+          "scopesRequired": "Kies minstens één scope.",
+          "invalid_scopes": "Een van de gekozen scopes is niet toegestaan. Kies alleen uit de lijst.",
+          "invalid_expiry": "Kies een geldige geldigheidsperiode.",
+          "key_cap_reached": "Je hebt al 3 actieve sleutels. Trek er een ongebruikte in om een nieuwe te maken.",
+          "mint_rate_limited": "Te veel sleutels aangemaakt in het afgelopen uur. Probeer het later opnieuw.",
+          "validation_error": "Een van de velden is ongeldig. Controleer en probeer opnieuw.",
+          "unknown": "We konden de sleutel niet aanmaken. Probeer het opnieuw of mail hello@beresol.eu."
+        }
+      },
+      "reveal": {
+        "title": "Bewaar deze sleutel nu",
+        "warning": "Dit is de enige keer dat we deze sleutel laten zien. Kopieer hem en bewaar hem veilig: wachtwoordkluis, CI-geheim of .env-bestand. Raak je hem kwijt, trek hem in en maak een nieuwe.",
+        "copy": "Kopieer naar klembord",
+        "copied": "Gekopieerd",
+        "done": "Opgeslagen"
+      },
+      "revoke": {
+        "title": "Deze sleutel intrekken?",
+        "body": "Elke applicatie die '{{name}}' gebruikt stopt direct met werken. Dit kan niet ongedaan worden gemaakt.",
+        "cancel": "Annuleren",
+        "confirm": "Intrekken",
+        "working": "Bezig met intrekken…"
+      },
+      "manageCredits": "Beheer credits"
+    },
+    "billing": {
+      "titlePre": "API-",
+      "titleAccent": "facturatie",
+      "lede": "Vul je euro-saldo aan, volg elke API-call die je doet en stel automatisch bijvullen in zodat je integratie nooit zonder krediet komt.",
+      "loading": "Saldo wordt geladen…",
+      "backToApi": "Terug naar /api",
+      "signedOut": {
+        "title": "Log in om je API-saldo te zien",
+        "body": "API-facturatie is gekoppeld aan je Brubru-account. Log in om bij te vullen, gebruik te bekijken en automatisch bijvullen in te stellen."
+      },
+      "balance": {
+        "title": "Saldo",
+        "empty": "Je saldo is leeg — vul bij om /api/v1/* te kunnen aanroepen.",
+        "calls": "~{{count}} lichte calls over"
+      },
+      "banner": {
+        "success": "Bedankt — je bijvulling wordt verwerkt. Je saldo wordt bijgewerkt zodra Stripe de betaling bevestigt (meestal binnen seconden).",
+        "cancelled": "Bijvulling geannuleerd. Er is niets afgeschreven."
+      },
+      "topup": {
+        "cta": "Bijvullen",
+        "title": "Bijvullen met euro's",
+        "lede": "Kies een preset of voer een aangepast bedrag in. Minimaal 1 EUR. Je wordt doorgestuurd naar Stripe om te betalen.",
+        "customLabel": "Aangepast bedrag (EUR)",
+        "customPlaceholder": "bv. 25",
+        "checkout": "Naar de betaling",
+        "submitting": "Doorsturen…",
+        "minHint": "Minimaal 1 EUR. We geven geen gratis krediet bij registratie — de publieke sandbox (in /api/docs) dekt de evaluatie.",
+        "callsApprox": "~{{count}} calls",
+        "errors": {
+          "topup_below_minimum": "Minimum bijvullen is 1 EUR.",
+          "topup_above_maximum": "Voor bedragen boven 5.000 EUR, neem contact op via hello@beresol.eu.",
+          "stripe_error": "Kon de betaling niet starten. Probeer opnieuw of mail hello@beresol.eu.",
+          "unknown": "Kon de betaling niet starten. Probeer opnieuw."
+        }
+      },
+      "autoTopup": {
+        "title": "Automatisch bijvullen",
+        "lede": "Wanneer je saldo onder de drempel zakt, schrijft Brubru je standaard Stripe-betaalmethode af om bij te vullen. Standaard uitgeschakeld.",
+        "enableLabel": "Automatisch bijvullen aan",
+        "thresholdLabel": "Wanneer saldo onder (EUR)",
+        "thresholdHint": "We starten een bijvulling de volgende keer dat je onder deze waarde komt.",
+        "amountLabel": "Bijvulbedrag (EUR)",
+        "amountHint": "Minimaal 1 EUR. Het bedrag dat elke ronde wordt toegevoegd.",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan…",
+        "saved": "Opgeslagen"
+      },
+      "usage": {
+        "title": "Recent gebruik",
+        "empty": "Nog geen betaalde calls. Aanroepen naar /api/v1/* verschijnen hier zodra ze plaatsvinden.",
+        "when": "Wanneer",
+        "endpoint": "Endpoint",
+        "method": "Methode",
+        "cost": "Kosten",
+        "status": "Status",
+        "refunded": "Gerestitueerd"
+      },
+      "history": {
+        "title": "Bijvulgeschiedenis",
+        "status": {
+          "pending": "In behandeling",
+          "succeeded": "Geslaagd",
+          "failed": "Mislukt",
+          "refunded": "Gerestitueerd"
+        }
+      }
     }
   },
   "auth": {
@@ -2052,5 +2203,123 @@
     "kindTalkingPoints": "gespreksaanwijzingen",
     "kindResolution": "resolutie",
     "kindEpQuestion": "schriftelijke vraag"
+  },
+  "mcp": {
+    "eyebrow": "MCP — Model Context Protocol",
+    "titlePre": "Brubru in",
+    "titleAccent": "Claude, ChatGPT en je IDE",
+    "lede": "Verbind Brubru met elke MCP-compatibele client — Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, custom GPT's in ChatGPT. Dezelfde API-sleutel, hetzelfde euro-saldo. Vandaag zes tools, meer onderweg.",
+    "sidebar": {
+      "onThisPage": "Op deze pagina"
+    },
+    "nav": {
+      "what": "Wat is MCP",
+      "quickstart": "Snelstart",
+      "claude": "Claude Desktop",
+      "cursor": "Cursor",
+      "cline": "Cline",
+      "continue": "Continue",
+      "vscode": "VS Code",
+      "chatgpt": "ChatGPT",
+      "gemini": "Gemini",
+      "tools": "Tools",
+      "pricing": "Prijzen"
+    },
+    "cta": {
+      "mintKey": "Maak een API-sleutel",
+      "topUp": "Saldo opwaarderen",
+      "signIn": "Inloggen",
+      "protocolSpec": "MCP-spec"
+    },
+    "copyBtn": {
+      "copy": "Kopieer",
+      "copied": "Gekopieerd"
+    },
+    "what": {
+      "title": "Wat is MCP?",
+      "body1": "Model Context Protocol is een open standaard waarmee AI-assistenten externe tools kunnen ontdekken en aanroepen. Brubru draait een MCP-server zodat elke compatibele client — Claude Desktop, Cursor, Cline, Continue, custom GPT's — Brubru kan bevragen over EU-beleid, wetgeving, agenda, MEP's en commissies zonder dat je context kopieert en plakt.",
+      "body2": "Authenticatie loopt via je Brubru API-sleutel. Elke tool-call boekt af van je euro-saldo tegen dezelfde prijs als de REST API. Tools die ruimere toegang nodig hebben (read:ep, read:commission, ...) werken alleen als de sleutel met die scope is aangemaakt — je impactstraal komt exact overeen met de gekozen scopes."
+    },
+    "quickstart": {
+      "title": "Snelstart (3 stappen)",
+      "step1Title": "Maak een Brubru API-sleutel",
+      "step1": "Log in en maak een sleutel op",
+      "step2Title": "Vul je saldo aan",
+      "step2": "Voeg minstens € 1 krediet toe op",
+      "step2b": "Elke MCP tool-call kost € 0,005.",
+      "step3Title": "Plak de configuratie in je client",
+      "step3": "Kies hieronder je client en plak de JSON. Herstart de client — de zes Brubru-tools worden beschikbaar voor de AI.",
+      "curlLabel": "Sanity-check met curl"
+    },
+    "claude": {
+      "title": "Claude Desktop",
+      "body": "Claude Desktop leest MCP-servers uit een JSON-configbestand. Voeg Brubru zo toe.",
+      "s1": "Open Claude Desktop → Settings → Developer → Edit config.",
+      "s2": "Plak de JSON hieronder. Vervang YOUR_KEY door de plaintext die je hebt gekopieerd op brubru.beresol.eu/api.",
+      "s3": "Bewaar en herstart Claude Desktop.",
+      "s4": "Vraag Claude: 'Met Brubru, wat is de status van de AI Act?' — search_eu_legislation of get_procedure_status moet afgaan."
+    },
+    "cursor": {
+      "title": "Cursor",
+      "body": "Cursor leest MCP-servers uit `.cursor/mcp.json` in de project-root.",
+      "s1": "Maak of open `.cursor/mcp.json` in je project.",
+      "s2": "Plak de JSON hieronder, vervang YOUR_KEY.",
+      "s3": "Herstart Cursor. Open de Composer en stel een Brubru-smaak vraag."
+    },
+    "cline": {
+      "title": "Cline (VS Code-extensie)",
+      "body": "Cline (voorheen Claude Dev) leest MCP-servers uit de extensie-instellingen.",
+      "s1": "VS Code → Cline-extensie → Settings → MCP Servers.",
+      "s2": "Bewerk het JSON-bestand (`cline_mcp_settings.json`) en plak het blok hieronder.",
+      "s3": "Herlaad VS Code. Brubru's tools verschijnen in de tools-lijst van Cline."
+    },
+    "continue": {
+      "title": "Continue",
+      "body": "Met Continue (continue.dev) kun je MCP-servers aansluiten op de assistent-context.",
+      "s1": "Bewerk `~/.continue/config.json` (of de project-`.continue/config.json`).",
+      "s2": "Voeg Brubru toe onder de `mcpServers`-sleutel zoals hieronder en herstart Continue."
+    },
+    "vscode": {
+      "title": "VS Code (Claude Cowork / Anthropic-extensie)",
+      "body": "Als je Claude Cowork van Anthropic of de Claude Code VS Code-extensie gebruikt, kan Brubru als MCP-server worden toegevoegd.",
+      "s1": "Open het MCP-instellingenpaneel van de extensie.",
+      "s2": "Plak de JSON hieronder in de gebruikers- of projectconfig.",
+      "s3": "Herlaad het venster — de zes Brubru-tools verschijnen in de tools-lijst van de assistent."
+    },
+    "chatgpt": {
+      "title": "ChatGPT (custom GPT)",
+      "body": "ChatGPT spreekt geen MCP native per mei 2026, maar je kunt Brubru aansluiten via een custom GPT Action.",
+      "bodyMoaning": "Je hebt een ChatGPT Plus- of Teams-account nodig om custom GPT's te maken. De setup duurt ongeveer drie minuten.",
+      "s1": "Ga in ChatGPT naar Explore GPTs → Create.",
+      "s2": "In Configure → Actions, voeg een nieuwe action toe.",
+      "s3": "Zet de URL hieronder als endpoint en Authentication = Bearer Token met je Brubru-sleutel.",
+      "s4": "Voeg een korte instructie toe die de GPT vertelt dat hij Brubru's MCP-tools kan aanroepen voor EU-beleidsvragen.",
+      "actionUrl": "Action endpoint"
+    },
+    "gemini": {
+      "title": "Gemini (en andere LLM's)",
+      "body": "Gemini's tool-calling API kan Brubru's HTTP-endpoint direct aanroepen. Geef de endpoint-URL en de Authorization: Bearer-header op in je Gemini SDK-setup; het tool-schema komt overeen met de MCP `tools/list`-respons.",
+      "bodySecondary": "Voor een andere provider — Mistral, Llama-tools, of je eigen agent-framework — wijs het naar hetzelfde /api/mcp-endpoint. Het protocol is open JSON-RPC; geen Brubru-specifieke SDK nodig."
+    },
+    "tools": {
+      "title": "Tools vandaag beschikbaar",
+      "lede": "Zes tools, 1:1 gekoppeld aan de relevante /api/v1/*-endpoints. Elke call kost € 0,005 van je saldo.",
+      "descs": {
+        "ask_brubru": "Open EU-beleidsvraag. Retourneert de 3 best passende, curated kennisgidsen.",
+        "search_eu_legislation": "Full-text zoeken in 28 710 EU-wetten via CELEX, titel of keyword.",
+        "search_knowledge_guides": "Zoek in Brubru's curated kennisgidsen (200+ beleidstopics).",
+        "get_procedure_status": "Live status van een EU-wetgevingsprocedure via OEIL-referentie.",
+        "get_calendar_events": "Aankomende agendapunten van Parlement, Raad en Commissie.",
+        "search_eprs": "Publicaties van de Onderzoeksdienst van het EP (briefings, studies)."
+      }
+    },
+    "pricing": {
+      "title": "Prijsherinnering",
+      "body": "Brubru's MCP tool-calls worden gefactureerd op dezelfde manier als de REST API:",
+      "b1": "Elke tool-call kost € 0,005 (5 000 micro-euro), afgeboekt van je saldo.",
+      "b2": "Geen gratis registratietegoed; minimum bijvullen € 1. Publieke sandbox dekt evaluatie.",
+      "b3": "Als een call mislukt (serverfout), wordt de kost automatisch teruggestort.",
+      "b4": "Scope-controle blijft van toepassing — een sleutel met alleen read:laws kan ask_brubru niet aanroepen (vereist read:knowledge)."
+    }
   }
 }
