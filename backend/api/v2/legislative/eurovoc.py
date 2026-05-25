@@ -105,11 +105,18 @@ async def acts_by_concept(
     published_from: Optional[date] = Query(None, description="Lower bound on document date"),
     language: str = Query("ENG", description="ISO-3 language code for titles"),
     limit: int = Query(50, ge=1, le=200),
+    include_body: bool = Query(False, description="Inline each act's full body (Cellar XHTML). Caps the page to 10. Default false."),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[CellarRecentItem]:
-    return await _v1_cellar.acts_by_eurovoc(
+    if include_body and limit > 10:
+        limit = 10
+    resp = await _v1_cellar.acts_by_eurovoc(
         request, concept_id=concept_id, published_from=published_from, language=language, limit=limit, user=user
     )
+    if include_body:
+        from api.v2.legislative.eur_lex import _fill_bodies
+        await _fill_bodies(resp.data)
+    return resp
 
 
 # Authority NAL dispatcher — maps a table slug to the v1 vocabularies handler.

@@ -85,6 +85,28 @@ def _law_created_at(db: Session, celex: str):
     return None
 
 
+async def _fill_bodies(items) -> None:
+    """Concurrently fetch + inline body_txt/body_html (Cellar XHTML, EN) for list
+    items that carry a .celex. Used by list endpoints when include_body=true.
+    Failures per item degrade to null (no exception bubbles up)."""
+    import asyncio
+    from api.v1.citations import _fetch_cellar_xhtml, _strip_html_to_text
+
+    async def _one(it):
+        celex = getattr(it, "celex", None)
+        if not celex:
+            return
+        try:
+            html = await _fetch_cellar_xhtml(celex)
+        except Exception:
+            html = None
+        if html:
+            it.body_html = html
+            it.body_txt = _strip_html_to_text(html)
+
+    await asyncio.gather(*(_one(it) for it in items))
+
+
 class _DataPoints(BaseModel):
     """The 5 mandatory Brubru v1 datapoints, mixed into every native v2 model
     so the response contract matches v1 (fields present, even when null)."""
@@ -360,42 +382,64 @@ GET /api/v2/legislative/eur-lex/laws/summaries?q=data%20protection
 ```
 
 **You get back**
-A `PaginatedResponse[SummaryItem]` (`summary_id`, `celex`, `title`, `lsu_url`). `coverage_complete=false`: LEGISSUM is a sparse subgraph in Cellar, so results are best-effort pending a dedicated LEGISSUM sync.
+A `PaginatedResponse[SummaryItem]` (`summary_id` = slug, `celex`, `title`, `lsu_url`). Backed by the harvested LEGISSUM catalogue (`public.legissum_summaries`).
 
 **Data freshness**
-Live SPARQL pass-through against the Cellar LEGISSUM graph.""",
+Read from the LEGISSUM catalogue harvested from EUR-Lex (sync via `scripts/sync_legissum.py`). Empty only until the first sync runs.""",
 )
 async def list_summaries(
     request: Request,
     q: Optional[str] = Query(None, description="Free-text search over summary titles"),
+    chapter: Optional[str] = Query(None, description="Filter by chapter code (e.g. 03) or chapter title substring"),
     limit: int = Query(50, ge=1, le=200),
+    page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> PaginatedResponse[SummaryItem]:
+    clauses = []
+    params: dict = {}
+    if q:
+        clauses.append("title ILIKE :q")
+        params["q"] = f"%{q}%"
+    if chapter:
+        clauses.append("(chapter_code = :ch OR chapter_title ILIKE :chl)")
+        params["ch"] = chapter
+        params["chl"] = f"%{chapter}%"
+    where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
+    total = 0
     rows = []
     try:
-        async with CellarSPARQLClient() as client:
-            rows = await client.search_legissum(keyword=q, limit=limit)
+        total = int(db.execute(text(f"SELECT COUNT(*) FROM public.legissum_summaries {where}"), params).scalar() or 0)
+        rows = db.execute(
+            text(
+                f"SELECT slug, title, celex, url, chapter_code, chapter_title "
+                f"FROM public.legissum_summaries {where} ORDER BY title LIMIT :lim OFFSET :off"
+            ),
+            {**params, "lim": limit, "off": (page - 1) * limit},
+        ).mappings().all()
     except Exception:
+        try:
+            db.rollback()
+        except Exception:
+            pass
         rows = []
-    items = []
-    for r in rows:
-        celex = r.get("celex")
-        items.append(
-            SummaryItem(
-                summary_id=celex or r.get("work"),
-                celex=celex,
-                title=r.get("title"),
-                lsu_url=_lsu_url(celex) if celex else None,
-                public_url=_lsu_url(celex) if celex else r.get("work"),
-                creation_date=datetime.utcnow(),
-            )
+    items = [
+        SummaryItem(
+            summary_id=r["slug"],
+            celex=r["celex"],
+            title=r["title"],
+            lsu_url=r["url"],
+            public_url=r["url"],
+            creation_date=datetime.utcnow(),
         )
+        for r in rows
+    ]
     return build_envelope(
         items=items,
-        total=len(items),
-        page=1,
+        total=total,
+        page=page,
         limit=limit,
-        coverage_complete=False,
+        coverage_complete=bool(total),
         op_core_title="LEGISSUM summaries of EU legislation",
         op_core_type="EU legislation summary",
         op_core_identifier=str(request.url),
@@ -429,21 +473,40 @@ Live: URL construction + an optional Cellar title lookup for CELEX ids.""",
 async def get_summary(
     summary_id: str,
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> SummaryItem:
     sid = summary_id.strip()
-    is_celex = bool(_CELEX_RE.match(sid))
-    if is_celex:
-        url = _lsu_url(sid.upper())
-        title = None
+    # Prefer the harvested catalogue (by slug, or by the CELEX it summarises).
+    row = None
+    try:
+        row = db.execute(
+            text(
+                "SELECT slug, title, celex, url, summary_text "
+                "FROM public.legissum_summaries WHERE slug = :s OR celex = :s LIMIT 1"
+            ),
+            {"s": sid},
+        ).mappings().first()
+    except Exception:
         try:
-            async with CellarSPARQLClient() as client:
-                meta = await client.get_celex_metadata(sid.upper(), language="ENG")
-            if meta:
-                title = meta.get("title")
+            db.rollback()
         except Exception:
             pass
-        return SummaryItem(summary_id=sid.upper(), celex=sid.upper(), title=title, lsu_url=url, public_url=url, creation_date=datetime.utcnow())
-    url = f"https://eur-lex.europa.eu/legal-content/EN/LSU/?uri=LEGISSUM:{sid}"
+        row = None
+    if row:
+        return SummaryItem(
+            summary_id=row["slug"],
+            celex=row["celex"],
+            title=row["title"],
+            lsu_url=row["url"],
+            public_url=row["url"],
+            body_txt=row["summary_text"],  # null until a --fetch-text sync populates it
+            creation_date=datetime.utcnow(),
+        )
+    # Fallback when the catalogue has no row: construct the LSU URL.
+    if _CELEX_RE.match(sid):
+        url = _lsu_url(sid.upper())
+        return SummaryItem(summary_id=sid.upper(), celex=sid.upper(), title=None, lsu_url=url, public_url=url, creation_date=datetime.utcnow())
+    url = f"https://eur-lex.europa.eu/EN/legal-content/summary/{sid}.html"
     return SummaryItem(summary_id=sid, celex=None, title=None, lsu_url=url, public_url=url, creation_date=datetime.utcnow())
 
 
@@ -494,11 +557,15 @@ async def list_laws(
     updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound (updated_at <= value)."),
     updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)."),
     include_orphans: bool = Query(False, description="Include rows with no CELEX (orphaned annexes). Default false."),
+    include_body: bool = Query(False, description="Inline each row's full body (Cellar XHTML). Caps the page to 10 to bound latency. Default false — call /laws/{celex}/text for a single body."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[LawItem]:
+    # Body fetch is one Cellar round-trip per row; cap the page when it's on.
+    if include_body and limit > 10:
+        limit = 10
     resp = await _v1_laws.list_laws(
         request,
         q=q,
@@ -519,6 +586,8 @@ async def list_laws(
     )
     for it in resp.data:
         _nativise_law_links(it)
+    if include_body:
+        await _fill_bodies(resp.data)
     return resp
 
 
@@ -1360,6 +1429,7 @@ async def oj_daily(
     series: str = Query("L", pattern="^[LC]$", description="OJ series: L (legislation) or C (information)"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    include_body: bool = Query(False, description="Inline each act's full body (Cellar XHTML). Caps the page to 10. Default false."),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[CellarRecentItem]:
     sectors = "3" if series == "L" else None
@@ -1371,7 +1441,7 @@ async def oj_daily(
         language="ENG",
         limit=limit,
         page=page,
-        include_body=False,
+        include_body=include_body,
         user=user,
     )
 
