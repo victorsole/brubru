@@ -37,6 +37,13 @@ RUN git clone --depth 1 --branch v1.9.11 \
 COPY requirements-light.txt .
 RUN pip install --no-cache-dir -r requirements-light.txt
 
+# Install the Chromium browser + its system libraries for the WAF-bypass fetcher
+# (services/scrapers/waf_browser_fetcher.py). eur-lex.europa.eu returns HTTP 202 +
+# empty body to non-JS clients; headless Chromium clears the JS challenge. This
+# adds ~400MB to the image and is the heaviest build step — last-resort fallback,
+# Cellar SPARQL/REST stays the primary path. `--with-deps` runs apt-get for the libs.
+RUN python -m playwright install --with-deps chromium
+
 # Copy application code
 COPY . /app
 

@@ -45,6 +45,10 @@ beautifulsoup4==4.12.3
 lxml==5.1.0
 tenacity==8.2.3
 feedparser==6.0.11
+# Headless-browser fallback for JS-WAF-walled EU pages (eur-lex.europa.eu returns
+# 202 + empty body to non-JS clients). Used by services/scrapers/waf_browser_fetcher.py.
+# The Chromium binary is installed separately in the Dockerfile.
+playwright==1.58.0
 
 # Background Tasks
 apscheduler==3.10.4
