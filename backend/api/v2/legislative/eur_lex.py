@@ -70,11 +70,19 @@ def _eurlex(celex: str) -> str:
 
 
 def _law_created_at(db: Session, celex: str):
-    """eu_laws.created_at for a CELEX (the 5th mandatory datapoint), or None."""
+    """eu_laws.created_at for a CELEX (the 5th mandatory datapoint), or None.
+
+    A CELEX can have several eu_laws rows (annexes share the parent's CELEX) and
+    some carry a null created_at, so scan for the first non-null value rather
+    than taking an arbitrary row.
+    """
     try:
-        return db.query(EULaw.created_at).filter(EULaw.celex == celex).scalar()
+        for (cd,) in db.query(EULaw.created_at).filter(EULaw.celex == celex).all():
+            if cd is not None:
+                return cd
     except Exception:
-        return None
+        pass
+    return None
 
 
 class _DataPoints(BaseModel):
@@ -1037,6 +1045,9 @@ async def law_xref(
     celex = celex.upper()
 
     if not refresh:
+        # Look up created_at BEFORE the raw law_xref SELECT (ORM query after a
+        # raw db.execute on the same session can come back empty).
+        cd = _law_created_at(db, celex)
         cached = _read_law_xref(db, celex)
         if cached:
             return XrefResult(
@@ -1044,7 +1055,7 @@ async def law_xref(
                 cached=True,
                 eurlex_url=_eurlex(celex),
                 public_url=_eurlex(celex),
-                creation_date=_law_created_at(db, celex),
+                creation_date=cd,
                 **cached,
             )
 
