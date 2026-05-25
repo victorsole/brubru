@@ -5,6 +5,7 @@
 - **Role**: committees do the substantive legislative work. Each file has a **lead committee** (with a rapporteur) and may have **opinion-giving** committees. Committees adopt amendments and reports that go to plenary.
 - **Standing committees + subcommittees + special committees**: most are standing committees; **DROI, SEDE, FISC, SANT, EUDS** are subcommittees; **HOUS** is a special committee (term 10). EUDS runs **until 3 February 2027**.
 - **Per-committee data**: draft agendas, draft reports, amendments, meeting documents, votes, minutes, work-in-progress, supporting analyses — at `europarl.europa.eu/committees/en/{code}/…` and via the EP Open Data API. See `ep_documents_and_open_data.md`.
+- **Composition & operation** (EP "Discover the committees" booklet, 2025): the **720 MEPs** represent ~**440 million** citizens; the legislative work runs through **22 standing committees + 2 subcommittees** (plus, in term 10, additional subcommittees and a special committee — see the table). Each committee elects a **chair + up to 4 vice-chairs**; composition mirrors each political group's weight in Parliament; committees usually meet **once or twice a month**; meetings are **livestreamed** and documents published in **24 languages**.
 - **Source**: https://www.europarl.europa.eu/committees/en/home.
 
 ## The 26 committees (term 10)
