@@ -143,6 +143,161 @@ LAW_PACKAGES = {
         'date_from': 2013
     },
 
+    'china_bev_countervailing_duties': {
+        'name': 'China BEV Countervailing Duties (Reg 2024/2754)',
+        'primary_celex': '32024R2754',
+        'description': (
+            'Commission Implementing Regulation (EU) 2024/2754 imposing definitive '
+            'countervailing duties on imports of new battery electric vehicles (BEVs) for '
+            'passenger transport originating in the People\'s Republic of China. Adopted '
+            '29 October 2024 under Article 15 of the Basic Anti-Subsidy Regulation '
+            '(Reg 2016/1037). Definitive additional ad valorem duties: BYD 17.0%, '
+            'Geely 18.8%, SAIC 35.3%, Tesla (Shanghai) 7.8%, other cooperating 20.7%, '
+            'all other companies 35.3% — on top of the 6.5% conventional MFN tariff. '
+            'Central legal finding: threat of material injury (Article 8(8)), not actual '
+            'injury — provisional-duty securities released. All 5 undertaking offers '
+            'rejected. Default 5-year duration.'
+        ),
+        'applicability': (
+            'EU importers, EU customs authorities, Chinese exporting BEV producers '
+            '(BYD/Geely/SAIC/Tesla Shanghai/other cooperating named in Annex/non-cooperating), '
+            'EU BEV producers monitoring circumvention, EU automotive industry associations, '
+            'Member State competent authorities. Product scope: new fully-electric passenger '
+            'BEVs under CN code ex 8703 80 10 / TARIC 8703 80 10 10. Excludes hybrids, '
+            'plug-in hybrids, range-extended EVs, and BEVs for goods transport.'
+        ),
+        'policy_area': 'Trade',
+        'priority_level': 'high',
+        'keywords': [
+            'china bev', 'chinese ev', 'chinese electric vehicle', 'china evs',
+            'countervailing duty', 'cvd', 'anti-subsidy', 'anti subsidy',
+            'byd', 'geely', 'zeekr', 'saic', 'tesla shanghai', 'maxus',
+            'volkswagen china', 'mg motor', 'nio', 'xpeng', 'eevb',
+            '8703 80 10', 'taric 8703', 'cn 8703',
+            '2024/2754', '32024r2754', '2024/1866', '32024r1866',
+            '2024/785', '32024r0785', '2016/1037', '32016r1037',
+            'basic anti-subsidy regulation', 'ltar', 'less than adequate remuneration',
+            'threat of material injury', 'article 8(8)', 'article 16(2)',
+            'price undercutting', 'union interest', 'lesser duty rule',
+            'cccme', 'undertaking offer', 'minimum import price', 'mip',
+            'facts available', 'article 28', 'sampling', 'individual examination',
+            'preferential financing', 'policy banks', 'china development bank',
+            'lfp batteries', 'land use rights', 'lur',
+            'trade defence', 'foreign subsidies regulation', 'fsr',
+        ],
+        'date_from': 2024
+    },
+
+    'china_egypt_gff_countervailing_duties': {
+        'name': 'China and Egypt GFF Countervailing Duties (Reg 2020/776)',
+        'primary_celex': '32020R0776',
+        'description': (
+            'Commission Implementing Regulation (EU) 2020/776 imposing definitive '
+            'countervailing duties on imports of certain woven and/or stitched glass '
+            'fibre fabrics (GFF) originating in the People\'s Republic of China and '
+            'Egypt. Adopted 12 June 2020 under Articles 15 and 24(1) of the Basic '
+            'Anti-Subsidy Regulation (Reg 2016/1037). Investigation initiated 16 May '
+            '2019 on a complaint by Tech-Fab Europe representing more than 25 % of '
+            'Union production. Definitive duties: PRC Jushi Group / Zhejiang Hengshi '
+            '/ Taishan Fiberglass 30.7 %, PGTEX China / Chongqing Tenways 17.0 %, '
+            'other PRC co-operating in both AS and AD 24.8 %, other PRC co-operating '
+            'in AD only 30.7 %, all other PRC companies 30.7 %, Jushi Egypt / Hengshi '
+            'Egypt 10.9 %, all other Egyptian companies 10.9 %. The regulation also '
+            'amends Reg (EU) 2020/492 (the parallel anti-dumping regulation on the '
+            'same product) and discontinues import registration established under '
+            'Reg (EU) 2020/44.'
+        ),
+        'applicability': (
+            'EU importers of woven and stitched glass fibre fabrics, EU customs '
+            'authorities, Chinese exporting GFF producers (Jushi Group / Zhejiang '
+            'Hengshi / Taishan Fiberglass / PGTEX China / Chongqing Tenways and '
+            'other co-operating named in Annex I-II), Egyptian exporting GFF '
+            'producers (Jushi Egypt, Hengshi Egypt), EU GFF producers and the '
+            'European GFF industry association (Tech-Fab Europe), wind-turbine blade '
+            'manufacturers and other downstream GFF users in the Union. Product '
+            'scope: woven and/or stitched continuous filament glass fibre rovings '
+            'and/or yarns under CN ex 70193900 / ex 70194000 / ex 70195900 / ex '
+            '70199000 (TARIC 7019390080 / 7019400080 / 7019590080 / 7019900080), '
+            'excluding pre-impregnated products and open-mesh fabrics with cell '
+            'size > 1.8 mm in both length and width weighing > 35 g/m^2.'
+        ),
+        'policy_area': 'Trade',
+        'priority_level': 'medium',
+        'keywords': [
+            'glass fibre fabrics', 'gff', 'woven glass fibre', 'stitched glass fibre',
+            'countervailing duty', 'cvd', 'anti-subsidy', 'anti subsidy',
+            'jushi', 'jushi group', 'jushi egypt', 'hengshi', 'taishan fiberglass',
+            'cnbm', 'china jushi', 'sinoma', 'pgtex', 'chongqing tenways',
+            '70193900', '70194000', '70195900', '70199000',
+            'taric 7019', 'cn 7019',
+            '2020/776', '32020r0776', '2020/492', '32020r0492',
+            '2020/44', '32020r0044', '2016/1037', '32016r1037',
+            'basic anti-subsidy regulation', 'tech-fab europe',
+            'setc-zone', 'sino-egyptian cooperation', 'suez',
+            'preferential lending', 'preferential financing', 'policy banks',
+            'export credits', 'land use rights', 'lur', 'ltar',
+            'less than adequate remuneration', 'grants', 'tax preferences',
+            'transhipment subsidies', 'cross-border subsidies',
+            'wind turbine blades', 'composite materials',
+        ],
+        'date_from': 2020
+    },
+
+    'india_indonesia_sscr_countervailing_duties': {
+        'name': 'India and Indonesia Stainless Steel Countervailing Duties (Reg 2022/433)',
+        'primary_celex': '32022R0433',
+        'description': (
+            'Commission Implementing Regulation (EU) 2022/433 imposing definitive '
+            'countervailing duties on imports of stainless steel cold-rolled flat '
+            'products (SSCR) originating in India and Indonesia. Adopted 15 March '
+            '2022 under Articles 15 and 24(1) of the Basic Anti-Subsidy Regulation '
+            '(Reg 2016/1037). Investigation initiated 17 February 2021 on a complaint '
+            'by EUROFER. Definitive countervailing duties: India Jindal Stainless / '
+            'Jindal Stainless Hisar 4.3 %, Chromeni Steels and all other Indian 7.5 %; '
+            'Indonesia IRNC Group 21.4 %, Jindal Stainless Indonesia 0 % (de minimis), '
+            'non-sampled cooperating 13.5 %, all other Indonesian 20.5 %. Combined '
+            'CVD + anti-dumping reaches 42.8 % (Chromeni). The dominant Indonesian '
+            'subsidy was nickel ore for less than adequate remuneration, supported by '
+            'cross-border Chinese financing channelled through the Morowali Industrial '
+            'Park and attributed to the Government of Indonesia (the GFF doctrine). The '
+            'regulation also amends Reg (EU) 2021/2012 (the parallel anti-dumping '
+            'regulation on the same product).'
+        ),
+        'applicability': (
+            'EU importers of stainless steel cold-rolled flat products, EU customs '
+            'authorities, Indian exporting producers (Jindal Group, Chromeni Steels), '
+            'Indonesian exporting producers (IRNC Group / Tsingshan-linked, Jindal '
+            'Stainless Indonesia), EU stainless steel producers and EUROFER, downstream '
+            'SSCR users in automotive, white goods, construction and process industries. '
+            'Product scope: flat-rolled stainless steel, not further worked than '
+            'cold-rolled, under 19 CN codes in headings 7219 and 7220.'
+        ),
+        'policy_area': 'Trade',
+        'priority_level': 'medium',
+        'keywords': [
+            'stainless steel cold-rolled flat products', 'sscr', 'stainless steel',
+            'cold-rolled flat products', 'countervailing duty', 'cvd',
+            'anti-subsidy', 'anti subsidy', 'india indonesia', 'eurofer',
+            'jindal', 'jindal stainless', 'jindal stainless hisar',
+            'jindal stainless indonesia', 'chromeni', 'chromeni steels',
+            'irnc', 'indonesia ruipu nickel', 'tsingshan',
+            'morowali', 'morowali industrial park', 'imip',
+            'nickel ore', 'nickel ore export ban', '2009 mining law',
+            'chromium ore', 'ltar', 'less than adequate remuneration',
+            'aas', 'dds', 'epcgs', 'meis', 'duty drawback scheme',
+            'advanced authorisation scheme', 'merchandise export from india',
+            'china-asean investment cooperation fund', 'caf', 'going out policy',
+            'cross-border subsidies', 'bilateral cooperation', 'china indonesia',
+            '7219', '7220', 'cn 7219', 'cn 7220', 'taric c654', 'taric c657',
+            '2022/433', '32022r0433', '2021/2012', '32021r2012',
+            '2016/1037', '32016r1037', 'basic anti-subsidy regulation',
+            'double counting', 'article 24(1)', 'de minimis',
+            'steel safeguard', '2019/159', 'lesser duty rule',
+            'preferential financing', 'policy banks',
+        ],
+        'date_from': 2022
+    },
+
     'capital_markets_union': {
         'name': 'Capital Markets Union Package',
         'primary_celex': None,

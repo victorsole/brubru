@@ -12,10 +12,16 @@
 
 export const EUCANON_BY_CELEX: Record<string, string> = {
   '32013R0575': '/eucanon/2013-575_crr/',
+  '32024R2754': '/eucanon/2024-2754_china_bev_duties/',
+  '32020R0776': '/eucanon/2020-776_china_egypt_glass_fibre/',
+  '32022R0433': '/eucanon/2022-433_india_indonesia_stainless_steel/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'CRR / CRD IV - Bank Prudential Requirements': '/eucanon/2013-575_crr/',
+  'China BEV Countervailing Duties (Reg 2024/2754)': '/eucanon/2024-2754_china_bev_duties/',
+  'China and Egypt GFF Countervailing Duties (Reg 2020/776)': '/eucanon/2020-776_china_egypt_glass_fibre/',
+  'India and Indonesia Stainless Steel Countervailing Duties (Reg 2022/433)': '/eucanon/2022-433_india_indonesia_stainless_steel/',
 };
 
 export interface EucanonLookupInput {
