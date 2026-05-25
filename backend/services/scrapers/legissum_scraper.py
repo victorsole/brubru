@@ -80,7 +80,8 @@ def get_chapter_slugs(chapter_url: str) -> List[str]:
 def fetch_summary_detail(slug: str) -> dict:
     """Fetch one summary page: precise title, summarised CELEX, body text + html."""
     r = fetch_one(summary_url(slug))
-    title = (r.title or "").replace(" - EUR-Lex", "").strip() or _slug_to_title(slug)
+    # EUR-Lex page titles end with " | EUR-Lex" (or " - EUR-Lex").
+    title = re.sub(r"\s*[|–-]\s*EUR-Lex\s*$", "", (r.title or "")).strip() or _slug_to_title(slug)
     celex = None
     m = re.search(r"uri=CELEX:([0-9][A-Z0-9()]+)", r.html or "")
     if m:
@@ -127,6 +128,41 @@ def _upsert(
             "url": url, "celex": celex, "stext": summary_text, "shtml": summary_html, "tf": text_fetched,
         },
     )
+
+
+def enrich_pending(db: Session, *, limit: Optional[int] = None, sleep_s: float = 0.5) -> dict:
+    """Resumable enrichment: fetch each summary page for rows that have no body
+    yet (text_fetched_at IS NULL) and fill the real title + CELEX + body. Re-runs
+    pick up where they left off, so a long crawl can be chunked or restarted.
+    Failed fetches stay unmarked and are retried on the next run."""
+    q = "SELECT slug FROM public.legissum_summaries WHERE text_fetched_at IS NULL ORDER BY chapter_code, slug"
+    if limit:
+        q += f" LIMIT {int(limit)}"
+    slugs = [r[0] for r in db.execute(text(q)).all()]
+    enriched = 0
+    for slug in slugs:
+        try:
+            detail = fetch_summary_detail(slug)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[legissum] enrich fetch failed for %s: %s", slug, exc)
+            time.sleep(sleep_s)
+            continue
+        if detail and detail.get("text"):
+            db.execute(
+                text(
+                    "UPDATE public.legissum_summaries SET title = :t, "
+                    "celex = COALESCE(:c, celex), summary_text = :st, summary_html = :sh, "
+                    "text_fetched_at = NOW(), updated_at = NOW() WHERE slug = :s"
+                ),
+                {"t": detail["title"], "c": detail.get("celex"),
+                 "st": detail.get("text"), "sh": detail.get("html"), "s": slug},
+            )
+            db.commit()
+            enriched += 1
+            if enriched % 25 == 0:
+                logger.info("[legissum] enriched %d/%d", enriched, len(slugs))
+        time.sleep(sleep_s)
+    return {"candidates": len(slugs), "enriched": enriched}
 
 
 def sync_legissum(

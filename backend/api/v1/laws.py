@@ -11,7 +11,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, func, or_, text
+from sqlalchemy import and_, case, func, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -147,7 +147,7 @@ async def list_laws(
     # part to its parent. Surfacing them produces all-null /laws rows that
     # confuse partners. Pass include_orphans=true to opt back in.
     if not include_orphans:
-        filters.append(EULaw.celex.isnot(None))
+        filters.append(and_(EULaw.celex.isnot(None), EULaw.celex != ""))
     if celex:
         filters.append(EULaw.celex == celex.upper())
     if doc_type:
@@ -163,29 +163,59 @@ async def list_laws(
     if updated_to:
         filters.append(EULaw.updated_at <= updated_to)
 
+    ts_query = None
+    alias_celexes: list[str] = []
     if q:
-        # Use search_vector if available, fall back to ILIKE on title
+        # Full-text match OR title ILIKE, plus any law-nickname alias (GDPR,
+        # AI Act, DSA, ...) resolved to its CELEX, so common-name searches recall
+        # the flagship act even when its title uses the formal long form.
         ts_query = func.plainto_tsquery("english", q)
-        filters.append(
-            or_(
-                EULaw.search_vector.op("@@")(ts_query),
-                EULaw.title.ilike(f"%{q}%"),
-            )
+        try:
+            from services.parsers.law_alias_resolver import find_alias_matches
+            alias_celexes = [m.celex for m in find_alias_matches(q) if getattr(m, "celex", None)]
+        except Exception:
+            alias_celexes = []
+        text_match = or_(
+            EULaw.search_vector.op("@@")(ts_query),
+            EULaw.title.ilike(f"%{q}%"),
         )
+        if alias_celexes:
+            filters.append(or_(text_match, EULaw.celex.in_(alias_celexes)))
+        else:
+            filters.append(text_match)
 
     if filters:
         query = query.filter(and_(*filters))
 
     total = query.count()
-    # When the partner is doing incremental sync, sort by updated_at desc so
-    # they see freshly-updated rows first. Otherwise fall back to adoption date.
-    if updated_from or updated_to:
-        order_col = EULaw.updated_at.desc().nullslast()
+    # Ordering: for a text search, rank by RELEVANCE (alias-matched flagship acts
+    # first, then full-text rank), not by date — otherwise recent minor acts that
+    # loosely match bury the flagship law. For incremental sync, newest-updated
+    # first. Otherwise, most-recent adoption date.
+    if q is not None and ts_query is not None:
+        order_cols = []
+        if alias_celexes:
+            order_cols.append(case((EULaw.celex.in_(alias_celexes), 0), else_=1))
+        # Prefer the canonical act over annexes / joint declarations that share
+        # its CELEX: the canonical row's title starts with its own doc-type word
+        # (e.g. "Regulation ..."), the same heuristic get_law_detail uses.
+        order_cols.append(
+            case(
+                (func.lower(EULaw.title).like(
+                    func.lower(func.coalesce(EULaw.doc_type_normalized, "zzzznomatch")).concat("%")
+                ), 0),
+                else_=1,
+            )
+        )
+        order_cols.append(func.ts_rank(EULaw.search_vector, ts_query).desc())
+        order_cols.append(EULaw.date.desc().nullslast())
+        query = query.order_by(*order_cols)
+    elif updated_from or updated_to:
+        query = query.order_by(EULaw.updated_at.desc().nullslast())
     else:
-        order_col = EULaw.date.desc().nullslast()
+        query = query.order_by(EULaw.date.desc().nullslast())
     rows = (
-        query.order_by(order_col)
-        .offset((page - 1) * limit)
+        query.offset((page - 1) * limit)
         .limit(limit)
         .all()
     )
