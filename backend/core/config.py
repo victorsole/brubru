@@ -66,7 +66,8 @@ class Settings(BaseSettings):
     # Stripe Payment Configuration
     STRIPE_PUBLISHABLE_KEY: str
     STRIPE_SECRET_KEY: str
-    STRIPE_WEBHOOK_SECRET: str | None = None  # Will be set when webhook is configured
+    STRIPE_WEBHOOK_SECRET: str | None = None  # Subscriptions webhook (/api/stripe/webhook)
+    STRIPE_BILLING_WEBHOOK_SECRET: str | None = None  # API-credits webhook (/api/billing/webhook) — Phase B (May 2026)
     APP_URL: str = "http://localhost:5173"
 
     # Old tier prices (kept for migration, will be removed)

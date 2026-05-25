@@ -28,13 +28,14 @@ from services.schedulers.amendment_sync_scheduler import (
 from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
-    feedback, admin_panel, admin_api_keys, committees, amendments, legislative_train,
+    feedback, admin_panel, admin_api_keys, me_api_keys, billing, mcp_http, mcp_openapi, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
     whatsapp, positions, archive, amendator_examples, public_analytics,
     datasets_dcat, comparator, dashboard, proactive, impact,
+    alerts, language_analytics,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -141,6 +142,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Billing refund middleware (Phase B — refunds 5xx debits on /api/v1/*).
+# Must be added AFTER CORS so the refund logic sees the final response.
+from api.v1._billing_middleware import BillingRefundMiddleware  # noqa: E402
+app.add_middleware(BillingRefundMiddleware)
+
 
 # Health check endpoint
 @app.get("/")
@@ -181,6 +187,10 @@ app.include_router(personalization.router, prefix="/api", tags=["Personalization
 app.include_router(feedback.router, tags=["Feedback"])
 app.include_router(admin_panel.router, tags=["Admin Panel"])
 app.include_router(admin_api_keys.router, tags=["Admin API Keys"])
+app.include_router(me_api_keys.router, tags=["Self-Serve API Keys"])
+app.include_router(billing.router, tags=["API Billing"])
+app.include_router(mcp_http.router, tags=["MCP — HTTP transport"])
+app.include_router(mcp_openapi.router, tags=["MCP — OpenAPI for ChatGPT"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
 app.include_router(committees.router, tags=["Committees"])
 app.include_router(committee_work.router, tags=["Committee Work"])
@@ -215,6 +225,8 @@ app.include_router(positions.router, tags=["Position Analysis"])
 app.include_router(dashboard.router, tags=["Dashboard"])
 app.include_router(proactive.router, tags=["Proactive Chat"])
 app.include_router(impact.router, tags=["Personalised Impact"])
+app.include_router(alerts.router, tags=["Alerts"])
+app.include_router(language_analytics.router, tags=["Language Analytics"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 # Data Provider API v1 (public paid surface, /api/v1/*)
@@ -222,13 +234,18 @@ from api.v1 import router as v1_router, docs_alias_router as v1_docs_alias
 from api.v1._errors import register_v1_error_handlers
 app.include_router(v1_router)
 app.include_router(v1_docs_alias)
-register_v1_error_handlers(app)
+register_v1_error_handlers(app)  # error envelope covers /api/v1/* AND /api/v2/*
+
+# Data Provider API v2 (institution-based surface, /api/v2/*)
+# Reuses the v1 auth/scope/billing dependency, envelope and error handlers.
+from api.v2 import router as v2_router
+app.include_router(v2_router)
 
 
 @app.middleware("http")
 async def _v1_rate_limit_headers(request, call_next):
     response = await call_next(request)
-    if request.url.path.startswith("/api/v1/"):
+    if request.url.path.startswith(("/api/v1/", "/api/v2/")):
         limit = getattr(request.state, "rate_limit_limit", None)
         remaining = getattr(request.state, "rate_limit_remaining", None)
         tier = getattr(request.state, "rate_limit_tier", None)

@@ -4,7 +4,7 @@ User Model
 SQLAlchemy model for Brubru users stored in Supabase.
 """
 
-from sqlalchemy import Column, String, DateTime, Boolean, Text
+from sqlalchemy import BigInteger, Column, String, DateTime, Boolean, Text
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -60,6 +60,14 @@ class User(Base):
     # Stripe payment info
     stripe_customer_id = Column(String(255), nullable=True, unique=True)
     stripe_subscription_id = Column(String(255), nullable=True)
+
+    # API vertical billing (Phase B, 21 May 2026). Amounts stored as
+    # BIGINT micro-euros (6dp) to avoid float drift. 1 EUR = 1_000_000.
+    # Default 0 — no free signup credit; users top up via Stripe.
+    api_balance_eur_micro = Column(BigInteger, nullable=False, default=0)
+    api_auto_topup_enabled = Column(Boolean, nullable=False, default=False)
+    api_auto_topup_threshold_micro = Column(BigInteger, nullable=True)
+    api_auto_topup_amount_micro = Column(BigInteger, nullable=True)
 
     # Private guides (20 May 2026) — per-user bespoke knowledge bundle in
     # backend/knowledge_base/private_guides/{slug}/, gitignored, injected

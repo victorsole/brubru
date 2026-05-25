@@ -74,8 +74,9 @@ def register_v1_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(StarletteHTTPException)
     async def _http_exc_handler(request: Request, exc: StarletteHTTPException):
-        # Only wrap /api/v1/* paths; leave legacy routes untouched
-        if not request.url.path.startswith("/api/v1/"):
+        # Only wrap the paid Data Provider surface (/api/v1/* + /api/v2/*);
+        # leave legacy app routes untouched.
+        if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
             return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail}, headers=dict(exc.headers or {}))
         rid = _request_id(request)
         body = _unwrap_detail(exc.detail, exc.status_code, rid)
@@ -83,7 +84,7 @@ def register_v1_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def _validation_exc_handler(request: Request, exc: RequestValidationError):
-        if not request.url.path.startswith("/api/v1/"):
+        if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
             return JSONResponse(status_code=422, content={"detail": exc.errors()})
         rid = _request_id(request)
         first = exc.errors()[0] if exc.errors() else {}

@@ -6,6 +6,7 @@ SQLAlchemy models for Brubru application.
 
 from .user import User
 from .api_key import ApiKey
+from .api_billing import ApiUsageEvent, ApiTopupEvent, ApiSandboxPool
 from .institutional_publication import InstitutionalPublication
 from .rss_feed import RSSFeed
 from .rss_entry import RSSEntry

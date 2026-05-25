@@ -67,12 +67,11 @@ async def mint_api_key(
     target = db.query(User).filter(User.id == user_id).first()
     if target is None:
         raise HTTPException(status_code=404, detail="User not found")
-    if target.subscription_tier != "blue":
-        raise HTTPException(
-            status_code=400,
-            detail="User must be on the Professional tier before an API key is issued",
-        )
 
+    # Subscription-tier gate removed 21 May 2026. API access is now gated by
+    # a positive euro balance (Phase B billing middleware), not by Professional
+    # tier. Admins can mint keys for any user (e.g. partners, beta testers).
+    # Admin-minted keys default to scopes=["*"] and no expiry for back-compat.
     plaintext, api_key = ApiKey.generate(user_id=target.id, name=body.name)
     db.add(api_key)
     db.commit()

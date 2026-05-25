@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "currency": "EUR",
+  "micro_unit": 1000000,
+  "_doc": "Pricing for /api/v1/* in micro-euros (1 EUR = 1_000_000). First matching path-pattern wins; unmatched paths fall back to the catch-all `_default`. Free paths (matched by services/api_keys/scopes.FREE_PATH_PATTERNS) bypass metering entirely.",
+  "patterns": [
+    {
+      "regex": "^/api/v2/legislative/eur-lex/laws/[^/]+/text/?$",
+      "cost_micro": 10000,
+      "label": "full-text retrieval",
+      "_doc": "API v2 mirror of the v1 full-text cost tier (Cellar / LEG XML passthrough)."
+    },
+    {
+      "regex": "^/api/v2/legislative/eur-lex/laws/[^/]+/(recital-article-map|defined-terms)/?$",
+      "cost_micro": 5000,
+      "label": "heavy compute (legal-text TF-IDF)",
+      "_doc": "API v2 mirror of the v1 legal-text heavy-compute tier (v2 nests these under /laws/{celex}/)."
+    },
+    {
+      "regex": "^/api/v2/legislative/eur-lex/laws/[^/]+/xref/?$",
+      "cost_micro": 5000,
+      "label": "heavy compute (cross-reference graph aggregation)",
+      "_doc": "Aggregates Cellar metadata + relationships + EuroVoc; cache-first via law_xref."
+    },
+    {
+      "regex": "^/api/v2/legislative/eur-lex/laws/[^/]+/consolidated/?$",
+      "cost_micro": 5000,
+      "label": "heavy compute (consolidation graph)",
+      "_doc": "Live Cellar consolidation-graph query."
+    },
+    {
+      "regex": "^/api/v1/laws/[^/]+/text/?$",
+      "cost_micro": 10000,
+      "label": "full-text retrieval",
+      "_doc": "Cellar / LEG XML passthrough; cached after first fetch."
+    },
+    {
+      "regex": "^/api/v1/legal-text/[^/]+/(recital-article-map|defined-terms)/?$",
+      "cost_micro": 5000,
+      "label": "heavy compute (legal-text TF-IDF)"
+    },
+    {
+      "regex": "^/api/v1/predictions/.+/(outcome|timeline)/?$",
+      "cost_micro": 5000,
+      "label": "heavy compute (predictions)"
+    },
+    {
+      "regex": "^/api/v1/commissioners/[^/]+/agenda/?$",
+      "cost_micro": 5000,
+      "label": "live scrape (commissioner agenda)"
+    },
+    {
+      "regex": "^/api/v1/chat/.*$",
+      "cost_micro": 20000,
+      "label": "chat completion (passes through Claude Sonnet cost)"
+    }
+  ],
+  "_default": {
+    "cost_micro": 1000,
+    "label": "lightweight read"
+  }
+}

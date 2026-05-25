@@ -392,6 +392,45 @@ class CellarSPARQLClient(BaseSPARQLClient):
             logger.error(f"Cellar SPARQL consolidations query failed: {e}")
             return []
 
+    async def search_legissum(
+        self,
+        keyword: Optional[str] = None,
+        limit: int = 50,
+        language: str = "en",
+    ) -> List[Dict[str, Any]]:
+        """
+        Search the LEGISSUM corpus — plain-language "Summaries of EU legislation".
+
+        Filters works of resource-type SUMMARY_LEGISLATION. Best-effort: the
+        LEGISSUM subgraph modelling in Cellar is sparse, so this degrades to an
+        empty list rather than raising. Returns dicts: work, celex, title.
+        """
+        lang2 = (language or "en").lower()[:2]
+        kw_filter = ""
+        if keyword:
+            safe = keyword.replace('"', '\\"')
+            kw_filter = f'FILTER(CONTAINS(LCASE(STR(?title)), LCASE("{safe}")))'
+        query = f"""
+        PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+        SELECT DISTINCT ?work ?celex ?title WHERE {{
+            ?work cdm:work_has_resource-type
+                  <http://publications.europa.eu/resource/authority/resource-type/SUMMARY_LEGISLATION> .
+            OPTIONAL {{ ?work cdm:resource_legal_id_celex ?celex . }}
+            OPTIONAL {{
+                ?expr cdm:expression_belongs_to_work ?work .
+                ?expr cdm:expression_title ?title .
+                ?expr cdm:expression_uses_language
+                      <http://publications.europa.eu/resource/authority/language/{lang2.upper()}3> .
+            }}
+            {kw_filter}
+        }} LIMIT {int(limit)}
+        """
+        try:
+            return await self._cached_select(query, cache_ttl=86400)
+        except Exception as e:
+            logger.error(f"Cellar SPARQL LEGISSUM search failed: {e}")
+            return []
+
     # ------------------------------------------------------------------
     # Subject matter / classification
     # ------------------------------------------------------------------
