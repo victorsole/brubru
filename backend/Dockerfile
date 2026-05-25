@@ -42,7 +42,8 @@ RUN pip install --no-cache-dir -r requirements-light.txt
 # empty body to non-JS clients; headless Chromium clears the JS challenge. This
 # adds ~400MB to the image and is the heaviest build step — last-resort fallback,
 # Cellar SPARQL/REST stays the primary path. `--with-deps` runs apt-get for the libs.
-RUN python -m playwright install --with-deps chromium
+RUN python -m playwright install --with-deps chromium \
+    || echo "[warn] Chromium install failed; waf_browser_fetcher unavailable at runtime (not wired into any router, so non-fatal)"
 
 # Copy application code
 COPY . /app

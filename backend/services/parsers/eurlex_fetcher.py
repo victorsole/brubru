@@ -142,6 +142,14 @@ class EurlexFetcher:
         if celex_match:
             return celex_match.group(1)
 
+        # ELI URI -> sector-3 CELEX, e.g. http://data.europa.eu/eli/reg/2024/1689/oj
+        # (reg->R, dir->L, dec->D; number zero-padded to 4 digits). Lets the
+        # Amendator accept the stable ELI link as input. See guide eli_european_legislation_identifier.
+        eli_match = re.search(r'/eli/(reg|dir|dec)(?:_impl|_del)?/(\d{4})/(\d+)', celex_or_url)
+        if eli_match:
+            _t = {'reg': 'R', 'dir': 'L', 'dec': 'D'}[eli_match.group(1)]
+            return f"3{eli_match.group(2)}{_t}{int(eli_match.group(3)):04d}"
+
         return None
 
     async def get_law(self, celex_or_url: str, prefer_web: bool = False) -> Optional[LawResult]:

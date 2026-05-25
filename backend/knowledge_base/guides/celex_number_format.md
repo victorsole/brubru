@@ -159,6 +159,13 @@ These appear alongside CELEX in policy work and Brubru must NOT confuse them:
 
 ## Cross-references
 
+- `finding_and_citing_eu_law.md` — the hub: where EU law lives (Cellar) and how to cite it
+- `eli_european_legislation_identifier.md` — the ELI permalink (the stable link to emit; maps 1:1 to a CELEX)
+- `ecli_european_case_law_identifier.md` — the case-law identifier (Sector 6 CELEX vs ECLI)
+- `official_journal_explained.md` — how acts are published (act-by-act since 1 Oct 2023)
+- `eu_legislative_procedures_explained.md` — CELEX vs OEIL procedure numbering (independent counters)
+- `eurovoc_thesaurus.md` — the subject concepts attached to each CELEX in Cellar
+- `docs/api/eu_legal_data_access.md` — engineering reference (CDM join graph, access paths)
 - `services/citation_verifier.py` + `models/citation_verification.py` + `migrations/040_citation_verifications.sql` — the verifier infrastructure
 - `quality_framework.md` — citation verifier is part of Sprint 1a (26 April 2026)
 - `feedback_cellar_needs_accept_language.md` — the Cellar Accept-Language gotcha

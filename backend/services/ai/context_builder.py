@@ -10500,6 +10500,17 @@ class ContextBuilder:
                 sections.append(f"  Date: {date}")
                 if keyword:
                     sections.append(f"  Topic: {keyword}")
+                # ELI permalink (stable; constructed from a clean sector-3 CELEX, no fetch).
+                # Prefer the ELI when citing — it dereferences to the consolidated version
+                # and survives the act-by-act OJ change. See guide finding_and_citing_eu_law.
+                _eli = item.get('eli')
+                if not _eli and isinstance(celex, str):
+                    _m = re.match(r'^3(\d{4})([RLD])(\d{4})$', celex)
+                    if _m:
+                        _t = {'R': 'reg', 'L': 'dir', 'D': 'dec'}[_m.group(2)]
+                        _eli = f"http://data.europa.eu/eli/{_t}/{_m.group(1)}/{int(_m.group(3))}/oj"
+                if _eli:
+                    sections.append(f"  ELI (stable link): {_eli}")
                 sections.append(f"  EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}")
                 sections.append("")
 

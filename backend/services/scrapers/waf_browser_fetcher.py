@@ -249,9 +249,17 @@ class WafBrowserFetcher:
 
 
 def fetch_one(url: str, **kwargs) -> FetchResult:
-    """Convenience: launch a browser, fetch a single URL, tear down."""
-    with WafBrowserFetcher() as f:
-        return f.fetch(url, **kwargs)
+    """Convenience: launch a browser, fetch a single URL, tear down.
+
+    Constructor knobs (settle_ms, networkidle_ms, nav_timeout_ms, user_agent,
+    locale, viewport) are routed to WafBrowserFetcher; the rest (expand_accordions,
+    strip_chrome) go to fetch().
+    """
+    ctor_keys = {"user_agent", "settle_ms", "networkidle_ms", "nav_timeout_ms", "locale", "viewport"}
+    ctor_kwargs = {k: v for k, v in kwargs.items() if k in ctor_keys}
+    fetch_kwargs = {k: v for k, v in kwargs.items() if k not in ctor_keys}
+    with WafBrowserFetcher(**ctor_kwargs) as f:
+        return f.fetch(url, **fetch_kwargs)
 
 
 if __name__ == "__main__":
@@ -259,7 +267,15 @@ if __name__ == "__main__":
         print("usage: python -m backend.services.scrapers.waf_browser_fetcher <url> [out.txt]")
         raise SystemExit(2)
     target = sys.argv[1]
-    result = fetch_one(target)
+    # Optional speed knobs for bulk crawling (subprocess-isolated + externally
+    # hard-capped). Defaults stay generous for one-off accuracy.
+    import os as _os
+    _kw = {}
+    if _os.environ.get("BRUBRU_FETCH_SETTLE_MS"):
+        _kw["settle_ms"] = int(_os.environ["BRUBRU_FETCH_SETTLE_MS"])
+    if _os.environ.get("BRUBRU_FETCH_NETWORKIDLE_MS"):
+        _kw["networkidle_ms"] = int(_os.environ["BRUBRU_FETCH_NETWORKIDLE_MS"])
+    result = fetch_one(target, **_kw) if _kw else fetch_one(target)
     if not result.ok:
         print(f"[ERROR] {target} -> {result.error or 'empty/blocked'} (status={result.nav_status})")
         raise SystemExit(1)
