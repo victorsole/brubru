@@ -164,6 +164,23 @@ def test_train_carriage_detail_and_404(client: TestClient, fresh_user):
     assert r404.json()["reason_code"] == "not_found"
 
 
+def test_train_carriage_detail_accepts_oeil_ref_with_slash(client: TestClient, fresh_user):
+    """Regression: carriage_id must accept an OEIL reference containing '/'
+    (e.g. 2022/0047(COD)) -- requires the {carriage_id:path} converter."""
+    _, token = fresh_user
+    key = _mint(client, token, ["read:procedures"])
+    h = {"X-API-Key": key}
+    # Pull a real OEIL reference (contains a slash) from the carriage list.
+    lst = client.get(f"{TRAIN}/carriages?limit=50", headers=h).json()
+    ref = next((c["oeil_procedure_ref"] for c in lst["data"]
+                if c.get("oeil_procedure_ref") and "/" in c["oeil_procedure_ref"]), None)
+    if not ref:
+        pytest.skip("no carriage with a slash-containing OEIL ref available")
+    r = client.get(f"{TRAIN}/carriages/{ref}", headers=h)
+    assert r.status_code == 200, f"{ref} -> {r.status_code}: {r.text[:200]}"
+    assert r.json()["oeil_procedure_ref"] == ref
+
+
 # ---------------------------------------------------------------------------
 # EuroVoc directories alias
 # ---------------------------------------------------------------------------

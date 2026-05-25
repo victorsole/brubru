@@ -147,7 +147,7 @@ async def list_carriages(
 
 
 @router.get(
-    "/carriages/{carriage_id}",
+    "/carriages/{carriage_id:path}",
     response_model=TrainCarriage,
     summary="One Legislative Train carriage + its monthly status timeline",
     description="""**What it does**

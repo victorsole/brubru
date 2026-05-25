@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -100,25 +101,87 @@ def _match_template(tail: str, needle: str) -> bool:
     return True
 
 
-def _to_postman_url(path: str):
-    raw = "{{baseUrl}}" + path
-    segments = path.strip("/").split("/")
-    return {
-        "raw": raw,
-        "host": ["{{baseUrl}}"],
-        "path": segments,
-    }
+# Sensible pre-filled example values so every request runs out of the box.
+_PARAM_DEFAULTS = {
+    "celex": "32016R0679",
+    "ref": "32016R0679",
+    "reference": "2022/0047(COD)",
+    "concept_id": "3030",
+    "table": "corporate-bodies",
+    "summary_id": "32016R0679",
+    "carriage_id": "2022/0047(COD)",
+    "series": "L",
+    "year": "2016",
+    "number": "119",
+}
+_QUERY_FALLBACKS = {
+    "q": "data protection",
+    "id": "GDPR",
+    "date": "2026-05-01",
+    "published_from": "2026-05-01",
+    "limit": "10",
+    "page": "1",
+    "days": "7",
+    "lang": "en",
+    "language": "en",
+    "series": "L",
+    "text": "See Regulation (EU) 2016/679 and the AI Act.",
+}
+
+
+def _clean_path(path: str) -> str:
+    """Strip FastAPI path converters: {ref:path} -> {ref}."""
+    return re.sub(r"\{(\w+):[^}]+\}", r"{\1}", path)
+
+
+def _to_postman_url(path: str, query_params: list) -> dict:
+    clean = _clean_path(path)
+    # Postman path variables use :name (NOT {name}, which it sends literally).
+    pm_path = re.sub(r"\{(\w+)\}", r":\1", clean)
+    raw = "{{baseUrl}}" + pm_path
+    url = {"raw": raw, "host": ["{{baseUrl}}"], "path": pm_path.strip("/").split("/")}
+
+    variables = []
+    for m in re.finditer(r"\{(\w+)\}", clean):
+        name = m.group(1)
+        variables.append({"key": name, "value": _PARAM_DEFAULTS.get(name, ""), "description": "(path variable)"})
+    if variables:
+        url["variable"] = variables
+
+    query = []
+    for p in query_params:
+        val = _query_value(p)
+        # Required params enabled; optional ones included-but-disabled for discoverability.
+        query.append({"key": p["name"], "value": val, "disabled": not p.get("required", False)})
+    if query:
+        url["query"] = query
+        if any(not q["disabled"] for q in query):
+            raw = raw + "?" + "&".join(f"{q['key']}={q['value']}" for q in query if not q["disabled"])
+            url["raw"] = raw
+    return url
+
+
+def _query_value(param: dict) -> str:
+    if param.get("example") is not None:
+        return str(param["example"])
+    sch = param.get("schema", {})
+    if sch.get("example") is not None:
+        return str(sch["example"])
+    if sch.get("default") is not None:
+        return str(sch["default"])
+    return _QUERY_FALLBACKS.get(param["name"], "")
 
 
 def _build_request(path: str, method: str, op: dict) -> dict:
     name = op.get("summary") or f"{method.upper()} {path}"
     desc = op.get("description") or ""
+    query_params = [p for p in op.get("parameters", []) if p.get("in") == "query"]
     req = {
         "name": name,
         "request": {
             "method": method.upper(),
             "header": [{"key": "X-API-Key", "value": "{{api_key}}", "type": "text"}],
-            "url": _to_postman_url(path),
+            "url": _to_postman_url(path, query_params),
             "description": desc,
         },
         "response": [],
@@ -216,15 +279,28 @@ def publish(collection: dict) -> None:
     ws = json.load(urllib.request.urlopen(req))["workspaces"]
     ws_id = next(w["id"] for w in ws if w["name"] == "Brubru EU Data API")
 
+    # Idempotent: update the existing collection by name if present, else create.
+    list_req = urllib.request.Request(
+        f"https://api.getpostman.com/collections?workspace={ws_id}",
+        headers={"X-Api-Key": api_key},
+    )
+    existing = json.load(urllib.request.urlopen(list_req)).get("collections", [])
+    match = next((c for c in existing if c.get("name") == COLLECTION_NAME), None)
+
     body = json.dumps({"collection": collection}).encode()
-    url = f"https://api.getpostman.com/collections?workspace={ws_id}"
+    if match:
+        url = f"https://api.getpostman.com/collections/{match['uid']}"
+        method = "PUT"
+    else:
+        url = f"https://api.getpostman.com/collections?workspace={ws_id}"
+        method = "POST"
     req = urllib.request.Request(
-        url, data=body, method="POST",
+        url, data=body, method=method,
         headers={"X-Api-Key": api_key, "Content-Type": "application/json"},
     )
     resp = json.load(urllib.request.urlopen(req))
     info = resp.get("collection", {})
-    print(f"[OK] Published collection: {info.get('name')}")
+    print(f"[OK] {'Updated' if match else 'Created'} collection: {info.get('name')}")
     print(f"     uid: {info.get('uid')}")
     print(f"     Open in workspace: https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/")
 
