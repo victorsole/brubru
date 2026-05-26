@@ -1,0 +1,1984 @@
+{
+  "info": {
+    "name": "Brubru API v2",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`. `baseUrl` defaults to production.\n\n40 requests across 2 domains.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Legislative data",
+      "item": [
+        {
+          "name": "EUR-Lex",
+          "item": [
+            {
+              "name": "Identifiers & resolution",
+              "item": [
+                {
+                  "name": "All the other names and links for one EU law",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/xref",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "xref"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "refresh",
+                          "value": "False",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nGiven one EU law's CELEX, returns every identifier and relationship the Publications Office holds for it: its ELI permalink, its Official Journal reference, the legislative procedure that produced it, its EuroVoc topics, its legal basis, whether it's still in force, and counts of the acts it repeals / amends / is cited by. The productised join key \u2014 the same data that backfills Brubru's law_xref table.\n\n**When to use it**\nWhen you have one identifier and need the others, or to join a law across EUR-Lex, OEIL and your own records. The backbone for citation, deduplication, and \"show me the full context of this act\". For the full edge list (not counts), call `/laws/{celex}/relationships`.\n\n**Input**\n- `celex` (path) \u2014 the real CELEX (call `/laws/resolve` first if you hold a different identifier).\n- `refresh` (query, default false) \u2014 bypass the cache and recompute.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/xref\n```\n\n**You get back**\nAn `XrefResult` with `celex`, `eli`, `oj_reference`, `procedure_ref`, `resource_type`, `in_force`, `document_date`, `eurovoc[]`, `legal_basis[]`, `relation_counts{}`, `relation_total`, `eurlex_url`, `cached`, `computed_at`. HTTP 404 (`reason_code: not_found`) if the CELEX is in neither Cellar nor the local mirror.\n\n**Data freshness**\nCache-first: served from law_xref when present, else aggregated live from Cellar (metadata + relationships + EuroVoc) and written through to the cache."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Browse the whole cross-reference index \u2014 every law whose links have been computed",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/xref",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "xref"
+                      ],
+                      "query": [
+                        {
+                          "key": "q",
+                          "value": "data protection",
+                          "disabled": true
+                        },
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nLists the complete cross-reference index \u2014 every CELEX whose ELI / OJ ref / procedure / EuroVoc / relationship graph has been computed and cached in `law_xref`. The browse-all sibling of `/laws/{celex}/xref`: where the single-act endpoint resolves one law, this one shows everything the index holds.\n\n**When to use it**\nTo enumerate the cross-reference corpus, sync it into your own store, or sample what Brubru has joined across EUR-Lex / OEIL / EuroVoc. Each `/laws/{celex}/xref` call adds to this index, and a backfill populates it in bulk.\n\n**Input**\n- `q` \u2014 optional CELEX prefix filter (e.g. `32024`).\n- `limit` (1-200, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/xref?limit=50\nGET /api/v2/legislative/eur-lex/xref?q=32024\n```\n\n**You get back**\nA `PaginatedResponse[XrefResult]`, newest-computed first \u2014 each item is the same shape as the single-act `/xref` (celex, eli, oj_reference, procedure_ref, eurovoc[], relation_counts{}, ...).\n\n**Data freshness**\nReads the `law_xref` cache, which grows as `/laws/{celex}/xref` is called and via bulk backfill."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Deterministic permanent-link set for one act \u2014 TXT / ALL / HIS / NIM / LSU + XML notice",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/views",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "views"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nBuilds the full set of EUR-Lex permanent-link views for one CELEX \u2014 TXT (text), ALL (all formats), HIS (procedure history), NIM (national transposition), LSU (legislative summary), PDF \u2014 plus the Cellar XML notice and resource URIs. Pure construction; no upstream fetch.\n\n**When to use it**\nWhen you want every canonical link for an act in one call, to render a \"view this law on EUR-Lex\" link set without composing URLs yourself.\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/views\n```\n\n**You get back**\nA `ViewsResult` with `celex`, `eli` (from cache when present), `views{}` (the link set), `xml_notice`, `cellar_resource`, `public_url`.\n\n**Data freshness**\nLive: deterministic URL construction (ELI is read from the law_xref cache when available)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Recognise any single EU identifier \u2014 legal IDs, case-law IDs, DOIs, ISBNs, OJ refs",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/identify?q=32016R0679",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "identify"
+                      ],
+                      "query": [
+                        {
+                          "key": "q",
+                          "value": "32016R0679",
+                          "disabled": false
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nHand it any EU standard identifier (CELEX, ECLI, ELI, ISBN, ISSN, DOI, OJ reference, catalogue number, authority URI, EuroVoc URI) and get back its recognised type, the canonical EU URL, the matching Brubru endpoint, and a ShowVoc deep-link.\n\n**When to use it**\nWhen you have an identifier of unknown type and want one call that says \"this is an X, here's where to find it\".\n\n**Input**\n- `q` \u2014 the identifier string.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/identify?q=32016R0679\nGET /api/v2/legislative/eur-lex/identify?q=ECLI:EU:C:2014:317\n```\n\n**You get back**\nAn `IdentifyResult` with `kind`, `value`, `canonical_url`, `brubru_url`, `showvoc_url`, `parts`. HTTP 422 (`reason_code: unknown_identifier`) if no type matches.\n\n**Data freshness**\nLive pass-through (pure pattern recognition; no upstream call)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Resolve any identifier to the canonical CELEX + ELI",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/resolve?id=GDPR",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        "resolve"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "GDPR",
+                          "disabled": false
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nAccepts any EU identifier \u2014 a CELEX, an ELI URI, an ECLI, a COM/OJ reference, an OEIL procedure reference, or a law nickname (GDPR, DSA, AI Act) \u2014 and normalises it to the canonical CELEX + ELI, with the recognised type and the matching Brubru endpoint. The productised join key: one identifier in, every other name out.\n\n**When to use it**\nWhen you hold one identifier and need the others, or before calling any CELEX-keyed endpoint with an input of unknown shape. Pairs with `/laws/{celex}/xref` for the full relationship graph.\n\n**Input**\n- `id` \u2014 the identifier or nickname (e.g. `GDPR`, `32016R0679`, `2021/0106(COD)`).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/resolve?id=GDPR\nGET /api/v2/legislative/eur-lex/laws/resolve?id=2021/0106(COD)\n```\n\n**You get back**\nA `ResolveResult` with `input`, `recognised_kind`, `resolved_via` (celex/eli/alias/oeil), `celex`, `eli`, `title`, `in_force`, `canonical_url`, `brubru_url`. HTTP 422 (`reason_code: unresolved_identifier`) when nothing matches.\n\n**Data freshness**\nLive: pattern recognition + alias dictionary + one Cellar lookup for the ELI (cached to law_xref)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Scan free text and extract every embedded EU identifier \u2014 list of recognised matches",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/identify/scan?text=See Regulation (EU) 2016/679 and Directive 2002/58/EC.",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "identify",
+                        "scan"
+                      ],
+                      "query": [
+                        {
+                          "key": "text",
+                          "value": "See Regulation (EU) 2016/679 and Directive 2002/58/EC.",
+                          "disabled": false
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nScans any free-text string and returns every embedded EU standard identifier it recognises \u2014 CELEX, ECLI, ELI, ISBN, ISSN, DOI, OJ refs, catalogue numbers \u2014 each as a fully-resolved match.\n\n**When to use it**\nWhen you have a chunk of free text (an article, an email, a chat message) and want every identifier in it extracted + resolved in one call.\n\n**Input**\n- `text` \u2014 the free-text string to scan (min 2 chars).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/identify/scan?text=See%20Regulation%20(EU)%202016/679%20and%20Directive%202002/58/EC.\n```\n\n**You get back**\nA `PaginatedResponse[IdentifyResult]` \u2014 each item is one match (same shape as `/identify`).\n\n**Data freshness**\nLive pass-through (pure pattern recognition)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Verify any EU legal reference \u2014 confirm it exists + return its full body and dates",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/verify-citation/:ref",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "verify-citation",
+                        ":ref"
+                      ],
+                      "variable": [
+                        {
+                          "key": "ref",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nGiven any EU legal reference, tells you whether it points at a real document on EUR-Lex / OEIL, and returns the canonical URLs plus the document's body and dates. Accepts CELEX (`32024R1689`), COM number (`COM(2021) 206`, auto-converted to CELEX), or OEIL procedure (`2021/0106(COD)`).\n\n**When to use it**\nGround your own AI's citations, validate a regulatory feed, or detect hallucinated legal-identifier numbers before showing them to users.\n\n**Input**\n- `ref` (path) \u2014 the reference (URL-encoded if it contains spaces or parentheses).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/verify-citation/32016R0679\n```\n\n**You get back**\nA `VerifyCitationResponse` with `data` (`VerifyCitationItem`): `ref`, `kind`, `status` (ok/broken/unknown), `public_url`, `resolved_url`, `http_status`, `body_txt`, `body_html`, `creation_date`, `document_date`.\n\n**Data freshness**\nCached 30 days on success, 24h on broken refs, 1h on transient errors; body fetched from Cellar XHTML on first call."
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Documents",
+              "item": [
+                {
+                  "name": "Full text of one adopted EU law \u2014 plain text or raw XML",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/text",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "text"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "format",
+                          "value": "plain",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (28,513 files from the LEG_2025-11 bulk export); falls back to a live Cellar fetch (`publications.europa.eu/resource/celex/{celex}`). Returns the body as whitespace-normalised plain text (default) or raw markup.\n\n**When to use it**\nWhen you need the actual legal text \u2014 for citation, full-text analysis, or feeding a downstream LLM context. For pre-parsed structured access (recital -> article mapping, definition extraction) use the legal-text endpoints under this same source.\n\n**Input**\n- `celex` (path) \u2014 EU legal identifier (case-insensitive).\n- `format` \u2014 `plain` (default) or `xml` (raw Formex markup).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32024R1689/text\nGET /api/v2/legislative/eur-lex/laws/32016R0679/text?format=xml\n```\n\n**You get back**\nA `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content`, `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).\n\n**Data freshness**\nLive pass-through; the local Formex cache is regenerated quarterly from the LEG_YYYY-MM bulk export. Once an act is published in the OJ its text doesn't change (only consolidations get new CELEX numbers)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Legal definitions from one EU act \u2014 terms the law itself defines authoritatively",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/defined-terms",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "defined-terms"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "force_recompute",
+                          "value": "False",
+                          "disabled": true
+                        },
+                        {
+                          "key": "body_threshold",
+                          "value": "500",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nExtracts the formal definitions article (typically Article 3 or 4) from an EU law \u2014 the terms the law defines authoritatively for its own scope \u2014 with each term + its definition text parsed from the Formex XML.\n\n**When to use it**\nWhen you need to know exactly how a law defines terms like \"very large online platform\" (DSA), \"AI system\" (AI Act), \"personal data\" (GDPR) without reading the full text. Critical for compliance scope analysis.\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n- `force_recompute` (query, default false) \u2014 local dev only.\n- `body_threshold` (default 500) \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32022R2065/defined-terms\n```\n\n**You get back**\nA `DefinedTermsResponse` with `celex`, `terms` (term -> definition), `has_body`, `body_html`, `body_txt`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nCached deterministically (definitions don't change after adoption)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Look up one adopted EU law by its legal identifier \u2014 metadata only (no body)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns the bibliographic metadata for one adopted EU law identified by its CELEX (the EU's stable legal identifier \u2014 e.g. `32024R1689` for the AI Act): title, document type, adoption date, OJ reference, policy area, legal-basis array, EUR-Lex URL, and a relative URL to the text endpoint.\n\n**When to use it**\nWhen you only need bibliographic fields and not the full body \u2014 faster than `/{celex}/text` because it doesn't fetch the body. Pair with `/api/v2/legislative/eur-lex/laws/{celex}/text` for the actual legal text.\n\n**Input**\n- `celex` (path) \u2014 the EU legal identifier. Case-insensitive; uppercased internally. Format: 5 digits + 1-2 letters + 4 digits (e.g. `32024R1689`, `52026PC0321`).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32024R1689\nGET /api/v2/legislative/eur-lex/laws/32016R0679\n```\n\n**You get back**\nA `LawItem` with `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.\n\n**Data freshness**\nSynced every 6 hours (hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Recital-to-article semantic mapping \u2014 which recitals explain each article",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/recital-article-map",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "recital-article-map"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "force_recompute",
+                          "value": "False",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nFor a given EU law, returns a mapping of each article to its top-3 most semantically related recitals, computed via TF-IDF cosine similarity over the act's preamble + body. Jump from \"article 22\" to the recitals that explain the drafter's intent.\n\n**When to use it**\nWhen interpreting a specific article and you need its explanatory recitals automatically \u2014 especially for GDPR / DSA / AI Act, where the preamble runs to hundreds of recitals.\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n- `force_recompute` (query, default false) \u2014 local dev only; bypass the cache.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32025R2149/recital-article-map\n```\n\n**You get back**\nA `RecitalArticleMapResponse` with `celex`, `map` (article -> [recital, score] list), `public_url`, `creation_date`. HTTP 404 (`reason_code: not_found`) when the cache hasn't been computed for this CELEX (Formex XML is not deployed to production \u2014 use `/laws/{celex}/text`).\n\n**Data freshness**\nCached deterministically; the underlying text doesn't change after adoption."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Search adopted EU legislation \u2014 8,710 distinct laws across 28,513 OJ publications",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws"
+                      ],
+                      "query": [
+                        {
+                          "key": "q",
+                          "value": "data protection",
+                          "disabled": true
+                        },
+                        {
+                          "key": "celex",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "doc_type",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "policy_area",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "published_from",
+                          "value": "2026-05-01",
+                          "disabled": true
+                        },
+                        {
+                          "key": "published_to",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "published_end",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "updated_from",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "updated_to",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "updated_end",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "include_orphans",
+                          "value": "False",
+                          "disabled": true
+                        },
+                        {
+                          "key": "include_body",
+                          "value": "False",
+                          "disabled": true
+                        },
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nFull-text search over Brubru's mirror of adopted EU legislation (the LEG_2025-11 Publications Office bulk export \u2014 8,710 distinct laws across 28,513 Official Journal publications). Each row carries the CELEX legal identifier, document type, title + subject matter, policy area, publication date, and the EUR-Lex canonical URL.\n\n**When to use it**\nTo find specific acts (\"the AI Act\"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Pair with `/api/v2/legislative/eur-lex/laws/{celex}/text` for the full body. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.\n\n**Input**\n- `q` \u2014 full-text search on title + subject matter (PostgreSQL TSVECTOR).\n- `celex` \u2014 exact match on the legal identifier.\n- `doc_type` \u2014 `regulation` / `directive` / `decision` / `recommendation` / `opinion` / ...\n- `policy_area` \u2014 single policy tag.\n- `published_from`, `published_to` \u2014 adoption-date bounds (YYYY-MM-DD).\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws?q=AI%20Act&limit=10\nGET /api/v2/legislative/eur-lex/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01\n```\n\n**You get back**\nA `PaginatedResponse[LawItem]` envelope. Each item carries `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3."
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Search & summaries",
+              "item": [
+                {
+                  "name": "Browse / search the LEGISSUM plain-language summaries of EU legislation",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/summaries",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        "summaries"
+                      ],
+                      "query": [
+                        {
+                          "key": "q",
+                          "value": "data protection",
+                          "disabled": true
+                        },
+                        {
+                          "key": "chapter",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nSearches the LEGISSUM corpus \u2014 the Publications Office's plain-language \"Summaries of EU legislation\" that explain a directive or regulation in accessible prose. Returns matching summaries with the underlying CELEX and the EUR-Lex LSU view URL.\n\n**When to use it**\nWhen you want the human-readable summary of a law rather than its legal text \u2014 ideal for grounding a chatbot answer or briefing a non-lawyer.\n\n**Input**\n- `q` \u2014 free-text search over summary titles (optional).\n- `limit` (1-200, default 50).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/summaries?q=data%20protection\n```\n\n**You get back**\nA `PaginatedResponse[SummaryItem]` (`summary_id` = slug, `celex`, `title`, `lsu_url`). Backed by the harvested LEGISSUM catalogue (`public.legissum_summaries`).\n\n**Data freshness**\nRead from the LEGISSUM catalogue harvested from EUR-Lex (sync via `scripts/sync_legissum.py`). Empty only until the first sync runs."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "One LEGISSUM summary by its identifier",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/summaries/:summary_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        "summaries",
+                        ":summary_id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "summary_id",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns one plain-language summary record. If the id is a CELEX, builds the EUR-Lex LSU view URL and resolves the title from Cellar; otherwise treats the id as a LEGISSUM reference.\n\n**When to use it**\nAfter `/laws/summaries` (or when you already hold a CELEX) to get the direct LSU link + title.\n\n**Input**\n- `summary_id` (path) \u2014 a CELEX (e.g. `32016R0679`) or a LEGISSUM reference.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/summaries/32016R0679\n```\n\n**You get back**\nA `SummaryItem` with `summary_id`, `celex`, `title`, `lsu_url`, `public_url`.\n\n**Data freshness**\nLive: URL construction + an optional Cellar title lookup for CELEX ids."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Resolve human names of EU laws (GDPR, DSA, AI Act, CBAM, ...) to their legal identifiers",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/resolve-aliases",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "resolve-aliases"
+                      ]
+                    },
+                    "description": "**What it does**\nScans free text for known human names of EU laws \u2014 GDPR, DSA, AI Act, CBAM, DORA, Solvency II, CRR, MiFID II, and 680+ more aliases \u2014 and returns each match with its legal identifier, canonical title, and the character offset where it was matched.\n\n**When to use it**\nWhen your users type \"GDPR\" but you need `32016R0679` to feed into other endpoints. Pairs with `/resolve-references` (which catches the formal \"Regulation (EU) 2016/679\" form).\n\n**Input**\nJSON body: `{ \"text\": \"<free text>\" }`.\n\n**Try it**\n```\nPOST /api/v2/legislative/eur-lex/resolve-aliases\n{ \"text\": \"Comparing GDPR and the AI Act on automated decisions\" }\n```\n\n**You get back**\n`{ aliases: [{ alias, celex, full_title, start, end, public_url, ... }], + envelope datapoints }`.\n\n**Data freshness**\nLive pass-through (regex match against a curated 680+ alias dictionary).",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"text\": \"Article 5 of Regulation (EU) 2022/2065 and the GDPR apply.\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Resolve inline EU legal citations in free text \u2014 extract every embedded reference",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/resolve-references",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "resolve-references"
+                      ]
+                    },
+                    "description": "**What it does**\nScans a block of free text and extracts every embedded EU legal citation (e.g. \"Article 7 of Regulation (EU) 2024/1234\"), returning a structured list with the matched legal identifier and canonical EUR-Lex URL. Pass `annotate_html=true` to receive the original text with each citation wrapped in an `<a href=...>` link.\n\n**When to use it**\nAuto-link EU citations in briefings, opinion pieces, AI-generated answers, or Word-to-HTML conversion. Idempotent; POST is used only because the request body carries free text.\n\n**Input**\nJSON body: `{ \"text\": \"<free text>\", \"annotate_html\": false }`.\n\n**Try it**\n```\nPOST /api/v2/legislative/eur-lex/resolve-references\n{ \"text\": \"Article 5 of Regulation (EU) 2022/2065 prohibits...\" }\n```\n\n**You get back**\nWith `annotate_html=false`: `{ refs: [{ alias, celex, url, public_url, ... }], + envelope datapoints }`. With `annotate_html=true`: `{ html: \"<text with inserted links>\" }`.\n\n**Data freshness**\nLive pass-through (regex extraction + URL composition; no upstream call).",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"text\": \"Article 5 of Regulation (EU) 2022/2065 and the GDPR apply.\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Relationships & lifecycle",
+              "item": [
+                {
+                  "name": "Acts that amend, repeal, or are amended by an act \u2014 the legal-relationship graph",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/relationships",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "relationships"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns the directed legal-relationship graph around one CELEX: outgoing edges (this act amends / repeals / is based on \u2026) and incoming edges (other acts that amend / repeal / cite this one). The envelope also carries the parent act's body so you don't need a second round-trip.\n\n**When to use it**\nRender an amendment tree, find every act that cites or supersedes a law, or drive an \"is this still in force, or amended by X?\" check.\n\n**Input**\n- `celex` (path).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32025R2158/relationships\n```\n\n**You get back**\nA paginated envelope of `CellarRelation` edges (`relation`, `related_celex`, `direction`) + the parent act's body in the envelope-level fields.\n\n**Data freshness**\nLive SPARQL pass-through."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Consolidated versions of one act \u2014 every dated consolidation, newest first",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/consolidated",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "consolidated"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns every consolidated version of a base act (each consolidation folds in subsequent amendments and gets its own CELEX), newest first, with the latest highlighted.\n\n**When to use it**\nWhen you need the current consolidated text rather than the original as-adopted version \u2014 the consolidated CELEX is what you then feed to `/laws/{celex}/text`.\n\n**Input**\n- `celex` (path) \u2014 the base act's legal identifier.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/consolidated\n```\n\n**You get back**\nA `ConsolidatedResult` with `base_celex`, `count`, `latest` ({celex, date, uri}), `versions[]`, `public_url`. Empty `versions` when the act has no consolidations.\n\n**Data freshness**\nLive SPARQL pass-through against the Cellar consolidation graph."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Every language version + download format of an EU act \u2014 direct download URLs",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/languages",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "languages"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns every `(language, format, URL)` tuple for one EU act from the Cellar metadata graph \u2014 up to 24 EU languages x multiple formats (FMX4 structured XML, XHTML, PDF/A, DOCX).\n\n**When to use it**\nWhen you need a specific-language or specific-format version of an act for a downstream parser or translation memory.\n\n**Input**\n- `celex` (path).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/languages\n```\n\n**You get back**\nA JSON object with `languages[]`, `manifestations[]` (each `language`, `format`, `url`), plus envelope datapoints.\n\n**Data freshness**\nLive SPARQL pass-through."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "In-force status + entry-into-force / end-of-validity dates for one act",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/lifecycle",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "lifecycle"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nReturns the temporal lifecycle of one act from the Cellar legal-status graph: whether it is in force, its entry-into-force date, its end-of-validity date (when set), the document date, and a derived repealed/expired flag.\n\n**When to use it**\nFor an \"is this law still in force?\" check, or to drive a compliance timeline.\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/lifecycle\n```\n\n**You get back**\nA `LifecycleResult` with `celex`, `in_force`, `date_in_force`, `date_end_validity`, `document_date`, `repealed_or_expired`, `public_url`. HTTP 404 if the CELEX is in neither Cellar nor the local mirror.\n\n**Data freshness**\nLive SPARQL pass-through against the Cellar legal-status graph."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Live Publications Office metadata for one act \u2014 title, ELI, in-force, languages, EuroVoc",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/laws/:celex/cellar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "laws",
+                        ":celex",
+                        "cellar"
+                      ],
+                      "variable": [
+                        {
+                          "key": "celex",
+                          "value": "32016R0679",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "language",
+                          "value": "ENG",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nLive fetch of full metadata for any EU act by CELEX from the Publications Office Cellar SPARQL graph \u2014 title, ELI URI, resource type, in-force status, validity dates, available languages, and EuroVoc subject concepts. Wider coverage than the `eu_laws`-backed `/laws/{celex}` (spans the full corpus incl. case law).\n\n**When to use it**\nWhen `/laws/{celex}` returns 404 (the act is outside Brubru's local mirror) or you need the live in-force flag + language list. Higher latency than the local cache (~2-3s vs ~50ms).\n\n**Input**\n- `celex` (path) \u2014 legal identifier.\n- `language` (query, default ENG) \u2014 ISO-3 for the returned title.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/laws/32016R0679/cellar\n```\n\n**You get back**\nA `CellarMetadata` object with `celex`, `work_uri`, `title`, `document_date`, `eli`, `resource_type_label`, `in_force`, validity dates, `available_languages[]`, `eurovoc_concepts[]`, plus envelope datapoints.\n\n**Data freshness**\nLive pass-through (no cache; hits Cellar SPARQL on every request)."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Recently published EU acts (live from the Publications Office Cellar)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/recent?published_from=2026-05-01",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "recent"
+                      ],
+                      "query": [
+                        {
+                          "key": "published_from",
+                          "value": "2026-05-01",
+                          "disabled": false
+                        },
+                        {
+                          "key": "published_to",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "sectors",
+                          "value": "",
+                          "disabled": true
+                        },
+                        {
+                          "key": "language",
+                          "value": "ENG",
+                          "disabled": true
+                        },
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        },
+                        {
+                          "key": "include_body",
+                          "value": "False",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nLive discovery of EU acts published in a date range, queried directly against the Publications Office Cellar SPARQL endpoint \u2014 covers the full corpus (incl. case law + proposals not in the local `eu_laws` mirror). Metadata-only by default; pass `include_body=true` for a concurrent body fetch (limit capped at 10).\n\n**When to use it**\nDaily polling of newly-published acts, sector-scoped discovery, or \"what landed on EUR-Lex since date X\".\n\n**Input**\n- `published_from` (required), `published_to` (defaults today).\n- `sectors` \u2014 comma-separated CELEX sector codes (e.g. `3,5`).\n- `language` \u2014 ISO-3 (default ENG).\n- `limit` (1-200, default 50; forced <=10 with include_body), `page`, `include_body`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/recent?published_from=2026-05-01&sectors=3&limit=20\n```\n\n**You get back**\nPaginated `CellarRecentItem` rows; each `public_url` deep-links to EUR-Lex.\n\n**Data freshness**\nLive SPARQL pass-through; Cellar publishes throughout the day."
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Official Journal",
+              "item": [
+                {
+                  "name": "Acts published in the Official Journal on a given date",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/oj/daily?date=2026-05-01",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "oj",
+                        "daily"
+                      ],
+                      "query": [
+                        {
+                          "key": "date",
+                          "value": "2026-05-01",
+                          "disabled": false
+                        },
+                        {
+                          "key": "series",
+                          "value": "L",
+                          "disabled": true
+                        },
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        },
+                        {
+                          "key": "include_body",
+                          "value": "False",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nLists the EU acts whose document date falls on a given day \u2014 the daily Official Journal view. Backed by the Cellar SPARQL date-range discovery constrained to a single date. `series=L` narrows to legislation (CELEX sector 3); `series=C` returns the rest.\n\n**When to use it**\nDaily monitoring of what was published in the OJ on a specific date.\n\n**Input**\n- `date` \u2014 the publication date (YYYY-MM-DD).\n- `series` \u2014 `L` (legislation, default) or `C` (information & notices).\n- `limit` (1-200, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/oj/daily?date=2026-05-01&series=L\n```\n\n**You get back**\nA `PaginatedResponse[CellarRecentItem]`; each row's `public_url` deep-links to EUR-Lex. Note: the OJ numbering switched to an act-by-act scheme on 1 Oct 2023; this endpoint keys on document date, which is stable across that change.\n\n**Data freshness**\nLive SPARQL pass-through."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Look up acts by an Official Journal reference (series / year / number)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "X-API-Key",
+                        "value": "{{api_key}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v2/legislative/eur-lex/oj/:series/:year/:number",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v2",
+                        "legislative",
+                        "eur-lex",
+                        "oj",
+                        ":series",
+                        ":year",
+                        ":number"
+                      ],
+                      "variable": [
+                        {
+                          "key": "series",
+                          "value": "L",
+                          "description": "(path variable)"
+                        },
+                        {
+                          "key": "year",
+                          "value": "2016",
+                          "description": "(path variable)"
+                        },
+                        {
+                          "key": "number",
+                          "value": "119",
+                          "description": "(path variable)"
+                        }
+                      ],
+                      "query": [
+                        {
+                          "key": "limit",
+                          "value": "50",
+                          "disabled": true
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "**What it does**\nResolves an Official Journal reference to the act(s) carrying it, from Brubru's `eu_laws` mirror. Handles both the pre-2023 issue-based form (`L 187/41`) and the post-1-Oct-2023 act-by-act form (`L 2024/1689`).\n\n**When to use it**\nWhen you hold an OJ citation (from a footnote or a press release) and need the act's CELEX + metadata.\n\n**Input**\n- `series` (path) \u2014 `L` or `C`.\n- `year` (path) \u2014 4-digit year.\n- `number` (path) \u2014 the issue number (pre-2023) or act number (post-2023).\n\n**Try it**\n```\nGET /api/v2/legislative/eur-lex/oj/L/2024/1689\nGET /api/v2/legislative/eur-lex/oj/L/2016/119\n```\n\n**You get back**\nA `PaginatedResponse[LawItem]` of acts whose `oj_reference` matches. Empty when no local row carries that reference.\n\n**Data freshness**\nSynced every 6 hours (hot tier) from EUR-Lex + Cellar."
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Legislative Observatory (OEIL)",
+          "item": [
+            {
+              "name": "Look up one legislative procedure by its reference \u2014 full timeline + rapporteurs + briefings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/oeil/procedures/:reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "oeil",
+                    "procedures",
+                    ":reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "reference",
+                      "value": "2022/0047(COD)",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the complete legislative carriage for one procedure \u2014 the full OEIL timeline (every event from Commission proposal to adoption with dates + actors), rapporteurs by committee, committee assignments, EPRS-matched briefings, EUR-Lex linked documents, and AI-enriched summary.\n\n**When to use it**\nWhen you need the complete picture of a legislative file in one call \u2014 for an advocacy briefing, a chat answer about \"where is the AI Act now\", or a tracker deep-link.\n\n**Input**\n- `reference` (path) \u2014 OEIL procedure ref (e.g. `2021/0106(COD)`) or Brubru file_id. The `:path` matcher accepts slashes + parentheses verbatim; no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v2/legislative/oeil/procedures/2024/0079(COD)\n```\n\n**You get back**\nA `ProcedureDetail` with `oeil_procedure_ref`, `title`, `current_status`, `lead_committee`, full timeline + key events, rapporteurs, EPRS briefings, EUR-Lex documents, AI summary, plus the 5 envelope-level datapoints. HTTP 404 (`reason_code: not_found`) if no procedure matches.\n\n**Data freshness**\nSynced every 6 hours (hot tier) from OEIL XML feeds."
+              },
+              "response": []
+            },
+            {
+              "name": "Most recently updated legislative procedures",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/oeil/procedures/latest",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "oeil",
+                    "procedures",
+                    "latest"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the procedures whose status changed most recently \u2014 the \"what just moved\" feed. Backed by the same carriage mirror as `/procedures`, filtered to files updated within the last N days and ordered newest-first.\n\n**When to use it**\nFor a daily \"what advanced in the EU pipeline\" digest, or to poll for stage transitions without scanning the whole register.\n\n**Input**\n- `days` (1-90, default 7) \u2014 look-back window on the last-updated date.\n- `limit` (1-100, default 50).\n\n**Try it**\n```\nGET /api/v2/legislative/oeil/procedures/latest?days=7\n```\n\n**You get back**\nA `PaginatedResponse[ProcedureItem]` ordered by last-updated descending.\n\n**Data freshness**\nSynced every 6 hours (hot tier) from OEIL XML feeds."
+              },
+              "response": []
+            },
+            {
+              "name": "Search EU legislative procedures in negotiation \u2014 proposed but not yet adopted",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/oeil/procedures",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "oeil",
+                    "procedures"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "rapporteur_mep_id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EU legislative files currently in the institutional pipeline (Commission proposal, EP committee, Council negotiation, trilogue, or recently adopted but not yet published). 1,200+ files tracked from OEIL \u2014 the EP's authoritative procedure-file register. Each row carries the procedure reference (e.g. `2025/0726(COD)`), title, procedure type, lead committee, rapporteur, current status, dates, and policy-area tags.\n\n**When to use it**\nThe companion to `/api/v2/legislative/eur-lex/laws` (adopted legislation). Use this for \"what's coming next\" advocacy work \u2014 tracking a file from proposal to adoption, monitoring rapporteur appointments, finding blocked procedures.\n\n**Input**\n- `q` \u2014 substring match on title.\n- `reference` \u2014 exact OEIL procedure reference (e.g. `2025/0726(COD)`).\n- `committee` \u2014 lead committee code (e.g. `LIBE`, `ENVI`).\n- `rapporteur_mep_id` \u2014 filter to a specific MEP's files.\n- `status` \u2014 procedure status enum.\n- `updated_from`, `updated_to` (+ `updated_end` alias) \u2014 incremental sync.\n- `limit`, `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/oeil/procedures?committee=ENVI&status=in_trilogue\nGET /api/v2/legislative/oeil/procedures?reference=2024/0079(COD)\n```\n\n**You get back**\nA `PaginatedResponse[ProcedureItem]` envelope; each item carries the procedure metadata + the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Legislative Train",
+          "item": [
+            {
+              "name": "Legislative Train carriages \u2014 files by von der Leyen II priority / committee / status",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/legislative-train/carriages",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "legislative-train",
+                    "carriages"
+                  ],
+                  "query": [
+                    {
+                      "key": "priority",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the legislative files tracked on the EP Legislative Train Schedule, filterable by Commission priority, lead committee, and current status. Each carriage carries its priority tags, lead committee, current status, and expected completion.\n\n**When to use it**\nTo monitor a Commission priority's pipeline (\"everything under the Clean Industrial Deal\"), or a committee's active files, train-style.\n\n**Input**\n- `priority` \u2014 Commission priority tag (matched against `ec_priority_ids`).\n- `committee` \u2014 lead committee code (e.g. `ENVI`).\n- `status` \u2014 current carriage status.\n- `limit` (1-100, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/legislative-train/carriages?committee=ENVI\n```\n\n**You get back**\nA `PaginatedResponse[TrainCarriage]` (id, title, oeil_procedure_ref, current_status, lead_committee, ec_priority_ids, expected_completion, law_tracker_url).\n\n**Data freshness**\nSynced every 6 hours (hot tier) from OEIL; priority mapping refreshed with the Legislative Train schedule."
+              },
+              "response": []
+            },
+            {
+              "name": "One Legislative Train carriage + its monthly status timeline",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/legislative-train/carriages/:carriage_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "legislative-train",
+                    "carriages",
+                    ":carriage_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "carriage_id",
+                      "value": "2022/0047(COD)",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one carriage with its full status history / timeline \u2014 the train view of a single legislative file.\n\n**When to use it**\nTo show a file's journey across the Legislative Train (status changes over time) in one call.\n\n**Input**\n- `carriage_id` (path) \u2014 Brubru's internal carriage id (from the list endpoint) or the OEIL procedure reference.\n\n**Try it**\n```\nGET /api/v2/legislative/legislative-train/carriages/123\n```\n\n**You get back**\nA `TrainCarriage` including `status_history[]` and `oeil_key_events[]`. HTTP 404 (`reason_code: not_found`) if no carriage matches.\n\n**Data freshness**\nSynced every 6 hours (hot tier) from OEIL."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "EuroVoc & vocabularies",
+          "item": [
+            {
+              "name": "Directory of EU legal acts \u2014 the 20-chapter subject classification tree",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/directories/legal-acts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "directories",
+                    "legal-acts"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the Publications Office subject classification of EU legislation \u2014 the directory codes (e.g. \"13.30.99 Environment / Air pollution\") every EUR-Lex act is tagged with. A convenience alias of `/authority/directories`.\n\n**When to use it**\nTo build a subject-tag navigator across the acquis or translate a directory code into its localised label.\n\n**Input**\n- `q` \u2014 substring search on the chapter label.\n- `lang` \u2014 Brubru language (default `en`).\n- `limit` (1-200, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/directories/legal-acts?q=environment\n```\n\n**You get back**\nA `PaginatedResponse[VocabularyConcept]`; each carries the directory-code `uri` (== `public_url`), `pref_label`, `alt_labels[]`, `lang`, plus the 5 envelope datapoints.\n\n**Data freshness**\nRefreshed nightly from the Cellar SPARQL endpoint into the local authority-label cache."
+              },
+              "response": []
+            },
+            {
+              "name": "EU acts tagged with one EuroVoc concept (e.g. AI, data protection, climate)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/concepts/:concept_id/acts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "concepts",
+                    ":concept_id",
+                    "acts"
+                  ],
+                  "variable": [
+                    {
+                      "key": "concept_id",
+                      "value": "3030",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "language",
+                      "value": "ENG",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns every EU legal act in the Cellar metadata graph tagged with the given EuroVoc subject concept (driven by `cdm:work_is_about_concept_eurovoc`). Optional date floor + language.\n\n**When to use it**\nTo enumerate \"every EU act about X\" where X is a curated EuroVoc subject \u2014 more precise than free-text search because EuroVoc is the EU's authoritative subject thesaurus.\n\n**How to obtain a concept_id**\nCall `/eurovoc/concepts/search?q=<topic>`; the trailing digits of each `concept_uri` are the IDs. Both `3030` and `http://eurovoc.europa.eu/3030` are accepted. Examples: `3030` AI, `5181` data protection, `5482` climate change, `754` renewable energy.\n\n**Input**\n- `concept_id` (path) \u2014 digits or full EuroVoc URI.\n- `published_from` (optional) \u2014 lower bound on document date.\n- `language` (default ENG) \u2014 ISO-3 for the title.\n- `limit` (1-200, default 50).\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/concepts/3030/acts?limit=5\n```\n\n**You get back**\nA `PaginatedResponse[CellarRecentItem]`; each row's `public_url` deep-links to EUR-Lex.\n\n**Data freshness**\nLive SPARQL pass-through."
+              },
+              "response": []
+            },
+            {
+              "name": "EU authority tables (NALs) \u2014 corporate bodies, procedure types, directories, modification types",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/authority/:table",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "authority",
+                    ":table"
+                  ],
+                  "variable": [
+                    {
+                      "key": "table",
+                      "value": "corporate-bodies",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLanguage-aware lookups against the EU's Named Authority Lists (NALs). One endpoint, four tables selected by the `table` path segment:\n- `corporate-bodies` \u2014 EU institutions, agencies, DGs, joint undertakings (~1,958 concepts).\n- `procedures` \u2014 inter-institutional procedure types (COD / CNS / APP / CONS / INI ...).\n- `directories` \u2014 the subject-matter directory tree of EU legal acts (~475 concepts). This also serves the \"directory of legal acts\" subject classification.\n- `modification-types` \u2014 amends / repeals / corrects / consolidates / replaces.\n\n**When to use it**\nResolve an acronym (`EP`, `EMA`) to its canonical multilingual name, translate a 3-letter procedure code, build a subject navigator, or render relationship labels \u2014 all in the user's language (en/fr/es/ca/it/nl).\n\n**Input**\n- `table` (path) \u2014 one of `corporate-bodies` / `procedures` / `directories` / `modification-types`.\n- `q` \u2014 substring on `pref_label` + exact match on `alt_labels` (acronym-friendly).\n- `lang` \u2014 Brubru language (default `en`).\n- `limit` (1-200, default 50), `page`.\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/authority/corporate-bodies?q=Parliament&lang=en\nGET /api/v2/legislative/eurovoc/authority/directories?q=environment\n```\n\n**You get back**\nA `PaginatedResponse[VocabularyConcept]`; each carries the canonical `uri` (== `public_url`), `pref_label`, `alt_labels[]`, `lang`, plus the 5 envelope datapoints. HTTP 404 (`reason_code: not_found`) for an unknown table.\n\n**Data freshness**\nRefreshed nightly from the Cellar SPARQL endpoint into the local authority-label cache."
+              },
+              "response": []
+            },
+            {
+              "name": "Search the EU subject thesaurus (EuroVoc) \u2014 find concept IDs to enumerate acts by topic",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/eurovoc/concepts/search?q=artificial intelligence",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "eurovoc",
+                    "concepts",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "artificial intelligence",
+                      "disabled": false
+                    },
+                    {
+                      "key": "language",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFree-text search against the EuroVoc thesaurus \u2014 the EU's official multilingual subject vocabulary. Returns matching concepts with `concept_uri`, human-readable `label`, and a ShowVoc deep-link.\n\n**When to use it**\nDiscover the `concept_id` to feed `/eurovoc/concepts/{concept_id}/acts` (the id is the trailing digits of `concept_uri`, e.g. `http://eurovoc.europa.eu/3030` -> `3030`). Or translate a plain-English topic into the EU's canonical subject tag.\n\n**Input**\n- `q` \u2014 search term (min 2 chars; multilingual).\n- `language` \u2014 ISO-2 (default `en`).\n- `limit` (1-100, default 20).\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/concepts/search?q=artificial%20intelligence\n```\n\n**You get back**\nA `PaginatedResponse[EuroVocConcept]`. The trailing digits of each `concept_uri` are the IDs for the `/acts` route.\n\n**Data freshness**\nLive SPARQL pass-through."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Proprietary Databases",
+      "item": [
+        {
+          "name": "Knowledge Guides",
+          "item": [
+            {
+              "name": "List Brubru's curated EU-policy knowledge guides \u2014 the chatbot's grounding layer",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/guides",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "guides"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "detail_level",
+                      "value": "Summary",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Brubru's curated knowledge-base guides \u2014 the same markdown explainers the chatbot uses to ground its answers. Each guide is a 100-300-line domain explainer for one policy area (AI Act, CBAM, MFF 2028-2034, ...) with a QUICK FACTS block at the top, a body, and keyword triggers. With no `q` this enumerates the **entire** corpus (~290 guides), page by page.\n\n**When to use it**\nGround your own LLM in Brubru's EU-policy knowledge: pull the guides for a topic with `q=<topic>`, embed them as context, and your assistant gets the same grounding the Brubru chatbot uses. Pass `detail_level=Full` for the complete markdown body (vs a 500-char preview at `Summary`).\n\n**Input**\n- `q` \u2014 keyword query (`GDPR`, `AI Act`, `CBAM`, `housing crisis`). Omit to list everything.\n- `detail_level` \u2014 `Summary` (default, 500-char preview) or `Full` (complete markdown).\n- `limit` (1-100, default 50), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/proprietary/guides?limit=100\nGET /api/v2/proprietary/guides?q=AI%20Act&detail_level=Full\n```\n\n**You get back**\nA `PaginatedResponse[KnowledgeGuideItem]`. Each item carries `id`, `title`, `quick_facts`, `triggers[]`, `content` (Full or preview), `content_preview`, `full_content_chars`. The 5 envelope datapoints sit on the envelope (per-item body lives in `content`).\n\n**Data freshness**\nBrubru-curated (not synced from external sources). Refreshed by `/morning` Phase 3D, `/audit-queries` gap-fills, and ad-hoc edits."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one knowledge guide by its slug \u2014 full markdown body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/guides/:guide_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "guides",
+                    ":guide_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "guide_id",
+                      "value": "ai_act_regulation",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the full markdown content of one Brubru knowledge guide by its filename slug. Always returns the complete body \u2014 no truncation. Same content the chatbot injects into Claude/Mistral context for grounded answers.\n\n**When to use it**\nAfter locating a guide via the list endpoint (or when you already know the slug), fetch the full markdown for embedding in your own UI or feeding to a downstream LLM as context.\n\n**Input**\n- `guide_id` (path) \u2014 the guide's filename slug without `.md`, e.g. `ai_act_regulation`, `cbam_downstream_goods_extension`, `mff_2028_2034`.\n\n**Try it**\n```\nGET /api/v2/proprietary/guides/ai_act_regulation\n```\n\n**You get back**\nA single `KnowledgeGuideItem`: `id`, `title`, `quick_facts`, `triggers[]`, full `content` markdown, `full_content_chars`. HTTP 404 (`reason_code: not_found`) if no guide with that slug exists.\n\n**Data freshness**\nBrubru-curated. Updated by `/morning` Phase 3D + ad-hoc edits when major legislative developments warrant a refresh."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Catalan Translations",
+          "item": [
+            {
+              "name": "List EU binding laws translated into Catalan \u2014 the whole corpus, filterable",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/catalan",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "catalan"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "celex",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "doc_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "category",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "category_en",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "engine",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns a paginated catalogue of binding EU legal acts (Regulations, Directives, Decisions) translated into Catalan by Brubru. With no filters this enumerates the **entire** binding-law corpus (thousands of acts), page by page.\n\n**When to use it**\nBrowse, search, or sync the Catalan corpus \u2014 populate a search index, build a per-category dashboard, or pull updates incrementally with `updated_from`.\n\n**Input**\n- `q` \u2014 substring search across `title_ca`, `title_en`, `short_name`, `celex` (e.g. `GDPR`).\n- `celex` \u2014 exact CELEX filter (e.g. `32016R0679`).\n- `doc_type` \u2014 long form (`regulation`/`directive`/`decision`/`delegated`/`implementing`) or CELEX shorthand (`R`/`L`/`D`).\n- `category` / `category_en` \u2014 exact name or slug (see `/catalan/stats` for names).\n- `engine` \u2014 `softcatala` (default) or `sonnet`.\n- `updated_from` / `updated_to` \u2014 incremental sync over `updated_at`.\n- `limit` (1-200, default 50), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/proprietary/catalan?q=GDPR&limit=3\nGET /api/v2/proprietary/catalan?doc_type=R&limit=50\n```\n\n**You get back**\nA `PaginatedResponse[CatalanTranslationItem]`. Per row: `celex`, `doc_type`, `short_name`, `title_ca`, `title_en`, `category`/`category_en`, `articles_count`, `recitals_count`, `html_size_bytes`, `engine`, `ca_url` (the canonical render on brubru.beresol.eu), `source_eurlex_url`, timestamps.\n\n**Data freshness**\nBrubru-curated (MIT-licensed). New translations are added via the `/catalan` skill; daily disk-to-DB sync keeps the table current."
+              },
+              "response": []
+            },
+            {
+              "name": "Catalan translations \u2014 aggregate counts (coverage, by doc_type / category / engine)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/catalan/stats",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "catalan",
+                    "stats"
+                  ]
+                },
+                "description": "**What it does**\nReturns aggregate counts of Catalan-translated EU acts grouped by `doc_type`, `category` (Catalan + English), and `engine`, plus the canonical 8,710 target and current coverage percentage.\n\n**When to use it**\nBuild a coverage dashboard, verify ingestion before pulling pages, or discover the canonical category names to use as filters on the list endpoint.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/proprietary/catalan/stats\n```\n\n**You get back**\n`CatalanStats`: `total`, `target` (8,710), `coverage_pct`, `by_doc_type[]`, `by_category[]` (use these names for the `category`/`category_en` filters), `by_engine[]`, `last_translated_at`, `licence` (`MIT`).\n\n**Data freshness**\nLive aggregate query over the `catalan_translations` table on each request."
+              },
+              "response": []
+            },
+            {
+              "name": "One Catalan translation by CELEX \u2014 optional inlined body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/catalan/:celex",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "catalan",
+                    ":celex"
+                  ],
+                  "variable": [
+                    {
+                      "key": "celex",
+                      "value": "32016R0679",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body",
+                      "value": "html",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Catalan-translated EU act by its CELEX number, optionally with the full rendered body inlined.\n\n**When to use it**\nWhen you have a CELEX and want the Catalan translation's metadata, optionally with the rendered HTML body for display or downstream processing.\n\n**Input**\n- `celex` (path) \u2014 CELEX (sector 3, forms R/L/D), e.g. `32016R0679` (GDPR), `32024R1689` (AI Act).\n- `body=html` (optional) \u2014 inlines the rendered Catalan HTML into `body_html` and a stripped plain-text version into `body_txt`.\n- `body_threshold` (optional, default 500) \u2014 minimum char length for `has_body=true`.\n\n**Try it**\n```\nGET /api/v2/proprietary/catalan/32016R0679\nGET /api/v2/proprietary/catalan/32016R0679?body=html\n```\n\n**You get back**\nAll list fields plus `has_body`, `body_html`, `body_txt` (the last two only when `?body=html`). HTTP 404 when the CELEX is outside the binding-law corpus or has no Catalan translation yet.\n\n**Data freshness**\nBrubru-curated (MIT). Generated by the `/catalan` skill; new translations land via daily disk-to-DB sync."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Canon & Deep-Dives",
+          "item": [
+            {
+              "name": "List every Brubru deep-dive report \u2014 the EU Canon + law deep-dives",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/canon",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "canon"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "canon",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "legal_family",
+                      "value": "eu_pharmaceutical",
+                      "disabled": true
+                    },
+                    {
+                      "key": "language",
+                      "value": "en",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Brubru's catalogue of hand-built HTML deep-dive reports: the **EU Canon** (article-by-article explainers of binding EU laws, e.g. the AI Act, CRR, MiCA) and the **law deep-dives** (thematic explainers, e.g. the Biotech Act, Critical Medicines Act, EU Inc.). With no filters this enumerates the **entire** catalogue, each entry carrying its public URL and the languages it is published in.\n\n**When to use it**\nDiscover which laws Brubru has a published deep-dive for, link to the citizen-facing report, or pick a `slug` to fetch the full body via `/canon/{slug}`. Filter to one report type or one legal family to build a topic index.\n\n**Input**\n- `report_type` \u2014 `canon` (EU Canon) or `deep_dive` (law deep-dives). Omit for both.\n- `q` \u2014 substring over title, summary, slug, CELEX.\n- `legal_family` \u2014 cluster tag (e.g. `anti_subsidy_trade_remedies`, `eu_pharmaceutical`).\n- `language` \u2014 keep only reports published in this language (en/es/ca/fr/it/nl).\n- `limit` (1-100, default 50), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/proprietary/canon\nGET /api/v2/proprietary/canon?report_type=canon&legal_family=eu_pharmaceutical\nGET /api/v2/proprietary/canon?q=AI%20Act\n```\n\n**You get back**\nA `PaginatedResponse[CanonReport]`. Each item: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints (`public_url` is the English page; `document_date` is the act's publication date for canon entries; `body_*` are null on lists \u2014 request them on the detail route).\n\n**Data freshness**\nBrubru-curated. New reports ship via the `/canon` skill; the manifest is regenerated by `scripts/build_canon_manifest.py`."
+              },
+              "response": []
+            },
+            {
+              "name": "One Brubru deep-dive report by slug \u2014 optional inlined body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/proprietary/canon/:slug",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "proprietary",
+                    "canon",
+                    ":slug"
+                  ],
+                  "variable": [
+                    {
+                      "key": "slug",
+                      "value": "2024-1689_aiact",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lang",
+                      "value": "en",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one Brubru deep-dive report (EU Canon entry or law deep-dive) by its slug, optionally with the full rendered HTML body inlined in the requested language.\n\n**When to use it**\nAfter locating a report via the list endpoint, fetch its metadata \u2014 and, with `include_body=true`, the full rendered article-by-article explainer \u2014 for display or downstream processing.\n\n**Input**\n- `slug` (path) \u2014 the report slug, e.g. `2024-1689_aiact`, `2013-575_crr`, `biotech-act`.\n- `include_body` (optional, default false) \u2014 inline the rendered HTML into `body_html` and a stripped plain-text version into `body_txt`.\n- `lang` (optional, default `en`) \u2014 which language edition to inline (must be in the report's `languages`).\n\n**Try it**\n```\nGET /api/v2/proprietary/canon/2024-1689_aiact\nGET /api/v2/proprietary/canon/2024-1689_aiact?include_body=true&lang=ca\n```\n\n**You get back**\nA single `CanonReport`: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints. With `include_body=true`, `body_html` + `body_txt` are populated (null + a logged warning if the upstream page is unreachable \u2014 fall back to `public_url`). HTTP 404 (`reason_code: not_found`) for an unknown slug.\n\n**Data freshness**\nBrubru-curated. Reports are regenerated as the underlying law evolves."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://brubru-production.up.railway.app",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
