@@ -23,104 +23,16 @@ GUIDES_PUBLIC_URL = "https://brubru.beresol.eu/guides/"
 
 
 def _render_md(md: str) -> Optional[str]:
-    """Render guide markdown to HTML for body_html. Prefers the `markdown`
-    library; falls back to a small dependency-free converter so body_html is
-    ALWAYS populated even if the library isn't importable on the host (Railway
-    has shown it can be). Returns None only for empty input."""
+    """Render guide markdown to HTML for body_html. Returns None on empty input
+    or if the markdown library is unavailable (body_txt still carries the raw
+    markdown, so callers never lose the content)."""
     if not md:
         return None
     try:
         import markdown as _md
         return _md.markdown(md, extensions=["extra", "sane_lists", "tables"])
-    except Exception:  # noqa: BLE001 — lib missing OR an extension failed
-        try:
-            import markdown as _md
-            return _md.markdown(md)  # retry without extensions
-        except Exception:  # noqa: BLE001 — lib genuinely unavailable
-            return _md_fallback(md)
-
-
-def _md_fallback(md: str) -> str:
-    """Minimal, dependency-free Markdown -> HTML for guide bodies. Handles
-    headings, unordered/ordered lists, blockquotes, fenced/indented code,
-    bold/italic/inline-code/links, and paragraphs. Not a full CommonMark
-    implementation — a reliable floor so body_html is never empty."""
-    import html as _h
-    import re as _re
-
-    def _inline(t: str) -> str:
-        t = _h.escape(t, quote=False)
-        t = _re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
-        t = _re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", t)
-        t = _re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", t)
-        t = _re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2">\1</a>', t)
-        return t
-
-    out: list[str] = []
-    lines = md.replace("\r\n", "\n").split("\n")
-    i, n = 0, len(lines)
-    list_tag: Optional[str] = None
-
-    def _close_list():
-        nonlocal list_tag
-        if list_tag:
-            out.append(f"</{list_tag}>")
-            list_tag = None
-
-    while i < n:
-        line = lines[i]
-        if line.strip().startswith("```"):  # fenced code block
-            _close_list()
-            i += 1
-            buf = []
-            while i < n and not lines[i].strip().startswith("```"):
-                buf.append(_h.escape(lines[i], quote=False))
-                i += 1
-            i += 1
-            out.append("<pre><code>" + "\n".join(buf) + "</code></pre>")
-            continue
-        m = _re.match(r"^(#{1,6})\s+(.*)$", line)
-        if m:
-            _close_list()
-            lvl = len(m.group(1))
-            out.append(f"<h{lvl}>{_inline(m.group(2).strip())}</h{lvl}>")
-            i += 1
-            continue
-        if _re.match(r"^\s*[-*+]\s+", line):
-            if list_tag != "ul":
-                _close_list()
-                out.append("<ul>")
-                list_tag = "ul"
-            out.append(f"<li>{_inline(_re.sub(r'^\s*[-*+]\s+', '', line))}</li>")
-            i += 1
-            continue
-        if _re.match(r"^\s*\d+\.\s+", line):
-            if list_tag != "ol":
-                _close_list()
-                out.append("<ol>")
-                list_tag = "ol"
-            out.append(f"<li>{_inline(_re.sub(r'^\s*\d+\.\s+', '', line))}</li>")
-            i += 1
-            continue
-        if line.strip().startswith(">"):
-            _close_list()
-            out.append(f"<blockquote>{_inline(line.strip()[1:].strip())}</blockquote>")
-            i += 1
-            continue
-        if not line.strip():
-            _close_list()
-            i += 1
-            continue
-        # paragraph: gather consecutive non-blank, non-block lines
-        _close_list()
-        para = [line]
-        i += 1
-        while i < n and lines[i].strip() and not _re.match(r"^(#{1,6}\s|\s*[-*+]\s|\s*\d+\.\s|>|```)", lines[i]):
-            para.append(lines[i])
-            i += 1
-        out.append("<p>" + _inline(" ".join(s.strip() for s in para)) + "</p>")
-    _close_list()
-    return "\n".join(out)
+    except Exception:  # noqa: BLE001 — never fail a guide response over rendering
+        return None
 
 
 def _parse_guide(gid: str, raw: str) -> dict:
