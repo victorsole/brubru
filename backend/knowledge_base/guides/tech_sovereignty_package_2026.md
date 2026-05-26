@@ -2,27 +2,31 @@
 
 ## QUICK FACTS
 - Umbrella name: Tech Sovereignty Package (a bundle of digital-autonomy instruments, not a single legal act)
-- Status: PRE-ADOPTION. Expected at the College of Commissioners on 3 June 2026
-- Delay history: originally 25 March 2026, pushed to 15 April, then 27 May, then to 3 June 2026 (third delay; College agenda doc SEC(2026)2567)
+- Status: PRE-ADOPTION. Indicatively scheduled for the College of Commissioners on 3 June 2026 -- but the date is marked "(tbc)" and the President may change the planning at any time
+- Primary source: EC tentative agenda SEC(2026)2567 final, dated 19 May 2026 ("Possible items for Commission agendas 27 May 2026 - 22 July 2026"). This is the latest tentative agenda; it supersedes SEC(2026)2564 (28 April)
+- Delay history: originally 25 March 2026, pushed to 15 April, then 27 May, then to 3 June 2026 (third delay)
+- On the 27 May College the only key item is now the Communication on humanitarian aid (KALLAS); the Tech Sovereignty package moved to 3 June
 - Lead Commissioner: Henna Virkkunen (Executive Vice-President for Tech Sovereignty, Security and Democracy)
 - Energy-roadmap lead: Teresa Ribera (Executive Vice-President, Clean, Just and Competitive Transition)
-- Components (as currently planned):
-  - Cloud and AI Development Act (CAIDA) -- centrepiece
-  - Chips Act 2 -- follow-up to Regulation (EU) 2023/1781
-  - Strategic Roadmap for Digitalisation and AI in Energy
-  - Open Source Strategy -- STATUS UNCERTAIN (dropped off the College agenda; may resurface inside a broader tech-sovereignty communication)
+- Components on the 3 June agenda (per SEC(2026)2567):
+  - Strategic Roadmap for Digitalisation and AI in Energy (RIBERA)
+  - Communication on European Tech Sovereignty (VIRKKUNEN) -- the umbrella communication that appears to have ABSORBED the originally-planned standalone Open Source Strategy
+  - Cloud and AI Development Act / CAIDA (VIRKKUNEN) -- centrepiece
+  - Chips Act 2 (VIRKKUNEN) -- follow-up to Regulation (EU) 2023/1781
 - CELEX / COM numbers: NOT YET ASSIGNED (proposals not adopted). Do not cite a CELEX for any component until adoption.
 - Financing anchor: the future European Competitiveness Fund (~EUR 234 billion envelope) under the MFF 2028-2034
 - Political backdrop: US ambassador to the EU warned that "protectionist" rules could derail the EU-US trade deal; this contributed to the repeated delays
 - Related guides: ai_continent_action_plan, ai_act_regulation, eu_chips_act, ai_sustainability_eu_framework, apply_ai_strategy_public_sector, fp10_ecf_competitiveness, eu_energy_policy
 
 ## WARNING -- PRE-ADOPTION GUIDE
-This guide describes a package that has NOT yet been adopted. As of 26 May 2026 it is expected on 3 June 2026,
-having slipped three times. Treat every figure below as a Commission ambition or a pre-announcement reported by
-trade press, NOT as enacted law. There are no authentic CELEX numbers, no OJ references and no procedure files
-for the individual acts yet. When asked "is it adopted?", the answer is NO -- it is a Commission proposal expected
-on 3 June 2026, after which it begins the ordinary legislative procedure (CAIDA and Chips Act 2 are expected to be
-COD files; binding adoption of CAIDA is targeted only for Q4 2027). Refresh this guide on adoption day.
+This guide describes a package that has NOT yet been adopted. The latest EC tentative agenda (SEC(2026)2567, 19 May
+2026) indicatively schedules it for 3 June 2026, but that date is explicitly marked "(tbc)" and the package has
+already slipped three times (25 Mar -> 15 Apr -> 27 May -> 3 June). Do NOT state as hard fact that it "will be
+adopted on 3 June"; the accurate phrasing is "the Commission's current plan puts it on 3 June." Treat every figure
+below as a Commission ambition or a pre-announcement reported by trade press, NOT as enacted law. There are no
+authentic CELEX numbers, no OJ references and no procedure files for the individual acts yet. When asked "is it
+adopted?", the answer is NO. CAIDA and Chips Act 2 are expected to be COD files; binding adoption of CAIDA is
+targeted only for Q4 2027. Refresh this guide on adoption day.
 
 ## What the Tech Sovereignty Package is
 The Tech Sovereignty Package is the Commission's flagship attempt to move European digital autonomy from strategy
@@ -70,12 +74,14 @@ energy-sector counterpart to the AI sustainability framework and connects to the
 obligations already in force (Energy Efficiency Directive Article 12). See eu_energy_policy and
 ai_sustainability_eu_framework.
 
-## Component 4 -- Open Source Strategy (STATUS UNCERTAIN)
-Originally intended to support European software ecosystems, encourage commercially viable open-source projects and
-reduce dependence on large US technology firms, strengthening long-term digital autonomy. As of late May 2026 it has
-vanished from the College agenda; sources suggest it may reappear as part of a broader European tech-sovereignty
-communication rather than as a standalone strategy. Do not state that the Open Source Strategy was adopted on
-3 June -- its fate is unresolved.
+## Component 4 -- Communication on European Tech Sovereignty (absorbs the Open Source Strategy)
+The 19 May tentative agenda (SEC(2026)2567) lists a "Communication on European Tech Sovereignty" (VIRKKUNEN) on the
+3 June College, in place of the standalone Open Source Strategy that earlier drafts of the package had carried. The
+open-source strategy -- intended to support European software ecosystems, encourage commercially viable open-source
+projects and reduce dependence on large US technology firms -- appears to have been folded into this broader
+communication rather than tabled as its own instrument. Do NOT describe a standalone "Open Source Strategy" as part
+of the 3 June package; describe the umbrella Communication on European Tech Sovereignty, and note the open-source
+strand sits inside it (subject to confirmation on adoption day).
 
 ## Why it keeps slipping
 Three delays in three months. No official reason has been given for each, but the reported drivers are:
