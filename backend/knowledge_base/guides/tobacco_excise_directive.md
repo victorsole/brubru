@@ -7,7 +7,7 @@
 - Procedure: Special legislative procedure (consultation, CNS)
 - OEIL procedure reference: 2025/0580(CNS)
 - Lead DG: DG TAXUD (Taxation and Customs Union)
-- Lead EP committee: ECON (rapporteur: Tomas Kubin, ECR, Czechia)
+- Lead EP committee: ECON (rapporteur: Tomas Kubin, PfE (Patriots for Europe), Czechia)
 - Council configuration: ECOFIN
 - Amendment deadline in ECON: 13 April 2026
 - Commissioner: Wopke Hoekstra (Tax and Customs Union; initially proposed under predecessor portfolio)
@@ -90,7 +90,7 @@ Member States with current rates below the new minima would have transitional pe
 
 ## ECON Draft Report
 
-The ECON committee is preparing its draft report under rapporteur Tomas Kubin (ECR, Czechia). The amendment deadline is 13 April 2026, making this a live file for advocacy.
+The ECON committee is preparing its draft report under rapporteur Tomas Kubin (PfE (Patriots for Europe) / ANO 2011, Czechia). The amendment deadline is 13 April 2026, making this a live file for advocacy. Kubin published his draft report on 5 March 2026, proposing a more gradual increase of the minimum rates: limiting indexation to core inflation with a 12% maximum three-yearly adjustment ceiling, increasing the weight of the price-level index in the minimum-rate formula from one third to one half, and lowering the proposed minimum rates for heated tobacco products and nicotine pouches relative to the Commission proposal, with longer transitional periods. (Do not confuse Kubin with Ondrej Krutilek (ECR / ODS, Czechia), a separate Czech MEP active on tobacco files in the SANT committee.)
 
 Key issues in the ECON debate:
 
@@ -144,7 +144,8 @@ Tobacco excise has been discussed as a potential EU own resource in the context 
 | Stage | Status/Date |
 |-------|-------------|
 | Commission proposal | Adopted (2025) |
-| ECON rapporteur appointed | Tomas Kubin (ECR, CZ) |
+| ECON rapporteur appointed | Tomas Kubin (PfE, CZ) |
+| ECON draft report published | 5 March 2026 |
 | ECON amendment deadline | 13 April 2026 |
 | ECON vote on draft report | Expected June 2026 |
 | EP plenary vote (consultation) | Expected September 2026 |
