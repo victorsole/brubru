@@ -127,6 +127,11 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/legislative/legislative-train(/|$)"), "read:procedures"),
     (re.compile(r"^/api/v2/legislative/eurovoc(/|$)"),          "read:publications"),
 
+    # --- API v2: "Brubru Proprietary Databases" domain --------------------
+    (re.compile(r"^/api/v2/proprietary/guides(/|$)"),           "read:knowledge"),
+    (re.compile(r"^/api/v2/proprietary/catalan(/|$)"),          "read:laws"),
+    (re.compile(r"^/api/v2/proprietary/canon(/|$)"),            "read:knowledge"),
+
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),
     (re.compile(r"^/api/v1/legal-text(/|$)"),                   "read:laws"),

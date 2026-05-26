@@ -641,7 +641,7 @@ async def get_catalan_translation(
             # text strip rules.
             body_html, body_text, has = body_from_html(html, threshold=body_threshold)
             detail.body_html = body_html
-            detail.body_text = body_text
+            detail.body_txt = body_text  # model field is body_txt (was body_text — latent crash on ?body=html)
             detail.has_body = has
 
     return detail

@@ -29,6 +29,18 @@
       "_doc": "Live Cellar consolidation-graph query."
     },
     {
+      "regex": "^/api/v2/proprietary/catalan/stats/?$",
+      "cost_micro": 1000,
+      "label": "lightweight read",
+      "_doc": "Aggregate counts — keep ahead of the proprietary content-retrieval pattern below."
+    },
+    {
+      "regex": "^/api/v2/proprietary/(guides|catalan|canon)/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full guide / translation / report body)",
+      "_doc": "Detail endpoints return full markdown / may inline a 30-500 KB HTML body (cached 6h)."
+    },
+    {
       "regex": "^/api/v1/laws/[^/]+/text/?$",
       "cost_micro": 10000,
       "label": "full-text retrieval",

@@ -1,0 +1,599 @@
+{
+  "schema": "brubru-canon-reports/1",
+  "site": "https://brubru.beresol.eu",
+  "count": 24,
+  "reports": [
+    {
+      "slug": "2000-141_orphan",
+      "report_type": "canon",
+      "title": "Orphan Medicinal Products Regulation explained: Regulation (EC) No 141/2000",
+      "summary": "Complete guide to Regulation (EC) No 141/2000 on Orphan Medicinal Products: how the EU created a designation procedure and incentive framework for rare-disease medicines, including 10-year market exclusivity, protocol assistance and centralised-procedure fee waivers.",
+      "celex": "32000R0141",
+      "doc_type": "Regulation",
+      "publication_date": "2000-01-22",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2000-141_orphan/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2000-141_orphan/index.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000R0141"
+    },
+    {
+      "slug": "2004-726_ema",
+      "report_type": "canon",
+      "title": "Regulation (EC) No 726/2004: EMA and the Centralised Procedure explained",
+      "summary": "Complete guide to Regulation (EC) No 726/2004 (EMA Regulation): the centralised marketing authorisation procedure, CHMP 210-day clock, 8+2+1 data protection, EMA governance, 7 scientific committees, and the 2023 pharma reform.",
+      "celex": "32004R0726",
+      "doc_type": "Regulation",
+      "publication_date": "2004-04-30",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2004-726_ema/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2004-726_ema/index.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32004R0726"
+    },
+    {
+      "slug": "2006-1901_paediatric",
+      "report_type": "canon",
+      "title": "The Paediatric Medicines Regulation explained: Regulation (EC) No 1901/2006",
+      "summary": "Complete guide to Regulation (EC) No 1901/2006 on medicinal products for paediatric use: how the EU created the obligations-and-rewards bargain that finally brought medicines research to children, covering PIPs, waivers, deferrals, PUMA, the three patent rewards and the PDCO.",
+      "celex": "32006R1901",
+      "doc_type": "Regulation",
+      "publication_date": "2006-12-27",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/index.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006R1901"
+    },
+    {
+      "slug": "2007-1394_atmp",
+      "report_type": "canon",
+      "title": "Advanced Therapy Medicinal Products Regulation explained: Regulation (EC) No 1394/2007",
+      "summary": "Complete guide to Regulation (EC) No 1394/2007 on Advanced Therapy Medicinal Products (ATMPs): how the EU created a tailored authorisation regime for gene therapy, somatic cell therapy and tissue-engineered products, with the EMA CAT as the expert committee, mandatory centralised procedure, 30-year traceability and SME incentives.",
+      "celex": "32007R1394",
+      "doc_type": "Regulation",
+      "publication_date": "2007-12-10",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/index.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32007R1394"
+    },
+    {
+      "slug": "2013-575_crr",
+      "report_type": "canon",
+      "title": "CRR Explained: EU Capital Requirements Regulation",
+      "summary": "Complete guide to Regulation (EU) No 575/2013 (CRR): Basel III EU implementation, capital ratios, CET1, own funds, credit risk, IRB approach. Article-by-article analysis with official sources.",
+      "celex": "32013R0575",
+      "doc_type": "Regulation (EU) No",
+      "publication_date": "2013-06-26",
+      "legal_family": "banking_prudential_basel",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2013-575_crr/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2013-575_crr/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2013-575_crr/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2013-575_crr/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2013-575_crr/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2013-575_crr/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2013-575_crr/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0575"
+    },
+    {
+      "slug": "2014-536_ctr",
+      "report_type": "canon",
+      "title": "Clinical Trials Regulation (EU) 536/2014 explained: CTIS, CTR authorisation procedure",
+      "summary": "Complete guide to Regulation (EU) 536/2014 (the Clinical Trials Regulation): one EU portal, coordinated assessment, single decision per Member State. Applicable from 31 January 2022 once CTIS went live. 99 articles, 19 chapters.",
+      "celex": "32014R0536",
+      "doc_type": "Regulation",
+      "publication_date": "2014-05-27",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2014-536_ctr/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2014-536_ctr/index.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0536"
+    },
+    {
+      "slug": "2016-429_animal_health_law",
+      "report_type": "canon",
+      "title": "The Animal Health Law: Regulation (EU) 2016/429 | Brubru EU Canon",
+      "summary": "Complete guide to Regulation (EU) 2016/429 (the Animal Health Law): how the EU replaced around 40 scattered acts with a single framework for transmissible animal diseases, introducing a five-category disease system, biosecurity obligations, TRACES traceability, and a unified emergency toolkit applied from 21 April 2021.",
+      "celex": "32016R0429",
+      "doc_type": "Regulation",
+      "publication_date": "2016-03-09",
+      "legal_family": "eu_animal_health_sps",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0429"
+    },
+    {
+      "slug": "2017-625_official_controls",
+      "report_type": "canon",
+      "title": "The Official Controls Regulation explained: Regulation (EU) 2017/625",
+      "summary": "Complete guide to Regulation (EU) 2017/625 (the Official Controls Regulation): how the EU created a single enforcement framework for the whole agri-food chain, covering food safety, animal health, plant health, GMOs, pesticides, organic production and protected names, applied from 14 December 2019.",
+      "celex": "32017R0625",
+      "doc_type": "Regulation",
+      "publication_date": "2017-03-15",
+      "legal_family": "eu_animal_health_sps",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0625"
+    },
+    {
+      "slug": "2019-2175_esas_review",
+      "report_type": "canon",
+      "title": "The ESAs Review: Regulation (EU) 2019/2175 | Brubru EU Canon",
+      "summary": "Complete guide to Regulation (EU) 2019/2175 (the ESAs Review): how the EU upgraded EBA, EIOPA and ESMA in 2019, making EBA the AML/CFT hub for the entire financial sector, giving ESMA direct powers over trading-data providers and critical benchmarks, and equipping all three authorities with sharper supervisory-convergence tools.",
+      "celex": "32019R2175",
+      "doc_type": "Regulation",
+      "publication_date": "2019-12-18",
+      "legal_family": "eu_financial_supervision_architecture",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2175"
+    },
+    {
+      "slug": "2020-776_china_egypt_glass_fibre",
+      "report_type": "canon",
+      "title": "EU Anti-Subsidy Duties on Chinese and Egyptian Glass Fibre Fabrics (Reg 2020/776)",
+      "summary": "Complete guide to Commission Implementing Regulation (EU) 2020/776: definitive countervailing duties on glass fibre fabrics from China and Egypt. CNBM 30.7%, Yuntianhua 17.0%, Egypt 10.9%. First EU case to attribute cross-border subsidies via the SETC-Zone using ILC Article 11.",
+      "celex": "32020R0776",
+      "doc_type": "Commission Implementing Regulation",
+      "publication_date": "2020-06-12",
+      "legal_family": "anti_subsidy_trade_remedies",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2020-776_china_egypt_glass_fibre/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020R0776"
+    },
+    {
+      "slug": "2021-2011_optical_fibre_cables",
+      "report_type": "canon",
+      "title": "Optical fibre cables from China: the EU anti-dumping duties explained",
+      "summary": "Complete guide to Commission Implementing Regulation (EU) 2021/2011: definitive anti-dumping duties on optical fibre cables from China. FiberHome (FTT) group 44.0%, ZTT group 19.7%. Article 2(6a) significant-distortions methodology, Argentina as representative country, lesser-duty rule applied.",
+      "celex": "32021R2011",
+      "doc_type": "Commission Implementing Regulation",
+      "publication_date": "2021-11-17",
+      "legal_family": "anti_dumping_trade_remedies",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R2011"
+    },
+    {
+      "slug": "2022-433_india_indonesia_stainless_steel",
+      "report_type": "canon",
+      "title": "EU Anti-Subsidy Duties on Stainless Steel from India and Indonesia (Reg 2022/433)",
+      "summary": "Complete guide to Commission Implementing Regulation (EU) 2022/433: definitive countervailing duties on stainless steel cold-rolled flat products from India and Indonesia. IRNC 21.4%, Chromeni 7.5%, combined up to 42.8%. Includes the Morowali nickel-ore LTAR and cross-border subsidy attribution doctrine.",
+      "celex": "32022R0433",
+      "doc_type": "Commission Implementing Regulation",
+      "publication_date": "2022-03-15",
+      "legal_family": "anti_subsidy_trade_remedies",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0433"
+    },
+    {
+      "slug": "2023-1114_mica",
+      "report_type": "canon",
+      "title": "MiCA explained: the EU Markets in Crypto-Assets Regulation",
+      "summary": "Complete guide to Regulation (EU) 2023/1114 (MiCA): the EU",
+      "celex": "32023R1114",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2023-05-31",
+      "legal_family": "eu_crypto_digital_finance",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2023-1114_mica/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2023-1114_mica/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2023-1114_mica/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2023-1114_mica/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2023-1114_mica/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114"
+    },
+    {
+      "slug": "2024-1689_aiact",
+      "report_type": "canon",
+      "title": "The EU AI Act explained: Regulation (EU) 2024/1689",
+      "summary": "Complete guide to Regulation (EU) 2024/1689 (AI Act): the world",
+      "celex": "32024R1689",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2024-06-13",
+      "legal_family": "eu_artificial_intelligence",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
+    },
+    {
+      "slug": "2024-2754_china_bev_duties",
+      "report_type": "canon",
+      "title": "EU Anti-Subsidy Duties on Chinese Battery Electric Vehicles (Reg 2024/2754)",
+      "summary": "Complete guide to Commission Implementing Regulation (EU) 2024/2754: definitive countervailing duties on Chinese BEVs. BYD 17.0%, Geely 18.8%, SAIC 35.3%, Tesla 7.8%. Subsidy findings, injury analysis, undertaking rejection.",
+      "celex": "32024R2754",
+      "doc_type": "Commission Implementing Regulation",
+      "publication_date": "2024-10-29",
+      "legal_family": "anti_subsidy_trade_remedies",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2754"
+    },
+    {
+      "slug": "2025-500_morocco_aluminium_wheels",
+      "report_type": "canon",
+      "title": "Aluminium road wheels from Morocco: the EU countervailing duties explained",
+      "summary": "Complete guide to Commission Implementing Regulation (EU) 2025/500: definitive countervailing duties on aluminium road wheels from Morocco. DMA 31.4%, Hands 8 5.6%. Cross-border subsidy doctrine, CITIC Dicastal, Belt and Road Initiative, Hengshi/Jushi Egypt judgment.",
+      "celex": "32025R0500",
+      "doc_type": "Commission Implementing Regulation",
+      "publication_date": "2025-03-13",
+      "legal_family": "anti_subsidy_trade_remedies",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0500"
+    },
+    {
+      "slug": "biotech-act",
+      "report_type": "deep_dive",
+      "title": "EU Biotech Act Explained: Strengthening Europe's Biotechnology Sector",
+      "summary": "Comprehensive guide to the European Biotech Act (COM(2025) 1022): 7 pillars, regulatory sandboxes, clinical trial acceleration, biosecurity, EUR 20.4B budget. Article-by-article analysis by Brubru.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/biotech-act/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/biotech-act/index.html",
+        "es": "https://brubru.beresol.eu/biotech-act/es.html",
+        "ca": "https://brubru.beresol.eu/biotech-act/ca.html",
+        "fr": "https://brubru.beresol.eu/biotech-act/fr.html",
+        "it": "https://brubru.beresol.eu/biotech-act/it.html",
+        "nl": "https://brubru.beresol.eu/biotech-act/nl.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "critical-medicines-act",
+      "report_type": "deep_dive",
+      "title": "The Critical Medicines Act: Strengthening EU Security of Supply",
+      "summary": "Comprehensive analysis of the EU Critical Medicines Act (COM(2025) 102): strategic projects, EU preference in procurement, joint procurement, the Union List, and the provisional agreement reached in May 2026. By Brubru.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/critical-medicines-act/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/critical-medicines-act/index.html",
+        "es": "https://brubru.beresol.eu/critical-medicines-act/es.html",
+        "ca": "https://brubru.beresol.eu/critical-medicines-act/ca.html",
+        "fr": "https://brubru.beresol.eu/critical-medicines-act/fr.html",
+        "it": "https://brubru.beresol.eu/critical-medicines-act/it.html",
+        "nl": "https://brubru.beresol.eu/critical-medicines-act/nl.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "csam-regulation",
+      "report_type": "deep_dive",
+      "title": "CSAM Regulation Explained: Combating Child Sexual Abuse Online",
+      "summary": "Comprehensive guide to the EU CSAM Regulation proposal (COM(2022) 209): mandatory detection orders, the EU Centre on Child Sexual Abuse, the ePrivacy derogation crisis, and the Chat Control debate. Article-by-article analysis.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/csam-regulation/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/csam-regulation/index.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "digital-networks-act",
+      "report_type": "deep_dive",
+      "title": "EU Digital Networks Act Explained: Rewiring Europe's Telecoms",
+      "summary": "Comprehensive guide to the EU Digital Networks Act (DNA): spectrum reform, copper switch-off, satellite authorisation, network resilience, single passport, net neutrality. COM(2026) 16. By Brubru.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/digital-networks-act/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/digital-networks-act/index.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "eu-inc",
+      "report_type": "deep_dive",
+      "title": "EU Inc. Explained: The 28th Regime for European Companies",
+      "summary": "Comprehensive guide to the EU Inc. proposal (COM(2026) 321): the new pan-European company form with 48-hour registration, EUR 0 minimum capital, and fully digital procedures. Article-by-article analysis.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eu-inc/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eu-inc/index.html",
+        "es": "https://brubru.beresol.eu/eu-inc/es.html",
+        "ca": "https://brubru.beresol.eu/eu-inc/ca.html",
+        "fr": "https://brubru.beresol.eu/eu-inc/fr.html",
+        "it": "https://brubru.beresol.eu/eu-inc/it.html",
+        "nl": "https://brubru.beresol.eu/eu-inc/nl.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "industrial-accelerator-act",
+      "report_type": "deep_dive",
+      "title": "Industrial Accelerator Act Explained: EU's Plan to Reindustrialise Europe",
+      "summary": "Comprehensive guide to the Industrial Accelerator Act (COM(2026)100): permitting acceleration, low-carbon labels for steel and cement, EU origin requirements, foreign investment screening. Article-by-article analysis with impact assessment figures.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/industrial-accelerator-act/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/industrial-accelerator-act/index.html",
+        "es": "https://brubru.beresol.eu/industrial-accelerator-act/es.html",
+        "ca": "https://brubru.beresol.eu/industrial-accelerator-act/ca.html",
+        "fr": "https://brubru.beresol.eu/industrial-accelerator-act/fr.html",
+        "it": "https://brubru.beresol.eu/industrial-accelerator-act/it.html",
+        "nl": "https://brubru.beresol.eu/industrial-accelerator-act/nl.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "late-payments",
+      "report_type": "deep_dive",
+      "title": "Late Payments Regulation Explained: COM(2023)533",
+      "summary": "Comprehensive analysis of the EU Late Payments Regulation (COM(2023)533): 30-day payment limits, automatic penalties, enforcement framework. Rapporteur proposals, MEP amendments, EP adopted text, stakeholder positions. Currently blocked in Council.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/late-payments/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/late-payments/index.html",
+        "es": "https://brubru.beresol.eu/late-payments/es.html",
+        "ca": "https://brubru.beresol.eu/late-payments/ca.html",
+        "fr": "https://brubru.beresol.eu/late-payments/fr.html",
+        "it": "https://brubru.beresol.eu/late-payments/it.html",
+        "nl": "https://brubru.beresol.eu/late-payments/nl.html"
+      },
+      "eurlex_url": null
+    },
+    {
+      "slug": "pharma-laws",
+      "report_type": "deep_dive",
+      "title": "EU Pharmaceutical Laws Explained: The Complete Legal Framework",
+      "summary": "Comprehensive guide to the EU pharmaceutical legal framework: Directive 2001/83/EC, Regulation 726/2004, EMA, clinical trials, pharmacovigilance, orphan medicines, the 2023 reform. By Brubru.",
+      "celex": null,
+      "doc_type": null,
+      "publication_date": null,
+      "legal_family": null,
+      "languages": [
+        "en"
+      ],
+      "public_url": "https://brubru.beresol.eu/pharma-laws/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/pharma-laws/index.html"
+      },
+      "eurlex_url": null
+    }
+  ]
+}
