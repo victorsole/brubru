@@ -19,14 +19,16 @@ from __future__ import annotations
 
 import json
 import logging
-import time
 from datetime import date, datetime
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query, Request
 from pydantic import BaseModel, Field
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
+from core.database import get_db
 from models.user import User
 
 from api.v1._deps import api_user_with_rate_limit
@@ -38,16 +40,9 @@ router = APIRouter(prefix="/canon", tags=["v2-proprietary-canon"])
 
 # knowledge_base/canon_reports.json — committed snapshot (see module docstring).
 _MANIFEST_PATH = Path(__file__).resolve().parents[3] / "knowledge_base" / "canon_reports.json"
-# Dev fallback for body fetch: the HTML lives alongside the repo at
-# frontend/public/{eucanon/<slug>|<slug>}/.
-_PUBLIC_DIR = Path(__file__).resolve().parents[4] / "frontend" / "public"
 
 _REPORT_TYPES = {"canon", "deep_dive"}
-
-# Body cache (6h) — bodies are 30-300 KB and rarely change.
-_BODY_CACHE: Dict[str, Tuple[float, str]] = {}
-_BODY_CACHE_TTL_S = 6 * 60 * 60
-_BODY_CACHE_MAX = 100
+_LANGS = {"en", "es", "ca", "fr", "it", "nl"}
 
 
 class _DataPoints(BaseModel):
@@ -117,72 +112,35 @@ def _to_report(entry: dict) -> CanonReport:
     )
 
 
-def _cache_body(key: str, html: str) -> None:
-    if len(_BODY_CACHE) >= _BODY_CACHE_MAX:
-        oldest = min(_BODY_CACHE.items(), key=lambda kv: kv[1][0])[0]
-        _BODY_CACHE.pop(oldest, None)
-    _BODY_CACHE[key] = (time.time(), html)
-
-
-def _disk_path(entry: dict, lang: str) -> Optional[Path]:
-    """Local dev path for a report's HTML, or None."""
-    fname = "index.html" if lang == "en" else f"{lang}.html"
-    slug = entry["slug"]
-    sub = _PUBLIC_DIR / ("eucanon" if entry["report_type"] == "canon" else "") / slug / fname
-    return sub if sub.is_file() else None
-
-
-def _fetch_body_html(entry: dict, lang: str) -> Optional[str]:
-    """Fetch a report's rendered HTML body. Disk first (dev), then HTTP from
-    SiteGround (prod). Returns None on miss — never raises."""
-    url = entry.get("lang_urls", {}).get(lang) or entry.get("public_url")
-    if not url:
-        return None
-    cache_key = f"{entry['slug']}:{lang}"
-    cached = _BODY_CACHE.get(cache_key)
-    if cached and (time.time() - cached[0]) < _BODY_CACHE_TTL_S:
-        return cached[1]
-
-    disk = _disk_path(entry, lang)
-    if disk:
-        try:
-            html = disk.read_text(encoding="utf-8", errors="replace")
-            _cache_body(cache_key, html)
-            return html
-        except OSError as exc:
-            logger.warning("canon disk read failed for %s: %s", cache_key, exc)
-
-    import urllib.error
-    import urllib.request
-    try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (compatible; Brubru/1.0; +https://brubru.beresol.eu)",
-                "Accept": "text/html,application/xhtml+xml",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            if resp.status == 200:
-                content = resp.read()
-                if len(content) > 500:
-                    html = content.decode("utf-8", errors="replace")
-                    _cache_body(cache_key, html)
-                    return html
-    except (urllib.error.HTTPError, urllib.error.URLError) as exc:
-        logger.warning("canon body fetch failed for %s [%s]: %s", cache_key, url, exc)
-    except Exception as exc:  # noqa: BLE001 — never 500 on a body miss
-        logger.warning("canon body fetch error for %s [%s]: %s", cache_key, url, exc)
-    return None
-
-
-def _strip_html(html: str) -> str:
-    import re
-    text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.IGNORECASE | re.DOTALL)
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"&nbsp;", " ", text)
-    text = re.sub(r"\s+", " ", text)
-    return text.strip()
+def _load_bodies(db: Session, slugs: list[str], lang: str) -> Dict[str, tuple[Optional[str], Optional[str]]]:
+    """Batch-load (body_html, body_txt) for the given canon slugs in `lang`
+    from the proprietary_report_bodies cache (migration 087). Falls back to the
+    English body when the requested language isn't cached for a slug. Bodies are
+    served from the DB because Railway cannot fetch SiteGround (datacenter IP
+    block) and frontend/public isn't in the backend build context.
+    """
+    if not slugs:
+        return {}
+    want = lang if lang in _LANGS else "en"
+    rows = db.execute(
+        text("""
+            SELECT ref, lang, body_html, body_txt
+            FROM public.proprietary_report_bodies
+            WHERE source = 'canon' AND ref = ANY(:slugs) AND lang IN (:want, 'en')
+        """),
+        {"slugs": slugs, "want": want},
+    ).fetchall()
+    # Prefer the requested language; fall back to English.
+    out: Dict[str, tuple[Optional[str], Optional[str]]] = {}
+    en_only: Dict[str, tuple[Optional[str], Optional[str]]] = {}
+    for ref, lg, html, txt in rows:
+        if lg == want:
+            out[ref] = (html, txt)
+        elif lg == "en":
+            en_only[ref] = (html, txt)
+    for ref, val in en_only.items():
+        out.setdefault(ref, val)
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -214,20 +172,21 @@ GET /api/v2/proprietary/canon?q=AI%20Act
 ```
 
 **You get back**
-A `PaginatedResponse[CanonReport]`. Each item: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints (`public_url` is the English page; `document_date` is the act's publication date for canon entries; `body_*` are null on lists — request them on the detail route).
+A `PaginatedResponse[CanonReport]`. Each item: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints — including the **fully populated `body_html` + `body_txt`** (the rendered report and its plain-text rendering, in the `language` edition or English). `public_url` is the language page; `document_date` is the act's publication date for canon entries.
 
 **Data freshness**
-Brubru-curated. New reports ship via the `/canon` skill; the manifest is regenerated by `scripts/build_canon_manifest.py`.""",
+Brubru-curated. New reports ship via the `/canon` skill; the manifest is regenerated by `scripts/build_canon_manifest.py` and bodies re-seeded by `scripts/seed_proprietary_bodies.py`.""",
 )
 async def list_canon(
     request: Request,
     report_type: Optional[str] = Query(None, description="canon | deep_dive (omit for both)"),
     q: Optional[str] = Query(None, description="Substring over title, summary, slug, CELEX"),
     legal_family: Optional[str] = Query(None, description="Legal-family cluster tag (e.g. eu_pharmaceutical)"),
-    language: Optional[str] = Query(None, description="Keep only reports published in this language (en/es/ca/fr/it/nl)"),
+    language: Optional[str] = Query(None, description="Keep only reports published in this language (en/es/ca/fr/it/nl); also the body edition returned"),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> PaginatedResponse[CanonReport]:
     reports = _load_manifest()
 
@@ -260,6 +219,13 @@ async def list_canon(
     start = (page - 1) * limit
     page_items = [_to_report(r) for r in reports[start:start + limit]]
 
+    # Populate body_html + body_txt from the DB cache for this page.
+    body_lang = (language or "en").strip().lower()
+    bodies = _load_bodies(db, [it.slug for it in page_items], body_lang)
+    for it in page_items:
+        html, txt = bodies.get(it.slug, (None, None))
+        it.body_html, it.body_txt = html, txt
+
     return build_envelope(
         page_items, total=total, page=page, limit=limit,
         op_core_title="Brubru deep-dive reports — EU Canon + law deep-dives",
@@ -281,26 +247,28 @@ After locating a report via the list endpoint, fetch its metadata — and, with 
 
 **Input**
 - `slug` (path) — the report slug, e.g. `2024-1689_aiact`, `2013-575_crr`, `biotech-act`.
-- `include_body` (optional, default false) — inline the rendered HTML into `body_html` and a stripped plain-text version into `body_txt`.
-- `lang` (optional, default `en`) — which language edition to inline (must be in the report's `languages`).
+- `lang` (optional, default `en`) — which language edition to return for `body_html` / `body_txt` (falls back to English if that edition isn't published).
+- `include_body` (optional, default `true`) — set `false` to omit the body and return metadata only (lighter response).
 
 **Try it**
 ```
 GET /api/v2/proprietary/canon/2024-1689_aiact
-GET /api/v2/proprietary/canon/2024-1689_aiact?include_body=true&lang=ca
+GET /api/v2/proprietary/canon/2024-1689_aiact?lang=ca
+GET /api/v2/proprietary/canon/2024-1689_aiact?include_body=false
 ```
 
 **You get back**
-A single `CanonReport`: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints. With `include_body=true`, `body_html` + `body_txt` are populated (null + a logged warning if the upstream page is unreachable — fall back to `public_url`). HTTP 404 (`reason_code: not_found`) for an unknown slug.
+A single `CanonReport`: `slug`, `report_type`, `title`, `summary`, `celex`, `doc_type`, `legal_family`, `languages[]`, `lang_urls{}`, `eurlex_url`, plus the 5 datapoints with **`body_html` + `body_txt` populated by default** (the rendered report + its plain-text rendering, served from the DB body cache). HTTP 404 (`reason_code: not_found`) for an unknown slug.
 
 **Data freshness**
-Brubru-curated. Reports are regenerated as the underlying law evolves.""",
+Brubru-curated. Bodies are seeded by `scripts/seed_proprietary_bodies.py` and re-seeded when a report changes.""",
 )
 async def get_canon(
     slug: str = PathParam(..., description="Report slug (e.g. '2024-1689_aiact', 'biotech-act')"),
-    include_body: bool = Query(False, description="Inline the rendered HTML body (body_html + body_txt)."),
-    lang: str = Query("en", description="Language edition to inline when include_body=true (en/es/ca/fr/it/nl)."),
+    lang: str = Query("en", description="Body language edition to return (en/es/ca/fr/it/nl); falls back to English."),
+    include_body: bool = Query(True, description="Default true — set false to omit body_html/body_txt for a lighter response."),
     user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
 ) -> CanonReport:
     entry = next((r for r in _load_manifest() if r.get("slug") == slug), None)
     if entry is None:
@@ -311,12 +279,7 @@ async def get_canon(
     report = _to_report(entry)
 
     if include_body:
-        use_lang = lang.strip().lower()
-        if use_lang not in (entry.get("languages") or []):
-            use_lang = "en"
-        html = _fetch_body_html(entry, use_lang)
-        if html:
-            report.body_html = html
-            report.body_txt = _strip_html(html)
+        bodies = _load_bodies(db, [slug], lang.strip().lower())
+        report.body_html, report.body_txt = bodies.get(slug, (None, None))
 
     return report

@@ -634,14 +634,27 @@ async def get_catalan_translation(
     )
 
     if body and body.lower() == "html":
-        html = _fetch_ca_body_html(celex, base["ca_url"])
-        if html:
-            # Use the shared body_from_html helper for consistency with the
-            # rest of the v1 surface — same threshold semantics, same plain-
-            # text strip rules.
-            body_html, body_text, has = body_from_html(html, threshold=body_threshold)
-            detail.body_html = body_html
-            detail.body_txt = body_text  # model field is body_txt (was body_text — latent crash on ?body=html)
-            detail.has_body = has
+        # 1) DB body cache (migration 087) — pre-rendered, seeded locally. This
+        #    is the ONLY path that works on Railway: the backend cannot fetch
+        #    brubru.beresol.eu (SiteGround blocks the datacenter egress IP).
+        cached = db.execute(
+            text(
+                "SELECT body_html, body_txt FROM public.proprietary_report_bodies "
+                "WHERE source = 'catalan' AND ref = :celex AND lang = 'ca'"
+            ),
+            {"celex": celex},
+        ).fetchone()
+        if cached and cached[0]:
+            detail.body_html = cached[0]
+            detail.body_txt = cached[1]
+            detail.has_body = True
+        else:
+            # 2) Fallback: live fetch (dev/local only — disk or SiteGround).
+            html = _fetch_ca_body_html(celex, base["ca_url"])
+            if html:
+                body_html, body_text, has = body_from_html(html, threshold=body_threshold)
+                detail.body_html = body_html
+                detail.body_txt = body_text  # model field is body_txt (was body_text — latent crash on ?body=html)
+                detail.has_body = has
 
     return detail

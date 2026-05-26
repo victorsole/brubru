@@ -22,6 +22,19 @@ from ._envelope import PaginatedResponse, build_envelope
 GUIDES_PUBLIC_URL = "https://brubru.beresol.eu/guides/"
 
 
+def _render_md(md: str) -> Optional[str]:
+    """Render guide markdown to HTML for body_html. Returns None on empty input
+    or if the markdown library is unavailable (body_txt still carries the raw
+    markdown, so callers never lose the content)."""
+    if not md:
+        return None
+    try:
+        import markdown as _md
+        return _md.markdown(md, extensions=["extra", "sane_lists", "tables"])
+    except Exception:  # noqa: BLE001 — never fail a guide response over rendering
+        return None
+
+
 def _parse_guide(gid: str, raw: str) -> dict:
     """Parse a markdown guide into title, quick_facts, content."""
     if not isinstance(raw, str):
@@ -145,6 +158,7 @@ async def list_knowledge_guides(
             full_content_chars=len(content),
             public_url=GUIDES_PUBLIC_URL,
             body_txt=body,
+            body_html=_render_md(body),
         ))
 
     env = build_envelope(data, total=total, page=page, limit=limit, detail_level="Full" if include_full else "Summary")
@@ -200,4 +214,5 @@ async def get_knowledge_guide(
         full_content_chars=len(parsed["content"]),
         public_url=GUIDES_PUBLIC_URL,
         body_txt=parsed["content"],
+        body_html=_render_md(parsed["content"]),
     )

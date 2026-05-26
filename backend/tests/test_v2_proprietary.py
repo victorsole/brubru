@@ -122,11 +122,12 @@ def test_guides_list_parity_with_v1(client, fresh_user):
     assert b1["total"] == b2["total"] > 0
     assert [i["id"] for i in b1["data"]] == [i["id"] for i in b2["data"]]
     assert all(i["title"] for i in b2["data"])
-    # 5 datapoints present on every item (the gap the user flagged before).
+    # 5 datapoints present + BODIES POPULATED on every item.
     for item in b2["data"]:
         _assert_item_datapoints(item)
         assert item["public_url"]
         assert item["body_txt"], "guide body_txt must carry the markdown content"
+        assert item["body_html"], "guide body_html must carry the rendered markdown"
 
 
 def test_guides_detail_full_body(client, fresh_user):
@@ -140,6 +141,8 @@ def test_guides_detail_full_body(client, fresh_user):
     assert body["id"] == gid
     assert body["full_content_chars"] > 0
     assert body["content"], "guide detail must return full content"
+    assert body["body_txt"], "guide detail body_txt must be populated"
+    assert body["body_html"], "guide detail body_html must be populated (rendered markdown)"
 
 
 # ---------------------------------------------------------------------------
@@ -166,24 +169,22 @@ def test_catalan_list_parity_and_stats(client, fresh_user):
     assert s["by_doc_type"], "stats must include by_doc_type breakdown"
 
 
-def test_catalan_detail_with_body(client, fresh_user):
+def test_catalan_detail_body_populated_by_default(client, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
     h = {"X-API-Key": key}
-    # GDPR is a stable, large translation.
+    # GDPR is a stable, large translation; v2 populates body by default (from cache).
     r = client.get(f"{BASE}/catalan/32016R0679", headers=h)
     assert r.status_code == 200, r.text
     body = r.json()
     assert body["celex"] == "32016R0679"
     assert body["has_body"] is True
-    # body not inlined unless requested
-    assert body["body_html"] is None
+    assert body["body_html"], "v2 catalan detail must populate body_html by default"
+    assert body["body_txt"], "v2 catalan detail must populate body_txt by default"
 
-    r2 = client.get(f"{BASE}/catalan/32016R0679?body=html", headers=h)
-    assert r2.status_code == 200, r2.text
-    b2 = r2.json()
-    assert b2["body_html"], "?body=html must inline the rendered body"
-    assert b2["body_txt"], "?body=html must inline the plain-text body"
+    # Opt-out for a lighter response.
+    meta = client.get(f"{BASE}/catalan/32016R0679?body=none", headers=h).json()
+    assert meta["body_html"] is None
 
 
 # ---------------------------------------------------------------------------
@@ -206,6 +207,9 @@ def test_canon_list_whole_catalogue(client, fresh_user):
     for item in body["data"]:
         _assert_item_datapoints(item)
         assert item["public_url"].startswith("https://brubru.beresol.eu/")
+        # bodies populated from the DB cache on the list too
+        assert item["body_html"], f"canon list {item['slug']} should have body_html"
+        assert item["body_txt"], f"canon list {item['slug']} should have body_txt"
         # canon entries carry document_date (the act's publication date)
         if item["report_type"] == "canon" and item["celex"]:
             assert item["document_date"], f"canon {item['slug']} should have document_date"
@@ -236,13 +240,15 @@ def test_canon_detail_and_body(client, fresh_user):
     assert body["slug"] == "2024-1689_aiact"
     assert body["celex"] == "32024R1689"
     _assert_item_datapoints(body)
-    assert body["body_html"] is None  # not inlined unless requested
+    # body populated by DEFAULT (no opt-in needed), served from the DB cache
+    assert body["body_html"], "canon detail must populate body_html by default"
+    assert body["body_txt"], "canon detail must populate body_txt by default"
 
-    r2 = client.get(f"{BASE}/canon/2024-1689_aiact?include_body=true&lang=en", headers=h)
-    assert r2.status_code == 200, r2.text
-    b2 = r2.json()
-    assert b2["body_html"], "include_body=true must inline body_html"
-    assert b2["body_txt"], "include_body=true must inline body_txt"
+    # Catalan edition + opt-out
+    ca = client.get(f"{BASE}/canon/2024-1689_aiact?lang=ca", headers=h).json()
+    assert ca["body_html"], "ca edition body must be populated"
+    meta = client.get(f"{BASE}/canon/2024-1689_aiact?include_body=false", headers=h).json()
+    assert meta["body_html"] is None, "include_body=false omits body"
 
 
 # ---------------------------------------------------------------------------
