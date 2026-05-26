@@ -8,6 +8,7 @@ their own assistants.
 """
 
 import re
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, HTTPException, Request
@@ -16,6 +17,9 @@ from pydantic import BaseModel, Field
 from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+
+# Guides are surfaced publicly via the guides index (no per-guide public page).
+GUIDES_PUBLIC_URL = "https://brubru.beresol.eu/guides/"
 
 
 def _parse_guide(gid: str, raw: str) -> dict:
@@ -47,6 +51,17 @@ class KnowledgeGuideItem(BaseModel):
     content: Optional[str] = None
     content_preview: Optional[str] = None
     full_content_chars: int = 0
+
+    # The 5 mandatory Brubru datapoints (present even when null). For a guide:
+    # public_url -> the guides index (no per-guide public page exists);
+    # body_txt   -> the markdown content (the guide body IS the payload);
+    # body_html  -> null (guides are not rendered to HTML);
+    # document_date / creation_date -> null (guides are not dated documents).
+    public_url: Optional[str] = Field(None, description="Citizen-facing URL — the guides index (guides have no per-guide public page).")
+    body_txt: Optional[str] = Field(None, description="The guide's markdown body (mirrors `content` at the requested detail level).")
+    body_html: Optional[str] = Field(None, description="Always null — guides are not rendered to HTML.")
+    document_date: Optional[date] = Field(None, description="Always null — guides are not dated documents.")
+    creation_date: Optional[datetime] = Field(None, description="Always null — guides are not per-row timestamped.")
 
 
 def _loader():
@@ -128,6 +143,8 @@ async def list_knowledge_guides(
             content=body,
             content_preview=body,
             full_content_chars=len(content),
+            public_url=GUIDES_PUBLIC_URL,
+            body_txt=body,
         ))
 
     env = build_envelope(data, total=total, page=page, limit=limit, detail_level="Full" if include_full else "Summary")
@@ -181,4 +198,6 @@ async def get_knowledge_guide(
         content=parsed["content"],
         content_preview=parsed["content"],
         full_content_chars=len(parsed["content"]),
+        public_url=GUIDES_PUBLIC_URL,
+        body_txt=parsed["content"],
     )
