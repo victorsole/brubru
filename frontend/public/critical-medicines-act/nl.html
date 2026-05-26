@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De wet kritieke geneesmiddelen: de EU-leveringszekerheid versterken | Brubru</title>
+  <meta name="description" content="Uitgebreide analyse van de EU-wet kritieke geneesmiddelen (COM(2025) 102): strategische projecten, EU-voorkeur bij aanbestedingen, gezamenlijke inkoop, de unielijst en het voorlopig akkoord van mei 2026. Door Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    .lang-select {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background-image:
+        linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.78) 50%, rgba(5,150,105,0.82) 100%),
+        url('https://images.pexels.com/photos/37466061/pexels-photo-37466061.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.9rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      color: white;
+      max-width: 780px;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.9);
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .hero__badges {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .hero__badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.7rem;
+      border-radius: 12px;
+    }
+
+    .status-banner {
+      background: linear-gradient(135deg, #059669 0%, #0693e3 100%);
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .status-banner .mdi { font-size: 1.3rem; }
+    .status-banner small {
+      font-weight: 400;
+      opacity: 0.9;
+      font-size: 0.82rem;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-red);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; margin-bottom: 0.5rem; }
+    .card ul li { margin-bottom: 0.25rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.3rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(5,150,105,0.08) 0%, rgba(6,147,227,0.08) 100%);
+      border: 2px solid var(--color-green);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .highlight-box__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-green);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.85rem;
+    }
+    .highlight-box h3 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .highlight-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .highlight-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .highlight-box ul li { margin-bottom: 0.4rem; }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-red); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-red);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; vertical-align: top; }
+    tr:hover td { background: rgba(220,38,38,0.03); }
+    .highlight-cell { color: var(--color-green); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    .shortage-bars { margin: 1rem 0; }
+    .shortage-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.65rem; }
+    .shortage-bar-label { font-size: 0.85rem; color: var(--color-secondary); width: 220px; flex-shrink: 0; }
+    .shortage-bar-track { flex: 1; background: var(--color-border); border-radius: 4px; height: 10px; overflow: hidden; }
+    .shortage-bar-fill { height: 100%; border-radius: 4px; background: var(--color-red); }
+    .shortage-bar-value { font-size: 0.85rem; font-weight: 700; color: var(--color-text); width: 46px; text-align: right; flex-shrink: 0; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-red);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__item--next::before { border-color: var(--color-muted); background: var(--color-bg-alt); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-red); }
+    .timeline__item--active .timeline__date { color: var(--color-green); }
+    .timeline__item--next .timeline__date { color: var(--color-muted); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    .actors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .actor-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.15rem;
+    }
+    .actor-card__role { font-size: 0.75rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+    .actor-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .actor-card__detail { font-size: 0.82rem; color: var(--color-secondary); }
+
+    .cta-strip {
+      position: relative;
+      background-image:
+        linear-gradient(135deg, rgba(220,38,38,0.82) 0%, rgba(155,81,224,0.8) 50%, rgba(6,147,227,0.82) 100%),
+        url('https://images.pexels.com/photos/3652097/pexels-photo-3652097.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: white;
+      margin-top: 3rem;
+    }
+    .cta-strip h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .cta-strip p { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      text-decoration: none;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .cta-strip__btn:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.3);
+    }
+
+    .footer {
+      background: var(--color-bg);
+      border-top: 3px solid var(--color-border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+    }
+    .footer__logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .footer__logos img { height: 36px; }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer p { margin-bottom: 0.4rem; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+      cursor: pointer;
+      border: none;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+      .actors-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .actors-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.85rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .actors-grid { grid-template-columns: 1fr; }
+      .shortage-bar-label { width: 160px; font-size: 0.78rem; }
+      .hero { padding: 2.5rem 1.25rem 2rem; min-height: 340px; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body id="top">
+
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Wet kritieke geneesmiddelen</div>
+    <div class="header__subtitle">COM(2025) 102 | Procedure 2025/0102(COD)</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Taal selecteren">
+    <option value="./index.html">EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html">ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html" selected>NL</option>
+    <option value="./ca.html">CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="status-banner">
+  <i class="mdi mdi-handshake-outline"></i>
+  <div>
+    <strong>Voorlopig akkoord bereikt op 11-12 mei 2026 onder het Cypriotisch voorzitterschap van de Raad</strong>
+    <small>Nog geen wet: formele aanneming in afwachting van juridisch-taalkundige herziening door beide instellingen</small>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero__tag">
+    <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102</a>
+    &nbsp;|&nbsp; 2025/0102(COD)
+  </div>
+  <div class="hero__badges">
+    <span class="hero__badge"><i class="mdi mdi-file-document-outline"></i> Verordening</span>
+    <span class="hero__badge"><i class="mdi mdi-scale-balance"></i> Article 114 TFEU</span>
+    <span class="hero__badge"><i class="mdi mdi-hospital-building"></i> Bevoegde commissie: SANT</span>
+    <span class="hero__badge"><i class="mdi mdi-handshake-outline"></i> Voorlopig akkoord</span>
+  </div>
+  <h1 class="hero__title">De wet kritieke geneesmiddelen</h1>
+  <p class="hero__subtitle">
+    De EU-leveringszekerheid van kritieke geneesmiddelen versterken via strategische projecten, hervorming van de overheidsopdrachten en gecoordineerde actie tussen de lidstaten.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-outline"></i> Voorgesteld op 11 maart 2025</span>
+    <span><i class="mdi mdi-account-tie"></i> Rapporteur: Tomislav Sokol (EVP, Kroatië)</span>
+    <span><i class="mdi mdi-domain"></i> DG SANTE</span>
+    <span><i class="mdi mdi-vote-outline"></i> 503 stemmen vóór bij de eerste lezing</span>
+  </div>
+</section>
+
+<div class="container">
+
+<div class="figures">
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">276</div>
+    <div class="figure-card__label">kritieke werkzame stoffen op de unielijst</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">&gt;50%</div>
+    <div class="figure-card__label">van de tekorten veroorzaakt door productieproblemen</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">EUR 83M</div>
+    <div class="figure-card__label">indicatief budget 2026-2027</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">503</div>
+    <div class="figure-card__label">EP-stemmen vóór bij de eerste lezing (jan. 2026)</div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Inhoud van deze analyse</div>
+  <div class="toc__grid">
+    <a href="#what" class="toc__link"><span class="toc__num">1</span> Wat is de wet en waarom nu</a>
+    <a href="#shortage-causes" class="toc__link"><span class="toc__num">2</span> Het tekortprobleem</a>
+    <a href="#key-actors" class="toc__link"><span class="toc__num">3</span> Belangrijkste institutionele actoren</a>
+    <a href="#chapters" class="toc__link"><span class="toc__num">4</span> Analyse hoofdstuk per hoofdstuk</a>
+    <a href="#deal" class="toc__link"><span class="toc__num">5</span> Wat het voorlopig akkoord vastlegde</a>
+    <a href="#context" class="toc__link"><span class="toc__num">6</span> Samenhang met andere dossiers</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">7</span> Wetgevingstijdlijn</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">8</span> Officiële bronnen</a>
+  </div>
+</nav>
+
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-pill"></i></div>
+    <h2 class="section__title">Wat is de wet kritieke geneesmiddelen?</h2>
+  </div>
+  <p class="section__subtitle">Een voorgestelde verordening om endemische tekorten aan geneesmiddelen en de grote afhankelijkheid van buiten de EU geproduceerde werkzame stoffen aan te pakken</p>
+
+  <div class="info-box">
+    <h3>De centrale propositie</h3>
+    <p>De wet kritieke geneesmiddelen is een voorgestelde EU-verordening die een kader vaststelt voor het versterken van de beschikbaarheid en leveringszekerheid van kritieke geneesmiddelen, alsmede de beschikbaarheid en toegankelijkheid van geneesmiddelen van gemeenschappelijk belang. Zij wijzigt Verordening (EU) 2024/795 (de STEP-verordening).</p>
+    <p>Het voorstel werd op 11 maart 2025 door de Commissie aangenomen (COM(2025) 102 final, Straatsburg) onder verantwoordelijkheid van Commissaris Olivér Varhelyi (DG SANTE). De rechtsgrondslag is <strong>artikel 114 VWEU</strong>, waarbij lid 3 een hoog niveau van gezondheidsbescherming vereist.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Het probleem</div>
+      <div class="article-card__title">Endemische tekorten, externe afhankelijkheid</div>
+      <div class="article-card__desc">De EU kampt met terugkerende tekorten aan antibiotica, insuline en pijnstillers. Ongeveer 70% van de in Europa verstrekte geneesmiddelen zijn generieke geneesmiddelen, waarvan de productie van de farmaceutische werkzame stof (API) grotendeels buiten de EU is verplaatst. Een pilotproject met 11 kritieke moleculen identificeerde een significante niet-EU API-afhankelijkheid voor vier daarvan.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">De oplossing</div>
+      <div class="article-card__title">Strategische projecten en hervorming van overheidsopdrachten</div>
+      <div class="article-card__desc">De wet stimuleert binnenlandse productie via de status van strategisch project (versnelde vergunningverlening, prioriteit voor EU-financiering), hervormt overheidsopdrachten om onder bepaalde voorwaarden EU-leveranciers te begunstigen, en stelt gecoordineerde gezamenlijke inkoop tussen de lidstaten in.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Economisch gewicht</div>
+      <div class="article-card__title">800 000 directe banen in de Europese farmacie</div>
+      <div class="article-card__desc">Ongeveer 800 000 mensen zijn rechtstreeks werkzaam in de farmaceutische sector van de EU. De weerbaarheid van de sector wordt als een strategisch doel beschouwd, naast energie en halfgeleiders, voortbouwend op dezelfde industriële logica als de wet kritieke grondstoffen en de Nettonulindustriewet.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Toepassingsgebied</div>
+      <div class="article-card__title">Gecentreerd op de unielijst van kritieke geneesmiddelen</div>
+      <div class="article-card__desc">Het toepassingsgebied van de wet is gecentreerd op de unielijst van kritieke geneesmiddelen (276 kritieke werkzame stoffen). Het omvat ook «geneesmiddelen van gemeenschappelijk belang» en introduceert een categorie «strategische projecten» voor faciliteiten die deze producten of hun werkzame stoffen in de EU produceren.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shortage-causes">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Het tekortprobleem begrijpen</h2>
+  </div>
+  <p class="section__subtitle">Bevindingen van de CHESSMEN-gemeenschappelijke actie over de grondoorzaken van gemelde tekorten</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Oorzaken van tekorten per categorie</div>
+    <p>De CHESSMEN-gemeenschappelijke actie heeft gemelde tekorten in de lidstaten onderzocht en vastgesteld dat productieproblemen verreweg de dominante oorzaak zijn:</p>
+    <div class="shortage-bars" style="margin-top: 1.25rem;">
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Productieproblemen</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 100%; background: var(--color-red);"></div></div>
+        <div class="shortage-bar-value">50,6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Onverwachte vraagstijging</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 33%; background: var(--color-amber);"></div></div>
+        <div class="shortage-bar-value">16,7%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Commerciële redenen</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 22%; background: var(--color-purple);"></div></div>
+        <div class="shortage-bar-value">11,2%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Distributieproblemen</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 21%; background: var(--color-blue);"></div></div>
+        <div class="shortage-bar-value">10,6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Overige oorzaken</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 13.6%; background: var(--color-secondary);"></div></div>
+        <div class="shortage-bar-value">6,9%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Kwaliteitsproblemen</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 5.5%; background: var(--color-green);"></div></div>
+        <div class="shortage-bar-value">2,8%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Regelgevingsproblemen</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 2.6%; background: var(--color-muted);"></div></div>
+        <div class="shortage-bar-value">1,3%</div>
+      </div>
+    </div>
+    <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-muted);">Bron: bevindingen van de CHESSMEN-gemeenschappelijke actie, vermeld in de effectbeoordeling van de Commissie bij COM(2025) 102.</p>
+  </div>
+</section>
+
+<section class="section" id="key-actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Belangrijkste institutionele actoren</h2>
+  </div>
+  <p class="section__subtitle">Rollen van de Commissie, het Parlement en de Raad in de wetgevingsprocedure</p>
+
+  <div class="actors-grid">
+    <div class="actor-card">
+      <div class="actor-card__role">Commissaris</div>
+      <div class="actor-card__name">Olivér Varhelyi</div>
+      <div class="actor-card__detail">DG SANTE. Verantwoordelijk voor het Commissievoorstel van 11 maart 2025.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">EP-rapporteur (bevoegde commissie: SANT)</div>
+      <div class="actor-card__name">Tomislav Sokol</div>
+      <div class="actor-card__detail">EVP, Kroatië. Benoemd op 2 mei 2025. Begeleidde het dossier tot het voorlopig akkoord.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Voorzitter commissie SANT</div>
+      <div class="actor-card__name">Adam Jarubas</div>
+      <div class="actor-card__detail">EVP, Polen. Zit de Commissie volksgezondheid voor, de bevoegde commissie voor dit dossier.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Adviesrapporteur ENVI</div>
+      <div class="actor-card__name">Michele Picaro</div>
+      <div class="actor-card__detail">ECR. Advies van de Commissie milieu, volksgezondheid en voedselveiligheid.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Adviesrapporteur ITRE</div>
+      <div class="actor-card__name">Oliver Schenk</div>
+      <div class="actor-card__detail">EVP. Advies van de Commissie industrie, onderzoek en energie.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Adviesrapporteur IMCO</div>
+      <div class="actor-card__name">Marion Walsmann</div>
+      <div class="actor-card__detail">EVP. Advies van de Commissie interne markt en consumentenbescherming.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-blue);"></i> Raadsvoorzitterschap</div>
+    <p>Het Cypriotisch voorzitterschap van de Raad (eerste helft 2026) leidde de interinstitutionele onderhandelingen en bereikte het voorlopig akkoord op 11-12 mei 2026.</p>
+  </div>
+</section>
+
+<section class="section" id="chapters">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-book-open-page-variant"></i></div>
+    <h2 class="section__title">Analyse hoofdstuk per hoofdstuk</h2>
+  </div>
+  <p class="section__subtitle">Structuur van de voorgestelde verordening: acht hoofdstukken die het volledige beleidskader bestrijken</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk I</div>
+      <div class="article-card__title">Algemene bepalingen</div>
+      <div class="article-card__desc">Doelstellingen, onderwerp, toepassingsgebied en definities. De voornaamste gedefinieerde begrippen zijn: kritiek geneesmiddel, geneesmiddel van gemeenschappelijk belang, strategisch project en leveringszekerheid. Het toepassingsgebied is gecentreerd op de unielijst van kritieke geneesmiddelen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk II</div>
+      <div class="article-card__title">Versterking van de EU-leveringszekerheid</div>
+      <div class="article-card__desc">Maakt de leveringszekerheid van kritieke geneesmiddelen tot een strategisch EU-doel dat gecoordineerde actie vereist van de lidstaten en de Commissie. Legt de overkoepelende politieke verbintenis vast die aan alle volgende hoofdstukken ten grondslag ligt.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk III, Afdeling I</div>
+      <div class="article-card__title">Erkenning als strategisch project</div>
+      <div class="article-card__desc">Erkenningscriteria en -procedure: een lidstaatautoriteit bevestigt dat een project aan de criteria voldoet (productie van een kritiek geneesmiddel of zijn werkzame stoffen in de EU). De erkenning ontsluit de voordelen van afdeling II.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk III, Afdeling II</div>
+      <div class="article-card__title">Prioritaire status en versnelde vergunningen</div>
+      <div class="article-card__desc">Strategische projecten ontvangen de hoogste nationale betekenisstatus (waar van toepassing), toegang tot versnelde vergunningverlening, gecoordineerde of gezamenlijke milieubeoordeling en toegewijde administratieve, regelgevende en wetenschappelijke ondersteuning van lidstaatautoriteiten.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk III, Afdeling III</div>
+      <div class="article-card__title">Financiële prikkels en EU-financiering</div>
+      <div class="article-card__desc">Strategische projecten krijgen prioritaire toegang tot EU-financiering in het kader van het MFK. De coördinatiegroep kritieke geneesmiddelen faciliteert informatie-uitwisseling over beschikbare financieringsinstrumenten, risicoverlagende mechanismen en potentiële co-investeringsmogelijkheden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk IV, Afdeling I</div>
+      <div class="article-card__title">Gunningscriteria voor opdrachten (MEAT en EU-voorkeur)</div>
+      <div class="article-card__desc">Aanbestedende diensten moeten criteria voor de economisch meest voordelige inschrijving (EMVI/MEAT) toepassen die verder gaan dan enkel de prijs. In specifieke gevallen, onderbouwd door een kwetsbaarheidsanalyse, kunnen aanbestedingseisen de voorkeur geven aan leveranciers die een significant deel in de EU produceren (de «EU-voorkeur»), met inachtneming van internationale verplichtingen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk IV, Afdeling II</div>
+      <div class="article-card__title">Gezamenlijke inkoop</div>
+      <div class="article-card__desc">Maakt grensoverschrijdende samenwerking bij inkoop mogelijk, inclusief inkoop namens of ten behoeve van lidstaten. Verlaagt drempels voor gezamenlijke aankoop van kritieke geneesmiddelen. Completeert het bestaande mechanisme van de gezamenlijke aanbestedingsovereenkomst dat tijdens gezondheidscrisissen wordt gebruikt.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk V</div>
+      <div class="article-card__title">Coördinatiegroep kritieke geneesmiddelen</div>
+      <div class="article-card__desc">Orgaan bestaande uit de Commissie en de lidstaten dat strategische richting geeft voor financiering, samenwerkt bij nationale aanbestedingsinitiatieven en advies geeft over de prioritering van kwetsbaarheidsbeoordelingen. Centraal knooppunt voor onderlinge coördinatie tussen lidstaten en strategische partnerschapsbeslissingen.</div>
+    </div>
+  </div>
+
+  <div class="article-grid" style="margin-top: 1rem;">
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk VI</div>
+      <div class="article-card__title">Internationale samenwerking</div>
+      <div class="article-card__desc">Draagt de Commissie op strategische partnerschappen te verkennen met derde landen en internationale organisaties om de toeleveringsketens voor kritieke werkzame stoffen te diversificeren.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk VII</div>
+      <div class="article-card__title">Slotbepalingen en wijziging van de STEP-verordening</div>
+      <div class="article-card__desc">Wijzigt Verordening (EU) 2024/795 (de STEP-verordening) om de status van strategisch project af te stemmen op bestaande EU-financieringsinstrumenten gericht op strategische technologieën in Europa.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Hoofdstuk VIII</div>
+      <div class="article-card__title">Informatie, evaluatie en toepassing</div>
+      <div class="article-card__desc">Voorziet in een evaluatie vijf jaar na de toepassing en vervolgens elke vijf jaar. Stelt de datum van inwerkingtreding en de toepassingsdata vast. Bevat verplichtingen tot informatie-uitwisseling over noodvoorraden en nationale programma's.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="deal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-handshake-outline"></i></div>
+    <h2 class="section__title">Wat het voorlopig akkoord vastlegde</h2>
+  </div>
+  <p class="section__subtitle">Belangrijkste uitkomsten van het interinstitutioneel akkoord van 11-12 mei 2026</p>
+
+  <div class="highlight-box">
+    <div class="highlight-box__label"><i class="mdi mdi-check-circle-outline"></i> Voorlopig akkoord: mei 2026</div>
+    <h3>Fundamentele compromissen bereikt tussen de Raad en het Parlement</h3>
+    <ul>
+      <li><strong>Weerbaarheidsvoorschriften bij overheidsopdrachten:</strong> aanbestedende diensten zijn verplicht weerbaarheidsvoorschriften toe te passen bij de aankoop van kritieke geneesmiddelen, waarbij verder wordt gegaan dan louter op prijs gebaseerde criteria.</li>
+      <li><strong>«EU-voorkeur» met flexibiliteit:</strong> ondernemingen die geneesmiddelen en hun werkzame stoffen in Europa produceren, worden begunstigd bij overheidsopdrachten, met voldoende flexibiliteit om conflicten met internationale handelsverplichtingen te vermijden (WTO-GPA en bilaterale overeenkomsten).</li>
+      <li><strong>Drempelwaarde voor het activeren van gezamenlijke inkoop verlaagd:</strong> het minimum aantal lidstaten dat nodig is om gezamenlijke inkoop te activeren, werd verlaagd van negen naar vijf, waardoor het instrument toegankelijker wordt voor kleinere groepen landen.</li>
+      <li><strong>Noodvoorraden:</strong> de vereisten voor nationale noodvoorraden moeten transparant zijn, de beginselen van solidariteit en evenredigheid respecteren, en functioneren naast het verduidelijkte vrijwillige solidariteitsmechanisme (VSM), dat informatie-uitwisseling en vrijwillige herverdeling van geneesmiddelen tussen lidstaten in tekortensituaties vergemakkelijkt.</li>
+      <li><strong>Weesgeneesmiddelen inbegrepen:</strong> geneesmiddelen voor aandoeningen die niet meer dan 5 op 10 000 personen in de EU treffen, vallen binnen het toepassingsgebied van strategische projecten en gezamenlijke inkoop, met erkenning van de bijzondere kwetsbaarheid van patiënten met zeldzame ziekten in tekortensituaties.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> Statusverduidelijking: nog geen wet</div>
+    <p>Een voorlopig akkoord is een politieke overeenkomst tussen de onderhandelingsteams van de Raad (die de lidstaten vertegenwoordigt) en het Europees Parlement. Het is <strong>nog niet juridisch bindend</strong>. De tekst moet:</p>
+    <ul>
+      <li>worden getoetst en bekrachtigd door de volledige Raad (COREPER) en de parlementaire commissie (SANT), en vervolgens worden bevestigd in plenaire vergadering;</li>
+      <li>worden onderworpen aan juridisch-taalkundige herziening in alle EU-talen;</li>
+      <li>formeel worden aangenomen door beide instellingen alvorens in werking te treden.</li>
+    </ul>
+    <p style="margin-top: 0.5rem;">Het onderscheid tussen voorstel, voorlopig akkoord en aangenomen wet is belangrijk voor nalevingsplanning: verplichtingen zijn nog niet afdwingbaar.</p>
+  </div>
+</section>
+
+<section class="section" id="context">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-puzzle-outline"></i></div>
+    <h2 class="section__title">Samenhang met het bredere farmaceutische en industriële landschap</h2>
+  </div>
+  <p class="section__subtitle">De wet kritieke geneesmiddelen staat niet op zichzelf: zij is onderdeel van een dicht ecosysteem van EU-farmaceutische en industriële wetgeving</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Verwant dossier</th>
+        <th>Referentie</th>
+        <th>Verband</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Herziening EU-farmaceutische wetgeving (Verordening)</strong></td>
+        <td class="dim-cell">2023/0131(COD)</td>
+        <td>De horizontale hervorming van het kader voor de handelsvergunning voor geneesmiddelen. De wet kritieke geneesmiddelen voegt daar een laag van leveringszekerheid en overheidsopdrachten aan toe.</td>
+      </tr>
+      <tr>
+        <td><strong>Herziening EU-farmaceutische wetgeving (Richtlijn)</strong></td>
+        <td class="dim-cell">2023/0132(COD)</td>
+        <td>De richtlijncomponent van het farmaceutisch pakket dat Richtlijn 2001/83/EG herziet. Aanvullend bij 2023/0131(COD).</td>
+      </tr>
+      <tr>
+        <td><strong>Versterkt mandaat van het EMA</strong></td>
+        <td class="dim-cell">Regulation (EU) 2022/123</td>
+        <td>Breidde de rol van het EMA uit op het gebied van tekortenbewaking en crisisvoorbereiding. De wet kritieke geneesmiddelen bouwt voort op het Europees tekortenbewakingsplatform dat in het kader van dit mandaat werd opgericht.</td>
+      </tr>
+      <tr>
+        <td><strong>Unielijst kritieke geneesmiddelen</strong></td>
+        <td class="dim-cell">EMA/HMA-oefening</td>
+        <td>De lijst van 276 kritieke werkzame stoffen die het toepassingsgebied van de wet bepaalt. Gezamenlijk bijgehouden door het EMA en het netwerk van Heads of Medicines Agencies.</td>
+      </tr>
+      <tr>
+        <td><strong>Alliantie voor kritieke geneesmiddelen</strong></td>
+        <td class="dim-cell">Opgericht april 2024</td>
+        <td>Meer dan 300 organisaties uit de industrie, gezondheidsstelsels en het maatschappelijk middenveld. Publiceerde het strategisch verslag (28 februari 2025) dat rechtstreeks het Commissievoorstel heeft geïnformeerd.</td>
+      </tr>
+      <tr>
+        <td><strong>STEP-verordening</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/795</td>
+        <td>Platform voor strategische technologieën voor Europa. Hoofdstuk VII van de wet kritieke geneesmiddelen wijzigt de STEP-verordening om de strategische projecten van de wet op te nemen in het STEP-financieringskader.</td>
+      </tr>
+      <tr>
+        <td><strong>Wet kritieke grondstoffen</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1252</td>
+        <td>Dezelfde architectuur van strategische projecten (erkenning, versnelde vergunningen, prioriteit voor EU-financiering). De wet kritieke geneesmiddelen past hetzelfde model toe op farmaceutische toeleveringsketens.</td>
+      </tr>
+      <tr>
+        <td><strong>Nettonulindustriewet</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1735</td>
+        <td>Een andere pijler van dezelfde logica van industriële soevereiniteit: strategische projecten, EU-voorkeur bij overheidsopdrachten en doelstellingen voor veerkrachtige productie.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">Van de alliantie voor kritieke geneesmiddelen tot het pad naar formele aanneming</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">April 2024</div>
+      <div class="timeline__text">Lancering van de alliantie voor kritieke geneesmiddelen, die meer dan 300 organisaties uit de farmaceutische industrie, gezondheidsstelsels, patiëntengroepen en het maatschappelijk middenveld samenbracht om aanbevelingen te ontwikkelen over leveringszekerheid.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 februari 2025</div>
+      <div class="timeline__text">Publicatie van het strategisch verslag van de alliantie, dat de bewijsbasis en de beleidsaanbevelingen bevat die het Commissievoorstel rechtstreeks hebben geïnformeerd.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 maart 2025</div>
+      <div class="timeline__text"><strong>De Commissie neemt het voorstel aan</strong> COM(2025) 102 final in Straatsburg. Ingediend door Commissaris Olivér Varhelyi (DG SANTE). Rechtsgrondslag: artikel 114 VWEU.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 mei 2025</div>
+      <div class="timeline__text">Tomislav Sokol (EVP, Kroatië) benoemd tot EP-rapporteur door de coördinatoren van de commissie SANT.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 december 2025</div>
+      <div class="timeline__text">De Raad bereikt zijn algemene oriëntatie, waardoor onderhandelingen met het Parlement kunnen beginnen.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 december 2025</div>
+      <div class="timeline__text">De commissie SANT neemt haar verslag aan. Verslag A-10-2025-0272 ingediend op 19 december 2025.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 januari 2026</div>
+      <div class="timeline__text"><strong>Standpunt van het EP in eerste lezing aangenomen</strong> met 503 stemmen vóór. Referentie van de aangenomen tekst: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">P10_TA(2026)0001</a>. Formeel mandaat voor trialoogonderhandelingen verleend aan het onderhandelingsteam van de commissie SANT.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Februari-maart 2026</div>
+      <div class="timeline__text">Trialoogonderhandelingen tussen het onderhandelingsteam van het EP (SANT) en de Raad (Cypriotisch voorzitterschap) over openstaande punten, waaronder het EU-voorkeurmechanisme, drempelwaarden voor gezamenlijke inkoop en de reikwijdte van weesgeneesmiddelen.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">11-12 mei 2026</div>
+      <div class="timeline__text"><strong>Voorlopig akkoord bereikt</strong> onder het Cypriotisch voorzitterschap van de Raad. De onderhandelingsteams van de Raad en het Parlement bereiken overeenstemming over een compromistekst over alle openstaande kwesties. Zie het <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">persbericht van de Raad</a> en het <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">persbericht van het EP</a>.</div>
+    </div>
+    <div class="timeline__item timeline__item--next">
+      <div class="timeline__date">Volgende stappen</div>
+      <div class="timeline__text">Bekrachtiging van de voorlopige tekst door COREPER en de commissie SANT; plenaire bevestiging door beide instellingen; juridisch-taalkundige herziening in alle officiële EU-talen; formele aanneming en bekendmaking in het Publicatieblad; datum van inwerkingtreding en toepassingsdata zoals vastgelegd in hoofdstuk VIII.</div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-strip">
+  <h2>Volg dit dossier in real time</h2>
+  <p>Brubru volgt de wet kritieke geneesmiddelen, het EU-farmaceutisch pakket en 1.296 actieve wetgevingsprocedures zodat u nooit een belangrijke ontwikkeling mist.</p>
+  <a href="https://brubru.beresol.eu" class="cta-strip__btn">Try Brubru Free</a>
+</div>
+
+<section class="section" id="sources" style="margin-top: 3rem;">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">Alle primaire bronnen die voor deze analyse zijn gebruikt</p>
+
+  <div class="card">
+    <p><strong>Commissievoorstel:</strong> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102 final (PDF)</a></p>
+    <p><strong>Commissiepagina (DG SANTE):</strong> <a href="https://health.ec.europa.eu/medicinal-products/critical-medicines-act_en" target="_blank" rel="noopener">health.ec.europa.eu: Critical Medicines Act</a></p>
+    <p><strong>Wetgevingsobservatorium OEIL:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">Procedure 2025/0102(COD)</a></p>
+    <p><strong>Persbericht Raad over voorlopig akkoord (12 mei 2026):</strong> <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">consilium.europa.eu</a></p>
+    <p><strong>Persbericht EP (11 mei 2026):</strong> <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">europarl.europa.eu: akkoord over EU-tekorten van essentiële geneesmiddelen</a></p>
+    <p><strong>Wetgevingstrein EP:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-era-for-european-defence-and-security/file-critical-medicines-act" target="_blank" rel="noopener">Critical Medicines Act (wetgevingstrein)</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer class="footer">
+  <div class="footer__logos">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol BV">
+  </div>
+  <p>Geproduceerd door <a href="https://brubru.beresol.eu">Brubru</a>, de AI-assistent voor EU-beleid van <a href="https://beresol.eu">Beresol BV</a>. Zie ook: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p>Analyse gebaseerd op COM(2025) 102 final (11 maart 2025) en het voorlopige interinstitutionele akkoord van 11-12 mei 2026. Procedure: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)">2025/0102(COD)</a>. Dit is een onafhankelijke analyse, geen officieel EU-document.</p>
+  <p style="margin-top: 0.75rem;">Herofoto door <strong>Elements Interactive</strong> via Pexels. Achtergrondfoto door <strong>Suzy Hazelwood</strong> via Pexels.</p>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Terug naar boven"><i class="mdi mdi-chevron-up"></i></button>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

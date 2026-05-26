@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Reglament sobre medicaments crítics: enfortir la seguretat de subministrament de la UE | Brubru</title>
+  <meta name="description" content="Anàlisi completa del Reglament europeu sobre medicaments crítics (COM(2025) 102): projectes estratègics, preferència de la UE en la contractació pública, contractació conjunta, llista de la Unió i acord provisional de maig de 2026. Per Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    .lang-select {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background-image:
+        linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.78) 50%, rgba(5,150,105,0.82) 100%),
+        url('https://images.pexels.com/photos/37466061/pexels-photo-37466061.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.9rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      color: white;
+      max-width: 780px;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.9);
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .hero__badges {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .hero__badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.7rem;
+      border-radius: 12px;
+    }
+
+    .status-banner {
+      background: linear-gradient(135deg, #059669 0%, #0693e3 100%);
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .status-banner .mdi { font-size: 1.3rem; }
+    .status-banner small {
+      font-weight: 400;
+      opacity: 0.9;
+      font-size: 0.82rem;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-red);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; margin-bottom: 0.5rem; }
+    .card ul li { margin-bottom: 0.25rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.3rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(5,150,105,0.08) 0%, rgba(6,147,227,0.08) 100%);
+      border: 2px solid var(--color-green);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .highlight-box__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-green);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.85rem;
+    }
+    .highlight-box h3 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .highlight-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .highlight-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .highlight-box ul li { margin-bottom: 0.4rem; }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-red); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-red);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; vertical-align: top; }
+    tr:hover td { background: rgba(220,38,38,0.03); }
+    .highlight-cell { color: var(--color-green); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    .shortage-bars { margin: 1rem 0; }
+    .shortage-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.65rem; }
+    .shortage-bar-label { font-size: 0.85rem; color: var(--color-secondary); width: 220px; flex-shrink: 0; }
+    .shortage-bar-track { flex: 1; background: var(--color-border); border-radius: 4px; height: 10px; overflow: hidden; }
+    .shortage-bar-fill { height: 100%; border-radius: 4px; background: var(--color-red); }
+    .shortage-bar-value { font-size: 0.85rem; font-weight: 700; color: var(--color-text); width: 46px; text-align: right; flex-shrink: 0; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-red);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__item--next::before { border-color: var(--color-muted); background: var(--color-bg-alt); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-red); }
+    .timeline__item--active .timeline__date { color: var(--color-green); }
+    .timeline__item--next .timeline__date { color: var(--color-muted); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    .actors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .actor-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.15rem;
+    }
+    .actor-card__role { font-size: 0.75rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+    .actor-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .actor-card__detail { font-size: 0.82rem; color: var(--color-secondary); }
+
+    .cta-strip {
+      position: relative;
+      background-image:
+        linear-gradient(135deg, rgba(220,38,38,0.82) 0%, rgba(155,81,224,0.8) 50%, rgba(6,147,227,0.82) 100%),
+        url('https://images.pexels.com/photos/3652097/pexels-photo-3652097.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: white;
+      margin-top: 3rem;
+    }
+    .cta-strip h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .cta-strip p { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      text-decoration: none;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .cta-strip__btn:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.3);
+    }
+
+    .footer {
+      background: var(--color-bg);
+      border-top: 3px solid var(--color-border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+    }
+    .footer__logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .footer__logos img { height: 36px; }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer p { margin-bottom: 0.4rem; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+      cursor: pointer;
+      border: none;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+      .actors-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .actors-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.85rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .actors-grid { grid-template-columns: 1fr; }
+      .shortage-bar-label { width: 160px; font-size: 0.78rem; }
+      .hero { padding: 2.5rem 1.25rem 2rem; min-height: 340px; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body id="top">
+
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Reglament sobre medicaments crítics</div>
+    <div class="header__subtitle">COM(2025) 102 | Procediment 2025/0102(COD)</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Seleccionar idioma">
+    <option value="./index.html">EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html">ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html">NL</option>
+    <option value="./ca.html" selected>CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="status-banner">
+  <i class="mdi mdi-handshake-outline"></i>
+  <div>
+    <strong>Acord provisional assolit l'11-12 de maig de 2026 sota la Presidència xipriota del Consell</strong>
+    <small>Encara no és llei: l'adopció formal és en espera de la revisió juridicoli&#8203;ngüística de les dues institucions</small>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero__tag">
+    <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102</a>
+    &nbsp;|&nbsp; 2025/0102(COD)
+  </div>
+  <div class="hero__badges">
+    <span class="hero__badge"><i class="mdi mdi-file-document-outline"></i> Reglament</span>
+    <span class="hero__badge"><i class="mdi mdi-scale-balance"></i> Article 114 TFEU</span>
+    <span class="hero__badge"><i class="mdi mdi-hospital-building"></i> Comissió competent: SANT</span>
+    <span class="hero__badge"><i class="mdi mdi-handshake-outline"></i> Acord provisional</span>
+  </div>
+  <h1 class="hero__title">El Reglament sobre medicaments crítics</h1>
+  <p class="hero__subtitle">
+    Enfortir la seguretat de subministrament de la UE en medicaments crítics mitjançant projectes estratègics, reforma de la contractació pública i acció coordinada entre els Estats membres.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-outline"></i> Proposat l'11 de març de 2025</span>
+    <span><i class="mdi mdi-account-tie"></i> Ponent: Tomislav Sokol (PPE, Croàcia)</span>
+    <span><i class="mdi mdi-domain"></i> DG SANTE</span>
+    <span><i class="mdi mdi-vote-outline"></i> 503 vots a favor en primera lectura</span>
+  </div>
+</section>
+
+<div class="container">
+
+<div class="figures">
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">276</div>
+    <div class="figure-card__label">substàncies actives crítiques a la llista de la Unió</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">&gt;50%</div>
+    <div class="figure-card__label">de les escassetats causades per problemes de fabricació</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">EUR 83M</div>
+    <div class="figure-card__label">pressupost indicatiu 2026-2027</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">503</div>
+    <div class="figure-card__label">vots del PE a favor en primera lectura (gen. 2026)</div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contingut d'aquesta anàlisi</div>
+  <div class="toc__grid">
+    <a href="#what" class="toc__link"><span class="toc__num">1</span> Què és el Reglament i per què ara</a>
+    <a href="#shortage-causes" class="toc__link"><span class="toc__num">2</span> El problema de les escassetats</a>
+    <a href="#key-actors" class="toc__link"><span class="toc__num">3</span> Actors institucionals clau</a>
+    <a href="#chapters" class="toc__link"><span class="toc__num">4</span> Anàlisi capítol per capítol</a>
+    <a href="#deal" class="toc__link"><span class="toc__num">5</span> Allò que va resoldre l'acord provisional</a>
+    <a href="#context" class="toc__link"><span class="toc__num">6</span> Relació amb altres expedients</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">7</span> Calendari legislatiu</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">8</span> Fonts oficials</a>
+  </div>
+</nav>
+
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-pill"></i></div>
+    <h2 class="section__title">Què és el Reglament sobre medicaments crítics?</h2>
+  </div>
+  <p class="section__subtitle">Un reglament proposat per abordar les escassetats endèmiques de medicaments i la forta dependència de principis actius produïts fora de la UE</p>
+
+  <div class="info-box">
+    <h3>La proposta central</h3>
+    <p>El Reglament sobre medicaments crítics és un reglament de la UE proposat que estableix un marc per enfortir la disponibilitat i la seguretat de subministrament de medicaments crítics, així com la disponibilitat i l'accessibilitat dels medicaments d'interès comú. Modifica el Reglament (UE) 2024/795 (el Reglament STEP).</p>
+    <p>La proposta va ser adoptada per la Comissió l'11 de març de 2025 (COM(2025) 102 final, Estrasburg) sota la responsabilitat del Comissari Olivér Varhelyi (DG SANTE). La base jurídica és l'<strong>article 114 del TFUE</strong>, l'apartat 3 del qual exigeix un nivell elevat de protecció de la salut.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">El problema</div>
+      <div class="article-card__title">Escassetats endèmiques, dependència exterior</div>
+      <div class="article-card__desc">La UE s'enfronta a escassetats recurrents d'antibiòtics, insulina i analgèsics. Aproximadament el 70% dels medicaments dispensats a Europa són genèrics, la producció dels quals de principi actiu farmacèutic (PAF) s'ha desplaçat en gran mesura fora de la UE. Un projecte pilot sobre 11 molècules crítiques va identificar una dependència significativa de PAF produïts fora de la UE per a quatre d'elles.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">La solució</div>
+      <div class="article-card__title">Projectes estratègics i reforma de la contractació pública</div>
+      <div class="article-card__desc">El Reglament incentiva la fabricació nacional mitjançant l'estatut de projecte estratègic (tramitació accelerada de permisos, prioritat de finançament de la UE), reforma la contractació pública per permetre afavorir els proveïdors de la UE en condicions definides, i estableix una contractació conjunta coordinada entre els Estats membres.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Pes econòmic</div>
+      <div class="article-card__title">800.000 llocs de treball directes a la farmàcia europea</div>
+      <div class="article-card__desc">Uns 800.000 persones treballen directament al sector farmacèutic de la UE. La resiliència del sector es tracta com un objectiu estratègic al mateix nivell que l'energia i els semiconductors, seguint la mateixa lògica industrial que el Reglament sobre matèries primeres crítiques i el Reglament d'indústria de zero emissions netes.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Àmbit d'aplicació</div>
+      <div class="article-card__title">Centrat en la llista de la Unió de medicaments crítics</div>
+      <div class="article-card__desc">L'àmbit del Reglament es centra en la llista de la Unió de medicaments crítics (276 substàncies actives crítiques). També abasta els «medicaments d'interès comú» i introdueix una categoria de «projectes estratègics» per a les instal·lacions que produeixen aquests productes o els seus principis actius a la UE.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shortage-causes">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Comprendre el problema de les escassetats</h2>
+  </div>
+  <p class="section__subtitle">Conclusions de l'acció conjunta CHESSMEN sobre les causes profundes de les escassetats notificades</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Causes de les escassetats per categoria</div>
+    <p>L'acció conjunta CHESSMEN va enquiestar les escassetats notificades als Estats membres i va determinar que els problemes de fabricació en són de lluny la causa dominant:</p>
+    <div class="shortage-bars" style="margin-top: 1.25rem;">
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Problemes de fabricació</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 100%; background: var(--color-red);"></div></div>
+        <div class="shortage-bar-value">50,6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Augment inesperat de la demanda</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 33%; background: var(--color-amber);"></div></div>
+        <div class="shortage-bar-value">16,7%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Raons comercials</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 22%; background: var(--color-purple);"></div></div>
+        <div class="shortage-bar-value">11,2%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Problemes de distribució</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 21%; background: var(--color-blue);"></div></div>
+        <div class="shortage-bar-value">10,6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Altres causes</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 13.6%; background: var(--color-secondary);"></div></div>
+        <div class="shortage-bar-value">6,9%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Problemes de qualitat</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 5.5%; background: var(--color-green);"></div></div>
+        <div class="shortage-bar-value">2,8%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Problemes regulatoris</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 2.6%; background: var(--color-muted);"></div></div>
+        <div class="shortage-bar-value">1,3%</div>
+      </div>
+    </div>
+    <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-muted);">Font: conclusions de l'acció conjunta CHESSMEN, referenciades a l'avaluació d'impacte de la Comissió que acompanya COM(2025) 102.</p>
+  </div>
+</section>
+
+<section class="section" id="key-actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Actors institucionals clau</h2>
+  </div>
+  <p class="section__subtitle">Funcions de la Comissió, el Parlament i el Consell en el procediment legislatiu</p>
+
+  <div class="actors-grid">
+    <div class="actor-card">
+      <div class="actor-card__role">Comissari</div>
+      <div class="actor-card__name">Olivér Varhelyi</div>
+      <div class="actor-card__detail">DG SANTE. Responsable de la proposta de la Comissió de l'11 de març de 2025.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Ponent del PE (comissió competent: SANT)</div>
+      <div class="actor-card__name">Tomislav Sokol</div>
+      <div class="actor-card__detail">PPE, Croàcia. Nomenat el 2 de maig de 2025. Va guiar l'expedient fins a l'acord provisional.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">President de la comissió SANT</div>
+      <div class="actor-card__name">Adam Jarubas</div>
+      <div class="actor-card__detail">PPE, Polònia. Presideix la Comissió de Salut Pública, comissió competent per a aquest expedient.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Ponent d'opinió ENVI</div>
+      <div class="actor-card__name">Michele Picaro</div>
+      <div class="actor-card__detail">ECR. Opinió de la Comissió de Medi Ambient, Salut Pública i Seguretat Alimentària.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Ponent d'opinió ITRE</div>
+      <div class="actor-card__name">Oliver Schenk</div>
+      <div class="actor-card__detail">PPE. Opinió de la Comissió d'Indústria, Recerca i Energia.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">Ponent d'opinió IMCO</div>
+      <div class="actor-card__name">Marion Walsmann</div>
+      <div class="actor-card__detail">PPE. Opinió de la Comissió de Mercat Interior i Protecció del Consumidor.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-blue);"></i> Presidència del Consell</div>
+    <p>La Presidència xipriota del Consell (primer semestre de 2026) va dirigir les negociacions interinstitucionals i va assolir l'acord provisional l'11-12 de maig de 2026.</p>
+  </div>
+</section>
+
+<section class="section" id="chapters">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-book-open-page-variant"></i></div>
+    <h2 class="section__title">Anàlisi capítol per capítol</h2>
+  </div>
+  <p class="section__subtitle">Estructura del reglament proposat: vuit capítols que cobreixen el marc complet de la política</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Capítol I</div>
+      <div class="article-card__title">Disposicions generals</div>
+      <div class="article-card__desc">Objectius, objecte, àmbit d'aplicació i definicions. Els termes definits clau inclouen: medicament crític, medicament d'interès comú, projecte estratègic i seguretat de subministrament. L'àmbit se centra en la llista de la Unió de medicaments crítics.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol II</div>
+      <div class="article-card__title">Enfortiment de la seguretat de subministrament de la UE</div>
+      <div class="article-card__desc">Converteix la seguretat de subministrament de medicaments crítics en un objectiu estratègic de la UE que requereix una acció coordinada dels Estats membres i la Comissió. Estableix el compromís polític general que fonamenta tots els capítols següents.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol III, Secció I</div>
+      <div class="article-card__title">Reconeixement com a projecte estratègic</div>
+      <div class="article-card__desc">Criteris i procediment de reconeixement: una autoritat d'un Estat membre confirma que un projecte compleix els criteris (producció d'un medicament crític o dels seus principis actius a la UE). El reconeixement desbloqueja els avantatges de la secció II.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol III, Secció II</div>
+      <div class="article-card__title">Estatut prioritari i permisos amb tramitació accelerada</div>
+      <div class="article-card__desc">Els projectes estratègics reben l'estatut d'importància nacional més alta (quan sigui aplicable), accés a procediments de concessió de permisos amb tramitació accelerada, avaluació ambiental coordinada o conjunta, i suport administratiu, regulatori i científic dedicat de les autoritats dels Estats membres.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol III, Secció III</div>
+      <div class="article-card__title">Incentius financers i finançament de la UE</div>
+      <div class="article-card__desc">Els projectes estratègics obtenen accés prioritari al finançament de la UE en el marc del MFP. El Grup de coordinació de medicaments crítics facilita l'intercanvi d'informació sobre els instruments de finançament disponibles, els mecanismes de reducció del risc i les possibles oportunitats de coinversió.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol IV, Secció I</div>
+      <div class="article-card__title">Criteris d'adjudicació de contractes (MEAT i preferència UE)</div>
+      <div class="article-card__desc">Els poders adjudicadors han d'aplicar criteris de l'oferta econòmicament més avantatjosa (MEAT) que vagin més enllà del preu. En casos específics, justificats per una anàlisi de vulnerabilitat, els requisits de contractació poden afavorir els proveïdors que fabriquin una part significativa a la UE (la «preferència UE»), respectant els compromisos internacionals.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol IV, Secció II</div>
+      <div class="article-card__title">Contractació conjunta</div>
+      <div class="article-card__desc">Permet la contractació conjunta transfronterera, inclosa la contractació en nom o per compte dels Estats membres. Redueix els obstacles a la compra conjunta de medicaments crítics. Complementa el mecanisme de l'acord de contractació conjunta existent usat durant les crisis sanitàries.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol V</div>
+      <div class="article-card__title">Grup de coordinació de medicaments crítics</div>
+      <div class="article-card__desc">Òrgan integrat per la Comissió i els Estats membres que proporciona orientació estratègica per al finançament, coopera en les iniciatives nacionals de contractació pública i assessora sobre la priorització de l'avaluació de vulnerabilitats. Nucli central de coordinació entre Estats membres i de decisions sobre associacions estratègiques.</div>
+    </div>
+  </div>
+
+  <div class="article-grid" style="margin-top: 1rem;">
+    <div class="article-card">
+      <div class="article-card__num">Capítol VI</div>
+      <div class="article-card__title">Cooperació internacional</div>
+      <div class="article-card__desc">Encarrega a la Comissió d'explorar associacions estratègiques amb tercers països i organitzacions internacionals per diversificar les cadenes de subministrament de substàncies actives crítiques.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol VII</div>
+      <div class="article-card__title">Disposicions finals i modificació del Reglament STEP</div>
+      <div class="article-card__desc">Modifica el Reglament (UE) 2024/795 (el Reglament STEP) per alinear l'estatut de projecte estratègic amb els instruments de finançament existents de la UE que tenen com a objectiu les tecnologies estratègiques a Europa.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Capítol VIII</div>
+      <div class="article-card__title">Informació, avaluació i aplicació</div>
+      <div class="article-card__desc">Preveu una avaluació cinc anys després de l'aplicació i posteriorment cada cinc anys. Fixa les dates d'entrada en vigor i d'aplicació. Inclou obligacions d'intercanvi d'informació sobre reserves de contingència i programes nacionals.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="deal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-handshake-outline"></i></div>
+    <h2 class="section__title">Allò que va resoldre l'acord provisional</h2>
+  </div>
+  <p class="section__subtitle">Principals resultats de l'acord interinstitucional de l'11-12 de maig de 2026</p>
+
+  <div class="highlight-box">
+    <div class="highlight-box__label"><i class="mdi mdi-check-circle-outline"></i> Acord provisional: maig de 2026</div>
+    <h3>Compromisos fonamentals assolits entre el Consell i el Parlament</h3>
+    <ul>
+      <li><strong>Requisits de resiliència en la contractació pública:</strong> els poders adjudicadors estan obligats a aplicar requisits de resiliència en la compra de medicaments crítics, anant més enllà dels criteris basats únicament en el preu.</li>
+      <li><strong>«Preferència UE» amb flexibilitat:</strong> les empreses que produeixen medicaments i els seus principis actius a Europa són afavorides en la contractació pública, amb prou flexibilitat per evitar conflictes amb els compromisos comercials internacionals (ACP de l'OMC i acords bilaterals).</li>
+      <li><strong>Llindar d'activació de la contractació conjunta reduït:</strong> el nombre mínim d'Estats membres necessari per activar la contractació col·laborativa es va reduir de nou a cinc, fent l'instrument més accessible per a grups de països menors.</li>
+      <li><strong>Reserves de contingència:</strong> els requisits per a les reserves de contingència nacionals han de ser transparents, respectar els principis de solidaritat i proporcionalitat, i funcionar conjuntament amb el Mecanisme de Solidaritat Voluntària (MSV) clarificat, que facilita l'intercanvi d'informació i la reassignació voluntària de medicaments entre Estats membres en situacions d'escassetat.</li>
+      <li><strong>Medicaments orfes inclosos:</strong> els medicaments per a afeccions que afecten com a màxim 5 persones per cada 10.000 a la UE s'inclouen en l'àmbit dels projectes estratègics i la contractació conjunta, reconeixent la vulnerabilitat particular dels pacients amb malalties rares en situacions d'escassetat.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> Aclariment sobre l'estat: encara no és llei</div>
+    <p>Un acord provisional és un acord polític entre els equips negociadors del Consell (que representa els Estats membres) i el Parlament Europeu. <strong>Encara no és jurídicament vinculant</strong>. El text ha de:</p>
+    <ul>
+      <li>ser revisat i recolzat pel Consell en ple (COREPER) i per la comissió parlamentària (SANT), i confirmat en sessió plenària;</li>
+      <li>ser sotmès a revisió juridicoli&#8203;ngüística en totes les llengües de la UE;</li>
+      <li>ser formalment adoptat per les dues institucions abans d'entrar en vigor.</li>
+    </ul>
+    <p style="margin-top: 0.5rem;">La distinció entre proposta, acord provisional i llei adoptada és important per a la planificació del compliment normatiu: les obligacions encara no són exigibles.</p>
+  </div>
+</section>
+
+<section class="section" id="context">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-puzzle-outline"></i></div>
+    <h2 class="section__title">Relació amb el panorama farmacèutic i industrial més ampli</h2>
+  </div>
+  <p class="section__subtitle">El Reglament sobre medicaments crítics no és un text aïllat: s'inscriu en un dens ecosistema de legislació farmacèutica i industrial de la UE</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Expedient relacionat</th>
+        <th>Referència</th>
+        <th>Connexió</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Revisió de la legislació farmacèutica de la UE (Reglament)</strong></td>
+        <td class="dim-cell">2023/0131(COD)</td>
+        <td>La reforma horitzontal del marc d'autorització de medicaments. El Reglament sobre medicaments crítics hi afegeix una capa de seguretat de subministrament i contractació pública.</td>
+      </tr>
+      <tr>
+        <td><strong>Revisió de la legislació farmacèutica de la UE (Directiva)</strong></td>
+        <td class="dim-cell">2023/0132(COD)</td>
+        <td>El component directiva del paquet farmacèutic que revisa la Directiva 2001/83/CE. Complement de 2023/0131(COD).</td>
+      </tr>
+      <tr>
+        <td><strong>Mandat reforçat de l'EMA</strong></td>
+        <td class="dim-cell">Regulation (EU) 2022/123</td>
+        <td>Va ampliar el paper de l'EMA en la vigilància de les escassetats i la preparació per a crisis. El Reglament sobre medicaments crítics es basa en la Plataforma Europea de Vigilància d'Escassetats creada en el marc d'aquest mandat.</td>
+      </tr>
+      <tr>
+        <td><strong>Llista de la Unió de medicaments crítics</strong></td>
+        <td class="dim-cell">Exercici EMA/HMA</td>
+        <td>La llista de 276 substàncies actives crítiques que defineix l'àmbit del Reglament. Mantinguda conjuntament per l'EMA i la xarxa dels Heads of Medicines Agencies.</td>
+      </tr>
+      <tr>
+        <td><strong>Aliança per als medicaments crítics</strong></td>
+        <td class="dim-cell">Llançada l'abril de 2024</td>
+        <td>Més de 300 organitzacions de la indústria, els sistemes de salut i la societat civil. Va publicar l'Informe estratègic (28 de febrer de 2025) que va inspirar directament la proposta de la Comissió.</td>
+      </tr>
+      <tr>
+        <td><strong>Reglament STEP</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/795</td>
+        <td>Plataforma de Tecnologies Estratègiques per a Europa. El capítol VII del Reglament sobre medicaments crítics modifica el Reglament STEP per incloure els projectes estratègics del Reglament en el marc de finançament STEP.</td>
+      </tr>
+      <tr>
+        <td><strong>Reglament sobre matèries primeres crítiques</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1252</td>
+        <td>Mateixa arquitectura de projectes estratègics (reconeixement, permisos amb tramitació accelerada, prioritat de finançament de la UE). El Reglament sobre medicaments crítics aplica el mateix model a les cadenes de subministrament farmacèutic.</td>
+      </tr>
+      <tr>
+        <td><strong>Reglament d'indústria de zero emissions netes</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1735</td>
+        <td>Un altre pilar de la mateixa lògica de sobirania industrial: projectes estratègics, preferència UE en contractació pública i objectius de resiliència de la fabricació.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendari legislatiu</h2>
+  </div>
+  <p class="section__subtitle">De l'Aliança per als medicaments crítics al camí cap a l'adopció formal</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">Abril de 2024</div>
+      <div class="timeline__text">Llançament de l'Aliança per als medicaments crítics, que va reunir més de 300 organitzacions de la indústria farmacèutica, els sistemes de salut, els grups de pacients i la societat civil per elaborar recomanacions sobre la seguretat de subministrament.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 de febrer de 2025</div>
+      <div class="timeline__text">Publicació de l'Informe estratègic de l'Aliança, que estableix la base empírica i les recomanacions de política que van inspirar directament la proposta de la Comissió.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 de març de 2025</div>
+      <div class="timeline__text"><strong>La Comissió adopta la proposta</strong> COM(2025) 102 final a Estrasburg. Proposada pel Comissari Olivér Varhelyi (DG SANTE). Base jurídica: article 114 del TFUE.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 de maig de 2025</div>
+      <div class="timeline__text">Tomislav Sokol (PPE, Croàcia) nomenat ponent del PE pels coordinadors de la comissió SANT.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 de desembre de 2025</div>
+      <div class="timeline__text">El Consell adopta la seva orientació general, permetent l'inici de les negociacions amb el Parlament.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 de desembre de 2025</div>
+      <div class="timeline__text">La comissió SANT adopta el seu informe. Informe A-10-2025-0272 presentat el 19 de desembre de 2025.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 de gener de 2026</div>
+      <div class="timeline__text"><strong>Posició del PE en primera lectura adoptada</strong> amb 503 vots a favor. Referència del text adoptat: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">P10_TA(2026)0001</a>. Mandat formal per a les negociacions en trileg conferit a l'equip negociador de la comissió SANT.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Febrer-març de 2026</div>
+      <div class="timeline__text">Negociacions en trileg entre l'equip negociador del PE (SANT) i el Consell (Presidència xipriota) sobre els punts pendents, incloent-hi el mecanisme de preferència UE, els llindars d'activació de la contractació conjunta i l'àmbit dels medicaments orfes.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">11-12 de maig de 2026</div>
+      <div class="timeline__text"><strong>Acord provisional assolit</strong> sota la Presidència xipriota del Consell. Els equips negociadors del Consell i del Parlament acorden un text de compromís sobre tots els assumptes pendents. Vegeu el <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">comunicat de premsa del Consell</a> i el <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">comunicat de premsa del PE</a>.</div>
+    </div>
+    <div class="timeline__item timeline__item--next">
+      <div class="timeline__date">Propers passos</div>
+      <div class="timeline__text">Aprovació del text provisional pel COREPER i la comissió SANT; confirmació en sessió plenària per les dues institucions; revisió juridicoli&#8203;ngüística en totes les llengües oficials de la UE; adopció formal i publicació al Diari Oficial; dates d'entrada en vigor i d'aplicació previstes al capítol VIII.</div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-strip">
+  <h2>Seguiu aquest expedient en temps real</h2>
+  <p>Brubru monitora el Reglament sobre medicaments crítics, el paquet farmacèutic de la UE i 1.296 procediments legislatius actius perquè no us perdeu cap desenvolupament clau.</p>
+  <a href="https://brubru.beresol.eu" class="cta-strip__btn">Try Brubru Free</a>
+</div>
+
+<section class="section" id="sources" style="margin-top: 3rem;">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Totes les fonts primàries emprades per elaborar aquesta anàlisi</p>
+
+  <div class="card">
+    <p><strong>Proposta de la Comissió:</strong> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102 final (PDF)</a></p>
+    <p><strong>Pàgina de la Comissió (DG SANTE):</strong> <a href="https://health.ec.europa.eu/medicinal-products/critical-medicines-act_en" target="_blank" rel="noopener">health.ec.europa.eu: Critical Medicines Act</a></p>
+    <p><strong>Observatori Legislatiu OEIL:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">Procediment 2025/0102(COD)</a></p>
+    <p><strong>Comunicat de premsa del Consell sobre l'acord provisional (12 de maig de 2026):</strong> <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">consilium.europa.eu</a></p>
+    <p><strong>Comunicat de premsa del PE (11 de maig de 2026):</strong> <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">europarl.europa.eu: acord sobre les escassetats de medicaments essencials a la UE</a></p>
+    <p><strong>Tren legislatiu del PE:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-era-for-european-defence-and-security/file-critical-medicines-act" target="_blank" rel="noopener">Critical Medicines Act (tren legislatiu)</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer class="footer">
+  <div class="footer__logos">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol BV">
+  </div>
+  <p>Elaborat per <a href="https://brubru.beresol.eu">Brubru</a>, l'assistent d'intel·ligència artificial per a polítiques europees de <a href="https://beresol.eu">Beresol BV</a>. Vegeu també: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p>Anàlisi basada en COM(2025) 102 final (11 de març de 2025) i l'acord provisional interinstitucional de l'11-12 de maig de 2026. Procediment: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)">2025/0102(COD)</a>. Es tracta d'una anàlisi independent, no d'un document oficial de la UE.</p>
+  <p style="margin-top: 0.75rem;">Fotografia de portada de <strong>Elements Interactive</strong> via Pexels. Fotografia de fons de <strong>Suzy Hazelwood</strong> via Pexels.</p>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Tornar amunt"><i class="mdi mdi-chevron-up"></i></button>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

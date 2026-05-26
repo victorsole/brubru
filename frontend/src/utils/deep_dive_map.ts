@@ -88,6 +88,26 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#dc2626',
     icon: 'mdi-shield-alert-outline',
   },
+  {
+    title: 'EU-Andorra Association Agreement',
+    shortTitle: 'EU-Andorra AA',
+    comReference: 'COM(2024) 191',
+    procedureRef: '2024/0102(NLE)',
+    basePath: '/legislacio-ue-catala/eu-andorra',
+    languages: ['ca'],
+    color: '#d52b1e',
+    icon: 'mdi-mountain',
+  },
+  {
+    title: 'Critical Medicines Act',
+    shortTitle: 'Critical Medicines Act',
+    comReference: 'COM(2025) 102',
+    procedureRef: '2025/0102(COD)',
+    basePath: '/critical-medicines-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#dc2626',
+    icon: 'mdi-pill',
+  },
 ];
 
 /**

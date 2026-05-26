@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Critical Medicines Act: Strengthening EU Security of Supply | Brubru</title>
+  <meta name="description" content="Comprehensive analysis of the EU Critical Medicines Act (COM(2025) 102): strategic projects, EU preference in procurement, joint procurement, the Union List, and the provisional agreement reached in May 2026. By Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .lang-select {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background-image:
+        linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.78) 50%, rgba(5,150,105,0.82) 100%),
+        url('https://images.pexels.com/photos/37466061/pexels-photo-37466061.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.9rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      color: white;
+      max-width: 780px;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.9);
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .hero__badges {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .hero__badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.7rem;
+      border-radius: 12px;
+    }
+
+    /* Status banner */
+    .status-banner {
+      background: linear-gradient(135deg, #059669 0%, #0693e3 100%);
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .status-banner .mdi { font-size: 1.3rem; }
+    .status-banner small {
+      font-weight: 400;
+      opacity: 0.9;
+      font-size: 0.82rem;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-red);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; margin-bottom: 0.5rem; }
+    .card ul li { margin-bottom: 0.25rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.3rem; }
+
+    /* Highlight box for provisional agreement */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(5,150,105,0.08) 0%, rgba(6,147,227,0.08) 100%);
+      border: 2px solid var(--color-green);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .highlight-box__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-green);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.85rem;
+    }
+    .highlight-box h3 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .highlight-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .highlight-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .highlight-box ul li { margin-bottom: 0.4rem; }
+
+    /* Article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-red); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-red);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; vertical-align: top; }
+    tr:hover td { background: rgba(220,38,38,0.03); }
+    .highlight-cell { color: var(--color-green); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Shortage breakdown bar chart */
+    .shortage-bars { margin: 1rem 0; }
+    .shortage-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.65rem; }
+    .shortage-bar-label { font-size: 0.85rem; color: var(--color-secondary); width: 220px; flex-shrink: 0; }
+    .shortage-bar-track { flex: 1; background: var(--color-border); border-radius: 4px; height: 10px; overflow: hidden; }
+    .shortage-bar-fill { height: 100%; border-radius: 4px; background: var(--color-red); }
+    .shortage-bar-value { font-size: 0.85rem; font-weight: 700; color: var(--color-text); width: 46px; text-align: right; flex-shrink: 0; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-red);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__item--next::before { border-color: var(--color-muted); background: var(--color-bg-alt); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-red); }
+    .timeline__item--active .timeline__date { color: var(--color-green); }
+    .timeline__item--next .timeline__date { color: var(--color-muted); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* Key actors */
+    .actors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .actor-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.15rem;
+    }
+    .actor-card__role { font-size: 0.75rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+    .actor-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .actor-card__detail { font-size: 0.82rem; color: var(--color-secondary); }
+
+    /* CTA strip */
+    .cta-strip {
+      position: relative;
+      background-image:
+        linear-gradient(135deg, rgba(220,38,38,0.82) 0%, rgba(155,81,224,0.8) 50%, rgba(6,147,227,0.82) 100%),
+        url('https://images.pexels.com/photos/3652097/pexels-photo-3652097.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200');
+      background-size: cover;
+      background-position: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: white;
+      margin-top: 3rem;
+    }
+    .cta-strip h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .cta-strip p { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      text-decoration: none;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .cta-strip__btn:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.3);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg);
+      border-top: 3px solid var(--color-border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+    }
+    .footer__logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .footer__logos img { height: 36px; }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer p { margin-bottom: 0.4rem; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+      cursor: pointer;
+      border: none;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+      .actors-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .actors-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.85rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .actors-grid { grid-template-columns: 1fr; }
+      .shortage-bar-label { width: 160px; font-size: 0.78rem; }
+      .hero { padding: 2.5rem 1.25rem 2rem; min-height: 340px; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body id="top">
+
+<!-- Sticky Header -->
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Critical Medicines Act Explainer</div>
+    <div class="header__subtitle">COM(2025) 102 | Procedure 2025/0102(COD)</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Select language">
+    <option value="./index.html" selected>EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html">ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html">NL</option>
+    <option value="./ca.html">CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<!-- Status banner -->
+<div class="status-banner">
+  <i class="mdi mdi-handshake-outline"></i>
+  <div>
+    <strong>Provisional Agreement reached 11-12 May 2026 under the Cyprus Council Presidency</strong>
+    <small>Not yet law: formal adoption pending after legal-linguistic revision by both institutions</small>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102</a>
+    &nbsp;|&nbsp; 2025/0102(COD)
+  </div>
+  <div class="hero__badges">
+    <span class="hero__badge"><i class="mdi mdi-file-document-outline"></i> Regulation</span>
+    <span class="hero__badge"><i class="mdi mdi-scale-balance"></i> Article 114 TFEU</span>
+    <span class="hero__badge"><i class="mdi mdi-hospital-building"></i> Lead committee: SANT</span>
+    <span class="hero__badge"><i class="mdi mdi-handshake-outline"></i> Provisional agreement</span>
+  </div>
+  <h1 class="hero__title">The Critical Medicines Act</h1>
+  <p class="hero__subtitle">
+    Strengthening the EU's security of supply of critical medicines through strategic projects, procurement reform, and coordinated action across Member States.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-outline"></i> Proposed 11 March 2025</span>
+    <span><i class="mdi mdi-account-tie"></i> Rapporteur: Tomislav Sokol (EPP, Croatia)</span>
+    <span><i class="mdi mdi-domain"></i> DG SANTE</span>
+    <span><i class="mdi mdi-vote-outline"></i> 503 votes in favour at first reading</span>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- Key Figures -->
+<div class="figures">
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">276</div>
+    <div class="figure-card__label">critical active substances on the Union List</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">&gt;50%</div>
+    <div class="figure-card__label">of shortages caused by manufacturing issues</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">EUR 83M</div>
+    <div class="figure-card__label">indicative budget 2026-2027</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">503</div>
+    <div class="figure-card__label">EP votes in favour at first reading (Jan 2026)</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> What is covered in this analysis</div>
+  <div class="toc__grid">
+    <a href="#what" class="toc__link"><span class="toc__num">1</span> What is the Act and why now</a>
+    <a href="#shortage-causes" class="toc__link"><span class="toc__num">2</span> The shortage problem</a>
+    <a href="#key-actors" class="toc__link"><span class="toc__num">3</span> Key actors</a>
+    <a href="#chapters" class="toc__link"><span class="toc__num">4</span> Chapter-by-chapter analysis</a>
+    <a href="#deal" class="toc__link"><span class="toc__num">5</span> What the provisional deal settled</a>
+    <a href="#context" class="toc__link"><span class="toc__num">6</span> Relation to other files</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">7</span> Legislative timeline</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">8</span> Official sources</a>
+  </div>
+</nav>
+
+<!-- Section 1: What it is -->
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-pill"></i></div>
+    <h2 class="section__title">What is the Critical Medicines Act?</h2>
+  </div>
+  <p class="section__subtitle">A proposed Regulation to address endemic medicine shortages and heavy API dependence outside the EU</p>
+
+  <div class="info-box">
+    <h3>The core proposition</h3>
+    <p>The Critical Medicines Act is a proposed EU Regulation laying a framework for strengthening the availability and security of supply of critical medicinal products, as well as the availability of and accessibility of medicinal products of common interest. It amends Regulation (EU) 2024/795 (the STEP Regulation).</p>
+    <p>The proposal was adopted by the Commission on 11 March 2025 (COM(2025) 102 final, Strasbourg) under Commissioner Olivér Varhelyi (DG SANTE). The legal basis is <strong>Article 114 TFEU</strong>, with Article 114(3) requiring a high level of health protection.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">The problem</div>
+      <div class="article-card__title">Endemic shortages, external dependence</div>
+      <div class="article-card__desc">The EU faces recurrent shortages of antibiotics, insulin, and painkillers. About 70% of medicines dispensed in Europe are generics, whose active pharmaceutical ingredient (API) production has largely moved outside the EU. A pilot of 11 critical molecules identified significant non-EU API dependence for four of them.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">The solution</div>
+      <div class="article-card__title">Strategic Projects and procurement reform</div>
+      <div class="article-card__desc">The Act incentivises domestic manufacturing through Strategic Project status (fast-track permits, EU funding priority), reforms public procurement to allow favouring EU suppliers under defined conditions, and establishes coordinated joint procurement across Member States.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Economic weight</div>
+      <div class="article-card__title">800,000 direct jobs in EU pharma</div>
+      <div class="article-card__desc">About 800,000 people are directly employed by the EU pharmaceutical sector. The sector's resilience is treated as a strategic objective alongside energy and semiconductors, building on the same industrial logic as the Critical Raw Materials Act and the Net-Zero Industry Act.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Scope</div>
+      <div class="article-card__title">Centred on the Union List of Critical Medicines</div>
+      <div class="article-card__desc">The Act's scope centres on the Union List of Critical Medicines (276 critical active substances). It also covers "medicinal products of common interest" and introduces a category of "strategic projects" for facilities producing these products or their active ingredients in the EU.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Shortage causes -->
+<section class="section" id="shortage-causes">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Understanding the Shortage Problem</h2>
+  </div>
+  <p class="section__subtitle">CHESSMEN joint action findings on the root causes of reported shortages</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Shortage causes by category</div>
+    <p>The CHESSMEN joint action surveyed reported shortages across Member States and found manufacturing issues to be by far the dominant cause:</p>
+    <div class="shortage-bars" style="margin-top: 1.25rem;">
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Manufacturing issues</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 100%; background: var(--color-red);"></div></div>
+        <div class="shortage-bar-value">50.6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Unexpected increased demand</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 33%; background: var(--color-amber);"></div></div>
+        <div class="shortage-bar-value">16.7%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Commercial reasons</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 22%; background: var(--color-purple);"></div></div>
+        <div class="shortage-bar-value">11.2%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Distribution issues</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 21%; background: var(--color-blue);"></div></div>
+        <div class="shortage-bar-value">10.6%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Other causes</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 13.6%; background: var(--color-secondary);"></div></div>
+        <div class="shortage-bar-value">6.9%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Quality issues</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 5.5%; background: var(--color-green);"></div></div>
+        <div class="shortage-bar-value">2.8%</div>
+      </div>
+      <div class="shortage-bar-row">
+        <div class="shortage-bar-label">Regulatory issues</div>
+        <div class="shortage-bar-track"><div class="shortage-bar-fill" style="width: 2.6%; background: var(--color-muted);"></div></div>
+        <div class="shortage-bar-value">1.3%</div>
+      </div>
+    </div>
+    <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-muted);">Source: CHESSMEN joint action findings, referenced in the Commission's impact assessment accompanying COM(2025) 102.</p>
+  </div>
+</section>
+
+<!-- Section 3: Key actors -->
+<section class="section" id="key-actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Key Institutional Actors</h2>
+  </div>
+  <p class="section__subtitle">Commission, Parliament, and Council roles in the legislative procedure</p>
+
+  <div class="actors-grid">
+    <div class="actor-card">
+      <div class="actor-card__role">Commissioner</div>
+      <div class="actor-card__name">Olivér Varhelyi</div>
+      <div class="actor-card__detail">DG SANTE. Responsible for the Commission proposal of 11 March 2025.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">EP Rapporteur (lead: SANT)</div>
+      <div class="actor-card__name">Tomislav Sokol</div>
+      <div class="actor-card__detail">EPP, Croatia. Appointed 2 May 2025. Shepherded the file to provisional agreement.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">SANT Committee Chair</div>
+      <div class="actor-card__name">Adam Jarubas</div>
+      <div class="actor-card__detail">EPP, Poland. Chairs the Public Health Committee, the lead committee for this file.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">ENVI Opinion Rapporteur</div>
+      <div class="actor-card__name">Michele Picaro</div>
+      <div class="actor-card__detail">ECR. Environment, Public Health and Food Safety Committee opinion.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">ITRE Opinion Rapporteur</div>
+      <div class="actor-card__name">Oliver Schenk</div>
+      <div class="actor-card__detail">EPP. Industry, Research and Energy Committee opinion.</div>
+    </div>
+    <div class="actor-card">
+      <div class="actor-card__role">IMCO Opinion Rapporteur</div>
+      <div class="actor-card__name">Marion Walsmann</div>
+      <div class="actor-card__detail">EPP. Internal Market and Consumer Protection Committee opinion.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-blue);"></i> Council Presidency</div>
+    <p>The Cyprus Council Presidency (first half of 2026) led the inter-institutional negotiations and secured the provisional agreement on 11-12 May 2026.</p>
+  </div>
+</section>
+
+<!-- Section 4: Chapter-by-chapter -->
+<section class="section" id="chapters">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-book-open-page-variant"></i></div>
+    <h2 class="section__title">Chapter-by-Chapter Analysis</h2>
+  </div>
+  <p class="section__subtitle">Structure of the proposed Regulation: eight chapters covering the full policy framework</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Chapter I</div>
+      <div class="article-card__title">General provisions</div>
+      <div class="article-card__desc">Objectives, subject matter, scope, and definitions. Key defined terms include: critical medicine, medicinal product of common interest, strategic project, and security of supply. The scope centres on the Union List of Critical Medicines.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter II</div>
+      <div class="article-card__title">Strengthening EU security of supply</div>
+      <div class="article-card__desc">Makes security of supply of critical medicines an EU strategic objective requiring coordinated action by Member States and the Commission. Establishes the overarching policy commitment underpinning all subsequent chapters.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter III, Section I</div>
+      <div class="article-card__title">Strategic Project recognition</div>
+      <div class="article-card__desc">Recognition criteria and procedure: a Member State authority confirms a project meets the criteria (producing a critical medicine or its active ingredients in the EU). Recognition unlocks the benefits in Section II.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter III, Section II</div>
+      <div class="article-card__title">Priority status and fast-tracked permits</div>
+      <div class="article-card__desc">Strategic Projects receive highest national significance status (where applicable), access fast-tracked permit-granting, coordinated or joint environmental assessment, and dedicated administrative, regulatory, and scientific support from Member State authorities.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter III, Section III</div>
+      <div class="article-card__title">Financial incentives and EU funding</div>
+      <div class="article-card__desc">Strategic Projects gain priority access to EU funding under the MFF. The Critical Medicines Coordination Group facilitates information exchange on available financing instruments, de-risking mechanisms, and potential co-investment opportunities.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter IV, Section I</div>
+      <div class="article-card__title">Procurement award criteria (MEAT and EU preference)</div>
+      <div class="article-card__desc">Contracting authorities must apply most-economically-advantageous-tender (MEAT) criteria that go beyond price alone. In specific cases, justified by a vulnerability analysis, procurement requirements may favour suppliers manufacturing a significant portion in the EU (the "EU preference"), respecting international commitments.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter IV, Section II</div>
+      <div class="article-card__title">Collaborative procurement</div>
+      <div class="article-card__desc">Enables cross-border collaborative procurement, including procurement on behalf of or in the name of Member States. Lowers barriers to joint purchasing of critical medicines. Complements the existing Joint Procurement Agreement mechanism used during health crises.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter V</div>
+      <div class="article-card__title">Critical Medicines Coordination Group</div>
+      <div class="article-card__desc">Commission plus Member States body providing strategic orientation for funding, cooperating on national procurement initiatives, and advising on vulnerability-evaluation priority. Central hub for inter-Member-State coordination and strategic partnership decisions.</div>
+    </div>
+  </div>
+
+  <div class="article-grid" style="margin-top: 1rem;">
+    <div class="article-card">
+      <div class="article-card__num">Chapter VI</div>
+      <div class="article-card__title">International cooperation</div>
+      <div class="article-card__desc">Mandates the Commission to explore strategic partnerships with third countries and international organisations to diversify supply chains for critical active substances.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter VII</div>
+      <div class="article-card__title">Final provisions and STEP amendment</div>
+      <div class="article-card__desc">Amends Regulation (EU) 2024/795 (the STEP Regulation) to align Strategic Project status with existing EU funding instruments targeting strategic technologies in Europe.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Chapter VIII</div>
+      <div class="article-card__title">Information, evaluation, and application</div>
+      <div class="article-card__desc">Provides for evaluation five years after application, and then every five years. Sets entry into force and application dates. Includes information-sharing obligations on contingency stocks and national programmes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Provisional deal -->
+<section class="section" id="deal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-handshake-outline"></i></div>
+    <h2 class="section__title">What the Provisional Deal Settled</h2>
+  </div>
+  <p class="section__subtitle">Key outcomes of the inter-institutional agreement of 11-12 May 2026</p>
+
+  <div class="highlight-box">
+    <div class="highlight-box__label"><i class="mdi mdi-check-circle-outline"></i> Provisional agreement: May 2026</div>
+    <h3>Core compromises reached between Council and Parliament</h3>
+    <ul>
+      <li><strong>Resilience requirements in procurement:</strong> contracting authorities are obliged to apply resilience requirements when purchasing critical medicines, moving beyond purely price-based criteria.</li>
+      <li><strong>"EU preference" with flexibility:</strong> companies that produce medicines and their active ingredients in Europe are favoured in procurement, with sufficient flexibility to avoid conflicts with international trade commitments (WTO GPA and bilateral agreements).</li>
+      <li><strong>Joint-procurement trigger threshold reduced:</strong> the minimum number of Member States required to trigger collaborative procurement was lowered from nine to five, making the tool more accessible for smaller groups of countries.</li>
+      <li><strong>Contingency stocks:</strong> requirements for national contingency stocks must be transparent, respect the principles of solidarity and proportionality, and operate alongside clarified use of the Voluntary Solidarity Mechanism (VSM), which facilitates information-sharing and voluntary reallocation of medicines between Member States in shortage situations.</li>
+      <li><strong>Orphan medicinal products included:</strong> medicines for conditions affecting no more than 5 in 10,000 people in the EU are brought into the scope of Strategic Projects and collaborative procurement, acknowledging the particular vulnerability of rare-disease patients in shortage situations.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> Status clarification: not yet law</div>
+    <p>A provisional agreement is a political deal between the negotiating teams of the Council (representing Member States) and the European Parliament. It is <strong>not yet legally binding</strong>. The text must be:</p>
+    <ul>
+      <li>Reviewed and endorsed by the full Council (COREPER) and the EP committee (SANT), then confirmed by plenary;</li>
+      <li>Subject to legal-linguistic revision in all EU languages;</li>
+      <li>Formally adopted by both institutions before it enters into force.</li>
+    </ul>
+    <p style="margin-top: 0.5rem;">The distinction between proposal, provisional agreement, and adopted law matters for compliance planning: obligations are not yet enforceable.</p>
+  </div>
+</section>
+
+<!-- Section 6: Relation to other files -->
+<section class="section" id="context">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-puzzle-outline"></i></div>
+    <h2 class="section__title">Relation to the Wider Pharmaceutical and Industrial Landscape</h2>
+  </div>
+  <p class="section__subtitle">The Critical Medicines Act does not stand alone: it sits within a dense ecosystem of EU pharmaceutical and industrial legislation</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Related file</th>
+        <th>Reference</th>
+        <th>Connection</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>EU Pharmaceutical Legislation Revision (Reg)</strong></td>
+        <td class="dim-cell">2023/0131(COD)</td>
+        <td>The horizontal reform of the medicinal products authorisation framework. The Critical Medicines Act adds a supply-security and procurement layer on top.</td>
+      </tr>
+      <tr>
+        <td><strong>EU Pharmaceutical Legislation Revision (Dir)</strong></td>
+        <td class="dim-cell">2023/0132(COD)</td>
+        <td>The directive component of the pharma package revising Directive 2001/83/EC. Companion to 2023/0131(COD).</td>
+      </tr>
+      <tr>
+        <td><strong>EMA Reinforced Mandate</strong></td>
+        <td class="dim-cell">Regulation (EU) 2022/123</td>
+        <td>Extended EMA's role in shortage monitoring and crisis preparedness. The Critical Medicines Act builds on the European Shortages Monitoring Platform established under this mandate.</td>
+      </tr>
+      <tr>
+        <td><strong>Union List of Critical Medicines</strong></td>
+        <td class="dim-cell">EMA/HMA exercise</td>
+        <td>The list of 276 critical active substances that defines the scope of the Act. Maintained jointly by EMA and the Heads of Medicines Agencies network.</td>
+      </tr>
+      <tr>
+        <td><strong>Critical Medicines Alliance</strong></td>
+        <td class="dim-cell">Launched April 2024</td>
+        <td>Over 300 organisations from industry, health systems, and civil society. Published the Strategic Report (28 February 2025) that informed the Commission proposal.</td>
+      </tr>
+      <tr>
+        <td><strong>STEP Regulation</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/795</td>
+        <td>Strategic Technologies for Europe Platform. Chapter VII of the Critical Medicines Act amends STEP to include Strategic Projects under the Act within the STEP funding framework.</td>
+      </tr>
+      <tr>
+        <td><strong>Critical Raw Materials Act</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1252</td>
+        <td>Same strategic-project architecture (recognition, fast-track permits, EU funding priority). The Critical Medicines Act applies the same model to pharmaceutical supply chains.</td>
+      </tr>
+      <tr>
+        <td><strong>Net-Zero Industry Act</strong></td>
+        <td class="dim-cell">Regulation (EU) 2024/1735</td>
+        <td>Another pillar of the same industrial sovereignty logic: strategic projects, EU preference in public procurement, and manufacturing resilience targets.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section 7: Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Legislative Timeline</h2>
+  </div>
+  <p class="section__subtitle">From the Critical Medicines Alliance to the path to formal adoption</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">April 2024</div>
+      <div class="timeline__text">Critical Medicines Alliance launched, bringing together over 300 organisations from the pharmaceutical industry, health systems, patient groups, and civil society to develop recommendations on supply security.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 February 2025</div>
+      <div class="timeline__text">Alliance Strategic Report published, setting out the evidence base and policy recommendations that directly informed the Commission proposal.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 March 2025</div>
+      <div class="timeline__text"><strong>Commission adopts the proposal</strong> COM(2025) 102 final in Strasbourg. Proposed by Commissioner Olivér Varhelyi (DG SANTE). Legal basis: Article 114 TFEU.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 May 2025</div>
+      <div class="timeline__text">Tomislav Sokol (EPP, Croatia) appointed EP rapporteur by the SANT committee coordinators.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2 December 2025</div>
+      <div class="timeline__text">Council reaches its general approach, allowing negotiations with Parliament to begin.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 December 2025</div>
+      <div class="timeline__text">SANT committee adopts its report. Report A-10-2025-0272 tabled on 19 December 2025.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 January 2026</div>
+      <div class="timeline__text"><strong>EP first-reading position adopted</strong> with 503 votes in favour. Adopted text reference: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">P10_TA(2026)0001</a>. Formal mandate for trilogue negotiations conferred on the SANT negotiating team.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">February-March 2026</div>
+      <div class="timeline__text">Trilogue negotiations between the EP (SANT) negotiating team and the Council (Cyprus Presidency) on outstanding points including the EU preference mechanism, joint-procurement thresholds, and orphan medicines scope.</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">11-12 May 2026</div>
+      <div class="timeline__text"><strong>Provisional agreement reached</strong> under the Cyprus Council Presidency. Council and Parliament negotiating teams agree on a compromise text covering all outstanding issues. See the <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">Council press release</a> and <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">EP press release</a>.</div>
+    </div>
+    <div class="timeline__item timeline__item--next">
+      <div class="timeline__date">Next steps</div>
+      <div class="timeline__text">Endorsement of the provisional text by COREPER and the SANT committee; plenary confirmation by both institutions; legal-linguistic revision in all EU official languages; formal adoption and publication in the Official Journal; entry into force and application dates as set out in Chapter VIII.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Strip -->
+<div class="cta-strip">
+  <h2>Track this file in real time</h2>
+  <p>Brubru monitors the Critical Medicines Act, the EU pharmaceutical package, and 1,296 active legislative procedures so you never miss a key development.</p>
+  <a href="https://brubru.beresol.eu" class="cta-strip__btn">Try Brubru Free</a>
+</div>
+
+<!-- Section 8: Sources -->
+<section class="section" id="sources" style="margin-top: 3rem;">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official Sources</h2>
+  </div>
+  <p class="section__subtitle">All primary sources used to produce this analysis</p>
+
+  <div class="card">
+    <p><strong>Commission proposal:</strong> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0102/COM_COM(2025)0102_EN.pdf" target="_blank" rel="noopener">COM(2025) 102 final (PDF)</a></p>
+    <p><strong>Commission page (DG SANTE):</strong> <a href="https://health.ec.europa.eu/medicinal-products/critical-medicines-act_en" target="_blank" rel="noopener">health.ec.europa.eu: Critical Medicines Act</a></p>
+    <p><strong>OEIL Legislative Observatory:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)" target="_blank" rel="noopener">Procedure 2025/0102(COD)</a></p>
+    <p><strong>Council provisional-deal press release (12 May 2026):</strong> <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">consilium.europa.eu</a></p>
+    <p><strong>EP press release (11 May 2026):</strong> <a href="https://www.europarl.europa.eu/news/en/press-room/20260511IPR43110/deal-on-tackling-eu-shortages-of-essential-medicines" target="_blank" rel="noopener">europarl.europa.eu: Deal on tackling EU shortages of essential medicines</a></p>
+    <p><strong>EP Legislative Train:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-era-for-european-defence-and-security/file-critical-medicines-act" target="_blank" rel="noopener">Critical Medicines Act (Legislative Train)</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer__logos">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol BV">
+  </div>
+  <p>Produced by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol BV</a>. See also: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p>Analysis based on COM(2025) 102 final (11 March 2025) and the provisional inter-institutional agreement of 11-12 May 2026. Procedure: <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0102(COD)">2025/0102(COD)</a>. This is an independent analysis, not an official EU document.</p>
+  <p style="margin-top: 0.75rem;">Hero photograph by <strong>Elements Interactive</strong> via Pexels. Background photograph by <strong>Suzy Hazelwood</strong> via Pexels.</p>
+</footer>
+
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></button>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

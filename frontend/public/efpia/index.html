@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Brubru for EFPIA | Beresol BV</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-purple: #9b51e0;
+      --color-green: #059669;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-silver: #9ca3af;
+      --color-text: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg: #ffffff;
+      --color-bg-alt: #f9fafb;
+      --font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text);
+      background: var(--color-bg-alt);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ============================================ HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .site-header__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .site-header__logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-text);
+    }
+    .site-header__logo img { height: 36px; }
+    .site-header__title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .site-header__subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ============================================ LANGUAGE SWITCH */
+    .lang-switch {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-md);
+      padding: 0.25rem;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      padding: 0.4rem 0.7rem;
+      font-family: var(--font-family);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+    .lang-switch button:hover { color: var(--color-blue); }
+    .lang-switch button.active {
+      background: var(--color-bg);
+      color: var(--color-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ============================================ NAV TABS */
+    .nav-tabs {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+    .nav-tab {
+      background: transparent;
+      border: none;
+      padding: 1rem 1.25rem;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-tab:hover { color: var(--color-blue); }
+    .nav-tab--active {
+      color: var(--color-blue);
+      border-bottom-color: var(--color-blue);
+    }
+    .nav-tab .mdi { font-size: 1.2rem; }
+
+    /* ============================================ MAIN */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .section { display: none; }
+    .section--active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header { margin-bottom: 2.5rem; }
+    .section-header__title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .section-header__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 800px;
+    }
+
+    /* ============================================ CARDS & GRID */
+    .grid { display: grid; gap: 1.5rem; }
+    .grid--2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid--3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card__icon--blue   { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .card__icon--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .card__icon--green  { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .card__icon--amber  { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .card__icon--red    { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .card__icon--silver { background: rgba(156,163,175,0.2); color: var(--color-silver); }
+
+    .card__title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .card__meta {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .card__text {
+      font-size: 0.98rem;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+    }
+    .card__text ul { margin: 0.5rem 0 0 1.25rem; padding: 0; }
+    .card__text li { margin-bottom: 0.25rem; }
+    .card__text strong { color: var(--color-text); }
+
+    /* ============================================ MATRIX TABLE */
+    .matrix-wrapper {
+      overflow-x: auto;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin-top: 1.5rem;
+    }
+    .matrix {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    .matrix th, .matrix td {
+      padding: 1rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .matrix th {
+      background: var(--color-bg-alt);
+      font-weight: 700;
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+    .matrix td:first-child {
+      font-weight: 600;
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+    .matrix tr:last-child th,
+    .matrix tr:last-child td { border-bottom: none; }
+
+    /* ============================================ HERO */
+    .hero {
+      background: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+      color: white;
+      padding: 4rem 2rem;
+      border-radius: var(--radius-xl);
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .hero__title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .hero__text {
+      font-size: 1.2rem;
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      opacity: 0.95;
+    }
+    .hero__ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.75rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn--white {
+      background: white;
+      color: var(--color-blue);
+    }
+    .btn--white:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn--ghost {
+      background: transparent;
+      color: white;
+      border-color: rgba(255,255,255,0.6);
+    }
+    .btn--ghost:hover { background: rgba(255,255,255,0.1); }
+    .btn--primary {
+      background: var(--color-blue);
+      color: white;
+    }
+    .btn--primary:hover { background: #0581c9; transform: translateY(-1px); }
+
+    /* ============================================ PAIN POINTS */
+    .pain-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 1.5rem;
+    }
+    .pain-list li {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-red);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-left-color 0.3s ease, border-left-width 0.3s ease;
+    }
+    .pain-list li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #dc2626, #9b51e0, #0693e3);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 2px;
+    }
+    .pain-list li:hover {
+      transform: translateY(-4px) translateX(2px);
+      box-shadow: 0 12px 24px -8px rgba(220,38,38,0.2), 0 6px 12px -4px rgba(155,81,224,0.12);
+      border-left-color: transparent;
+    }
+    .pain-list li:hover::after { transform: scaleY(1); }
+    .pain-list li strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .pain-list li:hover strong {
+      color: var(--color-blue);
+      transform: translateX(3px);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .stat-row--four { grid-template-columns: repeat(4, 1fr); }
+    .stat-row--two {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      .stat-row--four { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stat-row--four, .stat-row--two { grid-template-columns: 1fr; }
+    }
+
+    .stats-block {
+      margin: 1.5rem 0 2rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+    }
+    .stats-block--pain {
+      background: linear-gradient(180deg, rgba(220,38,38,0.03) 0%, rgba(220,38,38,0) 100%);
+      border-color: rgba(220,38,38,0.15);
+    }
+    .stats-block--solution {
+      background: linear-gradient(180deg, rgba(5,150,105,0.03) 0%, rgba(5,150,105,0) 100%);
+      border-color: rgba(5,150,105,0.15);
+    }
+    .stats-block__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .stats-block__badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.75rem;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .stats-block__badge--pain { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .stats-block__badge--solution { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .stats-block__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    .stat--pain .stat__number { color: var(--color-red); }
+    .stat--pain::before { background: linear-gradient(135deg, #dc2626, #f97316, #d97706); }
+    .stat--pain:hover { box-shadow: 0 15px 30px -10px rgba(220,38,38,0.25), 0 8px 15px -5px rgba(249,115,22,0.15); }
+    .stat--pain:hover .stat__number {
+      background: linear-gradient(135deg, #dc2626, #f97316, #d97706);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(220,38,38,0.3);
+    }
+    .stat--solution .stat__number { color: var(--color-green); }
+    .stat--solution::before { background: linear-gradient(135deg, #059669, #0693e3, #9b51e0); }
+    .stat--solution:hover { box-shadow: 0 15px 30px -10px rgba(5,150,105,0.25), 0 8px 15px -5px rgba(6,147,227,0.15); }
+    .stat--solution:hover .stat__number {
+      background: linear-gradient(135deg, #059669, #0693e3, #9b51e0);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(5,150,105,0.3);
+    }
+    .stat {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 2px;
+      background: linear-gradient(135deg, #0693e3, #9b51e0, #059669, #d97706);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .stat:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 15px 30px -10px rgba(6,147,227,0.25), 0 8px 15px -5px rgba(155,81,224,0.15); border-color: transparent; }
+    .stat:hover::before { opacity: 1; }
+    .stat__number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      line-height: 1;
+      display: inline-block;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.35s ease, text-shadow 0.35s ease;
+    }
+    .stat:hover .stat__number {
+      transform: scale(1.15);
+      background: linear-gradient(135deg, #0693e3, #9b51e0, #059669);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+    .stat__label { font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem; }
+
+    /* ============================================ PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .price-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .price-card--featured { border-color: var(--color-blue); border-width: 2px; box-shadow: var(--shadow-md); }
+    .price-card--featured::before {
+      content: "Recommended";
+      position: absolute;
+      top: -0.7rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-blue);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.75rem;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .price-card__name { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .price-card__price { font-size: 2.25rem; font-weight: 700; color: var(--color-blue); }
+    .price-card__per { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 1rem; }
+    .price-card__features { list-style: none; padding: 0; text-align: left; margin: 1rem 0; font-size: 0.92rem; }
+    .price-card__features li {
+      padding: 0.4rem 0;
+      color: var(--color-text-secondary);
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    .price-card__features li::before {
+      content: "\F012C";
+      font-family: "Material Design Icons";
+      position: absolute;
+      left: 0;
+      color: var(--color-green);
+      font-weight: 700;
+    }
+
+    /* ============================================ FOOTER */
+    .footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--color-border);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ============================================ INVESTOR-PLAN SHARED STYLES */
+    :root {
+      --color-primary: var(--color-blue);
+      --color-accent-blue: var(--color-blue);
+      --color-accent-purple: var(--color-purple);
+      --color-accent-green: var(--color-green);
+      --color-accent-gold: var(--color-amber);
+      --color-accent-red: var(--color-red);
+      --color-accent-silver: var(--color-silver);
+      --color-accent-orange: #f97316;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-900: #111827;
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      --radius-sm: 0.25rem;
+      --gradient-primary: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+    }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+    .metric-grid--3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .metric-card { background: white; border-radius: var(--radius-xl); padding: 1.5rem; box-shadow: var(--shadow-md); position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .metric-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+    .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+    .metric-card--blue::before { background: var(--color-blue); }
+    .metric-card--green::before { background: var(--color-green); }
+    .metric-card--purple::before { background: var(--color-purple); }
+    .metric-card--gold::before { background: var(--color-amber); }
+    .metric-card__icon { width: 48px; height: 48px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .metric-card--blue .metric-card__icon { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .metric-card--green .metric-card__icon { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .metric-card--purple .metric-card__icon { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .metric-card--gold .metric-card__icon { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .metric-card__label { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .metric-card__value { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+    .metric-card__detail { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    .card__title { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card__title .mdi { color: var(--color-blue); }
+
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-gray-100); }
+    .data-table th { font-size: 0.7rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; background: var(--color-gray-50); }
+    .data-table td { font-size: 0.85rem; }
+    .data-table tr:hover td { background: var(--color-gray-50); }
+
+    .badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 600; }
+    .badge--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .badge--gold { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .badge--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .badge--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+
+    .product-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 1100px) { .product-cards { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .product-cards { grid-template-columns: repeat(2, 1fr); } }
+    .product-card { background: white; border-radius: var(--radius-xl); padding: 1.25rem; box-shadow: var(--shadow-md); border: 2px solid transparent; cursor: pointer; transition: all 0.25s; text-align: center; position: relative; }
+    .product-card:hover { transform: translateY(-5px) scale(1.03); box-shadow: var(--shadow-xl); }
+    .product-card:hover .product-card__logo { transform: scale(1.1); transition: transform 0.3s ease; }
+    .product-card--active { border-color: var(--color-blue); box-shadow: var(--shadow-lg), 0 0 0 3px rgba(6,147,227,0.12); }
+    .product-card--active::after { content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid var(--color-blue); }
+    .product-card__logo { width: 36px; height: 36px; border-radius: var(--radius-md); object-fit: cover; margin: 0 auto 0.5rem; display: block; }
+    .product-card__name { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .product-card__tier-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .product-detail { display: none; background: white; border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-md); position: relative; overflow: hidden; margin-bottom: 1.5rem; }
+    .product-detail--active { display: block; }
+    .product-detail__bg { position: absolute; top: -10%; right: -10%; width: 300px; height: 300px; opacity: 0.04; background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
+    .product-detail__header, .product-detail__stat-grid, .product-detail__body { position: relative; z-index: 1; }
+    .product-detail__header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-gray-100); }
+    .product-detail__icon { width: 64px; height: 64px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+    .product-detail__title { font-size: 1.5rem; font-weight: 700; }
+    .product-detail__tagline { font-size: 0.95rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+    .product-detail__body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .product-detail__body { grid-template-columns: 1fr; } }
+    .product-detail__section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-blue); margin-bottom: 0.5rem; }
+    .product-detail__list { list-style: none; padding: 0; margin: 0 0 0.5rem 0; }
+    .product-detail__list li { font-size: 0.85rem; color: var(--color-gray-700); padding: 0.25rem 0; padding-left: 1.5rem; position: relative; line-height: 1.55; }
+    .product-detail__list li .mdi { position: absolute; left: 0; top: 0.4rem; color: var(--color-blue); font-size: 1rem; }
+    .product-detail__stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 600px) { .product-detail__stat-grid { grid-template-columns: 1fr; } }
+    .product-detail__stat { background: var(--color-gray-50); border-radius: var(--radius-md); padding: 1rem; text-align: center; }
+    .product-detail__stat-value { font-size: 1.5rem; font-weight: 700; color: var(--color-blue); }
+    .product-detail__stat-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+    .product-detail__sub-feature { display: flex; gap: 0.75rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--color-gray-50); border-radius: var(--radius-md); }
+    .product-detail__sub-feature-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .product-detail__sub-feature-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .product-detail__sub-feature-desc { font-size: 0.8rem; color: var(--color-gray-700); line-height: 1.5; }
+
+    .comp-matrix { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .comp-matrix th { padding: 0.6rem 0.5rem; text-align: center; background: var(--color-gray-50); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--color-text-muted); border-bottom: 2px solid var(--color-border); }
+    .comp-matrix th:first-child { text-align: left; }
+    .comp-matrix td { padding: 0.6rem 0.5rem; text-align: center; border-bottom: 1px solid var(--color-gray-100); }
+    .comp-matrix td:first-child { text-align: left; font-weight: 600; }
+    .comp-matrix tr:first-child td { background: rgba(6,147,227,0.04); font-weight: 600; }
+    .comp-matrix tr:first-child td:first-child { color: var(--color-blue); }
+    .comp-check { color: var(--color-green); }
+    .comp-cross { color: var(--color-text-muted); }
+    .comp-partial { color: var(--color-amber); }
+
+    .timeline-track { display: flex; align-items: flex-start; position: relative; padding-top: 1rem; margin: 1.5rem 0; }
+    .timeline-track::before { content: ''; position: absolute; top: 28px; left: 0; right: 0; height: 4px; background: var(--color-gray-200); border-radius: 2px; }
+    .timeline-milestone { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .timeline-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--color-gray-200); border: 4px solid white; box-shadow: 0 0 0 2px var(--color-gray-200); z-index: 1; margin-bottom: 0.75rem; }
+    .timeline-dot--active { background: var(--color-blue); box-shadow: 0 0 0 2px var(--color-blue), 0 0 0 6px rgba(6,147,227,0.2); }
+    .timeline-dot--complete { background: var(--color-green); box-shadow: 0 0 0 2px var(--color-green); }
+    .timeline-content { text-align: center; max-width: 140px; }
+    .timeline-label { font-size: 0.7rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.15rem; }
+    .timeline-value { font-size: 0.85rem; font-weight: 700; }
+    .timeline-target { font-size: 0.75rem; color: var(--color-green); margin-top: 0.15rem; }
+
+    .team-card { background: white; border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-md); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+    .team-card__avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; color: white; overflow: hidden; }
+    .team-card__avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+    .team-card__name { font-size: 1.15rem; font-weight: 700; }
+    .team-card__role { font-size: 0.85rem; color: var(--color-blue); font-weight: 600; margin-bottom: 0.75rem; }
+    .team-card__bio { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; }
+
+    .hire-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-gray-100); }
+    .hire-row:last-child { border-bottom: none; }
+    .hire-row__icon { width: 44px; height: 44px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .hire-row__info { flex: 1; }
+    .hire-row__title { font-size: 0.9rem; font-weight: 700; }
+    .hire-row__detail { font-size: 0.8rem; color: var(--color-text-secondary); }
+    .hire-row__timing { font-size: 0.75rem; font-weight: 600; color: var(--color-blue); }
+
+    .card-investor { background: white; border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem; }
+
+    /* ============================================ RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero__title { font-size: 2rem; }
+      .hero__text { font-size: 1rem; }
+      .section-header__title { font-size: 1.75rem; }
+      .nav-tab { padding: 0.75rem 0.9rem; font-size: 0.85rem; }
+      .nav-tab span:not(.mdi) { display: none; }
+      .matrix { min-width: 720px; }
+    }
+    @media (max-width: 900px) {
+      .grid--3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .grid--2, .grid--3 { grid-template-columns: 1fr; }
+      .hero__title { font-size: 1.9rem; }
+      .main { padding: 2rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="https://brubru.beresol.eu" class="site-header__logo">
+        <img src="brubru_mainlogo.png" alt="Brubru" />
+        <div>
+          <div class="site-header__title">Brubru for EFPIA</div>
+          <div class="site-header__subtitle">Prepared by Beresol BV &middot; Víctor Solé</div>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== NAV TABS ========== -->
+  <nav class="nav-tabs" id="navTabs">
+    <button class="nav-tab nav-tab--active" onclick="showSection('problem', this)">
+      <span class="mdi mdi-alert-circle-outline"></span> <span>The challenge</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('efpia', this)">
+      <span class="mdi mdi-pill"></span> <span>EFPIA context</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('products', this)">
+      <span class="mdi mdi-cube-outline"></span> <span>Product suite</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('usecases', this)">
+      <span class="mdi mdi-clipboard-list-outline"></span> <span>Use cases</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('pricing', this)">
+      <span class="mdi mdi-currency-eur"></span> <span>Pricing</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('team', this)">
+      <span class="mdi mdi-account-group-outline"></span> <span>Team</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('start', this)">
+      <span class="mdi mdi-rocket-launch-outline"></span> <span>Get started</span>
+    </button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ========================================
+         SECTION 1: THE CHALLENGE
+         ======================================== -->
+    <section id="problem" class="section section--active">
+      <div class="hero">
+        <h1 class="hero__title">The EU pharma reform moves in real time. Does your team?</h1>
+        <p class="hero__text">Brubru is an AI-powered assistant built specifically for public affairs professionals working on EU policy. It already knows EFPIA's legislative agenda, tracks every commission vote on the pharma reform, and drafts your briefings in minutes rather than hours.</p>
+        <div class="hero__ctas">
+          <a href="https://brubru.beresol.eu" class="btn btn--white">
+            <span class="mdi mdi-play-circle-outline"></span> Try Brubru free
+          </a>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20demo%20for%20EFPIA" class="btn btn--ghost">
+            <span class="mdi mdi-calendar-check"></span> Book a demo
+          </a>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-header__title">The EU policy workload has never been greater.</h2>
+        <p class="section-header__subtitle">EFPIA's Public Affairs team is navigating the most consequential overhaul of EU pharmaceutical legislation in a generation, in parallel with HTA Regulation joint assessments, compulsory licensing trilogue, the Critical Medicines Act, and more. The information burden grows every week.</p>
+      </div>
+
+      <div class="stats-block stats-block--pain">
+        <div class="stats-block__header">
+          <span class="stats-block__badge stats-block__badge--pain">The scale</span>
+          <h3 class="stats-block__title">The EU legislative corpus your team monitors</h3>
+        </div>
+        <div class="stat-row stat-row--four">
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="28513">28,513</div>
+            <div class="stat__label">Official Journal publications (8,710 distinct laws)</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="532">532</div>
+            <div class="stat__label">median days to medicine availability (W.A.I.T. 2025)</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="1274">1,274</div>
+            <div class="stat__label">active legislative files in the Legislative Train and OEIL</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="49">49%</div>
+            <div class="stat__label">of approved medicines not available across Europe (W.A.I.T. 2025)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-block stats-block--solution">
+        <div class="stats-block__header">
+          <span class="stats-block__badge stats-block__badge--solution">Brubru answers with</span>
+          <h3 class="stats-block__title">Purpose-built intelligence for your team</h3>
+        </div>
+        <div class="stat-row stat-row--two">
+          <div class="stat stat--animated stat--solution">
+            <div class="stat__number" data-target="244">244</div>
+            <div class="stat__label">expert EU policy knowledge guides, updated daily, including pharma-specific guides</div>
+          </div>
+          <div class="stat stat--animated stat--solution">
+            <div class="stat__number" data-target="44">44</div>
+            <div class="stat__label">EU institutional news portals scraped every morning</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 0.5rem;">What slows down a public affairs team like yours</h3>
+      <ul class="pain-list">
+        <li>
+          <strong>Tracking six live files simultaneously</strong>
+          <span>Pharma reform, HTA Regulation, compulsory licensing, Critical Medicines Act, Biotech Act, FAST-EU pilot. Each has its own OEIL procedure, rapporteur, committee timeline, and trilogue calendar. Keeping them synchronised is a part-time job on its own.</span>
+        </li>
+        <li>
+          <strong>Drafting briefings the same day a text drops</strong>
+          <span>When a compromise text emerges from trilogue, your members expect a clear summary of what changed on data protection, clawback, and paediatric incentives within hours. Brubru drafts it from the source text in minutes.</span>
+        </li>
+        <li>
+          <strong>Building the amendment picture for MEPs</strong>
+          <span>Knowing which EP groups are aligned with EFPIA's position on regulatory data protection, and which MEPs to brief first, requires scanning hundreds of tabled amendments. Brubru's Best Allies ranking surfaces the right fifteen names instantly.</span>
+        </li>
+        <li>
+          <strong>Monitoring the Council in parallel</strong>
+          <span>Council working party discussions on the pharma reform are harder to track than EP committee work. Brubru surfaces member state positions and signals as soon as they enter the public record.</span>
+        </li>
+        <li>
+          <strong>Turning W.A.I.T. data into advocacy arguments</strong>
+          <span>The 532-day median and the country-level spread (Romania over 1,100 days, Italy under 450 days) are powerful evidence. Brubru keeps this evidence base at your fingertips and wires it into the documents it generates for you.</span>
+        </li>
+        <li>
+          <strong>Producing documents in multiple working languages</strong>
+          <span>EFPIA communicates across six working languages. Brubru supports EN, FR, NL, ES, CA, and IT natively, so a position paper drafted in English can be adapted for a French or Dutch MEP briefing without leaving the platform.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ========================================
+         SECTION 2: EFPIA CONTEXT
+         ======================================== -->
+    <section id="efpia" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">EFPIA's legislative agenda in Brubru</h2>
+        <p class="section-header__subtitle">Every file below is tracked inside Brubru today. Your team can ask the chat about any of them and receive a sourced answer with procedure references, current stage, rapporteur, and next milestone.</p>
+      </div>
+
+      <!-- W.A.I.T. evidence callout -->
+      <div style="background: linear-gradient(135deg, rgba(220,38,38,0.04) 0%, rgba(155,81,224,0.04) 100%); border: 1px solid rgba(220,38,38,0.15); border-radius: var(--radius-xl); padding: 2rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+          <span style="background: rgba(220,38,38,0.1); color: var(--color-red); padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">W.A.I.T. Indicator 2025</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0;">The access-delay evidence base, always ready</h3>
+        </div>
+        <div class="stat-row stat-row--four">
+          <div class="stat stat--pain">
+            <div class="stat__number">532</div>
+            <div class="stat__label">days median time to availability of a new medicine across Europe</div>
+          </div>
+          <div class="stat stat--pain">
+            <div class="stat__number">49%</div>
+            <div class="stat__label">of EMA-approved medicines not available in at least one EU member state</div>
+          </div>
+          <div class="stat stat--pain">
+            <div class="stat__number">1,110+</div>
+            <div class="stat__label">days estimated median wait time in Romania</div>
+          </div>
+          <div class="stat stat--solution">
+            <div class="stat__number">441</div>
+            <div class="stat__label">days in Italy (wide country spread underlines the systemic failure)</div>
+          </div>
+        </div>
+        <p style="margin-top: 1.25rem; font-size: 0.95rem; color: var(--color-text-secondary);">Brubru keeps the W.A.I.T. evidence base in its knowledge layer. When your team drafts a position paper on regulatory data protection or clawback mechanisms, the access-delay data is injected automatically as a supporting argument.</p>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Live priority files</h3>
+
+      <div class="grid grid--2">
+        <div class="card">
+          <div class="card__icon card__icon--blue"><span class="mdi mdi-pill-multiple"></span></div>
+          <div class="card__meta">Pharma Reform (lead file)</div>
+          <div class="card__title">EU Pharmaceutical Legislation Revision</div>
+          <div class="card__text">
+            <p>Regulation and Directive (procedures 2023/0131 and 2023/0132). Provisional trilogue agreement reached December 2025; formal adoption expected autumn 2026; application date approximately 2028.</p>
+            <p style="margin-top: 0.75rem;"><strong>EFPIA headline concerns:</strong> cut in regulatory data protection from 8 to 6 years; clawback mechanisms; incentive structures for medicines in areas of unmet need. Ask Brubru: "What did the December 2025 trilogue agree on data protection and clawbacks?"</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--purple"><span class="mdi mdi-hospital-building"></span></div>
+          <div class="card__meta">HTA Regulation</div>
+          <div class="card__title">Joint Clinical Assessments (Regulation 2021/2282)</div>
+          <div class="card__text">
+            <p>The HTA Regulation is in application from January 2025 for oncology and ATMPs, expanding progressively. Joint Clinical Assessments are now producing binding scientific conclusions that national HTA bodies must take into account.</p>
+            <p style="margin-top: 0.75rem;">Brubru tracks every EUnetHTA 21 JCA output and maps it to the underlying procedure, so your team knows exactly which assessments are live and which are pending.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--red"><span class="mdi mdi-lock-open-alert-outline"></span></div>
+          <div class="card__meta">Compulsory Licensing</div>
+          <div class="card__title">Crisis Compulsory Licensing Regulation (2023/0129)</div>
+          <div class="card__text">
+            <p>Proposal for a regulation on compulsory licensing for crisis management. Trilogue ongoing as of mid-2026.</p>
+            <p style="margin-top: 0.75rem;">Brubru monitors every trilogue session record and committee vote, and can instantly produce a briefing on the current state of play including EFPIA's positions on the scope and safeguards.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--amber"><span class="mdi mdi-shield-plus-outline"></span></div>
+          <div class="card__meta">Critical Medicines Act</div>
+          <div class="card__title">Critical Medicines Act (provisional deal May 2026)</div>
+          <div class="card__text">
+            <p>Provisional trilogue deal reached May 2026. The Act addresses supply chain resilience and strategic autonomy for critical medicines, with particular relevance for API sourcing and manufacturing diversification.</p>
+            <p style="margin-top: 0.75rem;">Ask Brubru: "What does the Critical Medicines Act provisional deal mean for pharmaceutical manufacturers?" to get a sourced summary immediately.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--green"><span class="mdi mdi-dna"></span></div>
+          <div class="card__meta">Innovation agenda</div>
+          <div class="card__title">European Biotech Act</div>
+          <div class="card__text">
+            <p>The European Biotech Act is an EFPIA-supported initiative to strengthen EU competitiveness in biopharmaceutical innovation. Brubru tracks the Commission's preparatory work and any related legislative vehicles in the 2024-2029 work programme.</p>
+            <p style="margin-top: 0.75rem;">Brubru surfaces relevant Commission communications, DG SANTE consultations, and European Parliament own-initiative reports as they are published.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--blue"><span class="mdi mdi-flask-outline"></span></div>
+          <div class="card__meta">Clinical trials</div>
+          <div class="card__title">FAST-EU Pilot and Vaccines Europe</div>
+          <div class="card__text">
+            <p>The FAST-EU pilot aims to accelerate clinical trial authorisation across member states. Vaccines Europe monitors specific regulatory and procurement aspects of the EU vaccine ecosystem.</p>
+            <p style="margin-top: 0.75rem;">Brubru tracks the pilot's rollout schedule, participating member states, and any related Commission delegated or implementing acts that affect trial sponsors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 3: PRODUCT SUITE
+         ======================================== -->
+    <section id="products" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">Product suite</h2>
+        <p class="section-header__subtitle">Six integrated modules covering the full EU public affairs workflow. Each one is relevant to EFPIA's daily operations. Click any module to explore.</p>
+      </div>
+
+      <div class="product-cards">
+        <div class="product-card product-card--active" onclick="showProduct('chat', this)">
+          <img src="brubru_icon_colours.png" alt="Chat" class="product-card__logo">
+          <div class="product-card__name">Chat</div>
+          <div class="product-card__tier-label" style="color: var(--color-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('bubble', this)">
+          <img src="brubru_myeububble.png" alt="My EU Bubble" class="product-card__logo">
+          <div class="product-card__name">My EU Bubble</div>
+          <div class="product-card__tier-label" style="color: var(--color-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('amendator', this)">
+          <img src="brubru_amendator.png" alt="Amendator" class="product-card__logo">
+          <div class="product-card__name">Amendator</div>
+          <div class="product-card__tier-label" style="color: var(--color-amber);">Starter+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('comply', this)">
+          <img src="brubru_eulawcomply.png" alt="EU Law Comply" class="product-card__logo">
+          <div class="product-card__name">EU Law Comply</div>
+          <div class="product-card__tier-label" style="color: var(--color-amber);">Starter+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('docs', this)">
+          <img src="brubru_mainlogo.png" alt="Documents" class="product-card__logo">
+          <div class="product-card__name">Documents</div>
+          <div class="product-card__tier-label" style="color: var(--color-amber);">Advocate+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('api', this)">
+          <img src="brubru_mainlogo.png" alt="Brubru API" class="product-card__logo">
+          <div class="product-card__name">Brubru API</div>
+          <div class="product-card__tier-label" style="color: var(--color-blue);">Professional</div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Chat ===== -->
+      <div id="detail-chat" class="product-detail product-detail--active">
+        <div class="product-detail__bg" style="background-image: url('brubru_icon_colours.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-chat-processing-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Chat</div>
+            <div class="product-detail__tagline">Ask anything about EFPIA's priority files and receive a sourced answer in seconds</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">3</div><div class="product-detail__stat-label">Retrieval tiers (DB, live fetchers, API backstop)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">244</div><div class="product-detail__stat-label">Knowledge guides injected per query</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">15+</div><div class="product-detail__stat-label">Context sources per query</div></div>
+        </div>
+        <div style="background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.9rem;">
+          <strong>Private EFPIA profile:</strong> on the Professional plan, Brubru builds a private knowledge profile for your organisation. Every chat query is answered in the context of EFPIA's declared positions, your tracked files, and your uploaded documents. Your colleagues never see generic answers.
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">EFPIA-relevant queries it answers today</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> "What is the current state of play on the pharma regulation trilogue?" (procedure reference, rapporteur, last trilogue date, outstanding issues)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> "Which MEPs have tabled amendments supportive of 8-year regulatory data protection?" (Best Allies ranking)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> "What does the HTA Regulation require for ATMP assessments in 2025?" (sourced from the regulation and EUnetHTA guidance)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> "What is the W.A.I.T. 2025 finding on Romania?" (evidence base for advocacy)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> "When is the next ENVI committee vote on the pharma reform?"</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Context injected automatically</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-outline"></span> OEIL procedures (21,600+), Legislative Train (490+ files), EPRS Think Tank briefings</li>
+              <li><span class="mdi mdi-link-variant"></span> EP committee work across 26 committees including ENVI, IMCO, and ITRE</li>
+              <li><span class="mdi mdi-book-alphabet"></span> Regulatory definition extractor (every Article 3/4 "term means..." in pharma acquis)</li>
+              <li><span class="mdi mdi-tag-multiple-outline"></span> Law alias resolver (ATMP Regulation, Clinical Trials Regulation, EMA Regulation, etc.)</li>
+              <li><span class="mdi mdi-file-find-outline"></span> Cross-reference resolver: inline article references become clickable EUR-Lex URLs</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Six working languages</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-translate"></span> EN, FR, NL, ES, CA, IT. Ask in any language; receive a sourced answer in the same language.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: My EU Bubble ===== -->
+      <div id="detail-bubble" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_myeububble.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(155,81,224,0.1); color: var(--color-purple);"><span class="mdi mdi-glass-mug-variant"></span></div>
+          <div>
+            <div class="product-detail__title">My EU Bubble</div>
+            <div class="product-detail__tagline">Pin EFPIA's six priority files; get stage-change alerts, predictions, and position analysis in one dashboard</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">33+</div><div class="product-detail__stat-label">RSS feeds from EU institutional sources</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">11</div><div class="product-detail__stat-label">Dashboard tabs</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">6</div><div class="product-detail__stat-label">Calendar sources (EP, Council, Commission, Agency)</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">What EFPIA's team tracks in My Files</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-pill-multiple"></span> Pharma reform regulation and directive (two procedure files, one tracker)</li>
+              <li><span class="mdi mdi-hospital-building"></span> HTA Regulation joint assessments calendar</li>
+              <li><span class="mdi mdi-lock-open-alert-outline"></span> Compulsory licensing trilogue timeline</li>
+              <li><span class="mdi mdi-shield-plus-outline"></span> Critical Medicines Act post-deal implementing acts</li>
+              <li><span class="mdi mdi-dna"></span> Biotech Act preparatory documents from DG SANTE</li>
+              <li><span class="mdi mdi-flask-outline"></span> FAST-EU pilot updates and delegated acts</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">High-value tabs for public affairs</div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-chart-bell-curve"></span></div>
+              <div>
+                <div class="product-detail__sub-feature-title">Predictions</div>
+                <div class="product-detail__sub-feature-desc">AI-powered outcome forecasts: likely adoption date for the pharma reform, EP plenary vote breakdown by group, Council QMV with blocking minority detection.</div>
+              </div>
+            </div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(155,81,224,0.1); color: var(--color-purple);"><span class="mdi mdi-compass-outline"></span></div>
+              <div>
+                <div class="product-detail__sub-feature-title">Position Analysis</div>
+                <div class="product-detail__sub-feature-desc">Rapporteur and shadow rapporteur positions, EP group stances, member state Council signals on the pharma reform. Know who to brief before you pick up the phone.</div>
+              </div>
+            </div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(5,150,105,0.1); color: var(--color-green);"><span class="mdi mdi-calendar-month"></span></div>
+              <div>
+                <div class="product-detail__sub-feature-title">My EU Calendar</div>
+                <div class="product-detail__sub-feature-desc">All ENVI committee meetings, trilogue sessions, College agendas, and Council Health configurations in one calendar. Sync to Google Calendar with one click.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Amendator ===== -->
+      <div id="detail-amendator" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_amendator.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(5,150,105,0.1); color: var(--color-green);"><span class="mdi mdi-file-edit-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Amendator</div>
+            <div class="product-detail__tagline">Draft proposed amendments to the pharma reform text and identify friendly MEPs to deliver them</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">XML</div><div class="product-detail__stat-label">Akoma Ntoso compliant (EP AT4AM format)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">Export formats (XML, HTML, PDF, Word)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">15</div><div class="product-detail__stat-label">Best Allies MEPs ranked per amendment</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">EFPIA workflow: from position to amendment</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Load the pharma regulation proposal via EUR-Lex (already indexed in Brubru)</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Two-column view: Commission text vs your proposed changes</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> Click the data protection or clawback provisions to propose a change</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> Describe the change in plain language; Brubru produces legally precise amendment text</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Export in Word or XML for delivery to an MEP's office</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">MEP alignment analysis</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-account-group"></span> <strong>Best Allies:</strong> top 15 MEPs ranked by alignment with your amendment position, drawn from their tabled amendments across the pharma reform procedure</li>
+              <li><span class="mdi mdi-magnify-scan"></span> <strong>Coverage Gaps:</strong> articles other MEPs have already moved on that you have not, and vice versa</li>
+              <li><span class="mdi mdi-map-outline"></span> <strong>Political Landscape:</strong> which groups are supportive, mixed, or opposed on data protection, unmet medical need incentives, and clawbacks at a glance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: EU Law Comply ===== -->
+      <div id="detail-comply" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_eulawcomply.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(156,163,175,0.15); color: var(--color-silver);"><span class="mdi mdi-scale-balance"></span></div>
+          <div>
+            <div class="product-detail__title">EU Law Comply</div>
+            <div class="product-detail__tagline">Benchmark EFPIA member policies against the new pharmaceutical acquis before it enters into force</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">0-100%</div><div class="product-detail__stat-label">Compliance scoring per obligation</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">2</div><div class="product-detail__stat-label">Export formats (DOCX, PDF)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">2-phase</div><div class="product-detail__stat-label">Semantic + LLM analysis</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">How EFPIA would use it</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Upload the provisional pharma regulation text (or any implementing act)</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Upload a member company's existing regulatory affairs policy or R&D governance framework</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> Brubru maps every obligation in the regulation to the corresponding policy coverage</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> Gap report identifies missing, partial, unclear, and compliant areas with severity ratings</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Export a member-facing compliance roadmap with a Gantt-style action plan ahead of the 2028 application date</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Value to EFPIA secretariat</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-lightbulb-outline"></span> Run a sector-wide readiness assessment on the pharma reform before formal adoption</li>
+              <li><span class="mdi mdi-chart-bar"></span> Benchmark how prepared member companies are for the data protection changes and the new HTA requirements</li>
+              <li><span class="mdi mdi-file-chart-outline"></span> Produce a credible readiness report to present to DG SANTE, reinforcing EFPIA's evidence-based advocacy posture</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Documents ===== -->
+      <div id="detail-docs" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_mainlogo.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(5,150,105,0.1); color: var(--color-green);"><span class="mdi mdi-file-document-edit-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Document Generator</div>
+            <div class="product-detail__tagline">Position papers, MEP briefings, and DG SANTE talking points grounded in EFPIA's positions, drafted in minutes</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">3</div><div class="product-detail__stat-label">Core document types</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">6</div><div class="product-detail__stat-label">Output languages</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">&lt;5 min</div><div class="product-detail__stat-label">Time to first draft</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Documents EFPIA generates</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-file-document-outline"></span> <strong>Position papers:</strong> on regulatory data protection cuts, clawback mechanisms, unmet medical need incentives. Draft in one language, adapt to six.</li>
+              <li><span class="mdi mdi-account-tie-outline"></span> <strong>MEP briefings:</strong> tailored to a specific MEP's committee role and political group stance on the pharma reform. Names, positions, and arguments sourced automatically.</li>
+              <li><span class="mdi mdi-comment-text-outline"></span> <strong>Talking points:</strong> for DG SANTE meetings, Council presidency briefings, or member association communications. Structured, concise, sourced.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">How the drafting works</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Select document type and target audience (e.g. "MEP briefing, ENVI rapporteur, EPP")</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Brubru injects the current OEIL status, the rapporteur's latest statements, and EFPIA's declared positions from your private knowledge profile</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> AI produces a structured first draft with CELEX references and procedure cross-links</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> Edit inline, export in Word or PDF, or translate to FR or NL directly in the platform</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Brubru API ===== -->
+      <div id="detail-api" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_mainlogo.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-api"></span></div>
+          <div>
+            <div class="product-detail__title">Brubru API</div>
+            <div class="product-detail__tagline">Embed Brubru's EU intelligence layer into EFPIA's own internal tools and portals</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">519</div><div class="product-detail__stat-label">europa.eu sources inventoried</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">28,513</div><div class="product-detail__stat-label">OJ publications indexed (8,710 distinct laws)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">MCP</div><div class="product-detail__stat-label">Model Context Protocol server (plug into any AI assistant)</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">EFPIA integration use case</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-robot-happy-outline"></span> Embed the Brubru MCP server in EFPIA's internal AI assistant so every staff query about pharma legislation is answered with live EU data, not stale training data</li>
+              <li><span class="mdi mdi-sync"></span> Pipe procedure status updates into EFPIA's member portal automatically via the REST API</li>
+              <li><span class="mdi mdi-calendar-month"></span> Sync the EU calendar feed (trilogue dates, ENVI meetings, College agendas) into EFPIA's shared calendar system</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Core endpoints</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-search-outline"></span> <code>GET /api/v1/laws</code>: full-text search across 8,710 EU laws (28,513 OJ publications)</li>
+              <li><span class="mdi mdi-file-tree-outline"></span> <code>GET /api/v1/procedures</code>: OEIL status, rapporteurs, committees, timeline</li>
+              <li><span class="mdi mdi-calendar-month"></span> <code>GET /api/v1/calendar/events</code>: aggregated institutional calendar</li>
+              <li><span class="mdi mdi-chart-bell-curve"></span> <code>GET /api/v1/predictions/{procedure}</code>: timeline and outcome forecasts</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Try it</div>
+            <p style="font-size: 0.9rem; color: var(--color-gray-600);">Live docs at <a href="https://brubru.beresol.eu/api" target="_blank" style="color: var(--color-blue); font-weight: 600;">brubru.beresol.eu/api</a>. Enterprise plan includes dedicated API keys and higher rate limits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 4: USE CASES
+         ======================================== -->
+    <section id="usecases" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">How EFPIA's Public Affairs team uses Brubru</h2>
+        <p class="section-header__subtitle">Concrete scenarios mapped to EFPIA's six priority legislative files and core PA workflows.</p>
+      </div>
+
+      <div class="matrix-wrapper">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th>PA Task</th>
+              <th>Chat</th>
+              <th>Amendator</th>
+              <th>My EU Bubble</th>
+              <th>Documents</th>
+              <th>EU Law Comply</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Pharma reform tracking</td>
+              <td>Ask "What did the December 2025 trilogue agree on data protection?" and get a sourced answer in under 30 seconds.</td>
+              <td>Draft a proposal to restore 8-year data protection, ready to hand to a friendly MEP. Best Allies ranking identifies the top 15 MEPs to approach.</td>
+              <td>Pin the two pharma reform procedures. Get instant stage-change alerts and predictions on adoption timeline and EP vote breakdown.</td>
+              <td>Generate a two-page MEP briefing on data protection tailored to the rapporteur's political group position, sourced from OEIL and EPRS.</td>
+              <td>Run a gap analysis on how the provisional text changes obligations for member companies' pharmacovigilance and RD&amp;I governance policies.</td>
+            </tr>
+            <tr>
+              <td>HTA Regulation (JCAs)</td>
+              <td>Ask "Which oncology products are currently under JCA, and what are the timelines?" for a live status update.</td>
+              <td>Not applicable (regulation already in force). Use to draft amendments to any implementing acts or delegated acts.</td>
+              <td>Track JCA publication dates and national HTA body follow-up decisions across member states in My EU Calendar.</td>
+              <td>Draft a position paper on the JCA methodology, grounded in the regulation text and EUnetHTA 21 guidance documents.</td>
+              <td>Benchmark a member company's HTA dossier preparation process against the JCA procedural requirements.</td>
+            </tr>
+            <tr>
+              <td>Compulsory licensing</td>
+              <td>Ask "What is the current state of trilogue on compulsory licensing and what safeguards are still contested?" for a sourced status report.</td>
+              <td>Propose amendments to the crisis trigger definitions or compensation provisions, ready for a friendly MEP to table.</td>
+              <td>Get alerts when a new trilogue session record is published or when a committee vote is scheduled.</td>
+              <td>Produce a DG SANTE talking-points brief on EFPIA's position regarding proportionality safeguards and compensation mechanisms.</td>
+              <td>Not the primary use case here. Better suited to post-adoption impact assessment.</td>
+            </tr>
+            <tr>
+              <td>Critical Medicines Act</td>
+              <td>Ask "What does the May 2026 provisional deal say about API manufacturing requirements?" to brief members within the hour.</td>
+              <td>Draft amendments to any outstanding delegated acts or implementing measures flowing from the provisional deal.</td>
+              <td>Track Commission's work programme for the implementing acts following the provisional deal. Predictions tab forecasts likely formal adoption date.</td>
+              <td>Generate a member communication summarising the deal's implications for supply chain diversification obligations, in six languages.</td>
+              <td>Map the Act's supply chain obligations against a member company's existing crisis preparedness policy.</td>
+            </tr>
+            <tr>
+              <td>MEP engagement strategy</td>
+              <td>Ask "Who are the shadow rapporteurs on the pharma reform in EPP, Renew, and S&amp;D, and what are their stated positions on data protection?" to plan your coalition-building week.</td>
+              <td>Best Allies analysis across all tabled pharma reform amendments identifies which MEPs have already moved positions aligned with EFPIA's lines. Target list in one click.</td>
+              <td>Position Analysis tab shows how each EP group leans on data protection, clawback, and unmet medical need incentives. Updated as new amendments are tabled.</td>
+              <td>Produce individual MEP briefing packs tailored to each MEP's committee role, seniority, and declared position. One template, many outputs.</td>
+              <td>Not the primary use case for MEP engagement.</td>
+            </tr>
+            <tr>
+              <td>W.A.I.T. evidence advocacy</td>
+              <td>Ask "What does the W.A.I.T. 2025 data show about patient access in Romania vs Germany?" for instant evidence bullets usable in any advocacy meeting.</td>
+              <td>Draft recital amendments that embed the access-delay evidence into the pharma reform's recital preamble, strengthening the legislative record on the problem being addressed.</td>
+              <td>Track Commission and EP responses to EFPIA's W.A.I.T. publication. News Feed shows media and institutional reactions in real time.</td>
+              <td>Generate a country-specific briefing using the W.A.I.T. country data for national associations or Council presidency engagements.</td>
+              <td>Not the primary use case here.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem;">My EU Bubble, tab by tab</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1.25rem;">The Bubble is the operational heart of Brubru. Eleven working surfaces around your file portfolio. The most relevant tabs for EFPIA are highlighted below.</p>
+
+      <div class="grid grid--3">
+        <div class="card" style="border-top: 3px solid var(--color-blue);">
+          <div class="card__title"><span class="mdi mdi-view-dashboard-outline" style="color: var(--color-blue);"></span> Dashboard</div>
+          <div class="card__text">Your personalised home screen: pinned files with current status, the week's ENVI and Council Health events, predictions that have moved, and the morning's most relevant institutional news.</div>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--color-blue);">
+          <div class="card__title"><span class="mdi mdi-folder-open-outline" style="color: var(--color-blue);"></span> My Files</div>
+          <div class="card__text">Pin any EU legislative procedure. For EFPIA: the pharma reform regulation, directive, compulsory licensing file, Critical Medicines Act, and HTA Regulation in one tracked view with stage-change alerts.</div>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--color-blue);">
+          <div class="card__title"><span class="mdi mdi-compass-outline" style="color: var(--color-blue);"></span> Position Analysis</div>
+          <div class="card__text">Rapporteur and shadow positions, EP group stances, member state Council signals on your tracked files. Know the political landscape of the pharma reform before every meeting.</div>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-table-multiple" style="color: var(--color-blue);"></span> Comparator</div>
+          <div class="card__text">Side-by-side grid comparing EFPIA's priority files: rapporteur, committee, status, next milestone, recital counts. Never a guess, always a verifiable citation.</div>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--color-blue);">
+          <div class="card__title"><span class="mdi mdi-calendar-month" style="color: var(--color-blue);"></span> My EU Calendar</div>
+          <div class="card__text">All ENVI meetings, trilogue sessions, College agendas, and Council Health configurations. Sync to Google Calendar, never miss a deadline. EMA scientific committee meetings (CHMP, PRAC, COMP) are not a Brubru source today; we can add them as a custom feed for EFPIA.</div>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--color-blue);">
+          <div class="card__title"><span class="mdi mdi-chart-bell-curve" style="color: var(--color-blue);"></span> Predictions</div>
+          <div class="card__text">AI-powered outcome predictions: pharma reform adoption timeline, EP plenary vote by group (720 MEPs), Council QMV. Plan your advocacy resource allocation around likely scenarios.</div>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-comment-question-outline" style="color: var(--color-blue);"></span> EC Public Consultations</div>
+          <div class="card__text">Open Commission consultations matched to pharma and health. Browse Have Your Say feedback from other stakeholders. Draft EFPIA's consultation responses with AI assistance.</div>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-file-document-edit-outline" style="color: var(--color-blue);"></span> Documents</div>
+          <div class="card__text">Generate position papers, MEP briefings, talking points, and consultation responses. AI-drafted, sourced with procedure references, ready to edit and export.</div>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-file-tree-outline" style="color: var(--color-blue);"></span> Legislative Tracker</div>
+          <div class="card__text">490+ priority Commission files with OEIL status, EPRS briefings, and committee work. Filter by DG SANTE, ENVI, IMCO, and ITRE to build the full regulatory horizon view for your members.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 5: PRICING
+         ======================================== -->
+    <section id="pricing" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">Simple, modular pricing</h2>
+        <p class="section-header__subtitle">Start with a 14-day free trial, no credit card required. For a team the size of EFPIA's Public Affairs secretariat, the Professional or Enterprise plan delivers the highest value. Cancel any time.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-card__name">Starter</div>
+          <div class="price-card__price">39&euro;</div>
+          <div class="price-card__per">per month</div>
+          <ul class="price-card__features">
+            <li>Chat with full EU context</li>
+            <li>My EU Bubble (core tabs)</li>
+            <li>My EU Calendar read-only</li>
+            <li>Daily brief by email</li>
+            <li>Six languages (EN, FR, NL, ES, CA, IT)</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;">Start free trial</a>
+        </div>
+
+        <div class="price-card">
+          <div class="price-card__name">Advocate</div>
+          <div class="price-card__price">59&euro;</div>
+          <div class="price-card__per">per month</div>
+          <ul class="price-card__features">
+            <li>Everything in Starter</li>
+            <li>Amendator (XML amendment drafting)</li>
+            <li>Document Generator (position papers, MEP briefings, talking points)</li>
+            <li>10 Predictions per month</li>
+            <li>Calendar sync</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;">Start free trial</a>
+        </div>
+
+        <div class="price-card price-card--featured">
+          <div class="price-card__name">Professional</div>
+          <div class="price-card__price">99&euro;</div>
+          <div class="price-card__per">per month</div>
+          <ul class="price-card__features">
+            <li>Everything in Advocate</li>
+            <li>Unlimited Predictions (including Council QMV)</li>
+            <li>Position Analysis, Analytics, Legislative Tracker</li>
+            <li>EU Law Comply (compliance gap analysis)</li>
+            <li>Private EFPIA knowledge profile</li>
+            <li>API keys for internal integrations</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;">Start free trial</a>
+        </div>
+
+        <div class="price-card" style="border-color: #c4b5fd; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);">
+          <div class="price-card__name" style="color: #5b21b6;">Enterprise</div>
+          <div class="price-card__price" style="font-size: 1.75rem;">Custom quote</div>
+          <div class="price-card__per">Tailored to team size and usage</div>
+          <ul class="price-card__features">
+            <li>Multi-seat (from 5 seats) with SSO</li>
+            <li>API keys with higher rate limits and usage credits</li>
+            <li>Custom EFPIA knowledge profile and regulatory scans</li>
+            <li>Branded reports for member distribution</li>
+            <li>Priority SLA-backed support and dedicated onboarding</li>
+            <li>On-demand committee transcripts and deep-dive deliverables</li>
+          </ul>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20Enterprise%20for%20EFPIA" class="btn btn--primary" style="width: 100%; justify-content: center;">Contact sales</a>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 2rem; color: var(--color-text-secondary); font-size: 0.9rem;">Annual billing available with two months free. Enterprise pricing is tailored per team. Self-serve plans include a 14-day free trial with no credit card required.</p>
+
+      <div style="margin-top: 2.5rem; padding: 1.75rem; background: rgba(6,147,227,0.04); border: 1px solid rgba(6,147,227,0.15); border-radius: var(--radius-xl);">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-blue);">Recommended path for EFPIA</h3>
+        <p style="font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.65;">Start with a <strong>Professional trial</strong> (14 days, no card required) for two or three members of the Public Affairs team. By day three, you will have the pharma reform tracked, your MEP briefing templates set up, and your first Predictions run for the adoption timeline. If your team needs multi-seat access, a custom EFPIA knowledge profile, or API integration into your existing internal tools, we move to an <strong>Enterprise conversation</strong>. Contact Víctor Solé at <a href="mailto:hello@beresol.eu" style="color: var(--color-blue); font-weight: 600;">hello@beresol.eu</a> to arrange a live walkthrough tailored to your team's workflow.</p>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 6: TEAM
+         ======================================== -->
+    <section id="team" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">The team behind Brubru</h2>
+        <p class="section-header__subtitle">Solo founder with eight years of hands-on EU policy experience. Brubru is built from the inside of the Brussels bubble, not from a distance.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="team-card">
+          <div class="team-card__avatar"><img src="victor.JPG" alt="V&iacute;ctor Sol&eacute;"></div>
+          <div class="team-card__name">V&iacute;ctor Sol&eacute;</div>
+          <div class="team-card__role">Founder &amp; CEO, Beresol BV</div>
+          <div class="team-card__bio">8 years in EU policy: parliamentary assistant at the European Parliament, trade adviser, regulatory consultant across 6 languages (EN, ES, CA, FR, IT, NL). Worked on pharmaceutical, digital, and trade files in the Brussels ecosystem. Built Brubru because the product comes from doing the work, not from studying it. Based in Brussels.</div>
+        </div>
+        <div class="card-investor">
+          <div class="card__title"><span class="mdi mdi-information-outline"></span> Why Brubru understands pharma PA</div>
+          <p style="font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1rem;">EFPIA is not a new name in Brubru. The platform already references EFPIA in its knowledge guides covering the pharma reform, HTA Regulation, and compulsory licensing. The Public Affairs use case is the most natural fit for what Brubru does: turning complex, fast-moving EU legislative processes into actionable intelligence for a professional team that cannot afford to miss a signal.</p>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+              <span class="mdi mdi-check-circle-outline" style="color: var(--color-green); font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem;"></span>
+              <span style="font-size: 0.9rem; color: var(--color-text-secondary);">Pharma reform (regulation and directive) fully tracked in OEIL and Legislative Train</span>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+              <span class="mdi mdi-check-circle-outline" style="color: var(--color-green); font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem;"></span>
+              <span style="font-size: 0.9rem; color: var(--color-text-secondary);">HTA Regulation joint assessment timelines tracked in My EU Calendar</span>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+              <span class="mdi mdi-check-circle-outline" style="color: var(--color-green); font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem;"></span>
+              <span style="font-size: 0.9rem; color: var(--color-text-secondary);">W.A.I.T. evidence base loaded in the knowledge layer for instant retrieval</span>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+              <span class="mdi mdi-check-circle-outline" style="color: var(--color-green); font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem;"></span>
+              <span style="font-size: 0.9rem; color: var(--color-text-secondary);">DG SANTE, ENVI committee, and EMA scraper feeds run every morning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 7: GET STARTED
+         ======================================== -->
+    <section id="start" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title">Ready to try?</h2>
+        <p class="section-header__subtitle">Three ways to get started today. No commitment required.</p>
+      </div>
+
+      <div class="grid grid--3">
+        <div class="card">
+          <div class="card__icon card__icon--blue"><span class="mdi mdi-play-circle-outline"></span></div>
+          <div class="card__title">Try the chatbot now</div>
+          <div class="card__text">Ask Brubru "What is the current state of play on the EU pharma reform?" and see what you get. Three free queries, no sign-up needed.</div>
+          <a href="https://brubru.beresol.eu" class="btn btn--primary" style="margin-top: 1rem;">Open Brubru</a>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--purple"><span class="mdi mdi-account-plus-outline"></span></div>
+          <div class="card__title">Start a free trial</div>
+          <div class="card__text">14 days free on the Professional plan, no credit card. Full access to Predictions, Position Analysis, Document Generator, and private knowledge profiles.</div>
+          <a href="https://brubru.beresol.eu/signup" class="btn btn--primary" style="margin-top: 1rem;">Sign up</a>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--green"><span class="mdi mdi-calendar-check-outline"></span></div>
+          <div class="card__title">Book a live walkthrough</div>
+          <div class="card__text">Thirty minutes with V&iacute;ctor Sol&eacute;, walking through Brubru configured for EFPIA's Public Affairs team. We demo on your priority files, not a generic script.</div>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20demo%20for%20EFPIA" class="btn btn--primary" style="margin-top: 1rem;">Request demo</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding: 2rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-lg); text-align: center;">
+        <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;">Talk to us</h3>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">Beresol BV is the European AI company behind Brubru. Brubru is built in the EU bubble, for the EU bubble.</p>
+        <p>
+          <a href="mailto:hello@beresol.eu" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">hello@beresol.eu</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://linkedin.com/in/victor-sole" target="_blank" rel="noopener" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">V&iacute;ctor Sol&eacute; on LinkedIn</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://www.linkedin.com/company/beresol/" target="_blank" rel="noopener" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">Beresol on LinkedIn</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://www.linkedin.com/company/brubrueu" target="_blank" rel="noopener" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">Brubru on LinkedIn</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://brubru.beresol.eu" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">brubru.beresol.eu</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+      <img src="brubru_mainlogo.png" alt="Brubru" style="height: 28px;">
+      <img src="beresol-logo.png" alt="Beresol BV" style="height: 24px;">
+    </div>
+    <p>
+      &copy; 2026 <a href="https://beresol.eu">Beresol BV</a> &middot;
+      <a href="https://brubru.beresol.eu">Open Brubru</a>
+    </p>
+  </footer>
+
+  <script>
+    // ========== TAB NAVIGATION ==========
+    function showSection(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('section--active'));
+      document.getElementById(id).classList.add('section--active');
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('nav-tab--active'));
+      btn.classList.add('nav-tab--active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ========== PRODUCT SELECTOR ==========
+    function showProduct(productId, btn) {
+      document.querySelectorAll('.product-detail').forEach(d => d.classList.remove('product-detail--active'));
+      document.querySelectorAll('.product-card').forEach(c => c.classList.remove('product-card--active'));
+      const detail = document.getElementById('detail-' + productId);
+      if (detail) detail.classList.add('product-detail--active');
+      if (btn) btn.classList.add('product-card--active');
+    }
+
+    // ========== STAT COUNTER ANIMATION ==========
+    (function () {
+      function formatNumber(n) {
+        return Math.floor(n).toLocaleString('en-US');
+      }
+      function animateNumber(el) {
+        if (el.dataset.animated === '1') return;
+        const target = parseInt(el.dataset.target, 10);
+        if (!Number.isFinite(target)) return;
+        el.dataset.animated = '1';
+        const duration = 1400;
+        const start = performance.now();
+        const finalText = el.textContent;
+        function step(now) {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = formatNumber(target * eased);
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = finalText;
+          }
+        }
+        requestAnimationFrame(step);
+      }
+      function initObserver() {
+        const stats = document.querySelectorAll('.stat__number[data-target]');
+        if (!('IntersectionObserver' in window)) {
+          stats.forEach(animateNumber);
+          return;
+        }
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateNumber(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        stats.forEach((s) => io.observe(s));
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initObserver);
+      } else {
+        initObserver();
+      }
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.nav-tab');
+        if (!btn) return;
+        setTimeout(() => {
+          document.querySelectorAll('#problem .stat__number[data-target], #efpia .stat__number[data-target]').forEach((el) => {
+            el.dataset.animated = '0';
+            animateNumber(el);
+          });
+        }, 50);
+      });
+    })();
+
+  </script>
+
+</body>
+</html>

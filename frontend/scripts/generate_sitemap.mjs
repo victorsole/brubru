@@ -31,7 +31,7 @@ const DATA_CATALAN = resolve(__dirname, '..', '..', 'data', 'legislacio-ue-catal
 const SITE = 'https://brubru.beresol.eu';
 const TODAY = new Date().toISOString().slice(0, 10);
 
-const SKIP_DIRS = new Set(['assets', 'New-Yorker-Font']);
+const SKIP_DIRS = new Set(['assets', 'New-Yorker-Font', 'efpia']);
 const SKIP_FILES = new Set(['_original_index.html']);
 
 const ROUTE_META = {
@@ -61,6 +61,18 @@ const ROUTE_META = {
   '/eucanon/2024-2754_china_bev_duties/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2020-776_china_egypt_glass_fibre/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2022-433_india_indonesia_stainless_steel/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2019-2175_esas_review/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2016-429_animal_health_law/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2023-1114_mica/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2024-1689_aiact/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2025-500_morocco_aluminium_wheels/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2017-625_official_controls/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2021-2011_optical_fibre_cables/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2004-726_ema/':                   { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2000-141_orphan/':                { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2014-536_ctr/':                   { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2007-1394_atmp/':                 { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2006-1901_paediatric/':           { priority: 0.9, changefreq: 'monthly' },
   '/legislacio-ue-catala/':         { priority: 0.9, changefreq: 'daily'   },
   '/main/':                         { priority: 0.9, changefreq: 'daily'   },
   '/my-eu-bubble/':                 { priority: 0.9, changefreq: 'daily'   },
