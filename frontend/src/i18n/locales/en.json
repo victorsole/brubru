@@ -2220,6 +2220,13 @@
     "kindTalkingPoints": "talking points",
     "kindResolution": "resolution",
     "kindEpQuestion": "written question",
+    "typePetitionTitle": "EP Petition",
+    "typePetitionDesc": "Draft a petition to the European Parliament's Committee on Petitions",
+    "kindEpPetition": "EP petition",
+    "petitionDetails": "Petition details",
+    "petitionSubject": "Petition subject",
+    "egPetitionSubject": "e.g. Safeguarding Antoni Gaudí's heritage as European culture",
+
     "kindEuEmail": "EU email",
     "kindOnePager": "one-pager",
     "kindPressRelease": "press release",

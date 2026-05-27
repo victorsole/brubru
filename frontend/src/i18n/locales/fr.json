@@ -2056,6 +2056,13 @@
     "typeTalkingPointsTitle": "Éléments de langage",
     "typeTalkingPointsDesc": "Éléments de langage structurés et préparation aux questions-réponses pour les réunions de plaidoyer",
     "typeResolutionTitle": "Résolution du PE",
+    "typePetitionTitle": "Pétition au PE",
+    "typePetitionDesc": "Rédigez une pétition à la commission des pétitions du Parlement européen",
+    "kindEpPetition": "pétition au PE",
+    "petitionDetails": "Détails de la pétition",
+    "petitionSubject": "Objet de la pétition",
+    "egPetitionSubject": "p. ex. Préserver le patrimoine d'Antoni Gaudí comme culture européenne",
+
     "typeResolutionDesc": "Résolution du Parlement européen avec visas, considérants et points numérotés",
     "typeEpQuestionTitle": "Question écrite du PE",
     "typeEpQuestionDesc": "Question parlementaire écrite du PE à la Commission européenne, au Conseil ou au VP/HR",

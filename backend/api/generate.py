@@ -21,6 +21,7 @@ from schemas.document_generation import (
     GenerateMEPBriefingRequest,
     GenerateTalkingPointsRequest,
     GenerateResolutionRequest,
+    GeneratePetitionRequest,
     GenerateEPQuestionRequest,
     GenerateEUEmailRequest,
     GenerateOnePagerRequest,
@@ -284,6 +285,64 @@ async def generate_resolution(
 
     except Exception as e:
         logger.error(f"Error generating EP resolution: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/petition", response_model=GeneratedDocument)
+async def generate_petition(
+    request: GeneratePetitionRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> JSONResponse:
+    """
+    Generate a petition to the European Parliament (Committee on Petitions, PETI).
+
+    Follows the official PETI structure (legal basis, petitioner, subject,
+    EU-competence/admissibility hook, facts, requests, how to submit). The
+    prompt keeps unverified facts as bracketed placeholders for the petitioner
+    to complete.
+    """
+    try:
+        logger.info(f"User {current_user.id} generating EP petition on: {request.topic}")
+
+        generator = get_document_generator()
+        document = await generator.generate_petition(request=request)
+
+        user_doc = UserDocument(
+            user_id=current_user.id,
+            document_type="note",
+            title=document.title,
+            content=document.content,
+            policy_areas=[],
+            tags=["petition", "generated"],
+            doc_metadata={
+                "generated": True,
+                "generator_version": "1.0",
+                "topic": request.topic,
+                "document_subtype": "petition",
+            }
+        )
+        db.add(user_doc)
+        db.commit()
+
+        logger.info(f"EP petition generated and saved: {user_doc.id}")
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "document_type": document.document_type,
+                "title": document.title,
+                "content": document.content,
+                "sections": document.sections,
+                "word_count": document.word_count,
+                "language": document.language,
+                "document_id": str(user_doc.id),
+                "editable_sections": document.editable_sections,
+            }
+        )
+
+    except Exception as e:
+        logger.error(f"Error generating EP petition: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

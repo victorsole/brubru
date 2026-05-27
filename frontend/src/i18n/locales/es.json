@@ -2056,6 +2056,13 @@
     "typeTalkingPointsTitle": "Puntos clave",
     "typeTalkingPointsDesc": "Puntos clave estructurados y preparación de preguntas y respuestas para reuniones de incidencia",
     "typeResolutionTitle": "Resolución del PE",
+    "typePetitionTitle": "Petición al PE",
+    "typePetitionDesc": "Redacta una petición a la Comisión de Peticiones del Parlamento Europeo",
+    "kindEpPetition": "petición al PE",
+    "petitionDetails": "Detalles de la petición",
+    "petitionSubject": "Asunto de la petición",
+    "egPetitionSubject": "p. ej. Salvaguardar el patrimonio de Antoni Gaudí como cultura europea",
+
     "typeResolutionDesc": "Resolución del Parlamento Europeo con vistos, considerandos y puntos numerados",
     "typeEpQuestionTitle": "Pregunta escrita del PE",
     "typeEpQuestionDesc": "Pregunta parlamentaria escrita del PE a la Comisión Europea, el Consejo o el AR/VP",

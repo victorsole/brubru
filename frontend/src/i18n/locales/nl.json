@@ -2056,6 +2056,13 @@
     "typeTalkingPointsTitle": "Gespreksaanwijzingen",
     "typeTalkingPointsDesc": "Gestructureerde gespreksaanwijzingen en Q&A-voorbereiding voor belangenbehartigingsgesprekken",
     "typeResolutionTitle": "EP-resolutie",
+    "typePetitionTitle": "Verzoekschrift aan het EP",
+    "typePetitionDesc": "Stel een verzoekschrift op aan de Commissie verzoekschriften van het Europees Parlement",
+    "kindEpPetition": "verzoekschrift aan het EP",
+    "petitionDetails": "Details van het verzoekschrift",
+    "petitionSubject": "Onderwerp van het verzoekschrift",
+    "egPetitionSubject": "bijv. Het erfgoed van Antoni Gaudí beschermen als Europese cultuur",
+
     "typeResolutionDesc": "Resolutie van het Europees Parlement met gezien-overwegingen, overwegende dat-overwegingen en genummerde punten",
     "typeEpQuestionTitle": "Schriftelijke EP-vraag",
     "typeEpQuestionDesc": "Schriftelijke parlementaire vraag van het EP aan de Commissie, de Raad of de HV/VV",
