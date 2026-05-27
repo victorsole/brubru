@@ -1949,6 +1949,9 @@
     "optionAnalysis": "Analyse",
     "optionStrategy": "Strategie",
     "optionEpResolution": "EP-resolutie",
+    "optionEpPetition": "Verzoekschrift aan het EP",
+    "petitionTemplate": "**Verzoekschrift aan het Europees Parlement**\n\n**Rechtsgrondslag:** artikelen 24 en 227 VWEU; artikel 44 van het Handvest van de grondrechten.\n\n**Indiener:** [naam of organisatie; EU-burger, ingezetene van een lidstaat, of organisatie met statutaire zetel in de EU]\n\n**Onderwerp:** [één zin]\n\n**Europese dimensie (ontvankelijkheid):** betreft een EU-werkterrein omdat [verdragsartikel / verordening / EU-programma] en raakt de indiener rechtstreeks omdat [reden].\n\n**Feiten:**\n- [feit 1]\n- [feit 2]\n\n**De indiener verzoekt het Europees Parlement, via de Commissie verzoekschriften:**\n1. [specifieke actie];\n2. [specifieke actie].\n\n**Hoe in te dienen:** via het verzoekschriftenportaal (petitions.europarl.europa.eu) in een van de 24 officiële EU-talen. Een verzoekschrift kaart een kwestie aan en laat deze onderzoeken; het wijzigt op zichzelf het EU-recht niet.",
+
     "resolutionTemplate": "**Resolutie van het Europees Parlement over [onderwerp]**\n\n**Het Europees Parlement,**\n\n-- gezien de artikelen 2 en 3 van het Verdrag betreffende de Europese Unie,\n\n-- gezien artikel 132, lid 2, van zijn Reglement,\n\nA.  overwegende dat [eerste contextuele verklaring];\n\nB.  overwegende dat [tweede contextuele verklaring];\n\nC.  overwegende dat [derde contextuele verklaring];\n\n1.  verzoekt [de Commissie / de Raad / de lidstaten] om [specifieke actie];\n\n2.  dringt er bij [instelling] op aan om [specifieke actie];\n\n3.  benadrukt dat [belangrijk beginsel];\n\n4.  verzoekt zijn Voorzitter deze resolutie te doen toekomen aan de Raad, de Commissie, de vicevoorzitter van de Commissie / hoge vertegenwoordiger van de Unie voor buitenlandse zaken en veiligheidsbeleid en de regeringen en parlementen van de lidstaten.\n"
   },
   "analyticsTab": {

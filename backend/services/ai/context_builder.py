@@ -371,6 +371,19 @@ ACTION_WORD_MAP = {
     'draft a resolution': 'resolution', 'write a resolution': 'resolution',
     'draft a question': 'ep_question', 'write a question': 'ep_question',
     'parliamentary question': 'ep_question', 'written question': 'ep_question',
+    'draft a petition': 'petition', 'write a petition': 'petition', 'make a petition': 'petition',
+    'file a petition': 'petition', 'lodge a petition': 'petition', 'submit a petition': 'petition',
+    'ep petition': 'petition', 'petition to the european parliament': 'petition',
+    'petition to the ep': 'petition', 'petition to parliament': 'petition',
+    'peticio al parlament': 'petition', 'redacta una peticio': 'petition', 'fes una peticio': 'petition',
+    'peticion al parlamento': 'petition', 'redacta una peticion': 'petition', 'haz una peticion': 'petition',
+    'petition au parlement': 'petition', 'rediger une petition': 'petition',
+    'petizione al parlamento': 'petition', 'fai una petizione': 'petition',
+    'verzoekschrift': 'petition',
+    # petition - accented variants (the matcher does not strip accents)
+    'petició al parlament': 'petition', 'redacta una petició': 'petition', 'fes una petició': 'petition',
+    'petición al parlamento': 'petition', 'redacta una petición': 'petition', 'haz una petición': 'petition',
+    'pétition au parlement': 'petition', 'rédiger une pétition': 'petition',
     # Catalan
     'justificacio': 'justification', 'redacta': 'draft', 'escriu': 'draft',
     'esborrany': 'draft', 'prepara': 'draft', 'plantilla': 'template',
@@ -410,6 +423,7 @@ DOC_TYPE_TO_TEMPLATE = {
     'letter': ['briefing_note'],
     'ep_question': [],  # Handled by Document Generator
     'resolution': [],  # Handled by Document Generator
+    'petition': [],  # Handled by Document Generator
     'amendment': [],  # Handled by Amendator
     'template': [],  # Will search all templates
     'draft': [],  # Generic -- will search all
@@ -494,7 +508,7 @@ def detect_drafting_intent(query: str) -> DraftingIntent:
     TYPE_PRIORITY = {
         'position_paper': 10, 'briefing': 9, 'talking_points': 9,
         'justification': 9, 'amendment': 9, 'ep_question': 9,
-        'resolution': 9, 'report': 8, 'letter': 8,
+        'resolution': 9, 'petition': 9, 'report': 8, 'letter': 8,
         'proposal': 7, 'summary': 5, 'template': 4, 'draft': 3,
     }
     found_actions.sort(key=lambda x: TYPE_PRIORITY.get(x[1], 0), reverse=True)

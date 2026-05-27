@@ -469,6 +469,50 @@ In the light of the above:
 NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
 """
 
+    PETITION_PROMPT = """Generate a petition to the European Parliament (Committee on Petitions, PETI) in the official structure.
+
+TOPIC / SUBJECT: {topic}
+
+CONTEXT: {context_description}
+
+PETITIONER: {petitioner_name}
+
+{style_guidelines}
+
+Produce the petition in the following EXACT structure and section headers (bold):
+
+---
+
+**Petition to the European Parliament**
+
+**Legal basis:** Articles 24 and 227 of the Treaty on the Functioning of the European Union and Article 44 of the Charter of Fundamental Rights of the European Union.
+
+**Petitioner:** {petitioner_name}
+
+**Subject:** [one clear sentence stating the subject, derived from the topic]
+
+**EU dimension (admissibility):** [explain why the subject falls within an EU field of activity, citing a relevant treaty article, regulation or EU programme, and why it directly affects the petitioner]
+
+**Facts:**
+- [factual point 1]
+- [factual point 2]
+- [factual point 3]
+
+**The petitioner requests that the European Parliament, through its Committee on Petitions:**
+1. [specific action];
+2. [specific action];
+3. [specific action].
+
+**How to submit:** lodge via the Petitions Web Portal (petitions.europarl.europa.eu) in one of the 24 official EU languages.
+
+CRITICAL RULES:
+1. The petition MUST establish an EU-competence link (an EU field of activity) - this is the admissibility test. Cite a real, relevant treaty article (for example Article 167 TFEU for culture, Article 168 TFEU for public health, Article 191 TFEU for the environment) or a relevant EU regulation/programme for the topic.
+2. ANTI-HALLUCINATION: do NOT invent statistics, dates, named individuals, case numbers or events. Where a specific fact is needed but is not provided in the context, write a clear bracketed placeholder such as "[insert verified figure]" or "[insert date]" for the petitioner to complete. It is better to leave a placeholder than to state an unverified fact.
+3. Keep the requests specific and within what the Parliament or Commission can actually do (investigate, clarify, fund, protect a right, ask the Commission to act). A petition raises and investigates an issue; it does NOT by itself change EU law - do not promise legislative outcomes.
+4. Use the exact bold section headers above. Keep it factual and proportionate.
+5. Do NOT use markdown headers (##); this is a single continuous document. Use bold (**) only for the section headers.
+"""
+
     EU_EMAIL_PROMPT = """Generate a Brussels-style EU email or letter in the exact diplomatic register used inside the EU bubble.
 
 RECIPIENT:
@@ -782,6 +826,45 @@ NOW WRITE THE EMAIL.
             language=request.language,
             legislative_context=legislative_context,
             editable_sections=list(sections.keys())
+        )
+
+    async def generate_petition(
+        self,
+        request: "GeneratePetitionRequest",
+        legislative_context: Optional[Dict[str, Any]] = None
+    ) -> GeneratedDocument:
+        """
+        Generate a petition to the European Parliament (Committee on Petitions).
+
+        Follows the PETI structure (legal basis, petitioner, subject, EU-competence
+        hook, facts, requests, how to submit). Keeps unverified facts as bracketed
+        placeholders for the petitioner to complete.
+        """
+        logger.info(f"Generating EP petition on: {request.topic}")
+
+        prompt = self.PETITION_PROMPT.format(
+            topic=request.topic,
+            context_description=(
+                request.context_description
+                or "Infer the EU dimension and a plausible subject from the topic; "
+                   "keep every factual claim as a bracketed placeholder for the petitioner to complete."
+            ),
+            petitioner_name=request.petitioner_name or "[petitioner name / organisation]",
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+
+        content = await self._generate(prompt)
+        sections = self._parse_sections(content)
+
+        return GeneratedDocument(
+            document_type="petition",
+            title=f"Petition to the European Parliament on {request.topic}",
+            content=content,
+            sections=sections,
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=legislative_context,
+            editable_sections=list(sections.keys()),
         )
 
     async def generate_resolution(

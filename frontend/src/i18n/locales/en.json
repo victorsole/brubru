@@ -1949,6 +1949,9 @@
     "optionAnalysis": "Analysis",
     "optionStrategy": "Strategy",
     "optionEpResolution": "EP Resolution",
+    "optionEpPetition": "EP petition",
+    "petitionTemplate": "**Petition to the European Parliament**\n\n**Legal basis:** Articles 24 and 227 TFEU; Article 44 of the Charter of Fundamental Rights.\n\n**Petitioner:** [name or organisation; an EU citizen, a resident of a Member State, or an organisation with a registered office in the EU]\n\n**Subject:** [one sentence]\n\n**EU dimension (admissibility):** this concerns an EU field of activity because [treaty article / regulation / EU programme], and it directly affects the petitioner because [reason].\n\n**Facts:**\n- [fact 1]\n- [fact 2]\n\n**The petitioner requests that the European Parliament, through its Committee on Petitions:**\n1. [specific action];\n2. [specific action].\n\n**How to submit:** lodge via the Petitions Web Portal (petitions.europarl.europa.eu) in one of the 24 official EU languages. A petition raises and investigates an issue; it does not by itself change EU law.",
+
     "resolutionTemplate": "**European Parliament resolution on [topic]**\n\n**The European Parliament,**\n\n-- having regard to Articles 2 and 3 of the Treaty on European Union,\n\n-- having regard to Rule 132(2) of its Rules of Procedure,\n\nA.  whereas [first contextual statement];\n\nB.  whereas [second contextual statement];\n\nC.  whereas [third contextual statement];\n\n1.  Calls on [the Commission/Council/Member States] to [specific action];\n\n2.  Urges [institution] to [specific action];\n\n3.  Stresses that [important principle];\n\n4.  Instructs its President to forward this resolution to the Council, the Commission, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy, and the governments and parliaments of the Member States.\n"
   },
   "analyticsTab": {

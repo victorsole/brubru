@@ -1949,6 +1949,9 @@
     "optionAnalysis": "Anàlisi",
     "optionStrategy": "Estratègia",
     "optionEpResolution": "Resolució del PE",
+    "optionEpPetition": "Petició al PE",
+    "petitionTemplate": "**Petició al Parlament Europeu**\n\n**Base jurídica:** articles 24 i 227 del TFUE; article 44 de la Carta dels Drets Fonamentals.\n\n**Peticionari:** [nom o organització; ciutadà de la UE, resident en un Estat membre, o organització amb domicili social a la UE]\n\n**Assumpte:** [una frase]\n\n**Dimensió europea (admissibilitat):** es refereix a un àmbit d'activitat de la UE perquè [article del tractat / reglament / programa de la UE] i afecta directament el peticionari perquè [motiu].\n\n**Fets:**\n- [fet 1]\n- [fet 2]\n\n**El peticionari demana que el Parlament Europeu, a través de la seva Comissió de Peticions:**\n1. [acció concreta];\n2. [acció concreta].\n\n**Com presentar-la:** a través del Portal de Peticions (petitions.europarl.europa.eu) en una de les 24 llengües oficials de la UE. Una petició planteja i investiga un assumpte; no modifica per si sola el Dret de la UE.",
+
     "resolutionTemplate": "**Resolució del Parlament Europeu sobre [tema]**\n\n**El Parlament Europeu,**\n\n-- vistos els articles 2 i 3 del Tractat de la Unió Europea,\n\n-- vist l'article 132, apartat 2, del seu Reglament,\n\nA.  considerant que [primera declaració contextual];\n\nB.  considerant que [segona declaració contextual];\n\nC.  considerant que [tercera declaració contextual];\n\n1.  Demana a [la Comissió / el Consell / els Estats membres] que [acció específica];\n\n2.  Insta [institució] a [acció específica];\n\n3.  Subratlla que [principi important];\n\n4.  Encarrega a la seva Presidenta que transmeti aquesta Resolució al Consell, a la Comissió, al Vicepresident de la Comissió / Alt Representant de la Unió per a Afers Exteriors i Política de Seguretat i als governs i parlaments dels Estats membres.\n"
   },
   "analyticsTab": {

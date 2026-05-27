@@ -423,6 +423,17 @@ class GenerateResolutionRequest(BaseModel):
     language: str = Field("EN", description="Output language code")
 
 
+class GeneratePetitionRequest(BaseModel):
+    """Request to generate a petition to the European Parliament (Committee on Petitions, PETI)"""
+    topic: str = Field(..., description="Subject of the petition")
+    context_description: Optional[str] = Field(
+        None,
+        description="Background and facts for the petition (optional; the AI keeps unverified facts as bracketed placeholders for the petitioner to complete)"
+    )
+    petitioner_name: Optional[str] = Field(None, description="Name or organisation of the petitioner")
+    language: str = Field("en", description="Language code (en, es, ca, fr, it, nl)")
+
+
 class GenerateEPQuestionRequest(BaseModel):
     """Request to generate a European Parliament written question"""
     # Topic and addressee

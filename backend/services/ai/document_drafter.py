@@ -34,6 +34,7 @@ from schemas.document_generation import (
     GenerateOnePagerRequest,
     GenerateStakeholderMapRequest,
     GenerateResolutionRequest,
+    GeneratePetitionRequest,
     GenerateEPQuestionRequest,
     GenerateTalkingPointsRequest,
 )
@@ -107,6 +108,7 @@ INTENT_TO_AUTODRAFT = {
     "draft":          "one_pager",
     "talking_points": "talking_points",
     "resolution":     "resolution",
+    "petition":       "petition",
     "ep_question":    "ep_question",
     "report":         "stakeholder_map",
     # Not auto-drafted (need a specific named subject):
@@ -200,6 +202,19 @@ async def draft_from_chat_query(
             )
             document = await generator.generate_resolution(request=request)
             extra_tags = ["resolution"]
+            extra_metadata.update({"topic": topic})
+
+        elif subtype == "petition":
+            request = GeneratePetitionRequest(
+                topic=topic,
+                context_description=(
+                    f"User requested a petition to the European Parliament on: {query[:500]}"
+                ),
+                petitioner_name=org_name,
+                language="en",
+            )
+            document = await generator.generate_petition(request=request)
+            extra_tags = ["petition"]
             extra_metadata.update({"topic": topic})
 
         elif subtype == "ep_question":
