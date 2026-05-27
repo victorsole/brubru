@@ -447,6 +447,10 @@ Provide your response:"""
 
         total_time_ms = (datetime.now() - start_time).total_seconds() * 1000
 
+        # Surface a guide-flagged Brubru deep-dive/explainer URL if the injected
+        # context contains one and the answer omitted it (mirrors AIService.chat).
+        message = self.ai_service._append_deep_dive_link(message, context_str)
+
         return ChatResponse(
             message=message,
             citations=citations,

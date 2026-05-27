@@ -262,7 +262,7 @@ def _suggest_actions(
     actions.append(
         ActionLink(
             label="See predictions",
-            path="/my-eu-bubble?tab=predictions",
+            path=f"/my-eu-bubble?tab=predictions&ref={procedure_ref}" if procedure_ref else "/my-eu-bubble?tab=predictions",
             rationale="Brubru's forecast for the outcome and timeline.",
         )
     )

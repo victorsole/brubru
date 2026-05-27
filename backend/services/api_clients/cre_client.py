@@ -106,23 +106,53 @@ class CREClient:
         return f"{CRE_BASE_URL}/CRE-{CRE_TERM}-{date_str}_{lang.upper()}.xml"
 
     async def fetch_session(self, session_date: date, lang: str = "EN") -> Optional[PlenarySession]:
-        """Fetch and parse a full plenary session's CRE transcript."""
+        """Fetch and parse a full plenary session's CRE transcript.
+
+        EP Doceo is behind a JS WAF that returns HTTP 202 + empty body to a plain
+        HTTP client, so we go straight to a real browser: Playwright clears the
+        WAF on navigation, then an in-page fetch() returns the raw XML (the
+        rendered XML viewer is not clean enough to parse). Runs in a thread so it
+        does not block the event loop.
+        """
         url = self._build_url(session_date, lang)
         logger.info(f"[CRE] Fetching {url}")
 
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                resp = await client.get(url, headers={"Accept": "application/xml"})
-                if resp.status_code == 404:
-                    logger.info(f"[CRE] No transcript for {session_date} (404)")
-                    return None
-                resp.raise_for_status()
-                xml_text = resp.text
-        except httpx.HTTPError as e:
-            logger.warning(f"[CRE] Failed to fetch {url}: {e}")
+            import asyncio
+            xml_text = await asyncio.to_thread(self._fetch_xml_via_browser, url)
+        except Exception as e:
+            logger.warning(f"[CRE] Browser fetch failed for {url}: {e}")
             return None
 
-        return self._parse_session(xml_text, session_date, url)
+        if not xml_text or "<CHAPTER" not in xml_text:
+            logger.info(f"[CRE] No transcript for {session_date} (empty or not a sitting)")
+            return None
+
+        try:
+            return self._parse_session(xml_text, session_date, url)
+        except Exception as e:
+            logger.warning(f"[CRE] Parse failed for {url}: {e}")
+            return None
+
+    def _fetch_xml_via_browser(self, url: str) -> Optional[str]:
+        """Clear the Doceo WAF with a headless browser, then fetch the raw XML
+        in-page (so the WAF cookies apply). Returns clean XML text or None."""
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page()
+                page.goto(url, wait_until="domcontentloaded", timeout=40000)
+                page.wait_for_timeout(2500)  # let the WAF challenge resolve
+                xml_text = page.evaluate(
+                    "async (u) => { const r = await fetch(u, {headers:{'Accept':'application/xml'}}); "
+                    "return r.ok ? await r.text() : null; }",
+                    url,
+                )
+                return xml_text
+            finally:
+                browser.close()
 
     def _parse_session(self, xml_text: str, session_date: date, source_url: str) -> PlenarySession:
         """Parse CRE XML into structured PlenarySession."""

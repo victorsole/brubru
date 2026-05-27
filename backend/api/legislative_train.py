@@ -5,6 +5,7 @@ FastAPI endpoints for Legislative Train Schedule data.
 Provides access to trains, carriages, analytics, and user tracking.
 """
 
+import re
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -1160,6 +1161,44 @@ async def get_carriage_key_players(
         raise HTTPException(status_code=500, detail="Failed to retrieve key players")
 
 
+# OEIL "Key events" / "Documentation gateway" table boilerplate that the scraper
+# sometimes dumps into an event description, especially for RSP (resolution)
+# procedures whose OEIL page layout differs from COD files.
+_OEIL_BOILERPLATE_RE = re.compile(
+    r"(key events"
+    r"|date\s+event\s+reference\s+summary"
+    r"|document type\s+committee\s+reference\s+date\s+summary"
+    r"|\bpdf\b|\bsika\b)",
+    re.IGNORECASE,
+)
+
+
+def _clean_oeil_text(raw) -> str:
+    """Collapse whitespace and strip OEIL scrape boilerplate from a text field."""
+    if not raw or not isinstance(raw, str):
+        return ""
+    text = re.sub(r"\s+", " ", raw).strip()
+    text = _OEIL_BOILERPLATE_RE.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _sanitize_timeline_events(events) -> list:
+    """Drop scrape-boilerplate-only events and clean the remaining text fields."""
+    cleaned = []
+    for e in events or []:
+        if not isinstance(e, dict):
+            continue
+        desc = _clean_oeil_text(e.get("description"))
+        summ = _clean_oeil_text(e.get("summary"))
+        etype = (e.get("event_type") or "").strip()
+        has_real_type = bool(etype) and etype.lower() != "event"
+        # Keep only events that carry real information after cleaning.
+        if not (desc or summ or e.get("result") or has_real_type):
+            continue
+        cleaned.append({**e, "description": desc, "summary": summ})
+    return cleaned
+
+
 @router.get(
     "/carriages/{carriage_id}/timeline",
     summary="Get legislative timeline for carriage",
@@ -1210,6 +1249,7 @@ async def get_carriage_timeline(
             # Extract key events
             key_events = procedure.get("key_events", {})
             events = key_events.get("events", []) if isinstance(key_events, dict) else []
+            events = _sanitize_timeline_events(events)
 
             return {
                 "carriage_id": str(carriage_id),

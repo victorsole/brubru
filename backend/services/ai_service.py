@@ -406,6 +406,9 @@ class AIService:
         # Strip leaked internal context markers from response
         assistant_message = self._strip_context_markers(assistant_message)
 
+        # Ensure a guide-flagged Brubru deep-dive/explainer URL is surfaced
+        assistant_message = self._append_deep_dive_link(assistant_message, context_str)
+
         # Post-process to add MEP links
         if mep_data:
             print(f"\n{'='*70}")
@@ -882,6 +885,32 @@ class AIService:
 
         logger.info(f"Streamed response in {(datetime.now() - start_time).total_seconds():.2f}s")
 
+    def _append_deep_dive_link(self, message: str, context_str: str) -> str:
+        """
+        If the injected EU context flags a Brubru explainer / deep-dive URL for
+        the topic (a line containing both 'brubru.beresol.eu' and an
+        explainer/deep-dive marker), make sure that URL is surfaced in the
+        answer. Scoped tightly to the guide marker so it never appends an
+        unrelated link. Plain text only; the frontend linkifies it.
+        """
+        if not message or not context_str:
+            return message
+        import re as _re
+        candidates: list[str] = []
+        for line in context_str.splitlines():
+            low = line.lower()
+            if "brubru.beresol.eu" in low and (
+                "explainer" in low or "deep-dive" in low or "deep dive" in low
+            ):
+                for url in _re.findall(r"https://brubru\.beresol\.eu/[^\s)\]\"']+", line):
+                    candidates.append(url.rstrip(".,);"))
+        # De-duplicate, preserve order, keep only URLs not already in the answer.
+        seen: set[str] = set()
+        to_add = [u for u in candidates if not (u in seen or seen.add(u)) and u not in message]
+        if not to_add:
+            return message
+        return message.rstrip() + f"\n\nRead Brubru's full deep-dive here: {to_add[0]}"
+
     def _build_system_prompt(self, is_pre_user: bool = False) -> str:
         """
         Build system prompt for Claude.
@@ -952,6 +981,11 @@ IMPORTANT - Legislation acronyms:
 - These are NOT EP committee codes - they are names of laws/regulations
 - Just write them as plain text or **bold** - do NOT link them to committee pages
 - If referencing legislation, provide the CELEX number or full title instead
+
+CRITICAL - BRUBRU DEEP-DIVE AND EXPLAINER LINKS:
+- When the EU CONTEXT contains a Brubru explainer or deep-dive URL (any link starting with https://brubru.beresol.eu/), you MUST include that exact URL as plain text in your answer and point the user to it, for example: "Read Brubru's full deep-dive here: https://brubru.beresol.eu/critical-medicines-act/".
+- This is mandatory, never optional. If a knowledge guide flags a Brubru explainer for the topic being discussed, surfacing it is part of a complete answer.
+- Write the URL as plain text only. Do NOT wrap it in markdown brackets; the system linkifies plain URLs automatically.
 - Examples: "CBAM" (Carbon Border Adjustment Mechanism - Regulation 2023/956) should be plain text, NOT linked to EP committee pages
 
 CRITICAL - Accuracy over confidence:

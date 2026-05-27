@@ -1026,6 +1026,7 @@ async def get_unified_feed(
     source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | matches | all"),
     match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders"),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
+    programme: Optional[str] = Query(None, description="EU funding programme code (e.g. EU4H, HE, CEF) — filters F&T calls/projects by topic_id prefix"),
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
     client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
     limit: int = Query(20, ge=1, le=100),
@@ -1129,12 +1130,37 @@ async def get_unified_feed(
     totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0}
     now = datetime.utcnow()
 
+    # Map an EU funding programme code to the topic_id / call_id prefixes used on
+    # the F&T portal. The programme is NOT in framework_programme (that holds the
+    # period, e.g. "2021 - 2027"); it lives in the topic_id prefix.
+    PROGRAMME_TOPIC_PREFIXES = {
+        "HE": ["HORIZON"], "H2020": ["H2020"], "FP7": ["FP7"],
+        "EU4H": ["EU4"], "DEP": ["DIGITAL"], "CEF": ["CEF"], "LIFE": ["LIFE"],
+        "ERASMUS": ["ERASMUS"], "EIC": ["EIC", "HORIZON-EIC"], "CREA": ["CREA"],
+        "AMIF": ["AMIF"], "BMVI": ["BMVI"], "ISF": ["ISF"], "JTM": ["JTM"],
+    }
+    prog_prefixes = (
+        PROGRAMME_TOPIC_PREFIXES.get(programme.upper(), [programme.upper()])
+        if programme else None
+    )
+
+    def _proposal_programme_clause():
+        # OR of topic_id/call_id ILIKE '<prefix>%' across the programme's prefixes.
+        clauses = []
+        for pref in prog_prefixes:
+            clauses.append(FtCallForProposals.topic_id.ilike(f"{pref}%"))
+            clauses.append(FtCallForProposals.call_id.ilike(f"{pref}%"))
+        return or_(*clauses)
+
     def _ted_query():
         qry = db.query(Tender)
         if status_filter == "open":
             qry = qry.filter((Tender.submission_deadline > now) | (Tender.submission_deadline.is_(None)))
         elif status_filter == "closed":
             qry = qry.filter(Tender.submission_deadline < now)
+        else:
+            # Default: hide opportunities whose submission deadline has passed.
+            qry = qry.filter((Tender.submission_deadline >= now) | (Tender.submission_deadline.is_(None)))
         if q:
             qry = qry.filter(Tender.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_ted(qry)
@@ -1142,8 +1168,16 @@ async def get_unified_feed(
 
     def _proposals_query():
         qry = db.query(FtCallForProposals).filter(FtCallForProposals.is_test == False)  # noqa: E712
-        if status_filter:
+        if status_filter == "closed":
+            qry = qry.filter(FtCallForProposals.deadline < now)
+        elif status_filter:
             qry = qry.filter(FtCallForProposals.status == status_filter.lower())
+            qry = qry.filter((FtCallForProposals.deadline >= now) | (FtCallForProposals.deadline.is_(None)))
+        else:
+            # Default: hide calls whose deadline has passed.
+            qry = qry.filter((FtCallForProposals.deadline >= now) | (FtCallForProposals.deadline.is_(None)))
+        if prog_prefixes:
+            qry = qry.filter(_proposal_programme_clause())
         if q:
             qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_proposals(qry)
@@ -1151,8 +1185,14 @@ async def get_unified_feed(
 
     def _tenders_query():
         qry = db.query(FtCallForTenders).filter(FtCallForTenders.is_test == False)  # noqa: E712
-        if status_filter:
+        if status_filter == "closed":
+            qry = qry.filter(FtCallForTenders.deadline < now)
+        elif status_filter:
             qry = qry.filter(FtCallForTenders.status == status_filter.lower())
+            qry = qry.filter((FtCallForTenders.deadline >= now) | (FtCallForTenders.deadline.is_(None)))
+        else:
+            # Default: hide calls whose deadline has passed.
+            qry = qry.filter((FtCallForTenders.deadline >= now) | (FtCallForTenders.deadline.is_(None)))
         if q:
             qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_tenders(qry)
@@ -1273,6 +1313,7 @@ async def get_unified_feed(
                         .join(Tender, Tender.id == TenderMatch.tender_id)
                         .filter(TenderMatch.user_id == current_user.id)
                         .filter(TenderMatch.is_dismissed == False)  # noqa: E712
+                        .filter(or_(Tender.submission_deadline >= now, Tender.submission_deadline.is_(None)))
                     )
                     if q:
                         qry_ted = qry_ted.filter(Tender.title.ilike(f"%{q}%"))
@@ -1303,7 +1344,9 @@ async def get_unified_feed(
                 # --- F&T proposals: on-the-fly keyword scoring ---
                 if match_source in ("all", "ft_proposals"):
                     qry_prop = db.query(FtCallForProposals).filter(
-                        FtCallForProposals.is_test == False  # noqa: E712
+                        FtCallForProposals.is_test == False,  # noqa: E712
+                        # Matches are actionable opportunities: hide passed deadlines.
+                        or_(FtCallForProposals.deadline >= now, FtCallForProposals.deadline.is_(None)),
                     )
                     if q:
                         qry_prop = qry_prop.filter(FtCallForProposals.title.ilike(f"%{q}%"))
@@ -1340,7 +1383,8 @@ async def get_unified_feed(
                 # --- F&T tenders: on-the-fly CPV + keyword + country scoring ---
                 if match_source in ("all", "ft_tenders"):
                     qry_tend = db.query(FtCallForTenders).filter(
-                        FtCallForTenders.is_test == False  # noqa: E712
+                        FtCallForTenders.is_test == False,  # noqa: E712
+                        or_(FtCallForTenders.deadline >= now, FtCallForTenders.deadline.is_(None)),
                     )
                     if q:
                         qry_tend = qry_tend.filter(FtCallForTenders.title.ilike(f"%{q}%"))
@@ -2763,4 +2807,3 @@ async def _client_scorecard_impl(ca, country, programme, lot, keyword, lookalike
         "lookalikes": lookalikes,
         "filters_used": {k: v for k, v in {"ca": ca, "country": country, "programme": programme, "lot": lot, "keyword": keyword}.items() if v},
     }
-# Layer 3 deploy trigger 1779390536
