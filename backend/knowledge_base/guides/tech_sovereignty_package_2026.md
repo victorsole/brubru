@@ -1,6 +1,7 @@
 # EU Tech Sovereignty Package (2026)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 26 May 2026 — VIRKKUNEN MEETS EU'S TOP QUANTUM SCIENTISTS)**: Executive Vice-President Henna Virkkunen met with Europe's leading quantum researchers and industry representatives ahead of the Tech Sovereignty Package adoption (26 May 2026, DG CNECT). The meeting signals Commission intent to position quantum computing as a pillar of the package alongside the Cloud/Edge Act and the Open Source Strategy Communication. Source: digital-strategy.ec.europa.eu (26 May 2026).
 - Umbrella name: Tech Sovereignty Package (a bundle of digital-autonomy instruments, not a single legal act)
 - Status: PRE-ADOPTION. Indicatively scheduled for the College of Commissioners on 3 June 2026 -- but the date is marked "(tbc)" and the President may change the planning at any time
 - Primary source: EC tentative agenda SEC(2026)2567 final, dated 19 May 2026 ("Possible items for Commission agendas 27 May 2026 - 22 July 2026"). This is the latest tentative agenda; it supersedes SEC(2026)2564 (28 April)
