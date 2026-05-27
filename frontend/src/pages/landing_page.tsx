@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../i18n/config';
 import type { SupportedLanguage } from '../i18n/config';
 import { CarouselSection } from '../components/carousel/carousel_section';
+import Icon from '@mdi/react';
+import { mdiInstagram } from '@mdi/js';
 import './landing_page.css';
 
 // =====================================================
@@ -30,6 +32,86 @@ const STORY_STEPS = [
   { step: '02', titleKey: 'step2Title', contentKey: 'step2Content' },
   { step: '03', titleKey: 'step3Title', contentKey: 'step3Content' },
   { step: '04', titleKey: 'step4Title', contentKey: 'step4Content' },
+];
+
+// Brubru clients shown in the right-to-left carousel on the landing page.
+// Logos live under frontend/public/clients/ (gitignored — see clients/README.md).
+// Quotes are translated into the six Brubru languages (EN, ES, CA, FR, IT, NL)
+// and picked at render time based on the active i18n language.
+type ClientQuotes = { en: string; es: string; ca: string; fr: string; it: string; nl: string };
+type BrubruClient = { id: string; name: string; url: string; logo: string; quotes: ClientQuotes };
+
+const BRUBRU_CLIENTS: BrubruClient[] = [
+  {
+    id: 'bo',
+    name: 'Bo',
+    url: 'https://hellobo.eu',
+    logo: '/clients/bo.png',
+    quotes: {
+      en: 'Thanks to Brubru, we could power our platform with all the European laws related to agri-food and geographical indications. Truly a game-changer!',
+      es: '¡Gracias a Brubru, hemos podido potenciar nuestra plataforma con todas las leyes europeas relativas a la agroalimentación y a las indicaciones geográficas. Un auténtico cambio de juego!',
+      ca: 'Gràcies a Brubru, hem pogut potenciar la nostra plataforma amb totes les lleis europees relatives a l\'agroalimentació i a les indicacions geogràfiques. Un autèntic canvi de joc!',
+      fr: 'Grâce à Brubru, nous avons pu alimenter notre plateforme avec toutes les lois européennes relatives à l\'agroalimentaire et aux indications géographiques. Une véritable révolution !',
+      it: 'Grazie a Brubru, abbiamo potuto potenziare la nostra piattaforma con tutte le leggi europee in materia di agroalimentare e indicazioni geografiche. Davvero rivoluzionario!',
+      nl: 'Dankzij Brubru konden we ons platform voeden met alle Europese wetten over agrovoeding en geografische aanduidingen. Echt een game-changer!',
+    },
+  },
+  {
+    id: 'ferrmed',
+    name: 'Ferrmed',
+    url: 'https://www.ferrmed.com/',
+    logo: '/clients/ferrmed.jpeg',
+    quotes: {
+      en: 'Brubru helps us advocate for the efficient development of the Mediterranean Corridor by assisting our work with document-generation of many types, following up on EU laws on transport and infrastructure, or contact the right EU stakeholder.',
+      es: 'Brubru nos ayuda a defender el desarrollo eficiente del Corredor Mediterráneo asistiéndonos en la generación de muchos tipos de documentos, el seguimiento de las leyes europeas sobre transporte e infraestructura y el contacto con el actor adecuado en la UE.',
+      ca: 'Brubru ens ajuda a defensar el desenvolupament eficient del Corredor Mediterrani assistint-nos en la generació de molts tipus de documents, en el seguiment de les lleis europees sobre transport i infraestructura i en el contacte amb l\'actor adequat de la UE.',
+      fr: 'Brubru nous aide à défendre le développement efficace du Corridor Méditerranéen en nous accompagnant dans la rédaction de nombreux types de documents, le suivi des lois européennes sur les transports et les infrastructures et le contact avec le bon interlocuteur.',
+      it: 'Brubru ci aiuta a promuovere lo sviluppo efficiente del Corridoio Mediterraneo assistendoci nella generazione di documenti di vario tipo, nel monitoraggio delle leggi UE su trasporti e infrastrutture e nel contatto con l\'interlocutore giusto.',
+      nl: 'Brubru helpt ons pleiten voor een efficiënte ontwikkeling van de Mediterrane Corridor door ons werk te ondersteunen met documentgeneratie van allerlei aard, het opvolgen van EU-wetgeving over transport en infrastructuur en het contact met de juiste EU-stakeholder.',
+    },
+  },
+  {
+    id: 'movimentgaudi',
+    name: 'Moviment Gaudí',
+    url: 'https://movimentgaudi.cat/en/',
+    logo: '/clients/movimentgaudi.png',
+    quotes: {
+      en: 'Brubru is very helpful to know how we can access cultural and educational EU funds and grants. We could not work without it!',
+      es: 'Brubru nos resulta muy útil para saber cómo acceder a fondos y subvenciones europeas de cultura y educación. ¡No podríamos trabajar sin él!',
+      ca: 'Brubru ens resulta molt útil per saber com accedir a fons i subvencions europees de cultura i educació. No podríem treballar sense ell!',
+      fr: 'Brubru nous est très utile pour savoir comment accéder aux fonds et subventions européens en matière de culture et d\'éducation. Nous ne pourrions pas travailler sans lui !',
+      it: 'Brubru è molto utile per capire come accedere ai fondi e alle sovvenzioni UE in ambito culturale ed educativo. Non potremmo lavorare senza!',
+      nl: 'Brubru helpt ons enorm om te weten hoe we toegang krijgen tot Europese fondsen en subsidies voor cultuur en onderwijs. We zouden niet zonder kunnen!',
+    },
+  },
+  {
+    id: 'tas',
+    name: 'TAS Europrojects',
+    url: 'https://www.taseuro.com/',
+    logo: '/clients/tas.png',
+    quotes: {
+      en: "Brubru's Tenderator helps us follow up on EU funds and tenders of any type. Brubru's Chat is a daily staple for us.",
+      es: 'El Tenderator de Brubru nos ayuda a hacer seguimiento de fondos y licitaciones europeas de cualquier tipo. El Chat de Brubru es una herramienta diaria para nosotros.',
+      ca: 'El Tenderator de Brubru ens ajuda a fer el seguiment de fons i licitacions europees de qualsevol tipus. El Chat de Brubru és una eina diària per a nosaltres.',
+      fr: 'Le Tenderator de Brubru nous aide à suivre les fonds et les marchés publics européens de tout type. Le Chat de Brubru est un outil quotidien pour nous.',
+      it: "Il Tenderator di Brubru ci aiuta a monitorare fondi e gare d'appalto UE di ogni tipo. La Chat di Brubru è uno strumento quotidiano per noi.",
+      nl: 'De Tenderator van Brubru helpt ons om EU-fondsen en aanbestedingen van elk type op te volgen. De Chat van Brubru is voor ons een dagelijks hulpmiddel.',
+    },
+  },
+  {
+    id: 'govclipping',
+    name: 'GovClipping',
+    url: 'https://www.govclipping.com',
+    logo: '/assets/clients/govclipping.png',
+    quotes: {
+      en: "With Brubru's API we can provide our clients with updated data.",
+      es: 'Con la API de Brubru podemos ofrecer a nuestros clientes datos actualizados.',
+      ca: "Amb l'API de Brubru podem oferir als nostres clients dades actualitzades.",
+      fr: "Grâce à l'API de Brubru, nous pouvons fournir à nos clients des données actualisées.",
+      it: "Con l'API di Brubru possiamo fornire ai nostri clienti dati aggiornati.",
+      nl: 'Met de API van Brubru kunnen we onze klanten van actuele gegevens voorzien.',
+    },
+  },
 ];
 
 const ABOUT_VALUES = [
@@ -129,7 +211,7 @@ export const LandingPage = () => {
             className="nav-top__lang"
             value={i18n.language || 'en'}
             onChange={(e) => i18n.changeLanguage(e.target.value as SupportedLanguage)}
-            aria-label="Select language"
+            aria-label={t('common.selectLanguage')}
           >
             {SUPPORTED_LANGUAGES.map((lang) => (
               <option key={lang} value={lang}>{LANGUAGE_NAMES[lang]}</option>
@@ -327,20 +409,42 @@ export const LandingPage = () => {
             <div className="clients__cta fade-up">
               <a href="mailto:hello@beresol.eu?subject=Brubru%20-%20I%20need%20help!" className="btn--rainbow">{t('landing.clients.contactUs')}</a>
             </div>
-            <div className="clients__grid" style={{ marginTop: 'var(--spacing-2xl)' }}>
-              <div className="clients__card fade-up">
-                <h4>{t('landing.clients.agriTitle')}</h4>
-                <p>{t('landing.clients.agriDesc')}</p>
-                <a href="https://hellobo.eu" target="_blank" rel="noopener noreferrer">
-                  <img src="/assets/Bo_logo.png" alt="Bo" className="clients__logo" />
-                </a>
-              </div>
-              <div className="clients__card fade-up">
-                <h4>{t('landing.clients.transportTitle')}</h4>
-                <p>{t('landing.clients.transportDesc')}</p>
-                <a href="https://ferrmed.com" target="_blank" rel="noopener noreferrer">
-                  <img src="/assets/ferrmed.jpeg" alt="Ferrmed" className="clients__logo" />
-                </a>
+            {/* Carousel — auto-scrolls right to left, pauses on hover, card flips to quote */}
+            <div
+              className="clients-carousel fade-up"
+              style={{ marginTop: 'var(--spacing-2xl)' }}
+              aria-label="Brubru clients carousel"
+            >
+              <div className="clients-carousel__track">
+                {[...BRUBRU_CLIENTS, ...BRUBRU_CLIENTS].map((client, idx) => {
+                  const lang = (i18n.language || 'en').slice(0, 2) as keyof ClientQuotes;
+                  const quote = client.quotes[lang] || client.quotes.en;
+                  return (
+                    <a
+                      key={`${client.id}-${idx}`}
+                      href={client.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="clients-carousel__card"
+                      aria-label={`${client.name}: open client website`}
+                    >
+                      <div className="clients-carousel__card-inner">
+                        <div className="clients-carousel__face clients-carousel__face--front">
+                          <img
+                            src={client.logo}
+                            alt={client.name}
+                            className="clients-carousel__logo"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="clients-carousel__face clients-carousel__face--back">
+                          <p className="clients-carousel__quote">{quote}</p>
+                          <p className="clients-carousel__attr">{client.name}</p>
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -550,6 +654,15 @@ export const LandingPage = () => {
             <Link to="/terms">{t('landing.footer.terms')}</Link>
             <Link to="/cookies">{t('landing.footer.cookies')}</Link>
             <Link to="/contact">{t('landing.footer.contact')}</Link>
+            <a
+              href="https://www.instagram.com/beresolbv/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Beresol on Instagram"
+              className="footer__social"
+            >
+              <Icon path={mdiInstagram} size={0.9} />
+            </a>
           </div>
         </div>
       </footer>

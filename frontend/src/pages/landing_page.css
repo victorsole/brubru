@@ -859,85 +859,117 @@ html.landing-scroll-snap {
   margin-bottom: var(--spacing-2xl);
 }
 
-.landing .clients__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
-  max-width: 800px;
+/* =====================================================
+   CLIENTS CAROUSEL — right-to-left auto-scroll, flip on hover
+   ===================================================== */
+.landing .clients-carousel {
+  position: relative;
+  max-width: 1100px;
   margin: 0 auto;
+  overflow: hidden;
+  padding: var(--spacing-lg) 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
 
-.landing .clients__card {
-  background: var(--color-bg-alt);
-  border-radius: 12px;
-  padding: var(--spacing-xl);
-  text-align: left;
-  border-left: 4px solid var(--color-blue);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.landing .clients-carousel__track {
+  display: flex;
+  gap: var(--spacing-lg);
+  width: max-content;
+  animation: brubru-carousel-scroll 32s linear infinite;
+  will-change: transform;
+}
+
+.landing .clients-carousel:hover .clients-carousel__track {
+  animation-play-state: paused;
+}
+
+.landing .clients-carousel__card {
+  flex: 0 0 220px;
+  height: 140px;
+  perspective: 1000px;
+  text-decoration: none;
+  cursor: pointer;
+  display: block;
+}
+
+.landing .clients-carousel__card-inner {
   position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.landing .clients-carousel__card:hover .clients-carousel__card-inner,
+.landing .clients-carousel__card:focus-visible .clients-carousel__card-inner {
+  transform: rotateY(180deg);
+}
+
+.landing .clients-carousel__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+.landing .clients-carousel__face--back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.96), rgba(155, 81, 224, 0.96));
+  border: none;
+  color: #ffffff;
+  flex-direction: column;
+  text-align: center;
+  padding: 14px 16px;
+}
+
+.landing .clients-carousel__logo {
+  max-width: 150px;
+  max-height: 70px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+.landing .clients-carousel__quote {
+  font-family: 'Adobe Caslon Pro', Georgia, serif;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.landing .clients__card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(6, 147, 227, 0.04), rgba(5, 150, 105, 0.04));
-  opacity: 0;
-  transition: opacity 0.4s ease;
+.landing .clients-carousel__attr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  margin: 8px 0 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.95;
 }
 
-.landing .clients__card:hover {
-  box-shadow: 0 12px 40px rgba(6, 147, 227, 0.12);
-  transform: translateY(-6px);
-  border-left-color: var(--color-green);
+@keyframes brubru-carousel-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
-.landing .clients__card:hover::before {
-  opacity: 1;
-}
-
-.landing .clients__card h4 {
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--spacing-xs);
-  color: var(--color-blue);
-  transition: color 0.3s ease, letter-spacing 0.3s ease;
-  position: relative;
-}
-
-.landing .clients__card:hover h4 {
-  color: var(--color-green);
-  letter-spacing: 0.02em;
-}
-
-.landing .clients__card p {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--spacing-md);
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.landing .clients__card:hover p {
-  color: var(--color-text);
-}
-
-.landing .clients__logo {
-  max-width: 100px;
-  max-height: 40px;
-  object-fit: contain;
-  opacity: 0.6;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  position: relative;
-}
-
-.landing .clients__card:hover .clients__logo {
-  opacity: 1;
-  transform: scale(1.1);
+@media (prefers-reduced-motion: reduce) {
+  .landing .clients-carousel__track { animation: none; }
 }
 
 /* Contact CTA with Brubru colour cycle */
@@ -1245,6 +1277,7 @@ html.landing-scroll-snap {
 .landing .footer__links {
   display: flex;
   gap: var(--spacing-lg);
+  align-items: center;
 }
 
 .landing .footer__links a {
@@ -1254,6 +1287,17 @@ html.landing-scroll-snap {
 }
 
 .landing .footer__links a:hover { color: white; }
+
+.landing .footer__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing .footer__social svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
 
 /* =====================================================
    BUTTONS
@@ -1434,7 +1478,8 @@ html.landing-scroll-snap {
   .landing .product__description { margin-left: 0; }
   .landing .story__timeline { grid-template-columns: 1fr; }
   .landing .pricing__grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
-  .landing .clients__grid { grid-template-columns: 1fr; max-width: 500px; }
+  .landing .clients-carousel { max-width: 100%; }
+  .landing .clients-carousel__card { flex-basis: 200px; height: 130px; }
   .landing .about { grid-template-columns: 1fr; gap: var(--spacing-xl); }
   .landing .about__team { order: -1; }
   .landing .video-overlay__text { font-size: var(--font-size-2xl); }
@@ -1496,8 +1541,12 @@ html.landing-scroll-snap {
   .landing .pricing-section { padding: var(--spacing-2xl) var(--container-padding); }
   .landing .pricing__grid { grid-template-columns: 1fr; max-width: 100%; }
 
-  /* Clients */
-  .landing .clients__grid { grid-template-columns: 1fr; }
+  /* Clients carousel — keep horizontal scroll, tighter cards */
+  .landing .clients-carousel { padding: var(--spacing-md) 0; }
+  .landing .clients-carousel__card { flex-basis: 180px; height: 120px; }
+  .landing .clients-carousel__logo { max-width: 130px; max-height: 60px; }
+  .landing .clients-carousel__quote { font-size: 0.74rem; -webkit-line-clamp: 4; }
+  .landing .clients-carousel__track { animation-duration: 28s; }
 
   /* About */
   .landing .about { grid-template-columns: 1fr; gap: var(--spacing-lg); }
