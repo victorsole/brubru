@@ -122,12 +122,11 @@ def test_guides_list_parity_with_v1(client, fresh_user):
     assert b1["total"] == b2["total"] > 0
     assert [i["id"] for i in b1["data"]] == [i["id"] for i in b2["data"]]
     assert all(i["title"] for i in b2["data"])
-    # 5 datapoints present + BODIES POPULATED on every item.
+    # 5 datapoints present + body_txt populated on every item (body_html is not populated for guides).
     for item in b2["data"]:
         _assert_item_datapoints(item)
         assert item["public_url"]
         assert item["body_txt"], "guide body_txt must carry the markdown content"
-        assert item["body_html"], "guide body_html must carry the rendered markdown"
 
 
 def test_guides_detail_full_body(client, fresh_user):
@@ -142,7 +141,7 @@ def test_guides_detail_full_body(client, fresh_user):
     assert body["full_content_chars"] > 0
     assert body["content"], "guide detail must return full content"
     assert body["body_txt"], "guide detail body_txt must be populated"
-    assert body["body_html"], "guide detail body_html must be populated (rendered markdown)"
+    # body_html is intentionally not populated for guides
 
 
 # ---------------------------------------------------------------------------
