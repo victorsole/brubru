@@ -102,7 +102,7 @@ const BRUBRU_CLIENTS: BrubruClient[] = [
     id: 'govclipping',
     name: 'GovClipping',
     url: 'https://www.govclipping.com',
-    logo: '/assets/clients/govclipping.png',
+    logo: '/clients/govclipping.png',
     quotes: {
       en: "With Brubru's API we can provide our clients with updated data.",
       es: 'Con la API de Brubru podemos ofrecer a nuestros clientes datos actualizados.',
