@@ -60,10 +60,11 @@ def _build_priority_files_summary(priority: dict) -> str:
     bits = []
     for pf in priority["files"]:
         ref = pf.get("oeil_ref") or (pf.get("celex") and f"CELEX {pf['celex']}") or ""
+        status = pf.get("status_note", "").rstrip(".")
         if ref:
-            bits.append(f"{pf['label']} ({ref}) -- {pf.get('status_note', '')}")
+            bits.append(f"{pf['label']} ({ref}). {status}.")
         else:
-            bits.append(f"{pf['label']} -- {pf.get('status_note', '')}")
+            bits.append(f"{pf['label']}. {status}.")
     return "Brubru is monitoring these EFPIA priority files today: " + "; ".join(bits)
 
 
@@ -86,7 +87,7 @@ def ingest(issue_date: str, dry_run: bool = False) -> int:
         rows_written = 0
 
         # Anchor card: priority=0 makes it the headline card in the chat surface.
-        anchor_headline = f"Brubru EFPIA Brief -- {payload.get('day_of_week', '')} {brief_date.strftime('%-d %B %Y')}".strip()
+        anchor_headline = f"Brubru EFPIA Brief, {payload.get('day_of_week', '')} {brief_date.strftime('%-d %B %Y')}".strip().rstrip(',')
         anchor_snippet = payload.get("hero_intro") or (
             "Five EU pharma and health items today, plus Brubru's running monitor of your priority files."
         )

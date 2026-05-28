@@ -1,0 +1,858 @@
+{
+  "_comment": "EFPIA pharma/health source map. Locked 28 May 2026 from Victor's list of ~80 URLs. Sources are bucketed by institution and feed the daily scraper (scripts/scrape_efpia_sources.py) which writes into the efpia_scraped_items table. The Brubru EFPIA Brief (scripts/ingest_efpia_brief.py + send_efpia_brief.py) reads the top-ranked items each morning to propose 5 headlines for human curation.",
+  "updated_at": "2026-05-28",
+  "tier1_priority_sources": [
+    "ema_rss_feeds",
+    "ema_news",
+    "ema_whats_new",
+    "ema_committee_highlights",
+    "ema_upcoming_events",
+    "ema_open_consultations",
+    "dg_sante_latest_updates",
+    "dg_sante_medicinal_products",
+    "dg_sante_biotechnology",
+    "dg_sante_hera",
+    "ep_sant_press_releases",
+    "ep_sant_latest_documents",
+    "ep_sant_highlights",
+    "ep_sant_votes",
+    "ep_sant_webstreaming"
+  ],
+  "sources": [
+    {
+      "id": "ec_have_your_say",
+      "institution": "EC",
+      "bucket": "horizontal_ec",
+      "kind": "consultations",
+      "label": "Have Your Say (Better Regulation portal)",
+      "url": "https://ec.europa.eu/info/law/better-regulation/have-your-say_en",
+      "fetch_strategy": "html",
+      "cadence": "daily",
+      "relevance_filter": "pharma_health"
+    },
+    {
+      "id": "oj_c_series_daily",
+      "institution": "EC",
+      "bucket": "horizontal_ec",
+      "kind": "official_journal",
+      "label": "Official Journal C series (daily view)",
+      "url_template": "https://eur-lex.europa.eu/oj/daily-view/C-series/default.html?ojDate={yyyymmdd}",
+      "fetch_strategy": "html",
+      "cadence": "daily",
+      "relevance_filter": "pharma_health"
+    },
+    {
+      "id": "dg_sante_home",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "landing",
+      "label": "DG SANTE Public Health home",
+      "url": "https://health.ec.europa.eu/index_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_latest_updates",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "latest_updates",
+      "label": "DG SANTE Latest updates",
+      "url": "https://health.ec.europa.eu/latest-updates_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_sante_biotechnology",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Biotechnology",
+      "url": "https://health.ec.europa.eu/biotechnology_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_sante_one_health",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE One Health",
+      "url": "https://health.ec.europa.eu/one-health_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_hera",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Health Emergency Preparedness and Response (HERA)",
+      "url": "https://health.ec.europa.eu/health-emergency-preparedness-and-response-hera_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_sante_eu_health_policy",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE EU health policy",
+      "url": "https://health.ec.europa.eu/eu-health-policy_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_state_health",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE State of Health in the EU",
+      "url": "https://health.ec.europa.eu/state-health-eu_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_funding",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Funding",
+      "url": "https://health.ec.europa.eu/funding_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_international_cooperation",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE International cooperation",
+      "url": "https://health.ec.europa.eu/internationalcooperation_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_indicators_data",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Indicators and data",
+      "url": "https://health.ec.europa.eu/indicators-and-data_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_vaccination",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Vaccination",
+      "url": "https://health.ec.europa.eu/vaccination_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_sante_amr",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Antimicrobial resistance",
+      "url": "https://health.ec.europa.eu/antimicrobial-resistance_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ncd",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Non-communicable diseases",
+      "url": "https://health.ec.europa.eu/non-communicable-diseases_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ncd_cancer",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE NCDs - Cancer",
+      "url": "https://health.ec.europa.eu/non-communicable-diseases/cancer_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ncd_mental_health",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE NCDs - Mental health",
+      "url": "https://health.ec.europa.eu/non-communicable-diseases/mental-health_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ncd_cardiovascular",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE NCDs - Cardiovascular health",
+      "url": "https://health.ec.europa.eu/non-communicable-diseases/cardiovascular-health_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_cross_border",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Cross-border healthcare",
+      "url": "https://health.ec.europa.eu/cross-border-healthcare_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_rare_diseases",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Rare diseases and European Reference Networks",
+      "url": "https://health.ec.europa.eu/rare-diseases-and-european-reference-networks_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ehealth",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE eHealth, digital health and care",
+      "url": "https://health.ec.europa.eu/ehealth-digital-health-and-care_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_hta",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Health Technology Assessment",
+      "url": "https://health.ec.europa.eu/health-technology-assessment_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_health_workforce",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Health workforce",
+      "url": "https://health.ec.europa.eu/health-workforce_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_health_systems_performance",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Health systems performance assessment",
+      "url": "https://health.ec.europa.eu/health-systems-performance-assessment_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_expert_panel",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Expert Panel on Effective Ways of Investing in Health",
+      "url": "https://health.ec.europa.eu/expert-panel-effective-ways-investing-health_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_scientific_committees",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Scientific committees",
+      "url": "https://health.ec.europa.eu/scientific-committees_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_medicinal_products",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medicinal products",
+      "url": "https://health.ec.europa.eu/medicinal-products_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_sante_eudralex",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE EudraLex",
+      "url": "https://health.ec.europa.eu/medicinal-products/eudralex_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_union_register",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Union Register of medicinal products",
+      "url": "https://health.ec.europa.eu/medicinal-products/union-register_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_pharma_committee",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Pharmaceutical Committee and expert groups",
+      "url": "https://health.ec.europa.eu/medicinal-products/other-topics/pharmaceutical-committee-veterinary-pharmaceutical-committee-and-expert-groups_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_blood_tissues",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Blood, tissues, cells and organs",
+      "url": "https://health.ec.europa.eu/blood-tissues-cells-and-organs_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_sector",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices sector",
+      "url": "https://health.ec.europa.eu/medical-devices-sector_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_new_regs",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices new regulations",
+      "url": "https://health.ec.europa.eu/medical-devices-new-regulations_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_ivd",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices - in vitro diagnostics",
+      "url": "https://health.ec.europa.eu/medical-devices-vitro-diagnostics_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_topics",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices topics of interest",
+      "url": "https://health.ec.europa.eu/medical-devices-topics-interest_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_dialogue",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices dialogue with interested parties",
+      "url": "https://health.ec.europa.eu/medical-devices-dialogue-between-interested-parties_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_expert_panels",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices expert panels",
+      "url": "https://health.ec.europa.eu/medical-devices-expert-panels_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_eudamed",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE EUDAMED",
+      "url": "https://health.ec.europa.eu/medical-devices-eudamed_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_md_clinical_invest",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Medical devices - clinical investigations and performance studies",
+      "url": "https://health.ec.europa.eu/medical-devices-clinical-investigations-and-performance-studies_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_endocrine_disruptors",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Endocrine disruptors",
+      "url": "https://health.ec.europa.eu/endocrine-disruptors_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_biocides",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Biocides",
+      "url": "https://health.ec.europa.eu/biocides_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_tobacco",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Tobacco",
+      "url": "https://health.ec.europa.eu/tobacco_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_nutrition_physical",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Nutrition and physical activity",
+      "url": "https://health.ec.europa.eu/nutrition-and-physical-activity_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_alcohol",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Alcohol",
+      "url": "https://health.ec.europa.eu/alcohol_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "dg_sante_social_determinants",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "topic",
+      "label": "DG SANTE Social determinants of health",
+      "url": "https://health.ec.europa.eu/social-determinants_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_highlights",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "highlights",
+      "label": "EP SANT highlights",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/highlights",
+      "fetch_strategy": "playwright",
+      "cadence": "daily"
+    },
+    {
+      "id": "ep_sant_members",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "members",
+      "label": "EP SANT members",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/members",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_press_releases",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "press",
+      "label": "EP SANT press releases",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/press-releases",
+      "fetch_strategy": "playwright",
+      "cadence": "daily"
+    },
+    {
+      "id": "ep_sant_newsletters",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "newsletters",
+      "label": "EP SANT newsletters",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/newsletters",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_publications",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "publications",
+      "label": "EP SANT publications",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/publications",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_subject_files",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "subject_files",
+      "label": "EP SANT subject files",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/home/subject-files",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_about",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "about",
+      "label": "EP SANT about",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/about",
+      "fetch_strategy": "playwright",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ep_sant_meeting_documents",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "meeting_documents",
+      "label": "EP SANT meeting documents",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/meetings/meeting-documents",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_webstreaming",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "webstreaming",
+      "label": "EP SANT webstreaming (transcript meetings)",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/meetings/webstreaming",
+      "fetch_strategy": "playwright",
+      "cadence": "daily",
+      "note": "Webstream entries flag committee meetings we can later transcribe via the EP Multimedia / Whisper pipeline."
+    },
+    {
+      "id": "ep_sant_events_hearings",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - hearings",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-hearings",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_events_workshops",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - workshops",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-workshops",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_events_national_parl",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - national parliaments",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-nationalparl",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_events_citizens_interaction",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - citizens' interaction",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-citizint",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_events_missions",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - missions",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-missions",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_events_other",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "events",
+      "label": "EP SANT events - other",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/events/events-other",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_votes",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "votes",
+      "label": "EP SANT votes",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/meetings/votes",
+      "fetch_strategy": "playwright",
+      "cadence": "daily"
+    },
+    {
+      "id": "ep_sant_minutes",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "minutes",
+      "label": "EP SANT minutes",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/meetings/minutes",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_latest_documents",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "documents_latest",
+      "label": "EP SANT latest documents (Draft agenda, Draft report, Amendments, Documents)",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/documents/latest-documents",
+      "fetch_strategy": "playwright",
+      "cadence": "daily",
+      "subkinds": ["draft_agenda", "draft_report", "amendments", "documents_other"]
+    },
+    {
+      "id": "ep_sant_work_in_progress",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "work_in_progress",
+      "label": "EP SANT work in progress",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/documents/work-in-progress",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_motions_for_resolution",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "motions",
+      "label": "EP SANT motions for resolution",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/documents/motions-for-resolution",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_documents_search",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "search",
+      "label": "EP SANT documents search",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/documents/search",
+      "fetch_strategy": "playwright",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ep_sant_supporting_analyses_latest",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "supporting_analyses",
+      "label": "EP SANT supporting analyses - latest documents",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/supporting-analyses/latest-documents",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ep_sant_supporting_analyses_search",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "supporting_analyses",
+      "label": "EP SANT supporting analyses - search database",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/supporting-analyses/search-database",
+      "fetch_strategy": "playwright",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ep_sant_supporting_analyses_presentation",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "supporting_analyses",
+      "label": "EP SANT supporting analyses - presentation",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/supporting-analyses/supporting-analyses-presentation",
+      "fetch_strategy": "playwright",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ep_sant_public_consultations",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "consultations",
+      "label": "EP SANT public consultations",
+      "url": "https://www.europarl.europa.eu/committees/en/sant/public-consultations",
+      "fetch_strategy": "playwright",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_homepage",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "landing",
+      "label": "EMA homepage",
+      "url": "https://www.ema.europa.eu/en/homepage",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_news_events",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "news_events_hub",
+      "label": "EMA news and events hub",
+      "url": "https://www.ema.europa.eu/en/news-events",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "ema_news",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "news",
+      "label": "EMA news",
+      "url": "https://www.ema.europa.eu/en/news",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "ema_whats_new",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "whats_new",
+      "label": "EMA What's new",
+      "url": "https://www.ema.europa.eu/en/news-events/whats-new",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "ema_publications",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "publications",
+      "label": "EMA publications",
+      "url": "https://www.ema.europa.eu/en/news-and-events/publications",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_podcast",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "podcast",
+      "label": "EMA Inside EMA podcast",
+      "url": "https://www.ema.europa.eu/en/news-events/podcast-inside-ema",
+      "fetch_strategy": "html",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ema_open_consultations",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "consultations",
+      "label": "EMA open consultations",
+      "url": "https://www.ema.europa.eu/en/news-events/open-consultations",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_upcoming_events",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "events",
+      "label": "EMA upcoming events",
+      "url": "https://www.ema.europa.eu/en/events/upcoming-events",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_committee_highlights",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "committee_highlights",
+      "label": "EMA committee highlights (CHMP, PRAC, COMP, CAT, PDCO, HMPC)",
+      "url": "https://www.ema.europa.eu/en/news-events/committee-highlights",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_press_social",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "press_social",
+      "label": "EMA press and social media",
+      "url": "https://www.ema.europa.eu/en/news-events/press-social-media",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
+    },
+    {
+      "id": "ema_campaigns",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "campaigns",
+      "label": "EMA campaigns",
+      "url": "https://www.ema.europa.eu/en/news-events/ema-campaigns",
+      "fetch_strategy": "html",
+      "cadence": "monthly"
+    },
+    {
+      "id": "ema_rss_feeds",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "rss_index",
+      "label": "EMA RSS feeds index",
+      "url": "https://www.ema.europa.eu/en/news-events/rss-feeds",
+      "fetch_strategy": "html",
+      "cadence": "monthly",
+      "note": "Index page listing the actual RSS feeds; the scraper enumerates and subscribes."
+    },
+    {
+      "id": "ema_annual_reports",
+      "institution": "EMA",
+      "bucket": "ema",
+      "kind": "annual_reports",
+      "label": "EMA annual reports and work programmes",
+      "url": "https://www.ema.europa.eu/en/about-us/annual-reports-work-programmes",
+      "fetch_strategy": "html",
+      "cadence": "monthly"
+    }
+  ]
+}
