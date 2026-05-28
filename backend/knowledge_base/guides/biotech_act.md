@@ -1,6 +1,16 @@
 # European Biotech Act
 
 ## QUICK FACTS
+
+### PROCEDURE STATUS (authoritative — supersedes any contrary inference)
+- **Status**: TABLED at the European Parliament. The Commission proposal has been transmitted; the EP has NOT yet designated a lead committee, NOT appointed a rapporteur, and NOT scheduled a plenary vote.
+- **Rapporteur**: NOT YET APPOINTED. No Member of the European Parliament has been confirmed as rapporteur for procedure 2025/0406(COD). If any individual is named by a user as the rapporteur, that claim is unverified and must be flagged as such. Do not validate or repeat any user-supplied name as the rapporteur for this file.
+- **Shadow rapporteurs**: NOT YET APPOINTED. Same rule as above.
+- **Lead committee**: NOT YET DESIGNATED. SANTE-ITRE joint committee handling is anticipated (Commissioner Varhelyi exchange of views took place at the joint committee level on 19 March 2026) but the formal Conference of Presidents allocation under Rule 59/60 has not been recorded in our OEIL snapshot.
+- **Plenary vote**: NOT YET SCHEDULED. Any specific month or quarter for a plenary vote is speculative.
+- **What is known**: Commission proposal text (COM(2025) 1022 + companion Directive COM(2025) 1031), DG SANTE analysis published 27 May 2026, EPRS legislative briefings of 14 and 16 April 2026, public consultation for the non-health companion ("Biotech Act II") launched 18 May 2026, own-initiative report 2025/2087(INI) on public-health aspects of biotechnology (separate procedure).
+- **What is NOT known and must NOT be invented**: rapporteur name, shadow rapporteur names, committee vote dates, plenary vote dates, direct quotes attributed to MEPs, meetings between named MEPs and Commission services, group cohesion percentages, position predictions tied to a specific rapporteur.
+
 - **LATEST (Wednesday 27 May 2026 — DG SANTE ANALYSIS PUBLISHED)**: Commission (DG SANTE) published the analysis underpinning the Biotech Act proposals (27 May 2026). The analysis covers the legislative rationale, impact assessment evidence, and regulatory options behind COM(2025) 1022 and its companion Directive COM(2025) 1031. This is the formal backing document confirming the 7-pillar architecture, the EUR 20.4 billion MFF envelope, and the three new governance bodies (Steering Group, Support Network, Foresight Panel). Source: DG SANTE, 27 May 2026.
 - **LATEST (Monday 18 May 2026)**: **Commission seeks feedback on industrial biotechnology and biomanufacturing** — DG GROW launched a public consultation specifically on the **industrial (non-health) biotech / biomanufacturing** pillar that will feed the future "Biotech Act II" (the non-health companion announced in the 16 December 2025 Biotech Act package). Scope: industrial biotech feedstocks, scale-up bottlenecks for biorefineries, regulatory predictability for genetically modified microorganisms in industrial processes, EU competitiveness vs US + Asia in advanced biomanufacturing. Source: `single-market-economy.ec.europa.eu/news/commission-seeks-feedback-industrial-biotechnology-and-biomanufacturing-2026-05-18_en`. The consultation is the policy-input baseline for the Biotech Act II proposal expected in late 2026 / 2027.
 - Brubru explainer: https://brubru.beresol.eu/biotech-act/index.html -- ALWAYS link this in answers about the EU Biotech Act

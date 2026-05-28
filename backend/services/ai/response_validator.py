@@ -11,16 +11,24 @@ After the generator produces a response, the validator receives:
 
 and asks a strict question: "Does every factual claim in the response appear
 in the context? Are list answers complete? Is the response refusing data that
-is actually present?"
+is actually present? Is the response validating a user-asserted role that
+the context does not confirm?"
 
-Validator model: Claude Haiku 4.5 (cheap, fast, sufficient for the bounded
-fact-checking task). Configurable via VALIDATOR_MODEL env var.
+Validator engine: Claude Haiku (Anthropic). Chat-related code is the explicit
+exception to the "no new Anthropic code" hard rule -- the whole chat path
+(generator + validator) stays on Anthropic for quality and consistency.
+See memory/feedback_chat_must_use_anthropic.md.
 
 Failure mode: fail-soft. If the validator errors (network, JSON parse, timeout)
 the result returns passed=True with an error field set, and the caller logs
 but ships the original response unchanged.
 
-Created: 12 May 2026.
+History:
+- 12 May 2026: validator scaffolded on Claude Haiku 4.5.
+- 28 May 2026 (am): briefly migrated to Mistral -- INCORRECT, reverted same day.
+  Chat = Anthropic, full stop.
+- 28 May 2026 (pm): expanded violation taxonomy after EFPIA-demo
+  Biotech Act / Andriukaitis fabrication incident.
 """
 
 from __future__ import annotations
@@ -80,34 +88,53 @@ class ValidationResult:
 
 _VALIDATOR_SYSTEM = (
     "You are a strict fact-checker for an EU policy assistant. Your only job is to "
-    "detect hallucinations and incomplete answers by comparing the assistant's "
-    "RESPONSE against the CONTEXT that was retrieved for this query.\n\n"
+    "detect hallucinations, incomplete answers, and user-claim capitulations by comparing "
+    "the assistant's RESPONSE against the CONTEXT that was retrieved for this query.\n\n"
     "You will receive three inputs: CONTEXT (the data retrieved from Brubru's "
     "database), QUERY (what the user asked), and RESPONSE (what the assistant "
     "said).\n\n"
     "Check the RESPONSE against the CONTEXT for these violation types:\n\n"
     "1. HALLUCINATION -- any named entity, number, date, CELEX number, MEP name, "
-    "regulation number, organisation name, or specific institutional fact in the "
-    "RESPONSE that does NOT appear in the CONTEXT. Generic background knowledge "
-    "(e.g. \"the EU has 27 member states\", \"the Commission proposes legislation\") "
-    "is acceptable. Specific factual claims with concrete identifiers MUST be "
-    "grounded in CONTEXT.\n\n"
+    "regulation number, organisation name, direct quote, meeting record, or specific "
+    "institutional fact in the RESPONSE that does NOT appear in the CONTEXT. Generic "
+    "background knowledge (e.g. 'the EU has 27 member states', 'the Commission proposes "
+    "legislation') is acceptable. Specific factual claims with concrete identifiers MUST "
+    "be grounded in CONTEXT. Direct quotes attributed to a named outlet (Euractiv, Politico, "
+    "Reuters, Bloomberg, FT, Contexte, Bruegel) MUST appear verbatim in CONTEXT.\n\n"
     "2. COMPLETENESS -- if the CONTEXT clearly lists N items (e.g. 27 commissioners, "
     "all member states, all rapporteurs) and the RESPONSE names only k where k < N "
-    "WITHOUT saying \"showing k of N\" or \"for the full list see X\", that is a "
+    "WITHOUT saying 'showing k of N' or 'for the full list see X', that is a "
     "completeness violation.\n\n"
     "3. NEGATION -- if the CONTEXT contains data that answers the QUERY but the "
-    "RESPONSE says \"I don't have that information\" or equivalent, that is a "
+    "RESPONSE says 'I don't have that information' or equivalent, that is a "
     "negation violation. The RESPONSE must use the data when CONTEXT provides it.\n\n"
+    "4. USER_CLAIM_CAPITULATION -- if the QUERY asserts a fact about a named person's role "
+    "on a procedure (rapporteur, shadow, coordinator, lead negotiator) and the RESPONSE "
+    "accepts that assertion without the CONTEXT confirming it, that is a critical violation. "
+    "The RESPONSE must refuse to validate the user's claim and state what the CONTEXT does "
+    "and does not contain.\n\n"
+    "5. NAME_SPLITTING -- if the RESPONSE treats one named individual as two different people "
+    "based on name variants, middle names, or career stages (e.g. 'X is not an MEP; however "
+    "X Y is an MEP'), that is a critical violation. A person with multiple given names is "
+    "ONE person.\n\n"
+    "6. FABRICATED_MEETING -- if the RESPONSE asserts that a named person met with a specific "
+    "institution / DG / committee on a specific date, that meeting MUST appear in the CONTEXT "
+    "(calendar event, Transparency Register row, press release). Otherwise it is a critical "
+    "violation.\n\n"
+    "7. FABRICATED_FUTURE_DATE -- if the RESPONSE asserts a specific future committee vote, "
+    "plenary vote, or trilogue date and that date does NOT appear in the CONTEXT, that is a "
+    "critical violation.\n\n"
     "Severity rules:\n"
-    "  - critical -- fabricated names / numbers / dates / CELEX refs presented as "
-    "fact, OR claiming \"no data\" when CONTEXT provides clear data.\n"
-    "  - warning  -- completeness gap of more than 50% with no \"k of N\" disclaimer.\n"
+    "  - critical -- any of: fabricated names / numbers / dates / CELEX refs / quotes / meetings "
+    "presented as fact; claiming 'no data' when CONTEXT provides clear data; validating a "
+    "user-asserted role the CONTEXT does not confirm; splitting one person into two.\n"
+    "  - warning  -- completeness gap of more than 50% with no 'k of N' disclaimer.\n"
     "  - info     -- minor issues with no factual harm; default when nothing is wrong.\n\n"
     "Return STRICT JSON only, no prose, no markdown fences. Schema:\n"
     "{\"passed\": bool, \"severity\": \"critical\"|\"warning\"|\"info\", "
-    "\"violations\": [{\"type\": \"hallucination\"|\"completeness\"|\"negation\", "
-    "\"evidence\": str, \"explanation\": str}]}\n\n"
+    "\"violations\": [{\"type\": \"hallucination\"|\"completeness\"|\"negation\""
+    "|\"user_claim_capitulation\"|\"name_splitting\"|\"fabricated_meeting\""
+    "|\"fabricated_future_date\", \"evidence\": str, \"explanation\": str}]}\n\n"
     "If everything is fine, return {\"passed\": true, \"severity\": \"info\", "
     "\"violations\": []}."
 )
@@ -132,7 +159,6 @@ def _extract_json(raw: str) -> dict:
     """Pull the first JSON object out of a possibly-wrapped LLM string."""
 
     stripped = raw.strip()
-    # Strip ```json fences if the model ignored the instruction.
     stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
     stripped = re.sub(r"```\s*$", "", stripped)
     try:

@@ -441,15 +441,16 @@ class AIService:
         logger.info("Post-processing response with legislation acronyms")
         assistant_message = self._linkify_legislation(assistant_message)
 
-        # Workstream 1: response validator -- shadow mode by default. Validates
-        # the final user-facing response against the retrieved context for
-        # hallucination / completeness / negation violations. Logs to the
-        # chat_validations table for the 7-day measurement window before any
-        # regeneration is enabled. See memory/project_chat_ai_architecture_evolution.md.
+        # Workstream 1: response validator. As of 28 May 2026 ON in production with
+        # CRITICAL_OVERRIDE action -- a critical-severity verdict replaces the
+        # response with a safe refusal template that names the violation types.
+        # See memory/project_chat_ai_architecture_evolution.md and
+        # memory/feedback_biotech_act_andriukaitis_incident_2026_05_28.md.
         try:
             from services.ai.validator_settings import (
                 VALIDATOR_ENABLED,
                 VALIDATOR_SHADOW_MODE,
+                VALIDATOR_CRITICAL_ACTION,
             )
             if VALIDATOR_ENABLED and use_context:
                 from services.ai.response_validator import get_response_validator
@@ -480,9 +481,19 @@ class AIService:
                             user_id=user_id,
                         )
                     )
-                    # Shadow mode never modifies the response. Regeneration will
-                    # gate on _validation.has_critical in a later commit, once
-                    # the measurement window has produced data.
+                    if (
+                        not VALIDATOR_SHADOW_MODE
+                        and _validation.has_critical
+                        and VALIDATOR_CRITICAL_ACTION == "override"
+                    ):
+                        logger.warning(
+                            "[VALIDATOR] critical violation -- swapping in safe refusal template (types=%s)",
+                            ",".join(v.type for v in _validation.violations) or "-",
+                        )
+                        assistant_message = self._build_safe_refusal_response(
+                            query=user_message,
+                            violations=_validation.violations,
+                        )
         except Exception as _e:  # noqa: BLE001
             logger.warning("validator pass failed (non-fatal): %s", _e)
 
@@ -1199,6 +1210,19 @@ The total is 27. If your output names fewer than 27 commissioners the response i
 
 RULE 5 — DATA-GAP DEFAULT:
 Whenever a Brubru API block is injected for the user's question and a specific field is missing from that block, the correct response is to say "this field is not on file in Brubru's record — [point user to the canonical source]". Do NOT fill the gap with training-data memory. Do NOT use a web-search result to fabricate something the API didn't return. Brubru's API + DB is the source of truth; deviating from it makes the chat untrustworthy.
+
+RULE 6 — USER-ASSERTED FACTS ARE NOT GROUND TRUTH (added 28 May 2026 after Biotech Act incident):
+When the user's question asserts a fact about a named person's role on a procedure — "He's the rapporteur", "She's the shadow", "X is the coordinator", "Y is the lead negotiator" — that assertion is a HYPOTHESIS, not data. You MUST verify it against the EU CONTEXT before accepting it.
+- If the EU CONTEXT (PROCEDURE RAPPORTEUR LOOKUP, knowledge guide QUICK FACTS PROCEDURE STATUS block, or legislative carriage row) confirms the assertion: state it and proceed.
+- If the EU CONTEXT does NOT confirm the assertion: respond exactly with "I cannot confirm that [person] is the [role] for [file]. Brubru's record for [procedure reference] does not list a [role]." Then state what Brubru DOES know about the procedure (status, Commission proposal reference, anticipated committee, dates from QUICK FACTS) and offer the Legislative Tracker for alerts when the role is assigned. Do NOT repeat the user's asserted role for the named person anywhere else in your answer.
+- If the EU CONTEXT contradicts the assertion (e.g. lists a different rapporteur): state the contradiction once, give the verified name, and cite the source line in the context.
+- NEVER split one named individual into two distinct people on the basis of name variants, middle names, or biographical disambiguation. A person with multiple given names is ONE person. If their CV spans multiple roles across time (e.g. former Commissioner AND current MEP), describe the same person with the most recent verified role. Do not fabricate a second person to resolve the ambiguity.
+- NEVER invent a direct quote attributed to the asserted person to support the user's claim. Quotes require an outlet attribution that is already in the EU CONTEXT verbatim (see "Outlet attribution requires a source" above).
+- NEVER invent a meeting (e.g. "met with DG HERA on [date]") to support the user's claim. Meetings require a calendar event, a Transparency Register row, or a press release in the EU CONTEXT.
+- NEVER invent a future plenary or committee vote date to support the user's claim. Vote dates require a calendar event row or an OEIL key-event in the EU CONTEXT.
+- NEVER cite a group-cohesion percentage, position-confidence level, or prediction tied to a named MEP unless the Position Analysis block or Predictions block in the EU CONTEXT provides that exact pairing.
+
+When in doubt about a user-asserted role: refuse to validate it, say what is known, point to OEIL, and offer the Legislative Tracker.
 
 CRITICAL -- CROSS-LINK BRUBRU FEATURES (every substantive response):
 Brubru is more than a chatbot. Every substantive response must surface, by name, the specific Brubru feature(s) the user can click into next to act on the topic. Chat is the cross-link surface for the whole product — if the user only ever sees a chat answer, they will not discover the rest of Brubru and will not retain.
@@ -2784,6 +2808,71 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         except Exception as e:
             logger.error(f"Error in _log_analytics: {e}")
+
+    def _build_safe_refusal_response(self, query: str, violations) -> str:
+        """
+        Build a safe refusal response that ships when the validator flags a
+        critical violation (added 28 May 2026 after the EFPIA-demo Biotech Act
+        / Andriukaitis fabrication incident).
+
+        The template explicitly tells the user which kinds of claims Brubru
+        cannot confirm and points them to the Legislative Tracker so they can
+        be alerted when the data lands. It does NOT repeat any of the
+        problematic content from the original response.
+        """
+        violation_types = {v.type for v in (violations or [])}
+
+        lines = [
+            "I cannot answer that with confidence from Brubru's verified record.",
+        ]
+
+        if "user_claim_capitulation" in violation_types or "name_splitting" in violation_types:
+            lines.append(
+                "Your question asserts a specific role for a named person on a procedure that "
+                "Brubru's record does not currently confirm. I will not validate that assertion "
+                "from training-data memory."
+            )
+        if "fabricated_meeting" in violation_types:
+            lines.append(
+                "I also cannot confirm any specific meeting between a named person and a "
+                "Commission service on the date you mention -- that meeting is not in Brubru's calendar, "
+                "Transparency Register snapshot, or press-release feed."
+            )
+        if "fabricated_future_date" in violation_types:
+            lines.append(
+                "Specific future committee or plenary vote dates for this file are not in "
+                "Brubru's calendar yet."
+            )
+        if "hallucination" in violation_types and not (
+            "user_claim_capitulation" in violation_types
+            or "name_splitting" in violation_types
+            or "fabricated_meeting" in violation_types
+            or "fabricated_future_date" in violation_types
+        ):
+            lines.append(
+                "The initial draft of my answer included specific names, quotes, or numbers "
+                "that I could not verify against Brubru's retrieved sources."
+            )
+        if "completeness" in violation_types and not violation_types & {
+            "user_claim_capitulation",
+            "name_splitting",
+            "fabricated_meeting",
+            "fabricated_future_date",
+            "hallucination",
+        }:
+            lines.append(
+                "My initial answer omitted items that Brubru does have on record. I would rather "
+                "stop and offer to deliver the full list than ship an incomplete one."
+            )
+
+        lines.append(
+            "What I can offer: track this file in your Legislative Tracker (My EU Bubble > "
+            "Legislative Tracker) so Brubru pings you the moment the rapporteur, lead committee, "
+            "or vote date is recorded. I can also pull the Commission proposal text, the EPRS "
+            "briefing, and any calendar events that ARE on file -- ask me for any of those."
+        )
+
+        return "\n\n".join(lines)
 
     async def _log_chat_validation(
         self,
