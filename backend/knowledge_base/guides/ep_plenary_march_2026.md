@@ -1,7 +1,7 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
-**LATEST (Wednesday 27 May 2026 — EPRS AT A GLANCE: MAY 2026 PLENARY ROUND-UP (EPRS_ATA(2026)789306))**: EPRS published its "At a Glance" round-up of the May 2026 EP plenary session (Ref: EPRS_ATA(2026)789306, 22 May 2026). Covers the key votes and debates from the 19-22 May Strasbourg plenary: industrial competitiveness resolutions, rights-related urgency resolutions, and committee-work mandates. Source: EPRS, EP Think Tank.
+**LATEST (Wednesday 27 May 2026 — EPRS AT A GLANCE: MAY 2026 PLENARY ROUND-UP (EPRS_ATA(2026)789306))**: EPRS published its "At a Glance" round-up of the May 2026 EP plenary session (Ref: EPRS_ATA(2026)789306, 22 May 2026). Covers the key votes and debates from the **18-21 May** Strasbourg plenary (round-up published Friday 22 May): industrial competitiveness resolutions, rights-related urgency resolutions, and committee-work mandates. Source: EPRS, EP Think Tank.
 
 **LATEST (Tuesday 12 May 2026)** — answering "what is the next EP plenary" (verified against `memory/ep_calendar_2026.md` and the official EP 2026 Calendar of Parliamentary Activities PDF):
 

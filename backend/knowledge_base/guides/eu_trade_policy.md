@@ -1,6 +1,7 @@
 # EU Trade Policy
 
 ## QUICK FACTS
+- **LATEST (Wednesday 27 May 2026 — EU-MEXICO SUMMIT)**: President von der Leyen and Commissioner Sefcovic attended the EU-Mexico summit (27 May 2026). Von der Leyen declared: "We are taking our partnership to a whole new level." The summit marks a step-change in the EU-Mexico Global Agreement (in force since 2000), covering trade, political dialogue, and cooperation. The modernised EU-Mexico Global Agreement (covering a new-generation free trade agreement) concluded negotiations in 2023; the summit accelerates formal ratification steps. Source: EC Press Corner AC_26_1172, 27 May 2026.
 - Responsible DG: DG TRADE
 - Responsible Commissioner: Maros Sefcovic (Commissioner for Trade and Economic Security)
 - EP lead committee: INTA (International Trade)

@@ -8242,6 +8242,32 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'cherosene approvvigionamento ue': ['iran_strait_hormuz_eu_response'],
     'kerosine luchtvaart bevoorrading eu': ['iran_strait_hormuz_eu_response'],
 
+    # mobile_satellite_services_eu (added 28 May 2026)
+    'mobile satellite services': ['mobile_satellite_services_eu'],
+    'mss authorisation eu': ['mobile_satellite_services_eu'],
+    'satellite connectivity eu': ['mobile_satellite_services_eu'],
+    'starlink eu regulation': ['mobile_satellite_services_eu'],
+    'eu satellite authorisation': ['mobile_satellite_services_eu'],
+    'iris2 satellite': ['mobile_satellite_services_eu', 'eu_space_programme'],
+    'servicios móviles por satélite ue': ['mobile_satellite_services_eu'],
+    'services mobiles par satellite ue': ['mobile_satellite_services_eu'],
+    'servizi mobili via satellite ue': ['mobile_satellite_services_eu'],
+    'diensten mobiele satelliet eu': ['mobile_satellite_services_eu'],
+    'serveis mòbils per satèl·lit ue': ['mobile_satellite_services_eu'],
+
+    # eu_humanitarian_aid_reform_2026 (added 28 May 2026)
+    'eu humanitarian aid': ['eu_humanitarian_aid_reform_2026'],
+    'echo humanitarian': ['eu_humanitarian_aid_reform_2026'],
+    'humanitarian aid reform': ['eu_humanitarian_aid_reform_2026'],
+    'dg echo': ['eu_humanitarian_aid_reform_2026'],
+    'eu humanitarian action': ['eu_humanitarian_aid_reform_2026'],
+    'aide humanitaire ue': ['eu_humanitarian_aid_reform_2026'],
+    'ayuda humanitaria ue': ['eu_humanitarian_aid_reform_2026'],
+    'ajuda humanitaria ue': ['eu_humanitarian_aid_reform_2026'],
+    'aiuto umanitario ue': ['eu_humanitarian_aid_reform_2026'],
+    'humanitaire hulp eu': ['eu_humanitarian_aid_reform_2026'],
+    'lahbib humanitarian': ['eu_humanitarian_aid_reform_2026'],
+
     # 8 May 2026 — German State aid 5bn industry decarbonisation
     'german state aid 5 billion industry decarbonisation': ['competition_law_enforcement'],
     'germany 5 billion industry decarbonisation aid': ['competition_law_enforcement'],

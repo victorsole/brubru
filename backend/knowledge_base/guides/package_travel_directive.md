@@ -1,6 +1,7 @@
 # Revision of the Package Travel Directive
 
 ## QUICK FACTS
+- **LATEST (Thursday 28 May 2026)**: Commission published "Package travel — Stronger rights for travellers and simpler rules for the travel industry" (28 May 2026). The Commission is promoting the revised Directive's key consumer protections following the EP first reading (12 March 2026). File is now in Council first reading / inter-institutional negotiations. Source: commission.europa.eu/news, 28 May 2026.
 - Full name: Revision of the Package Travel Directive
 - Original directive: Directive (EU) 2015/2302 on package travel and linked travel arrangements
 - CELEX (original): 32015L2302

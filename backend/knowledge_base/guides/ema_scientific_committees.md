@@ -5,7 +5,7 @@ QUICK FACTS:
 - **CHMP** (Committee for Medicinal Products for Human Use) adopts opinions on marketing-authorisation applications, line extensions and safety referrals for human medicines, which the European Commission turns into EU-wide authorisations. **2026 plenary dates:** 26-29 January, 23-26 February, 23-26 March, 20-23 April, 18-21 May, 22-25 June, 20-23 July, 17-20 August (run by written procedure), 14-17 September, 12-15 October, 9-12 November, 7-10 December.
 - **PRAC** (Pharmacovigilance Risk Assessment Committee) assesses safety signals, periodic safety update reports, post-authorisation safety studies and referrals, and recommends EU-wide risk-minimisation measures. **2026 plenary dates:** 12-15 January, 9-12 February, 9-12 March, 7-10 April, 4-7 May, 8-11 June, 6-9 July, 3-6 August (written procedure), 31 August-3 September, 28 September-1 October, 26-29 October, 23-26 November.
 - **COMP** (Committee for Orphan Medicinal Products) reviews orphan-designation applications and advises on the EU orphan-medicines framework. **2026 plenary dates:** 20-22 January, 17-19 February, 17-19 March, 14-16 April, 11-13 May, 16-18 June, 14-16 July, 8-10 September, 6-8 October, 3-5 November, 1-3 December (no meeting in August).
-- All meetings are held at the EMA in Amsterdam. The full schedule is in Brubru's My EU Calendar (filter institution = EMA).
+- **All meetings are held at EMA headquarters, Domenico Scarlattilaan 6, 1083 HS Amsterdam, Netherlands.** The full schedule is in Brubru's My EU Calendar (filter institution = EMA).
 
 ## What these committees do and why they matter
 
