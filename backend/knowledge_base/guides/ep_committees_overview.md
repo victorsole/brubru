@@ -51,6 +51,17 @@ Rapporteur identity is authoritative on **OEIL**, not press — see `feedback_oe
 - **My EU Bubble**: committee draft agendas, reports and amendments are scraped/synced (`committee_work_scraper.py`) and surfaced in My Files / Amendments.
 - **Calendar**: committee meeting weeks differ from plenary weeks.
 
+## Meeting transcripts (AI-generated, April–May 2026)
+Brubru transcribes committee meeting recordings from the EP Multimedia Centre (`multimedia.europarl.europa.eu`) using Voxtral (Mistral open-source ASR). Ask about what was discussed by naming a committee and/or a topic:
+- "What did the **ENVI** committee discuss on 5 May 2026?"
+- "What did the **LIBE** committee say about the AI Act?"
+- "What was discussed in the **SANT** committee about the Critical Medicines Act?"
+- "What was the exchange in the **ITRE** committee on the Digital Networks Act?"
+
+Available committees (most recent meeting transcribed): AFCO, AFET, AGRI, BUDG, CONT, CULT, DEVE, DROI, ECON, EMPL, ENVI, FEMM, FISC, HOUS, IMCO, INTA, ITRE, JURI, LIBE, PETI, REGI, SANT, SEDE, TRAN (April–May 2026).
+
+Transcripts are AI-generated and may miss speaker names; the official minutes and reports remain authoritative. Source: EP Multimedia Centre webstreaming archive.
+
 ## Cross-references
 - `european_parliament_structure.md` — how committees fit the whole EP
 - `ep_political_groups_overview.md` — groups (rapporteur/shadow allocation)

@@ -5723,6 +5723,7 @@ class ContextBuilder:
         "cont committee", "pech committee", "afet committee", "inta committee",
         "empl committee", "cult committee", "femm committee", "fisc committee",
         "sede subcommittee", "droi subcommittee", "peti committee",
+        "euds subcommittee", "hous committee", "sant subcommittee",
         # French
         "réunion de commission", "commission libe", "commission envi",
         "commission econ", "en commission parlementaire",
@@ -6338,6 +6339,7 @@ class ContextBuilder:
         "AFCO", "AFET", "AGRI", "BUDG", "CONT", "CULT", "DEVE", "DROI", "ECON",
         "EMPL", "ENVI", "FEMM", "FISC", "IMCO", "INTA", "ITRE", "JURI", "LIBE",
         "PECH", "PETI", "REGI", "SEDE", "TRAN", "PANA", "SANT",
+        "EUDS", "HOUS",  # term 10 additions
     }
 
     def _detect_committee_transcript_intent(self, query: str) -> Optional[Dict[str, Any]]:

@@ -44,7 +44,7 @@ class CommitteeMeetingTranscript(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     # Core identifiers
-    committee_code = Column(String(10), nullable=False)       # "LIBE", "ENVI"
+    committee_code = Column(String(20), nullable=False)       # "LIBE", "ENVI", "IMCOJURIPETI"
     meeting_date = Column(DateTime, nullable=False)
     title = Column(String, nullable=False)                     # "ENVI Committee Meeting - 14 April 2026"
 
