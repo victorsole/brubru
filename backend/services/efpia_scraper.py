@@ -409,6 +409,123 @@ def parse_ep_sant_documents(html: str, source: dict) -> List[ScrapedItem]:
     return items
 
 
+_EMA_DATE_DMY_RE = re.compile(r"^\s*(\d{2})/(\d{2})/(\d{4})\s*[-–]\s*(.+)$")
+
+
+def parse_ema_whats_new_table(html: str, source: dict) -> List[ScrapedItem]:
+    """
+    EMA What's new is one big <tr> table with columns: date, kind+title, action.
+    Each row is a product update, document update, EPAR change, etc. Volume is
+    high (~450 rows) so we cap at the most recent 60 by document order (table
+    is already date-sorted) and assign a low relevance_score (30) so individual
+    EPAR updates do not dominate the daily-candidates pool.
+    """
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[ScrapedItem] = []
+    base = "https://www.ema.europa.eu/"
+
+    cap = 60
+    rows = soup.find_all("tr")
+    for row in rows:
+        a = row.find("a", href=True)
+        if not a:
+            continue
+        cells = row.find_all(["td", "th"])
+        if len(cells) < 2:
+            continue
+        date_text = cells[0].get_text(" ", strip=True)
+        title_text = cells[1].get_text(" ", strip=True)
+        action_text = cells[2].get_text(" ", strip=True) if len(cells) > 2 else ""
+        if not title_text:
+            continue
+        # Parse DD/MM/YYYY
+        published_dt: Optional[datetime] = None
+        try:
+            published_dt = datetime.strptime(date_text, "%d/%m/%Y").replace(tzinfo=timezone.utc)
+        except ValueError:
+            pass
+
+        url_abs = _absolute(a["href"], base)
+        items.append(
+            ScrapedItem(
+                source_id=source["id"],
+                institution=source["institution"],
+                bucket=source["bucket"],
+                kind=source["kind"],
+                item_url=url_abs,
+                item_title=title_text[:512],
+                item_summary=(action_text or None),
+                item_published_at=published_dt,
+                relevance_score=30,
+                metadata={"parser": "ema_whats_new_table", "action": action_text},
+            )
+        )
+        if len(items) >= cap:
+            break
+    return items
+
+
+def parse_ema_open_consultations(html: str, source: dict) -> List[ScrapedItem]:
+    """
+    EMA Open consultations lists each consultation as an h3 with text
+    "DD/MM/YYYY - <consultation title>" followed by a 'View' link to the
+    consultation document.
+    """
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[ScrapedItem] = []
+    base = "https://www.ema.europa.eu/"
+    main = soup.find("main") or soup
+
+    for heading in main.find_all(["h2", "h3", "h4"]):
+        text = heading.get_text(" ", strip=True)
+        m = _EMA_DATE_DMY_RE.match(text)
+        if not m:
+            continue
+        day, month, year, title = m.groups()
+        try:
+            published_dt = datetime(int(year), int(month), int(day), tzinfo=timezone.utc)
+        except ValueError:
+            published_dt = None
+
+        # The View link lives inside the heading's containing accordion-item
+        # (a parent <div>), not in the next sibling chain. Walk up two levels
+        # to find the container, then pick the first /documents/ link.
+        view_url: Optional[str] = None
+        container = heading
+        for _ in range(4):
+            container = container.parent
+            if container is None:
+                break
+            if container.name == "div":
+                for link in container.find_all("a", href=True):
+                    href = link["href"]
+                    if href.startswith("/en/documents/") or "/documents/" in href:
+                        view_url = href
+                        break
+            if view_url:
+                break
+
+        if not view_url:
+            continue
+        items.append(
+            ScrapedItem(
+                source_id=source["id"],
+                institution=source["institution"],
+                bucket=source["bucket"],
+                kind=source["kind"],
+                item_url=_absolute(view_url, base),
+                item_title=title.strip().strip('“”'),
+                item_summary=None,
+                item_published_at=published_dt,
+                relevance_score=75,
+                metadata={"parser": "ema_open_consultations"},
+            )
+        )
+    return items
+
+
 def parse_rss(body: str, source: dict) -> List[ScrapedItem]:
     """
     RSS 2.0 / Atom feed parser. Used by DG GROW newsroom feeds and any
@@ -509,6 +626,8 @@ _PARSERS: dict[str, Callable[[str, dict], List[ScrapedItem]]] = {
     "rss": parse_rss,
     "ecl": parse_ecl,
     "ema": parse_ema,
+    "ema_whats_new_table": parse_ema_whats_new_table,
+    "ema_open_consultations": parse_ema_open_consultations,
     "ep_sant_press": parse_ep_sant_press,
     "ep_sant_documents": parse_ep_sant_documents,
     "generic": parse_generic,
@@ -516,8 +635,9 @@ _PARSERS: dict[str, Callable[[str, dict], List[ScrapedItem]]] = {
 
 
 _SOURCE_PARSER_OVERRIDES: dict[str, str] = {
-    # Anything starting with dg_sante_ uses the ECL parser by default
-    # except where overridden below.
+    # EMA non-standard shapes
+    "ema_whats_new": "ema_whats_new_table",
+    "ema_open_consultations": "ema_open_consultations",
 }
 
 

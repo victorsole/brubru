@@ -35,7 +35,7 @@ from api import (
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
     whatsapp, positions, archive, amendator_examples, public_analytics,
     datasets_dcat, comparator, dashboard, proactive, impact,
-    alerts, language_analytics,
+    alerts, language_analytics, efpia,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -219,6 +219,7 @@ app.include_router(cron.router, tags=["Cron Jobs"])
 app.include_router(dg_grow.router, tags=["DG GROW Databases"])
 app.include_router(preuser_analytics.router, tags=["Pre-User Analytics"])
 app.include_router(daily_brief.router, tags=["Daily Brief"])
+app.include_router(efpia.router, tags=["EFPIA"])
 app.include_router(catalan_translations.router, tags=["Catalan Translations"])
 app.include_router(whatsapp.router, tags=["WhatsApp"])
 app.include_router(positions.router, tags=["Position Analysis"])

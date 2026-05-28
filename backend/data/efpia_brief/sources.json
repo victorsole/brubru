@@ -2,15 +2,12 @@
   "_comment": "EFPIA pharma/health source map. Locked 28 May 2026 from Victor's list of ~80 URLs. Sources are bucketed by institution and feed the daily scraper (scripts/scrape_efpia_sources.py) which writes into the efpia_scraped_items table. The Brubru EFPIA Brief (scripts/ingest_efpia_brief.py + send_efpia_brief.py) reads the top-ranked items each morning to propose 5 headlines for human curation.",
   "updated_at": "2026-05-28",
   "tier1_priority_sources": [
-    "ema_rss_feeds",
     "ema_news",
     "ema_whats_new",
-    "ema_committee_highlights",
-    "ema_upcoming_events",
     "ema_open_consultations",
+    "ema_upcoming_events",
     "dg_sante_latest_updates",
     "dg_sante_medicinal_products",
-    "dg_sante_biotechnology",
     "dg_sante_hera",
     "dg_grow_pharma_rss",
     "dg_grow_meddev_rss",
@@ -20,6 +17,11 @@
     "ep_sant_votes",
     "ep_sant_webstreaming"
   ],
+  "deprecated_from_tier1": {
+    "ema_rss_feeds": "index page listing other feeds; items reach DB via ema_news + ema_whats_new + ema_upcoming_events.",
+    "ema_committee_highlights": "JS-rendered landing; same highlights surface via ema_news (Meeting highlights -- CHMP / PRAC / COMP).",
+    "dg_sante_biotechnology": "static topic hub, no news listing; Biotech Act items surface via dg_sante_latest_updates."
+  },
   "sources": [
     {
       "id": "dg_grow_pharma_rss",
