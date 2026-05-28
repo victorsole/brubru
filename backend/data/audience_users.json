@@ -1,0 +1,11 @@
+{
+  "_comment": "Maps audience slugs to the user emails that should see the audience-tagged chat card + EU CONTEXT injection. Loaded by services/audience.py. Future tenants append here.",
+  "updated_at": "2026-05-28",
+  "audiences": {
+    "efpia": [
+      "public-affairs@efpia.eu",
+      "david.devantcerezo@efpia.eu",
+      "athina.giannoutsou@efpia.eu"
+    ]
+  }
+}

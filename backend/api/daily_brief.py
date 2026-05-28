@@ -3,12 +3,17 @@ Daily EU Brief API
 
 Serves today's EU institutional headlines for the chat page Daily Brief.
 Public endpoint (no auth required) -- pre-users need to see this.
+
+Tenant-scoped variant (28 May 2026): when the requester sends a valid JWT
+and that user is mapped to a tenant audience in backend/data/audience_users.json,
+the endpoint returns the tenant's audience='efpia' rows instead of the public
+audience IS NULL rows. Public anonymous users keep the existing behaviour.
 """
 
 from datetime import date, timedelta
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Header, Query
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -16,8 +21,53 @@ from sqlalchemy import desc
 
 from core.database import get_db
 from models.daily_brief import DailyBrief
+from services.audience import resolve_audience
 
 router = APIRouter(prefix="/api/daily-brief", tags=["daily-brief"])
+
+
+def _resolve_request_audience(
+    db: Session,
+    authorization: Optional[str],
+) -> Optional[str]:
+    """
+    Soft-decode the bearer JWT (if any) and return the audience slug the user
+    is mapped to. Anonymous and unmapped requests return None.
+
+    This deliberately does NOT depend on get_current_user -- the daily brief
+    must keep working for pre-users, and a bad token should not 401 the
+    endpoint, it should just degrade to public behaviour.
+    """
+
+    if not authorization:
+        return None
+    if not authorization.lower().startswith("bearer "):
+        return None
+    token = authorization.split(" ", 1)[1].strip()
+    if not token:
+        return None
+
+    try:
+        from api.auth import SECRET_KEY, ALGORITHM
+        from jose import jwt, JWTError
+        from models.user import User
+    except Exception:
+        return None
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        return None
+
+    user_id = payload.get("sub")
+    if not user_id:
+        return None
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or not user.is_active or not getattr(user, "email", None):
+        return None
+
+    return resolve_audience(user.email)
 
 
 class BriefItem(BaseModel):
@@ -37,58 +87,71 @@ class DailyBriefResponse(BaseModel):
     total: int
 
 
-@router.get("", response_model=DailyBriefResponse)
-def get_daily_brief(
-    limit: int = Query(default=5, ge=1, le=20),
-    db: Session = Depends(get_db),
+def _fetch_for_audience(
+    db: Session,
+    target_date: date,
+    audience: Optional[str],
+    limit: int,
 ):
-    """
-    Get today's EU institutional headlines.
-
-    Falls back to yesterday if no items for today yet (scraper hasn't run).
-    Public endpoint -- no auth required.
-    """
-    today = date.today()
-
-    # Try today first
-    items = (
-        db.query(DailyBrief)
-        .filter(DailyBrief.brief_date == today)
-        .order_by(DailyBrief.priority, DailyBrief.created_at)
+    q = db.query(DailyBrief).filter(DailyBrief.brief_date == target_date)
+    if audience is None:
+        q = q.filter(DailyBrief.audience.is_(None))
+    else:
+        q = q.filter(DailyBrief.audience == audience)
+    return (
+        q.order_by(DailyBrief.priority, DailyBrief.created_at)
         .limit(limit)
         .all()
     )
 
+
+@router.get("", response_model=DailyBriefResponse)
+def get_daily_brief(
+    limit: int = Query(default=5, ge=1, le=20),
+    db: Session = Depends(get_db),
+    authorization: Optional[str] = Header(default=None),
+):
+    """
+    Get today's EU institutional headlines.
+
+    Falls back to yesterday, then to the most recent date with data, if
+    nothing is on file for today yet.
+
+    Tenant-aware: if the requester carries a valid JWT for a user mapped to a
+    tenant audience (e.g. EFPIA), the tenant's audience-tagged rows are
+    returned. Otherwise the public (audience IS NULL) stream is returned.
+    """
+    today = date.today()
+    audience = _resolve_request_audience(db, authorization)
+
+    items = _fetch_for_audience(db, today, audience, limit)
     brief_date = today
 
-    # Fallback to yesterday if empty
     if not items:
         yesterday = today - timedelta(days=1)
-        items = (
-            db.query(DailyBrief)
-            .filter(DailyBrief.brief_date == yesterday)
-            .order_by(DailyBrief.priority, DailyBrief.created_at)
-            .limit(limit)
-            .all()
-        )
+        items = _fetch_for_audience(db, yesterday, audience, limit)
         brief_date = yesterday
 
-    # Fallback to most recent date with data
     if not items:
         latest = (
             db.query(DailyBrief.brief_date)
+            .filter(
+                DailyBrief.audience.is_(None) if audience is None else DailyBrief.audience == audience
+            )
             .order_by(desc(DailyBrief.brief_date))
             .first()
         )
         if latest:
             brief_date = latest[0]
-            items = (
-                db.query(DailyBrief)
-                .filter(DailyBrief.brief_date == brief_date)
-                .order_by(DailyBrief.priority, DailyBrief.created_at)
-                .limit(limit)
-                .all()
-            )
+            items = _fetch_for_audience(db, brief_date, audience, limit)
+
+    # Final safety net: if a tenant has no rows at all, fall back to public stream
+    if not items and audience is not None:
+        items = _fetch_for_audience(db, today, None, limit)
+        if not items:
+            items = _fetch_for_audience(db, today - timedelta(days=1), None, limit)
+        if items:
+            brief_date = items[0].brief_date
 
     return DailyBriefResponse(
         date=brief_date.isoformat(),
