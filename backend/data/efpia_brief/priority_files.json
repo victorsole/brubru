@@ -1,54 +1,59 @@
 {
-  "_comment": "EFPIA's monitored EU pharma/health files. The daily brief reads this and renders the 'Brubru is also tracking your files' block. Source: backend/knowledge_base/private_guides/david-devant-efpia/01_priority_files.md (seeded 21 May 2026). Athina's guide carries the same set plus the Critical Medicines Act track.",
-  "updated_at": "2026-05-28",
+  "_comment": "EFPIA's monitored EU pharma/health files. The daily brief reads this and renders the 'Brubru is also tracking your files' block. Each law title links to the file's CARD inside My EU Bubble (My Files deep-link ?tab=my_files&file=<file_id> (opens the law's own modal)) where a card exists, or to the file's dedicated deep-dive page, or to the right MEUB tab. Never to the Chat. file_id values verified live against /api/bubble/legislative-files/{file_id} on 29 May 2026. Source: backend/knowledge_base/private_guides/david-devant-efpia/01_priority_files.md.",
+  "updated_at": "2026-05-29",
   "files": [
     {
       "label": "Revision of EU pharmaceutical legislation (Regulation track)",
       "oeil_ref": "2023/0131(COD)",
+      "file_id": "lip-2023-0131-COD",
       "status_note": "CLOSE_TO_ADOPTION - provisional trilogue agreement 11 Dec 2025; Council formal adoption expected autumn 2026; applicable 2028.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=Where+is+the+pharma+legislation+revision+%282023%2F0131%28COD%29%29+today%3F"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0131-COD"
     },
     {
       "label": "Revision of EU pharmaceutical legislation (Directive track)",
       "oeil_ref": "2023/0132(COD)",
+      "file_id": "2023-0132-cod",
       "status_note": "CLOSE_TO_ADOPTION - companion to 2023/0131; same trilogue calendar; national transposition window opens after entry into force.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=Status+of+the+pharma+Directive+2023%2F0132%28COD%29"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=2023-0132-cod"
     },
     {
       "label": "Critical Medicines Act",
-      "oeil_ref": "2026/0072(COD)",
-      "status_note": "Tomislav Sokol (EPP, HR) rapporteur, SANT lead committee; trilogue track.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=Critical+Medicines+Act+latest+status+and+rapporteur"
+      "oeil_ref": "2025/0102(COD)",
+      "status_note": "PROVISIONAL AGREEMENT 11-12 May 2026 (Cyprus Presidency). Rapporteur Tomislav Sokol (EPP, HR), SANT lead. Not adopted yet; legal-linguistic revision and formal adoption votes pending.",
+      "brubru_url": "https://brubru.beresol.eu/critical-medicines-act/index.html"
     },
     {
       "label": "Compulsory licensing of patents for crisis management",
       "oeil_ref": "2023/0129(COD)",
+      "file_id": "lip-2023-0129-COD",
       "status_note": "ADOPTED. Watch: Commission delegated/implementing acts + national transposition + first crisis trigger.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=Status+of+the+EU+compulsory+licensing+regulation"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0129-COD"
     },
     {
       "label": "Health Technology Assessment (HTA) Regulation - implementation",
       "celex": "32021R2282",
       "status_note": "IN FORCE since 12 Jan 2025 for oncology + ATMPs. Next phase: medical devices + IVDs from 2030.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=HTA+Regulation+Joint+Clinical+Assessment+state+of+play"
+      "brubru_url": "https://brubru.beresol.eu/pharma-laws/"
     },
     {
       "label": "Variations to marketing authorisations - modernisation",
       "oeil_ref": "2026/2685(DEA)",
+      "file_id": "2026-2685-dea",
       "status_note": "TABLED. Delegated act, procedural calendar matters most for member portfolios.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=Variations+to+marketing+authorisations+modernisation+timeline"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=2026-2685-dea"
     },
     {
       "label": "European Biotech Act",
       "oeil_ref": "2025/0406(COD)",
+      "file_id": "lip-2025-0406-COD",
       "status_note": "TABLED. Rapporteur not yet appointed; lead committee not yet designated; plenary not yet scheduled.",
-      "brubru_url": "https://brubru.beresol.eu/biotech-act/index.html"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2025-0406-COD"
     },
     {
       "label": "EMA scientific committees (CHMP / PRAC / COMP / CAT / HMPC / PDCO)",
       "celex": null,
       "status_note": "Standing surveillance. CHMP next plenary: 22-25 June 2026, Amsterdam.",
-      "brubru_url": "https://brubru.beresol.eu/main?q=When+does+the+EMA+CHMP+committee+next+meet"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar"
     }
   ],
   "recipients": {

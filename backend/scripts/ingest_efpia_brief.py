@@ -72,8 +72,11 @@ def ingest(issue_date: str, dry_run: bool = False) -> int:
     payload = _load_headlines(issue_date)
     priority = _load_priority_files()
     headlines = payload.get("headlines") or []
-    if len(headlines) != 5:
-        raise SystemExit(f"expected exactly 5 headlines, got {len(headlines)}")
+    # Flexible count: the EFPIA brief carries as many verified headlines as the
+    # day warrants. Floor of 3 so a brief is never thin; ceiling of 20 keeps the
+    # priority ladder (100 - idx) safely above the priority-files row (50).
+    if not (3 <= len(headlines) <= 20):
+        raise SystemExit(f"expected 3 to 20 headlines, got {len(headlines)}")
 
     brief_date = datetime.strptime(issue_date, "%Y-%m-%d").date()
 

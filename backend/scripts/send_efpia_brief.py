@@ -131,9 +131,12 @@ def _load_headlines(issue_date: str) -> dict:
     if not isinstance(data, dict):
         raise SystemExit(f"{path} must contain a JSON object")
     headlines = data.get("headlines") or []
-    if len(headlines) != 5:
+    # Flexible count: the EFPIA brief carries as many verified headlines as the
+    # day warrants (3 to 20). EFPIA's savants want everything that moved, so we
+    # do not cap at 5.
+    if not (3 <= len(headlines) <= 20):
         raise SystemExit(
-            f"{path} must define exactly 5 headlines (got {len(headlines)})."
+            f"{path} must define 3 to 20 headlines (got {len(headlines)})."
         )
     return data
 
@@ -284,7 +287,7 @@ def _build_tracking_block(priority_files: list[dict]) -> str:
         <li style="margin-bottom: 8px;">
           <a href="{pf['brubru_url']}" style="color: #0693e3; text-decoration: none; font-weight: 600;">{pf['label']}</a>
           <div style="font-size: 12px; color: #6b7280; margin-top: 2px;">
-            {refs} &mdash; {pf.get('status_note', '')}
+            {refs}. {pf.get('status_note', '')}
           </div>
         </li>"""
         )
@@ -342,7 +345,6 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
         _build_headline_block(h, i) for i, h in enumerate(payload["headlines"])
     )
     tracking_block = _build_tracking_block(priority_files)
-    updates_block = _build_updates_block(updates)
     pretty_date = _pretty_date(issue_date, day_label)
 
     return f"""<!DOCTYPE html>
@@ -376,7 +378,6 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
         </td></tr>
         <tr><td style="padding: 0 32px 8px 32px;">
           {tracking_block}
-          {updates_block}
         </td></tr>
         <tr><td style="padding: 20px 32px 28px 32px; font-size: 11px; color: #9ca3af; line-height: 1.5;">
           You are receiving the Brubru EFPIA Brief as part of the EFPIA pilot access window

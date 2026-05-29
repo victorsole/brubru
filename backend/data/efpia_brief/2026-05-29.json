@@ -1,52 +1,43 @@
 {
   "issue_date": "2026-05-29",
   "day_of_week": "Friday",
-  "hero_intro": "Welcome to the Brubru EFPIA Brief. Every weekday until 28 June you receive a short read of what moved in EU pharma and health policy in the last 24 hours. You also see what Brubru is tracking for you, and what the agent itself has learned today. Five items below.",
+  "hero_intro": "Welcome to the Brubru EFPIA Brief. The freshest EU pharma and health moves from the last 48 hours, with what Brubru is tracking for you underneath. Every item links straight to the answer inside Brubru: a chat you can interrogate, your calendar, or the file's own page. A quiet end to the week on the regulatory wires, so this is a focused read: health security, the next health committee sitting, the Biotech Act evidence base, and antimicrobial resistance.",
   "headlines": [
     {
-      "title": "The Commission published the full analysis behind the Biotech Act",
-      "source": "DG SANTE, Wednesday 27 May 2026",
-      "snippet": "The Commission has now published the evidence document that sits underneath the Biotech Act, both the Regulation and the companion Directive on genetically modified microorganisms. The seven pillars are confirmed, the budget envelope of 20.4 billion euros under the next financial framework is confirmed, and the three new governance bodies are spelled out. The proposal is still on the table at the European Parliament. No rapporteur has been appointed for procedure 2025/0406(COD) and no committee vote is scheduled.",
-      "ask": "What does the Biotech Act analysis cover and what is its status in the European Parliament?",
+      "title": "EU health security group met this week, reports just published",
+      "source": "DG SANTE Latest Updates, 27 and 28 May 2026",
+      "snippet": "The Commission has published the reports from the General Working Group of the Health Security Committee, which met on 27 May, alongside the summary of an ad hoc working group on 26 May. This is the layer that coordinates Member State and Commission action on serious cross-border health threats: preparedness, surveillance and joint procurement. EFPIA's vaccines and antimicrobial members read it for the earliest signals on the next joint-procurement and stockpiling waves.",
+      "ask": "What did the EU Health Security Committee working group discuss this week, and how does EU joint procurement of medicines work?",
       "feature_label": "Chat",
-      "feature_url": "https://brubru.beresol.eu/biotech-act/index.html",
+      "feature_url": "https://brubru.beresol.eu/main?q=What+did+the+EU+Health+Security+Committee+working+group+discuss+on+27+May+2026+and+how+does+EU+joint+procurement+work",
       "color": "#0693e3"
     },
     {
-      "title": "The next EMA CHMP meeting is 22 to 25 June in Amsterdam",
-      "source": "EMA scientific committee calendar, May 2026",
-      "snippet": "The next CHMP plenary runs from 22 to 25 June at EMA headquarters in Amsterdam. PRAC meets on 8 to 11 June and COMP on 16 to 18 June. If your company has a file in the queue, this is the window to confirm your rapporteur engagement plan. Brubru's My EU Calendar carries every 2026 date for CHMP, PRAC, COMP, CAT, PDCO and HMPC, filterable by committee.",
-      "ask": "When does the EMA CHMP next meet, and what are all the 2026 plenary dates?",
+      "title": "Parliament's health committee sits Wednesday 3 June, agenda published",
+      "source": "European Parliament SANT subcommittee, draft agenda for 3 June 2026 (published 28 May)",
+      "snippet": "The Parliament's public health subcommittee has published the draft agenda for its next sitting on Wednesday 3 June, built around the EU health workforce, health resilience and disease prevention. This is the room where the pharmaceutical package and the Critical Medicines Act follow-up move. If you have a file in front of this committee, this is the moment to confirm your shadow engagement. Open your EU calendar to see it alongside the institutional dates that week.",
+      "ask": "What is the European Parliament public health committee likely to discuss at its 3 June 2026 meeting?",
       "feature_label": "My EU Calendar",
-      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
       "color": "#059669"
     },
     {
-      "title": "The Commission extended Hungary's and Poland's emergency medicine measures",
-      "source": "Official Journal, Commission Implementing Decisions 2026/1182 and 2026/1104, late May 2026",
-      "snippet": "Two implementing decisions extending Member State emergency action on specific medicinal products were published this week, one for Hungary and one for Poland. The legal basis is Article 5(1) of Directive 2001/83/EC, the route that lets a national authority keep a product available outside the standard authorisation track. Companies with portfolios touching either market should map the affected products. Brubru can pull the consolidated text on request.",
-      "ask": "What did the Commission extend with Implementing Decisions 2026/1182 and 2026/1104, and what is Article 5(1) of Directive 2001/83/EC?",
-      "feature_label": "Chat",
-      "feature_url": "https://brubru.beresol.eu/main?q=Commission+Implementing+Decision+2026%2F1182+Article+5+Directive+2001%2F83",
+      "title": "The Commission published the evidence base behind the Biotech Act",
+      "source": "DG SANTE, Wednesday 27 May 2026",
+      "snippet": "The Commission published the analysis underpinning the Biotech Act proposals, the Regulation and the companion work on genetically modified microorganisms. The document sets out the rationale, the pillars and the governance design. The proposal is still on the table at the European Parliament: no rapporteur has been appointed and no lead committee designated yet, so treat any named MEP or vote date with caution. Read the Brubru deep dive for what is known versus what is not.",
+      "ask": "What does the Biotech Act analysis cover, and what is its status in the European Parliament?",
+      "feature_label": "the Biotech Act deep dive",
+      "feature_url": "https://brubru.beresol.eu/biotech-act/index.html",
       "color": "#9b51e0"
     },
     {
-      "title": "The Health Security Committee met on 24 May, summary report now public",
-      "source": "DG SANTE Health Security Committee summary report, Tuesday 26 May 2026",
-      "snippet": "The senior-level Health Security Committee, the body that coordinates Member State and Commission action on serious cross-border health threats, met on 24 May. The summary report covers preparedness, surveillance, and joint procurement. EFPIA's vaccines and antimicrobial members watch this layer for early signals on the next joint-procurement waves. DG SANTE also flagged a Prevention Subgroup meeting on lifelong prevention held on 22 May.",
-      "ask": "What did the EU Health Security Committee discuss on 24 May 2026, and how does joint procurement work under Decision 1082/2013/EU?",
+      "title": "The EU's AMR One Health Network has published its latest meeting papers",
+      "source": "DG SANTE Latest Updates, published 28 May 2026",
+      "snippet": "DG SANTE has published the presentations from the latest meetings of the AMR One Health Network, the expert group that coordinates Member State action on antimicrobial resistance across human health, animal health and the environment. Antimicrobial resistance sits at the intersection of three EFPIA priorities: the pharmaceutical package incentives debate, the Critical Medicines Act, and health-security coordination. Ask Brubru how the EU's One Health approach and the incentive mechanisms fit together.",
+      "ask": "What is the EU's One Health approach to antimicrobial resistance, and what does the AMR One Health Network do?",
       "feature_label": "Chat",
-      "feature_url": "https://brubru.beresol.eu/main?q=Health+Security+Committee+24+May+2026+joint+procurement+Decision+1082%2F2013",
+      "feature_url": "https://brubru.beresol.eu/main?q=What+is+the+EU+One+Health+approach+to+antimicrobial+resistance+and+what+does+the+AMR+One+Health+Network+do",
       "color": "#dc2626"
-    },
-    {
-      "title": "Brubru is tracking the Critical Medicines Act, now a provisional deal",
-      "source": "Brubru legislative tracker, late May 2026",
-      "snippet": "The Critical Medicines Act procedure 2025/0102(COD) reached a provisional inter-institutional agreement on 11 and 12 May under the Cyprus Council Presidency. It is not yet adopted, the legal-linguistic clean-up and the formal adoption votes still have to happen. The main change worth carrying: the threshold of Member States needed to ask the Commission to procure on their behalf dropped from nine to five. Tomislav Sokol (EPP, Croatia) stays the SANT rapporteur, with the same shadow team that worked the December report.",
-      "ask": "What is the current status of the Critical Medicines Act trilogue, and what changed in the joint-procurement threshold?",
-      "feature_label": "Legislative Tracker",
-      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=legislative",
-      "color": "#ca8a04"
     }
   ]
 }
