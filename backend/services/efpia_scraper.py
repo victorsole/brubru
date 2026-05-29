@@ -745,6 +745,31 @@ def _pharma_relevance(title: Optional[str], summary: Optional[str]) -> int:
     return 60 if any(kw in blob for kw in _PHARMA_KEYWORDS) else 25
 
 
+# Broader HEALTH vocabulary (superset of pharma) for EP committee reports /
+# documents, which EFPIA wants focused on health issues, not only narrow pharma.
+_HEALTH_KEYWORDS = _PHARMA_KEYWORDS + (
+    "health", "public health", "healthcare", "health care", "patient",
+    "disease", "cancer", "mental health", "epidemic", "pandemic",
+    "health emergency", "health union", "medical", "one health",
+    "cross-border health", "tobacco", "nutrition", "biocide", "endocrine",
+    "ecdc", "ema", "hera", "european health data space", "ehds",
+)
+
+
+def _health_relevance(title: Optional[str], committees: Optional[list]) -> int:
+    """Score an EP report/document by HEALTH relevance.
+
+    65 if it comes from a health committee (any committee whose name contains
+    "health" -- the Public Health subcommittee SANT and the Environment, Public
+    Health and Food Safety committee ENVI), 60 if the title hits the health
+    vocabulary, otherwise 25 (filtered out of the default candidate feed).
+    """
+    if any("health" in (c or "").lower() for c in (committees or [])):
+        return 65
+    blob = (title or "").lower()
+    return 60 if any(kw in blob for kw in _HEALTH_KEYWORDS) else 25
+
+
 _SPARQL_WINDOW_DAYS = 45
 
 
@@ -811,7 +836,7 @@ def _scrape_oeil_feed(source: dict) -> List[ScrapedItem]:
             item_title=fi.title,
             item_summary=None,
             item_published_at=fi.last_pub_date,
-            relevance_score=_pharma_relevance(fi.title, fi.reference),
+            relevance_score=_health_relevance(fi.title, fi.committees),
             metadata={"parser": "oeil_feed", "reference": fi.reference,
                       "committees": fi.committees, "rapporteurs": fi.rapporteurs},
         ))
