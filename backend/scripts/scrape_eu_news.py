@@ -921,7 +921,7 @@ def save_to_daily_briefs(items: List[NewsItem]):
                 cur.execute(
                     """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                       ON CONFLICT (brief_date, url) DO NOTHING""",
+                       ON CONFLICT (brief_date, url, audience) DO NOTHING""",
                     (today, clean_headline, item.url, item.source, item.category,
                      item.priority, item.snippet or None,
                      generate_suggested_query(item.title))

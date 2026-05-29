@@ -674,6 +674,7 @@ class ContextData:
     # On-demand: TODAY block (current date + EP week type + 3-day calendar window + recent Commission docs)
     # Triggered by "today"/"hoy"/"avui"/"aujourd'hui"/"oggi"/"vandaag"/"heute"/"this week"/"esta semana"...
     today_block: Optional[str] = None
+    daily_brief_block: Optional[str] = None
 
     # On-demand: Legal-text article block (W1b, 12 May 2026)
     # Triggered by "Article N (paragraph M) of <CELEX|alias>", "Recital N of <CELEX|alias>",
@@ -1296,6 +1297,23 @@ class ContextBuilder:
 
         post_tasks['today_block'] = _fetch_today_safe()
 
+        # 3f2. On-demand: Daily Brief block (daily_briefs DB card for "Daily News DD/MM/YYYY" queries)
+        daily_brief_intent = self._detect_daily_brief_intent(user_message)
+
+        async def _fetch_daily_brief_safe():
+            if not daily_brief_intent:
+                return None
+            try:
+                block = await self._fetch_daily_brief_block(user_message)
+                if block:
+                    logger.info("[daily-brief-block] Injected daily brief block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[daily-brief-block] Failed: %s", e)
+                return None
+
+        post_tasks['daily_brief_block'] = _fetch_daily_brief_safe()
+
         # 3g. On-demand: Cellar SPARQL discovery block (live retrieval from publications.europa.eu)
         cellar_discovery_intent = self._detect_cellar_discovery_intent(user_message)
 
@@ -1732,6 +1750,7 @@ class ContextBuilder:
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
         today_block = post_map.get('today_block')
+        daily_brief_block = post_map.get('daily_brief_block')
         legal_text_article_block = post_map.get('legal_text_article_block')
         cellar_discovery_block = post_map.get('cellar_discovery_block')
         sanctions_block = post_map.get('sanctions_block')
@@ -1822,6 +1841,7 @@ class ContextBuilder:
             position_block=position_block,
             committee_transcript_block=committee_transcript_block,
             today_block=today_block,
+            daily_brief_block=daily_brief_block,
             legal_text_article_block=legal_text_article_block,
             cellar_discovery_block=cellar_discovery_block,
             sanctions_block=sanctions_block,
@@ -6160,6 +6180,98 @@ class ContextBuilder:
         return "\n".join(lines)
 
     # ------------------------------------------------------------------
+    # On-demand: Daily Brief block (daily_briefs DB card for a specific date)
+    # Triggered by "Daily News DD/MM/YYYY" or "daily news today" queries.
+    # ------------------------------------------------------------------
+
+    DAILY_BRIEF_INTENT_PHRASES = (
+        "daily news", "daily brief", "brubru brief", "noticies del dia",
+        "noticias del dia", "nouvelles du jour", "notizie del giorno",
+        "nieuws van vandaag",
+    )
+
+    def _detect_daily_brief_intent(self, query: str) -> bool:
+        if not query:
+            return False
+        q = query.lower()
+        for phrase in self.DAILY_BRIEF_INTENT_PHRASES:
+            if phrase in q:
+                return True
+        return False
+
+    def _parse_date_from_query(self, query: str) -> "Optional[date]":
+        """Extract a date from a query string. Handles:
+        - DD / MM / YYYY  (with any spacing around slashes)
+        - DD/MM/YYYY
+        - YYYY-MM-DD
+        Falls back to today (Europe/Brussels) if no date found.
+        """
+        import re
+        from datetime import date as _date
+        # DD[/.]MM[/.]YYYY with optional spaces
+        m = re.search(r'(\d{1,2})\s*/\s*(\d{1,2})\s*/\s*(\d{4})', query)
+        if m:
+            try:
+                return _date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+            except ValueError:
+                pass
+        # YYYY-MM-DD
+        m = re.search(r'(\d{4})-(\d{2})-(\d{2})', query)
+        if m:
+            try:
+                return _date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            except ValueError:
+                pass
+        # Fall back to today
+        try:
+            from zoneinfo import ZoneInfo
+            return __import__('datetime').datetime.now(ZoneInfo("Europe/Brussels")).date()
+        except Exception:
+            return __import__('datetime').date.today()
+
+    async def _fetch_daily_brief_block(self, query: str) -> Optional[str]:
+        """Fetch daily_briefs rows for the date in the query and return a context block."""
+        try:
+            target_date = self._parse_date_from_query(query)
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                rows = db.execute(_sql_text(
+                    """
+                    SELECT priority, headline, snippet, suggested_query, audience
+                    FROM daily_briefs
+                    WHERE brief_date = :d
+                      AND (audience IS NULL OR audience = 'public')
+                      AND headline NOT LIKE '[32%'
+                      AND headline NOT LIKE 'OJ:%'
+                      AND headline NOT LIKE '[320%'
+                    ORDER BY priority ASC
+                    LIMIT 12
+                    """
+                ), {"d": target_date}).fetchall()
+            finally:
+                db.close()
+
+            if not rows:
+                return None
+
+            lines = [f"=== BRUBRU DAILY NEWS — {target_date.strftime('%d %B %Y')} ==="]
+            for row in rows:
+                priority, headline, snippet, suggested_query, _ = row
+                lines.append(f"\n• {headline}")
+                if snippet:
+                    lines.append(f"  {snippet}")
+                if suggested_query:
+                    lines.append(f"  Suggested query: {suggested_query}")
+            lines.append("\nINSTRUCTION: Use ONLY the headlines above to answer this Daily News query. "
+                         "Do NOT invent or add any news items not listed here.")
+            lines.append("=== END DAILY NEWS ===")
+            return "\n".join(lines)
+        except Exception as e:
+            logger.warning("[daily-brief-block] Failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
     # On-demand: Cellar SPARQL discovery (live retrieval from
     # publications.europa.eu/webapi/rdf/sparql)
     # ------------------------------------------------------------------
@@ -9995,6 +10107,13 @@ class ContextBuilder:
         # verified context.
         if getattr(context_data, 'today_block', None):
             sections.append(context_data.today_block)
+
+        # DAILY BRIEF BLOCK (on-demand) — injected near the top so it survives
+        # the 32k truncation cap. Grounding for "Daily News DD/MM/YYYY" queries.
+        # Without this the model has no anchor and hallucinates news items.
+        if getattr(context_data, 'daily_brief_block', None):
+            sections.append(context_data.daily_brief_block)
+            sections.append("")
 
         # LEGAL-TEXT ARTICLE BLOCK (W1b, 12 May 2026) — also near TOP so the
         # article/recital reference survives 32k truncation. Triggered by

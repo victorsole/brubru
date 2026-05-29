@@ -21,6 +21,7 @@
 - Fines: up to 10% of aggregate worldwide turnover for procedural infringements
 - Remedies toolkit: commitments (structural/behavioural), prohibition of concentration, prohibition of contract award, redressive measures including divestiture, access commitments, reduction of capacity, R&D investment requirements
 - First conditional clearance under FSR (21 April 2026): **Lisbon high-speed railway line bid** (DG GROW press release IP/26/853) -- Commission cleared concentration subject to conditions related to commitments by third-country bidder
+- **In-depth investigation opened (28 May 2026): JD.com / CECONOMY** -- Commission opened Phase 2 in-depth FSR investigation into JD.com's proposed acquisition of CECONOMY (Europe's largest consumer electronics retailer, parent of MediaMarkt/Saturn). JD.com is a Chinese e-commerce company. Case is the first FSR in-depth M&A probe targeting a major retail acquisition. Watch: remedies discussions, standstill obligation, Q3 2026 deadline.
 - Pending high-profile cases (confidential): several ex officio investigations in Chinese EV manufacturers, wind-turbine tenders, rail rolling stock, solar panels
 - Cumulative notifications received (Commission data 2025): 200+ M&A notifications, 60+ public procurement notifications in first 2 years
 - Clearance ratio: approximately 95% cleared without conditions; 3-4% conditional; 1-2% under in-depth Phase 2 review
@@ -62,6 +63,20 @@ Commission can investigate any market situation on its own initiative:
 - No ownership change required
 
 Remedies include: commitments, divestiture, capacity reduction, R&D investment obligations, access commitments to infrastructure.
+
+## JD.com / CECONOMY In-Depth Investigation (28 May 2026)
+
+**Second major FSR M&A case — first in-depth (Phase 2) probe.**
+
+Key facts:
+- Acquirer: JD.com (Chinese e-commerce, NASDAQ-listed, state-linked)
+- Target: CECONOMY AG (Germany-headquartered, parent of MediaMarkt and Saturn; Europe's largest consumer electronics retailer, ~700 stores, ~EUR 22 billion revenue)
+- FSR trigger: JD.com's foreign financial contributions from China likely exceed the EUR 50 million threshold; CECONOMY's EU turnover well above EUR 500 million
+- Commission decision (28 May 2026): open Phase 2 in-depth investigation — preliminary finding that Chinese subsidies may have enabled an artificially favourable acquisition price
+- Standstill obligation active: transaction cannot close until Commission clears it
+- Phase 2 deadline: 90 working days from opening (extendable), putting decision in Q3-Q4 2026
+- Precedent signal: first FSR Phase 2 involving a major consumer retail chain — extends FSR scrutiny beyond infrastructure/manufacturing into retail and platform sectors
+- Possible remedies: behavioural commitments (supply chain separation, pricing independence), structural remedies (divestiture of certain store networks), or prohibition
 
 ## Lisbon Railway Bid Case (21 April 2026)
 
