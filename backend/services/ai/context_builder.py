@@ -10151,7 +10151,7 @@ class ContextBuilder:
     def format_context_for_ai(
         self,
         context_data: ContextData,
-        max_length: int = 32000
+        max_length: int = 80000
     ) -> str:
         """
         Format context data into structured text for AI consumption.
@@ -10204,6 +10204,25 @@ class ContextBuilder:
         if getattr(context_data, 'audience_brief_block', None):
             sections.append(context_data.audience_brief_block)
             sections.append("")
+
+        # INTERNAL KNOWLEDGE (guides + templates) — relocated to NEAR THE TOP
+        # (29 May 2026) so the highest-value grounding survives the max_length
+        # truncation cap. Knowledge guides carry QUICK FACTS, CELEX numbers and
+        # current status; burying them after RSS/legislation/EPRS meant they
+        # were truncated off for content-rich queries, leaving the model to
+        # improvise from training memory (which the validator then refused).
+        if context_data.internal_knowledge:
+            sections.append(f"\nINTERNAL KNOWLEDGE ({len(context_data.internal_knowledge)} resources):")
+            sections.append("IMPORTANT: Any markdown links [text](url) in the guides below are VERIFIED. Reproduce them exactly as clickable hyperlinks in your response. Do NOT strip the URLs.")
+            for item in context_data.internal_knowledge:
+                sections.append(f"- {item['title']}")
+                sections.append(f"  Type: {item['type']}")
+                # Staleness caveat (mirrors Claude Code's memory staleness signal)
+                staleness = item.get('staleness_caveat')
+                if staleness:
+                    sections.append(f"  {staleness}")
+                sections.append(f"  {item['content'][:4000]}")
+                sections.append("")
 
         # TODAY BLOCK (on-demand, date-anchored) — injected near the top so it
         # survives the 32k truncation cap and forces the model to ground
@@ -10709,19 +10728,13 @@ class ContextBuilder:
                 sections.append(f"  Source: {entry['source']} | {entry['link']}")
                 sections.append("")
 
-        # Internal knowledge (templates, guides)
-        if context_data.internal_knowledge:
-            sections.append(f"\nINTERNAL KNOWLEDGE ({len(context_data.internal_knowledge)} resources):")
-            sections.append("IMPORTANT: Any markdown links [text](url) in the guides below are VERIFIED. Reproduce them exactly as clickable hyperlinks in your response. Do NOT strip the URLs.")
-            for item in context_data.internal_knowledge:
-                sections.append(f"- {item['title']}")
-                sections.append(f"  Type: {item['type']}")
-                # Staleness caveat (mirrors Claude Code's memory staleness signal)
-                staleness = item.get('staleness_caveat')
-                if staleness:
-                    sections.append(f"  {staleness}")
-                sections.append(f"  {item['content'][:4000]}")
-                sections.append("")
+        # Internal knowledge (templates, guides) is rendered NEAR THE TOP now
+        # (right after the audience-brief block) so the highest-value grounding
+        # always survives the max_length truncation cap. See the relocated block
+        # above. Previously rendered here (after RSS/legislation/etc.), which
+        # meant guides were truncated off for content-rich queries -- the AMR /
+        # Health Security Committee refusals on 29 May 2026 traced to exactly
+        # this: context hit the 32k cap before reaching the guides.
 
         # CELLAR on-demand legislation (EuroVoc fallback when no guides match)
         if context_data.cellar_legislation:
