@@ -10,13 +10,14 @@
     "dg_sante_medicinal_products",
     "dg_sante_hera",
     "ep_sant_press_releases",
-    "ep_sant_latest_documents",
     "ep_sant_highlights",
     "ep_sant_votes",
     "ep_sant_webstreaming",
     "dg_comp_pharma_news",
     "dg_grow_news",
-    "oj_l_pharma"
+    "oj_l_pharma",
+    "ep_committee_reports",
+    "ep_information_documents"
   ],
   "deprecated_from_tier1": {
     "ema_rss_feeds": "index page listing other feeds; items reach DB via ema_news + ema_whats_new + ema_upcoming_events.",
@@ -26,7 +27,8 @@
     "dg_grow_meddev_rss": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
     "dg_grow_pharma_rss": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
     "dg_grow_pharma_html": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
-    "oj_c_series_daily": "EUR-Lex daily-view HTML is WAF-walled (0 items ever); replaced by oj_l_pharma via Cellar SPARQL"
+    "oj_c_series_daily": "EUR-Lex daily-view HTML is WAF-walled (0 items ever); replaced by oj_l_pharma via Cellar SPARQL",
+    "ep_sant_latest_documents": "parser yields file-size labels ('DOC (175 KB)'); replaced by ep_committee_reports (OEIL XML, clean titles)"
   },
   "sources": [
     {
@@ -953,6 +955,30 @@
       "cadence": "daily",
       "query_template": "PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT DISTINCT ?celex ?title ?date WHERE { ?work cdm:work_date_document ?date . ?work cdm:resource_legal_id_celex ?celex . ?expr cdm:expression_belongs_to_work ?work ; cdm:expression_uses_language <http://publications.europa.eu/resource/authority/language/ENG> ; cdm:expression_title ?title . FILTER(?date >= \"{since}\"^^<http://www.w3.org/2001/XMLSchema#date>) FILTER(CONTAINS(LCASE(STR(?title)), \"medicinal product\") || CONTAINS(LCASE(STR(?title)), \"pharmaceutical\") || CONTAINS(LCASE(STR(?title)), \"vaccine\") || CONTAINS(LCASE(STR(?title)), \"medical device\") || CONTAINS(LCASE(STR(?title)), \"orphan medic\") || CONTAINS(LCASE(STR(?title)), \"clinical trial\")) } ORDER BY DESC(?date) LIMIT 30",
       "note": "OJ L+C pharma acts via Cellar SPARQL (machine-readable; EUR-Lex HTML is WAF-walled). Replaces the non-functional oj_c_series_daily."
+    },
+    {
+      "id": "ep_committee_reports",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "report",
+      "label": "EP committee reports tabled (OEIL, pharma-filtered)",
+      "url": "https://oeil.europarl.europa.eu/oeil",
+      "fetch_strategy": "oeil_feed",
+      "oeil_feed": "latest_reports",
+      "cadence": "daily",
+      "note": "EP-wide committee/draft reports via OEIL XML; pharma-relevance filtered."
+    },
+    {
+      "id": "ep_information_documents",
+      "institution": "EP",
+      "bucket": "ep_sant",
+      "kind": "document",
+      "label": "EP/Commission information documents (OEIL, pharma-filtered)",
+      "url": "https://oeil.europarl.europa.eu/oeil",
+      "fetch_strategy": "oeil_feed",
+      "oeil_feed": "latest_documents",
+      "cadence": "daily",
+      "note": "Latest COM/SWD information documents via OEIL XML; pharma-relevance filtered."
     }
   ]
 }

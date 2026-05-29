@@ -769,8 +769,61 @@ def _fetch_sparql(endpoint: str, query_template: str) -> Optional[str]:
     return None
 
 
+def _scrape_oeil_feed(source: dict) -> List[ScrapedItem]:
+    """Pull an OEIL XML predefined-search feed (EP committee reports tabled,
+    information documents) via the existing OEILClient and map to ScrapedItems.
+
+    The feed is EP-wide, so it is pharma-relevance filtered (same as DG GROW):
+    a report/document on a pharma file (Critical Medicines Act, Biotech Act,
+    pharmaceutical legislation, ...) surfaces; the rest sink below the
+    candidate threshold.
+    """
+    import asyncio
+    feed = source.get("oeil_feed", "latest_reports")
+
+    async def _run():
+        from services.api_clients.oeil_client import OEILClient
+        client = OEILClient()
+        try:
+            if feed == "latest_documents":
+                return await client.get_latest_documents_xml()
+            if feed == "latest_procedures":
+                return await client.get_latest_procedures_xml()
+            return await client.get_latest_reports_xml()
+        finally:
+            await client.close()
+
+    try:
+        feed_items = asyncio.run(_run())
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[oeil-feed] %s (%s) failed: %s", source.get("id"), feed, e)
+        return []
+
+    out: List[ScrapedItem] = []
+    for fi in feed_items:
+        url = fi.link or f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={fi.reference}"
+        out.append(ScrapedItem(
+            source_id=source["id"],
+            institution=source.get("institution", "EP"),
+            bucket=source.get("bucket", "ep_sant"),
+            kind=source.get("kind", "report"),
+            item_url=url,
+            item_title=fi.title,
+            item_summary=None,
+            item_published_at=fi.last_pub_date,
+            relevance_score=_pharma_relevance(fi.title, fi.reference),
+            metadata={"parser": "oeil_feed", "reference": fi.reference,
+                      "committees": fi.committees, "rapporteurs": fi.rapporteurs},
+        ))
+    return out
+
+
 def scrape_source(source: dict, force_playwright: bool = False) -> List[ScrapedItem]:
     """Fetch one source URL and return the parsed items."""
+
+    # OEIL XML predefined-search feeds (EP committee reports / documents).
+    if source.get("fetch_strategy") == "oeil_feed":
+        return _scrape_oeil_feed(source)
 
     # SPARQL sources (OJ L-series via Cellar) query the RDF endpoint instead of
     # fetching HTML -- EUR-Lex HTML is WAF-walled; Cellar SPARQL is the official
