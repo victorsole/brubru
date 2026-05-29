@@ -483,7 +483,7 @@ class AIService:
                     )
                     if (
                         not VALIDATOR_SHADOW_MODE
-                        and _validation.has_critical
+                        and _validation.should_override
                         and VALIDATOR_CRITICAL_ACTION == "override"
                     ):
                         logger.warning(

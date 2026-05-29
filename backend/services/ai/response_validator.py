@@ -85,6 +85,33 @@ class ValidationResult:
     def has_critical(self) -> bool:
         return self.severity == "critical"
 
+    @property
+    def should_override(self) -> bool:
+        """
+        Whether this result warrants swapping the answer for a safe refusal.
+
+        Only genuinely dangerous, demo-killing FABRICATION types trigger an
+        override. A 'negation' (over-cautious refusal) or 'completeness' gap
+        rated critical by the model must NOT override -- replacing an answer
+        with a refusal template there is nonsensical, and over-cautious
+        escalation was silently refusing legitimate, guide-grounded answers
+        (29 May 2026). See memory feedback_validator_override_hard_types.
+        """
+        return self.severity == "critical" and any(
+            v.type in _OVERRIDE_VIOLATION_TYPES for v in self.violations
+        )
+
+
+# Violation types that justify swapping the answer for a safe refusal. The
+# soft types (negation, completeness) are logged but never override.
+_OVERRIDE_VIOLATION_TYPES = frozenset({
+    "hallucination",            # a fabricated named role / citation / quote / hard figure
+    "user_claim_capitulation",
+    "name_splitting",
+    "fabricated_meeting",
+    "fabricated_future_date",
+})
+
 
 _VALIDATOR_SYSTEM = (
     "You are a strict fact-checker for an EU policy assistant. Your only job is to "
@@ -93,21 +120,30 @@ _VALIDATOR_SYSTEM = (
     "You will receive three inputs: CONTEXT (the data retrieved from Brubru's "
     "database), QUERY (what the user asked), and RESPONSE (what the assistant "
     "said).\n\n"
+    "Guiding principle: you are catching FABRICATIONS that would mislead a specialist "
+    "reader, not policing every sentence. General EU legal and procedural background, "
+    "explanations of how a mechanism works, and reasonable inferences that are consistent "
+    "with the CONTEXT are ACCEPTABLE and must NOT be flagged. Only flag a claim when it "
+    "asserts a SPECIFIC, checkable fact that the CONTEXT contradicts or does not support.\n\n"
     "Check the RESPONSE against the CONTEXT for these violation types:\n\n"
-    "1. HALLUCINATION -- any named entity, number, date, CELEX number, MEP name, "
-    "regulation number, organisation name, direct quote, meeting record, or specific "
-    "institutional fact in the RESPONSE that does NOT appear in the CONTEXT. Generic "
-    "background knowledge (e.g. 'the EU has 27 member states', 'the Commission proposes "
-    "legislation') is acceptable. Specific factual claims with concrete identifiers MUST "
-    "be grounded in CONTEXT. Direct quotes attributed to a named outlet (Euractiv, Politico, "
-    "Reuters, Bloomberg, FT, Contexte, Bruegel) MUST appear verbatim in CONTEXT.\n\n"
+    "1. HALLUCINATION -- a SPECIFIC, checkable fabricated fact presented as true that the "
+    "CONTEXT does not support: a named person (MEP / rapporteur / shadow / official) given a "
+    "role or position; a CELEX / procedure / regulation number presented as a citation; a "
+    "specific statistic or vote tally presented as a hard figure; a direct quote attributed "
+    "to a named person or outlet (Euractiv, Politico, Reuters, Bloomberg, FT, Contexte, "
+    "Bruegel). These MUST be grounded in CONTEXT. "
+    "NOT a hallucination: generic background ('the EU has 27 member states', 'the Commission "
+    "proposes legislation'), explaining how a procedure or mechanism works, defining a term, "
+    "a reasonable inference about legislative history or context, or rephrasing CONTEXT. Do "
+    "NOT flag these. When unsure whether a statement is harmful fabrication or harmless "
+    "background, treat it as background (info), not a hallucination.\n\n"
     "2. COMPLETENESS -- if the CONTEXT clearly lists N items (e.g. 27 commissioners, "
     "all member states, all rapporteurs) and the RESPONSE names only k where k < N "
     "WITHOUT saying 'showing k of N' or 'for the full list see X', that is a "
-    "completeness violation.\n\n"
+    "completeness violation (warning, never critical).\n\n"
     "3. NEGATION -- if the CONTEXT contains data that answers the QUERY but the "
     "RESPONSE says 'I don't have that information' or equivalent, that is a "
-    "negation violation. The RESPONSE must use the data when CONTEXT provides it.\n\n"
+    "negation violation (warning, never critical -- the answer is over-cautious, not wrong).\n\n"
     "4. USER_CLAIM_CAPITULATION -- if the QUERY asserts a fact about a named person's role "
     "on a procedure (rapporteur, shadow, coordinator, lead negotiator) and the RESPONSE "
     "accepts that assertion without the CONTEXT confirming it, that is a critical violation. "
@@ -124,11 +160,16 @@ _VALIDATOR_SYSTEM = (
     "7. FABRICATED_FUTURE_DATE -- if the RESPONSE asserts a specific future committee vote, "
     "plenary vote, or trilogue date and that date does NOT appear in the CONTEXT, that is a "
     "critical violation.\n\n"
-    "Severity rules:\n"
-    "  - critical -- any of: fabricated names / numbers / dates / CELEX refs / quotes / meetings "
-    "presented as fact; claiming 'no data' when CONTEXT provides clear data; validating a "
-    "user-asserted role the CONTEXT does not confirm; splitting one person into two.\n"
-    "  - warning  -- completeness gap of more than 50% with no 'k of N' disclaimer.\n"
+    "Severity rules. Be conservative -- reserve 'critical' for fabrications that would "
+    "mislead a specialist, NOT for harmless background or inference:\n"
+    "  - critical -- ONLY one of: a fabricated NAMED person given a role the CONTEXT does not "
+    "confirm (includes user_claim_capitulation); name_splitting; a fabricated_meeting; a "
+    "fabricated_future_date; a fabricated direct QUOTE; or a fabricated CELEX / procedure / "
+    "regulation NUMBER presented as a citation. These are the only override-worthy violations.\n"
+    "  - warning  -- a claim that is plausible and consistent with the CONTEXT but not stated "
+    "verbatim there (general background, mechanism explanation, reasonable inference about "
+    "legislative history); a completeness gap over 50% with no 'k of N' disclaimer; or a "
+    "negation. Warnings are logged, NOT overridden. Do NOT escalate these to critical.\n"
     "  - info     -- minor issues with no factual harm; default when nothing is wrong.\n\n"
     "Return STRICT JSON only, no prose, no markdown fences. Schema:\n"
     "{\"passed\": bool, \"severity\": \"critical\"|\"warning\"|\"info\", "
