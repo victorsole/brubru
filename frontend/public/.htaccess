@@ -10,10 +10,15 @@
   RewriteRule ^late-payments/ - [L]
   RewriteRule ^guides/ - [L]
 
-  # If the requested file or directory doesn't exist, serve index.html
+  # Client-only app routes (/main, /my-eu-bubble, /amendator, ...) fall through
+  # to app.html, the CLEAN SPA shell (empty #root). Serving the prerendered
+  # homepage (index.html) here makes React hydrate homepage markup onto a
+  # different route -> hydration mismatch (#418). "/" and prerendered routes
+  # (/about, /login, ...) are still served by their own index.html via
+  # DirectoryIndex, so they keep their SEO content and hydrate correctly.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [L]
+  RewriteRule ^ app.html [L]
 </IfModule>
 
 # Security headers
