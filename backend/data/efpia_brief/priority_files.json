@@ -5,9 +5,9 @@
     {
       "label": "Revision of EU pharmaceutical legislation (Regulation track)",
       "oeil_ref": "2023/0131(COD)",
-      "file_id": "lip-2023-0131-COD",
+      "file_id": "lip-2023-0131-cod",
       "status_note": "CLOSE_TO_ADOPTION - provisional trilogue agreement 11 Dec 2025; Council formal adoption expected autumn 2026; applicable 2028.",
-      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0131-COD"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0131-cod"
     },
     {
       "label": "Revision of EU pharmaceutical legislation (Directive track)",
@@ -25,15 +25,17 @@
     {
       "label": "Compulsory licensing of patents for crisis management",
       "oeil_ref": "2023/0129(COD)",
-      "file_id": "lip-2023-0129-COD",
+      "file_id": "lip-2023-0129-cod",
       "status_note": "ADOPTED. Watch: Commission delegated/implementing acts + national transposition + first crisis trigger.",
-      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0129-COD"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2023-0129-cod"
     },
     {
       "label": "Health Technology Assessment (HTA) Regulation - implementation",
       "celex": "32021R2282",
+      "oeil_ref": "2017/0018(COD)",
+      "file_id": "lip-2017-0018-cod",
       "status_note": "IN FORCE since 12 Jan 2025 for oncology + ATMPs. Next phase: medical devices + IVDs from 2030.",
-      "brubru_url": "https://brubru.beresol.eu/pharma-laws/"
+      "brubru_url": "https://brubru.beresol.eu/my-eu-bubble?tab=my_files&file=lip-2017-0018-cod"
     },
     {
       "label": "Variations to marketing authorisations - modernisation",
