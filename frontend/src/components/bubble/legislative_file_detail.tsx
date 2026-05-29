@@ -12,6 +12,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiClose,
@@ -26,9 +27,11 @@ import {
   mdiChevronUp,
   mdiPencilOutline,
   mdiPlus,
+  mdiBookOpenPageVariantOutline,
 } from '@mdi/js';
 import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
+import { getDeepDiveForProcedure, getDeepDiveUrl } from '../../utils/deep_dive_map';
 import { StagePipeline } from './stage_pipeline';
 import { TrackFileButton } from '../shared/track_file_button';
 import { PersonalisedImpact } from '../shared/personalised_impact';
@@ -49,6 +52,7 @@ interface Amendment {
 }
 
 export const LegislativeFileDetail = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     selectedFile,
@@ -108,6 +112,13 @@ export const LegislativeFileDetail = () => {
   // Don't render if no file selected
   if (!selectedFile) return null;
 
+  // If this file has a published Brubru deep-dive, surface a link to it so the
+  // modal becomes the jumping-off point to the exhaustive analysis. Matched by
+  // OEIL procedure ref via the shared deep-dive map (reusable for every file).
+  const deepDive = selectedFile.oeil_procedure_ref
+    ? getDeepDiveForProcedure(selectedFile.oeil_procedure_ref)
+    : undefined;
+
   const handleAnalyze = async () => {
     try {
       await analyzeFile(selectedFile.file_id);
@@ -142,6 +153,29 @@ export const LegislativeFileDetail = () => {
             <h2>{selectedFile.title}</h2>
           </div>
           <div className="legislative-file-modal__header-right">
+            {deepDive && (
+              <a
+                href={getDeepDiveUrl(deepDive)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="legislative-file-modal__deepdive-link"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: '#ffffff',
+                  background: 'linear-gradient(135deg, #0693e3, #9b51e0)',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                }}
+              >
+                <Icon path={mdiBookOpenPageVariantOutline} size={0.8} />
+                {t('fileDetail.readDeepDive', 'Read the deep dive')}
+              </a>
+            )}
             {selectedFile.oeil_procedure_ref && (
               <TrackFileButton
                 procedureRef={selectedFile.oeil_procedure_ref}
@@ -151,7 +185,7 @@ export const LegislativeFileDetail = () => {
             <button
               className="legislative-file-modal__close"
               onClick={closeFileDetail}
-              title="Close"
+              title={t('fileDetail.closeTitle')}
             >
               <Icon path={mdiClose} size={0.9} />
             </button>
@@ -160,13 +194,13 @@ export const LegislativeFileDetail = () => {
 
         {isLoadingFileDetail ? (
           <div className="legislative-file-modal__loading">
-            Loading file details...
+            {t('fileDetail.loading')}
           </div>
         ) : (
           <div className="legislative-file-modal__body">
             {/* Stage Pipeline */}
             <div className="legislative-file-detail__section legislative-file-detail__section--pipeline">
-              <h3>Legislative Progress</h3>
+              <h3>{t('fileDetail.legislativeProgress')}</h3>
               <StagePipeline currentStatus={selectedFile.current_status} />
             </div>
 
@@ -187,7 +221,7 @@ export const LegislativeFileDetail = () => {
 
             {/* Status */}
             <div className="legislative-file-detail__section">
-              <h3>Current Status</h3>
+              <h3>{t('fileDetail.currentStatus')}</h3>
               <div className="legislative-file-detail__status-row">
                 <span
                   className="legislative-file-detail__status"
@@ -196,11 +230,11 @@ export const LegislativeFileDetail = () => {
                   {selectedFile.current_status.replace(/_/g, ' ')}
                 </span>
                 {selectedFile.is_blocked && (
-                  <span className="legislative-file-detail__blocked">⚠️ Blocked</span>
+                  <span className="legislative-file-detail__blocked">⚠️ {t('myFilesTab.blocked')}</span>
                 )}
                 {selectedFile.days_in_current_status && (
                   <span className="legislative-file-detail__days">
-                    {selectedFile.days_in_current_status} days in current status
+                    {t('myFilesTab.daysInStatus', { n: selectedFile.days_in_current_status })}
                   </span>
                 )}
               </div>
@@ -226,7 +260,7 @@ export const LegislativeFileDetail = () => {
                 {isActorsExpanded && (
                   <>
                     {isLoadingKeyPlayers ? (
-                      <div className="legislative-file-detail__loading-inline">Loading...</div>
+                      <div className="legislative-file-detail__loading-inline">{t('fileDetail.loading')}</div>
                     ) : (
                       <div className="legislative-file-detail__actors">
                         {validKeyPlayers.map((player, idx) => (
@@ -260,7 +294,7 @@ export const LegislativeFileDetail = () => {
             {/* Description */}
             {selectedFile.description && (
               <div className="legislative-file-detail__section">
-                <h3>Description</h3>
+                <h3>{t('fileDetail.description')}</h3>
                 <p>{selectedFile.description}</p>
               </div>
             )}
@@ -270,7 +304,7 @@ export const LegislativeFileDetail = () => {
               <div className="legislative-file-detail__section legislative-file-detail__section--ai">
                 <div className="legislative-file-detail__section-header">
                   <Icon path={mdiRobotOutline} size={0.9} />
-                  <h3>AI Summary</h3>
+                  <h3>{t('fileDetail.aiSummary')}</h3>
                 </div>
                 <div className="legislative-file-detail__ai-box">
                   <p>{selectedFile.ai_summary}</p>
@@ -288,7 +322,7 @@ export const LegislativeFileDetail = () => {
               <div className="legislative-file-detail__section">
                 <div className="legislative-file-detail__section-header">
                   <Icon path={mdiTag} size={0.9} />
-                  <h3>Policy Areas</h3>
+                  <h3>{t('fileDetail.policyAreas')}</h3>
                 </div>
                 <div className="legislative-file-detail__policies">
                   {selectedFile.ai_policy_classifications.map((classification, idx) => (
@@ -310,7 +344,7 @@ export const LegislativeFileDetail = () => {
               <div className="legislative-file-detail__section">
                 <div className="legislative-file-detail__section-header">
                   <Icon path={mdiAccountGroup} size={0.9} />
-                  <h3>Key Entities</h3>
+                  <h3>{t('fileDetail.keyEntities')}</h3>
                 </div>
                 <div className="legislative-file-detail__entities">
                   {selectedFile.ai_entities.map((entity, idx) => (
@@ -325,7 +359,7 @@ export const LegislativeFileDetail = () => {
             {/* Committees */}
             {(selectedFile.lead_committee || (selectedFile.committees && selectedFile.committees.length > 0)) && (
               <div className="legislative-file-detail__section">
-                <h3>Committees</h3>
+                <h3>{t('fileDetail.committees')}</h3>
                 <div className="legislative-file-detail__committees">
                   {selectedFile.lead_committee && (
                     <span className="legislative-file-detail__committee legislative-file-detail__committee--lead">
@@ -345,12 +379,12 @@ export const LegislativeFileDetail = () => {
             <div className="legislative-file-detail__section">
               <div className="legislative-file-detail__section-header">
                 <Icon path={mdiLinkVariant} size={0.9} />
-                <h3>References</h3>
+                <h3>{t('fileDetail.references')}</h3>
               </div>
               <div className="legislative-file-detail__references">
                 {selectedFile.oeil_procedure_ref && (
                   <div className="legislative-file-detail__reference">
-                    <strong>OEIL Procedure:</strong>
+                    <strong>{t('fileDetail.oeilProcedure')}</strong>
                     <a
                       href={`https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${selectedFile.oeil_procedure_ref}`}
                       target="_blank"
@@ -366,7 +400,7 @@ export const LegislativeFileDetail = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          EU Law Tracker
+                          {t('myFilesTab.euLawTracker')}
                         </a>
                       </>
                     )}
@@ -378,7 +412,7 @@ export const LegislativeFileDetail = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          RegDel Register
+                          {t('myFilesTab.regDel')}
                         </a>
                       </>
                     )}
@@ -386,13 +420,13 @@ export const LegislativeFileDetail = () => {
                 )}
                 {selectedFile.celex_numbers && selectedFile.celex_numbers.length > 0 && (
                   <div className="legislative-file-detail__reference">
-                    <strong>CELEX:</strong>
+                    <strong>{t('fileDetail.celexLabel')}</strong>
                     {selectedFile.celex_numbers.join(', ')}
                   </div>
                 )}
                 {selectedFile.legal_text_url && (
                   <div className="legislative-file-detail__reference">
-                    <strong>Legal Text:</strong>
+                    <strong>{t('fileDetail.legalText')}</strong>
                     <a href={selectedFile.legal_text_url} target="_blank" rel="noopener noreferrer">
                       View on EUR-Lex
                     </a>
@@ -405,11 +439,11 @@ export const LegislativeFileDetail = () => {
             <div className="legislative-file-detail__section legislative-file-detail__section--meta">
               <div className="legislative-file-detail__section-header">
                 <Icon path={mdiCalendar} size={0.9} />
-                <h3>Key Events</h3>
+                <h3>{t('fileDetail.keyEvents')}</h3>
               </div>
               <div className="legislative-file-detail__timeline">
                 {isLoadingTimeline ? (
-                  <div className="legislative-file-detail__loading-small">Loading events...</div>
+                  <div className="legislative-file-detail__loading-small">{t('fileDetail.loadingEvents')}</div>
                 ) : timelineEvents.length > 0 ? (
                   <div className="legislative-file-detail__events">
                     {timelineEvents.map((event, idx) => (
@@ -443,13 +477,13 @@ export const LegislativeFileDetail = () => {
                   <div className="legislative-file-detail__timeline-basic">
                     {selectedFile.first_seen && (
                       <div className="legislative-file-detail__timeline-item">
-                        <strong>First Seen:</strong>
+                        <strong>{t('fileDetail.firstSeen')}</strong>
                         <span>{new Date(selectedFile.first_seen).toLocaleDateString()}</span>
                       </div>
                     )}
                     {selectedFile.last_updated && (
                       <div className="legislative-file-detail__timeline-item">
-                        <strong>Last Updated:</strong>
+                        <strong>{t('myFilesTab.cardLastUpdate')}</strong>
                         <span>{new Date(selectedFile.last_updated).toLocaleDateString()}</span>
                       </div>
                     )}
@@ -477,10 +511,10 @@ export const LegislativeFileDetail = () => {
               {isAmendmentsExpanded && (
                 <>
                   {isLoadingAmendments ? (
-                    <div className="legislative-file-detail__loading-inline">Loading amendments...</div>
+                    <div className="legislative-file-detail__loading-inline">{t('fileDetail.loadingAmendments')}</div>
                   ) : amendments.length === 0 ? (
                     <div className="legislative-file-detail__amendments-empty">
-                      <p>No amendments drafted yet for this file.</p>
+                      <p>{t('fileDetail.noAmendmentsDrafted')}</p>
                       <button
                         className="legislative-file-detail__draft-btn"
                         onClick={() => {
