@@ -622,8 +622,47 @@ def parse_generic(html: str, source: dict) -> List[ScrapedItem]:
     return []
 
 
+def parse_cellar_sparql(payload: str, source: dict) -> List[ScrapedItem]:
+    """Parse Cellar SPARQL JSON results into ScrapedItems.
+
+    Expects SPARQL JSON bindings with ?celex ?title ?date. Used for the OJ
+    L-series pharma feed: EUR-Lex HTML is WAF-walled, but the Cellar SPARQL
+    endpoint (publications.europa.eu/webapi/rdf/sparql) is the official
+    machine-readable path and is not walled. item_url is the EUR-Lex CELEX
+    permalink (clickable for users).
+    """
+    items: List[ScrapedItem] = []
+    try:
+        bindings = json.loads(payload).get("results", {}).get("bindings", [])
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[cellar-sparql] bad JSON for %s: %s", source.get("id"), e)
+        return items
+    seen: set = set()
+    for b in bindings:
+        celex = (b.get("celex") or {}).get("value", "").strip()
+        title = (b.get("title") or {}).get("value", "").strip()
+        date_raw = (b.get("date") or {}).get("value", "").strip()
+        if not celex or not title or celex in seen:
+            continue
+        seen.add(celex)
+        items.append(ScrapedItem(
+            source_id=source["id"],
+            institution=source.get("institution", "EC"),
+            bucket=source.get("bucket", "horizontal_ec"),
+            kind=source.get("kind", "official_journal"),
+            item_url=f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}",
+            item_title=title,
+            item_summary=None,
+            item_published_at=_parse_iso_datetime(date_raw),
+            relevance_score=70,
+            metadata={"parser": "cellar_sparql", "celex": celex},
+        ))
+    return items
+
+
 _PARSERS: dict[str, Callable[[str, dict], List[ScrapedItem]]] = {
     "rss": parse_rss,
+    "cellar_sparql": parse_cellar_sparql,
     "ecl": parse_ecl,
     "ema": parse_ema,
     "ema_whats_new_table": parse_ema_whats_new_table,
@@ -646,6 +685,8 @@ def parser_for(source: dict) -> Callable[[str, dict], List[ScrapedItem]]:
     explicit = _SOURCE_PARSER_OVERRIDES.get(sid)
     if explicit:
         return _PARSERS.get(explicit, parse_generic)
+    if source.get("fetch_strategy") == "sparql":
+        return parse_cellar_sparql
     if source.get("fetch_strategy") == "rss" or source.get("kind") == "rss":
         return parse_rss
     bucket = source.get("bucket")
@@ -704,8 +745,42 @@ def _pharma_relevance(title: Optional[str], summary: Optional[str]) -> int:
     return 60 if any(kw in blob for kw in _PHARMA_KEYWORDS) else 25
 
 
+_SPARQL_WINDOW_DAYS = 45
+
+
+def _fetch_sparql(endpoint: str, query_template: str) -> Optional[str]:
+    """Run a Cellar SPARQL query (rolling date window) and return JSON text."""
+    from datetime import timedelta
+    since = (datetime.now(timezone.utc) - timedelta(days=_SPARQL_WINDOW_DAYS)).strftime("%Y-%m-%d")
+    query = query_template.replace("{since}", since)
+    try:
+        resp = requests.get(
+            endpoint,
+            params={"query": query, "format": "application/sparql-results+json"},
+            headers={"User-Agent": _REQUEST_HEADERS["User-Agent"],
+                     "Accept": "application/sparql-results+json"},
+            timeout=60,
+        )
+        if resp.status_code == 200:
+            return resp.text
+        logger.warning("[cellar-sparql] HTTP %s for %s", resp.status_code, endpoint)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[cellar-sparql] fetch failed: %s", e)
+    return None
+
+
 def scrape_source(source: dict, force_playwright: bool = False) -> List[ScrapedItem]:
     """Fetch one source URL and return the parsed items."""
+
+    # SPARQL sources (OJ L-series via Cellar) query the RDF endpoint instead of
+    # fetching HTML -- EUR-Lex HTML is WAF-walled; Cellar SPARQL is the official
+    # machine-readable path.
+    if source.get("fetch_strategy") == "sparql":
+        endpoint = source.get("url") or "http://publications.europa.eu/webapi/rdf/sparql"
+        payload = _fetch_sparql(endpoint, source.get("query_template", ""))
+        if not payload:
+            return []
+        return parse_cellar_sparql(payload, source)
 
     url = source.get("url")
     if not url:

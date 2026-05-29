@@ -15,7 +15,8 @@
     "ep_sant_votes",
     "ep_sant_webstreaming",
     "dg_comp_pharma_news",
-    "dg_grow_news"
+    "dg_grow_news",
+    "oj_l_pharma"
   ],
   "deprecated_from_tier1": {
     "ema_rss_feeds": "index page listing other feeds; items reach DB via ema_news + ema_whats_new + ema_upcoming_events.",
@@ -24,7 +25,8 @@
     "dg_grow_meddev_html": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
     "dg_grow_meddev_rss": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
     "dg_grow_pharma_rss": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
-    "dg_grow_pharma_html": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news"
+    "dg_grow_pharma_html": "dead since 2021 (DG GROW pharma/medical-devices moved to DG SANTE); replaced by dg_grow_news",
+    "oj_c_series_daily": "EUR-Lex daily-view HTML is WAF-walled (0 items ever); replaced by oj_l_pharma via Cellar SPARQL"
   },
   "sources": [
     {
@@ -939,6 +941,18 @@
       "fetch_strategy": "html",
       "cadence": "daily",
       "note": "General DG GROW feed; pharma-relevance filtered at scrape time. Legacy newsroom topic feeds 5048/5061 are dead since 2021."
+    },
+    {
+      "id": "oj_l_pharma",
+      "institution": "EC",
+      "bucket": "horizontal_ec",
+      "kind": "official_journal",
+      "label": "Official Journal - pharma/health acts (Cellar SPARQL, last 45 days)",
+      "url": "http://publications.europa.eu/webapi/rdf/sparql",
+      "fetch_strategy": "sparql",
+      "cadence": "daily",
+      "query_template": "PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT DISTINCT ?celex ?title ?date WHERE { ?work cdm:work_date_document ?date . ?work cdm:resource_legal_id_celex ?celex . ?expr cdm:expression_belongs_to_work ?work ; cdm:expression_uses_language <http://publications.europa.eu/resource/authority/language/ENG> ; cdm:expression_title ?title . FILTER(?date >= \"{since}\"^^<http://www.w3.org/2001/XMLSchema#date>) FILTER(CONTAINS(LCASE(STR(?title)), \"medicinal product\") || CONTAINS(LCASE(STR(?title)), \"pharmaceutical\") || CONTAINS(LCASE(STR(?title)), \"vaccine\") || CONTAINS(LCASE(STR(?title)), \"medical device\") || CONTAINS(LCASE(STR(?title)), \"orphan medic\") || CONTAINS(LCASE(STR(?title)), \"clinical trial\")) } ORDER BY DESC(?date) LIMIT 30",
+      "note": "OJ L+C pharma acts via Cellar SPARQL (machine-readable; EUR-Lex HTML is WAF-walled). Replaces the non-functional oj_c_series_daily."
     }
   ]
 }
