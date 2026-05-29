@@ -658,9 +658,11 @@ def parser_for(source: dict) -> Callable[[str, dict], List[ScrapedItem]]:
         # `.ecl-content-item` card layout as DG SANTE (server-rendered).
         return parse_ecl
     if bucket == "dg_grow":
-        # DG GROW newsroom HTML topic pages -- fall through to generic which
-        # tries ECL, EMA, EP shapes. RSS is already handled above.
-        return parse_generic
+        # Current DG GROW news (single-market-economy.ec.europa.eu) is
+        # server-rendered with ECL .ecl-content-item cards. The legacy
+        # newsroom RSS/HTML topic feeds (topic_id 5048/5061) are dead since
+        # 2021 (pharma + medical devices moved to DG SANTE). RSS handled above.
+        return parse_ecl
     if bucket == "ep_sant":
         if source.get("kind") in ("press", "highlights", "newsletters"):
             return parse_ep_sant_press
@@ -671,6 +673,35 @@ def parser_for(source: dict) -> Callable[[str, dict], List[ScrapedItem]]:
 # ---------------------------------------------------------------------------
 # Scraping driver
 # ---------------------------------------------------------------------------
+
+
+# Buckets whose feed is GENERAL (not already pharma-scoped by the source URL).
+# Items from these are re-scored by pharma relevance so only relevant ones
+# clear the default candidate threshold (min_relevance=50).
+_GENERAL_FEED_BUCKETS = {"dg_grow"}
+
+# Pharma / health / medical-device / pharma-industrial relevance markers.
+_PHARMA_KEYWORDS = (
+    "medicine", "medicinal", "pharmaceutic", "pharma", "biosimilar", "biotech",
+    "vaccine", "antimicrobial", "antibiotic", "medical device", "in vitro", " ivd",
+    "eudamed", "clinical trial", "orphan", "atmp", "advanced therap",
+    "active pharmaceutical", "active substance", "supply of medicines",
+    "critical medicines", "medicine shortage", "shortage of medicines",
+    "marketing authorisation", "marketing authorization", "life science",
+    "blood", "tissue", "plasma", "oncolog", "rare disease", "health technology",
+    "api ", "good manufacturing practice", "gmp",
+)
+
+
+def _pharma_relevance(title: Optional[str], summary: Optional[str]) -> int:
+    """Score a general-feed item by pharma relevance.
+
+    60 if the title/summary mentions a pharma / health / medical-device term,
+    otherwise 25 (below the default min_relevance=50 so non-pharma items from a
+    general DG GROW feed do not flood the candidate pool).
+    """
+    blob = f"{title or ''} {summary or ''}".lower()
+    return 60 if any(kw in blob for kw in _PHARMA_KEYWORDS) else 25
 
 
 def scrape_source(source: dict, force_playwright: bool = False) -> List[ScrapedItem]:
@@ -693,6 +724,12 @@ def scrape_source(source: dict, force_playwright: bool = False) -> List[ScrapedI
 
     parser = parser_for(source)
     items = parser(html, source)
+
+    # Re-score general feeds (DG GROW) by pharma relevance so non-pharma items
+    # sink below the default candidate threshold instead of flooding the pool.
+    if source.get("bucket") in _GENERAL_FEED_BUCKETS:
+        for it in items:
+            it.relevance_score = _pharma_relevance(it.item_title, it.item_summary)
     return items
 
 
