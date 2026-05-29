@@ -1403,11 +1403,22 @@ async def get_legislative_file(
     """
     try:
         from models.legislative_train import LegislativeCarriage
+        from sqlalchemy import func as _sql_func
 
-        # Find carriage by file_id
+        # Find carriage by file_id. Exact match first, then case-insensitive
+        # fallback: some file_ids carry an uppercase procedure suffix
+        # (e.g. "lip-2023-0131-COD") and the case can be altered in transit
+        # (email link -> client -> SPA router), which would otherwise 404 and
+        # leave the My Files deep-link modal blank. file_id is unique, so a
+        # lower() match is safe.
         carriage = db.query(LegislativeCarriage).filter(
             LegislativeCarriage.file_id == file_id
         ).first()
+
+        if not carriage:
+            carriage = db.query(LegislativeCarriage).filter(
+                _sql_func.lower(LegislativeCarriage.file_id) == file_id.lower()
+            ).first()
 
         if not carriage:
             raise HTTPException(
