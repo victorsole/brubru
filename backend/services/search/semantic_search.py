@@ -397,8 +397,29 @@ class SemanticSearch:
                 VectorStore.COLLECTION_RSS
             ]
 
-        # Generate query embedding once
-        query_embedding = await self.embeddings_service.generate_embedding(query)
+        # Generate query embedding once.
+        # FAIL-SOFT: if the embeddings provider is unavailable (e.g. OpenAI
+        # account inactive / billing 429, or no working embeddings key), do NOT
+        # crash the whole chat request. Degrade gracefully to keyword + guide-
+        # trigger retrieval by returning an empty semantic result set. The chat
+        # path (build_context_for_query -> hybrid_search.search) already handles
+        # an empty SearchResponse and continues with the non-vector context.
+        try:
+            query_embedding = await self.embeddings_service.generate_embedding(query)
+        except Exception as e:  # noqa: BLE001
+            search_time = (datetime.now() - start_time).total_seconds() * 1000
+            logger.error(
+                f"Embedding generation failed for query '{query[:80]}' "
+                f"({type(e).__name__}: {e}). Degrading to keyword/guide retrieval; "
+                f"semantic layer skipped."
+            )
+            return SearchResponse(
+                query=query,
+                results=[],
+                total_found=0,
+                search_time_ms=search_time,
+                collections_searched=[],
+            )
 
         # Search each collection
         all_results = []
