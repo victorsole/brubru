@@ -15,7 +15,8 @@
     "ep_sant_latest_documents",
     "ep_sant_highlights",
     "ep_sant_votes",
-    "ep_sant_webstreaming"
+    "ep_sant_webstreaming",
+    "dg_comp_pharma_news"
   ],
   "deprecated_from_tier1": {
     "ema_rss_feeds": "index page listing other feeds; items reach DB via ema_news + ema_whats_new + ema_upcoming_events.",
@@ -697,7 +698,12 @@
       "url": "https://www.europarl.europa.eu/committees/en/sant/documents/latest-documents",
       "fetch_strategy": "playwright",
       "cadence": "daily",
-      "subkinds": ["draft_agenda", "draft_report", "amendments", "documents_other"]
+      "subkinds": [
+        "draft_agenda",
+        "draft_report",
+        "amendments",
+        "documents_other"
+      ]
     },
     {
       "id": "ep_sant_work_in_progress",
@@ -899,6 +905,26 @@
       "url": "https://www.ema.europa.eu/en/about-us/annual-reports-work-programmes",
       "fetch_strategy": "html",
       "cadence": "monthly"
+    },
+    {
+      "id": "dg_comp_pharma_news",
+      "institution": "EC",
+      "bucket": "dg_comp",
+      "kind": "latest_news",
+      "label": "DG COMP Pharmaceuticals & health services - latest news",
+      "url": "https://competition-policy.ec.europa.eu/sectors/pharmaceuticals-health-services/latest-news_en",
+      "fetch_strategy": "html",
+      "cadence": "daily"
+    },
+    {
+      "id": "dg_comp_pharma_cases",
+      "institution": "EC",
+      "bucket": "dg_comp",
+      "kind": "cases",
+      "label": "DG COMP Pharmaceuticals & health services - cases",
+      "url": "https://competition-policy.ec.europa.eu/sectors/pharmaceuticals-health-services/cases_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly"
     }
   ]
 }

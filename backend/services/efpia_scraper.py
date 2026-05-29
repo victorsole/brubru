@@ -653,6 +653,10 @@ def parser_for(source: dict) -> Callable[[str, dict], List[ScrapedItem]]:
         return parse_ecl
     if bucket == "ema":
         return parse_ema
+    if bucket == "dg_comp":
+        # DG COMP competition-policy.ec.europa.eu pages use the same ECL
+        # `.ecl-content-item` card layout as DG SANTE (server-rendered).
+        return parse_ecl
     if bucket == "dg_grow":
         # DG GROW newsroom HTML topic pages -- fall through to generic which
         # tries ECL, EMA, EP shapes. RSS is already handled above.
