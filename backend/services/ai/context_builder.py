@@ -675,6 +675,10 @@ class ContextData:
     # Triggered by "today"/"hoy"/"avui"/"aujourd'hui"/"oggi"/"vandaag"/"heute"/"this week"/"esta semana"...
     today_block: Optional[str] = None
     daily_brief_block: Optional[str] = None
+    # Always-on for tenant-audience users (e.g. EFPIA pilot): their curated
+    # daily brief + tracked priority files, so the chat can answer questions
+    # about "my files" / today's headlines from the same content the email sends.
+    audience_brief_block: Optional[str] = None
 
     # On-demand: Legal-text article block (W1b, 12 May 2026)
     # Triggered by "Article N (paragraph M) of <CELEX|alias>", "Recital N of <CELEX|alias>",
@@ -1314,6 +1318,22 @@ class ContextBuilder:
 
         post_tasks['daily_brief_block'] = _fetch_daily_brief_safe()
 
+        # 3f3. Always-on for tenant-audience users (e.g. EFPIA): inject their own
+        # curated brief + tracked priority files so the chat answers "my files" /
+        # today's headlines from the same content the email sends. No-op (None)
+        # for non-audience users.
+        async def _fetch_audience_brief_safe():
+            try:
+                block = await self._fetch_audience_brief_block(user_id)
+                if block:
+                    logger.info("[audience-brief-block] Injected audience brief block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[audience-brief-block] Failed: %s", e)
+                return None
+
+        post_tasks['audience_brief_block'] = _fetch_audience_brief_safe()
+
         # 3g. On-demand: Cellar SPARQL discovery block (live retrieval from publications.europa.eu)
         cellar_discovery_intent = self._detect_cellar_discovery_intent(user_message)
 
@@ -1751,6 +1771,7 @@ class ContextBuilder:
         committee_transcript_block = post_map.get('committee_transcript')
         today_block = post_map.get('today_block')
         daily_brief_block = post_map.get('daily_brief_block')
+        audience_brief_block = post_map.get('audience_brief_block')
         legal_text_article_block = post_map.get('legal_text_article_block')
         cellar_discovery_block = post_map.get('cellar_discovery_block')
         sanctions_block = post_map.get('sanctions_block')
@@ -1842,6 +1863,7 @@ class ContextBuilder:
             committee_transcript_block=committee_transcript_block,
             today_block=today_block,
             daily_brief_block=daily_brief_block,
+            audience_brief_block=audience_brief_block,
             legal_text_article_block=legal_text_article_block,
             cellar_discovery_block=cellar_discovery_block,
             sanctions_block=sanctions_block,
@@ -6271,6 +6293,80 @@ class ContextBuilder:
             logger.warning("[daily-brief-block] Failed: %s", e)
             return None
 
+    async def _fetch_audience_brief_block(self, user_id: Optional[str]) -> Optional[str]:
+        """
+        For a tenant-audience user (e.g. the EFPIA pilot), inject their curated
+        daily brief + tracked priority files into chat context.
+
+        This is what makes the same content the email sends queryable in chat:
+        "where are my priority files?", "what is in today's brief?", and the
+        individual headline questions all become grounded. Resolves the user's
+        audience from their email via services.audience.resolve_audience, then
+        pulls the most recent daily_briefs rows tagged with that audience.
+
+        Always-on for audience users (not gated on date intent) so any question
+        about their portfolio is grounded. Returns None for non-audience users.
+        """
+        if not user_id:
+            return None
+        try:
+            from sqlalchemy import text as _sql_text
+            from services.audience import resolve_audience
+
+            db = SessionLocal()
+            try:
+                urow = db.execute(
+                    _sql_text("SELECT email FROM users WHERE id = :uid"),
+                    {"uid": user_id},
+                ).fetchone()
+                email = urow[0] if urow else None
+                audience = resolve_audience(email) if email else None
+                if not audience:
+                    return None
+
+                rows = db.execute(
+                    _sql_text(
+                        """
+                        SELECT brief_date, priority, headline, snippet, suggested_query
+                        FROM daily_briefs
+                        WHERE audience = :aud
+                          AND brief_date >= (CURRENT_DATE - INTERVAL '10 days')
+                        ORDER BY brief_date DESC, priority ASC
+                        LIMIT 30
+                        """
+                    ),
+                    {"aud": audience},
+                ).fetchall()
+            finally:
+                db.close()
+
+            if not rows:
+                return None
+
+            label = audience.upper()
+            lines = [
+                f"=== WHAT BRUBRU IS MONITORING FOR YOU ({label}) ===",
+                "This is your own curated daily brief and tracked priority files, the same "
+                "content Brubru emails you. Treat it as verified context. Use it to answer "
+                "questions about your priority files, today's brief, and the headlines below. "
+                "Do NOT add named people, meeting dates, or vote dates that are not written here.",
+            ]
+            current_date = None
+            for brief_date, _priority, headline, snippet, suggested_query in rows:
+                if brief_date != current_date:
+                    current_date = brief_date
+                    lines.append(f"\n-- Brief for {brief_date.strftime('%d %B %Y')} --")
+                lines.append(f"\n• {headline}")
+                if snippet:
+                    lines.append(f"  {snippet}")
+                if suggested_query:
+                    lines.append(f"  (You can ask: {suggested_query})")
+            lines.append(f"\n=== END {label} MONITORING ===")
+            return "\n".join(lines)
+        except Exception as e:
+            logger.warning("[audience-brief-block] Failed: %s", e)
+            return None
+
     # ------------------------------------------------------------------
     # On-demand: Cellar SPARQL discovery (live retrieval from
     # publications.europa.eu/webapi/rdf/sparql)
@@ -10099,6 +10195,14 @@ class ContextBuilder:
         # Always-on for the authenticated user when status in ('ready', 'locked').
         if getattr(context_data, 'private_guide_block', None):
             sections.append(context_data.private_guide_block)
+            sections.append("")
+
+        # AUDIENCE BRIEF BLOCK (EFPIA pilot, 29 May 2026) — a tenant-audience
+        # user's own curated daily brief + tracked priority files. Injected near
+        # the TOP (right after the private-guide block) so it survives the 32k
+        # truncation cap and grounds "my files" / today's-headline questions.
+        if getattr(context_data, 'audience_brief_block', None):
+            sections.append(context_data.audience_brief_block)
             sections.append("")
 
         # TODAY BLOCK (on-demand, date-anchored) — injected near the top so it
