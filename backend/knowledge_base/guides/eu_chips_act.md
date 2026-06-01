@@ -1,6 +1,7 @@
 # EU Chips Act
 
 ## QUICK FACTS
+- **CHIPS ACT 2 (forthcoming, indicative 3 June 2026):** A follow-up "Chips Act 2" is a component of the EU Tech Sovereignty package, which the Commission's current plan (EC tentative agenda SEC(2026)2568, 26 May 2026) puts on the 3 June 2026 College -- but that date is marked "(tbc)" and indicative, so do NOT state it as adopted. Lead: EVP Henna Virkkunen. It is expected to build on Regulation (EU) 2023/1781 below. No CELEX / COM number exists yet. See `tech_sovereignty_package_2026` for the full package.
 - Full name: Regulation (EU) 2023/1781 establishing a framework of measures for strengthening Europe's semiconductor ecosystem (European Chips Act)
 - CELEX: 32023R1781
 - OJ reference: OJ L 229, 18.9.2023, p. 1-51

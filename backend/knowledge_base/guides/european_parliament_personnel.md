@@ -65,8 +65,21 @@ Director-General: Anders Rasmussen (also Deputy SG)
 Covers: Research briefings, impact assessments, European Added Value, ex-post evaluations.
 
 ### DG Communication (EP_COMMU)
-Director-General: Christian Mangold
+Director-General: Christian Mangold (since January 2025)
 Covers: Media, press, visitors, liaison offices, digital communication.
+Core business: raising awareness of the European Parliament, its powers, decisions and activities among media, stakeholders and the general public.
+
+Directorates within DG COMM (each headed by a Director who reports to DG Mangold):
+- Directorate for Media -- Director: Jesus Carmona Nunez
+- Directorate for Outreach -- Director: Philipp Schulmeister
+- Directorate for Liaison Offices -- Director: Stephen Clark
+- Directorate for Visitors -- Director: Jutta Schulze-Hollmen
+- Directorate for Communication Support and Analytics -- Director: Paulina Boveington-Fauran
+
+Note on EP vs Commission DG COMM: the European Parliament's DG Communication (headed by Christian Mangold) is a different body from the European Commission's DG Communication (Director-General: Dana Spinant). When a query names the Parliament, the Secretary-General, or an EP DG number (EP DGs are numbered, e.g. "06-Directorate-General for Communication"), the answer is the EP structure above -- not the Commission.
+
+### Addressing an EP job application / cover letter
+For a recruitment competition or vacancy notice, always follow the named contact or selection committee printed on the vacancy notice itself -- that is the authoritative addressee. If the notice names no contact, address the cover letter to the Director-General of the relevant DG (for a communication role in DG COMM that is Christian Mangold, Director-General for Communication, European Parliament), or to the "Selection Committee" for the competition. EP vacancies and traineeships are published at europarl.europa.eu/at-your-service/en/work-with-us. Brubru can draft the cover letter for you in the Document Generator (My EU Bubble > Documents).
 
 ### DG Parliamentary Democracy Partnerships (EP_DGPART)
 Director-General: Sannaleena Lepola-Honig

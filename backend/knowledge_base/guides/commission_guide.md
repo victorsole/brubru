@@ -9,9 +9,11 @@
 - Legislative pipeline: 7 steps (Political Guidelines, Work Programme, Roadmap, Public Consultation, Impact Assessment, Inter-service Consultation, College Adoption)
 - Public consultation window: Usually 12 weeks via Have Your Say portal
 - Key engagement tools: Public consultations, expert groups, stakeholder events, Transparency Register meetings
-- Von der Leyen I priorities (2019-2024): 6 (Green Deal, Digital Age, Economy for People, Stronger in World, European Way of Life, European Democracy)
+- **Current priorities (2024-2029, von der Leyen II): 7** — Competitiveness & Sustainable Prosperity; Defence & Security; Social Fairness; Quality of Life; Democracy & Values; Global Europe; EU Budget & Reform. (The 2019-2024 von der Leyen I priorities below are kept for historical reference.)
 
 How the Commission works and how to engage with it.
+
+> **For "who does what" — which DG / service / executive agency handles which policy — see `european_commission_who_does_what.md`** (the master map), plus `eu_commission_executive_agencies.md`, `eu_commission_services_overview.md`, `eu_commission_priorities_2024_2029.md`, `eu_commission_decision_making.md`, `eu_commission_funding_programmes_map.md` and `eu_commission_transparency_and_college_agenda.md`. This guide focuses on **engaging** with the Commission.
 
 ## Structure
 
