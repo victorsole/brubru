@@ -1,6 +1,7 @@
 # EU-wide Age Verification Recommendation (28 April 2026)
 
 ## QUICK FACTS
+- EPRS Briefing (2 June 2026): "Debate on setting a minimum age for social media" -- maps the live EP/Member-State debate on a minimum age for social-media access and how it intersects with age-verification technology under the DSA. Ref: EPRS_BRI(2026)789316 (https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)789316)
 - **Title**: Commission Recommendation on establishing a common framework for EU-wide Age Verification technologies
 - **Source**: OJ(2026) 2564 final, 28 April 2026, Item 10 (College of Commissioners agenda)
 - **Adopted**: Tuesday 28 April 2026 (College in Strasbourg)

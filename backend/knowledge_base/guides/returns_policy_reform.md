@@ -1,6 +1,14 @@
 # EU Returns Policy Reform (Return Regulation)
 
 ## QUICK FACTS
+- **LATEST (Monday 1 June 2026 — PROVISIONAL POLITICAL AGREEMENT REACHED)**: EP and Council negotiators reached a **provisional political agreement** on the Return Regulation in the final trilogue (opened 18:00, 1 June). The Commission "welcomes the political agreement". Headline points of the agreed text:
+  - **Return hubs outside the EU** — Member States may transfer people who have received a return decision to "return hubs" in third countries under an agreement or arrangement. This provision applies **immediately** on entry into force (a priority for the Netherlands and Germany, which are already pursuing such arrangements). Other parts of the Regulation phase in after **one year**.
+  - **Stricter enforcement tools**: tougher rules for people deemed a security threat, the possibility of home searches, longer detention periods, EU-wide entry bans, and penalties for migrants who do not cooperate with their return.
+  - Migration Commissioner **Magnus Brunner**: the deal restores EU control over "who comes to the European Union, but also who has to leave"; cited the ~27% rate of failed asylum-seekers who actually leave (Eurostat). **François-Xavier Bellamy** (EPP) was a lead negotiator for the EPP.
+  - Last month's trilogue had **collapsed over implementation timing**; the 1 June compromise phases application (immediate for return hubs, +1 year for the rest).
+  - Civil-society groups (International Rescue Committee) warn the text has "dangerous gaps" — return hubs as "legal black holes", risk of refoulement, normalised immigration raids.
+  - **Next steps**: the agreed text must be formally **voted by the European Parliament** (LIBE then plenary) and **approved by the Council** before publication in the OJ. Provisional agreement is NOT yet adopted law — hedge accordingly.
+  - Source: Politico ("EU negotiators agree new migrant return law", 1 June 2026); IRC press (1 June 2026); Commission statement.
 - Full name: Regulation establishing a common system for the return of third-country nationals staying illegally in the Union
 - Commission proposal: [COM(2025)0101](https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2025/0101/COM_COM(2025)0101_EN.pdf), 11 March 2025
 - Procedure: [2025/0059(COD)](https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0059(COD))
@@ -14,7 +22,7 @@
 - Shadow rapporteurs: Francois-Xavier Bellamy (EPP), Murielle Laurent (S&D), Marieke Ehlers (PfE), Charlie Weimers (ECR), Melissa Camara (Greens/EFA), Estrella Galan (The Left), Mary Khan (ESN)
 - Committee report: [A10-0048/2026](https://www.europarl.europa.eu/doceo/document/A-10-2026-0048_EN.html), tabled 10 March 2026
 - LIBE vote: 9 March 2026 (41 in favour, 32 against, 1 abstention)
-- Current status: Awaiting plenary vote to confirm LIBE negotiating mandate (26 March 2026), then trilogue
+- Current status: **Provisional political agreement reached in trilogue 1 June 2026** (return hubs apply immediately, remainder +1 year). Awaiting formal EP plenary vote + Council approval before OJ publication. (Earlier milestones: LIBE mandate confirmed by plenary 26 March 2026; trilogues April-May; talks collapsed over timing in May; agreement 1 June.)
 - Implementation target: 1 July 2027
 - Replaces: Directive 2008/115/EC (Return Directive), Directive 2001/40/EC, Decision 2004/191/EC
 - Part of: Post-Pact on Migration and Asylum implementation

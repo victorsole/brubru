@@ -1,6 +1,7 @@
 # Horizon Europe Grant Management
 
 ## QUICK FACTS
+- EPRS Briefing (2 June 2026): "Boosting research and innovation in the EU: European research and innovation acts" -- reviews the policy push to strengthen the European Research Area and the proposed R&I acts. Ref: EPRS_BRI(2026)789317 (https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)789317)
 - Topic: Horizon Europe grant lifecycle -- from proposal selection to project closure
 - Programme regulation: Regulation (EU) 2021/695
 - Financial basis: Financial Regulation (EU, Euratom) 2018/1046

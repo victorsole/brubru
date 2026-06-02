@@ -6349,7 +6349,13 @@ class ContextBuilder:
                 "This is your own curated daily brief and tracked priority files, the same "
                 "content Brubru emails you. Treat it as verified context. Use it to answer "
                 "questions about your priority files, today's brief, and the headlines below. "
-                "Do NOT add named people, meeting dates, or vote dates that are not written here.",
+                "Do NOT add named people, meeting dates, or vote dates that are not written here. "
+                "Do NOT invent any statistic that is not written here: case counts, death tolls, "
+                "infection numbers, percentages, or monetary figures. If a headline says "
+                "'confirmed cases and deaths' without a number, say the number is not on file -- "
+                "never supply one. Do NOT contradict, raise, or invert any risk level or "
+                "assessment stated in a headline: if it says the risk is 'very low', the risk is "
+                "very low; quote risk ratings exactly as written.",
             ]
             current_date = None
             for brief_date, _priority, headline, snippet, suggested_query in rows:

@@ -152,11 +152,31 @@ Centralised procedure mandatory. EMA Committee for Advanced Therapies (CAT) prov
 
 Commission Regulation (EC) 658/2007 (CELEX 32007R0658): Financial penalties for non-compliance with Regulation 726/2004 obligations. EMA can impose fines on marketing authorisation holders.
 
+## Health Technology Assessment (HTA Regulation, (EU) 2021/2282)
+
+The HTA Regulation (Regulation (EU) 2021/2282, CELEX **32021R2282**) created EU-level cooperation on health technology assessment. It applies from **12 January 2025** and is phased in by technology type (oncology medicines and advanced therapy medicinal products first, orphan medicines from 2028, all centrally-authorised medicines from 2030). Governance sits with the **Member State Coordination Group on HTA (HTACG)**, supported by the Commission as secretariat. The Regulation defines **four joint work-streams**: Joint Clinical Assessments, Joint Scientific Consultations, identification of emerging health technologies (horizon scanning), and voluntary cooperation.
+
+### Joint Clinical Assessments (JCA) — Articles 7-15
+A JCA is a shared, EU-level assessment of a health technology's **relative clinical effectiveness and safety** versus comparators, produced once and used by all Member States. Member States must give the JCA report "due consideration" in their national HTA process but retain full competence over **pricing and reimbursement** decisions (the JCA does not cover cost-effectiveness or national value judgements). JCAs are mandatory for in-scope technologies (cancer medicines + ATMPs since January 2025) and the report is published with confidential business information redacted.
+
+### Joint Scientific Consultations (JSC) — Articles 16-21
+A JSC (the successor to the earlier "early dialogues") lets a **health technology developer seek simultaneous scientific advice** from HTA bodies on the evidence — study design, comparators, endpoints, patient populations — that the future JCA will need. It is **scientific advice, not an assessment**, and it is non-binding. The aim is to align the developer's clinical-evidence-generation plan with HTA expectations before pivotal trials run, often **in parallel with EMA scientific advice** (a joint EMA–HTA "parallel consultation" track) so the same development programme satisfies both the marketing-authorisation and HTA evidence needs.
+
+**Who can apply for a JSC:**
+- **Developers of medicinal products** — typically those planning or undergoing the EMA centralised marketing-authorisation procedure, especially for the in-scope categories (oncology medicines, ATMPs, and progressively orphan and all centrally-authorised medicines).
+- **Manufacturers of certain high-risk medical devices and in vitro diagnostics** in scope of the Regulation (class IIb/III devices and class D IVDs that the HTACG selects).
+- Applications are submitted to the **HTACG**, which runs an **annual selection** with a **limited number of slots** (demand exceeds capacity, so requests are prioritised — e.g. unmet medical need, novelty, expected EU-wide impact). A developer is not guaranteed a slot.
+
+JSC is the right answer when a company asks "how do I align my trial design with what EU HTA bodies will want?"; JCA is the right answer when they ask "how will my product be clinically assessed across the EU once authorised?". Do not conflate the two.
+
+**LATEST (1 June 2026, DG SANTE):** "Health Technology Assessment — New Opportunity to Apply for Joint Scientific Consultations". The HTACG has opened a **new application round for JSCs**. Developers of in-scope medicinal products (and selected high-risk devices/IVDs) can submit a request to be selected for a joint scientific consultation; slots are limited and allocated by the HTACG. Developers planning pivotal trials for oncology medicines or ATMPs should check the application window and eligibility criteria on the DG SANTE HTA page (health.ec.europa.eu). Source: DG SANTE latest-updates, 1 June 2026.
+
 ## Institutional Landscape
 
 | Actor | Role |
 |-------|------|
 | **DG SANTE** | Lead Commission DG for pharmaceuticals |
+| **HTACG** (Member State Coordination Group on HTA) | Governs Joint Clinical Assessments + Joint Scientific Consultations under Reg (EU) 2021/2282 |
 | **EMA** (Amsterdam) | Centralised MA, pharmacovigilance, scientific advice, crisis management |
 | **HMA** (Heads of Medicines Agencies) | Network of 30 national regulators + EMA |
 | **EDQM** (Strasbourg, Council of Europe) | European Pharmacopoeia, quality standards |

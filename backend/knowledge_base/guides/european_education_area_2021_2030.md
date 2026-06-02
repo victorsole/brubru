@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- EPRS Study (2 June 2026): "Erasmus+: Evolution, Structural Challenges and Future Design" -- assesses the Erasmus+ programme's growth, structural challenges, and options for its post-2027 design. Ref: IUST_STU(2026)789677 (https://www.europarl.europa.eu/thinktank/en/document/IUST_STU(2026)789677)
 - **Strategic framework**: **European Education Area (EEA) Strategic Framework 2021-2030**
 - **Founding instrument**: Council Resolution of 26 February 2021 on a strategic framework for European cooperation in education and training towards the European Education Area and beyond (2021-2030), CELEX 32021G0226(01), OJ C 66, 26.2.2021
 - **Vision**: "By 2025, build a true European Education Area where learning, studying and doing research would not be hampered by borders"
