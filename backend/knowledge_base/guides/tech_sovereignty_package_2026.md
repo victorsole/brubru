@@ -1,10 +1,15 @@
 # EU Tech Sovereignty Package (2026)
 
 ## QUICK FACTS
-- **LATEST (Monday 1 June 2026 — 3 JUNE AGENDA RE-CONFIRMED, STILL INDICATIVE)**: the newest EC tentative agenda **SEC(2026)2568 final (dated 26 May 2026)**, verified against the EC Transparency Register, keeps the Tech Sovereignty package on the **3 June 2026** College under the "(tbc)" indicative-planning caveat. Components unchanged (Energy/AI roadmap, Tech Sovereignty Communication, Cloud and AI Development Act, Chips Act 2). The same 3 June College also carries non-tech items (Public Procurement Act orientation debate, European Semester spring package, Ocean observation communication, 2027 Draft budget) -- see `college_agenda` for the full meeting. Do NOT assert adoption; the package has slipped 25 Mar -> 15 Apr -> 27 May -> 3 June.
-- **PRIOR (Tuesday 26 May 2026 — VIRKKUNEN MEETS EU'S TOP QUANTUM SCIENTISTS)**: Executive Vice-President Henna Virkkunen met with Europe's leading quantum researchers and industry representatives ahead of the Tech Sovereignty Package adoption (26 May 2026, DG CNECT), positioning quantum computing as a pillar alongside the Cloud/Edge Act and the Open Source Strategy Communication. Source: digital-strategy.ec.europa.eu (26 May 2026).
-- Umbrella name: Tech Sovereignty Package (a bundle of digital-autonomy instruments, not a single legal act)
-- Status: PRE-ADOPTION. Indicatively scheduled for the College of Commissioners on 3 June 2026 -- but the date is marked "(tbc)" and the President may change the planning at any time
+- **LATEST (Wednesday 3 June 2026 — ADOPTED BY THE COLLEGE TODAY, date held):** the College adopted the European Technological Sovereignty Package on 3 June 2026. Primary-source verified (all COM/SWD PDFs dated 3.6.2026). Four components now carry real references:
+  - **Cloud and AI Development Act (CADA)** — `COM(2026) 502 final`, procedure `2026/0138(COD)`. Dedicated guide `cloud_ai_development_act_cada`; deep-dive https://brubru.beresol.eu/cloud-ai-act/index.html.
+  - **Chips Act 2.0** — `COM(2026) 504 final`; repeals Regulation (EU) 2023/1781. Dedicated guide `eu_chips_act_2_0`; deep-dive https://brubru.beresol.eu/chips-act-2/index.html.
+  - **Communication on European Tech Sovereignty + EU Open Source Strategy** — `COM(2026) 503`.
+  - **Strategic Roadmap for Digitalisation and AI in the Energy sector** (RIBERA).
+  - Press: IP/26/1187; Q&A QANDA/26/1188 + QANDA/26/1185. CADA and Chips Act 2.0 are COD proposals now starting the ordinary legislative procedure (EP lead committee ITRE expected + Council): ADOPTED BY THE COMMISSION but NOT yet in force as law.
+- **PRIOR (Monday 1 June 2026)**: EC tentative agenda **SEC(2026)2568 final (26 May 2026)**, verified vs the EC Transparency Register, kept the package on the 3 June College under the "(tbc)" caveat; it had slipped 25 Mar -> 15 Apr -> 27 May -> 3 June (now adopted on 3 June). The same College carried non-tech items (Public Procurement Act orientation debate, European Semester spring package, Ocean observation communication, 2027 Draft budget).
+- Umbrella name: European Technological Sovereignty Package (a bundle of digital-autonomy instruments, not a single legal act)
+- Status: **ADOPTED by the Commission on 3 June 2026**; the two regulations (CADA, Chips Act 2.0) now enter the ordinary legislative procedure.
 - Primary source: EC tentative agenda SEC(2026)2568 final, dated 26 May 2026 ("Possible items for Commission agendas 3 June 2026 - 22 July 2026"). This is the latest tentative agenda; it supersedes SEC(2026)2567 (19 May) and SEC(2026)2564 (28 April)
 - Delay history: originally 25 March 2026, pushed to 15 April, then 27 May, then to 3 June 2026 (third delay)
 - On the 27 May College the only key item is now the Communication on humanitarian aid (KALLAS); the Tech Sovereignty package moved to 3 June
@@ -20,15 +25,15 @@
 - Political backdrop: US ambassador to the EU warned that "protectionist" rules could derail the EU-US trade deal; this contributed to the repeated delays
 - Related guides: ai_continent_action_plan, ai_act_regulation, eu_chips_act, ai_sustainability_eu_framework, apply_ai_strategy_public_sector, fp10_ecf_competitiveness, eu_energy_policy
 
-## WARNING -- PRE-ADOPTION GUIDE
-This guide describes a package that has NOT yet been adopted. The latest EC tentative agenda (SEC(2026)2567, 19 May
-2026) indicatively schedules it for 3 June 2026, but that date is explicitly marked "(tbc)" and the package has
-already slipped three times (25 Mar -> 15 Apr -> 27 May -> 3 June). Do NOT state as hard fact that it "will be
-adopted on 3 June"; the accurate phrasing is "the Commission's current plan puts it on 3 June." Treat every figure
-below as a Commission ambition or a pre-announcement reported by trade press, NOT as enacted law. There are no
-authentic CELEX numbers, no OJ references and no procedure files for the individual acts yet. When asked "is it
-adopted?", the answer is NO. CAIDA and Chips Act 2 are expected to be COD files; binding adoption of CAIDA is
-targeted only for Q4 2027. Refresh this guide on adoption day.
+## STATUS -- ADOPTED BY THE COMMISSION (3 June 2026)
+The Commission (College) adopted this package on 3 June 2026. Two of its instruments are now formal proposals with
+references: the **Cloud and AI Development Act (CADA), COM(2026) 502 final, 2026/0138(COD)** and the **Chips Act 2.0,
+COM(2026) 504 final** (repealing Reg (EU) 2023/1781), plus the **Communication COM(2026) 503** and the Strategic
+Roadmap for Digitalisation and AI in Energy. When asked "is it adopted?", the accurate answer is: the COMMISSION
+adopted it on 3 June 2026, but CADA and Chips Act 2.0 are COD proposals that are NOT yet law (they now go to the
+European Parliament and Council, then trilogues). Use the dedicated guides `cloud_ai_development_act_cada` and
+`eu_chips_act_2_0` for article-level detail. Some figures in the older sections below were pre-adoption Commission
+ambitions; cross-check against the two dedicated guides, which are built from the adopted COM/SWD documents.
 
 ## What the Tech Sovereignty Package is
 The Tech Sovereignty Package is the Commission's flagship attempt to move European digital autonomy from strategy

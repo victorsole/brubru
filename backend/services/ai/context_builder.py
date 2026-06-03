@@ -6355,7 +6355,11 @@ class ContextBuilder:
                 "'confirmed cases and deaths' without a number, say the number is not on file -- "
                 "never supply one. Do NOT contradict, raise, or invert any risk level or "
                 "assessment stated in a headline: if it says the risk is 'very low', the risk is "
-                "very low; quote risk ratings exactly as written.",
+                "very low; quote risk ratings exactly as written. "
+                "When a date appears here (a court judgment or ruling date, an application or "
+                "entry-into-force date, a meeting or vote date), quote it EXACTLY as written: "
+                "never shift, round, paraphrase, or change it by even a day. If a headline says "
+                "'judgment of 21 May 2026', the date is 21 May 2026 -- do not write any other date.",
             ]
             current_date = None
             for brief_date, _priority, headline, snippet, suggested_query in rows:

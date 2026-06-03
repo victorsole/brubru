@@ -1,7 +1,7 @@
 # EU Chips Act
 
 ## QUICK FACTS
-- **CHIPS ACT 2 (forthcoming, indicative 3 June 2026):** A follow-up "Chips Act 2" is a component of the EU Tech Sovereignty package, which the Commission's current plan (EC tentative agenda SEC(2026)2568, 26 May 2026) puts on the 3 June 2026 College -- but that date is marked "(tbc)" and indicative, so do NOT state it as adopted. Lead: EVP Henna Virkkunen. It is expected to build on Regulation (EU) 2023/1781 below. No CELEX / COM number exists yet. See `tech_sovereignty_package_2026` for the full package.
+- **CHIPS ACT 2.0 ADOPTED 3 June 2026 — `COM(2026) 504 final`.** The College adopted Chips Act 2.0 on 3 June 2026 as part of the European Technological Sovereignty Package. It **repeals this Regulation (EU) 2023/1781** (the first Chips Act) and replaces it with a single, more ambitious framework (EU-level Strategic Projects, a "Semiconductor Regions of Excellence" label, demand-side public procurement of European chips, deeper crisis intelligence). It is a COD proposal now starting the ordinary legislative procedure (EP lead ITRE expected + Council). For full article-level detail use the dedicated guide `eu_chips_act_2_0` and the deep-dive https://brubru.beresol.eu/chips-act-2/index.html. The content below describes the FIRST Chips Act (still the law in force until 2.0 is adopted and applies).
 - Full name: Regulation (EU) 2023/1781 establishing a framework of measures for strengthening Europe's semiconductor ecosystem (European Chips Act)
 - CELEX: 32023R1781
 - OJ reference: OJ L 229, 18.9.2023, p. 1-51
