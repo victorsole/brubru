@@ -1,6 +1,11 @@
 # European Semester and Economic Communication
 
 ## QUICK FACTS
+- **LATEST (3 June 2026 — Spring Package items in the Official Journal):** the Commission published the spring economic-governance documents under the reformed Stability and Growth Pact (Regulation (EU) 2024/1263). Key acts dated 3 June 2026:
+  - **COM(2026) 301 (CELEX 52026DC0301)** — Recommendation for a Council Recommendation **endorsing the national medium-term fiscal-structural plan of the Netherlands** (the multiannual net-expenditure path that replaces the old Stability/Convergence Programmes).
+  - **COM(2026) 303 (CELEX 52026PC0303)** — Recommendation for a Council Decision **abrogating Council Decision (EU) 2024/2128 on the existence of an excessive deficit in Malta** (i.e. closing Malta's excessive-deficit procedure as the deficit is brought back below the reference value).
+  - **COM(2026) 302 (CELEX 52026DC0302)** — Commission **Report under Article 126(3) TFEU on Bulgaria, Germany, Estonia, Latvia and Slovenia** (the step that assesses whether an excessive-deficit procedure should be opened or continued for those five Member States).
+  - These sit in the May-June "Spring Package" slot of the Semester cycle (CSRs + EDP steps) and are endorsed by ECOFIN/European Council in June-July.
 - Topic: European Semester cycle, economic forecasts, RRF implementation, DG ECFIN communication
 - Scope: EU economic policy coordination and institutional communication
 - Responsible DG: DG ECFIN (Economic and Financial Affairs)

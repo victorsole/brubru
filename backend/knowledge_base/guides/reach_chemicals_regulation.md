@@ -1,6 +1,7 @@
 # REACH and EU Chemicals Regulation
 
 ## QUICK FACTS
+- **LATEST (3 June 2026):** the Commission published a **Communication "Roadmap towards phasing out animal testing for chemical safety assessments"** (CELEX 52026XC03087, OJ C-series). It sets out a staged plan, milestones and timeline for replacing animal tests with New Approach Methodologies (NAMs) across REACH, CLP and the wider chemicals acquis, coordinated with ECHA and EFSA. Cross-references the Chemicals Strategy for Sustainability and the ongoing REACH revision (COM(2023) 245, 2023/0234(COD)).
 - Full name: Regulation (EC) No 1907/2006 -- Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)
 - CELEX: 32006R1907
 - Type: Regulation (directly applicable)

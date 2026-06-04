@@ -1605,6 +1605,17 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'a10-0033': ['european_semester_annual_report_2026'],
     'a10-0032': ['european_semester_annual_report_2026'],
     'autumn package': ['european_semester_annual_report_2026', 'european_semester_communication'],
+    'spring package': ['european_semester_communication'],
+    'medium-term fiscal-structural plan': ['european_semester_communication'],
+    'fiscal-structural plan': ['european_semester_communication'],
+    'excessive deficit procedure': ['european_semester_communication'],
+    'excessive deficit': ['european_semester_communication'],
+    'article 126': ['european_semester_communication'],
+    'stability and growth pact': ['european_semester_communication'],
+    'net expenditure path': ['european_semester_communication'],
+    'plan presupuestario estructural': ['european_semester_communication'],
+    'pacto de estabilidad': ['european_semester_communication'],
+    'semestre européen': ['european_semester_communication'],
 
     # Cohesion Policy Audit
     'cohesion': ['cohesion_policy_audit', 'mff_2028_2034'],
@@ -1732,6 +1743,10 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # REACH and Chemicals Regulation
     'reach': ['reach_chemicals_regulation'],
+    'animal testing': ['reach_chemicals_regulation'],
+    'phasing out animal testing': ['reach_chemicals_regulation'],
+    'new approach methodologies': ['reach_chemicals_regulation'],
+    'experimentación animal': ['reach_chemicals_regulation'],
     'chemicals': ['reach_chemicals_regulation'],
     'chemical substances': ['reach_chemicals_regulation'],
     'echa': ['reach_chemicals_regulation'],
