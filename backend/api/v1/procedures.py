@@ -21,6 +21,7 @@ from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from ._curated_procedures import BrubruCuration, get_curation
 
 logger = logging.getLogger(__name__)
 
@@ -336,6 +337,11 @@ class ProcedureDetail(BaseModel):
     enriched_at: Optional[datetime] = None
     enrichment_quality: Optional[str] = None
 
+    # Brubru curated overlay (hand-verified editorial layer) for high-salience
+    # files. Present only for procedures Brubru curates (e.g. EU Inc.); null
+    # otherwise. See api/v1/_curated_procedures.py.
+    curated: Optional[BrubruCuration] = None
+
 
 def _coerce_list(v: Any) -> list:
     if v is None:
@@ -396,6 +402,8 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         body_html=getattr(r, "oeil_html_body", None),
         document_date=_latest_event_date(getattr(r, "oeil_key_events", None)),
         creation_date=r.first_seen,
+        # Brubru curated editorial overlay (null unless Brubru curates this file)
+        curated=get_curation(r.oeil_procedure_ref),
     )
 
 
@@ -421,8 +429,10 @@ GET /api/v1/procedures/2021/0106(COD)
 **You get back**
 A `ProcedureDetail` object with `oeil_procedure_ref`, `file_id`, `title`, `procedure_type`, `procedure_stage`, `lead_committee`, full `events[]` timeline, `rapporteurs[]`, EPRS briefings, EUR-Lex documents, AI summary, and the 5 envelope-level datapoints. HTTP 404 with `reason_code: not_found` if no procedure matches.
 
+For a small set of high-salience files, the response also carries a `curated` object: a hand-verified Brubru editorial overlay with a plain-English status, the committee + rapporteur + shadow map, debate highlights, the political dynamics, related procedures, source links, and links to Brubru's multilingual deep-dive. `curated` is `null` for procedures Brubru does not curate. The flagship example is EU Inc., the 28th Regime corporate legal framework: `GET /api/v1/procedures/2026/0074(COD)`.
+
 **Data freshness**
-Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds.""",
+Raw carriage fields sync every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. The `curated` overlay is maintained editorially and carries its own `as_of` verification date.""",
 )
 async def get_procedure_detail(
     reference: str,
