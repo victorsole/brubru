@@ -39,6 +39,12 @@ _BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _BACKEND_DIR not in sys.path:
     sys.path.insert(0, _BACKEND_DIR)
 
+# Load .env BEFORE importing services so OPENAI_API_KEY / MISTRAL_API_KEY are visible
+# to the transcription service when it initialises (raw-script context, not uvicorn).
+from dotenv import load_dotenv
+_PROJECT_ROOT = os.path.dirname(_BACKEND_DIR)
+load_dotenv(os.path.join(_PROJECT_ROOT, ".env"))
+
 from core.database import SessionLocal
 from models.committee_meeting_transcript import (
     CommitteeMeetingTranscript,
@@ -80,6 +86,10 @@ async def discover_meetings(
     max_meetings: int = 50,
     days: int = 30,
     do_transcribe: bool = False,
+    engine: Optional[str] = None,
+    language: str = "en",
+    only_date: Optional[str] = None,
+    use_day_feed: Optional[bool] = None,
 ) -> int:
     """Discover committee meetings from the EP committees hub.
 
@@ -92,9 +102,16 @@ async def discover_meetings(
 
     client = get_ep_multimedia_client()
 
-    date_from = (datetime.utcnow() - timedelta(days=days)).date()
+    if only_date:
+        target = datetime.strptime(only_date, "%Y-%m-%d").date()
+        date_from = target
+        date_to = target
+    else:
+        date_from = (datetime.utcnow() - timedelta(days=days)).date()
+        date_to = None
     meetings = await client.discover_meetings(
-        committee_code=committee, date_from=date_from,
+        committee_code=committee, date_from=date_from, date_to=date_to,
+        use_day_feed=use_day_feed,
     )
     meetings = meetings[:max_meetings]
     logger.info(
@@ -159,6 +176,8 @@ async def discover_meetings(
                         {"number": ai.number, "title": ai.title, "procedure_refs": ai.procedure_refs}
                         for ai in meeting.agenda_items
                     ],
+                    language=language,
+                    engine=engine,
                 )
                 for k, v in result.items():
                     if hasattr(row, k):
@@ -187,14 +206,28 @@ def main():
     parser.add_argument("--days", type=int, default=30,
                         help="Discover meetings from the last N days (default: 30).")
     parser.add_argument("--transcribe", action="store_true",
-                        help="Also run Whisper transcription (costs ~$0.006/min).")
+                        help="Also run Whisper/Voxtral transcription (~$0.006/min).")
+    parser.add_argument("--engine", type=str, default=None, choices=("voxtral", "whisper"),
+                        help="Pin ASR engine (default: voxtral first, whisper fallback).")
+    parser.add_argument("--language", type=str, default="en",
+                        help="Interpretation booth language (en/fr/es/it/nl/floor). Default 'en'.")
+    parser.add_argument("--only-date", type=str, default=None,
+                        help="Restrict discovery to a single YYYY-MM-DD.")
+    parser.add_argument("--past", action="store_true",
+                        help="Use multimedia.europarl day-feed (past meetings with HLS URLs). "
+                             "Default uses the committees hub (upcoming only). --only-date implies --past.")
     args = parser.parse_args()
 
+    use_day_feed = True if (args.past or args.only_date) else None
     rc = asyncio.run(discover_meetings(
         committee=args.committee,
         max_meetings=args.max,
         days=args.days,
         do_transcribe=args.transcribe,
+        engine=args.engine,
+        language=args.language,
+        only_date=args.only_date,
+        use_day_feed=use_day_feed,
     ))
     sys.exit(0 if rc >= 0 else 1)
 

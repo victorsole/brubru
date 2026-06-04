@@ -142,11 +142,46 @@ def test_revoked_key_returns_401(test_app, blue_user_with_key):
     assert r.status_code == 401
 
 
-def test_non_blue_tier_returns_403(test_app, yellow_user_with_key):
+def test_non_blue_tier_now_authenticates_ok(test_app, yellow_user_with_key):
+    """Phase A (21 May 2026): subscription-tier gate REMOVED.
+
+    Pre-Phase A this test asserted that yellow-tier users got 403 with
+    reason_code='tier_insufficient'. The new model gates commercial API access
+    on a positive euro balance (Phase B billing middleware) rather than on
+    subscription tier — so yellow-tier users authenticate cleanly. They will
+    still be blocked at the billing layer if their balance is zero.
+    """
     plaintext = yellow_user_with_key
     client = TestClient(test_app)
     r = client.get("/protected", headers={"X-API-Key": plaintext})
-    assert r.status_code == 403
+    assert r.status_code == 200
+    assert r.json()["tier"] == "yellow"
+
+
+def test_expired_key_returns_401(test_app, blue_user_with_key):
+    """Self-serve keys have a non-NULL expires_at. Past expiry => 401."""
+    from datetime import datetime, timedelta, timezone
+
+    user, plaintext, key_id = blue_user_with_key
+    db = SessionLocal()
+    try:
+        key = db.query(ApiKey).filter(ApiKey.id == key_id).first()
+        key.expires_at = datetime.now(timezone.utc) - timedelta(days=1)
+        db.commit()
+    finally:
+        db.close()
+
+    client = TestClient(test_app)
+    r = client.get("/protected", headers={"X-API-Key": plaintext})
+    assert r.status_code == 401
     msg, code = _err(r.json())
-    assert "Professional" in msg
-    assert code == "tier_insufficient"
+    assert "expired" in msg.lower()
+    assert code == "key_expired"
+
+
+def test_bearer_auth_works(test_app, blue_user_with_key):
+    """Authorization: Bearer <key> is accepted alongside X-API-Key."""
+    _, plaintext, _ = blue_user_with_key
+    client = TestClient(test_app)
+    r = client.get("/protected", headers={"Authorization": f"Bearer {plaintext}"})
+    assert r.status_code == 200

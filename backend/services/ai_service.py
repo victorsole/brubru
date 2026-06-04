@@ -695,7 +695,8 @@ class AIService:
         conversation_history: Optional[List[ChatMessage]] = None,
         use_context: bool = True,
         is_pre_user: bool = False,
-        document_ids: Optional[List[str]] = None
+        document_ids: Optional[List[str]] = None,
+        nav_context: Optional[str] = None
     ) -> AsyncGenerator[str, None]:
         """
         Stream chat response with dynamic status events.
@@ -713,6 +714,18 @@ class AIService:
             JSON status events ({"type":"status","message":"..."}) and text chunks
         """
         start_time = datetime.now()
+
+        # Policy-interest navigation: a lightweight, taxonomy-grounded mapping
+        # flow (route free text -> canonical Brubru policy areas). Deliberately
+        # routed to the cheap provider (Mistral-first) and kept off the heavy
+        # knowledge-context path. See knowledge_base/policy_taxonomy.json.
+        if nav_context == "policy_interests":
+            async for chunk in self._stream_policy_nav(user_message, conversation_history):
+                yield chunk
+            logger.info(
+                f"Streamed policy-nav response in {(datetime.now() - start_time).total_seconds():.2f}s"
+            )
+            return
 
         # --- Emit entity-aware status events before context building ---
         if use_context:
@@ -895,6 +908,100 @@ class AIService:
                 logger.warning(f"Action routing failed in stream (non-critical): {e}")
 
         logger.info(f"Streamed response in {(datetime.now() - start_time).total_seconds():.2f}s")
+
+    _policy_taxonomy_cache: Optional[dict] = None
+
+    @classmethod
+    def _load_policy_taxonomy(cls) -> dict:
+        """Load + cache the canonical policy taxonomy JSON (shared with the
+        frontend selector and the /api/policy-taxonomy endpoint)."""
+        if cls._policy_taxonomy_cache is None:
+            import json
+            from pathlib import Path
+            path = (
+                Path(__file__).resolve().parents[1]
+                / "knowledge_base" / "policy_taxonomy.json"
+            )
+            with path.open(encoding="utf-8") as fh:
+                cls._policy_taxonomy_cache = json.load(fh)
+        return cls._policy_taxonomy_cache
+
+    def _build_policy_nav_prompt(self) -> str:
+        """System prompt for the policy-interest navigation flow: map free text
+        to the canonical Brubru policy areas, grounded ONLY on the taxonomy."""
+        taxonomy = self._load_policy_taxonomy()
+        lines = []
+        for cat in taxonomy.get("categories", []):
+            names = " | ".join(pa["name"] for pa in cat.get("policy_areas", []))
+            lines.append(f"- {cat['category']}: {names}")
+        leaf_block = "\n".join(lines)
+        return (
+            "You are Brubru's policy-interest guide. Everything in My EU Bubble "
+            "is organised around a FIXED set of EU policy areas (listed below). "
+            "The user is choosing which areas to follow and could not find their "
+            "topic in the picker.\n\n"
+            "Your job:\n"
+            "1. Map what the user typed to 1-3 areas FROM THE LIST BELOW. Use only "
+            "names from the list; never invent an area.\n"
+            "2. Write each chosen area name EXACTLY as it appears in the list and "
+            "in English (verbatim), so the app can offer it as a one-click option. "
+            "You may explain in the user's language, but keep the area names in "
+            "English.\n"
+            "3. Say briefly why each fits (one short clause).\n"
+            "4. Geography is a SEPARATE axis. If the user names a country or region, "
+            "do not treat it as a policy area: name the closest policy area and note "
+            "that geography is filtered separately.\n"
+            "5. If nothing on the list genuinely fits, say so plainly (\"Brubru does "
+            "not have a dedicated area for that yet\") and name the single closest "
+            "area, or suggest a broader term. Do not force a bad match.\n"
+            "6. Finish with one line in this exact shape: \"In Policy Interests, "
+            "tick: <Area>, <Area>.\"\n\n"
+            "Keep it short (3-6 sentences). Answer in the user's language. Do not "
+            "discuss legislation, procedures, or other Brubru tools here, only the "
+            "policy-area mapping.\n\n"
+            "Policy areas (by category):\n"
+            f"{leaf_block}"
+        )
+
+    async def _stream_policy_nav(
+        self,
+        user_message: str,
+        conversation_history: Optional[List[ChatMessage]] = None,
+    ) -> AsyncGenerator[str, None]:
+        """Run the policy-nav mapping. Mistral-first (prefer_claude=False); the
+        answer is short so we yield it as a single chunk. Falls back to the
+        Anthropic stream if the multi-provider chain is unavailable."""
+        system_prompt = self._build_policy_nav_prompt()
+        messages = self._build_messages(
+            user_message=user_message,
+            context="",
+            conversation_history=conversation_history,
+            documents=None,
+        )
+        if self.use_fallback and self.multi_provider:
+            try:
+                resp = await self.multi_provider.generate(
+                    system_prompt=system_prompt,
+                    messages=messages,
+                    max_tokens=600,
+                    temperature=0.2,
+                    prefer_claude=False,
+                )
+                yield resp.message
+                return
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning(
+                    f"policy-nav multi-provider failed, falling back to Anthropic: {exc}"
+                )
+        async with self.client.messages.stream(
+            model=self.model,
+            max_tokens=600,
+            temperature=0.2,
+            system=system_prompt,
+            messages=messages,
+        ) as stream:
+            async for text in stream.text_stream:
+                yield text
 
     def _append_deep_dive_link(self, message: str, context_str: str) -> str:
         """

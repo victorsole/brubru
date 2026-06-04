@@ -22,6 +22,7 @@ Created: April 2026
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
@@ -103,6 +104,34 @@ COUNTRY_NAME = {
     "PL": "Poland", "PT": "Portugal", "RO": "Romania", "SK": "Slovakia",
     "SI": "Slovenia", "ES": "Spain", "SE": "Sweden",
 }
+
+
+def _rollup_element_ref(ref: Optional[str]) -> str:
+    """Collapse a full amendment location to its ARTICLE-level anchor.
+
+    The raw element_reference goes down to the point/sub-point, e.g.
+    'Article 5 - paragraph 1 - point a - point vi' or 'Annex - point 14 - point 2'.
+    For an article-by-article view we want the leading anchor only:
+    'Article 5', 'Recital 66', 'Annex', 'Citation 4', 'Title IV'.
+    """
+    if not ref:
+        return "(unspecified)"
+    s = ref.strip()
+    patterns = [
+        r"^(Article\s+\d+\s*[a-z]?)",
+        r"^(Recital\s+\d+\s*[a-z]?)",
+        r"^(Citation\s+\d+\s*[a-z]?)",
+        r"^(Annex\s+[IVXLC0-9]+)",
+        r"^(Annex)",
+        r"^(Title\s+[IVXLC]+)",
+    ]
+    for p in patterns:
+        m = re.match(p, s, re.I)
+        if m:
+            return re.sub(r"\s+", " ", m.group(1)).strip()
+    # Fallback: text before the first dash separator (en-dash, em-dash or hyphen).
+    head = re.split(r"\s[–—-]\s", s)[0].strip()
+    return head or "(unspecified)"
 
 
 class PositionAggregator:
@@ -332,8 +361,13 @@ class PositionAggregator:
             ),
         }
 
-    def _amendments_by_article(self, carriage: LegislativeCarriage, limit_articles: int = 25) -> List[Dict[str, Any]]:
-        """Article-by-article amendment drill-down (v2)."""
+    def _amendments_by_article(self, carriage: LegislativeCarriage, limit_articles: int = 60) -> List[Dict[str, Any]]:
+        """Article-by-article amendment drill-down.
+
+        Rolls the granular element_reference up to its ARTICLE anchor, canonicalises
+        political-group names (so they match the prediction card), and labels the very
+        large no-group bucket honestly as 'Unattributed'. Returns most-contested first.
+        """
         proc_ref = carriage.oeil_procedure_ref
         if not proc_ref:
             return []
@@ -350,15 +384,19 @@ class PositionAggregator:
         )
         by_article: Dict[str, Dict[str, int]] = {}
         for art, group, n in rows:
-            key = art or "(unspecified)"
-            by_article.setdefault(key, {})
-            by_article[key][group or "Unknown"] = int(n)
-        # Rank by total activity, return most-amended articles first
+            key = _rollup_element_ref(art)
+            disp = GROUP_DISPLAY.get(group, group) if group else "Unattributed"
+            bucket = by_article.setdefault(key, {})
+            bucket[disp] = bucket.get(disp, 0) + int(n)
+        # Rank by total activity, most-contested article first.
         out = []
         for art, counts in sorted(by_article.items(), key=lambda kv: -sum(kv[1].values()))[: limit_articles]:
+            attributed = {g: c for g, c in counts.items() if g != "Unattributed"}
             out.append({
                 "article": art,
                 "by_group": counts,
+                "attributed_total": sum(attributed.values()),
+                "unattributed": counts.get("Unattributed", 0),
                 "total": sum(counts.values()),
             })
         return out

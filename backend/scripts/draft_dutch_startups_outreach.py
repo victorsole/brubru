@@ -311,13 +311,78 @@ def send_test(rows: list[dict]) -> None:
     print(f"     merge data: row for {target_row['name']} ({target_row['email']})")
 
 
+def send_all(rows: list[dict], dry_run: bool = False) -> None:
+    """Personalised mass-send to every row that has a verified email.
+
+    Single SMTP connection (memory: feedback_send_batch_use_bcc.md), each
+    recipient gets their own personalised MIMEMultipart (so BCC is not used:
+    bodies differ per recipient). 0.5s spacing between sends.
+    """
+    eligible = [r for r in rows if r.get("email", "").strip()]
+    if not eligible:
+        print("[ERROR] no rows with a verified email; aborting.")
+        sys.exit(1)
+
+    host = os.environ.get("SMTP_HOST")
+    port = int(os.environ.get("SMTP_PORT", "587"))
+    user = os.environ.get("SMTP_USER")
+    password = os.environ.get("SMTP_PASSWORD")
+    if not (host and user and password):
+        print("[ERROR] SMTP_HOST / SMTP_USER / SMTP_PASSWORD missing in .env; aborting.")
+        sys.exit(1)
+
+    print(f"[INFO] mass-send to {len(eligible)} verified recipients via {host}:{port} as {user}")
+    print(f"[INFO] mode: {'DRY-RUN' if dry_run else 'LIVE'}")
+    for r in eligible:
+        print(f"  - {r['name']:<25} <{r['email']}>")
+    if dry_run:
+        return
+
+    sent = 0
+    failed: list[tuple[str, str]] = []
+    import time as _time
+    with smtplib.SMTP(host, port) as s:
+        s.starttls()
+        s.login(user, password)
+        for r in eligible:
+            try:
+                subject = build_subject(r)
+                html_body = build_html_body(r)
+                plain_body = build_plain_body(r)
+                assert_no_em_dashes(subject + plain_body + html_body, f"row {r['name']}")
+
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = subject
+                msg["From"] = f"{SENDER_NAME} <{SENDER_EMAIL}>"
+                msg["To"] = r["email"]
+                msg["Reply-To"] = SENDER_EMAIL
+                msg["Bcc"] = "hello@beresol.eu"
+                msg.attach(MIMEText(plain_body, "plain", "utf-8"))
+                msg.attach(MIMEText(html_body, "html", "utf-8"))
+                s.send_message(msg)
+                sent += 1
+                print(f"  [OK]  {r['name']:<25} -> {r['email']}")
+                _time.sleep(0.5)
+            except Exception as e:
+                failed.append((r["name"], str(e)))
+                print(f"  [FAIL] {r['name']:<25} -> {r['email']}: {e}")
+
+    print(f"\n[DONE] {sent}/{len(eligible)} sent ({len(failed)} failed)")
+    if failed:
+        print("Failures:")
+        for n, e in failed:
+            print(f"  - {n}: {e}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--review", action="store_true", help="write the 41-email review markdown")
     ap.add_argument("--test", action="store_true", help="send ONE test email (Sustalium) to hello@beresol.eu")
+    ap.add_argument("--send-all", action="store_true", help="mass-send to ALL verified-email rows (single SMTP connection, 0.5s spacing, bcc=hello@beresol.eu)")
+    ap.add_argument("--dry-run", action="store_true", help="combine with --send-all to list recipients without sending")
     args = ap.parse_args()
 
-    if not (args.review or args.test):
+    if not (args.review or args.test or args.send_all):
         ap.print_help()
         sys.exit(1)
 
@@ -328,6 +393,8 @@ def main() -> None:
         write_review(rows)
     if args.test:
         send_test(rows)
+    if args.send_all:
+        send_all(rows, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":

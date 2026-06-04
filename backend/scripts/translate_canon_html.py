@@ -61,25 +61,55 @@ SYSTEM = (
 )
 
 
+def _translatable_chars(text):
+    """Count letters outside HTML tags/comments, to decide if a chunk is worth sending."""
+    stripped = re.sub(r'<[^>]+>', ' ', text)
+    stripped = re.sub(r'<!--.*?-->', ' ', stripped, flags=re.S)
+    return sum(c.isalpha() for c in stripped)
+
+
 def translate_chunk(text, lang):
     if not text.strip():
         return text
+    # Structural chunks with almost no human text (e.g. "<body>" + a comment) make the model
+    # refuse ("your message was cut off"). Keep them verbatim; there is nothing to translate.
+    if _translatable_chars(text) < 25:
+        return text
     cfg = LANGS[lang]
     sysmsg = SYSTEM.format(name=cfg["name"], note=cfg["note"])
+    # max_tokens must comfortably exceed the chunk size; verbose languages (FR) expand ~20%
+    # and a head chunk near the old 8000 cap was silently truncated mid-CSS. Scale generously.
+    out_cap = max(8000, min(32000, int(len(text) / 2) + 4000))
     for attempt in range(4):
         try:
             resp = client.messages.create(
                 model=MODEL,
-                max_tokens=8000,
+                max_tokens=out_cap,
                 system=sysmsg,
                 messages=[{"role": "user", "content": text}],
             )
-            return resp.content[0].text
+            out = resp.content[0].text
+            # Guard against truncation and refusals: output must look like HTML and not be a
+            # refusal sentence. If it fails, fall back to the original chunk (English structure
+            # preserved) rather than corrupting the file.
+            looks_html = ("<" in out) if ("<" in text) else True
+            truncated = getattr(resp, "stop_reason", None) == "max_tokens"
+            refusal = ("I need to see" in out or "message was cut off" in out
+                       or "fragment you want" in out)
+            if truncated and attempt < 3:
+                out_cap = min(32000, out_cap + 8000)
+                print(f"    [chunk truncated, raising cap to {out_cap}, retry]")
+                continue
+            if refusal or not looks_html:
+                print("    [refusal/non-HTML output -> keeping original chunk]")
+                return text
+            return out
         except Exception as e:
             wait = 5 * (attempt + 1)
             print(f"    [retry {attempt+1}] {e} -> sleep {wait}s")
             time.sleep(wait)
-    raise RuntimeError(f"translation failed for a chunk in {lang}")
+    print(f"    [translation failed for a chunk in {lang} -> keeping original]")
+    return text
 
 
 def split_blocks(html):
@@ -93,18 +123,20 @@ def split_blocks(html):
     return head, parts
 
 
-def patch_head(head, lang):
+def patch_head(head, lang, slug):
     cfg = LANGS[lang]
     head = head.replace('<html lang="en">', f'<html lang="{lang}">', 1)
     head = head.replace('content="en_GB"', f'content="{cfg["locale"]}"', 1)
     # canonical + og:url: index.html -> {lang}.html (only the two self-referential ones,
-    # NOT the hreflang alternates which must keep listing every language).
+    # NOT the hreflang alternates which must keep listing every language). Slug derived
+    # from the source path so this works for any canon entry.
+    base = f"https://brubru.beresol.eu/eucanon/{slug}"
     head = head.replace(
-        'property="og:url" content="https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/index.html"',
-        f'property="og:url" content="https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/{lang}.html"')
+        f'property="og:url" content="{base}/index.html"',
+        f'property="og:url" content="{base}/{lang}.html"')
     head = head.replace(
-        'rel="canonical" href="https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/index.html"',
-        f'rel="canonical" href="https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/{lang}.html"')
+        f'rel="canonical" href="{base}/index.html"',
+        f'rel="canonical" href="{base}/{lang}.html"')
     return head
 
 
@@ -118,14 +150,15 @@ def patch_selector(text, lang):
 def main():
     src_path = Path(sys.argv[1])
     langs = sys.argv[2:] if len(sys.argv) > 2 else list(LANGS.keys())
+    slug = src_path.parent.name  # eucanon/<slug>/index.html
     html = src_path.read_text(encoding="utf-8")
     head, blocks = split_blocks(html)
-    print(f"source: {src_path}  | head {len(head)} chars | {len(blocks)} body blocks")
+    print(f"source: {src_path}  | slug {slug} | head {len(head)} chars | {len(blocks)} body blocks")
 
     for lang in langs:
         print(f"\n=== {lang} ===")
         out_head = translate_chunk(head, lang)
-        out_head = patch_head(out_head, lang)
+        out_head = patch_head(out_head, lang, slug)
         out_parts = []
         for i, b in enumerate(blocks):
             print(f"  block {i+1}/{len(blocks)} ({len(b)} chars)")

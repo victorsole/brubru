@@ -402,10 +402,12 @@ def extract_structure_counts(file_ref: str, db: Session) -> CellResult:
                     "url": _eurlex_url(celex),
                 },
             }
-    # Distinguish proposal-only files from genuine fetch failures
+    # All sources exhausted (Cellar XHTML + PDF + WAF-browser HTML). This is a
+    # genuine "could not parse the source document", not a transient state, so
+    # don't promise that retrying will help.
     return _empty(
-        "Recitals + articles not available yet — EUR-Lex hasn't finished rendering this file. "
-        "Click 'Run compute' again in a few minutes."
+        "Recitals + articles could not be extracted from the source document "
+        "(no machine-readable structure available for this file)."
     )
 
 

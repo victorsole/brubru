@@ -37,6 +37,8 @@ from services.scrapers.legislative_train_scraper import LegislativeTrainScraper
 from services.scrapers.legislative_train_enricher import LegislativeTrainEnricher
 from services.scrapers.legislative_train_analyzer import LegislativeTrainAnalyzer
 from services.scrapers.oeil_scraper import OEILScraper
+from services.tracking.tracked_files_seeder import sync_tracked_files_from_interests, _interest_list
+from services.tracking.pi_committee_crosswalk import keywords_for_interests
 from services.api_clients.eurlex_client import EURLexClient
 from services.api_clients.european_parliament_client import EuropeanParliamentClient
 from .auth import get_current_user
@@ -70,8 +72,28 @@ async def get_all_trains(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get trains: {str(e)}")
+        logger.exception(f"Failed to get trains: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve trains")
+
+
+@router.get(
+    "/my-interest-keywords",
+    summary="Topic keywords for my policy interests",
+    description=(
+        "Lowercase topic keywords derived from the signed-in user's Policy "
+        "Interests. The Legislative Train view uses them to flag files whose "
+        "title matches the user's interests (train files carry no committee/policy "
+        "metadata, so title-keyword matching is the available PI signal)."
+    ),
+)
+async def get_my_interest_keywords(
+    current_user: Optional[User] = Depends(get_current_user),
+) -> dict:
+    """Return the user's PI topic keywords for client-side title matching."""
+    if not current_user:
+        return {"keywords": []}
+    interests = _interest_list(current_user)
+    return {"keywords": sorted(keywords_for_interests(interests))}
 
 
 @router.get(
@@ -97,7 +119,7 @@ async def get_train_statistics(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get train statistics: {str(e)}")
+        logger.exception(f"Failed to get train statistics: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve statistics")
 
 
@@ -187,7 +209,7 @@ async def get_carriages(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get carriages: {str(e)}")
+        logger.exception(f"Failed to get carriages: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve carriages")
 
 
@@ -249,7 +271,7 @@ async def get_carriage_details(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get carriage details: {str(e)}")
+        logger.exception(f"Failed to get carriage details: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve carriage")
 
 
@@ -273,7 +295,7 @@ async def get_blocked_files(
         return alerts
 
     except Exception as e:
-        logger.error(f"Failed to get blocked files: {str(e)}")
+        logger.exception(f"Failed to get blocked files: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve blocked files")
 
 
@@ -300,7 +322,7 @@ async def get_committee_workload(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get committee workload: {str(e)}")
+        logger.exception(f"Failed to get committee workload: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve workload")
 
 
@@ -327,7 +349,7 @@ async def predict_carriage_timeline(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to predict timeline: {str(e)}")
+        logger.exception(f"Failed to predict timeline: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to predict timeline")
 
 
@@ -390,7 +412,7 @@ async def track_carriage_by_procedure(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to track carriage by procedure: {str(e)}")
+        logger.exception(f"Failed to track carriage by procedure: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Failed to track file")
 
@@ -431,7 +453,7 @@ async def track_carriage(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to track carriage: {str(e)}")
+        logger.exception(f"Failed to track carriage: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Failed to track file")
 
@@ -469,7 +491,7 @@ async def track_carriage_by_celex(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to track by CELEX {celex}: {e}")
+        logger.exception(f"Failed to track by CELEX {celex}: {e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to track: {e}")
 
@@ -517,7 +539,7 @@ async def untrack_carriage_by_procedure(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to untrack carriage by procedure: {str(e)}")
+        logger.exception(f"Failed to untrack carriage by procedure: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Failed to untrack file")
 
@@ -547,9 +569,27 @@ async def untrack_carriage(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to untrack carriage: {str(e)}")
+        logger.exception(f"Failed to untrack carriage: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Failed to untrack file")
+
+
+@router.post(
+    "/sync-from-interests",
+    summary="Populate tracked files from your Policy Interests",
+    description=(
+        "Auto-populates My Tracked Files from the user's MEUB Policy Interests: "
+        "maps each interest to its EP committee(s), then pre-tracks the ongoing "
+        "OEIL legislative and non-legislative files led by those committees. "
+        "Idempotent, never duplicates an existing track."
+    ),
+)
+async def sync_from_interests(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Seed pre-checked tracked files from the user's policy interests."""
+    return sync_tracked_files_from_interests(db, current_user)
 
 
 @router.get(
@@ -601,7 +641,7 @@ async def get_tracked_carriages(
         return {"tracked_files": tracked_files}
 
     except Exception as e:
-        logger.error(f"Failed to get tracked carriages: {str(e)}")
+        logger.exception(f"Failed to get tracked carriages: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked files")
 
 
@@ -643,13 +683,17 @@ async def get_hot_this_week_carriages(
                   )
               )
               .order_by(LegislativeCarriage.last_updated.desc().nullslast())
-              .limit(limit * 5)
-              .all()
-        )
+              .limit(500)  # cover the whole recent window; a batch of placeholder-titled
+              .all()       # OEIL backfills sit at the top of last_updated and would
+        )                  # otherwise crowd out the real-titled hot files.
 
         # CELEX-only titles look like: CELEX:32016L2370R(01), 32016L2370,
         # CELEX:32026D02446 — uninformative, skip.
         CELEX_PATTERN = re.compile(r"^(CELEX[:\s]*)?[0-9]{5}[A-Z][0-9]{4}([A-Z]\([0-9]+\))?$", re.IGNORECASE)
+        # Placeholder titles from OEIL backfills: "Procedure File: 2025/2880(RSP)".
+        # The real descriptive title was never scraped — these read as gibberish,
+        # so they must not surface in the widget.
+        PROC_FILE_PATTERN = re.compile(r"^Procedure File:\s*\d{4}/\d+\([A-Z]+\)", re.IGNORECASE)
 
         def is_meaningful(title: str | None) -> bool:
             if not title:
@@ -658,6 +702,8 @@ async def get_hot_this_week_carriages(
             if len(t) < 25:
                 return False
             if CELEX_PATTERN.match(t):
+                return False
+            if PROC_FILE_PATTERN.match(t):
                 return False
             return True
 
@@ -673,7 +719,7 @@ async def get_hot_this_week_carriages(
                 "current_status": c.current_status.value if c.current_status else "unknown",
                 "oeil_procedure_ref": c.oeil_procedure_ref,
                 "celex_numbers": c.celex_numbers or [],
-                "lead_committee": (c.committees or [None])[0],
+                "lead_committee": c.lead_committee or (c.committees or [None])[0],
                 "last_updated": c.last_updated.isoformat() if c.last_updated else None,
                 "days_in_current_status": c.days_in_current_status,
                 "is_recently_updated": bool(c.is_recently_updated),
@@ -683,7 +729,7 @@ async def get_hot_this_week_carriages(
 
         return {"items": items, "total": len(items)}
     except Exception as e:
-        logger.error(f"Failed to get hot-this-week carriages: {e}")
+        logger.exception(f"Failed to get hot-this-week carriages: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve hot files")
 
 
@@ -771,7 +817,7 @@ async def get_carriage_eurlex_data(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get EUR-Lex data: {str(e)}")
+        logger.exception(f"Failed to get EUR-Lex data: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve EUR-Lex data")
 
 
@@ -829,7 +875,7 @@ async def get_eurlex_document(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get EUR-Lex document: {str(e)}")
+        logger.exception(f"Failed to get EUR-Lex document: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve EUR-Lex document")
 
 
@@ -877,7 +923,7 @@ async def get_eurlex_related_documents(
         }
 
     except Exception as e:
-        logger.error(f"Failed to get related documents: {str(e)}")
+        logger.exception(f"Failed to get related documents: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve related documents")
 
 
@@ -947,7 +993,7 @@ async def get_carriage_oeil_data(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get OEIL data: {str(e)}")
+        logger.exception(f"Failed to get OEIL data: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve OEIL data")
 
 
@@ -1157,7 +1203,7 @@ async def get_carriage_key_players(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get key players: {str(e)}")
+        logger.exception(f"Failed to get key players: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve key players")
 
 
@@ -1265,7 +1311,7 @@ async def get_carriage_timeline(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get timeline: {str(e)}")
+        logger.exception(f"Failed to get timeline: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve timeline")
 
 
@@ -1332,7 +1378,7 @@ async def get_carriage_forecasts(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get forecasts: {str(e)}")
+        logger.exception(f"Failed to get forecasts: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve forecasts")
 
 
@@ -1373,7 +1419,7 @@ async def get_oeil_procedure(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get OEIL procedure: {str(e)}")
+        logger.exception(f"Failed to get OEIL procedure: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve OEIL procedure")
 
 
@@ -1428,7 +1474,7 @@ async def search_active_procedures(
             await ep_client.close()
 
     except Exception as e:
-        logger.error(f"Failed to search procedures: {str(e)}")
+        logger.exception(f"Failed to search procedures: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to search procedures")
 
 
@@ -1569,7 +1615,7 @@ async def track_oeil_procedure(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to track OEIL procedure: {str(e)}")
+        logger.exception(f"Failed to track OEIL procedure: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to track procedure: {str(e)}")
 
@@ -1600,7 +1646,7 @@ async def get_carriage_amendments(
         }
 
     except Exception as e:
-        logger.error(f"Failed to get amendments for carriage: {str(e)}")
+        logger.exception(f"Failed to get amendments for carriage: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve amendments")
 
 
@@ -1625,7 +1671,7 @@ async def get_tracked_amendment_counts(
         }
 
     except Exception as e:
-        logger.error(f"Failed to get amendment counts: {str(e)}")
+        logger.exception(f"Failed to get amendment counts: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve amendment counts")
 
 
@@ -1807,7 +1853,7 @@ async def enrich_carriage_celex(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to enrich carriage CELEX: {str(e)}")
+        logger.exception(f"Failed to enrich carriage CELEX: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch CELEX: {str(e)}")
 
 
@@ -1869,7 +1915,7 @@ async def sync_oeil_feeds(
         }
 
     except Exception as e:
-        logger.error(f"[SYNC] Failed: {str(e)}")
+        logger.exception(f"[SYNC] Failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
 
 
@@ -1909,7 +1955,7 @@ async def lookup_oeil_procedure(
         return result
 
     except Exception as e:
-        logger.error(f"[SYNC] Lookup failed for {reference}: {str(e)}")
+        logger.exception(f"[SYNC] Lookup failed for {reference}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Lookup failed: {str(e)}")
 
 
@@ -1969,5 +2015,5 @@ async def sync_eurlex_feeds(
         }
 
     except Exception as e:
-        logger.error(f"[SYNC] Failed: {str(e)}")
+        logger.exception(f"[SYNC] Failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")

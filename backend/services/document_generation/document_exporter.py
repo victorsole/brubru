@@ -6,10 +6,8 @@ Render user_documents (markdown content) as DOCX or PDF bytes.
 DOCX path: parses markdown headings/lists/paragraphs into a python-docx Document.
 PDF path: same parsed structure rendered with reportlab Platypus.
 
-The renderer is intentionally minimal — headings, paragraphs, bullet/numbered
-lists, bold/italic, code blocks, blockquotes. Tables and images are not
-required for the position-paper / briefing / talking-points formats we ship
-from Brubru today.
+The renderer handles headings, paragraphs, bullet/numbered lists, bold/italic,
+code blocks, blockquotes, markdown tables and images (embedded inline).
 """
 
 from __future__ import annotations
@@ -17,6 +15,7 @@ from __future__ import annotations
 import io
 import re
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Optional
 
 
@@ -26,9 +25,10 @@ from typing import List, Optional
 
 @dataclass
 class Block:
-    kind: str          # 'h1' | 'h2' | 'h3' | 'p' | 'ul' | 'ol' | 'code' | 'quote' | 'hr'
+    kind: str          # 'h1'|'h2'|'h3'|'p'|'ul'|'ol'|'code'|'quote'|'hr'|'table'|'image'
     text: str = ""
     items: Optional[List[str]] = None
+    rows: Optional[List[List[str]]] = None  # table rows (header first)
 
 
 _FENCE_RE = re.compile(r"^```")
@@ -37,6 +37,47 @@ _UL_RE = re.compile(r"^\s*[-*]\s+(.+)$")
 _OL_RE = re.compile(r"^\s*\d+[.)]\s+(.+)$")
 _QUOTE_RE = re.compile(r"^>\s?(.*)$")
 _HR_RE = re.compile(r"^\s*(-{3,}|_{3,}|\*{3,})\s*$")
+_IMG_LINE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)$")
+
+
+def _is_table_sep(line: str) -> bool:
+    """A markdown table separator row, e.g. |---|:--:|---|."""
+    s = line.strip()
+    if "|" not in s or "-" not in s:
+        return False
+    return bool(re.fullmatch(r"[\s|:\-]+", s))
+
+
+def _split_table_row(line: str) -> List[str]:
+    s = line.strip().strip("|")
+    return [c.strip() for c in s.split("|")]
+
+
+def _load_image_bytes(url: str) -> Optional[bytes]:
+    """Resolve an image URL to bytes for embedding. Returns None on any failure."""
+    try:
+        if not url:
+            return None
+        clean = url.split("?")[0]
+        # Editor asset: read from local storage, no HTTP round-trip.
+        if "/api/documents/assets/" in clean:
+            asset_id = clean.rstrip("/").split("/api/documents/assets/")[-1]
+            from services.storage.document_storage import get_document_storage
+            return get_document_storage().get_document_content(asset_id)
+        # Frontend static asset (e.g. /clients/bo.png).
+        if "/clients/" in clean:
+            rel = clean.split("/clients/")[-1]
+            p = Path(__file__).resolve().parents[3] / "frontend" / "public" / "clients" / rel
+            return p.read_bytes() if p.exists() else None
+        # Remote image.
+        if clean.startswith("http://") or clean.startswith("https://"):
+            import httpx
+            r = httpx.get(clean, timeout=10.0, follow_redirects=True)
+            if r.status_code == 200 and len(r.content) <= 8 * 1024 * 1024:
+                return r.content
+        return None
+    except Exception:
+        return None
 
 
 def _strip_fence_wrap(text: str) -> str:
@@ -92,6 +133,23 @@ def parse_markdown(text: str) -> List[Block]:
             i += 1
             continue
 
+        # Standalone image line: ![alt](url)
+        m_img = _IMG_LINE_RE.match(stripped)
+        if m_img:
+            blocks.append(Block("image", text=m_img.group(2).strip(), items=[m_img.group(1)]))
+            i += 1
+            continue
+
+        # Table: a pipe row followed by a separator row
+        if stripped.startswith("|") and i + 1 < n and _is_table_sep(lines[i + 1]):
+            rows = [_split_table_row(stripped)]
+            i += 2  # consume header + separator
+            while i < n and lines[i].strip().startswith("|"):
+                rows.append(_split_table_row(lines[i]))
+                i += 1
+            blocks.append(Block("table", rows=rows))
+            continue
+
         # Heading
         m = _HEADING_RE.match(stripped)
         if m:
@@ -141,6 +199,8 @@ def parse_markdown(text: str) -> List[Block]:
                 or _QUOTE_RE.match(nxt_strip)
                 or _FENCE_RE.match(nxt_strip)
                 or _HR_RE.match(nxt_strip)
+                or _IMG_LINE_RE.match(nxt_strip)
+                or nxt_strip.startswith("|")
             ):
                 break
             buf.append(nxt_strip)
@@ -251,6 +311,31 @@ def export_docx(title: str, markdown_text: str) -> bytes:
         elif block.kind == "hr":
             p = doc.add_paragraph("_" * 40)
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        elif block.kind == "table":
+            rows = block.rows or []
+            if rows:
+                cols = max(len(r) for r in rows)
+                table = doc.add_table(rows=len(rows), cols=cols)
+                table.style = "Table Grid"
+                for ri, row in enumerate(rows):
+                    for ci in range(cols):
+                        cell = table.cell(ri, ci)
+                        cell.text = ""
+                        cp = cell.paragraphs[0]
+                        add_runs(cp, row[ci] if ci < len(row) else "")
+                        if ri == 0:
+                            for run in cp.runs:
+                                run.bold = True
+                doc.add_paragraph()
+        elif block.kind == "image":
+            data = _load_image_bytes(block.text)
+            if data:
+                from docx.shared import Inches
+                try:
+                    doc.add_picture(io.BytesIO(data), width=Inches(6.0))
+                except Exception:
+                    alt = (block.items or [""])[0]
+                    doc.add_paragraph(f"[image: {alt}]" if alt else "[image]")
 
     buffer = io.BytesIO()
     doc.save(buffer)
@@ -294,7 +379,11 @@ def export_pdf(title: str, markdown_text: str) -> bytes:
         ListItem,
         Preformatted,
         HRFlowable,
+        Table as RLTable,
+        TableStyle,
+        Image as RLImage,
     )
+    from reportlab.lib.utils import ImageReader
     from reportlab.lib import colors
 
     buffer = io.BytesIO()
@@ -362,6 +451,49 @@ def export_pdf(title: str, markdown_text: str) -> bytes:
             story.append(Paragraph(_inline_to_rl(block.text), quote))
         elif block.kind == "hr":
             story.append(HRFlowable(width="100%", color=colors.HexColor("#d1d5db"), spaceBefore=6, spaceAfter=6))
+        elif block.kind == "table":
+            rows = block.rows or []
+            if rows:
+                cols = max(len(r) for r in rows)
+                data = []
+                for ri, row in enumerate(rows):
+                    cells = []
+                    for ci in range(cols):
+                        raw = row[ci] if ci < len(row) else ""
+                        inner = _inline_to_rl(raw)
+                        if ri == 0:
+                            inner = f"<b>{inner}</b>"
+                        cells.append(Paragraph(inner, body))
+                    data.append(cells)
+                tbl = RLTable(data, repeatRows=1)
+                tbl.setStyle(TableStyle([
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 5),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+                    ("TOPPADDING", (0, 0), (-1, -1), 3),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ]))
+                story.append(tbl)
+                story.append(Spacer(1, 6))
+        elif block.kind == "image":
+            data = _load_image_bytes(block.text)
+            if data:
+                try:
+                    iw, ih = ImageReader(io.BytesIO(data)).getSize()
+                    iw, ih = float(iw), float(ih)
+                    if iw > 0 and ih > 0:
+                        # Usable area, minus a buffer for the frame's internal padding
+                        # (reportlab frames reserve ~6pt each side, so margin math alone overflows).
+                        max_w = A4[0] - 4 * cm - 12
+                        max_h = A4[1] - 4 * cm - 40
+                        # Scale to fit both dimensions; never upscale.
+                        scale = min(max_w / iw, max_h / ih, 1.0)
+                        story.append(RLImage(io.BytesIO(data), width=iw * scale, height=ih * scale))
+                        story.append(Spacer(1, 6))
+                except Exception:
+                    pass
 
     doc.build(story)
     return buffer.getvalue()

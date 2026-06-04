@@ -478,6 +478,91 @@ async def cron_sync_monthly(
     return {"status": "success", "tier": "monthly", "results": results}
 
 
+def _send_staleness_email(stale: list[dict]) -> None:
+    """Ping the operator when fast MEUB feeds miss their refresh window."""
+    if not stale:
+        return
+    recipient = settings.ALERT_EMAIL or settings.SMTP_USER
+    if not recipient:
+        logger.warning("[CRON] Stale feeds but no ALERT_EMAIL/SMTP_USER configured")
+        return
+    try:
+        from services.email_service import EmailService
+        rows = "".join(
+            f"<li><strong>{s['label']}</strong> — last success: "
+            f"{s['last_success_at'] or 'never'}</li>"
+            for s in stale
+        )
+        html = (
+            "<p>Heads up — these MEUB feeds have not refreshed within their "
+            "window and may be showing stale data:</p>"
+            f"<ul>{rows}</ul>"
+            "<p>Check the Railway cron logs and the source endpoints.</p>"
+        )
+        EmailService().send(
+            to=recipient,
+            subject=f"[Brubru] {len(stale)} MEUB feed(s) went stale",
+            html_body=html,
+        )
+        logger.info("[CRON] Staleness email sent to %s (%d feeds)", recipient, len(stale))
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning("[CRON] Staleness email failed: %s", exc)
+
+
+@router.post("/sync/tier/{tier}")
+async def cron_sync_tier(
+    tier: str,
+    authorization: str = Header(...),
+):
+    """
+    Run every MEUB feed registered for a cadence tier, recording freshness.
+
+    Railway cron calls this: `fast` every ~3h (News, My OJ, Votes), `warm`
+    every ~6h (Calendar, Transcripts, Lobby Meetings, Parliamentary Questions).
+    Each source runs as a fail-soft subprocess; one failure never blocks the
+    others. After the `fast` tier, any feed past its staleness window triggers
+    an operator email.
+    """
+    _verify_cron_secret(authorization)
+
+    from datetime import datetime, timezone
+    from services.sync.source_registry import sources_for_tier
+    from services.sync.freshness import record_run, find_stale
+
+    if tier not in ("fast", "warm"):
+        raise HTTPException(status_code=400, detail="tier must be 'fast' or 'warm'")
+
+    specs = sources_for_tier(tier)
+    results: dict = {}
+    stale: list[dict] = []
+    db = SessionLocal()
+    try:
+        for spec in specs:
+            started = datetime.now(timezone.utc)
+            res = _run_script(spec.key, spec.script, list(spec.args), timeout=spec.timeout)
+            status = res.get("status", "failed")
+            err = res.get("stderr_tail") or res.get("error") or res.get("reason")
+            record_run(
+                db,
+                source_key=spec.key,
+                tier=tier,
+                status=status,
+                error=(err if status != "success" else None),
+                started_at=started,
+                finished_at=datetime.now(timezone.utc),
+            )
+            results[spec.key] = status
+
+        if tier == "fast":
+            stale = find_stale(db, tier="fast")
+            if stale:
+                _send_staleness_email(stale)
+    finally:
+        db.close()
+
+    return {"tier": tier, "ran": results, "stale_fast": [s["key"] for s in stale]}
+
+
 @router.post("/sync/authority-labels")
 async def cron_sync_authority_labels(
     authorization: str = Header(...),

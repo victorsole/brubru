@@ -62,6 +62,18 @@
       "label": "live scrape (commissioner agenda)"
     },
     {
+      "regex": "^/api/v1/committee-transcripts/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full committee meeting transcript)",
+      "_doc": "Detail endpoint always returns the full Whisper transcript (40-140 KB). The list endpoint stays at _default (metadata-only unless include_body=true)."
+    },
+    {
+      "regex": "^/api/v1/committee-agendas/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (committee agenda document)",
+      "_doc": "Detail fetches + parses the doceo agenda PDF (cached after first access)."
+    },
+    {
       "regex": "^/api/v1/chat/.*$",
       "cost_micro": 20000,
       "label": "chat completion (passes through Claude Sonnet cost)"

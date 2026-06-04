@@ -100,7 +100,7 @@ async def create_document(
             action_plan=document.action_plan if hasattr(document, 'action_plan') else None,
             timeline=document.timeline if hasattr(document, 'timeline') else None,
             stakeholders=document.stakeholders if hasattr(document, 'stakeholders') else None,
-            metadata=document.metadata if hasattr(document, 'metadata') else None,
+            doc_metadata=document.doc_metadata if hasattr(document, 'doc_metadata') else None,
         )
 
         db.add(new_doc)
@@ -664,7 +664,8 @@ def _render_pptx_from_slides_markdown(title: str, markdown: str) -> bytes:
     current_bullets: List[str] = []
     current_notes = ""
     slide_count = 0
-    slide_heading_re = re.compile(r"^##\s*Slide\s*\d+\s*:\s*(.+)$", re.IGNORECASE)
+    # Accept any separator after the slide number (": ", " - ", en/em dash) or none.
+    slide_heading_re = re.compile(r"^##\s*Slide\s*\d+\s*[:\-–—]?\s*(.*)$", re.IGNORECASE)
     bullet_re = re.compile(r"^[-*]\s+(.+)$")
     notes_re = re.compile(r"^\s*Notes:\s*(.+)$", re.IGNORECASE)
 
@@ -713,10 +714,133 @@ def _render_pptx_from_slides_markdown(title: str, markdown: str) -> bytes:
     return buffer.getvalue()
 
 
+def _render_pptx_poster(title: str, markdown: str) -> bytes:
+    """
+    Render an event poster as a single large-format (A3 portrait) PPTX slide:
+    an optional logo (from an embedded <img src="/clients/...">), a big title,
+    a subtitle, and the body sections. Posters are visual single-slide documents,
+    so they use their own renderer rather than the slide-deck parser.
+    """
+    import io
+    import re
+    from pathlib import Path
+    from pptx import Presentation
+    from pptx.util import Inches, Pt
+    from pptx.enum.text import PP_ALIGN
+    from pptx.dml.color import RGBColor
+
+    pres = Presentation()
+    pres.slide_width = Inches(11.69)   # A3 portrait
+    pres.slide_height = Inches(16.54)
+    slide = pres.slides.add_slide(pres.slide_layouts[6])
+    sw = pres.slide_width
+
+    content = markdown.replace("\r\n", "\n")
+    green = RGBColor(0x2E, 0x7D, 0x32)
+    dark = RGBColor(0x0F, 0x17, 0x2A)
+    grey = RGBColor(0x37, 0x41, 0x51)
+
+    # Optional logo from an embedded <img src="/clients/xxx.png">
+    top = Inches(0.7)
+    m_img = re.search(r'<img[^>]+src="([^"]+)"', content)
+    if m_img and m_img.group(1).startswith("/clients/"):
+        repo_root = Path(__file__).resolve().parents[2]
+        logo_path = repo_root / "frontend" / "public" / m_img.group(1).lstrip("/")
+        if logo_path.exists():
+            try:
+                pic = slide.shapes.add_picture(str(logo_path), Inches(0), top, height=Inches(1.2))
+                pic.left = int((sw - pic.width) / 2)
+                top = Inches(2.3)
+            except Exception:
+                pass
+
+    # Strip HTML, then classify lines.
+    text = re.sub(r"<[^>]+>", "", content)
+    big_title = None
+    subtitle = ""
+    body: List[tuple] = []  # (kind, text): 'h' heading, 'b' bullet, 'p' paragraph
+    for raw in text.split("\n"):
+        s = raw.strip()
+        if not s or s == "---":
+            continue
+        if s.startswith("# ") and big_title is None:
+            big_title = s[2:].strip()
+            continue
+        if s.startswith("## ") and not subtitle:
+            subtitle = s[3:].strip()
+            continue
+        if s.startswith("### "):
+            body.append(("h", s[4:].strip()))
+            continue
+        if s.startswith(("- ", "* ")):
+            body.append(("b", s[2:].strip()))
+            continue
+        if s.startswith("#"):
+            body.append(("p", s.lstrip("#").strip()))
+            continue
+        body.append(("p", s))
+
+    def clean(x: str) -> str:
+        return re.sub(r"\*\*|__|`|\*", "", x).strip()
+
+    # Title
+    tb = slide.shapes.add_textbox(Inches(0.5), top, sw - Inches(1.0), Inches(1.6))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.text = clean(big_title or title)
+    for p in tf.paragraphs:
+        p.alignment = PP_ALIGN.CENTER
+        for r in p.runs:
+            r.font.size = Pt(40)
+            r.font.bold = True
+            r.font.color.rgb = green
+    top = top + Inches(1.7)
+
+    # Subtitle
+    if subtitle:
+        sb = slide.shapes.add_textbox(Inches(0.8), top, sw - Inches(1.6), Inches(1.0))
+        sf = sb.text_frame
+        sf.word_wrap = True
+        sf.text = clean(subtitle)
+        for p in sf.paragraphs:
+            p.alignment = PP_ALIGN.CENTER
+            for r in p.runs:
+                r.font.size = Pt(22)
+                r.font.color.rgb = dark
+        top = top + Inches(1.1)
+
+    # Body
+    bb = slide.shapes.add_textbox(Inches(1.0), top, sw - Inches(2.0), pres.slide_height - top - Inches(0.6))
+    bf = bb.text_frame
+    bf.word_wrap = True
+    first = True
+    for kind, txt in body:
+        para = bf.paragraphs[0] if first else bf.add_paragraph()
+        first = False
+        if kind == "b":
+            para.text = "• " + clean(txt)
+            sz, bold, col = 16, False, grey
+        elif kind == "h":
+            para.text = clean(txt)
+            para.space_before = Pt(10)
+            sz, bold, col = 20, True, dark
+        else:
+            para.text = clean(txt)
+            sz, bold, col = 16, False, grey
+        for r in para.runs:
+            r.font.size = Pt(sz)
+            r.font.bold = bold
+            r.font.color.rgb = col
+
+    buffer = io.BytesIO()
+    pres.save(buffer)
+    return buffer.getvalue()
+
+
 @router.get(
     "/{document_id}/export-pptx",
-    summary="Export presentation as PPTX",
-    description="Render a saved presentation (tagged 'presentation') as a real .pptx file",
+    summary="Export presentation or poster as PPTX",
+    description="Render a saved presentation (slides) or event poster (single A3 slide) as a real .pptx file",
 )
 async def export_document_pptx(
     document_id: UUID,
@@ -733,7 +857,11 @@ async def export_document_pptx(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
 
     try:
-        payload = _render_pptx_from_slides_markdown(document.title or "Presentation", document.content or "")
+        tags = document.tags or []
+        if "event_poster" in tags:
+            payload = _render_pptx_poster(document.title or "Poster", document.content or "")
+        else:
+            payload = _render_pptx_from_slides_markdown(document.title or "Presentation", document.content or "")
     except Exception as exc:
         logger.exception("Failed to render PPTX for %s", document_id)
         raise HTTPException(

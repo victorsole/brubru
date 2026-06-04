@@ -35,7 +35,9 @@ from api import (
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
     whatsapp, positions, archive, amendator_examples, public_analytics,
     datasets_dcat, comparator, dashboard, proactive, impact,
-    alerts, language_analytics, efpia,
+    alerts, language_analytics, efpia, ep_votes, oj, eu_news, transcripts,
+    parliamentary_questions, lobby_meetings, council_watch, mep_watch, plenary_agenda,
+    databases, stakeholders, policy_taxonomy, sync_status,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -59,12 +61,21 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Database connection failed (non-fatal): {str(e)}")
         print("       The backend will start without database functionality.")
 
-    # Start RSS feed scheduler (for My EU Bubble)
-    try:
-        start_scheduler()
-        print("[OK] RSS feed scheduler started")
-    except Exception as e:
-        print(f"[WARN] RSS scheduler failed to start (non-fatal): {str(e)}")
+    # Start RSS feed scheduler (for My EU Bubble).
+    # It is an AsyncIOScheduler running SYNCHRONOUS feed fetches on the event loop,
+    # so each run blocks the single worker and wedges the API (the recurring dev
+    # "backend off"). Opt-in via ENABLE_RSS_SCHEDULER=true; OFF by default so dev
+    # (and any single-worker deploy) stays responsive. Proper fix TODO: offload the
+    # fetch to a thread / run it as a separate process.
+    import os as _os
+    if _os.getenv("ENABLE_RSS_SCHEDULER", "false").lower() == "true":
+        try:
+            start_scheduler()
+            print("[OK] RSS feed scheduler started")
+        except Exception as e:
+            print(f"[WARN] RSS scheduler failed to start (non-fatal): {str(e)}")
+    else:
+        print("[INFO] RSS feed scheduler disabled (set ENABLE_RSS_SCHEDULER=true to enable)")
 
     # Start email scheduler (weekly re-engagement emails)
     try:
@@ -204,6 +215,15 @@ app.include_router(datasets_dcat.router, tags=["DCAT-AP Self-Catalogue"])
 app.include_router(public_analytics.router)
 app.include_router(eu_law_comply.router, prefix="/api", tags=["EU Law Comply"])
 app.include_router(comparator.router, tags=["Comparator"])
+app.include_router(ep_votes.router, tags=["EP Votes"])
+app.include_router(oj.router, tags=["My OJ"])
+app.include_router(eu_news.router, tags=["EU News"])
+app.include_router(transcripts.router, tags=["Transcripts"])
+app.include_router(parliamentary_questions.router, tags=["Parliamentary Questions"])
+app.include_router(lobby_meetings.router, tags=["Lobby Meetings"])
+app.include_router(council_watch.router, tags=["Council Watch"])
+app.include_router(mep_watch.router, tags=["MEP Watch"])
+app.include_router(plenary_agenda.router, tags=["EP Plenary Order of Business"])
 app.include_router(tenderator.router, tags=["Tenderator"])
 app.include_router(archive.router, tags=["Archive"])
 app.include_router(admin_tenders.router, tags=["Admin Tenders"])
@@ -223,6 +243,10 @@ app.include_router(efpia.router, tags=["EFPIA"])
 app.include_router(catalan_translations.router, tags=["Catalan Translations"])
 app.include_router(whatsapp.router, tags=["WhatsApp"])
 app.include_router(positions.router, tags=["Position Analysis"])
+app.include_router(databases.router, tags=["Brubru Databases"])
+app.include_router(stakeholders.router, tags=["Stakeholder Mapping"])
+app.include_router(policy_taxonomy.router, prefix="/api", tags=["Policy Taxonomy"])
+app.include_router(sync_status.router, prefix="/api", tags=["Sync Status"])
 app.include_router(dashboard.router, tags=["Dashboard"])
 app.include_router(proactive.router, tags=["Proactive Chat"])
 app.include_router(impact.router, tags=["Personalised Impact"])

@@ -14,12 +14,30 @@ from uuid import UUID
 
 
 class ProcedureType(str, Enum):
-    """Procedure types with relevance hierarchy."""
-    COD = "COD"  # Ordinary legislative procedure (100)
-    APP = "APP"  # Consent procedure (80)
-    CNS = "CNS"  # Consultation procedure (70)
-    NLE = "NLE"  # Non-legislative (50)
-    INI = "INI"  # Own-initiative (40)
+    """OEIL procedure types (used to validate the ?procedure_type filter).
+
+    OEIL's vocabulary is open-ended; this is the comprehensive set we currently
+    store. The stored column is a free varchar, so unseen types never crash.
+    """
+    COD = "COD"  # Ordinary legislative procedure
+    CNS = "CNS"  # Consultation procedure
+    APP = "APP"  # Consent procedure
+    NLE = "NLE"  # Non-legislative (international agreements / appointments)
+    INI = "INI"  # Own-initiative report
+    INL = "INL"  # Legislative own-initiative
+    RSP = "RSP"  # Resolution on a topical subject
+    RSO = "RSO"  # Internal organisation resolution
+    REG = "REG"  # Rules of Procedure
+    RPS = "RPS"  # Implementing acts (regulatory scrutiny)
+    DEA = "DEA"  # Delegated acts (scrutiny)
+    IMM = "IMM"  # MEP immunity
+    BUD = "BUD"  # Budgetary procedure
+    BUI = "BUI"  # Budgetary initiative
+    DEC = "DEC"  # Discharge
+    GBD = "GBD"  # General budget
+    ACI = "ACI"  # Interinstitutional agreement
+    COS = "COS"  # Strategy paper
+    DCE = "DCE"  # Written declaration
 
 
 class CommitteeRole(str, Enum):
@@ -51,7 +69,7 @@ class CommitteeWorkItemBase(BaseModel):
     title: str = Field(..., description="Procedure title")
     description: Optional[str] = Field(None, description="Short description")
 
-    procedure_type: ProcedureType = Field(ProcedureType.INI, description="Procedure type")
+    procedure_type: str = Field("INI", description="OEIL procedure type code (free text; e.g. COD, DEA, RSP)")
     committee_role: CommitteeRole = Field(CommitteeRole.LEAD, description="Committee role")
     relevance_score: int = Field(40, ge=0, le=100, description="Relevance score (40-100)")
 
@@ -112,12 +130,19 @@ class CommitteeWorkItemSummary(BaseModel):
     procedure_ref: str
     committee_code: str
     title: str
-    procedure_type: ProcedureType
+    procedure_type: str
     committee_role: CommitteeRole
     relevance_score: int
     rapporteur_name: Optional[str] = None
     status: CommitteeWorkStatus
     last_updated: datetime
+    # first_seen is the reliable chronological signal (when the procedure first
+    # appeared in our scrape); last_updated is touched by backfills so it is not.
+    first_seen: Optional[datetime] = None
+    # Lets the In-committee tab open the in-app file-detail modal for items that
+    # are linked to a legislative carriage; null items fall back to OEIL.
+    legislative_carriage_id: Optional[UUID] = None
+    oeil_url: Optional[str] = None
 
     class Config:
         from_attributes = True

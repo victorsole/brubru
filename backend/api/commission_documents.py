@@ -38,12 +38,33 @@ from schemas.commission_document_schemas import (
     SyncResultResponse,
 )
 from .auth import get_current_user
+from services.tracking.pi_committee_crosswalk import dgs_for_interests
+from services.tracking.tracked_files_seeder import _interest_list
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/commission-documents", tags=["Commission Documents"])
+
+
+@router.get(
+    "/my-dgs",
+    summary="Commission departments matching my policy interests",
+    description=(
+        "Returns the Commission Directorate-General codes that match the signed-in "
+        "user's Policy Interests, so the Commission Documents view can pre-select "
+        "them. Empty list for anonymous users or users with no mappable interests."
+    ),
+)
+async def get_my_dgs(
+    current_user: Optional[User] = Depends(get_current_user),
+) -> dict:
+    """Resolve the user's Policy Interests to Commission DG codes."""
+    if not current_user:
+        return {"dgs": [], "interests": []}
+    interests = _interest_list(current_user)
+    return {"dgs": sorted(dgs_for_interests(interests)), "interests": interests}
 
 
 # ===== List Items =====
@@ -128,7 +149,7 @@ async def get_items(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get Commission documents: {str(e)}")
+        logger.exception(f"Failed to get Commission documents: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve documents")
 
 
@@ -170,7 +191,7 @@ async def get_item(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get document {item_id}: {str(e)}")
+        logger.exception(f"Failed to get document {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve document")
 
 
@@ -209,7 +230,7 @@ async def get_tracked_documents(
         return TrackedCommissionDocsListResponse(items=items, total=len(items))
 
     except Exception as e:
-        logger.error(f"Failed to get tracked documents: {str(e)}")
+        logger.exception(f"Failed to get tracked documents: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked documents")
 
 
@@ -262,7 +283,7 @@ async def track_document(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to track document {item_id}: {str(e)}")
+        logger.exception(f"Failed to track document {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to track document")
 
 
@@ -295,7 +316,7 @@ async def untrack_document(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to untrack document {item_id}: {str(e)}")
+        logger.exception(f"Failed to untrack document {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to untrack document")
 
 
@@ -340,7 +361,7 @@ async def trigger_sync(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to run sync: {str(e)}")
+        logger.exception(f"Failed to run sync: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
 
 
@@ -382,5 +403,5 @@ async def trigger_enrichment(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to run enrichment: {str(e)}")
+        logger.exception(f"Failed to run enrichment: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Enrichment failed: {str(e)}")

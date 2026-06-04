@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     OPENAI_ORG_ID: str | None = None
     GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini (fallback 3)
 
+    # Beresol Monitor API (partner policy-intelligence feeds, MEUB 4.2 Beresol Monitors)
+    BERESOL_API_KEY: str | None = None
+    BERESOL_API_BASE: str = "https://beresol.eu/api/v1"
+
     # MCP Toolbox for Databases
     TOOLBOX_URL: str = "http://localhost:5000"  # GenAI Toolbox server URL
 
@@ -109,6 +113,8 @@ class Settings(BaseSettings):
     SMTP_USER: str | None = None  # hello@beresol.eu
     SMTP_PASSWORD: str | None = None  # App Password from Google Workspace
     SMTP_FROM_NAME: str = "Brubru by Beresol"
+    # Operational alerts (e.g. MEUB feed went stale). Falls back to SMTP_USER.
+    ALERT_EMAIL: str | None = None
 
     # CORS
     ALLOWED_ORIGINS: str = "http://localhost:3000"

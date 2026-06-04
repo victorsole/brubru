@@ -138,7 +138,7 @@ def _empty(
 
 
 def _tile_new_this_week(db: Session, user: User) -> NewThisWeekTile:
-    drill = "/my-eu-bubble?tab=my_files"
+    drill = "/my-eu-bubble?tab=legislative"
     handoff = (
         "Brief me on the EU legislative files added in the last week that "
         "match my policy interests."
@@ -213,19 +213,80 @@ def _tile_new_this_week(db: Session, user: User) -> NewThisWeekTile:
     ]
 
     if not items:
-        return NewThisWeekTile(
-            items=[],
-            total=0,
-            empty_state=_empty(
-                "no_matches",
-                "No new legislative files in the last 7 days matched your "
-                "policy interests. We will keep watching.",
-                "Browse the tracker",
-                "/my-eu-bubble?tab=legislative",
-            ),
-            drill_down_path=drill,
-            chat_handoff_prompt=None,
-        )
+        # Nothing brand-new this week: fall back to a live preview of the most
+        # recent files matching the user's interests, so the tile mirrors the
+        # legislative tracker rather than going blank.
+        try:
+            fb = db.execute(
+                text(
+                    f"""
+                    SELECT id::text AS carriage_id, title,
+                           oeil_procedure_ref AS procedure_ref, current_status,
+                           policy_areas, first_seen
+                    FROM legislative_carriages
+                    WHERE {overlap}
+                    ORDER BY first_seen DESC NULLS LAST
+                    LIMIT :limit
+                    """
+                ),
+                {"policy_interests": interests, "limit": TILE_ITEM_LIMIT},
+            ).mappings().all()
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("new_this_week fallback failed: %s", exc)
+            db.rollback()
+            fb = []
+        if not fb:
+            # Still nothing in the user's exact policy areas: preview the most
+            # recently seen files across the whole tracker, so the tile is never
+            # blank when there is real data to show.
+            try:
+                fb = db.execute(
+                    text(
+                        """
+                        SELECT id::text AS carriage_id, title,
+                               oeil_procedure_ref AS procedure_ref, current_status,
+                               policy_areas, first_seen
+                        FROM legislative_carriages
+                        ORDER BY first_seen DESC NULLS LAST
+                        LIMIT :limit
+                        """
+                    ),
+                    {"limit": TILE_ITEM_LIMIT},
+                ).mappings().all()
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning("new_this_week unfiltered fallback failed: %s", exc)
+                db.rollback()
+                fb = []
+        items = [
+            NewThisWeekItem(
+                carriage_id=row["carriage_id"],
+                title=row["title"],
+                procedure_ref=row.get("procedure_ref"),
+                current_status=(
+                    row["current_status"].value
+                    if hasattr(row["current_status"], "value")
+                    else (row["current_status"] if row.get("current_status") else None)
+                ),
+                policy_areas=list(row.get("policy_areas") or []),
+                matched_interests=[a for a in (row.get("policy_areas") or []) if a in interests],
+                created_at=row.get("first_seen"),
+            )
+            for row in fb
+        ]
+        if not items:
+            return NewThisWeekTile(
+                items=[],
+                total=0,
+                empty_state=_empty(
+                    "no_matches",
+                    "No legislative files match your policy interests yet. "
+                    "Browse the tracker to find files to follow.",
+                    "Browse the tracker",
+                    "/my-eu-bubble?tab=legislative",
+                ),
+                drill_down_path=drill,
+                chat_handoff_prompt=None,
+            )
 
     return NewThisWeekTile(
         items=items,
@@ -345,19 +406,56 @@ def _tile_tracked_files_moving(db: Session, user: User) -> TrackedFilesMovingTil
     ]
 
     if not items:
-        return TrackedFilesMovingTile(
-            items=[],
-            total=0,
-            empty_state=_empty(
-                "no_recent_activity",
-                "Your tracked files have not moved in the last 7 days. "
-                "Status changes will appear here as soon as they happen.",
-                "Open My Files",
-                "/my-eu-bubble?tab=my_files",
-            ),
-            drill_down_path=drill,
-            chat_handoff_prompt=None,
-        )
+        # No movement this week: preview the files the user actually tracks
+        # (with their current status) so the tile mirrors My Tracked Files.
+        try:
+            fb = db.execute(
+                text(
+                    """
+                    SELECT lc.id::text AS carriage_id, lc.title,
+                           lc.oeil_procedure_ref AS procedure_ref, lc.current_status
+                    FROM user_carriage_tracks uct
+                    JOIN legislative_carriages lc ON lc.id = uct.carriage_id
+                    WHERE uct.user_id = :uid
+                    ORDER BY uct.tracked_since DESC
+                    LIMIT :limit
+                    """
+                ),
+                {"uid": str(user.id), "limit": TILE_ITEM_LIMIT},
+            ).mappings().all()
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("tracked_files_moving fallback failed: %s", exc)
+            db.rollback()
+            fb = []
+        items = [
+            TrackedFileMovingItem(
+                carriage_id=row["carriage_id"],
+                title=row["title"],
+                procedure_ref=row.get("procedure_ref"),
+                old_status=None,
+                new_status=(
+                    row["current_status"].value
+                    if hasattr(row.get("current_status"), "value")
+                    else row.get("current_status")
+                ),
+                changed_at=None,
+            )
+            for row in fb
+        ]
+        if not items:
+            return TrackedFilesMovingTile(
+                items=[],
+                total=0,
+                empty_state=_empty(
+                    "no_recent_activity",
+                    "Your tracked files have not moved recently. Status changes "
+                    "will appear here as soon as they happen.",
+                    "Open My Files",
+                    "/my-eu-bubble?tab=my_files",
+                ),
+                drill_down_path=drill,
+                chat_handoff_prompt=None,
+            )
 
     return TrackedFilesMovingTile(
         items=items,
@@ -558,6 +656,51 @@ def _tile_next_seven_days(db: Session, user: User) -> NextSevenDaysTile:
         for row in rows
     ]
 
+    if not items and interests:
+        # Nothing tagged to the user's exact policy areas in the window: fall
+        # back to an unfiltered preview of the next 7 days, so the tile mirrors
+        # My EU Calendar rather than going blank.
+        try:
+            fb = db.execute(
+                text(
+                    """
+                    SELECT id::text AS event_id, title, institution, event_type,
+                           start_date, end_date, source_url, policy_areas
+                    FROM eu_calendar_events
+                    WHERE start_date BETWEEN :today AND :horizon
+                      AND status != 'cancelled'
+                    ORDER BY start_date ASC, start_time ASC NULLS LAST
+                    LIMIT :limit
+                    """
+                ),
+                {"today": today, "horizon": horizon, "limit": TILE_ITEM_LIMIT},
+            ).mappings().all()
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("next_seven_days fallback failed: %s", exc)
+            db.rollback()
+            fb = []
+        items = [
+            CalendarEventItem(
+                event_id=row["event_id"],
+                title=row["title"],
+                institution=(
+                    row["institution"].value
+                    if hasattr(row.get("institution"), "value")
+                    else row.get("institution")
+                ),
+                event_type=(
+                    row["event_type"].value
+                    if hasattr(row.get("event_type"), "value")
+                    else row.get("event_type")
+                ),
+                start_date=row["start_date"],
+                end_date=row.get("end_date"),
+                source_url=row.get("source_url"),
+                policy_areas=list(row.get("policy_areas") or []),
+            )
+            for row in fb
+        ]
+
     if not items:
         return NextSevenDaysTile(
             items=[],
@@ -565,8 +708,8 @@ def _tile_next_seven_days(db: Session, user: User) -> NextSevenDaysTile:
             empty_state=_empty(
                 "no_matches" if interests else "no_profile",
                 (
-                    "Nothing scheduled in your policy areas for the next "
-                    "7 days. Browse the full institutional calendar."
+                    "Nothing scheduled in the EU institutional calendar for "
+                    "the next 7 days."
                 )
                 if interests
                 else (

@@ -14,20 +14,27 @@ from enum import Enum
 
 
 class ProcedureType(str, Enum):
-    """
-    Procedure types with relevance hierarchy.
-
-    COD (100): Ordinary legislative procedure - laws
-    APP (80): Consent procedure
-    CNS (70): Consultation procedure
-    NLE (50): Non-legislative procedure
-    INI (40): Own-initiative reports
-    """
+    """OEIL procedure types (comprehensive). The scraper parses the suffix from
+    the procedure reference; unseen codes fall back to INI."""
     COD = "COD"
-    APP = "APP"
     CNS = "CNS"
+    APP = "APP"
     NLE = "NLE"
     INI = "INI"
+    INL = "INL"
+    RSP = "RSP"
+    RSO = "RSO"
+    REG = "REG"
+    RPS = "RPS"
+    DEA = "DEA"
+    IMM = "IMM"
+    BUD = "BUD"
+    BUI = "BUI"
+    DEC = "DEC"
+    GBD = "GBD"
+    ACI = "ACI"
+    COS = "COS"
+    DCE = "DCE"
 
 
 class CommitteeRole(str, Enum):

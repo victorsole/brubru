@@ -38,6 +38,28 @@ class InstitutionEnum(str, enum.Enum):
     EIOPA = "EIOPA"
     COR = "COR"
     EESC = "EESC"
+    # All-EU bodies for My EU Calendar event ingestion (migration 102, 1 Jun 2026):
+    # bodies that are neither Commission DGs nor already enumerated.
+    EDPS = "EDPS"
+    OMBUDSMAN = "OMBUDSMAN"
+    EIB = "EIB"
+    ECA = "ECA"
+    ECHA = "ECHA"
+    ENISA = "ENISA"
+    EUIPO = "EUIPO"
+    EUAA = "EUAA"
+    EUROJUST = "EUROJUST"
+    FRA = "FRA"
+    EU_OSHA = "EU_OSHA"
+    EUROFOUND = "EUROFOUND"
+    ACER = "ACER"
+    ECDC = "ECDC"
+    AMLA = "AMLA"
+    CEPOL = "CEPOL"
+    EIT = "EIT"
+    CPVO = "CPVO"
+    EMSA = "EMSA"
+    EEAS = "EEAS"
     # Non-EU-institutional events (think tanks, conference organisers,
     # associations, universities, public bodies). Added 22 April 2026 for
     # euagenda.eu integration. See `euagenda_brussels_events.md` guide.
@@ -56,6 +78,7 @@ class EventTypeEnum(str, enum.Enum):
     EUROPEAN_COUNCIL_SUMMIT = "european_council_summit"
     EUROGROUP = "eurogroup"
     COMMISSION_COLLEGE_MEETING = "commission_college_meeting"
+    COMMISSIONER_MEETING = "commissioner_meeting"
     COURT_HEARING = "court_hearing"
     ECB_GOVERNING_COUNCIL = "ecb_governing_council"
     AGENCY_EVENT = "agency_event"

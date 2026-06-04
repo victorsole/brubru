@@ -126,6 +126,40 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/legislative/oeil(/|$)"),             "read:procedures"),
     (re.compile(r"^/api/v2/legislative/legislative-train(/|$)"), "read:procedures"),
     (re.compile(r"^/api/v2/legislative/eurovoc(/|$)"),          "read:publications"),
+    (re.compile(r"^/api/v2/legislative/delegated-acts(/|$)"),   "read:commission"),
+    (re.compile(r"^/api/v2/legislative/implementing-acts(/|$)"), "read:commission"),
+
+    # --- API v2: institution-based "European Parliament" domain -----------
+    # Same scope mapping as the v1 EP surface (read:ep, with the two v1
+    # exceptions preserved: webstreams -> read:calendar, eprs -> read:knowledge).
+    (re.compile(r"^/api/v2/parliament/meps(/|$)"),                    "read:ep"),
+    (re.compile(r"^/api/v2/parliament/committees(/|$)"),             "read:ep"),
+    (re.compile(r"^/api/v2/parliament/amendments(/|$)"),             "read:ep"),
+    (re.compile(r"^/api/v2/parliament/ep-documents(/|$)"),           "read:ep"),
+    (re.compile(r"^/api/v2/parliament/reports(/|$)"),                "read:ep"),
+    (re.compile(r"^/api/v2/parliament/opinions(/|$)"),               "read:ep"),
+    (re.compile(r"^/api/v2/parliament/votes(/|$)"),                  "read:ep"),
+    (re.compile(r"^/api/v2/parliament/parliamentary-questions(/|$)"), "read:ep"),
+    (re.compile(r"^/api/v2/parliament/texts-adopted(/|$)"),          "read:ep"),
+    (re.compile(r"^/api/v2/parliament/texts-submitted(/|$)"),        "read:ep"),
+    (re.compile(r"^/api/v2/parliament/resolutions(/|$)"),            "read:ep"),
+    (re.compile(r"^/api/v2/parliament/webstreams(/|$)"),             "read:calendar"),
+    (re.compile(r"^/api/v2/parliament/eprs(/|$)"),                   "read:knowledge"),
+
+    # --- API v2: institution-based "European Commission" domain -----------
+    # Same scope mapping as the v1 Commission surface (read:commission, with
+    # the v1 exception preserved: meetings -> read:calendar).
+    (re.compile(r"^/api/v2/commission/commissioners(/|$)"),                  "read:commission"),
+    (re.compile(r"^/api/v2/commission/commission-register-documents(/|$)"),  "read:commission"),
+    (re.compile(r"^/api/v2/commission/rsb-opinions(/|$)"),                   "read:commission"),
+    (re.compile(r"^/api/v2/commission/infringements(/|$)"),                  "read:commission"),
+    (re.compile(r"^/api/v2/commission/consultations(/|$)"),                  "read:commission"),
+    (re.compile(r"^/api/v2/commission/tris-notifications(/|$)"),             "read:commission"),
+    (re.compile(r"^/api/v2/commission/meetings(/|$)"),                       "read:calendar"),
+
+    # --- API v2: institution-based "Council of the EU" domain -------------
+    (re.compile(r"^/api/v2/council/council-documents(/|$)"),                 "read:council"),
+    (re.compile(r"^/api/v2/council/council-configurations(/|$)"),            "read:council"),
 
     # --- API v2: "Brubru Proprietary Databases" domain --------------------
     (re.compile(r"^/api/v2/proprietary/guides(/|$)"),           "read:knowledge"),
@@ -155,6 +189,8 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     # read:ep
     (re.compile(r"^/api/v1/meps(/|$)"),                         "read:ep"),
     (re.compile(r"^/api/v1/committees(/|$)"),                   "read:ep"),
+    (re.compile(r"^/api/v1/committee-transcripts(/|$)"),        "read:ep"),
+    (re.compile(r"^/api/v1/committee-agendas(/|$)"),            "read:ep"),
     (re.compile(r"^/api/v1/amendments(/|$)"),                   "read:ep"),
     (re.compile(r"^/api/v1/ep-documents(/|$)"),                 "read:ep"),
     (re.compile(r"^/api/v1/reports(/|$)"),                      "read:ep"),
@@ -185,6 +221,7 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
 
     # read:council
     (re.compile(r"^/api/v1/council-documents(/|$)"),            "read:council"),
+    (re.compile(r"^/api/v1/council-configurations(/|$)"),       "read:council"),
 
     # read:knowledge
     (re.compile(r"^/api/v1/knowledge-guides(/|$)"),             "read:knowledge"),

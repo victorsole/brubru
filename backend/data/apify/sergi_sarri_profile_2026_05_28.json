@@ -1,0 +1,626 @@
+[
+  {
+    "id": "ACoAAAgBXtcBYr5o0otiOmSkKzU1wxS71XkJLjA",
+    "publicIdentifier": "lluís-sergi-sarri-i-camargo-333b9038",
+    "linkedinUrl": "https://www.linkedin.com/in/lluís-sergi-sarri-i-camargo-333b9038",
+    "firstName": "Lluís Sergi",
+    "lastName": "Sarri i Camargo",
+    "emails": [],
+    "headline": "Tech Innovation Specialist at Mobile World Capital Barcelona",
+    "premium": false,
+    "influencer": false,
+    "location": {
+      "linkedinText": "Spain",
+      "countryCode": "ES",
+      "parsed": {
+        "text": "Spain",
+        "countryCode": "ES",
+        "regionCode": null,
+        "country": "Spain",
+        "countryFull": "Spain"
+      }
+    },
+    "objectUrn": "134307543",
+    "registeredAt": null,
+    "topSkills": null,
+    "connectionsCount": 1545,
+    "followerCount": 1546,
+    "about": "",
+    "currentPosition": [
+      {
+        "companyId": "2623897",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/mwcapital/",
+        "companyName": "Mobile World Capital Barcelona"
+      }
+    ],
+    "profileTopEducation": [
+      {
+        "schoolId": "12260",
+        "companyId": "12297",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/uoc/",
+        "schoolName": "Universitat Oberta de Catalunya"
+      }
+    ],
+    "profileActions": [],
+    "profilePicture": {
+      "url": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1620657652984?e=1781740800&v=beta&t=_x6QygBtkYeDPjVOdyf_XjYJgN6xGe5dZI-QTOW2cMQ",
+      "sizes": [
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1620657652984?e=1781740800&v=beta&t=vHklKmiNNDhZoEc4Ao6AYTcJZE7BGeuGkCYuBQfx7XY",
+          "width": 100,
+          "height": 100,
+          "expiresAt": null
+        },
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1620657652984?e=1781740800&v=beta&t=xD_BdJzopvW8jSyWxlTYvNQ_zRODW-facNOqx5JBIxA",
+          "width": 200,
+          "height": 200,
+          "expiresAt": null
+        },
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1620657652984?e=1781740800&v=beta&t=8I2ZIOTLf-plKUNHpxa2898goRK9wtfWEzziM_TyWOA",
+          "width": 400,
+          "height": 400,
+          "expiresAt": null
+        },
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1620657652984?e=1781740800&v=beta&t=_x6QygBtkYeDPjVOdyf_XjYJgN6xGe5dZI-QTOW2cMQ",
+          "width": 800,
+          "height": 800,
+          "expiresAt": null
+        }
+      ]
+    },
+    "coverPicture": {
+      "url": "https://media.licdn.com/dms/image/v2/C5616AQGGA0tVOEA7Aw/profile-displaybackgroundimage-shrink_200_800/profile-displaybackgroundimage-shrink_200_800/0/1516806389285?e=1781740800&v=beta&t=HK-J0l9M7EfG_dGA4SSVT9S1vxave7jJMA8HutZuJVM",
+      "sizes": [
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5616AQGGA0tVOEA7Aw/profile-displaybackgroundimage-shrink_200_800/profile-displaybackgroundimage-shrink_200_800/0/1516806389285?e=1781740800&v=beta&t=HK-J0l9M7EfG_dGA4SSVT9S1vxave7jJMA8HutZuJVM",
+          "width": 800,
+          "height": 200,
+          "expiresAt": null
+        },
+        {
+          "url": "https://media.licdn.com/dms/image/v2/C5616AQGGA0tVOEA7Aw/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1516806389267?e=1781740800&v=beta&t=SaFqDFoLaXuLF4UebAuZZOcIFLShn9k3A1L9oX5rchY",
+          "width": 1400,
+          "height": 350,
+          "expiresAt": null
+        }
+      ]
+    },
+    "photo": "https://media.licdn.com/dms/image/v2/C5603AQGbQKQnu-OcOA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1620657652984?e=1781740800&v=beta&t=_x6QygBtkYeDPjVOdyf_XjYJgN6xGe5dZI-QTOW2cMQ",
+    "profileLocales": [
+      {
+        "country": "ES",
+        "language": "es"
+      },
+      {
+        "country": "US",
+        "language": "en"
+      }
+    ],
+    "primaryLocale": {
+      "country": "ES",
+      "language": "es"
+    },
+    "services": null,
+    "experience": [
+      {
+        "position": "Tech Innovation Specialist",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Mobile World Capital Barcelona",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/mwcapital/",
+        "companyId": "2623897",
+        "companyUniversalName": "mwcapital",
+        "duration": null,
+        "description": "o Coordinate and drive innovation projects using advanced digital technologies in the Digital Areas program (https://areesdigitals.cat/), a joint initiative of the Government of Catalonia, MWCapital, and i2CAT.\n\no Build a close, collaborative, trust-based relationship, within the framework of the Digital Areas, with Catalan institutions and companies, representing MWCapital.\n\no Coordinate and drive digital innovation projects from MWCapital’s Tech Lab.\n\no Support the coordination of the experiences and demos that MWCapital presents annually at Mobile World Congress Barcelona.",
+        "skills": [],
+        "startDate": {
+          "month": "Dec",
+          "year": 2023,
+          "text": "Dec 2023"
+        },
+        "endDate": {
+          "text": "Present"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQF26az0oT5lcg/company-logo_400_400/company-logo_400_400/0/1701343143431/mwcapital_logo?e=1781740800&v=beta&t=1VtkP6xpEurgygsgT5L-EM2SOh89BW2CbvX4fdxONgI",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Project Coordinator - Digital Talent (reports)",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Mobile World Capital Barcelona",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/mwcapital/",
+        "companyId": "2623897",
+        "companyUniversalName": "mwcapital",
+        "duration": null,
+        "description": "o Coordination of the internal team and partners to deliver two Talent Department reports end to end (planning, follow-up, drafting, review, and quality assurance):\n\n(1) Tech Hubs Overview 2025\n(2) Digital Talent Overview 2025",
+        "skills": [],
+        "startDate": {
+          "month": "Oct",
+          "year": 2024,
+          "text": "Oct 2024"
+        },
+        "endDate": {
+          "month": "Jul",
+          "year": 2025,
+          "text": "Jul 2025"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQF26az0oT5lcg/company-logo_400_400/company-logo_400_400/0/1701343143431/mwcapital_logo?e=1781740800&v=beta&t=1VtkP6xpEurgygsgT5L-EM2SOh89BW2CbvX4fdxONgI",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Head of Digital Connectivity",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Mobile World Capital Barcelona",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/mwcapital/",
+        "companyId": "2623897",
+        "companyUniversalName": "mwcapital",
+        "duration": null,
+        "description": "o Coordinate and drive innovation projects using advanced digital technologies in the 5G Areas program, a joint initiative of the Government of Catalonia, MWCapital, and i2CAT.\n\no Build a close, collaborative, trust-based relationship with Catalan institutions and companies, within the framework of the 5G Areas, representing MWCapital.",
+        "skills": [],
+        "startDate": {
+          "month": "Dec",
+          "year": 2021,
+          "text": "Dec 2021"
+        },
+        "endDate": {
+          "month": "Nov",
+          "year": 2023,
+          "text": "Nov 2023"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQF26az0oT5lcg/company-logo_400_400/company-logo_400_400/0/1701343143431/mwcapital_logo?e=1781740800&v=beta&t=1VtkP6xpEurgygsgT5L-EM2SOh89BW2CbvX4fdxONgI",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Program Operations Specialist",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "The Collider",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/thecollidertech/",
+        "companyId": "11291797",
+        "companyUniversalName": "thecollidertech",
+        "duration": null,
+        "description": "o Part of a three-person operations team coordinating day-to-day program delivery across two editions of The Collider.",
+        "skills": [],
+        "startDate": {
+          "month": "Apr",
+          "year": 2024,
+          "text": "Apr 2024"
+        },
+        "endDate": {
+          "month": "Nov",
+          "year": 2024,
+          "text": "Nov 2024"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C560BAQGc6APfYeHjDQ/company-logo_400_400/company-logo_400_400/0/1630578105214/thecollidertech_logo?e=1781740800&v=beta&t=QCS-a04AGhveCr3hg9pqOdKNRlVaFq1HvuebqHg_D2Y",
+          "sizes": []
+        }
+      },
+      {
+        "position": "OnCampus Program Coordinator",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "The Collider",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/thecollidertech/",
+        "companyId": "11291797",
+        "companyUniversalName": "thecollidertech",
+        "duration": null,
+        "description": "o Coordination of the day-to-day delivery of the OnCampus program across two editions, reporting to the Program Manager.",
+        "skills": [],
+        "startDate": {
+          "month": "Jun",
+          "year": 2023,
+          "text": "Jun 2023"
+        },
+        "endDate": {
+          "month": "Mar",
+          "year": 2024,
+          "text": "Mar 2024"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C560BAQGc6APfYeHjDQ/company-logo_400_400/company-logo_400_400/0/1630578105214/thecollidertech_logo?e=1781740800&v=beta&t=QCS-a04AGhveCr3hg9pqOdKNRlVaFq1HvuebqHg_D2Y",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Data Analyst & Public Administration Consultant.",
+        "location": "Barcelona, Catalunya",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "EIXOS economic observatory",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/eixos-economic-observatory/",
+        "companyId": "5350012",
+        "companyUniversalName": "eixos-economic-observatory",
+        "duration": null,
+        "description": "o Public outreach to municipal governments in Catalonia, the Valencian Country, and the Balearic o Islands to present EIXOS’s services and follow up on projects.\no Coordination of EIXOS’s various collaborators on each Public Administration project.\no Analyze data collected by EIXOS and draft reports.\no Expand and update the contacts database for the newsletter.\no Co-design EIXOS’s communication strategy.\no Co-design new indicators to analyze economic activity in cities.\no Co-design EIXOS’s services catalog.",
+        "skills": [],
+        "startDate": {
+          "month": "Jul",
+          "year": 2019,
+          "text": "Jul 2019"
+        },
+        "endDate": {
+          "month": "Dec",
+          "year": 2021,
+          "text": "Dec 2021"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C560BAQHTKG3jJT42qw/company-logo_400_400/company-logo_400_400/0/1631379527283?e=1781740800&v=beta&t=YQPoCS1vdxeHo7wna8HmXQ4petPLw0HqPVT9augX504",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Collaborator / Internship",
+        "location": "Barcelona, Catalunya",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "EIXOS economic observatory",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/eixos-economic-observatory/",
+        "companyId": "5350012",
+        "companyUniversalName": "eixos-economic-observatory",
+        "duration": null,
+        "description": "o Collaborator on various EIXOS projects as a data analyst.",
+        "skills": [],
+        "startDate": {
+          "month": "Sep",
+          "year": 2018,
+          "text": "Sep 2018"
+        },
+        "endDate": {
+          "month": "Jun",
+          "year": 2019,
+          "text": "Jun 2019"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C560BAQHTKG3jJT42qw/company-logo_400_400/company-logo_400_400/0/1631379527283?e=1781740800&v=beta&t=YQPoCS1vdxeHo7wna8HmXQ4petPLw0HqPVT9augX504",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Spokesperson for Convergència / GM Demòcrata - District 3 (Sants-Montjuïc)",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Ajuntament de Barcelona",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/ajuntament-de-barcelona/",
+        "companyId": "529145",
+        "companyUniversalName": "ajuntament-de-barcelona",
+        "duration": null,
+        "description": "o Lead the opposition in the Sants-Montjuïc District.\no Define the strategy to gain visibility across the neighborhoods.\no Get our message to as many District residents as possible.\no Advance initiatives and continuously hold the District government to account.\no Maintain and expand contact with the District’s network of community organizations.\no Support and take part in the District’s public events.",
+        "skills": [],
+        "startDate": {
+          "month": "Jul",
+          "year": 2015,
+          "text": "Jul 2015"
+        },
+        "endDate": {
+          "month": "Jun",
+          "year": 2019,
+          "text": "Jun 2019"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEAIElTdOIH0A/company-logo_400_400/B4DZnry5ikG8AY-/0/1760597613082/ajuntament_de_barcelona_logo?e=1781740800&v=beta&t=a5lhFt49USa9VY5dMW0bd060FqwnIJtG3fEBkNNugPc",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Chief of Staff to the District Councillor & Director of Strategy - District 3 (Sants-Montjuïc)",
+        "location": null,
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Ajuntament de Barcelona",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/ajuntament-de-barcelona/",
+        "companyId": "529145",
+        "companyUniversalName": "ajuntament-de-barcelona",
+        "duration": null,
+        "description": "o Co-manage the District’s administrative operations (about 100 employees) alongside District management.\no Lead the strategic priorities to be developed for the District.\no Oversee the relationship between the Administration and citizens, including their forums of engagement.\no Direct the messaging and presence the councillor’s office should maintain across the District’s neighborhoods.\no Serve as the permanent liaison with the media operating in the District.\no Serve as the permanent liaison with the Mayor’s Office to address all matters of specific interest to the Mayor.",
+        "skills": [],
+        "startDate": {
+          "month": "Jul",
+          "year": 2011,
+          "text": "Jul 2011"
+        },
+        "endDate": {
+          "month": "Jun",
+          "year": 2015,
+          "text": "Jun 2015"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEAIElTdOIH0A/company-logo_400_400/B4DZnry5ikG8AY-/0/1760597613082/ajuntament_de_barcelona_logo?e=1781740800&v=beta&t=a5lhFt49USa9VY5dMW0bd060FqwnIJtG3fEBkNNugPc",
+          "sizes": []
+        }
+      }
+    ],
+    "education": [
+      {
+        "schoolName": "Universitat Oberta de Catalunya",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/uoc/",
+        "schoolId": "12297",
+        "degree": "",
+        "fieldOfStudy": "Master's in Innovation and Digital Transformation",
+        "skills": [],
+        "description": "",
+        "insights": null,
+        "startDate": {
+          "month": "Oct",
+          "year": 2023,
+          "text": "Oct 2023"
+        },
+        "endDate": {
+          "month": "Feb",
+          "year": 2026,
+          "text": "Feb 2026"
+        },
+        "period": "Oct 2023 - Feb 2026",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEyUV6w_gu7xw/company-logo_200_200/company-logo_200_200/0/1694764811277/uoc_logo?e=1781740800&v=beta&t=U7yRZI-30BvLra502eVyNCNGpS27kv8i3qEOXMZqRAY",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEyUV6w_gu7xw/company-logo_200_200/company-logo_200_200/0/1694764811277/uoc_logo?e=1781740800&v=beta&t=U7yRZI-30BvLra502eVyNCNGpS27kv8i3qEOXMZqRAY",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEyUV6w_gu7xw/company-logo_100_100/company-logo_100_100/0/1694764811277/uoc_logo?e=1781740800&v=beta&t=TNL_qeT2c5b2dSG27oAvy_IsNObFitN14s2g-GovG_c",
+              "width": 100,
+              "height": 100
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQEyUV6w_gu7xw/company-logo_400_400/company-logo_400_400/0/1694764811277/uoc_logo?e=1781740800&v=beta&t=FYkuc9j3mdpUIh8ky_F1hsMyidASpTef3fZpD4KaCmc",
+              "width": 400,
+              "height": 400
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "Barcelona Technology School",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/barcelona-technology-school/",
+        "schoolId": "3751547",
+        "degree": "Master's in Big Data Solutions",
+        "fieldOfStudy": "Data processing and data processing technology.",
+        "skills": [],
+        "description": "https://barcelonatechnologyschool.com/master/master-in-big-data-solutions/",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2017,
+          "text": "2017"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2018,
+          "text": "2018"
+        },
+        "period": "2017 - 2018",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C4E0BAQFk87dllwCoRA/company-logo_200_200/company-logo_200_200/0/1631357539792?e=1781740800&v=beta&t=I4IeIxZwpOORxDrwkbnCq9IOCHHsz8_Q4vlhhosrmcc",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C4E0BAQFk87dllwCoRA/company-logo_200_200/company-logo_200_200/0/1631357539792?e=1781740800&v=beta&t=I4IeIxZwpOORxDrwkbnCq9IOCHHsz8_Q4vlhhosrmcc",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C4E0BAQFk87dllwCoRA/company-logo_100_100/company-logo_100_100/0/1631357539792?e=1781740800&v=beta&t=MGdc06QUSYc1yV4KHkKjGkdAup7IxPBooXwZLcK6LHM",
+              "width": 100,
+              "height": 100
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C4E0BAQFk87dllwCoRA/company-logo_400_400/company-logo_400_400/0/1631357539792?e=1781740800&v=beta&t=_xDJ3LKAd_3PRP7bnH6fPrOX84Hp4_z-RTvbA6J6nZ0",
+              "width": 400,
+              "height": 400
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "Universitat Autònoma de Barcelona",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/uabbarcelona/",
+        "schoolId": "234979",
+        "degree": "Master's in Aeronautical Management",
+        "fieldOfStudy": "",
+        "skills": [],
+        "description": "Sarri, S. (2012). The airport management: Public, private or mixed? (Final Master Project). UAB, Sabadell.\n\nDirected and supervised by: Pablo Torrejón Plaza.",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2011,
+          "text": "2011"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2012,
+          "text": "2012"
+        },
+        "period": "2011 - 2012",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQGdgdsEQmFAEw/company-logo_200_200/company-logo_200_200/0/1687853019787/uabbarcelona_logo?e=1781740800&v=beta&t=yl1jcmR_QLFFAODGxrzMde9CZb4Uk9qnPjqD0JrzdEM",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQGdgdsEQmFAEw/company-logo_200_200/company-logo_200_200/0/1687853019787/uabbarcelona_logo?e=1781740800&v=beta&t=yl1jcmR_QLFFAODGxrzMde9CZb4Uk9qnPjqD0JrzdEM",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQGdgdsEQmFAEw/company-logo_100_100/company-logo_100_100/0/1687853019787/uabbarcelona_logo?e=1781740800&v=beta&t=YT4urHPR6wwI2-BHiR_RM4saknXl9_Bw89ZS9l_jv-0",
+              "width": 100,
+              "height": 100
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4D0BAQGdgdsEQmFAEw/company-logo_400_400/company-logo_400_400/0/1687853019787/uabbarcelona_logo?e=1781740800&v=beta&t=5ukLE-gtHPazcB9zKoHHtYNOAiPNTCRgpgBhBwY2tRE",
+              "width": 400,
+              "height": 400
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "Universitat Politècnica de Catalunya",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/universitat-politecnica-de-catalunya/",
+        "schoolId": "166622",
+        "degree": "Technic Aeronautic Engineering",
+        "fieldOfStudy": "Aeronavigation",
+        "skills": [],
+        "description": "Sarri, S., & Torren, A. (2009). Numerical study of the flow in the nozzle of a rocket engine (Final Degree Project). UPC, Castelldefels.\n\nhttps://upcommons.upc.edu/handle/2099.1/8165\n\nDirected and supervised by: Daniel Crespo Artiaga & Roger Jové Casulleras.",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2005,
+          "text": "2005"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2009,
+          "text": "2009"
+        },
+        "period": "2005 - 2009",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEtJ44CBVOFuA/company-logo_200_200/B4EZ1njDtTGoAQ-/0/1775558737121/universitat_politecnica_de_catalunya_logo?e=1781740800&v=beta&t=Agf8ZwIo-O9JvcFcK8zK0RKlwwqriS1KUv7-V8PIgwc",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEtJ44CBVOFuA/company-logo_200_200/B4EZ1njDtTGoAQ-/0/1775558737121/universitat_politecnica_de_catalunya_logo?e=1781740800&v=beta&t=Agf8ZwIo-O9JvcFcK8zK0RKlwwqriS1KUv7-V8PIgwc",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEtJ44CBVOFuA/company-logo_100_100/B4EZ1njDtTGoAY-/0/1775558737121/universitat_politecnica_de_catalunya_logo?e=1781740800&v=beta&t=2sJMbMYBjr1eiJFfTmJgh84qzV7s6mSwbEBDyUdmkaQ",
+              "width": 100,
+              "height": 100
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEtJ44CBVOFuA/company-logo_400_400/B4EZ1njDtTGoAg-/0/1775558737121/universitat_politecnica_de_catalunya_logo?e=1781740800&v=beta&t=6LB0waZyyP2ijhagMFbWikl88fdpFXJBBBEg1xi-XQ4",
+              "width": 400,
+              "height": 400
+            }
+          ]
+        }
+      }
+    ],
+    "certifications": [],
+    "projects": [],
+    "volunteering": [],
+    "receivedRecommendations": [],
+    "skills": [
+      {
+        "name": "Business Strategy",
+        "positions": []
+      },
+      {
+        "name": "Microsoft Office",
+        "positions": []
+      },
+      {
+        "name": "Escritura creativa",
+        "positions": []
+      },
+      {
+        "name": "Redacción creativa",
+        "positions": []
+      },
+      {
+        "name": "Estrategias creativas",
+        "positions": []
+      },
+      {
+        "name": "Pensamiento creativo",
+        "positions": []
+      },
+      {
+        "name": "Gestión y motivación de equipos",
+        "positions": []
+      },
+      {
+        "name": "Creación de relaciones",
+        "positions": []
+      },
+      {
+        "name": "Coaching",
+        "positions": []
+      },
+      {
+        "name": "Docencia",
+        "positions": []
+      },
+      {
+        "name": "Management",
+        "positions": []
+      },
+      {
+        "name": "Estrategia empresarial",
+        "positions": []
+      },
+      {
+        "name": "Teamwork",
+        "positions": []
+      },
+      {
+        "name": "Microsoft Word",
+        "positions": []
+      },
+      {
+        "name": "Administración y dirección de empresas",
+        "positions": []
+      },
+      {
+        "name": "Gestión de proyectos",
+        "positions": []
+      },
+      {
+        "name": "Medios sociales",
+        "positions": []
+      },
+      {
+        "name": "Investigación y desarrollo",
+        "positions": []
+      },
+      {
+        "name": "Liderazgo de equipos",
+        "positions": []
+      },
+      {
+        "name": "Español",
+        "positions": []
+      }
+    ],
+    "publications": [],
+    "courses": [],
+    "honorsAndAwards": [],
+    "languages": [
+      {
+        "name": "Catalán",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "Español",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "Inglés",
+        "proficiency": "Professional working proficiency"
+      }
+    ],
+    "causes": [],
+    "featured": null,
+    "moreProfiles": [],
+    "originalQuery": {
+      "query": "https://es.linkedin.com/in/llu%C3%ADs-sergi-sarri-i-camargo-333b9038/en"
+    }
+  }
+]

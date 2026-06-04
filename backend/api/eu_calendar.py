@@ -48,6 +48,16 @@ from schemas.eu_calendar_schemas import (
 from knowledge_base.eu_calendar_institutions import (
     get_institutions_for_frontend,
     get_policy_areas_for_frontend,
+    get_bodies_for_frontend,
+    POLICY_AREAS,
+)
+from services.tracking.tracked_files_seeder import _interest_list
+from services.tracking.pi_committee_crosswalk import (
+    committees_for_interests,
+    dgs_for_interests,
+    council_configs_for_interests,
+    agencies_for_interests,
+    keywords_for_interests,
 )
 from .auth import get_current_user
 
@@ -81,6 +91,48 @@ def _is_admin(user: User) -> bool:
     return user and getattr(user, "is_admin", False)
 
 
+def _pi_clause(user: User):
+    """Build an OR clause selecting events that touch the user's Policy Interests.
+
+    Matches across every dimension an event might carry: EP committee, Commission
+    DG, Council configuration, agency institution, calendar policy-area tag, and
+    finally a title-keyword match (for third-party / agency events that have no
+    structured body). Returns None when the user has no interests (so callers
+    fall back to showing everything). Same PI lens the rest of MEUB uses.
+    """
+    interests = _interest_list(user)
+    if not interests:
+        return None
+
+    committees = committees_for_interests(interests)
+    dgs = dgs_for_interests(interests)
+    configs = council_configs_for_interests(interests)
+    agencies = agencies_for_interests(interests)
+    keywords = keywords_for_interests(interests)
+    # Calendar policy-area codes whose committees/configs intersect the user's —
+    # lets PI catch events tagged only by policy_areas.
+    pi_areas = {
+        pa.code for pa in POLICY_AREAS
+        if (committees & set(pa.ep_committee_codes)) or (configs & set(pa.council_configs))
+    }
+
+    clauses = []
+    if committees:
+        clauses.append(EUCalendarEvent.ep_committee_code.in_(list(committees)))
+    if dgs:
+        clauses.append(EUCalendarEvent.commission_dg.in_(list(dgs)))
+    if configs:
+        clauses.append(EUCalendarEvent.council_configuration.in_(list(configs)))
+    if agencies:
+        clauses.append(EUCalendarEvent.institution.in_(list(agencies)))
+    for area in pi_areas:
+        clauses.append(EUCalendarEvent.policy_areas.any(area))
+    for kw in keywords:
+        clauses.append(EUCalendarEvent.title.ilike(f"%{kw}%"))
+
+    return or_(*clauses) if clauses else None
+
+
 # ============================================================================
 # Events
 # ============================================================================
@@ -92,7 +144,11 @@ async def list_events(
     institution: Optional[str] = Query(None),
     event_type: Optional[str] = Query(None),
     committee_code: Optional[str] = Query(None, description="EP committee code(s), comma-separated"),
+    commission_dg: Optional[str] = Query(None, description="Commission DG code(s), comma-separated"),
+    council_configuration: Optional[str] = Query(None, description="Council configuration code(s), comma-separated"),
     policy_area: Optional[str] = Query(None),
+    organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
+    my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
     search: Optional[str] = Query(None),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
@@ -103,6 +159,11 @@ async def list_events(
     _require_yellow_tier(user)
 
     query = db.query(EUCalendarEvent)
+
+    if my_interests:
+        clause = _pi_clause(user)
+        if clause is not None:
+            query = query.filter(clause)
 
     # Filters
     if date_from:
@@ -117,8 +178,16 @@ async def list_events(
     if committee_code:
         codes = [c.strip() for c in committee_code.split(",")]
         query = query.filter(EUCalendarEvent.ep_committee_code.in_(codes))
+    if commission_dg:
+        dgs = [d.strip() for d in commission_dg.split(",")]
+        query = query.filter(EUCalendarEvent.commission_dg.in_(dgs))
+    if council_configuration:
+        cfgs = [c.strip() for c in council_configuration.split(",")]
+        query = query.filter(EUCalendarEvent.council_configuration.in_(cfgs))
     if policy_area:
         query = query.filter(EUCalendarEvent.policy_areas.any(policy_area))
+    if organiser:
+        query = query.filter(EUCalendarEvent.organiser.ilike(f"%{organiser}%"))
     if search:
         query = query.filter(
             or_(
@@ -151,7 +220,12 @@ async def get_events_in_range(
     date_to: date = Query(...),
     institution: Optional[str] = Query(None),
     committee_code: Optional[str] = Query(None, description="EP committee code(s), comma-separated"),
+    commission_dg: Optional[str] = Query(None, description="Commission DG code(s), comma-separated"),
+    council_configuration: Optional[str] = Query(None, description="Council configuration code(s), comma-separated"),
     policy_area: Optional[str] = Query(None),
+    event_type: Optional[str] = Query(None, description="Event type(s), comma-separated"),
+    organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
+    my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -170,17 +244,33 @@ async def get_events_in_range(
         EUCalendarEvent.start_date <= date_to,
     )
 
+    if my_interests:
+        clause = _pi_clause(user)
+        if clause is not None:
+            query = query.filter(clause)
+
     if institution:
         institutions = [i.strip() for i in institution.split(",")]
         query = query.filter(EUCalendarEvent.institution.in_(institutions))
     if committee_code:
         codes = [c.strip() for c in committee_code.split(",")]
         query = query.filter(EUCalendarEvent.ep_committee_code.in_(codes))
+    if commission_dg:
+        dgs = [d.strip() for d in commission_dg.split(",")]
+        query = query.filter(EUCalendarEvent.commission_dg.in_(dgs))
+    if council_configuration:
+        cfgs = [c.strip() for c in council_configuration.split(",")]
+        query = query.filter(EUCalendarEvent.council_configuration.in_(cfgs))
     if policy_area:
         areas = [a.strip() for a in policy_area.split(",")]
         query = query.filter(
             or_(*[EUCalendarEvent.policy_areas.any(a) for a in areas])
         )
+    if event_type:
+        types = [t.strip() for t in event_type.split(",")]
+        query = query.filter(EUCalendarEvent.event_type.in_(types))
+    if organiser:
+        query = query.filter(EUCalendarEvent.organiser.ilike(f"%{organiser}%"))
 
     # Exclude recess
     query = query.filter(EUCalendarEvent.event_type != EventTypeEnum.RECESS)
@@ -270,6 +360,16 @@ async def list_institutions():
 async def list_policy_areas():
     """List all policy areas with committee/config mappings. Public endpoint."""
     return get_policy_areas_for_frontend()
+
+
+@router.get("/bodies")
+async def list_bodies():
+    """Institution -> selectable departments (the cascading filter source).
+
+    EP -> committees, Commission -> the 40 DGs (policy/functional), Council ->
+    configurations. Institutions that ARE the body return an empty list. Public.
+    """
+    return get_bodies_for_frontend()
 
 
 # ============================================================================

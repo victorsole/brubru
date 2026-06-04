@@ -209,6 +209,7 @@ def _seed_via_copy(gen, label: str) -> None:
         raw = _ENGINE.raw_connection()
         try:
             with raw.cursor() as cur:
+                cur.execute("SET statement_timeout = 0")  # 236 MB COPY exceeds the default
                 cur.execute("DELETE FROM public.proprietary_report_bodies WHERE source = %s", (label,))
                 cur.copy_expert(
                     "COPY public.proprietary_report_bodies "

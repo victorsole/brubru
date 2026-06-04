@@ -2,7 +2,9 @@
 EFPIA daily pharma/health brief sender.
 
 Cadence: Mon-Fri until 28 June 2026 inclusive (EFPIA pilot window).
-Recipients: public-affairs@efpia.eu, david.devantcerezo@efpia.eu, athina.giannoutsou@efpia.eu.
+Recipients (live): david.devantcerezo@efpia.eu, athina.giannoutsou@efpia.eu.
+  (public-affairs@efpia.eu removed 2 Jun 2026 -- Google Group rejects external posts; it stays
+   a valid login/chat-audience account. Source of truth: priority_files.json recipients.live.)
 
 Format: short hero, 5 EU pharma/health headlines (60-word so-what each) +
 "Brubru is also tracking your files" block (from priority_files.json) +

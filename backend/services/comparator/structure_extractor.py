@@ -95,6 +95,27 @@ async def _try_cellar_pdf(client: httpx.AsyncClient, celex: str) -> Optional[Tup
     return _count_in_pdf_bytes(pdf_resp.content)
 
 
+def _count_sequential(numbers) -> int:
+    """Robust count for sequentially-numbered EU legal elements.
+
+    EU acts number recitals/articles 1..N. Raw detection over-counts: a
+    cross-reference like "Article 13" in the body, or an annex, adds duplicate
+    or out-of-order numbers. Taking the longest contiguous run starting at 1
+    ignores both duplicates and spurious high numbers; falls back to max(ints)
+    if there's no run from 1.
+    """
+    ints = sorted({int(n) for n in numbers if str(n).isdigit()})
+    if not ints:
+        return 0
+    run = 0
+    for expected, value in enumerate(ints, start=1):
+        if value == expected:
+            run = value
+        else:
+            break
+    return run or max(ints)
+
+
 def _count_in_pdf_bytes(data: bytes) -> Optional[Tuple[int, int]]:
     """Extract recital + article counts from a PDF body."""
     try:
@@ -106,12 +127,10 @@ def _count_in_pdf_bytes(data: bytes) -> Optional[Tuple[int, int]]:
         return None
     if not full_text:
         return None
-    article_nums = [int(m) for m in re.findall(r'(?:^|\n)\s*Article\s+(\d+)\b', full_text)]
-    recital_nums = [int(m) for m in re.findall(r'(?:^|\n)\s*\((\d+)\)\s', full_text)]
-    if not article_nums and not recital_nums:
-        return None
-    article_count = max(article_nums) if article_nums else 0
-    recital_count = max(recital_nums) if recital_nums else 0
+    article_nums = re.findall(r'(?:^|\n)\s*Article\s+(\d+)\b', full_text)
+    recital_nums = re.findall(r'(?:^|\n)\s*\((\d+)\)\s', full_text)
+    article_count = _count_sequential(article_nums)
+    recital_count = _count_sequential(recital_nums)
     if article_count == 0 and recital_count == 0:
         return None
     return (recital_count, article_count)
@@ -134,20 +153,54 @@ async def _fetch_async(celex: str) -> Optional[Tuple[int, int]]:
         return await _try_cellar_pdf(client, celex)
 
 
+def _fetch_via_waf_browser(celex: str) -> Optional[Tuple[int, int]]:
+    """Final fallback: render the EUR-Lex HTML through the Playwright WAF browser
+    and count recitals/articles with EurlexParser.
+
+    httpx Cellar paths only serve XHTML for adopted acts; Commission proposals
+    (PC/JC/DC) are PDF-only and frequently fail to parse cleanly. The rendered
+    EUR-Lex HTML, however, is clean — this is the same source the Amendator uses.
+    """
+    try:
+        from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+        from services.parsers.eurlex_parser import EurlexParser
+        url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:{celex}"
+        with WafBrowserFetcher() as fetcher:
+            html = fetcher.fetch(url, expand_accordions=False).html or ""
+        if not html:
+            return None
+        parsed = EurlexParser().parse_html(html)
+        # Count by longest contiguous run from 1, not len() — EurlexParser
+        # mis-detects in-body cross-references ("Article 13") as extra articles.
+        recital_count = _count_sequential([r.number for r in parsed.recitals])
+        article_count = _count_sequential([a.number for a in parsed.articles])
+        if recital_count == 0 and article_count == 0:
+            return None
+        return (recital_count, article_count)
+    except Exception:
+        return None
+
+
 def fetch_structure_counts(celex: str) -> Optional[Tuple[int, int]]:
     """Synchronous wrapper with hard timeout. Returns None on timeout/failure.
 
     Safe to call from sync FastAPI endpoints; uses a fresh event loop so we
-    don't collide with any caller-managed loop.
+    don't collide with any caller-managed loop. Order: Cellar XHTML (adopted) ->
+    Cellar PDF (proposals) -> WAF-browser EUR-Lex HTML (clean proposal fallback).
     """
     if not celex:
         return None
     try:
-        return asyncio.run(asyncio.wait_for(_fetch_async(celex), timeout=_TIMEOUT_SECONDS))
+        result = asyncio.run(asyncio.wait_for(_fetch_async(celex), timeout=_TIMEOUT_SECONDS))
     except (asyncio.TimeoutError, RuntimeError):
-        return None
+        result = None
     except Exception:
-        return None
+        result = None
+    if result is not None:
+        return result
+    # Cellar paths failed (typical for Commission proposals) — try the clean
+    # rendered HTML via the WAF browser.
+    return _fetch_via_waf_browser(celex)
 
 
 def cache_structure_counts(db: Session, celex: str, counts: Tuple[int, int]) -> None:

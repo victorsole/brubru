@@ -24,8 +24,14 @@ service layer and v1 becomes a thin alias of v2.
 from fastapi import APIRouter
 
 from .legislative import router as _legislative_router
+from .parliament import router as _parliament_router
+from .commission import router as _commission_router
+from .council import router as _council_router
 from .proprietary import router as _proprietary_router
 
 router = APIRouter(prefix="/api/v2")
 router.include_router(_legislative_router)
+router.include_router(_parliament_router)
+router.include_router(_commission_router)
+router.include_router(_council_router)
 router.include_router(_proprietary_router)

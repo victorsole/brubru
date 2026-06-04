@@ -1,0 +1,52 @@
+{
+  "issue_date": "2026-06-02",
+  "day_of_week": "Tuesday",
+  "hero_intro": "Good morning, and welcome to your Tuesday Brubru EFPIA Brief. Two new sources now feed your monitoring: the European disease control agency and the EU health technology assessment group, and both bring fresh items today. Here is what landed across the Commission, Parliament and the European Medicines Agency, freshest first. A note for the week ahead: the health technology consultation window opens tomorrow and Parliament's health committee sits the same day. Every headline links straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "EU joint scientific advice opens its next window for medicine developers",
+      "source": "European Commission, HTA Coordination Group, 1 June 2026",
+      "snippet": "With the Health Technology Assessment Regulation now in force, the Member State Coordination Group has confirmed the next window to apply for a Joint Scientific Consultation. Developers of medicines, and certain higher-risk devices and diagnostics, can request simultaneous advice on how to design their clinical studies so the evidence works for both the regulator and national HTA bodies. The window runs from 3 June to 1 July. This is the formal route to shape your evidence plan before a Joint Clinical Assessment.",
+      "ask": "What is the EU Health Technology Assessment Regulation and how does the Joint Clinical Assessment process work?",
+      "feature_label": "Apply",
+      "feature_url": "https://ec.europa.eu/newsroom/sante/newsletter-archives/75918",
+      "color": "#0693e3"
+    },
+    {
+      "title": "The EU disease control agency is tracking an Ebola outbreak, risk to Europe rated very low",
+      "source": "European Centre for Disease Prevention and Control, 1 June 2026",
+      "snippet": "Brubru now reads the European disease control agency directly. Its latest assessment, updated on 1 June, covers the Ebola outbreak in the Democratic Republic of the Congo and Uganda, with confirmed cases and deaths in both countries. The agency rates the likelihood of infection for people in the EU and wider European Economic Area as very low, and has activated the EU Health Task Force and deployed experts to support the response. Vaccines and health-security members will want this on the radar.",
+      "ask": "What is the latest ECDC assessment of the Ebola outbreak in the DRC and Uganda, and what is the risk to Europe?",
+      "feature_label": "ECDC",
+      "feature_url": "https://www.ecdc.europa.eu/en/ebola-outbreak-democratic-republic-congo-and-uganda",
+      "color": "#059669"
+    },
+    {
+      "title": "The EU medical device database has switched on its first four mandatory modules",
+      "source": "European Commission, DG SANTE, 28 May 2026",
+      "snippet": "The first four modules of EUDAMED, the EU database for medical devices, became mandatory on 28 May. Manufacturers must now register as actors, register devices with unique identifiers, log notified-body certificates and meet market-surveillance requirements, rather than using the system voluntarily. For companies with combination products or device-adjacent portfolios, this is a live compliance deadline that is already in effect.",
+      "ask": "Which four EUDAMED modules became mandatory in May 2026, and what must manufacturers now do?",
+      "feature_label": "DG SANTE",
+      "feature_url": "https://health.ec.europa.eu/medical-devices-eudamed/overview_en",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "Tomorrow: Parliament's health committee sits",
+      "source": "European Parliament, SANT subcommittee, 3 June 2026",
+      "snippet": "The Parliament's public health subcommittee meets tomorrow, Wednesday 3 June, on the EU health workforce, health resilience, disease prevention and crisis preparedness. This is the room where the pharmaceutical package and the Critical Medicines Act follow-up move, and it is the same day the health technology consultation window opens. If you have a file in front of this committee, today is the day to confirm your shadow engagement before members sit.",
+      "ask": "What is on the European Parliament public health committee agenda for 3 June 2026?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#dc2626"
+    },
+    {
+      "title": "Medicines agency opens a consultation on a soya-based herbal preparation",
+      "source": "European Medicines Agency, HMPC, 1 June 2026",
+      "snippet": "EMA's herbal medicines committee has published a draft European Union monograph on soya-bean lecithin for public consultation, alongside the supporting assessment report. A monograph sets the agreed position on a herbal substance and its accepted uses across the EU, which standardises how products built on it are assessed. It is the freshest scientific consultation on the EMA wire, and the window is open now for companies and stakeholders to comment.",
+      "ask": "What does EMA's draft EU herbal monograph on soya-bean lecithin cover, and how do EMA herbal monographs work?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/system/files/documents/herbal-monograph/lecithinum-ex-soya-mo_en.pdf",
+      "color": "#ca8a04"
+    }
+  ]
+}

@@ -4,11 +4,14 @@ Database Configuration
 SQLAlchemy setup for Supabase PostgreSQL connection.
 """
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import NullPool
 from typing import Generator
+import logging as _logging
+
+_db_log = _logging.getLogger(__name__)
 
 from .config import settings
 
@@ -35,6 +38,22 @@ else:
         pool_recycle=300,  # Recycle connections after 5 minutes
         pool_timeout=30,  # Timeout for getting connection from pool
     )
+
+# Safety net against leaked sessions: cap idle-in-transaction at 5 minutes at the
+# Postgres level, so any connection whose session is never committed/closed (a
+# leaked `SessionLocal()` somewhere) is auto-terminated rather than holding locks
+# for hours (which previously blocked DDL/migrations and exhausted the pool).
+# Supabase's session pooler keeps this SET for the connection's life. Idle-IN-
+# TRANSACTION only — normal idle pooled connections are unaffected.
+@event.listens_for(engine, "connect")
+def _set_idle_in_transaction_timeout(dbapi_conn, _conn_record):
+    try:
+        cur = dbapi_conn.cursor()
+        cur.execute("SET idle_in_transaction_session_timeout = '300000'")  # 5 min
+        cur.close()
+    except Exception as exc:  # never block a connection over this
+        _db_log.warning("could not set idle_in_transaction_session_timeout: %s", exc)
+
 
 # SessionLocal class for database sessions
 SessionLocal = sessionmaker(

@@ -30,6 +30,28 @@ class InstitutionType(str, Enum):
     EIOPA = "EIOPA"
     COR = "COR"
     EESC = "EESC"
+    # All-EU bodies (migration 102, 1 Jun 2026) — MUST mirror the model
+    # InstitutionEnum or every response containing one of these rows 500s.
+    EDPS = "EDPS"
+    OMBUDSMAN = "OMBUDSMAN"
+    EIB = "EIB"
+    ECA = "ECA"
+    ECHA = "ECHA"
+    ENISA = "ENISA"
+    EUIPO = "EUIPO"
+    EUAA = "EUAA"
+    EUROJUST = "EUROJUST"
+    FRA = "FRA"
+    EU_OSHA = "EU_OSHA"
+    EUROFOUND = "EUROFOUND"
+    ACER = "ACER"
+    ECDC = "ECDC"
+    AMLA = "AMLA"
+    CEPOL = "CEPOL"
+    EIT = "EIT"
+    CPVO = "CPVO"
+    EMSA = "EMSA"
+    EEAS = "EEAS"
     # Added 22 April 2026 to mirror the model enum after euagenda.eu
     # integration (think tanks, conferences, webinars). Missing this value
     # made every response containing a THIRD_PARTY row fail Pydantic
@@ -48,6 +70,7 @@ class EventType(str, Enum):
     EUROPEAN_COUNCIL_SUMMIT = "european_council_summit"
     EUROGROUP = "eurogroup"
     COMMISSION_COLLEGE_MEETING = "commission_college_meeting"
+    COMMISSIONER_MEETING = "commissioner_meeting"
     COURT_HEARING = "court_hearing"
     ECB_GOVERNING_COUNCIL = "ecb_governing_council"
     AGENCY_EVENT = "agency_event"

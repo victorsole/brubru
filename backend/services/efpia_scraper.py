@@ -660,15 +660,176 @@ def parse_cellar_sparql(payload: str, source: dict) -> List[ScrapedItem]:
     return items
 
 
+_CONSILIUM_DT_RE = re.compile(r"^\s*(\d{1,2})/(\d{1,2})/(\d{4})")
+
+
+def parse_consilium(html: str, source: dict) -> List[ScrapedItem]:
+    """Council of the EU / consilium.europa.eu pages (the "GSC" design system).
+
+    Meeting listings (/meetings/epsco/) and press releases
+    (/press/press-releases/) both render each entry as a
+    `li.gsc-excerpt-item` card:
+        a.gsc-excerpt-item__link[href]   -> item URL
+        .gsc-excerpt-item__title         -> title
+        time[datetime]                   -> "M/D/YYYY h:mm:ss AM/PM"
+        #excerpt-text p                  -> summary (optional)
+        .gsc-tag                         -> source body tag (optional)
+
+    Consilium is Akamai-WAF protected, so fetch_html falls back to Playwright
+    automatically (non-200 -> Playwright). The general press feed is EU-wide,
+    so council sources carry `health_filter: true` (re-scored in scrape_source).
+    """
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[ScrapedItem] = []
+    base = "https://www.consilium.europa.eu/"
+    seen: set[str] = set()
+
+    for card in soup.select("li.gsc-excerpt-item, .gsc-excerpt-item"):
+        link = card.select_one("a.gsc-excerpt-item__link[href], a[href]")
+        if not link:
+            continue
+        url_abs = _absolute(link.get("href", ""), base)
+        if not url_abs or url_abs in seen:
+            continue
+        seen.add(url_abs)
+
+        title_el = card.select_one(".gsc-excerpt-item__title")
+        title = (title_el.get_text(" ", strip=True) if title_el else link.get_text(" ", strip=True)).strip()
+        if not title:
+            continue
+
+        published: Optional[datetime] = None
+        time_el = card.find("time")
+        if time_el is not None:
+            raw = time_el.get("datetime", "").strip()
+            m = _CONSILIUM_DT_RE.match(raw)
+            if m:
+                month, day, year = (int(g) for g in m.groups())
+                try:
+                    published = datetime(year, month, day, tzinfo=timezone.utc)
+                except ValueError:
+                    published = None
+        if published is None:
+            # Meeting cards carry no <time>; the date lives in the URL path
+            # (.../YYYY/MM/DD/...). Fall back to that.
+            pm = re.search(r"/(\d{4})/(\d{2})/(\d{2})/", url_abs)
+            if pm:
+                try:
+                    published = datetime(int(pm.group(1)), int(pm.group(2)), int(pm.group(3)), tzinfo=timezone.utc)
+                except ValueError:
+                    published = None
+
+        summary_el = card.select_one("#excerpt-text, .gsc-excerpt-item__text p, #excerpt-text p")
+        summary = summary_el.get_text(" ", strip=True) if summary_el else None
+        tag_el = card.select_one(".gsc-tag")
+
+        metadata = {"parser": "consilium"}
+        if tag_el:
+            metadata["body_tag"] = tag_el.get_text(strip=True)
+
+        items.append(
+            ScrapedItem(
+                source_id=source["id"],
+                institution=source.get("institution", "Council"),
+                bucket=source.get("bucket", "council"),
+                kind=source.get("kind", "press"),
+                item_url=url_abs,
+                item_title=title,
+                item_summary=summary,
+                item_published_at=published,
+                relevance_score=60,
+                metadata=metadata,
+            )
+        )
+    return items
+
+
+def _edqm_deslugify(loc: str) -> str:
+    """Turn an EDQM friendly-URL slug into a readable title.
+
+    `https://www.edqm.eu/en/-/n-nitrosamine-impurities-in-ph.-eur.-monographs`
+    -> `N nitrosamine impurities in ph. eur. monographs`.
+    """
+    slug = loc.rsplit("/-/", 1)[-1].split("?")[0].rstrip("/")
+    slug = re.sub(r"-\d+$", "", slug)            # drop Liferay dedupe suffix (-1, -2)
+    text = slug.replace("/", " ").replace("-", " ").strip()
+    text = re.sub(r"\s+", " ", text)
+    return (text[:1].upper() + text[1:]) if text else slug
+
+
+def parse_edqm(xml: str, source: dict) -> List[ScrapedItem]:
+    """EDQM (Council of Europe) news via sitemap.xml.
+
+    edqm.eu content pages sit behind a Cloudflare "Just a moment" JS challenge
+    that headless Playwright cannot solve (all RSS paths 403; /en/news is a
+    not-found shell; the newsroom returns the interstitial 4/4 attempts). The
+    sitemap (https://www.edqm.eu/sitemap.xml) is whitelisted from the challenge
+    and returns 200 to plain requests, so we mine it instead of scraping cards.
+
+    EDQM news articles use the Liferay friendly-URL `/<lang>/-/<slug>` with a
+    <lastmod> timestamp. We keep English `/en/-/` entries, derive a title from
+    the slug, and use <lastmod> as the publication date. Recent items only
+    (source.max_age_days, default 180) capped at source.max_items (default 30)
+    so we do not republish the full historic archive each run.
+    """
+    items: List[ScrapedItem] = []
+    seen: set[str] = set()
+
+    rows: List[tuple[Optional[datetime], str]] = []
+    for blk in re.findall(r"<url>(.*?)</url>", xml, re.S):
+        loc_m = re.search(r"<loc>(.*?)</loc>", blk)
+        if not loc_m:
+            continue
+        loc = loc_m.group(1).strip()
+        if "/en/-/" not in loc:
+            continue
+        lm_m = re.search(r"<lastmod>(.*?)</lastmod>", blk)
+        published = _parse_iso_datetime(lm_m.group(1).strip()) if lm_m else None
+        rows.append((published, loc))
+
+    _floor = datetime.min.replace(tzinfo=timezone.utc)
+    rows.sort(key=lambda r: (r[0] is not None, r[0] or _floor), reverse=True)
+
+    max_items = int(source.get("max_items", 30))
+    max_age_days = int(source.get("max_age_days", 180))
+    now = datetime.now(timezone.utc)
+    for published, loc in rows:
+        if loc in seen:
+            continue
+        if published is not None and (now - published).days > max_age_days:
+            continue
+        seen.add(loc)
+        items.append(
+            ScrapedItem(
+                source_id=source["id"],
+                institution=source.get("institution", "EDQM"),
+                bucket=source.get("bucket", "edqm"),
+                kind=source.get("kind", "news"),
+                item_url=loc,
+                item_title=_edqm_deslugify(loc),
+                item_summary=None,
+                item_published_at=published,
+                relevance_score=60,
+                metadata={"parser": "edqm_sitemap"},
+            )
+        )
+        if len(items) >= max_items:
+            break
+    return items
+
+
 _PARSERS: dict[str, Callable[[str, dict], List[ScrapedItem]]] = {
     "rss": parse_rss,
     "cellar_sparql": parse_cellar_sparql,
+    "consilium": parse_consilium,
     "ecl": parse_ecl,
     "ema": parse_ema,
     "ema_whats_new_table": parse_ema_whats_new_table,
     "ema_open_consultations": parse_ema_open_consultations,
     "ep_sant_press": parse_ep_sant_press,
     "ep_sant_documents": parse_ep_sant_documents,
+    "edqm_sitemap": parse_edqm,
     "generic": parse_generic,
 }
 
@@ -677,6 +838,8 @@ _SOURCE_PARSER_OVERRIDES: dict[str, str] = {
     # EMA non-standard shapes
     "ema_whats_new": "ema_whats_new_table",
     "ema_open_consultations": "ema_open_consultations",
+    # EDQM is Cloudflare-challenge-walled -> mine the (whitelisted) sitemap.
+    "edqm_news": "edqm_sitemap",
 }
 
 
@@ -694,6 +857,9 @@ def parser_for(source: dict) -> Callable[[str, dict], List[ScrapedItem]]:
         return parse_ecl
     if bucket == "ema":
         return parse_ema
+    if bucket == "council":
+        # consilium.europa.eu GSC `li.gsc-excerpt-item` cards (WAF -> Playwright).
+        return parse_consilium
     if bucket == "dg_comp":
         # DG COMP competition-policy.ec.europa.eu pages use the same ECL
         # `.ecl-content-item` card layout as DG SANTE (server-rendered).
@@ -883,6 +1049,13 @@ def scrape_source(source: dict, force_playwright: bool = False) -> List[ScrapedI
     if source.get("bucket") in _GENERAL_FEED_BUCKETS:
         for it in items:
             it.relevance_score = _pharma_relevance(it.item_title, it.item_summary)
+
+    # Health-filter EU-wide feeds (e.g. the general Council press-releases page)
+    # so only health/pharma items clear the default candidate threshold.
+    if source.get("health_filter"):
+        for it in items:
+            it.relevance_score = _health_relevance(it.item_title, None)
+
     return items
 
 

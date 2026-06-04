@@ -1,0 +1,52 @@
+{
+  "issue_date": "2026-06-01",
+  "day_of_week": "Monday",
+  "hero_intro": "Good morning, and welcome to your Monday Brubru EFPIA Brief. Here is what landed late last week across the Commission, Parliament and the European Medicines Agency, freshest first, plus the health moments to watch this week. Every headline links straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "The EU's new single-market crisis framework is now in force",
+      "source": "European Commission, DG GROW, 29 May 2026",
+      "snippet": "The Internal Market Emergency and Resilience Act entered into force on 29 May. It builds a three-tier system, from everyday contingency monitoring to a full emergency mode that lets the EU coordinate procurement and stop members from fragmenting the market with internal export bans. This is the supply-resilience family that the Critical Medicines Act sits inside, so it matters directly to anyone planning around shortages. Its governing board holds its first meeting on 4 June.",
+      "ask": "What is the Internal Market Emergency and Resilience Act and how does it relate to medicines supply and the Critical Medicines Act?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What+is+the+Internal+Market+Emergency+and+Resilience+Act+and+how+does+it+relate+to+medicines+supply+and+the+Critical+Medicines+Act",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Medicines agency reopens its guideline on treatments to help people stop smoking",
+      "source": "European Medicines Agency, 29 May 2026",
+      "snippet": "EMA has published a concept paper flagging that its scientific guideline on developing medicines to treat smoking is due for revision. A concept paper is the first step before a draft guideline goes out to consultation, so this is the early window for companies with smoking-cessation pipelines to track the direction of travel and prepare input. It is the freshest scientific-guideline item on the EMA wire.",
+      "ask": "What did EMA say in its concept paper on revising the guideline for medicines to treat smoking?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/documents/scientific-guideline/concept-paper-need-revision-guideline-development-medicinal-products-treatment-smoking_en.pdf",
+      "color": "#059669"
+    },
+    {
+      "title": "Commission asks for views on cross-border supply restrictions",
+      "source": "European Commission, DG GROW, 28 May 2026",
+      "snippet": "The Commission has opened a twelve-week consultation on territorial supply constraints, the practices that stop wholesalers and retailers buying a product in one Member State and reselling it in another, which can lock in price gaps across the EU. The notice does not single out medicines, but cross-border sourcing and price disparities sit at the heart of how medicines move and are priced in Europe, so this is one for the parallel-trade and pricing teams to read and respond to.",
+      "ask": "What are territorial supply constraints, and why does the EU consultation on them matter for medicine pricing across Member States?",
+      "feature_label": "Have Your Say",
+      "feature_url": "https://single-market-economy.ec.europa.eu/news/commission-opens-consultation-territorial-supply-constraints-2026-05-28_en",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "This week: Parliament's health committee sits on Wednesday",
+      "source": "European Parliament, SANT subcommittee, 3 June 2026",
+      "snippet": "The Parliament's public health subcommittee meets on Wednesday 3 June, with a programme built around the EU health workforce, health resilience, disease prevention and crisis preparedness. This is the room where the pharmaceutical package and the Critical Medicines Act follow-up move. If you have a file in front of this committee, this is the week to confirm your shadow engagement before members sit.",
+      "ask": "What is on the European Parliament public health committee agenda for 3 June 2026?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#dc2626"
+    },
+    {
+      "title": "Next week: the EU medicines safety committee meets",
+      "source": "European Medicines Agency, PRAC, 8 to 11 June 2026",
+      "snippet": "The Pharmacovigilance Risk Assessment Committee, the EMA committee responsible for the safety of medicines once they are on the market, holds its next plenary from 8 to 11 June. This is the meeting that can trigger label changes, new warnings or referrals on products already authorised, so portfolio and safety teams will want it on the radar now. Brubru tracks the EMA committee calendar for you.",
+      "ask": "When does the EMA Pharmacovigilance Risk Assessment Committee (PRAC) meet next, and what does it do?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar&focus=ema-prac",
+      "color": "#ca8a04"
+    }
+  ]
+}

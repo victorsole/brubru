@@ -52,10 +52,24 @@ STATUS_TEXT_TO_ENUM = {
 # Relevance scores by procedure type
 RELEVANCE_SCORES = {
     ProcedureTypeEnum.COD: 100,
+    ProcedureTypeEnum.INL: 90,
     ProcedureTypeEnum.APP: 80,
     ProcedureTypeEnum.CNS: 70,
+    ProcedureTypeEnum.ACI: 65,
+    ProcedureTypeEnum.BUD: 60,
+    ProcedureTypeEnum.GBD: 60,
+    ProcedureTypeEnum.BUI: 58,
+    ProcedureTypeEnum.DEC: 58,
     ProcedureTypeEnum.NLE: 50,
+    ProcedureTypeEnum.RSP: 45,
+    ProcedureTypeEnum.RSO: 42,
     ProcedureTypeEnum.INI: 40,
+    ProcedureTypeEnum.COS: 40,
+    ProcedureTypeEnum.DCE: 38,
+    ProcedureTypeEnum.DEA: 30,
+    ProcedureTypeEnum.RPS: 30,
+    ProcedureTypeEnum.REG: 25,
+    ProcedureTypeEnum.IMM: 15,
 }
 
 

@@ -99,23 +99,11 @@ def main():
                     "source_url": src_url,
                 })
 
-        # Fallback synthetic seed if scraping returned nothing — Jordi can verify schema
+        # NO synthetic fallback. Fabricated questions would poison chat retrieval +
+        # the MEUB Parliamentary Questions tab (libe-seed contamination rule). If the
+        # scrape returns nothing, ingest nothing — use the EP Open Data path instead.
         if not candidates:
-            print("[INFO] No questions parsed from page. Seeding 3 known recent questions for surface testing.")
-            seeds = [
-                ("E-001234/2026", "Impact of the AI Act on healthcare SMEs in southern Europe", dt.date(2026, 4, 14), "written"),
-                ("E-001890/2026", "Implementation timeline of the Digital Services Act delegated regulation", dt.date(2026, 4, 18), "written"),
-                ("O-000045/2026", "Energy security strategy and the AGC nuclear deployment plan", dt.date(2026, 4, 22), "oral"),
-            ]
-            for qref, subject, d, qt in seeds:
-                candidates.append({
-                    "question_reference": qref,
-                    "question_type": qt,
-                    "parliamentary_term": 10,
-                    "subject": subject,
-                    "submitted_date": d,
-                    "source_url": f"https://www.europarl.europa.eu/doceo/document/{qref}_EN.html",
-                })
+            print("[INFO] No questions parsed. Ingesting nothing (no synthetic seeds).")
 
         for c in candidates:
             try:

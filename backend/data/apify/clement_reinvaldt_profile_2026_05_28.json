@@ -1,0 +1,468 @@
+[
+  {
+    "id": "ACoAABZIydABjk7z9-VJniYQNdJU7K-IYAhxOSM",
+    "publicIdentifier": "clément-reinvaldt-46825ba5",
+    "linkedinUrl": "https://www.linkedin.com/in/clément-reinvaldt-46825ba5",
+    "firstName": "Clément",
+    "lastName": "Reinvaldt",
+    "emails": [],
+    "headline": "Energy and climate attaché",
+    "premium": false,
+    "influencer": false,
+    "location": {
+      "linkedinText": "Copenhagen, Capital Region of Denmark, Denmark",
+      "countryCode": "DK",
+      "parsed": {
+        "text": "Copenhagen, Denmark",
+        "countryCode": "DK",
+        "regionCode": null,
+        "country": "Denmark",
+        "countryFull": "Denmark",
+        "state": "Capital Region of Denmark",
+        "city": "Copenhagen"
+      }
+    },
+    "objectUrn": "373869008",
+    "registeredAt": null,
+    "topSkills": null,
+    "connectionsCount": 597,
+    "followerCount": 604,
+    "about": "",
+    "currentPosition": [
+      {
+        "companyId": null,
+        "companyLinkedinUrl": null,
+        "companyName": "Permanent Representation of Denmark to the EU"
+      }
+    ],
+    "profileTopEducation": [
+      {
+        "schoolId": "12682",
+        "companyId": "4171",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/university-college-london/",
+        "schoolName": "UCL"
+      }
+    ],
+    "profileActions": [],
+    "profilePicture": {
+      "url": "",
+      "sizes": []
+    },
+    "coverPicture": {
+      "url": null,
+      "sizes": []
+    },
+    "photo": "",
+    "profileLocales": [
+      {
+        "country": "DK",
+        "language": "da"
+      }
+    ],
+    "primaryLocale": {
+      "country": "DK",
+      "language": "da"
+    },
+    "services": null,
+    "experience": [
+      {
+        "position": "Energy and climate attaché",
+        "location": "Brussels, Brussels Region, Belgium",
+        "employmentType": "Full-time",
+        "workplaceType": null,
+        "companyName": "Permanent Representation of Denmark to the EU",
+        "companyLinkedinUrl": null,
+        "companyId": null,
+        "companyUniversalName": null,
+        "duration": null,
+        "description": null,
+        "skills": [],
+        "startDate": {
+          "month": "Oct",
+          "year": 2025,
+          "text": "Oct 2025"
+        },
+        "endDate": {
+          "text": "Present"
+        },
+        "companyLogo": {
+          "url": "",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Seconded National Expert",
+        "location": "Brussels, Brussels Region, Belgium",
+        "employmentType": "Full-time",
+        "workplaceType": null,
+        "companyName": "European Commission",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/european-commission/",
+        "companyId": "1809",
+        "companyUniversalName": "european-commission",
+        "duration": null,
+        "description": "Seconded by the Danish Ministry of Climate, Energy and Utilities (Danish Energy Agency) as a National Expert to the European Commission, Directorate-General for Energy",
+        "skills": [],
+        "startDate": {
+          "month": "Mar",
+          "year": 2023,
+          "text": "Mar 2023"
+        },
+        "endDate": {
+          "month": "Sep",
+          "year": 2025,
+          "text": "Sep 2025"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQH6dmiVatqnJA/company-logo_400_400/B4EZ46aOORJMAU-/0/1779096413425/european_commission_logo?e=1781740800&v=beta&t=5UKS5kUMeksAsXSM68emHSDHcdtmpCNIxyTBbWAnAks",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Advisor",
+        "location": "Copenhagen Metropolitan Area",
+        "employmentType": "Full-time",
+        "workplaceType": null,
+        "companyName": "Danish Energy Agency",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/energistyrelsen/",
+        "companyId": "9836460",
+        "companyUniversalName": "energistyrelsen",
+        "duration": null,
+        "description": "Working on security of supply issues as renewables and new technologies are integrated into the power grid",
+        "skills": [],
+        "startDate": {
+          "month": "Dec",
+          "year": 2020,
+          "text": "Dec 2020"
+        },
+        "endDate": {
+          "month": "Mar",
+          "year": 2023,
+          "text": "Mar 2023"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4D0BAQH7HPfOrQ5niA/company-logo_400_400/B4DZVvnPInG8AY-/0/1741334311827/energistyrelsen_logo?e=1781740800&v=beta&t=p4BN2g7rq3O76lbzL83GlqKm6st5mkDFTddJh3pNj6g",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Economic Analyst",
+        "location": "Brussels Area, Belgium",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "European Commission",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/european-commission/",
+        "companyId": "1809",
+        "companyUniversalName": "european-commission",
+        "duration": null,
+        "description": "Directorate-General for Economics and Financial Affairs (DG ECFIN)\n\nPolicy and economic analysis of EU Member States",
+        "skills": [],
+        "startDate": {
+          "month": "Oct",
+          "year": 2017,
+          "text": "Oct 2017"
+        },
+        "endDate": {
+          "month": "Sep",
+          "year": 2019,
+          "text": "Sep 2019"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQH6dmiVatqnJA/company-logo_400_400/B4EZ46aOORJMAU-/0/1779096413425/european_commission_logo?e=1781740800&v=beta&t=5UKS5kUMeksAsXSM68emHSDHcdtmpCNIxyTBbWAnAks",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Economic Assistant",
+        "location": "Brussels Area, Belgium",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "European Commission",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/european-commission/",
+        "companyId": "1809",
+        "companyUniversalName": "european-commission",
+        "duration": null,
+        "description": "Directorate-General for Economic and Financial Affairs (DG ECFIN), on the country desks dealing with the economies and policies of France, Denmark, Portugal and Ireland.",
+        "skills": [],
+        "startDate": {
+          "month": "Mar",
+          "year": 2017,
+          "text": "Mar 2017"
+        },
+        "endDate": {
+          "month": "Sep",
+          "year": 2017,
+          "text": "Sep 2017"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQH6dmiVatqnJA/company-logo_400_400/B4EZ46aOORJMAU-/0/1779096413425/european_commission_logo?e=1781740800&v=beta&t=5UKS5kUMeksAsXSM68emHSDHcdtmpCNIxyTBbWAnAks",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Bluebook Trainee",
+        "location": "Bruxelles-området, Belgien",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "European Commission",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/european-commission/",
+        "companyId": "1809",
+        "companyUniversalName": "european-commission",
+        "duration": null,
+        "description": "Worked in the Directorate-General for Economic and Financial Affairs in the Unit for the economies of Denmark, Ireland and Portugal.\n\nParticipated in all stages of the European Semester cycle by carrying out economic analyses, preparing statistical data and by contributing to internal notes / research papers / briefings / country reports on a range of EU economic, fiscal and financial issues.",
+        "skills": [],
+        "startDate": {
+          "month": "Oct",
+          "year": 2016,
+          "text": "Oct 2016"
+        },
+        "endDate": {
+          "month": "Feb",
+          "year": 2017,
+          "text": "Feb 2017"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQH6dmiVatqnJA/company-logo_400_400/B4EZ46aOORJMAU-/0/1779096413425/european_commission_logo?e=1781740800&v=beta&t=5UKS5kUMeksAsXSM68emHSDHcdtmpCNIxyTBbWAnAks",
+          "sizes": []
+        }
+      },
+      {
+        "position": "Project Assistant",
+        "location": "Region Hovedstaden, Danmark",
+        "employmentType": null,
+        "workplaceType": null,
+        "companyName": "Maersk Group",
+        "companyLinkedinUrl": "https://www.linkedin.com/company/maersk-group/",
+        "companyId": "479080",
+        "companyUniversalName": "maersk-group",
+        "duration": null,
+        "description": null,
+        "skills": [],
+        "startDate": {
+          "month": "Aug",
+          "year": 2012,
+          "text": "Aug 2012"
+        },
+        "endDate": {
+          "month": "Sep",
+          "year": 2012,
+          "text": "Sep 2012"
+        },
+        "companyLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C4D0BAQFxaOJ8VzplhA/company-logo_400_400/company-logo_400_400/0/1630463556967/maersk_group_logo?e=1781740800&v=beta&t=5pZlvtVHySPPzqxqPWjUUE3aso_oOJ_MuQRGDpYlfQo",
+          "sizes": []
+        }
+      }
+    ],
+    "education": [
+      {
+        "schoolName": "UCL",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/university-college-london/",
+        "schoolId": "4171",
+        "degree": "Master of Science - MS",
+        "fieldOfStudy": "Economics and Policy of Energy and the Environment",
+        "skills": [],
+        "description": "Dissertation entitled: 'Optimal UK interconnector deployment within a decarbonising Europe'.",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2019,
+          "text": "2019"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2020,
+          "text": "2020"
+        },
+        "period": "2019 - 2020",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEvGiaUra6wrQ/company-logo_400_400/B4EZ0GP5OiG8AY-/0/1773926323603/university_college_london_logo?e=1781740800&v=beta&t=otFJv_T3-lIze29llUpclnrcsnCvKmSaaWIEbekKOaY",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEvGiaUra6wrQ/company-logo_400_400/B4EZ0GP5OiG8AY-/0/1773926323603/university_college_london_logo?e=1781740800&v=beta&t=otFJv_T3-lIze29llUpclnrcsnCvKmSaaWIEbekKOaY",
+              "width": 400,
+              "height": 400
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEvGiaUra6wrQ/company-logo_200_200/B4EZ0GP5OiG8AI-/0/1773926323603/university_college_london_logo?e=1781740800&v=beta&t=3vnt5B1k1GiDtxP3ZJZ4fLZJbSOTecqQRpItg2h6Oxg",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEvGiaUra6wrQ/company-logo_100_100/B4EZ0GP5OiG8AQ-/0/1773926323603/university_college_london_logo?e=1781740800&v=beta&t=2TMsS_kJ7SQX2RXFjZSEAszajL4yzRA3i9awq2oKkMk",
+              "width": 100,
+              "height": 100
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "The London School of Economics and Political Science (LSE)",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/london-school-of-economics/",
+        "schoolId": "6544",
+        "degree": "Bachelor of Science (BSc)",
+        "fieldOfStudy": "International Relations",
+        "skills": [],
+        "description": "",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2012,
+          "text": "2012"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2015,
+          "text": "2015"
+        },
+        "period": "2012 - 2015",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/C560BAQEmNyPMuyVfyQ/company-logo_200_200/company-logo_200_200/0/1657529757949/london_school_of_economics_logo?e=1781740800&v=beta&t=uBEFixc8h9teDuuEw2TKZhN6xl9GeXLr-l880s0KELs",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C560BAQEmNyPMuyVfyQ/company-logo_200_200/company-logo_200_200/0/1657529757949/london_school_of_economics_logo?e=1781740800&v=beta&t=uBEFixc8h9teDuuEw2TKZhN6xl9GeXLr-l880s0KELs",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C560BAQEmNyPMuyVfyQ/company-logo_100_100/company-logo_100_100/0/1657529757949/london_school_of_economics_logo?e=1781740800&v=beta&t=B70TvEhY-Tsb5cCPBcse8MHw0Z4DKoQn_dEQBxqZ0pc",
+              "width": 100,
+              "height": 100
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/C560BAQEmNyPMuyVfyQ/company-logo_400_400/company-logo_400_400/0/1657529757949/london_school_of_economics_logo?e=1781740800&v=beta&t=yiV6s3-UykKYnTs-YPfHdRHB3O-fyzak6uo-BF4vH-g",
+              "width": 400,
+              "height": 400
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "Europacollege",
+        "schoolLinkedinUrl": "https://www.linkedin.com/school/collegeofeurope/",
+        "schoolId": "15105558",
+        "degree": "MA in European Political and Administrative Studies",
+        "fieldOfStudy": "",
+        "skills": [],
+        "description": "Thesis entitled: 'The (re)reform of the Stability and Growth Pact - An analysis of the most recent SGP reforms and their implications for Commission power'",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2015,
+          "text": "2015"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2016,
+          "text": "2016"
+        },
+        "period": "2015 - 2016",
+        "schoolLogo": {
+          "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEhF5sN-3F62g/company-logo_200_200/B4EZkKmv8TGYAU-/0/1756819555172/collegeofeurope_logo?e=1781740800&v=beta&t=bBIqfkCC5KnCjgNbgmxtbFYD2W_20xbNyz3wAUMbxhQ",
+          "sizes": [
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEhF5sN-3F62g/company-logo_200_200/B4EZkKmv8TGYAU-/0/1756819555172/collegeofeurope_logo?e=1781740800&v=beta&t=bBIqfkCC5KnCjgNbgmxtbFYD2W_20xbNyz3wAUMbxhQ",
+              "width": 200,
+              "height": 200
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEhF5sN-3F62g/company-logo_400_400/B4EZkKmv8TGYAk-/0/1756819555172/collegeofeurope_logo?e=1781740800&v=beta&t=zaNBhV_951mPo_B9kL6BANR2nAy7lKOQ74PgNFy6HGk",
+              "width": 400,
+              "height": 400
+            },
+            {
+              "url": "https://media.licdn.com/dms/image/v2/D4E0BAQEhF5sN-3F62g/company-logo_100_100/B4EZkKmv8TGYAc-/0/1756819555172/collegeofeurope_logo?e=1781740800&v=beta&t=cyIL9uvTCfNvYFJ0S68N3awo7Q5-Jcp_y96kyGYrGp8",
+              "width": 100,
+              "height": 100
+            }
+          ]
+        }
+      },
+      {
+        "schoolName": "Birkeroed Gymnasium",
+        "schoolLinkedinUrl": "",
+        "schoolId": "",
+        "degree": "International Baccalaureate",
+        "fieldOfStudy": "",
+        "skills": [],
+        "description": "",
+        "insights": null,
+        "startDate": {
+          "month": null,
+          "year": 2009,
+          "text": "2009"
+        },
+        "endDate": {
+          "month": null,
+          "year": 2012,
+          "text": "2012"
+        },
+        "period": "2009 - 2012",
+        "schoolLogo": {
+          "url": null,
+          "sizes": []
+        }
+      }
+    ],
+    "certifications": [],
+    "projects": [],
+    "volunteering": [],
+    "receivedRecommendations": [],
+    "skills": [
+      {
+        "name": "Public speaking",
+        "positions": []
+      },
+      {
+        "name": "International Political Economy",
+        "positions": []
+      },
+      {
+        "name": "European Union",
+        "positions": []
+      },
+      {
+        "name": "International Relations",
+        "positions": []
+      },
+      {
+        "name": "Research",
+        "positions": []
+      },
+      {
+        "name": "Teamwork",
+        "positions": []
+      }
+    ],
+    "publications": [],
+    "courses": [],
+    "honorsAndAwards": [],
+    "languages": [
+      {
+        "name": "Danish",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "English",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "French",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "German",
+        "proficiency": "Elementary proficiency"
+      },
+      {
+        "name": "Spanish",
+        "proficiency": "Elementary proficiency"
+      }
+    ],
+    "causes": [],
+    "featured": null,
+    "moreProfiles": [],
+    "originalQuery": {
+      "query": "https://www.linkedin.com/in/cl%C3%A9ment-reinvaldt-46825ba5/"
+    }
+  }
+]

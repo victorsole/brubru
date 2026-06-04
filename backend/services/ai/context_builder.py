@@ -3743,7 +3743,14 @@ class ContextBuilder:
                     'celex_numbers': carriage.celex_numbers or [],
                     'source': source_label,
                     'first_seen': carriage.first_seen.isoformat() if carriage.first_seen else None,
-                    'description': carriage.description[:300] if carriage.description else None
+                    'description': carriage.description[:300] if carriage.description else None,
+                    # EP Legislative Train editorial "state of play" narrative —
+                    # high-value grounding OEIL lacks (purpose, politics, funding,
+                    # latest developments). Capped to protect the prompt budget.
+                    'legislative_train_summary': (
+                        carriage.legislative_train_summary[:1800]
+                        if getattr(carriage, 'legislative_train_summary', None) else None
+                    ),
                 })
 
             # On-demand OEIL lookup: if entity extractor found procedure refs
@@ -3911,6 +3918,37 @@ class ContextBuilder:
                         logger.warning(
                             f"[OEIL-TOPIC] Topic search failed: {e}"
                         )
+
+            # Attach real EP vote tallies (committee + plenary roll-call) from
+            # ep_roll_call_votes, keyed on OEIL ref, so Chat can ground "how did
+            # X vote / did plenary follow the committee" on actual numbers — not
+            # just the date-only "vote held" markers. Authoritative doceo source.
+            try:
+                refs = {f.get('oeil_ref') for f in train_files if f.get('oeil_ref')}
+                if refs:
+                    from models.ep_vote import EpVote
+                    vmap: Dict[str, Dict[str, Any]] = {}
+                    for v in db.query(EpVote).filter(EpVote.procedure_ref.in_(refs)).all():
+                        vmap.setdefault(v.procedure_ref, {})[v.level] = v
+                    for f in train_files:
+                        rec = vmap.get(f.get('oeil_ref'))
+                        if not rec:
+                            continue
+                        c, p = rec.get('committee'), rec.get('plenary')
+                        parts = []
+                        if c:
+                            parts.append(
+                                f"committee {c.votes_for}/{c.votes_against}/{c.votes_abstention} {c.result}"
+                                + (f" [{c.committee_code}]" if c.committee_code else ""))
+                        if p:
+                            parts.append(f"plenary {p.votes_for}/{p.votes_against}/{p.votes_abstention} {p.result}")
+                        if c and p:
+                            parts.append("plenary confirmed committee" if c.result == p.result
+                                         else "plenary diverged from committee")
+                        if parts:
+                            f['vote_summary'] = "; ".join(parts)
+            except Exception as e:
+                logger.warning(f"[VOTES] vote-summary enrichment failed: {e}")
 
             db.close()
 
@@ -10656,6 +10694,14 @@ class ContextBuilder:
                     sections.append(f"  CELEX: {', '.join(file['celex_numbers'][:3])}")
                 if file.get('description'):
                     sections.append(f"  Description: {file['description']}")
+                # EP Legislative Train editorial state-of-play narrative (the
+                # analytic context OEIL lacks). Authoritative EP source — safe to
+                # ground answers on "where does this file stand / why does it matter".
+                if file.get('legislative_train_summary'):
+                    sections.append(f"  Legislative Train state of play: {file['legislative_train_summary']}")
+                # Real roll-call results (committee + plenary) when Brubru has them.
+                if file.get('vote_summary'):
+                    sections.append(f"  EP vote results (roll-call): {file['vote_summary']}")
 
                 # Available procedural actions for data-driven follow-ups
                 if file.get('available_actions'):

@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _specialised_helpers import ChunkedDb  # noqa: E402
 
 SOURCE_URL = "https://transparency-register.europa.eu/odplastorganisationxml_en"
-PUBLIC_URL_TPL = "https://ec.europa.eu/transparencyregister/public/consultation/displaylobbyist.do?id={code}"
+PUBLIC_URL_TPL = "https://transparency-register.europa.eu/search-detail_en?id={code}"
 NS = "http://intragate.ec.europa.eu/transparencyregister/odp"
 MIN_BODY_LEN = 200
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"

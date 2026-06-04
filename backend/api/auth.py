@@ -359,6 +359,7 @@ async def update_user_profile(
         current_user.organization = update_data.organization
     if update_data.country is not None:
         current_user.country = update_data.country
+    pi_changed = False
     if update_data.policy_interests is not None:
         # Frontend sends JSON.stringify([...]), but the column is JSONB.
         # Parse first so we store as a proper JSON array (not a JSON-encoded
@@ -371,6 +372,7 @@ async def update_user_profile(
             )
         except (_json.JSONDecodeError, ValueError, TypeError):
             current_user.policy_interests = raw
+        pi_changed = True
     # P1b — Monitoring overhaul (May 2026)
     if update_data.role_title is not None:
         current_user.role_title = update_data.role_title
@@ -392,6 +394,18 @@ async def update_user_profile(
 
     db.commit()
     db.refresh(current_user)
+
+    # When Policy Interests change, auto-populate My Tracked Files (Section 1 -> 2).
+    # Best-effort: a sync failure must never break the profile save.
+    if pi_changed:
+        try:
+            from services.tracking.tracked_files_seeder import sync_tracked_files_from_interests
+            sync_tracked_files_from_interests(db, current_user)
+        except Exception as exc:  # noqa: BLE001
+            import logging
+            logging.getLogger(__name__).warning(
+                "Tracked-files auto-sync failed for %s: %s", current_user.email, exc
+            )
 
     return current_user
 

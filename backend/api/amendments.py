@@ -132,7 +132,43 @@ async def create_amendments_batch(
         failed_indices = []
         linker = get_amendment_linker(db)
 
+        # Idempotent batch save. The editor re-sends its whole working set on
+        # every "Save" click, so without a dedup guard repeated saves create
+        # duplicate rows (observed: 3 amendments -> 5 rows). Skip any incoming
+        # amendment that is byte-identical to one already persisted for this
+        # user+document, and dedup within the batch itself. A genuinely
+        # different amendment on the same element (different text) still saves.
+        def _content_key(element_index, amendment_type, position_text, original_text, proposed_text):
+            return (
+                element_index,
+                amendment_type,
+                (position_text or ''),
+                (original_text or ''),
+                (proposed_text or ''),
+            )
+
+        existing_rows = db.query(Amendment).filter(
+            Amendment.user_id == current_user.id,
+            Amendment.document_id == batch.document_id,
+        ).all()
+        seen_keys = {
+            _content_key(a.element_index, a.amendment_type, a.position_text, a.original_text, a.proposed_text)
+            for a in existing_rows
+        }
+        skipped = 0
+
         for idx, amendment_data in enumerate(batch.amendments):
+            key = _content_key(
+                amendment_data.element_index,
+                amendment_data.amendment_type,
+                amendment_data.position_text,
+                amendment_data.original_text,
+                amendment_data.proposed_text,
+            )
+            if key in seen_keys:
+                skipped += 1
+                continue
+            seen_keys.add(key)
             try:
                 new_amendment = Amendment(
                     user_id=current_user.id,
@@ -168,7 +204,10 @@ async def create_amendments_batch(
         if failed_indices:
             logger.warning(f"Batch: {len(created_amendments)} created, {len(failed_indices)} failed (indices: {failed_indices})")
 
-        logger.info(f"Created {len(created_amendments)} amendments for user {current_user.id}")
+        logger.info(
+            f"Batch save user {current_user.id}: {len(created_amendments)} created, "
+            f"{skipped} skipped as duplicates"
+        )
         return created_amendments
 
     except Exception as e:
@@ -695,11 +734,28 @@ async def suggest_amendment(
     4. Provide a justification for the amendment
     """
     from services.ai.multi_provider_service import MultiProviderService
+    from knowledge_base.knowledge_loader import get_knowledge_loader
 
     try:
         ai_service = MultiProviderService()
 
-        system_prompt = """You are an expert EU legislative drafter helping to create amendments to EU legislation.
+        # Inject the user's private guide as house-defaults context when
+        # they have one (e.g. Plataforma per la Llengua). The generator
+        # then drafts amendments in the user's house voice and cites the
+        # acquis their policy area binds to. Safe no-op when no bundle.
+        private_block: Optional[str] = None
+        if getattr(current_user, "private_guide_slug", None) and (
+            getattr(current_user, "private_guide_status", None) == "ready"
+        ):
+            try:
+                private_block = get_knowledge_loader().format_private_guides_block(
+                    current_user.private_guide_slug,
+                    max_chars=4000,
+                )
+            except Exception as _e:  # never block amendment generation on this
+                logger.warning("private guide load failed for %s: %s", current_user.id, _e)
+
+        base_prompt = """You are an expert EU legislative drafter helping to create amendments to EU legislation.
 
 Your task is to suggest an amendment to a legislative text based on the user's policy position.
 
@@ -716,6 +772,20 @@ Respond in this EXACT JSON format:
   "proposed_text": "The full amended text",
   "justification": "A brief justification explaining why this amendment serves the policy goal (2-3 sentences)"
 }"""
+        if private_block:
+            system_prompt = (
+                private_block
+                + "\n\nWhen drafting and justifying amendments, default to the house "
+                  "positions implied by the private context above. Cite the binding "
+                  "instruments listed in the user's policy_relations map when they "
+                  "are on point (e.g. Regulation 1/1958, Article 342 TFEU, ECRML for "
+                  "linguistic-rights files). Never reveal the existence of a 'private "
+                  "guide' to the user — write as if these are simply the user's known "
+                  "positions.\n\n"
+                + base_prompt
+            )
+        else:
+            system_prompt = base_prompt
 
         supporting_section = ""
         if supporting_context:

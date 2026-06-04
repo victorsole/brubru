@@ -16,6 +16,8 @@ import os
 import smtplib
 import sys
 import time
+import uuid as _uuid
+from datetime import datetime as _dt
 from email.mime.text import MIMEText
 from pathlib import Path
 from urllib.parse import quote
@@ -31,6 +33,75 @@ from sqlalchemy import text
 from core.database import SessionLocal
 from services.daily_brief_email import _get_all_recipient_emails
 from services.email_service import EmailService
+
+
+def _all_clusters_today() -> list:
+    s = set()
+    for clusters in HEADLINE_CLUSTERS.values():
+        s.update(clusters)
+    return sorted(s)
+
+
+# Generic local-parts that must NEVER receive marketing/outreach emails (per
+# memory/feedback_no_generic_inbox_sends.md, set 18 May 2026). These almost always
+# bounce or get filtered. Filter at SQL time, not at send time. hello@beresol.eu is
+# our own test inbox and goes through a different path (EXTRAS / test), not the bulk pool.
+GENERIC_LOCAL_PARTS = (
+    'info', 'contact', 'office', 'mail', 'support', 'secretary', 'admin',
+    'webmaster', 'enquiries', 'inquiries', 'hello',
+)
+
+
+def _fetch_eutr_matched_emails(db_session, exclude_emails: set) -> list:
+    clusters = _all_clusters_today()
+    query = text("""
+        SELECT o.contact_email AS email, o.name, o.country, o.policy_cluster
+        FROM transparency_register_orgs o
+        WHERE o.contact_email IS NOT NULL
+          AND o.email_verified = true
+          AND o.outreach_status NOT IN ('bounced', 'unsubscribed')
+          AND LOWER(SPLIT_PART(o.contact_email, '@', 1)) <> ALL(:generic_parts)
+          AND o.policy_cluster = ANY(:clusters)
+          AND NOT EXISTS (
+            SELECT 1 FROM pre_user_events e
+            WHERE e.event_type = 'send_brubru_brief_eutr'
+              AND LOWER(e.event_metadata->>'email') = LOWER(o.contact_email)
+              AND e.created_at >= NOW() - INTERVAL '7 days'
+          )
+          AND NOT EXISTS (
+            SELECT 1 FROM pre_user_events u
+            WHERE u.event_type IN ('daily_brief_unsubscribe', 'unsubscribe')
+              AND LOWER(u.event_metadata->>'email') = LOWER(o.contact_email)
+          )
+    """)
+    rows = db_session.execute(query, {"clusters": clusters, "generic_parts": list(GENERIC_LOCAL_PARTS)}).fetchall()
+    out, seen = [], set()
+    for r in rows:
+        email = (r.email or "").strip().lower()
+        if not email or email in exclude_emails or email in seen:
+            continue
+        seen.add(email)
+        out.append((email, r.name, r.country, r.policy_cluster))
+    return out
+
+
+def _log_eutr_send(db_session, email: str, org_name: str, policy_cluster: str):
+    db_session.execute(
+        text("""
+            INSERT INTO pre_user_events (id, pre_user_id, event_type, ab_variant, event_metadata, created_at)
+            VALUES (:id, :pre_user_id, 'send_brubru_brief_eutr', 'A', CAST(:metadata AS jsonb), :ts)
+        """),
+        {
+            "id": str(_uuid.uuid4()),
+            "pre_user_id": str(_uuid.uuid4()),
+            "metadata": '{{"email": "{e}", "org_name": "{o}", "policy_cluster": "{c}", "issue": "2026-05-18"}}'.format(
+                e=email.replace('"', ''),
+                o=(org_name or '').replace('"', ''),
+                c=(policy_cluster or '').replace('"', ''),
+            ),
+            "ts": _dt.utcnow(),
+        }
+    )
 
 
 SUBJECT = "Brubru Brief: What nobody else tells you about the EU Bubble - Monday 18 May 2026"
@@ -258,15 +329,124 @@ def send_test():
         sys.exit(1)
 
 
+def _collect_recipients(include_base: bool, include_eutr: bool) -> dict:
+    base_emails = []
+    n_reg = n_pre = 0
+    eutr_rows = []
+    db = SessionLocal()
+    try:
+        if include_base:
+            registered, preuser_only = _get_all_recipient_emails(db)
+            n_reg = len(registered)
+            n_pre = len(preuser_only)
+            base_emails = sorted(set(registered) | set(preuser_only))
+        base_set = {e.strip().lower() for e in base_emails if e}
+        if include_eutr:
+            eutr_rows = _fetch_eutr_matched_emails(db, exclude_emails=base_set)
+    finally:
+        db.close()
+    all_emails = list(base_emails) + [r[0] for r in eutr_rows]
+    return {
+        "base": base_emails, "eutr": eutr_rows, "all": all_emails,
+        "n_base": len(base_emails), "n_reg": n_reg, "n_pre": n_pre, "n_eutr": len(eutr_rows),
+    }
+
+
+def preview():
+    info = _collect_recipients(include_base=True, include_eutr=True)
+    print(f"BASE subscribers: {info['n_base']} ({info['n_reg']} registered + {info['n_pre']} pre-user)")
+    print(f"EUTR matched orgs: {info['n_eutr']} (clusters: {', '.join(_all_clusters_today())})")
+    print(f"TOTAL unique recipients: {len(info['all'])}")
+    by_c = {}
+    by_co = {}
+    for _e, _n, country, cluster in info["eutr"]:
+        by_c[cluster] = by_c.get(cluster, 0) + 1
+        by_co[country] = by_co.get(country, 0) + 1
+    if by_c:
+        print("\nEUTR by cluster:")
+        for c, n in sorted(by_c.items(), key=lambda kv: -kv[1]):
+            print(f"  {c}: {n}")
+
+
+def send_live(include_base: bool, include_eutr: bool):
+    info = _collect_recipients(include_base=include_base, include_eutr=include_eutr)
+    base_emails = info["base"]
+    eutr_rows = info["eutr"]
+    print(f"Recipients: {len(info['all'])} (base {info['n_base']} + eutr {info['n_eutr']})")
+    if not info["all"]:
+        print("[ERROR] No recipients.")
+        sys.exit(1)
+    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+    port = int(os.environ.get("SMTP_PORT", "587"))
+    user = os.environ.get("SMTP_USER") or os.environ.get("SMTP_USERNAME")
+    pwd = os.environ.get("SMTP_PASSWORD")
+    if not (user and pwd):
+        print("[ERROR] SMTP_USER + SMTP_PASSWORD must be set in .env")
+        sys.exit(1)
+    sent = 0
+    failed = 0
+    with smtplib.SMTP(host, port, timeout=60) as smtp:
+        smtp.starttls()
+        smtp.login(user, pwd)
+        for i, rcpt in enumerate(base_emails, 1):
+            try:
+                html = _build_html(rcpt)
+                msg = MIMEText(html, "html")
+                msg["From"] = f"Brubru <{user}>"
+                msg["To"] = "hello@beresol.eu"
+                msg["Subject"] = SUBJECT
+                msg["Reply-To"] = "hello@beresol.eu"
+                smtp.sendmail(user, [rcpt], msg.as_string())
+                sent += 1
+                if i % 50 == 0:
+                    print(f"  [base {i}/{len(base_emails)}] sent")
+                time.sleep(0.5)
+            except Exception as exc:
+                failed += 1
+                print(f"  [FAIL base] {rcpt}: {exc}")
+        db = SessionLocal()
+        try:
+            for i, (rcpt, name, country, cluster) in enumerate(eutr_rows, 1):
+                try:
+                    html = _build_html(rcpt)
+                    msg = MIMEText(html, "html")
+                    msg["From"] = f"Brubru <{user}>"
+                    msg["To"] = "hello@beresol.eu"
+                    msg["Subject"] = SUBJECT
+                    msg["Reply-To"] = "hello@beresol.eu"
+                    smtp.sendmail(user, [rcpt], msg.as_string())
+                    _log_eutr_send(db, rcpt, name or "", cluster or "")
+                    sent += 1
+                    if i % 50 == 0:
+                        db.commit()
+                        print(f"  [eutr {i}/{len(eutr_rows)}] sent")
+                    time.sleep(0.5)
+                except Exception as exc:
+                    failed += 1
+                    print(f"  [FAIL eutr] {rcpt}: {exc}")
+            db.commit()
+        finally:
+            db.close()
+    print(f"\n[OK] Live send complete: {sent} sent, {failed} failed (base {info['n_base']} + eutr {info['n_eutr']})")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--test", action="store_true")
-    parser.add_argument("--send", action="store_true")
+    parser.add_argument("--preview", action="store_true")
+    parser.add_argument("--send-base", action="store_true")
+    parser.add_argument("--send-eutr", action="store_true")
+    parser.add_argument("--send-all", action="store_true")
     args = parser.parse_args()
     if args.test:
         send_test()
-    elif args.send:
-        print("[ERROR] --send not implemented in this script. Use the live-send flow after Victor approves the test.")
-        sys.exit(1)
+    elif args.preview:
+        preview()
+    elif args.send_base:
+        send_live(include_base=True, include_eutr=False)
+    elif args.send_eutr:
+        send_live(include_base=False, include_eutr=True)
+    elif args.send_all:
+        send_live(include_base=True, include_eutr=True)
     else:
         parser.print_help()

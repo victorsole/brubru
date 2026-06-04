@@ -178,16 +178,79 @@ def _recent_brief_headlines(db: Session, limit: int = 2) -> List[DailyBrief]:
     )
 
 
+def _compose_alert_hooks(db: Session, user: User, limit: int = 2) -> List[Dict[str, str]]:
+    """Surface unread saved-search alerts (the user's own subscriptions) and
+    GAC-agenda-hawk hits as greeting hooks. Highest priority hook source —
+    these are signals the user explicitly subscribed to, so they should
+    win over generic briefings / daily-brief headlines.
+    """
+    try:
+        from sqlalchemy import text
+        rows = db.execute(
+            text(
+                """
+                SELECT title, message, action_url, notification_type, priority,
+                       notif_metadata
+                FROM notifications
+                WHERE user_id = :uid
+                  AND is_read = FALSE
+                  AND notification_type IN ('saved_search_alert','gac_agenda_hawk')
+                ORDER BY
+                    CASE priority
+                        WHEN 'urgent' THEN 0
+                        WHEN 'high'   THEN 1
+                        WHEN 'normal' THEN 2
+                        WHEN 'low'    THEN 3
+                        ELSE 4 END,
+                    created_at DESC
+                LIMIT :lim
+                """
+            ),
+            {"uid": user.id, "lim": limit},
+        ).mappings().all()
+    except Exception as exc:
+        logger.warning("alert hook query failed: %s", exc)
+        db.rollback()
+        return []
+
+    hooks: List[Dict[str, str]] = []
+    for r in rows:
+        meta = r["notif_metadata"] or {}
+        sub_label = meta.get("subscription_label") or (
+            "Council agenda watch" if r["notification_type"] == "gac_agenda_hawk" else "Saved search"
+        )
+        title = (r["title"] or "")[:120]
+        spoken = (
+            f"New for your '{sub_label}' watch: {title}"
+            if r["notification_type"] == "saved_search_alert"
+            else f"GAC alert: {title}"
+        )
+        hooks.append(
+            {
+                "label": sub_label,
+                "spoken": spoken[:240],
+                "suggested_query": f"Brief me on this alert: {title[:100]}",
+                "source": "alert" if r["notification_type"] == "saved_search_alert" else "gac_hawk",
+            }
+        )
+    return hooks
+
+
 def _compute_user_hooks(
     db: Session, user: User, previous_last_login: Optional[datetime] = None
 ) -> List[Dict[str, str]]:
     """
-    For an authenticated user, prefer real proactive briefings (tracked file
-    movement, amendment surge, new file matches, morning brief). Fall back
-    to the public daily_brief headlines so the chip strip is never empty
-    when there is something worth saying.
+    For an authenticated user, prefer in priority order:
+    1. Unread saved-search alerts / GAC-hawk events (the user's own subs)
+    2. Proactive briefings (tracked file movement, amendment surge, etc)
+    3. Public daily_brief headlines (so the chip strip is never empty)
     """
-    hooks: List[Dict[str, str]] = []
+    # 1. Alerts the user explicitly subscribed to always win.
+    hooks = _compose_alert_hooks(db, user, limit=2)
+    if hooks:
+        return hooks
+
+    # 2. Proactive briefings
     try:
         from services.proactive.trigger_engine import compute_pending_briefings
 
@@ -203,6 +266,7 @@ def _compute_user_hooks(
     if hooks:
         return hooks
 
+    # 3. Daily brief fallback
     try:
         items = _recent_brief_headlines(db, limit=2)
         hooks = compose_hooks_from_brief_headlines(items)

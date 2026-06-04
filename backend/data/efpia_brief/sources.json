@@ -1,6 +1,6 @@
 {
   "_comment": "EFPIA pharma/health source map. Locked 28 May 2026 from Victor's list of ~80 URLs. Sources are bucketed by institution and feed the daily scraper (scripts/scrape_efpia_sources.py) which writes into the efpia_scraped_items table. The Brubru EFPIA Brief (scripts/ingest_efpia_brief.py + send_efpia_brief.py) reads the top-ranked items each morning to propose 5 headlines for human curation.",
-  "updated_at": "2026-05-28",
+  "updated_at": "2026-06-02",
   "tier1_priority_sources": [
     "ema_news",
     "ema_whats_new",
@@ -17,7 +17,13 @@
     "dg_grow_news",
     "oj_l_pharma",
     "ep_committee_reports",
-    "ep_information_documents"
+    "ep_information_documents",
+    "ecdc_news",
+    "ecdc_threats_report",
+    "dg_sante_hta_updates",
+    "efsa_news",
+    "hma_recently_published",
+    "edqm_news"
   ],
   "deprecated_from_tier1": {
     "ema_rss_feeds": "index page listing other feeds; items reach DB via ema_news + ema_whats_new + ema_upcoming_events.",
@@ -979,6 +985,120 @@
       "oeil_feed": "latest_documents",
       "cadence": "daily",
       "note": "Latest COM/SWD information documents via OEIL XML; pharma-relevance filtered."
+    },
+    {
+      "id": "ecdc_news",
+      "institution": "ECDC",
+      "bucket": "ecdc",
+      "kind": "rss",
+      "label": "ECDC News & press releases (RSS)",
+      "url": "https://www.ecdc.europa.eu/en/taxonomy/term/1307/feed",
+      "fetch_strategy": "rss",
+      "cadence": "daily",
+      "note": "European Centre for Disease Prevention and Control - News/press releases RSS."
+    },
+    {
+      "id": "ecdc_threats_report",
+      "institution": "ECDC",
+      "bucket": "ecdc",
+      "kind": "rss",
+      "label": "ECDC Communicable disease threats report (RSS)",
+      "url": "https://www.ecdc.europa.eu/en/taxonomy/term/1505/feed",
+      "fetch_strategy": "rss",
+      "cadence": "weekly",
+      "note": "ECDC CDTR weekly threats report RSS."
+    },
+    {
+      "id": "ecdc_epi_updates",
+      "institution": "ECDC",
+      "bucket": "ecdc",
+      "kind": "rss",
+      "label": "ECDC Epidemiological updates (RSS)",
+      "url": "https://www.ecdc.europa.eu/en/taxonomy/term/1310/feed",
+      "fetch_strategy": "rss",
+      "cadence": "daily",
+      "note": "ECDC epidemiological updates RSS."
+    },
+    {
+      "id": "ecdc_risk_assessments",
+      "institution": "ECDC",
+      "bucket": "ecdc",
+      "kind": "rss",
+      "label": "ECDC Risk assessments (RSS)",
+      "url": "https://www.ecdc.europa.eu/en/taxonomy/term/1295/feed",
+      "fetch_strategy": "rss",
+      "cadence": "weekly",
+      "note": "ECDC rapid/threat risk assessments RSS."
+    },
+    {
+      "id": "council_epsco_meetings",
+      "institution": "Council",
+      "bucket": "council",
+      "kind": "meetings",
+      "label": "Council EPSCO meetings (health configuration)",
+      "url": "https://www.consilium.europa.eu/en/meetings/epsco/",
+      "fetch_strategy": "html",
+      "cadence": "weekly",
+      "note": "EPSCO (Employment, Social Policy, Health and Consumer Affairs) Council meetings. Consilium is Akamai-WAF protected + JS-rendered; fetched via the Playwright fallback and parsed by parse_consilium (li.gsc-excerpt-item cards). health_filter surfaces the Health-configuration meetings.",
+      "health_filter": true
+    },
+    {
+      "id": "council_press_health",
+      "institution": "Council",
+      "bucket": "council",
+      "kind": "press",
+      "label": "Council of the EU press releases (health-filtered)",
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/",
+      "fetch_strategy": "html",
+      "cadence": "daily",
+      "health_filter": true,
+      "note": "EU-wide Council/European Council press releases (Playwright fallback, parse_consilium). health_filter keeps only health/pharma items above the candidate threshold."
+    },
+    {
+      "id": "dg_sante_hta_updates",
+      "institution": "EC",
+      "bucket": "dg_sante",
+      "kind": "latest_updates",
+      "label": "EU-HTA latest updates (HTACG, Joint Clinical Assessments, HTAR)",
+      "url": "https://health.ec.europa.eu/health-technology-assessment/health-technology-assessment-latest-updates_en",
+      "fetch_strategy": "html",
+      "cadence": "weekly",
+      "note": "Dedicated HTA-topic latest-updates feed (HTACG flash reports/minutes, Joint Clinical Assessments, Joint Scientific Consultations under Reg (EU) 2021/2282). Real HTA-specific ECL feed - distinct from dg_sante_latest_updates (verified <=1 overlap)."
+    },
+    {
+      "id": "efsa_news",
+      "institution": "EFSA",
+      "bucket": "efsa",
+      "kind": "rss",
+      "label": "EFSA News (RSS)",
+      "url": "https://www.efsa.europa.eu/en/press/rss",
+      "fetch_strategy": "rss",
+      "cadence": "daily",
+      "note": "European Food Safety Authority news RSS. Surfaced for food/health overlap (nutrition/health claims, novel foods, contaminants, antimicrobials in the food chain). Curate for pharma relevance - feed carries broad food-safety items too. URL is the canonical press feed (/en/news/rss 301-redirects here)."
+    },
+    {
+      "id": "hma_recently_published",
+      "institution": "HMA",
+      "bucket": "hma",
+      "kind": "rss",
+      "label": "HMA Recently Published (RSS)",
+      "url": "https://www.hma.eu/rss/recently-published-about-hma/rss.xml",
+      "fetch_strategy": "rss",
+      "cadence": "daily",
+      "note": "Heads of Medicines Agencies - Recently Published feed (the only working HMA RSS; /rss.xml is empty). Network of national competent authorities + EMA; carries CMDh outputs, position papers, multi-agency guidance. Pharma-core."
+    },
+    {
+      "id": "edqm_news",
+      "institution": "EDQM",
+      "bucket": "edqm",
+      "kind": "news",
+      "label": "EDQM News (Council of Europe pharmacopoeia / quality)",
+      "url": "https://www.edqm.eu/sitemap.xml",
+      "fetch_strategy": "html",
+      "cadence": "daily",
+      "note": "European Directorate for the Quality of Medicines & HealthCare (Council of Europe). edqm.eu content pages are Cloudflare-challenge-walled (headless Playwright cannot pass \"Just a moment\"); the sitemap.xml is whitelisted and returns 200 to plain requests. parse_edqm mines /en/-/ Liferay news URLs by <lastmod>. Pharma-core: Ph. Eur. monographs, CEP, nitrosamine impurities, API inspections, falsified medicines, OMCL. Titles are slug-derived (article bodies are unreachable).",
+      "max_items": 30,
+      "max_age_days": 180
     }
   ]
 }

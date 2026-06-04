@@ -1270,3 +1270,39 @@ async def get_resolution_leading_indicators(
                 "weighted_sentiment": "NO_DATA"
             }
         )
+
+
+@router.get("/calibration/{procedure_ref:path}", summary="Actual roll-call vs prediction (calibration)")
+async def get_calibration(
+    procedure_ref: str,
+    current_user: User = Depends(get_current_user),
+):
+    """The actual EP roll-call outcome for a procedure (plenary preferred, else
+    committee), so a forecast can be shown against what really happened. Returns
+    has_vote=false when no roll-call has been recorded yet."""
+    require_tier(current_user, ["yellow", "blue"])
+    from core.database import SessionLocal
+    from sqlalchemy import text as _t
+    db = SessionLocal()
+    try:
+        row = db.execute(_t("""
+            SELECT level, result, votes_for, votes_against, votes_abstention, group_breakdown,
+                   vote_date, ta_reference, source_url
+            FROM ep_roll_call_votes
+            WHERE procedure_ref = :p
+            ORDER BY (CASE WHEN level='plenary' THEN 0 ELSE 1 END), vote_date DESC NULLS LAST
+            LIMIT 1
+        """), {"p": procedure_ref}).fetchone()
+        if not row:
+            return {"has_vote": False, "procedure_ref": procedure_ref}
+        return {
+            "has_vote": True, "procedure_ref": procedure_ref,
+            "level": row.level, "result": row.result,
+            "votes_for": row.votes_for, "votes_against": row.votes_against,
+            "votes_abstention": row.votes_abstention,
+            "group_breakdown": row.group_breakdown or {},
+            "vote_date": row.vote_date.isoformat() if row.vote_date else None,
+            "ta_reference": row.ta_reference, "source_url": row.source_url,
+        }
+    finally:
+        db.close()

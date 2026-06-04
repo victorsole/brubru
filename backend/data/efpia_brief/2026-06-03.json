@@ -1,0 +1,52 @@
+{
+  "issue_date": "2026-06-03",
+  "day_of_week": "Wednesday",
+  "hero_intro": "Good morning, and welcome to your Wednesday Brubru EFPIA Brief. The week's centre of gravity is the health ministers' Council on 16 June, where three of the files you watch most closely sit on a single agenda. Today also brings a notable decision from the EU medicines regulator on the main mpox antiviral, the switch-on of the EU's new single market crisis framework, your Parliament health committee in session, and the latest threats report. The most consequential first, with every headline linking straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "Health ministers meet on 16 June with three of your files on one agenda",
+      "source": "Council of the EU, EPSCO Health configuration, 16 June 2026",
+      "snippet": "The Cyprus Presidency has set an unusually pharma-heavy agenda for the health ministers' Council on 16 June. In one sitting it aims to land the final pieces of the pharmaceutical package after December's provisional deal, push the Critical Medicines work towards the finish, take a general approach on the Biotechnology Act's directive while reporting on its regulation, and report on the targeted fixes to the medical devices and diagnostics rules. For anyone tracking these files, this is the Council moment of the month.",
+      "ask": "What is the EPSCO Council and what is the current state of play on the EU pharmaceutical package and the Critical Medicines Act?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Europe's medicines regulator restricts the main mpox antiviral",
+      "source": "European Medicines Agency, 29 May 2026",
+      "snippet": "The EU has formally restricted the use of tecovirimat, the antiviral best known as the front-line treatment for mpox. After four randomised trials showed it did not heal lesions, ease pain or clear the virus faster than placebo, the medicines agency's human committee recommended withdrawing its mpox indication, and the Commission's binding decision took effect on 29 May. Its smallpox and related uses stand. A reminder that real-world trial data can unwind an established standard of care.",
+      "ask": "How does the EMA referral procedure work when the safety or efficacy of an authorised medicine is questioned?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/medicines/human/referrals/tecovirimat-siga",
+      "color": "#059669"
+    },
+    {
+      "title": "The EU's new single market crisis rulebook switches on",
+      "source": "European Commission, DG GROW, 29 May 2026",
+      "snippet": "A new framework for keeping goods moving when a crisis hits the single market came into application on 29 May. It runs in three gears: everyday contingency monitoring, a vigilance mode the Council can switch on to watch supply chains more closely, and an emergency mode that allows coordinated EU purchasing and limits on go-it-alone national measures. It is the horizontal cousin of the Critical Medicines work, and the machinery a medicines shortage would run through. Its board first meets on 4 June.",
+      "ask": "What is the Internal Market Emergency and Resilience Act and how does it relate to medicines supply and the Critical Medicines Act?",
+      "feature_label": "DG GROW",
+      "feature_url": "https://single-market-economy.ec.europa.eu/news/new-eu-framework-boosts-single-market-resilience-times-crisis-2026-05-29_en",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "Today: Parliament's health committee is in session",
+      "source": "European Parliament, SANT subcommittee, 3 June 2026",
+      "snippet": "Parliament's public health subcommittee sits today on the health workforce, system resilience, disease prevention and crisis preparedness. It is the room where the pharmaceutical package and the Critical Medicines follow-up are shaped, and the discussion lands two weeks before health ministers meet in Council. If you have a file in front of these members, the corridor conversations happening today set up the positions they will carry into the June Council.",
+      "ask": "What is on the European Parliament public health committee agenda this week, and which files is it shaping?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20is%20on%20the%20SANT%20health%20committee%20agenda%20this%20week",
+      "color": "#dc2626"
+    },
+    {
+      "title": "Europe's top court strikes down a blanket ban on selling everyday medicines online",
+      "source": "Court of Justice of the EU, judgment of 21 May 2026 (Greek case)",
+      "snippet": "In a judgment delivered on 21 May 2026, the Court of Justice has ruled that a Member State cannot, in the name of public health, ban online pharmacies from selling non-prescription medicines at a distance to the public, beyond a narrow carved-out subcategory. The case came from Greece, where national rules had shut most over-the-counter products out of online sale. The Court read the EU medicines code as covering all medicinal products, so a broad national prohibition is precluded. It is a marker for anyone weighing how far national restrictions on online medicine sales can go.",
+      "ask": "What do EU rules say about selling non-prescription medicines online across the EU, and can Member States restrict it?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=Can%20EU%20Member%20States%20ban%20the%20online%20sale%20of%20non-prescription%20medicines",
+      "color": "#ca8a04"
+    }
+  ]
+}

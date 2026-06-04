@@ -51,13 +51,17 @@ from schemas.comparator_schemas import (
     ResolveResponse,
     SearchHit,
     SearchResponse,
+    SuggestedResponse,
 )
 from services.comparator.cell_extractors import EXTRACTORS, extract_cell
 from services.comparator.file_search import (
+    files_by_committees,
     my_files_for_user,
     resolve_labels,
     search_files,
 )
+from services.tracking.pi_committee_crosswalk import committees_for_interests
+from services.tracking.tracked_files_seeder import _interest_list
 
 
 router = APIRouter(prefix="/api/comparator", tags=["Comparator"])
@@ -199,9 +203,26 @@ def my_files(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """User's tracked files (My EU Bubble > My Files), ready to drop into a grid."""
+    """User's tracked files (My EU Bubble > My Tracked Files), ready to drop into a grid."""
     raw = my_files_for_user(str(user.id), db)
     return [SearchHit(**h) for h in raw]
+
+
+@router.get("/suggested", response_model=SuggestedResponse)
+def suggested(
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Files in the user's Policy-Interest committees, as a PI on-ramp for a new
+    grid (so it starts PI-relevant instead of a blank search). Also returns the
+    user's interest committees for the picker's grouping/badges."""
+    interests = _interest_list(user)
+    committees = sorted(committees_for_interests(interests))
+    raw = files_by_committees(committees, db) if committees else []
+    return SuggestedResponse(
+        files=[SearchHit(**h) for h in raw],
+        my_committees=committees,
+    )
 
 
 @router.post("/resolve", response_model=ResolveResponse)
@@ -404,10 +425,12 @@ def compute_grid(
 ):
     """Run all 6 cell extractors over every (file_ref, column_key) in the grid.
 
-    Synchronous in MVP. Worst-case 60 cells × ~50ms each = 3s for a 10×6 grid;
-    most cells finish in <20ms because they reuse a single SELECT against
-    legislative_carriages cached by the OEIL ref. If the grid is bigger or the
-    extractors get slower, we can move this to a background task later.
+    Synchronous. Most cells finish in <20ms (a single SELECT against
+    legislative_carriages). The exception is the structure_counts column for a
+    Commission proposal: its first compute fetches the document (Cellar, then a
+    Playwright WAF-browser fallback) and can take a few seconds — but the result
+    is cached in eu_laws.extra_metadata, so re-computes are instant. If grids or
+    extractors get heavier, move this to a background task.
     """
     row = _fetch_grid_or_404(db, grid_id, user)
     file_refs: List[str] = list(row[2] or [])
@@ -424,7 +447,9 @@ def compute_grid(
                 res = extract_cell(key, ref, db)
                 value = res.get("value")
                 citation = res.get("citation")
-                status = "computed" if value is not None else "computed"  # null cell is still "computed"
+                # A null value is still a successful computation ("unknown"/"not
+                # available"), distinct from the 'failed' status set on exception.
+                status = "computed"
                 error: Optional[str] = res.get("_reason") if value is None else None
                 # Upsert
                 db.execute(

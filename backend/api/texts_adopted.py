@@ -143,7 +143,7 @@ async def get_items(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get texts adopted: {str(e)}")
+        logger.exception(f"Failed to get texts adopted: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve texts")
 
 
@@ -185,7 +185,7 @@ async def get_item(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get text {item_id}: {str(e)}")
+        logger.exception(f"Failed to get text {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve text")
 
 
@@ -228,7 +228,7 @@ async def get_by_reference(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get text by ref {ta_ref}: {str(e)}")
+        logger.exception(f"Failed to get text by ref {ta_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve text")
 
 
@@ -266,7 +266,7 @@ async def get_tracked_texts(
         return TrackedTextsListResponse(items=items, total=len(items))
 
     except Exception as e:
-        logger.error(f"Failed to get tracked texts: {str(e)}")
+        logger.exception(f"Failed to get tracked texts: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked texts")
 
 
@@ -318,7 +318,7 @@ async def track_text(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to track text {item_id}: {str(e)}")
+        logger.exception(f"Failed to track text {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to track text")
 
 
@@ -351,7 +351,7 @@ async def untrack_text(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to untrack text {item_id}: {str(e)}")
+        logger.exception(f"Failed to untrack text {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to untrack text")
 
 
@@ -387,7 +387,7 @@ async def get_terms(
         return TermsListResponse(terms=terms)
 
     except Exception as e:
-        logger.error(f"Failed to get terms: {str(e)}")
+        logger.exception(f"Failed to get terms: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve terms")
 
 
@@ -431,7 +431,7 @@ async def get_sync_status(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get sync status: {str(e)}")
+        logger.exception(f"Failed to get sync status: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve sync status")
 
 
@@ -488,5 +488,5 @@ async def trigger_sync(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to run sync: {str(e)}")
+        logger.exception(f"Failed to run sync: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")

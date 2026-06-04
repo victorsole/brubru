@@ -15,6 +15,7 @@ from . import calendar as _calendar
 from . import catalan_translations as _catalan_translations
 from . import commission_register as _commission_register
 from . import commissioners as _commissioners
+from . import committee_agendas as _committee_agendas
 from . import committees as _committees
 from . import consultations as _consultations
 from . import council_documents as _council_documents
@@ -33,6 +34,7 @@ from . import procedures as _procedures
 from . import publications as _publications
 from . import resolutions as _resolutions
 from . import texts_adopted as _texts_adopted
+from . import transcripts as _transcripts
 from . import w4_endpoints as _w4
 from . import w5_endpoints as _w5
 from . import webstreams as _webstreams
@@ -68,6 +70,8 @@ router.include_router(_publications.router)
 router.include_router(_knowledge_guides.router)
 router.include_router(_eprs.router)
 router.include_router(_committees.router)
+router.include_router(_committee_agendas.router)
+router.include_router(_transcripts.router)
 router.include_router(_calendar.router)
 router.include_router(_meps.router)
 router.include_router(_predictions.router)
@@ -75,6 +79,7 @@ router.include_router(_resolutions.router)
 router.include_router(_texts_adopted.texts_adopted_router)
 router.include_router(_texts_adopted.texts_submitted_router)
 router.include_router(_council_documents.router)
+router.include_router(_council_documents.configurations_router)
 router.include_router(_metadata.router)
 router.include_router(_metadata.meta_router)
 router.include_router(_ep_entities.amendments_router)

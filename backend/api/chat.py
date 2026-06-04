@@ -100,6 +100,14 @@ class ChatMessageRequest(BaseModel):
     document_ids: Optional[List[str]] = Field(None, description="Document IDs to include in context (optional)")
     use_context: bool = Field(True, description="Whether to inject EU context")
     stream: bool = Field(False, description="Whether to stream response")
+    nav_context: Optional[str] = Field(
+        None,
+        description=(
+            "Navigation context hint. 'policy_interests' routes the message to "
+            "the lightweight policy-taxonomy mapping flow (Mistral-first) instead "
+            "of the full knowledge-bearing answer."
+        ),
+    )
 
 
 class ChatMessageResponse(BaseModel):
@@ -600,7 +608,8 @@ async def stream_message(
                 conversation_history=history,
                 use_context=request.use_context,
                 is_pre_user=is_pre_user,
-                document_ids=request.document_ids
+                document_ids=request.document_ids,
+                nav_context=request.nav_context,
             ):
                 # Status/entity events are JSON -- pass through as SSE but don't save to DB
                 if chunk.startswith("{"):

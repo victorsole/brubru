@@ -1420,6 +1420,18 @@ async def get_legislative_file(
                 _sql_func.lower(LegislativeCarriage.file_id) == file_id.lower()
             ).first()
 
+        # UUID fallback: the In-committee tab opens this modal with the carriage
+        # primary key (committee_work_items.legislative_carriage_id), not the
+        # slug file_id, so resolve by id too.
+        if not carriage:
+            import uuid as _uuid
+            try:
+                carriage = db.query(LegislativeCarriage).filter(
+                    LegislativeCarriage.id == _uuid.UUID(str(file_id))
+                ).first()
+            except (ValueError, AttributeError, TypeError):
+                carriage = None
+
         if not carriage:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -1458,6 +1470,15 @@ async def get_legislative_file(
             "ai_summary": carriage.ai_summary,
             "ai_policy_classifications": carriage.ai_policy_classifications,
             "ai_entities": carriage.ai_entities,
+
+            # EP Legislative Train editorial "state of play" narrative (joined by
+            # OEIL ref). The analytic context OEIL lacks; see migration 097.
+            "legislative_train_summary": getattr(carriage, "legislative_train_summary", None),
+            "legislative_train_url": getattr(carriage, "legislative_train_url", None),
+            "legislative_train_updated_at": (
+                carriage.legislative_train_updated_at.isoformat()
+                if getattr(carriage, "legislative_train_updated_at", None) else None
+            ),
 
             # Temporal data
             "first_seen": carriage.first_seen.isoformat() if carriage.first_seen else None,

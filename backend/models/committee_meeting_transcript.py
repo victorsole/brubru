@@ -44,7 +44,8 @@ class CommitteeMeetingTranscript(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     # Core identifiers
-    committee_code = Column(String(20), nullable=False)       # "LIBE", "ENVI", "IMCOJURIPETI"
+    institution = Column(String(20), nullable=False, default="EP")  # EP | EC | COUNCIL (migration 103)
+    committee_code = Column(String(20), nullable=False)       # body code: EP committee / EC DG / Council config
     meeting_date = Column(DateTime, nullable=False)
     title = Column(String, nullable=False)                     # "ENVI Committee Meeting - 14 April 2026"
 
@@ -63,6 +64,11 @@ class CommitteeMeetingTranscript(Base):
     # Agenda mapping
     agenda_items = Column(JSON, default=list)                  # [{title, start_time, end_time, procedure_refs}]
     related_procedure_refs = Column(ARRAY(String), default=list)  # All procedure refs discussed
+
+    # Multilingual institutional summaries (migration 105). Keyed by language:
+    # {"en": {"text", "model", "generated_at"}, "es": {...}, ...}. EN is canonical
+    # (Qwen3-30B); other langs are on-demand translations (Qwen3-235B-Instruct).
+    summaries = Column(JSON, default=dict)
 
     # Speaker data (v2: full diarization)
     speakers = Column(JSON, default=list)                      # [{label, name, group, segments_count}]

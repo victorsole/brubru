@@ -14,7 +14,7 @@ Created: February 2026
 
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from typing import Dict, Any, List, Optional
 
 from sqlalchemy.orm import Session
@@ -68,6 +68,27 @@ class EUCalendarSyncService:
         # ECB Governing Council meetings
         result = self.sync_ecb_meetings(2026)
         results.append(result)
+
+        # Commission DG + executive-agency events (the ~50 DG event-page URLs)
+        try:
+            results.append(self.sync_dg_events())
+        except Exception as e:
+            logger.warning(f"[WARN] DG events sync skipped in sync_all: {e}")
+
+        # Individual Commissioner agendas (their scheduled meetings)
+        try:
+            results.append(self.sync_commissioner_agendas())
+        except Exception as e:
+            logger.warning(f"[WARN] Commissioner agenda sync skipped in sync_all: {e}")
+
+        # College tentative-agenda enrichment (what the College will adopt)
+        import asyncio as _asyncio
+        try:
+            results.append(_asyncio.run(self.sync_college_agendas()))
+        except RuntimeError:
+            pass  # already inside a running loop (handled by the committee block below)
+        except Exception as e:
+            logger.warning(f"[WARN] College agenda sync skipped in sync_all: {e}")
 
         # EP Committee agendas (async)
         import asyncio
@@ -331,6 +352,196 @@ class EUCalendarSyncService:
         elapsed = time.time() - start_time
         result["elapsed_seconds"] = round(elapsed, 1)
         return result
+
+    def sync_dg_events(self) -> Dict[str, Any]:
+        """Sync European Commission DG + executive-agency events into the calendar.
+
+        Iterates the DG_EVENT_SOURCES registry (the ~50 DG/agency event-page URLs),
+        scrapes each (ECL 'What's on' markup; SPA fallback), and upserts events
+        tagged institution=COMMISSION + commission_dg=<code> so they are filterable
+        by department and by the user's Policy Interests. source='dg_events:<DG>'.
+        """
+        start_time = time.time()
+        from services.scrapers.dg_events_sources import DG_EVENT_SOURCES
+        from services.scrapers.dg_events_scraper import scrape_source
+
+        result = {"source": "dg_events", "added": 0, "updated": 0, "skipped": 0,
+                  "errors": 0, "sources": 0, "sources_empty": 0}
+        db = self._get_db()
+        try:
+            for src in DG_EVENT_SOURCES:
+                try:
+                    events = scrape_source(src)
+                except Exception as e:
+                    logger.warning(f"[dg_events] source failed {src['url']}: {e}")
+                    result["errors"] += 1
+                    continue
+                result["sources"] += 1
+                if not events:
+                    result["sources_empty"] += 1
+                for ev in events:
+                    try:
+                        self._upsert_event(db, ev, result)
+                    except Exception as e:
+                        logger.warning(f"[dg_events] upsert failed: {e}")
+                        result["errors"] += 1
+                db.commit()
+        finally:
+            if self._should_close_db():
+                db.close()
+
+        result["elapsed_seconds"] = round(time.time() - start_time, 1)
+        return result
+
+    # Commissioner slug -> their Commission DG (shared taxonomy), so commissioner
+    # agenda items are filterable under Institution=Commission -> Department=<DG>
+    # and by Policy Interest. von der Leyen College 2024-2029. Unmapped = None
+    # (still PI-matched by keyword on the meeting title).
+    COMMISSIONER_DG = {
+        "teresa-ribera-rodriguez": "COMP", "henna-virkkunen": "CNECT",
+        "stephane-sejourne": "GROW", "kaja-kallas": "EEAS", "roxana-minzatu": "EMPL",
+        "raffaele-fitto": "REGIO", "maros-sefcovic": "TRADE", "valdis-dombrovskis": "ECFIN",
+        "oliver-varhelyi": "SANTE", "wopke-hoekstra": "CLIMA", "andrius-kubilius": "DEFIS",
+        "marta-kos": "NEAR", "jozef-sikela": "INTPA", "costas-kadis": "MARE",
+        "maria-luis-albuquerque": "FISMA", "hadja-lahbib": "JUST",
+        "magnus-brunner": "HOME", "jessika-roswall": "ENV", "piotr-serafin": "BUDG",
+        "dan-jorgensen": "ENER", "ekaterina-zaharieva": "RTD", "michael-mcgrath": "JUST",
+        "apostolos-tzitzikostas": "MOVE", "christophe-hansen": "AGRI", "glenn-micallef": "EAC",
+    }
+
+    def sync_commissioner_agendas(self, days_ahead: int = 45, days_back: int = 14) -> Dict[str, Any]:
+        """Sync individual Commissioners' published agenda items into the calendar
+        (institution=COMMISSION, event_type=commissioner_meeting, commission_dg from
+        COMMISSIONER_DG). Forward + recent window. Source='commissioner_agenda'."""
+        import asyncio
+        result = {"source": "commissioner_agenda", "added": 0, "updated": 0,
+                  "skipped": 0, "errors": 0, "commissioners": 0}
+        db = self._get_db()
+        df, dt = date.today() - timedelta(days=days_back), date.today() + timedelta(days=days_ahead)
+
+        import hashlib
+
+        async def _run():
+            from services.api_clients.commissioner_agenda_client import (
+                get_commissioner_agenda_client, load_commissioner_profiles,
+            )
+            cli = get_commissioner_agenda_client()
+            for p in load_commissioner_profiles():
+                try:
+                    _prof, items = await cli.fetch_agenda(p.slug, date_from=df, date_to=dt, db=db)
+                except Exception as e:
+                    logger.warning(f"[commissioner-agenda] {p.slug} failed: {e}")
+                    result["errors"] += 1
+                    continue
+                result["commissioners"] += 1
+                dg = self.COMMISSIONER_DG.get(p.slug)
+                seen = set()  # dedupe within this commissioner (HTML + RSS overlap)
+                for it in items:
+                    if not it.date:
+                        continue
+                    # STABLE id (hashlib, not Python hash()) so re-syncs update, not duplicate.
+                    tkey = hashlib.md5((it.title or "").encode("utf-8")).hexdigest()[:10]
+                    ext = f"commissioner:{p.slug}:{it.date.isoformat()}:{tkey}"
+                    if ext in seen:
+                        continue
+                    seen.add(ext)
+                    ev = {
+                        "institution": "COMMISSION",
+                        "event_type": "commissioner_meeting",
+                        "title": it.title,
+                        "start_date": it.date,
+                        "all_day": True,
+                        "commission_dg": dg,
+                        "venue": it.location or None,
+                        "organiser": p.name,
+                        "source": "commissioner_agenda",
+                        "external_id": ext,
+                        "source_url": it.detail_url or p.bio_url,
+                    }
+                    try:
+                        self._upsert_event(db, ev, result)
+                    except Exception as e:
+                        logger.warning(f"[commissioner-agenda] upsert failed: {e}")
+                        result["errors"] += 1
+                # commit per commissioner so one bad row never loses the whole run
+                try:
+                    db.commit()
+                except Exception as e:
+                    logger.warning(f"[commissioner-agenda] commit failed for %s: %s", p.slug, e)
+                    db.rollback()
+
+        try:
+            asyncio.run(_run())
+        finally:
+            if self._should_close_db():
+                db.close()
+        return result
+
+    def sync_bespoke_events(self) -> Dict[str, Any]:
+        """Sync the all-EU bodies' event pages (non-ECL, non-RSS) into the calendar.
+
+        Council comes from the future-meetings page (config+date parsed from URL) and
+        is deduped cross-source against the existing council_calendar rows. The other
+        bodies use a per-source link_re + nearest-date pairing. Upcoming only. NO LLM.
+        source='bespoke_events:<BODY>' / 'council_future_meetings'.
+        """
+        start_time = time.time()
+        from services.scrapers.bespoke_events_scraper import (
+            BESPOKE_EVENT_SOURCES, scrape_event_source,
+        )
+        from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+
+        result = {"source": "bespoke_events", "added": 0, "updated": 0, "skipped": 0,
+                  "errors": 0, "sources": 0, "sources_empty": 0}
+        db = self._get_db()
+        try:
+            with WafBrowserFetcher(settle_ms=8000, networkidle_ms=20000) as fetcher:
+                for src in BESPOKE_EVENT_SOURCES:
+                    try:
+                        events = scrape_event_source(src, fetcher)
+                    except Exception as e:
+                        logger.warning(f"[bespoke_events] source failed {src['url']}: {e}")
+                        result["errors"] += 1
+                        continue
+                    result["sources"] += 1
+                    if not events:
+                        result["sources_empty"] += 1
+                    for ev in events:
+                        try:
+                            dedup = ev.pop("_dedup", None)
+                            if dedup and self._event_exists(db, ev, dedup):
+                                result["skipped"] += 1
+                                continue
+                            self._upsert_event(db, ev, result)
+                        except Exception as e:
+                            logger.warning(f"[bespoke_events] upsert failed: {e}")
+                            result["errors"] += 1
+                    try:
+                        db.commit()
+                    except Exception as e:
+                        db.rollback()
+                        logger.warning(f"[bespoke_events] commit failed {src['institution']}: {e}")
+                        result["errors"] += 1
+        finally:
+            if self._should_close_db():
+                db.close()
+
+        result["elapsed_seconds"] = round(time.time() - start_time, 1)
+        return result
+
+    def _event_exists(self, db: Session, ev: Dict[str, Any], fields) -> bool:
+        """Cross-source existence check (any source) on the given fields + institution.
+
+        Used so the bespoke Council source does not duplicate meetings the existing
+        council_calendar source already has.
+        """
+        filters = [EUCalendarEvent.institution == InstitutionEnum(ev["institution"])]
+        for f in fields:
+            val = ev.get(f)
+            if f == "event_type":
+                val = EventTypeEnum(val)
+            filters.append(getattr(EUCalendarEvent, f) == val)
+        return db.query(EUCalendarEvent.id).filter(*filters).first() is not None
 
     async def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
         """Sync Council meetings (async scraper)."""

@@ -8,7 +8,7 @@ import logging
 from typing import Optional, List
 from pathlib import Path
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, Query, Depends
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query, Depends, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -18,6 +18,7 @@ import re
 from api.auth_optional import get_current_user_dev as get_current_user
 from models.user import User
 from services.storage.document_storage import get_document_storage
+from services.ai.multi_provider_service import get_multi_provider_service
 from services.document_processing.pdf_processor import PDFProcessor
 from services.document_processing.docx_processor import get_docx_processor
 from services.document_processing.url_parser import get_url_parser
@@ -164,6 +165,28 @@ def is_waf_blocked(html_content: Optional[str]) -> bool:
     if 'challenge.js' in html_content and 'AwsWafIntegration' in html_content:
         return True
     return False
+
+
+def _waf_browser_fetch_eurlex_html(celex: str, language: str = "EN") -> Optional[str]:
+    """
+    Fetch the EUR-Lex HTML manifestation through the Playwright WAF browser.
+
+    httpx requests to eur-lex are WAF-walled (challenge page), which is why the
+    pipeline otherwise falls back to the noisy EP RegData PDF for Commission
+    proposals. The real rendered HTML is clean (proper recital/article markup),
+    so try it before the PDF fallback. Synchronous (Playwright) — call via
+    asyncio.to_thread so it does not block the event loop.
+    """
+    try:
+        from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+        url = f"https://eur-lex.europa.eu/legal-content/{(language or 'EN').upper()}/TXT/HTML/?uri=CELEX:{celex}"
+        with WafBrowserFetcher() as fetcher:
+            res = fetcher.fetch(url, expand_accordions=False)
+        html = res.html or None
+        return html if (html and not is_waf_blocked(html)) else None
+    except Exception as exc:  # noqa: BLE001 - best-effort enrichment
+        logger.warning(f"WAF browser fetch failed for {celex}: {exc}")
+        return None
 
 
 def build_ep_regdata_url(celex: str, language: str = "EN") -> Optional[str]:
@@ -492,8 +515,14 @@ async def fetch_eurlex_document(request: FetchEURLexRequest) -> JSONResponse:
 
             # Check if WAF blocked the request
             if is_waf_blocked(html_content):
-                logger.warning(f"EUR-Lex WAF blocked request for {celex}, trying EP RegData fallback")
-                html_content = None
+                # Try the Playwright WAF browser first — it returns the real,
+                # clean EUR-Lex HTML. This avoids the garbled EP RegData PDF
+                # fallback for Commission proposals (PC) and other WAF-walled docs.
+                logger.warning(f"EUR-Lex WAF blocked request for {celex}, trying WAF browser")
+                import asyncio
+                html_content = await asyncio.to_thread(
+                    _waf_browser_fetch_eurlex_html, celex, request.language
+                )
 
             if html_content:
                 parser = EurlexParser()
@@ -729,6 +758,152 @@ async def parse_eurlex_url(url: str = Query(..., description="EUR-Lex URL to par
     except Exception as e:
         logger.error(f"Error parsing EUR-Lex URL: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ---------------------------------------------------------------------------
+# In-editor AI co-writer (Phase 3) -- Mistral-first via the multi-provider chain
+# ---------------------------------------------------------------------------
+
+# Non-chat tooling: routes through MultiProviderService at the default
+# prefer_claude=False, so Mistral is primary (Claude only as automatic fallback).
+AI_ASSIST_ACTIONS = {
+    "rewrite": "Rewrite the passage to read more clearly and professionally, keeping its meaning and roughly its length.",
+    "shorten": "Make the passage more concise without losing essential meaning.",
+    "expand": "Expand the passage with relevant detail, keeping the same voice and intent.",
+    "formalise": "Rewrite the passage in a more formal, institutional register suitable for EU policy work.",
+    "simplify": "Rewrite the passage in plain language a non-specialist can understand, without losing the substance.",
+    "continue": "Continue writing naturally from where the passage ends, adding one short coherent paragraph.",
+}
+
+AI_ASSIST_LANGUAGES = {
+    "en": "British English",
+    "es": "Spanish",
+    "ca": "Catalan",
+    "fr": "French",
+    "it": "Italian",
+    "nl": "Dutch",
+}
+
+
+class AiAssistRequest(BaseModel):
+    action: str
+    text: str
+    doc_title: Optional[str] = None
+    target_language: Optional[str] = None
+
+
+@router.post("/ai-assist", summary="In-editor AI co-writer (Mistral-first)")
+async def ai_assist(
+    req: AiAssistRequest,
+    current_user: User = Depends(get_current_user),
+) -> JSONResponse:
+    """Rewrite / shorten / formalise / translate a selected passage. Returns only the edited text."""
+    if not req.text or not req.text.strip():
+        raise HTTPException(status_code=400, detail="No text supplied.")
+
+    if req.action == "translate":
+        lang = AI_ASSIST_LANGUAGES.get((req.target_language or "en").lower(), "British English")
+        instruction = f"Translate the passage faithfully into {lang}. Preserve meaning, tone and any markdown formatting."
+    else:
+        instruction = AI_ASSIST_ACTIONS.get(req.action)
+        if not instruction:
+            raise HTTPException(status_code=400, detail=f"Unknown action: {req.action}")
+
+    system_prompt = (
+        "You are an expert EU public affairs editor helping a user refine a document. "
+        "Edit the passage the user selected and return ONLY the edited passage: no preamble, "
+        "no explanation, no surrounding quotation marks. Preserve any markdown formatting. "
+        "Use British English. Do not use em-dashes. Be specific and avoid hedging."
+    )
+    user_message = (
+        f"{instruction}\n\n"
+        f"Document title: {req.doc_title or '(untitled)'}\n\n"
+        f"Passage:\n{req.text}"
+    )
+
+    try:
+        service = get_multi_provider_service()
+        # prefer_claude defaults to False -> Mistral primary, Claude as fallback.
+        response = await service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=1500,
+            temperature=0.4,
+        )
+        result = (response.message or "").strip()
+        # Strip wrapping quotes the model sometimes adds, and scrub dashes.
+        if len(result) >= 2 and result[0] in "\"'" and result[-1] == result[0]:
+            result = result[1:-1].strip()
+        result = result.replace("—", "-").replace("–", "-")
+        if not result:
+            raise HTTPException(status_code=502, detail="The model returned no text. Please try again.")
+        return JSONResponse({"result": result, "provider": getattr(response, "provider", None)})
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("AI assist failed")
+        raise HTTPException(status_code=500, detail=f"AI assist failed: {exc}")
+
+
+# ---------------------------------------------------------------------------
+# Inline image assets for the document editor (Phase 2)
+# ---------------------------------------------------------------------------
+
+ALLOWED_IMAGE_TYPES = {
+    'image/png': '.png',
+    'image/jpeg': '.jpg',
+    'image/gif': '.gif',
+    'image/webp': '.webp',
+}
+MAX_ASSET_BYTES = 5 * 1024 * 1024
+
+
+@router.post("/assets", summary="Upload an inline image for the editor")
+async def upload_asset(
+    request: Request,
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+) -> JSONResponse:
+    """Store an inline editor image and return a stable absolute URL to embed in markdown."""
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail="Only PNG, JPEG, GIF or WebP images are allowed.")
+    data = await file.read()
+    if len(data) > MAX_ASSET_BYTES:
+        raise HTTPException(status_code=400, detail="Image exceeds the 5 MB limit.")
+    storage = get_document_storage()
+    asset_id = storage.store_document(
+        file_content=data,
+        filename=file.filename or f"image{ALLOWED_IMAGE_TYPES[file.content_type]}",
+        content_type=file.content_type,
+        user_id=str(getattr(current_user, 'id', '') or ''),
+        metadata={'kind': 'editor_image'},
+    )
+    # Absolute URL built from the serving host, so it resolves across origins
+    # (frontend and backend are on different domains in production). Force https for
+    # non-local hosts: behind Railway's TLS proxy request.base_url can be http://,
+    # which a browser would block as mixed content on an https page.
+    base = str(request.base_url).rstrip('/')
+    if base.startswith('http://') and not any(h in base for h in ('localhost', '127.0.0.1')):
+        base = 'https://' + base[len('http://'):]
+    return JSONResponse({"asset_id": asset_id, "url": f"{base}/api/documents/assets/{asset_id}"})
+
+
+@router.get("/assets/{asset_id}", summary="Serve an inline editor image")
+async def serve_asset(asset_id: str) -> Response:
+    """Serve a stored inline image. Public by unguessable id so <img> tags can load it."""
+    storage = get_document_storage()
+    content = storage.get_document_content(asset_id)
+    if content is None:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    meta = storage.get_document(asset_id) or {}
+    if meta.get('custom_metadata', {}).get('kind') != 'editor_image':
+        raise HTTPException(status_code=404, detail="Asset not found")
+    content_type = meta.get('content_type', 'application/octet-stream')
+    return Response(
+        content=content,
+        media_type=content_type,
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
 
 
 @router.get("/storage/{document_id}", response_model=DocumentMetadata)

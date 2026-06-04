@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`. `baseUrl` defaults to production.\n\n40 requests across 2 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n87 requests across 5 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -1597,6 +1597,2963 @@
                   ]
                 },
                 "description": "**What it does**\nFree-text search against the EuroVoc thesaurus \u2014 the EU's official multilingual subject vocabulary. Returns matching concepts with `concept_uri`, human-readable `label`, and a ShowVoc deep-link.\n\n**When to use it**\nDiscover the `concept_id` to feed `/eurovoc/concepts/{concept_id}/acts` (the id is the trailing digits of `concept_uri`, e.g. `http://eurovoc.europa.eu/3030` -> `3030`). Or translate a plain-English topic into the EU's canonical subject tag.\n\n**Input**\n- `q` \u2014 search term (min 2 chars; multilingual).\n- `language` \u2014 ISO-2 (default `en`).\n- `limit` (1-100, default 20).\n\n**Try it**\n```\nGET /api/v2/legislative/eurovoc/concepts/search?q=artificial%20intelligence\n```\n\n**You get back**\nA `PaginatedResponse[EuroVocConcept]`. The trailing digits of each `concept_uri` are the IDs for the `/acts` route.\n\n**Data freshness**\nLive SPARQL pass-through."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Legislative Documents",
+          "item": [
+            {
+              "name": "Commission delegated acts \u2014 secondary legislation under Article 290 TFEU",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/delegated-acts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "delegated-acts"
+                  ],
+                  "query": [
+                    {
+                      "key": "parent_celex",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "proposing_dg",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Commission delegated acts \u2014 secondary legislation adopted by the Commission under powers delegated by a basic legislative act (Article 290 TFEU). Each row carries the act reference (e.g. `C(2026)1234`), the parent CELEX (the basic act granting the delegation), the parent procedure reference, the status, the proposing DG, the publication date, the EP/Council objection deadline (typically 2-3 months), the EP scrutiny status, the Council scrutiny status, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all delegated acts under the AI Act), track the EP/Council objection window for delegated acts you might want to scrutinise, or audit which DGs are most active in delegated-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act granting the delegation (e.g. `32024R1689` for AI Act).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 `proposed` / `scrutiny` / `adopted` / `objected` / `withdrawn` (status enum).\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts?parent_celex=32024R1689&limit=20\nGET /api/v2/legislative/delegated-acts?proposing_dg=CNECT&status=scrutiny\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `objection_deadline`, `ep_scrutiny` (dict with EP rapporteur / motion status), `council_scrutiny` (dict), `celex` (if adopted), `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from the RegDel register + EUR-Lex C-series. New delegated acts appear on a steady drumbeat; daily sync catches them. Backed by `backend/scripts/backfill_eu_comitology.py`."
+              },
+              "response": []
+            },
+            {
+              "name": "Commission implementing acts \u2014 uniform implementation of EU law (Article 291 TFEU)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/implementing-acts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "implementing-acts"
+                  ],
+                  "query": [
+                    {
+                      "key": "parent_celex",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "proposing_dg",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Commission implementing acts \u2014 secondary legislation adopted by the Commission under Article 291 TFEU to ensure uniform conditions for implementation of EU law (typically with a comitology committee opinion). Each row carries the act reference (e.g. `C(2026)0234`), the parent CELEX, the parent procedure reference, the status, the proposing DG, the publication date, the comitology examination/advisory procedure outcome, the CELEX if adopted, plus body text + the 5 envelope-level datapoints.\n\n**When to use it**\nTo monitor secondary legislation flowing from a flagship regulation (e.g. all implementing acts under MDR, REACH, CRR), track comitology committee outcomes (e.g. SCoPAFF votes on pesticides), or audit which DGs are most active in implementing-act production. The `parent_celex` filter scopes to a specific parent act.\n\n**Input**\n- `parent_celex` \u2014 CELEX of the parent (basic) act (e.g. `32016R0679` for GDPR).\n- `proposing_dg` \u2014 DG code.\n- `status` \u2014 implementing-act status enum.\n- `q` \u2014 substring search on title + description.\n- `published_from`, `published_to` \u2014 date filter on `publication_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts?proposing_dg=SANTE&q=glyphosate\nGET /api/v2/legislative/implementing-acts?parent_celex=32016R0679&limit=20\n```\n\n**You get back**\nA `PaginatedResponse[SecondaryActItem]` envelope. Each item carries `reference`, `title`, `description`, `parent_celex`, `parent_procedure_ref`, `status`, `proposing_dg`, `publication_date`, `ep_scrutiny`, `council_scrutiny`, `celex`, `source_url`, `pdf_url`, `policy_areas`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from the Comitology Register + EUR-Lex C-series."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one delegated act by its Commission reference (e.g. C(2026)1234)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/delegated-acts/:reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "delegated-acts",
+                    ":reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "reference",
+                      "value": "2022/0047(COD)",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single delegated act by its Commission reference. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating a delegated act via the list endpoint, use this to fetch the full record (including body text + scrutiny details) in a deeper-link context.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. The `:path` matcher means the parentheses are accepted verbatim \u2014 no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v2/legislative/delegated-acts/C(2026)1234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the RegDel register + EUR-Lex C-series."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one implementing act by its Commission reference (e.g. C(2026)0234)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/legislative/implementing-acts/:reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "legislative",
+                    "implementing-acts",
+                    ":reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "reference",
+                      "value": "2022/0047(COD)",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single Commission implementing act by its reference. Implementing acts (Article 291 TFEU) lay down uniform conditions for the implementation of EU legislation across Member States. Returns the same shape as the list endpoint, with body text composed from the publication PDF when ingested.\n\n**When to use it**\nAfter locating an implementing act via the list endpoint, use this to fetch the full record in a deeper-link context. Note: the difference between delegated acts (Art. 290, modify or supplement the basic act) and implementing acts (Art. 291, uniform implementation) is constitutionally significant for legal-affairs work.\n\n**Input**\n- `reference` (path) \u2014 the Commission reference, format `C(YYYY)NNNN`. Path-matching accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/legislative/implementing-acts/C(2026)0234\n```\n\n**You get back**\nA single `SecondaryActItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the Comitology Register + EUR-Lex C-series."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "European Parliament",
+      "item": [
+        {
+          "name": "MEPs",
+          "item": [
+            {
+              "name": "Members of the European Parliament \u2014 list / search by country, group, name, term",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/meps",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "meps"
+                  ],
+                  "query": [
+                    {
+                      "key": "country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "group",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "name",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "term",
+                      "value": "10",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLive list of MEPs from the European Parliament's Open Data REST API v2. Each MEP carries the EP-internal id, full name, party of origin + EU political group, country, parliamentary term, photo, bio URL, committee assignments, and (when hydrated) email + social media handles. Both current and historical MEPs are searchable via `term`.\n\n**When to use it**\nDrive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to one political group (`group=EPP`), or look up an MEP by name (`name=Sarri`). For historical research, set `term=9` for the 2019-2024 parliament. Per-MEP profile hydration (country / group / role) runs concurrently when the cache is warm \u2014 first cold call may take ~3-5s.\n\n**Input**\n- `country` \u2014 ISO-3166-1 alpha-2 (exact 2 chars).\n- `group` \u2014 political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) \u2014 both are accepted.\n- `name` \u2014 substring on full name.\n- `term` \u2014 parliamentary term (default 10 = current, valid range 1-10).\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/meps?country=ES&group=RENEW\nGET /api/v2/parliament/meps?name=Sarri\n```\n\n**You get back**\nA `PaginatedResponse[MEPItem]` envelope. Each item carries `mep_id`, `full_name`, `country`, `political_group`, `party_national`, `term`, `photo_url`, `bio_url`, `committee_assignments[]`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nLive pass-through to data.europarl.europa.eu (the EP's Open Data REST API v2), with a 6-hour in-process cache. MEP changes are rare (election cycles + occasional resignations); the 6h cache balances freshness against EP API rate limits."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one MEP by their EP-internal id \u2014 full profile + body composition",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/meps/:mep_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "meps",
+                    ":mep_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "mep_id",
+                      "value": "197488",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single MEP by their EP-internal id (a 5-7 digit numeric identifier visible on europarl.europa.eu URLs like `/meps/en/197488/...`). Returns the full profile including biographical info, committee assignments, declared meetings (when available), and the composed body (name + group + country + roles + contact details as a readable contact card).\n\n**When to use it**\nAfter locating an MEP via the list endpoint, use this for the full record \u2014 particularly when embedding an MEP card in a chat answer or building an MEP profile page. The body composition gives you a ready-to-render HTML/text card.\n\n**Input**\n- `mep_id` (path) \u2014 EP-internal MEP id (e.g. `197488`).\n\n**Try it**\n```\nGET /api/v2/parliament/meps/197488\n```\n\n**You get back**\nA single `MEPItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nLive pass-through to data.europarl.europa.eu with a 6-hour in-process cache."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Amendments",
+          "item": [
+            {
+              "name": "EP committee amendments \u2014 what MEPs propose to change in a draft regulation",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/amendments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "amendments"
+                  ],
+                  "query": [
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "political_group",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "pe_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "amendment_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "element_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the individual amendments tabled by MEPs in EP committee meetings \u2014 the building blocks of co-decision negotiation. Each amendment carries the procedure reference, the committee, the document PE reference, the amendment number, the author MEPs + political group context, the element being amended (recital/article/paragraph), and crucially the side-by-side text: `original_text` (what's currently proposed) + `proposed_text` (the MEPs' alternative) + `justification`.\n\n**When to use it**\nThis is the canonical surface for amendment-tracking advocacy. Common patterns: filter by `procedure_reference` to see all amendments on the AI Act, by `political_group` + `procedure_reference` to see what the Greens want to change, or by `committee` to follow ENVI's amendment activity. The `amendment_type` filter (`modification` / `suppression` / `addition`) lets you isolate where MEPs want to delete text vs add new provisions.\n\n**Input**\n- `procedure_reference` \u2014 OEIL reference (e.g. `2025/0419(COD)`).\n- `committee` \u2014 4-letter committee code (e.g. `ENVI`).\n- `political_group` \u2014 code (e.g. `EPP`, `S&D`).\n- `pe_reference` \u2014 EP document PE reference.\n- `amendment_type` \u2014 `modification` / `suppression` / `addition`.\n- `element_type` \u2014 `recital` / `article` / `paragraph` / `subparagraph`.\n- `q` \u2014 substring search on element_reference + proposed_text.\n- `published_from`, `published_to` \u2014 date filter on `document_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/amendments?procedure_reference=2025/0419(COD)&committee=ENVI&limit=50\nGET /api/v2/parliament/amendments?political_group=S%26D&q=CBAM\n```\n\n**You get back**\nA `PaginatedResponse[AmendmentItem]` envelope. Each item carries `procedure_reference`, `committee_code`, `pe_reference`, `amendment_number`, `author_names`, `political_group`, `on_behalf_of_group`, `element_type`, `element_number`, `element_reference`, `amendment_type`, `original_text`, `proposed_text`, `justification`, `source_url`, `document_date`.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) from EP doceo committee meeting documents. Amendments appear on doceo within hours of committee tabling deadlines; 12h sync catches them inside the half-day window."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EP committee amendment by its internal UUID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/amendments/:amendment_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "amendments",
+                    ":amendment_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "amendment_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EP committee amendment by its Brubru-internal UUID. Returns the original text being amended, the proposed text, the justification, the author MEPs, the political group context (or whether tabled on behalf of a group), and the doceo URL.\n\n**When to use it**\nAfter locating an amendment via the list endpoint, use this to fetch the full record (with original + proposed text for diff rendering) \u2014 particularly useful for embedding in a comparison view in Amendator or in an advocacy briefing.\n\n**Input**\n- `amendment_id` (path) \u2014 Brubru UUID (returned in `id` from the list endpoint).\n\n**Try it**\n```\nGET /api/v2/parliament/amendments/<uuid>\n```\n\n**You get back**\nA single `AmendmentItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced every 12 hours (02:00 / 14:00 UTC, warm tier) from EP doceo committee meeting documents."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Votes",
+          "item": [
+            {
+              "name": "EP roll-call votes \u2014 plenary results with tallies (HowTheyVote)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/votes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "votes"
+                  ],
+                  "query": [
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "is_main",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "result",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nRoll-call vote results from European Parliament plenary sittings, sourced from HowTheyVote.eu (the open-source civic-tech mirror of the EP's official register of votes). Each row carries the vote title, procedure reference, EP committee report number, FOR/AGAINST/ABSTENTION/DID-NOT-VOTE tallies, ADOPTED/REJECTED result, and the timestamp.\n\nFilterable by procedure, vote reference, main-vote-only, result, full-text search, and incremental sync.\n\n**When to use it**\n- Track how a specific legislative file was voted in plenary.\n- Aggregate vote tallies by procedure or rapporteur.\n- Build dashboards of EP plenary activity.\n- Link to per-MEP voting positions via `/api/v2/parliament/votes/{vote_id}/records`.\n\n**Input**\n- `procedure_reference` \u2014 e.g. `2024/0123(COD)`.\n- `reference` \u2014 e.g. `A10-0142/2026` (the EP committee report being voted on).\n- `is_main` \u2014 true to exclude amendment-level votes.\n- `result` \u2014 `ADOPTED | REJECTED | UNKNOWN`.\n- `q` \u2014 substring on `display_title`.\n- `published_from` / `published_to` \u2014 timestamp range.\n- `updated_from` \u2014 incremental-sync upper-bound.\n- `limit` (1\u2013100, default 50), `page` (default 1).\n\n**Try it**\n```\nGET /api/v2/parliament/votes?procedure_reference=2024%2F0106(COD)\nGET /api/v2/parliament/votes?is_main=true&result=ADOPTED&limit=20\n```\n\n**You get back**\nPaginated `VoteItem` envelope. `public_url` points to the specific HowTheyVote vote page (`https://howtheyvote.eu/votes/{htv_id}`). All 5 mandatory v1 datapoints present per row.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision \u2014 see CLAUDE.md."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EP roll-call vote by its internal ID \u2014 full tallies + HowTheyVote link",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/votes/:vote_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "votes",
+                    ":vote_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "vote_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns full metadata for one EP roll-call vote, including title, procedure, committee report, tallies, result, and the citizen-facing HowTheyVote URL.\n\n**When to use it**\nAfter locating a vote via the list endpoint, use this to fetch the full record (with all tallies + ADOPTED/REJECTED result) for embedding in an analysis or a chat answer. To get the per-MEP breakdown of the same vote, follow up with `/api/v2/parliament/votes/{vote_id}/records`.\n\n**Input**\n- `vote_id` (path) \u2014 `ep_votes.id` (UUID).\n\n**Try it**\n```\nGET /api/v2/parliament/votes/{vote_id}\n```\n\n**You get back**\nA `VoteItem` with all 5 mandatory v1 datapoints. `public_url` resolves to `https://howtheyvote.eu/votes/{htv_id}` \u2014 the public vote page with per-MEP breakdown, country chart, and group cohesion.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision \u2014 see CLAUDE.md."
+              },
+              "response": []
+            },
+            {
+              "name": "Per-MEP voting records for a single roll-call vote",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/votes/:vote_id/records",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "votes",
+                    ":vote_id",
+                    "records"
+                  ],
+                  "variable": [
+                    {
+                      "key": "vote_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "group",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "position",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nPer-MEP vote positions (FOR / AGAINST / ABSTENTION / DID_NOT_VOTE) for one specific roll-call vote. Joins `ep_member_votes` to `ep_votes` so callers can see exactly how each named MEP voted, with their country and political-group code at the moment of the vote.\n\n**When to use it**\n- Build a \"how did my MEP vote?\" widget for any specific roll-call.\n- Aggregate per-group or per-country breakdowns.\n- Feed group-cohesion analysis or position-prediction models.\n\n**Input**\n- `vote_id` (path) \u2014 `ep_votes.id` (UUID).\n- `group` \u2014 EP group code (e.g. `EPP`, `S&D`, `Renew`).\n- `country` \u2014 ISO-2 (e.g. `DE`, `FR`).\n- `position` \u2014 `FOR | AGAINST | ABSTENTION | DID_NOT_VOTE`.\n- `limit` (1\u2013500, default 100), `page` (default 1).\n\n**Try it**\n```\nGET /api/v2/parliament/votes/{vote_id}/records?group=EPP\nGET /api/v2/parliament/votes/{vote_id}/records?country=DE&position=AGAINST\n```\n\n**You get back**\nPaginated `MemberVoteItem` envelope. `public_url` on each row points to the parent vote's HowTheyVote page. All 5 mandatory v1 datapoints present per row.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC) from HowTheyVote.eu (howtheyvote.eu) + EP plenary votes. HowTheyVote importer blocked on ep_political_groups.short_label collision \u2014 see CLAUDE.md."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "EP Documents",
+          "item": [
+            {
+              "name": "Unified view of all EP committee output \u2014 work items + amendments + adopted texts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/ep-documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "ep-documents"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "document_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns a unified, cross-committee view that merges three separate document streams into one envelope: (1) `committee_work` items (high-level work programme entries with stage + rapporteur), (2) `amendment_documents` (PR=draft report, AM=amendments, RD=draft recommendation, AD=opinion, PA=draft opinion), and (3) `texts_adopted` (the formal plenary outputs). Each row carries a `source` field telling you which stream it came from and a `document_type` normalised across the three.\n\n**When to use it**\nWhen you want \"everything that happened on file X across all stages\" without making three separate queries. Useful for assembling a procedure timeline, building a committee activity dashboard, or answering \"what is the LIBE committee working on this week?\".\n\n**Input**\n- `committee` \u2014 4-letter code (e.g. `LIBE`).\n- `procedure_reference` \u2014 OEIL reference.\n- `document_type` \u2014 normalised: `draft_report` / `report` / `amendments` / `opinion` / `minutes` / `resolution`.\n- `q` \u2014 substring search across titles.\n- `published_from`, `published_to` \u2014 date filter.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/ep-documents?committee=LIBE&document_type=draft_report\nGET /api/v2/parliament/ep-documents?procedure_reference=2025/0419(COD)\n```\n\n**You get back**\nA `PaginatedResponse[EPDocumentItem]` envelope. Each item carries `id`, `source` (which stream this row came from), `document_type`, `committee_code`, `procedure_reference`, `pe_reference`, `title` (enriched with the procedure's plain-language alias when available via `_enrich_doc_title`), `rapporteur_name`, `document_date`, `document_url`, `total_amendments` (for amendment docs), `public_url`, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work sync. Underlying tables (`committee_work_items`, `amendment_documents`, `texts_adopted`) are updated by separate syncs on hot/warm cadences."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reports",
+          "item": [
+            {
+              "name": "EP committee reports \u2014 draft reports + draft recommendations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/reports",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "reports"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EP committee reports \u2014 both `draft_report` (document type PR) and `draft_recommendation` (RD). These are the rapporteur's first written articulation of the EP's position on a legislative file, before amendments are tabled. Each row carries the procedure reference, the lead committee, the PE document reference, the rapporteur's name, the document date, and the doceo URL.\n\n**When to use it**\nReports are the most quoted EP documents in advocacy work \u2014 they set the framing for the committee's negotiation. Use this endpoint to find \"the latest report on the AI Act\", \"all draft reports by rapporteur X\", or \"all ENVI reports this year\". The title is enriched with the procedure's plain-language alias (e.g. \"draft_report for 2024/0079(COD) (ENVI)\" becomes \"draft_report for CBAM Downstream Extension (ENVI)\").\n\n**Input**\n- `committee` \u2014 4-letter committee code.\n- `procedure_reference` \u2014 OEIL reference.\n- `published_from`, `published_to` \u2014 date filter on `document_date`.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/reports?committee=ENVI&published_from=2026-01-01\nGET /api/v2/parliament/reports?procedure_reference=2025/0419(COD)\n```\n\n**You get back**\nA `PaginatedResponse[EPDocumentItem]` envelope, semantic-aliased subset of `/api/v2/parliament/ep-documents` filtered to `document_type \u2208 {PR, RD}`. Each item carries `source=\"amendment_document\"`, `document_type` (`draft_report` or `draft_recommendation`), `committee_code`, `procedure_reference`, `pe_reference`, enriched `title`, `rapporteur_name`, `document_date`, `document_url`, `total_amendments`, `last_updated`.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work + amendment_documents syncs from EP doceo."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Opinions",
+          "item": [
+            {
+              "name": "EP associated-committee opinions \u2014 what other committees say about a lead committee's file",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/opinions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "opinions"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EP committee opinions \u2014 both `opinion` (document type AD, the formal adopted opinion) and `draft_opinion` (PA, the rapporteur for opinion's first draft). An opinion is what an associated committee says to the lead committee on a legislative file: e.g. ITRE's opinion to ENVI on the CBAM file. They are non-binding but influence the lead committee's report.\n\n**When to use it**\nTo find which side-committees are weighing in on a file (e.g. all opinions on the AI Act \u2192 CULT, IMCO, JURI, LIBE), to track a specific committee's opinion-rapporteur output, or to assemble a procedure's full inter-committee picture. The `procedure_reference` filter scopes to one file.\n\n**Input**\n- `committee` \u2014 4-letter committee code (the OPINIONING committee, not the lead).\n- `procedure_reference` \u2014 OEIL reference.\n- `published_from`, `published_to` \u2014 date filter on `document_date`.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/opinions?procedure_reference=2024/0079(COD)\nGET /api/v2/parliament/opinions?committee=ITRE&published_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[EPDocumentItem]` envelope, semantic-aliased subset of `/api/v2/parliament/ep-documents` filtered to `document_type \u2208 {AD, PA}`. Same shape as `/api/v2/parliament/reports`.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via the committee_work + amendment_documents syncs from EP doceo."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Committees",
+          "item": [
+            {
+              "name": "EP committee meeting minutes \u2014 votes, decisions, attendance, decisions taken",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committees/:code/minutes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committees",
+                    ":code",
+                    "minutes"
+                  ],
+                  "variable": [
+                    {
+                      "key": "code",
+                      "value": "LIBE",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "date_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns minutes of a specific EP committee's meetings. Each row carries the meeting date, agenda items, votes (with for/against/abstention tallies), decisions taken, MEPs present, and the doceo URL for the official minutes document.\n\n**When to use it**\nTo audit what actually happened at a committee meeting \u2014 particularly useful for understanding why a file's status changed (e.g. a vote was postponed, an amendment was withdrawn, a rapporteur was reappointed). The official minutes are the authoritative record.\n\n**Input**\n- `code` (path) \u2014 EP committee 4-letter code (e.g. `LIBE`, `ENVI`).\n- `published_from`, `published_to` (aliased as `date_from`, `date_to`) \u2014 meeting_date filter.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/committees/LIBE/minutes?date_from=2026-01-01\nGET /api/v2/parliament/committees/ENVI/minutes\n```\n\n**You get back**\nA `CommitteeMinutesEnvelope` with paginated minutes rows. Each row carries the meeting date, agenda items, votes, decisions, attendance, and the doceo URL.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) via `backend/scripts/sync_committee_minutes.py`. Committee minutes are typically published on doceo within a few days of the meeting; 12h sync catches them as soon as they appear."
+              },
+              "response": []
+            },
+            {
+              "name": "Legislative files an EP committee is currently working on \u2014 with stage + status",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committees/:code/work-items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committees",
+                    ":code",
+                    "work-items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "code",
+                      "value": "LIBE",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "stage",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns every legislative file an EP committee is currently working on, with the file's title, rapporteur, current stage (e.g. `awaiting_committee_vote`, `in_trilogue`), status, and any CELEX numbers cross-referenced from the underlying `legislative_carriages` table. Each row enriches the committee_work_items scrape with canonical legislation data via an outer join.\n\n**When to use it**\nThe fastest way to answer \"what is committee X working on?\" Use to drive a committee dashboard, build a rapporteur-tracking UI, or feed a chatbot answer about a specific committee's caseload.\n\n**Input**\n- `code` (path) \u2014 EP committee 4-letter code (e.g. `LIBE`, `ENVI`).\n- `q` \u2014 substring on title.\n- `status` \u2014 work-item status.\n- `stage` \u2014 work-item stage.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/committees/LIBE/work-items\nGET /api/v2/parliament/committees/ENVI/work-items?stage=in_trilogue\n```\n\n**You get back**\nA `CommitteeWorkEnvelope` with paginated work items. Each row carries the procedure ref, title (enriched), rapporteur, stage, status, dates, source URL, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) from europarl.europa.eu/committees/<code>/work. Committee work items move on EP committee meeting cadences; 12h sync catches stage transitions."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Texts Adopted",
+          "item": [
+            {
+              "name": "EP plenary texts that have been adopted \u2014 resolutions, legislative resolutions, decisions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/texts-adopted",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "texts-adopted"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "text_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "parliamentary_term",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "rapporteur_mep_id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns every text adopted by the European Parliament in plenary session \u2014 legislative resolutions (the EP's formal positions on legislation), non-legislative resolutions (own-initiative + topical), decisions, recommendations. Each row carries the TA reference (e.g. `P10_TA(2025)0042`), the title, text type, procedure ref + parliamentary term, lead committee, rapporteur, adoption date, vote tallies, and the full-text URL.\n\n**When to use it**\nThe authoritative record of what the EP has decided in plenary. Use to track positions on co-decision files (legislative_resolution), trace the EP's stance on a topic (resolution), or build a plenary outcomes dashboard. Pair with `/api/v2/parliament/texts-submitted` to see the pipeline from tabled \u2192 adopted.\n\n**Input**\n- `q` \u2014 substring on title + description.\n- `text_type` \u2014 `resolution` / `legislative_resolution` / `decision` / `recommendation` / `other`.\n- `procedure_ref` \u2014 OEIL reference.\n- `parliamentary_term` \u2014 EP term (e.g. 10 for current, 9 for 2019-2024).\n- `committee` \u2014 lead committee code.\n- `rapporteur_mep_id` \u2014 filter to one rapporteur's adopted texts.\n- `published_from`, `published_to` (and `published_end` alias) \u2014 adoption_date filter.\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/texts-adopted?text_type=legislative_resolution&committee=ENVI\nGET /api/v2/parliament/texts-adopted?procedure_ref=2024/0079(COD)\n```\n\n**You get back**\nA `PaginatedResponse[TextItem]` envelope. Each item carries `ta_reference`, `title`, `text_type`, `procedure_ref`, `parliamentary_term`, `committees`, `rapporteur_mep_id`, `rapporteur_name`, `adoption_date`, vote tallies, `full_text_url`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) via RSS from europarl.europa.eu/plenary/en/texts-adopted.html. Texts appear within hours of plenary adoption."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EP plenary-adopted text by its TA reference (e.g. P10_TA(2025)0042)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/texts-adopted/:ta_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "texts-adopted",
+                    ":ta_reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "ta_reference",
+                      "value": "P10_TA(2025)0042",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EP plenary-adopted text by its TA reference. Returns the same shape as the list endpoint, including the full-text URL and body composition.\n\n**When to use it**\nAfter locating a text via the list endpoint, use this for the deep-link. Common pattern in chat answers when a user references a specific P10_TA number.\n\n**Input**\n- `ta_reference` (path) \u2014 the TA reference (format: `P<TERM>_TA(<YEAR>)<NUMBER>`, e.g. `P10_TA(2025)0042`). The `:path` matcher accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/parliament/texts-adopted/P10_TA(2025)0042\n```\n\n**You get back**\nA single `TextItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced every 6 hours from europarl.europa.eu/plenary/en/texts-adopted.html."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Texts Submitted",
+          "item": [
+            {
+              "name": "EP plenary texts tabled but NOT YET adopted \u2014 the upcoming-vote pipeline",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/texts-submitted",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "texts-submitted"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "text_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "parliamentary_term",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EP plenary texts that have been formally tabled for vote but not yet adopted (no adoption_date). Sibling endpoint to `/texts-adopted` \u2014 the same row \"moves\" from submitted to adopted when the plenary vote concludes. Each row carries the procedure ref, title, text type, parliamentary term, lead committee, rapporteur, the tabling date, and the doceo URL.\n\n**When to use it**\nFor advocacy work focused on upcoming plenary votes \u2014 see what's coming next week, identify which committees have files in the pipeline, or filter by rapporteur to track an MEP's pending plenary texts. Pair with `/api/v1/calendar?event_type=PLENARY` to know WHEN each text is expected to be voted.\n\n**Input**\nSame shape as `/texts-adopted` \u2014 `q`, `text_type`, `procedure_ref`, `parliamentary_term`, `committee`, `rapporteur_mep_id`, date filters, incremental sync, pagination.\n\n**Try it**\n```\nGET /api/v2/parliament/texts-submitted?committee=LIBE&parliamentary_term=10\nGET /api/v2/parliament/texts-submitted?text_type=legislative_resolution\n```\n\n**You get back**\nA `PaginatedResponse[TextItem]` envelope \u2014 same shape as `/texts-adopted`'s response, but with `adoption_date` null on every row (texts are pre-adoption).\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from europarl.europa.eu/plenary/en/texts-submitted.html. New tablings appear on doceo within hours; the 6h sync catches them."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Resolutions",
+          "item": [
+            {
+              "name": "EP non-legislative resolutions \u2014 own-initiative reports, legislative initiatives, topical resolutions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/resolutions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "resolutions"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "resolution_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lead_committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "rapporteur",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "has_commission_followup",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EP non-legislative outputs \u2014 files where the Parliament expresses a position WITHOUT directly amending EU law. Covers: `INL` (legislative initiative reports \u2014 EP asks the Commission to propose), `INI` (own-initiative reports \u2014 EP positions on horizontal themes), `RSP` (topical resolutions \u2014 urgent matters of EU concern, e.g. human rights, foreign policy). Each row carries the procedure ref, title, type, lead committee, rapporteur, adoption date, vote tallies, Commission follow-up status, and full text URL.\n\n**When to use it**\nEP resolutions don't have legal force but signal political direction \u2014 useful for advocacy work tracking what the EP demands of the Commission, urgent geopolitical positions, or thematic priorities. Filter by `has_commission_followup=true` to find resolutions where the Commission has actually responded.\n\n**Input**\n- `q` \u2014 substring on title + summary.\n- `resolution_type` \u2014 `INL` / `INI` / `RSP` / `OTHER`.\n- `lead_committee` \u2014 4-letter committee code.\n- `rapporteur` \u2014 name substring.\n- `procedure_ref` \u2014 OEIL reference.\n- `has_commission_followup` \u2014 boolean.\n- `published_from`, `published_to` (and `published_end` alias) \u2014 adoption_date filter.\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/resolutions?resolution_type=INL&lead_committee=ENVI\nGET /api/v2/parliament/resolutions?q=Ukraine&resolution_type=RSP\n```\n\n**You get back**\nA `PaginatedResponse[ResolutionItem]` envelope. Each item carries `procedure_ref`, `title`, `resolution_type`, `lead_committee`, `rapporteur_name`, `adoption_date`, vote tallies, `has_commission_followup`, `full_text_url`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from OEIL XML feeds. Resolutions are adopted at EP plenary sittings; the post-plenary sync catches them inside hours."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EP resolution by its procedure reference",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/resolutions/:procedure_ref",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "resolutions",
+                    ":procedure_ref"
+                  ],
+                  "variable": [
+                    {
+                      "key": "procedure_ref",
+                      "value": "2025/2125(INI)",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EP resolution by its procedure reference. Returns the same shape as the list endpoint, with the full text URL + adoption details + Commission follow-up status.\n\n**When to use it**\nAfter locating a resolution via the list endpoint, use this for the full record \u2014 common pattern in chat answers when a user references a specific INI / RSP / INL number.\n\n**Input**\n- `procedure_ref` (path) \u2014 procedure reference (e.g. `2025/2125(INI)`, `2025/2887(RSP)`). The `:path` matcher accepts slashes + parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/parliament/resolutions/2025/2125(INI)\n```\n\n**You get back**\nA single `ResolutionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced every 6 hours from OEIL XML feeds."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "EPRS",
+          "item": [
+            {
+              "name": "EPRS think-tank publications \u2014 Parliament's research service (briefings, studies, in-depth)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/eprs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "eprs"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "publication_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "celex",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns publications from EPRS \u2014 the European Parliamentary Research Service, the EP's in-house think-tank. Covers briefings, studies, in-depth analyses, at-a-glance notes, \"EU legislation in progress\" tracker entries, initial appraisals, ex-post evaluations, and historical archives. Each row carries the publication ID + type, authors, summary, policy areas, related procedure refs and legal IDs, HTML + PDF URLs, and (when ingested) word + page counts.\n\n**When to use it**\nEPRS publications are the highest-quality non-partisan policy briefings on EU files \u2014 used by MEPs (and their staff) to understand legislation. Filter by `committee` to find what's been written for the LIBE committee, by `procedure_ref` for everything related to one file, or by `q` for free-text search.\n\n**Input**\n- `q` \u2014 substring on title + summary.\n- `publication_type` \u2014 `BRIEFING` / `STUDY` / `IN_DEPTH_ANALYSIS` / `AT_A_GLANCE` / `EU_LEGISLATION_IN_PROGRESS` / `INITIAL_APPRAISAL` / `EX_POST_EVALUATION` / etc.\n- `committee` \u2014 committee code.\n- `procedure_ref` \u2014 OEIL reference.\n- `celex` \u2014 legal identifier cross-link.\n- `published_from`, `published_to` (and `published_end` alias).\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/eprs?committee=ENVI&publication_type=BRIEFING\nGET /api/v2/parliament/eprs?q=CBAM&published_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[EPRSItem]` envelope. Each item carries `publication_id` (e.g. `EPRS_BRI(2026)762322`), `title`, `publication_type`, `publication_date`, `authors`, `summary`, `policy_areas`, `committees`, `related_celex_numbers`, `related_procedures`, `html_url`, `pdf_url`, `word_count`, `page_count`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) from the EP Think Tank portal RSS (EPRS + ECTI + CASP) + the WordPress blog RSS as secondary source. EPRS publishes throughout the day; 12h sync catches new pieces inside a half-day."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EPRS publication by its publication_id \u2014 full metadata + links",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/eprs/:publication_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "eprs",
+                    ":publication_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "publication_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EPRS publication by its publication_id. Returns the same shape as the list endpoint, including HTML + PDF URLs for the full text and the related procedures / legal IDs the publication cross-references.\n\n**When to use it**\nAfter locating an EPRS publication via the list endpoint, use this to deep-link into a specific publication. The HTML URL is the canonical EP Think Tank page; the PDF URL is the direct download.\n\n**Input**\n- `publication_id` (path) \u2014 EPRS publication ID (e.g. `EPRS_BRI(2026)762322`). The `:path` matcher accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/parliament/eprs/EPRS_BRI(2026)762322\n```\n\n**You get back**\nA single `EPRSItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced every 12 hours from the EP Think Tank portal."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Webstreams",
+          "item": [
+            {
+              "name": "EP committee webstreams \u2014 meeting URLs + transcripts (multimedia.europarl.europa.eu)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/webstreams",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "webstreams"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "has_transcript",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nEvery EP committee meeting webstream URL discovered by Brubru's daily scrape of `multimedia.europarl.europa.eu/en/webstreaming`. Each row carries the multimedia landing-page URL (`public_url`), the direct video URL when extracted, the meeting date, the committee code (LIBE, ENVI, ECON, \u2026), and \u2014 when Whisper has run \u2014 the transcript metadata (duration, speaker count, word count).\n\n**When to use it**\n- Build per-committee streaming dashboards.\n- Track which committee meetings already have a Brubru transcript.\n- Filter to meetings linked to a specific OEIL procedure file.\n- Drive incremental sync with `updated_from`.\n\n**Input**\n- `committee` \u2014 EP committee code (LIBE, ENVI, ECON, IMCO, \u2026).\n- `status` \u2014 `PENDING | COMPLETED | FAILED | NOT_AVAILABLE` (transcription status, not the meeting itself).\n- `has_transcript` \u2014 true to filter to rows with a transcript already extracted.\n- `procedure_ref` \u2014 OEIL reference (e.g. `2024/0123(COD)`) to filter to meetings discussing that file.\n- `q` \u2014 substring on title.\n- `published_from` / `published_to` \u2014 meeting-date range.\n- `updated_from` / `updated_to` \u2014 incremental sync.\n- `limit` (1\u2013100, default 50), `page` (default 1).\n\n**Try it**\n```\nGET /api/v2/parliament/webstreams?committee=LIBE&has_transcript=true\nGET /api/v2/parliament/webstreams?procedure_ref=2024%2F0123(COD)\nGET /api/v2/parliament/webstreams?updated_from=2026-05-01\n```\n\n**You get back**\nPaginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EP committee webstream by its internal id \u2014 metadata + transcript status",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/webstreams/:stream_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "webstreams",
+                    ":stream_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "stream_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns full metadata for one committee-meeting webstream, including the multimedia landing page (`public_url`), direct video URL, meeting date, transcript status, and (when COMPLETED) duration / speaker / word counts.\n\n**When to use it**\nAfter locating a webstream via the list endpoint, use this for the full record \u2014 particularly to check transcript status before requesting transcription, or to deep-link into a specific committee meeting in an analysis.\n\n**Input**\n- `stream_id` (path) \u2014 `committee_meeting_transcripts.id` (UUID).\n\n**Try it**\n```\nGET /api/v2/parliament/webstreams/{stream_id}\n```\n\n**You get back**\nA `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent."
+              },
+              "response": []
+            },
+            {
+              "name": "Webstreams linked to a specific legislative procedure \u2014 every committee debate end-to-end",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/webstreams/by-procedure/:procedure_ref/transcript",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "webstreams",
+                    "by-procedure",
+                    ":procedure_ref",
+                    "transcript"
+                  ],
+                  "variable": [
+                    {
+                      "key": "procedure_ref",
+                      "value": "2025/2125(INI)",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns every committee-meeting webstream whose `related_procedure_refs` array contains the given procedure reference (OEIL identifier). Useful for tracking every committee debate of a specific legislative file end-to-end.\n\n**When to use it**\nTo assemble a \"complete debate timeline\" for an advocacy brief on a specific file \u2014 pull every meeting where the file appeared, sorted by date, with deep-links to the multimedia replays. Combine with `/api/v2/parliament/amendments?procedure_reference=X` for the amendments tabled at each meeting.\n\n**Input**\n- `procedure_ref` (path) \u2014 procedure reference, e.g. `2024/0123(COD)`. URL-encode the slash as `%2F` or use the `:path` matcher which accepts it verbatim.\n- `limit` (1\u2013100, default 50), `page` (default 1).\n\n**Try it**\n```\nGET /api/v2/parliament/webstreams/by-procedure/2024%2F0123(COD)/transcript\n```\n\n**You get back**\nPaginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Parliamentary Questions",
+          "item": [
+            {
+              "name": "European Parliament questions to Commission, Council or ECB \u2014 with answers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/parliamentary-questions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "parliamentary-questions"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "question_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "parliamentary_term",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "asking_mep_id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "answering_institution",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns parliamentary questions submitted by MEPs to the Commission, Council, or ECB \u2014 written questions, oral questions, priority questions, and Question Time. Each row includes the original question text, the answering institution's reply when published, the asking MEPs, the answering commissioner (when applicable), related procedure/CELEX cross-references, and the canonical citizen URL on doceo.\n\n**When to use it**\nTo track what MEPs are asking on a given policy area, find the official Commission position on an emerging topic before formal legislation drops, or build a \"what's been asked about X\" timeline. The `procedure_ref` filter lets you scope to questions related to a specific legislative file.\n\n**Input**\n- `q` \u2014 substring search on subject + question text + answer text.\n- `question_type` \u2014 `written` / `oral` / `priority` / `question_time`.\n- `parliamentary_term` \u2014 integer (current: 10).\n- `asking_mep_id` \u2014 filter to questions asked by a specific MEP.\n- `answering_institution` \u2014 `COMMISSION` / `COUNCIL` / `ECB`.\n- `procedure_ref` \u2014 OEIL reference (e.g. `2026/0419(COD)`).\n- `committee` \u2014 4-letter committee code (e.g. `ENVI`).\n- `published_from`, `published_to` \u2014 date filter on `submitted_date`.\n- `updated_from` \u2014 incremental sync (rows where `last_updated >= value`).\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/parliamentary-questions?q=AI%20Act&limit=10\nGET /api/v2/parliament/parliamentary-questions?committee=ENVI&published_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[ParliamentaryQuestionItem]` envelope. Each item carries `question_reference` (e.g. `E-001234/2026`), `question_type`, `subject`, `text_question`, `text_answer`, dates, asking-MEP arrays, `procedure_ref`, `related_celex`, `policy_areas`, `source_url`, `answer_url`, `body_txt` + `body_html` (semantic article with Question + Answer sections), plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from europarl.europa.eu/plenary/en/parliamentary-questions.html. New questions appear on doceo within hours of being tabled; answers can take days to weeks (Commission has up to 6 weeks under Rule 138). Scraper queued; endpoint returns empty result until ingestion completes."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one parliamentary question by its reference (e.g. E-001234/2026)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/parliamentary-questions/:question_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "parliamentary-questions",
+                    ":question_reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "question_reference",
+                      "value": "E-001234/2026",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single parliamentary question by its reference. Returns the same shape as the list endpoint, including the original question text, the official answer when published, and the citizen URL on doceo.\n\n**When to use it**\nAfter locating a question via the list endpoint, use this to get the full text + answer in a deeper-link context (e.g. embedding in a chat response). Common pattern: `q` search \u2192 pick a reference \u2192 fetch detail.\n\n**Input**\n- `question_reference` (path) \u2014 e.g. `E-001234/2026` for a written question or `O-000123/2026` for an oral question. Format: `<TYPE>-<NUMBER>/<YEAR>` where TYPE \u2208 {E, O, P, QT}.\n\n**Try it**\n```\nGET /api/v2/parliament/parliamentary-questions/E-001234/2026\n```\n\n**You get back**\nA single `ParliamentaryQuestionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` if no question with that reference exists in our mirror.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from europarl.europa.eu. If a question exists on doceo but not in our DB, it means it hasn't been picked up by the latest sync yet (max ~24h lag)."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "European Commission",
+      "item": [
+        {
+          "name": "Commissioners",
+          "item": [
+            {
+              "name": "College of Commissioners with portfolios + meeting-agenda URLs (live)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/commissioners",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "commissioners"
+                  ]
+                },
+                "description": "**What it does**\nReturns all 27 members of the Von der Leyen II College \u2014 for each commissioner: a stable slug, full name, portfolio title, country, the bio page on commission.europa.eu, and three working URLs to their meeting agenda: a filtered view of the unified calendar (per-commissioner), the always-working unified-calendar entry point, and a slot for a PDF agenda (most commissioners don't publish one).\n\n**When to use it**\nTo drive a commissioner dropdown in a UI, fetch a specific commissioner's meeting calendar, or label which commissioner owns a given policy file. The slugs are reused as the `commissioner_slug` filter on `/api/v1/publications`, `/api/v1/calendar`, and `/api/v2/commission/commissioners/{slug}/agenda`.\n\n**Input**\nNo parameters. Requires an `X-API-Key` header.\n\n**Try it**\n```\nGET /api/v2/commission/commissioners\n```\n\n**You get back**\nA `_GenericListResponse` with `total: 27` and `data` (alphabetical by name) \u2014 each item has `slug`, `name`, `portfolio`, `country` (ISO-2 lowercase), `bio_url`, `agenda_url` (filtered unified-calendar URL when leader_id known), `agenda_pdf_url`, `unified_calendar_url`. The 5 envelope-level datapoints are null because this is a reference enumeration.\n\n**Data freshness**\nReads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration to resolve each commissioner's `leader_id` for the filtered-calendar URL (24h cached client-side). Reshuffles or portfolio changes apply on Brubru redeploy after manual JSON update. Typically refreshed weekly via the Friday sweep."
+              },
+              "response": []
+            },
+            {
+              "name": "Calendar events for one Commissioner \u2014 meetings, speeches, College sessions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/commissioners/:name/agenda",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "commissioners",
+                    ":name",
+                    "agenda"
+                  ],
+                  "variable": [
+                    {
+                      "key": "name",
+                      "value": "ribera",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "date_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the live calendar of meeting events for one Commission College member \u2014 meetings with lobbyists / industry / NGOs, public speeches, College sessions, summit attendance. Name resolution is accent-insensitive and accepts the full name, the slug, or known nicknames (e.g. `ribera` \u2192 Teresa Ribera).\n\n**When to use it**\nFor lobbying-transparency work: \"who did Ribera meet last month?\", \"what speeches did the President give in May?\", or \"show me Hoekstra's upcoming public events\". Combined with `/api/v2/commission/meetings`, gives you a full picture of a Commissioner's engagement.\n\n**Input**\n- `name` (path) \u2014 full name, slug, or nickname (accent-insensitive).\n- `date_from`, `date_to` \u2014 date filter on agenda items.\n- `limit` (default 50, max 200), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/commissioners/ribera/agenda?date_from=2026-05-01\nGET /api/v2/commission/commissioners/Von der Leyen/agenda\n```\n\n**You get back**\nA `PaginatedResponse[AgendaItemOut]` envelope. Each item carries the meeting date/time, title, location, type (meeting / speech / college session), and participants where available.\n\n**Data freshness**\nLive pull from the Commission's calendar items page (commission.europa.eu/about/organisation/college-commissioners/calendar-items-president-and-commissioners_en), with a 24h client cache per commissioner. Commissioners' agendas are updated by their Cabinet within hours of confirmation."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one Commissioner profile by slug \u2014 bio + portfolio + agenda URLs",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/commissioners/:slug",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "commissioners",
+                    ":slug"
+                  ],
+                  "variable": [
+                    {
+                      "key": "slug",
+                      "value": "2024-1689_aiact",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nProfile-only view of one Commission College member. Returns the same shape as a row from `GET /commissioners` \u2014 name, portfolio, country, bio URL, plus three working URLs to their meeting agenda (filtered unified-calendar URL, agenda PDF, unified-calendar entry point). Does NOT return the agenda items themselves \u2014 for that, call `GET /commissioners/{slug}/agenda`.\n\n**When to use it**\nAfter locating a commissioner via the list endpoint, use this for the profile-only view (no agenda fetch overhead). Useful when embedding a commissioner card without needing the full meeting list.\n\n**Input**\n- `slug` (path) \u2014 commissioner slug (stable kebab-case form of their name).\n\n**Try it**\n```\nGET /api/v2/commission/commissioners/von-der-leyen\nGET /api/v2/commission/commissioners/ribera\n```\n\n**You get back**\nA single `CommissionerProfileOut` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nReads from `backend/data/commissioners.json` (hand-curated) + on-demand bio-page hydration (24h client cache). Refreshed on Brubru redeploy after manual JSON updates."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Commission Register",
+          "item": [
+            {
+              "name": "Commission Transparency Register \u2014 College agendas, minutes, COM proposals, SWD, impact assessments",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/commission-register-documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "commission-register-documents"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "doc_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "document_register_category",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dg_responsible",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "celex",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "has_pdf",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns documents from the Commission Transparency Register \u2014 College of Commissioners agendas (tentative + final), College minutes (PV), Commission proposals (COM), staff working documents (SWD), inter-service consultations (SEC), joint proposals (JOIN), and Regulatory Scrutiny Board opinions on impact assessments. Each row exposes the direct PDF URL where available, falling back to the Cellar resolver for adopted acts with a CELEX (returns the canonical EN PDF).\n\n**When to use it**\nThe single most useful surface for College-of-Commissioners tracking. Filter by `document_register_category=TENTAT_AGENDA_COM_MEETING` to see the upcoming tentative College agendas (which signal what's about to be adopted); by `PV` to see the post-meeting minutes (which confirm what WAS adopted); by `OPIN_IMPACT_ASSESS` to see RSB scrutiny on the file before it lands.\n\n**Input**\n- `q` \u2014 substring on title + reference.\n- `doc_type` \u2014 `COM` / `SWD` / `SEC` / `C` / `JOIN` / `OJ` / `PV`.\n- `document_register_category` \u2014 `AGENDA_COM_MEETING` / `TENTAT_AGENDA_COM_MEETING` / `PV` / `OPIN_IMPACT_ASSESS` / `IMPACT_ASSESS` / `OJ`.\n- `dg_responsible` \u2014 DG code.\n- `procedure_ref` \u2014 OEIL reference for cross-linked documents.\n- `celex` \u2014 legal identifier cross-link.\n- `has_pdf` \u2014 boolean; restrict to rows with a PDF URL.\n- `published_from`, `published_to` (and `published_end` alias).\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/commission-register?document_register_category=TENTAT_AGENDA_COM_MEETING\nGET /api/v2/commission/commission-register?q=AI%20Act&doc_type=COM\n```\n\n**You get back**\nA `PaginatedResponse[CommissionRegisterItem]` envelope. Each item carries reference, title, doc_type, register category, DG, procedure_ref, celex, pdf_url, source_url, dates, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from ec.europa.eu/transparency/documents-register/. Critical for College tracking \u2014 Secretariat-General updates the tentative agenda continuously, and PV minutes appear within days of each College meeting."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one Commission Register document by its reference (e.g. COM(2025) 87)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/commission-register-documents/:reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "commission-register-documents",
+                    ":reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "reference",
+                      "value": "2022/0047(COD)",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single document from the Commission Transparency Register by its reference (COM, SWD, SEC, JOIN, OJ, or PV number). Returns the same shape as the list endpoint, including the direct PDF URL when available.\n\n**When to use it**\nAfter locating a document via the list endpoint, use this for the deep-link. Common pattern: chat user asks about \"COM(2025)87\", you call this, get back the PDF URL + body, and embed it in the answer.\n\n**Input**\n- `reference` (path) \u2014 Commission document reference (e.g. `COM(2025) 87`, `SWD(2024) 123`, `SEC(2026) 2564`, `OJ(2026) 2565`, `PV(2026) 2562`). The `:path` matcher accepts parentheses + spaces verbatim \u2014 no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v2/commission/commission-register/COM(2025) 87\nGET /api/v2/commission/commission-register/SEC(2026) 2564\n```\n\n**You get back**\nA single `CommissionRegisterItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced every 6 hours from ec.europa.eu/transparency/documents-register/."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Meetings",
+          "item": [
+            {
+              "name": "Commission officials' meetings with interest representatives (Transparency Initiative)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/meetings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "meetings"
+                  ],
+                  "query": [
+                    {
+                      "key": "host_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "host_dg",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "organisation_met",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "transparency_register_id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the meetings between Commission officials (Commissioners, Heads of Cabinet, Directors-General) and external interest representatives \u2014 lobbyists, NGOs, trade bodies, member-state representatives \u2014 as published under the Transparency Initiative. Each row carries the host (UUID + name + role + DG/cabinet), the meeting date + location + subject, the organisation met, its Transparency Register ID, the participating representatives, and policy-area + related-CELEX tags.\n\n**When to use it**\nTo audit who lobbied which Commissioner on a given topic, build a \"meetings on Topic X\" view for an advocacy campaign, or cross-reference a known lobbyist against the meetings register. Combined with `/api/v1/specialised/transparency-register`, it lets you trace lobbying activity end-to-end (who is registered \u2192 who they met \u2192 what was discussed).\n\n**Input**\n- `host_uuid` \u2014 filter to a specific Commissioner/Cabinet host (UUID from commission.europa.eu).\n- `host_dg` \u2014 filter to a specific DG (e.g. `COMP`, `CLIMA`).\n- `organisation_met` \u2014 substring match on the organisation name (e.g. `Microsoft`).\n- `transparency_register_id` \u2014 filter to a specific registered entity.\n- `q` \u2014 substring search on the meeting subject.\n- `published_from`, `published_to` \u2014 date filter on `meeting_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/meetings?host_dg=COMP&q=AI\nGET /api/v2/commission/meetings?organisation_met=BusinessEurope&limit=20\n```\n\n**You get back**\nA `PaginatedResponse[TransparencyMeetingItem]` envelope. Each item carries `host_uuid`, `host_name`, `host_role`, `host_dg`, `host_cabinet`, `meeting_date`, `location`, `subject`, `organisation_met`, `transparency_register_id`, `organisation_type`, `representatives` (array of names), `source_url`, `policy_areas`, `related_celex`, plus a composed `body_txt`/`body_html` (subject + participants + organisation) and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/transparencyinitiative/meetings/. Cabinet officials are required to publish meetings within ~2 weeks; daily sync catches them inside that window. Seed host UUIDs: ca175ad3... (President), a2c7c963... (Ribera), 9fd4662a... (Hoekstra)."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one Transparency Initiative meeting by its internal UUID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/meetings/:meeting_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "meetings",
+                    ":meeting_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "meeting_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single Transparency Initiative meeting record by its Brubru-internal UUID. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating a meeting via the list endpoint, use this to deep-link into a specific record (e.g. embedded in an advocacy report or a chat answer).\n\n**Input**\n- `meeting_id` (path) \u2014 Brubru UUID of the meeting (returned in `id` from the list endpoint).\n\n**Try it**\n```\nGET /api/v2/commission/meetings/<uuid>\n```\n\n**You get back**\nA single `TransparencyMeetingItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` if no meeting with that UUID exists.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from ec.europa.eu/transparencyinitiative/meetings/."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "RSB Opinions",
+          "item": [
+            {
+              "name": "Regulatory Scrutiny Board opinions on Commission impact assessments + evaluations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/rsb-opinions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "rsb-opinions"
+                  ],
+                  "query": [
+                    {
+                      "key": "target_dg",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "verdict",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "opinion_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns opinions of the Regulatory Scrutiny Board \u2014 the independent body within the Commission that scrutinises impact assessments, evaluations, and fitness checks before they're submitted to the College. Each opinion carries the target initiative (the proposed regulation being assessed), the target DG, the procedure reference, the opinion type (`impact_assessment` / `evaluation` / `fitness_check`), and the verdict (`positive` / `positive_with_reservations` / `negative`).\n\n**When to use it**\nA negative RSB opinion is a red flag that a forthcoming proposal has methodological gaps \u2014 often a leading indicator that the College will delay adoption, send the file back for re-work, or amend the impact assessment. Use this endpoint to monitor RSB output on the policy files you care about, or to filter for \"all negative opinions on environment files in 2026\" as a quality signal.\n\n**Input**\n- `target_dg` \u2014 DG code (e.g. `CLIMA`, `ENVI`).\n- `procedure_ref` \u2014 OEIL reference.\n- `verdict` \u2014 `positive` / `positive_with_reservations` / `negative` / `unknown`.\n- `opinion_type` \u2014 `impact_assessment` / `evaluation` / `fitness_check`.\n- `q` \u2014 substring search on title + summary.\n- `published_from`, `published_to` \u2014 date filter on `opinion_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/rsb-opinions?verdict=negative&target_dg=CLIMA\nGET /api/v2/commission/rsb-opinions?q=AI%20Act\n```\n\n**You get back**\nA `PaginatedResponse[RSBOpinionItem]` envelope. Each item carries `opinion_reference`, `title`, `target_initiative`, `target_dg`, `procedure_ref`, `opinion_type`, `verdict`, `opinion_date`, `summary`, `pdf_url`, `source_url`, `policy_areas`, `last_updated`.\n\n**Data freshness**\nSynced once per week (Sunday 05:00 UTC, weekly tier) from commission.europa.eu/law/law-making-process/regulatory-scrutiny-board/. RSB publishes a handful of opinions per month; weekly sync is appropriate. Scraper queued; endpoint returns empty until ingestion completes."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one Regulatory Scrutiny Board opinion by its reference",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/rsb-opinions/:opinion_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "rsb-opinions",
+                    ":opinion_reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "opinion_reference",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single RSB opinion by its reference. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating an RSB opinion via the list endpoint, use this to deep-link into a specific record. Common pattern: list with `verdict=negative` to surface red-flag opinions, then drill into each one.\n\n**Input**\n- `opinion_reference` (path) \u2014 the RSB opinion reference (format varies; check the list endpoint for examples in the current data).\n\n**Try it**\n```\nGET /api/v2/commission/rsb-opinions/<reference>\n```\n\n**You get back**\nA single `RSBOpinionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 weekly Sunday 05:00 UTC sync from commission.europa.eu/law/law-making-process/regulatory-scrutiny-board/."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Infringements",
+          "item": [
+            {
+              "name": "Commission infringement decisions \u2014 Member State legal proceedings (LFN, reasoned opinion, CJEU referral, closure)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_state",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_stage",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sector",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "decision_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "decision_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the infringement decisions adopted by the College of Commissioners in the monthly infringement packages \u2014 letters of formal notice (LFN, the first warning), reasoned opinions (the second warning), referrals to the Court of Justice (CJEU litigation), and closures (Member State complied). Each row carries the INF reference, the Member State, the procedure stage, the sector, dates, and the decision summary.\n\n**When to use it**\nFor compliance + risk-monitoring work: which Member States have open infringements on a topic, what stages of proceedings the Commission has reached, and what risks of CJEU litigation exist. Filter by `member_state` for one country, by `sector` for a topic.\n\n**Input**\n- `member_state` \u2014 ISO-2 (exact 2 chars).\n- `procedure_stage` \u2014 substring on stage name (e.g. `formal notice`, `reasoned opinion`).\n- `sector` \u2014 substring on sector.\n- `q` \u2014 substring on title + summary.\n- `decision_from`, `decision_to` \u2014 decision_date filter.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/infringements?member_state=PL&procedure_stage=reasoned%20opinion\nGET /api/v2/commission/infringements?sector=environment&decision_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[InfringementItem]` envelope. Each item carries `inf_reference`, `title`, `summary`, `member_state`, `procedure_stage`, `sector`, `decision_date`, `source_url`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/commission/presscorner. The Commission adopts infringement packages monthly + ad-hoc; daily sync catches them within 24h of adoption. is_test=True fixture rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one infringement decision by its INF reference",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/infringements/:inf_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "infringements",
+                    ":inf_reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "inf_reference",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single infringement decision by its INF reference. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating an infringement via the list endpoint, use this for the full record + body composition.\n\n**Input**\n- `inf_reference` (path) \u2014 INF reference (e.g. `INF(2026)123`). The `:path` matcher accepts parentheses verbatim.\n\n**Try it**\n```\nGET /api/v2/commission/infringements/INF(2026)123\n```\n\n**You get back**\nA single `InfringementItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from ec.europa.eu/commission/presscorner."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Consultations",
+          "item": [
+            {
+              "name": "EC HaveYourSay consultations + calls for evidence \u2014 open, upcoming, closed, outcome-published",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/consultations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "consultations"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "consultation_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dg_responsible",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "policy_area",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the EC's public consultations from HaveYourSay (ec.europa.eu/info/law/better-regulation/have-your-say) \u2014 public consultations, calls for evidence, feedback periods, roadmaps, and inception initiatives. Each row carries the initiative_id, title, status, consultation type, the policy area, the responsible DG, the open + close dates, and the URLs to the consultation page + feedback summary.\n\n**When to use it**\nFor advocacy planning \u2014 find open consultations to submit feedback on, track upcoming ones for your sector, or audit which DGs are most consultation-heavy. For per-consultation stakeholder feedback (who responded and what they said), follow up with `/by-initiative/{id}/feedback`.\n\n**Input**\n- `q` \u2014 substring on title + description.\n- `status` \u2014 `open` / `upcoming` / `closed` / `outcome_published` / `withdrawn`.\n- `consultation_type` \u2014 `public_consultation` / `call_for_evidence` / `feedback` / `roadmap` / `initiative`.\n- Date + DG filters as standard.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/consultations?status=open&consultation_type=public_consultation\nGET /api/v2/commission/consultations?q=AI%20Act\n```\n\n**You get back**\nA `PaginatedResponse[ConsultationItem]` envelope. Each item carries `initiative_id` (numeric), `title`, `status`, `consultation_type`, `responsible_dg`, `policy_area`, `open_date`, `close_date`, `feedback_count`, `outcome_summary`, plus the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/law/better-regulation/have-your-say. Consultations open and close on known schedules; daily sync is sufficient."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one HaveYourSay consultation by its initiative_id \u2014 full description + dates",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/consultations/:initiative_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "consultations",
+                    ":initiative_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "initiative_id",
+                      "value": "13693",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns a single HaveYourSay consultation / call for evidence by its initiative_id. Includes the full description (objectives, scope, target group, outcome summary), dates, responsible DG, status, plus the composed body for embedding.\n\n**When to use it**\nAfter locating a consultation via the list endpoint, use this for the full record \u2014 particularly when drafting a feedback submission and you need the consultation's stated objectives + scope in front of you.\n\n**Input**\n- `initiative_id` (path) \u2014 numeric initiative ID (e.g. `13693`). Always numeric \u2014 the underlying table has a CHECK constraint that forbids non-numeric values.\n\n**Try it**\n```\nGET /api/v2/commission/consultations/13693\nGET /api/v2/commission/consultations/13687\n```\n\n**You get back**\nA single `ConsultationItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 synced once per day at 04:00 UTC."
+              },
+              "response": []
+            },
+            {
+              "name": "Stakeholder feedback on a HaveYourSay consultation \u2014 live, paginated, with aggregates",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/consultations/by-initiative/:initiative_id/feedback",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "consultations",
+                    "by-initiative",
+                    ":initiative_id",
+                    "feedback"
+                  ],
+                  "variable": [
+                    {
+                      "key": "initiative_id",
+                      "value": "13693",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "user_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the stakeholder feedback submitted to the EC HaveYourSay portal for one initiative, plus summary aggregates (totals per country, per stakeholder type) in the same payload \u2014 so you get analytics + detail in a single round-trip.\n\n**When to use it**\nFor consultation-tracking work: \"who submitted feedback on the housing-crisis call?\", \"what's the country breakdown of responses to the AI Act?\", or \"which industry associations have weighed in?\". The aggregates give you the macro view; the paginated feedback array gives you per-response detail.\n\n**Input**\n- `initiative_id` (path) \u2014 numeric initiative ID. Slug-style call-for-evidence IDs return 422 \u2014 only initiatives that accept feedback have numeric IDs.\n- Pagination + filter params for the feedback list.\n\n**Try it**\n```\nGET /api/v2/commission/consultations/by-initiative/13693/feedback?limit=10\n```\n\n**You get back**\nA `FeedbackEnvelope` extending the standard paginated response, with an additional `aggregates` field carrying totals_by_country, totals_by_stakeholder_type, and overall counts. Each feedback row carries the submitter org/individual, country, stakeholder type, position summary, attachment URLs, and submission date.\n\n**Data freshness**\nLive pass-through to the EC HaveYourSay portal, with a 6-hour in-process cache. Feedback closes when the consultation window ends; once closed, the dataset is stable (cache TTL is purely about reducing upstream load)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "TRIS Notifications",
+          "item": [
+            {
+              "name": "Member State notifications of national technical regulations (TRIS, Directive 2015/1535)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/tris-notifications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "tris-notifications"
+                  ],
+                  "query": [
+                    {
+                      "key": "notifying_country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sector",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns notifications submitted by EU Member States under Directive 2015/1535 \u2014 the obligation to notify the Commission of draft national technical regulations that could create barriers to the Single Market (in goods and information-society services). Each row carries the notification reference (e.g. `2026/0123/FR`), the notifying country, the sector, the title + short summary + main content, the standstill period, and the Commission's reaction (detailed opinion / comment / no-reaction).\n\n**When to use it**\nCritical for anyone tracking single-market barriers \u2014 a French draft law on packaging waste, a German tax on plastic bags, a Polish ban on a specific chemical \u2014 all surface here BEFORE they become national law. The 3-month standstill window gives industry and other Member States time to flag incompatibilities. Trade associations, single-market advocates, and product-compliance teams should monitor this continuously.\n\n**Input**\n- `notifying_country` \u2014 ISO-3166-1 alpha-2 (e.g. `FR`, `DE`).\n- `sector` \u2014 TRIS sector code (substring).\n- `q` \u2014 substring search on title + short summary + main content.\n- `published_from`, `published_to` \u2014 date filter on `notification_date`.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/commission/tris-notifications?notifying_country=FR&q=packaging\nGET /api/v2/commission/tris-notifications?sector=N40&published_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[TRISNotificationItem]` envelope. Each item carries `notification_number`, `notifying_country`, `sector`, `title`, `short_summary`, `main_content`, `notification_date`, `standstill_period`, `commission_reaction`, `source_url`, `pdf_url`, `policy_areas`, `related_celex`, body fields, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from technical-regulation-information-system.ec.europa.eu/. Member States submit notifications throughout the day; daily sync catches them. Backed by `services/scrapers/dg_grow/dg_grow_sync_service.py::sync_tris()`."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one TRIS notification by its number (e.g. 2026/0123/FR)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/tris-notifications/:notification_number",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "tris-notifications",
+                    ":notification_number"
+                  ],
+                  "variable": [
+                    {
+                      "key": "notification_number",
+                      "value": "2026/0123/FR",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single TRIS notification by its reference. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating a TRIS notification via the list endpoint, use this to fetch the full record (including the main content of the draft national regulation) in a deeper-link context \u2014 useful for compliance teams analysing whether a specific national draft impacts their product.\n\n**Input**\n- `notification_number` (path) \u2014 the TRIS reference, format `YYYY/NNNN/CC` where CC is the ISO country code (e.g. `2026/0123/FR`).\n\n**Try it**\n```\nGET /api/v2/commission/tris-notifications/2026/0123/FR\n```\n\n**You get back**\nA single `TRISNotificationItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from TRIS."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Council of the EU",
+      "item": [
+        {
+          "name": "Council Documents",
+          "item": [
+            {
+              "name": "Council of the EU documents \u2014 press releases, conclusions, meeting agendas, summits",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-documents"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "document_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "policy_area",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_end",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns a unified feed of Council of the EU + European Council documents and meetings \u2014 press releases, Council conclusions, meeting agendas, summit outcomes. Today the surface unions `institutional_publications` (Council-tagged rows) with `eu_calendar_events` for COUNCIL / EUROPEAN_COUNCIL events. A dedicated Council document register scraper (working-party + COREPER docs + Council conclusions full text) is queued.\n\n**When to use it**\nFor tracking Council positions on legislative files (the \"other half\" of EP-Council co-decision), summit conclusions (the political guidance feeding into Commission proposals), and ministerial meetings. The Council moves more slowly than the EP but its political conclusions are the most authoritative signal of where EU policy is heading.\n\n**Input**\n- `q` \u2014 substring search.\n- `document_type` \u2014 `press_release` / `conclusions` / `meeting_agenda` / etc.\n- `policy_area` \u2014 single policy area tag.\n- `published_from`, `published_to` (and `published_end` alias).\n- `updated_from`, `updated_to` (and `updated_end` alias) \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-documents?document_type=conclusions&published_from=2026-01-01\nGET /api/v2/council/council-documents?policy_area=energy\n```\n\n**You get back**\nA `PaginatedResponse[CouncilDocumentItem]` envelope. Each item carries reference, title, document_type, policy_area, dates, source URL, and the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced every 12 hours (02:00 / 14:00 UTC, warm tier) for now \u2014 will move to dedicated 6h scraper once the Council document register scraper ships. Meanwhile, this surface unions data from the publications sync (every 6h) and the calendar sync (every 6h)."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council document or meeting by id \u2014 full body (text + HTML)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-documents/:doc_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-documents",
+                    ":doc_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "doc_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single Council of the EU item by its Brubru-internal UUID \u2014 either a Council institutional publication (press release, conclusions) or a Council / European Council meeting from the calendar. Returns the same shape as the list endpoint with the 5 datapoints filled: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**When to use it**\nAfter locating an item via the list endpoint, use this to fetch the full record. For publications the body is the stored HTML content (or summary); for meetings the body is composed from the meeting facts (configuration, date, the legislative files on the agenda).\n\n**Input**\n- `doc_id` (path) \u2014 the Brubru-internal UUID from the list endpoint's `id`.\n\n**Try it**\n```\nGET /api/v2/council/council-documents/{doc_id}\n```\n\n**You get back**\nA single `CouncilDocumentItem`, or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame sources as the list endpoint (publications sync + calendar sync)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Configurations",
+          "item": [
+            {
+              "name": "Council of the EU configurations \u2014 the 10 ministerial formations (+ Eurogroup)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-configurations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-configurations"
+                  ]
+                },
+                "description": "**What it does**\nReturns the ten configurations the Council of the EU meets in (General Affairs, Foreign Affairs, ECOFIN, Justice and Home Affairs, EPSCO, Competitiveness, Transport/Telecommunications/Energy, Agriculture and Fisheries, Environment, Education/Youth/Culture/Sport) plus the informal Eurogroup. For each: the official name, the URL-slug, the consilium public-register entity id, the \"council-meetings-explained\" page, and a deep-link to the calendar filtered to that formation.\n\n**When to use it**\nAs a reference list to drive a configuration picker, to resolve a configuration code to its full name, or to get the canonical consilium URLs for a formation. Pair with `/api/v2/council/council-documents?` (meetings are tagged with `council_configuration`).\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/council/council-configurations\n```\n\n**You get back**\nA `PaginatedResponse[CouncilConfigurationItem]` with one row per configuration: `code`, `name`, `slug`, `register_entity_id`, `consilium_url`, `calendar_filter_url`, `informal`, plus the 5 envelope datapoints (`public_url` = the consilium page, `body_txt`/`body_html` = the description, `document_date` = null, `creation_date` = server time).\n\n**Data freshness**\nStatic reference data \u2014 the Council configurations are fixed by the Council's Rules of Procedure."
               },
               "response": []
             }

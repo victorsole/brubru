@@ -1,13 +1,25 @@
 """
 Committee Meeting Transcription Service
 
-Full pipeline: discover meeting -> download audio (ffmpeg) ->
-transcribe (OpenAI Whisper API) -> map agenda to timestamps -> store in DB.
+Full pipeline: discover meeting -> select language track (if HLS master) ->
+extract audio (ffmpeg) -> transcribe -> map agenda to timestamps -> store in DB.
 
-Whisper API: $0.006/min. A 2-hour meeting costs ~$0.72.
-Audio extraction requires ffmpeg in the system PATH.
+Engines (in preference order when not pinned):
+  * faster-whisper (local, FREE) -- medium model, CPU int8, no file-size cap.
+    Set FASTER_WHISPER_MODEL env var to override model size (default: medium).
+  * Voxtral (Mistral API, voxtral-mini-2507) -- $0.006/min. Set MISTRAL_API_KEY.
+    NOTE: requires Mistral Business plan; gives 401 on developer/free tier.
+  * OpenAI Whisper (whisper-1 API) -- $0.006/min. Set OPENAI_API_KEY.
+
+Language tracks:
+  EP committee HLS masters expose one AUDIO track per interpretation booth
+  (floor `qaj/qar/qac`, en, fr, es, it, nl, ...). `language` selects the
+  EXT-X-MEDIA LANGUAGE attribute. 'floor' picks the floor (original mix);
+  default 'en' picks the English booth.
 
 Created: April 2026
+Updated: May 2026 -- HLS language-track selection + Voxtral primary.
+Updated: May 2026 -- faster-whisper local engine added (free, no API cost).
 """
 
 import logging
@@ -18,20 +30,199 @@ import tempfile
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Tuple
 
+import httpx
 from openai import AsyncOpenAI
 
 logger = logging.getLogger(__name__)
 
-# Whisper API has a 25 MB file size limit
+# Whisper / Voxtral API: 25 MB per file limit
 MAX_AUDIO_SIZE_BYTES = 25 * 1024 * 1024
+
+VOXTRAL_API_URL = "https://api.mistral.ai/v1/audio/transcriptions"
+VOXTRAL_DEFAULT_MODEL = "voxtral-mini-2507"
+FLOOR_LANGUAGES = {"qaj", "qar", "qac", "mul"}
+FASTER_WHISPER_DEFAULT_MODEL = "medium"  # tiny/base/small/medium/large-v2/large-v3
+
+# Module-level faster-whisper model singleton (loaded lazily on first use)
+_faster_whisper_model = None
+_faster_whisper_model_name: Optional[str] = None
+
+# Inter-segment silence (seconds) above which we start a new paragraph.
+# Profiled on the SANT 23 April 2026 transcript: 1,460 gaps split bimodally
+# at <1s (intra-utterance) vs >=2s (speaker handover).
+# Only treat a sizeable pause as a paragraph break (timestamp gaps vary by engine,
+# so keep this conservative — the primary driver is length+sentence below).
+PARAGRAPH_GAP_SECONDS = 2.5
+# Target paragraph length: once exceeded, break at the next sentence end. Gives
+# uniform medium paragraphs regardless of ASR engine.
+PARAGRAPH_TARGET_CHARS = 450
+# Hard cap: break even without sentence-final punctuation past this, to avoid a
+# runaway wall-of-text on long monologues.
+PARAGRAPH_MAX_CHARS = 800
+# Phrases at the start of a segment that almost always mark a speaker change.
+# Lowercased; matched as `text_lower.lstrip().startswith(cue)`.
+_SPEAKER_CUES = (
+    "thank you,",
+    "thank you so much",
+    "thank you very much",
+    "thank you chair",
+    "thank you, chair",
+    "thank you, madam chair",
+    "thank you, madam president",
+    "thank you, mr president",
+    "i give the floor",
+    "i'll give the floor",
+    "give the floor to",
+    "the floor is yours",
+    "please, the floor",
+    "the next item",
+    "next item on the agenda",
+    "we now go",
+    "we go to",
+    "moving on",
+    "moving to",
+    "and now,",
+    "and now to",
+    "and then to",
+    "and then,",
+    "now to ",
+    "now, ",
+    "madam chair,",
+    "madam president,",
+    "mr president,",
+    "mr. president,",
+    "dear chair",
+    "dear colleagues",
+    "dear members",
+    "honourable members",
+    "honorable members",
+    "grazie",
+    "danke",
+    "merci",
+    "bonjour",
+    "good morning",
+    "next slide",
+    "the vote is open",
+    "final vote",
+    "compromise number",
+    "amendment number",
+    "adopted.",
+    "rejected.",
+)
+
+
+def format_segments_as_paragraphs(
+    segments: List[Dict[str, Any]],
+    gap_seconds: float = PARAGRAPH_GAP_SECONDS,
+    max_chars: int = PARAGRAPH_MAX_CHARS,
+) -> str:
+    """Join verbose_json segments into a readable multi-paragraph transcript.
+
+    Heuristics for inserting a paragraph break BEFORE the current segment:
+      (1) gap (seg.start - prev.end) >= `gap_seconds` -- natural pause / speaker
+          handover. Whisper chunks produce a clean bimodal gap distribution.
+      (2) segment text starts with a known speaker-transition cue ("Thank you,",
+          "I give the floor to", "Madam Chair", ...).
+      (3) the running paragraph exceeds `max_chars` AND ends in sentence-final
+          punctuation -- prevents wall-of-text in long monologues.
+    """
+    if not segments:
+        return ""
+
+    paragraphs: List[List[str]] = [[]]
+    prev_end = 0.0
+    for idx, seg in enumerate(segments):
+        text = (seg.get("text") or "").strip()
+        if not text:
+            continue
+        start = float(seg.get("start") or 0.0)
+        end = float(seg.get("end") or start)
+        gap = start - prev_end if idx > 0 else 0.0
+
+        text_lower_l = text.lower().lstrip()
+        starts_cue = any(text_lower_l.startswith(c) for c in _SPEAKER_CUES)
+        current_text = " ".join(paragraphs[-1])
+        ended_sentence = current_text.rstrip().endswith((".", "?", "!", ":"))
+        # Primary, engine-independent driver: pack to a target length, break at the
+        # next sentence end; hard-cap runaway monologues.
+        reached_target = len(current_text) >= PARAGRAPH_TARGET_CHARS and ended_sentence
+        hard_cap = len(current_text) >= max_chars
+        new_para = idx > 0 and bool(paragraphs[-1]) and (
+            starts_cue or reached_target or hard_cap or gap >= gap_seconds
+        )
+
+        if new_para:
+            paragraphs.append([])
+        paragraphs[-1].append(text)
+        prev_end = end
+
+    return "\n\n".join(" ".join(p).strip() for p in paragraphs if p)
 
 
 class CommitteeTranscriptionService:
-    """Transcribes EP committee meeting recordings using OpenAI Whisper API."""
+    """Transcribes EP committee meeting recordings."""
 
     def __init__(self):
-        api_key = os.getenv("OPENAI_API_KEY")
-        self._openai = AsyncOpenAI(api_key=api_key) if api_key else None
+        # Keys live in pydantic `settings` (loaded from ../.env); os.environ is NOT
+        # populated under uvicorn, so os.getenv alone returns None and the service
+        # falls back to slow local CPU faster-whisper (or fails). Read settings too.
+        try:
+            from core.config import settings as _settings
+        except Exception:
+            _settings = None
+
+        def _key(name):
+            return os.getenv(name) or (getattr(_settings, name, None) if _settings else None)
+
+        openai_key = _key("OPENAI_API_KEY")
+        self._openai = AsyncOpenAI(api_key=openai_key) if openai_key else None
+        self._mistral_key = _key("MISTRAL_API_KEY")
+        self._voxtral_model = _key("VOXTRAL_MODEL") or VOXTRAL_DEFAULT_MODEL
+        self._fw_model_name = _key("FASTER_WHISPER_MODEL") or FASTER_WHISPER_DEFAULT_MODEL
+
+    def _get_faster_whisper_model(self):
+        """Load (or return cached) faster-whisper model."""
+        global _faster_whisper_model, _faster_whisper_model_name
+        if _faster_whisper_model is None or _faster_whisper_model_name != self._fw_model_name:
+            try:
+                from faster_whisper import WhisperModel
+                logger.info("[TRANSCRIBE] Loading faster-whisper model '%s' (CPU int8)...", self._fw_model_name)
+                _faster_whisper_model = WhisperModel(
+                    self._fw_model_name, device="cpu", compute_type="int8"
+                )
+                _faster_whisper_model_name = self._fw_model_name
+                logger.info("[TRANSCRIBE] faster-whisper model loaded.")
+            except ImportError:
+                return None
+        return _faster_whisper_model
+
+    def _engine_order(self, prefer: Optional[str] = None) -> List[str]:
+        """Return ordered list of engines to try given env + preference."""
+        if prefer == "faster-whisper":
+            return ["faster-whisper"]
+        if prefer == "whisper":
+            order = []
+            if self._openai:
+                order.append("whisper")
+            if self._mistral_key:
+                order.append("voxtral")
+            return order
+        if prefer == "voxtral":
+            # API-only, EU-sovereign first — for ON-DEMAND (fast; never the slow
+            # local CPU engine). Falls back to OpenAI Whisper if Voxtral is down.
+            order = []
+            if self._mistral_key:
+                order.append("voxtral")
+            if self._openai:
+                order.append("whisper")
+            return order
+        # Default (batch/CLI): faster-whisper first (free, local), then APIs.
+        order = ["faster-whisper"]
+        if self._mistral_key:
+            order.append("voxtral")
+        if self._openai:
+            order.append("whisper")
+        return order
 
     async def transcribe_meeting(
         self,
@@ -40,8 +231,14 @@ class CommitteeTranscriptionService:
         meeting_date: date,
         title: str,
         agenda_items: Optional[List[Dict[str, Any]]] = None,
+        language: str = "en",
+        engine: Optional[str] = None,
+        progress_cb=None,
     ) -> Dict[str, Any]:
         """Full transcription pipeline.
+
+        ``progress_cb(stage: str, pct: float)`` is an optional callback for UI
+        progress (stage in {'preparing','transcribing'}); no-op when omitted.
 
         Returns a dict ready to populate a CommitteeMeetingTranscript row:
         {
@@ -58,21 +255,41 @@ class CommitteeTranscriptionService:
             "agenda_items": agenda_items or [],
             "related_procedure_refs": [],
             "transcription_cost": 0.0,
-            "transcription_model": "whisper-1",
+            "transcription_model": None,
+            "transcription_language": language,
             "status": "processing",
             "error_message": None,
         }
 
-        if not self._openai:
+        def _p(stage: str, pct: float):
+            if progress_cb:
+                try:
+                    progress_cb(stage, pct)
+                except Exception:
+                    pass
+
+        _p("preparing", 0)
+        engines = self._engine_order(prefer=engine)
+        if not engines:
             result["status"] = "failed"
-            result["error_message"] = "OPENAI_API_KEY not configured"
+            result["error_message"] = "No ASR engine configured (set MISTRAL_API_KEY or OPENAI_API_KEY)"
             return result
 
-        # Step 1: download and extract audio
-        logger.info("[TRANSCRIBE] Downloading audio from %s", video_url)
+        # Step 1: resolve the audio track URL (HLS master -> language booth)
+        source_url = video_url
+        if video_url.endswith(".m3u8"):
+            track_url = await self._select_audio_track(video_url, language=language)
+            if track_url:
+                source_url = track_url
+                logger.info("[TRANSCRIBE] Selected %s booth: %s", language, track_url[:120])
+            else:
+                logger.info("[TRANSCRIBE] No %s booth in master; using master URL", language)
+
+        # Step 2: download and extract audio
+        logger.info("[TRANSCRIBE] Downloading audio from %s", source_url[:120])
         audio_path = None
         try:
-            audio_path = await self._extract_audio(video_url)
+            audio_path = await self._extract_audio(source_url)
             if not audio_path:
                 result["status"] = "failed"
                 result["error_message"] = "Failed to extract audio from video URL"
@@ -80,22 +297,57 @@ class CommitteeTranscriptionService:
 
             audio_size = os.path.getsize(audio_path)
             logger.info("[TRANSCRIBE] Audio extracted: %d bytes (%.1f MB)", audio_size, audio_size / 1024 / 1024)
+            _p("transcribing", 0)
 
-            # Step 2: transcribe with Whisper API
-            if audio_size > MAX_AUDIO_SIZE_BYTES:
-                logger.info("[TRANSCRIBE] Audio > 25 MB, chunking required")
-                segments, full_text, duration = await self._transcribe_chunked(audio_path)
-            else:
-                segments, full_text, duration = await self._transcribe_single(audio_path)
+            # Step 3: transcribe (engines tried in order)
+            segments: List[Dict[str, Any]] = []
+            full_text: str = ""
+            duration: float = 0.0
+            used_engine: Optional[str] = None
+            last_error: Optional[str] = None
+            for eng in engines:
+                try:
+                    # faster-whisper runs locally — no file size cap, no chunking needed
+                    if eng == "faster-whisper":
+                        logger.info("[TRANSCRIBE] Transcribing via faster-whisper (local, free)")
+                        segments, full_text, duration = await self._transcribe_single(audio_path, engine=eng, language=language)
+                    elif audio_size > MAX_AUDIO_SIZE_BYTES:
+                        logger.info("[TRANSCRIBE] Audio > 25 MB, chunking via %s", eng)
+                        segments, full_text, duration = await self._transcribe_chunked(audio_path, engine=eng, language=language, progress_cb=progress_cb)
+                    else:
+                        segments, full_text, duration = await self._transcribe_single(audio_path, engine=eng, language=language)
+                    if full_text:
+                        used_engine = eng
+                        break
+                except Exception as exc:
+                    last_error = f"{eng}: {exc}"
+                    logger.warning("[TRANSCRIBE] Engine %s failed: %s", eng, exc)
+                    continue
+            if not used_engine:
+                result["status"] = "failed"
+                result["error_message"] = last_error or "All ASR engines failed"
+                return result
+
+            # Re-render the transcript as paragraphs using segment timestamps,
+            # so the stored text is readable (not one massive wall).
+            if segments:
+                paragraphed = format_segments_as_paragraphs(segments)
+                if paragraphed:
+                    full_text = paragraphed
 
             result["transcript_text"] = full_text
             result["transcript_segments"] = segments
             result["word_count"] = len(full_text.split()) if full_text else 0
             result["duration_seconds"] = int(duration) if duration else 0
-
-            # Cost: $0.006 per minute
-            minutes = (duration or 0) / 60
-            result["transcription_cost"] = round(minutes * 0.006, 4)
+            if used_engine == "faster-whisper":
+                result["transcription_model"] = f"faster-whisper-{self._fw_model_name}"
+                result["transcription_cost"] = 0.0  # local, free
+            elif used_engine == "voxtral":
+                result["transcription_model"] = self._voxtral_model
+                result["transcription_cost"] = round((duration or 0) / 60 * 0.006, 4)
+            else:
+                result["transcription_model"] = "whisper-1"
+                result["transcription_cost"] = round((duration or 0) / 60 * 0.006, 4)
 
             # Step 3: extract procedure references from transcript
             result["related_procedure_refs"] = self._extract_procedure_refs(full_text or "")
@@ -181,38 +433,194 @@ class CommitteeTranscriptionService:
                 os.unlink(tmp_path)
             return None
 
+    async def _select_audio_track(self, master_url: str, language: str = "en") -> Optional[str]:
+        """Parse an HLS master playlist and return the URL of the audio track for `language`.
+
+        `language='floor'` picks the original/floor mix (LANGUAGE in FLOOR_LANGUAGES).
+        Returns None if the master can't be parsed or the language isn't present.
+        """
+        try:
+            async with httpx.AsyncClient(timeout=20.0, headers={"User-Agent": "Brubru/1.0"}) as c:
+                resp = await c.get(master_url, follow_redirects=True)
+                if resp.status_code != 200:
+                    logger.warning("[TRANSCRIBE] HLS master %d: %s", resp.status_code, master_url[:120])
+                    return None
+                text = resp.text
+        except httpx.HTTPError as exc:
+            logger.warning("[TRANSCRIBE] HLS master fetch failed: %s", exc)
+            return None
+
+        tracks: List[Tuple[str, str]] = []  # (language, uri)
+        for line in text.splitlines():
+            if not line.startswith("#EXT-X-MEDIA") or 'TYPE=AUDIO' not in line:
+                continue
+            lang_match = re.search(r'LANGUAGE="([^"]+)"', line)
+            uri_match = re.search(r'URI="([^"]+)"', line)
+            if not (lang_match and uri_match):
+                continue
+            tracks.append((lang_match.group(1).lower(), uri_match.group(1)))
+
+        if not tracks:
+            return None
+
+        want = language.lower().strip()
+        picked: Optional[str] = None
+        if want == "floor":
+            for lang, uri in tracks:
+                if lang in FLOOR_LANGUAGES:
+                    picked = uri
+                    break
+        else:
+            for lang, uri in tracks:
+                if lang == want:
+                    picked = uri
+                    break
+        if not picked:
+            return None
+
+        # Resolve relative URI against master URL base
+        if picked.startswith("http"):
+            return picked
+        base = master_url.rsplit("/", 1)[0]
+        return f"{base}/{picked}"
+
     async def _transcribe_single(
-        self, audio_path: str
+        self, audio_path: str, engine: str = "voxtral", language: str = "en",
     ) -> Tuple[List[Dict[str, Any]], str, float]:
-        """Transcribe a single audio file (< 25 MB) with Whisper API."""
+        """Transcribe a single audio file via the chosen engine."""
+        if engine == "faster-whisper":
+            return await self._transcribe_single_faster_whisper(audio_path, language=language)
+        if engine == "voxtral":
+            return await self._transcribe_single_voxtral(audio_path, language=language)
+        return await self._transcribe_single_whisper(audio_path, language=language)
+
+    async def _transcribe_single_faster_whisper(
+        self, audio_path: str, language: str = "en",
+    ) -> Tuple[List[Dict[str, Any]], str, float]:
+        """Transcribe via local faster-whisper (free, no file size limit)."""
+        import asyncio
+
+        model = self._get_faster_whisper_model()
+        if model is None:
+            raise RuntimeError("faster-whisper not installed (pip install faster-whisper)")
+
+        fw_lang = None if language in ("floor", "auto") else language
+
+        def _run():
+            seg_gen, info = model.transcribe(
+                audio_path,
+                language=fw_lang,
+                beam_size=5,
+                vad_filter=True,           # skip silence chunks
+                vad_parameters={"min_silence_duration_ms": 500},
+            )
+            segs = []
+            parts = []
+            for seg in seg_gen:
+                text = (seg.text or "").strip()
+                segs.append({"start": seg.start, "end": seg.end, "text": text})
+                if text:
+                    parts.append(text)
+            full_text = " ".join(parts)
+            return segs, full_text, float(info.duration or 0)
+
+        return await asyncio.to_thread(_run)
+
+    async def _transcribe_single_whisper(
+        self, audio_path: str, language: str = "en",
+    ) -> Tuple[List[Dict[str, Any]], str, float]:
+        if not self._openai:
+            raise RuntimeError("OPENAI_API_KEY not configured")
+        whisper_lang = None if language in ("floor", "auto") else language
         with open(audio_path, "rb") as f:
-            response = await self._openai.audio.transcriptions.create(
+            kwargs = dict(
                 model="whisper-1",
                 file=f,
                 response_format="verbose_json",
                 timestamp_granularities=["segment"],
-                language="en",  # committee meetings are interpreted to English
             )
+            if whisper_lang:
+                kwargs["language"] = whisper_lang
+            response = await self._openai.audio.transcriptions.create(**kwargs)
 
         segments = []
         full_text_parts = []
-        duration = getattr(response, "duration", 0) or 0
+        duration = float(getattr(response, "duration", 0) or 0)
 
+        # OpenAI SDK >=1.0 returns Pydantic TranscriptionSegment objects (not dicts).
         for seg in getattr(response, "segments", []) or []:
+            start = getattr(seg, "start", None)
+            end = getattr(seg, "end", None)
+            text = (getattr(seg, "text", "") or "").strip()
+            if start is None and isinstance(seg, dict):  # belt-and-braces
+                start = seg.get("start", 0)
+                end = seg.get("end", 0)
+                text = (seg.get("text") or "").strip()
             segment = {
-                "start": seg.get("start", 0),
-                "end": seg.get("end", 0),
-                "text": (seg.get("text") or "").strip(),
+                "start": float(start or 0),
+                "end": float(end or 0),
+                "text": text,
             }
             segments.append(segment)
             if segment["text"]:
                 full_text_parts.append(segment["text"])
 
-        full_text = " ".join(full_text_parts)
+        full_text = (getattr(response, "text", None) or " ".join(full_text_parts) or "").strip()
+        return segments, full_text, duration
+
+    async def _transcribe_single_voxtral(
+        self, audio_path: str, language: str = "en",
+    ) -> Tuple[List[Dict[str, Any]], str, float]:
+        """Transcribe via Mistral Voxtral API. Returns (segments, full_text, duration)."""
+        if not self._mistral_key:
+            raise RuntimeError("MISTRAL_API_KEY not configured")
+        # ffprobe for duration (Voxtral doesn't always return it)
+        try:
+            probe = subprocess.run(
+                ["ffprobe", "-v", "quiet", "-show_entries", "format=duration",
+                 "-of", "default=noprint_wrappers=1:nokey=1", audio_path],
+                capture_output=True, timeout=30,
+            )
+            duration = float(probe.stdout.decode().strip() or "0")
+        except Exception:
+            duration = 0.0
+
+        async with httpx.AsyncClient(
+            timeout=300.0,
+            headers={"Authorization": f"Bearer {self._mistral_key}"},
+        ) as c:
+            with open(audio_path, "rb") as fh:
+                files = {"file": (os.path.basename(audio_path), fh, "audio/mpeg")}
+                data: Dict[str, str] = {
+                    "model": self._voxtral_model,
+                    "timestamp_granularities": "segment",
+                    "response_format": "verbose_json",
+                }
+                if language and language not in ("floor", "auto"):
+                    data["language"] = language
+                resp = await c.post(VOXTRAL_API_URL, files=files, data=data)
+            if resp.status_code >= 400:
+                raise RuntimeError(f"Voxtral HTTP {resp.status_code}: {resp.text[:200]}")
+            payload = resp.json()
+
+        segments: List[Dict[str, Any]] = []
+        full_text_parts: List[str] = []
+        for seg in (payload.get("segments") or []):
+            t = (seg.get("text") or "").strip()
+            segments.append({
+                "start": seg.get("start", 0),
+                "end": seg.get("end", 0),
+                "text": t,
+            })
+            if t:
+                full_text_parts.append(t)
+        full_text = payload.get("text") or " ".join(full_text_parts)
+        if not duration:
+            duration = float(payload.get("duration", 0) or 0)
         return segments, full_text, duration
 
     async def _transcribe_chunked(
-        self, audio_path: str
+        self, audio_path: str, engine: str = "voxtral", language: str = "en", progress_cb=None,
     ) -> Tuple[List[Dict[str, Any]], str, float]:
         """Split audio into chunks and transcribe each, stitching timestamps.
 
@@ -256,7 +664,9 @@ class CommitteeTranscriptionService:
                 )
 
                 if os.path.exists(chunk_path) and os.path.getsize(chunk_path) > 1000:
-                    segments, text, dur = await self._transcribe_single(chunk_path)
+                    segments, text, dur = await self._transcribe_single(
+                        chunk_path, engine=engine, language=language,
+                    )
 
                     # Adjust timestamps by offset
                     for seg in segments:
@@ -275,6 +685,11 @@ class CommitteeTranscriptionService:
 
             offset += chunk_seconds  # advance (overlap handled in extraction)
             chunk_idx += 1
+            if progress_cb and total_duration > 0:
+                try:
+                    progress_cb("transcribing", min(99.0, offset / total_duration * 100.0))
+                except Exception:
+                    pass
 
         full_text = " ".join(all_text_parts)
         return all_segments, full_text, total_duration
@@ -285,51 +700,76 @@ class CommitteeTranscriptionService:
         refs = re.findall(r"\d{4}/\d{4}\s*\([A-Z]{2,4}\)", text)
         return list(set(refs))
 
+    _AGENDA_STOP = {"the", "a", "an", "of", "on", "in", "for", "and", "to", "with",
+                    "by", "at", "from", "this", "that", "its", "as", "regards"}
+
     def _map_agenda_to_timestamps(
         self,
         agenda_items: List[Dict[str, Any]],
         segments: List[Dict[str, Any]],
     ) -> List[Dict[str, Any]]:
-        """Map agenda items to approximate transcript timestamps using keyword matching.
+        """Map agenda items to transcript timestamps with an ORDERED, cue-based sweep.
 
-        For each agenda item, find the first segment whose text contains
-        enough keywords from the agenda title. This gives an approximate
-        start time for each agenda topic in the recording.
+        Committee meetings work the agenda in order, so each item's start must come
+        after the previous item's. For each item we score candidate segments (only
+        those after the last assigned one) on three signals:
+          * title keyword overlap,
+          * the rapporteur's surname being spoken (strong),
+          * an explicit "point/item N" chair cue matching the item number (strongest).
+        The best segment above threshold becomes the item's start; end is the next
+        mapped item's start. Items genuinely not reached (draft agendas deviate) get
+        no timestamp rather than a wrong one. Assumes ``agenda_items`` are already
+        filtered to one recording session (see committee_agenda_pdf.items_for_session).
         """
-        if not segments:
+        if not segments or not agenda_items:
             return agenda_items
 
-        stop_words = {"the", "a", "an", "of", "on", "in", "for", "and", "to", "with",
-                      "by", "at", "from", "this", "that", "its"}
+        n = len(segments)
+        last_idx = -1
+        mapped: List[Dict[str, Any]] = []
 
-        mapped = []
         for item in agenda_items:
             title = item.get("title", "")
             keywords = {
-                w.lower().strip(".,;:!?()[]\"'")
+                w.lower().strip(".,;:!?()[]\"'’“”")
                 for w in title.split()
-                if len(w) > 3 and w.lower() not in stop_words
+                if len(w) > 3 and w.lower() not in self._AGENDA_STOP
             }
+            rapp = item.get("rapporteur") or ""
+            rapp_tokens = {
+                w.lower() for w in re.split(r"[\s,()]+", rapp)
+                if len(w) > 3 and w.lower() not in self._AGENDA_STOP
+            }
+            num = item.get("number")
+            num_cue = re.compile(rf"\b(?:point|item|number|punto|punkt)\s+(?:no\.?\s*)?{num}\b", re.I) if num else None
 
-            if not keywords:
-                mapped.append(item)
-                continue
-
-            best_seg = None
-            best_score = 0
-            for seg in segments:
-                seg_text = seg.get("text", "").lower()
-                score = sum(1 for kw in keywords if kw in seg_text)
+            best_idx, best_score = None, 0
+            for idx in range(last_idx + 1, n):
+                txt = (segments[idx].get("text") or "").lower()
+                if not txt:
+                    continue
+                score = sum(1 for kw in keywords if kw in txt)
+                score += 2 * sum(1 for kw in rapp_tokens if kw in txt)
+                if num_cue and num_cue.search(txt):
+                    score += 4
                 if score > best_score:
-                    best_score = score
-                    best_seg = seg
+                    best_score, best_idx = score, idx
 
             item_copy = dict(item)
-            if best_seg and best_score >= 2:
-                item_copy["start_time"] = best_seg.get("start")
-                item_copy["end_time"] = best_seg.get("end")
-
+            # Accept on a strong single cue (number/rapporteur) or >=2 title keywords.
+            if best_idx is not None and best_score >= 2:
+                item_copy["start_time"] = segments[best_idx].get("start")
+                last_idx = best_idx
             mapped.append(item_copy)
+
+        # end_time = the next mapped item's start_time
+        for i, it in enumerate(mapped):
+            if it.get("start_time") is None:
+                continue
+            for j in range(i + 1, len(mapped)):
+                if mapped[j].get("start_time") is not None:
+                    it["end_time"] = mapped[j]["start_time"]
+                    break
 
         return mapped
 

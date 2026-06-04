@@ -81,19 +81,71 @@ _LEG_ROUTING = [
     ("oeil/", "Legislative Observatory (OEIL)", None),
     ("legislative-train/", "Legislative Train", None),
     ("eurovoc/", "EuroVoc & vocabularies", None),
+    ("delegated-acts", "Legislative Documents", None),
+    ("implementing-acts", "Legislative Documents", None),
 ]
-_LEG_SOURCE_ORDER = ["EUR-Lex", "Legislative Observatory (OEIL)", "Legislative Train", "EuroVoc & vocabularies"]
+_LEG_SOURCE_ORDER = ["EUR-Lex", "Legislative Observatory (OEIL)", "Legislative Train", "EuroVoc & vocabularies", "Legislative Documents"]
 _EURLEX_SUBORDER = ["Identifiers & resolution", "Documents", "Search & summaries", "Relationships & lifecycle", "Official Journal"]
 
 # Proprietary: (path-tail prefix, source folder). Flat — no sub-sub-folders.
 _PROP_ROUTING = [("guides", "Knowledge Guides"), ("catalan", "Catalan Translations"), ("canon", "Canon & Deep-Dives")]
 _PROP_SOURCE_ORDER = ["Knowledge Guides", "Catalan Translations", "Canon & Deep-Dives"]
 
+# Parliament: (path-tail prefix, source folder). Flat — no sub-sub-folders.
+_PARL_ROUTING = [
+    ("meps", "MEPs"),
+    ("amendments", "Amendments"),
+    ("votes", "Votes"),
+    ("ep-documents", "EP Documents"),
+    ("reports", "Reports"),
+    ("opinions", "Opinions"),
+    ("committees", "Committees"),
+    ("texts-adopted", "Texts Adopted"),
+    ("texts-submitted", "Texts Submitted"),
+    ("resolutions", "Resolutions"),
+    ("eprs", "EPRS"),
+    ("webstreams", "Webstreams"),
+    ("parliamentary-questions", "Parliamentary Questions"),
+]
+_PARL_SOURCE_ORDER = [
+    "MEPs", "Amendments", "Votes", "EP Documents", "Reports", "Opinions",
+    "Committees", "Texts Adopted", "Texts Submitted", "Resolutions", "EPRS",
+    "Webstreams", "Parliamentary Questions",
+]
+
+# Commission: (path-tail prefix, source folder). Flat — no sub-sub-folders.
+_COMM_ROUTING = [
+    ("commissioners", "Commissioners"),
+    ("commission-register-documents", "Commission Register"),
+    ("meetings", "Meetings"),
+    ("rsb-opinions", "RSB Opinions"),
+    ("infringements", "Infringements"),
+    ("consultations", "Consultations"),
+    ("tris-notifications", "TRIS Notifications"),
+]
+_COMM_SOURCE_ORDER = [
+    "Commissioners", "Commission Register", "Meetings", "RSB Opinions",
+    "Infringements", "Consultations", "TRIS Notifications",
+]
+
+# Council: (path-tail prefix, source folder). Flat — no sub-sub-folders.
+_COUNCIL_ROUTING = [
+    ("council-documents", "Council Documents"),
+    ("council-configurations", "Council Configurations"),
+]
+_COUNCIL_SOURCE_ORDER = ["Council Documents", "Council Configurations"]
+
 _PARAM_DEFAULTS = {
     "celex": "32016R0679", "ref": "32016R0679", "reference": "2022/0047(COD)",
     "concept_id": "3030", "table": "corporate-bodies", "summary_id": "32016R0679",
     "carriage_id": "2022/0047(COD)", "series": "L", "year": "2016", "number": "119",
     "guide_id": "ai_act_regulation", "slug": "2024-1689_aiact",
+    # European Parliament domain path variables
+    "mep_id": "197488", "ta_reference": "P10_TA(2025)0042",
+    "question_reference": "E-001234/2026", "code": "LIBE",
+    "procedure_ref": "2025/2125(INI)",
+    # European Commission domain path variables
+    "name": "ribera", "initiative_id": "13693", "notification_number": "2026/0123/FR",
 }
 _QUERY_FALLBACKS = {
     "q": "data protection", "id": "GDPR", "date": "2026-05-01", "published_from": "2026-05-01",
@@ -123,6 +175,27 @@ def _prop_route(tail: str) -> str:
         if tail == needle or tail.startswith(needle):
             return source
     return "Knowledge Guides"
+
+
+def _parl_route(tail: str) -> str:
+    for needle, source in _PARL_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "MEPs"
+
+
+def _comm_route(tail: str) -> str:
+    for needle, source in _COMM_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Commissioners"
+
+
+def _council_route(tail: str) -> str:
+    for needle, source in _COUNCIL_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Council Documents"
 
 
 def _clean_path(path: str) -> str:
@@ -232,6 +305,51 @@ def _build_proprietary_domain(paths: dict) -> dict:
     return {"name": "Proprietary Databases", "item": sources}
 
 
+def _build_parliament_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/parliament/" not in path:
+            continue
+        tail = path.split("/api/v2/parliament/", 1)[1]
+        source = _parl_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _PARL_SOURCE_ORDER if s in tree]
+    return {"name": "European Parliament", "item": sources}
+
+
+def _build_commission_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/commission/" not in path:
+            continue
+        tail = path.split("/api/v2/commission/", 1)[1]
+        source = _comm_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _COMM_SOURCE_ORDER if s in tree]
+    return {"name": "European Commission", "item": sources}
+
+
+def _build_council_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/council/" not in path:
+            continue
+        tail = path.split("/api/v2/council/", 1)[1]
+        source = _council_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _COUNCIL_SOURCE_ORDER if s in tree]
+    return {"name": "Council of the EU", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -241,7 +359,13 @@ def _count(folder: dict) -> int:
 
 def build_collection() -> dict:
     paths = app.openapi().get("paths", {})
-    domains = [_build_legislative_domain(paths), _build_proprietary_domain(paths)]
+    domains = [
+        _build_legislative_domain(paths),
+        _build_parliament_domain(paths),
+        _build_commission_domain(paths),
+        _build_council_domain(paths),
+        _build_proprietary_domain(paths),
+    ]
     n_requests = sum(_count(d) for d in domains)
     return {
         "info": {
@@ -250,7 +374,15 @@ def build_collection() -> dict:
                 "Brubru's institution-/source-based public API, **v2**. One collection, one folder "
                 "per domain, each domain holding its source sub-folders.\n\n"
                 "- **Legislative data** — mirrored EU institutional sources: EUR-Lex / Legislative "
-                "Observatory (OEIL) / Legislative Train / EuroVoc.\n"
+                "Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n"
+                "- **European Parliament** — the EP surface: MEPs, amendments, votes, committee output, "
+                "reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams "
+                "and parliamentary questions.\n"
+                "- **European Commission** — the EC surface: College of Commissioners, Commission Register "
+                "documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, "
+                "infringements, Have Your Say consultations and TRIS notifications.\n"
+                "- **Council of the EU** — Council documents: press releases, conclusions, meeting "
+                "agendas and summits.\n"
                 "- **Proprietary Databases** — Brubru's own data products: Knowledge Guides / Catalan "
                 "Translations / Canon & Deep-Dives.\n\n"
                 "Domain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes "
@@ -258,7 +390,8 @@ def build_collection() -> dict:
                 "list request; detail requests are pre-filled with a working example.\n\n"
                 "Set the `api_key` collection variable to a `brubru_live_...` key (mint one at "
                 "brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, "
-                "`read:publications`, `read:knowledge`. `baseUrl` defaults to production.\n\n"
+                "`read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. "
+                "`baseUrl` defaults to production.\n\n"
                 f"{n_requests} requests across {len(domains)} domains."
             ),
             "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",

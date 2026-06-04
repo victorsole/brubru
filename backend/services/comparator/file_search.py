@@ -50,6 +50,7 @@ def _hit(
     type_: str,
     alias: Optional[str] = None,
     source: str,
+    committee: Optional[str] = None,
     celex_candidates: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     dd = deep_dive_for_file_ref(file_ref, celex_candidates=celex_candidates)
@@ -60,6 +61,9 @@ def _hit(
         "type": type_,
         "alias": alias,
         "source": source,
+        # Lead EP committee when known — lets the picker group by committee and
+        # flag PI matches, consistent with the other MEUB subfeatures.
+        "committee": committee or None,
         "deep_dive_url": dd["url"] if dd else None,
         "deep_dive_short_title": dd["short_title"] if dd else None,
     }
@@ -114,8 +118,11 @@ def search_files(query: str, db: Session, *, limit: int = 20) -> List[Dict[str, 
             {"celex": q.upper()},
         ).fetchone()
         if row:
+            title = (row[1] or "").strip()
             _push(_hit(
-                file_ref=row[0], label=row[0], subtitle=(row[1] or "")[:200],
+                file_ref=row[0],
+                label=(title[:80] if title else row[0]),
+                subtitle=(row[0] if title else None),
                 type_="celex", source="celex",
             ))
 
@@ -129,12 +136,12 @@ def search_files(query: str, db: Session, *, limit: int = 20) -> List[Dict[str, 
             {"ref": q},
         ).fetchone()
         if row:
-            subtitle = (row[1] or "")[:200]
-            if row[2]:
-                subtitle = f"{row[2]} · {subtitle}" if subtitle else row[2]
+            title = (row[1] or "").strip()
+            label = title[:80] if title else row[0]
+            subtitle = row[0] + (f" · {row[2]}" if row[2] else "")
             _push(_hit(
-                file_ref=row[0], label=row[0], subtitle=subtitle,
-                type_="oeil", source="oeil",
+                file_ref=row[0], label=label, subtitle=subtitle,
+                type_="oeil", source="oeil", committee=row[2],
             ))
 
     # --- 2. Alias resolver (GDPR, DSA, AI Act, Data Act, ...) ---
@@ -208,7 +215,7 @@ def search_files(query: str, db: Session, *, limit: int = 20) -> List[Dict[str, 
             subtitle = ref + (f" · {committee}" if committee else "")
             _push(_hit(
                 file_ref=ref, label=label, subtitle=subtitle,
-                type_="oeil", source="oeil",
+                type_="oeil", source="oeil", committee=committee or None,
             ))
             if len(out) >= limit:
                 break
@@ -280,8 +287,49 @@ def my_files_for_user(user_id: str, db: Session, *, limit: int = 50) -> List[Dic
             subtitle_bits.append(f"CELEX: {r[4][0]}")
         out.append(_hit(
             file_ref=ref, label=label, subtitle=" · ".join(subtitle_bits),
-            type_="oeil", source="my_files",
+            type_="oeil", source="my_files", committee=committee or None,
             celex_candidates=list(r[4]) if r[4] else None,
+        ))
+    return out
+
+
+def files_by_committees(committees: List[str], db: Session, *, limit: int = 40) -> List[Dict[str, Any]]:
+    """Ongoing legislative files whose lead committee is in `committees`.
+
+    Powers the Comparator's "Suggested from your interests" on-ramp: a new grid
+    can start from PI-relevant procedures (resolved from the user's Policy
+    Interests) instead of a blank search. SearchHit shape, committee-annotated.
+    """
+    if not committees:
+        return []
+    rows = db.execute(
+        text("""
+            SELECT oeil_procedure_ref, title, lead_committee
+            FROM legislative_carriages
+            WHERE lead_committee = ANY(:committees)
+              AND oeil_procedure_ref IS NOT NULL
+              AND title IS NOT NULL
+              AND length(title) > 10
+              AND title NOT ILIKE 'Procedure File:%'
+            ORDER BY last_updated DESC NULLS LAST
+            LIMIT :lim
+        """),
+        {"committees": list(committees), "lim": limit},
+    ).fetchall()
+    out: List[Dict[str, Any]] = []
+    for r in rows:
+        ref = r[0]
+        if not ref:
+            continue
+        title = (r[1] or "")[:160]
+        committee = r[2] or ""
+        label = title or ref
+        if len(label) > 80:
+            label = label[:77] + "…"
+        subtitle = ref + (f" · {committee}" if committee else "")
+        out.append(_hit(
+            file_ref=ref, label=label, subtitle=subtitle,
+            type_="oeil", source="suggested", committee=committee or None,
         ))
     return out
 

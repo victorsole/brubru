@@ -1,0 +1,761 @@
+{
+  "source": "EUWhoiswho_COM_EN.pdf",
+  "dg_count": 35,
+  "official_count": 171,
+  "officials": {
+    "REFOR": [
+      {
+        "name": "Ilze Juhansone",
+        "function": "Secretary-General"
+      },
+      {
+        "name": "Nils Behrndt",
+        "function": "Deputy Secretary-General — Policy"
+      },
+      {
+        "name": "John Watson",
+        "function": "Deputy Secretary-General"
+      },
+      {
+        "name": "Clara Martinez Alberola",
+        "function": "Principal Adviser for Pre"
+      },
+      {
+        "name": "Leopoldo Rubinacci",
+        "function": "Chair of the Regulatory Scrutiny Board"
+      }
+    ],
+    "COMM": [
+      {
+        "name": "Dana Spinant",
+        "function": "Director-General"
+      },
+      {
+        "name": "Sophia Eriksson",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Telmo Baltazar",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Olivier Smith",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Stefan De Keersmaecker",
+        "function": "Director"
+      }
+    ],
+    "IDEA": [
+      {
+        "name": "Undine Ruge",
+        "function": "Principal Adviser"
+      }
+    ],
+    "BUDG": [
+      {
+        "name": "Stephanie Riso",
+        "function": "Director-General"
+      },
+      {
+        "name": "Beatriz Sanz Redrado",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Olivier Waelbroeck",
+        "function": "Hors Classe Adviser"
+      },
+      {
+        "name": "Kai Wynands",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Iliyana Tsanova",
+        "function": "Hors Classe Adviser — Chief Risk"
+      }
+    ],
+    "HR": [
+      {
+        "name": "Stephen Quest",
+        "function": "Director-General"
+      },
+      {
+        "name": "Christian Roques",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Ilkka Salmi",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Lene Naesager",
+        "function": "Hors Classe Adviser — Chief"
+      },
+      {
+        "name": "Geraldine Dufort",
+        "function": "Principal Adviser"
+      }
+    ],
+    "DIGIT": [
+      {
+        "name": "Veronica Gaffey",
+        "function": "Director-General"
+      },
+      {
+        "name": "Philippe Van Damme",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Leontina Sandu",
+        "function": "Director"
+      },
+      {
+        "name": "Carl-Christian Buhr",
+        "function": "Director"
+      },
+      {
+        "name": "Natalia Aristimuno Perez",
+        "function": "Director"
+      }
+    ],
+    "IAS": [
+      {
+        "name": "Agnieszka Kaźmierczak",
+        "function": "Director-General"
+      },
+      {
+        "name": "Salla Saastamoinen",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Giorgos Rossides",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Florin Postica",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Cristiana Giacobbo",
+        "function": "Director"
+      }
+    ],
+    "ECFIN": [
+      {
+        "name": "Maarten Verwey",
+        "function": "Director-General"
+      },
+      {
+        "name": "Geraldine Mahieu",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Annika Eriksgaard",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Markus Schulte",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Reinhard Felke",
+        "function": "Principal Adviser"
+      }
+    ],
+    "GROW": [
+      {
+        "name": "Kerstin Jorna",
+        "function": "Director-General"
+      },
+      {
+        "name": "Maive Rute",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Valère Moutarlier",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Nathalie Berger",
+        "function": "Director"
+      },
+      {
+        "name": "Anna Athanasopoulou",
+        "function": "Director"
+      }
+    ],
+    "DEFIS": [
+      {
+        "name": "Lorena Boix Alonso",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Tomasz Husak",
+        "function": "Director"
+      },
+      {
+        "name": "Francois Arbault",
+        "function": "Director"
+      },
+      {
+        "name": "Ekaterini Kavvada",
+        "function": "Director"
+      },
+      {
+        "name": "Christoph Kautz",
+        "function": "Director"
+      }
+    ],
+    "COMP": [
+      {
+        "name": "Anthony Whelan",
+        "function": "Director-General"
+      },
+      {
+        "name": "Linsey Mccallum",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Guillaume Loriot",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Thomas Deisenhofer",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Yves-Alexandre De Montjoye",
+        "function": "Director"
+      }
+    ],
+    "EMPL": [
+      {
+        "name": "Mario Nava",
+        "function": "Director-General"
+      },
+      {
+        "name": "Stefan Olsson",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Andriana Sukova",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Manuela Geleng",
+        "function": "Director"
+      },
+      {
+        "name": "Maria Luisa Cabral",
+        "function": "Director"
+      }
+    ],
+    "AGRI": [
+      {
+        "name": "Elisabeth Werner",
+        "function": "Director-General"
+      },
+      {
+        "name": "Pierre Bascou",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Catherine Geslain-Laneelle",
+        "function": "Director"
+      },
+      {
+        "name": "Gijs Schilthuis",
+        "function": "Director"
+      },
+      {
+        "name": "Mario Milouchev",
+        "function": "Director"
+      }
+    ],
+    "MOVE": [
+      {
+        "name": "Magda Kopczynska",
+        "function": "Director-General"
+      },
+      {
+        "name": "Ewa Ptaszynska",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Maja Bakran",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Paloma Aba Garrote",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Mona Bjorklund",
+        "function": "Director"
+      }
+    ],
+    "ENER": [
+      {
+        "name": "Celine Gauer",
+        "function": "Director-General"
+      },
+      {
+        "name": "Mechthild Woersdoerfer",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Tudor Constantinescu",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Pierre Schellekens",
+        "function": "Director"
+      },
+      {
+        "name": "Rosalinde Van Der Vlies",
+        "function": "Director"
+      }
+    ],
+    "ENV": [
+      {
+        "name": "Eric Mamer",
+        "function": "Director-General"
+      },
+      {
+        "name": "Patrick Child",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Thomas Verheye",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Veronica Manfredi",
+        "function": "Director"
+      },
+      {
+        "name": "Monika Hencsey",
+        "function": "Director"
+      }
+    ],
+    "CLIMA": [
+      {
+        "name": "Kurt Vandenberghe",
+        "function": "Director-General"
+      },
+      {
+        "name": "Jan Dusik",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Jacob Werksman",
+        "function": "Principal Adviser — Digital for"
+      },
+      {
+        "name": "Dusan Chrenek",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Beatriz Yordi",
+        "function": "Director"
+      }
+    ],
+    "RTD": [
+      {
+        "name": "Marc Lemaitre",
+        "function": "Director-General"
+      },
+      {
+        "name": "Anna Krzyzanowska",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Maria Cristina Russo",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Michiel Scheffer",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Andras Inotai",
+        "function": "Principal Adviser (Acting)"
+      }
+    ],
+    "CNECT": [
+      {
+        "name": "Roberto Viola",
+        "function": "Director-General"
+      },
+      {
+        "name": "Thomas Skordas",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Renate Nikolay",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Gerard De Graaf",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Krzysztof Maruszewski",
+        "function": "Principal Adviser"
+      }
+    ],
+    "MARE": [
+      {
+        "name": "Charlina Vitcheva",
+        "function": "Director-General"
+      },
+      {
+        "name": "Kestutis Sadauskas",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Stefaan De Rynck",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Delilah Al Khudhairy",
+        "function": "Director"
+      },
+      {
+        "name": "Fernando Andresen",
+        "function": "Director"
+      }
+    ],
+    "FISMA": [
+      {
+        "name": "John Berrigan",
+        "function": "Director-General"
+      },
+      {
+        "name": "Alexandra Jour-Schroeder",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Didier Millerot",
+        "function": "Director"
+      },
+      {
+        "name": "Astrid Cousin",
+        "function": "Director"
+      },
+      {
+        "name": "Klaus Wiedner",
+        "function": "Director"
+      }
+    ],
+    "REGIO": [
+      {
+        "name": "Themis Christophidou",
+        "function": "Director-General"
+      },
+      {
+        "name": "Hugo Sobral",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Davinia Wood",
+        "function": "Director"
+      },
+      {
+        "name": "Peter Berkowitz",
+        "function": "Director"
+      },
+      {
+        "name": "Franck Sébert",
+        "function": "Director"
+      }
+    ],
+    "TAXUD": [
+      {
+        "name": "Gerassimos Thomas",
+        "function": "Director-General"
+      },
+      {
+        "name": "Claes Bengtsson",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Matthias Petschke",
+        "function": "Director"
+      },
+      {
+        "name": "Philippe Duponteil",
+        "function": "Director"
+      },
+      {
+        "name": "Maria Elena Scoppio",
+        "function": "Director"
+      }
+    ],
+    "EAC": [
+      {
+        "name": "Pia Ahrenkilde Hansen",
+        "function": "Director-General"
+      },
+      {
+        "name": "Normunds Popens",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Tamas Szucs",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Sophie Beernaerts",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Stefaan Hermans",
+        "function": "Director"
+      }
+    ],
+    "SANTE": [
+      {
+        "name": "Sandra Gallina",
+        "function": "Director-General"
+      },
+      {
+        "name": "Claire Bury",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Marc Tachelet",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Gabriella Fesus",
+        "function": "Director"
+      },
+      {
+        "name": "Antonio Parenti",
+        "function": "Director"
+      }
+    ],
+    "HERA": [
+      {
+        "name": "Florika Fink-Hooijer",
+        "function": "Director-General"
+      },
+      {
+        "name": "Laurent Muschel",
+        "function": "Director"
+      },
+      {
+        "name": "Anne Simon",
+        "function": "Head of Unit"
+      },
+      {
+        "name": "Olivier Girard",
+        "function": "Head of Unit"
+      },
+      {
+        "name": "Ana Burgos Gutierrez",
+        "function": "Head of Unit"
+      }
+    ],
+    "HOME": [
+      {
+        "name": "Beate Gminder",
+        "function": "Director-General"
+      },
+      {
+        "name": "Johannes Luchner",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Olivier Onidi",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Mari Juritsch",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Henrik Nielsen",
+        "function": "Director"
+      }
+    ],
+    "JUST": [
+      {
+        "name": "Ana Gallego",
+        "function": "Director-General"
+      },
+      {
+        "name": "Hubert Gambs",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Irena Moozova",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Isabelle Perignon",
+        "function": "Director"
+      },
+      {
+        "name": "Ana Carla Pereira",
+        "function": "Director"
+      }
+    ],
+    "TRADE": [
+      {
+        "name": "Ditte Juul-Joergensen",
+        "function": "Director-General"
+      },
+      {
+        "name": "Denis Redonnet",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Myrto Zambarta",
+        "function": "Director"
+      },
+      {
+        "name": "Joanna Szychowska",
+        "function": "Director"
+      },
+      {
+        "name": "Dora Correia",
+        "function": "Director"
+      }
+    ],
+    "ENEST": [
+      {
+        "name": "Gert Jan Koopman",
+        "function": "Director-General"
+      },
+      {
+        "name": "Adrienn Kiraly",
+        "function": "Director"
+      },
+      {
+        "name": "Anna Jarosz-Friis",
+        "function": "Director"
+      },
+      {
+        "name": "Mathieu Bousquet",
+        "function": "Director"
+      },
+      {
+        "name": "Valentina Superti",
+        "function": "Director"
+      }
+    ],
+    "INTPA": [
+      {
+        "name": "Koen Doens",
+        "function": "Director-General"
+      },
+      {
+        "name": "Myriam Ferran",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Marjeta Jager",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Sandra Bartelt",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Stefano Signore",
+        "function": "Director"
+      }
+    ],
+    "ECHO": [
+      {
+        "name": "Maciej Popowski",
+        "function": "Director-General"
+      },
+      {
+        "name": "Hans Das",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Athanasios Thanopoulos",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Bernd Adolph",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Michela Matuella",
+        "function": "Director"
+      }
+    ],
+    "SCIC": [
+      {
+        "name": "Genoveva Ruiz Calavera",
+        "function": "Director-General"
+      },
+      {
+        "name": "Colin Scicluna",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Jarek Porejski",
+        "function": "Principal Adviser"
+      },
+      {
+        "name": "Gianluca Pecchi",
+        "function": "Director"
+      },
+      {
+        "name": "Alexandra Panagakou",
+        "function": "Director"
+      }
+    ],
+    "DGT": [
+      {
+        "name": "Christos Ellinides",
+        "function": "Director-General"
+      },
+      {
+        "name": "Ildikó Horváth",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Roxana Manuela Enciu",
+        "function": "Director"
+      },
+      {
+        "name": "Marja Hennessy",
+        "function": "Director"
+      },
+      {
+        "name": "Marco Umberto Moricca",
+        "function": "Director"
+      }
+    ],
+    "MENA": [
+      {
+        "name": "Michael Karnitschnig",
+        "function": "Deputy Director-General"
+      },
+      {
+        "name": "Francisco Joaquin Gaztelu",
+        "function": "Director"
+      },
+      {
+        "name": "Henrike Trautmann",
+        "function": "Director"
+      },
+      {
+        "name": "Gergo Pasqualetti",
+        "function": "Head of Unit"
+      },
+      {
+        "name": "Christos Komninos",
+        "function": "Head of Unit"
+      }
+    ]
+  }
+}

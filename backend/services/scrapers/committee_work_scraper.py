@@ -47,13 +47,29 @@ class CommitteeWorkInProgressScraper(BaseScraper):
     - Statistics tracking
     """
 
-    # Procedure type to relevance score mapping
+    # Procedure type to relevance score mapping. Substantive legislative work
+    # ranks highest; technical scrutiny and housekeeping rank lowest so the
+    # default (substantive-first) views surface real files.
     RELEVANCE_SCORES = {
-        ProcedureType.COD: 100,  # Ordinary legislative procedure
+        ProcedureType.COD: 100,  # Ordinary legislative procedure (law)
+        ProcedureType.INL: 90,   # Legislative own-initiative
         ProcedureType.APP: 80,   # Consent procedure
         ProcedureType.CNS: 70,   # Consultation procedure
-        ProcedureType.NLE: 50,   # Non-legislative
-        ProcedureType.INI: 40,   # Own-initiative
+        ProcedureType.ACI: 65,   # Interinstitutional agreement
+        ProcedureType.BUD: 60,   # Budgetary procedure
+        ProcedureType.GBD: 60,   # General budget
+        ProcedureType.BUI: 58,   # Budgetary initiative
+        ProcedureType.DEC: 58,   # Discharge
+        ProcedureType.NLE: 50,   # Agreements / appointments
+        ProcedureType.RSP: 45,   # Topical resolution
+        ProcedureType.RSO: 42,   # Internal-organisation resolution
+        ProcedureType.INI: 40,   # Own-initiative report
+        ProcedureType.COS: 40,   # Strategy paper
+        ProcedureType.DCE: 38,   # Written declaration
+        ProcedureType.DEA: 30,   # Delegated-act scrutiny (technical)
+        ProcedureType.RPS: 30,   # Implementing-act scrutiny (technical)
+        ProcedureType.REG: 25,   # Rules of Procedure (housekeeping)
+        ProcedureType.IMM: 15,   # MEP immunity (housekeeping)
     }
 
     # Regex patterns
@@ -468,8 +484,34 @@ class CommitteeWorkInProgressScraper(BaseScraper):
                 pass
         return ProcedureType.INI  # Default to lowest relevance
 
+    # Page-chrome patterns the EP "Work in Progress" listing exposes instead of a
+    # real title (the real title lives on OEIL). Never persist these.
+    _JUNK_TITLE_RES = [
+        re.compile(r"^\s*\*+"),                                          # "***I ..."
+        re.compile(r"ordinary legislative procedure|first reading|second reading", re.I),
+        re.compile(r"\([A-Z]+\)\s+[A-Z]{3,4}\s*$"),                      # "(DEA) ENVI"
+        re.compile(r"^\s*procedure file:", re.I),
+        re.compile(r"^\s*(delegated acts|implementing acts|resolution on topical subjects)\b", re.I),
+    ]
+
+    def _is_junk_title(self, title: Optional[str]) -> bool:
+        """True for page chrome / stage legends that are not a real title."""
+        t = (title or "").strip()
+        if len(t) <= 5:
+            return True
+        return any(r.search(t) for r in self._JUNK_TITLE_RES)
+
     def _extract_title(self, element, procedure_ref: str) -> Optional[str]:
-        """Extract title from element."""
+        """Extract a real title, or a recognizable placeholder.
+
+        The EP work-in-progress page frequently exposes only stage legends
+        ("***I Ordinary legislative procedure (COD) first reading AGRI") rather
+        than the procedure title. We reject that chrome and return a placeholder
+        ("Procedure File: <ref>") so we never store garbage; the OEIL title
+        backfill and the frontend fallback resolve it from there.
+        """
+        placeholder = f"Procedure File: {procedure_ref}"
+
         # Try common title selectors
         title_selectors = [
             'h2', 'h3', 'h4',
@@ -485,7 +527,7 @@ class CommitteeWorkInProgressScraper(BaseScraper):
                 title = title_elem.get_text(strip=True)
                 # Clean up title (remove procedure ref if included)
                 title = title.replace(procedure_ref, '').strip()
-                if title and len(title) > 5:
+                if title and len(title) > 5 and not self._is_junk_title(title):
                     return title
 
         # Fallback: get all text and clean it
@@ -495,7 +537,9 @@ class CommitteeWorkInProgressScraper(BaseScraper):
         title = re.sub(r'(Rapporteur|Shadow|Committee|Lead|Opinion)[:]*', '', title)
         title = ' '.join(title.split())[:200]  # Limit length
 
-        return title if len(title) > 5 else None
+        if len(title) > 5 and not self._is_junk_title(title):
+            return title
+        return placeholder
 
     def _extract_rapporteur(self, element) -> tuple:
         """Extract rapporteur name and MEP ID."""

@@ -1,25 +1,43 @@
 {
   "issue_date": "2026-05-29",
   "day_of_week": "Friday",
-  "hero_intro": "Welcome to the Brubru EFPIA Brief. The freshest EU pharma and health moves from the last 48 hours, with what Brubru is tracking for you underneath. Every item links straight to the answer inside Brubru: a chat you can interrogate, your calendar, or the file's own page. A quiet end to the week on the regulatory wires, so this is a focused read: health security, the next health committee sitting, the Biotech Act evidence base, and antimicrobial resistance.",
+  "hero_intro": "Welcome to the Brubru EFPIA Brief. Today's read draws on the full monitoring set Brubru now scrapes for you: EMA, DG SANTE, the European Parliament health committee, and the Official Journal. Eight moves from the last week, freshest first, each linking straight to the source or to the answer inside Brubru.",
   "headlines": [
     {
-      "title": "EU health security group met this week, reports just published",
-      "source": "DG SANTE Latest Updates, 27 and 28 May 2026",
-      "snippet": "The Commission has published the reports from the General Working Group of the Health Security Committee, which met on 27 May, alongside the summary of an ad hoc working group on 26 May. This is the layer that coordinates Member State and Commission action on serious cross-border health threats: preparedness, surveillance and joint procurement. EFPIA's vaccines and antimicrobial members read it for the earliest signals on the next joint-procurement and stockpiling waves.",
-      "ask": "What did the EU Health Security Committee working group discuss this week, and how does EU joint procurement of medicines work?",
-      "feature_label": "Chat",
-      "feature_url": "https://brubru.beresol.eu/main?q=What+did+the+EU+Health+Security+Committee+working+group+discuss+on+27+May+2026+and+how+does+EU+joint+procurement+work",
+      "title": "EMA recommends updating COVID-19 vaccines to target the XFG variant",
+      "source": "European Medicines Agency, Emergency Task Force, 29 May 2026",
+      "snippet": "EMA's Emergency Task Force has recommended that COVID-19 vaccines be updated to target the XFG variant for the coming vaccination campaign. This is the signal manufacturers act on to adapt their strain composition and start the production and regulatory cycle. Vaccine members will want to align their variation submissions and supply planning now. This is the freshest item on the EMA wire today.",
+      "ask": "What did EMA's Emergency Task Force recommend about updating COVID-19 vaccines for the XFG variant?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/news/etf-recommends-updating-covid-19-vaccines-target-xfg-variant",
       "color": "#0693e3"
     },
     {
+      "title": "EU health security group met this week, reports just published",
+      "source": "DG SANTE Latest Updates, 27 and 28 May 2026",
+      "snippet": "The Commission published the reports from the General Working Group of the Health Security Committee, which met on 27 May, alongside the summary of an ad hoc working group on 26 May. This is the layer that coordinates Member State and Commission action on serious cross-border health threats, including preparedness, surveillance and joint procurement. EFPIA's vaccines and antimicrobial members read it for the earliest signals on the next procurement waves.",
+      "ask": "What did the EU Health Security Committee working group discuss this week?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What+did+the+EU+Health+Security+Committee+working+group+discuss+this+week",
+      "color": "#059669"
+    },
+    {
+      "title": "The EU's AMR One Health Network has published its latest meeting papers",
+      "source": "DG SANTE Latest Updates, published 28 May 2026",
+      "snippet": "DG SANTE has published the presentations from the latest meetings of the AMR One Health Network, the expert group that coordinates Member State action on antimicrobial resistance across human health, animal health and the environment. Antimicrobial resistance sits at the intersection of three EFPIA priorities: the pharmaceutical package incentives debate, the Critical Medicines Act, and health-security coordination.",
+      "ask": "What is the EU's One Health approach to antimicrobial resistance, and what does the AMR One Health Network do?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What+is+the+EU+One+Health+approach+to+antimicrobial+resistance+and+what+does+the+AMR+One+Health+Network+do",
+      "color": "#9b51e0"
+    },
+    {
       "title": "Parliament's health committee sits Wednesday 3 June, agenda published",
-      "source": "European Parliament SANT subcommittee, draft agenda for 3 June 2026 (published 28 May)",
-      "snippet": "The Parliament's public health subcommittee has published the draft agenda for its next sitting on Wednesday 3 June, built around the EU health workforce, health resilience and disease prevention. This is the room where the pharmaceutical package and the Critical Medicines Act follow-up move. If you have a file in front of this committee, this is the moment to confirm your shadow engagement. Open your EU calendar to see it alongside the institutional dates that week.",
+      "source": "European Parliament SANT subcommittee, 28 May 2026",
+      "snippet": "The Parliament's public health subcommittee has published its agenda for its next sitting on Wednesday 3 June, built around the EU health workforce, health resilience, disease prevention and crisis preparedness. This is the room where the pharmaceutical package and the Critical Medicines Act follow-up move. If you have a file in front of this committee, this is the moment to confirm your shadow engagement.",
       "ask": "What is the European Parliament public health committee likely to discuss at its 3 June 2026 meeting?",
       "feature_label": "My EU Calendar",
       "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
-      "color": "#059669"
+      "color": "#dc2626"
     },
     {
       "title": "The Commission published the evidence base behind the Biotech Act",
@@ -28,16 +46,34 @@
       "ask": "What does the Biotech Act analysis cover, and what is its status in the European Parliament?",
       "feature_label": "the Biotech Act deep dive",
       "feature_url": "https://brubru.beresol.eu/biotech-act/index.html",
-      "color": "#9b51e0"
+      "color": "#ca8a04"
     },
     {
-      "title": "The EU's AMR One Health Network has published its latest meeting papers",
-      "source": "DG SANTE Latest Updates, published 28 May 2026",
-      "snippet": "DG SANTE has published the presentations from the latest meetings of the AMR One Health Network, the expert group that coordinates Member State action on antimicrobial resistance across human health, animal health and the environment. Antimicrobial resistance sits at the intersection of three EFPIA priorities: the pharmaceutical package incentives debate, the Critical Medicines Act, and health-security coordination. Ask Brubru how the EU's One Health approach and the incentive mechanisms fit together.",
-      "ask": "What is the EU's One Health approach to antimicrobial resistance, and what does the AMR One Health Network do?",
-      "feature_label": "Chat",
-      "feature_url": "https://brubru.beresol.eu/main?q=What+is+the+EU+One+Health+approach+to+antimicrobial+resistance+and+what+does+the+AMR+One+Health+Network+do",
-      "color": "#dc2626"
+      "title": "The EU set the seasonal flu vaccine composition for next winter",
+      "source": "European Medicines Agency, 26 May 2026",
+      "snippet": "EMA has issued its recommendations for the composition of seasonal influenza vaccines for the 2026 to 2027 northern hemisphere season. These recommendations steer which strains manufacturers build into their vaccines and set the clock for the production cycle. Vaccine members will want to align their planning and any strain-change variations now rather than later.",
+      "ask": "What did EMA recommend for the 2026 to 2027 seasonal flu vaccine composition?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/news/eu-recommendations-2026-2027-seasonal-flu-vaccine-composition",
+      "color": "#0693e3"
+    },
+    {
+      "title": "The EU medicines committee backed three new medicines at its May meeting",
+      "source": "EMA CHMP meeting highlights, 18 to 21 May 2026",
+      "snippet": "At its May meeting the Committee for Medicinal Products for Human Use gave positive opinions, including a first oral GLP-1 treatment for weight management, a new medicine for two types of pulmonary fibrosis, and a first treatment for a rare uncontrolled growth of body tissues. A positive opinion is the step before a Commission marketing authorisation. The next CHMP plenary runs 22 to 25 June in Amsterdam.",
+      "ask": "What medicines did the EMA CHMP recommend at its May 2026 meeting?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/news/meeting-highlights-committee-medicinal-products-human-use-chmp-18-21-may-2026",
+      "color": "#059669"
+    },
+    {
+      "title": "Official Journal: Commission extended a Polish biocidal product authorisation",
+      "source": "Official Journal, Commission Implementing Decision (EU) 2026/1104, 22 May 2026",
+      "snippet": "Now that Brubru reads the Official Journal directly, here is one this week: Commission Implementing Decision 2026/1104 extends the action taken by the Polish authority permitting the making available and use of the biocidal product Biobor JF under the Biocidal Products Regulation. Biocides sit alongside the medicines and medical-device files in DG SANTE's remit. Brubru can pull the consolidated text on request.",
+      "ask": "What did Commission Implementing Decision 2026/1104 authorise, and what is the Biocidal Products Regulation?",
+      "feature_label": "EUR-Lex",
+      "feature_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D1104",
+      "color": "#9b51e0"
     }
   ]
 }

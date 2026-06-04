@@ -96,7 +96,8 @@ class SearchHit(BaseModel):
     subtitle: Optional[str] = None          # full title or short context line
     type: str                               # 'celex' | 'oeil'
     alias: Optional[str] = None             # if matched via the alias resolver
-    source: str                             # 'alias' | 'celex' | 'oeil' | 'my_files'
+    source: str                             # 'alias' | 'celex' | 'oeil' | 'my_files' | 'suggested'
+    committee: Optional[str] = None         # lead EP committee, for PI grouping/flagging
     deep_dive_url: Optional[str] = None     # Brubru deep-dive page if one exists for this file
     deep_dive_short_title: Optional[str] = None  # 'EU Inc.', 'Biotech Act', etc.
 
@@ -104,6 +105,12 @@ class SearchHit(BaseModel):
 class SearchResponse(BaseModel):
     query: str
     hits: List[SearchHit]
+
+
+class SuggestedResponse(BaseModel):
+    """PI-relevant suggestions + the user's interest committees for the picker."""
+    files: List[SearchHit]
+    my_committees: List[str]
 
 
 class ResolveRequest(BaseModel):

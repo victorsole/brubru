@@ -50,6 +50,8 @@ from schemas.committee_work_schemas import (
     CommitteeWorkStatus,
 )
 from knowledge_base.ep_committees import EP_COMMITTEES, EP_COMMITTEE_CODES
+from services.tracking.pi_committee_crosswalk import committees_for_interests
+from services.tracking.tracked_files_seeder import _interest_list
 from .auth import get_current_user
 
 import logging
@@ -142,7 +144,7 @@ async def get_work_items(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get work items: {str(e)}")
+        logger.exception(f"Failed to get work items: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve work items")
 
 
@@ -186,7 +188,7 @@ async def get_work_item(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get work item {item_id}: {str(e)}")
+        logger.exception(f"Failed to get work item {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve work item")
 
 
@@ -211,7 +213,7 @@ async def get_by_procedure_ref(
         return [CommitteeWorkItemResponse.model_validate(item) for item in items]
 
     except Exception as e:
-        logger.error(f"Failed to get items for procedure {procedure_ref}: {str(e)}")
+        logger.exception(f"Failed to get items for procedure {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve work items")
 
 
@@ -282,7 +284,7 @@ async def get_tracked_items(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get tracked items: {str(e)}")
+        logger.exception(f"Failed to get tracked items: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked items")
 
 
@@ -344,7 +346,7 @@ async def track_work_item(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to track work item {item_id}: {str(e)}")
+        logger.exception(f"Failed to track work item {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to track work item")
 
 
@@ -377,7 +379,7 @@ async def untrack_work_item(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to untrack work item {item_id}: {str(e)}")
+        logger.exception(f"Failed to untrack work item {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to untrack work item")
 
 
@@ -420,7 +422,7 @@ async def update_tracking(
         raise
     except Exception as e:
         db.rollback()
-        logger.error(f"Failed to update tracking for {item_id}: {str(e)}")
+        logger.exception(f"Failed to update tracking for {item_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update tracking")
 
 
@@ -458,7 +460,8 @@ async def get_sync_status(
             CommitteeWorkItem.procedure_type,
             func.count(CommitteeWorkItem.id)
         ).group_by(CommitteeWorkItem.procedure_type).all()
-        items_by_type = {str(t.value) if t else 'unknown': count for t, count in type_counts}
+        # procedure_type is now a free varchar (migration 093), not an enum.
+        items_by_type = {(t or 'unknown'): count for t, count in type_counts}
 
         return SyncStatusResponse(
             last_sync=last_sync,
@@ -468,8 +471,28 @@ async def get_sync_status(
         )
 
     except Exception as e:
-        logger.error(f"Failed to get sync status: {str(e)}")
+        logger.exception(f"Failed to get sync status: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve sync status")
+
+
+@router.get(
+    "/my-committees",
+    summary="Committees matching my policy interests",
+    description=(
+        "Returns the European Parliament committee codes that match the signed-in "
+        "user's Policy Interests, so the In-committee view can pre-select them. "
+        "Empty list for anonymous users or users with no mappable interests."
+    ),
+)
+async def get_my_committees(
+    current_user: Optional[User] = Depends(get_current_user),
+) -> dict:
+    """Resolve the user's Policy Interests to EP committee codes."""
+    if not current_user:
+        return {"committees": [], "interests": []}
+    interests = _interest_list(current_user)
+    committees = sorted(committees_for_interests(interests))
+    return {"committees": committees, "interests": interests}
 
 
 @router.post(
@@ -530,5 +553,5 @@ async def trigger_sync(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to run sync: {str(e)}")
+        logger.exception(f"Failed to run sync: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")

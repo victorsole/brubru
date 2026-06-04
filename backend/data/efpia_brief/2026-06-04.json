@@ -1,0 +1,52 @@
+{
+  "issue_date": "2026-06-04",
+  "day_of_week": "Thursday",
+  "hero_intro": "Good morning, and welcome to your Thursday Brubru EFPIA Brief. The Commission has just told national capitals what to fix in their health systems, Europe's and Africa's medicines regulators have joined forces on a fresh Ebola outbreak for the first time, and the medicines agency is reopening one of the most consequential questions in clinical evidence: when a trial without its own control group is good enough to approve a medicine. Parliament's committees have also backed a plan to add a million health workers, and new maps show disease-carrying mosquitoes pushing into new countries. The most consequential first, with every headline linking straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "Brussels tells more than a dozen capitals what to fix in their health systems",
+      "source": "European Commission, DG SANTE, European Semester Spring Package, 3 June 2026",
+      "snippet": "In its Spring Package on 3 June, the Commission issued health-related recommendations to more than a dozen Member States as part of the European Semester, its annual cycle of economic and social policy steering. The recommendations cluster around four themes: access to and affordability of care, primary care and prevention, the health workforce, and digital health and quality data. These are the reform signals that shape national budgets, pricing and procurement decisions over the coming year, and the Council will now discuss and endorse them.",
+      "ask": "What is the European Semester and how does it shape national health system reforms across the EU?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20is%20the%20European%20Semester%20and%20how%20does%20it%20shape%20national%20health%20system%20reforms",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Europe's and Africa's medicines regulators team up on a new Ebola outbreak",
+      "source": "European Medicines Agency, 3 June 2026",
+      "snippet": "The EU medicines agency's Emergency Task Force is working with the African Medicines Agency and national regulators on the response to an Ebola outbreak in the Democratic Republic of the Congo and Uganda, caused by the Bundibugyo virus. It is the first public health emergency they have handled together since the African agency began operating. There are no approved vaccines or treatments for this strain, so the work focuses on trial design and assessing candidate countermeasures. The World Health Organization declared the outbreak an international emergency on 17 May 2026.",
+      "ask": "What is the European Medicines Agency and what does it do?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/news/ema-ama-african-regulatory-authorities-join-forces-ebola-outbreak-response",
+      "color": "#059669"
+    },
+    {
+      "title": "The medicines regulator reopens the rules on trials without a control group",
+      "source": "European Medicines Agency, scientific guideline development, 3 June 2026",
+      "snippet": "The medicines agency is advancing work on external controls, where a single-arm trial is compared not against a randomised placebo group but against patient data drawn from other trials or from real-world sources. A concept paper sets out the plan for a reflection paper that will define when this kind of evidence is acceptable for approving a medicine, and where its methodological limits lie. The draft is expected at the human medicines committee in the last quarter of 2026, followed by a three-month public consultation. For rare diseases and oncology, where randomisation is often impractical, this is a defining evidence question.",
+      "ask": "What is EMA's position on single-arm trials and external control arms for approving medicines?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20is%20EMA%27s%20position%20on%20single-arm%20trials%20and%20external%20control%20arms%20for%20approving%20medicines",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "MEPs back a plan to add a million health workers",
+      "source": "European Parliament, EMPL and SANT committees, 3 June 2026",
+      "snippet": "Parliament's employment and public health committees jointly adopted a report on 3 June, by 85 votes to 3 with 2 abstentions, calling for an ambitious EU strategy to grow the healthcare workforce by at least one million over the 2028 to 2034 budget period. It asks for fair pay, mental health support and safe staffing levels, more public and EU funding, better training, and digital tools including AI-supported diagnostics and telemedicine for rural areas. The report is expected to be put to the full Parliament at the July plenary, two weeks after health ministers meet in Council on 16 June.",
+      "ask": "What is the European Parliament proposing to tackle the EU's healthcare workforce shortage?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#dc2626"
+    },
+    {
+      "title": "New maps show disease-carrying mosquitoes pushing into new countries",
+      "source": "European Centre for Disease Prevention and Control and EFSA, 3 June 2026",
+      "snippet": "The EU disease control agency and the food safety authority published updated maps on 3 June showing where mosquitoes, ticks, sandflies and biting midges are established across Europe. Two findings stand out: the yellow fever mosquito Aedes aegypti was reported in Luxembourg for the first time, and Culex tritaeniorhynchus, a potential carrier of Japanese encephalitis, is expanding in Greece. The maps, built on the VectorNet network, are the backbone of how Europe anticipates vector-borne disease risk, and a signal worth watching for vaccine and preparedness teams.",
+      "ask": "What is the ECDC and how does it monitor infectious disease and vector-borne disease risks across the EU?",
+      "feature_label": "ECDC",
+      "feature_url": "https://www.ecdc.europa.eu/en/news-events/ecdc-and-efsa-publish-maps-showing-distribution-disease-vectors-across-europe",
+      "color": "#ca8a04"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "_comment": "Canonical Brubru policy-interest taxonomy. SINGLE SOURCE OF TRUTH for the 9 categories / 34 policy-area leaves used as the join key across all of My EU Bubble (carriages, calendar, news, consultations, cockpit tiles). Served to the frontend via GET /api/policy-taxonomy (consumed by policy_preferences_selector.tsx) AND injected into the Chat context for PI-navigation queries. Aliases are a deliberate SEED for free-text resolution, to be superseded/expanded by the EC-DG harvest + OEIL-subject/EP-committee resolver. Geography (countries) is a SEPARATE axis (OEIL geographicalArea), not a leaf here.",
+  "version": "2026-06-04",
+  "categories": [
+    {
+      "category": "Core Economic and Market Policies",
+      "description": "7 areas",
+      "policy_areas": [
+        { "name": "Single Market", "description": "Free movement of goods, services, capital, and people", "aliases": ["internal market", "free movement", "services directive", "goods", "mutual recognition", "professional qualifications"] },
+        { "name": "Competition", "description": "Ensuring fair competition and preventing monopolies", "aliases": ["antitrust", "state aid", "mergers", "monopoly", "cartel", "dominance", "foreign subsidies"] },
+        { "name": "Trade and Economic Security", "description": "EU trade policy and international economic relations", "aliases": ["trade", "trade defence", "anti-dumping", "anti dumping", "anti-subsidy", "tariffs", "tariff", "customs duties", "export controls", "sanctions", "dumping", "free trade agreement", "fta", "wto", "economic security", "de-risking", "america", "usa", "united states", "china", "mercosur"] },
+        { "name": "Economic and Financial Affairs", "description": "Economic policy coordination and financial stability", "aliases": ["economy", "finance", "euro", "banking", "capital markets", "financial services", "fiscal", "deficit", "stability pact", "ecb", "monetary", "investment", "crypto", "mica"] },
+        { "name": "Taxation", "description": "Tax policy coordination across member states", "aliases": ["tax", "taxes", "vat", "corporate tax", "minimum tax", "pillar two", "dac", "digital tax"] },
+        { "name": "Customs", "description": "Customs union and border control procedures", "aliases": ["customs", "customs union", "border control", "import", "tariff classification", "union customs code"] },
+        { "name": "Business and Industry", "description": "Industrial policy and business competitiveness", "aliases": ["industry", "industrial", "smes", "sme", "manufacturing", "steel", "chemicals", "reach", "competitiveness", "net zero industry", "critical raw materials", "crma"] }
+      ]
+    },
+    {
+      "category": "Sustainability and Environmental Policies",
+      "description": "4 areas (European Green Deal)",
+      "policy_areas": [
+        { "name": "Climate Action", "description": "EU climate policies and carbon reduction", "aliases": ["climate", "co2", "emissions", "carbon", "net zero", "green deal", "ets", "cbam", "global warming", "paris agreement", "f-gas", "methane"] },
+        { "name": "Environment", "description": "Environmental protection and biodiversity", "aliases": ["environment", "biodiversity", "nature", "pollution", "water", "air", "air quality", "air pollution", "waste", "circular economy", "chemicals", "reach", "plastics", "deforestation", "soil", "nature restoration", "fire", "wildfire"] },
+        { "name": "Energy", "description": "Energy policy and renewable energy transition", "aliases": ["energy", "renewables", "renewable", "electricity", "gas", "hydrogen", "nuclear", "grid", "energy efficiency", "red iii", "solar", "wind", "power"] },
+        { "name": "Transport", "description": "Transport policy and sustainable mobility", "aliases": ["transport", "mobility", "aviation", "aircraft", "airlines", "air", "rail", "railway", "shipping", "maritime transport", "road", "cars", "vehicles", "drones", "uas", "unmanned", "uav", "ev", "charging", "afir"] }
+      ]
+    },
+    {
+      "category": "Digital Transformation",
+      "description": "2 areas (Europe Fit for Digital Age)",
+      "policy_areas": [
+        { "name": "Digital Policy and Digital Economy", "description": "Digital single market and e-commerce", "aliases": ["digital", "ai", "artificial intelligence", "ai act", "data", "data act", "gdpr", "platforms", "dsa", "dma", "e-commerce", "cyber", "cybersecurity", "nis2", "cra", "cloud", "chips"] },
+        { "name": "Communication Networks, Content and Technology", "description": "Telecommunications and digital infrastructure", "aliases": ["telecom", "telecommunications", "networks", "spectrum", "5g", "6g", "broadband", "connectivity", "media", "audiovisual", "gigabit", "submarine cables"] }
+      ]
+    },
+    {
+      "category": "Agriculture and Natural Resources",
+      "description": "3 areas",
+      "policy_areas": [
+        { "name": "Agriculture", "description": "Common Agricultural Policy and rural development", "aliases": ["agriculture", "farming", "farmers", "cap", "rural development", "geographical indications", "gi", "gis", "pdo", "pgi", "quality schemes", "wine", "cheese", "organic", "pesticides", "livestock", "crops", "eafrd", "smart villages"] },
+        { "name": "Maritime Affairs and Fisheries", "description": "Fisheries policy and blue economy", "aliases": ["fisheries", "fishing", "fish", "blue economy", "aquaculture", "oceans", "maritime", "quotas", "common fisheries policy", "cfp"] },
+        { "name": "Food Safety", "description": "Food standards and safety regulations", "aliases": ["food", "food safety", "food standards", "efsa", "labelling", "novel food", "animal health", "plant health", "additives", "gmo"] }
+      ]
+    },
+    {
+      "category": "Cohesion and Development",
+      "description": "4 areas",
+      "policy_areas": [
+        { "name": "Regional Policy", "description": "Cohesion policy and regional development", "aliases": ["regional", "cohesion", "structural funds", "erdf", "interreg", "regions", "territorial"] },
+        { "name": "Research and Innovation", "description": "Horizon Europe and research funding", "aliases": ["research", "innovation", "horizon europe", "science", "r&d", "startups", "deep tech", "patents", "technology transfer"] },
+        { "name": "Education, Training and Youth", "description": "Erasmus+ and education policies", "aliases": ["education", "training", "youth", "erasmus", "schools", "universities", "skills", "vocational", "lifelong learning"] },
+        { "name": "Culture", "description": "Cultural programmes and creative industries", "aliases": ["culture", "creative", "heritage", "arts", "film", "music", "creative europe"] }
+      ]
+    },
+    {
+      "category": "Social Policies",
+      "description": "3 areas",
+      "policy_areas": [
+        { "name": "Employment and Social Affairs", "description": "Labour rights and social protection", "aliases": ["employment", "jobs", "labour", "workers", "social", "social rights", "minimum wage", "pensions", "platform work", "working conditions", "social protection"] },
+        { "name": "Health", "description": "Public health and healthcare policies", "aliases": ["health", "healthcare", "medicines", "pharma", "pharmaceutical", "ema", "cancer", "vaccines", "medical devices", "mental health", "drugs", "marijuana", "cannabis", "cocaine", "tobacco", "alcohol"] },
+        { "name": "Consumer Protection", "description": "Consumer rights and product safety", "aliases": ["consumer", "consumers", "product safety", "consumer rights", "warranties", "unfair practices", "greenwashing"] }
+      ]
+    },
+    {
+      "category": "Justice and Home Affairs",
+      "description": "3 areas",
+      "policy_areas": [
+        { "name": "Justice and Fundamental Rights", "description": "Rule of law and fundamental rights", "aliases": ["justice", "rule of law", "fundamental rights", "judicial", "data protection", "privacy", "civil law", "company law", "contract", "rights", "anti-corruption"] },
+        { "name": "Migration and Home Affairs", "description": "Migration policy and border management", "aliases": ["migration", "asylum", "refugees", "refugee", "migrants", "borders", "schengen", "frontex", "visa", "police", "security", "terrorism", "organised crime", "trafficking", "drugs", "narcotics", "drug trafficking", "euda", "marijuana", "cocaine", "heroin"] },
+        { "name": "Women's Rights and Gender Equality", "description": "Gender equality and women's empowerment", "aliases": ["women", "gender", "gender equality", "equality", "violence against women", "pay gap", "lgbtiq", "discrimination"] }
+      ]
+    },
+    {
+      "category": "External Relations",
+      "description": "5 areas",
+      "policy_areas": [
+        { "name": "Foreign and Security Policy", "description": "Common foreign and security policy", "aliases": ["foreign policy", "cfsp", "diplomacy", "sanctions", "geopolitics", "america", "usa", "united states", "china", "russia", "ukraine", "middle east", "israel", "gaza", "transatlantic", "indo-pacific"] },
+        { "name": "Development and Cooperation", "description": "International development aid", "aliases": ["development", "development aid", "cooperation", "global gateway", "africa", "acp", "sdgs", "poverty"] },
+        { "name": "Neighbourhood and Enlargement", "description": "Enlargement and neighbourhood policy", "aliases": ["enlargement", "accession", "candidate", "western balkans", "albania", "serbia", "montenegro", "north macedonia", "kosovo", "bosnia", "ukraine", "moldova", "georgia", "turkey", "turkiye", "neighbourhood", "eastern partnership"] },
+        { "name": "Human Rights and Democracy", "description": "Global human rights advocacy", "aliases": ["human rights", "democracy", "civil society", "press freedom", "sakharov"] },
+        { "name": "Humanitarian Aid and Civil Protection", "description": "Emergency response and disaster relief", "aliases": ["humanitarian", "humanitarian aid", "disaster", "civil protection", "emergency", "rescue", "resceu", "wildfire", "wildfires", "forest fire", "floods", "earthquake", "fire", "crisis response"] }
+      ]
+    },
+    {
+      "category": "Emerging Strategic Areas",
+      "description": "3 areas",
+      "policy_areas": [
+        { "name": "Defence and Security", "description": "European defence and security cooperation", "aliases": ["defence", "defense", "military", "army", "weapons", "arms", "nato", "edf", "european defence fund", "edirpa", "asap", "drones", "uav", "missiles"] },
+        { "name": "Space Policy", "description": "EU space programme and satellite systems", "aliases": ["space", "satellite", "satellites", "galileo", "copernicus", "egnos", "iris2", "launchers", "space programme"] },
+        { "name": "Statistics", "description": "Eurostat and statistical data", "aliases": ["statistics", "eurostat", "indicators", "census", "national accounts"] }
+      ]
+    }
+  ]
+}

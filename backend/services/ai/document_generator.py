@@ -1203,7 +1203,7 @@ NOW WRITE THE ONE-PAGER. NO em-dashes. NO marketing fluff. NO emojis.
     # #7 EU press release
     # =====================================================================
 
-    PRESS_RELEASE_PROMPT = """Generate an EU-format press release in the {institution_label} house style.
+    PRESS_RELEASE_PROMPT = """Write a press release in the BRUBRU house style: one format that merges the strongest conventions of the European Commission, the European Parliament and the Council of the EU.
 
 HEADLINE: {headline}
 SUB-HEADLINE: {sub_headline}
@@ -1211,7 +1211,7 @@ DATELINE: {dateline_city}, {dateline_date}
 
 LEAD PARAGRAPH (set in stone, do not alter): {lead_paragraph}
 
-KEY POINTS:
+KEY POINTS (use for the top summary bullets):
 {key_points_block}
 
 QUOTE: {quote_text}
@@ -1233,61 +1233,50 @@ LANGUAGE: {language_label}
 
 {style_guidelines}
 
-HOUSE STYLE RULES FOR {institution_label}:
+THE BRUBRU PRESS-RELEASE STYLE (best of each institution):
+- From the Commission: a clean meta line, a bold lead summary sentence, a dedicated Quote section with the speaker's full name and title, a "For more information" block, and named press contacts.
+- From the Parliament: a three-bullet "In brief" summary at the very top, clear sub-headings in the body, and a factual decision or figure line when one genuinely applies.
+- From the Council: a neutral, factual, non-promotional voice with a clear Background and next steps.
 
-If Commission (IP/XX/XXXX style):
-- Headline in sentence case.
-- "(Brussels, [date])" inline dateline.
-- 3 to 5 short paragraphs.
-- One direct quote attributed to a Commissioner or DG official.
-- "For more information" footer with links.
-- "Background" section at the end.
+HARD RULES:
+- Factual and neutral. No promotional adjectives, no marketing voice.
+- NO em-dashes.
+- Sentence-case headline.
+- Never invent an institutional reference (IP/ number, Council document number, EP procedure or IPR code), a vote tally, or a named institutional spokesperson. If one was not supplied, omit it. Use only the press contacts supplied above.
 
-If European Parliament:
-- Headline in title case.
-- Dateline "Brussels, [date] -- " (single hyphen for the en-dash REPLACEMENT, never use --).
-- Quote from the lead rapporteur or committee chair.
-- Note the legislative procedure reference (e.g., 2021/0106(COD)).
-- "Next steps" paragraph indicates the next vote / institution.
+OUTPUT FORMAT (markdown), follow EXACTLY:
 
-If Council:
-- Headline in sentence case, neutral and factual.
-- "(Brussels)" inline city.
-- Reference Council formation (Foreign Affairs Council, ECOFIN, ...).
-- "Background" + "Member State positions" if relevant.
-- Conservative, diplomatic, never editorialising.
-
-If Agency:
-- Compact, technical tone.
-- Headline in sentence case.
-- Quote from the agency executive director.
-- Agency acronym in the dateline.
-
-OUTPUT FORMAT (markdown):
+**PRESS RELEASE | {dateline_city}, {dateline_date}**
 
 # {headline}
 {sub_headline_block}
 
-**{dateline_city}, {dateline_date}**
+**In brief**
+- Three short bullets capturing the key takeaways, drawn from KEY POINTS.
 
-[Lead paragraph here, expanded to 2 short sentences max.]
+**[Lead paragraph here, expanded to at most two short sentences, in bold.]**
 
-## Key points
-- Bullets from KEY POINTS, polished.
+[One to three body paragraphs. Add a short sub-heading before a paragraph where it helps the reader. Include a factual decision or figure line only if it was supplied above; never invent one.]
+
+## Quote
 
 > "{quote_text_inline}"
-> -- {quote_attribution_or_blank}
+>
+> {quote_attribution_or_blank}
 
 ## Background
-[Background paragraph in 3-5 sentences.]
+[Three to five factual sentences.]
 
 ## Next steps
-[1 short paragraph on what happens next and when.]
+[One short paragraph on what happens next and when.]
+
+## For more information
+[Links or references supplied above; if none, write "Available on request."]
 
 ## Press contacts
 [Contacts block, one per line.]
 
-NOW WRITE THE PRESS RELEASE. NO em-dashes. NO promotional adjectives.
+NOW WRITE THE PRESS RELEASE. Keep it tight, factual and neutral.
 """
 
     async def generate_eu_press_release(self, request):
@@ -1327,7 +1316,7 @@ NOW WRITE THE PRESS RELEASE. NO em-dashes. NO promotional adjectives.
         sections = self._parse_sections(content)
         return GeneratedDocument(
             document_type="press_release",
-            title=f"{institution_label} press release: {request.headline[:120]}",
+            title=f"Press release: {request.headline[:130]}",
             content=content,
             sections=sections or {"press_release": content},
             word_count=len(content.split()),
@@ -1458,46 +1447,78 @@ STYLE REFERENCE (from a user-uploaded IA):
 
 {style_guidelines}
 
-STRUCTURE (follow EXACTLY -- this is the Commission Better Regulation IA template):
+STRUCTURE (follow EXACTLY -- the Commission Better Regulation IA structure, adapted as a Brubru-made impact assessment):
 
 # Impact Assessment: {initiative_title}
+
+*Brubru-made impact assessment, following the European Commission Better Regulation structure. This is a working draft prepared for the user. It is not an official Commission Staff Working Document and has not been submitted to the Regulatory Scrutiny Board.*
+
+## Executive summary sheet
+A two-page standalone summary, written as labelled boxes:
+
+**A. Need for action.** What is the problem and why is it a problem at EU level? (2 to 3 sentences)
+**B. What the initiative aims to achieve.** The general and specific objectives in brief.
+**C. Preferred option and why.** Name the preferred option, or state that none is preferred and why.
+**D. Impacts of the preferred option.** Main benefits and costs, including the SME and competitiveness effect and the net administrative burden under one-in, one-out.
+**E. Who is affected.** The main groups affected and how.
+**F. Follow-up.** When and how the policy will be reviewed.
 
 ## 1. Problem definition
 1.1. What is the problem? (use the input above; cite drivers)
 1.2. Who is affected and how?
-1.3. How likely is the problem to persist or worsen under the baseline?
+1.3. How likely is the problem to persist or worsen?
 
-## 2. Why should the EU act?
-2.1. Legal basis (cite the Treaty article range where appropriate)
-2.2. Subsidiarity and proportionality
+## 2. Intervention logic
+One short paragraph or list linking problem -> drivers -> objectives -> options, so the analysis reads as a single chain.
 
-## 3. Objectives
-3.1. General objective
-3.2. Specific objectives (bullet list)
+## 3. Why should the EU act?
+3.1. Legal basis (cite the Treaty article range where appropriate)
+3.2. Subsidiarity and proportionality
 
-## 4. Policy options
+## 4. Objectives
+4.1. General objective
+4.2. Specific objectives (bullet list)
+
+## 5. Baseline scenario (no further EU action)
+One paragraph describing how the situation evolves dynamically if no further EU action is taken. This is the reference against which every option is measured.
+
+## 6. Policy options
 A numbered list of the supplied options. For each option:
 - One short paragraph describing the intervention.
 - Bullet expected mechanism.
 
-## 5. Impacts of the options
+## 7. Impacts of the options
 A markdown table comparing options against the impact dimensions:
 
 | Option | Economic | Social | Environmental | Fundamental rights | SMEs / Competitiveness | Administrative burden |
 |---|---|---|---|---|---|---|
 
-Fill each cell with a short qualitative score ("positive / neutral / negative / mixed") followed by one sentence of reasoning. Use only the dimensions actually requested.
+Fill each cell with a short qualitative score ("positive / neutral / negative / mixed") followed by one sentence of reasoning. Use only the dimensions actually requested. Then add three short subsections:
+- **SME and competitiveness check:** how the options affect small and medium-sized enterprises and EU competitiveness.
+- **One-in, one-out:** the net change in administrative and adjustment costs (what new burden is introduced and what is offset).
+- **Do no significant harm:** confirm the preferred direction does no significant harm to environmental objectives, or flag where it might.
 
-## 6. Comparison of options
-2 short paragraphs that synthesise the impact table and explain which option scores best on which criterion.
+## 8. Comparison of options
+A markdown table scoring each option against the Commission comparison criteria:
 
-## 7. Preferred option and justification
+| Option | Effectiveness | Efficiency | Coherence | Proportionality |
+|---|---|---|---|---|
+
+Use a short qualitative score plus a few words per cell. Follow the table with one paragraph explaining which option performs best overall.
+
+## 9. Preferred option and justification
 1 paragraph naming the preferred option and the trade-offs accepted.
 
-## 8. Monitoring and evaluation
+## 10. Monitoring and evaluation
 Short bullet list of indicators and review cadence.
 
-NOW WRITE THE IA. NO em-dashes. Avoid hedging like "may possibly contribute"; be specific.
+## Annex 1. Procedural information
+A short note stating that this is a Brubru-made impact assessment prepared for the user, the lead policy area, and the evidence base used. Do not invent a Staff Working Document number and do not reference the Regulatory Scrutiny Board.
+
+## Annex 2. Stakeholder consultation synopsis
+A short summary of who would be (or was) consulted, the main views expected on each side, and how those views are reflected in the analysis. If no consultation has taken place, say so and describe the consultation that should accompany the initiative.
+
+NOW WRITE THE IA. NO em-dashes. British English. Avoid hedging like "may possibly contribute"; be specific. Where an input was not supplied, draft a plausible, clearly-reasoned placeholder rather than leaving a gap.
 """
 
     async def generate_impact_assessment(self, request):

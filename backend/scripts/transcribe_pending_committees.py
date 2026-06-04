@@ -135,6 +135,16 @@ async def transcribe_batch(
         failed = 0
 
         for i, row in enumerate(rows, 1):
+            # Re-read status — a concurrent batch may have already processed this row.
+            session.refresh(row)
+            if row.status != TranscriptStatusEnum.PENDING:
+                logger.info(
+                    "[batch] [%d/%d] SKIP %s %s (status=%s — already handled)",
+                    i, len(rows), row.committee_code,
+                    row.meeting_date.strftime("%Y-%m-%d"), row.status,
+                )
+                continue
+
             logger.info(
                 "[batch] [%d/%d] Transcribing %s %s ...",
                 i, len(rows), row.committee_code, row.meeting_date.strftime("%Y-%m-%d"),
@@ -208,8 +218,8 @@ def main():
         help="Transcribe all PENDING rows (ignores --committee filter).",
     )
     parser.add_argument(
-        "--engine", type=str, default=None, choices=("voxtral", "whisper"),
-        help="Pin ASR engine (default: voxtral primary, whisper fallback).",
+        "--engine", type=str, default=None, choices=("faster-whisper", "voxtral", "whisper"),
+        help="Pin ASR engine. faster-whisper = local/free (default when available); voxtral/whisper = paid API.",
     )
     parser.add_argument(
         "--language", type=str, default="en",

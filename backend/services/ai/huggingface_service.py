@@ -49,6 +49,9 @@ class HuggingFaceService:
 
     # API endpoints
     INFERENCE_API_BASE = "https://router.huggingface.co/hf-inference/models/"
+    # OpenAI-compatible chat endpoint (HF Inference Providers router) for instruct
+    # LLMs (Qwen, Llama, etc.). Pass model as "<repo>" or "<repo>:<provider>".
+    ROUTER_CHAT_URL = "https://router.huggingface.co/v1/chat/completions"
 
     # Recommended models for EU legislative content
     MODELS = {
@@ -466,6 +469,54 @@ class HuggingFaceService:
 
         except Exception as e:
             logger.error(f"Legal LLM error: {str(e)}")
+            return None
+
+    async def chat_completion(
+        self,
+        model: str,
+        messages: List[Dict[str, str]],
+        max_tokens: int = 1024,
+        temperature: float = 0.2,
+        timeout: float = 180.0,
+    ) -> Optional[str]:
+        """Call an instruct LLM via the HF Inference Providers OpenAI-compatible
+        router. ``model`` may pin a provider as "<repo>:<provider>" (e.g.
+        "Qwen/Qwen3-30B-A3B-Instruct-2507:featherless-ai"). Returns the assistant
+        message content, or None on failure. Strips any leaked <think> blocks.
+
+        NO Anthropic — this is the sanctioned path for non-chat OSS generation.
+        """
+        try:
+            resp = await self.client.post(
+                self.ROUTER_CHAT_URL,
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                },
+                timeout=timeout,
+            )
+            if resp.status_code != 200:
+                logger.error("[HF-chat] %s -> HTTP %s: %s", model, resp.status_code, resp.text[:200])
+                return None
+            data = resp.json()
+            choice = (data.get("choices") or [{}])[0]
+            msg = choice.get("message") or {}
+            content = msg.get("content")
+            # Some thinking models leave content empty and put text in reasoning_content
+            # (we suppress thinking, but guard anyway).
+            if not content and msg.get("reasoning_content"):
+                content = msg["reasoning_content"]
+            if not content:
+                logger.warning("[HF-chat] %s returned empty content (finish=%s)",
+                               model, choice.get("finish_reason"))
+                return None
+            import re as _re
+            content = _re.sub(r"<think>.*?</think>", "", content, flags=_re.S).strip()
+            return content or None
+        except Exception as e:
+            logger.error("[HF-chat] %s error: %s", model, e)
             return None
 
     async def __aenter__(self):

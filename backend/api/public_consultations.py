@@ -153,6 +153,33 @@ def check_blue_tier(user: User):
         )
 
 
+def _apply_pi(query, user: User):
+    """Restrict consultations to the user's Policy Interests, the same lens used
+    across MEUB (Calendar / News / Votes / Transcripts). A consultation matches
+    when its responsible DG is one the user cares about (PI -> Commission DG
+    crosswalk) OR its title/description mentions a PI keyword. Returns
+    (query, pi_active). No interests -> unchanged."""
+    from services.tracking.tracked_files_seeder import _interest_list
+    from services.tracking.pi_committee_crosswalk import (
+        dgs_for_interests, keywords_for_interests,
+    )
+    interests = _interest_list(user)
+    if not interests:
+        return query, False
+    dgs = dgs_for_interests(interests)
+    kws = keywords_for_interests(interests)
+    clauses = []
+    if dgs:
+        clauses.append(PublicConsultation.dg_responsible.in_(list(dgs)))
+    for kw in kws:
+        like = f"%{kw}%"
+        clauses.append(PublicConsultation.title.ilike(like))
+        clauses.append(PublicConsultation.description.ilike(like))
+    if not clauses:
+        return query, False
+    return query.filter(or_(*clauses)), True
+
+
 def consultation_to_list_item(
     consultation: PublicConsultation,
     is_tracked: bool = False
@@ -205,6 +232,7 @@ async def get_consultations(
     search: Optional[str] = Query(None, description="Search in title/description"),
     closing_soon: Optional[bool] = Query(None, description="Filter closing within 7 days"),
     min_relevance: Optional[int] = Query(None, ge=0, le=100, description="Minimum relevance"),
+    my_interests: bool = Query(False, description="Restrict to the user's Policy Interests"),
     sort_by: str = Query("end_date", description="Sort: end_date, relevance_score, feedback_count, last_updated"),
     sort_desc: bool = Query(False, description="Sort descending"),
     limit: int = Query(50, ge=1, le=500),
@@ -274,6 +302,12 @@ async def get_consultations(
             query = query.filter(PublicConsultation.relevance_score >= min_relevance)
             filters_applied['min_relevance'] = min_relevance
 
+        # Policy-Interest lens (shared across MEUB): DG crosswalk + keyword match.
+        if my_interests:
+            query, pi_active = _apply_pi(query, current_user)
+            if pi_active:
+                filters_applied['my_interests'] = True
+
         # Get total count
         total = query.count()
 
@@ -323,12 +357,21 @@ async def get_consultations(
     response_model=DGListResponse,
     summary="List Directorate-Generals"
 )
-async def get_dgs() -> DGListResponse:
-    """Get list of EC Directorate-Generals."""
-    dgs = [
-        DGInfo(code=dg.code, name=dg.name, full_name=dg.full_name)
-        for dg in DGS
+async def get_dgs(db: Session = Depends(get_db)) -> DGListResponse:
+    """DGs present in the consultations data, named via the SHARED Commission
+    registry (knowledge_base/eu_calendar_institutions.COMMISSION_DG_NAME) so the
+    filter taxonomy matches the Calendar / Transcripts Institution->Body lists.
+    Data-driven so the dropdown never shows empty DGs."""
+    from knowledge_base.eu_calendar_institutions import COMMISSION_DG_NAME
+
+    codes = [
+        r[0] for r in db.query(PublicConsultation.dg_responsible)
+        .filter(PublicConsultation.dg_responsible.isnot(None)).distinct().all()
     ]
+    dgs = []
+    for code in sorted({c for c in codes if c}):
+        name = COMMISSION_DG_NAME.get(code) or get_dg_full_name(code) or code
+        dgs.append(DGInfo(code=code, name=name, full_name=name))
     return DGListResponse(dgs=dgs, total=len(dgs))
 
 

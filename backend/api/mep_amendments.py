@@ -48,12 +48,88 @@ from schemas.mep_amendment_schemas import (
     ComparisonAllyItem,
 )
 from .auth import get_current_user
+from services.tracking.pi_committee_crosswalk import committees_for_interests
+from services.tracking.tracked_files_seeder import _interest_list
+from models.legislative_train import LegislativeCarriage
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/mep-amendments", tags=["MEP Amendments"])
+
+
+# ===== PI-aligned procedure picker =====
+# NOTE: must be declared before the "/{procedure_ref:path}" catch-all GET below,
+# otherwise FastAPI matches "procedures-by-committee" as a procedure reference.
+
+@router.get(
+    "/procedures-by-committee",
+    summary="Procedures that have MEP amendments, annotated by committee",
+    description=(
+        "Lists every procedure with committee amendments, each annotated with its "
+        "committee code(s), amendment count and (best-effort) title. Also returns "
+        "the signed-in user's Policy-Interest committees so the picker can default "
+        "to 'My interests'. Powers the PI-aligned MEP Amendments picker."
+    ),
+)
+async def get_procedures_by_committee(
+    current_user: Optional[User] = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Procedures-with-amendments grouped/annotated by committee, plus the user's PI committees."""
+    rows = (
+        db.query(
+            MEPAmendment.procedure_reference,
+            MEPAmendment.committee_code,
+            func.count(MEPAmendment.id),
+        )
+        .group_by(MEPAmendment.procedure_reference, MEPAmendment.committee_code)
+        .all()
+    )
+
+    proc_map: dict = {}
+    for proc_ref, committee, count in rows:
+        if not proc_ref:
+            continue
+        p = proc_map.setdefault(
+            proc_ref, {"procedure_ref": proc_ref, "count": 0, "committees": [], "title": None}
+        )
+        p["count"] += count
+        if committee and committee not in p["committees"]:
+            p["committees"].append(committee)
+
+    # Title enrichment. Primary: the carriages corpus (keyed on OEIL ref).
+    refs = list(proc_map.keys())
+    if refs:
+        titles = dict(
+            db.query(LegislativeCarriage.oeil_procedure_ref, LegislativeCarriage.title)
+            .filter(LegislativeCarriage.oeil_procedure_ref.in_(refs))
+            .all()
+        )
+        for ref, p in proc_map.items():
+            if titles.get(ref):
+                p["title"] = titles[ref]
+
+        # Secondary: the OEIL title cache (migration 096) for in-progress
+        # proposals that are not in the carriages corpus, so the picker shows a
+        # real title instead of the bare reference ("2023/0477(COD)").
+        missing = [ref for ref, p in proc_map.items() if not p["title"]]
+        if missing:
+            from sqlalchemy import text as sqla_text, bindparam
+            stmt = sqla_text(
+                "SELECT procedure_ref, title FROM oeil_procedure_titles WHERE procedure_ref IN :refs"
+            ).bindparams(bindparam("refs", expanding=True))
+            cached = dict(db.execute(stmt, {"refs": missing}).fetchall())
+            for ref in missing:
+                if cached.get(ref):
+                    proc_map[ref]["title"] = cached[ref]
+
+    procedures = sorted(proc_map.values(), key=lambda x: x["count"], reverse=True)
+
+    interests = _interest_list(current_user) if current_user else []
+    my_committees = sorted(committees_for_interests(interests))
+    return {"procedures": procedures, "my_committees": my_committees}
 
 
 # ===== Fetch & Parse =====
@@ -95,7 +171,7 @@ async def fetch_amendments(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to fetch amendments for {procedure_ref}: {str(e)}")
+        logger.exception(f"Failed to fetch amendments for {procedure_ref}: {str(e)}")
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch amendments: {str(e)}"
@@ -183,7 +259,7 @@ async def get_amendments_by_author(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to search amendments by author '{author}': {str(e)}")
+        logger.exception(f"Failed to search amendments by author '{author}': {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -213,7 +289,7 @@ async def get_sync_status(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get sync status: {str(e)}")
+        logger.exception(f"Failed to get sync status: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -233,7 +309,7 @@ async def _run_bulk_sync(db: Session, request: BulkSyncRequest):
             f"{result.amendments_stored} amendments"
         )
     except Exception as e:
-        logger.error(f"[ERROR] Bulk sync failed: {e}")
+        logger.exception(f"[ERROR] Bulk sync failed: {e}")
 
 
 @router.post(
@@ -268,7 +344,7 @@ async def trigger_bulk_sync(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to trigger bulk sync: {str(e)}")
+        logger.exception(f"Failed to trigger bulk sync: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -315,7 +391,7 @@ async def score_alignment(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Alignment scoring failed for {procedure_ref}: {str(e)}")
+        logger.exception(f"Alignment scoring failed for {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Alignment scoring failed: {str(e)}")
 
 
@@ -358,7 +434,7 @@ async def get_comparison(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Comparison analysis failed for {procedure_ref}: {str(e)}")
+        logger.exception(f"Comparison analysis failed for {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Comparison failed: {str(e)}")
 
 
@@ -393,7 +469,7 @@ async def list_documents(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to list documents for {procedure_ref}: {str(e)}")
+        logger.exception(f"Failed to list documents for {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -581,7 +657,7 @@ async def get_stats(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to get stats for {procedure_ref}: {str(e)}")
+        logger.exception(f"Failed to get stats for {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -676,5 +752,5 @@ async def list_amendments(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to list amendments for {procedure_ref}: {str(e)}")
+        logger.exception(f"Failed to list amendments for {procedure_ref}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

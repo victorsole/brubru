@@ -298,6 +298,151 @@ LAW_PACKAGES = {
         'date_from': 2022
     },
 
+    'esas_review_regulation': {
+        'name': 'ESAs Review (Reg 2019/2175)',
+        'primary_celex': '32019R2175',
+        'description': (
+            'Regulation (EU) 2019/2175 (the ESAs Review) reforming the three European '
+            'Supervisory Authorities (EBA, EIOPA, ESMA) and amending MiFIR (Reg 600/2014), '
+            'the Benchmarks Regulation (Reg 2016/1011) and the transfer-of-funds regulation '
+            '(Reg 2015/847). Adopted 18 December 2019 under Article 114 TFEU. Headline '
+            'change: EBA becomes the EU AML/CFT hub for the entire financial sector (central '
+            'AML database, internal AML committee, power to request national investigations). '
+            'New supervisory-convergence tools across all three ESAs: Union strategic '
+            'supervisory priorities (Art 29a), strengthened peer reviews (Art 30), public '
+            'Q&A tool (Art 16b), no-action letters (Art 9c), whistleblower protection '
+            '(Art 17a), coordination groups (Art 45b). ESMA gains direct supervision of data '
+            'reporting services providers and critical benchmarks from 1 Jan 2022. '
+            'Application waves: Articles 1/2/3/6 from 1 Jan 2020, Articles 4/5 from 1 Jan 2022.'
+        ),
+        'applicability': (
+            'The three European Supervisory Authorities (EBA, EIOPA, ESMA), national '
+            'competent authorities supervising banks, insurers, pension funds and securities '
+            'markets, financial sector operators subject to AML/CFT supervision, data '
+            'reporting services providers (APAs, CTPs, ARMs), benchmark administrators '
+            '(including third-country administrators seeking EU recognition), and EU '
+            'financial institutions monitoring supervisory-convergence and equivalence '
+            'developments. Amends Reg 1093/2010, 1094/2010, 1095/2010, 600/2014, 2016/1011 '
+            'and 2015/847.'
+        ),
+        'policy_area': 'Economic and Financial Affairs',
+        'priority_level': 'medium',
+        'keywords': [
+            'esas review', 'esas review regulation', 'european supervisory authorities',
+            'eba', 'eiopa', 'esma', 'european banking authority',
+            'european securities and markets authority', 'esfs', 'esrb',
+            'de larosiere', 'founding regulations', 'single rulebook',
+            'supervisory convergence', 'union strategic supervisory priorities',
+            'peer review', 'peer review committee', 'no action letter',
+            'questions and answers', 'whistleblower', 'reporting persons',
+            'fitness and propriety', 'coordination groups', 'third-country equivalence',
+            'anti-money laundering', 'aml', 'cft', 'countering terrorist financing',
+            'central aml database', 'aml committee', 'article 9a', 'article 9b',
+            'data reporting services providers', 'apa', 'ctp', 'arm', 'consolidated tape',
+            'critical benchmarks', 'benchmark administrators', 'mifir',
+            'sustainable finance', 'esg risks', 'fintech',
+            '2019/2175', '32019r2175', '1093/2010', '1094/2010', '1095/2010',
+            '600/2014', '2016/1011', '2015/847', 'article 114 tfeu',
+            'capital markets union', 'amla', 'board of supervisors', 'management board',
+        ],
+        'date_from': 2019
+    },
+
+    'animal_health_law_regulation': {
+        'name': 'Animal Health Law (Reg 2016/429)',
+        'primary_celex': '32016R0429',
+        'description': (
+            'Regulation (EU) 2016/429 (the Animal Health Law) is the single EU framework '
+            'regulation for transmissible animal diseases. Adopted 9 March 2016 under Articles '
+            '43(2), 114 and 168(4)(b) TFEU; entered into force 20 April 2016; applies from 21 '
+            'April 2021. It replaced around 40 prior acts. It names five diseases directly '
+            '(foot-and-mouth, classical swine fever, African swine fever, highly pathogenic '
+            'avian influenza, African horse sickness), sorts listed diseases into five '
+            'management categories (A immediate eradication, B compulsory eradication, C '
+            'optional eradication, D movement restrictions, E surveillance), and covers '
+            'responsibilities and biosecurity, notification and surveillance, eradication '
+            'programmes, disease-free status, contingency plans and vaccine banks, disease '
+            'control measures and restricted zones, registration and approval of '
+            'establishments, identification and traceability, movements within the Union and '
+            'TRACES certification, entry from third countries, non-commercial pet movements '
+            '(max five pets, EU pet passport), and emergency measures.'
+        ),
+        'applicability': (
+            'Livestock and aquaculture operators, transporters, assembly operators, germinal '
+            'product establishments, hatcheries, veterinarians and aquatic animal health '
+            'professionals, pet keepers and travellers with pets, importers of animals and '
+            'products of animal origin, Member State competent veterinary authorities, '
+            'reference laboratories, and the wider food chain. Covers kept and wild animals, '
+            'germinal products, products of animal origin, and animal by-products.'
+        ),
+        'policy_area': 'Food Safety',
+        'priority_level': 'medium',
+        'keywords': [
+            'animal health law', 'ahl', 'transmissible animal diseases', 'animal health',
+            'listed diseases', 'disease categorisation', 'category a b c d e',
+            'foot and mouth disease', 'classical swine fever', 'african swine fever',
+            'avian influenza', 'bird flu', 'african horse sickness', 'brucellosis',
+            'zoonoses', 'antimicrobial resistance', 'one health', 'biosecurity',
+            'sps agreement', 'oie', 'woah', 'efsa', 'reference laboratories',
+            'disease notification', 'adis', 'surveillance', 'eradication programme',
+            'disease-free status', 'zones', 'compartments', 'compartmentalisation',
+            'contingency plans', 'vaccine bank', 'antigen bank', 'restricted zone',
+            'emergency vaccination', 'registration of establishments',
+            'approval of establishments', 'confined establishment', 'assembly operation',
+            'traceability', 'identification and registration', 'equine passport',
+            'germinal products', 'animal health certificate', 'official veterinarian',
+            'traces', 'entry into the union', 'third country listing', 'export',
+            'pet movements', 'non-commercial movement', 'pet passport', 'rabies vaccination',
+            'emergency measures', 'scopaff', 'animal health package',
+            '2016/429', '32016r0429', '64/432/eec', '2006/88/ec', '21/2004', '576/2013',
+            '21 april 2021', 'food safety', 'veterinary',
+        ],
+        'date_from': 2016
+    },
+
+    'mica_crypto_assets_regulation': {
+        'name': 'MiCA (Reg 2023/1114)',
+        'primary_celex': '32023R1114',
+        'description': (
+            'Regulation (EU) 2023/1114 (MiCA, Markets in Crypto-Assets) is the EU first '
+            'comprehensive framework for crypto-assets not already regulated as financial '
+            'instruments. Adopted 31 May 2023 under Article 114 TFEU; applies from 30 December '
+            '2024, with the stablecoin Titles III and IV (asset-referenced tokens and e-money '
+            'tokens) from 30 June 2024. It classifies crypto-assets into three types (e-money '
+            'tokens, asset-referenced tokens, and other/utility tokens), requires a crypto-'
+            'asset white paper, licenses crypto-asset service providers (CASPs) across ten '
+            'services with EU-wide passporting, imposes reserve, redemption and own-funds '
+            'rules on stablecoin issuers, prohibits crypto market abuse, and gives EBA direct '
+            'supervision of significant tokens and ESMA a public register. Also amends the '
+            'EBA and ESMA regulations, the CRD and the Whistleblower Directive.'
+        ),
+        'applicability': (
+            'Crypto-asset issuers, offerors and persons seeking admission to trading; '
+            'stablecoin issuers (asset-referenced and e-money tokens); crypto-asset service '
+            'providers (exchanges, custodians, brokers, trading platforms, advisers, portfolio '
+            'managers); credit institutions and electronic money institutions issuing tokens; '
+            'national competent authorities, EBA and ESMA; and retail and professional holders '
+            'of crypto-assets in the Union.'
+        ),
+        'policy_area': 'Economic and Financial Affairs',
+        'priority_level': 'high',
+        'keywords': [
+            'mica', 'markets in crypto-assets', 'crypto-assets', 'crypto asset', 'stablecoin',
+            'e-money token', 'emt', 'asset-referenced token', 'art', 'utility token',
+            'crypto-asset white paper', 'white paper', 'crypto-asset service provider', 'casp',
+            'crypto exchange', 'crypto custody', 'trading platform', 'distributed ledger',
+            'dlt', 'blockchain', 'consensus mechanism', 'nft', 'non-fungible token',
+            'significant token', 'reserve of assets', 'right of redemption', 'own funds',
+            'qualifying holding', 'market abuse crypto', 'insider dealing', 'passporting',
+            'grandfathering', 'transitional regime', 'eba supervision', 'esma register',
+            'monetary sovereignty', 'algorithmic stablecoin', 'credit institution',
+            'electronic money institution', 'dora', 'dlt pilot regime',
+            '2023/1114', '32023r1114', 'article 114 tfeu', '30 december 2024', '30 june 2024',
+            '1 july 2026', 'amends 1093/2010', 'amends 1095/2010', 'amends 2013/36',
+        ],
+        'date_from': 2023
+    },
+
     'capital_markets_union': {
         'name': 'Capital Markets Union Package',
         'primary_celex': None,

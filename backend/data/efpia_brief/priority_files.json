@@ -61,8 +61,8 @@
   ],
   "recipients": {
     "test": "hello@beresol.eu",
+    "_live_note": "public-affairs@efpia.eu REMOVED from sends 2 Jun 2026 -- it is a Google Group that rejects external posts (mailer-daemon bounce 1 Jun). It remains a valid Brubru login/demo account and stays in audience_users.json for chat cards; only email DELIVERY to it is disabled.",
     "live": [
-      "public-affairs@efpia.eu",
       "david.devantcerezo@efpia.eu",
       "athina.giannoutsou@efpia.eu"
     ]

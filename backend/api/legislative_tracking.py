@@ -255,11 +255,12 @@ def get_recital_article_map(
 
     mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
     if mapping is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"CELEX {celex} not in eu_laws or Formex XML unavailable",
-        )
-    return {"celex": celex, "map": mapping}
+        # No Formex source for this CELEX (e.g. Commission proposals, which are
+        # not in the adopted-acquis archive). This is a "no map available" state,
+        # not an error — return an empty map so the Amendator recitals panel
+        # degrades gracefully instead of logging a 404 in the console.
+        return {"celex": celex, "map": {}, "available": False}
+    return {"celex": celex, "map": mapping, "available": True}
 
 
 @router.get("/{celex}/defined-terms")

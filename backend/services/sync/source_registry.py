@@ -1,0 +1,64 @@
+"""
+MEUB sync source registry.
+
+ONE place that declares every auto-synced MEUB feed: which CLI runs it, on
+which cadence tier, and how to label it. The cron tier endpoints loop over
+this by tier; the freshness API labels chips from it. Adding a source later
+is a single line here, not new plumbing.
+
+Tiers (cadence is set on the Railway cron schedule, not here):
+  - "fast" (~3h): intraday newswires, the Official Journal, votes
+  - "warm" (~6h): calendar, transcripts (metadata), lobby meetings, questions
+
+Already-scheduled feeds (OEIL/Tracked Files, Texts Adopted, Commission docs,
+Committee Work, Consultations) keep running via their existing cron endpoints
+and are intentionally NOT duplicated here.
+"""
+
+from dataclasses import dataclass, field
+from typing import List, Tuple
+
+
+@dataclass(frozen=True)
+class SourceSpec:
+    key: str                       # stable id, used as sync_runs.source_key + chip key
+    label: str                     # human label for the freshness chip
+    tier: str                      # 'fast' | 'warm'
+    script: str                    # relpath under backend/ (run as a subprocess)
+    args: Tuple[str, ...] = field(default_factory=tuple)
+    timeout: int = 900             # seconds
+    # Hours after which a missed refresh is considered "stale" (drives the
+    # staleness email for fast feeds and the amber chip in the UI).
+    stale_after_hours: int = 7
+
+
+# fmt: off
+MEUB_SOURCES: List[SourceSpec] = [
+    # ---- FAST (~3h): things the EU publishes intraday ---------------------
+    SourceSpec("news_dg",      "News - Commission & EU bodies", "fast", "scripts/sync_dg_news.py",       timeout=900),
+    SourceSpec("news_ep",      "News - Parliament",             "fast", "scripts/sync_ep_news.py",        timeout=900),
+    SourceSpec("news_bespoke", "News - other bodies",           "fast", "scripts/sync_bespoke_news.py",   timeout=900),
+    SourceSpec("oj",           "My OJ (Official Journal)",      "fast", "scripts/sync_oj.py",             ("--apply",), timeout=900),
+    SourceSpec("votes_ep",     "Votes - Parliament",            "fast", "scripts/sync_ep_votes.py",       ("--apply",), timeout=1200),
+    SourceSpec("votes_council","Votes - Council",               "fast", "scripts/sync_council_votes.py",  ("--max", "20"), timeout=900),
+
+    # ---- WARM (~6h): slower-moving institutional feeds --------------------
+    SourceSpec("calendar",          "My EU Calendar",            "warm", "scripts/sync_eu_calendar.py",          timeout=1200, stale_after_hours=14),
+    SourceSpec("calendar_dg_events","Calendar - DG events",      "warm", "scripts/sync_dg_events.py",            timeout=900,  stale_after_hours=14),
+    SourceSpec("transcripts",       "Transcripts (committee)",   "warm", "scripts/sync_committee_transcripts.py", ("--max", "10", "--days", "7"), timeout=1200, stale_after_hours=14),
+    SourceSpec("lobby_meetings",    "Lobby Meetings",            "warm", "scripts/sync_mep_lobby_meetings.py",    ("--procedures", "20", "--profiles", "10"), timeout=1200, stale_after_hours=14),
+    SourceSpec("parl_questions",    "Parliamentary Questions",   "warm", "scripts/ingest_parl_questions.py",      timeout=900,  stale_after_hours=14),
+]
+# fmt: on
+
+
+def sources_for_tier(tier: str) -> List[SourceSpec]:
+    return [s for s in MEUB_SOURCES if s.tier == tier]
+
+
+def all_source_keys() -> List[str]:
+    return [s.key for s in MEUB_SOURCES]
+
+
+def get_source(key: str) -> SourceSpec | None:
+    return next((s for s in MEUB_SOURCES if s.key == key), None)

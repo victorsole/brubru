@@ -228,6 +228,12 @@ class LegislativeCarriage(Base):
     enriched_at = Column(DateTime)
     enrichment_quality = Column(String)  # "high", "medium", "low"
 
+    # EP Legislative Train editorial narrative (migration 097). The "state of
+    # play" prose OEIL lacks; joined by OEIL ref. See legislative_train_narrative.py.
+    legislative_train_summary = Column(Text)
+    legislative_train_url = Column(Text)
+    legislative_train_updated_at = Column(DateTime(timezone=True))
+
     # Phase 5 of docs/applications/euvoc.md — IMMC-equivalent inter-institutional
     # handoff events projected from cdm:event_legal_*. See migration 049_immc_tags.sql
     # and services/api_clients/immc_client.py for the JSONB shape.

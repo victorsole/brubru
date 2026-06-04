@@ -21,20 +21,32 @@ from core.database import Base
 
 
 class ProcedureTypeEnum(str, enum.Enum):
-    """
-    Procedure types with relevance hierarchy.
+    """OEIL procedure types. Reference set only.
 
-    COD (100): Ordinary legislative procedure - laws
-    APP (80): Consent procedure
-    CNS (70): Consultation procedure
-    NLE (50): Non-legislative procedure
-    INI (40): Own-initiative reports
+    The committee_work_items.procedure_type column is a free varchar (migration
+    093) because OEIL's vocabulary is open-ended; a native enum used to collapse
+    every type outside the first five to INI. Kept here for the relevance map
+    and for callers that want the canonical codes.
     """
     COD = "COD"
-    APP = "APP"
     CNS = "CNS"
+    APP = "APP"
     NLE = "NLE"
     INI = "INI"
+    INL = "INL"
+    RSP = "RSP"
+    RSO = "RSO"
+    REG = "REG"
+    RPS = "RPS"
+    DEA = "DEA"
+    IMM = "IMM"
+    BUD = "BUD"
+    BUI = "BUI"
+    DEC = "DEC"
+    GBD = "GBD"
+    ACI = "ACI"
+    COS = "COS"
+    DCE = "DCE"
 
 
 class CommitteeRoleEnum(str, enum.Enum):
@@ -78,11 +90,9 @@ class CommitteeWorkItem(Base):
     full_description = Column(Text)
 
     # Procedure metadata
-    procedure_type = Column(
-        SQLEnum(ProcedureTypeEnum),
-        default=ProcedureTypeEnum.INI,
-        nullable=False
-    )
+    # Free varchar (migration 093): OEIL has 20+ procedure types and adds more;
+    # a native enum silently collapsed everything outside COD/APP/CNS/NLE/INI.
+    procedure_type = Column(String(10), default="INI", nullable=False)
     committee_role = Column(
         SQLEnum(CommitteeRoleEnum),
         default=CommitteeRoleEnum.LEAD,

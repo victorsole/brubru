@@ -1,0 +1,2517 @@
+"""
+Tenderator API Router
+
+FastAPI endpoints for EU public procurement tender monitoring.
+Blue-tier feature for SME users.
+
+Endpoints:
+- GET /api/tenders - Search tenders
+- GET /api/tenders/{id} - Get tender details
+- GET /api/tenders/matches - Get user's matched tenders
+- POST /api/tenders/profile - Create/update tender profile
+- GET /api/tenders/profile - Get user's tender profile
+- POST /api/tenders/matches/{id}/save - Save a match
+- POST /api/tenders/matches/{id}/dismiss - Dismiss a match
+- POST /api/tenders/fetch - Trigger tender fetch (admin)
+- GET /api/tenders/statistics - Get tender statistics
+"""
+
+import logging
+from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+
+from fastapi import APIRouter, HTTPException, Query, Depends, status, BackgroundTasks
+from sqlalchemy.orm import Session
+from uuid import UUID
+
+from core.database import get_db
+from models.user import User
+from models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
+from services.tenders.tender_service import TenderService
+from services.tenders.matcher import TenderMatcher
+from schemas.tender_schemas import (
+    TenderSummary, TenderDetail,
+    TenderProfileCreate, TenderProfileUpdate, TenderProfileResponse,
+    TenderMatchResponse, TenderMatchWithTender, TenderMatchUpdate,
+    TenderSearchParams, TenderSearchResponse,
+    TenderMatchListParams, TenderMatchListResponse,
+    TenderFetchRequest, TenderFetchJobResponse,
+    TenderStatistics, UserTenderStatistics
+)
+from .auth import get_current_user
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(
+    prefix="/api/tenders",
+    tags=["Tenderator"],
+    responses={404: {"description": "Not found"}}
+)
+
+
+# ============================================================================
+# Dependencies
+# ============================================================================
+
+def get_tender_service(db: Session = Depends(get_db)) -> TenderService:
+    """Get TenderService instance"""
+    return TenderService(db)
+
+
+def run_profile_matching_background(profile_id: int):
+    """
+    Run matching for a specific profile as a background task.
+
+    Creates its own database session to avoid transaction conflicts
+    with the main request. This is the correct pattern for FastAPI
+    BackgroundTasks that need database access.
+    """
+    import asyncio
+    from core.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        # Create matcher with appropriate threshold
+        matcher = TenderMatcher(db, score_threshold=35.0)
+
+        # Run async matching in sync context
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            results = loop.run_until_complete(matcher.match_single_profile(profile_id))
+        finally:
+            loop.close()
+
+        # Create matches in database with duplicate check
+        matches_created = 0
+        for result in results:
+            # Check if match already exists (prevents race conditions)
+            existing = db.query(TenderMatch).filter(
+                TenderMatch.profile_id == result.profile_id,
+                TenderMatch.tender_id == result.tender_id
+            ).first()
+
+            if existing:
+                continue
+
+            match = TenderMatch(
+                tender_id=result.tender_id,
+                profile_id=result.profile_id,
+                user_id=result.user_id,
+                match_score=result.total_score,
+                match_reasons=result.score_breakdown,
+                match_details=result.match_details,
+                created_at=datetime.utcnow()
+            )
+            db.add(match)
+            matches_created += 1
+
+        db.commit()
+        logger.info(f"Background matching created {matches_created} matches for profile {profile_id}")
+        return matches_created
+
+    except Exception as e:
+        logger.error(f"Background matching failed for profile {profile_id}: {e}")
+        db.rollback()
+        return 0
+    finally:
+        db.close()
+
+
+async def require_blue_tier(current_user: User = Depends(get_current_user)) -> User:
+    """Require Blue tier subscription for Tenderator access"""
+    # Check if user has Blue tier subscription
+    if current_user.subscription_tier not in ['blue', 'admin']:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Tenderator requires Blue tier subscription"
+        )
+    return current_user
+
+
+# ============================================================================
+# Health Check (must be before /{tender_id})
+# ============================================================================
+
+@router.get(
+    "/health",
+    summary="Health check",
+    description="Check Tenderator API health"
+)
+async def health_check():
+    """Tenderator API health check"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "service": "Tenderator API"
+    }
+
+
+# ============================================================================
+# Tender Profile Endpoints (Blue Tier) - must be before /{tender_id}
+# ============================================================================
+
+@router.get(
+    "/profile/me",
+    response_model=TenderProfileResponse,
+    summary="Get my tender profile",
+    description="Get the current user's tender matching profile"
+)
+async def get_my_profile(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+) -> TenderProfileResponse:
+    """
+    Get your tender matching profile.
+
+    The profile contains your company information and preferences
+    used for matching tenders to your needs.
+    """
+    try:
+        profile = db.query(TenderProfile).filter(
+            TenderProfile.user_id == current_user.id
+        ).first()
+
+        if not profile:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No tender profile found. Create one first."
+            )
+
+        return TenderProfileResponse.model_validate(profile)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get profile for user {current_user.id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get profile: {str(e)}"
+        )
+
+
+@router.post(
+    "/profile",
+    response_model=TenderProfileResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create tender profile",
+    description="Create a new tender matching profile"
+)
+async def create_profile(
+    profile_data: TenderProfileCreate,
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+) -> TenderProfileResponse:
+    """
+    Create your tender matching profile.
+
+    **Company Information**:
+    - `company_name`: Your company name
+    - `company_size`: micro, small, or medium
+    - `annual_turnover`: Annual turnover in EUR
+    - `employee_count`: Number of employees
+
+    **Preferences**:
+    - `cpv_categories`: CPV code prefixes (e.g., ['72', '48'] for IT)
+    - `countries_of_interest`: Target countries
+    - `max_tender_value`: Maximum contract value
+    - `min_deadline_days`: Minimum days until deadline
+    """
+    try:
+        # Check if profile already exists
+        existing = db.query(TenderProfile).filter(
+            TenderProfile.user_id == current_user.id
+        ).first()
+
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Profile already exists. Use PUT to update."
+            )
+
+        # Create profile
+        profile = TenderProfile(
+            user_id=current_user.id,
+            **profile_data.model_dump()
+        )
+
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+
+        logger.info(f"Created tender profile for user {current_user.id}")
+
+        # Schedule matching to run in background (separate transaction)
+        # This ensures profile creation succeeds independently of matching
+        background_tasks.add_task(run_profile_matching_background, profile.id)
+
+        return TenderProfileResponse.model_validate(profile)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to create profile: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create profile: {str(e)}"
+        )
+
+
+@router.put(
+    "/profile",
+    response_model=TenderProfileResponse,
+    summary="Update tender profile",
+    description="Update your tender matching profile"
+)
+async def update_profile(
+    profile_data: TenderProfileUpdate,
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+) -> TenderProfileResponse:
+    """
+    Update your tender matching profile.
+
+    Only provided fields will be updated.
+    After updating, matches are recalculated automatically.
+    """
+    try:
+        profile = db.query(TenderProfile).filter(
+            TenderProfile.user_id == current_user.id
+        ).first()
+
+        if not profile:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No profile found. Create one first."
+            )
+
+        # Update only provided fields
+        update_data = profile_data.model_dump(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(profile, key, value)
+
+        profile.updated_at = datetime.utcnow()
+
+        # Clear old non-saved matches to recalculate with new profile
+        db.query(TenderMatch).filter(
+            TenderMatch.profile_id == profile.id,
+            TenderMatch.is_saved == False,
+            TenderMatch.is_applied == False
+        ).delete()
+
+        db.commit()
+        db.refresh(profile)
+
+        logger.info(f"Updated tender profile for user {current_user.id}")
+
+        # Schedule matching to run in background (separate transaction)
+        # This ensures profile update succeeds independently of matching
+        background_tasks.add_task(run_profile_matching_background, profile.id)
+
+        return TenderProfileResponse.model_validate(profile)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to update profile: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update profile: {str(e)}"
+        )
+
+
+# ============================================================================
+# Statistics Endpoints - must be before /{tender_id}
+# ============================================================================
+
+@router.get(
+    "/statistics",
+    response_model=TenderStatistics,
+    summary="Get tender statistics",
+    description="Get aggregated tender statistics"
+)
+async def get_statistics(
+    db: Session = Depends(get_db)
+) -> TenderStatistics:
+    """
+    Get aggregated tender statistics.
+
+    Available to all users (public tenders data).
+    """
+    try:
+        from datetime import timedelta
+        from sqlalchemy import func
+
+        # Total tenders
+        total_tenders = db.query(Tender).count()
+        open_tenders = db.query(Tender).filter(Tender.status == "open").count()
+
+        # Tenders this week
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        tenders_this_week = db.query(Tender).filter(
+            Tender.publication_date >= week_ago
+        ).count()
+
+        # Average value
+        avg_value = db.query(func.avg(Tender.estimated_value)).filter(
+            Tender.estimated_value.isnot(None)
+        ).scalar()
+
+        # By country
+        country_counts = db.query(
+            Tender.buyer_country,
+            func.count(Tender.id)
+        ).group_by(Tender.buyer_country).all()
+
+        by_country = {c: count for c, count in country_counts if c}
+
+        # By CPV category (first 2 digits)
+        cpv_counts = db.query(
+            func.substring(Tender.cpv_main, 1, 2),
+            func.count(Tender.id)
+        ).filter(Tender.cpv_main.isnot(None)).group_by(
+            func.substring(Tender.cpv_main, 1, 2)
+        ).all()
+
+        by_cpv = {cpv: count for cpv, count in cpv_counts if cpv}
+
+        # By procedure type
+        proc_counts = db.query(
+            Tender.procedure_type,
+            func.count(Tender.id)
+        ).group_by(Tender.procedure_type).all()
+
+        by_procedure = {p: count for p, count in proc_counts if p}
+
+        return TenderStatistics(
+            total_tenders=total_tenders,
+            open_tenders=open_tenders,
+            tenders_this_week=tenders_this_week,
+            average_value=avg_value,
+            by_country=by_country,
+            by_cpv_category=by_cpv,
+            by_procedure_type=by_procedure
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to get statistics: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get statistics: {str(e)}"
+        )
+
+
+@router.get(
+    "/statistics/me",
+    response_model=UserTenderStatistics,
+    summary="Get my tender statistics",
+    description="Get personalized tender statistics"
+)
+async def get_my_statistics(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+) -> UserTenderStatistics:
+    """
+    Get your personalized tender statistics.
+
+    Includes match counts, saved tenders, and match score averages.
+    """
+    try:
+        from datetime import timedelta
+        from sqlalchemy import func
+
+        user_id = current_user.id
+
+        # Total matches
+        total_matches = db.query(TenderMatch).filter(
+            TenderMatch.user_id == user_id
+        ).count()
+
+        # Saved tenders
+        saved_tenders = db.query(TenderMatch).filter(
+            TenderMatch.user_id == user_id,
+            TenderMatch.is_saved == True
+        ).count()
+
+        # Dismissed tenders
+        dismissed_tenders = db.query(TenderMatch).filter(
+            TenderMatch.user_id == user_id,
+            TenderMatch.is_dismissed == True
+        ).count()
+
+        # Applied tenders
+        applied_tenders = db.query(TenderMatch).filter(
+            TenderMatch.user_id == user_id,
+            TenderMatch.is_applied == True
+        ).count()
+
+        # Average match score
+        avg_score = db.query(func.avg(TenderMatch.match_score)).filter(
+            TenderMatch.user_id == user_id
+        ).scalar()
+
+        # Matches this week
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        matches_this_week = db.query(TenderMatch).filter(
+            TenderMatch.user_id == user_id,
+            TenderMatch.created_at >= week_ago
+        ).count()
+
+        return UserTenderStatistics(
+            total_matches=total_matches,
+            saved_tenders=saved_tenders,
+            dismissed_tenders=dismissed_tenders,
+            applied_tenders=applied_tenders,
+            average_match_score=avg_score,
+            matches_this_week=matches_this_week
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to get user statistics: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get statistics: {str(e)}"
+        )
+
+
+# ============================================================================
+# Unified calendar deadlines (TED + F&T proposals + F&T tenders)
+# ============================================================================
+
+@router.get(
+    "/calendar-deadlines",
+    summary="Unified deadlines feed for the Tenderator calendar",
+    description=(
+        "Returns submission/application deadlines from all three live "
+        "sources (TED tenders, F&T calls for proposals, F&T calls for "
+        "tenders) in a single shape so the calendar widget can render "
+        "any source on the right day. Blue tier only."
+    ),
+)
+async def get_calendar_deadlines(
+    months_ahead: int = Query(6, ge=1, le=12, description="How many months ahead to include"),
+    only_open: bool = Query(True, description="When true, exclude already-closed items"),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from datetime import timedelta
+    from models.funding_tenders import FtCallForProposals, FtCallForTenders
+
+    now = datetime.utcnow()
+    horizon = now + timedelta(days=30 * months_ahead)
+    items: List[Dict[str, Any]] = []
+
+    # --- TED ---
+    try:
+        qry = db.query(Tender).filter(Tender.submission_deadline != None)  # noqa: E711
+        if only_open:
+            qry = qry.filter(Tender.submission_deadline >= now)
+        qry = qry.filter(Tender.submission_deadline <= horizon)
+        for t in qry.order_by(Tender.submission_deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ted:{t.id}",
+                "source": "ted",
+                "ref": t.publication_number,
+                "title": t.title,
+                "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+                "budget": float(t.estimated_value) if t.estimated_value else None,
+                "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+                "country": t.buyer_country,
+                "programme": None,
+                "source_url": getattr(t, "ted_url", None) or "",
+            })
+    except Exception as exc:
+        logger.warning(f"calendar TED query failed: {exc}")
+        db.rollback()
+
+    # --- F&T proposals ---
+    try:
+        qry = db.query(FtCallForProposals).filter(
+            FtCallForProposals.is_test == False,  # noqa: E712
+            FtCallForProposals.deadline != None,  # noqa: E711
+        )
+        if only_open:
+            qry = qry.filter(FtCallForProposals.deadline >= now)
+        qry = qry.filter(FtCallForProposals.deadline <= horizon)
+        for p in qry.order_by(FtCallForProposals.deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ft_proposals:{p.id}",
+                "source": "ft_proposals",
+                "ref": p.topic_id,
+                "title": p.title,
+                "deadline": p.deadline.isoformat() if p.deadline else None,
+                "budget": float(p.indicative_budget) if p.indicative_budget else None,
+                "currency": p.budget_currency or "EUR",
+                "country": None,
+                "programme": p.framework_programme,
+                "source_url": p.source_url,
+            })
+    except Exception as exc:
+        logger.warning(f"calendar F&T proposals query failed: {exc}")
+        db.rollback()
+
+    # --- F&T tenders ---
+    try:
+        qry = db.query(FtCallForTenders).filter(
+            FtCallForTenders.is_test == False,  # noqa: E712
+            FtCallForTenders.deadline != None,  # noqa: E711
+        )
+        if only_open:
+            qry = qry.filter(FtCallForTenders.deadline >= now)
+        qry = qry.filter(FtCallForTenders.deadline <= horizon)
+        for ftt in qry.order_by(FtCallForTenders.deadline.asc()).limit(500).all():
+            items.append({
+                "id": f"ft_tenders:{ftt.id}",
+                "source": "ft_tenders",
+                "ref": ftt.tender_reference,
+                "title": ftt.title,
+                "deadline": ftt.deadline.isoformat() if ftt.deadline else None,
+                "budget": float(ftt.estimated_value) if ftt.estimated_value else None,
+                "currency": ftt.value_currency or "EUR",
+                "country": None,
+                "programme": None,
+                "source_url": ftt.source_url,
+            })
+    except Exception as exc:
+        logger.warning(f"calendar F&T tenders query failed: {exc}")
+        db.rollback()
+
+    # Sort by deadline ascending for the frontend
+    items.sort(key=lambda x: x.get("deadline") or "9999-12-31")
+
+    return {
+        "months_ahead": months_ahead,
+        "only_open": only_open,
+        "total": len(items),
+        "by_source": {
+            "ted": sum(1 for i in items if i["source"] == "ted"),
+            "ft_proposals": sum(1 for i in items if i["source"] == "ft_proposals"),
+            "ft_tenders": sum(1 for i in items if i["source"] == "ft_tenders"),
+        },
+        "items": items,
+        "generated_at": now.isoformat(),
+    }
+
+
+# ============================================================================
+# Phase 5: EU Programmes catalogue
+# ============================================================================
+
+@router.get(
+    "/programmes",
+    summary="EU funding programmes catalogue",
+    description=(
+        "Returns the list of seeded EU funding programmes (Horizon Europe, "
+        "LIFE, CEF, Digital Europe Programme, EU4Health, Erasmus+, EIC, "
+        "etc.) with budget, period, and source URL. Blue tier only."
+    ),
+)
+async def list_programmes(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    try:
+        rows = db.execute(
+            text(
+                """
+                SELECT programme_code, name, parent_framework, budget_total,
+                       budget_currency, period_start, period_end, description,
+                       source_url
+                FROM ft_programmes
+                WHERE is_test = FALSE
+                ORDER BY
+                    CASE parent_framework
+                        WHEN 'MFF 2021-2027' THEN 1
+                        WHEN 'Horizon Europe pillar' THEN 2
+                        WHEN 'MFF 2014-2020' THEN 3
+                        WHEN 'MFF 2007-2013' THEN 4
+                        ELSE 5
+                    END,
+                    budget_total DESC NULLS LAST
+                """
+            )
+        ).mappings().all()
+    except Exception as exc:
+        logger.error(f"programmes query failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Programmes query failed: {exc}")
+
+    items = []
+    for r in rows:
+        items.append({
+            "programme_code": r["programme_code"],
+            "name": r["name"],
+            "parent_framework": r["parent_framework"],
+            "budget_total": float(r["budget_total"]) if r["budget_total"] else None,
+            "budget_currency": r["budget_currency"],
+            "period_start": r["period_start"].isoformat() if r["period_start"] else None,
+            "period_end": r["period_end"].isoformat() if r["period_end"] else None,
+            "description": r["description"],
+            "source_url": r["source_url"],
+        })
+    return {"items": items, "total": len(items)}
+
+
+# Pull text + datetime locally for the SQL above (already imported globally)
+from sqlalchemy import text
+
+
+# ============================================================================
+# Phase 3: AI brief + similar-projects endpoints
+# ============================================================================
+
+from pydantic import BaseModel as _PydanticBaseModel
+
+
+class BriefRequest(_PydanticBaseModel):
+    """Request body for the AI-generated tender brief."""
+    opportunity_id: str  # "ted:123" / "ft_proposals:<uuid>" / "ft_tenders:<uuid>" / "ft_projects:<uuid>"
+
+
+@router.post(
+    "/brief",
+    summary="AI-extracted one-page brief for an opportunity",
+    description=(
+        "Reads the call's body (title + description + objective + scope + "
+        "expected_outcome + eligibility) and asks the AI to extract a "
+        "structured 7-field brief: scope, eligible_applicants, "
+        "budget_per_project, trl_range, key_dates, evaluation_criteria, "
+        "first_steps. Returns plain text fields; the frontend renders a "
+        "side-by-side card next to the raw description. Blue tier only."
+    ),
+)
+async def generate_opportunity_brief(
+    request: BriefRequest,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    # Resolve opportunity to a body string we can pass to the AI
+    try:
+        kind, raw_id = request.opportunity_id.split(":", 1)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="opportunity_id must be of the form '<source>:<id>'",
+        )
+
+    body_parts: List[str] = []
+    title = ""
+    programme = ""
+    deadline = None
+
+    try:
+        if kind == "ted":
+            row = db.query(Tender).filter(Tender.id == int(raw_id)).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Tender not found")
+            title = row.title or ""
+            body_parts.append(f"Title: {title}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.official_name:
+                body_parts.append(f"Buyer: {row.official_name}")
+            if row.cpv_main:
+                body_parts.append(f"CPV main code: {row.cpv_main}")
+            deadline = row.submission_deadline.isoformat() if row.submission_deadline else None
+        elif kind == "ft_proposals":
+            row = db.query(FtCallForProposals).filter(FtCallForProposals.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Call for proposals not found")
+            title = row.title or ""
+            programme = row.framework_programme or ""
+            body_parts.append(f"Title: {title}")
+            if row.framework_programme:
+                body_parts.append(f"Framework programme: {row.framework_programme}")
+            if row.type_of_action:
+                body_parts.append(f"Type of action: {row.type_of_action}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.indicative_budget:
+                body_parts.append(f"Indicative budget: {row.indicative_budget} {row.budget_currency or 'EUR'}")
+            deadline = row.deadline.isoformat() if row.deadline else None
+        elif kind == "ft_tenders":
+            row = db.query(FtCallForTenders).filter(FtCallForTenders.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Call for tenders not found")
+            title = row.title or ""
+            body_parts.append(f"Title: {title}")
+            if row.contracting_authority:
+                body_parts.append(f"Contracting authority: {row.contracting_authority}")
+            if row.contract_type:
+                body_parts.append(f"Contract type: {row.contract_type}")
+            if row.description:
+                body_parts.append(f"Description: {row.description}")
+            if row.estimated_value:
+                body_parts.append(f"Estimated value: {row.estimated_value} {row.value_currency or 'EUR'}")
+            deadline = row.deadline.isoformat() if row.deadline else None
+        elif kind == "ft_projects":
+            row = db.query(FtFundedProject).filter(FtFundedProject.id == raw_id).first()
+            if not row:
+                raise HTTPException(status_code=404, detail="Funded project not found")
+            title = row.title or ""
+            programme = row.framework_programme or ""
+            body_parts.append(f"Title: {title}")
+            if row.framework_programme:
+                body_parts.append(f"Framework programme: {row.framework_programme}")
+            if row.type_of_action:
+                body_parts.append(f"Type of action: {row.type_of_action}")
+            if row.objective:
+                body_parts.append(f"Objective: {row.objective}")
+            if row.coordinator_name:
+                body_parts.append(f"Coordinator: {row.coordinator_name} ({row.coordinator_country or '?'})")
+            if row.eu_contribution:
+                body_parts.append(f"EU contribution: {row.eu_contribution} {row.cost_currency or 'EUR'}")
+        else:
+            raise HTTPException(status_code=400, detail=f"Unknown opportunity source: {kind}")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error(f"brief resolve failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Could not resolve opportunity: {exc}")
+
+    if not body_parts:
+        raise HTTPException(status_code=422, detail="Opportunity has no body to summarise")
+
+    body_text = "\n\n".join(body_parts)[:8000]
+
+    # Ask the AI service for a structured 7-field brief
+    try:
+        from services.ai_service import get_ai_service
+        ai_service = get_ai_service()
+        prompt = (
+            "You are summarising one EU funding opportunity for a public-affairs professional. "
+            "Read the opportunity body below and extract a 7-field brief. Each field is a single "
+            "short sentence. Do NOT invent facts. If a field is not present in the body, write "
+            "exactly: 'Not stated in the call.'. Never use em-dashes. Output strict JSON with "
+            "these keys and no other text:\n\n"
+            "{\n"
+            '  "scope": "...",\n'
+            '  "eligible_applicants": "...",\n'
+            '  "budget_per_project": "...",\n'
+            '  "trl_range": "...",\n'
+            '  "key_dates": "...",\n'
+            '  "evaluation_criteria": "...",\n'
+            '  "first_steps": "..."\n'
+            "}\n\n"
+            "Opportunity body:\n" + body_text
+        )
+        # Use the non-streaming chat path with minimal context
+        response = await ai_service.chat(
+            user_message=prompt,
+            conversation_history=[],
+            user_id=str(current_user.id),
+            use_context=False,
+            stream=False,
+            is_pre_user=False,
+        )
+        ai_text = response.message
+    except Exception as exc:
+        logger.error(f"brief AI call failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"AI brief generation failed: {str(exc)}",
+        )
+
+    # Parse the JSON envelope. Fall back to a single-field summary if the
+    # model returned unstructured text (the system prompt asks for JSON).
+    import json as _json
+    import re as _re
+    parsed: dict = {}
+    try:
+        # The model sometimes wraps JSON in a code fence. Strip it.
+        cleaned = _re.sub(r"^```(?:json)?\s*|\s*```$", "", ai_text.strip(), flags=_re.MULTILINE)
+        parsed = _json.loads(cleaned)
+    except Exception:
+        parsed = {
+            "scope": ai_text.strip()[:300],
+            "eligible_applicants": "Not stated in the call.",
+            "budget_per_project": "Not stated in the call.",
+            "trl_range": "Not stated in the call.",
+            "key_dates": "Not stated in the call.",
+            "evaluation_criteria": "Not stated in the call.",
+            "first_steps": "Not stated in the call.",
+        }
+
+    return {
+        "opportunity_id": request.opportunity_id,
+        "title": title,
+        "programme": programme,
+        "deadline": deadline,
+        "brief": {
+            "scope": parsed.get("scope", "Not stated in the call."),
+            "eligible_applicants": parsed.get("eligible_applicants", "Not stated in the call."),
+            "budget_per_project": parsed.get("budget_per_project", "Not stated in the call."),
+            "trl_range": parsed.get("trl_range", "Not stated in the call."),
+            "key_dates": parsed.get("key_dates", "Not stated in the call."),
+            "evaluation_criteria": parsed.get("evaluation_criteria", "Not stated in the call."),
+            "first_steps": parsed.get("first_steps", "Not stated in the call."),
+        },
+        "generated_at": datetime.utcnow().isoformat(),
+    }
+
+
+@router.get(
+    "/similar-projects",
+    summary="Past grantees on similar calls",
+    description=(
+        "Returns up to 10 ft_funded_projects that share a framework programme "
+        "and/or type_of_action with the requested opportunity. Helps the user "
+        "see who has won similar funding so they can map potential consortium "
+        "partners. Blue tier only."
+    ),
+)
+async def get_similar_projects(
+    opportunity_id: str = Query(..., description="<source>:<id>"),
+    limit: int = Query(10, ge=1, le=50),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtFundedProject,
+    )
+
+    try:
+        kind, raw_id = opportunity_id.split(":", 1)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="opportunity_id must be of the form '<source>:<id>'",
+        )
+
+    programme: Optional[str] = None
+    type_of_action: Optional[str] = None
+    title_anchor: str = ""
+
+    if kind == "ft_proposals":
+        row = db.query(FtCallForProposals).filter(FtCallForProposals.id == raw_id).first()
+        if row:
+            programme = row.framework_programme
+            type_of_action = row.type_of_action
+            title_anchor = row.title or ""
+    elif kind == "ft_projects":
+        row = db.query(FtFundedProject).filter(FtFundedProject.id == raw_id).first()
+        if row:
+            programme = row.framework_programme
+            type_of_action = row.type_of_action
+            title_anchor = row.title or ""
+    elif kind == "ted":
+        # TED tenders have no programme. We return an empty similar list with
+        # a hint, rather than 404, so the UI degrades gracefully.
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": ""},
+            "items": [],
+            "note": "TED tenders are not part of the framework-programme pipeline; no similar projects to surface.",
+        }
+    else:
+        # ft_tenders has no programme either; same degradation.
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": ""},
+            "items": [],
+            "note": "This source is not linked to ft_funded_projects.",
+        }
+
+    if not programme and not type_of_action:
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": None, "type_of_action": None, "title": title_anchor},
+            "items": [],
+            "note": "Anchor opportunity has no programme or type_of_action; cannot match.",
+        }
+
+    # The two tables store programme + type_of_action under different
+    # conventions:
+    #   - ft_calls_for_proposals: "2021 - 2027" / "Research and Innovation action"
+    #   - ft_funded_projects:     "HORIZON" / "RIA"
+    # Map period strings to the project-table codes and expand action names
+    # to their canonical abbreviations.
+    PROGRAMME_PERIOD_TO_CODES = {
+        "2021 - 2027": ["HORIZON"],
+        "2014 - 2020": ["H2020", "FP7"],
+        "2007 - 2013": ["FP7"],
+    }
+    TOA_ALIASES = {
+        "research and innovation action": "RIA",
+        "innovation action": "IA",
+        "coordination and support action": "CSA",
+    }
+
+    programme_codes = PROGRAMME_PERIOD_TO_CODES.get(programme or "", [programme] if programme else [])
+    toa_code = TOA_ALIASES.get((type_of_action or "").lower(), type_of_action)
+
+    qry = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+    if programme_codes:
+        qry = qry.filter(FtFundedProject.framework_programme.in_(programme_codes))
+    if toa_code:
+        qry = qry.filter(FtFundedProject.type_of_action == toa_code)
+
+    # Exclude the anchor row itself when the anchor IS an ft_project
+    if kind == "ft_projects":
+        qry = qry.filter(FtFundedProject.id != raw_id)
+
+    try:
+        rows = (
+            qry.order_by(FtFundedProject.start_date.desc().nullslast())
+            .limit(limit)
+            .all()
+        )
+    except Exception as exc:
+        logger.error(f"similar-projects query failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Query failed: {exc}")
+
+    items = [
+        {
+            "id": str(r.id),
+            "project_id": r.project_id,
+            "acronym": r.project_acronym,
+            "title": r.title,
+            "objective": (r.objective or "")[:400] if r.objective else None,
+            "framework_programme": r.framework_programme,
+            "type_of_action": r.type_of_action,
+            "coordinator_name": r.coordinator_name,
+            "coordinator_country": r.coordinator_country,
+            "start_date": r.start_date.isoformat() if r.start_date else None,
+            "end_date": r.end_date.isoformat() if r.end_date else None,
+            "eu_contribution": float(r.eu_contribution) if r.eu_contribution else None,
+            "cost_currency": r.cost_currency or "EUR",
+            "source_url": r.source_url,
+        }
+        for r in rows
+    ]
+
+    return {
+        "opportunity_id": opportunity_id,
+        "anchor": {
+            "programme": programme,
+            "type_of_action": type_of_action,
+            "title": title_anchor,
+        },
+        "items": items,
+    }
+
+
+# ============================================================================
+# Unified F&T feed for the dashboard cockpit
+#
+# The Tenderator dashboard exposes 4 sources behind a single list view:
+# TED tenders + F&T calls for proposals + F&T calls for tenders + F&T
+# funded projects. Each source has its own table with its own column
+# names. This endpoint normalises them to one shape so the frontend can
+# render any source through one component.
+# ============================================================================
+
+@router.get(
+    "/unified-feed",
+    summary="Mixed-source opportunity feed for the dashboard",
+    description=(
+        "Returns a paginated list of opportunities from one of: ted, "
+        "ft_proposals, ft_tenders, ft_projects, or all. Normalises each "
+        "source to a common shape: {id, source, external_id, title, "
+        "description, status, deadline, budget, currency, source_url, "
+        "organisation, country, programme, published_at}. Blue tier only."
+    ),
+)
+async def get_unified_feed(
+    source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | matches | all"),
+    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders"),
+    q: Optional[str] = Query(None, description="Substring match on title + description"),
+    status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
+    limit: int = Query(20, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects"}
+    if source not in valid_sources:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"source must be one of {sorted(valid_sources)}",
+        )
+
+    offset = (page - 1) * limit
+    items: List[dict] = []
+    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0}
+    now = datetime.utcnow()
+
+    def _ted_query():
+        qry = db.query(Tender)
+        if status_filter == "open":
+            qry = qry.filter((Tender.submission_deadline > now) | (Tender.submission_deadline.is_(None)))
+        elif status_filter == "closed":
+            qry = qry.filter(Tender.submission_deadline < now)
+        if q:
+            qry = qry.filter(Tender.title.ilike(f"%{q}%"))
+        return qry
+
+    def _proposals_query():
+        qry = db.query(FtCallForProposals).filter(FtCallForProposals.is_test == False)  # noqa: E712
+        if status_filter:
+            qry = qry.filter(FtCallForProposals.status == status_filter.lower())
+        if q:
+            qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
+        return qry
+
+    def _tenders_query():
+        qry = db.query(FtCallForTenders).filter(FtCallForTenders.is_test == False)  # noqa: E712
+        if status_filter:
+            qry = qry.filter(FtCallForTenders.status == status_filter.lower())
+        if q:
+            qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
+        return qry
+
+    def _projects_query():
+        qry = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+        if q:
+            qry = qry.filter(FtFundedProject.title.ilike(f"%{q}%"))
+        return qry
+
+    def _serialise_ted(t):
+        return {
+            "id": f"ted:{t.id}",
+            "source": "ted",
+            "external_id": t.publication_number,
+            "title": t.title,
+            "description": (t.description or "")[:600] if t.description else None,
+            "status": t.status,
+            "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+            "budget": float(t.estimated_value) if t.estimated_value else None,
+            "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+            "source_url": getattr(t, "ted_url", None) or "",
+            "organisation": getattr(t, "official_name", None),
+            "country": t.buyer_country,
+            "programme": None,
+            "published_at": t.publication_date.isoformat() if t.publication_date else None,
+        }
+
+    def _serialise_proposal(p):
+        return {
+            "id": f"ft_proposals:{p.id}",
+            "source": "ft_proposals",
+            "external_id": p.topic_id,
+            "title": p.title,
+            "description": (p.description or "")[:600] if p.description else None,
+            "status": p.status,
+            "deadline": p.deadline.isoformat() if p.deadline else None,
+            "budget": float(p.indicative_budget) if p.indicative_budget else None,
+            "currency": p.budget_currency or "EUR",
+            "source_url": p.source_url,
+            "organisation": None,
+            "country": None,
+            "programme": p.framework_programme,
+            "published_at": p.published_at.isoformat() if p.published_at else None,
+        }
+
+    def _serialise_tender_ft(t):
+        return {
+            "id": f"ft_tenders:{t.id}",
+            "source": "ft_tenders",
+            "external_id": t.tender_reference,
+            "title": t.title,
+            "description": (t.description or "")[:600] if t.description else None,
+            "status": t.status,
+            "deadline": t.deadline.isoformat() if t.deadline else None,
+            "budget": float(t.estimated_value) if t.estimated_value else None,
+            "currency": t.value_currency or "EUR",
+            "source_url": t.source_url,
+            "organisation": t.contracting_authority,
+            "country": None,
+            "programme": None,
+            "published_at": t.published_at.isoformat() if t.published_at else None,
+        }
+
+    def _serialise_project(p):
+        return {
+            "id": f"ft_projects:{p.id}",
+            "source": "ft_projects",
+            "external_id": p.project_id,
+            "title": p.title,
+            "description": (p.objective or "")[:600] if p.objective else None,
+            "status": p.status,
+            "deadline": p.end_date.isoformat() if p.end_date else None,
+            "budget": float(p.eu_contribution) if p.eu_contribution else (float(p.total_cost) if p.total_cost else None),
+            "currency": p.cost_currency or "EUR",
+            "source_url": p.source_url,
+            "organisation": p.coordinator_name,
+            "country": p.coordinator_country,
+            "programme": p.framework_programme,
+            "published_at": p.start_date.isoformat() if p.start_date else None,
+        }
+
+    try:
+        # NEW: "matches" source. Returns three sub-feeds, each scored:
+        #   - TED:           pulled from tender_matches (persisted score)
+        #   - F&T proposals: on-the-fly score (keyword + country overlap)
+        #   - F&T tenders:   on-the-fly score (CPV + keyword + country overlap)
+        # `match_source` narrows to one (ted, ft_proposals, ft_tenders) or
+        # "all" (the default) which interleaves all three.
+        if source == "matches":
+            try:
+                from models.tender import TenderProfile
+                from models.funding_tenders import FtCallForProposals, FtCallForTenders
+
+                profile = (
+                    db.query(TenderProfile)
+                    .filter(TenderProfile.user_id == current_user.id)
+                    .first()
+                )
+                kw_lower = [k.lower() for k in (profile.keywords or [])] if profile else []
+                cpv_two = set((c[:2] for c in (profile.cpv_categories or []) if c)) if profile else set()
+                countries = set(profile.countries_of_interest or []) if profile else set()
+
+                total_ted_matches = 0
+                total_proposal_matches = 0
+                total_tender_matches = 0
+
+                bucket_ted: List[Dict[str, Any]] = []
+                bucket_proposals: List[Dict[str, Any]] = []
+                bucket_tenders: List[Dict[str, Any]] = []
+
+                # --- TED via persisted tender_matches ---
+                if match_source in ("all", "ted"):
+                    qry_ted = (
+                        db.query(TenderMatch, Tender)
+                        .join(Tender, Tender.id == TenderMatch.tender_id)
+                        .filter(TenderMatch.user_id == current_user.id)
+                        .filter(TenderMatch.is_dismissed == False)  # noqa: E712
+                    )
+                    if q:
+                        qry_ted = qry_ted.filter(Tender.title.ilike(f"%{q}%"))
+                    total_ted_matches = qry_ted.count()
+                    if match_source == "ted":
+                        ted_limit = limit
+                        ted_offset = offset
+                    else:
+                        ted_limit = max(1, limit // 3)
+                        ted_offset = 0
+                    rows_ted = (
+                        qry_ted.order_by(TenderMatch.match_score.desc())
+                        .offset(ted_offset)
+                        .limit(ted_limit)
+                        .all()
+                    )
+                    bucket_ted = [
+                        {
+                            **_serialise_ted(t),
+                            "match_score": float(m.match_score) if m.match_score else None,
+                            "is_saved": bool(m.is_saved),
+                            "is_applied": bool(m.is_applied),
+                            "match_id": m.id,
+                        }
+                        for m, t in rows_ted
+                    ]
+
+                # --- F&T proposals: on-the-fly keyword scoring ---
+                if match_source in ("all", "ft_proposals"):
+                    qry_prop = db.query(FtCallForProposals).filter(
+                        FtCallForProposals.is_test == False  # noqa: E712
+                    )
+                    if q:
+                        qry_prop = qry_prop.filter(FtCallForProposals.title.ilike(f"%{q}%"))
+                    rows_prop = qry_prop.all() if kw_lower else []
+                    scored: List[Tuple[float, Any]] = []
+                    for p in rows_prop:
+                        title_l = (p.title or "").lower()
+                        desc_l = (p.description or "").lower()
+                        score = 0.0
+                        for kw in kw_lower:
+                            if kw in title_l:
+                                score += 40
+                            elif kw in desc_l:
+                                score += 20
+                        # Open status earns bonus
+                        if p.status and p.status.lower() == "open":
+                            score += 10
+                        if score >= 20:
+                            scored.append((score, p))
+                    scored.sort(key=lambda x: x[0], reverse=True)
+                    total_proposal_matches = len(scored)
+                    take_offset = offset if match_source == "ft_proposals" else 0
+                    take_limit = limit if match_source == "ft_proposals" else max(1, limit // 3)
+                    bucket_proposals = [
+                        {
+                            **_serialise_proposal(p),
+                            "match_score": float(score),
+                            "is_saved": False,
+                            "is_applied": False,
+                        }
+                        for (score, p) in scored[take_offset : take_offset + take_limit]
+                    ]
+
+                # --- F&T tenders: on-the-fly CPV + keyword + country scoring ---
+                if match_source in ("all", "ft_tenders"):
+                    qry_tend = db.query(FtCallForTenders).filter(
+                        FtCallForTenders.is_test == False  # noqa: E712
+                    )
+                    if q:
+                        qry_tend = qry_tend.filter(FtCallForTenders.title.ilike(f"%{q}%"))
+                    rows_tend = qry_tend.all() if (kw_lower or cpv_two or countries) else []
+                    scored: List[Tuple[float, Any]] = []
+                    for ftt in rows_tend:
+                        title_l = (ftt.title or "").lower()
+                        desc_l = (ftt.description or "").lower()
+                        cpv_list = ftt.cpv_codes or []
+                        score = 0.0
+                        if cpv_two:
+                            for c in cpv_list:
+                                if c and c[:2] in cpv_two:
+                                    score += 40
+                                    break
+                        for kw in kw_lower:
+                            if kw in title_l:
+                                score += 30
+                            elif kw in desc_l:
+                                score += 15
+                        # Country boost via contracting_authority text
+                        if countries and ftt.contracting_authority:
+                            ca_lower = ftt.contracting_authority.lower()
+                            if any(c.lower() in ca_lower for c in countries):
+                                score += 10
+                        if score >= 20:
+                            scored.append((score, ftt))
+                    scored.sort(key=lambda x: x[0], reverse=True)
+                    total_tender_matches = len(scored)
+                    take_offset = offset if match_source == "ft_tenders" else 0
+                    take_limit = limit if match_source == "ft_tenders" else max(1, limit // 3)
+                    bucket_tenders = [
+                        {
+                            **_serialise_tender_ft(t),
+                            "match_score": float(score),
+                            "is_saved": False,
+                            "is_applied": False,
+                        }
+                        for (score, t) in scored[take_offset : take_offset + take_limit]
+                    ]
+
+                if match_source == "ted":
+                    items = bucket_ted
+                elif match_source == "ft_proposals":
+                    items = bucket_proposals
+                elif match_source == "ft_tenders":
+                    items = bucket_tenders
+                else:
+                    # "all" inside matches: interleave the three buckets, sort
+                    # by match_score desc, take top `limit`.
+                    combined = bucket_ted + bucket_proposals + bucket_tenders
+                    combined.sort(key=lambda x: (x.get("match_score") or 0), reverse=True)
+                    items = combined[:limit]
+
+                return {
+                    "source": source,
+                    "match_source": match_source,
+                    "page": page,
+                    "limit": limit,
+                    "totals": {
+                        "ted": total_ted_matches,
+                        "ft_proposals": total_proposal_matches,
+                        "ft_tenders": total_tender_matches,
+                        "ft_projects": 0,
+                    },
+                    "items": items,
+                }
+            except Exception as exc:
+                logger.error(f"matches feed failed: {exc}")
+                import traceback
+                traceback.print_exc()
+                raise HTTPException(status_code=500, detail=f"Matches query failed: {exc}")
+
+        if source == "ted" or source == "all":
+            qry = _ted_query()
+            totals["ted"] = qry.count()
+            if source == "ted":
+                rows = qry.order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_ted(t) for t in rows)
+        if source == "ft_proposals" or source == "all":
+            qry = _proposals_query()
+            totals["ft_proposals"] = qry.count()
+            if source == "ft_proposals":
+                rows = qry.order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_proposal(p) for p in rows)
+        if source == "ft_tenders" or source == "all":
+            qry = _tenders_query()
+            totals["ft_tenders"] = qry.count()
+            if source == "ft_tenders":
+                rows = qry.order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_tender_ft(t) for t in rows)
+        if source == "ft_projects" or source == "all":
+            qry = _projects_query()
+            totals["ft_projects"] = qry.count()
+            if source == "ft_projects":
+                rows = qry.order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(limit).all()
+                items.extend(_serialise_project(p) for p in rows)
+
+        # 'all' mode: interleave the top N from each source so the user sees
+        # the variety. Cap each source to limit/4 + remainder.
+        if source == "all":
+            per_source = max(1, limit // 4)
+            slot_ted = _ted_query().order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_prop = _proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_tend = _tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
+            slot_proj = _projects_query().order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(per_source).all()
+            items = []
+            items.extend(_serialise_ted(t) for t in slot_ted)
+            items.extend(_serialise_proposal(p) for p in slot_prop)
+            items.extend(_serialise_tender_ft(t) for t in slot_tend)
+            items.extend(_serialise_project(p) for p in slot_proj)
+    except Exception as exc:
+        logger.error(f"unified-feed query failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Feed query failed: {str(exc)}",
+        )
+
+    return {
+        "source": source,
+        "page": page,
+        "limit": limit,
+        "totals": totals,
+        "items": items,
+    }
+
+
+# ============================================================================
+# Dashboard cockpit endpoint
+# ============================================================================
+
+@router.get(
+    "/dashboard-stats",
+    summary="Cockpit metrics for the Tenderator dashboard",
+    description=(
+        "Returns the 5 top-strip KPIs plus the closing-soon urgency list "
+        "and per-source counts. Pure aggregation over `tenders`, "
+        "`tender_matches`, and the three F&T tables. Blue tier only."
+    ),
+)
+async def get_dashboard_stats(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    """
+    KPI strip cards consumed by tenderator_dashboard.tsx:
+      - open_opportunities: open tenders across all sources
+      - closing_7d:         count of saved or matched items whose deadline
+                            falls in the next 7 days
+      - your_matches:       total tender_matches for this user
+      - your_saved:         saved tender_matches for this user
+      - applied_ytd:        applied tender_matches for this user this year
+
+    Plus:
+      - deltas_week_over_week for matches and saved
+      - closing_soon: top 5 deadlines in the next 14 days
+      - by_source: { ted, ft_proposals, ft_tenders, ft_projects }
+    """
+    from datetime import timedelta
+    from sqlalchemy import func
+    from models.funding_tenders import (
+        FtCallForProposals,
+        FtCallForTenders,
+        FtFundedProject,
+    )
+
+    user_id = current_user.id
+    now = datetime.utcnow()
+    week_ago = now - timedelta(days=7)
+    two_weeks_ago = now - timedelta(days=14)
+    in_7_days = now + timedelta(days=7)
+    in_14_days = now + timedelta(days=14)
+    year_start = datetime(now.year, 1, 1)
+
+    def _safe(query_fn, default=0):
+        try:
+            return query_fn()
+        except Exception as exc:
+            logger.warning("dashboard-stats sub-query failed: %s", exc)
+            db.rollback()
+            return default
+
+    # --- per-source open-opportunity counts ---
+    ted_open = _safe(lambda: db.query(Tender).filter(
+        (Tender.submission_deadline > now) | (Tender.submission_deadline.is_(None))
+    ).count())
+    ft_proposals_open = _safe(lambda: db.query(FtCallForProposals).filter(
+        FtCallForProposals.is_test == False,
+        (FtCallForProposals.deadline > now) | (FtCallForProposals.deadline.is_(None)),
+    ).count())
+    ft_tenders_open = _safe(lambda: db.query(FtCallForTenders).filter(
+        FtCallForTenders.is_test == False,
+        (FtCallForTenders.deadline > now) | (FtCallForTenders.deadline.is_(None)),
+    ).count())
+    ft_projects_total = _safe(lambda: db.query(FtFundedProject).filter(
+        FtFundedProject.is_test == False,
+    ).count())
+
+    open_opportunities = ted_open + ft_proposals_open + ft_tenders_open
+
+    # --- per-user pipeline counts ---
+    total_matches = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id
+    ).count())
+    your_saved = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+    ).count())
+    applied_ytd = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_applied == True,
+        TenderMatch.created_at >= year_start,
+    ).count())
+
+    matches_this_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.created_at >= week_ago,
+    ).count())
+    matches_prev_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.created_at >= two_weeks_ago,
+        TenderMatch.created_at < week_ago,
+    ).count())
+
+    saved_this_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+        TenderMatch.created_at >= week_ago,
+    ).count())
+    saved_prev_week = _safe(lambda: db.query(TenderMatch).filter(
+        TenderMatch.user_id == user_id,
+        TenderMatch.is_saved == True,
+        TenderMatch.created_at >= two_weeks_ago,
+        TenderMatch.created_at < week_ago,
+    ).count())
+
+    # --- closing in next 7d (saved or matched) ---
+    closing_7d_q = (
+        db.query(TenderMatch, Tender)
+        .join(Tender, Tender.id == TenderMatch.tender_id)
+        .filter(TenderMatch.user_id == user_id)
+        .filter(Tender.submission_deadline != None)
+        .filter(Tender.submission_deadline >= now)
+        .filter(Tender.submission_deadline <= in_7_days)
+    )
+    closing_7d_count = _safe(lambda: closing_7d_q.count())
+
+    closing_soon = []
+    try:
+        rows = (
+            db.query(TenderMatch, Tender)
+            .join(Tender, Tender.id == TenderMatch.tender_id)
+            .filter(TenderMatch.user_id == user_id)
+            .filter(Tender.submission_deadline != None)
+            .filter(Tender.submission_deadline >= now)
+            .filter(Tender.submission_deadline <= in_14_days)
+            .order_by(Tender.submission_deadline.asc())
+            .limit(5)
+            .all()
+        )
+        for m, t in rows:
+            # Normalise tz so the subtraction does not blow up. The DB column
+            # is tz-aware; `now = datetime.utcnow()` is tz-naive.
+            deadline = t.submission_deadline
+            if deadline.tzinfo is not None:
+                deadline = deadline.replace(tzinfo=None)
+            days_left = max(0, (deadline - now).days)
+            closing_soon.append({
+                "tender_id": t.id,
+                "match_id": m.id,
+                "publication_number": t.publication_number,
+                "title": (t.title or "")[:120],
+                "deadline": t.submission_deadline.isoformat() if t.submission_deadline else None,
+                "days_left": days_left,
+                "estimated_value": float(t.estimated_value) if t.estimated_value else None,
+                "currency": getattr(t, "estimated_value_currency", None) or "EUR",
+                "source": "ted",
+            })
+    except Exception as exc:
+        logger.warning("dashboard-stats closing_soon failed: %s", exc)
+        db.rollback()
+
+    return {
+        "kpis": {
+            "open_opportunities": open_opportunities,
+            "closing_7d": closing_7d_count,
+            "your_matches": total_matches,
+            "your_saved": your_saved,
+            "applied_ytd": applied_ytd,
+        },
+        "deltas": {
+            "matches_wow": matches_this_week - matches_prev_week,
+            "saved_wow": saved_this_week - saved_prev_week,
+            "matches_this_week": matches_this_week,
+            "saved_this_week": saved_this_week,
+        },
+        "by_source": {
+            "ted": ted_open,
+            "ft_proposals": ft_proposals_open,
+            "ft_tenders": ft_tenders_open,
+            "ft_projects": ft_projects_total,
+        },
+        "closing_soon": closing_soon,
+        "generated_at": now.isoformat(),
+    }
+
+
+# ============================================================================
+# Tender Match Endpoints (Blue Tier) - must be before /{tender_id}
+# ============================================================================
+
+@router.get(
+    "/matches",
+    response_model=TenderMatchListResponse,
+    summary="Get my tender matches",
+    description="Get tenders matched to your profile"
+)
+async def get_my_matches(
+    include_dismissed: bool = Query(False, description="Include dismissed matches"),
+    saved_only: bool = Query(False, description="Only show saved matches"),
+    min_score: Optional[float] = Query(None, ge=0, le=100, description="Minimum match score"),
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(20, ge=1, le=100, description="Results per page"),
+    current_user: User = Depends(require_blue_tier),
+    service: TenderService = Depends(get_tender_service),
+    db: Session = Depends(get_db)
+) -> TenderMatchListResponse:
+    """
+    Get tenders matched to your profile.
+
+    **Filters**:
+    - `saved_only`: Only show saved matches
+    - `min_score`: Filter by minimum match score (0-100)
+    - `include_dismissed`: Include previously dismissed matches
+    """
+    try:
+        matches = service.get_user_matches(
+            user_id=str(current_user.id),
+            include_dismissed=include_dismissed,
+            saved_only=saved_only,
+            limit=page_size,
+            offset=(page - 1) * page_size
+        )
+
+        # Filter by minimum score if specified
+        if min_score is not None:
+            matches = [m for m in matches if m.match_score >= min_score]
+
+        # Get total count
+        total_query = db.query(TenderMatch).filter(
+            TenderMatch.user_id == current_user.id
+        )
+        if not include_dismissed:
+            total_query = total_query.filter(TenderMatch.is_dismissed == False)
+        if saved_only:
+            total_query = total_query.filter(TenderMatch.is_saved == True)
+        total = total_query.count()
+
+        # Build response with tender details
+        match_responses = []
+        for match in matches:
+            tender = service.get_tender(match.tender_id)
+            if tender:
+                match_resp = TenderMatchWithTender(
+                    id=match.id,
+                    tender_id=match.tender_id,
+                    user_id=match.user_id,
+                    match_score=match.match_score,
+                    match_reasons=match.match_reasons,
+                    match_details=match.match_details,
+                    is_viewed=match.is_viewed,
+                    is_saved=match.is_saved,
+                    is_dismissed=match.is_dismissed,
+                    is_applied=match.is_applied,
+                    user_notes=match.user_notes,
+                    user_rating=match.user_rating,
+                    notified_at=match.notified_at,
+                    created_at=match.created_at,
+                    tender=TenderSummary.model_validate(tender)
+                )
+                match_responses.append(match_resp)
+
+        return TenderMatchListResponse(
+            matches=match_responses,
+            total=total,
+            page=page,
+            page_size=page_size,
+            total_pages=(total + page_size - 1) // page_size if total > 0 else 0
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to get matches: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get matches: {str(e)}"
+        )
+
+
+# ============================================================================
+# Admin Endpoints - must be before /{tender_id}
+# ============================================================================
+
+@router.post(
+    "/fetch",
+    response_model=TenderFetchJobResponse,
+    summary="Fetch new tenders",
+    description="Trigger a tender fetch from TED (admin only)"
+)
+async def fetch_tenders(
+    request: TenderFetchRequest,
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_user),
+    service: TenderService = Depends(get_tender_service)
+) -> TenderFetchJobResponse:
+    """
+    Trigger a new tender fetch from TED.
+
+    **Admin only** - Fetches tenders from TED API or SPARQL endpoint.
+
+    **Parameters**:
+    - `days_back`: Number of days to look back (1-90)
+    - `countries`: Optional country filter
+    - `cpv_codes`: Optional CPV code filter
+    - `max_value`: Maximum tender value for SME filtering
+    - `source`: Data source (ted_api or ted_sparql)
+    """
+    # Check admin status
+    if current_user.subscription_tier != 'admin':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
+    try:
+        # Start fetch in background
+        job = await service.fetch_new_tenders(
+            days_back=request.days_back,
+            countries=request.countries,
+            cpv_codes=request.cpv_codes,
+            max_value=request.max_value,
+            source=request.source
+        )
+
+        return TenderFetchJobResponse.model_validate(job)
+
+    except Exception as e:
+        logger.error(f"Tender fetch failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Fetch failed: {str(e)}"
+        )
+
+
+@router.post(
+    "/match",
+    summary="Run tender matching",
+    description="Run matching algorithm for all users (admin only)"
+)
+async def run_matching(
+    current_user: User = Depends(get_current_user),
+    service: TenderService = Depends(get_tender_service)
+):
+    """
+    Run tender matching algorithm.
+
+    **Admin only** - Matches open tenders to all active user profiles.
+    """
+    if current_user.subscription_tier != 'admin':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
+    try:
+        matches_created = await service.match_tenders_to_users()
+
+        return {
+            "message": "Matching completed",
+            "matches_created": matches_created
+        }
+
+    except Exception as e:
+        logger.error(f"Matching failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Matching failed: {str(e)}"
+        )
+
+
+@router.post(
+    "/score-sme",
+    summary="Batch SME scoring",
+    description="Calculate SME scores for tenders (admin only)"
+)
+async def batch_sme_scoring(
+    recalculate: bool = Query(False, description="Recalculate all scores"),
+    current_user: User = Depends(get_current_user),
+    service: TenderService = Depends(get_tender_service)
+):
+    """
+    Calculate SME suitability scores for tenders.
+
+    **Admin only** - Batch calculate SME scores for:
+    - All unscored tenders (default)
+    - All tenders (when recalculate=true)
+    """
+    if current_user.subscription_tier != 'admin':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
+    try:
+        scored_count = service.batch_score_sme_suitability(recalculate=recalculate)
+
+        return {
+            "message": "SME scoring completed",
+            "tenders_scored": scored_count
+        }
+
+    except Exception as e:
+        logger.error(f"SME scoring failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"SME scoring failed: {str(e)}"
+        )
+
+
+# ============================================================================
+# Publication Number Route - must be before /{tender_id}
+# ============================================================================
+
+@router.get(
+    "/publication/{publication_number}",
+    response_model=TenderDetail,
+    summary="Get tender by publication number",
+    description="Get tender by TED publication number"
+)
+async def get_tender_by_publication(
+    publication_number: str,
+    service: TenderService = Depends(get_tender_service)
+) -> TenderDetail:
+    """
+    Get tender by TED publication number (e.g., '1776-2025').
+    """
+    try:
+        tender = service.get_tender_by_publication(publication_number)
+
+        if not tender:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tender {publication_number} not found"
+            )
+
+        return TenderDetail.model_validate(tender)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get tender {publication_number}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get tender: {str(e)}"
+        )
+
+
+# ============================================================================
+# EU Procurement Law Integration - must be before /{tender_id}
+# ============================================================================
+
+@router.get(
+    "/legal-framework",
+    summary="Get EU procurement legal framework",
+    description="Get relevant EU laws for public procurement"
+)
+async def get_procurement_legal_framework(
+    sector: Optional[str] = None,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+):
+    """
+    Get EU procurement directives and regulations relevant to tenders.
+
+    Query Parameters:
+    - sector: Filter by sector (utilities, defence, concessions, general)
+
+    Returns key EU procurement laws with their requirements.
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        search_service = EULawSearchService(db)
+
+        # Core EU procurement CELEX numbers
+        procurement_laws = {
+            'general': [
+                '32014L0024',  # Public Procurement Directive
+                '32014L0025',  # Utilities Directive
+            ],
+            'utilities': [
+                '32014L0025',  # Utilities Directive
+            ],
+            'defence': [
+                '32009L0081',  # Defence Procurement Directive
+            ],
+            'concessions': [
+                '32014L0023',  # Concessions Directive
+            ],
+            'remedies': [
+                '32007L0066',  # Remedies Directive
+                '31989L0665',  # Review Procedures Directive
+            ],
+            'eforms': [
+                '32019R1780',  # eForms Regulation
+            ],
+        }
+
+        # Select relevant laws
+        if sector and sector in procurement_laws:
+            celex_list = procurement_laws[sector]
+        else:
+            # Return all core procurement laws
+            celex_list = list(set(
+                procurement_laws['general'] +
+                procurement_laws['remedies'] +
+                procurement_laws['eforms']
+            ))
+
+        # Fetch law details
+        laws = []
+        for celex in celex_list:
+            result = search_service.get_by_celex(celex)
+            if result:
+                laws.append(result.to_dict())
+
+        # Also search for recent procurement-related laws
+        recent = search_service.search(
+            query='public procurement',
+            doc_type='Regulation',
+            year_from=2020,
+            limit=5
+        )
+
+        return {
+            'core_laws': laws,
+            'recent_updates': [r.to_dict() for r in recent.results],
+            'sector': sector or 'all',
+            'total_core': len(laws),
+        }
+
+    except Exception as e:
+        logger.error(f"Error getting procurement legal framework: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve legal framework: {str(e)}"
+        )
+
+
+# ============================================================================
+# Tender Search Endpoints
+# ============================================================================
+
+@router.get(
+    "",
+    response_model=TenderSearchResponse,
+    summary="Search tenders",
+    description="Search EU procurement tenders with filters"
+)
+async def search_tenders(
+    query: Optional[str] = Query(None, description="Text search query"),
+    countries: Optional[str] = Query(None, description="Comma-separated country codes (e.g., 'BE,FR,DE')"),
+    cpv_codes: Optional[str] = Query(None, description="Comma-separated CPV codes"),
+    min_value: Optional[float] = Query(None, ge=0, description="Minimum estimated value in EUR"),
+    max_value: Optional[float] = Query(None, ge=0, description="Maximum estimated value in EUR"),
+    procedure_type: Optional[str] = Query(None, description="Procedure type filter"),
+    status: str = Query("open", description="Tender status (open, closed, awarded)"),
+    sme_friendly: bool = Query(False, description="Filter for SME-friendly tenders"),
+    sort_by: str = Query("publication_date", description="Sort field"),
+    sort_order: str = Query("desc", description="Sort order (asc/desc)"),
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(20, ge=1, le=100, description="Results per page"),
+    db: Session = Depends(get_db)
+) -> TenderSearchResponse:
+    """
+    Search EU procurement tenders.
+
+    **Filters**:
+    - `countries`: ISO 3166-1 alpha-2 codes (BE, FR, DE, etc.)
+    - `cpv_codes`: Common Procurement Vocabulary codes
+    - `procedure_type`: open, restricted, negotiated, competitive-dialogue
+    - `sme_friendly`: Filters for smaller, more accessible tenders
+
+    **Pagination**: Use page and page_size parameters
+    """
+    try:
+        service = TenderService(db)
+
+        # Parse comma-separated values
+        country_list = countries.split(",") if countries else None
+        cpv_list = cpv_codes.split(",") if cpv_codes else None
+
+        # Search tenders
+        tenders = service.search_tenders(
+            query=query,
+            countries=country_list,
+            cpv_codes=cpv_list,
+            min_value=min_value,
+            max_value=max_value,
+            status=status,
+            limit=page_size,
+            offset=(page - 1) * page_size
+        )
+
+        # Get total count for pagination
+        total_query = db.query(Tender)
+        if status:
+            total_query = total_query.filter(Tender.status == status)
+        if country_list:
+            total_query = total_query.filter(Tender.buyer_country.in_(country_list))
+        total = total_query.count()
+
+        return TenderSearchResponse(
+            tenders=[TenderSummary.model_validate(t) for t in tenders],
+            total=total,
+            page=page,
+            page_size=page_size,
+            total_pages=(total + page_size - 1) // page_size if total > 0 else 0
+        )
+
+    except Exception as e:
+        logger.error(f"Tender search failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Search failed: {str(e)}"
+        )
+
+
+@router.get(
+    "/{tender_id}",
+    response_model=TenderDetail,
+    summary="Get tender details",
+    description="Get full details for a specific tender"
+)
+async def get_tender(
+    tender_id: int,
+    fetch_xml: bool = Query(False, description="Fetch and parse XML for full details"),
+    service: TenderService = Depends(get_tender_service)
+) -> TenderDetail:
+    """
+    Get detailed tender information.
+
+    Set `fetch_xml=true` to fetch and parse the full XML from TED
+    for complete tender details (may be slower).
+    """
+    try:
+        tender = service.get_tender(tender_id)
+
+        if not tender:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tender {tender_id} not found"
+            )
+
+        # Optionally fetch full XML
+        if fetch_xml and tender.publication_number:
+            tender = await service.fetch_and_parse_xml(tender.publication_number)
+
+        return TenderDetail.model_validate(tender)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get tender {tender_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get tender: {str(e)}"
+        )
+
+
+@router.get(
+    "/{tender_id}/sme-score",
+    summary="Get SME suitability score",
+    description="Get personalized SME suitability score for a tender"
+)
+async def get_sme_score(
+    tender_id: int,
+    company_size: str = Query("small", description="Company size: micro, small, or medium"),
+    annual_turnover: Optional[float] = Query(None, description="Annual turnover in EUR"),
+    service: TenderService = Depends(get_tender_service)
+):
+    """
+    Get personalized SME suitability score for a tender.
+
+    **Score Range**: 0-100 (higher = more SME-friendly)
+
+    **Scoring Criteria**:
+    - Contract value (smaller = more accessible)
+    - Procedure type (open procedures preferred)
+    - Time until deadline (more time = better)
+    - Lot structure (multiple lots increase chances)
+    - Requirements complexity
+    - Framework agreement status
+
+    **Company Size**:
+    - `micro`: < 10 employees, < €2M turnover
+    - `small`: < 50 employees, < €10M turnover
+    - `medium`: < 250 employees, < €50M turnover
+    """
+    try:
+        result = service.get_sme_score_for_tender(
+            tender_id=tender_id,
+            company_size=company_size,
+            annual_turnover=annual_turnover
+        )
+
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tender {tender_id} not found"
+            )
+
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get SME score for tender {tender_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get SME score: {str(e)}"
+        )
+
+
+@router.get(
+    "/{tender_id}/summary",
+    summary="Get AI summary of tender",
+    description="Generate an AI-powered summary of the tender"
+)
+async def get_tender_summary(
+    tender_id: int,
+    current_user: User = Depends(require_blue_tier),
+    service: TenderService = Depends(get_tender_service),
+    db: Session = Depends(get_db)
+):
+    """
+    Generate an AI-powered summary of the tender.
+
+    Returns a structured summary with:
+    - one_liner: Brief description
+    - what: What is being procured
+    - who: Who is the contracting authority
+    - value: Contract value information
+    - deadline: Submission deadline info
+    - key_requirements: Main requirements list
+    - award_focus: Key award criteria focus
+    """
+    try:
+        tender = service.get_tender(tender_id)
+
+        if not tender:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tender {tender_id} not found"
+            )
+
+        # Build context from tender
+        tender_context = f"""
+Title: {tender.title}
+Contracting Authority: {tender.official_name}
+Country: {tender.buyer_country}
+Estimated Value: {tender.estimated_value or 'Not specified'} {tender.estimated_value_currency or 'EUR'}
+Procedure Type: {tender.procedure_type or 'Not specified'}
+Submission Deadline: {tender.submission_deadline or 'Not specified'}
+Description: {tender.description or 'No description available'}
+CPV Codes: {', '.join(tender.cpv_codes) if tender.cpv_codes else 'Not specified'}
+Lot Count: {tender.lot_count or 1}
+Award Criteria: {tender.award_criteria or 'Not specified'}
+"""
+
+        prompt = f"""Analyse this EU public procurement tender and provide a structured summary.
+Be concise and focus on what a potential bidder needs to know.
+
+Tender Information:
+{tender_context}
+
+Provide your response in this exact JSON format:
+{{
+    "one_liner": "A single sentence describing the opportunity",
+    "what": "What is being procured (2-3 sentences max)",
+    "who": "Brief description of the contracting authority",
+    "value": "Contract value or budget information",
+    "deadline": "Submission deadline with any important time notes",
+    "key_requirements": ["requirement 1", "requirement 2", "requirement 3"],
+    "award_focus": "What the evaluation criteria prioritise"
+}}
+
+Respond ONLY with the JSON, no additional text."""
+
+        try:
+            from services.ai_service import get_ai_service
+            import json
+            import re
+
+            ai_service = get_ai_service()
+            response = await ai_service.chat(
+                user_message=prompt,
+                conversation_history=None,
+                user_id=str(current_user.id)
+            )
+
+            # Extract JSON from response with robust parsing
+            response_text = response.get("response", "")
+            summary = _extract_and_validate_summary_json(response_text)
+
+            if summary:
+                return summary
+            else:
+                # Fallback if AI doesn't return valid JSON
+                logger.warning("AI response did not contain valid summary JSON, using fallback")
+                return _build_fallback_summary(tender)
+
+        except Exception as ai_error:
+            logger.warning(f"AI summary generation failed, using fallback: {ai_error}")
+            return _build_fallback_summary(tender)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to generate summary for tender {tender_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate summary: {str(e)}"
+        )
+
+
+def _extract_and_validate_summary_json(response_text: str) -> Optional[dict]:
+    """
+    Extract and validate JSON summary from AI response.
+
+    Handles edge cases:
+    - JSON wrapped in markdown code blocks
+    - Multiple JSON objects (takes the first valid one)
+    - Malformed JSON with trailing commas
+    - Missing required fields
+
+    Returns validated summary dict or None if invalid.
+    """
+    import json
+    import re
+
+    if not response_text:
+        return None
+
+    # Required fields for a valid summary
+    required_fields = {"one_liner", "what", "who", "value", "deadline", "key_requirements", "award_focus"}
+
+    # Try to extract JSON from various formats
+    json_candidates = []
+
+    # Pattern 1: JSON in markdown code block
+    code_block_match = re.search(r'```(?:json)?\s*(\{[\s\S]*?\})\s*```', response_text)
+    if code_block_match:
+        json_candidates.append(code_block_match.group(1))
+
+    # Pattern 2: Raw JSON object (greedy match for outermost braces)
+    # Use a more precise approach: find balanced braces
+    brace_depth = 0
+    start_idx = None
+    for i, char in enumerate(response_text):
+        if char == '{':
+            if brace_depth == 0:
+                start_idx = i
+            brace_depth += 1
+        elif char == '}':
+            brace_depth -= 1
+            if brace_depth == 0 and start_idx is not None:
+                json_candidates.append(response_text[start_idx:i+1])
+                start_idx = None
+
+    # Try each candidate
+    for candidate in json_candidates:
+        try:
+            # Clean up common issues
+            cleaned = candidate.strip()
+            # Remove trailing commas before } or ]
+            cleaned = re.sub(r',\s*([}\]])', r'\1', cleaned)
+
+            parsed = json.loads(cleaned)
+
+            # Validate structure
+            if not isinstance(parsed, dict):
+                continue
+
+            # Check required fields
+            if required_fields.issubset(parsed.keys()):
+                # Validate types
+                if (isinstance(parsed.get("key_requirements"), list) and
+                    isinstance(parsed.get("one_liner"), str) and
+                    isinstance(parsed.get("what"), str)):
+                    return parsed
+
+        except json.JSONDecodeError:
+            continue
+
+    return None
+
+
+def _build_fallback_summary(tender) -> dict:
+    """Build a basic summary from tender data when AI fails."""
+    # Safely format value
+    if tender.estimated_value:
+        currency = tender.estimated_value_currency or 'EUR'
+        value_str = f"{tender.estimated_value:,.0f} {currency}"
+    else:
+        value_str = "Not specified"
+
+    # Safely format deadline
+    if tender.submission_deadline:
+        try:
+            deadline_str = tender.submission_deadline.strftime("%d %B %Y")
+        except (AttributeError, ValueError):
+            deadline_str = "Check tender notice"
+    else:
+        deadline_str = "Check tender notice"
+
+    # Safely truncate description
+    if tender.description and len(tender.description) > 300:
+        what_str = tender.description[:300] + "..."
+    elif tender.description:
+        what_str = tender.description
+    else:
+        what_str = "See tender notice for details."
+
+    return {
+        "one_liner": tender.title or "EU public procurement opportunity",
+        "what": what_str,
+        "who": tender.official_name or "EU contracting authority",
+        "value": value_str,
+        "deadline": deadline_str,
+        "key_requirements": ["Review full tender documentation"],
+        "award_focus": "Refer to tender evaluation criteria"
+    }
+
+
+# ============================================================================
+# Match Actions - these routes are specific enough they work after /{tender_id}
+# ============================================================================
+
+@router.post(
+    "/matches/{match_id}/save",
+    response_model=TenderMatchResponse,
+    summary="Save a match",
+    description="Save a tender match for later"
+)
+async def save_match(
+    match_id: int,
+    current_user: User = Depends(require_blue_tier),
+    service: TenderService = Depends(get_tender_service)
+) -> TenderMatchResponse:
+    """
+    Save a tender match to your saved list.
+    """
+    try:
+        match = service.save_match(match_id, str(current_user.id))
+
+        if not match:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Match {match_id} not found"
+            )
+
+        return TenderMatchResponse.model_validate(match)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to save match {match_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to save match: {str(e)}"
+        )
+
+
+@router.post(
+    "/matches/{match_id}/dismiss",
+    response_model=TenderMatchResponse,
+    summary="Dismiss a match",
+    description="Dismiss a tender match (hide from list)"
+)
+async def dismiss_match(
+    match_id: int,
+    current_user: User = Depends(require_blue_tier),
+    service: TenderService = Depends(get_tender_service)
+) -> TenderMatchResponse:
+    """
+    Dismiss a tender match so it doesn't appear in your list.
+    """
+    try:
+        match = service.dismiss_match(match_id, str(current_user.id))
+
+        if not match:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Match {match_id} not found"
+            )
+
+        return TenderMatchResponse.model_validate(match)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to dismiss match {match_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to dismiss match: {str(e)}"
+        )
+
+
+@router.put(
+    "/matches/{match_id}",
+    response_model=TenderMatchResponse,
+    summary="Update match",
+    description="Update match notes or rating"
+)
+async def update_match(
+    match_id: int,
+    update_data: TenderMatchUpdate,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+) -> TenderMatchResponse:
+    """
+    Update match details (notes, rating, applied status).
+    """
+    try:
+        match = db.query(TenderMatch).filter(
+            TenderMatch.id == match_id,
+            TenderMatch.user_id == current_user.id
+        ).first()
+
+        if not match:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Match {match_id} not found"
+            )
+
+        # Update fields
+        update_dict = update_data.model_dump(exclude_unset=True)
+        for key, value in update_dict.items():
+            setattr(match, key, value)
+
+        match.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(match)
+
+        return TenderMatchResponse.model_validate(match)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to update match {match_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update match: {str(e)}"
+        )
+
+
+@router.get(
+    "/{tender_id}/legal-requirements",
+    summary="Get legal requirements for tender",
+    description="Get applicable EU law requirements for a specific tender"
+)
+async def get_tender_legal_requirements(
+    tender_id: int,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+):
+    """
+    Get EU legal requirements applicable to a specific tender.
+
+    Based on tender type, value, and sector, returns:
+    - Applicable directives
+    - Key compliance requirements
+    - Threshold information
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        # Get tender
+        tender = db.query(Tender).filter(Tender.id == tender_id).first()
+        if not tender:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Tender {tender_id} not found"
+            )
+
+        search_service = EULawSearchService(db)
+
+        # Determine applicable directive based on tender type
+        applicable_laws = []
+
+        # Check tender value against EU thresholds (2024 values)
+        thresholds = {
+            'supplies_services_central': 143000,
+            'supplies_services_sub_central': 221000,
+            'works': 5538000,
+            'utilities': 443000,
+            'defence': 443000,
+        }
+
+        # Get Public Procurement Directive
+        ppd = search_service.get_by_celex('32014L0024')
+        if ppd:
+            applicable_laws.append({
+                **ppd.to_dict(),
+                'relevance': 'Primary directive for public contracts'
+            })
+
+        # Search for sector-specific laws if tender has CPV codes
+        if tender.cpv_codes:
+            cpv_main = tender.cpv_codes[0][:2] if tender.cpv_codes else None
+
+            # Map CPV to sectors
+            sector_cpv = {
+                '09': 'energy',
+                '50': 'transport',
+                '60': 'transport',
+                '64': 'postal',
+                '65': 'utilities',
+            }
+
+            if cpv_main in sector_cpv:
+                utilities = search_service.get_by_celex('32014L0025')
+                if utilities:
+                    applicable_laws.append({
+                        **utilities.to_dict(),
+                        'relevance': f'Utilities directive for {sector_cpv[cpv_main]} sector'
+                    })
+
+        return {
+            'tender_id': str(tender_id),
+            'tender_title': tender.title,
+            'estimated_value': tender.estimated_value,
+            'applicable_laws': applicable_laws,
+            'thresholds': thresholds,
+            'note': 'Thresholds are 2024 values in EUR, excluding VAT'
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting tender legal requirements: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve legal requirements: {str(e)}"
+        )
+
