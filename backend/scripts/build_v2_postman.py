@@ -108,11 +108,14 @@ _PARL_ROUTING = [
     ("parliamentary-questions", "Parliamentary Questions"),
     ("emeeting-documents", "eMeeting Documents"),
     ("emeeting", "eMeeting"),
+    ("committee-transcripts", "Committee Transcripts"),
+    ("committee-agendas", "Committee Agendas"),
 ]
 _PARL_SOURCE_ORDER = [
     "MEPs", "Amendments", "Votes", "EP Documents", "Reports", "Opinions",
     "Committees", "Texts Adopted", "Texts Submitted", "Resolutions", "EPRS",
     "Webstreams", "Parliamentary Questions", "eMeeting", "eMeeting Documents",
+    "Committee Transcripts", "Committee Agendas",
 ]
 
 # Commission: (path-tail prefix, source folder). Flat — no sub-sub-folders.
@@ -170,6 +173,17 @@ _EUROGROUP_ROUTING = [
     ("eurogroup-about", "About"),
 ]
 _EUROGROUP_SOURCE_ORDER = ["Meetings", "Documents", "Work Programme", "Members", "About"]
+
+# Funding & Tenders: (path-tail prefix, source folder).
+_FUNDING_ROUTING = [
+    ("funding-opportunities", "Funding Opportunities"),
+    ("ft-calls-for-proposals", "Calls for Proposals"),
+    ("ft-calls-for-tenders", "Calls for Tenders"),
+    ("ft-funded-projects", "Funded Projects"),
+    ("tenders", "TED Tenders"),
+]
+_FUNDING_SOURCE_ORDER = ["Funding Opportunities", "Calls for Proposals", "Calls for Tenders",
+                         "Funded Projects", "TED Tenders"]
 
 _PARAM_DEFAULTS = {
     "celex": "32016R0679", "ref": "32016R0679", "reference": "2022/0047(COD)",
@@ -246,6 +260,13 @@ def _eurogroup_route(tail: str) -> str:
         if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
             return source
     return "Meetings"
+
+
+def _funding_route(tail: str) -> str:
+    for needle, source in _FUNDING_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Funding Opportunities"
 
 
 def _clean_path(path: str) -> str:
@@ -430,6 +451,21 @@ def _build_eurogroup_domain(paths: dict) -> dict:
     return {"name": "Eurogroup", "item": sources}
 
 
+def _build_funding_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/funding/" not in path:
+            continue
+        tail = path.split("/api/v2/funding/", 1)[1]
+        source = _funding_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _FUNDING_SOURCE_ORDER if s in tree]
+    return {"name": "Funding & Tenders", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -446,6 +482,7 @@ def build_collection() -> dict:
         _build_council_domain(paths),
         _build_european_council_domain(paths),
         _build_eurogroup_domain(paths),
+        _build_funding_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)

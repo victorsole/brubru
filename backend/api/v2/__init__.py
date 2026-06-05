@@ -29,6 +29,7 @@ from .commission import router as _commission_router
 from .council import router as _council_router
 from .european_council import router as _european_council_router
 from .eurogroup import router as _eurogroup_router
+from .funding import router as _funding_router
 from .proprietary import router as _proprietary_router
 
 router = APIRouter(prefix="/api/v2")
@@ -38,4 +39,5 @@ router.include_router(_commission_router)
 router.include_router(_council_router)
 router.include_router(_european_council_router)
 router.include_router(_eurogroup_router)
+router.include_router(_funding_router)
 router.include_router(_proprietary_router)

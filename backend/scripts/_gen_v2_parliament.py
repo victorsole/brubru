@@ -26,6 +26,7 @@ EP_SEGMENTS = (
     "meps", "amendments", "votes", "ep-documents", "reports", "opinions",
     "committees", "texts-adopted", "texts-submitted", "resolutions", "eprs",
     "webstreams", "parliamentary-questions", "emeeting-documents", "emeeting",
+    "committee-transcripts", "committee-agendas",
 )
 _URL_RE = re.compile(r"/api/v1/(" + "|".join(EP_SEGMENTS) + r")\b")
 
@@ -84,6 +85,14 @@ SPEC = {
         ("documents_router", "documents_router", "/emeeting-documents", "v2-parliament-emeeting-documents",
          ["list_emeeting_documents", "get_emeeting_document"]),
     ],
+    "transcripts": [
+        ("router", "router", "/committee-transcripts", "v2-parliament-committee-transcripts",
+         ["list_committee_transcripts", "get_committee_transcript_detail"]),
+    ],
+    "committee_agendas": [
+        ("router", "router", "/committee-agendas", "v2-parliament-committee-agendas",
+         ["list_committee_agendas", "get_committee_agenda_detail"]),
+    ],
 }
 
 # output filename per v1 module (mirror v1 names; w4 -> parliamentary_questions)
@@ -97,6 +106,8 @@ OUT_NAME = {
     "webstreams": "webstreams",
     "w4_endpoints": "parliamentary_questions",
     "ep_emeeting": "ep_emeeting",
+    "transcripts": "transcripts",
+    "committee_agendas": "committee_agendas",
 }
 
 PREAMBLE = '''"""European Parliament domain — {paths}.

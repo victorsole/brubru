@@ -157,6 +157,8 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/parliament/eprs(/|$)"),                   "read:knowledge"),
     (re.compile(r"^/api/v2/parliament/emeeting(/|$)"),               "read:ep"),
     (re.compile(r"^/api/v2/parliament/emeeting-documents(/|$)"),      "read:ep"),
+    (re.compile(r"^/api/v2/parliament/committee-transcripts(/|$)"),   "read:ep"),
+    (re.compile(r"^/api/v2/parliament/committee-agendas(/|$)"),       "read:ep"),
 
     # --- API v2: institution-based "European Commission" domain -----------
     # Same scope mapping as the v1 Commission surface (read:commission, with
@@ -195,6 +197,13 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/eurogroup/eurogroup-work-programme(/|$)"),        "read:eurogroup"),
     (re.compile(r"^/api/v2/eurogroup/eurogroup-members(/|$)"),               "read:eurogroup"),
     (re.compile(r"^/api/v2/eurogroup/eurogroup-about(/|$)"),                 "read:eurogroup"),
+
+    # --- API v2: "Funding & Tenders" domain (Commission-administered) ------
+    (re.compile(r"^/api/v2/funding/funding-opportunities(/|$)"),  "read:commission"),
+    (re.compile(r"^/api/v2/funding/ft-calls-for-proposals(/|$)"), "read:commission"),
+    (re.compile(r"^/api/v2/funding/ft-calls-for-tenders(/|$)"),   "read:commission"),
+    (re.compile(r"^/api/v2/funding/ft-funded-projects(/|$)"),     "read:commission"),
+    (re.compile(r"^/api/v2/funding/tenders(/|$)"),                "read:commission"),
 
     # --- API v2: "Brubru Proprietary Databases" domain --------------------
     (re.compile(r"^/api/v2/proprietary/guides(/|$)"),           "read:knowledge"),

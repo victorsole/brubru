@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n129 requests across 7 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n143 requests across 8 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -3671,6 +3671,263 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "Committee Transcripts",
+          "item": [
+            {
+              "name": "EP committee meeting transcripts \u2014 full AI transcript of committee webstreams",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committee-transcripts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committee-transcripts"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "has_transcript",
+                      "value": "True",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns AI-generated transcripts of European Parliament committee (and subcommittee) meetings, produced from the EP Multimedia Centre webstream recordings. Each row carries the committee, meeting date, title, word count, duration, mapped agenda items, the procedure references discussed, and a link to the official recording. This is the textual companion to `/api/v2/parliament/webstreams` (which gives the stream URL + transcript status); this endpoint gives the transcript content itself.\n\n**When to use it**\nTo read what was actually said in a committee debate \u2014 search a committee's deliberations, pull every meeting that discussed a given procedure, or feed a verbatim debate record into your own analysis. For the official summary record instead, use `/api/v2/parliament/committees/{code}/minutes`.\n\n**Input**\n- `committee` \u2014 EP committee/subcommittee code (e.g. `LIBE`, `ENVI`, `DROI`).\n- `procedure_reference` \u2014 return only meetings that discussed this procedure (e.g. `2024/0079(COD)`); matches the transcript's mapped `related_procedure_refs`.\n- `q` \u2014 substring search across the meeting title and the transcript text.\n- `has_transcript` \u2014 `true` (default) returns only meetings with a completed transcript; set `false` to also see scheduled/pending/failed rows.\n- `status` \u2014 filter on processing status (`completed`, `pending`, `transcribing`, `failed`).\n- `published_from` / `published_to` (aliased `date_from` / `date_to`) \u2014 `meeting_date` range.\n- `updated_from` \u2014 rows updated at/after this timestamp (incremental sync).\n- `body_threshold` \u2014 minimum transcript length (chars) for `has_body=true`. Default 500.\n- `limit` (default 10, max 50 \u2014 bodies are always returned and each is large), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/committee-transcripts?committee=LIBE\nGET /api/v2/parliament/committee-transcripts?procedure_reference=2024/0079(COD)\nGET /api/v2/parliament/committee-transcripts?committee=ENVI&limit=3\n```\n\n**You get back**\nA `PaginatedResponse[CommitteeTranscriptOut]`. Each row carries `committee_code`, `title`, `meeting_date`, `word_count`, `duration_seconds`, `speaker_count`, `agenda_items[]`, `related_procedure_refs[]`, plus the 5 envelope datapoints: `public_url` (the recording page), `body_txt` + `body_html` (the full transcript \u2014 always populated when a transcript exists), `document_date` (the meeting date), and `creation_date` (when Brubru transcribed it).\n\n**Data freshness**\nTranscribed from EP Multimedia Centre recordings via OpenAI Whisper (`backend/scripts/transcribe_pending_committees.py`). New committee recordings appear on the Multimedia Centre within hours of a meeting; transcription runs as a batch job after the recording is published."
+              },
+              "response": []
+            },
+            {
+              "name": "One committee meeting transcript by id \u2014 full transcript text + HTML",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committee-transcripts/:transcript_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committee-transcripts",
+                    ":transcript_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "transcript_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single committee meeting transcript by its Brubru-internal UUID, always with the full body: `body_txt` (the verbatim Whisper transcript) and `body_html` (the same text structured one paragraph per segment, with speaker labels when known).\n\n**When to use it**\nAfter locating a meeting via the list endpoint, use this to pull the complete transcript for display or downstream processing.\n\n**Input**\n- `transcript_id` (path) \u2014 the Brubru-internal UUID from the list endpoint's `id`.\n\n**Try it**\n```\nGET /api/v2/parliament/committee-transcripts/{transcript_id}\n```\n\n**You get back**\nA single `CommitteeTranscriptOut` (same shape as the list endpoint's `data[i]`), always with `body_txt` + `body_html` populated when a transcript exists, or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nTranscribed from EP Multimedia Centre recordings via OpenAI Whisper. Re-transcription updates `creation_date` (transcribed_at)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Committee Agendas",
+          "item": [
+            {
+              "name": "EP committee draft agendas \u2014 the order of the day for committee meetings, with full text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committee-agendas",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committee-agendas"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_reference",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "upcoming",
+                      "value": "False",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EP committee draft agendas (the official \"order of the day\" for each committee meeting): the committee, the meeting date, the link to the doceo agenda document, the procedure references scheduled for discussion, and the full agenda text (`body_txt` + `body_html`). It tells you what a committee plans to take up before the meeting happens.\n\n**When to use it**\nTo see what is coming up in a committee \u2014 which files are tabled for discussion or vote at the next meeting, and the full running order. Pair with `/api/v2/parliament/committees/{code}/minutes` (what happened) and `/api/v2/parliament/committee-transcripts` (what was said).\n\n**Input**\n- `committee` \u2014 EP committee/subcommittee code (e.g. `LIBE`, `ENVI`).\n- `procedure_reference` \u2014 only agendas that scheduled this procedure (e.g. `2024/0079(COD)`).\n- `q` \u2014 substring search on the agenda title.\n- `upcoming` \u2014 `true` returns only agendas dated today or later (the planning view); default `false` returns all.\n- `published_from` / `published_to` (aliased `date_from` / `date_to`) \u2014 meeting-date range.\n- `updated_from` \u2014 rows updated at/after this timestamp (incremental sync).\n- `body_threshold` \u2014 minimum agenda-text length (chars) for `has_body=true`. Default 500.\n- `limit` (default 10, max 25 \u2014 the agenda document is fetched + cached on first access), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/committee-agendas?committee=LIBE&upcoming=true\nGET /api/v2/parliament/committee-agendas?procedure_reference=2024/0079(COD)\n```\n\n**You get back**\nA `PaginatedResponse[CommitteeAgendaOut]`. Each row carries `committee_code`, `title`, `meeting_date`, `procedure_refs[]`, plus the 5 envelope datapoints: `public_url` (the agenda document), `body_txt` + `body_html` (the agenda text), `document_date` (the meeting date), and `creation_date`. `has_body` is true once the agenda document has been fetched.\n\n**Data freshness**\nAgenda metadata syncs from the EP committee pages (`backend/services/scrapers/committee_agenda_sync_service.py`); draft agendas appear ~1 week before a meeting. The agenda document body is fetched from doceo on first access and cached."
+              },
+              "response": []
+            },
+            {
+              "name": "One committee draft agenda by id \u2014 full agenda text + HTML",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/committee-agendas/:event_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "committee-agendas",
+                    ":event_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "event_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single committee draft agenda by its Brubru-internal calendar-event UUID, with the full agenda document body (`body_txt` + `body_html`).\n\n**When to use it**\nAfter locating an agenda via the list endpoint, use this to pull the complete order of the day.\n\n**Input**\n- `event_id` (path) \u2014 the Brubru-internal UUID from the list endpoint's `id`.\n\n**Try it**\n```\nGET /api/v2/parliament/committee-agendas/{event_id}\n```\n\n**You get back**\nA single `CommitteeAgendaOut` (same shape as the list endpoint's `data[i]`), with `body_txt` + `body_html` populated when the agenda document is reachable, or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nAgenda body fetched from doceo on first access and cached on the event."
+              },
+              "response": []
+            }
+          ]
         }
       ]
     },
@@ -6858,6 +7115,649 @@
                   ]
                 },
                 "description": "Fetch a single Eurogroup reference page by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Funding & Tenders",
+      "item": [
+        {
+          "name": "Funding Opportunities",
+          "item": [
+            {
+              "name": "EU funding opportunities \u2014 open + forthcoming calls across programmes (alternate view)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/funding-opportunities",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "funding-opportunities"
+                  ],
+                  "query": [
+                    {
+                      "key": "programme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "type_of_action",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.\n\n**When to use it**\nSame domain as `/api/v1/calls-for-proposals` but a slightly different surface \u2014 this one is broader (includes some opportunities not in the calls-for-proposals export). For most use cases, `/api/v1/calls-for-proposals` is the recommended endpoint. This one is preserved for backwards compatibility + a different filtering surface.\n\n**Input**\n- `programme` \u2014 substring (e.g. `Horizon`, `CEF`, `Digital Europe`).\n- `status` \u2014 `open` / `forthcoming` / `closed` / `under-evaluation`.\n- `type_of_action` \u2014 substring.\n- `q` \u2014 substring on title + short_summary.\n- `deadline_from`, `deadline_to` \u2014 deadline window.\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/funding?programme=Horizon&status=open\nGET /api/v1/funding?q=AI&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `programme`, `title`, `short_summary`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `source_url`, `documents_url`, `keywords`, `target_audience`, `published_at`, `last_updated`, body fields + the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal. is_test=True fixture rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EU funding opportunity by its topic_id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/funding-opportunities/:topic_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "funding-opportunities",
+                    ":topic_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "topic_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EU funding opportunity by its topic_id. Returns the same shape as the list endpoint, with the full description + body composition.\n\n**When to use it**\nAfter locating an opportunity via the list endpoint, use this for the full record before drafting a bid.\n\n**Input**\n- `topic_id` (path) \u2014 the EU's topic identifier (e.g. `HORIZON-CL5-2026-D2-01-01`). The `:path` matcher accepts hyphens + dots verbatim.\n\n**Try it**\n```\nGET /api/v1/funding/HORIZON-CL5-2026-D2-01-01\n```\n\n**You get back**\nA single `FundingItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the F&T Portal."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Calls for Proposals",
+          "item": [
+            {
+              "name": "EU funding calls for proposals \u2014 Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-calls-for-proposals",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-calls-for-proposals"
+                  ],
+                  "query": [
+                    {
+                      "key": "framework_programme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "type_of_action",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns calls for grant proposals from the EU Funding & Tenders Portal \u2014 the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (open / forthcoming / closed / under-evaluation), the deadline, the budget, and a body composed from title + objective + scope.\n\n**When to use it**\nFor consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see \"what's been funded under this programme\" \u2192 \"what's currently open\". Default ordering puts most recent deadlines first so partners land on actionable opportunities.\n\n**Input**\n- `framework_programme` \u2014 substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).\n- `status` \u2014 `open` / `forthcoming` / `closed` / `under-evaluation`.\n- `type_of_action` \u2014 substring (e.g. `RIA`, `IA`, `CSA`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 deadline window (use to find calls closing in your bidding-feasible range).\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open\nGET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page).\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one funding call for proposals by its EU topic_id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-calls-for-proposals/:topic_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-calls-for-proposals",
+                    ":topic_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "topic_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single call for proposals by its EU topic identifier. Returns the same shape as the list endpoint, with the full body composed from title + objective + scope + expected outcome.\n\n**When to use it**\nAfter locating a call via the list endpoint, use this for the full record \u2014 particularly when you want to embed call details in a bid-tracker or render the scope text in a UI.\n\n**Input**\n- `topic_id` (path) \u2014 the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`. The `:path` matcher accepts hyphens + dots verbatim, no URL-encoding needed.\n\n**Try it**\n```\nGET /api/v1/calls-for-proposals/HORIZON-CL5-2026-D2-01-01\n```\n\n**You get back**\nA single `FtCallProposalItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` (also returned if the row is flagged `is_test=true`).\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the F&T Portal."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Calls for Tenders",
+          "item": [
+            {
+              "name": "EU public-procurement tenders from the F&T Portal \u2014 distinct from the /tenders TED view",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-calls-for-tenders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-calls-for-tenders"
+                  ],
+                  "query": [
+                    {
+                      "key": "contracting_authority",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "contract_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns calls for tenders (public procurement) published by EU institutions and agencies on the Funding & Tenders Portal. Each row carries the tender_reference, the contracting authority (which institution / agency is buying), the contract type, the status, the deadline, the budget, and a body composed from title + description.\n\n**When to use it**\nFor service providers, consultancies, and contractors bidding on EU institutional procurement. This is the F&T Portal-specific view; for the broader TED (Tenders Electronic Daily) feed which covers Member State buyers as well, see `/api/v2/funding/tenders`. The two surfaces overlap for some Commission contracts but TED is the authoritative legal source.\n\n**Input**\n- `contracting_authority` \u2014 substring (e.g. `European Commission`, `Frontex`, `EMA`).\n- `status` \u2014 F&T tender status enum.\n- `contract_type` \u2014 substring (e.g. `services`, `supplies`, `works`).\n- `q` \u2014 substring search on title + description.\n- `deadline_from`, `deadline_to` \u2014 submission window.\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open\nGET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page).\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one F&T Portal tender by its tender_reference",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-calls-for-tenders/:tender_reference",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-calls-for-tenders",
+                    ":tender_reference"
+                  ],
+                  "variable": [
+                    {
+                      "key": "tender_reference",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single F&T Portal call for tenders by its EU tender_reference. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating a tender via the list endpoint, use this for the full record. The `:path` matcher accepts the reference verbatim including any slashes / dots / hyphens.\n\n**Input**\n- `tender_reference` (path) \u2014 the EU's tender identifier as published on the F&T Portal.\n\n**Try it**\n```\nGET /api/v1/calls-for-tenders/<tender_reference>\n```\n\n**You get back**\nA single `FtCallTenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the F&T Portal."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Funded Projects",
+          "item": [
+            {
+              "name": "EU grant-funded projects \u2014 active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-funded-projects",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-funded-projects"
+                  ],
+                  "query": [
+                    {
+                      "key": "framework_programme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "coordinator_country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "type_of_action",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "start_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "end_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns EU-funded grant projects from the Funding & Tenders Portal \u2014 both active and completed projects across all framework programmes (Horizon Europe, Horizon 2020, FP7, sectoral programmes like Digital Europe, EU4Health, LIFE, Creative Europe). Each row carries the project_id (e.g. `101082345`), the title, the framework programme, the type of action, the coordinator name + country, the consortium size, the start/end dates, the EU contribution, the total cost, the objective summary, and the project portal URL.\n\n**When to use it**\nFor research orgs and consultancies doing competitive intelligence on EU funding: \"what has the Commission funded on AI in the last 3 years?\", \"which Polish coordinators have run successful Horizon projects?\", \"what are the typical budgets for IA actions in Cluster 5?\". Combine with `/api/v1/calls-for-proposals` to see the call \u2192 project pipeline.\n\n**Input**\n- `framework_programme` \u2014 substring (e.g. `Horizon Europe`, `Horizon 2020`).\n- `coordinator_country` \u2014 ISO-2 (2 chars exact).\n- `type_of_action` \u2014 substring (`RIA`, `IA`, `CSA`).\n- `status` \u2014 F&T project status enum.\n- `q` \u2014 substring search on title + objective.\n- `start_from`, `end_to` \u2014 start-date / end-date window.\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL\nGET /api/v1/funded-projects?q=climate&type_of_action=IA\n```\n\n**You get back**\nA `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `title`, `framework_programme`, `type_of_action`, `coordinator_name`, `coordinator_country`, `consortium_size`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal project page).\n\n**Data freshness**\nSynced once per week (Sunday 05:00 UTC, weekly tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results. CORDIS (the more comprehensive research-results portal) is reachable separately via `/api/v1/discover/eurio`. is_test=True seed rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one EU-funded project by its grant project_id (numeric)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ft-funded-projects/:project_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ft-funded-projects",
+                    ":project_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "project_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EU-funded project by its grant project_id. Returns the same shape as the list endpoint.\n\n**When to use it**\nAfter locating a project via the list endpoint, use this for the full record. For richer project metadata (deliverables, consortium members, publications), cross-reference via `/api/v1/discover/eurio/projects/{cordis_id}/consortium` etc.\n\n**Input**\n- `project_id` (path) \u2014 the EU grant project id (typically a numeric identifier, e.g. `101082345`).\n\n**Try it**\n```\nGET /api/v1/funded-projects/101082345\n```\n\n**You get back**\nA single `FtFundedProjectItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 weekly Sunday 05:00 UTC sync from the F&T Portal projects-results page."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "TED Tenders",
+          "item": [
+            {
+              "name": "EU public procurement tenders (TED \u2014 Tenders Electronic Daily)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/tenders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "tenders"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "buyer_country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "contract_nature",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "cpv_main",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "cpv_code",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "form_type",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "min_value",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "max_value",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns public-procurement tender notices from TED (Tenders Electronic Daily) \u2014 the EU's official journal for procurement, where every supplement to the OJ for above-threshold contracts is published. Covers tenders from the Commission, EP, Council, agencies, and Member State buyers obliged to publish at EU level. Each row carries the publication number, the title + description, the buying authority, the procedure type, the CPV codes (Common Procurement Vocabulary), the estimated value, the publication date, the submission deadline, lots information, and an SME-suitability score.\n\n**When to use it**\nFor consultancies / SMEs looking for EU funding opportunities \u2014 filter by `cpv_main` for your sector, set `min_value` / `max_value` for relevant contract sizes, and use `deadline_from` / `deadline_to` to scope to bidding-feasible windows. The `sme_suitability_score` (0-1) is Brubru's heuristic on how SME-friendly a tender is based on value + lots + complexity.\n\n**Input**\n- `q` \u2014 substring search on title + description + summary.\n- `buyer_country` \u2014 ISO-2.\n- `procedure_type` \u2014 TED procedure type code.\n- `contract_nature` \u2014 `works` / `supplies` / `services`.\n- `cpv_main`, `cpv_code` \u2014 CPV filter.\n- `form_type` \u2014 TED form code (F02 / F03 / F14 / etc).\n- `min_value`, `max_value` \u2014 estimated-value range in EUR.\n- `deadline_from`, `deadline_to` \u2014 submission_deadline window.\n- `published_from`, `published_to` \u2014 publication date window.\n- `updated_from` \u2014 incremental sync.\n- `limit` (default 50, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/funding/tenders?cpv_main=72000000&min_value=50000\nGET /api/v2/funding/tenders?buyer_country=BE&contract_nature=services\n```\n\n**You get back**\nA `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `title`, `description`, `official_name`, `buyer_country`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ted.europa.eu \u2014 TED publishes daily by definition (the \"Daily\" in the name). Backed by `backend/scripts/backfill_tenders_description.py`."
+              },
+              "response": []
+            },
+            {
+              "name": "Look up one TED tender by its internal numeric id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/tenders/:tender_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "tenders",
+                    ":tender_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "tender_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single TED tender by its Brubru-internal integer id. Returns the same shape as the list endpoint, including CPV codes + lot details + the TED URL for the official notice.\n\n**When to use it**\nAfter locating a tender via the list endpoint, use this to fetch the full record (with description + all CPV codes) for embedding in a bid-tracker UI.\n\n**Input**\n- `tender_id` (path) \u2014 Brubru integer id (returned in `id` from the list endpoint).\n\n**Try it**\n```\nGET /api/v2/funding/tenders/12345\n```\n\n**You get back**\nA single `TenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from ted.europa.eu."
               },
               "response": []
             }
