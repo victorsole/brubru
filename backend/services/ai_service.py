@@ -46,6 +46,7 @@ logger = logging.getLogger(__name__)
 # See memory/feedback_linkify_garbage_acronyms_fa.md.
 _LINKIFY_ACRONYM_DENYLIST = frozenset({
     "ETF",   # EMA Emergency Task Force (not the Work-in-Fishing directive)
+    "COVID-19", "COVID",  # disease names, not legislation (false-fire on every health answer)
     "ACT", "NEW", "API", "ART", "EOV", "SET", "END", "KEY", "ONE", "TWO",
     "AID", "AIR", "GAS", "NET", "USE", "WAR",
 })
