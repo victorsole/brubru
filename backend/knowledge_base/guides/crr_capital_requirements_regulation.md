@@ -1,6 +1,7 @@
 # CRR — Capital Requirements Regulation (Regulation (EU) No 575/2013)
 
 ## QUICK FACTS
+- **LATEST (Thursday 4 June 2026 — FRTB market-risk adjustment)**: The Commission adopted **targeted, time-limited amendments to the EU's implementation of the Fundamental Review of the Trading Book (FRTB)** — the Basel III market-risk own-funds framework in CRR Part Three, Title IV. The stated aim is to preserve a level playing field for EU banks against international competitors (given slower / divergent FRTB roll-out in the US and UK), continuing the earlier postponement of FRTB application. The instrument is a Commission Delegated Regulation under the CRR III empowerment (adopted 4 June 2026; OJ publication + EP/Council scrutiny period pending — CELEX to be captured once published). Responsible DG: DG FISMA. Source: finance.ec.europa.eu/news (4 June 2026). Cross-link: `crr3_banking_package` if present.
 - Short name: CRR (Capital Requirements Regulation)
 - Full title: Regulation (EU) No 575/2013 of the European Parliament and of the Council of 26 June 2013 on prudential requirements for credit institutions and investment firms and amending Regulation (EU) No 648/2012
 - CELEX: 32013R0575

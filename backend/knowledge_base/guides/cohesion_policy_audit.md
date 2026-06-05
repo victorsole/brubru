@@ -1,6 +1,7 @@
 # Cohesion Policy Audit
 
 ## QUICK FACTS
+- **LATEST (Friday 5 June 2026 — ECA Special Report 15/2026)**: The European Court of Auditors published **Special Report 15/2026 "Cohesion policy support for youth employment – The EU is on the job, but ensuring lasting employment for young people still needs work"** (CELEX 52026SA0015). The ECA finds cohesion funds (ESF+/ERDF) reached young people but questions the durability of the employment outcomes, urging better targeting and result measurement. Relevant funds: ESF+ (Reg (EU) 2021/1057), ERDF (Reg (EU) 2021/1058). Source: OJ C / Cellar, 5 June 2026.
 - Topic: Cohesion policy audit framework, error rate methodology, Arachne risk scoring, assurance chain
 - Scope: Shared management auditing for 8 EU funds (ERDF, ESF+, Cohesion Fund, JTF, EMFAF, AMIF, ISF, BMVI)
 - Framework regulation: Common Provisions Regulation (EU) 2021/1060

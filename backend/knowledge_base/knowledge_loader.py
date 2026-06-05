@@ -7394,6 +7394,17 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'rapport etat de droit 2025': ['commission_rule_of_law_report_2025'],
     'informe estado de derecho 2025': ['commission_rule_of_law_report_2025'],
     'informe estat dret 2025': ['commission_rule_of_law_report_2025'],
+    # EU Justice Scoreboard 2026 (DG JUST, 4 June 2026) -> rule of law guide (justice-systems pillar)
+    'justice scoreboard': ['commission_rule_of_law_report_2025'],
+    'eu justice scoreboard': ['commission_rule_of_law_report_2025'],
+    '2026 justice scoreboard': ['commission_rule_of_law_report_2025'],
+    'cuadro de indicadores de la justicia': ['commission_rule_of_law_report_2025'],
+    'tableau de bord de la justice': ['commission_rule_of_law_report_2025'],
+    # CRR / FRTB market-risk adjustment (DG FISMA, 4 June 2026)
+    'frtb': ['crr_capital_requirements_regulation'],
+    'fundamental review of the trading book': ['crr_capital_requirements_regulation'],
+    'market risk rules': ['crr_capital_requirements_regulation'],
+    'basel iii market risk': ['crr_capital_requirements_regulation'],
     # International Claims Commission Ukraine (plenary consent vote 28 April)
     'international claims commission for ukraine': ['international_claims_commission_ukraine'],
     'international claims commission ukraine': ['international_claims_commission_ukraine'],
