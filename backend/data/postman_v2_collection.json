@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n148 requests across 9 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n152 requests across 10 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -8055,6 +8055,199 @@
                   ]
                 },
                 "description": "Fetch a single data.europa.eu catalogue by its Brubru UUID. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Who is Who",
+      "item": [
+        {
+          "name": "Departments",
+          "item": [
+            {
+              "name": "EU departments \u2014 organisational units across all EU institutions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/who-is-who/departments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "who-is-who",
+                    "departments"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "mnemonic",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the organisational units of the EU institutions \u2014 Directorates-General, directorates, units, cabinets, services \u2014 from the official interinstitutional directory, each with its code and the number of officials listed.\n\n**When to use it**\nTo map the EU's organisational structure, resolve a department code, or find which unit owns a policy area.\n\n**Input**\n- `q` \u2014 substring search over department name / code.\n- `mnemonic` \u2014 exact department code (e.g. AGRI).\n- `limit` (default 25, max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/who-is-who/departments?q=agriculture\n```\n\n**You get back**\nA `PaginatedResponse[WhoIsWhoDepartmentItem]`. The five envelope datapoints are filled (`public_url` = the Who is Who page, `body_txt`/`body_html` composed, `document_date` = null, `creation_date`).\n\n**Data freshness**\nSynced from the EU SPARQL endpoint (the structured EU Whoiswho directory). Bodies composed at ingest."
+              },
+              "response": []
+            },
+            {
+              "name": "One EU department by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/who-is-who/departments/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "who-is-who",
+                    "departments",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single EU department by its Brubru UUID. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Officials",
+          "item": [
+            {
+              "name": "EU officials \u2014 named officials with position and department",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/who-is-who/officials",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "who-is-who",
+                    "officials"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "department",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "mnemonic",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "position",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns named EU officials from the official interinstitutional directory \u2014 each with their position (job title) and the department they belong to, across all EU institutions.\n\n**When to use it**\nTo find who holds a position (e.g. the Director-General of a DG), or to list the officials of a department.\n\n**Input**\n- `q` \u2014 substring search over the official's name.\n- `department` \u2014 substring match on the department name.\n- `mnemonic` \u2014 exact department code.\n- `position` \u2014 substring match on the position / job title.\n- `limit` (default 25, max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/who-is-who/officials?position=Director-General&mnemonic=AGRI\n```\n\n**You get back**\nA `PaginatedResponse[WhoIsWhoOfficialItem]`. The five envelope datapoints are filled (`public_url` = the Who is Who page, `body_txt`/`body_html` composed, `document_date` = null, `creation_date`).\n\n**Data freshness**\nSynced from the EU SPARQL endpoint (the structured EU Whoiswho directory). Bodies composed at ingest."
+              },
+              "response": []
+            },
+            {
+              "name": "One EU official by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/who-is-who/officials/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "who-is-who",
+                    "officials",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single EU official by its Brubru UUID. 404 with `reason_code: not_found` if absent."
               },
               "response": []
             }

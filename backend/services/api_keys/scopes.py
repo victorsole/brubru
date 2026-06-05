@@ -198,6 +198,10 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/eurogroup/eurogroup-members(/|$)"),               "read:eurogroup"),
     (re.compile(r"^/api/v2/eurogroup/eurogroup-about(/|$)"),                 "read:eurogroup"),
 
+    # --- API v2: "Who is Who" domain (EU interinstitutional directory) -----
+    (re.compile(r"^/api/v2/who-is-who/departments(/|$)"),       "read:publications"),
+    (re.compile(r"^/api/v2/who-is-who/officials(/|$)"),         "read:publications"),
+
     # --- API v2: "Open Data" domain (data.europa.eu / Publications Office) -
     (re.compile(r"^/api/v2/open-data/datasets(/|$)"),            "read:publications"),
     (re.compile(r"^/api/v2/open-data/high-value-datasets(/|$)"), "read:publications"),
@@ -271,6 +275,8 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v1/specialised(/|$)"),                  "read:commission"),
 
     # read:council
+    (re.compile(r"^/api/v1/who-is-who/departments(/|$)"),       "read:publications"),
+    (re.compile(r"^/api/v1/who-is-who/officials(/|$)"),         "read:publications"),
     (re.compile(r"^/api/v1/open-data/datasets(/|$)"),           "read:publications"),
     (re.compile(r"^/api/v1/open-data/high-value-datasets(/|$)"), "read:publications"),
     (re.compile(r"^/api/v1/open-data/catalogues(/|$)"),         "read:publications"),
