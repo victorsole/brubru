@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n152 requests across 10 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n154 requests across 11 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -8248,6 +8248,103 @@
                   ]
                 },
                 "description": "Fetch a single EU official by its Brubru UUID. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "General Publications",
+      "item": [
+        {
+          "name": "Publications",
+          "item": [
+            {
+              "name": "One EU general publication by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/general-publications/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "general-publications",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single EU general publication by its Brubru UUID. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            },
+            {
+              "name": "EU general publications \u2014 brochures, reports and studies",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/general-publications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "general-publications"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the EU Publications Office's general publications (brochures, reports, studies) \u2014 Cellar works of resource-type PUB_GEN \u2014 each with its title, publication date, and the read/download page.\n\n**When to use it**\nTo search the EU's catalogue of general (non-legal) publications across all policy areas.\n\n**Input**\n- `q` \u2014 substring search over the title.\n- `published_from`, `published_to` \u2014 bound on the publication date.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/general-publications?q=artificial+intelligence\n```\n\n**You get back**\nA `PaginatedResponse[GeneralPublicationItem]` with the five envelope datapoints filled (`public_url` = the publication page, `body_txt`/`body_html` composed, `document_date` = publication date, `creation_date`).\n\n**Data freshness**\nSynced from the EU SPARQL endpoint (Cellar). Bodies composed at ingest."
               },
               "response": []
             }

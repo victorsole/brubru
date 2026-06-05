@@ -507,6 +507,19 @@ def _build_open_data_domain(paths: dict) -> dict:
     return {"name": "Open Data", "item": sources}
 
 
+def _build_general_publications_domain(paths: dict) -> dict:
+    items = []
+    for path, methods in paths.items():
+        if "/api/v2/general-publications" not in path:
+            continue
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            items.append(_build_request(path, method, op))
+    items.sort(key=_prop_sort_key)
+    return {"name": "General Publications", "item": [{"name": "Publications", "item": items}]}
+
+
 def _build_who_is_who_domain(paths: dict) -> dict:
     tree: dict[str, list] = {}
     for path, methods in paths.items():
@@ -541,6 +554,7 @@ def build_collection() -> dict:
         _build_funding_domain(paths),
         _build_open_data_domain(paths),
         _build_who_is_who_domain(paths),
+        _build_general_publications_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)
