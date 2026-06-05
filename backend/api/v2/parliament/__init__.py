@@ -34,6 +34,7 @@ from . import resolutions as _resolutions
 from . import eprs as _eprs
 from . import webstreams as _webstreams
 from . import parliamentary_questions as _parliamentary_questions
+from . import ep_emeeting as _ep_emeeting
 
 router = APIRouter(prefix="/parliament")
 router.include_router(_meps.router)
@@ -49,3 +50,4 @@ router.include_router(_resolutions.router)
 router.include_router(_eprs.router)
 router.include_router(_webstreams.router)
 router.include_router(_parliamentary_questions.parl_q_router)
+router.include_router(_ep_emeeting.router)

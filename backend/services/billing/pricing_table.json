@@ -92,6 +92,12 @@
       "_doc": "Detail endpoints for the 5 Eurogroup surfaces return the full stored body. List endpoints fall to _default. Matches both v1 and v2."
     },
     {
+      "regex": "^/api/v[12]/(?:parliament/)?emeeting/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full EP eMeeting agenda + document tree)",
+      "_doc": "Detail endpoint returns the full item/document tree (all document PDF URLs). List endpoint falls to _default. Matches both v1 and v2."
+    },
+    {
       "regex": "^/api/v1/chat/.*$",
       "cost_micro": 20000,
       "label": "chat completion (passes through Claude Sonnet cost)"

@@ -25,7 +25,7 @@ OUT = pathlib.Path("api/v2/parliament")
 EP_SEGMENTS = (
     "meps", "amendments", "votes", "ep-documents", "reports", "opinions",
     "committees", "texts-adopted", "texts-submitted", "resolutions", "eprs",
-    "webstreams", "parliamentary-questions",
+    "webstreams", "parliamentary-questions", "emeeting",
 )
 _URL_RE = re.compile(r"/api/v1/(" + "|".join(EP_SEGMENTS) + r")\b")
 
@@ -78,6 +78,10 @@ SPEC = {
         ("parl_q_router", "parl_q_router", "/parliamentary-questions", "v2-parliament-parliamentary-questions",
          ["list_parliamentary_questions", "get_parl_question_detail"]),
     ],
+    "ep_emeeting": [
+        ("router", "router", "/emeeting", "v2-parliament-emeeting",
+         ["list_emeeting_agendas", "get_emeeting_agenda"]),
+    ],
 }
 
 # output filename per v1 module (mirror v1 names; w4 -> parliamentary_questions)
@@ -90,6 +94,7 @@ OUT_NAME = {
     "eprs": "eprs",
     "webstreams": "webstreams",
     "w4_endpoints": "parliamentary_questions",
+    "ep_emeeting": "ep_emeeting",
 }
 
 PREAMBLE = '''"""European Parliament domain — {paths}.

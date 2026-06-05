@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n125 requests across 7 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n127 requests across 7 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -3429,6 +3429,120 @@
                   ]
                 },
                 "description": "**What it does**\nFetches a single parliamentary question by its reference. Returns the same shape as the list endpoint, including the original question text, the official answer when published, and the citizen URL on doceo.\n\n**When to use it**\nAfter locating a question via the list endpoint, use this to get the full text + answer in a deeper-link context (e.g. embedding in a chat response). Common pattern: `q` search \u2192 pick a reference \u2192 fetch detail.\n\n**Input**\n- `question_reference` (path) \u2014 e.g. `E-001234/2026` for a written question or `O-000123/2026` for an oral question. Format: `<TYPE>-<NUMBER>/<YEAR>` where TYPE \u2208 {E, O, P, QT}.\n\n**Try it**\n```\nGET /api/v2/parliament/parliamentary-questions/E-001234/2026\n```\n\n**You get back**\nA single `ParliamentaryQuestionItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found` if no question with that reference exists in our mirror.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from europarl.europa.eu. If a question exists on doceo but not in our DB, it means it hasn't been picked up by the latest sync yet (max ~24h lag)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "eMeeting",
+          "item": [
+            {
+              "name": "EP eMeeting \u2014 committee meeting agendas and their documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/emeeting",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "emeeting"
+                  ],
+                  "query": [
+                    {
+                      "key": "committee",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "procedure_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns European Parliament committee meeting agendas from eMeeting \u2014 one item per committee OJ (agenda). Each agenda carries its full item/document tree in `items`: every agenda item with its OEIL procedure reference, rapporteur(s), and the attached documents (draft reports, amendments, voting lists, compromise amendments) \u2014 each document with a direct multi-language PDF URL on the europarl meetdocs store.\n\n**When to use it**\nTo pull the actual working documents for a committee file the moment they are tabled \u2014 the richest source of draft reports and amendments, keyed by the OEIL procedure reference so it joins straight to a tracked legislative file.\n\n**Input**\n- `committee` \u2014 committee code (AFCO, ENVI, IMCO, LIBE, ...).\n- `procedure_ref` \u2014 an OEIL procedure reference (e.g. `2026/2013(INI)`); returns agendas whose items touch that file.\n- `q` \u2014 substring search over title / body / OJ reference.\n- `published_from`, `published_to` \u2014 bound on the meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/parliament/emeeting?committee=AFCO\nGET /api/v2/parliament/emeeting?procedure_ref=2026/2013(INI)\n```\n\n**You get back**\nA `PaginatedResponse[EmeetingAgendaItem]` envelope. Each agenda carries `procedure_refs`, `rapporteurs`, `document_count`, `agenda_pdf_url`, the full `items` tree (document PDF URLs live at `items[].document_sets[].documents[].pdf_url`), and the five envelope datapoints (`public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`).\n\n**Data freshness**\nSynced from the eMeeting open JSON API (no scraping). Bodies are composed at ingest time, so the API never calls eMeeting on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One EP eMeeting agenda by id \u2014 full item/document tree",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/parliament/emeeting/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "parliament",
+                    "emeeting",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nFetches a single EP committee agenda by its Brubru UUID, with the complete item/document tree: every agenda item, its OEIL procedure reference and rapporteur(s), and all attached documents with their multi-language PDF URLs.\n\n**When to use it**\nAfter locating an agenda via the list endpoint, to pull every document URL (draft reports, amendments, voting lists, compromise amendments) for that committee meeting.\n\n**Input**\n- `item_id` (path) \u2014 the Brubru-internal UUID from the list endpoint's `id`.\n\n**Try it**\n```\nGET /api/v2/parliament/emeeting/{item_id}\n```\n\n**You get back**\nA single `EmeetingAgendaItem` with the five datapoints filled and the full `items` tree, or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSynced from the eMeeting open JSON API."
               },
               "response": []
             }
