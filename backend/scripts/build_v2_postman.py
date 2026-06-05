@@ -185,6 +185,14 @@ _FUNDING_ROUTING = [
 _FUNDING_SOURCE_ORDER = ["Funding Opportunities", "Calls for Proposals", "Calls for Tenders",
                          "Funded Projects", "TED Tenders"]
 
+# Open Data: (path-tail prefix, source folder).
+_OPENDATA_ROUTING = [
+    ("datasets", "Datasets"),
+    ("high-value-datasets", "High-Value Datasets"),
+    ("catalogues", "Catalogues"),
+]
+_OPENDATA_SOURCE_ORDER = ["Datasets", "High-Value Datasets", "Catalogues"]
+
 _PARAM_DEFAULTS = {
     "celex": "32016R0679", "ref": "32016R0679", "reference": "2022/0047(COD)",
     "concept_id": "3030", "table": "corporate-bodies", "summary_id": "32016R0679",
@@ -267,6 +275,13 @@ def _funding_route(tail: str) -> str:
         if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
             return source
     return "Funding Opportunities"
+
+
+def _opendata_route(tail: str) -> str:
+    for needle, source in _OPENDATA_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Datasets"
 
 
 def _clean_path(path: str) -> str:
@@ -466,6 +481,21 @@ def _build_funding_domain(paths: dict) -> dict:
     return {"name": "Funding & Tenders", "item": sources}
 
 
+def _build_open_data_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/open-data/" not in path:
+            continue
+        tail = path.split("/api/v2/open-data/", 1)[1]
+        source = _opendata_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _OPENDATA_SOURCE_ORDER if s in tree]
+    return {"name": "Open Data", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -483,6 +513,7 @@ def build_collection() -> dict:
         _build_european_council_domain(paths),
         _build_eurogroup_domain(paths),
         _build_funding_domain(paths),
+        _build_open_data_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)

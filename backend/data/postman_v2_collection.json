@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n143 requests across 8 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n148 requests across 9 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -7758,6 +7758,303 @@
                   ]
                 },
                 "description": "**What it does**\nFetches a single TED tender by its Brubru-internal integer id. Returns the same shape as the list endpoint, including CPV codes + lot details + the TED URL for the official notice.\n\n**When to use it**\nAfter locating a tender via the list endpoint, use this to fetch the full record (with description + all CPV codes) for embedding in a bid-tracker UI.\n\n**Input**\n- `tender_id` (path) \u2014 Brubru integer id (returned in `id` from the list endpoint).\n\n**Try it**\n```\nGET /api/v2/funding/tenders/12345\n```\n\n**You get back**\nA single `TenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from ted.europa.eu."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Open Data",
+      "item": [
+        {
+          "name": "Datasets",
+          "item": [
+            {
+              "name": "EU open datasets \u2014 search data.europa.eu (with direct download links)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/open-data/datasets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "open-data",
+                    "datasets"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "publisher",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "theme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "format",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "catalogue",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "hvd",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nSearches the European Union open-data portal (data.europa.eu) \u2014 datasets published by EU institutions and member states, each with its publisher, catalogue, themes, formats, the High-Value-Dataset flag, and direct distribution download URLs.\n\n**When to use it**\nTo find and pull EU open data on any policy topic \u2014 the single biggest EU open-data catalogue (1.9M+ datasets), with machine-readable download links per dataset.\n\n**Input**\n- `q` \u2014 full-text search over title / description / keywords.\n- `publisher` \u2014 substring match on the publisher.\n- `theme` \u2014 DCAT theme / category.\n- `country` \u2014 ISO country code of the publishing portal (e.g. `de`, `fr`).\n- `format` \u2014 distribution format (CSV, JSON, XML, ...).\n- `catalogue` \u2014 catalogue id.\n- `hvd` \u2014 true = only High-Value Datasets.\n- `published_from`, `published_to` \u2014 bound on the last-modified date.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/open-data/datasets?q=air+quality&format=CSV\n```\n\n**You get back**\nA `PaginatedResponse[OpenDataDatasetItem]`; each item carries `distributions` (download URLs), `formats`, `is_hvd`, `publisher`, `catalogue`, `themes`. The five envelope datapoints are filled: `public_url` (the data.europa.eu page), `body_txt`/`body_html` (metadata + download links), `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from the data.europa.eu open JSON API (no scraping). Bodies are composed at ingest, so the API never calls data.europa.eu on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One EU open dataset by id \u2014 full metadata + download links",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/open-data/datasets/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "open-data",
+                    "datasets",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single data.europa.eu dataset by its Brubru UUID, with the full DCAT metadata and all distribution download URLs. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "High-Value Datasets",
+          "item": [
+            {
+              "name": "EU High-Value Datasets (Open Data Directive)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/open-data/high-value-datasets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "open-data",
+                    "high-value-datasets"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "publisher",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "theme",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "country",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "format",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "catalogue",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the High-Value Datasets \u2014 the category the EU Open Data Directive designates as having high reuse potential (geospatial, earth observation/environment, meteorological, statistics, companies, mobility) \u2014 a filtered view of the open-data catalogue.\n\n**When to use it**\nTo find the EU datasets the law itself flags as the most valuable to reuse, with their download links.\n\n**Input**\n- `q`, `publisher`, `theme`, `country`, `format`, `catalogue` \u2014 same as the datasets endpoint.\n- `published_from`, `published_to`.\n- `limit` (default 25, max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/open-data/high-value-datasets?theme=geospatial\n```\n\n**You get back**\nA `PaginatedResponse[OpenDataDatasetItem]` of High-Value Datasets (all `is_hvd=true`). The five envelope datapoints are filled: `public_url` (the data.europa.eu page), `body_txt`/`body_html` (metadata + download links), `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from the data.europa.eu open JSON API (no scraping). Bodies are composed at ingest, so the API never calls data.europa.eu on the request path."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Catalogues",
+          "item": [
+            {
+              "name": "EU open-data catalogues \u2014 the data.europa.eu catalogue directory",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/open-data/catalogues",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "open-data",
+                    "catalogues"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the data catalogues federated by data.europa.eu \u2014 the ~90 EU institution and member-state open-data catalogues (including the EU Legal Data Space ELDS and the Public Procurement Data Space PPDS).\n\n**When to use it**\nAs a reference list of the data sources data.europa.eu aggregates, to scope a dataset search by `catalogue`.\n\n**Input**\n- `q` \u2014 substring match on the catalogue id / title.\n- `limit` (default 50, max 100), `page`.\n\n**Try it**\n```\nGET /api/v2/open-data/catalogues?q=eurostat\n```\n\n**You get back**\nA `PaginatedResponse[OpenDataCatalogueItem]`. The five envelope datapoints are filled: `public_url` (the data.europa.eu page), `body_txt`/`body_html` (metadata + download links), `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from the data.europa.eu open JSON API (no scraping). Bodies are composed at ingest, so the API never calls data.europa.eu on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One EU open-data catalogue by id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/open-data/catalogues/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "open-data",
+                    "catalogues",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single data.europa.eu catalogue by its Brubru UUID. 404 with `reason_code: not_found` if absent."
               },
               "response": []
             }

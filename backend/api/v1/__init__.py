@@ -23,6 +23,7 @@ from . import council_register as _council_register
 from . import european_council as _european_council
 from . import eurogroup as _eurogroup
 from . import ep_emeeting as _ep_emeeting
+from . import open_data as _open_data
 from . import docs as _docs
 from . import ep_entities as _ep_entities
 from . import eprs as _eprs
@@ -105,6 +106,9 @@ router.include_router(_eurogroup.members_router)
 router.include_router(_eurogroup.about_router)
 router.include_router(_ep_emeeting.router)
 router.include_router(_ep_emeeting.documents_router)
+router.include_router(_open_data.datasets_router)
+router.include_router(_open_data.hvd_router)
+router.include_router(_open_data.catalogues_router)
 router.include_router(_metadata.router)
 router.include_router(_metadata.meta_router)
 router.include_router(_ep_entities.amendments_router)
