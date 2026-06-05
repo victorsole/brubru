@@ -1,4 +1,4 @@
-"""European Parliament domain — /api/v2/parliament/emeeting/*.
+"""European Parliament domain — /api/v2/parliament/emeeting/* and /api/v2/parliament/emeeting-documents/*.
 
 LIVE — copy-pasted verbatim from the v1 EP surface (api.v1.ep_emeeting); the body
 delegates to the v1 handler so there is exactly one implementation during the
@@ -25,6 +25,8 @@ from api.v1.ep_emeeting import *  # noqa: F401,F403 - reproduce v1's exact names
 
 
 router = APIRouter(prefix="/emeeting", tags=["v2-parliament-emeeting"])
+
+documents_router = APIRouter(prefix="/emeeting-documents", tags=["v2-parliament-emeeting-documents"])
 
 
 @router.get(
@@ -104,3 +106,85 @@ async def get_emeeting_agenda(
     db: Session = Depends(get_db),
 ) -> EmeetingAgendaItem:
     return await _v1.get_emeeting_agenda(item_id=item_id, user=user, db=db)
+
+
+@documents_router.get(
+    "",
+    response_model=PaginatedResponse[EmeetingDocumentItem],
+    summary="EP eMeeting documents — every committee document with all-language PDF URLs",
+    description="""**What it does**
+Returns individual European Parliament committee documents from eMeeting — one item per document (draft reports, amendments, voting lists, compromise amendments, reports, opinions, agendas, minutes). Each carries the document type (`gepro_code`), the PE-number, the OEIL procedure reference, the rapporteur(s), and **every language PDF URL** (`pdf_urls` — up to ~24 languages) on the un-walled europarl meetdocs store.
+
+**When to use it**
+This is the document-level feed (far more rows than the agenda-level `/emeeting`). Use it to pull, say, every draft report (`gepro_code=PR`) or every amendment (`AM`) for a procedure, or all documents for a committee in a date range, with direct PDF links in any EU language.
+
+**Input**
+- `committee` — committee code (AFCO, ENVI, ...).
+- `doc_kind` — the document category most people want: `draft_report`, `amendment`, `voting_list`, `compromise_amendments`, `agenda`, `minutes`, `report`, `opinion`, `adopted_text`, `miscellaneous`. (Voting lists and compromise amendments both come from the raw `DV` code and are split here by the document filename.)
+- `gepro_code` — the raw eMeeting code if you prefer: `PR`, `AM`, `DV`, `RR`, `AD`, `OJ`, `PV`.
+- `procedure_ref` — OEIL procedure reference (e.g. `2026/2013(INI)`).
+- `q` — substring search over title / reference.
+- `published_from`, `published_to` — bound on the meeting date.
+- `updated_from`, `updated_to` — incremental sync on ingest time.
+- `limit` (default 25, max 100), `page` (1-indexed).
+
+**Try it**
+```
+GET /api/v2/parliament/emeeting-documents?doc_kind=draft_report&committee=AFCO
+GET /api/v2/parliament/emeeting-documents?doc_kind=voting_list
+GET /api/v2/parliament/emeeting-documents?doc_kind=compromise_amendments
+GET /api/v2/parliament/emeeting-documents?procedure_ref=2026/2013(INI)
+```
+
+**You get back**
+A `PaginatedResponse[EmeetingDocumentItem]`. Each document carries `pdf_urls` (every language → URL), `reference`, `gepro_code`, `procedure_ref`, `rapporteurs`, and the five envelope datapoints (`public_url` = the EN PDF).
+
+**Data freshness**
+Synced from the eMeeting open JSON API. No scraping; bodies composed at ingest.""",
+)
+async def list_emeeting_documents(
+    request: Request,
+    committee: Optional[str] = Query(None),
+    doc_kind: Optional[str] = Query(None, description="Normalised kind: draft_report | amendment | voting_list | compromise_amendments | agenda | minutes | report | opinion | adopted_text | miscellaneous."),
+    gepro_code: Optional[str] = Query(None, description="Raw code: PR | AM | DV | RR | AD | OJ | PV"),
+    procedure_ref: Optional[str] = Query(None),
+    q: Optional[str] = Query(None),
+    published_from: Optional[date] = Query(None),
+    published_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[datetime] = Query(None),
+    limit: int = Query(25, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PaginatedResponse[EmeetingDocumentItem]:
+    return await _v1.list_emeeting_documents(request=request, committee=committee, doc_kind=doc_kind, gepro_code=gepro_code, procedure_ref=procedure_ref, q=q, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
+
+
+@documents_router.get(
+    "/{item_id}",
+    response_model=EmeetingDocumentItem,
+    summary="One EP eMeeting document by id — all-language PDF URLs",
+    description="""**What it does**
+Fetches a single EP committee document by its Brubru UUID, with every language PDF URL and the full linking metadata (committee, meeting date, OEIL procedure ref, rapporteurs, dossier).
+
+**Input**
+- `item_id` (path) — the Brubru-internal UUID from the list endpoint's `id`.
+
+**Try it**
+```
+GET /api/v2/parliament/emeeting-documents/{item_id}
+```
+
+**You get back**
+A single `EmeetingDocumentItem` with the five datapoints and `pdf_urls` (all languages), or HTTP 404 with `reason_code: not_found`.
+
+**Data freshness**
+Synced from the eMeeting open JSON API.""",
+)
+async def get_emeeting_document(
+    item_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> EmeetingDocumentItem:
+    return await _v1.get_emeeting_document(item_id=item_id, user=user, db=db)

@@ -106,12 +106,13 @@ _PARL_ROUTING = [
     ("eprs", "EPRS"),
     ("webstreams", "Webstreams"),
     ("parliamentary-questions", "Parliamentary Questions"),
+    ("emeeting-documents", "eMeeting Documents"),
     ("emeeting", "eMeeting"),
 ]
 _PARL_SOURCE_ORDER = [
     "MEPs", "Amendments", "Votes", "EP Documents", "Reports", "Opinions",
     "Committees", "Texts Adopted", "Texts Submitted", "Resolutions", "EPRS",
-    "Webstreams", "Parliamentary Questions", "eMeeting",
+    "Webstreams", "Parliamentary Questions", "eMeeting", "eMeeting Documents",
 ]
 
 # Commission: (path-tail prefix, source folder). Flat — no sub-sub-folders.

@@ -40,6 +40,81 @@ _GROUP_RE = re.compile(r"\(([^)]+)\)\s*$")
 _OEIL_RE = re.compile(r"\b\d{4}/\d{3,4}\([A-Z]{2,4}\)")
 
 
+# Derived document kind — normalises the geproCode taxonomy into the categories
+# people actually ask for. PR/AM/RR/AD/OJ/PV are clean codes; DV ("Miscellaneous")
+# is the catch-all where voting lists + compromise amendments live, told apart by
+# the reference/filename (the DV `reference` IS the descriptive filename).
+# Code fallback for opaque descriptions (verified against /plmrep/document-types
+# + live geproCodeDescription values).
+_BASE_KIND = {
+    "OJ": "agenda", "PR": "draft_report", "AM": "amendment", "VL": "voting_list",
+    "PV": "minutes", "AD": "opinion", "PA": "draft_opinion", "RR": "report",
+    "DT": "working_document", "NP": "reasoned_opinion", "TA_DEF": "adopted_text",
+    "TA_PROV": "adopted_text", "TA_A8": "adopted_text",
+    "COM": "commission_document", "SEC": "commission_document",
+    "SWD": "commission_document", "JOIN": "commission_document",
+}
+_VL_RE = re.compile(r"voting[ _]?list|\bvl[ _]|\bfinal vl\b|_voting_list\b", re.I)
+_CA_RE = re.compile(r"compromise amendment|\bca[s]?\b|_ca[s]?[_ .]|\bca[s]?_", re.I)
+
+
+def doc_kind(gepro_code: Optional[str], reference: Optional[str],
+             title: Optional[str], description: Optional[str] = None) -> str:
+    """Normalised document kind for filtering. Classifies from the authoritative
+    geproCodeDescription first, then DV-filename heuristic, then code fallback."""
+    code = (gepro_code or "").upper()
+    # DV ("Miscellaneous") = catch-all; split voting lists vs compromise amendments
+    # by the document's own filename (the DV reference IS the filename).
+    if code == "DV":
+        blob = f"{reference or ''} {title or ''}"
+        if _VL_RE.search(blob):
+            return "voting_list"
+        if _CA_RE.search(blob):
+            return "compromise_amendments"
+        return "miscellaneous"
+    desc = (description or "").lower()
+    if desc:
+        if "voting list" in desc:
+            return "voting_list"
+        if "compromise" in desc:
+            return "compromise_amendments"
+        if "draft report" in desc or "draft recommendation" in desc:
+            return "draft_report"
+        if "draft opinion" in desc:
+            return "draft_opinion"
+        if "reasoned opinion" in desc:
+            return "reasoned_opinion"
+        if "opinion" in desc:
+            return "opinion"
+        if "minutes" in desc:
+            return "minutes"
+        if "agenda" in desc:
+            return "agenda"
+        if "amendment" in desc:
+            return "amendment"
+        if "working document" in desc:
+            return "working_document"
+        if "draft motion for a resolution" in desc:
+            return "draft_resolution"
+        if "report" in desc or "recommendation" in desc:
+            return "report"
+        if "notice to members" in desc:
+            return "notice_to_members"
+        if "text agreed" in desc or "interinstitutional negotiation" in desc:
+            return "agreed_text"
+        if "letter confirming agreement" in desc or "letter of agreement" in desc:
+            return "letter_of_agreement"
+        if "presentation" in desc:
+            return "presentation"
+        if "oral question" in desc:
+            return "oral_question"
+        if "written question" in desc:
+            return "written_question"
+    if code in _BASE_KIND:
+        return _BASE_KIND[code]
+    return code.lower() or "other"
+
+
 def _clean_procedure_ref(raw: str) -> Optional[str]:
     """eMeeting packs OEIL ref + adopted-text + Council doc into one tab-separated
     string. Return the clean OEIL ref (the MEUB anchor); fall back to first token."""
@@ -114,6 +189,17 @@ def _en_pdf(document_links) -> tuple:
     return None, []
 
 
+def _all_pdfs(document_links) -> tuple:
+    """Return ({LANG: url} for every language, [lang_codes]) across all links."""
+    urls = {}
+    for link in document_links or []:
+        for l in link.get("languages") or []:
+            code = (l.get("code") or "").upper()
+            if code and l.get("url") and code not in urls:
+                urls[code] = l.get("url")
+    return urls, list(urls.keys())
+
+
 def _parse_actor(actor: dict) -> Optional[dict]:
     """{'name': 'Rapporteur:\\tLoránt Vincze (PPE)', 'codictPersonId': 98582, ...}."""
     raw = (actor.get("name") or "").replace("\t", " ").strip()
@@ -143,13 +229,16 @@ def _normalise_item(it: dict) -> dict:
         docs = []
         for d in s.get("documents") or []:
             url, codes = _en_pdf(d.get("documentLinks"))
+            all_urls, all_codes = _all_pdfs(d.get("documentLinks"))
             docs.append({
                 "gepro_code": d.get("geproCode"),
                 "description": d.get("geproCodeDescription"),
                 "reference": d.get("reference"),
+                "visual_reference": d.get("visualReference"),
                 "title": (d.get("title") or "").strip() or None,
                 "pdf_url": url,
-                "languages": codes,
+                "pdf_urls": all_urls,
+                "languages": all_codes or codes,
             })
         sets.append({"type": s.get("type"), "rapporteurs": rapporteurs, "documents": docs})
     return {
@@ -241,6 +330,122 @@ def normalise_oj(stub: dict, raw: dict, committee_code: str, committee_name: Opt
         "event_reference": stub.get("eventReference"),
         "source_url": f"{BASE}/OJ/oj?reference={oj_reference}",
     }
+
+
+def _compose_doc_body(doc: dict) -> tuple:
+    label = f"{doc['gepro_description'] or doc['gepro_code']}"
+    lines = [f"{label}: {doc['title'] or doc['reference'] or ''}".strip()]
+    meta = [
+        ("Type", f"{doc['gepro_description']} ({doc['gepro_code']})" if doc.get("gepro_description") else doc.get("gepro_code")),
+        ("Reference", doc.get("reference")),
+        ("Committee", f"{doc.get('committee_name') or ''} ({doc.get('committee_code')})".strip()),
+        ("Meeting date", doc["meeting_date"].isoformat() if doc.get("meeting_date") else None),
+        ("Procedure", doc.get("procedure_ref")),
+        ("Rapporteur(s)", ", ".join(doc.get("rapporteurs") or []) or None),
+        ("Agenda item", doc.get("item_title")),
+    ]
+    for k, v in meta:
+        if v:
+            lines.append(f"{k}: {v}")
+    if doc.get("pdf_url"):
+        lines.append(f"PDF (EN): {doc['pdf_url']}")
+    if doc.get("languages"):
+        lines.append(f"Available languages: {', '.join(doc['languages'])}")
+    txt = "\n".join(lines)
+    li = "".join(f"<li><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</li>" for k, v in meta if v)
+    pdf_lis = "".join(
+        f'<li>{_html.escape(lang)}: <a href="{_html.escape(url)}">PDF</a></li>'
+        for lang, url in (doc.get("pdf_urls") or {}).items())
+    html = (f"<article><h2>{_html.escape(lines[0])}</h2><ul>{li}</ul>"
+            + (f"<h3>Document PDFs ({len(doc.get('pdf_urls') or {})} languages)</h3><ul>{pdf_lis}</ul>" if pdf_lis else "")
+            + "</article>")
+    return txt, html
+
+
+def documents_from_agenda(agenda: dict) -> list:
+    """Flatten a normalised agenda into one row per attached document (all
+    languages). Each carries the agenda's linking anchors."""
+    out = []
+    seen = set()
+    oj = agenda.get("oj_reference")
+    base = {
+        "committee_code": agenda.get("committee_code"),
+        "committee_name": agenda.get("committee_name"),
+        "meeting_date": agenda.get("meeting_date"),
+        "oj_reference": oj,
+    }
+    for it in agenda.get("items") or []:
+        item_title = it.get("title")
+        dossier = it.get("dossier_reference")
+        proc = it.get("procedure_ref")
+        for s in it.get("document_sets") or []:
+            set_type = s.get("type")
+            raps = [f"{r['name']} ({r['group']})" if r.get("group") else r["name"]
+                    for r in s.get("rapporteurs") or []]
+            for d in s.get("documents") or []:
+                vref = d.get("visual_reference") or f"{d.get('gepro_code')}:{d.get('reference')}"
+                key = f"{oj}::{vref}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                row = dict(base)
+                row.update({
+                    "document_key": key,
+                    "gepro_code": d.get("gepro_code"),
+                    "gepro_description": d.get("description"),
+                    "doc_kind": doc_kind(d.get("gepro_code"), d.get("reference"), d.get("title") or item_title, d.get("description")),
+                    "reference": d.get("reference"),
+                    "visual_reference": d.get("visual_reference"),
+                    "title": d.get("title") or item_title,
+                    "dossier_reference": dossier,
+                    "procedure_ref": proc,
+                    "item_title": item_title,
+                    "document_set_type": set_type,
+                    "rapporteurs": raps,
+                    "pdf_url": d.get("pdf_url"),
+                    "pdf_urls": d.get("pdf_urls") or {},
+                    "languages": d.get("languages") or [],
+                    "source_url": f"{BASE}/OJ/oj?reference={oj}",
+                })
+                row["body_txt"], row["body_html"] = _compose_doc_body(row)
+                out.append(row)
+    return out
+
+
+def committee_index(committees: Optional[list] = None) -> list:
+    """Return [(code, name)] for the requested committees (all 26 by default)."""
+    with _client() as c:
+        coms = list_committees(c)
+    if committees:
+        want = {x.upper() for x in committees}
+        coms = [x for x in coms if x.get("code") in want]
+    return [(x.get("code"), x.get("name")) for x in coms]
+
+
+def fetch_committee(code: str, name: Optional[str], per_committee: int,
+                    name_by_code: Optional[dict] = None) -> list:
+    """Fetch + normalise the most recent `per_committee` agendas for ONE committee.
+    Lets the caller write/commit per committee so a long run streams to the DB."""
+    out = []
+    name_by_code = name_by_code or {}
+    with _client() as c:
+        try:
+            stubs = agenda_archive(c, code)[:per_committee]
+        except Exception as exc:
+            logger.warning("[emeeting] %s archive error: %s", code, exc)
+            return out
+        for stub in stubs:
+            ref = stub.get("ojReference")
+            if not ref:
+                continue
+            raw = get_oj(c, ref)
+            if not raw:
+                continue
+            import re as _re
+            prefix = _re.match(r"^([A-Z]+)\(", ref)
+            row_code = prefix.group(1) if prefix else code
+            out.append(normalise_oj(stub, raw, row_code, name_by_code.get(row_code, name)))
+    return out
 
 
 def fetch_agendas(per_committee: int = 6, committees: Optional[list] = None) -> list:

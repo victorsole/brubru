@@ -25,7 +25,7 @@ OUT = pathlib.Path("api/v2/parliament")
 EP_SEGMENTS = (
     "meps", "amendments", "votes", "ep-documents", "reports", "opinions",
     "committees", "texts-adopted", "texts-submitted", "resolutions", "eprs",
-    "webstreams", "parliamentary-questions", "emeeting",
+    "webstreams", "parliamentary-questions", "emeeting-documents", "emeeting",
 )
 _URL_RE = re.compile(r"/api/v1/(" + "|".join(EP_SEGMENTS) + r")\b")
 
@@ -81,6 +81,8 @@ SPEC = {
     "ep_emeeting": [
         ("router", "router", "/emeeting", "v2-parliament-emeeting",
          ["list_emeeting_agendas", "get_emeeting_agenda"]),
+        ("documents_router", "documents_router", "/emeeting-documents", "v2-parliament-emeeting-documents",
+         ["list_emeeting_documents", "get_emeeting_document"]),
     ],
 }
 

@@ -156,6 +156,7 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/parliament/webstreams(/|$)"),             "read:calendar"),
     (re.compile(r"^/api/v2/parliament/eprs(/|$)"),                   "read:knowledge"),
     (re.compile(r"^/api/v2/parliament/emeeting(/|$)"),               "read:ep"),
+    (re.compile(r"^/api/v2/parliament/emeeting-documents(/|$)"),      "read:ep"),
 
     # --- API v2: institution-based "European Commission" domain -----------
     # Same scope mapping as the v1 Commission surface (read:commission, with
@@ -226,6 +227,7 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v1/committee-transcripts(/|$)"),        "read:ep"),
     (re.compile(r"^/api/v1/committee-agendas(/|$)"),            "read:ep"),
     (re.compile(r"^/api/v1/emeeting(/|$)"),                     "read:ep"),
+    (re.compile(r"^/api/v1/emeeting-documents(/|$)"),           "read:ep"),
     (re.compile(r"^/api/v1/amendments(/|$)"),                   "read:ep"),
     (re.compile(r"^/api/v1/ep-documents(/|$)"),                 "read:ep"),
     (re.compile(r"^/api/v1/reports(/|$)"),                      "read:ep"),
