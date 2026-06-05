@@ -1,5 +1,5 @@
 // frontend/src/components/chat/chat_interface.tsx
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -24,14 +24,7 @@ export interface Citation {
 }
 
 export interface ChatAction {
-  action_type:
-    | 'track_file'
-    | 'generate_document'
-    | 'open_document'
-    | 'open_amendator'
-    | 'view_prediction'
-    | 'view_calendar'
-    | 'open_tenderator';
+  action_type: 'track_file' | 'generate_document' | 'open_amendator' | 'view_prediction' | 'view_calendar' | 'open_tenderator';
   label: string;
   icon: string;
   colour: string;
@@ -42,13 +35,12 @@ export interface ChatAction {
 }
 
 export interface DraftedDocument {
-  document_id: string;
+  document_id?: string;
   document_subtype: string;
   title: string;
-  content: string;
   preview: string;
-  edit_url: string;
   word_count: number;
+  edit_url: string;
 }
 
 export interface Message {
@@ -61,8 +53,8 @@ export interface Message {
   searchTimeMs?: number;
   contextsUsed?: number;
   actions?: ChatAction[];
-  draftedDocument?: DraftedDocument;
   isStreaming?: boolean;
+  draftedDocument?: DraftedDocument;
 }
 
 interface ChatInterfaceProps {
@@ -128,6 +120,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   // Read ?q= param directly from URL as well as initialQuestion prop
   const urlQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') : null;
   const urlAutofire = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('autofire') : null;
+  // `?context=policy_interests` (from the Policy Interests "Talk to Brubru" button)
+  // routes this session to the lightweight taxonomy-mapping flow + chip suggestions.
+  const urlNavContext = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('context') : null;
   const [inputValue, setInputValue] = useState(initialQuestion || urlQuery || '');
   const autofirePendingRef = useRef<boolean>(urlAutofire === '1' && !!(initialQuestion || urlQuery));
   const [isLoading, setIsLoading] = useState(false);
@@ -142,12 +137,66 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const [preUserQueryCount, setPreUserQueryCount] = useState<number>(getPreUserQueryCount());
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const { isAuthenticated, user, token } = useAuth();
+  const { isAuthenticated, user, token, updateProfile } = useAuth();
   const navigate = useNavigate();
 
   // API base URL - configure this in your environment
   const API_BASE_URL = import.meta.env?.VITE_API_URL || (window as any).REACT_APP_API_URL || 'http://localhost:8000';
-  
+
+  // --- Policy-interest navigation: "+ Add to my interests" chips ---------
+  // When entered from the Policy Interests tab (?context=policy_interests),
+  // we fetch the canonical taxonomy, detect which leaf names the assistant
+  // proposed, and offer one-click chips that write them to the profile.
+  const isPolicyNav = urlNavContext === 'policy_interests';
+  const [piTaxoNames, setPiTaxoNames] = useState<string[]>([]);
+  const [piAdded, setPiAdded] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!isPolicyNav) return;
+    fetch(`${API_BASE_URL}/api/policy-taxonomy`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d?.categories)) {
+          setPiTaxoNames(d.categories.flatMap((c: any) => (c.policy_areas || []).map((p: any) => p.name)));
+        }
+      })
+      .catch(() => { /* chips simply won't render */ });
+  }, [isPolicyNav, API_BASE_URL]);
+
+  const parseInterests = (v: any): string[] => {
+    try {
+      const a = typeof v === 'string' ? JSON.parse(v) : v;
+      return Array.isArray(a) ? a : [];
+    } catch {
+      return [];
+    }
+  };
+
+  // Canonical leaves the assistant named in its latest reply, minus ones the
+  // user already follows or just added (exact whole-name, case-insensitive).
+  const piSuggestions = useMemo(() => {
+    if (!isPolicyNav || piTaxoNames.length === 0) return [] as string[];
+    const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
+    if (!lastAssistant) return [] as string[];
+    const haystack = lastAssistant.content.toLowerCase();
+    const current = parseInterests(user?.policy_interests);
+    return piTaxoNames.filter(
+      (n) => haystack.includes(n.toLowerCase()) && !current.includes(n) && !piAdded.includes(n),
+    );
+  }, [isPolicyNav, piTaxoNames, messages, piAdded, user]);
+
+  const addInterest = async (name: string) => {
+    const current = parseInterests(user?.policy_interests);
+    if (!current.includes(name)) {
+      try {
+        await updateProfile({ policy_interests: JSON.stringify([...current, name]) });
+      } catch {
+        return; // leave the chip in place so the user can retry
+      }
+    }
+    setPiAdded((prev) => (prev.includes(name) ? prev : [...prev, name]));
+  };
+
   // Admin-managed example prompts
   interface ExamplePrompt { id: string; text: string }
   const [examplePrompts, setExamplePrompts] = useState<ExamplePrompt[] | null>(null);
@@ -281,7 +330,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
 
     const loadConversation = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/chat/history/${activeChatId}`);
+        // Auth: JWT for signed-in users, pre_user_id for anonymous sessions.
+        // Backend enforces ownership and returns 404 on any mismatch.
+        const historyUrl = isAuthenticated
+          ? `${API_BASE_URL}/api/chat/history/${activeChatId}`
+          : `${API_BASE_URL}/api/chat/history/${activeChatId}?pre_user_id=${encodeURIComponent(getPreUserId())}`;
+        const response = await fetch(historyUrl, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (!response.ok) throw new Error('Failed to load conversation');
         const data = await response.json();
 
@@ -356,6 +412,8 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         body: JSON.stringify({
           message: currentInput,
           chat_id: chatId,
+          // user_id is now derived from the JWT by the backend; this body
+          // field is retained for back-compat but is ignored server-side.
           user_id: user?.id || null,
           pre_user_id: !isAuthenticated ? getPreUserId() : null,
           document_ids: documentIds.length > 0 ? documentIds : null,
@@ -399,17 +457,6 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         searchTimeMs: data.search_time_ms,
         contextsUsed: data.citations?.length || 0,
         actions: data.actions || [],
-        draftedDocument: data.drafted_document
-          ? {
-              document_id: data.drafted_document.document_id,
-              document_subtype: data.drafted_document.document_subtype,
-              title: data.drafted_document.title,
-              content: data.drafted_document.content,
-              preview: data.drafted_document.preview,
-              edit_url: data.drafted_document.edit_url,
-              word_count: data.drafted_document.word_count,
-            }
-          : undefined,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
@@ -494,10 +541,13 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         body: JSON.stringify({
           message: currentInput,
           chat_id: chatId,
+          // user_id is now derived from the JWT by the backend; this body
+          // field is retained for back-compat but is ignored server-side.
           user_id: user?.id || null,
           pre_user_id: !isAuthenticated ? getPreUserId() : null,
           document_ids: documentIds.length > 0 ? documentIds : null,
           use_context: useContext,
+          nav_context: urlNavContext || null,
         }),
         signal: abortControllerRef.current.signal,
       });
@@ -697,26 +747,15 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         }
         break;
       }
-      case 'generate_document': {
-        // The action carries an already-formed route to /my-eu-bubble; honour
-        // it when present so the Documents tab can pop the wizard.
-        const params = new URLSearchParams({
-          tab: 'documents',
-          openWizard: '1',
+      case 'generate_document':
+        navigate('/main', {
+          state: {
+            openDocGenerator: true,
+            docType: action.params.document_type,
+            topic: action.params.topic,
+          },
         });
-        if (action.params.document_type) params.set('docType', String(action.params.document_type));
-        if (action.params.topic) params.set('topic', String(action.params.topic));
-        navigate(action.route || `/my-eu-bubble?${params.toString()}`);
         break;
-      }
-      case 'open_document': {
-        // Chat auto-drafted a document; route the user to that exact row in
-        // the Documents tab so they can edit it.
-        const docId = action.params.document_id;
-        const route = action.route || `/my-eu-bubble?tab=documents&docId=${docId}`;
-        navigate(route);
-        break;
-      }
       case 'open_amendator':
       case 'view_prediction':
       case 'view_calendar':
@@ -831,6 +870,42 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             }}
             onActionClick={handleActionClick}
           />
+        )}
+
+        {/* Policy-interest chips: one-click "add to my interests" for the
+            canonical areas Brubru proposed (only in the PI navigation flow). */}
+        {isPolicyNav && (piSuggestions.length > 0 || piAdded.length > 0) && (
+          <div className="chat-interface__pi-chips">
+            {piSuggestions.length > 0 && (
+              <>
+                <span className="chat-interface__pi-chips-label">
+                  {t('chat.addToInterests', 'Add to your policy interests:')}
+                </span>
+                {piSuggestions.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    className="chat-interface__pi-chip"
+                    onClick={() => addInterest(name)}
+                  >
+                    + {name}
+                  </button>
+                ))}
+              </>
+            )}
+            {piAdded.length > 0 && (
+              <span className="chat-interface__pi-added">
+                {t('chat.interestsAdded', 'Added:')} {piAdded.join(', ')} ·{' '}
+                <button
+                  type="button"
+                  className="chat-interface__pi-open"
+                  onClick={() => navigate('/my-eu-bubble?tab=policy_interests')}
+                >
+                  {t('chat.openPolicyInterests', 'Open Policy Interests')}
+                </button>
+              </span>
+            )}
+          </div>
         )}
 
         {/* Email capture prompt after first assistant response */}

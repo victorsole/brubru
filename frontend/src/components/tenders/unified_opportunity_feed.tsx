@@ -40,6 +40,7 @@ interface UnifiedFeedProps {
   source: SourceFilter;
   matchSubSource?: MatchSubSource;
   initialQuery?: string;
+  programme?: string;
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
@@ -74,7 +75,7 @@ const formatDeadline = (iso: string | null): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', onSelectOpportunity }: UnifiedFeedProps) => {
+export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
   const [items, setItems] = useState<UnifiedOpportunity[]>([]);
   const [loading, setLoading] = useState(false);
@@ -111,6 +112,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         params.set('match_source', matchSubSource);
       }
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
+      if (programme) params.set('programme', programme);
       if (clientFilter) params.set('client_filter', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -132,7 +134,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, clientFilter]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, clientFilter]);
 
   useEffect(() => {
     setPage(1);

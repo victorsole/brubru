@@ -23,7 +23,7 @@ from datetime import date, datetime, timedelta
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import or_, func
+from sqlalchemy import or_, func, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -31,6 +31,7 @@ from models.user import User
 from models.w4_entities import ParliamentaryQuestion
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.pi_committee_crosswalk import keywords_for_interests
+from services.tracking.tracked_lens import tracked_anchors
 from .auth import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -147,10 +148,13 @@ def _clean_answer_text(raw: Optional[str]) -> Optional[str]:
     return "\n".join(merged).strip() or raw.strip()
 
 
-def _summary(r: ParliamentaryQuestion) -> dict:
+def _summary(r: ParliamentaryQuestion, tracked_procs: set = frozenset(),
+             tracked_celex: set = frozenset()) -> dict:
     answered = bool(r.text_answer and len(r.text_answer.strip()) > 10)
     return {
         "reference": r.question_reference,
+        "matches_tracked": bool((r.procedure_ref and r.procedure_ref in tracked_procs)
+                                or (set(r.related_celex or []) & tracked_celex)),
         "type": r.question_type.value if hasattr(r.question_type, "value") else r.question_type,
         "subject": r.subject,
         "submitted_date": r.submitted_date.isoformat() if r.submitted_date else None,
@@ -173,6 +177,7 @@ def _summary(r: ParliamentaryQuestion) -> dict:
 @router.get("")
 def list_questions(
     my_interests: bool = Query(True, description="Restrict to the user's Policy Interests"),
+    my_files: bool = Query(False, description="Restrict to questions touching files you track"),
     question_type: Optional[str] = Query(None, description="written|oral|priority|question_time"),
     answered: Optional[bool] = Query(None, description="Filter answered / awaiting answer"),
     search: Optional[str] = Query(None),
@@ -184,10 +189,24 @@ def list_questions(
 ):
     """PI-filtered list of parliamentary questions (the user's topics, newest first)."""
     _require_yellow(user)
+    tracked = tracked_anchors(db, str(user.id)) if user else {}
+    tracked_procs = tracked.get("procedures", set())
+    tracked_celex = tracked.get("celex", set())
     q = db.query(ParliamentaryQuestion)
     pi_active = False
     if my_interests:
         q, pi_active = _apply_pi(q, user)
+    if my_files and (tracked_procs or tracked_celex):
+        conds = []
+        if tracked_procs:
+            conds.append(ParliamentaryQuestion.procedure_ref.in_(list(tracked_procs)))
+        if tracked_celex:
+            cx = sorted(tracked_celex)
+            arr = ", ".join(f":rc_{i}" for i in range(len(cx)))
+            conds.append(text(f"related_celex && ARRAY[{arr}]::text[]")
+                         .bindparams(**{f"rc_{i}": c for i, c in enumerate(cx)}))
+        if conds:
+            q = q.filter(or_(*conds))
     if question_type:
         q = q.filter(ParliamentaryQuestion.question_type == question_type.lower())
     if answered is True:
@@ -204,7 +223,9 @@ def list_questions(
     q = q.order_by(ParliamentaryQuestion.submitted_date.desc().nullslast())
     rows = q.offset(offset).limit(limit).all()
     return {"total": total, "pi_active": pi_active,
-            "items": [_summary(r) for r in rows]}
+            "files_active": bool(my_files and (tracked_procs or tracked_celex)),
+            "has_tracked_files": bool(tracked_procs or tracked_celex),
+            "items": [_summary(r, tracked_procs, tracked_celex) for r in rows]}
 
 
 @router.get("/new-count")

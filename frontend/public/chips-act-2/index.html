@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chips Act 2.0 Explained: Europe's Second Semiconductor Push | Brubru</title>
+  <meta name="description" content="Article-by-article guide to the EU Chips Act 2.0 (COM(2026) 504, 2026/0139(COD)): three pillars, Chips for Europe Initiative 2.0, strategic projects, the advanced-manufacturing open foundry, crisis toolbox. Repeals Regulation (EU) 2023/1781. Adopted 3 June 2026. By Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+      --accent: #0693e3;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .lang-select { font-family: inherit; font-size: 0.8rem; font-weight: 600; color: var(--color-secondary); padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); cursor: pointer; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(6,147,227,0.1); color: var(--accent); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--accent); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-amber), var(--color-purple), var(--color-blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; transition: background-position 0s; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 760px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--accent); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--accent); color: white; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--accent); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+
+    .infobox { background: linear-gradient(135deg, rgba(6,147,227,0.08), rgba(217,119,6,0.08)); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem 1.75rem; margin: 1.25rem 0; }
+    .infobox__title { font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); }
+
+    .gc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+    .gc-card { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
+    .gc-card b { color: var(--accent); }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th { background: var(--color-bg-alt); font-weight: 700; text-align: left; padding: 0.7rem 0.9rem; border-bottom: 2px solid var(--color-border); }
+    td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+
+    .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .tag-blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .tag-green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .tag-purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .tag-amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .tag-red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -1.55rem; top: 0.55rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--accent); background: var(--color-bg); z-index: 1; }
+    .timeline__item.done::before { background: var(--accent); }
+    .timeline__item.active::before { background: var(--color-amber); border-color: var(--color-amber); box-shadow: 0 0 0 4px rgba(217,119,6,0.2); }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
+    .timeline__text { font-size: 0.95rem; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; background: #fdfcfa; }
+    .footer__logos { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .footer__logos img { height: 30px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .footer__text a { color: var(--accent); text-decoration: none; }
+    .footer__strip { height: 3px; background: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber)); }
+
+    a.doc-link { color: inherit; text-decoration: none; border-bottom: 1px dashed var(--accent); }
+    a.doc-link:hover { color: var(--accent); }
+
+    .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(6,147,227,0.4); z-index: 90; }
+    .back-to-top.visible { display: flex; }
+
+    @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } .gc-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 767px) { .hero__title { font-size: 1.9rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } table { font-size: 0.82rem; } }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Brubru Deep Dive Library</div>
+    <div class="header__subtitle">Chips Act 2.0</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Select language">
+    <option value="./index.html" selected>EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html">ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html">NL</option>
+    <option value="./ca.html">CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero__tag"><a href="https://brubru.beresol.eu">Brubru Deep Dive</a></div>
+    <h1 class="hero__title">Chips Act 2.0: <span>Europe's Second Semiconductor Push</span></h1>
+    <p class="hero__subtitle">The Commission's second-generation semiconductor law, read pillar by pillar. It repeals the first Chips Act and rebalances toward demand and industrial deployment: a reinforced Chips for Europe Initiative 2.0, EU strategic projects with a flagship advanced-manufacturing open foundry, and a sharper crisis-response mechanism. Adopted by the College on 3 June 2026.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-file-document-outline"></i> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0504" target="_blank" class="doc-link">COM(2026) 504</a></span>
+      <span><i class="mdi mdi-scale-balance"></i> 2026/0139(COD)</span>
+      <span><i class="mdi mdi-calendar"></i> adopted 3 June 2026</span>
+      <span><i class="mdi mdi-source-branch"></i> repeals Reg (EU) 2023/1781</span>
+    </div>
+  </div>
+
+  <!-- KEY FIGURES -->
+  <div class="figures fade-in">
+    <div class="figure-card fc-red">
+      <div class="figure-card__number">&lt;10%</div>
+      <div class="figure-card__label">EU share of global chip production</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number">3</div>
+      <div class="figure-card__label">pillars (Initiative / supply / crisis)</div>
+    </div>
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number">&euro;52B+</div>
+      <div class="figure-card__label">mobilised by the first Chips Act</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number">6</div>
+      <div class="figure-card__label">strategic-project priority areas</div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc fade-in">
+    <div class="toc__title">Contents</div>
+    <div class="toc__grid">
+      <a href="#why" class="toc__link"><span class="toc__num">1</span> Why a Chips Act 2.0?</a>
+      <a href="#objectives" class="toc__link"><span class="toc__num">2</span> Objectives + structure</a>
+      <a href="#pillar1" class="toc__link"><span class="toc__num">3</span> Pillar I: Initiative 2.0</a>
+      <a href="#pillar2" class="toc__link"><span class="toc__num">4</span> Pillar II: supply + demand</a>
+      <a href="#projects" class="toc__link"><span class="toc__num">5</span> Strategic-project areas</a>
+      <a href="#permits" class="toc__link"><span class="toc__num">6</span> Permits + Regions</a>
+      <a href="#pillar3" class="toc__link"><span class="toc__num">7</span> Pillar III: crisis response</a>
+      <a href="#changes" class="toc__link"><span class="toc__num">8</span> What changes vs 2023</a>
+      <a href="#impact" class="toc__link"><span class="toc__num">9</span> Impact assessment</a>
+      <a href="#timeline" class="toc__link"><span class="toc__num">10</span> Timeline + next steps</a>
+      <a href="#sources" class="toc__link"><span class="toc__num">11</span> Official sources</a>
+    </div>
+  </div>
+
+  <!-- 1 WHY -->
+  <div class="section fade-in" id="why">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-help-circle-outline"></i></div>
+      <h2 class="section__title">1. Why a Chips Act 2.0?</h2>
+    </div>
+    <p class="section__subtitle">The first Chips Act built capacity but did not close the gap</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-chart-line-variant" style="color:var(--color-red)"></i> The structural gap remains</div>
+      <p>The first European Chips Act (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1781" target="_blank" class="doc-link">Regulation (EU) 2023/1781</a>) mobilised over EUR 52 billion under Pillar II and built EU pilot lines, competence centres and the European Semiconductor Board. Yet the EU still produces less than 10% of the world's semiconductors and is almost entirely dependent on the US and Asia for advanced nodes below 5nm, including AI chips. Semiconductors are now the world's third most-traded commodity (after oil and vehicles), with the market heading toward USD 1.6 trillion by 2030. The Draghi report and the Semicon Coalition Declaration, signed by all 27 Member States in September 2025, called for a reinforced Chips Act 2.0.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-package-variant" style="color:var(--color-blue)"></i> Part of a bigger package</div>
+      <p>Chips Act 2.0 is one component of the European Technological Sovereignty Package adopted on 3 June 2026, alongside the <a href="../cloud-ai-act/index.html" class="doc-link">Cloud and AI Development Act (CADA)</a>, the EU Open Source Strategy, and the Strategic Roadmap for Digitalisation and AI in Energy. Lead: Executive Vice-President Henna Virkkunen, DG CNECT. Legal bases: Articles 173(3) + 114 TFEU.</p>
+    </div>
+  </div>
+
+  <!-- 2 OBJECTIVES -->
+  <div class="section fade-in" id="objectives">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-target"></i></div>
+      <h2 class="section__title">2. Objectives and structure</h2>
+    </div>
+    <p class="section__subtitle">Two objectives, three pillars, eight chapters</p>
+    <div class="card">
+      <p><strong>Two overarching objectives:</strong> (1) increase the competitiveness of the European semiconductor value chain to improve technological sovereignty and resilience; (2) enhance crisis preparedness to ensure security of supply. <strong>Three specific objectives:</strong> capacity, security of supply and competitiveness across the value chain (including leading-edge AI chips); a strong user market; and intelligence for crisis preparedness.</p>
+    </div>
+    <table>
+      <tr><th>Pillar / Chapter</th><th>What it does</th></tr>
+      <tr><td><strong>Pillar I</strong> - Chips for Europe Initiative 2.0 (Ch. II)</td><td>R&amp;D&amp;I and capacity building: design, pilot lines, quantum chips, competence centres, photonics, Chips Fund, grand challenges, demand forum.</td></tr>
+      <tr><td><strong>Pillar II</strong> - Security of supply and demand (Ch. III)</td><td>European semiconductor technology initiatives, strategic projects, the advanced-manufacturing open foundry, fast-track permits, Regions of Excellence, procurement resilience.</td></tr>
+      <tr><td><strong>Pillar III</strong> - Monitoring and crisis response (Ch. IV)</td><td>Strategic mapping, the B2B supply-chain platform, crisis stage, priority-rated orders, common purchasing.</td></tr>
+      <tr><td>Governance + final (Ch. V-VIII)</td><td>European Semiconductor Board, Industrial Alliance, national authorities, penalties, delegated acts, review.</td></tr>
+    </table>
+  </div>
+
+  <!-- 3 PILLAR I -->
+  <div class="section fade-in" id="pillar1">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-flask-outline"></i></div>
+      <h2 class="section__title">3. Pillar I: Chips for Europe Initiative 2.0</h2>
+    </div>
+    <p class="section__subtitle">Six operational objectives, plus demand-side levers</p>
+    <table>
+      <tr><th>Component</th><th>What it does</th></tr>
+      <tr><td><strong>1. Advanced design</strong></td><td>The virtual design platform for academia, start-ups, SMEs and fabless firms.</td></tr>
+      <tr><td><strong>2. Pilot lines + testbeds</strong></td><td>Test, validate and industrialise cutting-edge and next-generation technologies.</td></tr>
+      <tr><td><strong>3. Quantum chips</strong></td><td>Pilot lines, design libraries and validation facilities for quantum chips.</td></tr>
+      <tr><td><strong>4. Competence centres</strong></td><td>At least one per Member State (building on the European Digital Innovation Hubs), plus skills.</td></tr>
+      <tr><td><strong>5. Photonics (new)</strong></td><td>Design, prototyping and manufacturing of photonic integrated circuits, a new sixth objective.</td></tr>
+      <tr><td><strong>6. Chips Fund</strong></td><td>Access to finance for start-ups, scale-ups and SMEs via the EIC Accelerator and InvestEU.</td></tr>
+    </table>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-trophy-outline"></i> Grand challenges + demand</div>
+      <p>The Initiative adds "grand challenges" (large cross-sectoral missions on AI chips, energy-efficient compute and leading-edge capacities), coordinated with CADA's grand challenges and the EuroHPC Joint Undertaking. New demand-side instruments, a demand forum, demand accelerators and chip innovation procurement, run through the Industrial Alliance for Semiconductors, aim to pull European production. The Initiative is funded by Horizon Europe and the Digital Europe Programme and implemented by the Chips Joint Undertaking.</p>
+    </div>
+  </div>
+
+  <!-- 4 PILLAR II -->
+  <div class="section fade-in" id="pillar2">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-factory"></i></div>
+      <h2 class="section__title">4. Pillar II: security of supply and demand</h2>
+    </div>
+    <p class="section__subtitle">Initiatives, strategic projects and a flagship open foundry</p>
+    <div class="card">
+      <p><strong>European semiconductor technology initiatives</strong> (the successors to the first Act's integrated production facilities and open EU foundries) are carried out by domestic undertakings, must be "first-of-a-kind", must join the B2B Platform and accept priority-rated orders, and get preferential pilot-line access. Importantly, the status no longer depends on receiving public support. <strong>Strategic projects</strong> meet six criteria (Union added value, domestic undertaking, reduced supply-chain dependence, cross-border dimension, resilience, technological sovereignty), are designated through the Chips Joint Undertaking, and receive the competitiveness seal under the European Competitiveness Fund.</p>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-star-outline"></i> The flagship: an advanced-manufacturing open foundry (Art 19)</div>
+      <p>A Union-based open foundry for advanced semiconductor manufacturing, combining leading-edge node manufacturing with chiplet integration and 2.5D/3D packaging, is treated with the highest priority under the Competitiveness Coordination Tool. Pilot production is envisaged for 2030 to 2033.</p>
+    </div>
+  </div>
+
+  <!-- 5 PROJECTS -->
+  <div class="section fade-in" id="projects">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-rocket-launch-outline"></i></div>
+      <h2 class="section__title">5. The six strategic-project priority areas (Annex II)</h2>
+    </div>
+    <p class="section__subtitle">Indicative investment ranges from the proposal</p>
+    <div class="gc-grid">
+      <div class="gc-card"><b>1. Advanced manufacturing</b><br>Leading-edge node + chiplet + 2.5D/3D packaging. EUR 20-40bn (+ EUR 3-4bn for fabless design).</div>
+      <div class="gc-card"><b>2. AI chips and systems</b><br>Design, prototype and tape-out AI chips and full-rack systems on a common EU testbed.</div>
+      <div class="gc-card"><b>3. Automotive processor</b><br>High-performance RISC-V application processors for autonomous driving.</div>
+      <div class="gc-card"><b>4. Memory fab</b><br>A European DRAM / NAND / HBM fabrication facility. EUR 15-30bn.</div>
+      <div class="gc-card"><b>5. Leading-edge design</b><br>Sovereign IP, architecture and verification at 2nm and below. EUR 8-12bn.</div>
+      <div class="gc-card"><b>6. Value-chain segments</b><br>OSAT and advanced packaging, mainstream chips, materials and equipment (Nexperia case).</div>
+    </div>
+  </div>
+
+  <!-- 6 PERMITS -->
+  <div class="section fade-in" id="permits">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-file-sign"></i></div>
+      <h2 class="section__title">6. Faster permits and Regions of Excellence</h2>
+    </div>
+    <p class="section__subtitle">Cutting the EU's permitting disadvantage</p>
+    <div class="card">
+      <p>Permitting and design phases for advanced fabs in the EU run about 7.5 months longer than in competing jurisdictions, adding roughly EUR 625 million to a EUR 20 billion plant. Chips Act 2.0 sets a permit-granting cap of <strong>12 months</strong> from a complete application, a one-stop shop in each Member State (45-day completeness check), and a single access portal using the new <strong>European Business Wallets</strong>, with the highest national significance where national law allows. A new <strong>European Semiconductor Region of Excellence label</strong>, awarded by the Commission on a regional application endorsed by the Member State and built on a Region Investment Plan, signals high-potential ecosystems to investors; recognised regions join a dedicated Network.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-cart-outline" style="color:var(--color-amber)"></i> Procurement resilience (Arts 30-32)</div>
+      <p>For procurement in NIS2 sectors, contracting authorities may require a security-of-supply declaration on the sourcing of semiconductors (supplier diversity, domestic-undertaking share, dual sourcing). The Commission can designate risk-prone sectors and, where risks persist, require mitigation (dual sourcing, stockpiling, diversification). A cost difference above 25% may be presumed disproportionate.</p>
+    </div>
+  </div>
+
+  <!-- 7 PILLAR III -->
+  <div class="section fade-in" id="pillar3">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-red)"><i class="mdi mdi-radar"></i></div>
+      <h2 class="section__title">7. Pillar III: monitoring and crisis response</h2>
+    </div>
+    <p class="section__subtitle">A supply-chain digital twin and an emergency toolbox</p>
+    <div class="card">
+      <p>The Commission, with the European Semiconductor Board, runs a strategic mapping of the value chain and maintains early-warning indicators. The <strong>Business-to-Business Semiconductor Supply Chain Platform</strong> is a "digital twin" of the supply chain (domestic undertakings only) that aggregates data, stress-tests the chain and issues early warnings; participants are exempt from pre-crisis information requests. An EU Blueprint for semiconductor crisis management is due by the second quarter of 2027.</p>
+    </div>
+    <table>
+      <tr><th>Crisis tool</th><th>What it does</th></tr>
+      <tr><td><strong>Crisis stage</strong> (Art 39)</td><td>Activated by the Council by qualified majority, for up to 12 months (prolongable).</td></tr>
+      <tr><td><strong>Information gathering</strong> (Art 41)</td><td>The Commission can require production and disruption data from supply-chain undertakings.</td></tr>
+      <tr><td><strong>Priority-rated orders</strong> (Art 42)</td><td>Initiatives and strategic projects can be obliged to accept and prioritise crisis-relevant orders, overriding contracts at a fair price, with a liability exemption.</td></tr>
+      <tr><td><strong>Common purchasing</strong> (Art 43)</td><td>On request from two or more Member States, the Commission acts as a central purchasing body.</td></tr>
+    </table>
+  </div>
+
+  <!-- 8 CHANGES -->
+  <div class="section fade-in" id="changes">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-compare-horizontal"></i></div>
+      <h2 class="section__title">8. What changes vs the 2023 Chips Act</h2>
+    </div>
+    <p class="section__subtitle">Chips Act 2.0 (COM(2026) 504) vs the first Chips Act (Reg (EU) 2023/1781)</p>
+    <table>
+      <tr><th>Area</th><th>First Chips Act (2023/1781)</th><th>Chips Act 2.0 (COM(2026) 504)</th></tr>
+      <tr><td>Orientation</td><td>Supply-driven</td><td>Demand + supply (innovation procurement, demand forum)</td></tr>
+      <tr><td>Strategic Projects</td><td>Not a distinct instrument</td><td>EU strategic projects + competitiveness seal (ECF)</td></tr>
+      <tr><td>Flagship</td><td>Integrated production facilities</td><td>Highest-priority advanced-manufacturing open foundry</td></tr>
+      <tr><td>Initiative scope</td><td>5 operational objectives</td><td>6 (adds photonics) + grand challenges + Chips Fund</td></tr>
+      <tr><td>Regions</td><td>None</td><td>Semiconductor Region of Excellence label + Network</td></tr>
+      <tr><td>Supply intelligence</td><td>Voluntary info-sharing</td><td>B2B Platform "digital twin" + EU crisis Blueprint</td></tr>
+      <tr><td>Permitting</td><td>General</td><td>12-month cap + European Business Wallets</td></tr>
+      <tr><td>Simplification</td><td>ECIC concept</td><td>ECIC deleted (never used)</td></tr>
+    </table>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-information-outline"></i> A note on the repeal reference</div>
+      <p>The adopted proposal, its title and the Annex VII correlation table confirm that Chips Act 2.0 repeals <strong>Regulation (EU) 2023/1781</strong> (the first Chips Act). The executive summaries of the impact assessment carry a clerical "2023/1782" in their title line; the authoritative repeal target is 2023/1781.</p>
+    </div>
+  </div>
+
+  <!-- 9 IMPACT -->
+  <div class="section fade-in" id="impact">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-chart-box-outline"></i></div>
+      <h2 class="section__title">9. Impact assessment</h2>
+    </div>
+    <p class="section__subtitle">Key figures from SWD(2026) 504 and SWD(2026) 505</p>
+    <div class="figures">
+      <div class="figure-card fc-red"><div class="figure-card__number">&lt;10%</div><div class="figure-card__label">EU share of global production</div></div>
+      <div class="figure-card fc-amber"><div class="figure-card__number">11</div><div class="figure-card__label">First-of-a-Kind projects by end 2025</div></div>
+      <div class="figure-card fc-blue"><div class="figure-card__number">7.5mo</div><div class="figure-card__label">EU permitting disadvantage</div></div>
+      <div class="figure-card fc-green"><div class="figure-card__number">~€70M</div><div class="figure-card__label">B2B Platform set-up</div></div>
+    </div>
+    <div class="card">
+      <p>The impact assessment received a negative Regulatory Scrutiny Board opinion on 28 January 2026, then a positive opinion with reservations on 30 March 2026. Of the options assessed, the Commission chose the vertical, proactive industrial-policy option (PO2), funding strategic projects through the European Competitiveness Fund. Monitoring indicators (Annex III) include semiconductor FDI inflows, skilled workforce, scale-up funding, the EU's share of global semiconductor value by segment, installed wafer-fab capacity, and the share of the value chain covered by the B2B Platform. The Commission evaluates the Regulation 4 to 5 years after application.</p>
+    </div>
+  </div>
+
+  <!-- 10 TIMELINE -->
+  <div class="section fade-in" id="timeline">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-timeline-clock-outline"></i></div>
+      <h2 class="section__title">10. Timeline and next steps</h2>
+    </div>
+    <p class="section__subtitle">Where the file stands in the ordinary legislative procedure</p>
+    <div class="timeline">
+      <div class="timeline__item done"><div class="timeline__date">18 September 2023</div><div class="timeline__text">First Chips Act, Regulation (EU) 2023/1781, enters into force.</div></div>
+      <div class="timeline__item done"><div class="timeline__date">29 September 2025</div><div class="timeline__text">Semicon Coalition Declaration: 27 Member States call for a reinforced Chips Act 2.0.</div></div>
+      <div class="timeline__item active"><div class="timeline__date">3 June 2026</div><div class="timeline__text">College adopts Chips Act 2.0 (COM(2026) 504, 2026/0139(COD)) within the Tech Sovereignty Package.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Next</div><div class="timeline__text">European Parliament (lead committee ITRE expected) and Council positions, then trilogues.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Q2 2027</div><div class="timeline__text">EU Blueprint for semiconductor crisis management due.</div></div>
+      <div class="timeline__item"><div class="timeline__date">On entry into force</div><div class="timeline__text">Repeals Regulation (EU) 2023/1781 (transitional for existing facilities). Evaluation 4 to 5 years after application.</div></div>
+    </div>
+  </div>
+
+  <!-- 11 SOURCES -->
+  <div class="section fade-in" id="sources">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-link-variant"></i></div>
+      <h2 class="section__title">11. Official sources</h2>
+    </div>
+    <div class="card">
+      <ul style="margin:0 0 0 1.25rem; line-height:2">
+        <li><a href="https://digital-strategy.ec.europa.eu/en/library/proposal-chips-act-20" target="_blank" class="doc-link">Proposal page: Chips Act 2.0 (DG CNECT)</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129104" target="_blank" class="doc-link">COM(2026) 504 final</a> (the proposal) + <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129105" target="_blank" class="doc-link">ANNEXES I to VII</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129106" target="_blank" class="doc-link">SWD(2026) 504</a> (Impact Assessment, Parts 1 to 3) and <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129109" target="_blank" class="doc-link">SWD(2026) 505</a> (executive summary)</li>
+        <li>Press: <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1187" target="_blank" class="doc-link">IP/26/1187</a>; Q&amp;A <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1188" target="_blank" class="doc-link">QANDA/26/1188</a> and <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1185" target="_blank" class="doc-link">QANDA/26/1185</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1781" target="_blank" class="doc-link">First Chips Act, Regulation (EU) 2023/1781</a></li>
+      </ul>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-robot-happy-outline"></i> Ask Brubru</div>
+      <p>Brubru tracks Chips Act 2.0 across Chat, the Legislative Tracker and your My Files workspace. Ask "What are the three pillars of Chips Act 2.0?" or "Which strategic-project priority areas does Chips Act 2.0 list?" and Brubru answers from the verified record, then links you straight to the file.</p>
+    </div>
+  </div>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></button>
+
+<footer class="footer">
+  <div class="footer__strip"></div>
+  <div class="footer__logos" style="margin-top:1.5rem">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol">
+  </div>
+  <p class="footer__text">A <a href="https://brubru.beresol.eu">Brubru</a> deep dive, by <a href="https://beresol.eu">Beresol</a>. EU legislative intelligence with AI. All the EU, with AI.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  const btt = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 600); });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>

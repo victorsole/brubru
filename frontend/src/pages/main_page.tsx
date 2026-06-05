@@ -71,7 +71,7 @@ interface MainPageProps {
 
 export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => {
   const { t } = useTranslation();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, token } = useAuth();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const state = location.state as { initialQuestion?: string; source?: string; findingId?: number } | null;
@@ -90,10 +90,13 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
   };
 
   const fetchConversations = useCallback(async () => {
-    if (!isAuthenticated || !user?.id) return;
+    if (!isAuthenticated || !user?.id || !token) return;
     setIsLoadingHistory(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/chat/list?user_id=${user.id}&limit=30`);
+      // Auth: backend derives user_id from JWT; query-string user_id is ignored.
+      const res = await fetch(`${API_BASE_URL}/api/chat/list?limit=30`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       setConversations(data.conversations || []);
@@ -102,7 +105,7 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
     } finally {
       setIsLoadingHistory(false);
     }
-  }, [isAuthenticated, user?.id]);
+  }, [isAuthenticated, user?.id, token]);
 
   useEffect(() => {
     fetchConversations();

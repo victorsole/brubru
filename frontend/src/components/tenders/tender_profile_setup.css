@@ -504,3 +504,24 @@
     margin-left: 0;
   }
 }
+
+/* Phase-3: "Use my policy interests" pre-fill button */
+.tender-profile-setup__use-interests {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid #c7d2e8;
+  border-radius: 999px;
+  background: #f5f8ff;
+  color: #0959a8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tender-profile-setup__use-interests:hover {
+  background: #e3f0ff;
+  border-color: #0693e3;
+}

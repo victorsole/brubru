@@ -1,0 +1,213 @@
+/* ===========================================================================
+   Brubru — /mcp landing page styles.
+   Builds on api_page.css (sidebar, sections, hero, CTAs) and api_keys.css
+   (buttons, status colours).
+
+   Responsive ladder (per CLAUDE.md hard rule):
+     >1440px       full sidebar + 3-column tool grid
+     1024-1440px   sidebar + 2-column tool grid
+     768-1024px    sidebar + 2-column tool grid (tighter)
+     <768px        hide sidebar, single-column tools, narrower padding
+     <400px        smaller copy, full-width buttons
+   =========================================================================== */
+
+.mcp-page {
+  /* Inherits the api-page layout — no override needed at the page level. */
+}
+
+/* ----- Numbered step list ----- */
+.mcp-list {
+  margin: 1rem 0 1.25rem 0;
+  padding-left: 1.5rem;
+  color: #1a1a1a;
+}
+
+.mcp-list li {
+  margin: 0.45rem 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.mcp-bullets {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+}
+
+.mcp-bullets li {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+/* ----- Code block with header + copy button ----- */
+.mcp-codeblock {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #1e1e2e;
+  margin: 1rem 0 1.5rem 0;
+  overflow: hidden;
+}
+
+.mcp-codeblock__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  background: #11111c;
+  color: #b3b8c5;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.78rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mcp-codeblock__label {
+  letter-spacing: 0.04em;
+}
+
+.mcp-codeblock__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: #e6e6e6;
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.mcp-codeblock__copy:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mcp-codeblock__pre {
+  margin: 0;
+  padding: 1rem 1.25rem 1.1rem;
+  overflow-x: auto;
+  color: #e6e6e6;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+.mcp-codeblock__pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+}
+
+/* ----- Tool catalogue grid ----- */
+.mcp-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.mcp-tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mcp-tool-card:hover {
+  border-color: #c8e0ff;
+  box-shadow: 0 1px 4px rgba(6, 147, 227, 0.08);
+}
+
+.mcp-tool-card__name {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  color: #0a5fa8;
+  background: #eef4ff;
+  border: 1px solid #c8e0ff;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  display: inline-block;
+  width: fit-content;
+  word-break: break-word;
+}
+
+.mcp-tool-card__desc {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.mcp-tool-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.6rem;
+  font-size: 0.78rem;
+}
+
+.mcp-tool-card__scope {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #555;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+.mcp-tool-card__cost {
+  font-weight: 600;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  color: #1c7a3e;
+}
+
+/* ===========================================================================
+   RESPONSIVE LADDER
+   =========================================================================== */
+
+@media (max-width: 1440px) {
+  .mcp-tools-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .mcp-tools-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .mcp-tool-card { padding: 0.85rem 1rem; }
+}
+
+@media (max-width: 767px) {
+  .mcp-tools-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .mcp-codeblock__pre {
+    padding: 0.85rem 1rem;
+    font-size: 0.78rem;
+  }
+  .mcp-codeblock__header {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.72rem;
+  }
+  .mcp-list li,
+  .mcp-bullets li {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .mcp-tool-card { padding: 0.75rem 0.85rem; }
+  .mcp-tool-card__name { font-size: 0.82rem; }
+  .mcp-tool-card__desc { font-size: 0.82rem; }
+  .mcp-codeblock__pre { font-size: 0.72rem; padding: 0.75rem 0.85rem; }
+}

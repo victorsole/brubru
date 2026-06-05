@@ -8,13 +8,16 @@ shown to users. Newer items displace older ones via the rotation script
 (scripts/rotate_amendator_examples.py).
 """
 
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 from sqlalchemy import text
 
-from core.database import SessionLocal
+from core.database import SessionLocal, get_db
+from sqlalchemy.orm import Session
+from models.user import User
+from .auth import get_current_user
 
 
 router = APIRouter(prefix="/api/amendator", tags=["Amendator"])
@@ -42,6 +45,53 @@ AMENDABLE_TYPES = (
     "regulation", "directive", "decision_legislative",
     "proposal_cod", "proposal_app", "proposal_cns",
 )
+
+
+class MyAmendableFile(BaseModel):
+    carriage_id: str
+    title: str
+    celex: Optional[str] = None
+    procedure_ref: Optional[str] = None
+    eurlex_url: Optional[str] = None
+    text_type: Optional[str] = None
+
+
+@router.get("/my-amendable-files", response_model=List[MyAmendableFile],
+            summary="Files you track that you can amend",
+            description=(
+                "**What it does**\nLists the legislative files you track that can be "
+                "opened in Amendator (legislative acts / proposals with a EUR-Lex "
+                "document), so you can amend a dossier you already follow.\n\n"
+                "**When to use it**\nThe 'Amend a file you track' row in the Amendator "
+                "input panel.\n\n"
+                "**You get back**\nEach file's title, CELEX/procedure ref and a EUR-Lex URL."))
+def my_amendable_files(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    limit: int = Query(15, ge=1, le=50),
+):
+    rows = db.execute(text(
+        """
+        SELECT lc.id::text, lc.title, lc.celex_numbers, lc.oeil_procedure_ref, lc.text_type
+          FROM user_carriage_tracks uct
+          JOIN legislative_carriages lc ON lc.id = uct.carriage_id
+         WHERE uct.user_id = :uid AND uct.archived_at IS NULL
+           AND (lc.text_type = 'LEGISLATIVE' OR array_length(lc.celex_numbers, 1) > 0)
+         ORDER BY uct.tracked_since DESC
+         LIMIT :lim
+        """
+    ), {"uid": str(current_user.id), "lim": limit}).fetchall()
+    out = []
+    for r in rows:
+        celex = (r[2] or [None])[0]
+        url = (f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+               if celex else None)
+        out.append(MyAmendableFile(
+            carriage_id=r[0], title=r[1], celex=celex,
+            procedure_ref=r[3], eurlex_url=url,
+            text_type=(r[4].value if hasattr(r[4], "value") else r[4]),
+        ))
+    return out
 
 
 @router.get("/featured-examples", response_model=FeaturedExamplesResponse)

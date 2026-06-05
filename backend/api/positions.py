@@ -21,7 +21,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 from sqlalchemy.orm import Session
 
 from api.auth import get_current_user
@@ -172,16 +172,15 @@ async def list_positions(
     if my_interests:
         interests = _interest_list(current_user)
         if interests:
-            committees = committees_for_interests(interests)
-            keywords = keywords_for_interests(interests)
-            clauses = []
-            if committees:
-                clauses.append(LegislativeCarriage.lead_committee.in_(list(committees)))
-            for kw in list(keywords)[:40]:
-                clauses.append(LegislativeCarriage.title.ilike(f"%{kw}%"))
-            if clauses:
+            # Shared PI builder: carriages are now tagged, so suggestions match on
+            # the canonical policy_areas overlap as well as committee + title.
+            from services.tracking.pi_filter import build_pi_clause, AnchorSpec
+            spec = AnchorSpec(policy_areas_col="policy_areas",
+                              committee_col="lead_committee", keyword_cols=("title",))
+            sql, params = build_pi_clause(interests, spec)
+            if sql != "TRUE":
                 pi_active = True
-                q = db.query(LegislativeCarriage).filter(or_(*clauses))
+                q = db.query(LegislativeCarriage).filter(text(sql).bindparams(**params))
                 if tracked_ids:
                     q = q.filter(~LegislativeCarriage.id.in_(tracked_ids))
                 suggested_carriages = (q.order_by(LegislativeCarriage.last_updated.desc().nullslast())

@@ -26,7 +26,7 @@ export interface RSSEntry {
 
 export interface UserDocument {
   id: string;
-  document_type: 'amendment' | 'analysis' | 'strategy' | 'note' | 'uploaded' | 'ep_question';
+  document_type: 'amendment' | 'analysis' | 'strategy' | 'note' | 'uploaded' | 'ep_question' | 'amendment_carriage';
   title: string;
   content?: string;
   policy_areas?: string[];
@@ -34,6 +34,12 @@ export interface UserDocument {
   celex_number?: string;
   procedure_reference?: string;
   amendment_status?: string;
+  // Strategy-doc frame fields (document_type='strategy')
+  objectives?: string;
+  action_plan?: string;
+  timeline?: string;
+  stakeholders?: string[];
+  doc_metadata?: Record<string, any>;
   // Uploaded document fields
   storage_document_id?: string;
   original_filename?: string;
@@ -43,6 +49,13 @@ export interface UserDocument {
   created_at: string;
   updated_at: string;
   word_count?: number;
+  // Versioning
+  version?: number;
+  parent_document_id?: string;
+  // Carriage-amendment rows (merged from /api/amendments)
+  carriage_id?: string;
+  amendment_type?: string;
+  article_number?: string;
 }
 
 export interface FeedSubscription {

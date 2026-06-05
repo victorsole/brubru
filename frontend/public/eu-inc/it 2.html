@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Inc. spiegato: il 28° regime per le imprese europee | Brubru</title>
+  <meta name="description" content="Guida completa alla proposta EU Inc. (COM(2026) 321): la nuova forma giuridica paneuropea con registrazione in 48 ore, capitale minimo di 0 EUR e procedure interamente digitali. Analisi articolo per articolo.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: #fffbeb;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Chapter article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Disclaimer banner -->
+<div class="disclaimer-banner">
+  Questa analisi si basa sulla versione inglese di COM(2026) 321. La versione ufficiale in italiano non è ancora stata pubblicata su EUR-Lex. Questa traduzione è stata preparata da Brubru e potrebbe differire dalla versione ufficiale una volta disponibile.
+</div>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">EU Inc.: analisi dettagliata</div>
+    <div class="header__subtitle">Il quadro giuridico societario del 28° regime</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Lingua" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html">Español</option>
+    <option value="it.html" selected>Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Català</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Prova Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)321&lang=en" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2026) 321</a> | Adottato il 18 marzo 2026</div>
+  <h1 class="hero__title">EU Inc.: <span>una sola forma giuridica,<br>27 Stati membri</span></h1>
+  <p class="hero__subtitle">
+    La proposta della Commissione europea per una nuova forma giuridica societaria paneuropea.
+    Registra un'impresa in 48 ore, per un massimo di 100 EUR, interamente online, senza capitale minimo.
+    Ecco tutto quello che devi sapere.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-file-document-outline"></i> 109 articoli, 12 capi</span>
+    <span><i class="mdi mdi-scale-balance"></i> Regolamento (direttamente applicabile)</span>
+    <span><i class="mdi mdi-calendar-check"></i> Applicazione prevista: 2028</span>
+    <span><i class="mdi mdi-account-tie"></i> Relatore al PE: René Repasi (S&amp;D, DE)</span>
+  </div>
+</section>
+
+<!-- Relatore del Parlamento europeo -->
+<section class="card" style="margin: 2rem 0;">
+  <h3 style="margin-top: 0;"><i class="mdi mdi-account-tie" style="color: var(--color-red);"></i> Relatore del Parlamento europeo</h3>
+  <p><strong>René Repasi</strong> (S&amp;D, Germania — SPD) è stato confermato come relatore del Parlamento europeo per la proposta EU Inc. il 23 aprile 2026. È membro della Commissione giuridica (JURI) — la commissione competente per questo fascicolo — e della Commissione per i problemi economici e monetari (ECON), e supplente in ITRE e nella Sottocommissione per le questioni fiscali (FISC). È anche professore di Diritto alla Erasmus School of Law di Rotterdam. <a href="https://www.europarl.europa.eu/meps/en/229839/RENE_REPASI/home" target="_blank" rel="noopener">Profilo eurodeputato</a>.</p>
+  <p>Repasi ha già guidato la relazione preparatoria del Parlamento, una <strong>relazione di iniziativa legislativa</strong> sul 28º regime (<a href="https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html" target="_blank" rel="noopener">A10-0269/2025</a>, procedura 2025/2079(INL)), presentata il 17 dicembre 2025 e approvata in JURI con 18 voti a favore, 4 contrari e 1 astensione. La sua relazione INL proponeva il nome "Societas Europaea Unificata (S.EU)", un capitale minimo di 1 euro e garanzie esplicite per la partecipazione dei lavoratori, oltre a disposizioni opzionali di steward-ownership e asset-lock. La Commissione ha alla fine scelto il nome "EU Inc." con capitale minimo di 0 euro, ma ha mantenuto la stessa base giuridica (articoli 50 e 114 TFUE) che JURI aveva difeso contro l'articolo 352.</p>
+  <p>Le tre istituzioni si sono impegnate pubblicamente a concludere i negoziati <strong>entro la fine del 2026</strong>.</p>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48h</div>
+    <div class="figure-card__label">Registrazione dell'impresa (procedura accelerata)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">0 EUR</div>
+    <div class="figure-card__label">Capitale minimo richiesto</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">100 EUR</div>
+    <div class="figure-card__label">Costo massimo di registrazione</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308 000</div>
+    <div class="figure-card__label">Imprese stimate in 10 anni</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Struttura della proposta</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Principi generali (artt. 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registrazione e deposito (artt. 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Informazioni transfrontaliere (artt. 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Succursali transfrontaliere (artt. 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organizzazione (artt. 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Quote e trasferimenti (artt. 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Finanziamento (artt. 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Stock option per i dipendenti (artt. 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Chiusura di società solvibili (artt. 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolvenza (artt. 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Requisiti vietati (art. 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Disposizioni finali (artt. 104-109)</a>
+  </div>
+</nav>
+
+<!-- What and Why -->
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-lightbulb-outline"></i></div>
+    <h2 class="section__title">Cos'è EU Inc.?</h2>
+  </div>
+  <p class="section__subtitle">una nuova forma giuridica facoltativa per l'intero mercato unico europeo</p>
+
+  <div class="info-box">
+    <h3>Il concetto del «28° regime»</h3>
+    <p>EU Inc. crea una nuova forma giuridica armonizzata che esiste <strong>accanto</strong> ai 27 sistemi nazionali di diritto societario. Qualsiasi fondatore (persona fisica o giuridica) può scegliere di costituire un'impresa secondo questo insieme unico di norme a livello UE, invece del diritto nazionale. La società è registrata in uno Stato membro, ma è riconosciuta in tutti e 27 senza ulteriori formalità.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Il problema</div>
+      <div class="article-card__title">27 sistemi, un solo mercato</div>
+      <div class="article-card__desc">L'Europa crea più startup degli Stati Uniti, ma la maggior parte non riesce a scalare. 27 diversi regimi di diritto societario creano frammentazione, elevati costi di conformità transfrontaliera e incentivi a trasferirsi fuori dall'UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">La soluzione</div>
+      <div class="article-card__title">Un solo insieme di norme, ovunque</div>
+      <div class="article-card__desc">EU Inc. offre un quadro aziendale unico e completamente digitale che copre l'intero ciclo di vita: costituzione, governance, finanziamento, trasferimento di quote, stock option per i dipendenti, scioglimento e insolvenza.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">A differenza della Societas Europaea</div>
+      <div class="article-card__title">Aperta a tutti, non solo alle grandi imprese</div>
+      <div class="article-card__desc">La SE richiede un capitale minimo di 120 000 EUR e può essere costituita solo a partire da società transfrontaliere preesistenti. EU Inc. non ha capitale minimo e può essere costituita da zero da qualsiasi persona.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Contesto politico</div>
+      <div class="article-card__title">Draghi, Letta, Bussola per la competitività</div>
+      <div class="article-card__desc">Richiesto dal Consiglio europeo (marzo 2025), a seguito del rapporto Draghi e del rapporto Letta sul mercato unico. Fa parte dell'Unione del risparmio e degli investimenti e della strategia per il mercato unico.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Capo I: principi generali</h2>
+  </div>
+  <p class="section__subtitle">Articoli 1-12: fondamenti della forma giuridica EU Inc.</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articoli 1-2</div>
+      <div class="article-card__title">Oggetto e definizioni</div>
+      <div class="article-card__desc">Crea la forma giuridica EU Inc., l'interfaccia centrale UE, il principio «una tantum» e 30 definizioni chiave (BRIS, EUID, registro digitale delle quote, strumenti convertibili, warrant, ecc.).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articolo 3</div>
+      <div class="article-card__title">Società a responsabilità limitata</div>
+      <div class="article-card__desc">I soci non sono responsabili delle obbligazioni della società. Personalità giuridica al momento della registrazione. Può essere costituita da persone fisiche o giuridiche, ex nihilo o tramite conversioni/fusioni.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 4-9</div>
+      <div class="article-card__title">Norme, personalità, denominazione, statuto, sede</div>
+      <div class="article-card__desc">Disciplinata dal presente Regolamento e dallo statuto. Le lacune sono colmate dal diritto nazionale della sede sociale. La denominazione deve includere «EU Inc.». Statuto digitale leggibile automaticamente. Sede sociale e amministrazione centrale nell'UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 10-12</div>
+      <div class="article-card__title">Solo digitale, pagamenti, dipendenti</div>
+      <div class="article-card__desc"><strong>Tutte le procedure sono 100% online.</strong> Niente carta. Pagamenti tramite servizi online transfrontalieri. Si applicano le norme sulla partecipazione dei lavoratori dello Stato membro della sede. Il diritto nazionale del lavoro non è modificato.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter II -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-rocket-launch-outline"></i></div>
+    <h2 class="section__title">Capo II: registrazione e deposito</h2>
+  </div>
+  <p class="section__subtitle">Articoli 13-24: come creare una EU Inc.</p>
+
+  <div class="info-box">
+    <h3>Tre vie di costituzione</h3>
+    <p><strong>1. Procedura accelerata tramite l'interfaccia centrale UE</strong> (art. 16): mediante modelli UE, registrazione in 48 ore, massimo 100 EUR. <strong>2. Statuto personalizzato tramite l'interfaccia centrale UE</strong> (art. 17): 5 giorni lavorativi. <strong>3. Direttamente presso il registro delle imprese nazionale</strong> (art. 18): interamente online, stessi termini. Tutte le vie utilizzano lo stesso modulo di domanda armonizzato (art. 13), con identificazione elettronica eIDAS e scambio automatico di dati con le autorità fiscali, IVA e previdenziali (art. 20).</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articolo 13</div>
+      <div class="article-card__title">Modulo di domanda armonizzato</div>
+      <div class="article-card__desc">Interamente digitale e leggibile automaticamente. Amministratori identificati tramite eIDAS. Raccoglie dati di costituzione, NIF/IVA/titolarità effettiva. Verifica automatica dei marchi tramite l'interconnessione BRIS-EUIPO.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 14-15</div>
+      <div class="article-card__title">Controllo preventivo e interfaccia centrale UE</div>
+      <div class="article-card__desc">Statuto verificato (in via amministrativa, giudiziaria o notarile). La Commissione gestisce l'interfaccia centrale UE tramite BRIS. La decisione di registrazione rimane nazionale. Monitoraggio in tempo reale.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 16-18</div>
+      <div class="article-card__title">48 ore, massimo 100 EUR</div>
+      <div class="article-card__desc">Procedura accelerata (modelli UE): 48 ore, 100 EUR. Statuto personalizzato: 5 giorni lavorativi. Via nazionale diretta: stessi termini. Le filiali riutilizzano automaticamente i dati della società madre da BRIS (art. 19).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 20-24</div>
+      <div class="article-card__title">Principio «una tantum», conversioni, deposito digitale</div>
+      <div class="article-card__desc">Il registro delle imprese condivide automaticamente i dati con le autorità fiscali, IVA, previdenziali e di titolarità effettiva. EU Inc. può essere creata tramite conversione, fusione o scissione nazionale o transfrontaliera (attesa di 2 anni). Firme digitali tramite eIDAS.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-earth"></i></div>
+    <h2 class="section__title">Capo III: informazioni transfrontaliere</h2>
+  </div>
+  <p class="section__subtitle">Articoli 25-35: trasparenza, certificati e principio «una tantum»</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articoli 25-27</div>
+      <div class="article-card__title">Pubblicità tramite i registri e BRIS</div>
+      <div class="article-card__desc">Informazioni complete sulla società disponibili al pubblico: denominazione, sede, codice NACE, statuto, amministratori, conti, stato di liquidazione. Documenti chiave gratuiti. Modifiche depositate entro 5 giorni.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articolo 28</div>
+      <div class="article-card__title">Principio «una tantum»</div>
+      <div class="article-card__desc">Le autorità pubbliche devono consultare BRIS direttamente. La EU Inc. non deve mai ripresentare informazioni già presenti nel registro delle imprese, salvo in caso di sospetto di frode o abuso.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 30-31</div>
+      <div class="article-card__title">Certificato europeo di società e procura</div>
+      <div class="article-card__desc">Certificato multilingue accettato in tutti i 27 Stati membri come prova di costituzione. Procura europea digitale in tutte le lingue dell'UE. Entrambi compatibili con i portafogli aziendali europei.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 32-35</div>
+      <div class="article-card__title">Niente legalizzazione, traduzione tramite IA, registro centrale</div>
+      <div class="article-card__desc">Esente da apostille e legalizzazione. Agenti di traduzione tramite IA accettati (approvati dagli Stati membri). La Commissione sviluppa un registro digitale centrale. Tutto il contenuto BRIS consultabile in tutte le lingue dell'UE.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter IV -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-domain"></i></div>
+    <h2 class="section__title">Capo IV: succursali transfrontaliere</h2>
+  </div>
+  <p class="section__subtitle">Articoli 36-41: aprire succursali in tutta l'UE senza difficoltà</p>
+
+  <div class="card">
+    <p>Le società EU Inc. possono aprire succursali in qualsiasi altro Stato membro. Registrazione tramite l'interfaccia centrale UE (stesso termine di 48 ore, tetto di 100 EUR) o direttamente presso il registro delle imprese nazionale. La succursale recupera automaticamente i dati della società madre da BRIS, eliminando le presentazioni duplicate. Scambio di dati «una tantum» con le autorità fiscali, IVA e previdenziali. Le conversioni, scissioni e fusioni transfrontaliere seguono la Direttiva 2017/1132.</p>
+  </div>
+</section>
+
+<!-- Chapter V -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Capo V: organizzazione</h2>
+  </div>
+  <p class="section__subtitle">Articoli 42-52: governance, amministratori, soci</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articoli 42-44</div>
+      <div class="article-card__title">Consiglio di amministrazione</div>
+      <div class="article-card__desc">Una o più persone fisiche. Almeno un amministratore residente nell'UE. Il consiglio gestisce la società. L'assemblea generale nomina e revoca. Doveri degli amministratori: buona fede, ragionevole diligenza. Porto sicuro per decisioni aziendali oneste.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 45-46</div>
+      <div class="article-card__title">Conflitti di interessi e parti correlate</div>
+      <div class="article-card__desc">Gli amministratori devono dichiarare i conflitti e astenersi salvo autorizzazione. Le operazioni con parti correlate possono richiedere approvazione ai sensi dello statuto. Società unipersonale: contratti con il socio unico per iscritto.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 47-49</div>
+      <div class="article-card__title">Riunioni online, delibere scritte, maggioranze</div>
+      <div class="article-card__desc">Riunioni interamente online o ibride. Gli Stati membri non possono limitare questo. Delibere scritte tramite mezzi elettronici. Quorum: maggioranza semplice presente. Decisioni: maggioranza semplice. Modifiche dello statuto: due terzi.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 50-52</div>
+      <div class="article-card__title">Modifiche, diritti di categoria, recesso del socio</div>
+      <div class="article-card__desc">Statuto modificato con voto dei due terzi. Le modifiche ai diritti di categoria richiedono l'approvazione della categoria. I soci lesi possono richiedere al tribunale il riacquisto a giusto valore.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VI -->
+<section class="section" id="ch6">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+    <h2 class="section__title">Capo VI: quote e trasferimenti</h2>
+  </div>
+  <p class="section__subtitle">Articoli 53-60: quote dematerializzate, trasferimenti digitali, mercati pubblici</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articoli 53-54</div>
+      <div class="article-card__title">Registro digitale delle quote</div>
+      <div class="article-card__desc">Tutte le quote dematerializzate in un registro digitale (può utilizzare la tecnologia a registro distribuito). Nessuna quota al portatore. Il registro traccia: identità dei soci, categoria di quota, gravami, storico dei trasferimenti. Certificati digitali di quota emessi automaticamente.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 55-57</div>
+      <div class="article-card__title">Categorie di quote e diritti di voto</div>
+      <div class="article-card__desc">Per impostazione predefinita: diritti uguali. Lo statuto può creare più categorie con diritti diversi (preferenze, voto multiplo, veto, governance). Una quota = un voto (per impostazione predefinita). Le quote senza diritto di voto sono escluse dal quorum.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 58-59</div>
+      <div class="article-card__title">Trasferimenti interamente digitali, senza notaio</div>
+      <div class="article-card__desc">Quote liberamente trasferibili. Trasferimenti interamente online tramite firme elettroniche qualificate (eIDAS) o portafoglio aziendale. <strong>Nessun atto notarile richiesto.</strong> La società esamina entro 3 giorni lavorativi. Efficacia dall'iscrizione nel registro digitale.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articolo 60</div>
+      <div class="article-card__title">Accesso ai mercati pubblici</div>
+      <div class="article-card__desc">Gli Stati membri non possono vietare a EU Inc. di accedere ai mercati di crescita delle PMI o ai sistemi multilaterali di negoziazione. Gli Stati membri possono anche consentire l'ammissione ai mercati regolamentati tramite legislazione nazionale.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VII -->
+<section class="section" id="ch7">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cash-multiple"></i></div>
+    <h2 class="section__title">Capo VII: finanziamento</h2>
+  </div>
+  <p class="section__subtitle">Articoli 61-77: capitale, quote, distribuzioni e strumenti di finanziamento moderni</p>
+
+  <div class="info-box">
+    <h3>Capitale minimo zero, massima flessibilità</h3>
+    <p>EU Inc. non ha <strong>alcun requisito di capitale minimo</strong> né riserve legali obbligatorie. Le quote sono senza valore nominale per impostazione predefinita. Il corrispettivo delle quote può essere in denaro o in natura (tranne lavoro/servizi). Strumenti moderni come i <strong>SAFE e le note KISS</strong> sono espressamente abilitati. La protezione dei creditori avviene tramite test di bilancio e di solvibilità invece del capitale minimo.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Articoli 61-63</div>
+      <div class="article-card__title">Quote senza valore nominale, capitale 0 EUR</div>
+      <div class="article-card__desc">Per impostazione predefinita: quote senza valore nominale (nessun valore nominale, nessuna frazione del capitale). Valore nominale opzionale. Non si possono mescolare. Nessun capitale minimo. Nessuna riserva legale. Capitale in EUR o in valuta nazionale.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 64-67</div>
+      <div class="article-card__title">Conferimenti, in natura, emissione di quote</div>
+      <div class="article-card__desc">Quote emesse a fronte di conferimento di capitale o corrispettivo non di capitale (o entrambi). I conferimenti in natura richiedono una relazione peritale (rinunciabile). Prime quote nello statuto; nuove quote interamente online, senza notaio.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 68-69</div>
+      <div class="article-card__title">SAFE, KISS, convertibili, diritti di opzione</div>
+      <div class="article-card__desc">Strumenti convertibili (SAFE, KISS) e warrant espressamente abilitati. Il consiglio può essere autorizzato a emetterli. Periodo di diritto di opzione di 14 giorni. Nessun diritto di opzione sulle quote provenienti da strumenti convertibili.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Articoli 70-77</div>
+      <div class="article-card__title">Modifiche del capitale, distribuzioni, azioni proprie, quote riscattabili</div>
+      <div class="article-card__desc">Distribuzioni solo se test di bilancio (attivo > passivo + capitale) E test di solvibilità (12 mesi). Amministratori personalmente responsabili. Azioni proprie solo con fondi distribuibili. Quote riscattabili con maturazione di 24 mesi.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VIII -->
+<section class="section" id="ch8">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-account-heart-outline"></i></div>
+    <h2 class="section__title">Capo VIII: stock option per i dipendenti dell'UE</h2>
+  </div>
+  <p class="section__subtitle">Articoli 78-79: il piano EU-ESO con tassazione differita armonizzata</p>
+
+  <div class="info-box">
+    <h3>Un solo piano di stock option, 27 paesi, un solo momento fiscale</h3>
+    <p>L'EU-ESO è un piano armonizzato di stock option per i dipendenti che risolve il principale problema delle startup transfrontaliere: <strong>stock option tassate diversamente in ogni Stato membro</strong>. Con EU-ESO, nessuna imposta alla concessione, nessuna imposta al vesting, nessuna imposta all'esercizio. L'imposta sorge <strong>solo quando le quote vengono vendute</strong>. L'importo imponibile è la differenza tra il prezzo di vendita e il costo di acquisizione. Gli Stati membri determinano l'aliquota, ma devono trattare EU-ESO in modo non meno favorevole rispetto ai regimi nazionali.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-format-list-checks" style="color: var(--color-amber);"></i> Norme chiave dell'EU-ESO</div>
+    <p><strong>Ammissibili:</strong> membri del consiglio e dipendenti della società e delle sue filiali</p>
+    <p><strong>Non ammissibili:</strong> persone che detengono più del 25% dei diritti di voto</p>
+    <p><strong>Vesting:</strong> minimo 24 mesi</p>
+    <p><strong>Non trasferibili:</strong> i warrant non possono essere venduti</p>
+    <p><strong>Esercizio:</strong> corrispettivo pagato in denaro, interamente versato all'emissione</p>
+    <p><strong>Nessun diritto di opzione:</strong> i soci esistenti non hanno diritti di opzione sulle quote EU-ESO</p>
+    <p><strong>Soddisfazione:</strong> il consiglio emette nuove quote o trasferisce azioni proprie</p>
+  </div>
+</section>
+
+<!-- Chapter IX -->
+<section class="section" id="ch9">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-close-circle-outline"></i></div>
+    <h2 class="section__title">Capo IX: chiusura di società solvibili</h2>
+  </div>
+  <p class="section__subtitle">Articoli 80-87: liquidazione rapida in circa 3 mesi</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lightning-bolt" style="color: var(--color-red);"></i> Liquidazione accelerata</div>
+    <p>Le società EU Inc. solvibili possono chiudersi tramite una procedura accelerata se hanno cessato l'attività economica, non hanno attività (o le hanno distribuite), non hanno passività (o hanno il consenso dei creditori) e non hanno procedimenti pendenti.</p>
+    <p><strong>Processo:</strong> presentazione simultanea della delibera di scioglimento e della domanda di cancellazione (tutto online). Gli amministratori firmano una dichiarazione con firme elettroniche qualificate. I creditori hanno 30 giorni per opporsi. L'autorità fiscale ha 30 giorni per il nulla osta (il silenzio equivale ad approvazione tacita). Dopo i termini: cancellazione dal registro.</p>
+    <p><strong>Garanzie:</strong> amministratori personalmente e solidalmente responsabili per le dichiarazioni false. Libri conservati per 6 anni. I creditori mantengono i diritti nei confronti degli amministratori dopo la cancellazione.</p>
+  </div>
+</section>
+
+<!-- Chapter X -->
+<section class="section" id="ch10">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
+    <h2 class="section__title">Capo X: insolvenza semplificata</h2>
+  </div>
+  <p class="section__subtitle">Articoli 88-102: liquidazione più rapida ed economica per le startup innovative</p>
+
+  <div class="info-box">
+    <h3>Solo per le startup innovative EU Inc.</h3>
+    <p>Questo capo si applica esclusivamente alle società EU Inc. che si qualificano come <strong>startup innovative</strong> (come definite nella Raccomandazione della Commissione). La procedura semplificata deve essere conclusa entro <strong>6 mesi</strong> (prorogabile una volta). Non è richiesto un avvocato. Modulo standard per il deposito. Comunicazione esclusivamente digitale. I beni sono venduti tramite piattaforme di aste elettroniche interconnesse in tutta l'UE tramite il portale europeo della giustizia elettronica.</p>
+  </div>
+</section>
+
+<!-- Chapter XI -->
+<section class="section" id="ch11">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">Capo XI: non discriminazione</h2>
+  </div>
+  <p class="section__subtitle">Articolo 103: requisiti nazionali vietati</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cancel" style="color: var(--color-red);"></i> Ciò che gli Stati membri NON POSSONO fare</div>
+    <p>Negare il sostegno pubblico (sovvenzioni, sussidi) alle società EU Inc. in base alla sede della loro sede legale</p>
+    <p>Imporre requisiti di autorizzazione basati sulla sede sociale</p>
+    <p>Richiedere un rappresentante locale o la presenza fisica per una EU Inc. di un altro Stato membro</p>
+    <p>Negare l'utilizzo di conti di pagamento aperti in un altro Stato membro</p>
+  </div>
+</section>
+
+<!-- Chapter XII -->
+<section class="section" id="ch12">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Capo XII: disposizioni finali</h2>
+  </div>
+  <p class="section__subtitle">Articoli 104-109: protezione dei dati, contabilità, sanzioni, revisione</p>
+
+  <div class="card">
+    <p><strong>Protezione dei dati:</strong> soggetta al GDPR e al Regolamento 2018/1725.</p>
+    <p><strong>Contabilità:</strong> si applica il diritto nazionale della sede sociale.</p>
+    <p><strong>Sanzioni:</strong> gli Stati membri devono prevedere sanzioni efficaci in caso di inosservanza (mancato deposito, dichiarazioni false).</p>
+    <p><strong>Revisione:</strong> la Commissione effettua una valutazione 5 anni dopo l'applicazione. Il tetto di 100 EUR è rivisto ogni 5 anni (indicizzato all'inflazione).</p>
+    <p><strong>Entrata in vigore:</strong> 20 giorni dopo la pubblicazione nella Gazzetta ufficiale. Si applica 12 mesi dopo.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">EU Inc. e il diritto societario nazionale</h2>
+  </div>
+  <p class="section__subtitle">un confronto fianco a fianco delle principali differenze</p>
+
+  <table>
+    <thead>
+      <tr><th>Caratteristica</th><th>EU Inc.</th><th>Diritto nazionale tipico</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Capitale minimo</td><td class="highlight-cell">0 EUR</td><td class="dim-cell">da 1 EUR a 120 000 EUR</td></tr>
+      <tr><td>Tempi di registrazione</td><td class="highlight-cell">48 ore (procedura accelerata)</td><td class="dim-cell">Giorni o settimane</td></tr>
+      <tr><td>Costo di registrazione</td><td class="highlight-cell">Massimo 100 EUR</td><td class="dim-cell">Variabile</td></tr>
+      <tr><td>Procedura</td><td class="highlight-cell">100% digitale</td><td class="dim-cell">Spesso cartacea o in presenza</td></tr>
+      <tr><td>Trasferimento di quote</td><td class="highlight-cell">Digitale, senza notaio</td><td class="dim-cell">Spesso richiesto il notaio</td></tr>
+      <tr><td>Quote</td><td class="highlight-cell">Dematerializzate, registro digitale</td><td class="dim-cell">Certificati cartacei comuni</td></tr>
+      <tr><td>Valore nominale</td><td class="highlight-cell">Opzionale (senza valore nominale per default)</td><td class="dim-cell">Di solito obbligatorio</td></tr>
+      <tr><td>Strumenti SAFE / KISS</td><td class="highlight-cell">Espressamente abilitati</td><td class="dim-cell">Incertezza giuridica</td></tr>
+      <tr><td>Stock option per i dipendenti</td><td class="highlight-cell">EU-ESO e tassazione differita</td><td class="dim-cell">27 regimi diversi</td></tr>
+      <tr><td>Succursali transfrontaliere</td><td class="highlight-cell">Con un clic tramite BRIS</td><td class="dim-cell">Procedure nazionali separate</td></tr>
+      <tr><td>Insolvenza delle startup</td><td class="highlight-cell">Semplificata, 6 mesi, digitale</td><td class="dim-cell">Lunga e costosa</td></tr>
+      <tr><td>Chiusura solvibile</td><td class="highlight-cell">Circa 3 mesi (procedura accelerata)</td><td class="dim-cell">Spesso 12 mesi o più</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Impact -->
+<section class="section" id="impact">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Valutazione d'impatto</h2>
+  </div>
+  <p class="section__subtitle">Cifre chiave da <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)321&lang=en" target="_blank" rel="noopener" style="color: var(--color-secondary);">SWD(2026) 321</a> e <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)322&lang=en" target="_blank" rel="noopener" style="color: var(--color-secondary);">SWD(2026) 322</a></p>
+
+  <div class="figures" style="margin-top: 1rem;">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" style="font-size: 1.6rem;">328-440 M EUR</div>
+      <div class="figure-card__label">Risparmio sugli oneri amministrativi (10 anni)</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" style="font-size: 1.6rem;">2,7 M EUR</div>
+      <div class="figure-card__label">Costi informatici una tantum (tutti gli Stati membri)</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" style="font-size: 1.6rem;">59,9 M EUR</div>
+      <div class="figure-card__label">Bilancio UE 2028-2034</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" style="font-size: 1.6rem;">52%</div>
+      <div class="figure-card__label">Hanno ritenuto il capitale minimo non necessario</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendario legislativo</h2>
+  </div>
+  <p class="section__subtitle">dal rapporto Draghi alla data di applicazione</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">Settembre 2024</div>
+      <div class="timeline__text">Il rapporto Draghi sulla competitività identifica la frammentazione normativa come principale ostacolo</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Gennaio 2025</div>
+      <div class="timeline__text">La Bussola per la competitività annuncia la creazione del «28° regime»</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Marzo 2025</div>
+      <div class="timeline__text">Il Consiglio europeo chiede alla Commissione di proporre un regime opzionale di diritto societario</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">18 marzo 2026</div>
+      <div class="timeline__text"><strong>La Commissione adotta la proposta EU Inc. (COM(2026) 321)</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19-20 marzo 2026</div>
+      <div class="timeline__text">Il Consiglio europeo discute la competitività e l'agenda «One Europe, One Market»</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">T2 2026</div>
+      <div class="timeline__text">Assegnazione alla commissione del Parlamento europeo (previsto: JURI capofila, pareri IMCO/ECON)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Fine 2026</div>
+      <div class="timeline__text">Obiettivo della Commissione per un accordo politico tra il Parlamento europeo e il Consiglio</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Adozione degli atti di esecuzione (modelli, formulari, specifiche BRIS)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Data di applicazione: EU Inc. diventa disponibile in tutti gli Stati membri</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonti ufficiali</h2>
+  </div>
+  <p class="section__subtitle">tutti i documenti utilizzati per produrre questa analisi</p>
+
+  <div class="card">
+    <p><strong>Proposta:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)321&lang=en" target="_blank" rel="noopener">COM(2026) 321 final</a> | <a href="https://commission.europa.eu/document/download/3e9822aa-8cef-40a1-904e-a53fc68e7265_en" target="_blank" rel="noopener">Proposta di quadro giuridico EU Inc. (PDF)</a></p>
+    <p><strong>Allegato:</strong> <a href="https://commission.europa.eu/document/download/18ee8f50-ab9f-43cd-af1b-92fec29a9754_en" target="_blank" rel="noopener">Allegato: contenuto minimo dello statuto (PDF)</a></p>
+    <p><strong>Comunicazione:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)320&lang=en" target="_blank" rel="noopener">COM(2026) 320 final</a> | <a href="https://commission.europa.eu/document/download/2d1b62a4-7807-4808-aed1-36f1f58ac1e7_en" target="_blank" rel="noopener">Verso un 28° regime per le imprese dell'UE (PDF)</a></p>
+    <p><strong>Comunicato stampa:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_614" target="_blank" rel="noopener">IP/26/614</a></p>
+    <p><strong>D&amp;R:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_615" target="_blank" rel="noopener">QANDA/26/615</a></p>
+    <p><strong>Scheda informativa:</strong> <a href="https://commission.europa.eu/document/download/0d717491-03b4-47e6-8960-d16412d018c1_en" target="_blank" rel="noopener">Scheda informativa EU Inc. (PDF)</a></p>
+    <p><strong>Pagina ufficiale:</strong> <a href="https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en" target="_blank" rel="noopener">EU Inc.: un nuovo regime giuridico armonizzato per le imprese</a></p>
+    <p><strong>Valutazione d'impatto:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)321&lang=en" target="_blank" rel="noopener">SWD(2026) 321 final</a> | <a href="https://commission.europa.eu/document/download/e996b973-9421-4e4b-a95a-d38eb14dd8ad_en" target="_blank" rel="noopener">Sintesi</a> | <a href="https://commission.europa.eu/document/download/38805451-8ffd-4512-8c46-fd76de0e9c9c_en" target="_blank" rel="noopener">Parte 1</a> | <a href="https://commission.europa.eu/document/download/4df0e523-df7b-433b-9805-bc5dcd95a8d3_en" target="_blank" rel="noopener">Parte 2</a> | <a href="https://commission.europa.eu/document/download/f3e9230d-3262-4115-ac9a-fed91dd68d0c_en" target="_blank" rel="noopener">Parte 3</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Prodotto da <a href="https://brubru.beresol.eu">Brubru</a>, l'assistente di politica dell'UE basato sull'IA di <a href="https://beresol.eu">Beresol BV</a>. Vedi anche: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p style="margin-top: 0.5rem;">Analisi basata su COM(2026) 321 final, adottata il 18 marzo 2026. Si tratta di un'analisi indipendente, non di un documento ufficiale dell'UE.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

@@ -119,6 +119,18 @@ export const LegislativeFileDetail = () => {
     ? getDeepDiveForProcedure(selectedFile.oeil_procedure_ref)
     : undefined;
 
+  // Transposition deadlines apply ONLY to directives (regulations are directly
+  // applicable). Detect from the title or a directive-type CELEX (5 digits + "L").
+  const isDirective =
+    /\bdirective\b/i.test(selectedFile.title || '') ||
+    (selectedFile.celex_numbers || []).some((c) => /^\d{5}L\d/i.test(c));
+
+  // CEN/CENELEC standards apply ONLY to acts that reference harmonised standards
+  // (product / technical legislation). Detect from the act's own text signals.
+  const cenRelevant = /harmonis(?:e|ed) standard|harmoniz(?:e|ed) standard|\bCEN\b|CENELEC|\bETSI\b|standardis(?:ation|ed) request|European standard/i.test(
+    `${selectedFile.title || ''} ${selectedFile.ai_summary || ''} ${selectedFile.description || ''}`,
+  );
+
   const handleAnalyze = async () => {
     try {
       await analyzeFile(selectedFile.file_id);
@@ -204,6 +216,28 @@ export const LegislativeFileDetail = () => {
               <StagePipeline currentStatus={selectedFile.current_status} />
             </div>
 
+            {/* EP Legislative Train — editorial "state of play" narrative */}
+            {selectedFile.legislative_train_summary && (
+              <div className="legislative-file-detail__section legislative-file-detail__train">
+                <h3>{t('fileDetail.legislativeTrain')}</h3>
+                <div className="legislative-file-detail__train-body">
+                  {selectedFile.legislative_train_summary.split('\n\n').map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+                {selectedFile.legislative_train_url && (
+                  <a
+                    className="legislative-file-detail__train-source"
+                    href={selectedFile.legislative_train_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t('fileDetail.legislativeTrainSource')}
+                  </a>
+                )}
+              </div>
+            )}
+
             {/* Personalised Impact — "what this means for you" */}
             {selectedFile.oeil_procedure_ref && (
               <PersonalisedImpact procedureRef={selectedFile.oeil_procedure_ref} />
@@ -216,7 +250,11 @@ export const LegislativeFileDetail = () => {
 
             {/* Regulatory cascade — secondary acts + related in-flight files */}
             {selectedFile.oeil_procedure_ref && (
-              <RegulatoryCascade procedureRef={selectedFile.oeil_procedure_ref} />
+              <RegulatoryCascade
+                procedureRef={selectedFile.oeil_procedure_ref}
+                isDirective={isDirective}
+                cenRelevant={cenRelevant}
+              />
             )}
 
             {/* Status */}

@@ -1,4 +1,5 @@
 // frontend/src/components/amendator/document_viewer.tsx
+import { useTranslation } from 'react-i18next';
 import './document_viewer.css';
 import { LegalText } from '../shared/legal_text';
 
@@ -48,6 +49,7 @@ export interface LoadedDocument {
 }
 
 export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerProps) => {
+  const { t } = useTranslation();
   // If no document loaded, show empty state
   if (!loadedDocument) {
     return (
@@ -55,9 +57,9 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
         <div className="document-viewer__content">
           <div className="document-viewer__empty">
             <span className="document-viewer__empty-icon mdi mdi-file-document-outline"></span>
-            <p className="document-viewer__empty-text">No document loaded</p>
+            <p className="document-viewer__empty-text">{t('amendatorExtras.noDocLoaded')}</p>
             <p className="document-viewer__empty-hint">
-              Upload a document or paste a EUR-Lex URL to get started
+              {t('amendator.eurlex.hint')}
             </p>
           </div>
         </div>
@@ -71,7 +73,7 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
       <div className="document-viewer">
         <div className="document-viewer__content">
           <div className="document-viewer__selected">
-            <h3 className="document-viewer__selected-title">Selected Text</h3>
+            <h3 className="document-viewer__selected-title">{t('amendatorExtras.selectedText')}</h3>
             <div className="document-viewer__selected-content">{selectedText}</div>
           </div>
         </div>
@@ -91,7 +93,7 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
 
         {loadedDocument.metadata.celex && (
           <div className="document-viewer__metadata">
-            <span className="document-viewer__metadata-label">CELEX:</span>
+            <span className="document-viewer__metadata-label">{t('amendatorExtras.celexLabel')}</span>
             <span className="document-viewer__metadata-value">{loadedDocument.metadata.celex}</span>
           </div>
         )}
@@ -99,7 +101,7 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
         {/* Display Recitals if available */}
         {recitals.length > 0 && (
           <div className="document-viewer__recitals">
-            <h2 className="document-viewer__section-title">Recitals</h2>
+            <h2 className="document-viewer__section-title">{t('amendatorExtras.recitalsLabel')}</h2>
             {recitals.map((recital) => (
               <div key={recital.number} className="document-viewer__recital">
                 <span className="document-viewer__recital-number">({recital.number})</span>

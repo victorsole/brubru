@@ -209,6 +209,17 @@
   transform: translateX(4px);
 }
 
+/* Social link variant (icon + label) — used for the Beresol Instagram entry. */
+.footer__link--social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer__link--social svg {
+  flex: 0 0 auto;
+}
+
 .footer__link:hover::after {
   width: 100%;
 }
@@ -243,6 +254,12 @@
 @media (max-width: 767px) {
   .footer {
     margin-left: 0 !important;
+  }
+
+  /* Hide the marketing footer on the chat app page on mobile — every pixel
+     belongs to the message area and the input bar, not to nav links. */
+  .footer--chat-app {
+    display: none;
   }
 
   .footer__container {

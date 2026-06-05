@@ -106,11 +106,32 @@
 
 .text-adopted-card__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #f3f4f6;
 }
+
+.text-adopted-card__action-btn--primary {
+  background: #e3f2fd;
+  color: #0693E3;
+  border-color: #cfe6fb;
+  font-weight: 600;
+}
+.text-adopted-card__action-btn--track {
+  background: #eafaf1;
+  color: #0f9d58;
+  border-color: #cdeedd;
+  font-weight: 600;
+}
+.text-adopted-card__action-btn--track:hover { background: #d6f3e3; }
+.text-adopted-card__action-btn--danger {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #f7d4d4;
+}
+.text-adopted-card__action-btn--danger:hover { background: #fde4e4; }
 
 .text-adopted-card__action-btn {
   display: inline-flex;

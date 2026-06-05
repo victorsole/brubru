@@ -26,6 +26,7 @@ from models.user import User
 from models.eu_calendar import EUCalendarEvent
 from models.ep_vote import EpVote
 from services.tracking.tracked_files_seeder import _interest_list
+from services.tracking.tracked_lens import tracked_anchors
 from services.tracking.pi_committee_crosswalk import (
     committees_for_interests, keywords_for_interests,
 )
@@ -44,6 +45,7 @@ def _require_yellow(user: User):
 @router.get("")
 def plenary_order_of_business(
     my_interests: bool = Query(True),
+    my_files: bool = Query(False),
     search: Optional[str] = Query(None),
     limit: int = Query(60, ge=1, le=200),
     db: Session = Depends(get_db),
@@ -53,6 +55,9 @@ def plenary_order_of_business(
     interests."""
     _require_yellow(user)
     today = date.today()
+    _tracked = tracked_anchors(db, str(user.id)) if user else {}
+    tracked_procs = _tracked.get("procedures", set())
+    tracked_committees = _tracked.get("committees", set())
 
     # 1) Upcoming sittings (the schedule)
     sess_rows = (
@@ -88,6 +93,15 @@ def plenary_order_of_business(
         if conds:
             sql.append("AND (" + " OR ".join(conds) + ")")
             pi_active = True
+    if my_files and (tracked_procs or tracked_committees):
+        fconds = []
+        if tracked_procs:
+            fconds.append("procedure_ref = ANY(:tprocs)")
+            params["tprocs"] = list(tracked_procs)
+        if tracked_committees:
+            fconds.append("committees && CAST(:tcoms AS varchar[])")
+            params["tcoms"] = list(tracked_committees)
+        sql.append("AND (" + " OR ".join(fconds) + ")")
     if search:
         sql.append("AND title ILIKE :search")
         params["search"] = f"%{search}%"
@@ -114,12 +128,16 @@ def plenary_order_of_business(
         "adoption_date": r["adoption_date"].isoformat() if r["adoption_date"] else None,
         "document_url": _doc_url(r["source_url"]),
         "oeil_url": _oeil(r["procedure_ref"]),
+        "matches_tracked": bool((r["procedure_ref"] and r["procedure_ref"] in tracked_procs)
+                                or (set(r["committees"] or []) & tracked_committees)),
     } for r in rows]
 
     plenary_votes = db.query(EpVote.id).filter(EpVote.level == "plenary").count()
 
     return {
         "pi_active": pi_active,
+        "files_active": bool(my_files and (tracked_procs or tracked_committees)),
+        "has_tracked_files": bool(tracked_procs or tracked_committees),
         "sessions": sessions,
         "business": business,
         "business_total": len(business),

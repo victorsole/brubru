@@ -11,6 +11,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiChevronLeft,
@@ -33,6 +34,11 @@ import {
   useEUCalendar,
   groupEventsByDate,
   PHASE1_INSTITUTIONS,
+  CORE_INSTITUTIONS,
+  FILTERABLE_EVENT_TYPES,
+  EP_DELEGATION_OPTIONS,
+  EP_GROUP_OPTIONS,
+  EP_OTHER_OPTIONS,
   POLICY_AREA_CODES,
 } from '../../hooks/use_eu_calendar';
 import type { ViewMode } from '../../hooks/use_eu_calendar';
@@ -40,7 +46,6 @@ import { useAuth } from '../../hooks/use_auth';
 import {
   INSTITUTION_CONFIG,
   POLICY_AREA_CONFIG,
-  ALL_COMMITTEE_CODES,
   getInstitutionColour,
   getInstitutionLabel,
   getEventTypeLabel,
@@ -53,6 +58,7 @@ import type {
   CalendarEvent,
 } from '../../services/eu_calendar_service';
 import './eu_calendar_tab.css';
+import { FreshnessChip } from './freshness_chip';
 
 // ============================================================================
 // Constants
@@ -66,6 +72,7 @@ const MAX_EVENTS_PER_CELL = 4;
 // ============================================================================
 
 function MyEUTodayDigest() {
+  const { t } = useTranslation();
   const { todayDigest, isLoadingDigest, fetchTodayDigest } = useEUCalendar();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const [isOpen, setIsOpen] = useState(() => {
@@ -93,14 +100,14 @@ function MyEUTodayDigest() {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="eu-calendar-tab__digest-title-row">
-          <h3 className="eu-calendar-tab__digest-title">My EU Today</h3>
+          <h3 className="eu-calendar-tab__digest-title">{t('calendar.myEuToday')}</h3>
           <span className="eu-calendar-tab__digest-badge">
-            {today_count} event{today_count !== 1 ? 's' : ''}
+            {t('calendarTab.events', { count: today_count })}
           </span>
         </div>
         <button
           className={`eu-calendar-tab__digest-toggle ${isOpen ? 'eu-calendar-tab__digest-toggle--open' : ''}`}
-          aria-label={isOpen ? 'Collapse digest' : 'Expand digest'}
+          aria-label={isOpen ? t('calendarTab.collapseDigest') : t('calendarTab.expandDigest')}
         >
           <Icon path={mdiChevronDown} size={0.8} />
         </button>
@@ -126,13 +133,13 @@ function MyEUTodayDigest() {
             </div>
           ) : (
             <div className="eu-calendar-tab__digest-empty">
-              No EU institutional events today.
+              {t('calendarTab.noEventsToday')}
             </div>
           )}
 
           {tomorrow_count > 0 && (
             <div className="eu-calendar-tab__digest-tomorrow">
-              Tomorrow: {tomorrow_count} event{tomorrow_count !== 1 ? 's' : ''}
+              {tomorrow_count === 1 ? t('calendarTab.tomorrow', { count: tomorrow_count }) : t('calendarTab.tomorrowPlural', { count: tomorrow_count })}
             </div>
           )}
 
@@ -152,15 +159,16 @@ function MyEUTodayDigest() {
 // ============================================================================
 
 function CalendarToolbar() {
+  const { t } = useTranslation();
   const {
     viewMode, setViewMode, currentDate, navigateDate,
     searchQuery, setSearchQuery,
   } = useEUCalendar();
 
   const viewModes: { mode: ViewMode; label: string; icon: string }[] = [
-    { mode: 'month', label: 'Month', icon: mdiCalendarMonth },
-    { mode: 'week', label: 'Week', icon: mdiCalendarWeek },
-    { mode: 'day', label: 'Day', icon: mdiCalendarToday },
+    { mode: 'month', label: t('calendarTab.month'), icon: mdiCalendarMonth },
+    { mode: 'week', label: t('calendarTab.week'), icon: mdiCalendarWeek },
+    { mode: 'day', label: t('calendarTab.day'), icon: mdiCalendarToday },
   ];
 
   const dateLabel = (() => {
@@ -209,7 +217,7 @@ function CalendarToolbar() {
           <button
             className="eu-calendar-tab__nav-btn"
             onClick={() => navigateDate('prev')}
-            aria-label="Previous"
+            aria-label={t('calendarTab.previous')}
           >
             <Icon path={mdiChevronLeft} size={0.8} />
           </button>
@@ -217,12 +225,12 @@ function CalendarToolbar() {
             className="eu-calendar-tab__today-btn"
             onClick={() => navigateDate('today')}
           >
-            Today
+            {t('calendarTab.todayBtn')}
           </button>
           <button
             className="eu-calendar-tab__nav-btn"
             onClick={() => navigateDate('next')}
-            aria-label="Next"
+            aria-label={t('calendarTab.next')}
           >
             <Icon path={mdiChevronRight} size={0.8} />
           </button>
@@ -237,11 +245,12 @@ function CalendarToolbar() {
           <input
             type="text"
             className="eu-calendar-tab__search-input"
-            placeholder="Search events..."
+            placeholder={t('calendar.searchEvents')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        <FreshnessChip sourceKey={['calendar', 'calendar_dg_events']} />
       </div>
     </div>
   );
@@ -252,111 +261,144 @@ function CalendarToolbar() {
 // ============================================================================
 
 function CalendarFilters() {
+  const { t } = useTranslation();
   const {
-    activeInstitutions, toggleInstitution,
-    activePolicyAreas, togglePolicyArea,
-    activeCommittees, toggleCommittee,
+    selectedInstitution, setInstitution,
+    selectedDepartment, setDepartment,
+    selectedPolicyArea, setPolicyArea,
+    selectedEventType, setEventType,
+    bodies, fetchBodies,
+    myInterests, setMyInterests,
     clearFilters,
   } = useEUCalendar();
 
-  const hasFilters = activeInstitutions.size > 0 || activePolicyAreas.size > 0 || activeCommittees.size > 0;
+  useEffect(() => {
+    if (Object.keys(bodies).length === 0) fetchBodies();
+  }, []);
 
-  // Empty set = "all selected" (we send no filter to the backend, so every
-  // event in the window shows). The first click while empty kicks the user
-  // into explicit-selection mode and deselects the clicked chip.
-  const isInstitutionActive = (code: string) =>
-    activeInstitutions.size === 0 || activeInstitutions.has(code as never);
-  const isPolicyAreaActive = (code: string) =>
-    activePolicyAreas.size === 0 || activePolicyAreas.has(code);
+  const hasFilters = !!selectedInstitution || !!selectedDepartment || !!selectedPolicyArea
+    || !!selectedEventType || myInterests;
 
-  // Show committee filter row when EP is in the visible-institutions set.
-  // Using isInstitutionActive so the row also appears in the default
-  // "everything selected" state.
-  const showCommitteeFilter = isInstitutionActive('EP');
+  // Institution options grouped: core institutions vs agencies & bodies.
+  const coreInstitutions = PHASE1_INSTITUTIONS.filter((c) => CORE_INSTITUTIONS.includes(c));
+  const bodyInstitutions = PHASE1_INSTITUTIONS.filter((c) => !CORE_INSTITUTIONS.includes(c));
+  // Dependent department options for the chosen institution (committees / DGs / configs).
+  const departments = (selectedInstitution && bodies[selectedInstitution]) || [];
+  // Commission DGs split policy vs functional for tidy optgroups.
+  const dgPolicy = departments.filter((d) => d.kind === 'policy');
+  const dgFunctional = departments.filter((d) => d.kind === 'functional');
+  const isCommission = selectedInstitution === 'COMMISSION';
+  const isEP = selectedInstitution === 'EP';
+  const deptLabelKey = isEP
+    ? t('calendar.epBody', 'Body')
+    : isCommission
+      ? t('calendar.department', 'Department (DG)')
+      : t('calendar.configuration', 'Configuration');
 
   return (
     <div className="eu-calendar-tab__filters">
-      {/* Institution chips */}
+      {/* PI lens: My interests | All (shared MEUB pattern). */}
       <div className="eu-calendar-tab__filter-row">
-        <span className="eu-calendar-tab__filter-label">Institutions</span>
-        {PHASE1_INSTITUTIONS.map((code) => {
-          const config = INSTITUTION_CONFIG[code];
-          const isActive = isInstitutionActive(code);
-          return (
-            <span
-              key={code}
-              className={`eu-calendar-tab__chip ${isActive ? 'eu-calendar-tab__chip--active' : 'eu-calendar-tab__chip--inactive'}`}
-              style={{
-                borderColor: config.colour,
-                background: isActive ? config.colour : 'white',
-                color: isActive ? 'white' : config.colour,
-              }}
-              onClick={() => toggleInstitution(code)}
-            >
-              {config.shortLabel}
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Policy area chips */}
-      <div className="eu-calendar-tab__filter-row">
-        <span className="eu-calendar-tab__filter-label">Policy</span>
-        {POLICY_AREA_CODES.map((code) => {
-          const config = POLICY_AREA_CONFIG[code];
-          if (!config) return null;
-          const isActive = isPolicyAreaActive(code);
-          return (
-            <span
-              key={code}
-              className={`eu-calendar-tab__chip ${isActive ? 'eu-calendar-tab__chip--active' : 'eu-calendar-tab__chip--inactive'}`}
-              style={{
-                borderColor: config.colour,
-                background: isActive ? config.colour : 'white',
-                color: isActive ? 'white' : config.colour,
-              }}
-              onClick={() => togglePolicyArea(code)}
-            >
-              {config.label}
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Committee chips (visible when EP filter is active) */}
-      {showCommitteeFilter && (
-        <div className="eu-calendar-tab__filter-row eu-calendar-tab__filter-row--committees">
-          <span className="eu-calendar-tab__filter-label">Committee</span>
-          {ALL_COMMITTEE_CODES.map((code) => {
-            const isActive = activeCommittees.has(code);
-            return (
-              <span
-                key={code}
-                className={`eu-calendar-tab__chip eu-calendar-tab__chip--committee ${isActive ? 'eu-calendar-tab__chip--active' : 'eu-calendar-tab__chip--inactive'}`}
-                style={{
-                  borderColor: '#0693e3',
-                  background: isActive ? '#0693e3' : 'white',
-                  color: isActive ? 'white' : '#0693e3',
-                }}
-                onClick={() => toggleCommittee(code)}
-                title={getCommitteeLabel(code)}
-              >
-                {code}
-              </span>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Clear all - visible when any filter is active */}
-      {hasFilters && (
-        <div className="eu-calendar-tab__filter-row eu-calendar-tab__filter-row--clear">
-          <button className="eu-calendar-tab__clear-filters" onClick={clearFilters}>
-            <Icon path={mdiClose} size={0.5} />
-            Clear all filters
+        <span className="eu-calendar-tab__filter-label">{t('calendar.show', 'Show')}</span>
+        <div className="eu-calendar-tab__pi-toggle">
+          <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>
+            {t('calendar.allEvents', 'All')}
+          </button>
+          <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>
+            {t('calendar.myInterests', 'My interests')}
           </button>
         </div>
-      )}
+      </div>
+
+      {/* Cascading dropdowns: Institution -> Department + Policy area. */}
+      <div className="eu-calendar-tab__filter-row eu-calendar-tab__filter-row--dropdowns">
+        <label className="eu-calendar-tab__dropdown">
+          <span className="eu-calendar-tab__filter-label">{t('calendar.institution', 'Institution')}</span>
+          <select value={selectedInstitution} onChange={(e) => setInstitution(e.target.value)}>
+            <option value="">{t('calendar.allInstitutions', 'All institutions')}</option>
+            <optgroup label={t('calendar.coreInstitutions', 'Core institutions')}>
+              {coreInstitutions.map((code) => (
+                <option key={code} value={code}>{INSTITUTION_CONFIG[code]?.label || code}</option>
+              ))}
+            </optgroup>
+            <optgroup label={t('calendar.agenciesBodies', 'Agencies & bodies')}>
+              {bodyInstitutions.map((code) => (
+                <option key={code} value={code}>{INSTITUTION_CONFIG[code]?.label || code}</option>
+              ))}
+            </optgroup>
+          </select>
+        </label>
+
+        {(departments.length > 0 || isEP) && (
+          <label className="eu-calendar-tab__dropdown">
+            <span className="eu-calendar-tab__filter-label">{deptLabelKey}</span>
+            <select value={selectedDepartment} onChange={(e) => setDepartment(e.target.value)}>
+              <option value="">{t('calendar.allDepartments', 'All')}</option>
+              {isEP ? (
+                <>
+                  <optgroup label={t('calendar.committees', 'Committees')}>
+                    {departments.map((d) => <option key={d.code} value={`committee:${d.code}`}>{d.code} — {d.name}</option>)}
+                  </optgroup>
+                  <optgroup label={t('calendar.delegations', 'Delegations')}>
+                    {EP_DELEGATION_OPTIONS.map((o) => <option key={o.value} value={o.value}>{t('calendar.allDelegations', o.label)}</option>)}
+                  </optgroup>
+                  <optgroup label={t('calendar.politicalGroups', 'Political groups')}>
+                    {EP_GROUP_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </optgroup>
+                  <optgroup label={t('calendar.epOther', 'Other')}>
+                    {EP_OTHER_OPTIONS.map((o) => {
+                      const lbl = o.value === 'eventtype:plenary_session'
+                        ? t('calendar.eventType.plenary_session', 'Plenary')
+                        : t('calendar.eprsEvents', o.label);
+                      return <option key={o.value} value={o.value}>{lbl}</option>;
+                    })}
+                  </optgroup>
+                </>
+              ) : isCommission ? (
+                <>
+                  <optgroup label={t('calendar.policyDgs', 'Policy DGs')}>
+                    {dgPolicy.map((d) => <option key={d.code} value={d.code}>{d.code} — {d.name}</option>)}
+                  </optgroup>
+                  <optgroup label={t('calendar.functionalDgs', 'Functional DGs & departments')}>
+                    {dgFunctional.map((d) => <option key={d.code} value={d.code}>{d.code} — {d.name}</option>)}
+                  </optgroup>
+                </>
+              ) : (
+                departments.map((d) => <option key={d.code} value={d.code}>{d.code} — {d.name}</option>)
+              )}
+            </select>
+          </label>
+        )}
+
+        <label className="eu-calendar-tab__dropdown">
+          <span className="eu-calendar-tab__filter-label">{t('calendar.policy')}</span>
+          <select value={selectedPolicyArea} onChange={(e) => setPolicyArea(e.target.value)}>
+            <option value="">{t('calendar.allPolicyAreas', 'All policy areas')}</option>
+            {POLICY_AREA_CODES.map((code) => {
+              const config = POLICY_AREA_CONFIG[code];
+              if (!config) return null;
+              return <option key={code} value={code}>{config.label}</option>;
+            })}
+          </select>
+        </label>
+
+        <label className="eu-calendar-tab__dropdown">
+          <span className="eu-calendar-tab__filter-label">{t('calendar.eventTypeLabel', 'Type')}</span>
+          <select value={selectedEventType} onChange={(e) => setEventType(e.target.value)}>
+            <option value="">{t('calendar.allEventTypes', 'All types')}</option>
+            {FILTERABLE_EVENT_TYPES.map((code) => (
+              <option key={code} value={code}>{t(`calendar.eventType.${code}`, code)}</option>
+            ))}
+          </select>
+        </label>
+
+        {hasFilters && (
+          <button className="eu-calendar-tab__clear-filters" onClick={clearFilters}>
+            <Icon path={mdiClose} size={0.5} />
+            {t('calendarTab.clearAllFilters')}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -536,14 +578,15 @@ function WeekView() {
 // ============================================================================
 
 function DayView() {
+  const { t } = useTranslation();
   const { events, selectEvent } = useEUCalendar();
 
   if (events.length === 0) {
     return (
       <div className="eu-calendar-tab__empty">
         <Icon path={mdiCalendarToday} size={2} color="#d1d5db" />
-        <div className="eu-calendar-tab__empty-text">No events on this day</div>
-        <div className="eu-calendar-tab__empty-hint">Try navigating to another date or adjusting your filters.</div>
+        <div className="eu-calendar-tab__empty-text">{t('calendar.noEventsOnDay')}</div>
+        <div className="eu-calendar-tab__empty-hint">{t('calendar.tryAnotherDate')}</div>
       </div>
     );
   }
@@ -663,6 +706,7 @@ function MobileEventList({ events }: { events: CalendarEvent[] }) {
 // ============================================================================
 
 function EventDetailModal() {
+  const { t } = useTranslation();
   const { selectedEvent, selectEvent } = useEUCalendar();
   const navigate = useNavigate();
 
@@ -760,7 +804,7 @@ function EventDetailModal() {
           {/* Procedure deep-links */}
           {event.procedure_refs && event.procedure_refs.length > 0 && (
             <div className="eu-calendar-tab__modal-procedures">
-              <h4 className="eu-calendar-tab__modal-procedures-title">Related Procedures</h4>
+              <h4 className="eu-calendar-tab__modal-procedures-title">{t('calendar.relatedProcedures')}</h4>
               {event.procedure_refs.map((ref) => (
                 <div key={ref} className="eu-calendar-tab__procedure-item">
                   <span className="eu-calendar-tab__procedure-ref">{ref}</span>

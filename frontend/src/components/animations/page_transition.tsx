@@ -44,7 +44,10 @@ export const AnimatedPage = ({ children }: PageTransitionProps) => {
       exit="exit"
       style={{
         width: '100%',
-        height: '100%',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 0,
       }}
     >
       {children}

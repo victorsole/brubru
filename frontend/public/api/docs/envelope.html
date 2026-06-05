@@ -102,6 +102,24 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
     <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
     <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+    <li><a href="/api/docs/endpoints.html#vocabularies" data-nav="endpoints-vocabularies">EU Vocabularies</a></li>
+    <li><a href="/api/docs/endpoints.html#identify" data-nav="endpoints-identify">Identifier resolver</a></li>
+    <li><a href="/api/docs/endpoints.html#ecli" data-nav="endpoints-ecli">ECLI search</a></li>
+    <li><a href="/api/docs/endpoints.html#datasets" data-nav="endpoints-datasets">DCAT-AP self-description</a></li>
+  </ul>
+
+  <h3>Specialised EC databases</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#sanctions" data-nav="endpoints-sanctions">Sanctions (CFSP)</a></li>
+    <li><a href="/api/docs/endpoints.html#transparency-register" data-nav="endpoints-transparency-register">Transparency Register</a></li>
+    <li><a href="/api/docs/endpoints.html#comitology" data-nav="endpoints-comitology">Comitology documents</a></li>
+    <li><a href="/api/docs/endpoints.html#gi" data-nav="endpoints-gi">Geographical Indications</a></li>
+    <li><a href="/api/docs/endpoints.html#fta" data-nav="endpoints-fta">International agreements</a></li>
+    <li><a href="/api/docs/endpoints.html#trade-defence" data-nav="endpoints-trade-defence">Trade defence</a></li>
+    <li><a href="/api/docs/endpoints.html#competition-cases" data-nav="endpoints-competition-cases">DG COMP cases</a></li>
+    <li><a href="/api/docs/endpoints.html#jrc-datasets" data-nav="endpoints-jrc-datasets">JRC Data Catalogue</a></li>
+    <li><a href="/api/docs/endpoints.html#cohesion-datasets" data-nav="endpoints-cohesion-datasets">DG REGIO cohesion data</a></li>
+    <li><a href="/api/docs/endpoints.html#access2markets" data-nav="endpoints-access2markets">CN codes (Access2Markets)</a></li>
   </ul>
 
   <h3>Reference</h3>
@@ -218,6 +236,15 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Dataset-specific <code>aggregates</code></h2>
 <p>Some endpoints (e.g. <code>/consultations/.../feedback</code>) include a sibling <code>aggregates</code> object alongside <code>data</code>, giving counts by country and user_type in the same response so you don't need a separate summary call.</p>
+
+<h2>Specialised EC databases (May 2026): <code>body_threshold</code> + <code>has_body</code></h2>
+<p>The ten <code>/api/v1/specialised/*</code> endpoints (sanctions, transparency-register, comitology, gi, fta, trade-defence, competition-cases, jrc-datasets, cohesion-datasets, access2markets) all return the same envelope, plus a per-row contract that documents whether the full body of each item has been fetched into our local cache:</p>
+<ul>
+<li><code>has_body</code> (bool) &mdash; <code>true</code> if <code>body_text</code>/<code>body_html</code> is present for this row. <code>false</code> if only the metadata has been ingested.</li>
+<li><code>body_threshold</code> (query param) &mdash; pass <code>?body_threshold=200</code> to include only rows where <code>body_text</code> is at least 200 characters; useful for ranking, full-text scoring, or RAG ingest.</li>
+<li><code>body_source</code> &mdash; provenance of the body when fetched: <code>cellar_xhtml</code> (preferred), <code>cellar_pdf</code> (fallback for proposals), <code>scrape</code> (legacy), or <code>null</code>.</li>
+</ul>
+<p>Two of the ten clusters are <strong>live pass-throughs</strong> (DG COMP cases, Combined Nomenclature) &mdash; on these, <code>has_body</code> is meaningless because the upstream response is fetched at request time; the envelope's <code>coverage_complete</code> will be <code>false</code> for the same reason.</p>
 
 <h2>Sort order</h2>
 <p>All list endpoints are sorted <strong>most-recent-first</strong> by date (adoption, publication, event, or last-updated depending on dataset). Within ties, secondary sort is id descending. Custom sort via <code>?sort=</code> is on the June 2026 roadmap.</p>

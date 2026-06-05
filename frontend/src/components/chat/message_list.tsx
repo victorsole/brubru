@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import type { Message, Citation, DetectedEntities, ChatAction } from './chat_interface';
 import { ActionButtons } from './action_buttons';
+import { DraftedDocumentCard } from './drafted_document_card';
 import { getEultUrl } from '../../utils/eu_links';
 import './message_list.css';
 
@@ -389,6 +390,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                           </button>
                         ))}
                       </div>
+                    )}
+                    {message.draftedDocument && (
+                      <DraftedDocumentCard drafted={message.draftedDocument} />
                     )}
                     {isLastAssistant && message.actions && message.actions.length > 0 && onActionClick && (
                       <ActionButtons

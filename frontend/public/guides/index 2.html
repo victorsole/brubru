@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru Knowledge Guide Library | 226 EU Policy Guides</title>
+  <meta name="description" content="Browse all 226 Brubru knowledge guides covering EU policy, legislation, and institutional processes. 7,387 keyword triggers, updated 07 May 2026.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(6,147,227,0.1); color: var(--color-blue); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--color-blue); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 750px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 4px; background: var(--color-blue); color: white; border-radius: 11px; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .guide-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+    .guide-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; transition: all 0.2s; }
+    .guide-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .guide-card__header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.25rem; }
+    .guide-card__title { font-size: 0.95rem; font-weight: 700; }
+    .guide-card__stats { font-size: 0.75rem; color: var(--color-muted); white-space: nowrap; }
+    .guide-card__meta { font-size: 0.8rem; color: var(--color-secondary); }
+    .guide-card__status { margin-top: 0.35rem; }
+
+    .pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .footer { background: var(--color-bg-alt); border-top: 1px solid var(--color-border); padding: 2rem; text-align: center; font-size: 0.85rem; color: var(--color-secondary); margin-top: 3rem; }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; border-radius: 50%; background: var(--color-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transition: all 0.3s; z-index: 50; }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    @media (max-width: 1024px) { .figures { grid-template-columns: repeat(2, 1fr); } .toc__grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 767px) { .hero__title { font-size: 1.8rem; } .figures { grid-template-columns: 1fr 1fr; } .toc__grid { grid-template-columns: 1fr; } .header { padding: 0.75rem 1rem; } .header__cta { display: none; } .container { padding: 1.25rem; } .hero__meta { flex-direction: column; gap: 0.5rem; } .guide-card__header { flex-direction: column; gap: 0.25rem; } }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Knowledge Guide Library</div>
+    <div class="header__subtitle">All EU policy domains covered by Brubru's chatbot</div>
+  </div>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<section class="hero">
+  <div class="hero__tag">Updated 07 May 2026</div>
+  <h1 class="hero__title">Brubru's <span>Knowledge Guides</span></h1>
+  <p class="hero__subtitle">
+    Every guide is a verified, structured briefing that powers Brubru's chatbot answers.
+    Browse 226 guides across 19 EU policy domains.
+  </p>
+  <div class="hero__meta">
+    <span><span class="mdi mdi-book-open-page-variant"></span> 226 guides</span>
+    <span><span class="mdi mdi-tag-multiple"></span> 7,387 keyword triggers</span>
+    <span><span class="mdi mdi-text-box-outline"></span> 2,047,527 characters</span>
+    <span><span class="mdi mdi-folder-multiple"></span> 19 categories</span>
+  </div>
+</section>
+
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">226</div>
+    <div class="figure-card__label">Knowledge guides</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">7,387</div>
+    <div class="figure-card__label">Keyword triggers</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">19</div>
+    <div class="figure-card__label">Policy domains</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">2047K</div>
+    <div class="figure-card__label">Characters of knowledge</div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc__title">Categories</div>
+  <div class="toc__grid">
+        <a href="#digital-and-technology" class="toc__link"><span class="toc__num">46</span> Digital and Technology</a>
+        <a href="#energy-and-climate" class="toc__link"><span class="toc__num">22</span> Energy and Climate</a>
+        <a href="#institutional" class="toc__link"><span class="toc__num">20</span> Institutional</a>
+        <a href="#other" class="toc__link"><span class="toc__num">18</span> Other</a>
+        <a href="#trade-and-customs" class="toc__link"><span class="toc__num">13</span> Trade and Customs</a>
+        <a href="#health" class="toc__link"><span class="toc__num">13</span> Health</a>
+        <a href="#migration-and-home-affairs" class="toc__link"><span class="toc__num">12</span> Migration and Home Affairs</a>
+        <a href="#defence-and-security" class="toc__link"><span class="toc__num">11</span> Defence and Security</a>
+        <a href="#environment" class="toc__link"><span class="toc__num">11</span> Environment</a>
+        <a href="#economic-and-financial-affairs" class="toc__link"><span class="toc__num">11</span> Economic and Financial Affairs</a>
+        <a href="#employment-and-social-affairs" class="toc__link"><span class="toc__num">9</span> Employment and Social Affairs</a>
+        <a href="#transport" class="toc__link"><span class="toc__num">7</span> Transport</a>
+        <a href="#research-and-innovation" class="toc__link"><span class="toc__num">6</span> Research and Innovation</a>
+        <a href="#external-relations" class="toc__link"><span class="toc__num">6</span> External Relations</a>
+        <a href="#competition-and-single-market" class="toc__link"><span class="toc__num">6</span> Competition and Single Market</a>
+        <a href="#agriculture-and-food" class="toc__link"><span class="toc__num">6</span> Agriculture and Food</a>
+        <a href="#professional-skills" class="toc__link"><span class="toc__num">6</span> Professional Skills</a>
+        <a href="#brubru-platform" class="toc__link"><span class="toc__num">2</span> Brubru Platform</a>
+        <a href="#justice-and-home-affairs" class="toc__link"><span class="toc__num">1</span> Justice and Home Affairs</a>
+  </div>
+</nav>
+
+
+    <section class="section" id="digital-and-technology">
+      <div class="section__header">
+        <div class="section__icon" style="background: #0693e3;"><span class="mdi mdi-chip"></span></div>
+        <h2 class="section__title">Digital and Technology</h2>
+      </div>
+      <p class="section__subtitle">46 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">"One Europe, One Market" Roadmap: Interinstitutional Single Market Deepening Pla</span>
+            <span class="guide-card__stats">11 triggers | 9,263 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AI Act Amendments 2026 -- Simplification Omnibus (Nudifier Ban + High-Risk Delay</span>
+            <span class="guide-card__stats">46 triggers | 5,676 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/0359(COD) | IMCO + LIBE (joint)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AI Act Harmonised Standards — M/613 + M/606 Programme</span>
+            <span class="guide-card__stats">17 triggers | 5,658 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">working drafts under M/613 circulating. Draft adop</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AI Continent Action Plan</span>
+            <span class="guide-card__stats">37 triggers | 9,243 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 723</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Apply AI Strategy and EU Public Sector AI Adoption</span>
+            <span class="guide-card__stats">65 triggers | 12,933 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 723</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Automattic Inc. — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">5 triggers | 4,454 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Brubru Features & Data Sources</span>
+            <span class="guide-card__stats">0 triggers | 7,520 chars</span>
+          </div>
+          <div class="guide-card__meta">2024/0176(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">CJEU Landmark Article 2 TEU Judgment: Commission v Hungary (Anti-LGBTI Law, 2026</span>
+            <span class="guide-card__stats">21 triggers | 9,988 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Coinbase — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">4 triggers | 4,059 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Copyright and Generative AI: EP Report</span>
+            <span class="guide-card__stats">16 triggers | 4,039 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">DG GROW Databases for Single Market Compliance</span>
+            <span class="guide-card__stats">35 triggers | 5,558 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Dark Web and EU Cybersecurity Policy</span>
+            <span class="guide-card__stats">18 triggers | 8,045 chars</span>
+          </div>
+          <div class="guide-card__meta">2022/0155(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Data Retention / ePrivacy Derogation Extension (Regulation 2021/1232)</span>
+            <span class="guide-card__stats">18 triggers | 9,514 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 209 | 2025/0429(COD) | CLOSE_TO_ADOPTION**.</div>
+          <div class="guide-card__status"><span class="pill pill--green">CLOSE_TO_ADOPTION**. Lead committee LIBE.</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Digital Fairness Act (DFA)</span>
+            <span class="guide-card__stats">31 triggers | 11,264 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">Commission proposal expected Q4 2026</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Digital Markets Act (DMA)</span>
+            <span class="guide-card__stats">121 triggers | 20,911 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 178 | 2022/0003(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Digital Networks Act</span>
+            <span class="guide-card__stats">65 triggers | 14,436 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 0016 | 2026/0013(COD) | **ITRE** (Industry, </div>
+          <div class="guide-card__status"><span class="pill pill--blue">*awaiting committee decision*.</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Digital Services Act: Enforcement and Cases</span>
+            <span class="guide-card__stats">102 triggers | 21,854 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022)209 | 2020/0361(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Discord Inc. — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">6 triggers | 4,076 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Artificial Intelligence Act (AI Act)</span>
+            <span class="guide-card__stats">67 triggers | 12,944 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 206 | 2021/0106(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Cybersecurity Act and Proposed Revision</span>
+            <span class="guide-card__stats">57 triggers | 8,217 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026)11 | 2017/0225(COD) | ITRE (Industry, Rese</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Preparatory phase in Parliament (March 2026)</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Digital Omnibus Package (19 November 2025)</span>
+            <span class="guide-card__stats">37 triggers | 18,762 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 836 | 2025/0359(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Film Financing and Support for Cinema from Smaller Member States</span>
+            <span class="guide-card__stats">39 triggers | 5,884 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Financial Supervision: ESAs, MiCA, and DORA</span>
+            <span class="guide-card__stats">20 triggers | 14,630 chars</span>
+          </div>
+          <div class="guide-card__meta">ECON (Economic and M</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Fisheries Policy and Control</span>
+            <span class="guide-card__stats">35 triggers | 17,277 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)195 | 2025/0106(COD) | PECH (Fisheries)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Media Landscape: Brussels Policy Press</span>
+            <span class="guide-card__stats">12 triggers | 7,738 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Multilingual, Translation and Content Localisation Law</span>
+            <span class="guide-card__stats">22 triggers | 10,396 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Product Safety and Consumer Protection</span>
+            <span class="guide-card__stats">41 triggers | 3,712 chars</span>
+          </div>
+          <div class="guide-card__meta">IMCO (Internal Marke</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Returns Policy Reform (Return Regulation)</span>
+            <span class="guide-card__stats">24 triggers | 4,917 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)0101 | 2025/0059(COD) | LIBE (Civil Libertie</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Awaiting plenary vote to confirm LIBE negotiating </span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Waste Shipment Regulation (WSR) and DIWASS Digital System</span>
+            <span class="guide-card__stats">17 triggers | 6,219 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-wide Age Verification Recommendation (28 April 2026)</span>
+            <span class="guide-card__stats">27 triggers | 7,626 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Ecodesign for Sustainable Products Regulation (ESPR) and Digital Product Passpor</span>
+            <span class="guide-card__stats">75 triggers | 10,228 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022)142 | 2022/0095(COD) | ENVI</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Epic Games, Inc. — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">6 triggers | 4,512 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Essential EU Websites & Resources</span>
+            <span class="guide-card__stats">0 triggers | 5,794 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Europe's Beating Cancer Plan</span>
+            <span class="guide-card__stats">16 triggers | 6,311 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 44 | SANT (Subcommittee o</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Council and Council of the EU -- Personnel Directory</span>
+            <span class="guide-card__stats">36 triggers | 11,188 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Health Data Space (EHDS)</span>
+            <span class="guide-card__stats">17 triggers | 6,698 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022)197 | 2022/0140(COD) | ENVI (Environment, P</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Parliament -- Personnel Directory</span>
+            <span class="guide-card__stats">41 triggers | 6,727 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Europol Regulation Revision (Q2 2026 Commission Proposal Expected)</span>
+            <span class="guide-card__stats">22 triggers | 4,758 chars</span>
+          </div>
+          <div class="guide-card__meta">LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Eurostat Statistics Production</span>
+            <span class="guide-card__stats">17 triggers | 13,385 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">General Data Protection Regulation (GDPR)</span>
+            <span class="guide-card__stats">20 triggers | 12,039 chars</span>
+          </div>
+          <div class="guide-card__meta">LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Grindr Inc. — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">5 triggers | 3,828 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">High-Level Study Group on Connectivity and Digital Infrastructure</span>
+            <span class="guide-card__stats">12 triggers | 5,734 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 0016 | 2026/0013(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Late Payments Regulation</span>
+            <span class="guide-card__stats">29 triggers | 5,999 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)533 | 2023/0323(COD) | IMCO (Internal Marke</div>
+          <div class="guide-card__status"><span class="pill pill--red">BLOCKED in Council. EP adopted 1st reading 23 Apri</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Nextdoor Holdings, Inc. — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">3 triggers | 4,409 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Politico AI & Tech Week 2026 — Brussels, 5-7 May 2026</span>
+            <span class="guide-card__stats">62 triggers | 15,148 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 178 | 2025/0359(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">UN Convention against Cybercrime</span>
+            <span class="guide-card__stats">14 triggers | 4,206 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/0231(NLE) | LIBE (Civil Libertie</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="energy-and-climate">
+      <div class="section__header">
+        <div class="section__icon" style="background: #059669;"><span class="mdi mdi-flash"></span></div>
+        <h2 class="section__title">Energy and Climate</h2>
+      </div>
+      <p class="section__subtitle">22 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AI and Sustainability: the EU Regulatory Framework</span>
+            <span class="guide-card__stats">39 triggers | 8,989 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 723</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AccelerateEU: EU Response to the Fossil Energy Crisis</span>
+            <span class="guide-card__stats">26 triggers | 7,616 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 380</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Battery Regulation: Removability Exemptions Public Consultation (DG ENV, April 2</span>
+            <span class="guide-card__stats">9 triggers | 2,676 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">CBAM Scope Extension to Downstream Goods + Anti-Circumvention</span>
+            <span class="guide-card__stats">16 triggers | 6,058 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 989 | 2025/0419(COD) | ENVI (Environment, C</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Citizens Energy Package</span>
+            <span class="guide-card__stats">38 triggers | 10,823 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 115</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Communication (non-legislative) with recommendatio</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Clean Energy Investment Strategy</span>
+            <span class="guide-card__stats">36 triggers | 9,141 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 116</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Communication (non-legislative), but triggers regu</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EP Fundamental Rights Report 2024-2025 (Strolenberg INI)</span>
+            <span class="guide-card__stats">6 triggers | 5,158 chars</span>
+          </div>
+          <div class="guide-card__meta">EP annual **own-init</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Battery Booster Strategy</span>
+            <span class="guide-card__stats">23 triggers | 5,088 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">Draft Decision under consultation (March 2026); no</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Energy Policy Framework</span>
+            <span class="guide-card__stats">213 triggers | 29,756 chars</span>
+          </div>
+          <div class="guide-card__meta">ITRE (Industry, Rese</div>
+          <div class="guide-card__status"><span class="pill pill--blue">DG ENER published data from the 2nd PCI/PMI list (</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Islands and Insular Territories</span>
+            <span class="guide-card__stats">16 triggers | 5,676 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Regulatory Landscape for Major Spanish Companies (IBEX 35 and Beyond)</span>
+            <span class="guide-card__stats">33 triggers | 7,842 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Small Modular Reactors (SMR) Strategy</span>
+            <span class="guide-card__stats">49 triggers | 10,866 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 117</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Communication (non-legislative strategy)</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Special Representatives (EUSRs)</span>
+            <span class="guide-card__stats">39 triggers | 5,744 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-NATO Relations in the Southern Neighbourhood</span>
+            <span class="guide-card__stats">15 triggers | 5,348 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Emissions Accounting in Transport Services -- CountEmissions EU</span>
+            <span class="guide-card__stats">13 triggers | 5,112 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 441 | 2023/0266(COD) | TRAN (Transport and </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Affordable Housing Plan (EAHP)</span>
+            <span class="guide-card__stats">27 triggers | 8,368 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 1025</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Climate Law</span>
+            <span class="guide-card__stats">85 triggers | 6,756 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Grids Package</span>
+            <span class="guide-card__stats">38 triggers | 14,698 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)85</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Semester Annual Report 2026 -- EP Reports</span>
+            <span class="guide-card__stats">20 triggers | 5,252 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2182(INI)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Iran War, Strait of Hormuz and EU Crisis Response</span>
+            <span class="guide-card__stats">71 triggers | 15,803 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Multiannual Financial Framework 2028-2034</span>
+            <span class="guide-card__stats">125 triggers | 23,577 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Transboundary Water Governance (EU + Global)</span>
+            <span class="guide-card__stats">13 triggers | 6,983 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 280</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="institutional">
+      <div class="section__header">
+        <div class="section__icon" style="background: #6b7280;"><span class="mdi mdi-bank"></span></div>
+        <h2 class="section__title">Institutional</h2>
+      </div>
+      <p class="section__subtitle">20 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">CELEX Number Format — the EU Legal-Document Identifier System</span>
+            <span class="guide-card__stats">32 triggers | 11,687 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Combating Firearms Trafficking and Other Firearms-Related Offences</span>
+            <span class="guide-card__stats">11 triggers | 3,052 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 102 | 2026/0059(COD) | **LIBE** (Civil Libe</div>
+          <div class="guide-card__status"><span class="pill pill--blue">**TABLED** -- Commission proposal of 26 February 2</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Consular Protection and the EU Emergency Travel Document (ETD)</span>
+            <span class="guide-card__stats">13 triggers | 3,276 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 930 | 2023/0441(CNS)</div>
+          <div class="guide-card__status"><span class="pill pill--green">**CLOSE_TO_ADOPTION** -- LIBE draft report announc</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Carbon Removal and Carbon Farming Regulation (CRCF)</span>
+            <span class="guide-card__stats">20 triggers | 9,436 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 672 | 2022/0394(COD) | Lidia Pereira, EPP, </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Competitiveness Debate: Member State Positions and Council Dynamics</span>
+            <span class="guide-card__stats">75 triggers | 13,053 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Staff Categories and Grades</span>
+            <span class="guide-card__stats">24 triggers | 5,074 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-Andorra Association Agreement</span>
+            <span class="guide-card__stats">51 triggers | 18,399 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2024) 189 | 2024/0101(NLE) | NLE — **Consent by P</div>
+          <div class="guide-card__status"><span class="pill pill--blue">STILL **"Preparatory phase in Parliament"** — the </span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Committee of the Regions (CoR)</span>
+            <span class="guide-card__stats">29 triggers | 8,144 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Education Area 2021-2030 Strategic Framework</span>
+            <span class="guide-card__stats">16 triggers | 8,729 chars</span>
+          </div>
+          <div class="guide-card__meta">CULT (Culture and Ed</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Public Prosecutor's Office (EPPO)</span>
+            <span class="guide-card__stats">27 triggers | 9,286 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/0803(NLE)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Foreign Subsidies Regulation (FSR)</span>
+            <span class="guide-card__stats">17 triggers | 7,500 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Forest Reproductive Material Regulation (FRM)</span>
+            <span class="guide-card__stats">11 triggers | 5,748 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Framework Agreement on Relations Between the European Parliament and the Europea</span>
+            <span class="guide-card__stats">8 triggers | 3,158 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2243(ACI) | **AFCO** (Constituti</div>
+          <div class="guide-card__status"><span class="pill pill--green">**CLOSE_TO_ADOPTION** -- AFCO draft report announc</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Hungary 2026 Election: Orban Defeated, Magyar's Grand Bargain with Brussels</span>
+            <span class="guide-card__stats">42 triggers | 10,373 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Linguistic Patterns of EU Directives</span>
+            <span class="guide-card__stats">0 triggers | 27,597 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Organising EU Policy Events in Brussels</span>
+            <span class="guide-card__stats">0 triggers | 6,681 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Product Liability Directive (Directive (EU) 2024/2853)</span>
+            <span class="guide-card__stats">20 triggers | 5,511 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 495 | 2022/0302(COD) | IMCO + JURI</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Public Access to Documents: Regulation (EC) 1049/2001</span>
+            <span class="guide-card__stats">17 triggers | 6,828 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2008) 229 | 2011/0073(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Stakeholder Mapping for EU Public Affairs</span>
+            <span class="guide-card__stats">0 triggers | 11,633 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Understanding the Council of the EU</span>
+            <span class="guide-card__stats">20 triggers | 5,945 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="other">
+      <div class="section__header">
+        <div class="section__icon" style="background: #6b7280;"><span class="mdi mdi-file-document-outline"></span></div>
+        <h2 class="section__title">Other</h2>
+      </div>
+      <p class="section__subtitle">18 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AFCO Institutional Framework Review and Article 19 TEU Interaction with National</span>
+            <span class="guide-card__stats">11 triggers | 9,700 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2263(INI) | AFCO (Constitutional</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Commission Communication on Better Regulation and Enforcement (April 2026)</span>
+            <span class="guide-card__stats">42 triggers | 10,354 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 380</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Consent-Based Definition of Rape -- EU Debate</span>
+            <span class="guide-card__stats">20 triggers | 7,758 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 105 | FEMM (Women's Rights</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Corporate Sustainability Due Diligence Directive (CSDDD)</span>
+            <span class="guide-card__stats">48 triggers | 14,354 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 71 | 2022/0051(COD) | JURI (Legal Affairs)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Deportation and Return of Ukrainian Children: EU Response</span>
+            <span class="guide-card__stats">25 triggers | 8,723 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EP Plenary Sessions: March-April 2026</span>
+            <span class="guide-card__stats">84 triggers | 16,183 chars</span>
+          </div>
+          <div class="guide-card__meta">2026/2576(RSP)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EP Proxy Voting in Plenary During Pregnancy and After Giving Birth</span>
+            <span class="guide-card__stats">8 triggers | 2,995 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2195(INL) | **AFCO** (Constituti</div>
+          <div class="guide-card__status"><span class="pill pill--green">**CLOSE_TO_ADOPTION** -- LIBE/AFCO procedural mile</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU "Right to Stay" Strategy (DG REGIO, May 2026)</span>
+            <span class="guide-card__stats">19 triggers | 5,020 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Anti-Money Laundering Framework: AMLA, 6th Directive, and International Compa</span>
+            <span class="guide-card__stats">40 triggers | 7,380 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Automotive Omnibus (Automotive Industrial Action Plan)</span>
+            <span class="guide-card__stats">38 triggers | 5,503 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)95</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Chips Act</span>
+            <span class="guide-card__stats">18 triggers | 15,305 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 46 | 2022/0032(COD) | ITRE (Industry, Rese</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Recovery and Resilience Facility (RRF) and National Recovery Plans (NRRPs)</span>
+            <span class="guide-card__stats">64 triggers | 11,451 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 179</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Territorial Supply Constraints (TSCs)</span>
+            <span class="guide-card__stats">19 triggers | 7,502 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Enhanced EU Decision-Making Through the Treaties: Passerelle Clauses and Article</span>
+            <span class="guide-card__stats">10 triggers | 3,365 chars</span>
+          </div>
+          <div class="guide-card__meta">2026/2012(INI) | **AFCO** (Constituti</div>
+          <div class="guide-card__status"><span class="pill pill--blue">**TABLED** -- AFCO draft report announcement 29 Ap</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Semester and Economic Communication</span>
+            <span class="guide-card__stats">10 triggers | 10,042 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 369</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Fertilisers Action Plan (forthcoming, College tentative 13 May 2026)</span>
+            <span class="guide-card__stats">13 triggers | 6,303 chars</span>
+          </div>
+          <div class="guide-card__meta">AGRI (with opinions </div>
+          <div class="guide-card__status"><span class="pill pill--green">**Forthcoming**, scheduled for College adoption **</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Sudan Humanitarian Crisis: EU Response</span>
+            <span class="guide-card__stats">15 triggers | 3,603 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">ePrivacy: Directive, Proposed Regulation, and Current Status</span>
+            <span class="guide-card__stats">27 triggers | 15,582 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2017) 10 | 2017/0003(COD)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">WITHDRAWN by Commission on 11 February 2025 (2025 </span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="trade-and-customs">
+      <div class="section__header">
+        <div class="section__icon" style="background: #d97706;"><span class="mdi mdi-swap-horizontal"></span></div>
+        <h2 class="section__title">Trade and Customs</h2>
+      </div>
+      <p class="section__subtitle">13 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Budget and Economic & Monetary Union Law</span>
+            <span class="guide-card__stats">91 triggers | 16,387 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 179 | 2025/2247(BUI)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">"EU Corporate Tax Policy in a Changing Environment</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Customs Electronic Systems</span>
+            <span class="guide-card__stats">19 triggers | 3,820 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Customs Reform</span>
+            <span class="guide-card__stats">11 triggers | 2,547 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 258 | 2023/0156(COD) | IMCO (Internal Marke</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Trilogue ongoing (March 2026). Commission publishe</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Trade Defence Instruments</span>
+            <span class="guide-card__stats">52 triggers | 13,223 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2955(RSP)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Trade Policy</span>
+            <span class="guide-card__stats">192 triggers | 17,224 chars</span>
+          </div>
+          <div class="guide-card__meta">INTA (International </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-Australia Trade Agreement</span>
+            <span class="guide-card__stats">21 triggers | 5,077 chars</span>
+          </div>
+          <div class="guide-card__meta">INTA (International </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-Latin America and Caribbean Relations</span>
+            <span class="guide-card__stats">18 triggers | 8,744 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-Mercosur Interim Trade Agreement: Provisional Application from 1 May 2026</span>
+            <span class="guide-card__stats">22 triggers | 11,304 chars</span>
+          </div>
+          <div class="guide-card__meta">AGRI, DEVE, ENVI, AF</div>
+          <div class="guide-card__status"><span class="pill pill--blue">**Provisional application begins Friday 1 May 2026</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU-US Trade Deal 2026</span>
+            <span class="guide-card__stats">94 triggers | 17,038 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">New Generalised Scheme of Preferences (GSP) -- Post-2027 Framework</span>
+            <span class="guide-card__stats">16 triggers | 5,339 chars</span>
+          </div>
+          <div class="guide-card__meta">INTA (International </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Tobacco Taxation Directive Revision (Recast)</span>
+            <span class="guide-card__stats">23 triggers | 12,063 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/0580(CNS)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Union Customs Code Reform (COM(2023)258)</span>
+            <span class="guide-card__stats">47 triggers | 7,184 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)258 | 2023/0156(COD) | IMCO (Internal Marke</div>
+          <div class="guide-card__status"><span class="pill pill--blue">awaiting Council's 1st reading position (Parliamen</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Welfare of Dogs and Cats and Traceability (EU Regulation)</span>
+            <span class="guide-card__stats">15 triggers | 5,989 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 769 | 2023/0421(COD)</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="health">
+      <div class="section__header">
+        <div class="section__icon" style="background: #059669;"><span class="mdi mdi-hospital-box-outline"></span></div>
+        <h2 class="section__title">Health</h2>
+      </div>
+      <p class="section__subtitle">13 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Bioeconomy and Food Systems R&I Policy</span>
+            <span class="guide-card__stats">24 triggers | 14,226 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2018) 673 | 2024/0319(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Anti-Poverty Strategy 2026</span>
+            <span class="guide-card__stats">22 triggers | 9,959 chars</span>
+          </div>
+          <div class="guide-card__meta">EMPL (Employment and</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Food Safety and Pesticide Regulation</span>
+            <span class="guide-card__stats">75 triggers | 8,275 chars</span>
+          </div>
+          <div class="guide-card__meta">ENVI (Environment, P</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Occupational Health and Safety</span>
+            <span class="guide-card__stats">29 triggers | 3,545 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 323 | EMPL (Employment and</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Pharmaceutical Legal Framework</span>
+            <span class="guide-card__stats">81 triggers | 10,723 chars</span>
+          </div>
+          <div class="guide-card__meta">SANT (Public Health)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Pharmaceutical Legislation Reform</span>
+            <span class="guide-card__stats">52 triggers | 6,861 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)192 | 2023/0132(COD) | SANT (Public Health)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">provisional agreement reached 11 December 2025, aw</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU4Health 2027: priorities consultation</span>
+            <span class="guide-card__stats">10 triggers | 3,872 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">Consultation open as of **Monday 4 May 2026** (DG </span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Employment Policy and the Future of Work</span>
+            <span class="guide-card__stats">80 triggers | 12,608 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2016) 815 | EMPL (Employment and</div>
+          <div class="guide-card__status"><span class="pill pill--blue">(EU) 2024/2831 -- employment status, algorithmic m</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">European Biotech Act</span>
+            <span class="guide-card__stats">67 triggers | 14,333 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 1022 | 2025/2087(INI)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Medical Devices Regulation (MDR)</span>
+            <span class="guide-card__stats">19 triggers | 6,160 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)1022 | 2025/0404(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Novel Food Regulation and Edible Insects in the EU</span>
+            <span class="guide-card__stats">23 triggers | 9,819 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Pharmaceutical Sector: Full Regulatory Landscape</span>
+            <span class="guide-card__stats">82 triggers | 16,472 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">REACH and EU Chemicals Regulation</span>
+            <span class="guide-card__stats">48 triggers | 10,161 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 245 | 2023/0234(COD)</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="migration-and-home-affairs">
+      <div class="section__header">
+        <div class="section__icon" style="background: #dc2626;"><span class="mdi mdi-passport"></span></div>
+        <h2 class="section__title">Migration and Home Affairs</h2>
+      </div>
+      <p class="section__subtitle">12 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">"Terrible Ten" Single Market Barriers and Proportionality Guidance</span>
+            <span class="guide-card__stats">27 triggers | 5,339 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Anti-Corruption Directive</span>
+            <span class="guide-card__stats">19 triggers | 2,974 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)234 | 2023/0135(COD) | LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Combating Child Sexual Abuse Online: EU Regulatory Framework</span>
+            <span class="guide-card__stats">120 triggers | 34,683 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 209 | 2022/0155(COD)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">**EXPIRED 3 April 2026**. No plenary vote on the e</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">ERTMS Deployment Plan and Decision (EU) 2023/1095</span>
+            <span class="guide-card__stats">15 triggers | 5,463 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Demographic Change and Population Projections</span>
+            <span class="guide-card__stats">22 triggers | 7,792 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 577</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Drugs Agency (EUDA, formerly EMCDDA)</span>
+            <span class="guide-card__stats">27 triggers | 5,065 chars</span>
+          </div>
+          <div class="guide-card__meta">LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Pact on Migration and Asylum</span>
+            <span class="guide-card__stats">69 triggers | 10,069 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2020)609 | LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Rare Diseases Policy Framework</span>
+            <span class="guide-card__stats">27 triggers | 20,144 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2130(INL)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Eurodac and the New Pact on Migration and Asylum</span>
+            <span class="guide-card__stats">25 triggers | 5,670 chars</span>
+          </div>
+          <div class="guide-card__meta">2016/0132(COD) | LIBE</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Facilitation Directive Reform (Anti-Smuggling Package)</span>
+            <span class="guide-card__stats">14 triggers | 4,536 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)755 | 2023/0340(COD) | LIBE (Civil Libertie</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Georgia Visa-Free Travel Suspension</span>
+            <span class="guide-card__stats">13 triggers | 1,796 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Linguistic Patterns of EU Regulations</span>
+            <span class="guide-card__stats">0 triggers | 30,035 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="defence-and-security">
+      <div class="section__header">
+        <div class="section__icon" style="background: #6b7280;"><span class="mdi mdi-shield-outline"></span></div>
+        <h2 class="section__title">Defence and Security</h2>
+      </div>
+      <p class="section__subtitle">11 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Common European Defence Union: Institutional Design</span>
+            <span class="guide-card__stats">22 triggers | 5,757 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2024) 150 | 2025/2212(INI)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Critical Medicines Act</span>
+            <span class="guide-card__stats">22 triggers | 4,961 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)102 | 2025/0102(COD) | SANT (Public Health)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Commission proposal published March 2025. EP commi</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Cardiovascular Health Plan</span>
+            <span class="guide-card__stats">13 triggers | 5,013 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 44</div>
+          <div class="guide-card__status"><span class="pill pill--blue">**Call for Evidence open** (DG SANTE, announced 21</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Common Military List</span>
+            <span class="guide-card__stats">21 triggers | 12,575 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Defence Procurement</span>
+            <span class="guide-card__stats">191 triggers | 22,725 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2024) 150 | 2026/0078(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Sanctions Implementation Framework</span>
+            <span class="guide-card__stats">28 triggers | 5,541 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Space Programme and Defence</span>
+            <span class="guide-card__stats">11 triggers | 14,254 chars</span>
+          </div>
+          <div class="guide-card__meta">Commission proposal </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU and the Global Coalition on Telecommunications (GCOT)</span>
+            <span class="guide-card__stats">12 triggers | 3,968 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">**First strategic partner** of GCOT, announced **M</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Military Mobility and Dual-Use Logistics</span>
+            <span class="guide-card__stats">14 triggers | 6,663 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">SAFE Instrument and ReArm Europe (Readiness 2030)</span>
+            <span class="guide-card__stats">48 triggers | 8,583 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 120 | 2025/0076(NLE)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">United States' 2026 National Defence Strategy -- EU-US Transatlantic Implication</span>
+            <span class="guide-card__stats">15 triggers | 4,793 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2212(INI)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">2026 NDS released by US DoD, classified summary; u</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="environment">
+      <div class="section__header">
+        <div class="section__icon" style="background: #059669;"><span class="mdi mdi-leaf"></span></div>
+        <h2 class="section__title">Environment</h2>
+      </div>
+      <p class="section__subtitle">11 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Corporate Tax Policy in a Changing Environment (Kollár ECON INI 2026)</span>
+            <span class="guide-card__stats">12 triggers | 5,637 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">Pillar Two implementation review, BEFIT proposal s</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Deforestation Regulation (EUDR)</span>
+            <span class="guide-card__stats">19 triggers | 13,135 chars</span>
+          </div>
+          <div class="guide-card__meta">2021/0366(COD) | ENVI (Environment, P</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Water Legislation</span>
+            <span class="guide-card__stats">42 triggers | 6,860 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Water Pollution and PFAS Regulation</span>
+            <span class="guide-card__stats">32 triggers | 5,455 chars</span>
+          </div>
+          <div class="guide-card__meta">2022/0344(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Wildfire Risk Management</span>
+            <span class="guide-card__stats">21 triggers | 6,666 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 135</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Maritime Decarbonisation -- EU Policy and IMO MEPC 84</span>
+            <span class="guide-card__stats">15 triggers | 5,133 chars</span>
+          </div>
+          <div class="guide-card__meta">TRAN (Transport and </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Natura 2000: Sites of Community Importance Update 2026</span>
+            <span class="guide-card__stats">15 triggers | 4,193 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Nature Restoration Law</span>
+            <span class="guide-card__stats">20 triggers | 10,761 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 304 | 2022/0195(COD) | ENVI (Environment, P</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Omnibus VI -- Chemicals Simplification</span>
+            <span class="guide-card__stats">15 triggers | 5,042 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 245 | 2023/0234(COD) | ENVI (Environment, C</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Single-Use Plastics Directive (SUPD)</span>
+            <span class="guide-card__stats">18 triggers | 7,164 chars</span>
+          </div>
+          <div class="guide-card__meta">2018/0172(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Working with Parliamentary Assistants (APAs)</span>
+            <span class="guide-card__stats">0 triggers | 7,161 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="economic-and-financial-affairs">
+      <div class="section__header">
+        <div class="section__icon" style="background: #0693e3;"><span class="mdi mdi-chart-line"></span></div>
+        <h2 class="section__title">Economic and Financial Affairs</h2>
+      </div>
+      <p class="section__subtitle">11 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">10th Framework Programme (FP10) and European Competitiveness Fund (ECF)</span>
+            <span class="guide-card__stats">71 triggers | 14,308 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Banking Union Reform Package (2nd Reading, March 2026)</span>
+            <span class="guide-card__stats">65 triggers | 4,317 chars</span>
+          </div>
+          <div class="guide-card__meta">2023/0111(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Cohesion Policy 2021-2027: Mid-Term Review</span>
+            <span class="guide-card__stats">41 triggers | 10,172 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 58</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">ECB Monetary Policy and Interest Rates</span>
+            <span class="guide-card__stats">25 triggers | 3,610 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Financial Regulation and Public Procurement</span>
+            <span class="guide-card__stats">31 triggers | 10,929 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Funding for Enlargement Countries: IPA III, Reform and Growth Facility, IPARD</span>
+            <span class="guide-card__stats">123 triggers | 15,130 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Interinstitutional Relations (EP-Council-Commission)</span>
+            <span class="guide-card__stats">15 triggers | 7,069 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Jargon Glossary</span>
+            <span class="guide-card__stats">35 triggers | 5,832 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Taxonomy and Sustainable Finance</span>
+            <span class="guide-card__stats">26 triggers | 6,391 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Horizon Europe Grant Management</span>
+            <span class="guide-card__stats">12 triggers | 11,535 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">International Claims Commission for Ukraine (ICCU)</span>
+            <span class="guide-card__stats">17 triggers | 7,601 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="employment-and-social-affairs">
+      <div class="section__header">
+        <div class="section__icon" style="background: #dc2626;"><span class="mdi mdi-account-group"></span></div>
+        <h2 class="section__title">Employment and Social Affairs</h2>
+      </div>
+      <p class="section__subtitle">9 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Council Recommendation on Fighting Housing Exclusion (2026)</span>
+            <span class="guide-card__stats">24 triggers | 9,001 chars</span>
+          </div>
+          <div class="guide-card__meta">EMPL (Employment and</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Disability Rights Strategy Post-2024</span>
+            <span class="guide-card__stats">13 triggers | 4,482 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 101 | 2025/2057(INI) | 2025/2057(INI) "EU s</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Directive (EU) 2024/2841 -- mutual recognition of </span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Equality and Anti-Discrimination Framework</span>
+            <span class="guide-card__stats">83 triggers | 11,394 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2008)426 | 2025/2239(INI)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Housing Crisis: EP Special Committee Report</span>
+            <span class="guide-card__stats">27 triggers | 3,549 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Social Dialogue and Collective Bargaining</span>
+            <span class="guide-card__stats">58 triggers | 11,852 chars</span>
+          </div>
+          <div class="guide-card__meta">2024/0006(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Strengthened Child Guarantee 2026</span>
+            <span class="guide-card__stats">19 triggers | 7,696 chars</span>
+          </div>
+          <div class="guide-card__meta">EMPL (Employment and</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Gender Equality Strategy 2026-2030</span>
+            <span class="guide-card__stats">22 triggers | 7,685 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2020)152 | FEMM (Women's Rights</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Intergenerational Fairness Strategy</span>
+            <span class="guide-card__stats">14 triggers | 4,878 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Maternity and Paternity Leave in the EU</span>
+            <span class="guide-card__stats">15 triggers | 6,069 chars</span>
+          </div>
+          <div class="guide-card__meta">EMPL jointly with FE</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="transport">
+      <div class="section__header">
+        <div class="section__icon" style="background: #d97706;"><span class="mdi mdi-train-car"></span></div>
+        <h2 class="section__title">Transport</h2>
+      </div>
+      <p class="section__subtitle">7 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">AI Agents Under EU Law: Compliance Architecture for AI Providers</span>
+            <span class="guide-card__stats">18 triggers | 11,755 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Connecting Europe Facility (CEF) — Transport envelope</span>
+            <span class="guide-card__stats">13 triggers | 6,209 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Aviation and Air Transport Policy</span>
+            <span class="guide-card__stats">90 triggers | 10,677 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)441 | 2013/0186(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Railway Regulation</span>
+            <span class="guide-card__stats">40 triggers | 6,928 chars</span>
+          </div>
+          <div class="guide-card__meta">TRAN (Transport and </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Road Safety, Autonomous Vehicles and ADAS Regulation</span>
+            <span class="guide-card__stats">25 triggers | 10,571 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 127 | 2023/0053(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">TEN-T Regulation 2024/1679 (recast) — Trans-European Transport Network</span>
+            <span class="guide-card__stats">24 triggers | 6,924 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 812 | 2021/0420(COD) | TRAN (Transport and </div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Transport Community Treaty: Council Decision (EU) 2026/523</span>
+            <span class="guide-card__stats">7 triggers | 1,816 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="research-and-innovation">
+      <div class="section__header">
+        <div class="section__icon" style="background: #0693e3;"><span class="mdi mdi-lightbulb-on-outline"></span></div>
+        <h2 class="section__title">Research and Innovation</h2>
+      </div>
+      <p class="section__subtitle">6 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Cohesion Policy Audit</span>
+            <span class="guide-card__stats">24 triggers | 15,428 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Comparator (Brubru top-level feature)</span>
+            <span class="guide-card__stats">30 triggers | 6,794 chars</span>
+          </div>
+          <div class="guide-card__meta">Comparator is a spre</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Comparator is a spreadsheet-style workspace inside</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Council of the EU: Analysis and Research Team (ART) Publications</span>
+            <span class="guide-card__stats">10 triggers | 3,458 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025)280</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Definition of Innovative Enterprises, Startups and Scaleups</span>
+            <span class="guide-card__stats">14 triggers | 2,582 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Inc. -- 28th Regime Corporate Legal Framework (COM(2026) 321)</span>
+            <span class="guide-card__stats">121 triggers | 43,848 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026) 321 | 2025/2079(INL) | JURI (Legal Affairs)</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Commission proposal (18 March 2026), EP and Counci</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Knowledge Valorisation and Technology Transfer</span>
+            <span class="guide-card__stats">12 triggers | 13,302 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2022) 31</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="external-relations">
+      <div class="section__header">
+        <div class="section__icon" style="background: #9b51e0;"><span class="mdi mdi-earth"></span></div>
+        <h2 class="section__title">External Relations</h2>
+      </div>
+      <p class="section__subtitle">6 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Commission 2025 Rule of Law Report</span>
+            <span class="guide-card__stats">9 triggers | 5,774 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 700 | Konstantinos Arvanit</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Lobbying Methodology</span>
+            <span class="guide-card__stats">8 triggers | 10,226 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Policy Monitoring: Pro Tips</span>
+            <span class="guide-card__stats">0 triggers | 4,991 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Global Gateway Strategy</span>
+            <span class="guide-card__stats">27 triggers | 5,089 chars</span>
+          </div>
+          <div class="guide-card__meta">2025/2073(INI) | AFET (Foreign Affair</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Lebanon Humanitarian Crisis and EU Response</span>
+            <span class="guide-card__stats">16 triggers | 2,993 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Pact for Skills</span>
+            <span class="guide-card__stats">18 triggers | 8,392 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2020) 274</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="competition-and-single-market">
+      <div class="section__header">
+        <div class="section__icon" style="background: #9b51e0;"><span class="mdi mdi-scale-balance"></span></div>
+        <h2 class="section__title">Competition and Single Market</h2>
+      </div>
+      <p class="section__subtitle">6 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Common Agricultural Policy (CAP) 2023-2027</span>
+            <span class="guide-card__stats">66 triggers | 9,406 chars</span>
+          </div>
+          <div class="guide-card__meta">AGRI</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Competition Law Enforcement</span>
+            <span class="guide-card__stats">89 triggers | 18,027 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Innovation Fund</span>
+            <span class="guide-card__stats">35 triggers | 7,479 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Merger Guidelines 2026 — Public Consultation Draft</span>
+            <span class="guide-card__stats">60 triggers | 15,336 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          <div class="guide-card__status"><span class="pill pill--blue">** **Draft for public consultation** (not yet adop</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">METSAF — Middle East Crisis Temporary State Aid Framework (29 April 2026)</span>
+            <span class="guide-card__stats">21 triggers | 6,984 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Technology Transfer Block Exemption Regulation (TTBER) — 2026 Revision</span>
+            <span class="guide-card__stats">18 triggers | 8,444 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="agriculture-and-food">
+      <div class="section__header">
+        <div class="section__icon" style="background: #059669;"><span class="mdi mdi-sprout"></span></div>
+        <h2 class="section__title">Agriculture and Food</h2>
+      </div>
+      <p class="section__subtitle">6 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Food and Feed Simplification Omnibus ("Omnibus X")</span>
+            <span class="guide-card__stats">16 triggers | 7,818 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 30 | ENVI (Environment, C</div>
+          <div class="guide-card__status"><span class="pill pill--blue">Commission preparing proposal; no OEIL reference y</span></div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Farmed Fish Welfare in the EU (DG SANTE Report 2026)</span>
+            <span class="guide-card__stats">11 triggers | 6,379 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 236</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">JRC Report: Capitalism, Sustainability and Democracy (2026)</span>
+            <span class="guide-card__stats">33 triggers | 10,429 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">MiFID II and MiFIR: EU Financial Markets Regulation</span>
+            <span class="guide-card__stats">57 triggers | 6,173 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2021) 726 | 2021/0384(COD) | ECON (Economic and M</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">New Genomic Techniques (NGT) for Plant Breeding</span>
+            <span class="guide-card__stats">26 triggers | 8,583 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023) 411 | 2023/0226(COD)</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Temporary Decarbonisation Fund (TDF)</span>
+            <span class="guide-card__stats">11 triggers | 6,611 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 85 | ** ITRE (Industry, R</div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="professional-skills">
+      <div class="section__header">
+        <div class="section__icon" style="background: #d97706;"><span class="mdi mdi-briefcase-variant"></span></div>
+        <h2 class="section__title">Professional Skills</h2>
+      </div>
+      <p class="section__subtitle">6 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Circular Economy Act 2026 (CEA)</span>
+            <span class="guide-card__stats">27 triggers | 7,395 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2025) 30</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">EU Law Application Monitoring + Article 258 TFEU Infringement Procedures</span>
+            <span class="guide-card__stats">12 triggers | 5,934 chars</span>
+          </div>
+          <div class="guide-card__meta">Dainius Žalimas** (R</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Roblox Corporation — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">4 triggers | 3,982 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Understanding the European Commission</span>
+            <span class="guide-card__stats">0 triggers | 6,617 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">What Professional EU Public Affairs Looks Like</span>
+            <span class="guide-card__stats">0 triggers | 8,500 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Yubo (TWELVE APP SAS) — EU Regulatory Exposure</span>
+            <span class="guide-card__stats">6 triggers | 4,483 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="brubru-platform">
+      <div class="section__header">
+        <div class="section__icon" style="background: #0693e3;"><span class="mdi mdi-robot-outline"></span></div>
+        <h2 class="section__title">Brubru Platform</h2>
+      </div>
+      <p class="section__subtitle">2 guides</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Industrial Accelerator Act (COM(2026)100)</span>
+            <span class="guide-card__stats">101 triggers | 25,740 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2026)100 | 2026/0068(COD) | keep clear in answer</div>
+          
+        </div>
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">euagenda.eu -- Brussels Events Aggregator (Third-Party Events)</span>
+            <span class="guide-card__stats">23 triggers | 4,527 chars</span>
+          </div>
+          <div class="guide-card__meta"></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="justice-and-home-affairs">
+      <div class="section__header">
+        <div class="section__icon" style="background: #dc2626;"><span class="mdi mdi-gavel"></span></div>
+        <h2 class="section__title">Justice and Home Affairs</h2>
+      </div>
+      <p class="section__subtitle">1 guide</p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card__header">
+            <span class="guide-card__title">Revision of the Package Travel Directive</span>
+            <span class="guide-card__stats">27 triggers | 11,524 chars</span>
+          </div>
+          <div class="guide-card__meta">COM(2023)905</div>
+          <div class="guide-card__status"><span class="pill pill--green">EP first reading adopted 12 March 2026</span></div>
+        </div>
+      </div>
+    </section>
+
+
+</div>
+
+<footer class="footer">
+  <p>
+    Knowledge Guide Library by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.
+    <br>Guides are updated daily during the <a href="https://brubru.beresol.eu">morning routine</a>. Last updated: 07 May 2026.
+    <br><a href="https://beresol.eu/public-affairs">Beresol Public Affairs</a> | <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+</footer>
+
+<a href="#top" class="back-to-top" id="backToTop"><span class="mdi mdi-chevron-up"></span></a>
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 400) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
+  document.getElementById('backToTop').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

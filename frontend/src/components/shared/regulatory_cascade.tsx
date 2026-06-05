@@ -72,6 +72,10 @@ interface CascadeData {
 
 interface RegulatoryCascadeProps {
   procedureRef: string;
+  /** Only directives are transposed into national law -> gates the transposition pane. */
+  isDirective?: boolean;
+  /** Only acts that reference harmonised standards relate to CEN/CENELEC -> gates that pane. */
+  cenRelevant?: boolean;
 }
 
 const formatDate = (iso: string | null) => {
@@ -143,7 +147,7 @@ const SecondaryActRow = ({ act }: { act: SecondaryAct }) => {
   );
 };
 
-export const RegulatoryCascade = ({ procedureRef }: RegulatoryCascadeProps) => {
+export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenRelevant = false }: RegulatoryCascadeProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<CascadeData | null>(null);
@@ -302,7 +306,8 @@ export const RegulatoryCascade = ({ procedureRef }: RegulatoryCascadeProps) => {
         </div>
       )}
 
-      {!data.transposition_data_available && (
+      {/* Transposition only applies to directives (regulations are directly applicable). */}
+      {isDirective && !data.transposition_data_available && (
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>
@@ -316,7 +321,8 @@ export const RegulatoryCascade = ({ procedureRef }: RegulatoryCascadeProps) => {
         </div>
       )}
 
-      {!data.cen_standards_data_available && (
+      {/* CEN/CENELEC only applies to acts that reference harmonised standards. */}
+      {cenRelevant && !data.cen_standards_data_available && (
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>

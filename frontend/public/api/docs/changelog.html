@@ -137,6 +137,17 @@ Every change to <code>/api/v1/*</code> — endpoint additions, response shape tw
 
 <h2>2026</h2>
 
+<h3>2 May 2026 &mdash; EU Vocabularies layer shipped</h3>
+<p>Brubru now speaks the same vocabulary as the EU Publications Office. Six new endpoint families surface label resolution, identifier recognition, and structured self-description in the formats data.europa.eu harvesters expect.</p>
+<ul>
+<li><strong>EU Vocabularies (4 endpoints):</strong> <code>/vocabularies/corporate-bodies</code>, <code>/vocabularies/procedures</code>, <code>/vocabularies/directories</code>, <code>/vocabularies/modification-types</code>. Search the official EU Authority Tables; multilingual labels in EN/FR/ES/CA/IT/NL.</li>
+<li><strong>Identifier resolver (2 endpoints):</strong> <code>GET /identify/{ref}</code> for a single ref, <code>POST /identify/scan</code> for free text. Recognises CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number.</li>
+<li><strong>ECLI search:</strong> <code>GET /discover/ecli/{ecli}</code> returns canonical deep-links. CJEU-aware with e-Justice fallback.</li>
+<li><strong>DCAT-AP self-description:</strong> <code>GET /api/datasets.{ttl,rdf,json}</code> publishes Brubru's datasets in the standard catalogue profile.</li>
+<li><strong>OP Core Metadata on every v1 response:</strong> Dublin-Core-aliased fields (<code>dct:title</code>, <code>dct:identifier</code>, <code>dct:type</code>, <code>dct:language</code>, <code>dct:publisher</code>, <code>dct:conformsTo</code>) plus an <code>X-OP-Core-Conformance</code> response header on every <code>/api/v1/*</code> call.</li>
+<li><strong>Citation verification, extended:</strong> the existing verifier now also checks authority URIs against the local cache. Closes a class of "AI cited a body code that doesn't exist" failures.</li>
+</ul>
+
 <h3>1 May 2026 &mdash; Partner-feedback iteration sprint (post-GovClipping meeting)</h3>
 <p>Same-day iteration after Jordi Montoya's 30 April feedback. 8 cross-cutting fixes audited, shipped and verified end-to-end against production.</p>
 <ul>

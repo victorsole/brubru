@@ -319,3 +319,59 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============ MEUB Overview (greeting + cockpit + navigator) ============ */
+.ov { max-width: 1040px; margin: 0 auto; padding: 1.5rem 0.25rem 2rem; display: flex; flex-direction: column; gap: 1.6rem; }
+
+/* Greeting (Chat-style) */
+.ov-greeting { background: linear-gradient(135deg, #1e3a8a 0%, #0693e3 100%); color: #fff; border-radius: 18px; padding: 1.4rem 1.6rem; }
+.ov-greeting__text { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.45; max-width: 60ch; }
+.ov-hooks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.ov-hook { display: inline-flex; align-items: center; gap: 0.35rem; border: 0; background: rgba(255,255,255,0.16); color: #fff; border-radius: 999px; padding: 0.4rem 0.8rem; font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.ov-hook:hover { background: rgba(255,255,255,0.28); }
+
+/* Explore navigator */
+.ov-explore__title { margin: 0 0 0.9rem; font-size: 1.15rem; color: #0f172a; }
+.ov-navgroup { margin-bottom: 1.1rem; }
+.ov-navgroup__title { display: flex; align-items: center; gap: 0.35rem; margin: 0 0 0.55rem; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #94a3b8; }
+/* Fixed columns so every section's cards line up (auto-fill stretched 2-item rows). */
+.ov-navgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+
+/* Section info tooltip */
+.ov-tip { position: relative; display: inline-flex; align-items: center; color: #cbd5e1; cursor: help; }
+.ov-tip:hover, .ov-tip:focus { color: #0693e3; outline: none; }
+.ov-tip__pop {
+  position: absolute; top: 150%; left: 0; width: 260px; background: #0f172a; color: #f1f5f9;
+  border-radius: 10px; padding: 0.6rem 0.75rem; font-size: 0.78rem; font-weight: 400; line-height: 1.5;
+  text-transform: none; letter-spacing: 0; opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: opacity 0.15s, transform 0.15s; box-shadow: 0 12px 28px rgba(15,23,42,0.25); z-index: 6; pointer-events: none;
+}
+.ov-tip:hover .ov-tip__pop, .ov-tip:focus .ov-tip__pop, .ov-tip:focus-within .ov-tip__pop { opacity: 1; visibility: visible; transform: translateY(0); }
+.ov-navcard { display: flex; align-items: center; gap: 0.6rem; background: #fff; border: 1px solid #e8edf3; border-radius: 12px; padding: 0.7rem 0.85rem; font: inherit; cursor: pointer; text-align: left; transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s; }
+.ov-navcard:hover { box-shadow: 0 8px 20px rgba(15,23,42,0.1); transform: translateY(-2px); border-color: #c7d2e8; }
+.ov-navcard__icon { color: #0693e3; flex-shrink: 0; }
+.ov-navcard__label { flex: 1; font-size: 0.88rem; font-weight: 600; color: #0f172a; }
+.ov-navcard__go { color: #cbd5e1; flex-shrink: 0; }
+.ov-navcard:hover .ov-navcard__go { color: #0693e3; }
+
+@media (max-width: 860px) { .ov-navgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .ov-greeting__text { font-size: 1.1rem; }
+  .ov-navgrid { grid-template-columns: 1fr; }
+  .ov-tip__pop { left: auto; right: 0; }
+}
+
+/* Phase-4: "What touched your workspace" linking digest */
+.ov-digest { }
+.ov-digest__title { display: flex; align-items: center; gap: 0.4rem; margin: 0 0 0.9rem; font-size: 1.15rem; color: #0f172a; }
+.ov-digest__title svg { color: #6c5ce7; }
+.ov-digest__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+.ov-digest__card { background: #fff; border: 1px solid #e8edf3; border-radius: 12px; padding: 0.85rem 1rem; }
+.ov-digest__head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%; border: 0; background: none; padding: 0 0 0.5rem; cursor: pointer; font: inherit; font-size: 0.9rem; font-weight: 700; color: #0959a8; }
+.ov-digest__head:hover { color: #0693e3; }
+.ov-digest__head svg { color: #cbd5e1; }
+.ov-digest__items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.ov-digest__items li { font-size: 0.84rem; color: #334155; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.ov-digest__items a { color: #334155; text-decoration: none; }
+.ov-digest__items a:hover { color: #0693e3; text-decoration: underline; }
+@media (max-width: 700px) { .ov-digest__grid { grid-template-columns: 1fr; } }

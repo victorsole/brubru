@@ -1,4 +1,5 @@
 // frontend/src/components/chat/action_buttons.tsx
+import { useTranslation } from 'react-i18next';
 import type { ChatAction } from './chat_interface';
 import './action_buttons.css';
 
@@ -9,11 +10,12 @@ interface ActionButtonsProps {
 }
 
 export const ActionButtons = ({ actions, onActionClick, isPreUser }: ActionButtonsProps) => {
+  const { t } = useTranslation();
   if (!actions || actions.length === 0) return null;
 
   return (
     <div className="action-buttons">
-      <span className="action-buttons__label">Quick actions:</span>
+      <span className="action-buttons__label">{t('actionButtons.quickActions')}</span>
       <div className="action-buttons__row">
         {actions.map((action, idx) => (
           <button

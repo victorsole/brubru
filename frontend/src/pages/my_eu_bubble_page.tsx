@@ -1,14 +1,22 @@
 // frontend/src/pages/my_eu_bubble_page.tsx
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth, mdiScaleBalance, mdiCompareHorizontal } from '@mdi/js';
+import {
+  mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiTrain,
+  mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation,
+  mdiCalendarMonth, mdiScaleBalance, mdiCompareHorizontal, mdiBookmarkMultipleOutline, mdiMicrophoneMessage,
+  mdiCommentQuestionOutline, mdiHandshakeOutline, mdiAccountGroup, mdiAccountTieOutline,
+  mdiMenu, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiClose, mdiGavel,
+  mdiNewspaperVariantOutline, mdiNewspaperVariantMultipleOutline, mdiBookshelf, mdiFlaskOutline,
+  mdiGraphOutline, mdiBullseyeArrow,
+  mdiRobotOutline, mdiBriefcaseSearchOutline, mdiAccountCircleOutline,
+} from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
 import { AmendmentsTab } from '../components/bubble/amendments_tab';
-import { AnalyticsTab } from '../components/bubble/analytics_tab';
 import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_tab';
 import { MyTrackedFilesTab } from '../components/bubble/my_tracked_files_tab';
 import { ECConsultationsTab } from '../components/bubble/ec_consultations_tab';
@@ -17,23 +25,93 @@ import { PredictionsTab } from '../components/bubble/predictions_tab';
 import { EUCalendarTab } from '../components/bubble/eu_calendar_tab';
 import { EUCalendarCTA } from '../components/bubble/eu_calendar_cta';
 import { PositionAnalysisTab } from '../components/bubble/position_analysis_tab';
+import { DatabasesTab } from '../components/bubble/databases_tab';
+import { ResearchEvidenceTab } from '../components/bubble/research_evidence_tab';
+import { StakeholderMapTab } from '../components/bubble/stakeholder_map_tab';
+import { StrategyDocsTab } from '../components/bubble/strategy_docs_tab';
 import { ComparatorTab } from '../components/bubble/comparator_tab';
-import { NewsSidebar } from '../components/bubble/news_sidebar';
+import { VotesTab } from '../components/bubble/votes_tab';
+import { OJTab } from '../components/bubble/oj_tab';
+import { NewsTab } from '../components/bubble/news_tab';
+import { TranscriptsTab } from '../components/bubble/transcripts_tab';
+import { ParliamentaryQuestionsTab } from '../components/bubble/parliamentary_questions_tab';
+import { LobbyMeetingsTab } from '../components/bubble/lobby_meetings_tab';
+import { CouncilWatchTab } from '../components/bubble/council_watch_tab';
+import { MepWatchTab } from '../components/bubble/mep_watch_tab';
+import { PlenaryAgendaTab } from '../components/bubble/plenary_agenda_tab';
+import { PolicyPreferencesSelector } from '../components/profile/policy_preferences_selector';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
-import { TalkToBrubruButton } from '../components/shared/talk_to_brubru_button';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'my_files' | 'position_analysis' | 'comparator' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType =
+  | 'dashboard' | 'policy_interests' | 'documents'
+  | 'my_files' | 'oj' | 'amendments' | 'comparator' | 'legislative' | 'votes'
+  | 'eu_calendar' | 'consultations' | 'news' | 'transcripts' | 'parliamentary_questions' | 'lobby_meetings'
+  | 'council_watch' | 'mep_watch' | 'plenary_agenda'
+  | 'position_analysis' | 'predictions' | 'databases' | 'research_evidence' | 'stakeholder_mapping' | 'strategy_docs';
 
 const VALID_TABS: TabType[] = [
-  'dashboard', 'my_files', 'position_analysis', 'comparator', 'eu_calendar', 'predictions', 'consultations',
-  'documents', 'amendments', 'analytics', 'legislative',
+  'dashboard', 'policy_interests', 'documents',
+  'my_files', 'oj', 'amendments', 'comparator', 'legislative', 'votes',
+  'eu_calendar', 'news', 'transcripts', 'council_watch', 'mep_watch', 'plenary_agenda',
+  'parliamentary_questions', 'consultations', 'lobby_meetings',
+  'position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs',
 ];
+
+// Per-tab metadata: label key + icon. `dashboard` keeps its id but is now
+// labelled "Overview"; `legislative` keeps its id but is now "Legislative Train".
+const TAB_META: Record<TabType, { labelKey: string; fallback: string; icon: string; isPredictions?: boolean }> = {
+  dashboard:         { labelKey: 'bubble.tabs.overview',          fallback: 'Overview',                 icon: mdiViewDashboard },
+  policy_interests:  { labelKey: 'bubble.tabs.policyInterests',   fallback: 'Policy Interests',         icon: mdiBookmarkMultipleOutline },
+  documents:         { labelKey: 'bubble.tabs.myDocuments',       fallback: 'My Documents',             icon: mdiFileDocument },
+  my_files:          { labelKey: 'bubble.tabs.myTrackedFiles',    fallback: 'My Tracked Files',         icon: mdiStarOutline },
+  oj:                { labelKey: 'bubble.tabs.oj',                 fallback: 'My OJ',                    icon: mdiNewspaperVariantOutline },
+  amendments:        { labelKey: 'bubble.amendments',             fallback: 'Amendments',               icon: mdiFileEdit },
+  comparator:        { labelKey: 'bubble.tabs.comparator',        fallback: 'Comparator',               icon: mdiCompareHorizontal },
+  legislative:       { labelKey: 'bubble.tabs.legislativeTrain',  fallback: 'Legislative Train',        icon: mdiTrain },
+  votes:             { labelKey: 'bubble.tabs.votes',             fallback: 'Votes',                    icon: mdiGavel },
+  eu_calendar:       { labelKey: 'bubble.tabs.euCalendar',        fallback: 'My EU Calendar',           icon: mdiCalendarMonth },
+  consultations:     { labelKey: 'bubble.tabs.consultations',     fallback: 'EC Public Consultations',  icon: mdiCalendarCollapseHorizontal },
+  news:              { labelKey: 'bubble.tabs.news',              fallback: 'News',                     icon: mdiNewspaperVariantMultipleOutline },
+  transcripts:       { labelKey: 'bubble.tabs.transcripts',       fallback: 'Transcripts',              icon: mdiMicrophoneMessage },
+  parliamentary_questions: { labelKey: 'bubble.tabs.parliamentaryQuestions', fallback: 'Parliamentary Questions', icon: mdiCommentQuestionOutline },
+  lobby_meetings:    { labelKey: 'bubble.tabs.lobbyMeetings',     fallback: 'Lobby Meetings',           icon: mdiHandshakeOutline },
+  council_watch:     { labelKey: 'bubble.tabs.councilWatch',      fallback: 'Council Watch',            icon: mdiAccountGroup },
+  mep_watch:         { labelKey: 'bubble.tabs.mepWatch',          fallback: 'MEP Watch',                icon: mdiAccountTieOutline },
+  plenary_agenda:    { labelKey: 'bubble.tabs.plenaryAgenda',     fallback: 'Plenary Order of Business', icon: mdiGavel },
+  position_analysis: { labelKey: 'bubble.tabs.positionAnalysis',  fallback: 'Position Analysis',        icon: mdiScaleBalance },
+  predictions:       { labelKey: 'bubble.tabs.predictions',       fallback: 'Predictions',              icon: mdiCrystalBall, isPredictions: true },
+  databases:         { labelKey: 'bubble.databases',              fallback: 'Brubru Databases',         icon: mdiBookshelf },
+  research_evidence: { labelKey: 'bubble.research_evidence',      fallback: 'Research & Evidence',      icon: mdiFlaskOutline },
+  stakeholder_mapping: { labelKey: 'bubble.stakeholder_mapping',  fallback: 'Stakeholder Mapping',      icon: mdiGraphOutline },
+  strategy_docs:     { labelKey: 'bubble.strategy_docs',          fallback: 'Strategy Docs',            icon: mdiBullseyeArrow },
+};
+
+// The 4-section information architecture (doc 03). Section titles render as
+// small-caps group headers in the folding left sidebar.
+const SECTIONS: { id: string; titleKey: string; titleFallback: string; withName?: boolean; items: TabType[] }[] = [
+  { id: 'corner',        titleKey: 'bubble.sections.corner',        titleFallback: 'Start here',                             items: ['dashboard', 'policy_interests', 'documents', 'news'] },
+  { id: 'legislative',   titleKey: 'bubble.sections.legislative',   titleFallback: 'Legislative Monitoring',                 items: ['my_files', 'oj', 'amendments', 'comparator', 'legislative', 'votes'] },
+  { id: 'institutional', titleKey: 'bubble.sections.institutional', titleFallback: 'Institutional Monitoring',               items: ['eu_calendar', 'transcripts', 'council_watch', 'mep_watch', 'plenary_agenda', 'parliamentary_questions', 'consultations', 'lobby_meetings'] },
+  { id: 'strategy',      titleKey: 'bubble.sections.strategy',      titleFallback: 'Analysis & Strategy',                    items: ['position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs'] },
+];
+
+// Section 5: links OUT to the other Brubru products (navigate, not internal tabs).
+const OTHER_FEATURES: { key: string; labelKey: string; fallback: string; icon: string; route: string }[] = [
+  { key: 'amendator',   labelKey: 'bubble.feat.amendator',   fallback: 'Amendator',     icon: mdiFileEdit,               route: '/amendator' },
+  { key: 'chat',        labelKey: 'bubble.feat.chat',        fallback: 'Chat',          icon: mdiRobotOutline,           route: '/main' },
+  { key: 'eulawcomply', labelKey: 'bubble.feat.eulawcomply', fallback: 'EU Law Comply', icon: mdiScaleBalance,           route: '/eulawcomply' },
+  { key: 'tenderator',  labelKey: 'bubble.feat.tenderator',  fallback: 'Tenderator',    icon: mdiBriefcaseSearchOutline, route: '/tenderator' },
+  { key: 'profile',     labelKey: 'bubble.feat.profile',     fallback: 'Profile',       icon: mdiAccountCircleOutline,   route: '/profile' },
+];
+
+const SIDEBAR_COLLAPSED_KEY = 'meub_sidebar_collapsed';
 
 export const MyEUBubblePage = () => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     const tabParam = searchParams.get('tab');
@@ -43,6 +121,48 @@ export const MyEUBubblePage = () => {
     return 'dashboard';
   });
 
+  // Folding sidebar (desktop) + drawer (mobile)
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; }
+  });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  const toggleCollapsed = () => {
+    setCollapsed(prev => {
+      const next = !prev;
+      try { localStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  // Policy Interests state (mirrors the profile page wiring so both surfaces
+  // read/write the same users.policy_interests field).
+  const [policyInterests, setPolicyInterests] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (user?.policy_interests) {
+      try {
+        const interests = typeof user.policy_interests === 'string'
+          ? JSON.parse(user.policy_interests)
+          : user.policy_interests;
+        setPolicyInterests(Array.isArray(interests) ? interests : []);
+      } catch {
+        setPolicyInterests([]);
+      }
+    } else {
+      setPolicyInterests([]);
+    }
+  }, [user]);
+
+  const handlePolicyUpdate = async (policies: string[]) => {
+    setPolicyInterests(policies);
+    try {
+      await updateProfile({ policy_interests: JSON.stringify(policies) });
+    } catch (err) {
+      console.error('Failed to update policy interests', err);
+    }
+  };
+
   // Respond to URL param changes (e.g. from calendar deep-links)
   useEffect(() => {
     const tabParam = searchParams.get('tab');
@@ -51,69 +171,86 @@ export const MyEUBubblePage = () => {
     }
   }, [searchParams]);
 
-  // Tab-specific Chat hand-off prompts. Each one is a question Brubru is
-  // already able to answer from the user's profile + tracked files; the
-  // /main?q=...&autofire=1 navigation streams the answer immediately.
-  const CHAT_HANDOFF_PROMPTS: Record<TabType, string> = {
-    dashboard: "Brief me on what's new this week across my policy areas and tracked files, and what I should act on first.",
-    my_files: 'Summarise the legislative files I track and what to watch this week.',
-    position_analysis: 'Walk me through the positions on the files I track and which are likely to survive trilogue.',
-    comparator: 'Compare the files I have selected — where do they overlap and where do they conflict?',
-    eu_calendar: 'Summarise the EU institutional events in the next 7 days that touch my policy areas or tracked files.',
-    predictions: 'Predict the outcome of the files I track and explain the key variables driving each prediction.',
-    consultations: 'Which open EC public consultations close soon for my policy areas, and what is the strongest angle for my response?',
-    documents: 'Help me draft a position paper on the file I am viewing — start with the key arguments and likely counter-positions.',
-    amendments: 'Summarise the amendments tabled on my tracked files in the last week and tell me which articles are most affected.',
-    legislative: 'Walk me through where my tracked legislative files sit in the pipeline and the next procedural milestones.',
-    analytics: 'Which of my tracked files are gaining momentum and what does my Brubru usage tell me about my priorities?',
+  const selectTab = (id: TabType) => {
+    setActiveTab(id);
+    setMobileNavOpen(false);
   };
 
-  const tabs = [
-    { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
-    { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
-    { id: 'position_analysis' as TabType, label: t('bubble.tabs.positionAnalysis', 'Position Analysis'), icon: mdiScaleBalance },
-    { id: 'comparator' as TabType, label: 'Comparator', icon: mdiCompareHorizontal },
-    { id: 'eu_calendar' as TabType, label: t('bubble.tabs.euCalendar', 'My EU Calendar'), icon: mdiCalendarMonth },
-    { id: 'predictions' as TabType, label: t('bubble.tabs.predictions', 'Predictions'), icon: mdiCrystalBall, isPredictions: true },
-    { id: 'consultations' as TabType, label: t('bubble.tabs.consultations', 'EC Consultations'), icon: mdiCalendarCollapseHorizontal },
-    { id: 'documents' as TabType, label: t('bubble.documents'), icon: mdiFileDocument },
-    { id: 'amendments' as TabType, label: t('bubble.amendments'), icon: mdiFileEdit },
-    { id: 'legislative' as TabType, label: 'Legislative Tracker', icon: mdiTrain },
-    { id: 'analytics' as TabType, label: t('bubble.analytics'), icon: mdiChartLine },
-  ];
+  const firstName = (user?.full_name || '').trim().split(/\s+/)[0] || t('common.there', 'there');
+  const initials = (user?.full_name || '?')
+    .split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0]?.toUpperCase() || '').join('') || '?';
+
+  const tabLabel = (id: TabType) => t(TAB_META[id].labelKey, TAB_META[id].fallback);
+  const sectionTitle = (s: typeof SECTIONS[number]) =>
+    s.withName ? t(s.titleKey, { name: firstName, defaultValue: s.titleFallback.replace('{{name}}', firstName) })
+               : t(s.titleKey, s.titleFallback);
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
+      case 'policy_interests':
+        return (
+          <div className="my-eu-bubble-page__policy-pane">
+            <h2 className="my-eu-bubble-page__pane-title">{t('bubble.tabs.policyInterests', 'Policy Interests')}</h2>
+            <p className="my-eu-bubble-page__pane-intro">
+              {t('bubble.policyInterestsIntro', "These are the European Commission's own policy areas. Choose the ones that matter to you and Brubru pre-selects the legislative and non-legislative files currently being worked on under them, above all at the European Parliament, so they flow into your feed, calendar and alerts. You can always fine-tune the list later by adding or removing individual files in My Tracked Files.")}
+            </p>
+            <PolicyPreferencesSelector selectedPolicies={policyInterests} onUpdate={handlePolicyUpdate} />
+          </div>
+        );
       case 'my_files':
         return <MyTrackedFilesTab />;
-      case 'position_analysis':
-        return <PositionAnalysisTab />;
+      case 'oj':
+        return <OJTab />;
+      case 'amendments':
+        return <AmendmentsTab />;
       case 'comparator':
         return <ComparatorTab />;
+      case 'legislative':
+        return <LegislativeTrackerTab />;
+      case 'votes':
+        return <VotesTab />;
       case 'eu_calendar':
         // Show CTA for White tier users, full calendar for Yellow+ tiers
         if (!user || user.subscription_tier === 'white') {
           return <EUCalendarCTA />;
         }
         return <EUCalendarTab />;
-      case 'predictions':
-        return <PredictionsTab />;
       case 'consultations':
         // Show CTA for White tier users, full tab for Yellow+ tiers
         if (!user || user.subscription_tier === 'white') {
           return <ConsultationsCTA />;
         }
         return <ECConsultationsTab />;
+      case 'news':
+        return <NewsTab />;
+      case 'transcripts':
+        return <TranscriptsTab />;
+      case 'parliamentary_questions':
+        return <ParliamentaryQuestionsTab />;
+      case 'lobby_meetings':
+        return <LobbyMeetingsTab />;
+      case 'council_watch':
+        return <CouncilWatchTab />;
+      case 'mep_watch':
+        return <MepWatchTab />;
+      case 'plenary_agenda':
+        return <PlenaryAgendaTab />;
+      case 'position_analysis':
+        return <PositionAnalysisTab />;
+      case 'predictions':
+        return <PredictionsTab />;
       case 'documents':
         return <DocumentsTab />;
-      case 'amendments':
-        return <AmendmentsTab />;
-      case 'legislative':
-        return <LegislativeTrackerTab />;
-      case 'analytics':
-        return <AnalyticsTab />;
+      case 'databases':
+        return <DatabasesTab />;
+      case 'research_evidence':
+        return <ResearchEvidenceTab />;
+      case 'stakeholder_mapping':
+        return <StakeholderMapTab />;
+      case 'strategy_docs':
+        return <StrategyDocsTab />;
       default:
         return <DashboardTab />;
     }
@@ -123,6 +260,38 @@ export const MyEUBubblePage = () => {
   const backgroundImage = user?.background_preference && user.background_preference !== 'default'
     ? `/assets/backgrounds/${user.background_preference}`
     : null;
+
+  const renderNavItem = (id: TabType) => {
+    const meta = TAB_META[id];
+    const isActive = activeTab === id;
+    const isPred = !!meta.isPredictions;
+    return (
+      <button
+        key={id}
+        type="button"
+        className={[
+          'my-eu-bubble-nav__item',
+          isActive ? 'my-eu-bubble-nav__item--active' : '',
+          isPred ? 'my-eu-bubble-nav__item--predictions' : '',
+        ].join(' ').trim()}
+        onClick={() => selectTab(id)}
+        aria-current={isActive ? 'page' : undefined}
+        title={collapsed ? tabLabel(id) : undefined}
+      >
+        <span className="my-eu-bubble-nav__item-icon">
+          <Icon
+            path={meta.icon}
+            size={0.9}
+            color={isPred && isActive ? 'url(#predictionGradient)' : (isActive ? '#0693E3' : '#5b6b7a')}
+          />
+        </span>
+        <span className={`my-eu-bubble-nav__item-label ${isPred && isActive ? 'my-eu-bubble-nav__item-label--gradient' : ''}`}>
+          {isPred && isActive && <Icon path={mdiCreation} size={0.55} className="my-eu-bubble-nav__sparkle" />}
+          {tabLabel(id)}
+        </span>
+      </button>
+    );
+  };
 
   return (
     <div
@@ -156,60 +325,104 @@ export const MyEUBubblePage = () => {
             {t('bubble.subtitle')}
           </p>
         </div>
+        {/* Mobile-only: open the navigation drawer */}
+        <button
+          type="button"
+          className="my-eu-bubble-page__mobile-menu"
+          onClick={() => setMobileNavOpen(true)}
+          aria-label={t('bubble.sidebar.menu', 'Menu')}
+        >
+          <Icon path={mdiMenu} size={1.1} />
+          <span>{tabLabel(activeTab)}</span>
+        </button>
       </div>
 
-      <div className="my-eu-bubble-page__layout">
-        {/* Main Content Area */}
-        <div className="my-eu-bubble-page__main">
-          {/* Talk to Brubru — tab-specific Chat hand-off */}
-          <div className="my-eu-bubble-page__chat-handoff">
-            <TalkToBrubruButton prompt={CHAT_HANDOFF_PROMPTS[activeTab]} />
+      <div className={`my-eu-bubble-page__layout ${collapsed ? 'my-eu-bubble-page__layout--collapsed' : ''}`}>
+        {/* Folding left sidebar (module navigation) */}
+        {mobileNavOpen && (
+          <div className="my-eu-bubble-nav__scrim" onClick={() => setMobileNavOpen(false)} aria-hidden="true" />
+        )}
+        <aside className={`my-eu-bubble-nav ${collapsed ? 'my-eu-bubble-nav--collapsed' : ''} ${mobileNavOpen ? 'my-eu-bubble-nav--open' : ''}`}>
+          <div className="my-eu-bubble-nav__head">
+            <div className="my-eu-bubble-nav__avatar" aria-hidden="true">{initials}</div>
+            {!collapsed && (
+              <div className="my-eu-bubble-nav__who">
+                <span className="my-eu-bubble-nav__name">{user?.full_name || firstName}</span>
+                {user?.role_title && <span className="my-eu-bubble-nav__role">{user.role_title}</span>}
+              </div>
+            )}
+            {/* Mobile-only close */}
+            <button
+              type="button"
+              className="my-eu-bubble-nav__close"
+              onClick={() => setMobileNavOpen(false)}
+              aria-label={t('common.close', 'Close')}
+            >
+              <Icon path={mdiClose} size={1} />
+            </button>
           </div>
 
-          {/* Tab Navigation */}
-          <nav className="my-eu-bubble-page__tabs">
-            {tabs.map(tab => {
-              const isActive = activeTab === tab.id;
-              const isPredictionsTab = 'isPredictions' in tab && tab.isPredictions;
+          <nav className="my-eu-bubble-nav__sections">
+            {SECTIONS.map(section => (
+              <div className="my-eu-bubble-nav__section" key={section.id}>
+                {!collapsed && (
+                  <p className="my-eu-bubble-nav__section-title">{sectionTitle(section)}</p>
+                )}
+                {collapsed && <div className="my-eu-bubble-nav__section-rule" aria-hidden="true" />}
+                {section.items.map(renderNavItem)}
+              </div>
+            ))}
 
-              return (
+            {/* Section 5: links out to the other Brubru products */}
+            <div className="my-eu-bubble-nav__section" key="other">
+              {!collapsed && (
+                <p className="my-eu-bubble-nav__section-title">{t('bubble.sections.other', 'Other Brubru Features')}</p>
+              )}
+              {collapsed && <div className="my-eu-bubble-nav__section-rule" aria-hidden="true" />}
+              {OTHER_FEATURES.map(feature => (
                 <button
-                  key={tab.id}
-                  className={`my-eu-bubble-page__tab ${
-                    isActive ? 'my-eu-bubble-page__tab--active' : ''
-                  } ${isPredictionsTab ? 'my-eu-bubble-page__tab--predictions' : ''}`}
-                  onClick={() => setActiveTab(tab.id)}
+                  key={feature.key}
+                  type="button"
+                  className="my-eu-bubble-nav__item"
+                  onClick={() => { setMobileNavOpen(false); navigate(feature.route); }}
+                  title={collapsed ? t(feature.labelKey, feature.fallback) : undefined}
                 >
-                  <span className={`my-eu-bubble-page__tab-icon ${isPredictionsTab && isActive ? 'my-eu-bubble-page__tab-icon--gradient' : ''}`}>
-                    <Icon path={tab.icon} size={1} color={isPredictionsTab && isActive ? 'url(#predictionGradient)' : '#0693E3'} />
+                  <span className="my-eu-bubble-nav__item-icon">
+                    <Icon path={feature.icon} size={0.9} color="#5b6b7a" />
                   </span>
-                  <span className={`my-eu-bubble-page__tab-label ${isPredictionsTab && isActive ? 'my-eu-bubble-page__tab-label--gradient' : ''}`}>
-                    {isPredictionsTab && isActive && (
-                      <Icon path={mdiCreation} size={0.6} className="my-eu-bubble-page__sparkle" />
-                    )}
-                    {tab.label}
-                  </span>
+                  <span className="my-eu-bubble-nav__item-label">{t(feature.labelKey, feature.fallback)}</span>
                 </button>
-              );
-            })}
+              ))}
+            </div>
           </nav>
 
-          {/* Tab Content */}
+          {/* Desktop collapse toggle */}
+          <button
+            type="button"
+            className="my-eu-bubble-nav__toggle"
+            onClick={toggleCollapsed}
+            aria-label={collapsed ? t('bubble.sidebar.expand', 'Expand sidebar') : t('bubble.sidebar.collapse', 'Collapse sidebar')}
+            title={collapsed ? t('bubble.sidebar.expand', 'Expand sidebar') : t('bubble.sidebar.collapse', 'Collapse sidebar')}
+          >
+            <Icon path={collapsed ? mdiChevronDoubleRight : mdiChevronDoubleLeft} size={0.9} />
+            {!collapsed && <span>{t('bubble.sidebar.collapse', 'Collapse sidebar')}</span>}
+          </button>
+        </aside>
+
+        {/* Workspace. Every tab gets the full content width. The scraped-items
+            feed ("Latest Updates") now lives INSIDE Overview, beside the cockpit,
+            instead of as a global right rail. */}
+        <div className="my-eu-bubble-page__main">
           <div className="my-eu-bubble-page__content">
             {renderTabContent()}
           </div>
         </div>
-
-        {/* News Sidebar */}
-        <aside className="my-eu-bubble-page__sidebar">
-          <NewsSidebar />
-        </aside>
       </div>
 
       {/* Feedback Section */}
       <FeedbackInvitation
-        featureName="My EU Bubble"
-        featureDescription="Help us improve My EU Bubble by sharing your thoughts, suggestions, or reporting any issues. Your feedback helps us create better tools for the EU policy community."
+        featureName={t('bubble.feedbackTitle')}
+        featureDescription={t('bubble.feedbackDescription')}
         variant="card"
       />
     </div>

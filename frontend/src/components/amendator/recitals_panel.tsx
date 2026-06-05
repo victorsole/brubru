@@ -19,6 +19,7 @@
 // the drafter pastes them wherever they want.
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiCompassOutline,
@@ -46,6 +47,7 @@ function _articleKey(el: LegislativeElement | null): string | null {
 }
 
 export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) => {
+  const { t } = useTranslation();
   const { data: map, loading } = useRecitalArticleMap(celex);
   const articleKey = _articleKey(selectedElement);
   const links: RecitalLink[] = (articleKey && map?.[articleKey]) || [];
@@ -54,11 +56,8 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
     return (
       <div className="recitals-panel__empty">
         <Icon path={mdiLinkVariantOff} size={2.5} />
-        <p className="recitals-panel__empty-title">Load a law first</p>
-        <p className="recitals-panel__empty-hint">
-          Once you load an EU legal text in the Amendator, recitals linked to
-          each article will appear here.
-        </p>
+        <p className="recitals-panel__empty-title">{t('amendator.panel.loadLawFirst')}</p>
+        <p className="recitals-panel__empty-hint">{t('amendator.panel.loadLawHint')}</p>
       </div>
     );
   }
@@ -66,7 +65,7 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
   if (loading && !map) {
     return (
       <div className="recitals-panel__empty">
-        <p className="recitals-panel__empty-hint">Computing recital-to-article links…</p>
+        <p className="recitals-panel__empty-hint">{t('amendator.panel.computing')}</p>
       </div>
     );
   }
@@ -75,12 +74,8 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
     return (
       <div className="recitals-panel__empty">
         <Icon path={mdiCompassOutline} size={2.5} />
-        <p className="recitals-panel__empty-title">Select an article</p>
-        <p className="recitals-panel__empty-hint">
-          Click on any article in the document viewer. The 3 most relevant
-          recitals will appear here so you can cite them in the amendment
-          Justification.
-        </p>
+        <p className="recitals-panel__empty-title">{t('amendator.panel.selectArticle')}</p>
+        <p className="recitals-panel__empty-hint">{t('amendator.panel.selectArticleHint')}</p>
       </div>
     );
   }
@@ -88,11 +83,8 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
   if (!links.length) {
     return (
       <div className="recitals-panel__empty">
-        <p className="recitals-panel__empty-title">No linked recitals for {articleKey}</p>
-        <p className="recitals-panel__empty-hint">
-          Either this law has no recitals or none of them scored high enough
-          for this article.
-        </p>
+        <p className="recitals-panel__empty-title">{t('amendator.panel.noLinkedRecitals', { article: articleKey })}</p>
+        <p className="recitals-panel__empty-hint">{t('amendator.panel.noLinkedHint')}</p>
       </div>
     );
   }
@@ -100,11 +92,8 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
   return (
     <div className="recitals-panel">
       <header className="recitals-panel__header">
-        <h3 className="recitals-panel__title">Recitals linked to {articleKey}</h3>
-        <p className="recitals-panel__subtitle">
-          Top {links.length} by TF-IDF cosine similarity. Cite in your amendment
-          Justification to ground it in the original legal intent.
-        </p>
+        <h3 className="recitals-panel__title">{t('amendator.panel.title', { article: articleKey })}</h3>
+        <p className="recitals-panel__subtitle">{t('amendator.panel.subtitle', { count: links.length })}</p>
       </header>
 
       <ul className="recitals-panel__list">
@@ -126,7 +115,7 @@ export const RecitalsPanel = ({ selectedElement, celex }: RecitalsPanelProps) =>
           className="recitals-panel__eurlex-link"
         >
           <Icon path={mdiOpenInNew} size={0.7} />
-          Open full recitals on EUR-Lex
+          {t('amendator.panel.openFullEurlex')}
         </a>
       </footer>
     </div>
@@ -140,6 +129,7 @@ interface RecitalCardProps {
 }
 
 function RecitalCard({ link, celex, articleKey }: RecitalCardProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const scorePct = Math.min(100, Math.round(link.score * 100));
@@ -164,7 +154,7 @@ function RecitalCard({ link, celex, articleKey }: RecitalCardProps) {
   return (
     <li className="recital-card">
       <div className="recital-card__header">
-        <span className="recital-card__number">Recital ({link.recital_number})</span>
+        <span className="recital-card__number">{t('amendator.panel.recitalNumber', { number: link.recital_number })}</span>
         <span className="recital-card__score" title={`Cosine similarity: ${link.score.toFixed(3)}`}>
           <span className="recital-card__score-bar" style={{ width: `${scorePct}%` }} />
           <span className="recital-card__score-label">{scorePct}%</span>
@@ -178,10 +168,10 @@ function RecitalCard({ link, celex, articleKey }: RecitalCardProps) {
           type="button"
           className="recital-card__copy-btn"
           onClick={handleCopy}
-          title="Copy a pre-formatted justification line"
+          title={t('amendator.panel.copyTooltip')}
         >
           <Icon path={copied ? mdiCheck : mdiContentCopy} size={0.7} />
-          {copied ? 'Copied' : 'Copy for justification'}
+          {copied ? t('amendator.panel.copied') : t('amendator.panel.copyForJustification')}
         </button>
       </div>
     </li>

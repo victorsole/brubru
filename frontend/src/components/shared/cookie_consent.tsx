@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiCookie, mdiCheck, mdiClose } from '@mdi/js';
 import './cookie_consent.css';
@@ -11,6 +12,7 @@ const COOKIE_CONSENT_KEY = 'brubru_cookie_consent';
 type ConsentStatus = 'accepted' | 'declined' | null;
 
 export const CookieConsent = () => {
+  const { t } = useTranslation();
   const [consentStatus, setConsentStatus] = useState<ConsentStatus | 'pending'>('pending');
 
   useEffect(() => {
@@ -53,11 +55,9 @@ export const CookieConsent = () => {
 
           <div className="cookie-consent__content">
             <p className="cookie-consent__text">
-              We use cookies to ensure you get the best experience on Brubru.
-              Essential cookies are required for the site to function.
-              By clicking "Accept", you consent to our use of cookies.{' '}
+              {t('cookies.message')}{' '}
               <Link to="/cookies" className="cookie-consent__link">
-                Learn more
+                {t('common.learnMore')}
               </Link>
             </p>
           </div>
@@ -69,7 +69,7 @@ export const CookieConsent = () => {
               onClick={handleDecline}
             >
               <Icon path={mdiClose} size={0.8} />
-              <span>Decline</span>
+              <span>{t('common.decline')}</span>
             </button>
             <button
               type="button"
@@ -77,7 +77,7 @@ export const CookieConsent = () => {
               onClick={handleAccept}
             >
               <Icon path={mdiCheck} size={0.8} />
-              <span>Accept</span>
+              <span>{t('common.accept')}</span>
             </button>
           </div>
         </div>

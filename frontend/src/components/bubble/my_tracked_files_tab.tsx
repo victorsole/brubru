@@ -6,8 +6,9 @@
  * Part of My EU Bubble - Legislative Tracking Enhancement
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiFileDocumentOutline,
@@ -29,8 +30,12 @@ import {
   mdiTextBoxCheckOutline,
   mdiFileDocumentMultipleOutline,
   mdiBookOpenPageVariantOutline,
+  mdiPlaylistPlus,
+  mdiInformationOutline,
+  mdiChevronDown,
+  mdiChevronUp,
 } from '@mdi/js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getDeepDiveForProcedure, getDeepDiveUrl } from '../../utils/deep_dive_map';
 import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
@@ -38,18 +43,65 @@ import type { TrackedFile } from '../../hooks/use_legislative_trains';
 import { useCommitteeWork, PROCEDURE_TYPE_INFO, STATUS_INFO } from '../../hooks/use_committee_work';
 import type { CommitteeWorkItem } from '../../hooks/use_committee_work';
 import { useTextsAdopted } from '../../hooks/use_texts_adopted';
-import type { TextAdopted as TextAdoptedType } from '../../hooks/use_texts_adopted';
 import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
-import type { CommissionDocType } from '../../hooks/use_commission_documents';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import { HotThisWeekWidget } from './hot_this_week_widget';
 import { useAuth } from '../../hooks/use_auth';
+import { plainLanguageTypeKey } from '../../utils/procedure_type';
 import './my_tracked_files_tab.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+// Order + labels for grouping the tracked list by plain-language kind of action
+// (doc-06 §7). typeKey null = the "Other files" catch-all.
+const TRACKED_GROUP_ORDER: Array<{ typeKey: string | null; titleKey: string; tipKey?: string }> = [
+  { typeKey: 'typeNewLaw', titleKey: 'groupNewLaw', tipKey: 'tipGroupNewLaw' },
+  { typeKey: 'typeParliamentPosition', titleKey: 'groupParliamentPosition', tipKey: 'tipGroupParliamentPosition' },
+  { typeKey: 'typeAgreement', titleKey: 'groupAgreement', tipKey: 'tipGroupAgreement' },
+  { typeKey: 'typeScrutiny', titleKey: 'groupScrutiny', tipKey: 'tipGroupScrutiny' },
+  { typeKey: 'typeBudget', titleKey: 'groupBudget', tipKey: 'tipGroupBudget' },
+  { typeKey: null, titleKey: 'groupOther' },
+];
+
+// Commission Directorate-General code -> display name, for the Commission Docs
+// tab (PI anchor = DG, since those documents carry no EP committee). Covers the
+// DGs present in the data; unknown codes fall back to the bare code.
+const DG_NAMES: Record<string, string> = {
+  AGRI: 'Agriculture and Rural Development',
+  MARE: 'Maritime Affairs and Fisheries',
+  SANTE: 'Health and Food Safety',
+  CLIMA: 'Climate Action',
+  ENV: 'Environment',
+  ENER: 'Energy',
+  MOVE: 'Mobility and Transport',
+  GROW: 'Internal Market, Industry, Entrepreneurship and SMEs',
+  COMP: 'Competition',
+  TRADE: 'Trade',
+  ECFIN: 'Economic and Financial Affairs',
+  TAXUD: 'Taxation and Customs Union',
+  JUST: 'Justice and Consumers',
+  HOME: 'Migration and Home Affairs',
+  EMPL: 'Employment, Social Affairs and Inclusion',
+  CNECT: 'Communications Networks, Content and Technology',
+  REGIO: 'Regional and Urban Policy',
+  RTD: 'Research and Innovation',
+  EAC: 'Education, Youth, Sport and Culture',
+  DEFIS: 'Defence Industry and Space',
+  ECHO: 'Humanitarian Aid and Civil Protection',
+  INTPA: 'International Partnerships',
+  NEAR: 'Neighbourhood and Enlargement',
+  ENEST: 'Enlargement and Eastern Neighbourhood',
+  MENA: 'Middle East and North Africa',
+  FISMA: 'Financial Stability, Financial Services and Capital Markets Union',
+  ESTAT: 'Eurostat',
+  EEAS: 'European External Action Service',
+  FPI: 'Foreign Policy Instruments',
+  SG: 'Secretariat-General',
+  REFOR: 'Structural Reform Support',
+};
 
 interface SearchableFile {
   id: string;
@@ -59,7 +111,9 @@ interface SearchableFile {
 }
 
 export const MyTrackedFilesTab = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const {
     trackedFiles,
@@ -69,6 +123,7 @@ export const MyTrackedFilesTab = () => {
     fetchRecentChanges,
     untrackFile,
     fetchFileDetail,
+    selectedFile,
     trackFile,
     isTracking,
   } = useLegislativeTrains();
@@ -80,8 +135,10 @@ export const MyTrackedFilesTab = () => {
     isLoadingItems: isLoadingCommitteeWork,
     fetchItems: fetchCommitteeWorkItems,
     fetchCommittees,
-    filters: committeeFilters,
-    setFilters: setCommitteeFilters,
+    fetchTrackedItems: fetchCommitteeTrackedItems,
+    trackedItems: committeeTrackedItems,
+    trackItem: trackCommitteeItem,
+    untrackItem: untrackCommitteeItem,
   } = useCommitteeWork();
 
   // Texts Adopted hook
@@ -89,8 +146,10 @@ export const MyTrackedFilesTab = () => {
     items: textsAdoptedItems,
     isLoadingItems: isLoadingTextsAdopted,
     fetchItems: fetchTextsAdoptedItems,
-    filters: textsAdoptedFilters,
-    setFilters: setTextsAdoptedFilters,
+    fetchTrackedItems: fetchTextsTrackedItems,
+    trackedItems: textsTrackedItems,
+    trackItem: trackTextItem,
+    untrackItem: untrackTextItem,
   } = useTextsAdopted();
 
   // Commission Documents hook
@@ -98,22 +157,52 @@ export const MyTrackedFilesTab = () => {
     items: commissionDocItems,
     isLoadingItems: isLoadingCommissionDocs,
     fetchItems: fetchCommissionDocItems,
-    filters: commissionDocFilters,
-    setFilters: setCommissionDocFilters,
+    fetchTrackedItems: fetchCommissionTrackedItems,
+    trackedItems: commissionTrackedItems,
+    trackItem: trackCommissionItem,
+    untrackItem: untrackCommissionItem,
   } = useCommissionDocuments();
 
   const hasLoadedRef = useRef(false);
   const [activeTab, setActiveTab] = useState<'legislative' | 'committee' | 'texts_adopted' | 'commission_docs'>('legislative');
   const [amendmentCounts, setAmendmentCounts] = useState<Record<string, number>>({});
   const [showAddModal, setShowAddModal] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [listQuery, setListQuery] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [availableFiles, setAvailableFiles] = useState<SearchableFile[]>([]);
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [trackingFileId, setTrackingFileId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(25);
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'alphabetical'>('newest');
-  const ITEMS_PER_PAGE = 50;
+  const PAGE_STEP = 25;
+  const [showAdvancedRef, setShowAdvancedRef] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // In-committee tab state. The view is linked to the user's Policy Interests:
+  // committees resolved from PI (myCommittees) are pre-selected in "mine" mode;
+  // "all" mode drops the committee filter so the user can browse everything.
+  const [myCommittees, setMyCommittees] = useState<string[]>([]);
+  const [committeeMode, setCommitteeMode] = useState<'mine' | 'all'>('all');
+  const [committeeChips, setCommitteeChips] = useState<string[]>([]);
+  const [committeeKind, setCommitteeKind] = useState<string>('all');
+  const [showTechnical, setShowTechnical] = useState(false);
+  const [addCommitteeCode, setAddCommitteeCode] = useState('');
+
+  // Adopted-texts tab state (mirrors the In-committee PI alignment).
+  const [textsMode, setTextsMode] = useState<'mine' | 'all'>('all');
+  const [textsChips, setTextsChips] = useState<string[]>([]);
+  const [textsKind, setTextsKind] = useState<string>('all');
+  const [addTextsCommitteeCode, setAddTextsCommitteeCode] = useState('');
+
+  // Commission-docs tab state. Anchor is the Directorate-General (dg_responsible),
+  // not an EP committee, since Commission documents carry no committee.
+  const [myDgs, setMyDgs] = useState<string[]>([]);
+  const [docsMode, setDocsMode] = useState<'mine' | 'all'>('all');
+  const [docsChips, setDocsChips] = useState<string[]>([]);
+  const [docsKind, setDocsKind] = useState<string>('all');
+  const [addDocsDg, setAddDocsDg] = useState('');
 
   // OEIL direct tracking state
   const [oeilProcedureRef, setOeilProcedureRef] = useState('');
@@ -139,17 +228,87 @@ export const MyTrackedFilesTab = () => {
       await fetchTrackedFiles();
       await fetchRecentChanges(168); // Last 7 days
       await fetchAmendmentCounts();
-      // Load committee work data
+      // Load committee work data. Pull the whole table (only a few hundred rows)
+      // so the PI split, kind filter and search all run client-side.
+      useCommitteeWork.setState({ limit: 500 });
       await fetchCommittees();
       await fetchCommitteeWorkItems();
-      // Load texts adopted data
+      await fetchCommitteeTrackedItems();
+      // Resolve the user's Policy Interests -> committee codes and pre-select them.
+      try {
+        const token = useAuth.getState().token;
+        const mc = await axios.get<{ committees: string[] }>(
+          `${API_BASE}/api/committee-work/my-committees`,
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+        );
+        const codes = mc.data?.committees || [];
+        setMyCommittees(codes);
+        if (codes.length > 0) {
+          setCommitteeChips(codes);
+          setCommitteeMode('mine');
+          setTextsChips(codes);
+          setTextsMode('mine');
+        }
+      } catch {
+        // Anonymous or no mappable interests: stay in "all committees" mode.
+      }
+      // Load texts adopted data (whole set; filter client-side like In-committee)
+      useTextsAdopted.setState({ limit: 500 });
       await fetchTextsAdoptedItems();
-      // Load commission documents data
+      await fetchTextsTrackedItems();
+      // Load commission documents data (whole set; filter client-side by DG)
+      useCommissionDocuments.setState({ limit: 500 });
       await fetchCommissionDocItems();
+      await fetchCommissionTrackedItems();
+      // Resolve the user's Policy Interests -> Commission DGs and pre-select them.
+      try {
+        const token = useAuth.getState().token;
+        const md = await axios.get<{ dgs: string[] }>(
+          `${API_BASE}/api/commission-documents/my-dgs`,
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+        );
+        const dgs = md.data?.dgs || [];
+        setMyDgs(dgs);
+        if (dgs.length > 0) {
+          setDocsChips(dgs);
+          setDocsMode('mine');
+        }
+      } catch {
+        // Anonymous or no mappable interests: stay in "all" mode.
+      }
     };
 
     loadData();
   }, []);
+
+  // Deep-link: ?file=<file_id> opens that tracked file's detail modal directly.
+  // Used by the EFPIA / OJ / Votes "tracked file" links so a click lands on the
+  // law's own card inside My Files, not the Legislative Train list or the Chat.
+  //
+  // Open ONCE per file id (the ref guard stops the effect re-firing on unrelated
+  // searchParams changes), and once the modal is closed, strip the `file` param
+  // from the URL — otherwise the stale param lingers, the browser autocompletes
+  // the long URL, and the modal reopens automatically on every visit.
+  const openedFileRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const fileParam = searchParams.get('file');
+    if (fileParam && openedFileRef.current !== fileParam) {
+      openedFileRef.current = fileParam;
+      fetchFileDetail(fileParam);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    // Modal was closed (selectedFile cleared) but the URL still carries ?file=
+    // from a deep-link we already consumed -> clean it so it can't auto-reopen.
+    if (!selectedFile && openedFileRef.current && searchParams.get('file')) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('file');
+      setSearchParams(next, { replace: true });
+      openedFileRef.current = null;
+    }
+  }, [selectedFile]);
 
   const handleRefresh = async () => {
     if (activeTab === 'legislative') {
@@ -161,6 +320,27 @@ export const MyTrackedFilesTab = () => {
       await fetchTextsAdoptedItems();
     } else {
       await fetchCommissionDocItems();
+    }
+  };
+
+  // Populate tracked files from the user's Policy Interests (Section 1 -> 2).
+  const handleSyncFromInterests = async () => {
+    setIsSyncing(true);
+    try {
+      const token = useAuth.getState().token;
+      const res = await axios.post<{ seeded: number; committees: string[] }>(
+        `${API_BASE}/api/legislative-train/sync-from-interests`,
+        {},
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+      );
+      await fetchTrackedFiles();
+      await fetchRecentChanges(168);
+      const n = res.data?.seeded ?? 0;
+      alert(n > 0 ? t('myFilesTab.syncAdded', { count: n }) : t('myFilesTab.syncNone'));
+    } catch {
+      alert(t('myFilesTab.syncFailed'));
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -324,15 +504,18 @@ export const MyTrackedFilesTab = () => {
     return sortOrder === 'newest' ? refB.number - refA.number : refA.number - refB.number;
   });
 
-  // Pagination calculations (use sortedFiles)
-  const totalPages = Math.ceil(sortedFiles.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedFiles = sortedFiles.slice(startIndex, endIndex);
+  // Browse list: drop placeholder / non-procedure titles so the picker is not full of junk.
+  const browseFiles = sortedFiles.filter((f) => {
+    const title = (f.title || '').trim();
+    if (title.length < 8) return false;
+    if (/^Procedure File:\s*\d{4}\/\d+\([A-Z]+\)/i.test(title)) return false;
+    return true;
+  });
+  const shownFiles = browseFiles.slice(0, visibleCount);
 
-  // Reset to page 1 when search query, status filter, or sort order changes
+  // Reset the visible count when the query, status filter or sort order changes.
   useEffect(() => {
-    setCurrentPage(1);
+    setVisibleCount(PAGE_STEP);
   }, [searchQuery, statusFilter, sortOrder]);
 
   // Check if a file is already tracked
@@ -385,39 +568,282 @@ export const MyTrackedFilesTab = () => {
     return 'Just now';
   };
 
+  // Inline search filter for the tracked lists (separate from the Add-modal search).
+  const q = listQuery.trim().toLowerCase();
+  const matchQ = (...vals: Array<string | null | undefined>) =>
+    !q || vals.some((v) => (v || '').toLowerCase().includes(q));
+  const visibleTracked = trackedFiles.filter((f) =>
+    matchQ(f.title, f.oeil_procedure_ref, f.lead_committee),
+  );
+
+  // --- In-committee tab: PI split + kind/search filters + grouping ----------
+  // Plain-language "kind" families used by the Kind dropdown (doc-06 Axis A).
+  const COMMITTEE_KINDS = [
+    'typeNewLaw', 'typeParliamentPosition', 'typeAgreement', 'typeBudget', 'typeScrutiny',
+  ] as const;
+  // Scraper junk titles (no real title was captured), e.g.
+  //   "Delegated acts (DEA) ECON" / "Resolution on topical subjects (RSP) ENVI"
+  //   "***I Ordinary legislative procedure (COD) first reading AGRI ENVI"
+  //   "Procedure File: 2025/2880(RSP)"
+  const isStubTitle = (title?: string) => {
+    const tl = (title || '').trim();
+    if (!tl) return true;
+    return /\([A-Z]+\)\s+[A-Z]{3,4}\s*$/.test(tl)          // "(DEA) ENVI"
+      || /^\*+/.test(tl)                                    // "***I ..."
+      || /ordinary legislative procedure|first reading|second reading/i.test(tl)
+      || /^procedure file:/i.test(tl);
+  };
+  // Technical / housekeeping = scrutiny families, no plain-language family, or a stub title.
+  const isTechnicalItem = (item: CommitteeWorkItem) => {
+    const key = plainLanguageTypeKey(item.procedure_ref);
+    return key === null || key === 'typeScrutiny' || isStubTitle(item.title);
+  };
+
+  const committeeNameOf = (code: string) =>
+    committees.find((c) => c.code === code)?.name || code;
+
+  const committeeGroups = useMemo(() => {
+    const activeCodes = new Set(committeeChips);
+    const filtered = committeeWorkItems.filter((item) => {
+      if (committeeMode === 'mine' && myCommittees.length > 0) {
+        if (!myCommittees.includes(item.committee_code)) return false;
+      }
+      if (activeCodes.size > 0 && !activeCodes.has(item.committee_code)) return false;
+      if (committeeKind !== 'all'
+        && plainLanguageTypeKey(item.procedure_ref) !== committeeKind) return false;
+      if (!showTechnical && isTechnicalItem(item)) return false;
+      if (!matchQ(item.title, item.procedure_ref, item.rapporteur_name)) return false;
+      return true;
+    });
+    // Group by committee, my-interest committees first, then by item relevance.
+    const byCode = new Map<string, CommitteeWorkItem[]>();
+    for (const item of filtered) {
+      const list = byCode.get(item.committee_code) || [];
+      list.push(item);
+      byCode.set(item.committee_code, list);
+    }
+    return Array.from(byCode.entries())
+      .map(([code, items]) => ({
+        code,
+        name: committeeNameOf(code),
+        isMine: myCommittees.includes(code),
+        // Newest first (first_seen is the reliable date), then by relevance.
+        items: items.sort((a, b) =>
+          (new Date(b.first_seen || 0).getTime() - new Date(a.first_seen || 0).getTime())
+          || (b.relevance_score - a.relevance_score)
+          || a.title.localeCompare(b.title)),
+      }))
+      .sort((a, b) => (Number(b.isMine) - Number(a.isMine)) || a.code.localeCompare(b.code));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [committeeWorkItems, committeeMode, committeeChips, committeeKind, showTechnical, myCommittees, q, committees]);
+
+  const committeeVisibleCount = committeeGroups.reduce((n, g) => n + g.items.length, 0);
+  const toggleChip = (code: string) =>
+    setCommitteeChips((prev) => prev.includes(code)
+      ? prev.filter((c) => c !== code) : [...prev, code]);
+
+  // Which committee items the user already tracks (separate store from carriages).
+  const committeeTrackedIds = useMemo(
+    () => new Set((committeeTrackedItems || []).map((t) => t.work_item.id)),
+    [committeeTrackedItems],
+  );
+  const handleCommitteeTrack = async (item: CommitteeWorkItem) => {
+    try {
+      await trackCommitteeItem(item.id);
+    } catch {
+      alert(t('myFilesTab.trackFailed'));
+    }
+  };
+  const handleCommitteeUntrack = async (item: CommitteeWorkItem) => {
+    try {
+      await untrackCommitteeItem(item.id);
+    } catch {
+      alert(t('myFilesTab.trackFailed'));
+    }
+  };
+  // View details: open the in-app file modal when the item is linked to a
+  // carriage; otherwise fall back to the OEIL procedure page.
+  const handleCommitteeViewDetail = (item: CommitteeWorkItem) => {
+    if (item.legislative_carriage_id) {
+      fetchFileDetail(item.legislative_carriage_id);
+    } else {
+      const url = item.oeil_url || (item.procedure_ref
+        ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
+        : null);
+      if (url) window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  // --- Adopted texts: PI split + kind/search filters + grouping -------------
+  const TEXT_KINDS = ['resolution', 'legislative_resolution', 'decision', 'recommendation', 'other'] as const;
+  const textsGroups = useMemo(() => {
+    const activeCodes = new Set(textsChips);
+    const filtered = textsAdoptedItems.filter((item) => {
+      const codes = item.committees || [];
+      if (textsMode === 'mine' && myCommittees.length > 0
+        && !codes.some((c) => myCommittees.includes(c))) return false;
+      if (activeCodes.size > 0 && !codes.some((c) => activeCodes.has(c))) return false;
+      if (textsKind !== 'all' && item.text_type !== textsKind) return false;
+      if (!matchQ(item.title, item.ta_reference, item.procedure_ref, item.rapporteur_name)) return false;
+      return true;
+    });
+    const byCode = new Map<string, typeof filtered>();
+    for (const item of filtered) {
+      const code = (item.committees && item.committees[0]) || 'OTHER';
+      const list = byCode.get(code) || [];
+      list.push(item);
+      byCode.set(code, list);
+    }
+    return Array.from(byCode.entries())
+      .map(([code, items]) => ({
+        code,
+        name: code === 'OTHER' ? t('myFilesTab.committeeOther') : committeeNameOf(code),
+        isMine: myCommittees.includes(code),
+        items: [...items].sort((a, b) =>
+          new Date(b.adoption_date).getTime() - new Date(a.adoption_date).getTime()),
+      }))
+      .sort((a, b) =>
+        (Number(b.isMine) - Number(a.isMine))
+        || (a.code === 'OTHER' ? 1 : b.code === 'OTHER' ? -1 : a.code.localeCompare(b.code)));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textsAdoptedItems, textsMode, textsChips, textsKind, myCommittees, q, committees]);
+
+  const textsVisibleCount = textsGroups.reduce((n, g) => n + g.items.length, 0);
+  const toggleTextsChip = (code: string) =>
+    setTextsChips((prev) => prev.includes(code)
+      ? prev.filter((c) => c !== code) : [...prev, code]);
+
+  const textsTrackedIds = useMemo(
+    () => new Set((textsTrackedItems || []).map((tk) => tk.text.id)),
+    [textsTrackedItems],
+  );
+  const handleTextTrack = async (item: { id: string }) => {
+    try { await trackTextItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+  };
+  const handleTextUntrack = async (item: { id: string }) => {
+    try { await untrackTextItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+  };
+  const handleTextViewDetail = (item: { legislative_carriage_id?: string; procedure_ref?: string }) => {
+    if (item.legislative_carriage_id) {
+      fetchFileDetail(item.legislative_carriage_id);
+    } else if (item.procedure_ref) {
+      window.open(
+        `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`,
+        '_blank', 'noopener,noreferrer',
+      );
+    }
+  };
+
+  // --- Commission documents: PI split by DG + kind/search + grouping --------
+  const DOC_KINDS = ['COM', 'SWD', 'JOIN', 'OJ'] as const;
+  const dgNameOf = (code: string) => DG_NAMES[code] || code;
+  const docsGroups = useMemo(() => {
+    const activeCodes = new Set(docsChips);
+    const filtered = commissionDocItems.filter((item) => {
+      const dg = item.dg_responsible || '';
+      if (docsMode === 'mine' && myDgs.length > 0 && !myDgs.includes(dg)) return false;
+      if (activeCodes.size > 0 && !activeCodes.has(dg)) return false;
+      if (docsKind !== 'all' && item.doc_type !== docsKind) return false;
+      if (!matchQ(item.title, item.reference, item.dg_responsible, item.procedure_ref)) return false;
+      return true;
+    });
+    const byDg = new Map<string, typeof filtered>();
+    for (const item of filtered) {
+      const dg = item.dg_responsible || 'OTHER';
+      const list = byDg.get(dg) || [];
+      list.push(item);
+      byDg.set(dg, list);
+    }
+    return Array.from(byDg.entries())
+      .map(([code, items]) => ({
+        code,
+        name: code === 'OTHER' ? t('myFilesTab.committeeOther') : dgNameOf(code),
+        isMine: myDgs.includes(code),
+        items: [...items].sort((a, b) =>
+          new Date(b.publication_date || 0).getTime() - new Date(a.publication_date || 0).getTime()),
+      }))
+      .sort((a, b) =>
+        (Number(b.isMine) - Number(a.isMine))
+        || (a.code === 'OTHER' ? 1 : b.code === 'OTHER' ? -1 : a.code.localeCompare(b.code)));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commissionDocItems, docsMode, docsChips, docsKind, myDgs, q]);
+
+  const docsVisibleCount = docsGroups.reduce((n, g) => n + g.items.length, 0);
+  const toggleDocsChip = (code: string) =>
+    setDocsChips((prev) => prev.includes(code)
+      ? prev.filter((c) => c !== code) : [...prev, code]);
+  // DGs available to add (present in the data, not already a chip).
+  const availableDgs = useMemo(() => {
+    const set = new Set<string>();
+    for (const item of commissionDocItems) {
+      if (item.dg_responsible) set.add(item.dg_responsible);
+    }
+    return Array.from(set).sort();
+  }, [commissionDocItems]);
+
+  const docsTrackedIds = useMemo(
+    () => new Set((commissionTrackedItems || []).map((tk) => tk.document.id)),
+    [commissionTrackedItems],
+  );
+  const handleDocTrack = async (item: { id: string }) => {
+    try { await trackCommissionItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+  };
+  const handleDocUntrack = async (item: { id: string }) => {
+    try { await untrackCommissionItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+  };
+
+  // Cross-link to the Amendments sub-feature (MEP Amendments) with this
+  // procedure preselected. Search-only navigation keeps the MEUB pathname.
+  const openMepAmendments = (ref?: string | null) => {
+    if (!ref) return;
+    navigate({ search: `?tab=amendments&procedure=${encodeURIComponent(ref)}` });
+  };
+
   return (
     <div className="my-tracked-files-tab">
       {/* Header */}
       <div className="my-tracked-files-tab__header">
         <div className="my-tracked-files-tab__header-left">
-          <h2>My Files</h2>
+          <h2>{t('myFilesTab.title')}</h2>
           <p className="my-tracked-files-tab__subtitle">
             {activeTab === 'legislative'
-              ? `${trackedFiles.length} file${trackedFiles.length !== 1 ? 's' : ''} tracked`
+              ? t('myFilesTab.filesTracked', { count: trackedFiles.length })
               : activeTab === 'committee'
-              ? `${committeeWorkItems.length} committee work items`
+              ? t('myFilesTab.committeeItems', { count: committeeWorkItems.length })
               : activeTab === 'texts_adopted'
-              ? `${textsAdoptedItems.length} adopted texts`
-              : `${commissionDocItems.length} Commission documents`
+              ? t('myFilesTab.adoptedTexts', { count: textsAdoptedItems.length })
+              : t('myFilesTab.commissionDocs', { count: commissionDocItems.length })
             }
           </p>
         </div>
         <div className="my-tracked-files-tab__header-actions">
           <button
-            className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
+            className="my-tracked-files-tab__btn my-tracked-files-tab__btn--icon"
             onClick={handleRefresh}
             disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted || isLoadingCommissionDocs}
+            title={t('myFilesTab.refresh')}
+            aria-label={t('myFilesTab.refresh')}
           >
-            <Icon path={mdiRefresh} size={0.8} />
-            Refresh
+            <Icon path={mdiRefresh} size={0.85} />
           </button>
+          {activeTab === 'legislative' && (
+            <button
+              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
+              onClick={handleSyncFromInterests}
+              disabled={isSyncing}
+              title={t('myFilesTab.syncFromInterestsHint')}
+            >
+              <Icon path={isSyncing ? mdiLoading : mdiPlaylistPlus} size={0.8} spin={isSyncing} />
+              {isSyncing ? t('myFilesTab.syncing') : t('myFilesTab.syncFromInterests')}
+            </button>
+          )}
           {activeTab === 'legislative' && (
             <button
               className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
               onClick={handleOpenAddModal}
             >
               <Icon path={mdiPlus} size={0.8} />
-              Track File
+              {t('myFilesTab.trackFile')}
             </button>
           )}
         </div>
@@ -428,31 +854,62 @@ export const MyTrackedFilesTab = () => {
         <button
           className={`my-tracked-files-tab__tab ${activeTab === 'legislative' ? 'my-tracked-files-tab__tab--active' : ''}`}
           onClick={() => setActiveTab('legislative')}
+          title={t('myFilesTab.tipLegislative')}
         >
           <Icon path={mdiFileDocumentOutline} size={0.8} />
-          Legislative Train
+          {t('myFilesTab.legislativeTrain')}
+          <Icon path={mdiInformationOutline} size={0.55} className="my-tracked-files-tab__tab-info" />
         </button>
         <button
           className={`my-tracked-files-tab__tab ${activeTab === 'committee' ? 'my-tracked-files-tab__tab--active' : ''}`}
           onClick={() => setActiveTab('committee')}
+          title={t('myFilesTab.tipCommittee')}
         >
           <Icon path={mdiAccountGroupOutline} size={0.8} />
-          Committee Work
+          {t('myFilesTab.committeeWork')}
+          <Icon path={mdiInformationOutline} size={0.55} className="my-tracked-files-tab__tab-info" />
         </button>
         <button
           className={`my-tracked-files-tab__tab ${activeTab === 'texts_adopted' ? 'my-tracked-files-tab__tab--active' : ''}`}
           onClick={() => setActiveTab('texts_adopted')}
+          title={t('myFilesTab.tipTextsAdopted')}
         >
           <Icon path={mdiTextBoxCheckOutline} size={0.8} />
-          Texts Adopted
+          {t('myFilesTab.textsAdopted')}
+          <Icon path={mdiInformationOutline} size={0.55} className="my-tracked-files-tab__tab-info" />
         </button>
         <button
           className={`my-tracked-files-tab__tab ${activeTab === 'commission_docs' ? 'my-tracked-files-tab__tab--active' : ''}`}
           onClick={() => setActiveTab('commission_docs')}
+          title={t('myFilesTab.tipCommissionDocs')}
         >
           <Icon path={mdiFileDocumentMultipleOutline} size={0.8} />
-          Commission Docs
+          {t('myFilesTab.commissionDocs')}
+          <Icon path={mdiInformationOutline} size={0.55} className="my-tracked-files-tab__tab-info" />
         </button>
+      </div>
+
+      {/* Search filter bar — filters the active tab's list */}
+      <div className="my-tracked-files-tab__search">
+        <Icon path={mdiMagnify} size={0.85} className="my-tracked-files-tab__search-icon" />
+        <input
+          type="search"
+          className="my-tracked-files-tab__search-input"
+          value={listQuery}
+          onChange={(e) => setListQuery(e.target.value)}
+          placeholder={t('myFilesTab.searchPlaceholder')}
+          aria-label={t('myFilesTab.searchPlaceholder')}
+        />
+        {listQuery && (
+          <button
+            type="button"
+            className="my-tracked-files-tab__search-clear"
+            onClick={() => setListQuery('')}
+            aria-label={t('myFilesTab.clearSearch')}
+          >
+            <Icon path={mdiClose} size={0.7} />
+          </button>
+        )}
       </div>
 
       {/* Legislative Files Tab Content */}
@@ -461,6 +918,7 @@ export const MyTrackedFilesTab = () => {
           {/* Hot This Week Widget — surfaces files with recent activity */}
           <HotThisWeekWidget
             isAuthenticated={isAuthenticated}
+            onView={(file) => fetchFileDetail(file.file_id)}
             onTrack={async (file) => {
               try {
                 await trackFile(file.carriage_id, true);
@@ -468,9 +926,9 @@ export const MyTrackedFilesTab = () => {
               } catch (error: unknown) {
                 const ax = error as { response?: { status?: number; data?: { detail?: string } } };
                 if (ax.response?.status === 401) {
-                  alert('Please log in to track files.');
+                  alert(t('myFilesTab.alertLogin'));
                 } else {
-                  alert(ax.response?.data?.detail || 'Failed to track file.');
+                  alert(ax.response?.data?.detail || t('myFilesTab.alertFailedTrack'));
                 }
               }
             }}
@@ -481,7 +939,7 @@ export const MyTrackedFilesTab = () => {
             <div className="my-tracked-files-tab__changes">
               <h3 className="my-tracked-files-tab__section-title">
                 <Icon path={mdiHistory} size={0.9} />
-                Recent Changes (Last 7 days)
+                {t('myFilesTab.recentChanges')}
               </h3>
               <div className="my-tracked-files-tab__changes-list">
                 {recentChanges.slice(0, 5).map((change, idx) => (
@@ -499,12 +957,12 @@ export const MyTrackedFilesTab = () => {
                       <div className="my-tracked-files-tab__change-description">
                         {change.change_type === 'status_change' && (
                           <>
-                            Status changed: {change.old_value?.replace(/_/g, ' ')} →{' '}
+                            {t('myFilesTab.statusChanged')} {change.old_value?.replace(/_/g, ' ')} →{' '}
                             <strong>{change.new_value?.replace(/_/g, ' ')}</strong>
                           </>
                         )}
                         {change.change_type === 'new_document' && change.description}
-                        {change.change_type === 'blocking' && 'File blocked - no progress for 9+ months'}
+                        {change.change_type === 'blocking' && t('myFilesTab.blockedNoProgress')}
                       </div>
                     </div>
                     <div className="my-tracked-files-tab__change-time">
@@ -520,88 +978,221 @@ export const MyTrackedFilesTab = () => {
           <div className="my-tracked-files-tab__files">
             <h3 className="my-tracked-files-tab__section-title">
               <Icon path={mdiFileDocumentOutline} size={0.9} />
-              Tracked Legislative Files
+              {t('myFilesTab.trackedFiles')}
             </h3>
 
             {isLoadingTrackedFiles ? (
           <div className="my-tracked-files-tab__loading">
-            Loading tracked files...
+            {t('myFilesTab.loadingTracked')}
           </div>
         ) : trackedFiles.length === 0 ? (
           <div className="my-tracked-files-tab__empty">
             <Icon path={mdiFileDocumentOutline} size={2} color="#ccc" />
-            <h4>No tracked files yet</h4>
-            <p>Start tracking legislative files to monitor their progress</p>
+            <h4>{t('myFilesTab.noTrackedFiles')}</h4>
+            <p>{t('myFilesTab.syncFromInterestsHint')}</p>
             <button
               className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
+              onClick={handleSyncFromInterests}
+              disabled={isSyncing}
+            >
+              <Icon path={isSyncing ? mdiLoading : mdiPlaylistPlus} size={0.8} spin={isSyncing} />
+              {isSyncing ? t('myFilesTab.syncing') : t('myFilesTab.syncFromInterests')}
+            </button>
+            <button
+              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
               onClick={handleOpenAddModal}
             >
               <Icon path={mdiPlus} size={0.8} />
-              Track Your First File
+              {t('myFilesTab.trackYourFirstFile')}
             </button>
+          </div>
+        ) : visibleTracked.length === 0 ? (
+          <div className="my-tracked-files-tab__empty">
+            <Icon path={mdiMagnify} size={2} color="#ccc" />
+            <p>{t('myFilesTab.noFilesMatchSearch')}</p>
           </div>
         ) : (
           <div className="my-tracked-files-tab__files-list">
-            {trackedFiles.map((file) => (
-              <TrackedFileCard
-                key={file.id}
-                file={file}
-                onViewDetail={() => fetchFileDetail(file.file_id)}
-                onUntrack={() => handleUntrack(file)}
-                onDraftAmendment={() => {
-                  // Navigate to Amendator - the TrackedFilesLoader will be available there
-                  navigate('/amendator');
-                }}
-                getStatusColor={getStatusColor}
-                amendmentCount={amendmentCounts[file.carriage_id]}
-              />
-            ))}
+            {TRACKED_GROUP_ORDER.map(({ typeKey, titleKey, tipKey }) => {
+              const groupFiles = visibleTracked.filter(
+                (file) => plainLanguageTypeKey(file.oeil_procedure_ref) === typeKey,
+              );
+              if (groupFiles.length === 0) return null;
+              return (
+                <div key={titleKey} className="my-tracked-files-tab__group">
+                  <h4 className="my-tracked-files-tab__group-title">
+                    {t(`myFilesTab.${titleKey}`)}
+                    {tipKey && (
+                      <span className="my-tracked-files-tab__group-info" title={t(`myFilesTab.${tipKey}`)}>
+                        <Icon path={mdiInformationOutline} size={0.6} />
+                      </span>
+                    )}
+                    <span className="my-tracked-files-tab__group-count">({groupFiles.length})</span>
+                  </h4>
+                  {groupFiles.map((file) => (
+                    <TrackedFileCard
+                      key={file.id}
+                      file={file}
+                      onViewDetail={() => fetchFileDetail(file.file_id)}
+                      onUntrack={() => handleUntrack(file)}
+                      onDraftAmendment={() => {
+                        navigate('/amendator');
+                      }}
+                      onMepAmendments={() => openMepAmendments(file.oeil_procedure_ref)}
+                      getStatusColor={getStatusColor}
+                      amendmentCount={amendmentCounts[file.carriage_id]}
+                    />
+                  ))}
+                </div>
+              );
+            })}
           </div>
         )}
           </div>
         </>
       )}
 
-      {/* Committee Work Tab Content */}
+      {/* In committee Tab Content */}
       {activeTab === 'committee' && (
         <div className="my-tracked-files-tab__committee-work">
-          {/* Committee Filter */}
-          <div className="my-tracked-files-tab__committee-filter">
-            <Icon path={mdiFilterVariant} size={0.8} />
-            <select
-              value={committeeFilters.committee_code || ''}
-              onChange={(e) => setCommitteeFilters({ ...committeeFilters, committee_code: e.target.value || undefined })}
-            >
-              <option value="">All Committees ({committeeWorkItems.length})</option>
-              {committees.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.code} - {c.name}
-                </option>
+          <div className="my-tracked-files-tab__committee-controls">
+            {/* Segmented toggle: My interests | All committees */}
+            {myCommittees.length > 0 && (
+              <div className="my-tracked-files-tab__segmented" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={committeeMode === 'mine'}
+                  className={`my-tracked-files-tab__segment ${committeeMode === 'mine' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setCommitteeMode('mine'); setCommitteeChips(myCommittees); }}
+                >
+                  {t('myFilesTab.myInterests')} ({myCommittees.length})
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={committeeMode === 'all'}
+                  className={`my-tracked-files-tab__segment ${committeeMode === 'all' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setCommitteeMode('all'); setCommitteeChips([]); }}
+                >
+                  {t('myFilesTab.allCommitteesLabel')}
+                </button>
+              </div>
+            )}
+
+            {/* Committee chips = the active committee filter (editable) */}
+            <div className="my-tracked-files-tab__committee-chips">
+              {committeeChips.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  className="my-tracked-files-tab__chip my-tracked-files-tab__chip--active"
+                  title={committeeNameOf(code)}
+                  onClick={() => toggleChip(code)}
+                >
+                  {code}
+                  <Icon path={mdiClose} size={0.55} />
+                </button>
               ))}
-            </select>
+              <select
+                className="my-tracked-files-tab__chip-add"
+                value={addCommitteeCode}
+                onChange={(e) => { if (e.target.value) { toggleChip(e.target.value); setAddCommitteeCode(''); } }}
+              >
+                <option value="">{t('myFilesTab.addCommittee')}</option>
+                {committees.filter((c) => !committeeChips.includes(c.code)).map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} - {c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Search + Kind + technical toggle */}
+            <div className="my-tracked-files-tab__committee-filters">
+              <div className="my-tracked-files-tab__committee-search">
+                <Icon path={mdiMagnify} size={0.8} />
+                <input
+                  type="text"
+                  placeholder={t('myFilesTab.searchCommittee')}
+                  value={listQuery}
+                  onChange={(e) => setListQuery(e.target.value)}
+                />
+              </div>
+              <div className="my-tracked-files-tab__committee-kind">
+                <Icon path={mdiFilterVariant} size={0.8} />
+                <select value={committeeKind} onChange={(e) => setCommitteeKind(e.target.value)}>
+                  <option value="all">{t('myFilesTab.allKinds')}</option>
+                  {COMMITTEE_KINDS.map((k) => (
+                    <option key={k} value={k}>{t(`myFilesTab.${k}`)}</option>
+                  ))}
+                </select>
+              </div>
+              <label className="my-tracked-files-tab__committee-techtoggle">
+                <input
+                  type="checkbox"
+                  checked={showTechnical}
+                  onChange={(e) => setShowTechnical(e.target.checked)}
+                />
+                {t('myFilesTab.showTechnical')}
+              </label>
+            </div>
+
+            <div className="my-tracked-files-tab__committee-note">
+              <Icon path={mdiInformationOutline} size={0.6} />
+              <span title={t('myFilesTab.committeeDataNote')}>
+                {t('myFilesTab.committeeDataNoteShort')}
+              </span>
+            </div>
           </div>
 
-          {/* Committee Work Items List */}
+          {/* Grouped-by-committee list */}
           {isLoadingCommitteeWork ? (
             <div className="my-tracked-files-tab__loading">
               <Icon path={mdiLoading} size={1} spin />
-              Loading committee work items...
+              {t('myFilesTab.loadingCommittee')}
             </div>
-          ) : committeeWorkItems.length === 0 ? (
+          ) : committeeVisibleCount === 0 ? (
             <div className="my-tracked-files-tab__empty">
               <Icon path={mdiAccountGroupOutline} size={2} color="#ccc" />
-              <h4>No committee work items</h4>
+              <h4>{t('myFilesTab.noCommitteeWork')}</h4>
               <p>
-                {committeeFilters.committee_code
-                  ? `No items found for ${committeeFilters.committee_code}`
-                  : 'Select a committee to view work in progress'
-                }
+                {committeeMode === 'mine'
+                  ? t('myFilesTab.noCommitteeMine')
+                  : t('myFilesTab.tryAdjusting')}
               </p>
             </div>
           ) : (
-            <div className="my-tracked-files-tab__committee-list">
-              {committeeWorkItems.map((item) => (
-                <CommitteeWorkCard key={item.id} item={item} />
+            <div className="my-tracked-files-tab__committee-groups">
+              {committeeGroups.map((group) => (
+                <div key={group.code} className="my-tracked-files-tab__committee-group">
+                  <div className="my-tracked-files-tab__committee-group-title">
+                    <span className="my-tracked-files-tab__committee-group-code">{group.code}</span>
+                    <span className="my-tracked-files-tab__committee-group-name">{group.name}</span>
+                    {group.isMine && (
+                      <span
+                        className="my-tracked-files-tab__committee-group-mine"
+                        title={t('myFilesTab.matchesInterests')}
+                      >
+                        <Icon path={mdiStarOutline} size={0.6} />
+                        {t('myFilesTab.matchesInterests')}
+                      </span>
+                    )}
+                    <span className="my-tracked-files-tab__committee-group-count">{group.items.length}</span>
+                  </div>
+                  <div className="my-tracked-files-tab__committee-list">
+                    {group.items.map((item) => (
+                      <CommitteeWorkCard
+                        key={item.id}
+                        item={item}
+                        isJunkTitle={isStubTitle(item.title)}
+                        isTracked={committeeTrackedIds.has(item.id)}
+                        onViewDetail={() => handleCommitteeViewDetail(item)}
+                        onTrack={() => handleCommitteeTrack(item)}
+                        onUntrack={() => handleCommitteeUntrack(item)}
+                        onMepAmendments={() => openMepAmendments(item.procedure_ref)}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -610,79 +1201,130 @@ export const MyTrackedFilesTab = () => {
 
       {/* Texts Adopted Tab Content */}
       {activeTab === 'texts_adopted' && (
-        <div className="my-tracked-files-tab__texts-adopted">
-          {/* Filters */}
-          <div className="my-tracked-files-tab__texts-adopted-filters">
-            <div className="my-tracked-files-tab__texts-adopted-filter">
-              <Icon path={mdiFilterVariant} size={0.8} />
+        <div className="my-tracked-files-tab__committee-work">
+          <div className="my-tracked-files-tab__committee-controls">
+            {/* Segmented toggle: My interests | All committees */}
+            {myCommittees.length > 0 && (
+              <div className="my-tracked-files-tab__segmented" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={textsMode === 'mine'}
+                  className={`my-tracked-files-tab__segment ${textsMode === 'mine' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setTextsMode('mine'); setTextsChips(myCommittees); }}
+                >
+                  {t('myFilesTab.myInterests')} ({myCommittees.length})
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={textsMode === 'all'}
+                  className={`my-tracked-files-tab__segment ${textsMode === 'all' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setTextsMode('all'); setTextsChips([]); }}
+                >
+                  {t('myFilesTab.allCommitteesLabel')}
+                </button>
+              </div>
+            )}
+
+            {/* Committee chips = the active committee filter (editable) */}
+            <div className="my-tracked-files-tab__committee-chips">
+              {textsChips.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  className="my-tracked-files-tab__chip my-tracked-files-tab__chip--active"
+                  title={committeeNameOf(code)}
+                  onClick={() => toggleTextsChip(code)}
+                >
+                  {code}
+                  <Icon path={mdiClose} size={0.55} />
+                </button>
+              ))}
               <select
-                value={textsAdoptedFilters.parliamentary_term || ''}
-                onChange={(e) => setTextsAdoptedFilters({
-                  ...textsAdoptedFilters,
-                  parliamentary_term: e.target.value ? parseInt(e.target.value) : undefined
-                })}
+                className="my-tracked-files-tab__chip-add"
+                value={addTextsCommitteeCode}
+                onChange={(e) => { if (e.target.value) { toggleTextsChip(e.target.value); setAddTextsCommitteeCode(''); } }}
               >
-                <option value="">All Terms</option>
-                <option value="10">Term 10 (2024-2029)</option>
-                <option value="9">Term 9 (2019-2024)</option>
-                <option value="8">Term 8 (2014-2019)</option>
-                <option value="7">Term 7 (2009-2014)</option>
-                <option value="6">Term 6 (2004-2009)</option>
-                <option value="5">Term 5 (1999-2004)</option>
-                <option value="4">Term 4 (1994-1999)</option>
+                <option value="">{t('myFilesTab.addCommittee')}</option>
+                {committees.filter((c) => !textsChips.includes(c.code)).map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} - {c.name}</option>
+                ))}
               </select>
             </div>
-            <div className="my-tracked-files-tab__texts-adopted-filter">
-              <select
-                value={textsAdoptedFilters.text_type || ''}
-                onChange={(e) => setTextsAdoptedFilters({
-                  ...textsAdoptedFilters,
-                  text_type: e.target.value ? e.target.value as TextAdoptedType['text_type'] : undefined
-                })}
-              >
-                <option value="">All Types</option>
-                <option value="resolution">Resolution</option>
-                <option value="legislative_resolution">Legislative Resolution</option>
-                <option value="decision">Decision</option>
-                <option value="recommendation">Recommendation</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div className="my-tracked-files-tab__texts-adopted-search">
-              <Icon path={mdiMagnify} size={0.8} />
-              <input
-                type="text"
-                placeholder="Search texts..."
-                value={textsAdoptedFilters.search || ''}
-                onChange={(e) => setTextsAdoptedFilters({
-                  ...textsAdoptedFilters,
-                  search: e.target.value || undefined
-                })}
-              />
+
+            {/* Search + kind */}
+            <div className="my-tracked-files-tab__committee-filters">
+              <div className="my-tracked-files-tab__committee-search">
+                <Icon path={mdiMagnify} size={0.8} />
+                <input
+                  type="text"
+                  placeholder={t('myFilesTab.searchCommittee')}
+                  value={listQuery}
+                  onChange={(e) => setListQuery(e.target.value)}
+                />
+              </div>
+              <div className="my-tracked-files-tab__committee-kind">
+                <Icon path={mdiFilterVariant} size={0.8} />
+                <select value={textsKind} onChange={(e) => setTextsKind(e.target.value)}>
+                  <option value="all">{t('myFilesTab.allTypes')}</option>
+                  {TEXT_KINDS.map((k) => (
+                    <option key={k} value={k}>
+                      {t(`myFilesTab.${k === 'legislative_resolution' ? 'legislativeResolution' : k}`)}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* Items List */}
+          {/* Grouped-by-committee list */}
           {isLoadingTextsAdopted ? (
             <div className="my-tracked-files-tab__loading">
               <Icon path={mdiLoading} size={1} spin />
-              Loading adopted texts...
+              {t('myFilesTab.loadingAdopted')}
             </div>
-          ) : textsAdoptedItems.length === 0 ? (
+          ) : textsVisibleCount === 0 ? (
             <div className="my-tracked-files-tab__empty">
               <Icon path={mdiTextBoxCheckOutline} size={2} color="#ccc" />
-              <h4>No adopted texts found</h4>
+              <h4>{t('myFilesTab.noAdoptedFound')}</h4>
               <p>
-                {textsAdoptedFilters.search || textsAdoptedFilters.text_type || textsAdoptedFilters.parliamentary_term
-                  ? 'Try adjusting your filters'
-                  : 'Sync texts adopted data to populate this tab'
-                }
+                {textsMode === 'mine'
+                  ? t('myFilesTab.noCommitteeMine')
+                  : t('myFilesTab.tryAdjusting')}
               </p>
             </div>
           ) : (
-            <div className="my-tracked-files-tab__texts-adopted-list">
-              {textsAdoptedItems.map((item) => (
-                <TextAdoptedCard key={item.id} item={item} />
+            <div className="my-tracked-files-tab__committee-groups">
+              {textsGroups.map((group) => (
+                <div key={group.code} className="my-tracked-files-tab__committee-group">
+                  <div className="my-tracked-files-tab__committee-group-title">
+                    <span className="my-tracked-files-tab__committee-group-code">{group.code}</span>
+                    <span className="my-tracked-files-tab__committee-group-name">{group.name}</span>
+                    {group.isMine && (
+                      <span
+                        className="my-tracked-files-tab__committee-group-mine"
+                        title={t('myFilesTab.matchesInterests')}
+                      >
+                        <Icon path={mdiStarOutline} size={0.6} />
+                        {t('myFilesTab.matchesInterests')}
+                      </span>
+                    )}
+                    <span className="my-tracked-files-tab__committee-group-count">{group.items.length}</span>
+                  </div>
+                  <div className="my-tracked-files-tab__texts-adopted-list">
+                    {group.items.map((item) => (
+                      <TextAdoptedCard
+                        key={item.id}
+                        item={item}
+                        isTracked={textsTrackedIds.has(item.id)}
+                        onViewDetail={() => handleTextViewDetail(item)}
+                        onTrack={() => handleTextTrack(item)}
+                        onUntrack={() => handleTextUntrack(item)}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -691,63 +1333,127 @@ export const MyTrackedFilesTab = () => {
 
       {/* Commission Documents Tab Content */}
       {activeTab === 'commission_docs' && (
-        <div className="my-tracked-files-tab__commission-docs">
-          {/* Filters */}
-          <div className="my-tracked-files-tab__commission-docs-filters">
-            <div className="my-tracked-files-tab__commission-docs-filter">
-              <Icon path={mdiFilterVariant} size={0.8} />
+        <div className="my-tracked-files-tab__committee-work">
+          <div className="my-tracked-files-tab__committee-controls">
+            {/* Segmented toggle: My interests | All departments */}
+            {myDgs.length > 0 && (
+              <div className="my-tracked-files-tab__segmented" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={docsMode === 'mine'}
+                  className={`my-tracked-files-tab__segment ${docsMode === 'mine' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setDocsMode('mine'); setDocsChips(myDgs); }}
+                >
+                  {t('myFilesTab.myInterests')} ({myDgs.length})
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={docsMode === 'all'}
+                  className={`my-tracked-files-tab__segment ${docsMode === 'all' ? 'my-tracked-files-tab__segment--active' : ''}`}
+                  onClick={() => { setDocsMode('all'); setDocsChips([]); }}
+                >
+                  {t('myFilesTab.allDepartmentsLabel')}
+                </button>
+              </div>
+            )}
+
+            {/* DG chips = the active department filter (editable) */}
+            <div className="my-tracked-files-tab__committee-chips">
+              {docsChips.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  className="my-tracked-files-tab__chip my-tracked-files-tab__chip--active"
+                  title={dgNameOf(code)}
+                  onClick={() => toggleDocsChip(code)}
+                >
+                  {code}
+                  <Icon path={mdiClose} size={0.55} />
+                </button>
+              ))}
               <select
-                value={commissionDocFilters.doc_type || ''}
-                onChange={(e) => setCommissionDocFilters({
-                  ...commissionDocFilters,
-                  doc_type: e.target.value ? e.target.value as CommissionDocType : undefined
-                })}
+                className="my-tracked-files-tab__chip-add"
+                value={addDocsDg}
+                onChange={(e) => { if (e.target.value) { toggleDocsChip(e.target.value); setAddDocsDg(''); } }}
               >
-                <option value="">All Types</option>
-                <option value="COM">COM (Proposals)</option>
-                <option value="SWD">SWD (Staff Working)</option>
-                {/* <option value="SEC">SEC (Secretariat)</option> */}
-                {/* <option value="C">C (Delegated Acts)</option> */}
-                <option value="JOIN">JOIN (Joint Docs)</option>
-                <option value="OJ">OJ (Official Journal)</option>
-                {/* <option value="PV">PV (Minutes)</option> — will be used in EU Calendar */}
+                <option value="">{t('myFilesTab.addDepartment')}</option>
+                {availableDgs.filter((c) => !docsChips.includes(c)).map((c) => (
+                  <option key={c} value={c}>{c} - {dgNameOf(c)}</option>
+                ))}
               </select>
             </div>
-            <div className="my-tracked-files-tab__commission-docs-search">
-              <Icon path={mdiMagnify} size={0.8} />
-              <input
-                type="text"
-                placeholder="Search documents..."
-                value={commissionDocFilters.search || ''}
-                onChange={(e) => setCommissionDocFilters({
-                  ...commissionDocFilters,
-                  search: e.target.value || undefined
-                })}
-              />
+
+            {/* Search + kind */}
+            <div className="my-tracked-files-tab__committee-filters">
+              <div className="my-tracked-files-tab__committee-search">
+                <Icon path={mdiMagnify} size={0.8} />
+                <input
+                  type="text"
+                  placeholder={t('myFilesTab.searchDocsPlaceholder')}
+                  value={listQuery}
+                  onChange={(e) => setListQuery(e.target.value)}
+                />
+              </div>
+              <div className="my-tracked-files-tab__committee-kind">
+                <Icon path={mdiFilterVariant} size={0.8} />
+                <select value={docsKind} onChange={(e) => setDocsKind(e.target.value)}>
+                  <option value="all">{t('myFilesTab.allTypes')}</option>
+                  {DOC_KINDS.map((k) => (
+                    <option key={k} value={k}>{t(`myFilesTab.${k.toLowerCase()}Alias`)}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* Items List */}
+          {/* Grouped-by-DG list */}
           {isLoadingCommissionDocs ? (
             <div className="my-tracked-files-tab__loading">
               <Icon path={mdiLoading} size={1} spin />
-              Loading Commission documents...
+              {t('myFilesTab.loadingCommissionDocs')}
             </div>
-          ) : commissionDocItems.length === 0 ? (
+          ) : docsVisibleCount === 0 ? (
             <div className="my-tracked-files-tab__empty">
               <Icon path={mdiFileDocumentMultipleOutline} size={2} color="#ccc" />
-              <h4>No Commission documents found</h4>
+              <h4>{t('myFilesTab.noCommissionDocs')}</h4>
               <p>
-                {commissionDocFilters.search || commissionDocFilters.doc_type
-                  ? 'Try adjusting your filters'
-                  : 'Sync Commission documents to populate this tab'
-                }
+                {docsMode === 'mine'
+                  ? t('myFilesTab.noDepartmentMine')
+                  : t('myFilesTab.tryAdjusting')}
               </p>
             </div>
           ) : (
-            <div className="my-tracked-files-tab__commission-docs-list">
-              {commissionDocItems.map((item) => (
-                <CommissionDocumentCard key={item.id} item={item} />
+            <div className="my-tracked-files-tab__committee-groups">
+              {docsGroups.map((group) => (
+                <div key={group.code} className="my-tracked-files-tab__committee-group">
+                  <div className="my-tracked-files-tab__committee-group-title">
+                    <span className="my-tracked-files-tab__committee-group-code">{group.code}</span>
+                    <span className="my-tracked-files-tab__committee-group-name">{group.name}</span>
+                    {group.isMine && (
+                      <span
+                        className="my-tracked-files-tab__committee-group-mine"
+                        title={t('myFilesTab.matchesInterests')}
+                      >
+                        <Icon path={mdiStarOutline} size={0.6} />
+                        {t('myFilesTab.matchesInterests')}
+                      </span>
+                    )}
+                    <span className="my-tracked-files-tab__committee-group-count">{group.items.length}</span>
+                  </div>
+                  <div className="my-tracked-files-tab__commission-docs-list">
+                    {group.items.map((item) => (
+                      <CommissionDocumentCard
+                        key={item.id}
+                        item={item}
+                        isTracked={docsTrackedIds.has(item.id)}
+                        onTrack={() => handleDocTrack(item)}
+                        onUntrack={() => handleDocUntrack(item)}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -759,7 +1465,7 @@ export const MyTrackedFilesTab = () => {
         <div className="my-tracked-files-tab__modal-overlay" onClick={() => setShowAddModal(false)}>
           <div className="my-tracked-files-tab__modal my-tracked-files-tab__modal--search" onClick={(e) => e.stopPropagation()}>
             <div className="my-tracked-files-tab__modal-header">
-              <h3>Track a Legislative File</h3>
+              <h3>{t('myFilesTab.trackLegislativeFile')}</h3>
               <button
                 className="my-tracked-files-tab__modal-close"
                 onClick={() => setShowAddModal(false)}
@@ -768,121 +1474,95 @@ export const MyTrackedFilesTab = () => {
               </button>
             </div>
 
-            {/* Track OEIL Procedure Directly */}
-            <div className="my-tracked-files-tab__oeil-track">
-              <h4>Track Any EU Procedure</h4>
-              <p className="my-tracked-files-tab__oeil-track-hint">
-                Enter an OEIL procedure reference to track legislation not in the Legislative Train.
-                Find references on <a href="https://oeil.europarl.europa.eu" target="_blank" rel="noopener noreferrer">OEIL</a>.
-              </p>
-              <div className="my-tracked-files-tab__oeil-track-input">
-                <input
-                  type="text"
-                  placeholder="e.g., 2024/0176(COD)"
-                  value={oeilProcedureRef}
-                  onChange={(e) => {
-                    setOeilProcedureRef(e.target.value.toUpperCase());
-                    setOeilTrackError(null);
-                    setOeilTrackSuccess(null);
-                  }}
-                  onKeyDown={(e) => e.key === 'Enter' && handleTrackOeilProcedure()}
-                />
-                <button
-                  className="my-tracked-files-tab__oeil-track-btn"
-                  onClick={handleTrackOeilProcedure}
-                  disabled={isTrackingOeil || !oeilProcedureRef.trim()}
-                >
-                  {isTrackingOeil ? (
-                    <Icon path={mdiLoading} size={0.8} spin />
-                  ) : (
-                    <Icon path={mdiPlus} size={0.8} />
-                  )}
-                  Track
-                </button>
-              </div>
-              {oeilTrackError && (
-                <div className="my-tracked-files-tab__oeil-track-error">
-                  <Icon path={mdiAlertCircleOutline} size={0.7} />
-                  {oeilTrackError}
-                </div>
-              )}
-              {oeilTrackSuccess && (
-                <div className="my-tracked-files-tab__oeil-track-success">
-                  <Icon path={mdiStarOutline} size={0.7} />
-                  {oeilTrackSuccess}
-                </div>
-              )}
+            {/* Recommended shortcut: auto-populate from interests */}
+            <div className="my-tracked-files-tab__modal-nudge">
+              <Icon path={mdiPlaylistPlus} size={0.9} />
+              <span>{t('myFilesTab.modalNudge')}</span>
+              <button
+                className="my-tracked-files-tab__modal-nudge-btn"
+                onClick={() => {
+                  setShowAddModal(false);
+                  handleSyncFromInterests();
+                }}
+                disabled={isSyncing}
+              >
+                {t('myFilesTab.syncFromInterests')}
+              </button>
             </div>
 
-            <div className="my-tracked-files-tab__modal-divider">
-              <span>or browse Commission priorities</span>
-            </div>
-
-            {/* Search and Filter */}
-            <div className="my-tracked-files-tab__search-filters">
+            {/* Search-first: search always visible; status/sort fold away to free result space */}
+            <div className="my-tracked-files-tab__modal-search">
               <div className="my-tracked-files-tab__search-input">
                 <Icon path={mdiMagnify} size={0.9} />
                 <input
-                  type="text"
-                  placeholder="Search by title or procedure reference..."
+                  type="search"
+                  placeholder={t('myFilesTab.modalSearchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   autoFocus
                 />
                 {searchQuery && (
-                  <button onClick={() => handleSearchChange('')}>
+                  <button onClick={() => handleSearchChange('')} aria-label={t('myFilesTab.clearSearch')}>
                     <Icon path={mdiClose} size={0.7} />
                   </button>
                 )}
               </div>
-              <div className="my-tracked-files-tab__filter-row">
-                <div className="my-tracked-files-tab__status-filter">
-                  <label>Status:</label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All ({availableFiles.length})</option>
-                    {availableStatuses.map(status => {
-                      const count = availableFiles.filter(f => f.current_status === status).length;
-                      return (
-                        <option key={status} value={status}>
-                          {status.replace(/_/g, ' ')} ({count})
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-                <div className="my-tracked-files-tab__sort-filter">
-                  <label>Sort:</label>
-                  <select
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest' | 'alphabetical')}
-                  >
-                    <option value="newest">Newest first</option>
-                    <option value="oldest">Oldest first</option>
-                    <option value="alphabetical">A-Z</option>
-                  </select>
-                </div>
-              </div>
+              <button
+                type="button"
+                className={`my-tracked-files-tab__filter-toggle ${showFilters ? 'my-tracked-files-tab__filter-toggle--active' : ''}`}
+                onClick={() => setShowFilters((v) => !v)}
+                aria-expanded={showFilters}
+              >
+                <Icon path={mdiFilterVariant} size={0.8} />
+                {t('myFilesTab.filters')}
+                <Icon path={showFilters ? mdiChevronUp : mdiChevronDown} size={0.7} />
+              </button>
             </div>
+            {showFilters && (
+              <div className="my-tracked-files-tab__modal-filters">
+                <select
+                  className="my-tracked-files-tab__modal-select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  aria-label={t('myFilesTab.statusLabel')}
+                >
+                  <option value="all">{t('myFilesTab.allWithCount', { count: browseFiles.length })}</option>
+                  {availableStatuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status.replace(/_/g, ' ')}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="my-tracked-files-tab__modal-select"
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest' | 'alphabetical')}
+                  aria-label={t('myFilesTab.sortLabel')}
+                >
+                  <option value="newest">{t('myFilesTab.sortNewest')}</option>
+                  <option value="oldest">{t('myFilesTab.sortOldest')}</option>
+                  <option value="alphabetical">{t('myFilesTab.sortAZ')}</option>
+                </select>
+              </div>
+            )}
 
             {/* Files List */}
             <div className="my-tracked-files-tab__search-results">
               {isLoadingFiles ? (
                 <div className="my-tracked-files-tab__search-loading">
                   <Icon path={mdiLoading} size={1} spin />
-                  Loading legislative files...
+                  {t('myFilesTab.loadingLegFiles')}
                 </div>
-              ) : sortedFiles.length === 0 ? (
+              ) : browseFiles.length === 0 ? (
                 <div className="my-tracked-files-tab__search-empty">
-                  {searchQuery ? 'No files match your search' : 'No files available'}
+                  {searchQuery ? t('myFilesTab.noFilesMatch') : t('myFilesTab.noFilesAvailable')}
                 </div>
               ) : (
                 <div className="my-tracked-files-tab__search-list">
-                  {paginatedFiles.map((file) => {
+                  {shownFiles.map((file) => {
                     const alreadyTracked = isAlreadyTracked(file);
                     const isCurrentlyTracking = trackingFileId === file.id;
+                    const typeKey = plainLanguageTypeKey(file.oeil_procedure_ref);
 
                     return (
                       <div
@@ -894,6 +1574,11 @@ export const MyTrackedFilesTab = () => {
                             {file.title}
                           </div>
                           <div className="my-tracked-files-tab__search-item-meta">
+                            {typeKey && (
+                              <span className="my-tracked-files-tab__search-item-type">
+                                {t(`myFilesTab.${typeKey}`)}
+                              </span>
+                            )}
                             <span
                               className="my-tracked-files-tab__search-item-status"
                               style={{ backgroundColor: getStatusColor(file.current_status) }}
@@ -911,43 +1596,84 @@ export const MyTrackedFilesTab = () => {
                           className="my-tracked-files-tab__search-item-track"
                           onClick={() => handleTrackFromModal(file)}
                           disabled={alreadyTracked || isCurrentlyTracking || isTracking}
-                          title={alreadyTracked ? 'Already tracked' : 'Track this file'}
+                          title={alreadyTracked ? t('myFilesTab.alreadyTracked') : t('myFilesTab.trackThisFile')}
                         >
                           {isCurrentlyTracking ? (
                             <Icon path={mdiLoading} size={0.8} spin />
                           ) : (
                             <Icon path={mdiStarOutline} size={0.8} />
                           )}
-                          {alreadyTracked ? 'Tracked' : 'Track'}
+                          {alreadyTracked ? t('myFilesTab.tracked') : t('myFilesTab.track')}
                         </button>
                       </div>
                     );
                   })}
-                  {/* Pagination controls */}
-                  {sortedFiles.length > ITEMS_PER_PAGE && (
-                    <div className="my-tracked-files-tab__pagination">
-                      <span className="my-tracked-files-tab__pagination-info">
-                        Showing {startIndex + 1}-{Math.min(endIndex, sortedFiles.length)} of {sortedFiles.length}
+                  {/* Load more */}
+                  {browseFiles.length > visibleCount && (
+                    <div className="my-tracked-files-tab__load-more">
+                      <button
+                        className="my-tracked-files-tab__load-more-btn"
+                        onClick={() => setVisibleCount((c) => c + PAGE_STEP)}
+                      >
+                        {t('myFilesTab.loadMore')}
+                      </button>
+                      <span className="my-tracked-files-tab__load-more-info">
+                        {t('myFilesTab.showingCount', { shown: shownFiles.length, total: browseFiles.length })}
                       </span>
-                      <div className="my-tracked-files-tab__pagination-controls">
-                        <button
-                          className="my-tracked-files-tab__pagination-btn"
-                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                          disabled={currentPage === 1}
-                        >
-                          Previous
-                        </button>
-                        <span className="my-tracked-files-tab__pagination-pages">
-                          Page {currentPage} of {totalPages}
-                        </span>
-                        <button
-                          className="my-tracked-files-tab__pagination-btn"
-                          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                          disabled={currentPage === totalPages}
-                        >
-                          Next
-                        </button>
-                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Advanced: add by OEIL procedure reference (expert path) */}
+            <div className="my-tracked-files-tab__advanced">
+              <button
+                type="button"
+                className="my-tracked-files-tab__advanced-toggle"
+                onClick={() => setShowAdvancedRef((v) => !v)}
+                aria-expanded={showAdvancedRef}
+              >
+                <Icon path={showAdvancedRef ? mdiChevronUp : mdiChevronDown} size={0.8} />
+                {t('myFilesTab.advancedAddByRef')}
+              </button>
+              {showAdvancedRef && (
+                <div className="my-tracked-files-tab__oeil-track">
+                  <p className="my-tracked-files-tab__oeil-track-hint">
+                    {t('myFilesTab.oeilHintPrefix')}{' '}
+                    <a href="https://oeil.europarl.europa.eu" target="_blank" rel="noopener noreferrer">OEIL</a>.
+                  </p>
+                  <div className="my-tracked-files-tab__oeil-track-input">
+                    <input
+                      type="text"
+                      placeholder={t('myFilesTab.oeilPlaceholder')}
+                      value={oeilProcedureRef}
+                      onChange={(e) => {
+                        setOeilProcedureRef(e.target.value.toUpperCase());
+                        setOeilTrackError(null);
+                        setOeilTrackSuccess(null);
+                      }}
+                      onKeyDown={(e) => e.key === 'Enter' && handleTrackOeilProcedure()}
+                    />
+                    <button
+                      className="my-tracked-files-tab__oeil-track-btn"
+                      onClick={handleTrackOeilProcedure}
+                      disabled={isTrackingOeil || !oeilProcedureRef.trim()}
+                    >
+                      {isTrackingOeil ? <Icon path={mdiLoading} size={0.8} spin /> : <Icon path={mdiPlus} size={0.8} />}
+                      {t('myFilesTab.trackBtn')}
+                    </button>
+                  </div>
+                  {oeilTrackError && (
+                    <div className="my-tracked-files-tab__oeil-track-error">
+                      <Icon path={mdiAlertCircleOutline} size={0.7} />
+                      {oeilTrackError}
+                    </div>
+                  )}
+                  {oeilTrackSuccess && (
+                    <div className="my-tracked-files-tab__oeil-track-success">
+                      <Icon path={mdiStarOutline} size={0.7} />
+                      {oeilTrackSuccess}
                     </div>
                   )}
                 </div>
@@ -970,11 +1696,13 @@ interface TrackedFileCardProps {
   onViewDetail: () => void;
   onUntrack: () => void;
   onDraftAmendment: () => void;
+  onMepAmendments?: () => void;
   getStatusColor: (status: string) => string;
   amendmentCount?: number;
 }
 
-const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getStatusColor, amendmentCount }: TrackedFileCardProps) => {
+const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, onMepAmendments, getStatusColor, amendmentCount }: TrackedFileCardProps) => {
+  const { t } = useTranslation();
   const oeilUrl = file.oeil_procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(file.oeil_procedure_ref)}`
     : null;
@@ -990,16 +1718,21 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
         >
           {file.current_status.replace(/_/g, ' ')}
         </div>
+        {plainLanguageTypeKey(file.oeil_procedure_ref) && (
+          <div className="tracked-file-card__plain-type">
+            {t(`myFilesTab.${plainLanguageTypeKey(file.oeil_procedure_ref)}`)}
+          </div>
+        )}
         {file.is_blocked && (
           <div className="tracked-file-card__blocked">
             <Icon path={mdiAlertCircleOutline} size={0.7} />
-            Blocked
+            {t('myFilesTab.blocked')}
           </div>
         )}
         {amendmentCount !== undefined && amendmentCount > 0 && (
           <div className="tracked-file-card__amendment-badge">
             <Icon path={mdiPencilOutline} size={0.6} />
-            {amendmentCount} amendment{amendmentCount !== 1 ? 's' : ''}
+            {t('myFilesTab.amendments', { count: amendmentCount })}
           </div>
         )}
       </div>
@@ -1023,7 +1756,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
         {file.days_in_current_status && (
           <span className="tracked-file-card__days">
             <Icon path={mdiClockOutline} size={0.6} />
-            {file.days_in_current_status} days
+            {t('myFilesTab.daysInStatus', { n: file.days_in_current_status })}
           </span>
         )}
       </div>
@@ -1034,16 +1767,25 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
           onClick={onViewDetail}
         >
           <Icon path={mdiFileDocumentOutline} size={0.7} />
-          View Details
+          {t('myFilesTab.viewDetails')}
         </button>
         <button
           className="tracked-file-card__action-btn tracked-file-card__action-btn--amendator"
           onClick={onDraftAmendment}
-          title="Open in Amendator"
+          title={t('myFilesTab.openInAmendator')}
         >
           <Icon path={mdiPencilOutline} size={0.7} />
-          Draft Amendment
+          {t('myFilesTab.draftAmendment')}
         </button>
+        {onMepAmendments && file.oeil_procedure_ref && (
+          <button
+            className="tracked-file-card__action-btn"
+            onClick={onMepAmendments}
+          >
+            <Icon path={mdiAccountGroupOutline} size={0.7} />
+            {t('amendmentsTab.mepAmendments')}
+          </button>
+        )}
         {file.oeil_procedure_ref && getDeepDiveForProcedure(file.oeil_procedure_ref) && (
           <a
             href={getDeepDiveUrl(getDeepDiveForProcedure(file.oeil_procedure_ref)!, 'en')}
@@ -1052,7 +1794,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             className="tracked-file-card__action-btn tracked-file-card__action-btn--deep-dive"
           >
             <Icon path={mdiBookOpenPageVariantOutline} size={0.7} />
-            Deep Dive
+            {t('myFilesTab.deepDive')}
           </a>
         )}
         {oeilUrl && (
@@ -1063,7 +1805,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             className="tracked-file-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            OEIL
+            {t('myFilesTab.oeil')}
           </a>
         )}
         {eultUrl && (
@@ -1074,7 +1816,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             className="tracked-file-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            EU Law Tracker
+            {t('myFilesTab.euLawTracker')}
           </a>
         )}
         {regDelUrl && (
@@ -1085,7 +1827,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             className="tracked-file-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            RegDel Register
+            {t('myFilesTab.regDel')}
           </a>
         )}
         <button
@@ -1093,13 +1835,13 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
           onClick={onUntrack}
         >
           <Icon path={mdiTrashCanOutline} size={0.7} />
-          Untrack
+          {t('myFilesTab.untrack')}
         </button>
       </div>
 
       <div className="tracked-file-card__footer">
         <span className="tracked-file-card__tracked-since">
-          Tracking since {new Date(file.tracked_since).toLocaleDateString()}
+          {t('myFilesTab.trackingSince', { date: new Date(file.tracked_since).toLocaleDateString() })}
         </span>
       </div>
     </div>
@@ -1109,11 +1851,28 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
 // Committee Work Card Component
 interface CommitteeWorkCardProps {
   item: CommitteeWorkItem;
+  isJunkTitle?: boolean;
+  isTracked?: boolean;
+  onViewDetail?: () => void;
+  onTrack?: () => void;
+  onUntrack?: () => void;
+  onMepAmendments?: () => void;
 }
 
-const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
+const CommitteeWorkCard = ({ item, isJunkTitle, isTracked, onViewDetail, onTrack, onUntrack, onMepAmendments }: CommitteeWorkCardProps) => {
+  const { t } = useTranslation();
   const procedureInfo = PROCEDURE_TYPE_INFO[item.procedure_type] || { name: item.procedure_type, color: '#6b7280', score: 0 };
   const statusInfo = STATUS_INFO[item.status] || { name: item.status, color: '#9ca3af' };
+  // Plain-language family ("New EU law", "Resolution", ...) for the prominent
+  // badge; the raw OEIL code stays as the tooltip. null = no plain family.
+  const kindKey = plainLanguageTypeKey(item.procedure_ref);
+  const kindLabel = kindKey ? t(`myFilesTab.${kindKey}`) : procedureInfo.name;
+  const showStatus = item.status && item.status !== 'unknown';
+  // Graceful fallback when the scraper left a junk title: show the plain kind
+  // and committee rather than the garbage string.
+  const displayTitle = isJunkTitle
+    ? t('myFilesTab.committeeFallbackTitle', { kind: kindLabel, ref: item.procedure_ref })
+    : item.title;
 
   const oeilUrl = item.oeil_url || (item.procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
@@ -1126,28 +1885,28 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
     <div className="committee-work-card">
       <div className="committee-work-card__header">
         <span
-          className="committee-work-card__committee"
-          title={`${item.committee_code} - ${item.committee_role}`}
-        >
-          {item.committee_code}
-        </span>
-        <span
           className="committee-work-card__procedure-type"
           style={{ backgroundColor: procedureInfo.color }}
-          title={procedureInfo.name}
+          title={`${procedureInfo.name} (${item.procedure_type})`}
         >
-          {item.procedure_type}
+          {kindLabel}
         </span>
-        <span
-          className="committee-work-card__status"
-          style={{ backgroundColor: statusInfo.color }}
-        >
-          {statusInfo.name}
-        </span>
+        {showStatus && (
+          <span
+            className="committee-work-card__status"
+            style={{ backgroundColor: statusInfo.color }}
+          >
+            {statusInfo.name}
+          </span>
+        )}
       </div>
 
-      <h4 className="committee-work-card__title">
-        {item.title}
+      <h4
+        className="committee-work-card__title"
+        onClick={onViewDetail}
+        style={onViewDetail ? { cursor: 'pointer' } : undefined}
+      >
+        {displayTitle}
       </h4>
 
       <div className="committee-work-card__meta">
@@ -1160,12 +1919,55 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             {item.rapporteur_name}
           </span>
         )}
-        <span className="committee-work-card__relevance" title="Relevance score">
-          Score: {item.relevance_score}
+        <span className="committee-work-card__relevance" title={t('myFilesTab.score', { n: item.relevance_score })}>
+          {t('myFilesTab.score', { n: item.relevance_score })}
         </span>
       </div>
 
       <div className="committee-work-card__actions">
+        {onViewDetail && (
+          <button
+            type="button"
+            className="committee-work-card__action-btn committee-work-card__action-btn--primary"
+            onClick={onViewDetail}
+          >
+            <Icon path={mdiFileDocumentOutline} size={0.7} />
+            {t('myFilesTab.viewDetails')}
+          </button>
+        )}
+        {onMepAmendments && (
+          <button
+            type="button"
+            className="committee-work-card__action-btn"
+            onClick={onMepAmendments}
+          >
+            <Icon path={mdiAccountGroupOutline} size={0.7} />
+            {t('amendmentsTab.mepAmendments')}
+          </button>
+        )}
+        {isTracked ? (
+          onUntrack && (
+            <button
+              type="button"
+              className="committee-work-card__action-btn committee-work-card__action-btn--danger"
+              onClick={onUntrack}
+            >
+              <Icon path={mdiTrashCanOutline} size={0.7} />
+              {t('myFilesTab.untrack')}
+            </button>
+          )
+        ) : (
+          onTrack && (
+            <button
+              type="button"
+              className="committee-work-card__action-btn committee-work-card__action-btn--track"
+              onClick={onTrack}
+            >
+              <Icon path={mdiPlaylistPlus} size={0.7} />
+              {t('myFilesTab.track')}
+            </button>
+          )
+        )}
         {oeilUrl && (
           <a
             href={oeilUrl}
@@ -1174,7 +1976,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             className="committee-work-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            OEIL
+            {t('myFilesTab.oeil')}
           </a>
         )}
         {eultUrl && (
@@ -1185,7 +1987,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             className="committee-work-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            EU Law Tracker
+            {t('myFilesTab.euLawTracker')}
           </a>
         )}
         {regDelUrl && (
@@ -1196,7 +1998,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             className="committee-work-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            RegDel Register
+            {t('myFilesTab.regDel')}
           </a>
         )}
         {item.ep_page_url && (
@@ -1207,7 +2009,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             className="committee-work-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            EP Page
+            {t('myFilesTab.epPage')}
           </a>
         )}
       </div>

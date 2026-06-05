@@ -53,6 +53,9 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
+  /* Explicit white: a global `h2 { color }` rule otherwise beats the white
+     inherited from .legislative-trains__header, rendering the title dark on blue. */
+  color: #ffffff;
 }
 
 .legislative-trains__stats {
@@ -362,4 +365,79 @@
   border-radius: 4px;
   font-size: 0.6875rem;
   color: #666;
+}
+
+/* PI lens (matches the cockpit pattern in the other MEUB sub-features) */
+.legislative-trains__stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.legislative-trains__pi-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.legislative-trains__pi-toggle--active {
+  background: #ffffff;
+  color: #0066cc;
+  border-color: #ffffff;
+}
+.legislative-trains__train-pi {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+.legislative-trains__file-pi {
+  display: inline-flex;
+  align-items: center;
+  color: #d97706;
+}
+
+/* Responsive (smartphone/tablet) — header, batch bar and train rows stack/wrap */
+@media (max-width: 640px) {
+  .legislative-trains__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+  .legislative-trains__stats {
+    flex-wrap: wrap;
+  }
+  .legislative-trains__batch-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+  }
+  .legislative-trains__batch-actions {
+    justify-content: flex-end;
+  }
+  .legislative-trains__list {
+    padding: 0.6rem;
+  }
+  .legislative-trains__train-header {
+    padding: 0.85rem 1rem;
+    gap: 0.5rem;
+  }
+  .legislative-trains__train-meta {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
 }

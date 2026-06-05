@@ -12,6 +12,8 @@ interface LawBrowserProps {
   onSelectCluster: (cluster: LawCluster) => void;
 }
 
+type ForMeCluster = LawCluster & { matches_interests?: boolean; matches_tracked?: boolean };
+
 export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
   const { t } = useTranslation();
   const { token } = useAuth();
@@ -21,10 +23,28 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
   const [selectedPolicyArea, setSelectedPolicyArea] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [forMe, setForMe] = useState<ForMeCluster[]>([]);
 
   useEffect(() => {
     fetchClusters();
   }, []);
+
+  // Phase-3 bridge: compliance clusters in your interests / containing files you track.
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch(`${API_BASE_URL}/api/eu-law-comply/clusters/for-me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!cancelled) setForMe(Array.isArray(d.clusters) ? d.clusters : []);
+      } catch { /* silent: the section just won't render */ }
+    })();
+    return () => { cancelled = true; };
+  }, [token]);
 
   useEffect(() => {
     filterClusters();
@@ -154,6 +174,32 @@ export const LawBrowser = ({ onSelectCluster }: LawBrowserProps) => {
           </select>
         </div>
       </div>
+
+      {/* Phase-3 bridge: clusters in your interests / containing files you track */}
+      {forMe.length > 0 && searchQuery === '' && selectedPolicyArea === 'all' && (
+        <div className="law-browser__section law-browser__section--forme">
+          <h2 className="law-browser__section-title">
+            <span className="mdi mdi-creation"></span>
+            {t('comply.browser.forYou', 'For you')}
+          </h2>
+          <div className="law-browser__grid">
+            {forMe.slice(0, 6).map(cluster => (
+              <div key={cluster.id} className="law-browser__forme-card">
+                {cluster.matches_tracked && (
+                  <span className="law-browser__forme-chip is-tracked">
+                    <span className="mdi mdi-bookmark-check"></span> {t('comply.browser.fromTracked', 'Touches a file you track')}
+                  </span>
+                )}
+                <ClusterCard
+                  cluster={cluster}
+                  onSelect={onSelectCluster}
+                  priorityIcon={getPriorityIcon(cluster.law_count)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Results Count */}
       <div className="law-browser__results-count">

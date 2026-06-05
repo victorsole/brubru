@@ -1,0 +1,54 @@
+.mepw-tab { padding: 0.5rem 0.25rem 2rem; max-width: 1040px; margin: 0 auto; }
+.mepw-tab__header { margin-bottom: 1.1rem; }
+.mepw-tab__title { display: flex; gap: 0.75rem; align-items: flex-start; }
+.mepw-tab__title h2 { margin: 0; font-size: 1.4rem; }
+.mepw-tab__title p { margin: 0.25rem 0 0; color: #64748b; font-size: 0.9rem; max-width: 62ch; }
+
+.mepw-tab__controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+.mepw-tab__toggle { display: inline-flex; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.mepw-tab__toggle button { border: 0; background: #fff; padding: 0.45rem 0.95rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #475569; }
+.mepw-tab__toggle button.is-active { background: #1e3a8a; color: #fff; }
+.mepw-tab__search { display: flex; align-items: center; gap: 0.4rem; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.35rem 0.6rem; flex: 1; min-width: 200px; }
+.mepw-tab__search input { border: 0; outline: 0; flex: 1; font-size: 0.85rem; }
+.mepw-tab__count { color: #64748b; font-size: 0.82rem; }
+.mepw-tab__empty { text-align: center; color: #94a3b8; padding: 2.5rem 1rem; }
+
+/* Auto-fill so cards reflow to as many columns as fit without ever getting
+   cramped; min(420px,100%) keeps them from overflowing on small screens.
+   align-items:stretch -> equal-height cards per row (clean grid edges). */
+.mepw-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
+  gap: 0.7rem; align-items: stretch;
+}
+.mepw-card { display: flex; align-items: flex-start; gap: 0.7rem; text-align: left; background: #fff; border: 1px solid #e8edf3; border-radius: 12px; padding: 0.8rem 0.9rem; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+.mepw-card:hover { box-shadow: 0 6px 18px rgba(15,23,42,.08); transform: translateY(-1px); }
+.mepw-card__rank { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #eef2ff; color: #1e3a8a; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+.mepw-card__main { flex: 1; min-width: 0; }
+.mepw-card__name { font-weight: 700; font-size: 0.92rem; color: #0f172a; }
+.mepw-card__bar { height: 6px; background: #eef2f7; border-radius: 999px; overflow: hidden; margin: 0.35rem 0; }
+.mepw-card__bar span { display: block; height: 100%; background: #6366f1; border-radius: 999px; }
+.mepw-card__meta { font-size: 0.78rem; color: #64748b; }
+.mepw-card__meta b { color: #1e3a8a; }
+.mepw-card__subj { font-size: 0.78rem; color: #475569; margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.mepw-modal { position: fixed; inset: 0; background: rgba(15,23,42,.6); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.mepw-modal__panel { background: #fff; border-radius: 16px; width: min(760px, 94vw); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+.mepw-modal__head { display: flex; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; border-bottom: 1px solid #eef2f7; }
+.mepw-modal__head h3 { margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.4rem; }
+.mepw-profile { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.4rem; color: #1e3a8a; font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+.mepw-modal__close { border: 0; background: #f1f5f9; border-radius: 8px; padding: 0.4rem; cursor: pointer; align-self: flex-start; }
+.mepw-modal__body { padding: 1rem 1.3rem 1.3rem; overflow-y: auto; }
+.mepw-modal__body h5 { display: flex; align-items: center; gap: 0.35rem; margin: 0 0 0.6rem; font-size: 0.85rem; color: #1e3a8a; }
+.mepw-muted { color: #94a3b8; font-size: 0.85rem; }
+.mepw-qlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; max-width: 72ch; }
+.mepw-qlist li { display: flex; align-items: baseline; gap: 0.5rem; font-size: 0.88rem; line-height: 1.4; }
+.mepw-qlist a { color: #1e293b; text-decoration: none; flex: 1; }
+.mepw-qlist a:hover { text-decoration: underline; }
+.mepw-status.is-answered { color: #2e8b57; }
+.mepw-status.is-awaiting { color: #b45309; }
+.mepw-qdate { color: #94a3b8; font-size: 0.74rem; white-space: nowrap; }
+
+@media (max-width: 767px) {
+  .mepw-modal { padding: 0; }
+  .mepw-modal__panel { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; }
+}

@@ -18,6 +18,7 @@ from models.user import User
 from models.oj_entry import OjEntry
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.pi_committee_crosswalk import keywords_for_interests
+from services.tracking.tracked_lens import tracked_anchors
 from .auth_optional import get_current_user_optional
 
 import logging
@@ -40,9 +41,12 @@ def _matches(entry: OjEntry, keywords: List[str]) -> bool:
     return any(k in hay for k in keywords)
 
 
-def _entry_dict(e: OjEntry, keywords: List[str]) -> dict:
+def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(),
+                tracked_celex: set = frozenset()) -> dict:
     return {
         "id": str(e.id),
+        "matches_tracked": bool((e.matched_procedure_ref and e.matched_procedure_ref in tracked_procs)
+                                or (e.celex and e.celex in tracked_celex)),
         "oj_date": e.oj_date.isoformat() if e.oj_date else None,
         "series": e.series,
         "oj_number": e.oj_number,
@@ -88,6 +92,7 @@ async def oj_entries(
     date: Optional[str] = Query(None, description="YYYY-MM-DD; default = latest ingested"),
     series: Optional[str] = Query(None, description="L or C"),
     my_interests: bool = Query(False),
+    my_files: bool = Query(False),
     institution: Optional[str] = Query(None),
     act_type: Optional[str] = Query(None),
     theme: Optional[str] = Query(None),
@@ -97,6 +102,9 @@ async def oj_entries(
 ):
     try:
         keywords = _user_keywords(current_user)
+        tracked = tracked_anchors(db, str(current_user.id)) if current_user else {}
+        tracked_procs = tracked.get("procedures", set())
+        tracked_celex = tracked.get("celex", set())
 
         if date:
             target = date
@@ -119,9 +127,11 @@ async def oj_entries(
             q = q.filter(OjEntry.title.ilike(f"%{search}%"))
 
         rows = q.order_by(OjEntry.series, OjEntry.act_type, OjEntry.oj_number).all()
-        items = [_entry_dict(e, keywords) for e in rows]
+        items = [_entry_dict(e, keywords, tracked_procs, tracked_celex) for e in rows]
         if my_interests and keywords:
             items = [i for i in items if i["matches_interests"]]
+        if my_files and (tracked_procs or tracked_celex):
+            items = [i for i in items if i["matches_tracked"]]
 
         # Day-at-a-glance facets (computed over the unfiltered-by-my_interests set
         # for the chosen date, so the chips always reflect the whole day).
@@ -138,6 +148,8 @@ async def oj_entries(
             "items": items,
             "total": len(items),
             "pi_active": bool(my_interests and keywords),
+            "files_active": bool(my_files and (tracked_procs or tracked_celex)),
+            "has_tracked_files": bool(tracked_procs or tracked_celex),
             "tracked_count": sum(1 for i in items if i["is_tracked"]),
             "interest_count": sum(1 for i in items if i["matches_interests"]),
             "facets": {

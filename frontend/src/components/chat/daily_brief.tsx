@@ -1,6 +1,7 @@
 // frontend/src/components/chat/daily_brief.tsx
 // Dashboard grid: combines daily headlines, example prompts, and knowledge stats
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './daily_brief.css';
 
 const API_BASE_URL = import.meta.env?.VITE_API_URL || (window as any).REACT_APP_API_URL || 'http://localhost:8000';
@@ -41,6 +42,7 @@ const CARD_ICONS = [
 const CARD_COLOURS = ['blue', 'purple', 'green', 'amber'] as const;
 
 export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: DailyBriefProps) => {
+  const { t, i18n } = useTranslation();
   const [items, setItems] = useState<BriefItem[]>([]);
   const [stats, setStats] = useState<BriefStats | null>(null);
   const [briefDate, setBriefDate] = useState<string>('');
@@ -89,7 +91,7 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr + 'T00:00:00');
-      return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      return d.toLocaleDateString(i18n.language || 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     } catch {
       return dateStr;
     }
@@ -111,9 +113,9 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
   const remainingHeadlines = items.slice(1);
 
   const statLines = stats ? [
-    `${stats.total_guides} policy knowledge guides, and growing`,
-    `${stats.total_files.toLocaleString()} legislative files tracked`,
-    stats.last_trained ? `Updated ${formatDate(stats.last_trained)}` : 'Updated today',
+    t('brief.statGuides', { count: stats.total_guides }),
+    t('brief.statFiles', { count: stats.total_files.toLocaleString() }),
+    stats.last_trained ? t('brief.statUpdated', { date: formatDate(stats.last_trained) }) : t('brief.statUpdatedToday'),
   ] : [];
 
   return (
@@ -126,7 +128,7 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
           className="dashboard-welcome__card dashboard-welcome__card--blue"
           onClick={() => {
             if (topHeadline) {
-              onQueryClick(topHeadline.suggested_query || `Tell me about: ${topHeadline.headline}`);
+              onQueryClick(topHeadline.suggested_query || t('brief.tellMeAbout', { topic: topHeadline.headline }));
             }
           }}
           disabled={!topHeadline}
@@ -135,9 +137,9 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
             <span className="mdi mdi-newspaper-variant-outline" />
           </div>
           <div className="dashboard-welcome__card-content">
-            <span className="dashboard-welcome__card-label">Today in Brussels</span>
+            <span className="dashboard-welcome__card-label">{t('chat.todayInBrussels')}</span>
             <span className="dashboard-welcome__card-text">
-              {topHeadline ? topHeadline.headline : 'Loading headlines...'}
+              {topHeadline ? topHeadline.headline : t('brief.loadingHeadlines')}
             </span>
           </div>
           <span className="mdi mdi-arrow-right dashboard-welcome__card-arrow" />
@@ -156,7 +158,7 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
             </div>
             <div className="dashboard-welcome__card-content">
               <span className="dashboard-welcome__card-label">
-                {i === 0 ? 'EP Plenary' : i === 1 ? 'Ask anything' : 'Policy intelligence'}
+                {i === 0 ? t('brief.epPlenary') : i === 1 ? t('brief.askAnything') : t('brief.policyIntelligence')}
               </span>
               <span className="dashboard-welcome__card-text">{ex.text}</span>
             </div>
@@ -174,7 +176,7 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
             onClick={() => setExpandedHeadlines(!expandedHeadlines)}
           >
             <span className="mdi mdi-newspaper" />
-            <span>{expandedHeadlines ? 'Hide' : `${remainingHeadlines.length} more`} headlines{briefDate ? ` for ${formatDate(briefDate)}` : ''}</span>
+            <span>{expandedHeadlines ? t('brief.hide') : t('brief.moreHeadlines', { count: remainingHeadlines.length })} {t('brief.headlines')}{briefDate ? ` ${t('brief.forDate', { date: formatDate(briefDate) })}` : ''}</span>
             <span className={`mdi ${expandedHeadlines ? 'mdi-chevron-up' : 'mdi-chevron-down'} dashboard-welcome__more-chevron`} />
           </button>
           {expandedHeadlines && (
@@ -184,7 +186,7 @@ export const DailyBrief = ({ onQueryClick, examplePrompts, onExampleClick }: Dai
                   key={i}
                   type="button"
                   className="dashboard-welcome__headline-item"
-                  onClick={() => onQueryClick(item.suggested_query || `Tell me about: ${item.headline}`)}
+                  onClick={() => onQueryClick(item.suggested_query || t('brief.tellMeAbout', { topic: item.headline }))}
                 >
                   <span className={`mdi ${categoryIcon(item.category)} dashboard-welcome__headline-icon`} />
                   <span className="dashboard-welcome__headline-text">{item.headline}</span>

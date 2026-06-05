@@ -130,6 +130,7 @@ export interface ConsultationFilters {
   search?: string;
   closing_soon?: boolean;
   min_relevance?: number;
+  my_interests?: boolean;
 }
 
 export interface TrackingOptions {
@@ -241,6 +242,7 @@ export const consultationService = {
       if (filters.search) queryParams.append('search', filters.search);
       if (filters.closing_soon !== undefined) queryParams.append('closing_soon', String(filters.closing_soon));
       if (filters.min_relevance !== undefined) queryParams.append('min_relevance', String(filters.min_relevance));
+      if (filters.my_interests) queryParams.append('my_interests', 'true');
     }
 
     queryParams.append('sort_by', params.sort_by || 'end_date');

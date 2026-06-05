@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reglamento sobre el Desarrollo de la Nube y la IA (CADA) | Brubru</title>
+  <meta name="description" content="Guía artículo por artículo del Reglamento de la UE sobre el Desarrollo de la Nube y la IA (CADA), COM(2026) 502, 2026/0138(COD): cuatro niveles de garantía de la Unión, ocho grandes retos, triplicar la capacidad de centros de datos, EuroCloud Federation, ámbito NIS2. Adoptado el 3 de junio de 2026. Por Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+      --accent: #9b51e0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(155,81,224,0.35), 0 4px 15px rgba(6,147,227,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .lang-select { font-family: inherit; font-size: 0.8rem; font-weight: 600; color: var(--color-secondary); padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); cursor: pointer; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(155,81,224,0.1); color: var(--accent); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--accent); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-purple), var(--color-blue), var(--color-green), var(--color-amber), var(--color-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; transition: background-position 0s; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 760px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(155,81,224,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(155,81,224,0.08); color: var(--accent); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--accent); color: white; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--accent); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+
+    .infobox { background: linear-gradient(135deg, rgba(155,81,224,0.08), rgba(6,147,227,0.08)); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem 1.75rem; margin: 1.25rem 0; }
+    .infobox__title { font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th { background: var(--color-bg-alt); font-weight: 700; text-align: left; padding: 0.7rem 0.9rem; border-bottom: 2px solid var(--color-border); }
+    td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    tr:hover td { background: rgba(155,81,224,0.03); }
+
+    .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .tag-blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .tag-green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .tag-purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .tag-amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .tag-red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .gc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+    .gc-card { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
+    .gc-card b { color: var(--accent); }
+
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -1.55rem; top: 0.55rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--accent); background: var(--color-bg); z-index: 1; }
+    .timeline__item.done::before { background: var(--accent); }
+    .timeline__item.active::before { background: var(--color-amber); border-color: var(--color-amber); box-shadow: 0 0 0 4px rgba(217,119,6,0.2); }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
+    .timeline__text { font-size: 0.95rem; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; background: #fdfcfa; }
+    .footer__logos { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .footer__logos img { height: 30px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .footer__text a { color: var(--accent); text-decoration: none; }
+    .footer__strip { height: 3px; background: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber)); }
+
+    a.doc-link { color: inherit; text-decoration: none; border-bottom: 1px dashed var(--accent); }
+    a.doc-link:hover { color: var(--accent); }
+
+    .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(155,81,224,0.4); z-index: 90; }
+    .back-to-top.visible { display: flex; }
+
+    @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } .gc-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 767px) { .hero__title { font-size: 1.9rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } table { font-size: 0.82rem; } }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Biblioteca de Análisis en Profundidad de Brubru</div>
+    <div class="header__subtitle">Reglamento sobre el Desarrollo de la Nube y la IA (CADA)</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Seleccionar idioma">
+    <option value="./index.html">EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html" selected>ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html">NL</option>
+    <option value="./ca.html">CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero__tag"><a href="https://brubru.beresol.eu">Análisis en Profundidad de Brubru</a></div>
+    <h1 class="hero__title">Reglamento sobre el Desarrollo de la Nube y la IA: <span>La apuesta europea por la computación soberana</span></h1>
+    <p class="hero__subtitle">La pieza central del Paquete de Soberanía Tecnológica, analizada artículo por artículo. CADA combina un impulso de capacidad (triplicar la capacidad de centros de datos de la UE para 2030) con un marco único y auditado de soberanía digital en la nube de cuatro niveles de garantía de la Unión, para que Europa gestione más de su propia computación y pueda optar por servicios soberanos en sus casos de uso más críticos. Adoptado por el Colegio el 3 de junio de 2026.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-file-document-outline"></i> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0502" target="_blank" class="doc-link">COM(2026) 502</a></span>
+      <span><i class="mdi mdi-scale-balance"></i> 2026/0138(COD)</span>
+      <span><i class="mdi mdi-calendar"></i> adoptado el 3 de junio de 2026</span>
+      <span><i class="mdi mdi-account-tie"></i> VPE Virkkunen, DG CNECT</span>
+    </div>
+  </div>
+
+  <!-- KEY FIGURES -->
+  <div class="figures fade-in">
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number">x3</div>
+      <div class="figure-card__label">Capacidad de centros de datos de la UE para 2030</div>
+    </div>
+    <div class="figure-card fc-red">
+      <div class="figure-card__number">&gt;70%</div>
+      <div class="figure-card__label">Nube europea en manos de 3 hiperscaladores no europeos</div>
+    </div>
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number">4</div>
+      <div class="figure-card__label">Niveles de garantía de la Unión</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number">8</div>
+      <div class="figure-card__label">Grandes retos (Annex I)</div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc fade-in">
+    <div class="toc__title">Contenido</div>
+    <div class="toc__grid">
+      <a href="#why" class="toc__link"><span class="toc__num">1</span> ¿Por qué CADA?</a>
+      <a href="#basis" class="toc__link"><span class="toc__num">2</span> Dos bases jurídicas, cuatro objetivos</a>
+      <a href="#structure" class="toc__link"><span class="toc__num">3</span> Mapa artículo por artículo</a>
+      <a href="#initiatives" class="toc__link"><span class="toc__num">4</span> Iniciativas de Liderazgo en Nube e IA</a>
+      <a href="#challenges" class="toc__link"><span class="toc__num">5</span> Los 8 grandes retos</a>
+      <a href="#capacity" class="toc__link"><span class="toc__num">6</span> Triplicar la capacidad</a>
+      <a href="#sovereignty" class="toc__link"><span class="toc__num">7</span> Cuatro niveles de garantía</a>
+      <a href="#audit" class="toc__link"><span class="toc__num">8</span> Reconocimiento y auditoría independiente</a>
+      <a href="#demand" class="toc__link"><span class="toc__num">9</span> Contratación pública y EuroCloud</a>
+      <a href="#scope" class="toc__link"><span class="toc__num">10</span> Ámbito y la pila digital de la UE</a>
+      <a href="#timeline" class="toc__link"><span class="toc__num">11</span> Calendario y próximos pasos</a>
+      <a href="#sources" class="toc__link"><span class="toc__num">12</span> Fuentes oficiales</a>
+    </div>
+  </div>
+
+  <!-- 1 WHY -->
+  <div class="section fade-in" id="why">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-help-circle-outline"></i></div>
+      <h2 class="section__title">1. ¿Por qué CADA?</h2>
+    </div>
+    <p class="section__subtitle">Capacidad de computación insuficiente y excesiva dependencia de unos pocos proveedores</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-server-off" style="color:var(--color-red)"></i> Dos problemas estructurales</div>
+      <p>La capacidad de computación de la UE es limitada y está geográficamente concentrada, lo que frena la competitividad y la adopción de la IA, especialmente en cargas de trabajo de baja latencia. Al mismo tiempo, tres hiperscaladores no europeos controlan más del 70% del mercado europeo de computación en la nube, y la cuota de los proveedores europeos cayó del 29% en 2017 al 15% en 2022. La dependencia de proveedores bajo jurisdicción de terceros países genera riesgos para el control de los datos y la continuidad operativa. Las políticas nacionales fragmentan el despliegue. El informe Draghi reclamó recuperar el control sobre los datos y la nube, ampliar la computación doméstica y construir un ciclo virtuoso de financiación y talento.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-package-variant" style="color:var(--color-purple)"></i> Parte de un paquete más amplio</div>
+      <p>CADA es la pieza central del Paquete de Soberanía Tecnológica Europea adoptado el 3 de junio de 2026, junto con la <a href="../chips-act-2/index.html" class="doc-link">Ley de Chips 2.0</a>, la Estrategia de la UE en Software de Código Abierto y la Hoja de Ruta Estratégica para la Digitalización y la IA en el Sector Energético. Operacionaliza el Plan de Acción del Continente IA y la Estrategia de Aplicación de la IA, incluidas las fábricas de IA y las gigafábricas de IA.</p>
+    </div>
+  </div>
+
+  <!-- 2 BASIS -->
+  <div class="section fade-in" id="basis">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-scale-balance"></i></div>
+      <h2 class="section__title">2. Dos bases jurídicas, cuatro objetivos</h2>
+    </div>
+    <p class="section__subtitle">Un instrumento deliberadamente dividido</p>
+    <div class="card">
+      <p>CADA se basa en una doble base jurídica, que le otorga dos objetivos generales distintos:</p>
+      <ul style="margin:0.75rem 0 0 1.25rem; line-height:1.9">
+        <li><strong>Artículo 173(3) TFUE</strong> (competitividad industrial, <em>sin</em> armonización) ampara las <strong>Iniciativas de Liderazgo en Nube e IA</strong>.</li>
+        <li><strong>Artículo 114 TFUE</strong> (mercado interior, armonización) ampara el <strong>marco de soberanía digital en la nube</strong> y las normas sobre centros de datos.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-target" style="color:var(--color-purple)"></i> Los cuatro objetivos políticos</div>
+      <p><span class="tag tag-purple">1</span> aumentar la capacidad de computación de la UE mediante tecnologías innovadoras y sostenibles.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-blue">2</span> garantizar condiciones atractivas para ese despliegue.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-amber">3</span> reducir la dependencia global de los servicios soberanos de nube e IA no europeos.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-green">4</span> proteger el orden público haciendo resiliente el suministro de nube e IA, en particular en el sector público.</p>
+    </div>
+  </div>
+
+  <!-- 3 STRUCTURE -->
+  <div class="section fade-in" id="structure">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-format-list-numbered"></i></div>
+      <h2 class="section__title">3. Mapa artículo por artículo</h2>
+    </div>
+    <p class="section__subtitle">48 artículos en cinco títulos, más tres anexos</p>
+    <table>
+      <tr><th>Título</th><th>Contenido</th></tr>
+      <tr><td><strong>I. Disposiciones generales</strong> (Arts. 1-2)</td><td>Objeto (5 medidas); definiciones (servicio en la nube = NIS2; sistema de IA = Reglamento IA; software/SBOM = Reglamento de Ciberresiliencia).</td></tr>
+      <tr><td><strong>II. Iniciativas de Liderazgo en Nube e IA</strong> (Arts. 3-9)</td><td>8 objetivos operativos; Centros de IA (Art. 5); ejecución mediante grandes retos (Art. 6); estrategias nacionales en el plazo de un año (Art. 7); proyectos prioritarios de IA de frontera (Art. 8); equiparación de computación EuroHPC (Art. 9).</td></tr>
+      <tr><td><strong>III. Capacidad de centros de datos</strong> (Arts. 10-15)</td><td>Zonas de aceleración (Art. 10); condiciones (Art. 11); puntos de información únicos (Art. 12); tramitación de autorizaciones en 12 meses (Art. 13); proyectos estratégicos (Art. 14); seguimiento de la brecha de capacidad (Art. 15).</td></tr>
+      <tr><td><strong>IV. Autonomía</strong> (Arts. 16-44)</td><td>Marco de soberanía digital y 4 niveles de garantía (16-28); contratación pública por el lado de la demanda (29-33); EuroCloud Federation (34-36); contratación de la Comisión (37-40); código abierto (41-44).</td></tr>
+      <tr><td><strong>V. Disposiciones finales</strong> (Arts. 45-48)</td><td>Actos delegados y de ejecución; revisión a los 4 años y luego cada 5 (Art. 47); entrada en vigor y aplicación (Art. 48).</td></tr>
+      <tr><td><strong>Anexos</strong></td><td>I grandes retos; II criterios para los cuatro niveles de garantía; III pruebas de auditoría independiente (11 criterios).</td></tr>
+    </table>
+  </div>
+
+  <!-- 4 INITIATIVES -->
+  <div class="section fade-in" id="initiatives">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-rocket-launch-outline"></i></div>
+      <h2 class="section__title">4. Iniciativas de Liderazgo en Nube e IA</h2>
+    </div>
+    <p class="section__subtitle">El motor de apoyo industrial (artículo 173(3) TFUE)</p>
+    <div class="card">
+      <p>La Iniciativa de Liderazgo en la Nube y la Iniciativa de Liderazgo en IA persiguen ocho objetivos operativos: tecnología de centros de datos energéticamente eficiente, pilas de nube autónomas, IA de frontera, IA física, IA industrial, plataformas de agentes de IA, IA para el sector público, y adopción regional y local. Instrumentos clave:</p>
+      <ul style="margin:0.75rem 0 0 1.25rem; line-height:1.9">
+        <li><strong>Centros de IA</strong> (Art. 5): cada Estado miembro crea Centros de Experiencia y Aceleración para la IA, basados en los anteriores Centros Europeos de Innovación Digital (EDIH).</li>
+        <li><strong>Estrategias nacionales de nube e IA</strong> (Art. 7): adoptadas en el plazo de un año, siguiendo el principio de «la IA primero».</li>
+        <li><strong>Proyectos prioritarios de IA de frontera</strong> (Art. 8): reconocidos por la Comisión, ejecutados por un EDIC con al menos tres Estados miembros que agrupan su capacidad de computación.</li>
+        <li><strong>Equiparación de computación EuroHPC</strong> (Art. 9): la Unión equipara, como mínimo, la computación de IA que los Estados miembros aporten a los proyectos prioritarios de IA de frontera.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5 GRAND CHALLENGES -->
+  <div class="section fade-in" id="challenges">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-trophy-outline"></i></div>
+      <h2 class="section__title">5. Los 8 grandes retos (Annex I)</h2>
+    </div>
+    <p class="section__subtitle">Cómo se ejecutan las iniciativas en la práctica</p>
+    <div class="gc-grid">
+      <div class="gc-card"><b>1. Centros de datos sostenibles</b><br>PUE medio de 1,15 en toda la UE; utilización de servidores cercana al 50%; chips y computación cuántica europeos; seguridad.</div>
+      <div class="gc-card"><b>2. Pilas de nube</b><br>Pilas de nube de hardware y software europeo de extremo a extremo; servidores de IA sobre semiconductores y computación cuántica de la UE.</div>
+      <div class="gc-card"><b>3. IA de frontera</b><br>Modelos y sistemas multimodales de nueva generación con capacidades avanzadas de razonamiento y agencia.</div>
+      <div class="gc-card"><b>4. IA física</b><br>Robots autónomos, sistemas industriales y drones que operan de forma segura en entornos no estructurados.</div>
+      <div class="gc-card"><b>5. IA industrial</b><br>Modelos específicos por sector (automoción, fabricación, sanidad, energía, agroalimentación, defensa).</div>
+      <div class="gc-card"><b>6. Modelos industriales cooperativos</b><br>Colaboración con preservación de la confidencialidad (entrenamiento federado, ejecución segura).</div>
+      <div class="gc-card"><b>7. Plataforma de agentes de IA</b><br>Un marco europeo de orquestación de agentes de IA y middleware para agentes a escala.</div>
+      <div class="gc-card"><b>8. IA para el sector público</b><br>Modelos sobre datos públicos de alta calidad para sanidad, administración pública, derecho y gestión de crisis.</div>
+    </div>
+  </div>
+
+  <!-- 6 CAPACITY -->
+  <div class="section fade-in" id="capacity">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-server-network"></i></div>
+      <h2 class="section__title">6. Triplicar la capacidad de centros de datos</h2>
+    </div>
+    <p class="section__subtitle">Zonas de aceleración, tramitación más rápida, proyectos estratégicos (Título III)</p>
+    <div class="card">
+      <p>CADA tiene por objetivo <strong>triplicar la capacidad de centros de datos de la UE para 2030</strong> (un objetivo intermedio; la memoria explicativa lo sitúa en un horizonte de cinco a siete años) y satisfacer las necesidades de la UE para 2035, con un despliegue geográfico equilibrado. Cada Estado miembro debe designar al menos una <strong>zona de aceleración de centros de datos</strong> en un plazo de seis meses (Art. 10), crear puntos de información únicos (Art. 12) y emitir una autorización de base agregada de manera que la tramitación en una zona no supere <strong>los 12 meses</strong> (Art. 13). Un objetivo complementario fija todas las autorizaciones de centros de datos en menos de 18 meses para 2030. Se priorizan los emplazamientos existentes, se fomenta el aprovechamiento del calor residual y los contratos de compra de energía, y los indicadores de sostenibilidad siguen el Reglamento Delegado (UE) 2024/1364.</p>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-star-outline"></i> Proyectos estratégicos de centros de datos (Art. 14)</div>
+      <p>La Comisión puede declarar un proyecto como estratégico si cumple al menos dos de cinco criterios: respalda funciones esenciales del sector público; es altamente sostenible o innovador; refuerza la estabilidad de la red eléctrica o se ubica junto a energía limpia; integra chips, procesadores o computadores cuánticos diseñados o fabricados en la UE; o aborda una escasez de computación. Los proyectos estratégicos reciben el sello de competitividad en el marco del Fondo Europeo de Competitividad.</p>
+    </div>
+  </div>
+
+  <!-- 7 SOVEREIGNTY -->
+  <div class="section fade-in" id="sovereignty">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-shield-lock-outline"></i></div>
+      <h2 class="section__title">7. Los cuatro niveles de garantía de la Unión (Annex II)</h2>
+    </div>
+    <p class="section__subtitle">La innovación central: soberanía digital en la nube escalonada y auditable</p>
+    <table>
+      <tr><th>Nivel</th><th>Verificado por</th><th>Criterios clave (acumulativos)</th></tr>
+      <tr><td><span class="tag tag-green">Nivel 1</span></td><td>Autoevaluación del proveedor + declaración pública de conformidad en la UE</td><td>Establecimiento en la UE; residencia de datos e infraestructura en la UE (salvo solicitud expresa del cliente); ciberseguridad de última generación; transparencia total de subcontratistas. Las declaraciones de pymes se reconocen automáticamente en toda la UE.</td></tr>
+      <tr><td><span class="tag tag-blue">Nivel 2</span></td><td>Auditoría independiente de terceros</td><td>+ Personal ubicado en la UE; certificación de ciberseguridad europea EUCS «sustancial»; datos de clientes que nunca se usen para entrenar IA de terceros países; auditorías del SBOM y del código fuente; asistencia técnica exclusivamente en la UE; separación jurídica de la empresa matriz en la UE respecto a cualquier filial en terceros países.</td></tr>
+      <tr><td><span class="tag tag-amber">Nivel 3</span></td><td>Auditoría independiente de terceros</td><td>+ Personal con ciudadanía de la UE (con habilitación de seguridad nacional para información clasificada); proveedor no bajo control de terceros países (salvo la excepción de terceros países asociados); asistencia solo desde la UE; puede albergar información clasificada de la UE.</td></tr>
+      <tr><td><span class="tag tag-red">Nivel 4</span></td><td>Auditoría independiente de terceros (el más exigente)</td><td>+ Certificación de ciberseguridad «alta»; datos sensibles evaluados por riesgos mantenidos en la UE; ningún control efectivo por terceros países sobre el diseño, mantenimiento o evolución de los componentes de software.</td></tr>
+    </table>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-earth"></i> Terceros países asociados (Art. 18)</div>
+      <p>Un proveedor bajo control de un tercer país puede aun así alcanzar el Nivel 3, pero solo si la Comisión designa a ese tercer país como «asociado»: debe contar con una decisión de adecuación del RGPD, no tener leyes que obliguen al acceso a datos, interrupciones de servicios o sanciones, disponer de un mercado abierto y ofrecer acceso recíproco a su contratación pública.</p>
+    </div>
+  </div>
+
+  <!-- 8 AUDIT -->
+  <div class="section fade-in" id="audit">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-clipboard-check-outline"></i></div>
+      <h2 class="section__title">8. Reconocimiento y auditoría independiente</h2>
+    </div>
+    <p class="section__subtitle">Una auditoría, válida en toda la UE, para acabar con el «lavado de soberanía»</p>
+    <div class="card">
+      <p>El proveedor presenta su solicitud ante la <strong>autoridad nacional competente del Estado miembro de establecimiento</strong> (Art. 17), que dispone de 60 días para evaluarla y luego notifica a los demás Estados miembros para un período de revisión de 60 días; las controversias se remiten a la Comisión para una decisión vinculante. El Nivel 1 se basa en una autoevaluación (Art. 19); los Niveles 2 a 4 exigen una auditoría independiente de terceros a cargo del proveedor (Art. 20), con estrictas normas de independencia del auditor (ningún servicio no relacionado con la auditoría en los 12 meses anteriores o posteriores, ningún trabajo de auditoría en los 10 años previos, ninguna remuneración contingente) y revisión anual. Los servicios reconocidos figuran en un repositorio central público (Art. 22). El Annex III enumera 11 criterios de evidencia para la auditoría independiente: establecimiento en la Unión, ubicación de la infraestructura y el personal, localización de datos, ciudadanía de la UE, certificación de ciberseguridad europea, no uso para entrenar IA de terceros países, ausencia de control de terceros países (un test del 5% de propiedad y del propietario final), asistencia exclusivamente en la UE incluyendo el SOC y el NOC, transparencia de la cadena de suministro de software, código abierto y separación de filiales en terceros países.</p>
+    </div>
+  </div>
+
+  <!-- 9 DEMAND -->
+  <div class="section fade-in" id="demand">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-storefront-outline"></i></div>
+      <h2 class="section__title">9. Contratación pública, EuroCloud y código abierto</h2>
+    </div>
+    <p class="section__subtitle">Convertir la demanda pública en oferta europea</p>
+    <table>
+      <tr><th>Mecanismo</th><th>Descripción</th></tr>
+      <tr><td><strong>Evaluaciones de riesgo</strong> (Art. 29)</td><td>Los Estados miembros y las entidades de la Unión asignan las actividades de orden público a los niveles de garantía requeridos, en el plazo de un año y luego cada dos años.</td></tr>
+      <tr><td><strong>Contratación pública</strong> (Art. 30)</td><td>Los organismos no relacionados con el orden público utilizan al menos el Nivel 1; las actividades de orden público (sectores del Annex I de NIS2, seguridad nacional, defensa, justicia, aplicación de la ley, gestión de fronteras) utilizan los Niveles 2 a 4.</td></tr>
+      <tr><td><strong>Entidades esenciales privadas</strong> (Art. 31)</td><td>Las entidades de los sectores del Annex I de NIS2 pueden llevar a cabo las mismas evaluaciones.</td></tr>
+      <tr><td><strong>Valor añadido de la Unión</strong> (Art. 32)</td><td>Criterios de adjudicación no relacionados con el precio para la cadena de suministro y el hardware fabricado en la UE (máximo sugerido de 15 sobre 120 puntos).</td></tr>
+      <tr><td><strong>Contratación innovadora</strong> (Art. 33)</td><td>Los Estados miembros aspiran a adjudicar al menos el 25% de la contratación innovadora de nube e IA a pymes innovadoras.</td></tr>
+      <tr><td><strong>EuroCloud Federation</strong> (Arts. 34-36)</td><td>Una federación exclusiva para el sector público que permite agrupar y compartir capacidad de computación inactiva, de forma gratuita o a precio de coste, fuera de las normas de contratación.</td></tr>
+      <tr><td><strong>Contratación de la Comisión</strong> (Arts. 37-40)</td><td>La Comisión puede actuar como central de compras para las entidades de la Unión y las autoridades de los Estados miembros (contratos marco, sistemas dinámicos de adquisición).</td></tr>
+      <tr><td><strong>Código abierto primero</strong> (Arts. 41-44)</td><td>Principio de código abierto primero para los organismos públicos; un Catálogo de Soluciones de Código Abierto de la UE en el portal de Europa Interoperable; una red OSPO.</td></tr>
+    </table>
+  </div>
+
+  <!-- 10 SCOPE -->
+  <div class="section fade-in" id="scope">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-vector-link"></i></div>
+      <h2 class="section__title">10. Ámbito y la pila digital de la UE</h2>
+    </div>
+    <p class="section__subtitle">CADA no es una norma aislada</p>
+    <div class="card">
+      <p>Las medidas de carácter obligatorio se aplican al sector público y a las entidades esenciales privadas de los sectores del <strong>Annex I de NIS2</strong> (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" class="doc-link">Directiva (UE) 2022/2555</a>): energía, transporte, banca, infraestructura de mercados financieros, sanidad, suministro y tratamiento de agua potable y residual, infraestructura digital, gestión de servicios TIC, administración pública y espacio.</p>
+    </div>
+    <table>
+      <tr><th>Instrumento</th><th>Relación con CADA</th></tr>
+      <tr><td><strong>Data Act</strong></td><td>La portabilidad e interoperabilidad en la nube reducen la dependencia excesiva, facilitando el traslado a servicios europeos; CADA construye el camino soberano que el Data Act abre.</td></tr>
+      <tr><td><strong>DMA</strong></td><td>El 18 de noviembre de 2025 se abrieron tres investigaciones de mercado sobre servicios en la nube y la designación de guardianes de acceso.</td></tr>
+      <tr><td><strong>EUCS / Revisión de la Ley de Ciberseguridad (CSA2)</strong></td><td>Proporcionan la certificación de ciberseguridad en la que se basan los niveles de garantía de CADA; CADA cubre la brecha de soberanía digital.</td></tr>
+      <tr><td><strong>Reglamento de Ciberresiliencia</strong></td><td>Define el SBOM que las auditorías de CADA exigen.</td></tr>
+      <tr><td><strong>Plan de Acción del Continente IA / fábricas de IA</strong></td><td>CADA proporciona la amplia capacidad de nube y centros de datos que las fábricas y gigafábricas de IA necesitan.</td></tr>
+      <tr><td><strong>Estrategia de la UE en Software de Código Abierto</strong></td><td>Un instrumento complementario dentro del mismo paquete; CADA integra varias de sus medidas de código abierto.</td></tr>
+    </table>
+  </div>
+
+  <!-- 11 TIMELINE -->
+  <div class="section fade-in" id="timeline">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-timeline-clock-outline"></i></div>
+      <h2 class="section__title">11. Calendario y próximos pasos</h2>
+    </div>
+    <p class="section__subtitle">En qué punto se encuentra CADA en el procedimiento legislativo ordinario</p>
+    <div class="timeline">
+      <div class="timeline__item done"><div class="timeline__date">Septiembre de 2024</div><div class="timeline__text">El informe Draghi reclama recuperar el control sobre los datos y la nube y ampliar la computación doméstica.</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2025-2026</div><div class="timeline__text">El Plan de Acción del Continente IA y la Estrategia de Aplicación de la IA fijan la ambición (fábricas de IA, gigafábricas).</div></div>
+      <div class="timeline__item active"><div class="timeline__date">3 de junio de 2026</div><div class="timeline__text">El Colegio adopta CADA (COM(2026) 502, 2026/0138(COD)) dentro del Paquete de Soberanía Tecnológica.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Próxima etapa</div><div class="timeline__text">Posiciones del Parlamento Europeo (comisión competente prevista: ITRE) y del Consejo, seguidas de los trílogos.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Entrada en vigor</div><div class="timeline__text">20 días después de su publicación; el Reglamento se aplica un año después. A continuación se realizan las evaluaciones de riesgo de soberanía de los Estados miembros y se designan las zonas de aceleración.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Revisión</div><div class="timeline__text">Evaluación de la Comisión 4 años después de la entrada en vigor y, posteriormente, cada 5 años.</div></div>
+    </div>
+  </div>
+
+  <!-- 12 SOURCES -->
+  <div class="section fade-in" id="sources">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-link-variant"></i></div>
+      <h2 class="section__title">12. Fuentes oficiales</h2>
+    </div>
+    <div class="card">
+      <ul style="margin:0 0 0 1.25rem; line-height:2">
+        <li><a href="https://digital-strategy.ec.europa.eu/en/library/proposal-cloud-and-ai-development-act-cada" target="_blank" class="doc-link">Página de la propuesta: Reglamento sobre el Desarrollo de la Nube y la IA (DG CNECT)</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129111" target="_blank" class="doc-link">COM(2026) 502 final</a> (la propuesta) + <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129112" target="_blank" class="doc-link">ANEXOS 1 a 3</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129113" target="_blank" class="doc-link">SWD(2026) 502</a> (Evaluación de impacto, partes 1 y 2) y <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129115" target="_blank" class="doc-link">SWD(2026) 503</a> (resumen ejecutivo)</li>
+        <li>Prensa: <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1187" target="_blank" class="doc-link">IP/26/1187</a>; P&amp;R <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1188" target="_blank" class="doc-link">QANDA/26/1188</a> y <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1185" target="_blank" class="doc-link">QANDA/26/1185</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" class="doc-link">Directiva NIS2 (UE) 2022/2555</a></li>
+      </ul>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-robot-happy-outline"></i> Pregunta a Brubru</div>
+      <p>Brubru hace el seguimiento de CADA en el Chat, en el Rastreador Legislativo y en el espacio de trabajo de Mis Archivos. Pregunta «¿Cuáles son los cuatro niveles de garantía de la Unión en CADA?» o «¿A quién se aplica el Reglamento sobre el Desarrollo de la Nube y la IA?» y Brubru responde a partir del registro verificado, enlazándote directamente al expediente.</p>
+    </div>
+  </div>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Volver al inicio"><i class="mdi mdi-chevron-up"></i></button>
+
+<footer class="footer">
+  <div class="footer__strip"></div>
+  <div class="footer__logos" style="margin-top:1.5rem">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol">
+  </div>
+  <p class="footer__text">Un análisis en profundidad de <a href="https://brubru.beresol.eu">Brubru</a>, por <a href="https://beresol.eu">Beresol</a>. Inteligencia legislativa de la UE con IA. All the EU, with AI.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  const btt = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 600); });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>

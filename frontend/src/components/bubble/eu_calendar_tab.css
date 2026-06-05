@@ -1250,3 +1250,56 @@
     border-radius: 4px;
   }
 }
+
+/* PI lens toggle (My interests | All) - Phase A */
+.eu-calendar-tab__pi-toggle {
+  display: inline-flex;
+  background: #f0f2f7;
+  border-radius: 9px;
+  padding: 3px;
+  gap: 2px;
+}
+.eu-calendar-tab__pi-toggle button {
+  border: none;
+  background: none;
+  padding: .35rem .8rem;
+  border-radius: 7px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+}
+.eu-calendar-tab__pi-toggle button.is-active {
+  background: #fff;
+  color: #2a3fd6;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+
+/* Cascading dropdown filters (Phase B) */
+.eu-calendar-tab__filter-row--dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+.eu-calendar-tab__dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  min-width: 180px;
+}
+.eu-calendar-tab__dropdown select {
+  border: 1px solid #e2e6ee;
+  border-radius: 9px;
+  padding: .5rem .65rem;
+  font-size: .85rem;
+  color: #1a1a2e;
+  background: #fff;
+  cursor: pointer;
+  max-width: 320px;
+}
+@media (max-width: 767px) {
+  .eu-calendar-tab__filter-row--dropdowns { gap: .65rem; }
+  .eu-calendar-tab__dropdown { min-width: 100%; }
+  .eu-calendar-tab__dropdown select { max-width: 100%; }
+}

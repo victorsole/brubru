@@ -1,6 +1,7 @@
 // frontend/src/pages/amendator_page.tsx
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiContentSave, mdiFileEditOutline, mdiRobotOutline, mdiCompassOutline } from '@mdi/js';
 import { Sidebar } from '../components/shared/sidebar';
@@ -13,6 +14,7 @@ import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar'
 import type { LoadedDocument } from '../components/amendator/document_viewer';
 import { LegislativeContextBanner } from '../components/amendator/legislative_context_banner';
 import { useAuth } from '../hooks/use_auth';
+import { formatCelexLabel } from '../components/bubble/celex_alias';
 import './amendator_page.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -68,6 +70,7 @@ interface AmendatorPageProps {
 }
 
 export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPageProps) => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedAmendment, setSelectedAmendment] = useState<Amendment | null>(null);
   const [loadedDocument, setLoadedDocument] = useState<LoadedDocument | null>(null);
@@ -79,38 +82,385 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
-  // Deep-link: auto-load document from ?celex= query param
+  // Filter out false article-title rows that the EUR-Lex / COM parser
+  // sometimes emits for cross-references like "Article 22 of Directive
+  // (EU) 2017/1132". These create the illusion that the document jumps
+  // from Article 2 to Article 22 because they appear before the real
+  // Article 3 row. Heuristic: an article_title is a continuation
+  // reference if its text starts with a lower-case word, with "of " /
+  // "and " / "to " / "from ", with punctuation, or is empty / a single
+  // character. Such rows are merged into the previous element's text so
+  // the document keeps reading naturally.
+  const sanitiseElements = (raw: any[]): any[] => {
+    if (!Array.isArray(raw)) return [];
+    const looksLikeCrossRef = (text: string): boolean => {
+      const t = (text || '').trim();
+      if (!t || t.length <= 2) return true;
+      if (/^[;,.)\]–—]/.test(t)) return true;
+      const first = t.split(/\s+/)[0];
+      // Single lowercase preposition or starting lowercase letter => continuation
+      if (/^(of|and|to|from|in|on|by|the|or|as|for|with|at|that|which)\b/i.test(t)) return true;
+      if (first && /^[a-z]/.test(first)) return true;
+      return false;
+    };
+    const out: any[] = [];
+    for (const el of raw) {
+      const isFakeTitle = el && el.type === 'article_title' && looksLikeCrossRef(el.text);
+      if (isFakeTitle && out.length > 0) {
+        const prev = out[out.length - 1];
+        const fragment = `${el.number ? el.number + ' ' : ''}${(el.text || '').trim()}`.trim();
+        if (fragment) {
+          prev.text = `${prev.text || ''} ${fragment}`.replace(/\s+/g, ' ').trim();
+        }
+        continue;
+      }
+      out.push({ ...el });
+    }
+    return out;
+  };
+
+  // Deep-link: auto-load document from ?celex= and (optionally) hydrate the
+  // user's saved amendments so "Open in Amendator" from My EU Bubble lands
+  // on the editor with the chosen amendment restored on screen.
+  const [pendingFocusAmendmentId, setPendingFocusAmendmentId] = useState<string | null>(null);
+  const [pendingFocusCelex, setPendingFocusCelex] = useState<string | null>(null);
+  const [deepLinkStatus, setDeepLinkStatus] = useState<
+    | { kind: 'idle' }
+    | { kind: 'loading'; celex: string }
+    | { kind: 'error'; celex: string; reason: string }
+    | { kind: 'hydrating'; celex: string }
+    | { kind: 'done' }
+  >({ kind: 'idle' });
+
   useEffect(() => {
     const celex = searchParams.get('celex');
     if (!celex || loadedDocument) return;
 
+    // Capture deferred params BEFORE we clear the URL.
+    const amendmentId = searchParams.get('amendmentId');
+    setDeepLinkStatus({ kind: 'loading', celex });
+
     const loadFromCelex = async () => {
       try {
         const eurlexUrl = `https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:${celex}`;
+        console.debug('[Amendator] Fetching CELEX', celex);
         const response = await fetch(`${API_BASE}/documents/fetch-eurlex`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: eurlexUrl, format: 'html', language: 'EN' }),
         });
-        if (response.ok) {
-          const doc = await response.json();
-          setLoadedDocument({
-            document_id: doc.document_id,
-            filename: doc.filename,
-            text: doc.text,
-            metadata: doc.metadata,
-            structure: doc.structure,
+        if (!response.ok) {
+          const body = await response.text().catch(() => '');
+          console.error('[Amendator] fetch-eurlex failed', response.status, body);
+          setDeepLinkStatus({
+            kind: 'error',
+            celex,
+            reason: `EUR-Lex returned HTTP ${response.status}. The law could not be auto-loaded.`,
           });
+          return;
         }
+        const doc = await response.json();
+        if (!doc?.structure?.legislative_structure?.elements?.length) {
+          setDeepLinkStatus({
+            kind: 'error',
+            celex,
+            reason:
+              'EUR-Lex returned the document but its legislative structure could not be parsed. ' +
+              'This sometimes happens when EUR-Lex serves a WAF challenge page.',
+          });
+          return;
+        }
+        // Strip out false article-title rows before storing the doc so both
+        // the editor and the amendment-hydration pass operate on a clean
+        // element list.
+        const cleanedElements = sanitiseElements(doc.structure.legislative_structure.elements);
+        const cleanedDoc = {
+          document_id: doc.document_id,
+          filename: doc.filename,
+          text: doc.text,
+          metadata: doc.metadata,
+          structure: {
+            ...doc.structure,
+            legislative_structure: {
+              ...doc.structure.legislative_structure,
+              elements: cleanedElements,
+            },
+          },
+        };
+        console.debug(
+          '[Amendator] Element sanitisation:',
+          doc.structure.legislative_structure.elements.length,
+          '->',
+          cleanedElements.length,
+        );
+        setLoadedDocument(cleanedDoc);
+        // Queue the saved-amendments hydration; the next effect handles it
+        // once loadedDocument is populated.
+        setPendingFocusCelex(celex);
+        if (amendmentId) setPendingFocusAmendmentId(amendmentId);
+        setDeepLinkStatus({ kind: 'hydrating', celex });
       } catch (err) {
-        console.error('Failed to auto-load CELEX document:', err);
+        console.error('[Amendator] Failed to auto-load CELEX document:', err);
+        setDeepLinkStatus({
+          kind: 'error',
+          celex,
+          reason: err instanceof Error ? err.message : 'Network error while loading the law.',
+        });
+      } finally {
+        // Clear the params so they don't re-trigger
+        setSearchParams({}, { replace: true });
       }
-      // Clear the celex param so it doesn't re-trigger
-      setSearchParams({}, { replace: true });
     };
 
     loadFromCelex();
   }, [searchParams, loadedDocument, setSearchParams]);
+
+  // Hydrate the user's saved amendments from /api/amendments?celex=... so a
+  // round-trip from the Documents tab restores the editor exactly where the
+  // user left it. Runs once after the legislative document is in place.
+  useEffect(() => {
+    if (!loadedDocument || !pendingFocusCelex) return;
+    const celex = pendingFocusCelex;
+    const focusId = pendingFocusAmendmentId;
+    setPendingFocusCelex(null);
+    setPendingFocusAmendmentId(null);
+
+    const token = useAuth.getState().token;
+    if (!token) return;
+
+    (async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/amendments?celex=${encodeURIComponent(celex)}&page_size=200`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        if (!res.ok) {
+          console.warn('[Amendator] /api/amendments returned', res.status);
+          setDeepLinkStatus({ kind: 'done' });
+          return;
+        }
+        const data = await res.json();
+        const rows: any[] = Array.isArray(data) ? data : data.amendments || [];
+        console.debug('[Amendator] Hydrating', rows.length, 'saved amendments for', celex);
+        if (rows.length === 0) {
+          setDeepLinkStatus({ kind: 'done' });
+          return;
+        }
+
+        // Resolve each saved amendment to a fresh index in the current parse.
+        // element_index in the DB was computed against an old parse that may
+        // no longer match this one (recital/article counts drift, parser
+        // fixes, sanitisation strips false article-titles), so we fall back
+        // through a chain of progressively looser matchers.
+        const parsedElements: any[] =
+          loadedDocument.structure?.legislative_structure?.elements || [];
+
+        const normalise = (s: string) =>
+          (s || '')
+            .toLowerCase()
+            .replace(/[(),.]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        // Pull the article / paragraph / point / subparagraph / recital
+        // identifiers out of a position string like "Article 5, paragraph 2"
+        // or "Article 7(1)(a)" or "Recital 15".
+        const parsePosition = (pt: string) => {
+          const out: {
+            articleNum?: string;
+            paragraphNum?: string;
+            pointNum?: string;
+            subparagraphNum?: string;
+            recitalNum?: string;
+          } = {};
+          const text = pt || '';
+          const articleMatch = /Article\s+(\d+[a-z]?)/i.exec(text);
+          if (articleMatch) out.articleNum = articleMatch[1].toLowerCase();
+          const recitalMatch = /Recital\s+(\d+[a-z]?)/i.exec(text);
+          if (recitalMatch) out.recitalNum = recitalMatch[1].toLowerCase();
+          const paragraphMatch = /paragraph\s+(\d+[a-z]?)/i.exec(text);
+          if (paragraphMatch) out.paragraphNum = paragraphMatch[1].toLowerCase();
+          const pointMatch = /point\s+\(?([a-z0-9]+)\)?/i.exec(text);
+          if (pointMatch) out.pointNum = pointMatch[1].toLowerCase();
+          const subMatch = /subparagraph\s+\(?([a-z0-9]+)\)?/i.exec(text);
+          if (subMatch) out.subparagraphNum = subMatch[1].toLowerCase();
+          // Bare "Article 5(2)" / "Article 5(2)(a)" parenthesised form
+          const parenMatch = /Article\s+\d+[a-z]?\s*\(([a-z0-9]+)\)(?:\s*\(([a-z0-9]+)\))?/i.exec(text);
+          if (parenMatch && !out.paragraphNum) out.paragraphNum = parenMatch[1].toLowerCase();
+          if (parenMatch && parenMatch[2] && !out.pointNum) out.pointNum = parenMatch[2].toLowerCase();
+          return out;
+        };
+
+        const buildPositionStrings = (el: any): string[] => {
+          const tps: string[] = [];
+          if (!el) return tps;
+          const articleNum = el.article_number || (el.type?.startsWith('article') ? el.number : '');
+          const elNum = el.number || '';
+          const paraNum = el.paragraph_number || '';
+          if (el.type === 'recital' && elNum) tps.push(`recital ${elNum}`);
+          if (el.type === 'article_title' && elNum) tps.push(`article ${elNum}`);
+          if (el.type === 'article_intro' && articleNum) tps.push(`article ${articleNum}`);
+          if (el.type === 'paragraph' && articleNum && elNum) {
+            tps.push(`article ${articleNum} paragraph ${elNum}`);
+            tps.push(`article ${articleNum} ${elNum}`);
+            tps.push(`article ${articleNum}  ${elNum}`); // tolerate "Article 5, 2"
+          }
+          if (el.type === 'subparagraph' && articleNum && paraNum && elNum)
+            tps.push(`article ${articleNum} paragraph ${paraNum} subparagraph ${elNum}`);
+          if (articleNum && elNum) tps.push(`${articleNum} ${elNum}`);
+          return tps.map(normalise);
+        };
+
+        const indexByPosition = new Map<string, number>();
+        // Fast direct lookups by structural keys.
+        const indexByTypeArtNum = new Map<string, number>(); // "paragraph:5:2" -> i
+        const indexByTypeArt = new Map<string, number[]>(); // "paragraph:5"   -> [i, ...]
+        parsedElements.forEach((el, i) => {
+          for (const candidate of buildPositionStrings(el)) {
+            if (!indexByPosition.has(candidate)) indexByPosition.set(candidate, i);
+          }
+          if (!el) return;
+          const articleNum = el.article_number || (el.type?.startsWith('article') ? el.number : '');
+          const elNum = el.number != null ? String(el.number).toLowerCase() : '';
+          if (el.type && articleNum && elNum) {
+            const k = `${el.type}:${String(articleNum).toLowerCase()}:${elNum}`;
+            if (!indexByTypeArtNum.has(k)) indexByTypeArtNum.set(k, i);
+          }
+          if (el.type && articleNum) {
+            const k = `${el.type}:${String(articleNum).toLowerCase()}`;
+            if (!indexByTypeArt.has(k)) indexByTypeArt.set(k, []);
+            indexByTypeArt.get(k)!.push(i);
+          }
+        });
+
+        const resolveIndex = (a: any): { index: number | null; via: string } => {
+          // 1) Trust element_index when its element looks right.
+          if (typeof a.element_index === 'number' && a.element_index < parsedElements.length) {
+            const el = parsedElements[a.element_index];
+            if (el && el.type === a.element_type) {
+              const elNum = String(el.number ?? '');
+              if (!a.element_number || elNum === String(a.element_number)) {
+                return { index: a.element_index, via: 'element_index' };
+              }
+            }
+          }
+
+          // 2) Exact position-string match.
+          const target = normalise(a.position_text || '');
+          if (target && indexByPosition.has(target)) {
+            return { index: indexByPosition.get(target)!, via: 'position_text' };
+          }
+
+          // 3) Direct type:article:elementNumber lookup. This is the most
+          //    reliable channel: a saved "Article 5, paragraph 2" amendment
+          //    has type='paragraph', element_number='2', and we parse '5'
+          //    out of position_text.
+          const parsed = parsePosition(a.position_text || '');
+          const inferredArticle =
+            String(parsed.articleNum || a.article_number || '').toLowerCase();
+          const inferredNumber = String(
+            a.element_number ||
+              parsed.paragraphNum ||
+              parsed.pointNum ||
+              parsed.recitalNum ||
+              parsed.subparagraphNum ||
+              '',
+          ).toLowerCase();
+
+          if (a.element_type && inferredArticle && inferredNumber) {
+            const key = `${a.element_type}:${inferredArticle}:${inferredNumber}`;
+            if (indexByTypeArtNum.has(key)) {
+              return { index: indexByTypeArtNum.get(key)!, via: `type+art+num (${key})` };
+            }
+          }
+
+          // 4) Cross-type fallback: maybe the saved row said 'paragraph' but
+          //    the new parse buckets it as 'subparagraph' (or vice versa).
+          if (inferredArticle && inferredNumber) {
+            for (const candidateType of ['paragraph', 'subparagraph', 'point', 'article_title']) {
+              const key = `${candidateType}:${inferredArticle}:${inferredNumber}`;
+              if (indexByTypeArtNum.has(key)) {
+                return { index: indexByTypeArtNum.get(key)!, via: `cross-type (${key})` };
+              }
+            }
+          }
+
+          // 5) Last resort: any element of the right type+article. Caller
+          //    decides whether to accept the first one.
+          if (a.element_type && inferredArticle) {
+            const arr = indexByTypeArt.get(`${a.element_type}:${inferredArticle}`);
+            if (arr && arr.length > 0) {
+              return { index: arr[0], via: `type+art-only (${a.element_type}:${inferredArticle})` };
+            }
+          }
+
+          return { index: null, via: 'unresolved' };
+        };
+
+        const next = new Map<number, CellAmendment>();
+        let focusIndex: number | null = null;
+        let resolved = 0;
+        let unresolved = 0;
+        for (const a of rows) {
+          const { index: idx, via } = resolveIndex(a);
+          if (idx === null) {
+            unresolved += 1;
+            console.warn(
+              `[Amendator] Could not place saved amendment in current parse: position="${a.position_text}" type=${a.element_type} number=${a.element_number} oldIndex=${a.element_index}`,
+            );
+            continue;
+          }
+          resolved += 1;
+          console.debug(
+            `[Amendator] Placed "${a.position_text}" at element_index=${idx} via ${via}`,
+          );
+          const cell: CellAmendment = {
+            elementIndex: idx,
+            elementType: a.element_type || 'paragraph',
+            elementNumber: a.element_number || '',
+            amendmentType: (a.amendment_type || 'modification') as
+              | 'modification'
+              | 'suppression'
+              | 'addition',
+            originalText: a.original_text || '',
+            proposedText: a.proposed_text || '',
+            position: a.position_text || '',
+            insertAfter: typeof a.insert_after === 'number' ? a.insert_after : undefined,
+          };
+          next.set(idx, cell);
+          if (focusId && a.id === focusId) focusIndex = idx;
+        }
+        console.debug(
+          '[Amendator] Hydration result:',
+          resolved,
+          'placed,',
+          unresolved,
+          'unresolved',
+        );
+        if (next.size === 0) {
+          setDeepLinkStatus({ kind: 'done' });
+          return;
+        }
+        setCellAmendments(next);
+        setDeepLinkStatus({ kind: 'done' });
+
+        // Best-effort focus on the requested amendment.
+        if (focusIndex !== null) {
+          setTimeout(() => {
+            const sel = document.querySelector(`[data-element-index="${focusIndex}"]`);
+            if (sel && 'scrollIntoView' in sel) {
+              (sel as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+              sel.classList.add('two-column-layout__row--focus');
+              setTimeout(() => sel.classList.remove('two-column-layout__row--focus'), 2500);
+            }
+          }, 400);
+        }
+      } catch (err) {
+        console.warn('[Amendator] Failed to hydrate saved amendments:', err);
+        setDeepLinkStatus({ kind: 'done' });
+      }
+    })();
+  }, [loadedDocument, pendingFocusCelex, pendingFocusAmendmentId]);
 
   // Convert cellAmendments to Amendment format for sidebar display
   const amendments: Amendment[] = Array.from(cellAmendments.entries()).map(([index, cellAmendment]) => ({
@@ -145,6 +495,28 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
   };
 
   const handleDocumentLoaded = (document: LoadedDocument) => {
+    // Apply the same false-article-title scrub used by the deep-link path so
+    // every ingress point (EUR-Lex URL input, file upload, tracked files,
+    // deep-link) hands the editor a clean element list.
+    const structure = document.structure;
+    const raw = structure?.legislative_structure?.elements;
+    if (structure && Array.isArray(raw) && raw.length > 0) {
+      const cleaned = sanitiseElements(raw);
+      if (cleaned.length !== raw.length) {
+        console.debug('[Amendator] Element sanitisation:', raw.length, '->', cleaned.length);
+      }
+      setLoadedDocument({
+        ...document,
+        structure: {
+          ...structure,
+          legislative_structure: {
+            ...structure.legislative_structure,
+            elements: cleaned,
+          },
+        },
+      });
+      return;
+    }
     setLoadedDocument(document);
   };
 
@@ -158,7 +530,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
 
   const handleSaveAmendments = async () => {
     if (!loadedDocument || cellAmendments.size === 0) {
-      setSaveMessage('No amendments to save');
+      setSaveMessage(t('amendator.noToSave'));
       setTimeout(() => setSaveMessage(null), 3000);
       return;
     }
@@ -206,12 +578,12 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
       }
 
       const savedAmendments = await response.json();
-      setSaveMessage(`Successfully saved ${savedAmendments.length} amendments!`);
+      setSaveMessage(t('amendator.saveSuccess', { count: savedAmendments.length }));
       setTimeout(() => setSaveMessage(null), 5000);
 
     } catch (error) {
       console.error('Error saving amendments:', error);
-      setSaveMessage('Error saving amendments. Please try again.');
+      setSaveMessage(t('amendator.saveError'));
       setTimeout(() => setSaveMessage(null), 5000);
     } finally {
       setIsSaving(false);
@@ -286,7 +658,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               onClick={() => setActiveTab('amendments')}
             >
               <Icon path={mdiFileEditOutline} size={0.8} />
-              <span className="amendator-sidebar__tab-label">Amendments</span>
+              <span className="amendator-sidebar__tab-label">{t('amendator.amendments')}</span>
               {amendments.length > 0 && (
                 <span className="amendator-sidebar__tab-badge">{amendments.length}</span>
               )}
@@ -296,15 +668,15 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               onClick={() => setActiveTab('ai')}
             >
               <Icon path={mdiRobotOutline} size={0.8} />
-              <span className="amendator-sidebar__tab-label">AI</span>
+              <span className="amendator-sidebar__tab-label">{t('amendator.ai')}</span>
             </button>
             <button
               className={`amendator-sidebar__tab ${activeTab === 'recitals' ? 'amendator-sidebar__tab--active' : ''}`}
               onClick={() => setActiveTab('recitals')}
-              title="Recitals linked to the selected article (TF-IDF cosine)"
+              title={t('amendator.recitalsTitle')}
             >
               <Icon path={mdiCompassOutline} size={0.8} />
-              <span className="amendator-sidebar__tab-label">Recitals</span>
+              <span className="amendator-sidebar__tab-label">{t('amendator.recitals')}</span>
             </button>
           </div>
 
@@ -339,15 +711,45 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
 
       {/* Main Content Area */}
       <main className={`amendator-page__main ${isSidebarOpen ? 'amendator-page__main--sidebar-open' : ''}`}>
+        {/* Deep-link status: centred overlay while fetching, small error pill on failure. */}
+        {(deepLinkStatus.kind === 'loading' || deepLinkStatus.kind === 'hydrating') && (
+          <div className="amendator-page__loading-overlay" role="status" aria-live="polite">
+            <div className="amendator-page__loading-card">
+              <div className="amendator-page__loading-spinner" />
+              <div className="amendator-page__loading-title">
+                {deepLinkStatus.kind === 'loading'
+                  ? 'Loading legislative text…'
+                  : 'Restoring your amendments…'}
+              </div>
+              <div className="amendator-page__loading-sub">
+                {formatCelexLabel(deepLinkStatus.celex)}
+              </div>
+              <div className="amendator-page__loading-celex">{deepLinkStatus.celex}</div>
+            </div>
+          </div>
+        )}
+        {deepLinkStatus.kind === 'error' && (
+          <div className="amendator-page__deeplink amendator-page__deeplink--error" role="alert">
+            <span>Couldn't auto-open {deepLinkStatus.celex}: {deepLinkStatus.reason}</span>
+            <button
+              className="amendator-page__deeplink-dismiss"
+              onClick={() => setDeepLinkStatus({ kind: 'idle' })}
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
         {/* Save Amendments Bar */}
         {loadedDocument && cellAmendments.size > 0 && (
           <div className="amendator-page__save-bar">
             <div className="amendator-page__save-info">
               <span className="amendator-page__amendment-count">
-                {cellAmendments.size} amendment{cellAmendments.size !== 1 ? 's' : ''} pending
+                {t('amendator.amendmentsPending', { count: cellAmendments.size })}
               </span>
               {saveMessage && (
-                <span className={`amendator-page__save-message ${saveMessage.includes('Error') ? 'amendator-page__save-message--error' : 'amendator-page__save-message--success'}`}>
+                <span className={`amendator-page__save-message ${(saveMessage === t('amendator.saveError') || saveMessage === t('amendator.noToSave')) ? 'amendator-page__save-message--error' : 'amendator-page__save-message--success'}`}>
                   {saveMessage}
                 </span>
               )}
@@ -358,7 +760,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               disabled={isSaving}
             >
               <Icon path={mdiContentSave} size={0.8} />
-              {isSaving ? 'Saving...' : 'Save Amendments'}
+              {isSaving ? t('amendator.saving') : t('amendator.saveAmendments')}
             </button>
           </div>
         )}

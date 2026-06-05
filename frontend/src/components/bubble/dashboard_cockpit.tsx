@@ -9,8 +9,9 @@
  * "Talk to Brubru" handoff opens Chat with a pre-loaded prompt.
  */
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiCreation,
@@ -22,6 +23,9 @@ import {
   mdiArrowRight,
   mdiMessageOutline,
   mdiAccountCircleOutline,
+  mdiChevronUp,
+  mdiChevronDown,
+  mdiDragVertical,
 } from '@mdi/js';
 
 import {
@@ -53,6 +57,28 @@ const formatDate = (iso?: string | null) => {
 const formatStatus = (raw?: string | null) =>
   raw ? raw.replace(/_/g, ' ') : '';
 
+// Friendly labels for the InstitutionEnum codes. Verbose multi-word codes get a
+// readable name; anything else (agency acronyms like ECB/EMA/ENISA) stays as-is.
+const INSTITUTION_LABELS: Record<string, string> = {
+  EP: 'European Parliament',
+  COUNCIL: 'Council of the EU',
+  EUROPEAN_COUNCIL: 'European Council',
+  COMMISSION: 'European Commission',
+  THIRD_PARTY: 'External event',
+};
+
+const formatInstitution = (raw?: string | null): string => {
+  if (!raw) return '';
+  if (INSTITUTION_LABELS[raw]) return INSTITUTION_LABELS[raw];
+  // Multi-word codes (e.g. EU_OSHA) → title case; lone acronyms stay uppercase.
+  return raw.includes('_')
+    ? raw
+        .split('_')
+        .map((w) => (w.length <= 4 ? w : w.charAt(0) + w.slice(1).toLowerCase()))
+        .join(' ')
+    : raw;
+};
+
 const TILE_ICONS: Record<string, string> = {
   new_this_week: mdiCreation,
   tracked_files_moving: mdiSwapHorizontalBold,
@@ -72,12 +98,64 @@ const TILE_LABELS: Record<string, string> = {
 };
 
 const TILE_OPEN_LABELS: Record<string, string> = {
-  new_this_week: 'Open My Files',
+  new_this_week: 'Open Legislative Tracker',
   tracked_files_moving: 'Open My Files',
   positions_under_stress: 'Open Position Analysis',
   next_seven_days: 'Open My EU Calendar',
   compliance_signals: 'Open EU Law Comply',
   voice_opportunities: 'Open EC Consultations',
+};
+
+const TILE_KEYS = [
+  'new_this_week',
+  'tracked_files_moving',
+  'positions_under_stress',
+  'next_seven_days',
+  'compliance_signals',
+  'voice_opportunities',
+] as const;
+type TileKey = (typeof TILE_KEYS)[number];
+
+const ORDER_STORAGE_KEY = 'meub_cockpit_order_v1';
+const FOLD_STORAGE_KEY = 'meub_cockpit_folds_v1';
+
+// Load the saved tile order, dropping unknown keys and appending any new tiles
+// that did not exist when the order was last saved (forwards-compatible).
+const loadOrder = (): TileKey[] => {
+  try {
+    const raw = localStorage.getItem(ORDER_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const valid = parsed.filter((k): k is TileKey =>
+          (TILE_KEYS as readonly string[]).includes(k),
+        );
+        const merged = [
+          ...valid,
+          ...TILE_KEYS.filter((k) => !valid.includes(k)),
+        ];
+        if (merged.length === TILE_KEYS.length) return merged;
+      }
+    }
+  } catch {
+    /* ignore corrupt storage */
+  }
+  return [...TILE_KEYS];
+};
+
+const loadFolds = (): Record<string, boolean> => {
+  try {
+    const raw = localStorage.getItem(FOLD_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        return parsed as Record<string, boolean>;
+      }
+    }
+  } catch {
+    /* ignore corrupt storage */
+  }
+  return {};
 };
 
 interface TileShellProps {
@@ -87,6 +165,14 @@ interface TileShellProps {
   drillPath: string;
   chatPrompt: string | null;
   children: React.ReactNode;
+  folded: boolean;
+  onToggleFold: () => void;
+  dragging: boolean;
+  dropTarget: boolean;
+  onDragStart: () => void;
+  onDragEnter: () => void;
+  onDragEnd: () => void;
+  onDrop: () => void;
 }
 
 const TileShell = ({
@@ -96,7 +182,17 @@ const TileShell = ({
   drillPath,
   chatPrompt,
   children,
+  folded,
+  onToggleFold,
+  dragging,
+  dropTarget,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+  onDrop,
 }: TileShellProps) => {
+  const { t } = useTranslation();
+  const tChat = t('talkToBrubru');
   const navigate = useNavigate();
 
   const onDrill = () => navigate(drillPath);
@@ -108,17 +204,33 @@ const TileShell = ({
     if (emptyState) navigate(emptyState.cta_path);
   };
 
+  const className =
+    'dashboard-cockpit__tile' +
+    (folded ? ' dashboard-cockpit__tile--folded' : '') +
+    (dragging ? ' dashboard-cockpit__tile--dragging' : '') +
+    (dropTarget ? ' dashboard-cockpit__tile--drop' : '');
+
   return (
-    <article className="dashboard-cockpit__tile">
-      <header
-        className="dashboard-cockpit__tile-header"
-        onClick={onDrill}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') onDrill();
-        }}
-      >
+    <article
+      className={className}
+      draggable
+      onDragStart={onDragStart}
+      onDragEnter={onDragEnter}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnd={onDragEnd}
+      onDrop={(e) => {
+        e.preventDefault();
+        onDrop();
+      }}
+    >
+      <header className="dashboard-cockpit__tile-header">
+        <span
+          className="dashboard-cockpit__tile-grip"
+          title={t('dashboard.dragToReorder', 'Drag to reorder')}
+          aria-hidden="true"
+        >
+          <Icon path={mdiDragVertical} size={0.8} color="#c2cdda" />
+        </span>
         <span className="dashboard-cockpit__tile-icon">
           <Icon path={TILE_ICONS[tileKey]} size={1} color="#0693E3" />
         </span>
@@ -128,49 +240,66 @@ const TileShell = ({
         {!emptyState && total > 0 && (
           <span className="dashboard-cockpit__tile-count">{total}</span>
         )}
+        <button
+          type="button"
+          className="dashboard-cockpit__tile-fold"
+          onClick={onToggleFold}
+          aria-expanded={!folded}
+          aria-label={
+            folded
+              ? t('dashboard.expandTile', 'Expand')
+              : t('dashboard.collapseTile', 'Collapse')
+          }
+        >
+          <Icon path={folded ? mdiChevronDown : mdiChevronUp} size={0.9} color="#7a8aa0" />
+        </button>
       </header>
 
-      <div className="dashboard-cockpit__tile-body">
-        {emptyState ? (
-          <div className="dashboard-cockpit__empty">
-            <p className="dashboard-cockpit__empty-message">
-              {emptyState.message}
-            </p>
-            <button
-              className="dashboard-cockpit__empty-cta"
-              type="button"
-              onClick={onCta}
-            >
-              {emptyState.cta_label}
-              <Icon path={mdiArrowRight} size={0.7} />
-            </button>
+      {!folded && (
+        <>
+          <div className="dashboard-cockpit__tile-body">
+            {emptyState ? (
+              <div className="dashboard-cockpit__empty">
+                <p className="dashboard-cockpit__empty-message">
+                  {emptyState.message}
+                </p>
+                <button
+                  className="dashboard-cockpit__empty-cta"
+                  type="button"
+                  onClick={onCta}
+                >
+                  {emptyState.cta_label}
+                  <Icon path={mdiArrowRight} size={0.7} />
+                </button>
+              </div>
+            ) : (
+              children
+            )}
           </div>
-        ) : (
-          children
-        )}
-      </div>
 
-      {!emptyState && (
-        <footer className="dashboard-cockpit__tile-footer">
-          <button
-            type="button"
-            className="dashboard-cockpit__tile-action"
-            onClick={onDrill}
-          >
-            {TILE_OPEN_LABELS[tileKey] || 'Open'}
-            <Icon path={mdiArrowRight} size={0.7} />
-          </button>
-          {chatPrompt && (
-            <button
-              type="button"
-              className="dashboard-cockpit__tile-action dashboard-cockpit__tile-action--chat"
-              onClick={onChat}
-            >
-              <Icon path={mdiMessageOutline} size={0.7} />
-              Talk to Brubru about this
-            </button>
+          {!emptyState && (
+            <footer className="dashboard-cockpit__tile-footer">
+              <button
+                type="button"
+                className="dashboard-cockpit__tile-action"
+                onClick={onDrill}
+              >
+                {TILE_OPEN_LABELS[tileKey] || 'Open'}
+                <Icon path={mdiArrowRight} size={0.7} />
+              </button>
+              {chatPrompt && (
+                <button
+                  type="button"
+                  className="dashboard-cockpit__tile-action dashboard-cockpit__tile-action--chat"
+                  onClick={onChat}
+                >
+                  <Icon path={mdiMessageOutline} size={0.7} />
+                  {tChat}
+                </button>
+              )}
+            </footer>
           )}
-        </footer>
+        </>
       )}
     </article>
   );
@@ -212,9 +341,15 @@ const renderTrackedFileMovingItem = (item: TrackedFileMovingItem) => (
         </span>
       )}
       <span className="dashboard-cockpit__item-transition">
-        {item.old_status ? formatStatus(item.old_status) : 'previous'}
-        {' → '}
-        <strong>{formatStatus(item.new_status)}</strong>
+        {item.old_status ? (
+          <>
+            {formatStatus(item.old_status)}
+            {' → '}
+            <strong>{formatStatus(item.new_status)}</strong>
+          </>
+        ) : (
+          <strong>{formatStatus(item.new_status)}</strong>
+        )}
       </span>
       {item.changed_at && (
         <span className="dashboard-cockpit__item-when">
@@ -251,7 +386,7 @@ const renderCalendarEventItem = (item: CalendarEventItem) => (
       </span>
       {item.institution && (
         <span className="dashboard-cockpit__item-pill dashboard-cockpit__item-pill--institution">
-          {item.institution}
+          {formatInstitution(item.institution)}
         </span>
       )}
       {item.event_type && (
@@ -306,6 +441,7 @@ const renderVoiceItem = (item: VoiceOpportunityItem) => (
 );
 
 export const DashboardCockpit = () => {
+  const { t: i18nT } = useTranslation();
   const navigate = useNavigate();
   const { data, isLoading, error, fetchTiles } = useDashboard();
   const { isAuthenticated, user } = useAuth();
@@ -325,6 +461,54 @@ export const DashboardCockpit = () => {
     [completeness],
   );
 
+  // Per-user-browser cockpit layout: tile order + folded state, both persisted.
+  const [order, setOrder] = useState<TileKey[]>(loadOrder);
+  const [folds, setFolds] = useState<Record<string, boolean>>(loadFolds);
+  const dragKey = useRef<TileKey | null>(null);
+  const [draggingKey, setDraggingKey] = useState<TileKey | null>(null);
+  const [overKey, setOverKey] = useState<TileKey | null>(null);
+
+  const toggleFold = (key: TileKey) => {
+    setFolds((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      try {
+        localStorage.setItem(FOLD_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+
+  const handleDragStart = (key: TileKey) => {
+    dragKey.current = key;
+    setDraggingKey(key);
+  };
+  const handleDragEnter = (key: TileKey) => {
+    if (dragKey.current && dragKey.current !== key) setOverKey(key);
+  };
+  const handleDrop = (key: TileKey) => {
+    const from = dragKey.current;
+    setOverKey(null);
+    if (!from || from === key) return;
+    setOrder((prev) => {
+      const arr = prev.filter((x) => x !== from);
+      const idx = arr.indexOf(key);
+      arr.splice(idx < 0 ? arr.length : idx, 0, from);
+      try {
+        localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(arr));
+      } catch {
+        /* ignore */
+      }
+      return arr;
+    });
+  };
+  const handleDragEnd = () => {
+    dragKey.current = null;
+    setDraggingKey(null);
+    setOverKey(null);
+  };
+
   if (!isAuthenticated) {
     return null;
   }
@@ -332,7 +516,7 @@ export const DashboardCockpit = () => {
   if (isLoading && !data) {
     return (
       <section className="dashboard-cockpit dashboard-cockpit--loading">
-        <p>Loading your cockpit...</p>
+        <p>{i18nT('dashboard.loadingCockpit')}</p>
       </section>
     );
   }
@@ -350,6 +534,25 @@ export const DashboardCockpit = () => {
   }
 
   const t = data.tiles;
+
+  const renderItems = (key: TileKey) => {
+    switch (key) {
+      case 'new_this_week':
+        return t.new_this_week.items.map(renderNewThisWeekItem);
+      case 'tracked_files_moving':
+        return t.tracked_files_moving.items.map(renderTrackedFileMovingItem);
+      case 'positions_under_stress':
+        return t.positions_under_stress.items.map(renderPositionStressItem);
+      case 'next_seven_days':
+        return t.next_seven_days.items.map(renderCalendarEventItem);
+      case 'compliance_signals':
+        return t.compliance_signals.items.map(renderComplianceItem);
+      case 'voice_opportunities':
+        return t.voice_opportunities.items.map(renderVoiceItem);
+      default:
+        return null;
+    }
+  };
 
   return (
     <section className="dashboard-cockpit">
@@ -373,77 +576,30 @@ export const DashboardCockpit = () => {
       )}
 
       <div className="dashboard-cockpit__grid">
-        <TileShell
-          tileKey="new_this_week"
-          total={t.new_this_week.total}
-          emptyState={t.new_this_week.empty_state}
-          drillPath={t.new_this_week.drill_down_path}
-          chatPrompt={t.new_this_week.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.new_this_week.items.map(renderNewThisWeekItem)}
-          </ul>
-        </TileShell>
-
-        <TileShell
-          tileKey="tracked_files_moving"
-          total={t.tracked_files_moving.total}
-          emptyState={t.tracked_files_moving.empty_state}
-          drillPath={t.tracked_files_moving.drill_down_path}
-          chatPrompt={t.tracked_files_moving.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.tracked_files_moving.items.map(renderTrackedFileMovingItem)}
-          </ul>
-        </TileShell>
-
-        <TileShell
-          tileKey="positions_under_stress"
-          total={t.positions_under_stress.total}
-          emptyState={t.positions_under_stress.empty_state}
-          drillPath={t.positions_under_stress.drill_down_path}
-          chatPrompt={t.positions_under_stress.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.positions_under_stress.items.map(renderPositionStressItem)}
-          </ul>
-        </TileShell>
-
-        <TileShell
-          tileKey="next_seven_days"
-          total={t.next_seven_days.total}
-          emptyState={t.next_seven_days.empty_state}
-          drillPath={t.next_seven_days.drill_down_path}
-          chatPrompt={t.next_seven_days.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.next_seven_days.items.map(renderCalendarEventItem)}
-          </ul>
-        </TileShell>
-
-        <TileShell
-          tileKey="compliance_signals"
-          total={t.compliance_signals.total}
-          emptyState={t.compliance_signals.empty_state}
-          drillPath={t.compliance_signals.drill_down_path}
-          chatPrompt={t.compliance_signals.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.compliance_signals.items.map(renderComplianceItem)}
-          </ul>
-        </TileShell>
-
-        <TileShell
-          tileKey="voice_opportunities"
-          total={t.voice_opportunities.total}
-          emptyState={t.voice_opportunities.empty_state}
-          drillPath={t.voice_opportunities.drill_down_path}
-          chatPrompt={t.voice_opportunities.chat_handoff_prompt}
-        >
-          <ul className="dashboard-cockpit__items">
-            {t.voice_opportunities.items.map(renderVoiceItem)}
-          </ul>
-        </TileShell>
+        {order.map((key) => {
+          const tile = t[key];
+          if (!tile) return null;
+          return (
+            <TileShell
+              key={key}
+              tileKey={key}
+              total={tile.total}
+              emptyState={tile.empty_state}
+              drillPath={tile.drill_down_path}
+              chatPrompt={tile.chat_handoff_prompt}
+              folded={!!folds[key]}
+              onToggleFold={() => toggleFold(key)}
+              dragging={draggingKey === key}
+              dropTarget={overKey === key}
+              onDragStart={() => handleDragStart(key)}
+              onDragEnter={() => handleDragEnter(key)}
+              onDragEnd={handleDragEnd}
+              onDrop={() => handleDrop(key)}
+            >
+              <ul className="dashboard-cockpit__items">{renderItems(key)}</ul>
+            </TileShell>
+          );
+        })}
       </div>
     </section>
   );

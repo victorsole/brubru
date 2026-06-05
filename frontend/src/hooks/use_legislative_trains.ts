@@ -116,6 +116,10 @@ export interface LegislativeFileDetail {
   last_updated?: string;
   enriched_at?: string;
   enrichment_quality?: string;
+  // EP Legislative Train editorial "state of play" narrative (joined by OEIL ref).
+  legislative_train_summary?: string | null;
+  legislative_train_url?: string | null;
+  legislative_train_updated_at?: string | null;
 }
 
 interface LegislativeTrainState {

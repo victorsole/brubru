@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Introduction — Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API v1 documentation. 82 endpoints for 28,505 EU laws, 1,464 legislative procedures, 14,873 officials, 56,051 amendments, 206 policy guides, commissioner agendas, EP webstreams, and legal-text intelligence.">
+<meta name="description" content="Brubru EU Data API v1 documentation. 92+ endpoints for 28,505 EU laws, 1,717 legislative procedures, 14,873 officials, 56,051 amendments, 227 policy guides, commissioner agendas, EP webstreams, legal-text intelligence, plus 10 specialised EC databases (sanctions, lobbying, comitology, GIs, trade agreements, trade defence, competition cases, JRC + cohesion datasets, CN sections).">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -102,6 +102,24 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
     <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
     <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+    <li><a href="/api/docs/endpoints.html#vocabularies" data-nav="endpoints-vocabularies">EU Vocabularies</a></li>
+    <li><a href="/api/docs/endpoints.html#identify" data-nav="endpoints-identify">Identifier resolver</a></li>
+    <li><a href="/api/docs/endpoints.html#ecli" data-nav="endpoints-ecli">ECLI search</a></li>
+    <li><a href="/api/docs/endpoints.html#datasets" data-nav="endpoints-datasets">DCAT-AP self-description</a></li>
+  </ul>
+
+  <h3>Specialised EC databases</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#sanctions" data-nav="endpoints-sanctions">Sanctions (CFSP)</a></li>
+    <li><a href="/api/docs/endpoints.html#transparency-register" data-nav="endpoints-transparency-register">Transparency Register (lobbyists)</a></li>
+    <li><a href="/api/docs/endpoints.html#comitology" data-nav="endpoints-comitology">Comitology documents</a></li>
+    <li><a href="/api/docs/endpoints.html#gi" data-nav="endpoints-gi">Geographical Indications</a></li>
+    <li><a href="/api/docs/endpoints.html#fta" data-nav="endpoints-fta">International agreements</a></li>
+    <li><a href="/api/docs/endpoints.html#trade-defence" data-nav="endpoints-trade-defence">Trade defence (anti-dumping)</a></li>
+    <li><a href="/api/docs/endpoints.html#competition-cases" data-nav="endpoints-competition-cases">DG COMP cases</a></li>
+    <li><a href="/api/docs/endpoints.html#jrc-datasets" data-nav="endpoints-jrc-datasets">JRC Data Catalogue</a></li>
+    <li><a href="/api/docs/endpoints.html#cohesion-datasets" data-nav="endpoints-cohesion-datasets">DG REGIO cohesion data</a></li>
+    <li><a href="/api/docs/endpoints.html#access2markets" data-nav="endpoints-access2markets">CN codes (Access2Markets)</a></li>
   </ul>
 
   <h3>Reference</h3>
@@ -122,10 +140,10 @@ active link by adding class="active" to the matching <a>.
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API · v1 · 82 endpoints across 36 folders</div>
+<div class="main__eyebrow">Brubru EU Data API · v1 · 92+ endpoints across 37 folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
-Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>28,505 adopted EU laws</strong>, <strong>1,464 legislative procedures</strong> in flight, <strong>14,873 EU officials</strong> across every institution, <strong>56,051 amendments</strong>, <strong>1,026 EP reports</strong>, <strong>386 tenders</strong> (TED), <strong>210 research publications</strong> (EPRS, STOA, JRC, ART, ECA), <strong>528 Commission Register documents</strong>, <strong>206 curated policy guides</strong>, live commissioner agendas, EP webstreams, and the legal-text intelligence layer that powers Brubru's own chatbot and Amendator. The same data we use internally is what you call. Brubru is the first customer of its own API.
+Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>28,505 adopted EU laws</strong>, <strong>1,717 legislative procedures</strong> in flight, <strong>14,873 EU officials</strong> across every institution, <strong>56,051 amendments</strong>, <strong>1,026 EP reports</strong>, <strong>386 tenders</strong> (TED), <strong>210 research publications</strong> (EPRS, STOA, JRC, ART, ECA), <strong>528 Commission Register documents</strong>, <strong>227 curated policy guides</strong>, live commissioner agendas, EP webstreams, the legal-text intelligence layer that powers Brubru's own chatbot and Amendator, and a new <strong>specialised EC databases</strong> folder covering 10 institutional surfaces no other vendor exposes through a single API key: <strong>6,002 CFSP-sanctioned persons/entities</strong>, <strong>17,247 Transparency Register lobbyist orgs</strong>, <strong>83,807 comitology documents</strong>, <strong>5,917 Geographical Indications</strong>, <strong>900 international agreements</strong>, <strong>675 trade-defence measures</strong>, live DG COMP competition cases (~250k upstream), <strong>3,543 JRC datasets</strong>, <strong>1,451 DG REGIO cohesion datasets</strong>, and live Combined Nomenclature lookup. The same data we use internally is what you call. Brubru is the first customer of its own API.
 </p>
 
 <div class="callout callout--ok">
@@ -286,6 +304,51 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 </a>
 </div>
 
+<h3 style="margin-top:24px;">Specialised EC databases (10 folders, NEW May 2026)</h3>
+<p style="margin-top:8px;margin-bottom:16px;color:var(--text-muted,#6b7280);">Ten institutional surfaces no other vendor exposes through a single API key. Each cluster is also wired into the Brubru chatbot &mdash; when a user asks about lobbyists, sanctions, or anti-dumping duties, the chat retrieves directly from these tables.</p>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#sanctions">
+  <div class="toc-card__title">Sanctions (CFSP)</div>
+  <div class="toc-card__desc">6,002 persons + entities on the EU consolidated CFSP list. Programmes (IRN, RUS, UKR, BLR, SYR, PRK, MMR, TERR), legal basis, citizenships, date_file.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#transparency-register">
+  <div class="toc-card__title">Transparency Register</div>
+  <div class="toc-card__desc">17,247 registered lobbyist organisations. Original name, acronym, registration category, head office country, EP-pass count, FTEs, declared lobbying costs.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#comitology">
+  <div class="toc-card__title">Comitology documents</div>
+  <div class="toc-card__desc">83,807 documents from the Comitology Register: voting sheets, summary records, draft implementing acts, opinions. Filter by committee code (e.g. SCoPAFF C20407, Appeal Committee C39800).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#gi">
+  <div class="toc-card__title">Geographical Indications</div>
+  <div class="toc-card__desc">5,917 EU-protected names &mdash; PDO, PGI, TSG, wine, spirit drinks, craft. Sourced from eAmbrosia (DG AGRI authoritative) + EUIPO GIview union register. Filter by type, country, status.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#fta">
+  <div class="toc-card__title">International agreements</div>
+  <div class="toc-card__desc">900 EU international agreements: FTA, EPA, AA, PCA, Fisheries, Aviation. CELEX sector-2 type-A, with partner, agreement type, in-force flag.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#trade-defence">
+  <div class="toc-card__title">Trade defence</div>
+  <div class="toc-card__desc">675 anti-dumping, countervailing, and safeguard measures. CELEX sector-3 type-R, with measure type, duty status, target country, product, in-force flag.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#competition-cases">
+  <div class="toc-card__title">DG COMP cases (live)</div>
+  <div class="toc-card__desc">Live pass-through to <code>api.tech.ec.europa.eu/search-api</code> &mdash; ~250k competition cases (state aid SA., antitrust AT., mergers M.). Cases by member state, aid category, instrument.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#jrc-datasets">
+  <div class="toc-card__title">JRC Data Catalogue</div>
+  <div class="toc-card__desc">3,543 scientific datasets from the Joint Research Centre: ESDAC, EFFIS, GHSL, LUISA, JRC AI Watch, JRC EDGAR-FOOD. Title, description, publisher, EuroVoc keywords.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cohesion-datasets">
+  <div class="toc-card__title">DG REGIO cohesion data</div>
+  <div class="toc-card__desc">1,451 Socrata-catalogued cohesion datasets from cohesiondata.ec.europa.eu &mdash; ESF+, ERDF, Cohesion Fund, Just Transition Fund, Interreg, RRF beneficiaries.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#access2markets">
+  <div class="toc-card__title">CN codes (Access2Markets, live)</div>
+  <div class="toc-card__desc">Live pass-through to <code>webgate.ec.europa.eu/nomen</code> &mdash; Combined Nomenclature sections and product trees for tariff/customs classification.</div>
+</a>
+</div>
+
 <h2>Data sources &amp; refresh cadence</h2>
 <table>
 <thead><tr><th>Source</th><th>Endpoint fed</th><th>Refresh cadence</th><th>Freshness</th></tr></thead>
@@ -309,7 +372,17 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 <tr><td>TED (Tenders Electronic Daily)</td><td><code>/tenders</code></td><td>Daily</td><td>&lt; 24h, 386 active today</td></tr>
 <tr><td>EP doceo (reports, votes, amendments, resolutions, opinions)</td><td><code>/reports</code>, <code>/votes</code>, <code>/amendments</code>, <code>/resolutions</code>, <code>/opinions</code></td><td>Daily</td><td>&lt; 24h</td></tr>
 <tr><td>EP doceo questions module</td><td><code>/parliamentary-questions</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>Curated Brubru team</td><td><code>/knowledge-guides</code></td><td>Daily additions</td><td>206 guides today</td></tr>
+<tr><td>Curated Brubru team</td><td><code>/knowledge-guides</code></td><td>Daily additions</td><td>227 guides today</td></tr>
+<tr><td>EU consolidated CFSP sanctions list</td><td><code>/specialised/sanctions</code></td><td>Daily</td><td>6,002 entities</td></tr>
+<tr><td>EU Transparency Register Joint Secretariat XML</td><td><code>/specialised/transparency-register</code></td><td>Daily</td><td>17,247 orgs</td></tr>
+<tr><td>EC Comitology Register (Playwright-cracked <code>/core/api/front/</code>)</td><td><code>/specialised/comitology</code></td><td>Weekly</td><td>83,807 docs</td></tr>
+<tr><td>eAmbrosia + EUIPO GIview (DG AGRI + EUIPO)</td><td><code>/specialised/gi</code></td><td>Weekly</td><td>5,917 GIs</td></tr>
+<tr><td>Cellar SPARQL sector-2 type-A</td><td><code>/specialised/fta</code></td><td>Monthly</td><td>900 agreements</td></tr>
+<tr><td>Cellar SPARQL sector-3 type-R</td><td><code>/specialised/trade-defence</code></td><td>Weekly</td><td>675 measures</td></tr>
+<tr><td><code>api.tech.ec.europa.eu/search-api</code> (DG COMP)</td><td><code>/specialised/competition-cases</code></td><td>Live</td><td>~250k cases</td></tr>
+<tr><td>data.europa.eu federation of JRC catalogue</td><td><code>/specialised/jrc-datasets</code></td><td>Weekly</td><td>3,543 datasets</td></tr>
+<tr><td>cohesiondata.ec.europa.eu Socrata</td><td><code>/specialised/cohesion-datasets</code></td><td>Weekly</td><td>1,451 datasets</td></tr>
+<tr><td><code>webgate.ec.europa.eu/nomen</code> (Access2Markets)</td><td><code>/specialised/access2markets/products</code></td><td>Live</td><td>21 sections + product tree</td></tr>
 <tr><td>Derived from local Formex XML + DB</td><td><code>/legal-text/*</code></td><td>On-demand; cached</td><td>Recomputed when spec changes</td></tr>
 <tr><td>Brubru XGBoost model + OEIL</td><td><code>/predictions/*</code></td><td>Model retrained weekly</td><td>Inference in real-time</td></tr>
 </tbody>

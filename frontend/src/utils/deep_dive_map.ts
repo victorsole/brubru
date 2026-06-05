@@ -108,6 +108,26 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#dc2626',
     icon: 'mdi-pill',
   },
+  {
+    title: 'Cloud and AI Development Act (CADA)',
+    shortTitle: 'Cloud and AI Act',
+    comReference: 'COM(2026) 502',
+    procedureRef: '2026/0138(COD)',
+    basePath: '/cloud-ai-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#9b51e0',
+    icon: 'mdi-cloud-cog-outline',
+  },
+  {
+    title: 'Chips Act 2.0',
+    shortTitle: 'Chips Act 2.0',
+    comReference: 'COM(2026) 504',
+    procedureRef: '2026/0139(COD)',
+    basePath: '/chips-act-2',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#0693e3',
+    icon: 'mdi-chip',
+  },
 ];
 
 /**

@@ -789,7 +789,7 @@ export const ProfilePage = () => {
             onClick={logout}
           >
             <Icon path={mdiLogout} size={0.85} className="profile-dashboard__nav-icon" />
-            <span>Log Out</span>
+            <span>{t('common.logOut')}</span>
           </button>
         </div>
       </aside>

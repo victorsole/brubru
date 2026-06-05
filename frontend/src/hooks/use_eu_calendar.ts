@@ -34,11 +34,19 @@ interface EUCalendarState {
   viewMode: ViewMode;
   currentDate: Date;
 
-  // Filters
+  // Filters — cascading dropdowns (Phase B): single-select institution -> dependent
+  // department (committee / DG / Council configuration) + policy area.
+  selectedInstitution: string;   // '' = all
+  selectedDepartment: string;    // '' = all (committee | DG | config, per institution)
+  selectedPolicyArea: string;    // '' = all
+  selectedEventType: string;     // '' = all (plenary / committee / council / summit / …)
+  bodies: Record<string, { code: string; name: string; kind?: string }[]>;
+  myInterests: boolean;
+  searchQuery: string;
+  // Legacy chip state (kept for compatibility; the UI now uses the dropdowns above)
   activeInstitutions: Set<InstitutionType>;
   activePolicyAreas: Set<string>;
   activeCommittees: Set<string>;
-  searchQuery: string;
 
   // Loading
   isLoading: boolean;
@@ -54,6 +62,12 @@ interface EUCalendarState {
   toggleInstitution: (code: InstitutionType) => void;
   togglePolicyArea: (code: string) => void;
   toggleCommittee: (code: string) => void;
+  setMyInterests: (on: boolean) => void;
+  fetchBodies: () => Promise<void>;
+  setInstitution: (code: string) => void;
+  setDepartment: (code: string) => void;
+  setPolicyArea: (code: string) => void;
+  setEventType: (code: string) => void;
   selectEvent: (event: CalendarEvent | null) => void;
   setSearchQuery: (query: string) => void;
   clearFilters: () => void;
@@ -127,9 +141,15 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
   todayDigest: null,
   viewMode: 'month',
   currentDate: new Date(),
+  selectedInstitution: '',
+  selectedDepartment: '',
+  selectedPolicyArea: '',
+  selectedEventType: '',
+  bodies: {},
   activeInstitutions: new Set<InstitutionType>(),
   activePolicyAreas: new Set<string>(),
   activeCommittees: new Set<string>(),
+  myInterests: false,
   searchQuery: '',
   isLoading: false,
   isLoadingDigest: false,
@@ -140,26 +160,32 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const { viewMode, currentDate, activeInstitutions, activePolicyAreas, activeCommittees } = get();
+      const { viewMode, currentDate, selectedInstitution, selectedDepartment, selectedPolicyArea, selectedEventType, myInterests } = get();
       const { dateFrom, dateTo } = getDateRange(viewMode, currentDate);
 
-      // Build institution filter
-      const instFilter = activeInstitutions.size > 0
-        ? Array.from(activeInstitutions).join(',')
-        : undefined;
-
-      // Build policy area filter
-      const paFilter = activePolicyAreas.size > 0
-        ? Array.from(activePolicyAreas).join(',')
-        : undefined;
-
-      // Build committee filter
-      const cmFilter = activeCommittees.size > 0
-        ? Array.from(activeCommittees).join(',')
-        : undefined;
+      const instFilter = selectedInstitution || undefined;
+      const paFilter = selectedPolicyArea || undefined;
+      let etFilter = selectedEventType || undefined;
+      // The dependent "department" maps to a different column per institution.
+      let cmFilter: string | undefined;
+      let dgFilter: string | undefined;
+      let cfgFilter: string | undefined;
+      let orgFilter: string | undefined;
+      if (selectedDepartment) {
+        if (selectedInstitution === 'EP') {
+          // EP values are type-prefixed: committee:AGRI | organiser:Renew Europe | eventtype:plenary_session
+          const idx = selectedDepartment.indexOf(':');
+          const kind = idx >= 0 ? selectedDepartment.slice(0, idx) : 'committee';
+          const val = idx >= 0 ? selectedDepartment.slice(idx + 1) : selectedDepartment;
+          if (kind === 'committee') cmFilter = val;
+          else if (kind === 'organiser') orgFilter = val;
+          else if (kind === 'eventtype') etFilter = val;
+        } else if (selectedInstitution === 'COMMISSION') dgFilter = selectedDepartment;
+        else if (selectedInstitution === 'COUNCIL') cfgFilter = selectedDepartment;
+      }
 
       const response = await euCalendarService.getEventsInRange(
-        dateFrom, dateTo, instFilter, paFilter, cmFilter
+        dateFrom, dateTo, instFilter, paFilter, cmFilter, myInterests, dgFilter, cfgFilter, etFilter, orgFilter
       );
 
       set({
@@ -302,6 +328,44 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
     get().fetchEvents();
   },
 
+  // PI lens: restrict to events touching the user's Policy Interests. The
+  // backend resolves the interests from the signed-in user; we just pass the flag.
+  setMyInterests: (on: boolean) => {
+    set({ myInterests: on });
+    get().fetchEvents();
+  },
+
+  // Cascading dropdowns (Phase B): institution -> dependent department.
+  fetchBodies: async () => {
+    try {
+      const bodies = await euCalendarService.getBodies();
+      set({ bodies });
+    } catch (error) {
+      console.error('Failed to fetch calendar bodies:', error);
+    }
+  },
+
+  setInstitution: (code: string) => {
+    // Changing institution resets the dependent department.
+    set({ selectedInstitution: code, selectedDepartment: '' });
+    get().fetchEvents();
+  },
+
+  setDepartment: (code: string) => {
+    set({ selectedDepartment: code });
+    get().fetchEvents();
+  },
+
+  setPolicyArea: (code: string) => {
+    set({ selectedPolicyArea: code });
+    get().fetchEvents();
+  },
+
+  setEventType: (code: string) => {
+    set({ selectedEventType: code });
+    get().fetchEvents();
+  },
+
   // Select event for detail modal
   selectEvent: (event: CalendarEvent | null) => {
     set({ selectedEvent: event });
@@ -315,9 +379,14 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
   // Clear all filters
   clearFilters: () => {
     set({
+      selectedInstitution: '',
+      selectedDepartment: '',
+      selectedPolicyArea: '',
+      selectedEventType: '',
       activeInstitutions: new Set(),
       activePolicyAreas: new Set(),
       activeCommittees: new Set(),
+      myInterests: false,
       searchQuery: '',
     });
     get().fetchEvents();
@@ -364,7 +433,41 @@ export function getActiveInstitutionCodes(events: CalendarEvent[]): InstitutionT
  * events (think tanks, conferences, webinars, training) added 22 April 2026.
  */
 export const PHASE1_INSTITUTIONS: InstitutionType[] = [
-  'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB', 'THIRD_PARTY',
+  'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB', 'EMA',
+  // All-EU bodies with calendar events (1 Jun 2026)
+  'COR', 'FRA', 'EU_OSHA', 'CEPOL', 'EIT', 'EUROFOUND', 'EEAS',
+  'THIRD_PARTY',
+];
+
+// The four core EU institutions (+ ECB) get their own optgroup; everything else
+// is grouped under "Agencies & bodies" so the growing list stays easy to scan.
+export const CORE_INSTITUTIONS: InstitutionType[] = [
+  'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB',
+];
+
+// Event types offered in the calendar's "Type" filter (the meaningful subset of
+// EventType). Labels are i18n'd in the component via calendar.eventType.<code>.
+export const FILTERABLE_EVENT_TYPES: string[] = [
+  'plenary_session', 'committee_meeting', 'council_meeting', 'european_council_summit',
+  'eurogroup', 'commission_college_meeting', 'conference', 'webinar', 'workshop',
+  'agency_event', 'court_hearing',
+];
+
+// EP "body" dropdown — the non-committee groups. Values are type-prefixed so the
+// hook routes them to the right backend filter (committee_code / organiser /
+// event_type). Committees come from the /bodies endpoint (bodies['EP']).
+export const EP_DELEGATION_OPTIONS: { value: string; label: string }[] = [
+  { value: 'committee:DELE', label: 'All delegations' },
+];
+export const EP_GROUP_OPTIONS: { value: string; label: string }[] = [
+  { value: 'organiser:S&D Group', label: 'S&D' },
+  { value: 'organiser:Renew Europe', label: 'Renew Europe' },
+  { value: 'organiser:ECR Group', label: 'ECR' },
+  { value: 'organiser:Greens/EFA', label: 'Greens/EFA' },
+];
+export const EP_OTHER_OPTIONS: { value: string; label: string }[] = [
+  { value: 'eventtype:plenary_session', label: 'Plenary' },
+  { value: 'organiser:EPRS', label: 'EPRS (research events)' },
 ];
 
 /**

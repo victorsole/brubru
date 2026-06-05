@@ -6,6 +6,22 @@
   background-color: var(--color-background, #f8fafc);
   color: var(--color-text, #111827);
   overflow: hidden;
+  min-height: 0; /* Allow flex children (chat-interface) to shrink and scroll internally */
+}
+
+/* On mobile, lock the entire app shell to the viewport when the chat page
+   is mounted, so .main-page's flex:1 yields a real pixel height and the
+   chat-interface fills it deterministically — independent of header height. */
+@media (max-width: 767px) {
+  body:has(.main-page) {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  body:has(.main-page) .app {
+    height: 100dvh;
+    min-height: 0;
+  }
 }
 
 .main-page__sidebar-content {
@@ -145,6 +161,9 @@
 
 .main-page__main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow chat-interface (flex:1 child) to shrink and scroll internally */
   transition: margin-left var(--transition-base);
   margin-left: 0;
 }

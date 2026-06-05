@@ -741,3 +741,54 @@ export function getPositionTextClass(position: GroupPosition): string {
       return '';
   }
 }
+
+// ============================================================================
+// PI lens + calibration (Section 4 alignment)
+// ============================================================================
+
+const POSITIONS_BASE = `${import.meta.env.VITE_API_URL || ''}/api/positions`;
+
+export interface PredictionPickerFile {
+  carriage_id: string;
+  procedure_ref?: string;
+  title?: string;
+  lead_committee?: string;
+  current_status?: string;
+  is_tracked: boolean;
+  is_pi_match: boolean;
+}
+export interface InterestFiles {
+  pi_active: boolean;
+  tracked: PredictionPickerFile[];
+  suggested: PredictionPickerFile[];
+}
+
+// Reuses the shared PI-bucketed carriage list (tracked + suggested-by-interests).
+export async function getInterestFiles(myInterests: boolean): Promise<InterestFiles> {
+  const response = await axios.get<InterestFiles>(`${POSITIONS_BASE}/`, {
+    params: { my_interests: myInterests, limit: 40 },
+  });
+  return response.data;
+}
+
+export interface CalibrationResult {
+  has_vote: boolean;
+  procedure_ref: string;
+  level?: string;
+  result?: string;
+  votes_for?: number;
+  votes_against?: number;
+  votes_abstention?: number;
+  group_breakdown?: Record<string, any>;
+  vote_date?: string | null;
+  ta_reference?: string | null;
+  source_url?: string | null;
+}
+
+// Actual roll-call outcome for predicted-vs-actual calibration.
+export async function getCalibration(procedureRef: string): Promise<CalibrationResult> {
+  const response = await axios.get<CalibrationResult>(
+    `${API_BASE}/calibration/${encodeURIComponent(procedureRef)}`,
+  );
+  return response.data;
+}

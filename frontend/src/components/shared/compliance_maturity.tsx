@@ -84,29 +84,40 @@ export const ComplianceMaturity = () => {
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<MaturityData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = () => {
     if (!isAuthenticated) return;
     const token = useAuth.getState().token;
-    if (!token) return;
-    let cancelled = false;
+    if (!token) {
+      setError('You appear to be signed out. Sign in to see your compliance maturity.');
+      return;
+    }
     setIsLoading(true);
+    setError(null);
     axios
       .get<MaturityData>(`${API_URL}/api/eu-law-comply/maturity`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        if (!cancelled) {
-          setData(response.data);
-          setIsLoading(false);
-        }
+        setData(response.data);
+        setIsLoading(false);
       })
-      .catch(() => {
-        if (!cancelled) setIsLoading(false);
+      .catch((err) => {
+        const detail =
+          err?.response?.data?.detail || err?.message || 'unknown error';
+        setError(`Could not load your maturity score: ${detail}`);
+        setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!cancelled) load();
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   if (!isAuthenticated) return null;
@@ -114,6 +125,21 @@ export const ComplianceMaturity = () => {
     return (
       <section className="compliance-maturity compliance-maturity--loading">
         <p>Composing your compliance maturity score…</p>
+      </section>
+    );
+  }
+  if (error) {
+    return (
+      <section className="compliance-maturity compliance-maturity--loading">
+        <p style={{ color: '#b56500' }}>{error}</p>
+        <button
+          type="button"
+          className="compliance-maturity__rec-cta"
+          onClick={load}
+          style={{ marginTop: '0.5rem' }}
+        >
+          Try again
+        </button>
       </section>
     );
   }

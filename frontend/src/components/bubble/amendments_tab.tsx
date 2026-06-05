@@ -10,7 +10,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiFileDocumentOutline,
@@ -26,6 +27,7 @@ import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
 import { MEPAmendmentsTab } from './mep_amendments_tab';
 import { MEPComparativeTab } from './mep_comparative_tab';
+import { plainLanguageTypeKey } from '../../utils/procedure_type';
 import './amendments_tab.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -57,15 +59,21 @@ interface AmendmentGroup {
 type AmendmentSubTab = 'my-amendments' | 'mep-amendments' | 'comparative';
 
 export const AmendmentsTab = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { token } = useAuth();
+  const [searchParams] = useSearchParams();
+  // Deep-link from My Tracked Files: ?tab=amendments&procedure=<oeil_ref>
+  const initialProcedure = searchParams.get('procedure') || undefined;
   const { trackedFiles, fetchTrackedFiles, fetchFileDetail } = useLegislativeTrains();
   const [amendments, setAmendments] = useState<Amendment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [documentFilter, setDocumentFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'list' | 'grouped'>('grouped');
-  const [activeSubTab, setActiveSubTab] = useState<AmendmentSubTab>('my-amendments');
+  const [activeSubTab, setActiveSubTab] = useState<AmendmentSubTab>(
+    initialProcedure ? 'mep-amendments' : 'my-amendments',
+  );
 
   useEffect(() => {
     fetchAmendments();
@@ -173,7 +181,10 @@ export const AmendmentsTab = () => {
       if (a.trackedFile && !b.trackedFile) return -1;
       if (!a.trackedFile && b.trackedFile) return 1;
       if (a.trackedFile && b.trackedFile) {
-        return a.trackedFile.title.localeCompare(b.trackedFile.title);
+        // Group by committee first, then by title (matches MTF ordering).
+        const ca = a.trackedFile.lead_committee || '';
+        const cb = b.trackedFile.lead_committee || '';
+        return ca.localeCompare(cb) || a.trackedFile.title.localeCompare(b.trackedFile.title);
       }
       return a.groupId.localeCompare(b.groupId);
     });
@@ -202,26 +213,26 @@ export const AmendmentsTab = () => {
           className={`amendments-tab__sub-tab ${activeSubTab === 'my-amendments' ? 'amendments-tab__sub-tab--active' : ''}`}
           onClick={() => setActiveSubTab('my-amendments')}
         >
-          My Amendments
+          {t('amendmentsTab.myAmendments')}
         </button>
         <button
           className={`amendments-tab__sub-tab ${activeSubTab === 'mep-amendments' ? 'amendments-tab__sub-tab--active' : ''}`}
           onClick={() => setActiveSubTab('mep-amendments')}
         >
           <Icon path={mdiAccountGroupOutline} size={0.7} />
-          MEP Amendments
+          {t('amendmentsTab.mepAmendments')}
         </button>
         <button
           className={`amendments-tab__sub-tab ${activeSubTab === 'comparative' ? 'amendments-tab__sub-tab--active' : ''}`}
           onClick={() => setActiveSubTab('comparative')}
         >
           <Icon path={mdiScaleBalance} size={0.7} />
-          Comparative Analysis
+          {t('amendmentsTab.comparativeAnalysis')}
         </button>
       </div>
 
       {/* MEP Amendments sub-tab */}
-      {activeSubTab === 'mep-amendments' && <MEPAmendmentsTab />}
+      {activeSubTab === 'mep-amendments' && <MEPAmendmentsTab initialProcedure={initialProcedure} />}
 
       {/* Comparative Analysis sub-tab */}
       {activeSubTab === 'comparative' && <MEPComparativeTab />}
@@ -232,13 +243,13 @@ export const AmendmentsTab = () => {
       {/* Header */}
       <div className="amendments-tab__header">
         <div className="amendments-tab__header-left">
-          <h2>My Amendments</h2>
+          <h2>{t('amendmentsTab.myAmendments')}</h2>
           <div className="amendments-tab__summary">
             <span className="amendments-tab__summary-item">
-              Total: <strong>{amendments.length}</strong>
+              {t('amendmentsTab.total')}: <strong>{amendments.length}</strong>
             </span>
             <span className="amendments-tab__summary-item">
-              Documents: <strong>{uniqueDocuments.length}</strong>
+              {t('amendmentsTab.documents')}: <strong>{uniqueDocuments.length}</strong>
             </span>
           </div>
         </div>
@@ -246,18 +257,18 @@ export const AmendmentsTab = () => {
           <button
             className={`amendments-tab__view-btn ${viewMode === 'grouped' ? 'amendments-tab__view-btn--active' : ''}`}
             onClick={() => setViewMode('grouped')}
-            title="Group by Legislative File"
+            title={t('amendmentsTab.groupByFile')}
           >
             <Icon path={mdiViewModule} size={0.8} />
-            Grouped
+            {t('amendmentsTab.grouped')}
           </button>
           <button
             className={`amendments-tab__view-btn ${viewMode === 'list' ? 'amendments-tab__view-btn--active' : ''}`}
             onClick={() => setViewMode('list')}
-            title="List View"
+            title={t('amendmentsTab.listView')}
           >
             <Icon path={mdiViewList} size={0.8} />
-            List
+            {t('amendmentsTab.list')}
           </button>
         </div>
       </div>
@@ -265,13 +276,13 @@ export const AmendmentsTab = () => {
       {/* Document Filter */}
       {uniqueDocuments.length > 1 && (
         <div className="amendments-tab__document-filter">
-          <label>Filter by Document:</label>
+          <label>{t('amendmentsTab.filterByDocument')}</label>
           <select
             value={documentFilter}
             onChange={(e) => setDocumentFilter(e.target.value)}
             className="amendments-tab__filter-select"
           >
-            <option value="all">All Documents</option>
+            <option value="all">{t('amendmentsTab.allDocuments')}</option>
             {uniqueDocuments.map(docId => (
               <option key={docId} value={docId}>{docId}</option>
             ))}
@@ -282,13 +293,13 @@ export const AmendmentsTab = () => {
       {/* Status Filters */}
       <div className="amendments-tab__status-filters">
         {[
-          { value: 'all', label: 'All', color: '#666' },
-          { value: 'draft', label: 'Draft', color: '#999' },
-          { value: 'candidate', label: 'Candidate', color: '#f57c00' },
-          { value: 'tabled', label: 'Tabled', color: '#059669' },
-          { value: 'adopted', label: 'Adopted', color: '#2e7d32' },
-          { value: 'rejected', label: 'Rejected', color: '#dc3545' },
-          { value: 'withdrawn', label: 'Withdrawn', color: '#6b7280' },
+          { value: 'all', label: t('amendmentsTab.statusAll'), color: '#666' },
+          { value: 'draft', label: t('amendmentsTab.statusDraft'), color: '#999' },
+          { value: 'candidate', label: t('amendmentsTab.statusCandidate'), color: '#f57c00' },
+          { value: 'tabled', label: t('amendmentsTab.statusTabled'), color: '#059669' },
+          { value: 'adopted', label: t('amendmentsTab.statusAdopted'), color: '#2e7d32' },
+          { value: 'rejected', label: t('amendmentsTab.statusRejected'), color: '#dc3545' },
+          { value: 'withdrawn', label: t('amendmentsTab.statusWithdrawn'), color: '#6b7280' },
         ].map(status => (
           <button
             key={status.value}
@@ -309,11 +320,11 @@ export const AmendmentsTab = () => {
       {/* Amendments List */}
       <div className="amendments-tab__content">
         {isLoading ? (
-          <div className="amendments-tab__loading">Loading amendments...</div>
+          <div className="amendments-tab__loading">{t('amendmentsTab.loadingAmendments')}</div>
         ) : filteredAmendments.length === 0 ? (
           <div className="amendments-tab__empty">
-            <p>No amendments found</p>
-            <small>Create amendments in the Amendator to see them here</small>
+            <p>{t('amendmentsTab.noAmendmentsFound')}</p>
+            <small>{t('amendmentsTab.createInAmendator')}</small>
           </div>
         ) : viewMode === 'grouped' ? (
           /* Grouped View */
@@ -332,6 +343,16 @@ export const AmendmentsTab = () => {
                           >
                             {group.trackedFile.current_status.replace(/_/g, ' ')}
                           </span>
+                          {group.trackedFile.lead_committee && (
+                            <span className="amendments-tab__group-committee">
+                              {group.trackedFile.lead_committee}
+                            </span>
+                          )}
+                          {plainLanguageTypeKey(group.trackedFile.oeil_procedure_ref) && (
+                            <span className="amendments-tab__group-kind">
+                              {t(`myFilesTab.${plainLanguageTypeKey(group.trackedFile.oeil_procedure_ref)}`)}
+                            </span>
+                          )}
                           {group.trackedFile.oeil_procedure_ref && (
                             <span className="amendments-tab__group-ref">
                               {group.trackedFile.oeil_procedure_ref}
@@ -353,7 +374,7 @@ export const AmendmentsTab = () => {
                         <button
                           className="amendments-tab__group-action-btn"
                           onClick={() => navigate('/amendator')}
-                          title="Draft More Amendments"
+                          title={t('amendmentsTab.draftMore')}
                         >
                           <Icon path={mdiPencilOutline} size={0.7} />
                         </button>
@@ -363,7 +384,7 @@ export const AmendmentsTab = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="amendments-tab__group-action-btn"
-                            title="View in OEIL"
+                            title={t('amendmentsTab.viewInOeil')}
                           >
                             <Icon path={mdiOpenInNew} size={0.7} />
                           </a>
@@ -408,13 +429,13 @@ export const AmendmentsTab = () => {
                       <div className="amendments-tab__card-content-section">
                         {amendment.original_text && amendment.amendment_type !== 'addition' && (
                           <div className="amendments-tab__text-block">
-                            <strong>Original:</strong>
+                            <strong>{t('amendmentsTab.original')}</strong>
                             <p>{amendment.original_text.slice(0, 100)}{amendment.original_text.length > 100 ? '...' : ''}</p>
                           </div>
                         )}
                         {amendment.proposed_text && amendment.amendment_type !== 'suppression' && (
                           <div className="amendments-tab__text-block">
-                            <strong>Proposed:</strong>
+                            <strong>{t('amendmentsTab.proposed')}</strong>
                             <p><em><strong>{amendment.proposed_text.slice(0, 100)}{amendment.proposed_text.length > 100 ? '...' : ''}</strong></em></p>
                           </div>
                         )}
@@ -425,12 +446,12 @@ export const AmendmentsTab = () => {
                           onChange={(e) => handleStatusChange(amendment.id, e.target.value)}
                           className="amendments-tab__status-select"
                         >
-                          <option value="draft">Draft</option>
-                          <option value="candidate">Candidate</option>
-                          <option value="tabled">Tabled</option>
-                          <option value="adopted">Adopted</option>
-                          <option value="rejected">Rejected</option>
-                          <option value="withdrawn">Withdrawn</option>
+                          <option value="draft">{t('amendmentsTab.statusDraft')}</option>
+                          <option value="candidate">{t('amendmentsTab.statusCandidate')}</option>
+                          <option value="tabled">{t('amendmentsTab.statusTabled')}</option>
+                          <option value="adopted">{t('amendmentsTab.statusAdopted')}</option>
+                          <option value="rejected">{t('amendmentsTab.statusRejected')}</option>
+                          <option value="withdrawn">{t('amendmentsTab.statusWithdrawn')}</option>
                         </select>
                       </div>
                     </div>
@@ -480,13 +501,13 @@ export const AmendmentsTab = () => {
                   <div className="amendments-tab__card-content-section">
                     {amendment.original_text && amendment.amendment_type !== 'addition' && (
                       <div className="amendments-tab__text-block">
-                        <strong>Original:</strong>
+                        <strong>{t('amendmentsTab.original')}</strong>
                         <p>{amendment.original_text.slice(0, 150)}{amendment.original_text.length > 150 ? '...' : ''}</p>
                       </div>
                     )}
                     {amendment.proposed_text && amendment.amendment_type !== 'suppression' && (
                       <div className="amendments-tab__text-block">
-                        <strong>Proposed:</strong>
+                        <strong>{t('amendmentsTab.proposed')}</strong>
                         <p><em><strong>{amendment.proposed_text.slice(0, 150)}{amendment.proposed_text.length > 150 ? '...' : ''}</strong></em></p>
                       </div>
                     )}
@@ -495,7 +516,7 @@ export const AmendmentsTab = () => {
                   {/* Justification */}
                   {amendment.justification && (
                     <div className="amendments-tab__justification">
-                      <strong>Justification:</strong>
+                      <strong>{t('amendmentsTab.justification')}</strong>
                       <p>{amendment.justification.slice(0, 100)}{amendment.justification.length > 100 ? '...' : ''}</p>
                     </div>
                   )}
@@ -507,12 +528,12 @@ export const AmendmentsTab = () => {
                       onChange={(e) => handleStatusChange(amendment.id, e.target.value)}
                       className="amendments-tab__status-select"
                     >
-                      <option value="draft">Draft</option>
-                      <option value="candidate">Candidate</option>
-                      <option value="tabled">Tabled</option>
-                      <option value="adopted">Adopted</option>
-                      <option value="rejected">Rejected</option>
-                      <option value="withdrawn">Withdrawn</option>
+                      <option value="draft">{t('amendmentsTab.statusDraft')}</option>
+                      <option value="candidate">{t('amendmentsTab.statusCandidate')}</option>
+                      <option value="tabled">{t('amendmentsTab.statusTabled')}</option>
+                      <option value="adopted">{t('amendmentsTab.statusAdopted')}</option>
+                      <option value="rejected">{t('amendmentsTab.statusRejected')}</option>
+                      <option value="withdrawn">{t('amendmentsTab.statusWithdrawn')}</option>
                     </select>
                   </div>
                 </div>

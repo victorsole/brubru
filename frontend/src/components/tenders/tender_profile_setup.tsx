@@ -110,6 +110,27 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
 
   const totalSteps = 4;
 
+  // Phase-3 bridge: pre-fill CPV categories + keywords from the user's Policy
+  // Interests (non-destructive — merges into whatever is already selected).
+  const applyMyInterests = async () => {
+    try {
+      const r = await fetch(`${API_URL}/api/tenders/profile/suggested-from-interests`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!r.ok) return;
+      const d = await r.json();
+      if (Array.isArray(d.cpv_categories) && d.cpv_categories.length) {
+        setSelectedSectors((prev) => Array.from(new Set([...prev, ...d.cpv_categories])));
+      }
+      if (Array.isArray(d.keywords) && d.keywords.length) {
+        setKeywords((prev) => {
+          const existing = prev.split(',').map((k) => k.trim()).filter(Boolean);
+          return Array.from(new Set([...existing, ...d.keywords])).join(', ');
+        });
+      }
+    } catch { /* silent: leave the form as-is */ }
+  };
+
   const toggleSector = (code: string) => {
     if (selectedSectors.includes(code)) {
       setSelectedSectors(selectedSectors.filter((s) => s !== code));
@@ -331,6 +352,15 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
           <div className="tender-profile-setup__step">
             <h3>Business Sectors</h3>
             <p>Select the sectors that match your business activities. You can select multiple.</p>
+
+            <button
+              type="button"
+              className="tender-profile-setup__use-interests"
+              onClick={applyMyInterests}
+              title="Pre-fill from your My EU Bubble Policy Interests"
+            >
+              <span className="mdi mdi-creation"></span> Use my policy interests
+            </button>
 
             <div className="tender-profile-setup__chips">
               {CPV_CATEGORIES.map((sector) => (

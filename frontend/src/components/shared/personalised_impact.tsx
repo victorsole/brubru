@@ -21,6 +21,7 @@ import {
 } from '@mdi/js';
 
 import { useAuth } from '../../hooks/use_auth';
+import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import './personalised_impact.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -51,6 +52,8 @@ interface PersonalisedImpactProps {
 export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { trackedFiles } = useLegislativeTrains();
+  const isTracked = trackedFiles.some((f) => f.oeil_procedure_ref === procedureRef);
 
   const [block, setBlock] = useState<ImpactBlock | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -184,24 +187,37 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
             Actions you can take
           </h4>
           <ul className="personalised-impact__actions">
-            {block.actions_you_can_take.map((action) => (
-              <li key={action.label}>
-                <button
-                  type="button"
-                  className="personalised-impact__action"
-                  onClick={() => navigate(action.path)}
-                  title={action.rationale}
-                >
-                  {action.label}
-                  <Icon path={mdiArrowRight} size={0.65} />
-                </button>
-                {action.rationale && (
-                  <p className="personalised-impact__action-rationale">
-                    {action.rationale}
-                  </p>
-                )}
-              </li>
-            ))}
+            {block.actions_you_can_take.map((action) => {
+              // The "Track this file" action targets the My Files tab. Disable it
+              // when the user already tracks this file.
+              const isTrackAction = action.path.includes('tab=my_files');
+              const alreadyTracking = isTrackAction && isTracked;
+              return (
+                <li key={action.label}>
+                  <button
+                    type="button"
+                    className="personalised-impact__action"
+                    onClick={() => {
+                      if (!alreadyTracking) navigate(action.path);
+                    }}
+                    disabled={alreadyTracking}
+                    title={
+                      alreadyTracking
+                        ? "You're already tracking this file on Brubru."
+                        : action.rationale
+                    }
+                  >
+                    {alreadyTracking ? 'Already tracking this file' : action.label}
+                    {!alreadyTracking && <Icon path={mdiArrowRight} size={0.65} />}
+                  </button>
+                  {action.rationale && (
+                    <p className="personalised-impact__action-rationale">
+                      {action.rationale}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </article>
       </div>

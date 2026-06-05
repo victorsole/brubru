@@ -1,0 +1,83 @@
+.parlq-tab { padding: 0.5rem 0.25rem 2rem; max-width: 1040px; margin: 0 auto; }
+
+.parlq-tab__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.parlq-tab__title { display: flex; gap: 0.75rem; align-items: flex-start; }
+.parlq-tab__title h2 { margin: 0; font-size: 1.4rem; }
+.parlq-tab__title p { margin: 0.25rem 0 0; color: #64748b; font-size: 0.9rem; max-width: 60ch; }
+.parlq-tab__badge {
+  display: inline-flex; align-items: center; gap: 0.4rem; background: #fff7ed; color: #b45309;
+  border: 1px solid #fed7aa; border-radius: 999px; padding: 0.4rem 0.85rem; font-size: 0.83rem; font-weight: 600;
+}
+
+.parlq-tab__controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+.parlq-tab__toggle { display: inline-flex; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.parlq-tab__toggle button { border: 0; background: #fff; padding: 0.45rem 0.95rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #475569; }
+.parlq-tab__toggle button.is-active { background: #1e3a8a; color: #fff; }
+.parlq-tab__select { border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.45rem 0.6rem; font-size: 0.85rem; color: #475569; background: #fff; cursor: pointer; }
+.parlq-tab__search { display: flex; align-items: center; gap: 0.4rem; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.35rem 0.6rem; flex: 1; min-width: 200px; }
+.parlq-tab__search input { border: 0; outline: 0; flex: 1; font-size: 0.85rem; }
+.parlq-tab__count { color: #64748b; font-size: 0.82rem; margin: 0 0 0.6rem; }
+.parlq-tab__empty { text-align: center; color: #94a3b8; padding: 3rem 1rem; }
+
+.parlq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+@media (max-width: 760px) { .parlq-grid { grid-template-columns: 1fr; } }
+
+.parlq-card {
+  text-align: left; background: #fff; border: 1px solid #e8edf3; border-radius: 12px; padding: 0.9rem;
+  cursor: pointer; transition: box-shadow .15s, transform .15s; display: flex; flex-direction: column; gap: 0.45rem;
+}
+.parlq-card:hover { box-shadow: 0 6px 18px rgba(15,23,42,.08); transform: translateY(-1px); }
+.parlq-card__top { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.parlq-card__date { color: #64748b; font-size: 0.76rem; margin-left: auto; }
+.parlq-card__subject { font-weight: 600; font-size: 0.92rem; line-height: 1.35; color: #0f172a; }
+.parlq-card__meta { display: flex; flex-wrap: wrap; gap: 0.7rem; color: #64748b; font-size: 0.78rem; margin-top: 0.1rem; }
+.parlq-card__meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+.parlq-card__meps { color: #1e3a8a; }
+
+.parlq-chip { border-radius: 6px; padding: 0.12rem 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: .02em; background: #eef2ff; color: #3730a3; }
+.parlq-chip.is-written { background: #e0f2fe; color: #075985; }
+.parlq-chip.is-oral { background: #f0fdf4; color: #166534; }
+.parlq-chip.is-priority { background: #fef2f2; color: #991b1b; }
+.parlq-chip.is-question_time { background: #fef9c3; color: #854d0e; }
+.parlq-chip.is-muted { background: #f1f5f9; color: #64748b; font-weight: 600; }
+
+.parlq-status { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.72rem; font-weight: 600; }
+.parlq-status.is-answered { color: #2e8b57; }
+.parlq-status.is-awaiting { color: #b45309; }
+
+.parlq-ref { background: #eef2ff; color: #3730a3; border-radius: 6px; padding: 0.12rem 0.5rem; font-size: 0.72rem; font-weight: 600; text-decoration: none; }
+.parlq-ref:hover { background: #e0e7ff; }
+
+/* Detail modal (narrow + contained per the MEUB width preference) */
+.parlq-modal { position: fixed; inset: 0; background: rgba(15,23,42,.6); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.parlq-modal__panel { background: #fff; border-radius: 16px; width: min(900px, 94vw); max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+.parlq-modal__head { display: flex; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; border-bottom: 1px solid #eef2f7; }
+.parlq-modal__tags { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.4rem; }
+.parlq-modal__head h3 { margin: 0.2rem 0; font-size: 1.1rem; line-height: 1.35; }
+.parlq-modal__sub { margin: 0; color: #64748b; font-size: 0.82rem; }
+.parlq-modal__close { border: 0; background: #f1f5f9; border-radius: 8px; padding: 0.4rem; cursor: pointer; align-self: flex-start; }
+.parlq-modal__body { padding: 1rem 1.3rem 1.3rem; overflow-y: auto; min-height: 0; }
+
+.parlq-meps { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+.parlq-mep { display: inline-flex; align-items: center; gap: 0.3rem; background: #eef4ff; color: #1e3a8a; border: 1px solid #c7d2e8; border-radius: 8px; padding: 0.3rem 0.6rem; font-size: 0.8rem; font-weight: 600; text-decoration: none; }
+.parlq-mep:hover { background: #e0e7ff; }
+.parlq-mep.is-plain { background: #f8fafc; color: #475569; border-color: #e2e8f0; }
+
+.parlq-explainer { display: flex; gap: 0.5rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 0.7rem 0.85rem; color: #5b21b6; font-size: 0.88rem; line-height: 1.5; margin-bottom: 0.9rem; }
+.parlq-explain-btn { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid #ddd6fe; background: #faf5ff; color: #6d28d9; border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.83rem; font-weight: 600; cursor: pointer; margin-bottom: 0.9rem; }
+.parlq-explain-btn:disabled { opacity: .7; cursor: default; }
+
+.parlq-celex-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-bottom: 1rem; }
+.parlq-celex-row__lbl { color: #64748b; font-size: 0.78rem; }
+
+.parlq-section { font-size: 0.95rem; color: #1e3a8a; margin: 1.1rem 0 0.5rem; }
+.parlq-text { max-width: 72ch; }
+.parlq-text p { margin: 0 0 0.7rem; line-height: 1.6; font-size: 0.9rem; color: #1e293b; }
+.parlq-text.is-answer p { color: #334155; }
+.parlq-source { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.8rem; color: #1e3a8a; font-size: 0.82rem; text-decoration: none; font-weight: 600; }
+
+@media (max-width: 767px) {
+  .parlq-modal { padding: 0; }
+  .parlq-modal__panel { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; }
+  .parlq-tab__controls { gap: 0.5rem; }
+}

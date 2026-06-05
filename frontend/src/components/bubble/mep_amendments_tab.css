@@ -700,6 +700,9 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
+  .mep-filter__search input {
+    width: 100%;
+  }
   .mep-overview__card {
     padding: 0.65rem;
   }
@@ -734,4 +737,121 @@
     flex-direction: column;
     gap: 0.3rem;
   }
+}
+
+/* ---- PI-aligned procedure picker (mirrors My Tracked Files cockpit) ---- */
+.mep-procedure__selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.mep-procedure__selected-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.6rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.mep-procedure__selected-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+}
+.mep-procedure__selected-main strong {
+  font-size: 0.95rem;
+  color: #1f2937;
+}
+.mep-procedure__selected-ref {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+.mep-procedure__change {
+  flex-shrink: 0;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0066cc;
+  background: #eaf2fd;
+  border: 1px solid #cfe0f5;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.mep-procedure__change:hover { background: #d9e8fb; }
+.mep-procedure__meta {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+.mep-procedure__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mep-procedure__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mep-procedure__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.mep-procedure__row:hover {
+  border-color: #cfe0f5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.mep-procedure__row--active {
+  border-color: #0066cc;
+  background: #f5f9ff;
+}
+.mep-procedure__row-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+.mep-procedure__row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+.mep-procedure__row-ref {
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+.mep-procedure__row-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0066cc;
+  background: #eaf2fd;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .mep-procedure__change { width: 100%; }
 }

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llei de Desenvolupament del Núvol i la IA (CADA) Explicada | Brubru</title>
+  <meta name="description" content="Guia article per article sobre la Llei de Desenvolupament del Núvol i la IA de la UE (CADA), COM(2026) 502, 2026/0138(COD): quatre nivells de garantia de la Unió, vuit grans reptes, capacitat triple de centres de dades, EuroCloud Federation, àmbit NIS2. Adoptada el 3 de juny de 2026. Per Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+      --accent: #9b51e0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(155,81,224,0.35), 0 4px 15px rgba(6,147,227,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .lang-select { font-family: inherit; font-size: 0.8rem; font-weight: 600; color: var(--color-secondary); padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); cursor: pointer; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(155,81,224,0.1); color: var(--accent); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--accent); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-purple), var(--color-blue), var(--color-green), var(--color-amber), var(--color-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; transition: background-position 0s; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 760px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(155,81,224,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .gc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+    .gc-card { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
+    .gc-card b { color: var(--accent); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(155,81,224,0.08); color: var(--accent); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--accent); color: white; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--accent); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+
+    .infobox { background: linear-gradient(135deg, rgba(155,81,224,0.08), rgba(6,147,227,0.08)); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem 1.75rem; margin: 1.25rem 0; }
+    .infobox__title { font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+    th { background: var(--color-bg-alt); font-weight: 700; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--color-border); }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    tr:hover td { background: rgba(155,81,224,0.03); }
+
+    .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .tag-blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .tag-green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .tag-purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .tag-amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .tag-red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -1.55rem; top: 0.55rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--accent); background: var(--color-bg); z-index: 1; }
+    .timeline__item.done::before { background: var(--accent); }
+    .timeline__item.active::before { background: var(--color-amber); border-color: var(--color-amber); box-shadow: 0 0 0 4px rgba(217,119,6,0.2); }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
+    .timeline__text { font-size: 0.95rem; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; background: #fdfcfa; }
+    .footer__logos { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .footer__logos img { height: 30px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .footer__text a { color: var(--accent); text-decoration: none; }
+    .footer__strip { height: 3px; background: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber)); }
+
+    a.doc-link { color: inherit; text-decoration: none; border-bottom: 1px dashed var(--accent); }
+    a.doc-link:hover { color: var(--accent); }
+
+    .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(155,81,224,0.4); z-index: 90; }
+    .back-to-top.visible { display: flex; }
+
+    @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } .gc-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 767px) { .hero__title { font-size: 1.9rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } table { font-size: 0.82rem; } }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Biblioteca Brubru d'Anàlisis en Profunditat</div>
+    <div class="header__subtitle">Llei de Desenvolupament del Núvol i la IA (CADA)</div>
+  </div>
+  <select class="lang-select" onchange="location.href=this.value" aria-label="Selecciona l'idioma">
+    <option value="./index.html">EN</option>
+    <option value="./fr.html">FR</option>
+    <option value="./es.html">ES</option>
+    <option value="./it.html">IT</option>
+    <option value="./nl.html">NL</option>
+    <option value="./ca.html" selected>CA</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero__tag"><a href="https://brubru.beresol.eu">Brubru Anàlisi en Profunditat</a></div>
+    <h1 class="hero__title">Llei de Desenvolupament del Núvol i la IA: <span>L'Aposta Sobirana d'Europa en Còmput</span></h1>
+    <p class="hero__subtitle">La peça central del Paquet de Sobirania Tecnològica, llegida article per article. CADA combina un impuls de capacitat (triplicar la capacitat dels centres de dades de la UE el 2030) amb un marc únic i auditat de sobirania al núvol de quatre nivells de garantia de la Unió, perquè Europa gestioni més còmput propi i pugui triar serveis sobirans per als seus casos d'ús més crítics. Adoptada pel Col·legi el 3 de juny de 2026.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-file-document-outline"></i> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0502" target="_blank" class="doc-link">COM(2026) 502</a></span>
+      <span><i class="mdi mdi-scale-balance"></i> 2026/0138(COD)</span>
+      <span><i class="mdi mdi-calendar"></i> adoptada el 3 de juny de 2026</span>
+      <span><i class="mdi mdi-account-tie"></i> VPE Virkkunen, DG CNECT</span>
+    </div>
+  </div>
+
+  <!-- KEY FIGURES -->
+  <div class="figures fade-in">
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number">x3</div>
+      <div class="figure-card__label">Capacitat dels centres de dades de la UE el 2030</div>
+    </div>
+    <div class="figure-card fc-red">
+      <div class="figure-card__number">&gt;70%</div>
+      <div class="figure-card__label">Núvol de la UE en mans de 3 hiperscaladors no europeus</div>
+    </div>
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number">4</div>
+      <div class="figure-card__label">Nivells de garantia de la Unió</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number">8</div>
+      <div class="figure-card__label">grans reptes (Annex I)</div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc fade-in">
+    <div class="toc__title">Continguts</div>
+    <div class="toc__grid">
+      <a href="#why" class="toc__link"><span class="toc__num">1</span> Per què CADA?</a>
+      <a href="#basis" class="toc__link"><span class="toc__num">2</span> Dues bases jurídiques, quatre objectius</a>
+      <a href="#structure" class="toc__link"><span class="toc__num">3</span> Mapa article per article</a>
+      <a href="#initiatives" class="toc__link"><span class="toc__num">4</span> Iniciatives de Lideratge en Núvol i IA</a>
+      <a href="#challenges" class="toc__link"><span class="toc__num">5</span> Els 8 grans reptes</a>
+      <a href="#capacity" class="toc__link"><span class="toc__num">6</span> Triplicar la capacitat</a>
+      <a href="#sovereignty" class="toc__link"><span class="toc__num">7</span> Quatre nivells de garantia</a>
+      <a href="#audit" class="toc__link"><span class="toc__num">8</span> Reconeixement i auditoria</a>
+      <a href="#demand" class="toc__link"><span class="toc__num">9</span> Contractació pública i EuroCloud</a>
+      <a href="#scope" class="toc__link"><span class="toc__num">10</span> Àmbit i la pila digital de la UE</a>
+      <a href="#timeline" class="toc__link"><span class="toc__num">11</span> Calendari i properes etapes</a>
+      <a href="#sources" class="toc__link"><span class="toc__num">12</span> Fonts oficials</a>
+    </div>
+  </div>
+
+  <!-- 1 WHY -->
+  <div class="section fade-in" id="why">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-help-circle-outline"></i></div>
+      <h2 class="section__title">1. Per què CADA?</h2>
+    </div>
+    <p class="section__subtitle">Massa poc còmput, massa dependència de pocs proveïdors</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-server-off" style="color:var(--color-red)"></i> Dos problemes estructurals</div>
+      <p>La capacitat de còmput de la UE és limitada i geogràficament concentrada, cosa que frena la competitivitat i l'adopció de la IA, especialment les càrregues de treball de baixa latència. Al mateix temps, tres hiperscaladors no europeus controlen més del 70% del mercat europeu del núvol, i la quota dels proveïdors de la UE va caure del 29% el 2017 al 15% el 2022. La dependència de proveïdors sota jurisdicció de tercers països crea riscos per al control de les dades i la continuïtat operativa. Les polítiques nacionals fragmenten el desplegament. L'informe Draghi va reclamar recuperar el control sobre les dades i el núvol, ampliar el còmput domèstic i construir un volant financer i de talent.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-package-variant" style="color:var(--color-purple)"></i> Part d'un paquet més ampli</div>
+      <p>CADA és la peça central del Paquet de Sobirania Tecnològica Europea adoptat el 3 de juny de 2026, juntament amb la <a href="../chips-act-2/index.html" class="doc-link">Llei de Xips 2.0</a>, l'Estratègia de Programari Obert de la UE i el Full de Ruta Estratègic per a la Digitalització i la IA en l'Energia. Operacionalitza el Pla d'Acció del Continent d'IA i l'Estratègia Aplica la IA, incloent-hi fàbriques d'IA i gigafàbriques d'IA.</p>
+    </div>
+  </div>
+
+  <!-- 2 BASIS -->
+  <div class="section fade-in" id="basis">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-scale-balance"></i></div>
+      <h2 class="section__title">2. Dues bases jurídiques, quatre objectius</h2>
+    </div>
+    <p class="section__subtitle">Un instrument deliberadament dividit</p>
+    <div class="card">
+      <p>CADA descansa sobre una doble base jurídica, la qual li confereix dos objectius generals diferenciats:</p>
+      <ul style="margin:0.75rem 0 0 1.25rem; line-height:1.9">
+        <li><strong>Article 173(3) TFUE</strong> (competitivitat industrial, <em>sense</em> harmonització) sustenta les <strong>Iniciatives de Lideratge en Núvol i IA</strong>.</li>
+        <li><strong>Article 114 TFUE</strong> (mercat interior, harmonització) sustenta el <strong>marc de sobirania al núvol</strong> i les normes sobre centres de dades.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-target" style="color:var(--color-purple)"></i> Els quatre objectius de política</div>
+      <p><span class="tag tag-purple">1</span> Augmentar la capacitat de còmput de la UE mitjançant tecnologies innovadores i sostenibles.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-blue">2</span> Garantir condicions atractives per a aquest desplegament.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-amber">3</span> Reduir la dependència global dels serveis de núvol i IA no sobirans.</p>
+      <p style="margin-top:0.6rem"><span class="tag tag-green">4</span> Protegir l'ordre públic fent que el subministrament de núvol i IA sigui resilient, en particular en el sector públic.</p>
+    </div>
+  </div>
+
+  <!-- 3 STRUCTURE -->
+  <div class="section fade-in" id="structure">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-format-list-numbered"></i></div>
+      <h2 class="section__title">3. Mapa article per article</h2>
+    </div>
+    <p class="section__subtitle">48 articles en cinc títols, més tres annexos</p>
+    <table>
+      <tr><th>Títol</th><th>Contingut</th></tr>
+      <tr><td><strong>I. Disposicions generals</strong> (Arts 1-2)</td><td>Objecte (5 mesures); definicions (servei en núvol = NIS2; sistema d'IA = Llei d'IA; programari/SBOM = Llei de Resiliència Cibernètica).</td></tr>
+      <tr><td><strong>II. Iniciatives de Lideratge en Núvol i IA</strong> (Arts 3-9)</td><td>8 objectius operatius; Centres per a la IA (Art 5); implementació mitjançant grans reptes (Art 6); estratègies nacionals en 1 any (Art 7); projectes prioritaris d'IA de frontera (Art 8); equiparació de còmput EuroHPC (Art 9).</td></tr>
+      <tr><td><strong>III. Capacitat dels centres de dades</strong> (Arts 10-15)</td><td>Zones d'acceleració (Art 10); condicions (Art 11); punts únics d'informació (Art 12); autoritzacions en 12 mesos (Art 13); projectes estratègics (Art 14); seguiment de la bretxa de capacitat (Art 15).</td></tr>
+      <tr><td><strong>IV. Autonomia</strong> (Arts 16-44)</td><td>Marc de sobirania + 4 nivells de garantia (16-28); contractació pública del costat de la demanda (29-33); EuroCloud Federation (34-36); contractació pública de la Comissió (37-40); programari obert (41-44).</td></tr>
+      <tr><td><strong>V. Disposicions finals</strong> (Arts 45-48)</td><td>Actes delegats i d'execució; revisió als 4 anys i cada 5 (Art 47); entrada en vigor i aplicació (Art 48).</td></tr>
+      <tr><td><strong>Annexos</strong></td><td>I grans reptes; II criteris per als quatre nivells de garantia; III proves d'auditoria (11 criteris).</td></tr>
+    </table>
+  </div>
+
+  <!-- 4 INITIATIVES -->
+  <div class="section fade-in" id="initiatives">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-rocket-launch-outline"></i></div>
+      <h2 class="section__title">4. Iniciatives de Lideratge en Núvol i IA</h2>
+    </div>
+    <p class="section__subtitle">El motor de suport industrial (Article 173(3) TFUE)</p>
+    <div class="card">
+      <p>La Iniciativa de Lideratge en Núvol i la Iniciativa de Lideratge en IA persegueixen vuit objectius operatius: tecnologia de centres de dades eficient energèticament, piles de núvol autònomes, IA de frontera, IA física, IA industrial, plataformes d'agents d'IA, IA per al sector públic, i adopció regional i local. Instruments clau:</p>
+      <ul style="margin:0.75rem 0 0 1.25rem; line-height:1.9">
+        <li><strong>Centres per a la IA</strong> (Art 5): cada Estat membre crea Centres d'Experiència i Acceleració per a la IA, construïts sobre els antics Centres Europeus d'Innovació Digital.</li>
+        <li><strong>Estratègies nacionals de núvol i IA</strong> (Art 7): adoptades en un any, seguint el principi d'"IA primer".</li>
+        <li><strong>Projectes prioritaris d'IA de frontera</strong> (Art 8): reconeguts per la Comissió, gestionats per un EDIC amb almenys tres Estats membres que aporten còmput conjuntament.</li>
+        <li><strong>Equiparació de còmput EuroHPC</strong> (Art 9): la Unió equipara, com a mínim, el còmput d'IA que els Estats membres aporten als projectes prioritaris d'IA de frontera.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5 GRAND CHALLENGES -->
+  <div class="section fade-in" id="challenges">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-trophy-outline"></i></div>
+      <h2 class="section__title">5. Els 8 grans reptes (Annex I)</h2>
+    </div>
+    <p class="section__subtitle">Com es materialitzen les iniciatives a la pràctica</p>
+    <div class="gc-grid">
+      <div class="gc-card"><b>1. Centres de dades sostenibles</b><br>PUE mitjà d'1,15 a tota la UE; utilització dels servidors cap al 50%; xips i quàntica de la UE; seguretat.</div>
+      <div class="gc-card"><b>2. Piles de núvol</b><br>Piles de núvol d'extrem a extrem amb maquinari i programari europeus; servidors d'IA sobre semiconductors i quàntica de la UE.</div>
+      <div class="gc-card"><b>3. IA de frontera</b><br>Models i sistemes multimodals de frontera de nova generació, raonament avançat i capacitats agèntiques.</div>
+      <div class="gc-card"><b>4. IA física</b><br>Robots autònoms, sistemes industrials i drons que operen de forma segura en entorns no estructurats.</div>
+      <div class="gc-card"><b>5. IA industrial</b><br>Models específics per sector (automoció, manufactura, sanitat, energia, agroalimentari, defensa).</div>
+      <div class="gc-card"><b>6. Models industrials cooperatius</b><br>Col·laboració que preserva la confidencialitat (entrenament federat, execució segura).</div>
+      <div class="gc-card"><b>7. Plataforma d'agents d'IA</b><br>Un marc europeu d'orquestració d'agents d'IA i programari intermedi per a agents a escala.</div>
+      <div class="gc-card"><b>8. IA per al sector públic</b><br>Models sobre dades públiques d'alta qualitat per a sanitat, administració pública, dret i gestió de crisis.</div>
+    </div>
+  </div>
+
+  <!-- 6 CAPACITY -->
+  <div class="section fade-in" id="capacity">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-server-network"></i></div>
+      <h2 class="section__title">6. Triplicar la capacitat dels centres de dades</h2>
+    </div>
+    <p class="section__subtitle">Zones d'acceleració, autoritzacions més ràpides, projectes estratègics (Títol III)</p>
+    <div class="card">
+      <p>CADA té com a objectiu <strong>triplicar la capacitat dels centres de dades de la UE el 2030</strong> (un objectiu intermedi; el memoràndum explicatiu el situa en un horitzó de cinc a set anys) i satisfer les necessitats de la UE el 2035, amb un desplegament geogràfic equilibrat. Cada Estat membre ha de designar almenys una <strong>zona d'acceleració de centres de dades</strong> en un termini de sis mesos (Art 10), establir punts únics d'informació (Art 12) i emetre un permís de base agregat perquè les autoritzacions en una zona triguin <strong>un màxim de 12 mesos</strong> (Art 13). Un objectiu separat estableix que totes les autoritzacions de centres de dades han de ser inferiors a 18 mesos el 2030. Es prefereixen els emplaçaments de rehabilitació, es fomenta la reutilització de la calor residual i els acords de compra d'energia, i els indicadors de sostenibilitat segueixen el Reglament Delegat (UE) 2024/1364.</p>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-star-outline"></i> Projectes estratègics de centres de dades (Art 14)</div>
+      <p>La Comissió pot designar un projecte com a estratègic si compleix almenys dos dels cinc criteris: dóna suport a funcions essencials del sector públic; és altament sostenible o innovador; reforça l'estabilitat de la xarxa elèctrica o col·localitza energia neta; integra xips, processadors o ordinadors quàntics dissenyats o fabricats a la UE; o aborda una escassetat de còmput. Els projectes estratègics reben el segell de competitivitat en el marc del Fons Europeu de Competitivitat.</p>
+    </div>
+  </div>
+
+  <!-- 7 SOVEREIGNTY -->
+  <div class="section fade-in" id="sovereignty">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-shield-lock-outline"></i></div>
+      <h2 class="section__title">7. Els quatre nivells de garantia de la Unió (Annex II)</h2>
+    </div>
+    <p class="section__subtitle">La innovació central: sobirania al núvol graduada i auditable</p>
+    <table>
+      <tr><th>Nivell</th><th>Verificat per</th><th>Criteris clau (acumulatius)</th></tr>
+      <tr><td><span class="tag tag-green">Nivell 1</span></td><td>Autoavaluació del proveïdor + declaració pública de conformitat a la UE</td><td>Establiment a la UE; residència de dades i infraestructures a la UE (llevat que el client ho sol·liciti altrament); ciberseguretat d'última generació; transparència total dels subcontractistes. Les declaracions de les pimes es reconeixen automàticament a tota la UE.</td></tr>
+      <tr><td><span class="tag tag-blue">Nivell 2</span></td><td>Auditoria independent de tercers</td><td>+ Personal amb seu a la UE; certificat de ciberseguretat de la UE "substancial" (EUCS); les dades dels clients mai no s'utilitzen per entrenar IA de tercers països; llista de materials de programari (SBOM) i auditories de codi font; assistència tècnica exclusivament a la UE; separació jurídica de la matriu europea de qualsevol filial en un tercer país.</td></tr>
+      <tr><td><span class="tag tag-amber">Nivell 3</span></td><td>Auditoria independent de tercers</td><td>+ Personal amb ciutadania de la UE (amb habilitació de seguretat nacional per a informació classificada); proveïdor no sota control d'un tercer país (llevat de la derogació del tercer país associat); suport exclusivament des de la UE; pot allotjar informació classificada de la UE.</td></tr>
+      <tr><td><span class="tag tag-red">Nivell 4</span></td><td>Auditoria independent de tercers (màxim nivell)</td><td>+ Certificat de ciberseguretat "alt"; dades sensibles avaluades per risc conservades a la UE; cap control efectiu d'un tercer país sobre el disseny, el manteniment o l'evolució dels components de programari.</td></tr>
+    </table>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-earth"></i> Tercers països associats (Art 18)</div>
+      <p>Un proveïdor sota control d'un tercer país pot assolir el Nivell 3, però només si la Comissió designa aquell tercer país com a "associat": ha de tenir una decisió d'adequació del RGPD, cap legislació que obligui a l'accés a dades, la interrupció del servei o les sancions, un mercat obert i accés recíproc a la seva contractació pública.</p>
+    </div>
+  </div>
+
+  <!-- 8 AUDIT -->
+  <div class="section fade-in" id="audit">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-clipboard-check-outline"></i></div>
+      <h2 class="section__title">8. Reconeixement i auditoria independent</h2>
+    </div>
+    <p class="section__subtitle">Una auditoria, vàlida a tota la UE, per acabar amb el "sovereign-washing"</p>
+    <div class="card">
+      <p>Un proveïdor presenta la sol·licitud a l'<strong>autoritat nacional competent d'establiment</strong> (Art 17), que disposa de 60 dies per avaluar-la i notifica els altres Estats membres per a un període de revisió de 60 dies; les disputes es remeten a la Comissió per a una decisió vinculant. El Nivell 1 es basa en una autoavaluació (Art 19); els Nivells 2 a 4 requereixen una auditoria independent de tercers a càrrec del proveïdor (Art 20), amb normes estrictes d'independència de l'auditor (cap servei diferent de l'auditoria en els 12 mesos anteriors o posteriors, cap tasca d'auditoria en els 10 anys previs, cap honorari condicionat) i revisió anual. Els serveis reconeguts figuren en un repositori central públic (Art 22). L'Annex III recull 11 criteris de proves d'auditoria: establiment a la Unió, localització de la infraestructura i el personal, localització de les dades, ciutadania de la UE, certificació de ciberseguretat de la UE, absència d'entrenament d'IA per a tercers països, absència de control d'un tercer país (una prova del 5% de participació i del propietari últim), assistència exclusivament a la UE incloent-hi el SOC i el NOC, transparència de la cadena de subministrament de programari, programari obert i separació de filials en tercers països.</p>
+    </div>
+  </div>
+
+  <!-- 9 DEMAND -->
+  <div class="section fade-in" id="demand">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-storefront-outline"></i></div>
+      <h2 class="section__title">9. Contractació pública, EuroCloud i programari obert</h2>
+    </div>
+    <p class="section__subtitle">Convertir la demanda pública en oferta europea</p>
+    <table>
+      <tr><th>Mecanisme</th><th>Funció</th></tr>
+      <tr><td><strong>Avaluacions de riscos</strong> (Art 29)</td><td>Els Estats membres i les entitats de la Unió mapegen les activitats d'ordre públic als nivells de garantia requerits, en el termini d'un any i cada dos anys.</td></tr>
+      <tr><td><strong>Contractació pública</strong> (Art 30)</td><td>Els organismes no d'ordre públic utilitzen almenys el Nivell 1; les activitats d'ordre públic (sectors de l'Annex I de NIS2, seguretat nacional, defensa, justícia, forces de l'ordre, gestió de fronteres) utilitzen els Nivells 2 a 4.</td></tr>
+      <tr><td><strong>Entitats essencials privades</strong> (Art 31)</td><td>Les entitats dels sectors de l'Annex I de NIS2 poden realitzar les mateixes avaluacions.</td></tr>
+      <tr><td><strong>Valor afegit de la Unió</strong> (Art 32)</td><td>Criteris d'adjudicació no relacionats amb el preu per a la cadena de subministrament de la UE i el maquinari fabricat a la UE (màxim suggerit: 15 de 120 punts).</td></tr>
+      <tr><td><strong>Contractació pública d'innovació</strong> (Art 33)</td><td>Els Estats membres aspiren a adjudicar almenys el 25% de la contractació d'innovació en núvol i IA a pimes innovadores.</td></tr>
+      <tr><td><strong>EuroCloud Federation</strong> (Arts 34-36)</td><td>Una federació exclusiva per al sector públic per agrupar i compartir còmput inactiu, de manera gratuïta o al cost, fora de les normes de contractació pública.</td></tr>
+      <tr><td><strong>Contractació pública de la Comissió</strong> (Arts 37-40)</td><td>La Comissió pot actuar com a central de compres per a les entitats de la Unió i les autoritats dels Estats membres (contractes marc, sistemes de compra dinàmics).</td></tr>
+      <tr><td><strong>Programari obert en primer lloc</strong> (Arts 41-44)</td><td>Prioritat al programari obert per als organismes públics; un Catàleg de Solucions de Programari Obert de la UE al portal d'Europa Interoperable; una xarxa OSPO.</td></tr>
+    </table>
+  </div>
+
+  <!-- 10 SCOPE -->
+  <div class="section fade-in" id="scope">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-vector-link"></i></div>
+      <h2 class="section__title">10. Àmbit i la pila digital de la UE</h2>
+    </div>
+    <p class="section__subtitle">CADA no existeix de forma aïllada</p>
+    <div class="card">
+      <p>Les mesures obligatòries afecten el sector públic i les entitats essencials privades dels sectors de l'<strong>Annex I de NIS2</strong> (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" class="doc-link">Directive (EU) 2022/2555</a>): energia, transport, banca, infraestructura de mercats financers, sanitat, aigües potables i residuals, infraestructura digital, gestió de serveis TIC, administració pública i espai.</p>
+    </div>
+    <table>
+      <tr><th>Instrument</th><th>Relació amb CADA</th></tr>
+      <tr><td><strong>Data Act</strong></td><td>El canvi de proveïdor al núvol i la interoperabilitat redueixen el bloqueig, facilitant el pas als serveis de la UE; CADA construeix el camí sobirà que el Data Act obre.</td></tr>
+      <tr><td><strong>DMA</strong></td><td>Es van obrir tres investigacions de mercat sobre serveis en núvol i la designació de guardabarrera el 18 de novembre de 2025.</td></tr>
+      <tr><td><strong>EUCS / Revisió de la Llei de Ciberseguretat (CSA2)</strong></td><td>Proporcionen la certificació de ciberseguretat en la qual s'eleven els nivells de garantia de CADA; CADA omple el buit en matèria de sobirania.</td></tr>
+      <tr><td><strong>Llei de Resiliència Cibernètica</strong></td><td>Defineix la llista de materials de programari (SBOM) que requereixen les auditories de CADA.</td></tr>
+      <tr><td><strong>Pla d'Acció del Continent d'IA / fàbriques d'IA</strong></td><td>CADA proporciona la capacitat amplia de núvol i centres de dades que necessiten les fàbriques i gigafàbriques d'IA.</td></tr>
+      <tr><td><strong>Estratègia de Programari Obert de la UE</strong></td><td>Un instrument germà dins del mateix paquet; CADA recull diverses de les seves mesures de programari obert.</td></tr>
+    </table>
+  </div>
+
+  <!-- 11 TIMELINE -->
+  <div class="section fade-in" id="timeline">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-timeline-clock-outline"></i></div>
+      <h2 class="section__title">11. Calendari i properes etapes</h2>
+    </div>
+    <p class="section__subtitle">On es troba CADA en el procediment legislatiu ordinari</p>
+    <div class="timeline">
+      <div class="timeline__item done"><div class="timeline__date">Setembre de 2024</div><div class="timeline__text">L'informe Draghi reclama el control sobre les dades i el núvol i un major còmput domèstic.</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2025 a 2026</div><div class="timeline__text">El Pla d'Acció del Continent d'IA i l'Estratègia Aplica la IA fixen l'ambició (fàbriques d'IA, gigafàbriques).</div></div>
+      <div class="timeline__item active"><div class="timeline__date">3 de juny de 2026</div><div class="timeline__text">El Col·legi adopta CADA (COM(2026) 502, 2026/0138(COD)) en el marc del Paquet de Sobirania Tecnològica.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Properes etapes</div><div class="timeline__text">Posicions del Parlament Europeu (comitè principal ITRE previsiblement) i del Consell, i posterior tríleg.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Entrada en vigor</div><div class="timeline__text">20 dies després de la publicació; el Reglament s'aplica un any més tard. Les avaluacions de risc de sobirania dels Estats membres i les zones d'acceleració seguiran.</div></div>
+      <div class="timeline__item"><div class="timeline__date">Revisió</div><div class="timeline__text">Avaluació de la Comissió 4 anys després de l'entrada en vigor, i posteriorment cada 5 anys.</div></div>
+    </div>
+  </div>
+
+  <!-- 12 SOURCES -->
+  <div class="section fade-in" id="sources">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-link-variant"></i></div>
+      <h2 class="section__title">12. Fonts oficials</h2>
+    </div>
+    <div class="card">
+      <ul style="margin:0 0 0 1.25rem; line-height:2">
+        <li><a href="https://digital-strategy.ec.europa.eu/en/library/proposal-cloud-and-ai-development-act-cada" target="_blank" class="doc-link">Pàgina de la proposta: Llei de Desenvolupament del Núvol i la IA (DG CNECT)</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129111" target="_blank" class="doc-link">COM(2026) 502 final</a> (la proposta) + <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129112" target="_blank" class="doc-link">ANNEXOS 1 a 3</a></li>
+        <li><a href="https://ec.europa.eu/newsroom/dae/redirection/document/129113" target="_blank" class="doc-link">SWD(2026) 502</a> (Avaluació d'Impacte, Parts 1 i 2) i <a href="https://ec.europa.eu/newsroom/dae/redirection/document/129115" target="_blank" class="doc-link">SWD(2026) 503</a> (resum executiu)</li>
+        <li>Premsa: <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_1187" target="_blank" class="doc-link">IP/26/1187</a>; Q&amp;A <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1188" target="_blank" class="doc-link">QANDA/26/1188</a> i <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_1185" target="_blank" class="doc-link">QANDA/26/1185</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" class="doc-link">Directiva NIS2 (EU) 2022/2555</a></li>
+      </ul>
+    </div>
+    <div class="infobox">
+      <div class="infobox__title"><i class="mdi mdi-robot-happy-outline"></i> Pregunta a Brubru</div>
+      <p>Brubru fa el seguiment de CADA a través del Xat, el Seguidor Legislatiu i el vostre espai de treball Els Meus Arxius. Pregunteu "Quins són els quatre nivells de garantia de la Unió a CADA?" o "Qui entra dins l'àmbit de la Llei de Desenvolupament del Núvol i la IA?" i Brubru respon a partir del registre verificat, i us enllaça directament amb l'arxiu.</p>
+    </div>
+  </div>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Torna al principi"><i class="mdi mdi-chevron-up"></i></button>
+
+<footer class="footer">
+  <div class="footer__strip"></div>
+  <div class="footer__logos" style="margin-top:1.5rem">
+    <img src="../assets/brubru_mainlogo.png" alt="Brubru">
+    <img src="../assets/beresol-logo.png" alt="Beresol">
+  </div>
+  <p class="footer__text">Una anàlisi en profunditat de <a href="https://brubru.beresol.eu">Brubru</a>, per <a href="https://beresol.eu">Beresol</a>. Intel·ligència legislativa europea amb IA. Tot l'EU, amb IA.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  const btt = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 600); });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>

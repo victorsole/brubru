@@ -13,6 +13,7 @@
  */
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiScaleBalance,
@@ -57,18 +58,23 @@ const PolicyPositionInput = ({
   isLoading: boolean;
   disabled: boolean;
 }) => (
+  <PolicyPositionInputInner value={value} onChange={onChange} onSubmit={onSubmit} isLoading={isLoading} disabled={disabled} />
+);
+
+const PolicyPositionInputInner = ({ value, onChange, onSubmit, isLoading, disabled }: any) => {
+  const { t } = useTranslation();
+  return (
   <div className="mep-comparative__input-section">
     <label className="mep-comparative__input-label" htmlFor="policy-position">
-      Describe your policy position
+      {t('mepComparativeTab.describePosition')}
     </label>
     <p className="mep-comparative__input-hint">
-      Summarise your organisation's stance on this legislative file in 2-3 sentences.
-      The AI will score each MEP amendment's alignment with your position.
+      {t('mepComparativeTab.describeHint')}
     </p>
     <textarea
       id="policy-position"
       className="mep-comparative__textarea"
-      placeholder="e.g. We support strong consumer protection standards and mandatory transparency requirements, but oppose provisions that would create disproportionate compliance burdens for SMEs..."
+      placeholder={t('mepComparativeTab.positionPlaceholder')}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       rows={4}
@@ -76,29 +82,30 @@ const PolicyPositionInput = ({
     />
     <div className="mep-comparative__input-footer">
       <span className="mep-comparative__char-count">
-        {value.length} / 5,000 characters
+        {t('mepComparativeTab.charCount', { used: value.length })}
       </span>
       <button
         className="mep-comparative__run-btn"
         onClick={onSubmit}
         disabled={disabled || value.length < 10 || isLoading}
-        aria-label="Run alignment analysis"
+        aria-label={t('mepComparativeTab.runAnalysis')}
       >
         {isLoading ? (
           <>
             <Icon path={mdiLoading} size={0.7} spin />
-            Scoring amendments...
+            {t('mepComparativeTab.scoringAmendments')}
           </>
         ) : (
           <>
             <Icon path={mdiMagnifyScan} size={0.7} />
-            Run Analysis
+            {t('mepComparativeTab.runAnalysisBtn')}
           </>
         )}
       </button>
     </div>
   </div>
-);
+  );
+};
 
 
 /** Alignment Summary Cards */
@@ -109,11 +116,12 @@ const AlignmentSummary = ({
   distribution: Record<string, number>;
   total: number;
 }) => {
+  const { t } = useTranslation();
   const cards = [
-    { key: '2', label: 'Strongly Aligned', colour: '#059669' },
-    { key: '1', label: 'Partially Aligned', colour: '#0693e3' },
-    { key: '0', label: 'Neutral', colour: '#9ca3af' },
-    { key: 'negative', label: 'Opposed', colour: '#dc2626' },
+    { key: '2', label: t('mepComparativeTab.stronglyAligned'), colour: '#059669' },
+    { key: '1', label: t('mepComparativeTab.partiallyAligned'), colour: '#0693e3' },
+    { key: '0', label: t('mepComparativeTab.neutral'), colour: '#9ca3af' },
+    { key: 'negative', label: t('mepComparativeTab.opposed'), colour: '#dc2626' },
   ];
 
   const negativeCount = (distribution['-1'] || 0) + (distribution['-2'] || 0);
@@ -122,8 +130,8 @@ const AlignmentSummary = ({
     <div className="mep-comparative__section">
       <div className="mep-comparative__section-header">
         <Icon path={mdiScaleBalance} size={0.8} />
-        <span>Alignment Summary</span>
-        <span className="mep-comparative__section-count">{total} amendments scored</span>
+        <span>{t('mepComparativeTab.alignmentSummary')}</span>
+        <span className="mep-comparative__section-count">{t('mepComparativeTab.amendmentsScored', { n: total })}</span>
       </div>
       <div className="mep-comparative__summary-grid">
         {cards.map((card) => {
@@ -149,16 +157,17 @@ const AlignmentSummary = ({
 
 /** Best Allies Ranked List */
 const BestAllies = ({ allies }: { allies: ComparisonAlly[] }) => {
+  const { t } = useTranslation();
   if (!allies.length) return null;
 
   return (
     <div className="mep-comparative__section">
       <div className="mep-comparative__section-header">
         <Icon path={mdiAccountHeartOutline} size={0.8} />
-        <span>Best Allies</span>
+        <span>{t('mepComparativeTab.bestAllies')}</span>
       </div>
       <p className="mep-comparative__section-desc">
-        MEPs whose amendments most closely align with your position, ranked by average score.
+        {t('mepComparativeTab.bestAlliesDesc')}
       </p>
       <div className="mep-comparative__allies-list">
         {allies.map((ally, i) => {
@@ -191,7 +200,7 @@ const BestAllies = ({ allies }: { allies: ComparisonAlly[] }) => {
               >
                 {ally.avg_score > 0 ? '+' : ''}{ally.avg_score.toFixed(1)}
               </span>
-              <span className="mep-comparative__ally-count">{ally.count} am.</span>
+              <span className="mep-comparative__ally-count">{t('mepComparativeTab.amCount', { n: ally.count })}</span>
             </div>
           );
         })}
@@ -207,18 +216,18 @@ const CoverageGaps = ({
 }: {
   gaps: { user_unique: string[]; blind_spots: string[] };
 }) => {
+  const { t } = useTranslation();
   if (!gaps.user_unique.length && !gaps.blind_spots.length) {
     return (
       <div className="mep-comparative__section">
         <div className="mep-comparative__section-header">
           <Icon path={mdiPuzzleOutline} size={0.8} />
-          <span>Coverage Gaps</span>
+          <span>{t('mepComparativeTab.coverageGaps')}</span>
         </div>
         <div className="mep-comparative__info-note">
           <Icon path={mdiInformationOutline} size={0.7} />
           <span>
-            Draft amendments in the Amendator for this procedure to see coverage gaps.
-            This compares elements you amended against elements MEPs targeted.
+            {t('mepComparativeTab.amendatorDraftHint')}
           </span>
         </div>
       </div>
@@ -229,12 +238,12 @@ const CoverageGaps = ({
     <div className="mep-comparative__section">
       <div className="mep-comparative__section-header">
         <Icon path={mdiPuzzleOutline} size={0.8} />
-        <span>Coverage Gaps</span>
+        <span>{t('mepComparativeTab.coverageGaps')}</span>
       </div>
       <div className="mep-comparative__gaps-grid">
         <div className="mep-comparative__gap-col mep-comparative__gap-col--unique">
           <div className="mep-comparative__gap-header">
-            Your Unique Positions ({gaps.user_unique.length})
+            {t('mepComparativeTab.yourUniquePositions', { n: gaps.user_unique.length })}
           </div>
           <div className="mep-comparative__gap-list">
             {gaps.user_unique.length > 0 ? (
@@ -245,14 +254,14 @@ const CoverageGaps = ({
               ))
             ) : (
               <p className="mep-comparative__gap-empty">
-                All your amended elements are also targeted by MEPs.
+                {t('mepComparativeTab.allCovered')}
               </p>
             )}
           </div>
         </div>
         <div className="mep-comparative__gap-col mep-comparative__gap-col--blind">
           <div className="mep-comparative__gap-header">
-            Blind Spots ({gaps.blind_spots.length})
+            {t('mepComparativeTab.blindSpots', { n: gaps.blind_spots.length })}
           </div>
           <div className="mep-comparative__gap-list">
             {gaps.blind_spots.length > 0 ? (
@@ -263,7 +272,7 @@ const CoverageGaps = ({
               ))
             ) : (
               <p className="mep-comparative__gap-empty">
-                No blind spots -- you cover all elements MEPs have targeted.
+                {t('mepComparativeTab.noBlindSpots')}
               </p>
             )}
           </div>
@@ -284,6 +293,7 @@ const PoliticalLandscape = ({
     opposed: LandscapeGroup[];
   };
 }) => {
+  const { t } = useTranslation();
   const renderColumn = (
     title: string,
     groups: LandscapeGroup[],
@@ -309,11 +319,11 @@ const PoliticalLandscape = ({
               >
                 {g.avg_score > 0 ? '+' : ''}{g.avg_score.toFixed(1)}
               </span>
-              <span className="mep-comparative__landscape-count">{g.count} am.</span>
+              <span className="mep-comparative__landscape-count">{t('mepComparativeTab.amCount', { n: g.count })}</span>
             </div>
           );
         }) : (
-          <p className="mep-comparative__landscape-empty">None</p>
+          <p className="mep-comparative__landscape-empty">{t('mepComparativeTab.none')}</p>
         )}
       </div>
     </div>
@@ -323,12 +333,12 @@ const PoliticalLandscape = ({
     <div className="mep-comparative__section">
       <div className="mep-comparative__section-header">
         <Icon path={mdiBankOutline} size={0.8} />
-        <span>Political Landscape</span>
+        <span>{t('mepComparativeTab.politicalLandscape')}</span>
       </div>
       <div className="mep-comparative__landscape-grid">
-        {renderColumn('Supportive', landscape.supportive, 'mep-comparative__landscape-col--supportive')}
-        {renderColumn('Mixed', landscape.mixed, 'mep-comparative__landscape-col--mixed')}
-        {renderColumn('Opposed', landscape.opposed, 'mep-comparative__landscape-col--opposed')}
+        {renderColumn(t('mepComparativeTab.supportive'), landscape.supportive, 'mep-comparative__landscape-col--supportive')}
+        {renderColumn(t('mepComparativeTab.mixed'), landscape.mixed, 'mep-comparative__landscape-col--mixed')}
+        {renderColumn(t('mepComparativeTab.opposed'), landscape.opposed, 'mep-comparative__landscape-col--opposed')}
       </div>
     </div>
   );
@@ -340,6 +350,7 @@ const PoliticalLandscape = ({
 // ============================================================================
 
 export const MEPComparativeTab = () => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const {
     selectedProcedure,
@@ -369,7 +380,7 @@ export const MEPComparativeTab = () => {
       <div className="mep-comparative">
         <div className="mep-comparative__info-note">
           <Icon path={mdiInformationOutline} size={0.7} />
-          <span>Select a procedure from the MEP Amendments tab to run comparative analysis.</span>
+          <span>{t('mepComparativeTab.selectProcedure')}</span>
         </div>
       </div>
     );
@@ -398,7 +409,7 @@ export const MEPComparativeTab = () => {
       {isLoading && (
         <div className="mep-comparative__loading">
           <Icon path={mdiLoading} size={1} spin />
-          <span>Scoring amendments against your position... This may take a moment.</span>
+          <span>{t('mepComparativeTab.scoring')}</span>
         </div>
       )}
 

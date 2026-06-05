@@ -39,6 +39,8 @@ from schemas.tender_schemas import (
     TenderStatistics, UserTenderStatistics
 )
 from .auth import get_current_user
+from services.tracking.tracked_files_seeder import _interest_list
+from services.tracking.pi_committee_crosswalk import cpv_for_interests, keywords_for_interests
 
 logger = logging.getLogger(__name__)
 
@@ -188,6 +190,28 @@ async def get_my_profile(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get profile: {str(e)}"
         )
+
+
+@router.get(
+    "/profile/suggested-from-interests",
+    summary="Suggested tender profile from your Policy Interests",
+    description=(
+        "**What it does**\nTurns your My EU Bubble Policy Interests into a head-start "
+        "tender profile: the CPV procurement categories and keywords that match your "
+        "areas, so you can pre-fill the profile form instead of starting blank.\n\n"
+        "**When to use it**\nThe 'Use my policy interests' button on the tender-profile form.\n\n"
+        "**You get back**\n`cpv_categories` (CPV divisions) + `keywords`, both derived "
+        "from your interests. Non-destructive — you edit and save."),
+)
+async def suggested_profile_from_interests(
+    current_user: User = Depends(require_blue_tier),
+):
+    interests = _interest_list(current_user)
+    return {
+        "interests": interests,
+        "cpv_categories": sorted(cpv_for_interests(interests)),
+        "keywords": sorted(keywords_for_interests(interests)),
+    }
 
 
 @router.post(

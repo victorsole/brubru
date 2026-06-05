@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paquet Mobilitat de passatgers 2026 · Brubru</title>
+<meta name="description" content="El paquet Mobilitat de passatgers de la UE: tres propostes adoptades pel Col·legi de Comissaris el 13 de maig de 2026. Segueix-lo a Brubru.">
+<meta property="og:title" content="Paquet Mobilitat de passatgers: adoptat el 13 de maig de 2026">
+<meta property="og:description" content="The first cross-modal single-market intervention in EU passenger transport since 2017. Three proposals: MDMS, SDBT, Rail Passengers' Rights.">
+<meta property="og:image" content="https://brubru.beresol.eu/assets/brubru_og_image.png">
+<style>
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro Italic'; src: url('../../New-Yorker-Font/ACaslonPro-Italic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro Italic'; src: url('../../New-Yorker-Font/ACaslonPro-BoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #08070d;
+    color: #f5f1e6;
+    font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---- Canvas ---- */
+  .stage {
+    position: fixed;
+    inset: 0;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    background: #08070d;
+  }
+
+  /* ---- Background layers ---- */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1100ms cubic-bezier(.5,.05,.2,.95);
+    will-change: opacity, transform;
+    transform: scale(1.05);
+    animation: kenburns 24s ease-in-out infinite alternate;
+  }
+  .bg.is-on { opacity: 0.72; }
+
+  @keyframes kenburns {
+    0%   { transform: scale(1.04) translate(0,0); }
+    100% { transform: scale(1.12) translate(-1.5%, -1.0%); }
+  }
+
+  /* Pexels backgrounds per scene cluster */
+  /* Hero: Brussels station / transport hub */
+  .bg--hero { background-image: url('https://images.pexels.com/photos/2130132/pexels-photo-2130132.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  /* Scene 1 (MDMS): digital/data/API abstract */
+  .bg--c1   { background-image: url('https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  /* Scene 2 (SDBT): ticketing/booking on mobile */
+  .bg--c2   { background-image: url('https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  /* Scene 3 (Rail rights): high-speed train interior/exterior */
+  .bg--c3   { background-image: url('https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  /* Scene 4 (Who it changes): crowd/passengers */
+  .bg--c4   { background-image: url('https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+
+  /* ---- Tonal overlays per cluster ---- */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%),
+      linear-gradient(180deg, rgba(0,70,140,0.12) 0%, rgba(8,7,13,0.32) 60%, rgba(8,7,13,0.65) 100%);
+    transition: background 1100ms ease;
+  }
+  /* MDMS: blue-tinted */
+  .overlay.is-c1 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.08) 0%, rgba(8,7,13,0.52) 80%), linear-gradient(180deg, rgba(0,70,200,0.14) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.65) 100%); }
+  /* SDBT: purple-tinted */
+  .overlay.is-c2 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.08) 0%, rgba(8,7,13,0.52) 80%), linear-gradient(180deg, rgba(80,30,160,0.14) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.65) 100%); }
+  /* Rail rights: warm green-tinted */
+  .overlay.is-c3 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%), linear-gradient(180deg, rgba(20,80,50,0.18) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.70) 100%); }
+  /* Who it changes: amber-tinted */
+  .overlay.is-c4 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.08) 0%, rgba(8,7,13,0.50) 80%), linear-gradient(180deg, rgba(160,100,20,0.14) 0%, rgba(8,7,13,0.28) 60%, rgba(8,7,13,0.65) 100%); }
+
+  /* ---- 12-star halo ---- */
+  .stars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 900ms ease;
+    pointer-events: none;
+  }
+  .stars.is-on { opacity: 0.06; }
+  .stars svg { width: 70vmin; height: 70vmin; }
+
+  /* ---- Intro / hero card ---- */
+  .intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2vh, 28px);
+    opacity: 0;
+    transition: opacity 700ms ease;
+    padding: 4vh 6vw;
+    text-align: center;
+  }
+  .intro.is-on { opacity: 1; }
+  .intro img.logo {
+    width: clamp(220px, 28vw, 460px);
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.55));
+  }
+  .intro .overline {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(16px, 2vw, 26px);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 230, 0.65);
+    margin-top: 6px;
+  }
+  .intro .hero-title {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5.5vw, 88px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    color: #f7f0d9;
+    text-shadow: 0 6px 24px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.7);
+    max-width: 80vw;
+  }
+  .intro .hero-sub {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.2vw, 30px);
+    letter-spacing: 0.04em;
+    color: rgba(245, 241, 230, 0.78);
+    text-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    max-width: 72vw;
+    line-height: 1.35;
+  }
+
+  /* ---- Scene panels (full-screen content blocks) ---- */
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6vh 8vw;
+    opacity: 0;
+    transition: opacity 650ms cubic-bezier(.4,.0,.2,1);
+    pointer-events: none;
+    gap: clamp(14px, 2.2vh, 30px);
+  }
+  .scene.is-on { opacity: 1; pointer-events: auto; }
+
+  .scene-label {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.2vw, 17px);
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 230, 0.50);
+    margin-bottom: clamp(4px, 1vh, 12px);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 500ms ease 150ms, transform 500ms ease 150ms;
+  }
+  .scene.is-on .scene-label { opacity: 1; transform: translateY(0); }
+
+  .scene-heading {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5.8vw, 92px);
+    line-height: 1.04;
+    letter-spacing: -0.016em;
+    color: #f7f0d9;
+    text-shadow: 0 6px 28px rgba(0,0,0,0.88), 0 2px 8px rgba(0,0,0,0.72);
+    max-width: 88vw;
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 400ms cubic-bezier(.2,.65,.25,1) 80ms, transform 480ms cubic-bezier(.2,.65,.25,1) 80ms;
+  }
+  .scene.is-on .scene-heading { opacity: 1; transform: translateY(0); }
+
+  .scene-body {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(18px, 2.4vw, 34px);
+    line-height: 1.30;
+    color: rgba(245, 241, 230, 0.82);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.65);
+    max-width: 72vw;
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 400ms ease 260ms, transform 480ms ease 260ms;
+  }
+  .scene.is-on .scene-body { opacity: 1; transform: translateY(0); }
+
+  .scene-accent {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 600;
+    font-size: clamp(22px, 3.4vw, 52px);
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #0070F3 0%, #7C4DFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 420ms ease 380ms, transform 500ms ease 380ms;
+  }
+  .scene.is-on .scene-accent { opacity: 1; transform: translateY(0); }
+
+  /* ---- Cluster label (top-left) ---- */
+  .clusterlbl {
+    position: absolute;
+    top: 4vh;
+    left: 5vw;
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.2vw, 17px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 230, 0.50);
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+  .clusterlbl.is-on { opacity: 1; }
+
+  /* ---- CTA scene ---- */
+  .ctascene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 2.4vh, 34px);
+    text-align: center;
+    padding: 6vh 8vw;
+    opacity: 0;
+    transition: opacity 700ms ease;
+    pointer-events: none;
+  }
+  .ctascene.is-on { opacity: 1; pointer-events: auto; }
+
+  .ctascene .cta-overline {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.5vw, 20px);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 230, 0.55);
+  }
+  .ctascene .cta-heading {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4.8vw, 72px);
+    line-height: 1.08;
+    color: #f7f0d9;
+    text-shadow: 0 6px 24px rgba(0,0,0,0.85);
+    max-width: 80vw;
+  }
+  .ctascene .cta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 80vw;
+  }
+  .ctascene .pill {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-size: clamp(13px, 1.3vw, 18px);
+    letter-spacing: 0.06em;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(124, 77, 255, 0.55);
+    color: #f5f1e6;
+    background: rgba(124, 77, 255, 0.12);
+  }
+  .ctascene .cta-link {
+    display: inline-block;
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 600;
+    font-size: clamp(15px, 1.6vw, 22px);
+    letter-spacing: 0.04em;
+    padding: 14px 36px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0070F3 0%, #7C4DFF 100%);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 24px rgba(0,112,243,0.40);
+    transition: box-shadow 250ms ease, transform 250ms ease;
+    pointer-events: auto;
+  }
+  .ctascene .cta-link:hover { box-shadow: 0 6px 32px rgba(0,112,243,0.60); transform: translateY(-2px); }
+
+  /* ---- End frame ---- */
+  .endframe {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2vh, 28px);
+    opacity: 0;
+    transition: opacity 800ms ease;
+    pointer-events: none;
+    text-align: center;
+    padding: 4vh 6vw;
+  }
+  .endframe.is-on { opacity: 1; pointer-events: auto; }
+  .endframe img.logo {
+    width: clamp(260px, 28vw, 460px);
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.55));
+  }
+  .endframe .url {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 400;
+    font-size: clamp(18px, 2vw, 28px);
+    letter-spacing: 0.08em;
+    color: #f4d690;
+  }
+  .endframe .end-cta {
+    display: inline-block;
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 600;
+    font-size: clamp(14px, 1.5vw, 20px);
+    padding: 12px 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0070F3 0%, #7C4DFF 100%);
+    color: #fff;
+    text-decoration: none;
+    pointer-events: auto;
+    box-shadow: 0 4px 20px rgba(0,112,243,0.38);
+  }
+  .endframe .smalltag {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.4vw, 19px);
+    color: rgba(245, 241, 230, 0.62);
+    margin-top: 4px;
+    max-width: 72vw;
+  }
+
+  /* ---- Footer ---- */
+  .footer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    /* 3px gradient strip on top edge for brand presence */
+    border-top: 3px solid transparent;
+    border-image: linear-gradient(90deg, #0070F3, #7C4DFF) 1;
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+    z-index: 10;
+    /* Light footer zone for native-colour logos */
+    background: rgba(248, 246, 240, 0.92);
+  }
+  .footer .beresol {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 800ms ease;
+  }
+  .footer .beresol.is-on { opacity: 1; }
+  .footer .beresol img { height: 26px; }
+  .footer .beresol span {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: rgba(30, 28, 40, 0.65);
+  }
+  .footer .credits {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: rgba(30, 28, 40, 0.50);
+    text-align: right;
+    line-height: 1.5;
+    max-width: 56vw;
+    opacity: 0;
+    transition: opacity 800ms ease;
+  }
+  .footer .credits.is-on { opacity: 1; }
+  .footer .credits a { color: inherit; text-decoration: none; }
+
+  /* ---- Replay button ---- */
+  .replay {
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 20;
+    appearance: none;
+    border: 1px solid rgba(245,241,230,0.25);
+    background: rgba(8,7,13,0.55);
+    color: #f5f1e6;
+    padding: 8px 16px;
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 600ms ease;
+  }
+  .replay.is-on { opacity: 0.85; }
+  .replay:hover { opacity: 1; }
+
+  /* ---- Progress bar ---- */
+  .progress-bar {
+    position: fixed;
+    bottom: 58px;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, #0070F3, #7C4DFF);
+    z-index: 15;
+    transition: width 200ms linear;
+    opacity: 0;
+    transition: width 200ms linear, opacity 400ms ease;
+  }
+  .progress-bar.is-on { opacity: 0.7; }
+
+  /* ---- Mobile adjustments ---- */
+  @media (max-width: 480px) {
+    .scene-body { max-width: 90vw; }
+    .scene-heading { max-width: 92vw; }
+    .ctascene .cta-heading { max-width: 90vw; }
+    .ctascene .cta-pills { gap: 7px; }
+    .footer { padding: 12px 14px; }
+    .footer .credits { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<button class="replay" id="replay" type="button" data-id="31">Tornar a reproduir</button>
+<div class="progress-bar" id="progressBar"></div>
+
+<main class="stage">
+  <!-- Background image layers -->
+  <div class="bg bg--hero" id="bgHero"></div>
+  <div class="bg bg--c1"   id="bgC1"></div>
+  <div class="bg bg--c2"   id="bgC2"></div>
+  <div class="bg bg--c3"   id="bgC3"></div>
+  <div class="bg bg--c4"   id="bgC4"></div>
+
+  <!-- Tonal overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- 12-star halo -->
+  <div class="stars" id="stars">
+    <svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#FFCC00"><g id="starGroup"></g></g>
+    </svg>
+  </div>
+
+  <!-- Cluster label (top-left) -->
+  <div class="clusterlbl" id="clusterlbl"></div>
+
+  <!-- Scene 0: Intro / Hero -->
+  <div class="intro" id="intro">
+    <img class="logo" src="/assets/brubru_mainlogo.png" alt="Brubru">
+    <div class="overline" data-id="1">Dimecres 13 de maig de 2026</div>
+    <div class="hero-title"><span data-id="2">Paquet Mobilitat de passatgers</span></div>
+    <div class="hero-sub"><span data-id="3">La primera intervenció transmodal al mercat únic del transport de passatgers de la UE des de 2017.</span></div>
+  </div>
+
+  <!-- Scene 1: MDMS -->
+  <div class="scene" id="scene1">
+    <div class="scene-label" data-id="4">Proposta 1 de 3</div>
+    <div class="scene-heading" data-id="5">Serveis digitals de mobilitat multimodal</div>
+    <div class="scene-body"><span data-id="6">API de dades en temps real, accés no discriminatori a la reserva i interoperabilitat dels títols de transport electrònics entre tren, autobús, autocar, bicicleta compartida i VTC.</span></div>
+    <div class="scene-accent"><span data-id="7">Brussel·les a Estrasburg. Una reserva. Tots els modes.</span></div>
+  </div>
+
+  <!-- Scene 2: SDBT -->
+  <div class="scene" id="scene2">
+    <div class="scene-label" data-id="8">Proposta 2 de 3</div>
+    <div class="scene-heading" data-id="9">Reserva i bitlleteria digital única</div>
+    <div class="scene-body"><span data-id="10">Els transportistes han d'obrir les seves tarifes i la seva disponibilitat a les plataformes externes. Un estàndard comú de bitllet electrònic llegible per màquina. Garanties de connexió quan el viatge multimodal es ven com un únic producte.</span></div>
+    <div class="scene-accent"><span data-id="11">Els viatges transfronterers generen avui entre un 35 i un 40% menys d'ingressos. La SDBT tanca aquesta bretxa.</span></div>
+  </div>
+
+  <!-- Scene 3: Rail Passengers' Rights -->
+  <div class="scene" id="scene3">
+    <div class="scene-label" data-id="12">Proposta 3 de 3</div>
+    <div class="scene-heading" data-id="13">Drets dels viatgers ferroviaris revisats</div>
+    <div class="scene-body"><span data-id="14">El Reglament 1371/2007 s'actualitza per a l'era multimodal: indemnització per connexions perdudes entre operadors, prenotificació per a persones amb mobilitat reduïda reduïda de 36 a 24 hores, informació en temps real sobre retards enviada a cada plataforma de bitllets.</span></div>
+    <div class="scene-accent"><span data-id="15">Els teus drets viatgen amb tu, sigui quin sigui el mode.</span></div>
+  </div>
+
+  <!-- Scene 4: Who it changes -->
+  <div class="scene" id="scene4">
+    <div class="scene-label" data-id="16">Impacte</div>
+    <div class="scene-heading" data-id="17">Què canvia</div>
+    <div class="scene-body"><span data-id="18">Operadors ferroviaris. Transportistes per carretera. Plataformes MaaS. Intermediaris de reserva. Consumidors. Defensors de l'accessibilitat.</span></div>
+    <div class="scene-accent"><span data-id="19">DB Navigator, SNCF Connect, OBB Scotty, i tota plataforma que els segueixi.</span></div>
+  </div>
+
+  <!-- Scene 5: CTA -->
+  <div class="ctascene" id="scene5">
+    <div class="cta-overline" data-id="20">Segueix aquest paquet a Brubru</div>
+    <div class="cta-heading"><span data-id="21">Tres propostes. Un mercat únic. Cada pas seguit.</span></div>
+    <div class="cta-pills">
+      <span class="pill" data-id="22">Seguiment legislatiu</span>
+      <span class="pill" data-id="23">El meu calendari UE</span>
+      <span class="pill" data-id="24">Brubru Chat</span>
+      <span class="pill" data-id="25">Prediccions</span>
+    </div>
+    <a class="cta-link"
+       href="https://brubru.beresol.eu/main?q=What%20is%20in%20the%20Mobility%20Package%20adopted%20by%20the%20College%20on%2013%20May%202026%3F"
+       target="_blank"
+       rel="noopener"
+       data-id="26">Pregunta a Brubru sobre el paquet Mobilitat</a>
+  </div>
+
+  <!-- End frame -->
+  <div class="endframe" id="endframe">
+    <img class="logo" src="/assets/brubru_mainlogo.png" alt="Brubru">
+    <div class="url">brubru.beresol.eu</div>
+    <a class="end-cta"
+       href="https://brubru.beresol.eu/main?q=What%20is%20in%20the%20Mobility%20Package%20adopted%20by%20the%20College%20on%2013%20May%202026%3F"
+       target="_blank"
+       rel="noopener"
+       data-id="27">Què conté el paquet Mobilitat adoptat el 13 de maig de 2026?</a>
+    <div class="smalltag" data-id="28">Intel·ligència legislativa UE basada en IA. Més ràpida que les publicacions institucionals.</div>
+  </div>
+
+  <!-- Footer (light background, native-colour Beresol logo) -->
+  <footer class="footer">
+    <div class="beresol" id="beresol">
+      <img src="/assets/beresol-logo.png" alt="Beresol BV">
+      <span data-id="29">2026 Beresol BV</span>
+    </div>
+    <div class="credits" id="credits">
+      Photos: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>
+      &middot; <span data-id="30">Comissari líder: Raffaele Fitto (Vicepresident Executiu, Cohesió i Reformes). DG líder: DG MOVE.</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+  // ---- 12 EU stars ----
+  (function injectStars() {
+    const g = document.getElementById('starGroup');
+    if (!g) return;
+    const ns = 'http://www.w3.org/2000/svg';
+    const R = 72, r1 = 6, r2 = 2.4;
+    function starPath(cx, cy) {
+      let d = '';
+      for (let i = 0; i < 10; i++) {
+        const ang = (-Math.PI / 2) + i * Math.PI / 5;
+        const r = i % 2 === 0 ? r1 : r2;
+        const x = cx + r * Math.cos(ang);
+        const y = cy + r * Math.sin(ang);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2);
+      }
+      return d + 'Z';
+    }
+    for (let k = 0; k < 12; k++) {
+      const ang = (k / 12) * Math.PI * 2 - Math.PI / 2;
+      const cx = R * Math.cos(ang);
+      const cy = R * Math.sin(ang);
+      const p = document.createElementNS(ns, 'path');
+      p.setAttribute('d', starPath(cx, cy));
+      g.appendChild(p);
+    }
+  })();
+
+  // ---- Element references ----
+  const els = {
+    bgHero:   document.getElementById('bgHero'),
+    bgC1:     document.getElementById('bgC1'),
+    bgC2:     document.getElementById('bgC2'),
+    bgC3:     document.getElementById('bgC3'),
+    bgC4:     document.getElementById('bgC4'),
+    overlay:  document.getElementById('overlay'),
+    stars:    document.getElementById('stars'),
+    intro:    document.getElementById('intro'),
+    scene1:   document.getElementById('scene1'),
+    scene2:   document.getElementById('scene2'),
+    scene3:   document.getElementById('scene3'),
+    scene4:   document.getElementById('scene4'),
+    scene5:   document.getElementById('scene5'),
+    cluster:  document.getElementById('clusterlbl'),
+    endframe: document.getElementById('endframe'),
+    beresol:  document.getElementById('beresol'),
+    credits:  document.getElementById('credits'),
+    replay:   document.getElementById('replay'),
+    progressBar: document.getElementById('progressBar'),
+  };
+
+  // ---- Timeline (ms) ----
+  const T = {
+    introInAt:    300,     // intro fades in
+    introOutAt:   3200,    // intro fades out
+    s1InAt:       3800,    // Scene 1 (MDMS) starts
+    s1Dur:        4800,    // hold duration
+    s2InAt:       8900,    // Scene 2 (SDBT) starts
+    s2Dur:        4800,
+    s3InAt:       14000,   // Scene 3 (Rail rights) starts
+    s3Dur:        4800,
+    s4InAt:       19100,   // Scene 4 (Who it changes)
+    s4Dur:        4400,
+    s5InAt:       23800,   // CTA scene
+    s5Dur:        5200,
+    endAt:        29300,   // end frame
+    endDur:       5000,
+    totalDur:     34300,   // total for progress bar
+  };
+
+  let timeouts = [];
+  function schedule(fn, delay) { timeouts.push(setTimeout(fn, delay)); }
+  function clearAllTimers() { timeouts.forEach(clearTimeout); timeouts = []; }
+
+  const ALL_BGS = () => [els.bgHero, els.bgC1, els.bgC2, els.bgC3, els.bgC4];
+
+  function setBg(which) {
+    ALL_BGS().forEach(b => b.classList.remove('is-on'));
+    if (which) which.classList.add('is-on');
+  }
+  function setOverlay(cls) {
+    els.overlay.className = 'overlay ' + (cls || '');
+  }
+  function setCluster(label) {
+    if (!label) { els.cluster.classList.remove('is-on'); return; }
+    els.cluster.textContent = label;
+    els.cluster.classList.add('is-on');
+  }
+  function showScene(sceneEl) {
+    sceneEl.classList.add('is-on');
+  }
+  function hideScene(sceneEl) {
+    sceneEl.classList.remove('is-on');
+  }
+
+  // ---- Progress bar animation ----
+  function startProgressBar() {
+    els.progressBar.style.width = '0%';
+    els.progressBar.classList.add('is-on');
+    let start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      const pct = Math.min(100, ((ts - start) / T.totalDur) * 100);
+      els.progressBar.style.width = pct + '%';
+      if (pct < 100) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function play() {
+    clearAllTimers();
+
+    // Reset all
+    ALL_BGS().forEach(b => b.classList.remove('is-on'));
+    setOverlay('');
+    setCluster(null);
+    els.intro.classList.remove('is-on');
+    [els.scene1, els.scene2, els.scene3, els.scene4, els.scene5].forEach(s => s.classList.remove('is-on'));
+    els.endframe.classList.remove('is-on');
+    els.beresol.classList.remove('is-on');
+    els.credits.classList.remove('is-on');
+    els.stars.classList.remove('is-on');
+    els.replay.classList.remove('is-on');
+    els.progressBar.classList.remove('is-on');
+    els.progressBar.style.width = '0%';
+
+    startProgressBar();
+
+    // ---- Scene 0: Hero / Intro ----
+    schedule(() => {
+      setBg(els.bgHero);
+      setOverlay('');
+      els.stars.classList.add('is-on');
+      els.intro.classList.add('is-on');
+    }, T.introInAt);
+
+    schedule(() => {
+      els.intro.classList.remove('is-on');
+      els.stars.classList.remove('is-on');
+    }, T.introOutAt);
+
+    // ---- Scene 1: MDMS ----
+    schedule(() => {
+      setBg(els.bgC1);
+      setOverlay('is-c1');
+      setCluster('MDMS');
+      showScene(els.scene1);
+    }, T.s1InAt);
+    schedule(() => {
+      hideScene(els.scene1);
+    }, T.s1InAt + T.s1Dur);
+
+    // ---- Scene 2: SDBT ----
+    schedule(() => {
+      setBg(els.bgC2);
+      setOverlay('is-c2');
+      setCluster('SDBT');
+      showScene(els.scene2);
+    }, T.s2InAt);
+    schedule(() => {
+      hideScene(els.scene2);
+    }, T.s2InAt + T.s2Dur);
+
+    // ---- Scene 3: Rail Passengers' Rights ----
+    schedule(() => {
+      setBg(els.bgC3);
+      setOverlay('is-c3');
+      setCluster('Rail Passengers\' Rights');
+      showScene(els.scene3);
+    }, T.s3InAt);
+    schedule(() => {
+      hideScene(els.scene3);
+    }, T.s3InAt + T.s3Dur);
+
+    // ---- Scene 4: Who it changes ----
+    schedule(() => {
+      setBg(els.bgC4);
+      setOverlay('is-c4');
+      setCluster('Impact');
+      showScene(els.scene4);
+    }, T.s4InAt);
+    schedule(() => {
+      hideScene(els.scene4);
+    }, T.s4InAt + T.s4Dur);
+
+    // ---- Scene 5: CTA ----
+    schedule(() => {
+      // dark overlay for CTA legibility
+      setBg(els.bgC1);
+      setOverlay('is-c1');
+      setCluster('Track on Brubru');
+      showScene(els.scene5);
+    }, T.s5InAt);
+    schedule(() => {
+      hideScene(els.scene5);
+    }, T.s5InAt + T.s5Dur);
+
+    // ---- End frame ----
+    schedule(() => {
+      ALL_BGS().forEach(b => b.classList.remove('is-on'));
+      setOverlay('');
+      setCluster(null);
+    }, T.endAt - 200);
+
+    schedule(() => {
+      els.endframe.classList.add('is-on');
+      els.beresol.classList.add('is-on');
+      els.credits.classList.add('is-on');
+    }, T.endAt);
+
+    // Replay button reveals near the end
+    schedule(() => {
+      els.replay.classList.add('is-on');
+    }, T.endAt + T.endDur - 600);
+  }
+
+  els.replay.addEventListener('click', play);
+
+  // Wait for fonts before first play
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(play);
+  } else {
+    window.addEventListener('load', play);
+  }
+</script>
+</body>
+</html>

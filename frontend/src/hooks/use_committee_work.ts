@@ -13,7 +13,12 @@ import axios from 'axios';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 // Types
-export type ProcedureType = 'COD' | 'APP' | 'CNS' | 'NLE' | 'INI';
+// OEIL procedure-type code. Free string in the DB (varchar, migration 093);
+// the union lists the codes we currently store but unknown codes are tolerated.
+export type ProcedureType =
+  | 'COD' | 'CNS' | 'APP' | 'NLE' | 'INI' | 'INL' | 'RSP' | 'RSO' | 'REG'
+  | 'RPS' | 'DEA' | 'IMM' | 'BUD' | 'BUI' | 'DEC' | 'GBD' | 'ACI' | 'COS' | 'DCE'
+  | (string & {});
 export type CommitteeRole = 'lead' | 'associated' | 'opinion';
 export type CommitteeWorkStatus =
   | 'in_committee'
@@ -42,6 +47,8 @@ export interface CommitteeWorkItem {
   oeil_url?: string;
   ep_page_url?: string;
   last_updated: string;
+  first_seen?: string;
+  legislative_carriage_id?: string | null;
 }
 
 export interface CommitteeWorkItemDetail extends CommitteeWorkItem {
@@ -368,13 +375,28 @@ export const useCommitteeWork = create<CommitteeWorkState>((set, get) => ({
   },
 }));
 
-// Procedure type display names and colors
-export const PROCEDURE_TYPE_INFO: Record<ProcedureType, { name: string; color: string; score: number }> = {
-  COD: { name: 'Ordinary Legislative', color: '#0066cc', score: 100 },
+// Procedure type display names and colors. Keyed by string so any OEIL code
+// resolves; callers fall back to the raw code for anything not listed.
+export const PROCEDURE_TYPE_INFO: Record<string, { name: string; color: string; score: number }> = {
+  COD: { name: 'Ordinary legislative', color: '#0066cc', score: 100 },
+  INL: { name: 'Legislative initiative', color: '#0066cc', score: 90 },
   APP: { name: 'Consent', color: '#7c3aed', score: 80 },
   CNS: { name: 'Consultation', color: '#059669', score: 70 },
-  NLE: { name: 'Non-Legislative', color: '#d97706', score: 50 },
-  INI: { name: 'Own-Initiative', color: '#6b7280', score: 40 },
+  ACI: { name: 'Interinstitutional agreement', color: '#6b7280', score: 65 },
+  BUD: { name: 'Budget', color: '#0891b2', score: 60 },
+  GBD: { name: 'General budget', color: '#0891b2', score: 60 },
+  BUI: { name: 'Budget initiative', color: '#0891b2', score: 58 },
+  DEC: { name: 'Discharge', color: '#0891b2', score: 58 },
+  NLE: { name: 'Agreement / appointment', color: '#d97706', score: 50 },
+  RSP: { name: 'Resolution', color: '#8b5cf6', score: 45 },
+  RSO: { name: 'Internal resolution', color: '#8b5cf6', score: 42 },
+  INI: { name: 'Own-initiative', color: '#6b7280', score: 40 },
+  COS: { name: 'Strategy paper', color: '#6b7280', score: 40 },
+  DCE: { name: 'Written declaration', color: '#9ca3af', score: 38 },
+  DEA: { name: 'Delegated-act scrutiny', color: '#94a3b8', score: 30 },
+  RPS: { name: 'Implementing-act scrutiny', color: '#94a3b8', score: 30 },
+  REG: { name: 'Rules of Procedure', color: '#9ca3af', score: 25 },
+  IMM: { name: 'MEP immunity', color: '#9ca3af', score: 15 },
 };
 
 // Status display names and colors

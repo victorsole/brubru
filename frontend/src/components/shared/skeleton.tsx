@@ -1,4 +1,5 @@
 // frontend/src/components/shared/skeleton.tsx
+import { useTranslation } from 'react-i18next';
 import './skeleton.css';
 
 interface SkeletonProps {
@@ -14,6 +15,7 @@ export const Skeleton = ({
   height,
   className = '',
 }: SkeletonProps) => {
+  const { t } = useTranslation();
   const style: React.CSSProperties = {
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
@@ -24,7 +26,7 @@ export const Skeleton = ({
       className={`skeleton skeleton--${variant} ${className}`}
       style={style}
       role="status"
-      aria-label="Loading..."
+      aria-label={t('common.loading')}
     />
   );
 };

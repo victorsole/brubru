@@ -1,154 +1,129 @@
 // frontend/src/pages/contact_page.tsx
+import { useTranslation } from 'react-i18next';
+import Icon from '@mdi/react';
+import { mdiInstagram } from '@mdi/js';
 import './policy_pages.css';
 
 export const ContactPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="policy-page">
       <div className="policy-page__container">
-        <h1 className="policy-page__title">Contact Brubru</h1>
+        <h1 className="policy-page__title">{t('contact.pageTitle')}</h1>
 
         <section className="policy-page__section">
-          <h2>Get in Touch</h2>
-          <p>
-            We're here to help. Whether you have questions about our platform, need technical support,
-            or want to explore custom enterprise solutions, our team is ready to assist you.
-          </p>
+          <h2>{t('contact.getInTouch')}</h2>
+          <p>{t('contact.getInTouchBody')}</p>
         </section>
 
         <section className="policy-page__section">
-          <h2>General Inquiries</h2>
+          <h2>{t('contact.generalInquiries')}</h2>
           <div className="policy-page__contact-box">
-            <p><strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a></p>
-            <p><strong>Website:</strong> <a href="https://brubru.beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">brubru.beresol.eu</a></p>
-            <p><strong>Company:</strong> <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">Beresol BV</a></p>
-          </div>
-        </section>
-
-        <section className="policy-page__section">
-          <h2>Support</h2>
-
-          <div className="policy-page__feature">
-            <h3>White Tier (Free) Users</h3>
+            <p><strong>{t('contact.emailLabel')}</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a></p>
+            <p><strong>{t('contact.websiteLabel')}</strong> <a href="https://brubru.beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">brubru.beresol.eu</a></p>
+            <p><strong>{t('contact.companyLabel')}</strong> <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">Beresol BV</a></p>
             <p>
-              Community support is available through our documentation and FAQ resources.
-              For technical issues, please email us with your account details and a description
-              of the problem you're experiencing.
-            </p>
-          </div>
-
-          <div className="policy-page__feature">
-            <h3>Starter &amp; Advocate Plan Users</h3>
-            <p>
-              Email support with 48-hour response time during business days.
-              Send your inquiries to <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
-              with "Support" in the subject line.
-            </p>
-          </div>
-
-          <div className="policy-page__feature">
-            <h3>Professional Plan Users</h3>
-            <p>
-              Dedicated support with 24-hour response time.
-              Contact your assigned account manager directly or email
-              <a href="mailto:hello@beresol.eu" className="policy-page__link"> hello@beresol.eu</a>
-              with "Priority Support" in the subject line for immediate escalation.
+              <strong>Instagram:</strong>{' '}
+              <a
+                href="https://www.instagram.com/beresolbv/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Beresol on Instagram"
+                className="policy-page__link policy-page__link--social"
+              >
+                <Icon path={mdiInstagram} size={0.85} style={{ verticalAlign: 'middle', marginRight: '0.35rem' }} />
+                @beresolbv
+              </a>
             </p>
           </div>
         </section>
 
         <section className="policy-page__section">
-          <h2>Sales & Enterprise Solutions</h2>
+          <h2>{t('contact.support')}</h2>
+
+          <div className="policy-page__feature">
+            <h3>{t('contact.whiteTitle')}</h3>
+            <p>{t('contact.whiteBody')}</p>
+          </div>
+
+          <div className="policy-page__feature">
+            <h3>{t('contact.starterTitle')}</h3>
+            <p>{t('contact.starterBody')}</p>
+          </div>
+
+          <div className="policy-page__feature">
+            <h3>{t('contact.proTitle')}</h3>
+            <p>{t('contact.proBody')}</p>
+          </div>
+        </section>
+
+        <section className="policy-page__section">
+          <h2>{t('contact.salesTitle')}</h2>
+          <p>{t('contact.salesBody')}</p>
           <p>
-            Interested in Brubru for your organization? We offer customized enterprise packages,
-            multi-user accounts, white-label solutions, and dedicated training sessions.
+            <strong>{t('contact.salesContact')}</strong> <a href="mailto:hello@beresol.eu?subject=Enterprise%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
+          <p className="policy-page__note">{t('contact.salesNote')}</p>
+        </section>
+
+        <section className="policy-page__section">
+          <h2>{t('contact.partnershipsTitle')}</h2>
+          <p>{t('contact.partnershipsBody')}</p>
           <p>
-            <strong>Contact our sales team:</strong> <a href="mailto:hello@beresol.eu?subject=Enterprise%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
-          </p>
-          <p className="policy-page__note">
-            Please include information about your organization, team size, and specific requirements
-            in your initial email so we can provide you with a tailored proposal.
+            <strong>{t('contact.partnershipsContact')}</strong> <a href="mailto:hello@beresol.eu?subject=Partnership%20Opportunity" className="policy-page__link">hello@beresol.eu</a>
           </p>
         </section>
 
         <section className="policy-page__section">
-          <h2>Partnership & Integration Opportunities</h2>
+          <h2>{t('contact.pressTitle')}</h2>
+          <p>{t('contact.pressBody')}</p>
           <p>
-            We're always interested in collaborating with complementary services, EU institutional partners,
-            and technology providers. If you'd like to explore partnership opportunities or API integration,
-            please reach out to us.
-          </p>
-          <p>
-            <strong>Partnership inquiries:</strong> <a href="mailto:hello@beresol.eu?subject=Partnership%20Opportunity" className="policy-page__link">hello@beresol.eu</a>
+            <strong>{t('contact.pressContact')}</strong> <a href="mailto:hello@beresol.eu?subject=Press%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
         </section>
 
         <section className="policy-page__section">
-          <h2>Press & Media</h2>
+          <h2>{t('contact.privacyTitle')}</h2>
+          <p>{t('contact.privacyBody')}</p>
           <p>
-            For press inquiries, media kits, interview requests, or information about Brubru for publication,
-            please contact our communications team.
+            <strong>{t('contact.privacyContact')}</strong> <a href="mailto:hello@beresol.eu?subject=Privacy%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
           <p>
-            <strong>Press contact:</strong> <a href="mailto:hello@beresol.eu?subject=Press%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
+            {t('contact.privacyReview')} <a href="/privacy" className="policy-page__link">{t('contact.privacyPolicy')}</a>.
           </p>
         </section>
 
         <section className="policy-page__section">
-          <h2>Data Protection & Privacy Inquiries</h2>
+          <h2>{t('contact.bugsTitle')}</h2>
+          <p>{t('contact.bugsBody')}</p>
           <p>
-            Questions about how we handle your data, GDPR rights, or privacy concerns?
-            We take data protection seriously and are committed to transparency.
+            <strong>{t('contact.bugsContact')}</strong> <a href="mailto:hello@beresol.eu?subject=Bug%20Report" className="policy-page__link">hello@beresol.eu</a>
           </p>
-          <p>
-            <strong>Privacy inquiries:</strong> <a href="mailto:hello@beresol.eu?subject=Privacy%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
-          </p>
-          <p>
-            For detailed information about our data practices, please review our <a href="/privacy" className="policy-page__link">Privacy Policy</a>.
-          </p>
+          <p className="policy-page__note">{t('contact.bugsNote')}</p>
         </section>
 
         <section className="policy-page__section">
-          <h2>Bug Reports & Feature Requests</h2>
-          <p>
-            Found a bug or have an idea for a new feature? We value your feedback and use it to
-            continuously improve Brubru.
+          <h2>{t('contact.addressTitle')}</h2>
+          <p style={{ whiteSpace: 'pre-line' }}>
+            <strong>{t('contact.addressLines')}</strong>
           </p>
-          <p>
-            <strong>Feedback email:</strong> <a href="mailto:hello@beresol.eu?subject=Bug%20Report" className="policy-page__link">hello@beresol.eu</a>
-          </p>
-          <p className="policy-page__note">
-            Please include as much detail as possible: steps to reproduce (for bugs), expected vs. actual behavior,
-            screenshots if applicable, and your subscription tier.
-          </p>
+          <p className="policy-page__note">{t('contact.addressNote')}</p>
         </section>
 
         <section className="policy-page__section">
-          <h2>Business Address</h2>
-          <p>
-            <strong>Beresol BV</strong><br />
-            Brussels, Belgium<br />
-            European Union
-          </p>
-          <p className="policy-page__note">
-            Brubru is a registered trademark of Beresol BV, registered with the
-            European Union Intellectual Property Office (EUIPO).
-          </p>
-        </section>
-
-        <section className="policy-page__section">
-          <h2>Response Times</h2>
+          <h2>{t('contact.responseTitle')}</h2>
           <ul>
-            <li><strong>General Inquiries:</strong> 3-5 business days</li>
-            <li><strong>Starter &amp; Advocate Support:</strong> 48 hours (business days)</li>
-            <li><strong>Professional Support:</strong> 24-hour dedicated response</li>
-            <li><strong>Enterprise Sales:</strong> 2 business days</li>
-            <li><strong>Privacy/GDPR Requests:</strong> 30 days (as required by GDPR)</li>
+            <li>{t('contact.responseGeneral')}</li>
+            <li>{t('contact.responseStarter')}</li>
+            <li>{t('contact.responseProfessional')}</li>
+            <li>{t('contact.responseEnterprise')}</li>
+            <li>{t('contact.responsePrivacy')}</li>
           </ul>
         </section>
 
         <div className="policy-page__footer">
-          <p>Last Updated: November 2025</p>
+          <p>{t('contact.lastUpdated')}</p>
         </div>
       </div>
     </div>

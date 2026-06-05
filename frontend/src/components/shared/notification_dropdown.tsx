@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiBell,
@@ -55,6 +56,7 @@ const getPriorityColor = (priority: string): string => {
 };
 
 export const NotificationDropdown = () => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const {
     notifications,
@@ -153,15 +155,15 @@ export const NotificationDropdown = () => {
       style={getDropdownStyle()}
     >
       <div className="notification-dropdown__header">
-        <h3>Notifications</h3>
+        <h3>{t('notifications.title')}</h3>
         {unreadCount > 0 && (
           <button
             className="notification-dropdown__mark-all"
             onClick={handleMarkAllRead}
-            title="Mark all as read"
+            title={t('common.markAllRead')}
           >
             <Icon path={mdiCheckAll} size={0.8} />
-            <span>Mark all read</span>
+            <span>{t('notifications.markAllRead')}</span>
           </button>
         )}
       </div>
@@ -169,12 +171,12 @@ export const NotificationDropdown = () => {
       <div className="notification-dropdown__list">
         {isLoading && notifications.length === 0 ? (
           <div className="notification-dropdown__empty">
-            Loading...
+            {t('common.loading')}
           </div>
         ) : notifications.length === 0 ? (
           <div className="notification-dropdown__empty">
             <Icon path={mdiBellOutline} size={2} color="#9ca3af" />
-            <p>No notifications yet</p>
+            <p>{t('notifications.noNotifications')}</p>
           </div>
         ) : (
           notifications.slice(0, 10).map((notification) => (
@@ -213,7 +215,7 @@ export const NotificationDropdown = () => {
       {notifications.length > 10 && (
         <div className="notification-dropdown__footer">
           <button className="notification-dropdown__view-all">
-            View all notifications
+            {t('notifications.viewAll')}
           </button>
         </div>
       )}
@@ -226,7 +228,7 @@ export const NotificationDropdown = () => {
         ref={buttonRef}
         className={`notification-dropdown__trigger ${isOpen ? 'notification-dropdown__trigger--active' : ''}`}
         onClick={handleToggle}
-        aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
+        aria-label={unreadCount > 0 ? t('notifications.ariaUnread', { count: unreadCount }) : t('notifications.ariaNone')}
       >
         <Icon
           path={unreadCount > 0 ? mdiBell : mdiBellOutline}

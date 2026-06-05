@@ -1,5 +1,6 @@
 // frontend/src/components/eu_comply/compliance_report.tsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ComplianceAnalysis, GapFinding } from '../../pages/eu_comply_page';
 import { useAuth } from '../../hooks/use_auth';
 import './compliance_report.css';
@@ -14,6 +15,7 @@ interface ComplianceReportProps {
 type FilterType = 'all' | 'met' | 'partial' | 'gap';
 
 export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportProps) => {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [expandedFindings, setExpandedFindings] = useState<Set<number>>(new Set());
 
@@ -100,7 +102,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
       document.body.removeChild(a);
     } catch (error) {
       console.error('Export error:', error);
-      alert('Failed to export report. Please try again.');
+      alert(t('comply.report.errorExport'));
     }
   };
 
@@ -109,7 +111,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
   return (
     <div className="compliance-report">
       <div className="compliance-report__header">
-        <h2>Compliance Report</h2>
+        <h2>{t('comply.report.title')}</h2>
         <div className="compliance-report__cluster-name">
           {analysis.cluster.name}
         </div>
@@ -122,7 +124,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
             {Math.round(analysis.compliance_score)}%
           </div>
           <div className="compliance-report__score-label">
-            Overall Compliance
+            {t('comply.report.overall')}
           </div>
         </div>
 
@@ -133,7 +135,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
               {analysis.requirements_met}
             </div>
             <div className="compliance-report__stat-label">
-              Requirements Met
+              {t('comply.report.requirementsMet')}
             </div>
           </div>
 
@@ -143,7 +145,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
               {analysis.requirements_partial}
             </div>
             <div className="compliance-report__stat-label">
-              Partial Compliance
+              {t('comply.report.partialCompliance')}
             </div>
           </div>
 
@@ -153,7 +155,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
               {analysis.requirements_gap}
             </div>
             <div className="compliance-report__stat-label">
-              Critical Gaps
+              {t('comply.report.criticalGaps')}
             </div>
           </div>
         </div>
@@ -165,28 +167,28 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
           className={`compliance-report__filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
           onClick={() => setActiveFilter('all')}
         >
-          All ({analysis.total_requirements})
+          {t('comply.report.filterAll')} ({analysis.total_requirements})
         </button>
         <button
           className={`compliance-report__filter-btn ${activeFilter === 'met' ? 'active' : ''}`}
           onClick={() => setActiveFilter('met')}
         >
           <span className={`mdi ${getStatusIcon('met')}`}></span>
-          Met ({analysis.requirements_met})
+          {t('comply.report.filterMet')} ({analysis.requirements_met})
         </button>
         <button
           className={`compliance-report__filter-btn ${activeFilter === 'partial' ? 'active' : ''}`}
           onClick={() => setActiveFilter('partial')}
         >
           <span className={`mdi ${getStatusIcon('partial')}`}></span>
-          Partial ({analysis.requirements_partial})
+          {t('comply.report.filterPartial')} ({analysis.requirements_partial})
         </button>
         <button
           className={`compliance-report__filter-btn ${activeFilter === 'gap' ? 'active' : ''}`}
           onClick={() => setActiveFilter('gap')}
         >
           <span className={`mdi ${getStatusIcon('gap')}`}></span>
-          Gaps ({analysis.requirements_gap})
+          {t('comply.report.filterGap')} ({analysis.requirements_gap})
         </button>
       </div>
 
@@ -204,7 +206,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                   {finding.article_number}
                 </span>
                 <span className={`compliance-report__finding-criticality ${getCriticalityColor(finding.criticality)}`}>
-                  {finding.criticality}
+                  {finding.criticality === 'critical' ? t('comply.report.criticalityCritical') : finding.criticality === 'important' ? t('comply.report.criticalityImportant') : t('comply.report.criticalityRecommended')}
                 </span>
               </div>
               <button
@@ -222,7 +224,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
             {finding.deadline_date && (
               <div className="compliance-report__finding-deadline">
                 <span className="mdi mdi-calendar-clock"></span>
-                Deadline: {new Date(finding.deadline_date).toLocaleDateString()}
+                {t('comply.report.deadline')} {new Date(finding.deadline_date).toLocaleDateString()}
               </div>
             )}
 
@@ -232,12 +234,12 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                   <div className="compliance-report__evidence">
                     <h4>
                       <span className="mdi mdi-file-document-outline"></span>
-                      Evidence Found
+                      {t('comply.report.evidenceFound')}
                     </h4>
                     <p>{finding.evidence_text}</p>
                     {finding.evidence_source && (
                       <div className="compliance-report__evidence-source">
-                        Source: {finding.evidence_source}
+                        {t('comply.report.evidenceSource')} {finding.evidence_source}
                       </div>
                     )}
                   </div>
@@ -247,7 +249,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                   <div className="compliance-report__gap">
                     <h4>
                       <span className="mdi mdi-alert-outline"></span>
-                      Gap Analysis
+                      {t('comply.report.gapAnalysis')}
                     </h4>
                     <p>{finding.gap_description}</p>
                   </div>
@@ -257,7 +259,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                   <div className="compliance-report__recommendation">
                     <h4>
                       <span className="mdi mdi-lightbulb-outline"></span>
-                      Recommendation
+                      {t('comply.report.recommendation')}
                     </h4>
                     <p>{finding.recommendation}</p>
                   </div>
@@ -270,14 +272,14 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                       onClick={() => onAskChatbot(finding)}
                     >
                       <span className="mdi mdi-chat-question-outline"></span>
-                      Ask chatbot how to fix
+                      {t('comply.report.askChatbot')}
                     </button>
                   </div>
                 )}
 
                 {finding.confidence_score && (
                   <div className="compliance-report__confidence">
-                    Confidence: {Math.round(finding.confidence_score)}%
+                    {t('comply.report.confidence')} {Math.round(finding.confidence_score)}%
                   </div>
                 )}
               </div>
@@ -288,7 +290,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
         {filteredFindings.length === 0 && (
           <div className="compliance-report__no-findings">
             <span className="mdi mdi-file-search-outline"></span>
-            <p>No findings in this category.</p>
+            <p>{t('comply.report.noFindings')}</p>
           </div>
         )}
       </div>
@@ -300,7 +302,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
           onClick={handleExportReport}
         >
           <span className="mdi mdi-download"></span>
-          Export Full Report (DOCX)
+          {t('comply.report.exportReport')}
         </button>
       </div>
     </div>

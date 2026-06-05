@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { LawBrowser } from '../components/eu_comply/law_browser';
 import { ComplianceReport } from '../components/eu_comply/compliance_report';
 import { ActionPlanTimeline } from '../components/eu_comply/action_plan_timeline';
@@ -73,6 +74,7 @@ interface EUComplyPageProps {
 }
 
 export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [viewState, setViewState] = useState<ViewState>('select');
   const [selectedCluster, setSelectedCluster] = useState<LawCluster | null>(null);
@@ -177,7 +179,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       throw new Error('Analysis timed out');
     } catch (error) {
       console.error('Compliance analysis error:', error);
-      alert('Failed to analyze compliance. Please try again.');
+      alert(t('comply.errorAnalysis'));
     } finally {
       setIsAnalyzing(false);
     }
@@ -231,7 +233,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       setViewState('results');
     } catch (error) {
       console.error('Error fetching past analysis:', error);
-      alert('Failed to load analysis. Please try again.');
+      alert(t('comply.errorLoadPast'));
     }
   };
 
@@ -264,21 +266,19 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
                 className="eu-comply-page__mascot"
               />
               <div>
-                <h1 className="eu-comply-page__title">EU Law Comply</h1>
-                <p className="eu-comply-page__subtitle">
-                  Automated compliance checking for EU laws
-                </p>
+                <h1 className="eu-comply-page__title">{t('comply.title')}</h1>
+                <p className="eu-comply-page__subtitle">{t('comply.subtitle')}</p>
               </div>
             </div>
             <div className="eu-comply-page__header-actions">
               <div className="eu-comply-page__tier-notice">
                 <span className="mdi mdi-information-outline"></span>
-                Personalised compliance curation available with Professional plan
+                {t('comply.tierNotice')}
               </div>
               <button
                 className="eu-comply-page__sidebar-toggle"
                 onClick={toggleHistorySidebar}
-                title={isHistorySidebarOpen ? 'Hide history' : 'Show history'}
+                title={isHistorySidebarOpen ? t('common.hideHistory') : t('common.showHistory')}
               >
                 <span className={`mdi ${isHistorySidebarOpen ? 'mdi-chevron-right' : 'mdi-chevron-left'}`}></span>
               </button>
@@ -301,7 +301,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               onClick={handleBackToSelection}
             >
               <span className="mdi mdi-arrow-left"></span>
-              Back to clusters
+              {t('comply.backToClusters')}
             </button>
 
             <div className="eu-comply-page__cluster-info">
@@ -309,24 +309,24 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               <div className="eu-comply-page__cluster-stats">
                 <div className="eu-comply-page__stat">
                   <span className="mdi mdi-file-document-multiple"></span>
-                  <span>{selectedCluster.law_count} Related Laws</span>
+                  <span>{selectedCluster.law_count} {t('comply.relatedLaws')}</span>
                 </div>
                 <div className="eu-comply-page__stat">
                   <span className="mdi mdi-gavel"></span>
-                  <span>{selectedCluster.requirement_count} Requirements</span>
+                  <span>{selectedCluster.requirement_count} {t('comply.requirements')}</span>
                 </div>
               </div>
               <p className="eu-comply-page__cluster-description">
                 {selectedCluster.description}
               </p>
               <p className="eu-comply-page__cluster-applicability">
-                <strong>Applies to:</strong> {selectedCluster.applicability}
+                <strong>{t('comply.appliesTo')}</strong> {selectedCluster.applicability}
               </p>
             </div>
 
             <div className="eu-comply-page__upload-box">
-              <h3>Upload Company Documents</h3>
-              <p>Upload your compliance documentation (PDF, DOCX, TXT)</p>
+              <h3>{t('comply.uploadCompanyDocs')}</h3>
+              <p>{t('comply.uploadHint')}</p>
 
               <input
                 type="file"
@@ -341,7 +341,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
 
               {uploadedDocuments.length > 0 && (
                 <div className="eu-comply-page__uploaded-files">
-                  <h4>Uploaded Files:</h4>
+                  <h4>{t('comply.uploadedFiles')}</h4>
                   <ul>
                     {uploadedDocuments.map((file, idx) => (
                       <li key={idx}>
@@ -361,12 +361,12 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
                 {isAnalyzing ? (
                   <>
                     <span className="mdi mdi-loading mdi-spin"></span>
-                    Analyzing...
+                    {t('comply.analyzing')}
                   </>
                 ) : (
                   <>
                     <span className="mdi mdi-chart-line"></span>
-                    Analyze Compliance
+                    {t('comply.analyzeCompliance')}
                   </>
                 )}
               </button>
@@ -381,7 +381,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               onClick={handleBackToUpload}
             >
               <span className="mdi mdi-arrow-left"></span>
-              Upload more documents
+              {t('comply.uploadMoreDocs')}
             </button>
 
             <ComplianceReport
@@ -406,8 +406,8 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               selectedAnalysisId={analysisResult?.id}
             />
             <FeedbackInvitation
-              featureName="EU Law Comply"
-              featureDescription="Help us improve EU Law Comply. Share your thoughts on compliance analysis tools and law cluster coverage."
+              featureName={t('comply.feedbackTitle')}
+              featureDescription={t('comply.feedbackDescription')}
               variant="sidebar"
             />
           </div>
@@ -426,7 +426,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
             <button
               className="eu-comply-page__sidebar-close"
               onClick={toggleHistorySidebar}
-              aria-label="Close sidebar"
+              aria-label={t('common.closeSidebar')}
             >
               <span className="mdi mdi-close"></span>
             </button>
@@ -435,8 +435,8 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               selectedAnalysisId={analysisResult?.id}
             />
             <FeedbackInvitation
-              featureName="EU Law Comply"
-              featureDescription="Help us improve EU Law Comply. Share your thoughts on compliance analysis tools and law cluster coverage."
+              featureName={t('comply.feedbackTitle')}
+              featureDescription={t('comply.feedbackDescription')}
               variant="sidebar"
             />
           </div>

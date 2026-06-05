@@ -139,8 +139,14 @@
   transition: all 0.12s ease;
 }
 
-.personalised-impact__action:hover {
+.personalised-impact__action:hover:not(:disabled) {
   background: rgba(6, 147, 227, 0.08);
+}
+
+.personalised-impact__action:disabled {
+  opacity: 0.55;
+  cursor: default;
+  border-style: dashed;
 }
 
 .personalised-impact__action-rationale {

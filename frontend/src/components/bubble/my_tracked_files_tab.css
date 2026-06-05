@@ -193,9 +193,291 @@
 }
 
 .my-tracked-files-tab__files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Each kind-of-action group is its own card grid with a full-width heading. */
+.my-tracked-files-tab__group {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 1rem;
+}
+
+.my-tracked-files-tab__group-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.my-tracked-files-tab__group-count {
+  font-weight: 500;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* ---- Add-file modal: search-first redesign ---- */
+.my-tracked-files-tab__modal-nudge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  margin: 1rem 1.5rem 0;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), rgba(0, 102, 204, 0.08));
+  border: 1px solid #d7e6f5;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.my-tracked-files-tab__modal-nudge span {
+  flex: 1;
+}
+
+.my-tracked-files-tab__modal-nudge-btn {
+  flex-shrink: 0;
+  border: none;
+  background: #0066cc;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.my-tracked-files-tab__modal-nudge-btn:hover:not(:disabled) {
+  background: #0052a3;
+}
+
+.my-tracked-files-tab__modal-nudge-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.my-tracked-files-tab__modal-search {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.my-tracked-files-tab__modal-search .my-tracked-files-tab__search-input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.my-tracked-files-tab__filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+}
+
+.my-tracked-files-tab__filter-toggle:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.my-tracked-files-tab__filter-toggle--active {
+  border-color: #3b82f6;
+  color: #0066cc;
+  background: #f0f7ff;
+}
+
+.my-tracked-files-tab__modal-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  margin: 0 1.5rem 1rem;
+}
+
+.my-tracked-files-tab__modal-select {
+  padding: 0.55rem 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.85rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.my-tracked-files-tab__search-item-type {
+  background: #e0edff;
+  color: #1e3a5f;
+  border: 1px solid #c7ddff;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.my-tracked-files-tab__load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+}
+
+.my-tracked-files-tab__load-more-btn {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0066cc;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.my-tracked-files-tab__load-more-btn:hover {
+  background: #f8fafc;
+}
+
+.my-tracked-files-tab__load-more-info {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.my-tracked-files-tab__advanced {
+  flex-shrink: 0;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.6rem 1.5rem 0.85rem;
+}
+
+.my-tracked-files-tab__advanced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.my-tracked-files-tab__advanced-toggle:hover {
+  color: #0f172a;
+}
+
+/* ---- Icon-only header button (e.g. Refresh) ---- */
+.my-tracked-files-tab__btn--icon {
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.my-tracked-files-tab__btn--icon:hover:not(:disabled) {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* ---- Search filter bar ---- */
+.my-tracked-files-tab__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 0 1.25rem;
+}
+
+.my-tracked-files-tab__search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.my-tracked-files-tab__search-input {
+  width: 100%;
+  padding: 0.6rem 2.3rem 0.6rem 2.4rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1f2937;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.my-tracked-files-tab__search-input::placeholder {
+  color: #94a3b8;
+}
+
+.my-tracked-files-tab__search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.my-tracked-files-tab__search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.my-tracked-files-tab__search-clear {
+  position: absolute;
+  right: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+}
+
+.my-tracked-files-tab__search-clear:hover {
+  color: #1f2937;
+  background: #f1f5f9;
+}
+
+/* Info-icon tooltips (native title on hover) for tab labels + group headers. */
+.my-tracked-files-tab__tab-info {
+  margin-left: 0.3rem;
+  color: #94a3b8;
+  opacity: 0.8;
+}
+
+.my-tracked-files-tab__group-info {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.1rem;
+  color: #94a3b8;
+  cursor: help;
+}
+
+.my-tracked-files-tab__group-info:hover {
+  color: #0066cc;
 }
 
 /* Tracked File Card */
@@ -227,6 +509,17 @@
   font-weight: 600;
   color: white;
   text-transform: capitalize;
+}
+
+.tracked-file-card__plain-type {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1e3a5f;
+  background: #e0edff;
+  border: 1px solid #c7ddff;
 }
 
 .tracked-file-card__blocked {
@@ -487,13 +780,14 @@
   text-align: center;
 }
 
-/* Search Modal */
+/* Search Modal — large, with the results list as the flex-grow scroll region */
 .my-tracked-files-tab__modal--search {
-  max-width: 600px;
+  max-width: 880px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  max-height: 80vh;
+  height: 86vh;
+  max-height: 860px;
 }
 
 .my-tracked-files-tab__modal-header {
@@ -502,6 +796,7 @@
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
 }
 
 .my-tracked-files-tab__modal-header h3 {
@@ -728,10 +1023,10 @@
 }
 
 .my-tracked-files-tab__search-results {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
-  min-height: 200px;
-  max-height: 400px;
+  min-height: 0;
+  border-top: 1px solid #f0f0f0;
 }
 
 .my-tracked-files-tab__search-loading,
@@ -916,7 +1211,8 @@
   }
 
   .my-tracked-files-tab__modal--search {
-    max-height: 90vh;
+    height: 92vh;
+    max-height: 92vh;
   }
 }
 
@@ -980,10 +1276,200 @@
   cursor: pointer;
 }
 
+/* In-committee controls: segmented toggle + committee chips + filters */
+.my-tracked-files-tab__committee-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.my-tracked-files-tab__segmented {
+  display: inline-flex;
+  align-self: flex-start;
+  background: #f1f5f9;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+}
+.my-tracked-files-tab__segment {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.my-tracked-files-tab__segment:hover { color: #0066cc; }
+.my-tracked-files-tab__segment--active {
+  background: #fff;
+  color: #0066cc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.my-tracked-files-tab__committee-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.my-tracked-files-tab__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid #cfe0f5;
+  background: #eaf2fd;
+  color: #0066cc;
+  cursor: pointer;
+}
+.my-tracked-files-tab__chip--active:hover { background: #d9e8fb; }
+.my-tracked-files-tab__chip-add {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+
+.my-tracked-files-tab__committee-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.my-tracked-files-tab__committee-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 260px;
+  min-width: 200px;
+  padding: 0.45rem 0.7rem;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #6b7280;
+}
+.my-tracked-files-tab__committee-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  outline: none;
+  color: #111827;
+}
+.my-tracked-files-tab__committee-kind {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+}
+.my-tracked-files-tab__committee-kind select {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+.my-tracked-files-tab__committee-techtoggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.my-tracked-files-tab__committee-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+.my-tracked-files-tab__committee-note span {
+  cursor: help;
+  border-bottom: 1px dotted #cbd5e1;
+}
+
+/* Grouped-by-committee list */
+.my-tracked-files-tab__committee-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.my-tracked-files-tab__committee-group-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #eef2f7;
+}
+.my-tracked-files-tab__committee-group-code {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #1a3a6b;
+  background: #eef4fc;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+}
+.my-tracked-files-tab__committee-group-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.my-tracked-files-tab__committee-group-mine {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.my-tracked-files-tab__committee-group-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+
 .my-tracked-files-tab__committee-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .my-tracked-files-tab__committee-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .my-tracked-files-tab__committee-kind select { width: 100%; }
 }
 
 /* Committee Work Card */
@@ -1023,7 +1509,6 @@
   color: white;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  text-transform: uppercase;
 }
 
 .committee-work-card__status {
@@ -1032,8 +1517,24 @@
   color: white;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  margin-left: auto;
 }
+
+.committee-work-card__action-btn--primary {
+  background: #e3f2fd;
+  color: #0693E3;
+  font-weight: 600;
+}
+.committee-work-card__action-btn--track {
+  background: #eafaf1;
+  color: #0f9d58;
+  font-weight: 600;
+}
+.committee-work-card__action-btn--track:hover { background: #d6f3e3; }
+.committee-work-card__action-btn--danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.committee-work-card__action-btn--danger:hover { background: #fde4e4; }
 
 .committee-work-card__title {
   margin: 0 0 0.75rem 0;
@@ -1163,7 +1664,7 @@
 
 .my-tracked-files-tab__texts-adopted-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 1rem;
 }
 
@@ -1230,7 +1731,7 @@
 
 .my-tracked-files-tab__commission-docs-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 1rem;
 }
 

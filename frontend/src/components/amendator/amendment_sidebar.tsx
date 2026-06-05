@@ -160,8 +160,8 @@ export const AmendmentSidebar = ({
                       e.stopPropagation();
                       onDeleteAmendment(amendment);
                     }}
-                    title="Delete amendment"
-                    aria-label="Delete amendment"
+                    title={t('amendatorExtras.deleteAmendment')}
+                    aria-label={t('amendatorExtras.deleteAmendment')}
                   >
                     <Icon path={mdiCloseCircleOutline} size={0.65} />
                   </button>

@@ -8,6 +8,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiMessageOutline, mdiArrowRight } from '@mdi/js';
 
@@ -16,8 +17,8 @@ import './talk_to_brubru_button.css';
 
 interface TalkToBrubruButtonProps {
   prompt: string;
-  /** Visual variant. Defaults to `inline`; use `pill` for header chips. */
-  variant?: 'inline' | 'pill';
+  /** Visual variant. `inline`/`pill` are gradient pills; `link` is a quiet text link. */
+  variant?: 'inline' | 'pill' | 'link';
   /** Override the label. Defaults to "Talk to Brubru about this". */
   label?: string;
   /** Set false to disable auto-fire (just pre-fill). Default true. */
@@ -27,11 +28,13 @@ interface TalkToBrubruButtonProps {
 export const TalkToBrubruButton = ({
   prompt,
   variant = 'inline',
-  label = 'Talk to Brubru about this',
+  label,
   autoFire = true,
 }: TalkToBrubruButtonProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const displayLabel = label ?? t('talkToBrubru');
 
   if (!isAuthenticated || !prompt) {
     return null;
@@ -50,7 +53,7 @@ export const TalkToBrubruButton = ({
       onClick={onClick}
     >
       <Icon path={mdiMessageOutline} size={0.75} />
-      {label}
+      {displayLabel}
       <Icon path={mdiArrowRight} size={0.7} />
     </button>
   );

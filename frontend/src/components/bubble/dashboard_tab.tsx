@@ -1,287 +1,178 @@
 /**
- * Dashboard Tab Component
+ * MEUB Overview — the front door of My EU Bubble.
  *
- * Shows user activity overview, quick stats, and tracked legislation.
- * Part of My EU Bubble - Phase 3: Frontend
+ * Three parts: (1) a Chat-style personalised greeting (+ policy hooks) from
+ * /api/personalization/greeting; (2) the monitoring cockpit (DashboardCockpit,
+ * /api/dashboard/tiles) that synthesises the user's whole MEUB with deep-links;
+ * (3) an "Explore" navigator that jumps to every MEUB filter. No "Latest Updates".
  */
-
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Icon from '@mdi/react';
-import { mdiFileDocument, mdiFileEdit, mdiNewspaper, mdiStar } from '@mdi/js';
-import { useBubble } from '../../hooks/use_bubble';
+import {
+  mdiBookmarkMultipleOutline, mdiFileDocument, mdiStarOutline, mdiNewspaperVariantOutline,
+  mdiFileEdit, mdiCompareHorizontal, mdiTrain, mdiGavel, mdiCalendarMonth,
+  mdiNewspaperVariantMultipleOutline, mdiMicrophoneMessage, mdiAccountGroup, mdiAccountTieOutline,
+  mdiCommentQuestionOutline, mdiCalendarCollapseHorizontal, mdiHandshakeOutline, mdiScaleBalance,
+  mdiCrystalBall, mdiBookshelf, mdiFlaskOutline, mdiGraphOutline, mdiBullseyeArrow,
+  mdiArrowRight, mdiCreation, mdiInformationOutline,
+} from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
-import { TenderatorWidget } from './tenderator_widget';
-import { LegislativeUpdatesWidget } from './legislative_updates_widget';
 import { DashboardCockpit } from './dashboard_cockpit';
 import './dashboard_tab.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+interface PolicyHook { label: string; spoken?: string; suggested_query?: string; source?: string }
+interface DigestItem { title: string; date?: string | null; ref?: string | null; url?: string | null }
+interface DigestSection { key: string; label: string; drill: string; items: DigestItem[] }
+
+interface NavItem { tab: string; labelKey: string; fallback: string; icon: string }
+const NAV_GROUPS: { titleKey: string; fallback: string; descKey: string; descFallback: string; items: NavItem[] }[] = [
+  { titleKey: 'bubble.overview.corner', fallback: 'Start here',
+    descKey: 'bubble.overview.desc_corner', descFallback: 'Your starting point: set your policy interests, manage your own documents and read the news that matters to you.', items: [
+    { tab: 'policy_interests', labelKey: 'bubble.tabs.policyInterests', fallback: 'Policy Interests', icon: mdiBookmarkMultipleOutline },
+    { tab: 'documents', labelKey: 'bubble.tabs.myDocuments', fallback: 'My Documents', icon: mdiFileDocument },
+    { tab: 'news', labelKey: 'bubble.tabs.news', fallback: 'News', icon: mdiNewspaperVariantMultipleOutline },
+  ] },
+  { titleKey: 'bubble.sections.legislative', fallback: 'Legislative Monitoring',
+    descKey: 'bubble.overview.desc_legislative', descFallback: 'Track legislative files and their paperwork.', items: [
+    { tab: 'my_files', labelKey: 'bubble.tabs.myTrackedFiles', fallback: 'My Tracked Files', icon: mdiStarOutline },
+    { tab: 'oj', labelKey: 'bubble.tabs.oj', fallback: 'My OJ', icon: mdiNewspaperVariantOutline },
+    { tab: 'amendments', labelKey: 'bubble.amendments', fallback: 'Amendments', icon: mdiFileEdit },
+    { tab: 'comparator', labelKey: 'bubble.tabs.comparator', fallback: 'Comparator', icon: mdiCompareHorizontal },
+    { tab: 'legislative', labelKey: 'bubble.tabs.legislativeTrain', fallback: 'Legislative Train', icon: mdiTrain },
+    { tab: 'votes', labelKey: 'bubble.tabs.votes', fallback: 'Votes', icon: mdiGavel },
+  ] },
+  { titleKey: 'bubble.sections.institutional', fallback: 'Institutional Monitoring',
+    descKey: 'bubble.overview.desc_institutional', descFallback: 'Follow the EU institutions.', items: [
+    { tab: 'eu_calendar', labelKey: 'bubble.tabs.euCalendar', fallback: 'My EU Calendar', icon: mdiCalendarMonth },
+    { tab: 'transcripts', labelKey: 'bubble.tabs.transcripts', fallback: 'Transcripts', icon: mdiMicrophoneMessage },
+    { tab: 'council_watch', labelKey: 'bubble.tabs.councilWatch', fallback: 'Council Watch', icon: mdiAccountGroup },
+    { tab: 'mep_watch', labelKey: 'bubble.tabs.mepWatch', fallback: 'MEP Watch', icon: mdiAccountTieOutline },
+    { tab: 'plenary_agenda', labelKey: 'bubble.tabs.plenaryAgenda', fallback: 'Plenary Order of Business', icon: mdiGavel },
+    { tab: 'parliamentary_questions', labelKey: 'bubble.tabs.parliamentaryQuestions', fallback: 'Parliamentary Questions', icon: mdiCommentQuestionOutline },
+    { tab: 'consultations', labelKey: 'bubble.tabs.consultations', fallback: 'EC Public Consultations', icon: mdiCalendarCollapseHorizontal },
+    { tab: 'lobby_meetings', labelKey: 'bubble.tabs.lobbyMeetings', fallback: 'Lobby Meetings', icon: mdiHandshakeOutline },
+  ] },
+  { titleKey: 'bubble.sections.strategy', fallback: 'Analysis & Strategy',
+    descKey: 'bubble.overview.desc_strategy', descFallback: 'Analyse and act.', items: [
+    { tab: 'position_analysis', labelKey: 'bubble.tabs.positionAnalysis', fallback: 'Position Analysis', icon: mdiScaleBalance },
+    { tab: 'predictions', labelKey: 'bubble.tabs.predictions', fallback: 'Predictions', icon: mdiCrystalBall },
+    { tab: 'databases', labelKey: 'bubble.databases', fallback: 'Brubru Databases', icon: mdiBookshelf },
+    { tab: 'research_evidence', labelKey: 'bubble.research_evidence', fallback: 'Research & Evidence', icon: mdiFlaskOutline },
+    { tab: 'stakeholder_mapping', labelKey: 'bubble.stakeholder_mapping', fallback: 'Stakeholder Mapping', icon: mdiGraphOutline },
+    { tab: 'strategy_docs', labelKey: 'bubble.strategy_docs', fallback: 'Strategy Docs', icon: mdiBullseyeArrow },
+  ] },
+];
+
 export const DashboardTab = () => {
-  const {
-    documents,
-    userStats,
-    documentStats,
-    fetchDocuments,
-    fetchUserStats,
-    fetchDocumentStats,
-  } = useBubble();
-  const { user } = useAuth();
-  const hasLoadedRef = useRef(false);
+  const { t } = useTranslation();
+  const { user, token } = useAuth();
+  const navigate = useNavigate();
+  const [greeting, setGreeting] = useState<string | null>(null);
+  const [hooks, setHooks] = useState<PolicyHook[]>([]);
+  const [digest, setDigest] = useState<DigestSection[]>([]);
 
   useEffect(() => {
-    // Prevent duplicate loads
-    if (hasLoadedRef.current) {
-      console.log('⏭️ Dashboard already loaded, skipping fetch');
-      return;
-    }
+    if (!token) return;
+    axios.get(`${API_BASE_URL}/api/personalization/greeting`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => { setGreeting(r.data?.message || null); setHooks(r.data?.policy_hooks || []); })
+      .catch(() => { /* fall back to the time-of-day greeting below */ });
+  }, [token]);
 
-    console.log('🔄 Dashboard mounting - fetching stats...');
-    hasLoadedRef.current = true;
-
-    // Fetch with small delays to avoid overwhelming the connection pool
-    const loadData = async () => {
-      try {
-        await fetchUserStats();
-        await new Promise(resolve => setTimeout(resolve, 100));
-        await fetchDocumentStats();
-        await new Promise(resolve => setTimeout(resolve, 100));
-        await fetchDocuments();
-      } catch (error) {
-        console.error('Failed to load dashboard data:', error);
-      }
-    };
-
-    loadData();
-  }, []);
-
+  // Phase-4 linking digest: what touched your tracked files / areas across surfaces.
   useEffect(() => {
-    console.log('📊 documentStats updated:', documentStats);
-  }, [documentStats]);
+    if (!token) return;
+    axios.get(`${API_BASE_URL}/api/dashboard/digest`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => setDigest(r.data?.sections || []))
+      .catch(() => { /* section just won't render */ });
+  }, [token]);
 
-  const recentDocuments = documents.slice(0, 5);
-
-  // Parse user's policy interests
-  const userPolicyInterests = (() => {
-    if (!user?.policy_interests) return [];
-    try {
-      const interests = typeof user.policy_interests === 'string'
-        ? JSON.parse(user.policy_interests)
-        : user.policy_interests;
-      return Array.isArray(interests) ? interests : [];
-    } catch (e) {
-      console.error('Failed to parse policy interests', e);
-      return [];
-    }
-  })();
-
-  // Check if a policy area matches user's interests
-  const isPolicyInterest = (policyArea: string) => {
-    return userPolicyInterests.includes(policyArea);
+  const firstName = (user?.full_name || '').trim().split(/\s+/)[0] || t('common.there', 'there');
+  const fallbackGreeting = () => {
+    const h = new Date().getHours();
+    const part = h < 12 ? t('bubble.overview.morning', 'Good morning') : h < 18 ? t('bubble.overview.afternoon', 'Good afternoon') : t('bubble.overview.evening', 'Good evening');
+    return `${part}, ${firstName}.`;
   };
 
-  // Merge user's policy interests with document policy areas
-  const getMergedPolicyAreas = () => {
-    const documentPolicyAreas = documentStats?.by_policy_area || {};
-    const merged: Record<string, number> = { ...documentPolicyAreas };
-
-    // Add user's policy interests with 0 count if not already present
-    userPolicyInterests.forEach(interest => {
-      if (!(interest in merged)) {
-        merged[interest] = 0;
-      }
-    });
-
-    // Convert to array and sort: interests first (with blue stars), then by count
-    return Object.entries(merged)
-      .sort(([areaA, countA], [areaB, countB]) => {
-        const aIsInterest = isPolicyInterest(areaA);
-        const bIsInterest = isPolicyInterest(areaB);
-
-        // Interests first
-        if (aIsInterest && !bIsInterest) return -1;
-        if (!aIsInterest && bIsInterest) return 1;
-
-        // Then by count (descending)
-        return countB - countA;
-      })
-      .slice(0, 10); // Show top 10
+  const openHook = (hook: PolicyHook) => {
+    const q = hook.suggested_query || hook.label;
+    navigate(`/main?q=${encodeURIComponent(q)}`);
   };
 
   return (
-    <div className="dashboard-tab">
-      {/* Welcome Section */}
-      <div className="dashboard-tab__welcome">
-        <h2>Welcome to Your EU Bubble</h2>
-        <p>Your personalised EU policy cockpit</p>
-      </div>
+    <div className="ov">
+      {/* 1. Greeting (Chat-style) */}
+      <section className="ov-greeting">
+        <p className="ov-greeting__text">{greeting || fallbackGreeting()}</p>
+        {hooks.length > 0 && (
+          <div className="ov-hooks">
+            {hooks.map((hook, i) => (
+              <button key={`${hook.source}-${i}`} className="ov-hook" onClick={() => openHook(hook)}>
+                <Icon path={mdiCreation} size={0.6} /> {hook.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
 
-      {/* Monitoring cockpit — the six-tile front door of My EU Bubble. */}
+      {/* 2. Synthesis — the monitoring cockpit (deep-links to every filter) */}
       <DashboardCockpit />
 
-      {/* Quick Stats */}
-      <div className="dashboard-tab__stats-grid">
-        <div className="dashboard-tab__stat-card">
-          <div className="dashboard-tab__stat-icon">
-            <Icon path={mdiFileDocument} size={1.5} color="#0693E3" />
-          </div>
-          <div className="dashboard-tab__stat-content">
-            <div className="dashboard-tab__stat-value">
-              {documentStats?.total_documents || 0}
-            </div>
-            <div className="dashboard-tab__stat-label">Total Documents</div>
-          </div>
-        </div>
-
-        <div className="dashboard-tab__stat-card">
-          <div className="dashboard-tab__stat-icon">
-            <Icon path={mdiFileEdit} size={1.5} color="#0693E3" />
-          </div>
-          <div className="dashboard-tab__stat-content">
-            <div className="dashboard-tab__stat-value">
-              {documentStats?.total_amendments || 0}
-            </div>
-            <div className="dashboard-tab__stat-label">Amendments</div>
-          </div>
-        </div>
-
-        <div className="dashboard-tab__stat-card">
-          <div className="dashboard-tab__stat-icon">
-            <Icon path={mdiNewspaper} size={1.5} color="#0693E3" />
-          </div>
-          <div className="dashboard-tab__stat-content">
-            <div className="dashboard-tab__stat-value">
-              {userStats?.total_reads || 0}
-            </div>
-            <div className="dashboard-tab__stat-label">Articles Read</div>
-          </div>
-        </div>
-
-        <div className="dashboard-tab__stat-card">
-          <div className="dashboard-tab__stat-icon">
-            <Icon path={mdiStar} size={1.5} color="#0693E3" />
-          </div>
-          <div className="dashboard-tab__stat-content">
-            <div className="dashboard-tab__stat-value">
-              {userStats?.total_saves || 0}
-            </div>
-            <div className="dashboard-tab__stat-label">Saved Items</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Widget Row */}
-      <div className="dashboard-tab__widget-row">
-        <TenderatorWidget />
-        <LegislativeUpdatesWidget />
-      </div>
-
-      {/* Two Column Layout */}
-      <div className="dashboard-tab__content-grid">
-        {/* Left Column: Recent Activity */}
-        <div className="dashboard-tab__section">
-          <h3 className="dashboard-tab__section-title">Recent Activity</h3>
-
-          <div className="dashboard-tab__activity-list">
-            <h4 className="dashboard-tab__subsection-title">Recent Documents</h4>
-            {recentDocuments.length === 0 ? (
-              <p className="dashboard-tab__empty">No documents yet. Create your first document!</p>
-            ) : (
-              <div className="dashboard-tab__document-list">
-                {recentDocuments.map(doc => (
-                  <div key={doc.id} className="dashboard-tab__document-item">
-                    <div className="dashboard-tab__document-type-badge" data-type={doc.document_type}>
-                      {doc.document_type}
-                    </div>
-                    <div className="dashboard-tab__document-info">
-                      <div className="dashboard-tab__document-title">{doc.title}</div>
-                      <div className="dashboard-tab__document-meta">
-                        {new Date(doc.updated_at).toLocaleDateString()} • {doc.word_count || 0} words
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right Column: Insights */}
-        <div className="dashboard-tab__section">
-          <h3 className="dashboard-tab__section-title">Your Insights</h3>
-
-          {/* Policy Area Breakdown */}
-          <div className="dashboard-tab__insight-card">
-            <h4 className="dashboard-tab__insight-title">Top Policy Areas</h4>
-            {(() => {
-              const mergedAreas = getMergedPolicyAreas();
-              return mergedAreas.length > 0 ? (
-                <div className="dashboard-tab__policy-list">
-                  {mergedAreas.map(([area, count]) => (
-                    <div key={area} className="dashboard-tab__policy-item">
-                      <div className="dashboard-tab__policy-name">
-                        {isPolicyInterest(area) && (
-                          <Icon
-                            path={mdiStar}
-                            size={0.7}
-                            color="#0693E3"
-                            style={{ marginRight: '0.5rem' }}
-                          />
-                        )}
-                        {area}
-                      </div>
-                      <div className="dashboard-tab__policy-count">{count}</div>
-                    </div>
+      {/* 2b. What touched your workspace — the Phase-4 cross-feature linking digest */}
+      {digest.length > 0 && (
+        <section className="ov-digest">
+          <h3 className="ov-digest__title">
+            <Icon path={mdiCreation} size={0.7} /> {t('bubble.overview.workspace', 'What touched your workspace')}
+          </h3>
+          <div className="ov-digest__grid">
+            {digest.map((s) => (
+              <div key={s.key} className="ov-digest__card">
+                <button className="ov-digest__head" onClick={() => navigate(s.drill)}>
+                  <span>{s.label}</span><Icon path={mdiArrowRight} size={0.6} />
+                </button>
+                <ul className="ov-digest__items">
+                  {s.items.slice(0, 4).map((it, i) => (
+                    <li key={i}>
+                      {it.url
+                        ? <a href={it.url} target="_blank" rel="noopener noreferrer">{it.title}</a>
+                        : it.title}
+                    </li>
                   ))}
-                </div>
-              ) : (
-                <p className="dashboard-tab__empty">
-                  No policy areas yet. <a href="/profile" style={{ color: '#0693E3' }}>Set your interests</a> in your profile.
-                </p>
-              );
-            })()}
-          </div>
-
-          {/* Favorite Sources */}
-          <div className="dashboard-tab__insight-card">
-            <h4 className="dashboard-tab__insight-title">Favorite News Sources</h4>
-            {userStats && userStats.favorite_sources.length > 0 ? (
-              <div className="dashboard-tab__source-list">
-                {userStats.favorite_sources.map((source, idx) => (
-                  <div key={idx} className="dashboard-tab__source-item">
-                    {source}
-                  </div>
-                ))}
+                </ul>
               </div>
-            ) : (
-              <p className="dashboard-tab__empty">Start reading to see your favorite sources</p>
-            )}
+            ))}
           </div>
+        </section>
+      )}
 
-          {/* Document Type Breakdown */}
-          <div className="dashboard-tab__insight-card">
-            <h4 className="dashboard-tab__insight-title">Document Breakdown</h4>
-            {documentStats && Object.keys(documentStats.by_type || {}).length > 0 ? (
-              <div className="dashboard-tab__type-breakdown">
-                {Object.entries(documentStats.by_type || {}).map(([type, count]) => (
-                  <div key={type} className="dashboard-tab__type-row">
-                    <div className="dashboard-tab__type-label">{type}</div>
-                    <div className="dashboard-tab__type-bar">
-                      <div
-                        className="dashboard-tab__type-fill"
-                        style={{
-                          width: `${(count / (documentStats.total_documents || 1)) * 100}%`,
-                        }}
-                      />
-                    </div>
-                    <div className="dashboard-tab__type-count">{count}</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="dashboard-tab__empty">No documents created yet</p>
-            )}
+      {/* 3. Explore — jump to any filter */}
+      <section className="ov-explore">
+        <h3 className="ov-explore__title">{t('bubble.overview.explore', 'Explore My EU Bubble')}</h3>
+        {NAV_GROUPS.map((g) => (
+          <div key={g.titleKey} className="ov-navgroup">
+            <h4 className="ov-navgroup__title">
+              {t(g.titleKey, { defaultValue: g.fallback, name: firstName })}
+              <span className="ov-tip" tabIndex={0} aria-label={t(g.descKey, g.descFallback)}>
+                <Icon path={mdiInformationOutline} size={0.6} />
+                <span className="ov-tip__pop">{t(g.descKey, g.descFallback)}</span>
+              </span>
+            </h4>
+            <div className="ov-navgrid">
+              {g.items.map((it) => (
+                <button key={it.tab} className="ov-navcard" onClick={() => navigate(`/my-eu-bubble?tab=${it.tab}`)}>
+                  <Icon path={it.icon} size={0.95} className="ov-navcard__icon" />
+                  <span className="ov-navcard__label">{t(it.labelKey, it.fallback)}</span>
+                  <Icon path={mdiArrowRight} size={0.6} className="ov-navcard__go" />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        ))}
+      </section>
     </div>
   );
 };

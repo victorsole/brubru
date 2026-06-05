@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Icon from '@mdi/react';
+import { mdiMagnify, mdiClose, mdiChatProcessingOutline } from '@mdi/js';
 import './policy_preferences_selector.css';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 interface PolicyArea {
   name: string;
-  url: string;
   description: string;
+  aliases?: string[];
 }
 
 interface PolicyCategory {
@@ -18,129 +23,85 @@ interface PolicyPreferencesSelectorProps {
   onUpdate: (policies: string[]) => void;
 }
 
-const POLICY_CATEGORIES: PolicyCategory[] = [
-  {
-    category: 'Core Economic and Market Policies',
-    description: '7 areas',
-    policy_areas: [
-      { name: 'Single Market', url: '', description: 'Free movement of goods, services, capital, and people' },
-      { name: 'Competition', url: '', description: 'Ensuring fair competition and preventing monopolies' },
-      { name: 'Trade and Economic Security', url: '', description: 'EU trade policy and international economic relations' },
-      { name: 'Economic and Financial Affairs', url: '', description: 'Economic policy coordination and financial stability' },
-      { name: 'Taxation', url: '', description: 'Tax policy coordination across member states' },
-      { name: 'Customs', url: '', description: 'Customs union and border control procedures' },
-      { name: 'Business and Industry', url: '', description: 'Industrial policy and business competitiveness' }
-    ]
-  },
-  {
-    category: 'Sustainability and Environmental Policies',
-    description: '4 areas (European Green Deal)',
-    policy_areas: [
-      { name: 'Climate Action', url: '', description: 'EU climate policies and carbon reduction' },
-      { name: 'Environment', url: '', description: 'Environmental protection and biodiversity' },
-      { name: 'Energy', url: '', description: 'Energy policy and renewable energy transition' },
-      { name: 'Transport', url: '', description: 'Transport policy and sustainable mobility' }
-    ]
-  },
-  {
-    category: 'Digital Transformation',
-    description: '2 areas (Europe Fit for Digital Age)',
-    policy_areas: [
-      { name: 'Digital Policy and Digital Economy', url: '', description: 'Digital single market and e-commerce' },
-      { name: 'Communication Networks, Content and Technology', url: '', description: 'Telecommunications and digital infrastructure' }
-    ]
-  },
-  {
-    category: 'Agriculture and Natural Resources',
-    description: '3 areas',
-    policy_areas: [
-      { name: 'Agriculture', url: '', description: 'Common Agricultural Policy and rural development' },
-      { name: 'Maritime Affairs and Fisheries', url: '', description: 'Fisheries policy and blue economy' },
-      { name: 'Food Safety', url: '', description: 'Food standards and safety regulations' }
-    ]
-  },
-  {
-    category: 'Cohesion and Development',
-    description: '4 areas',
-    policy_areas: [
-      { name: 'Regional Policy', url: '', description: 'Cohesion policy and regional development' },
-      { name: 'Research and Innovation', url: '', description: 'Horizon Europe and research funding' },
-      { name: 'Education, Training and Youth', url: '', description: 'Erasmus+ and education policies' },
-      { name: 'Culture', url: '', description: 'Cultural programmes and creative industries' }
-    ]
-  },
-  {
-    category: 'Social Policies',
-    description: '3 areas',
-    policy_areas: [
-      { name: 'Employment and Social Affairs', url: '', description: 'Labour rights and social protection' },
-      { name: 'Health', url: '', description: 'Public health and healthcare policies' },
-      { name: 'Consumer Protection', url: '', description: 'Consumer rights and product safety' }
-    ]
-  },
-  {
-    category: 'Justice and Home Affairs',
-    description: '3 areas',
-    policy_areas: [
-      { name: 'Justice and Fundamental Rights', url: '', description: 'Rule of law and fundamental rights' },
-      { name: 'Migration and Home Affairs', url: '', description: 'Migration policy and border management' },
-      { name: 'Women\'s Rights and Gender Equality', url: '', description: 'Gender equality and women\'s empowerment' }
-    ]
-  },
-  {
-    category: 'External Relations',
-    description: '5 areas',
-    policy_areas: [
-      { name: 'Foreign and Security Policy', url: '', description: 'Common foreign and security policy' },
-      { name: 'Development and Cooperation', url: '', description: 'International development aid' },
-      { name: 'Neighbourhood and Enlargement', url: '', description: 'Enlargement and neighbourhood policy' },
-      { name: 'Human Rights and Democracy', url: '', description: 'Global human rights advocacy' },
-      { name: 'Humanitarian Aid and Civil Protection', url: '', description: 'Emergency response and disaster relief' }
-    ]
-  },
-  {
-    category: 'Emerging Strategic Areas',
-    description: '3 areas',
-    policy_areas: [
-      { name: 'Defence and Security', url: '', description: 'European defence and security cooperation' },
-      { name: 'Space Policy', url: '', description: 'EU space programme and satellite systems' },
-      { name: 'Statistics', url: '', description: 'Eurostat and statistical data' }
-    ]
-  }
-];
+
+/** Lower-case + strip diacritics so "Turkiye"/"turkiye"/accented forms all match. */
+const normalise = (value: string): string =>
+  value.toLowerCase().normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '');
 
 export const PolicyPreferencesSelector = ({
   selectedPolicies,
   onUpdate
 }: PolicyPreferencesSelectorProps) => {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<string[]>(selectedPolicies || []);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [query, setQuery] = useState('');
+
+  // Canonical taxonomy is served by the backend (single source of truth shared
+  // with the Chat). The selector renders identically; it just no longer owns
+  // the list. See backend/knowledge_base/policy_taxonomy.json.
+  const [taxonomy, setTaxonomy] = useState<PolicyCategory[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/policy-taxonomy`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.categories)) setTaxonomy(data.categories);
+      })
+      .catch(() => { /* keep empty; the no-results / loading state covers it */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  const normalisedQuery = normalise(query.trim());
+  const isSearching = normalisedQuery.length > 0;
+
+  // Filter the tree by the search query, matching against category labels, leaf names,
+  // leaf descriptions and the seed alias keywords. Returns each surviving category with
+  // only its matching leaves.
+  const filteredCategories = useMemo(() => {
+    if (!isSearching) {
+      return taxonomy.map((category) => ({ category, matches: category.policy_areas }));
+    }
+
+    return taxonomy
+      .map((category) => {
+        const categoryHaystack = `${normalise(category.category)} ${normalise(category.description)}`;
+        const categoryMatches = categoryHaystack.includes(normalisedQuery);
+
+        const matches = category.policy_areas.filter((policy) => {
+          if (categoryMatches) return true;
+          const aliasHaystack = (policy.aliases || []).map(normalise).join(' ');
+          const haystack = `${normalise(policy.name)} ${normalise(policy.description)} ${aliasHaystack}`;
+          return haystack.includes(normalisedQuery);
+        });
+
+        return { category, matches };
+      })
+      .filter((entry) => entry.matches.length > 0);
+  }, [isSearching, normalisedQuery, taxonomy]);
+
+  const totalPolicies = taxonomy.flatMap((cat) => cat.policy_areas).length;
 
   const toggleCategory = (category: string) => {
-    setExpandedCategories(prev =>
+    setExpandedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(c => c !== category)
+        ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
   };
 
   const togglePolicy = (policyName: string) => {
-    let newSelected: string[];
-
-    if (selected.includes(policyName)) {
-      newSelected = selected.filter(p => p !== policyName);
-    } else {
-      newSelected = [...selected, policyName];
-    }
+    const newSelected = selected.includes(policyName)
+      ? selected.filter((p) => p !== policyName)
+      : [...selected, policyName];
 
     setSelected(newSelected);
     onUpdate(newSelected);
   };
 
   const selectAll = () => {
-    const allPolicies = POLICY_CATEGORIES.flatMap(cat =>
-      cat.policy_areas.map(pa => pa.name)
-    );
+    const allPolicies = taxonomy.flatMap((cat) => cat.policy_areas.map((pa) => pa.name));
     setSelected(allPolicies);
     onUpdate(allPolicies);
   };
@@ -150,8 +111,52 @@ export const PolicyPreferencesSelector = ({
     onUpdate([]);
   };
 
+  // Hand the exact thing the user couldn't find (their current search query)
+  // to the Chat, flagged as a policy-interest navigation request so the backend
+  // routes it to the lightweight taxonomy-mapping flow.
+  const askBrubru = () => {
+    const params = new URLSearchParams({ context: 'policy_interests' });
+    const q = query.trim();
+    if (q) {
+      params.set('q', q);
+      params.set('autofire', '1');
+    }
+    navigate(`/main?${params.toString()}`);
+  };
+
   return (
     <div className="policy-preferences">
+      <div className="policy-preferences__search">
+        <Icon path={mdiMagnify} size={0.85} className="policy-preferences__search-icon" />
+        <input
+          type="search"
+          className="policy-preferences__search-input"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search policies, e.g. agriculture, trade defence, drones, refugees…"
+          aria-label="Search policy areas"
+        />
+        {query.length > 0 && (
+          <button
+            type="button"
+            className="policy-preferences__search-clear"
+            onClick={() => setQuery('')}
+            aria-label="Clear search"
+          >
+            <Icon path={mdiClose} size={0.75} />
+          </button>
+        )}
+      </div>
+
+      <button
+        type="button"
+        className="policy-preferences__ask-brubru"
+        onClick={askBrubru}
+      >
+        <Icon path={mdiChatProcessingOutline} size={0.8} />
+        <span>Can&rsquo;t find what you are looking for? Talk to Brubru!</span>
+      </button>
+
       <div className="policy-preferences__header">
         <p className="policy-preferences__count">
           Selected: <strong>{selected.length}</strong> policy {selected.length === 1 ? 'area' : 'areas'}
@@ -160,7 +165,7 @@ export const PolicyPreferencesSelector = ({
           <button
             onClick={selectAll}
             className="policy-preferences__select-all"
-            disabled={selected.length === POLICY_CATEGORIES.flatMap(cat => cat.policy_areas).length}
+            disabled={selected.length === totalPolicies}
           >
             Select All
           </button>
@@ -175,72 +180,84 @@ export const PolicyPreferencesSelector = ({
         </div>
       </div>
 
-      <div className="policy-preferences__categories">
-        {POLICY_CATEGORIES.map((category) => {
-          const isExpanded = expandedCategories.includes(category.category);
-          const categorySelectedCount = category.policy_areas.filter(pa =>
-            selected.includes(pa.name)
-          ).length;
+      {isSearching && filteredCategories.length === 0 ? (
+        <div className="policy-preferences__no-results">
+          <p>
+            No policy areas match <strong>&ldquo;{query.trim()}&rdquo;</strong>.
+          </p>
+          <p className="policy-preferences__no-results-hint">
+            Try a broader term, or clear the search to browse all areas.
+          </p>
+        </div>
+      ) : (
+        <div className="policy-preferences__categories">
+          {filteredCategories.map(({ category, matches }) => {
+            const isExpanded = isSearching || expandedCategories.includes(category.category);
+            const categorySelectedCount = category.policy_areas.filter((pa) =>
+              selected.includes(pa.name)
+            ).length;
 
-          return (
-            <div key={category.category} className="policy-preferences__category">
-              <button
-                className="policy-preferences__category-header"
-                onClick={() => toggleCategory(category.category)}
-              >
-                <div className="policy-preferences__category-title">
-                  <span className="policy-preferences__category-icon">
-                    {isExpanded ? '▼' : '▶'}
-                  </span>
-                  <div>
-                    <h3>{category.category}</h3>
-                    <span className="policy-preferences__category-description">
-                      {category.description}
-                      {categorySelectedCount > 0 && (
-                        <span className="policy-preferences__category-selected">
-                          {' '}• {categorySelectedCount} selected
-                        </span>
-                      )}
+            return (
+              <div key={category.category} className="policy-preferences__category">
+                <button
+                  className="policy-preferences__category-header"
+                  onClick={() => toggleCategory(category.category)}
+                  disabled={isSearching}
+                >
+                  <div className="policy-preferences__category-title">
+                    <span className="policy-preferences__category-icon">
+                      {isExpanded ? '▼' : '▶'}
                     </span>
+                    <div>
+                      <h3>{category.category}</h3>
+                      <span className="policy-preferences__category-description">
+                        {category.description}
+                        {categorySelectedCount > 0 && (
+                          <span className="policy-preferences__category-selected">
+                            {' '}• {categorySelectedCount} selected
+                          </span>
+                        )}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
 
-              {isExpanded && (
-                <div className="policy-preferences__policies">
-                  {category.policy_areas.map((policy) => {
-                    const isSelected = selected.includes(policy.name);
+                {isExpanded && (
+                  <div className="policy-preferences__policies">
+                    {matches.map((policy) => {
+                      const isSelected = selected.includes(policy.name);
 
-                    return (
-                      <label
-                        key={policy.name}
-                        className={`policy-preferences__policy ${
-                          isSelected ? 'policy-preferences__policy--selected' : ''
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => togglePolicy(policy.name)}
-                          className="policy-preferences__checkbox"
-                        />
-                        <div className="policy-preferences__policy-content">
-                          <span className="policy-preferences__policy-name">
-                            {policy.name}
-                          </span>
-                          <span className="policy-preferences__policy-description">
-                            {policy.description}
-                          </span>
-                        </div>
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                      return (
+                        <label
+                          key={policy.name}
+                          className={`policy-preferences__policy ${
+                            isSelected ? 'policy-preferences__policy--selected' : ''
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => togglePolicy(policy.name)}
+                            className="policy-preferences__checkbox"
+                          />
+                          <div className="policy-preferences__policy-content">
+                            <span className="policy-preferences__policy-name">
+                              {policy.name}
+                            </span>
+                            <span className="policy-preferences__policy-description">
+                              {policy.description}
+                            </span>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {selected.length > 0 && (
         <div className="policy-preferences__selected-tags">

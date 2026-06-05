@@ -8,11 +8,14 @@
  */
 
 import Icon from '@mdi/react';
+import { useTranslation } from 'react-i18next';
 import {
   mdiOpenInNew,
   mdiFileDocumentOutline,
   mdiAccountTieOutline,
   mdiCalendarOutline,
+  mdiPlaylistPlus,
+  mdiTrashCanOutline,
 } from '@mdi/js';
 import type { TextAdopted } from '../../hooks/use_texts_adopted';
 import { TEXT_TYPE_INFO } from '../../hooks/use_texts_adopted';
@@ -21,10 +24,16 @@ import './text_adopted_card.css';
 
 interface TextAdoptedCardProps {
   item: TextAdopted;
+  isTracked?: boolean;
+  onViewDetail?: () => void;
+  onTrack?: () => void;
+  onUntrack?: () => void;
 }
 
-export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
+export const TextAdoptedCard = ({ item, isTracked, onViewDetail, onTrack, onUntrack }: TextAdoptedCardProps) => {
+  const { t, i18n } = useTranslation();
   const typeInfo = TEXT_TYPE_INFO[item.text_type] || { name: item.text_type, color: '#6b7280' };
+  const locale = i18n.language || 'en';
 
   const epUrl = item.full_text_url || item.source_url;
   const oeilUrl = item.procedure_ref
@@ -42,11 +51,15 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
           {typeInfo.name}
         </span>
         <span className="text-adopted-card__term">
-          Term {item.parliamentary_term}
+          {t('textAdopted.term', { n: item.parliamentary_term })}
         </span>
       </div>
 
-      <h4 className="text-adopted-card__title">
+      <h4
+        className="text-adopted-card__title"
+        onClick={onViewDetail}
+        style={onViewDetail ? { cursor: 'pointer' } : undefined}
+      >
         {item.title}
       </h4>
 
@@ -56,7 +69,7 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
         </span>
         <span className="text-adopted-card__date">
           <Icon path={mdiCalendarOutline} size={0.55} />
-          {new Date(item.adoption_date).toLocaleDateString('en-GB', {
+          {new Date(item.adoption_date).toLocaleDateString(locale, {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
@@ -86,6 +99,39 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
       )}
 
       <div className="text-adopted-card__actions">
+        {onViewDetail && (
+          <button
+            type="button"
+            className="text-adopted-card__action-btn text-adopted-card__action-btn--primary"
+            onClick={onViewDetail}
+          >
+            <Icon path={mdiFileDocumentOutline} size={0.7} />
+            {t('myFilesTab.viewDetails')}
+          </button>
+        )}
+        {isTracked ? (
+          onUntrack && (
+            <button
+              type="button"
+              className="text-adopted-card__action-btn text-adopted-card__action-btn--danger"
+              onClick={onUntrack}
+            >
+              <Icon path={mdiTrashCanOutline} size={0.7} />
+              {t('myFilesTab.saved')}
+            </button>
+          )
+        ) : (
+          onTrack && (
+            <button
+              type="button"
+              className="text-adopted-card__action-btn text-adopted-card__action-btn--track"
+              onClick={onTrack}
+            >
+              <Icon path={mdiPlaylistPlus} size={0.7} />
+              {t('myFilesTab.save')}
+            </button>
+          )
+        )}
         {epUrl && (
           <a
             href={epUrl}
@@ -94,7 +140,7 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
             className="text-adopted-card__action-btn"
           >
             <Icon path={mdiFileDocumentOutline} size={0.7} />
-            View Text
+            {t('textAdopted.viewText')}
           </a>
         )}
         {oeilUrl && (

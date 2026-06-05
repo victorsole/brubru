@@ -1,0 +1,43 @@
+{
+  "issue_date": "2026-06-05",
+  "day_of_week": "Friday",
+  "hero_intro": "Good morning, and welcome to your Friday Brubru EFPIA Brief. The EU medicines regulator has published its yearly read on how artificial intelligence is reshaping drug development, Brussels has tightened the antibiotic rules on food entering the single market in the name of fighting drug resistance, and Europe's top court has spelled out who must check that a product really is a medical device. We close with the week ahead, where the medicines safety committee, the EMA board and the run-up to the health ministers' meeting all land in the next few days. The most consequential first, with every headline linking straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "The EU medicines regulator publishes its yearly read on how AI is changing drug development",
+      "source": "European Medicines Agency and Heads of Medicines Agencies, 4 June 2026",
+      "snippet": "The agencies released the 2025 edition of their AI Observatory report, the network's annual stocktake of how artificial intelligence is being used across the medicines lifecycle. It tracks four areas: guidance and policy, real applications of AI, collaboration and engagement, and EU-funded research. The headline trend is growing use of AI to automate data capture, optimise trial protocols and build predictive models for patient outcomes and recruitment. The findings feed the network's data strategy and its AI workplan through to 2028, and cover both human and veterinary medicines.",
+      "ask": "How does the EMA assess and authorise new medicines in the EU?",
+      "feature_label": "EMA",
+      "feature_url": "https://www.ema.europa.eu/en/documents/report/2025-ai-observatory-report_en.pdf",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Brussels tightens the antibiotic rules on food entering the single market, in the name of fighting drug resistance",
+      "source": "European Commission, 4 June 2026",
+      "snippet": "The Commission adopted new rules on animal products imported into the EU, designed to keep out antibiotics used to promote animal growth and those reserved for treating people. The measure consolidates the restrictions into a single list, adds twenty-one newly approved countries and regions, and removes several categories from suppliers that could not prove compliance. It applies from 3 September 2026. The move is part of the EU's One Health approach to antimicrobial resistance, the same agenda that shapes the incentives being debated for new human antibiotics in the pharmaceutical legislation.",
+      "ask": "What is the EU doing to tackle antimicrobial resistance?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20is%20the%20EU%20doing%20to%20tackle%20antimicrobial%20resistance",
+      "color": "#059669"
+    },
+    {
+      "title": "Europe's top court clarifies who must check that a product really is a medical device",
+      "source": "Court of Justice of the European Union, 4 June 2026, Case C-10/24",
+      "snippet": "In a preliminary ruling under the Medical Devices Regulation, the Court looked at oil-free dry-air compressors used to produce compressed air for dental treatment, which had been CE-marked as machinery rather than as a class IIa medical device. The judges set out a distributor's duty to verify the classification and the CE marking before making a device available on the market, rather than relying on the label the manufacturer affixed. The ruling matters across the device supply chain, including the drug-device combinations that pharmaceutical companies place on the market.",
+      "ask": "How are medical devices regulated in the EU?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=How%20are%20medical%20devices%20regulated%20in%20the%20EU",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "The week ahead: the medicines safety committee, the EMA board, and the run-up to the health ministers' meeting",
+      "source": "European Medicines Agency and Council of the EU, week of 8 June 2026",
+      "snippet": "Next week the medicines safety committee, PRAC, meets from 8 to 11 June, and the EMA Management Board sits on 10 and 11 June, with an EMA and European Chemicals Agency joint meeting with industry in between. It all builds towards health ministers gathering in Council on 16 June, where several of the files you track sit on one agenda. We will flag any safety signal, board decision or ministerial conclusion that touches your portfolio as it lands.",
+      "ask": "What does the EMA's PRAC safety committee do?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#ca8a04"
+    }
+  ]
+}

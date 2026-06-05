@@ -1,93 +1,1674 @@
 {
-  "_comment": "Canonical Brubru policy-interest taxonomy. SINGLE SOURCE OF TRUTH for the 9 categories / 34 policy-area leaves used as the join key across all of My EU Bubble (carriages, calendar, news, consultations, cockpit tiles). Served to the frontend via GET /api/policy-taxonomy (consumed by policy_preferences_selector.tsx) AND injected into the Chat context for PI-navigation queries. Aliases are a deliberate SEED for free-text resolution, to be superseded/expanded by the EC-DG harvest + OEIL-subject/EP-committee resolver. Geography (countries) is a SEPARATE axis (OEIL geographicalArea), not a leaf here.",
-  "version": "2026-06-04",
+  "_comment": "Canonical Brubru policy-interest taxonomy. SINGLE SOURCE OF TRUTH for the 9 categories / 34 policy-area leaves used as the join key across all of My EU Bubble (carriages, calendar, news, consultations, cockpit tiles). Served to the frontend via GET /api/policy-taxonomy (consumed by policy_preferences_selector.tsx) AND injected into the Chat context for PI-navigation queries. Aliases are a deliberate SEED for free-text resolution, to be superseded/expanded by the EC-DG harvest + OEIL-subject/EP-committee resolver. Geography (countries) is a SEPARATE axis (OEIL geographicalArea), not a leaf here. ENRICHED 5 Jun 2026: each leaf now also carries keywords, committees, dgs, council_configs, agencies, policy_area_strings, cpv (migrated from pi_committee_crosswalk.py + authored CPV) so this is the single crosswalk source.",
+  "version": "2026-06-05",
   "categories": [
     {
       "category": "Core Economic and Market Policies",
       "description": "7 areas",
       "policy_areas": [
-        { "name": "Single Market", "description": "Free movement of goods, services, capital, and people", "aliases": ["internal market", "free movement", "services directive", "goods", "mutual recognition", "professional qualifications"] },
-        { "name": "Competition", "description": "Ensuring fair competition and preventing monopolies", "aliases": ["antitrust", "state aid", "mergers", "monopoly", "cartel", "dominance", "foreign subsidies"] },
-        { "name": "Trade and Economic Security", "description": "EU trade policy and international economic relations", "aliases": ["trade", "trade defence", "anti-dumping", "anti dumping", "anti-subsidy", "tariffs", "tariff", "customs duties", "export controls", "sanctions", "dumping", "free trade agreement", "fta", "wto", "economic security", "de-risking", "america", "usa", "united states", "china", "mercosur"] },
-        { "name": "Economic and Financial Affairs", "description": "Economic policy coordination and financial stability", "aliases": ["economy", "finance", "euro", "banking", "capital markets", "financial services", "fiscal", "deficit", "stability pact", "ecb", "monetary", "investment", "crypto", "mica"] },
-        { "name": "Taxation", "description": "Tax policy coordination across member states", "aliases": ["tax", "taxes", "vat", "corporate tax", "minimum tax", "pillar two", "dac", "digital tax"] },
-        { "name": "Customs", "description": "Customs union and border control procedures", "aliases": ["customs", "customs union", "border control", "import", "tariff classification", "union customs code"] },
-        { "name": "Business and Industry", "description": "Industrial policy and business competitiveness", "aliases": ["industry", "industrial", "smes", "sme", "manufacturing", "steel", "chemicals", "reach", "competitiveness", "net zero industry", "critical raw materials", "crma"] }
+        {
+          "name": "Single Market",
+          "description": "Free movement of goods, services, capital, and people",
+          "aliases": [
+            "internal market",
+            "free movement",
+            "services directive",
+            "goods",
+            "mutual recognition",
+            "professional qualifications"
+          ],
+          "keywords": [
+            "single market",
+            "internal market",
+            "free movement",
+            "mutual recognition",
+            "services directive"
+          ],
+          "committees": [
+            "IMCO"
+          ],
+          "dgs": [
+            "GROW"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [
+            "EUIPO"
+          ],
+          "policy_area_strings": [
+            "Internal Market",
+            "Single Market"
+          ],
+          "cpv": [
+            "79"
+          ]
+        },
+        {
+          "name": "Competition",
+          "description": "Ensuring fair competition and preventing monopolies",
+          "aliases": [
+            "antitrust",
+            "state aid",
+            "mergers",
+            "monopoly",
+            "cartel",
+            "dominance",
+            "foreign subsidies"
+          ],
+          "keywords": [
+            "competition",
+            "antitrust",
+            "state aid",
+            "merger",
+            "cartel",
+            "foreign subsid"
+          ],
+          "committees": [
+            "ECON",
+            "IMCO"
+          ],
+          "dgs": [
+            "COMP"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Competition"
+          ],
+          "cpv": [
+            "79"
+          ]
+        },
+        {
+          "name": "Trade and Economic Security",
+          "description": "EU trade policy and international economic relations",
+          "aliases": [
+            "trade",
+            "trade defence",
+            "anti-dumping",
+            "anti dumping",
+            "anti-subsidy",
+            "tariffs",
+            "tariff",
+            "customs duties",
+            "export controls",
+            "sanctions",
+            "dumping",
+            "free trade agreement",
+            "fta",
+            "wto",
+            "economic security",
+            "de-risking",
+            "america",
+            "usa",
+            "united states",
+            "china",
+            "mercosur"
+          ],
+          "keywords": [
+            "trade",
+            "tariff",
+            "anti-dumping",
+            "anti-subsidy",
+            "export control",
+            "customs duties",
+            "economic security",
+            "free trade"
+          ],
+          "committees": [
+            "INTA"
+          ],
+          "dgs": [
+            "TRADE"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "International Trade",
+            "Trade and Economic Security"
+          ],
+          "cpv": [
+            "79",
+            "75"
+          ]
+        },
+        {
+          "name": "Economic and Financial Affairs",
+          "description": "Economic policy coordination and financial stability",
+          "aliases": [
+            "economy",
+            "finance",
+            "euro",
+            "banking",
+            "capital markets",
+            "financial services",
+            "fiscal",
+            "deficit",
+            "stability pact",
+            "ecb",
+            "monetary",
+            "investment",
+            "crypto",
+            "mica"
+          ],
+          "keywords": [
+            "economic",
+            "financial",
+            "banking",
+            "capital market",
+            "fiscal",
+            "monetary",
+            "euro area",
+            "investment"
+          ],
+          "committees": [
+            "ECON"
+          ],
+          "dgs": [
+            "ECFIN"
+          ],
+          "council_configs": [
+            "ECOFIN",
+            "EUROGROUP"
+          ],
+          "agencies": [
+            "ECB",
+            "EBA",
+            "ESMA",
+            "EIOPA",
+            "AMLA",
+            "EIB"
+          ],
+          "policy_area_strings": [
+            "Economic governance",
+            "Economic and Financial Affairs"
+          ],
+          "cpv": [
+            "66",
+            "79"
+          ]
+        },
+        {
+          "name": "Taxation",
+          "description": "Tax policy coordination across member states",
+          "aliases": [
+            "tax",
+            "taxes",
+            "vat",
+            "corporate tax",
+            "minimum tax",
+            "pillar two",
+            "dac",
+            "digital tax"
+          ],
+          "keywords": [
+            "tax",
+            "vat",
+            "excise",
+            "minimum tax",
+            "pillar two"
+          ],
+          "committees": [
+            "ECON",
+            "FISC"
+          ],
+          "dgs": [
+            "TAXUD"
+          ],
+          "council_configs": [
+            "ECOFIN"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Taxation"
+          ],
+          "cpv": [
+            "79",
+            "72"
+          ]
+        },
+        {
+          "name": "Customs",
+          "description": "Customs union and border control procedures",
+          "aliases": [
+            "customs",
+            "customs union",
+            "border control",
+            "import",
+            "tariff classification",
+            "union customs code"
+          ],
+          "keywords": [
+            "customs",
+            "union customs code",
+            "import",
+            "tariff classification"
+          ],
+          "committees": [
+            "IMCO",
+            "INTA"
+          ],
+          "dgs": [
+            "TAXUD"
+          ],
+          "council_configs": [
+            "COMPET",
+            "ECOFIN"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Customs"
+          ],
+          "cpv": [
+            "79",
+            "48"
+          ]
+        },
+        {
+          "name": "Business and Industry",
+          "description": "Industrial policy and business competitiveness",
+          "aliases": [
+            "industry",
+            "industrial",
+            "smes",
+            "sme",
+            "manufacturing",
+            "steel",
+            "chemicals",
+            "reach",
+            "competitiveness",
+            "net zero industry",
+            "critical raw materials",
+            "crma"
+          ],
+          "keywords": [
+            "industr",
+            "manufactur",
+            "sme",
+            "competitiveness",
+            "steel",
+            "critical raw material",
+            "net zero industry"
+          ],
+          "committees": [
+            "ITRE",
+            "IMCO"
+          ],
+          "dgs": [
+            "GROW"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Industry",
+            "Business and Industry"
+          ],
+          "cpv": [
+            "42",
+            "24",
+            "14",
+            "31"
+          ]
+        }
       ]
     },
     {
       "category": "Sustainability and Environmental Policies",
       "description": "4 areas (European Green Deal)",
       "policy_areas": [
-        { "name": "Climate Action", "description": "EU climate policies and carbon reduction", "aliases": ["climate", "co2", "emissions", "carbon", "net zero", "green deal", "ets", "cbam", "global warming", "paris agreement", "f-gas", "methane"] },
-        { "name": "Environment", "description": "Environmental protection and biodiversity", "aliases": ["environment", "biodiversity", "nature", "pollution", "water", "air", "air quality", "air pollution", "waste", "circular economy", "chemicals", "reach", "plastics", "deforestation", "soil", "nature restoration", "fire", "wildfire"] },
-        { "name": "Energy", "description": "Energy policy and renewable energy transition", "aliases": ["energy", "renewables", "renewable", "electricity", "gas", "hydrogen", "nuclear", "grid", "energy efficiency", "red iii", "solar", "wind", "power"] },
-        { "name": "Transport", "description": "Transport policy and sustainable mobility", "aliases": ["transport", "mobility", "aviation", "aircraft", "airlines", "air", "rail", "railway", "shipping", "maritime transport", "road", "cars", "vehicles", "drones", "uas", "unmanned", "uav", "ev", "charging", "afir"] }
+        {
+          "name": "Climate Action",
+          "description": "EU climate policies and carbon reduction",
+          "aliases": [
+            "climate",
+            "co2",
+            "emissions",
+            "carbon",
+            "net zero",
+            "green deal",
+            "ets",
+            "cbam",
+            "global warming",
+            "paris agreement",
+            "f-gas",
+            "methane"
+          ],
+          "keywords": [
+            "climate",
+            "emission",
+            "carbon",
+            "net zero",
+            "ets",
+            "cbam",
+            "greenhouse gas",
+            "f-gas",
+            "methane"
+          ],
+          "committees": [
+            "ENVI"
+          ],
+          "dgs": [
+            "CLIMA"
+          ],
+          "council_configs": [
+            "ENVI"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Climate Action",
+            "Environment"
+          ],
+          "cpv": [
+            "90",
+            "09",
+            "71"
+          ]
+        },
+        {
+          "name": "Environment",
+          "description": "Environmental protection and biodiversity",
+          "aliases": [
+            "environment",
+            "biodiversity",
+            "nature",
+            "pollution",
+            "water",
+            "air",
+            "air quality",
+            "air pollution",
+            "waste",
+            "circular economy",
+            "chemicals",
+            "reach",
+            "plastics",
+            "deforestation",
+            "soil",
+            "nature restoration",
+            "fire",
+            "wildfire"
+          ],
+          "keywords": [
+            "environment",
+            "biodiversity",
+            "nature",
+            "pollution",
+            "water",
+            "air quality",
+            "waste",
+            "circular economy",
+            "chemical",
+            "reach",
+            "deforestation",
+            "ecolabel"
+          ],
+          "committees": [
+            "ENVI"
+          ],
+          "dgs": [
+            "ENV"
+          ],
+          "council_configs": [
+            "ENVI"
+          ],
+          "agencies": [
+            "ECHA"
+          ],
+          "policy_area_strings": [
+            "Environment"
+          ],
+          "cpv": [
+            "90",
+            "24",
+            "65"
+          ]
+        },
+        {
+          "name": "Energy",
+          "description": "Energy policy and renewable energy transition",
+          "aliases": [
+            "energy",
+            "renewables",
+            "renewable",
+            "electricity",
+            "gas",
+            "hydrogen",
+            "nuclear",
+            "grid",
+            "energy efficiency",
+            "red iii",
+            "solar",
+            "wind",
+            "power"
+          ],
+          "keywords": [
+            "energy",
+            "renewable",
+            "electricity",
+            "hydrogen",
+            "nuclear",
+            "grid",
+            "gas market",
+            "energy efficiency"
+          ],
+          "committees": [
+            "ITRE"
+          ],
+          "dgs": [
+            "ENER"
+          ],
+          "council_configs": [
+            "TTE"
+          ],
+          "agencies": [
+            "ACER"
+          ],
+          "policy_area_strings": [
+            "Energy"
+          ],
+          "cpv": [
+            "09",
+            "31",
+            "65",
+            "71"
+          ]
+        },
+        {
+          "name": "Transport",
+          "description": "Transport policy and sustainable mobility",
+          "aliases": [
+            "transport",
+            "mobility",
+            "aviation",
+            "aircraft",
+            "airlines",
+            "air",
+            "rail",
+            "railway",
+            "shipping",
+            "maritime transport",
+            "road",
+            "cars",
+            "vehicles",
+            "drones",
+            "uas",
+            "unmanned",
+            "uav",
+            "ev",
+            "charging",
+            "afir"
+          ],
+          "keywords": [
+            "transport",
+            "mobility",
+            "aviation",
+            "rail",
+            "maritime transport",
+            "road",
+            "vehicle",
+            "drone",
+            "shipping"
+          ],
+          "committees": [
+            "TRAN"
+          ],
+          "dgs": [
+            "MOVE"
+          ],
+          "council_configs": [
+            "TTE"
+          ],
+          "agencies": [
+            "EMSA"
+          ],
+          "policy_area_strings": [
+            "Transport"
+          ],
+          "cpv": [
+            "34",
+            "60",
+            "63",
+            "45"
+          ]
+        }
       ]
     },
     {
       "category": "Digital Transformation",
       "description": "2 areas (Europe Fit for Digital Age)",
       "policy_areas": [
-        { "name": "Digital Policy and Digital Economy", "description": "Digital single market and e-commerce", "aliases": ["digital", "ai", "artificial intelligence", "ai act", "data", "data act", "gdpr", "platforms", "dsa", "dma", "e-commerce", "cyber", "cybersecurity", "nis2", "cra", "cloud", "chips"] },
-        { "name": "Communication Networks, Content and Technology", "description": "Telecommunications and digital infrastructure", "aliases": ["telecom", "telecommunications", "networks", "spectrum", "5g", "6g", "broadband", "connectivity", "media", "audiovisual", "gigabit", "submarine cables"] }
+        {
+          "name": "Digital Policy and Digital Economy",
+          "description": "Digital single market and e-commerce",
+          "aliases": [
+            "digital",
+            "ai",
+            "artificial intelligence",
+            "ai act",
+            "data",
+            "data act",
+            "gdpr",
+            "platforms",
+            "dsa",
+            "dma",
+            "e-commerce",
+            "cyber",
+            "cybersecurity",
+            "nis2",
+            "cra",
+            "cloud",
+            "chips"
+          ],
+          "keywords": [
+            "digital",
+            "artificial intelligence",
+            " ai ",
+            "data act",
+            "platform",
+            "cyber",
+            "e-privacy",
+            "online",
+            "cloud",
+            "chips"
+          ],
+          "committees": [
+            "ITRE",
+            "IMCO"
+          ],
+          "dgs": [
+            "CNECT"
+          ],
+          "council_configs": [
+            "TTE",
+            "COMPET"
+          ],
+          "agencies": [
+            "ENISA",
+            "EUIPO"
+          ],
+          "policy_area_strings": [
+            "Digital single market",
+            "Artificial intelligence",
+            "Cybersecurity"
+          ],
+          "cpv": [
+            "48",
+            "72",
+            "30"
+          ]
+        },
+        {
+          "name": "Communication Networks, Content and Technology",
+          "description": "Telecommunications and digital infrastructure",
+          "aliases": [
+            "telecom",
+            "telecommunications",
+            "networks",
+            "spectrum",
+            "5g",
+            "6g",
+            "broadband",
+            "connectivity",
+            "media",
+            "audiovisual",
+            "gigabit",
+            "submarine cables"
+          ],
+          "keywords": [
+            "telecom",
+            "spectrum",
+            "5g",
+            "6g",
+            "broadband",
+            "connectivity",
+            "media",
+            "audiovisual"
+          ],
+          "committees": [
+            "ITRE",
+            "CULT"
+          ],
+          "dgs": [
+            "CNECT"
+          ],
+          "council_configs": [
+            "TTE"
+          ],
+          "agencies": [
+            "ENISA"
+          ],
+          "policy_area_strings": [
+            "Telecommunications",
+            "5G/6G networks",
+            "Digital infrastructure"
+          ],
+          "cpv": [
+            "32",
+            "64",
+            "72"
+          ]
+        }
       ]
     },
     {
       "category": "Agriculture and Natural Resources",
       "description": "3 areas",
       "policy_areas": [
-        { "name": "Agriculture", "description": "Common Agricultural Policy and rural development", "aliases": ["agriculture", "farming", "farmers", "cap", "rural development", "geographical indications", "gi", "gis", "pdo", "pgi", "quality schemes", "wine", "cheese", "organic", "pesticides", "livestock", "crops", "eafrd", "smart villages"] },
-        { "name": "Maritime Affairs and Fisheries", "description": "Fisheries policy and blue economy", "aliases": ["fisheries", "fishing", "fish", "blue economy", "aquaculture", "oceans", "maritime", "quotas", "common fisheries policy", "cfp"] },
-        { "name": "Food Safety", "description": "Food standards and safety regulations", "aliases": ["food", "food safety", "food standards", "efsa", "labelling", "novel food", "animal health", "plant health", "additives", "gmo"] }
+        {
+          "name": "Agriculture",
+          "description": "Common Agricultural Policy and rural development",
+          "aliases": [
+            "agriculture",
+            "farming",
+            "farmers",
+            "cap",
+            "rural development",
+            "geographical indications",
+            "gi",
+            "gis",
+            "pdo",
+            "pgi",
+            "quality schemes",
+            "wine",
+            "cheese",
+            "organic",
+            "pesticides",
+            "livestock",
+            "crops",
+            "eafrd",
+            "smart villages"
+          ],
+          "keywords": [
+            "agricultur",
+            "agri-food",
+            "agrifood",
+            "farm",
+            "livestock",
+            "crop",
+            "rural",
+            "cap ",
+            "common agricultural",
+            "wine",
+            "dairy",
+            "organic",
+            "pesticide",
+            "fertilis",
+            "plant variety",
+            "geographical indication"
+          ],
+          "committees": [
+            "AGRI"
+          ],
+          "dgs": [
+            "AGRI"
+          ],
+          "council_configs": [
+            "AGRIFISH"
+          ],
+          "agencies": [
+            "CPVO"
+          ],
+          "policy_area_strings": [
+            "Agriculture"
+          ],
+          "cpv": [
+            "03",
+            "77",
+            "16",
+            "15"
+          ]
+        },
+        {
+          "name": "Maritime Affairs and Fisheries",
+          "description": "Fisheries policy and blue economy",
+          "aliases": [
+            "fisheries",
+            "fishing",
+            "fish",
+            "blue economy",
+            "aquaculture",
+            "oceans",
+            "maritime",
+            "quotas",
+            "common fisheries policy",
+            "cfp"
+          ],
+          "keywords": [
+            "fish",
+            "fisher",
+            "aquacultur",
+            "maritime",
+            "ocean",
+            "marine",
+            "vessel",
+            "seafood",
+            "baltic sea",
+            "mediterranean",
+            "blue economy"
+          ],
+          "committees": [
+            "PECH"
+          ],
+          "dgs": [
+            "MARE"
+          ],
+          "council_configs": [
+            "AGRIFISH"
+          ],
+          "agencies": [
+            "EMSA"
+          ],
+          "policy_area_strings": [
+            "Fisheries",
+            "Maritime Affairs and Fisheries"
+          ],
+          "cpv": [
+            "03",
+            "77",
+            "34"
+          ]
+        },
+        {
+          "name": "Food Safety",
+          "description": "Food standards and safety regulations",
+          "aliases": [
+            "food",
+            "food safety",
+            "food standards",
+            "efsa",
+            "labelling",
+            "novel food",
+            "animal health",
+            "plant health",
+            "additives",
+            "gmo"
+          ],
+          "keywords": [
+            "food",
+            "gmo",
+            "genetically modified",
+            "biocid",
+            "pesticide",
+            "novel food",
+            "additive",
+            "contaminant",
+            "hygiene",
+            "efsa",
+            "plant health",
+            "animal health",
+            "veterinary",
+            "labelling of",
+            "animal feed",
+            "feed safety"
+          ],
+          "committees": [
+            "ENVI",
+            "SANT",
+            "AGRI"
+          ],
+          "dgs": [
+            "SANTE"
+          ],
+          "council_configs": [
+            "AGRIFISH",
+            "EPSCO"
+          ],
+          "agencies": [
+            "ECHA"
+          ],
+          "policy_area_strings": [
+            "Food Safety"
+          ],
+          "cpv": [
+            "15",
+            "85",
+            "33",
+            "71"
+          ]
+        }
       ]
     },
     {
       "category": "Cohesion and Development",
       "description": "4 areas",
       "policy_areas": [
-        { "name": "Regional Policy", "description": "Cohesion policy and regional development", "aliases": ["regional", "cohesion", "structural funds", "erdf", "interreg", "regions", "territorial"] },
-        { "name": "Research and Innovation", "description": "Horizon Europe and research funding", "aliases": ["research", "innovation", "horizon europe", "science", "r&d", "startups", "deep tech", "patents", "technology transfer"] },
-        { "name": "Education, Training and Youth", "description": "Erasmus+ and education policies", "aliases": ["education", "training", "youth", "erasmus", "schools", "universities", "skills", "vocational", "lifelong learning"] },
-        { "name": "Culture", "description": "Cultural programmes and creative industries", "aliases": ["culture", "creative", "heritage", "arts", "film", "music", "creative europe"] }
+        {
+          "name": "Regional Policy",
+          "description": "Cohesion policy and regional development",
+          "aliases": [
+            "regional",
+            "cohesion",
+            "structural funds",
+            "erdf",
+            "interreg",
+            "regions",
+            "territorial"
+          ],
+          "keywords": [
+            "cohesion",
+            "regional",
+            "structural fund",
+            "interreg",
+            "erdf",
+            "outermost region"
+          ],
+          "committees": [
+            "REGI"
+          ],
+          "dgs": [
+            "REGIO"
+          ],
+          "council_configs": [
+            "GAC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Regional policy"
+          ],
+          "cpv": [
+            "45",
+            "71"
+          ]
+        },
+        {
+          "name": "Research and Innovation",
+          "description": "Horizon Europe and research funding",
+          "aliases": [
+            "research",
+            "innovation",
+            "horizon europe",
+            "science",
+            "r&d",
+            "startups",
+            "deep tech",
+            "patents",
+            "technology transfer"
+          ],
+          "keywords": [
+            "research",
+            "innovation",
+            "horizon europe",
+            "deep tech",
+            "patent"
+          ],
+          "committees": [
+            "ITRE"
+          ],
+          "dgs": [
+            "RTD"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [
+            "EIT"
+          ],
+          "policy_area_strings": [
+            "Research",
+            "New technologies"
+          ],
+          "cpv": [
+            "73",
+            "38"
+          ]
+        },
+        {
+          "name": "Education, Training and Youth",
+          "description": "Erasmus+ and education policies",
+          "aliases": [
+            "education",
+            "training",
+            "youth",
+            "erasmus",
+            "schools",
+            "universities",
+            "skills",
+            "vocational",
+            "lifelong learning"
+          ],
+          "keywords": [
+            "education",
+            "training",
+            "youth",
+            "erasmus",
+            "skills",
+            "vocational"
+          ],
+          "committees": [
+            "CULT"
+          ],
+          "dgs": [
+            "EAC"
+          ],
+          "council_configs": [
+            "EDUC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Education"
+          ],
+          "cpv": [
+            "80"
+          ]
+        },
+        {
+          "name": "Culture",
+          "description": "Cultural programmes and creative industries",
+          "aliases": [
+            "culture",
+            "creative",
+            "heritage",
+            "arts",
+            "film",
+            "music",
+            "creative europe"
+          ],
+          "keywords": [
+            "culture",
+            "creative",
+            "heritage",
+            "audiovisual",
+            "media literacy"
+          ],
+          "committees": [
+            "CULT"
+          ],
+          "dgs": [
+            "EAC"
+          ],
+          "council_configs": [
+            "EDUC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Culture"
+          ],
+          "cpv": [
+            "92"
+          ]
+        }
       ]
     },
     {
       "category": "Social Policies",
       "description": "3 areas",
       "policy_areas": [
-        { "name": "Employment and Social Affairs", "description": "Labour rights and social protection", "aliases": ["employment", "jobs", "labour", "workers", "social", "social rights", "minimum wage", "pensions", "platform work", "working conditions", "social protection"] },
-        { "name": "Health", "description": "Public health and healthcare policies", "aliases": ["health", "healthcare", "medicines", "pharma", "pharmaceutical", "ema", "cancer", "vaccines", "medical devices", "mental health", "drugs", "marijuana", "cannabis", "cocaine", "tobacco", "alcohol"] },
-        { "name": "Consumer Protection", "description": "Consumer rights and product safety", "aliases": ["consumer", "consumers", "product safety", "consumer rights", "warranties", "unfair practices", "greenwashing"] }
+        {
+          "name": "Employment and Social Affairs",
+          "description": "Labour rights and social protection",
+          "aliases": [
+            "employment",
+            "jobs",
+            "labour",
+            "workers",
+            "social",
+            "social rights",
+            "minimum wage",
+            "pensions",
+            "platform work",
+            "working conditions",
+            "social protection"
+          ],
+          "keywords": [
+            "employment",
+            "labour",
+            "worker",
+            "pension",
+            "platform work",
+            "minimum wage",
+            "working conditions",
+            "social affairs",
+            "social protection",
+            "social rights",
+            "social dialogue"
+          ],
+          "committees": [
+            "EMPL"
+          ],
+          "dgs": [
+            "EMPL"
+          ],
+          "council_configs": [
+            "EPSCO"
+          ],
+          "agencies": [
+            "EU_OSHA",
+            "EUROFOUND"
+          ],
+          "policy_area_strings": [
+            "Employment",
+            "Social affairs"
+          ],
+          "cpv": [
+            "79",
+            "85",
+            "75"
+          ]
+        },
+        {
+          "name": "Health",
+          "description": "Public health and healthcare policies",
+          "aliases": [
+            "health",
+            "healthcare",
+            "medicines",
+            "pharma",
+            "pharmaceutical",
+            "ema",
+            "cancer",
+            "vaccines",
+            "medical devices",
+            "mental health",
+            "drugs",
+            "marijuana",
+            "cannabis",
+            "cocaine",
+            "tobacco",
+            "alcohol"
+          ],
+          "keywords": [
+            "health",
+            "medicine",
+            "pharmaceutic",
+            "medical device",
+            "cancer",
+            "vaccine",
+            "patient",
+            "european medicines",
+            "medicines agency"
+          ],
+          "committees": [
+            "SANT",
+            "ENVI"
+          ],
+          "dgs": [
+            "SANTE"
+          ],
+          "council_configs": [
+            "EPSCO"
+          ],
+          "agencies": [
+            "EMA",
+            "ECDC"
+          ],
+          "policy_area_strings": [
+            "Health",
+            "Public health"
+          ],
+          "cpv": [
+            "33",
+            "85"
+          ]
+        },
+        {
+          "name": "Consumer Protection",
+          "description": "Consumer rights and product safety",
+          "aliases": [
+            "consumer",
+            "consumers",
+            "product safety",
+            "consumer rights",
+            "warranties",
+            "unfair practices",
+            "greenwashing"
+          ],
+          "keywords": [
+            "consumer",
+            "product safety",
+            "warrant",
+            "unfair commercial",
+            "greenwashing"
+          ],
+          "committees": [
+            "IMCO"
+          ],
+          "dgs": [
+            "JUST"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Consumer Protection",
+            "Consumer protection"
+          ],
+          "cpv": [
+            "79",
+            "71"
+          ]
+        }
       ]
     },
     {
       "category": "Justice and Home Affairs",
       "description": "3 areas",
       "policy_areas": [
-        { "name": "Justice and Fundamental Rights", "description": "Rule of law and fundamental rights", "aliases": ["justice", "rule of law", "fundamental rights", "judicial", "data protection", "privacy", "civil law", "company law", "contract", "rights", "anti-corruption"] },
-        { "name": "Migration and Home Affairs", "description": "Migration policy and border management", "aliases": ["migration", "asylum", "refugees", "refugee", "migrants", "borders", "schengen", "frontex", "visa", "police", "security", "terrorism", "organised crime", "trafficking", "drugs", "narcotics", "drug trafficking", "euda", "marijuana", "cocaine", "heroin"] },
-        { "name": "Women's Rights and Gender Equality", "description": "Gender equality and women's empowerment", "aliases": ["women", "gender", "gender equality", "equality", "violence against women", "pay gap", "lgbtiq", "discrimination"] }
+        {
+          "name": "Justice and Fundamental Rights",
+          "description": "Rule of law and fundamental rights",
+          "aliases": [
+            "justice",
+            "rule of law",
+            "fundamental rights",
+            "judicial",
+            "data protection",
+            "privacy",
+            "civil law",
+            "company law",
+            "contract",
+            "rights",
+            "anti-corruption"
+          ],
+          "keywords": [
+            "justice",
+            "rule of law",
+            "fundamental rights",
+            "data protection",
+            "privacy",
+            "judicial",
+            "company law",
+            "anti-corruption"
+          ],
+          "committees": [
+            "JURI",
+            "LIBE"
+          ],
+          "dgs": [
+            "JUST"
+          ],
+          "council_configs": [
+            "JHA"
+          ],
+          "agencies": [
+            "FRA",
+            "EUROJUST",
+            "EDPS"
+          ],
+          "policy_area_strings": [
+            "Legal Affairs",
+            "Justice",
+            "Fundamental rights"
+          ],
+          "cpv": [
+            "79",
+            "75"
+          ]
+        },
+        {
+          "name": "Migration and Home Affairs",
+          "description": "Migration policy and border management",
+          "aliases": [
+            "migration",
+            "asylum",
+            "refugees",
+            "refugee",
+            "migrants",
+            "borders",
+            "schengen",
+            "frontex",
+            "visa",
+            "police",
+            "security",
+            "terrorism",
+            "organised crime",
+            "trafficking",
+            "drugs",
+            "narcotics",
+            "drug trafficking",
+            "euda",
+            "marijuana",
+            "cocaine",
+            "heroin"
+          ],
+          "keywords": [
+            "migration",
+            "asylum",
+            "border",
+            "schengen",
+            "visa",
+            "police",
+            "terrorism",
+            "organised crime",
+            "trafficking"
+          ],
+          "committees": [
+            "LIBE"
+          ],
+          "dgs": [
+            "HOME"
+          ],
+          "council_configs": [
+            "JHA"
+          ],
+          "agencies": [
+            "EUAA",
+            "CEPOL",
+            "EUROJUST"
+          ],
+          "policy_area_strings": [
+            "Security",
+            "Migration"
+          ],
+          "cpv": [
+            "35",
+            "75",
+            "79"
+          ]
+        },
+        {
+          "name": "Women's Rights and Gender Equality",
+          "description": "Gender equality and women's empowerment",
+          "aliases": [
+            "women",
+            "gender",
+            "gender equality",
+            "equality",
+            "violence against women",
+            "pay gap",
+            "lgbtiq",
+            "discrimination"
+          ],
+          "keywords": [
+            "gender",
+            "women",
+            "equality",
+            "violence against women",
+            "lgbti"
+          ],
+          "committees": [
+            "FEMM"
+          ],
+          "dgs": [
+            "JUST"
+          ],
+          "council_configs": [
+            "EPSCO"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "gender_equality",
+            "Democracy"
+          ],
+          "cpv": [
+            "85",
+            "79"
+          ]
+        }
       ]
     },
     {
       "category": "External Relations",
       "description": "5 areas",
       "policy_areas": [
-        { "name": "Foreign and Security Policy", "description": "Common foreign and security policy", "aliases": ["foreign policy", "cfsp", "diplomacy", "sanctions", "geopolitics", "america", "usa", "united states", "china", "russia", "ukraine", "middle east", "israel", "gaza", "transatlantic", "indo-pacific"] },
-        { "name": "Development and Cooperation", "description": "International development aid", "aliases": ["development", "development aid", "cooperation", "global gateway", "africa", "acp", "sdgs", "poverty"] },
-        { "name": "Neighbourhood and Enlargement", "description": "Enlargement and neighbourhood policy", "aliases": ["enlargement", "accession", "candidate", "western balkans", "albania", "serbia", "montenegro", "north macedonia", "kosovo", "bosnia", "ukraine", "moldova", "georgia", "turkey", "turkiye", "neighbourhood", "eastern partnership"] },
-        { "name": "Human Rights and Democracy", "description": "Global human rights advocacy", "aliases": ["human rights", "democracy", "civil society", "press freedom", "sakharov"] },
-        { "name": "Humanitarian Aid and Civil Protection", "description": "Emergency response and disaster relief", "aliases": ["humanitarian", "humanitarian aid", "disaster", "civil protection", "emergency", "rescue", "resceu", "wildfire", "wildfires", "forest fire", "floods", "earthquake", "fire", "crisis response"] }
+        {
+          "name": "Foreign and Security Policy",
+          "description": "Common foreign and security policy",
+          "aliases": [
+            "foreign policy",
+            "cfsp",
+            "diplomacy",
+            "sanctions",
+            "geopolitics",
+            "america",
+            "usa",
+            "united states",
+            "china",
+            "russia",
+            "ukraine",
+            "middle east",
+            "israel",
+            "gaza",
+            "transatlantic",
+            "indo-pacific"
+          ],
+          "keywords": [
+            "foreign",
+            "cfsp",
+            "sanction",
+            "diplomacy",
+            "third countr",
+            "external action"
+          ],
+          "committees": [
+            "AFET",
+            "SEDE"
+          ],
+          "dgs": [
+            "EEAS",
+            "FPI"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [
+            "EEAS"
+          ],
+          "policy_area_strings": [
+            "Foreign affairs",
+            "External action"
+          ],
+          "cpv": [
+            "75",
+            "79"
+          ]
+        },
+        {
+          "name": "Development and Cooperation",
+          "description": "International development aid",
+          "aliases": [
+            "development",
+            "development aid",
+            "cooperation",
+            "global gateway",
+            "africa",
+            "acp",
+            "sdgs",
+            "poverty"
+          ],
+          "keywords": [
+            "global gateway",
+            "humanitarian",
+            "acp",
+            "least developed",
+            "development aid",
+            "developing countr",
+            "development cooperation",
+            "international cooperation"
+          ],
+          "committees": [
+            "DEVE"
+          ],
+          "dgs": [
+            "INTPA"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Development",
+            "International Cooperation"
+          ],
+          "cpv": [
+            "75",
+            "79",
+            "73"
+          ]
+        },
+        {
+          "name": "Neighbourhood and Enlargement",
+          "description": "Enlargement and neighbourhood policy",
+          "aliases": [
+            "enlargement",
+            "accession",
+            "candidate",
+            "western balkans",
+            "albania",
+            "serbia",
+            "montenegro",
+            "north macedonia",
+            "kosovo",
+            "bosnia",
+            "ukraine",
+            "moldova",
+            "georgia",
+            "turkey",
+            "turkiye",
+            "neighbourhood",
+            "eastern partnership"
+          ],
+          "keywords": [
+            "enlargement",
+            "accession",
+            "candidate",
+            "western balkan",
+            "neighbourhood",
+            "pre-accession"
+          ],
+          "committees": [
+            "AFET"
+          ],
+          "dgs": [
+            "ENEST",
+            "NEAR"
+          ],
+          "council_configs": [
+            "GAC",
+            "FAC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "External action"
+          ],
+          "cpv": [
+            "75",
+            "79"
+          ]
+        },
+        {
+          "name": "Human Rights and Democracy",
+          "description": "Global human rights advocacy",
+          "aliases": [
+            "human rights",
+            "democracy",
+            "civil society",
+            "press freedom",
+            "sakharov"
+          ],
+          "keywords": [
+            "human rights",
+            "democracy",
+            "civil society",
+            "press freedom"
+          ],
+          "committees": [
+            "AFET",
+            "DROI"
+          ],
+          "dgs": [
+            "EEAS"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [
+            "FRA",
+            "EEAS"
+          ],
+          "policy_area_strings": [
+            "Human rights",
+            "Democracy"
+          ],
+          "cpv": [
+            "79",
+            "75"
+          ]
+        },
+        {
+          "name": "Humanitarian Aid and Civil Protection",
+          "description": "Emergency response and disaster relief",
+          "aliases": [
+            "humanitarian",
+            "humanitarian aid",
+            "disaster",
+            "civil protection",
+            "emergency",
+            "rescue",
+            "resceu",
+            "wildfire",
+            "wildfires",
+            "forest fire",
+            "floods",
+            "earthquake",
+            "fire",
+            "crisis response"
+          ],
+          "keywords": [
+            "humanitarian",
+            "civil protection",
+            "disaster",
+            "emergency",
+            "rescue"
+          ],
+          "committees": [
+            "DEVE"
+          ],
+          "dgs": [
+            "ECHO"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Development"
+          ],
+          "cpv": [
+            "35",
+            "75",
+            "85"
+          ]
+        }
       ]
     },
     {
       "category": "Emerging Strategic Areas",
       "description": "3 areas",
       "policy_areas": [
-        { "name": "Defence and Security", "description": "European defence and security cooperation", "aliases": ["defence", "defense", "military", "army", "weapons", "arms", "nato", "edf", "european defence fund", "edirpa", "asap", "drones", "uav", "missiles"] },
-        { "name": "Space Policy", "description": "EU space programme and satellite systems", "aliases": ["space", "satellite", "satellites", "galileo", "copernicus", "egnos", "iris2", "launchers", "space programme"] },
-        { "name": "Statistics", "description": "Eurostat and statistical data", "aliases": ["statistics", "eurostat", "indicators", "census", "national accounts"] }
+        {
+          "name": "Defence and Security",
+          "description": "European defence and security cooperation",
+          "aliases": [
+            "defence",
+            "defense",
+            "military",
+            "army",
+            "weapons",
+            "arms",
+            "nato",
+            "edf",
+            "european defence fund",
+            "edirpa",
+            "asap",
+            "drones",
+            "uav",
+            "missiles"
+          ],
+          "keywords": [
+            "defence",
+            "defense",
+            "military",
+            "security and defence",
+            "edf",
+            "weapon",
+            "armament"
+          ],
+          "committees": [
+            "SEDE",
+            "AFET"
+          ],
+          "dgs": [
+            "DEFIS"
+          ],
+          "council_configs": [
+            "FAC"
+          ],
+          "agencies": [
+            "EEAS"
+          ],
+          "policy_area_strings": [
+            "Defence",
+            "Security",
+            "SAFE programme"
+          ],
+          "cpv": [
+            "35",
+            "75"
+          ]
+        },
+        {
+          "name": "Space Policy",
+          "description": "EU space programme and satellite systems",
+          "aliases": [
+            "space",
+            "satellite",
+            "satellites",
+            "galileo",
+            "copernicus",
+            "egnos",
+            "iris2",
+            "launchers",
+            "space programme"
+          ],
+          "keywords": [
+            "space",
+            "satellite",
+            "galileo",
+            "copernicus",
+            "launcher"
+          ],
+          "committees": [
+            "ITRE",
+            "SEDE"
+          ],
+          "dgs": [
+            "DEFIS"
+          ],
+          "council_configs": [
+            "COMPET"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Space"
+          ],
+          "cpv": [
+            "35",
+            "38",
+            "73",
+            "34"
+          ]
+        },
+        {
+          "name": "Statistics",
+          "description": "Eurostat and statistical data",
+          "aliases": [
+            "statistics",
+            "eurostat",
+            "indicators",
+            "census",
+            "national accounts"
+          ],
+          "keywords": [
+            "statistic",
+            "eurostat",
+            "indicator",
+            "census"
+          ],
+          "committees": [
+            "ECON"
+          ],
+          "dgs": [
+            "ESTAT"
+          ],
+          "council_configs": [
+            "ECOFIN"
+          ],
+          "agencies": [],
+          "policy_area_strings": [
+            "Statistics"
+          ],
+          "cpv": [
+            "72",
+            "79"
+          ]
+        }
       ]
     }
   ]

@@ -4,6 +4,109 @@
   gap: 1.5rem;
 }
 
+/* ---- Search / filter bar ---- */
+.policy-preferences__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.policy-preferences__search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.policy-preferences__search-input {
+  width: 100%;
+  padding: 0.7rem 2.4rem 0.7rem 2.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1f2937;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.policy-preferences__search-input::placeholder {
+  color: #9ca3af;
+}
+
+.policy-preferences__search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Hide the native search clear (we render our own) */
+.policy-preferences__search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.policy-preferences__search-clear {
+  position: absolute;
+  right: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: color 0.15s, background 0.15s;
+}
+
+.policy-preferences__search-clear:hover {
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+/* ---- Talk-to-Brubru escape hatch (sits under the filter bar) ---- */
+.policy-preferences__ask-brubru {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  margin-top: -0.75rem;
+  padding: 0.4rem 0.25rem;
+  border: none;
+  background: transparent;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.policy-preferences__ask-brubru:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* ---- No-results state ---- */
+.policy-preferences__no-results {
+  padding: 1.5rem;
+  text-align: center;
+  background: #f8f9fa;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  color: #4b5563;
+}
+
+.policy-preferences__no-results p {
+  margin: 0;
+}
+
+.policy-preferences__no-results-hint {
+  margin-top: 0.35rem !important;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
 .policy-preferences__header {
   display: flex;
   justify-content: space-between;

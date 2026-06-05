@@ -1,6 +1,7 @@
 // Tracked Files Loader for Amendator
 // Allows users to load documents from their tracked legislative files
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { FetchedDocument } from './eurlex_url_input';
 import './tracked_files_loader.css';
@@ -12,6 +13,7 @@ interface TrackedFilesLoaderProps {
 }
 
 export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProps) => {
+  const { t } = useTranslation();
   const { trackedFiles, fetchTrackedFiles, isLoadingTrackedFiles } = useLegislativeTrains();
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,8 +24,25 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
     fetchTrackedFiles();
   }, [fetchTrackedFiles]);
 
-  // Filter tracked files by search query
-  const filteredFiles = trackedFiles.filter(file =>
+  // The Amendator drafts amendments to files that are still open in the
+  // legislative process. Two exclusions:
+  //  1. Type: only COD/APP/CNS procedures (or anything with a CELEX) are
+  //     amendable. Resolutions (RSP/RSO), own-initiative reports (INI),
+  //     delegated/implementing acts (DEA/RPS) and Commission communications
+  //     (COM ...) have no amendable text or fetchable CELEX.
+  //  2. Stage: already adopted/completed acts are final, so they are not
+  //     offered for amendment drafting.
+  const AMENDABLE_PROC = /\((?:COD|APP|CNS)\)\s*$/i;
+  const FINAL_STATUSES = new Set(['completed', 'adopted', 'withdrawn', 'rejected', 'closed']);
+  const amendableFiles = trackedFiles.filter(file =>
+    !FINAL_STATUSES.has((file.current_status || '').toLowerCase()) &&
+    ((file.celex_numbers && file.celex_numbers.length > 0) ||
+      AMENDABLE_PROC.test(file.oeil_procedure_ref || ''))
+  );
+  const hiddenCount = trackedFiles.length - amendableFiles.length;
+
+  // Filter amendable files by search query
+  const filteredFiles = amendableFiles.filter(file =>
     file.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (file.oeil_procedure_ref && file.oeil_procedure_ref.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -38,7 +57,7 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
 
       // If no CELEX, try to fetch via backend (OEIL + EUR-Lex SPARQL)
       if (!celex) {
-        setError('Looking up document in EUR-Lex...');
+        setError(t('amendator.tracked.lookingUp'));
         const enrichResponse = await fetch(`${API_BASE}/legislative-train/carriages/${carriageId}/enrich-celex`, {
           method: 'POST',
           headers: {
@@ -52,11 +71,11 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
             celex = enrichData.celex_numbers[0];
             setError(''); // Clear the "fetching" message
           } else {
-            throw new Error('No CELEX number found for this legislation. It may be too new or not yet published in EUR-Lex.');
+            throw new Error(t('amendator.tracked.errorNoCelex'));
           }
         } else {
           const errorData = await enrichResponse.json().catch(() => ({}));
-          throw new Error(errorData.detail || 'Failed to fetch CELEX number from OEIL');
+          throw new Error(errorData.detail || t('amendator.tracked.errorFetchCelex'));
         }
       }
 
@@ -77,7 +96,7 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to fetch document from EUR-Lex');
+        throw new Error(errorData.detail || t('amendator.eurlex.errorFetch'));
       }
 
       const document: FetchedDocument = await response.json();
@@ -85,7 +104,7 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
 
     } catch (err) {
       console.error('Error loading tracked file:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load document');
+      setError(err instanceof Error ? err.message : t('amendator.eurlex.errorFetch'));
     } finally {
       setIsLoading(false);
       setSelectedFileId(null);
@@ -116,17 +135,20 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
   return (
     <div className="tracked-files-loader">
       <div className="tracked-files-loader__header">
-        <h3 className="tracked-files-loader__title">Load from Tracked Files</h3>
-        <p className="tracked-files-loader__hint">
-          Select a file from your tracked legislation to start drafting amendments
-        </p>
+        <h3 className="tracked-files-loader__title">{t('amendator.tracked.title')}</h3>
+        <p className="tracked-files-loader__hint">{t('amendator.tracked.hint')}</p>
+        {hiddenCount > 0 && (
+          <p className="tracked-files-loader__hint" style={{ fontSize: '0.8rem', opacity: 0.8, marginTop: '0.35rem' }}>
+            {hiddenCount} tracked {hiddenCount === 1 ? 'file is' : 'files are'} not shown: only legislative files still open for amendment appear here. Already-adopted or completed acts, resolutions, delegated acts and communications are excluded.
+          </p>
+        )}
       </div>
 
       <div className="tracked-files-loader__search">
         <input
           type="text"
           className="tracked-files-loader__search-input"
-          placeholder="Search tracked files..."
+          placeholder={t('amendator.tracked.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -141,17 +163,15 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
 
       <div className="tracked-files-loader__list">
         {isLoadingTrackedFiles ? (
-          <div className="tracked-files-loader__loading">Loading tracked files...</div>
+          <div className="tracked-files-loader__loading">{t('amendator.tracked.loadingTracked')}</div>
         ) : filteredFiles.length === 0 ? (
           <div className="tracked-files-loader__empty">
             {searchQuery ? (
-              <p>No tracked files match your search.</p>
+              <p>{t('amendator.tracked.noMatch')}</p>
             ) : (
               <>
-                <p>You haven't tracked any legislative files yet.</p>
-                <p className="tracked-files-loader__empty-hint">
-                  Track files in My EU Bubble → My Tracked Files to see them here.
-                </p>
+                <p>{t('amendator.tracked.noneYet')}</p>
+                <p className="tracked-files-loader__empty-hint">{t('amendator.tracked.noneYetHint')}</p>
               </>
             )}
           </div>
@@ -180,7 +200,7 @@ export const TrackedFilesLoader = ({ onDocumentFetched }: TrackedFilesLoaderProp
                 onClick={() => handleLoadFile(file.carriage_id, file.celex_numbers)}
                 disabled={isLoading && selectedFileId === file.carriage_id}
               >
-                {isLoading && selectedFileId === file.carriage_id ? 'Loading...' : 'Load'}
+                {isLoading && selectedFileId === file.carriage_id ? t('amendator.tracked.loading') : t('amendator.tracked.load')}
               </button>
             </div>
           ))

@@ -108,15 +108,25 @@ div:has(> .policy-page.api-page) {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 10px 14px;
   border-radius: 4px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border: 2px solid #0693e3;
   transition: all 0.2s;
   min-height: 44px;
   box-sizing: border-box;
+  white-space: nowrap;        /* keep each label intact (no internal wrap) */
+  line-height: 1.2;
+}
+
+/* Tablet — slightly tighter so 4 CTAs still fit on one row */
+@media (max-width: 1024px) {
+  .api-page__cta {
+    padding: 9px 12px;
+    font-size: 0.9rem;
+  }
 }
 .api-page__cta--primary { background: #0693e3; color: #fff; }
 .api-page__cta--primary:hover { background: #047dbe; border-color: #047dbe; color: #fff; }

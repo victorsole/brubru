@@ -1,5 +1,6 @@
 // Amendator Document Upload Component
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './amendator_document_upload.css';
 
@@ -17,6 +18,7 @@ export interface UploadedDocument {
 }
 
 export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumentUploadProps) => {
+  const { t } = useTranslation();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -43,13 +45,13 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
     Array.from(files).forEach((file) => {
       // Validate file type
       if (!Object.keys(acceptedFileTypes).includes(file.type)) {
-        errors.push(`${file.name}: Unsupported file type. Please upload PDF, DOC, or DOCX files.`);
+        errors.push(t('amendator.upload.errorUnsupported', { name: file.name }));
         return;
       }
 
       // Validate file size
       if (file.size > maxFileSize) {
-        errors.push(`${file.name}: File size exceeds 10MB limit.`);
+        errors.push(t('amendator.upload.errorTooLarge', { name: file.name }));
         return;
       }
 
@@ -83,7 +85,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) {
-      setError('Please select at least one file');
+      setError(t('amendator.upload.errorSelectFile'));
       return;
     }
 
@@ -107,7 +109,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
 
         if (!uploadResponse.ok) {
           const errorData = await uploadResponse.json();
-          throw new Error(errorData.detail || 'Failed to upload document');
+          throw new Error(errorData.detail || t('amendator.upload.errorFailed'));
         }
 
         const uploadedDoc = await uploadResponse.json();
@@ -139,7 +141,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
 
     } catch (err) {
       console.error('Error uploading documents:', err);
-      setError(err instanceof Error ? err.message : 'Failed to upload documents');
+      setError(err instanceof Error ? err.message : t('amendator.upload.errorFailed'));
     } finally {
       setIsUploading(false);
     }
@@ -152,10 +154,8 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
   return (
     <div className="amendator-document-upload">
       <div className="amendator-document-upload__header">
-        <h3 className="amendator-document-upload__title">Upload Document</h3>
-        <p className="amendator-document-upload__hint">
-          Upload PDF, DOC, or DOCX files (max 10MB)
-        </p>
+        <h3 className="amendator-document-upload__title">{t('amendator.upload.title')}</h3>
+        <p className="amendator-document-upload__hint">{t('amendator.upload.hint')}</p>
       </div>
 
       {/* Drag & Drop Zone */}
@@ -167,12 +167,10 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
       >
         <div className="amendator-document-upload__dropzone-content">
           <span className="amendator-document-upload__icon mdi mdi-file-document-outline"></span>
-          <p className="amendator-document-upload__dropzone-text">
-            Drag & drop files here
-          </p>
-          <p className="amendator-document-upload__dropzone-or">or</p>
+          <p className="amendator-document-upload__dropzone-text">{t('amendator.upload.dragDrop')}</p>
+          <p className="amendator-document-upload__dropzone-or">{t('amendator.upload.or')}</p>
           <label className="amendator-document-upload__file-label button button-secondary button-sm">
-            Browse Files
+            {t('amendator.upload.browse')}
             <input
               type="file"
               className="amendator-document-upload__file-input"
@@ -189,7 +187,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
       {selectedFiles.length > 0 && (
         <div className="amendator-document-upload__files">
           <h4 className="amendator-document-upload__files-title">
-            Selected Files ({selectedFiles.length})
+            {t('amendator.upload.selectedFiles', { count: selectedFiles.length })}
           </h4>
           <ul className="amendator-document-upload__files-list">
             {selectedFiles.map((file, index) => (
@@ -237,7 +235,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
           onClick={handleUpload}
           disabled={isUploading}
         >
-          {isUploading ? 'Uploading...' : `Upload ${selectedFiles.length} File${selectedFiles.length > 1 ? 's' : ''}`}
+          {isUploading ? t('amendator.upload.uploading') : t('amendator.upload.uploadFiles', { count: selectedFiles.length })}
         </button>
       )}
     </div>

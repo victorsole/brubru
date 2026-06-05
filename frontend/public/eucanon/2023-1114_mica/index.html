@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiCA explained: the EU Markets in Crypto-Assets Regulation | Brubru</title>
+  <meta name="description" content="Complete guide to Regulation (EU) 2023/1114 (MiCA): the EU's first comprehensive framework for crypto-assets, covering e-money tokens, asset-referenced tokens, crypto-asset service providers, white papers and market abuse rules.">
+  <meta property="og:title" content="MiCA: the EU Markets in Crypto-Assets Regulation (2023/1114) | Brubru EU Canon">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:description" content="Same activities, same risks, same rules. MiCA creates uniform EU rules for issuers and service providers in crypto-assets that fall outside existing financial-services law, from e-money tokens to CASP licensing.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/8358144/pexels-photo-8358144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MiCA (Reg 2023/1114): EU Markets in Crypto-Assets | Brubru EU Canon">
+  <meta name="twitter:description" content="MiCA: 149 articles, 9 Titles, 3 token types, 10 crypto-asset services. Stablecoin rules from June 2024; full application December 2024. EBA supervises significant tokens.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/8358144/pexels-photo-8358144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2023-1114_mica/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Regulation (EU) 2023/1114 of the European Parliament and of the Council on markets in crypto-assets (MiCA)",
+    "alternateName": "MiCA",
+    "identifier": "CELEX:32023R1114",
+    "legislationIdentifier": "32023R1114",
+    "legislationType": "Regulation",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114",
+    "datePublished": "2023-05-31",
+    "dateModified": "2026-05-26",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "crypto-assets, e-money tokens, asset-referenced tokens, stablecoins, crypto-asset service providers, white paper, market abuse, EBA, ESMA, DLT, blockchain"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image {
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+
+    /* Tables */
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    /* 5-card "what it covers" grid (3+2 centred) */
+    .covers-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .covers-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+      background: var(--color-bg);
+    }
+    .covers-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .covers-card--span2 { grid-column: span 2; }
+    .covers-card--c4 { grid-column: 2 / span 2; }
+    .covers-card--c5 { grid-column: 4 / span 2; }
+    .covers-card__icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .covers-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .covers-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Three-col grid */
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Two-col grid */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Glossary */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-purple);
+      margin-bottom: 0.35rem;
+    }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Brubru CTA features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Related canon card */
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    /* CTA Strip */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+    .cta-strip__sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 1.5rem;
+    }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .covers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .covers-grid { grid-template-columns: 1fr; }
+      .covers-card--span2,
+      .covers-card--c4,
+      .covers-card--c5 { grid-column: span 1; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU policy intelligence</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language">
+    <option value="index.html" selected>English</option>
+    <option value="fr.html">Francais</option>
+    <option value="es.html">Espanol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Try Brubru free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / Crypto-assets and digital finance
+  </div>
+  <h1 class="hero__title">The <span>Markets in Crypto-Assets Regulation</span></h1>
+  <p class="hero__subtitle">
+    Regulation (EU) 2023/1114 (MiCA) is the EU's first comprehensive framework for crypto-assets outside existing financial-services law, covering issuers, service providers and market abuse across three asset types and ten licensed services.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar"></i> Adopted 31 May 2023</span>
+    <span><i class="mdi mdi-book-open-outline"></i> OJ L 150, 9.6.2023, p. 40</span>
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32023R1114</span>
+    <span><i class="mdi mdi-gavel"></i> Art 114 TFEU</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/8358144/pexels-photo-8358144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    alt="Digital crypto asset concept with glowing cryptocurrency tokens"
+    loading="lazy"
+  >
+  <figcaption>
+    Photo: <a href="https://www.pexels.com/@leeloo-the-first" target="_blank" rel="noopener">Leeloo The First</a>
+    via <a href="https://www.pexels.com/photo/8358144/" target="_blank" rel="noopener">Pexels</a>
+    | MiCA creates uniform rules for crypto-asset issuers and service providers across the EU single market
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">149</div>
+    <div class="figure-card__label">Articles</div>
+    <div class="figure-card__context">Across 9 Titles and 119 recitals. MiCA is the first bespoke EU regulation dedicated to crypto-assets outside financial-instruments law.</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">9</div>
+    <div class="figure-card__label">Titles</div>
+    <div class="figure-card__context">From scope and definitions (Title I) through white papers, ARTs, EMTs, CASP authorisation, market abuse, supervisory architecture, delegated acts to transitional provisions (Title IX).</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">119</div>
+    <div class="figure-card__label">Recitals</div>
+    <div class="figure-card__context">Including recital 7 (environmental disclosure), recitals 59 to 62 and 102 to 107 (significant tokens and EBA direct supervision) and recital 16 (anti-money-laundering alignment).</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">3</div>
+    <div class="figure-card__label">Crypto-asset types</div>
+    <div class="figure-card__context">E-money tokens (one currency), asset-referenced tokens (basket/other assets) and other crypto-assets including utility tokens. Each type carries a distinct issuer regime.</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#what-it-covers" class="toc__link"><i class="mdi mdi-view-grid-outline"></i> What it covers</a>
+    <a href="#key-numbers" class="toc__link"><i class="mdi mdi-numeric"></i> Key numbers</a>
+    <a href="#scope" class="toc__link"><i class="mdi mdi-magnify"></i> Scope and exclusions</a>
+    <a href="#token-types" class="toc__link"><i class="mdi mdi-format-list-bulleted-type"></i> Three token types</a>
+    <a href="#white-paper" class="toc__link"><i class="mdi mdi-file-document-outline"></i> The white paper</a>
+    <a href="#art-emt" class="toc__link"><i class="mdi mdi-bank-outline"></i> ARTs and EMTs</a>
+    <a href="#significant" class="toc__link"><i class="mdi mdi-star-outline"></i> Significant tokens</a>
+    <a href="#casp" class="toc__link"><i class="mdi mdi-account-key-outline"></i> CASP licensing</a>
+    <a href="#market-abuse" class="toc__link"><i class="mdi mdi-alert-circle-outline"></i> Market abuse</a>
+    <a href="#supervisors" class="toc__link"><i class="mdi mdi-domain"></i> Authorities and supervision</a>
+    <a href="#transitional" class="toc__link"><i class="mdi mdi-clock-time-eight-outline"></i> Transitional provisions</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-alphabet"></i> Key definitions</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-table"></i> Comparison table</a>
+    <a href="#context" class="toc__link"><i class="mdi mdi-family-tree"></i> Legislative context</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossary</a>
+    <a href="#timeline-section" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-link"></i> Related canon entries</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overview</h2>
+  </div>
+  <p class="section__subtitle">From legal grey zone to harmonised single market</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> Why MiCA exists</div>
+    <p>Before MiCA, most crypto-assets in the EU sat in a legal grey zone. Exchanges, wallet providers and token issuers were largely unregulated except for anti-money-laundering checks, while some Member States had introduced their own national frameworks, creating fragmentation across the single market. MiCA fills that gap with a single harmonised regulation, built on <strong>Article 114 TFEU</strong> (internal market approximation), the same legal basis as MiFID II and GDPR.</p>
+    <p>The organising principle is <em>"same activities, same risks, same rules"</em>: an entity providing crypto-asset services faces the same authorisation, capital and conduct requirements as comparable financial-services firms. This principle extends to technology neutrality: the regulation applies to any distributed ledger technology or similar technology without singling out particular protocols.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-leaf-circle-outline" style="color: var(--color-green);"></i> Environmental disclosure and sustainability</div>
+    <p>Recital 7 requires white papers to disclose the environmental impact of the consensus mechanism used by the crypto-asset (for example whether it uses proof-of-work or proof-of-stake). ESMA was tasked with developing technical standards on the content of this disclosure. This requirement reflects the EU's broader push to align financial regulation with sustainability objectives, though MiCA does not restrict particular consensus mechanisms.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-purple);"></i> What MiCA protects</div>
+    <p>The four objectives named in the regulation are: protecting retail holders of crypto-assets; safeguarding market integrity; ensuring financial stability (particularly against systemic risks from large stablecoins); and preserving monetary sovereignty (by ensuring that widely-used stablecoins do not undermine currencies). Recital 16 also connects MiCA to the international fight against money laundering, through the transfer-of-funds regulation and the sixth anti-money-laundering directive.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cog-outline" style="color: var(--color-amber);"></i> Nine Titles, one framework</div>
+    <p>MiCA is structured in nine Titles: <strong>Title I</strong> (subject matter, scope and definitions); <strong>Title II</strong> (other crypto-assets and the white paper); <strong>Title III</strong> (asset-referenced tokens); <strong>Title IV</strong> (e-money tokens); <strong>Title V</strong> (crypto-asset service provider authorisation and operating conditions); <strong>Title VI</strong> (prevention and prohibition of market abuse); <strong>Title VII</strong> (competent authorities, EBA and ESMA); <strong>Title VIII</strong> (delegated acts); and <strong>Title IX</strong> (transitional and final provisions, including amendments to four other instruments).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 2: WHAT IT COVERS (5-card grid)
+     ========================================================= -->
+<section class="section" id="what-it-covers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-view-grid-outline"></i></div>
+    <h2 class="section__title">What it covers</h2>
+  </div>
+  <p class="section__subtitle">Five thematic pillars of Regulation (EU) 2023/1114</p>
+
+  <div class="covers-grid">
+    <div class="covers-card covers-card--span2">
+      <span class="covers-card__icon"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-blue);"></i></span>
+      <div class="covers-card__title">White paper and disclosure</div>
+      <div class="covers-card__desc">Offerors of Title II crypto-assets must publish a standardised white paper with mandatory disclosures: issuer, project, offer, rights, technology, risks and environmental impact. Civil liability attaches. Retail holders get 14 days to withdraw.</div>
+    </div>
+    <div class="covers-card covers-card--span2">
+      <span class="covers-card__icon"><i class="mdi mdi-bank-outline" style="color: var(--color-amber);"></i></span>
+      <div class="covers-card__title">Asset-referenced tokens (ARTs)</div>
+      <div class="covers-card__desc">Stablecoins referencing a basket or non-currency asset. Issuers need authorisation, own funds, a segregated low-risk reserve, a permanent right of redemption and no interest. EBA supervises the significant ones directly.</div>
+    </div>
+    <div class="covers-card covers-card--span2">
+      <span class="covers-card__icon"><i class="mdi mdi-currency-eur" style="color: var(--color-green);"></i></span>
+      <div class="covers-card__title">E-money tokens (EMTs)</div>
+      <div class="covers-card__desc">Currency-pegged stablecoins (one official currency). Issuable only by authorised credit institutions or e-money institutions. Redeemable at par at any time. No interest permitted. Supervised under the e-money framework, with EBA for significant EMTs.</div>
+    </div>
+    <div class="covers-card covers-card--c4">
+      <span class="covers-card__icon"><i class="mdi mdi-account-key-outline" style="color: var(--color-purple);"></i></span>
+      <div class="covers-card__title">CASP authorisation and 10 services</div>
+      <div class="covers-card__desc">Crypto-asset service providers must be authorised, hold capital, safeguard client assets and treat clients fairly. One licence is valid Union-wide. Ten services defined, from custody and trading platforms to advice and portfolio management.</div>
+    </div>
+    <div class="covers-card covers-card--c5">
+      <span class="covers-card__icon"><i class="mdi mdi-shield-alert-outline" style="color: var(--color-red);"></i></span>
+      <div class="covers-card__title">Market abuse and supervision</div>
+      <div class="covers-card__desc">Insider dealing, unlawful disclosure and market manipulation are prohibited. National authorities supervise most issuers and CASPs; EBA oversees significant tokens; ESMA maintains the public register and issues technical standards.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3: KEY NUMBERS
+     ========================================================= -->
+<section class="section" id="key-numbers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-numeric"></i></div>
+    <h2 class="section__title">Key numbers</h2>
+  </div>
+  <p class="section__subtitle">Thresholds and limits traceable to the text of Regulation (EU) 2023/1114</p>
+
+  <div class="two-col-grid">
+    <div class="info-box">
+      <h3><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> Structure</h3>
+      <ul>
+        <li><strong>149 articles</strong> in <strong>9 Titles</strong></li>
+        <li><strong>119 recitals</strong></li>
+        <li>Legal basis: Article 114 TFEU (internal market)</li>
+        <li>Procedure: ordinary legislative procedure; ECB and EESC opinions; EP position 20 April 2023; Council decision 16 May 2023</li>
+        <li>Also amends: Regulation (EU) 1093/2010 (EBA), Regulation (EU) 1095/2010 (ESMA), Directive 2013/36/EU (CRD), Directive (EU) 2019/1937 (Whistleblower)</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h3><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Application dates</h3>
+      <ul>
+        <li>Adopted: <strong>31 May 2023</strong></li>
+        <li>Published: OJ L 150, <strong>9 June 2023</strong>, p. 40</li>
+        <li>Entry into force: <strong>29 June 2023</strong> (20th day after publication)</li>
+        <li>Titles III and IV (ARTs and EMTs): <strong>30 June 2024</strong></li>
+        <li>All other Titles (including CASP regime): <strong>30 December 2024</strong></li>
+        <li>CASP grandfathering window closes: <strong>1 July 2026</strong></li>
+      </ul>
+    </div>
+    <div class="info-box info-box--amber">
+      <h3><i class="mdi mdi-cash" style="color: var(--color-amber);"></i> White-paper exemption thresholds</h3>
+      <ul>
+        <li>Offers to <strong>fewer than 150 persons</strong> per Member State</li>
+        <li>Offers to <strong>qualified investors only</strong></li>
+        <li>Total consideration not exceeding <strong>EUR 1 000 000</strong> over 12 months</li>
+        <li>Also exempt: free crypto-assets, mining rewards, limited-network utility tokens</li>
+        <li>ART authorisation not required below <strong>EUR 5 000 000</strong> or for qualified-investor-only offers</li>
+      </ul>
+    </div>
+    <div class="info-box info-box--purple">
+      <h3><i class="mdi mdi-chart-line" style="color: var(--color-purple);"></i> Significant-token and qualifying-holding thresholds</h3>
+      <ul>
+        <li>Retail right of withdrawal: <strong>14 days</strong> (Title II)</li>
+        <li>Qualifying holding triggering notification: <strong>10%</strong> of capital or voting rights</li>
+        <li>ART "used widely as means of exchange": above <strong>1 million transactions</strong> AND <strong>EUR 200 000 000 per day</strong> in a single currency area, triggers duty to reduce activity</li>
+        <li>Significance thresholds for EBA direct supervision: large customer base, high market capitalisation or large transaction volumes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4: SCOPE AND EXCLUSIONS
+     ========================================================= -->
+<section class="section" id="scope">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-magnify"></i></div>
+    <h2 class="section__title">Scope and exclusions</h2>
+  </div>
+  <p class="section__subtitle">Articles 1 to 2: what falls inside and outside MiCA</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-circle-outline" style="color: var(--color-green);"></i> What MiCA covers</div>
+    <ul>
+      <li>Persons engaged in the <strong>issuance, offer to the public or admission to trading</strong> of crypto-assets in the Union</li>
+      <li>Persons providing <strong>crypto-asset services</strong> (CASPs) in the Union</li>
+      <li>All three categories: e-money tokens, asset-referenced tokens and other crypto-assets including utility tokens</li>
+      <li>Algorithmic stablecoins are treated as ARTs or EMTs if they aim to stabilise value</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-close-circle-outline" style="color: var(--color-red);"></i> What MiCA excludes (Article 2)</div>
+    <ul>
+      <li>Crypto-assets that qualify as <strong>financial instruments</strong> under MiFID II (regulated separately)</li>
+      <li>Crypto-assets that qualify as <strong>deposits, funds, securitisation positions, insurance or pension products</strong></li>
+      <li>Crypto-assets that are <strong>unique and non-fungible</strong> (NFTs such as digital art and collectibles)</li>
+      <li>Central bank digital money and crypto-assets issued by <strong>public authorities acting as monetary authorities</strong></li>
+      <li><strong>Fully decentralised</strong> services provided without any intermediary</li>
+      <li>Non-transferable digital assets such as <strong>closed-loop loyalty points</strong></li>
+    </ul>
+    <p>ESMA was mandated to issue guidelines on the crypto-asset / financial-instrument boundary by 30 December 2024 (Article 2(5)).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 5: THREE TOKEN TYPES
+     ========================================================= -->
+<section class="section" id="token-types">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-format-list-bulleted-type"></i></div>
+    <h2 class="section__title">The three types of crypto-asset</h2>
+  </div>
+  <p class="section__subtitle">Article 3 and recital 18: MiCA's core classification by stabilisation method</p>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> The classification logic</h3>
+    <p>MiCA classifies crypto-assets by whether and how they seek to stabilise their value. The classification determines which Title of MiCA applies and therefore the applicable issuer regime. A token must be assessed against its actual design and purpose, not its label.</p>
+  </div>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-currency-eur" style="color: var(--color-green);"></i> E-money tokens (Title IV)</div>
+      <p>An EMT references the value of <strong>one official currency</strong> (for example a euro-pegged or dollar-pegged stablecoin). It functions like electronic money. Only authorised <strong>credit institutions or electronic money institutions</strong> may issue EMTs. Holders have a permanent right of redemption at par. No interest may be paid on EMT holdings.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-amber);"></i> Asset-referenced tokens (Title III)</div>
+      <p>An ART references another value, right or basket, including one or more currencies, commodities or crypto-assets. This is the catch-all stablecoin category. Issuers must have a registered office in the Union, obtain authorisation and white-paper approval, hold own funds, maintain a segregated low-risk reserve of assets in custody, offer a permanent right of redemption, and may not pay interest.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-puzzle-outline" style="color: var(--color-blue);"></i> Other crypto-assets including utility tokens (Title II)</div>
+      <p>Everything that is not an EMT or ART, including so-called utility tokens that give access to a good or service supplied by the issuer, and tokens with no stabilisation mechanism (such as Bitcoin or Ether in their original form). These are regulated primarily through the white-paper disclosure regime, with lighter requirements than for stablecoins.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 6: THE WHITE PAPER
+     ========================================================= -->
+<section class="section" id="white-paper">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-file-document-outline"></i></div>
+    <h2 class="section__title">The crypto-asset white paper</h2>
+  </div>
+  <p class="section__subtitle">Title II and recitals 24 to 39: the mandatory disclosure document</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-edit-outline" style="color: var(--color-blue);"></i> What the white paper must contain</div>
+    <p>Offerors and persons seeking admission to trading of Title II crypto-assets (and ART/EMT issuers as part of authorisation) must draw up, notify to their competent authority and publish a <strong>crypto-asset white paper</strong>. Mandatory content includes: the identity of the issuer, the project and offer, the rights and obligations attached to the crypto-asset, the underlying technology and its consensus mechanism, the principal risks, and the <strong>environmental impact</strong> of the consensus mechanism. All information must be fair, clear and not misleading.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i> Supervision of Title II white papers</div>
+    <p>Competent authorities do <strong>not pre-approve</strong> Title II white papers but may require amendments, suspend or prohibit an offer where the white paper is incomplete, misleading or where there is a risk to investor protection or market integrity. For ARTs, the white paper is approved as part of the authorisation process, giving the competent authority a stronger prior-review role.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-decagram" style="color: var(--color-green);"></i> Exemptions from the white-paper obligation</div>
+    <ul>
+      <li>Offers to <strong>fewer than 150 persons</strong> per Member State</li>
+      <li>Offers to <strong>qualified investors only</strong></li>
+      <li>Total consideration not exceeding <strong>EUR 1 000 000</strong> over any 12-month period</li>
+      <li>Free crypto-asset distributions (airdrops) where no payment is required</li>
+      <li>Crypto-assets created as <strong>mining or validation rewards</strong></li>
+      <li>Utility tokens for services that already exist at the time of issue, if exchangeable only within a limited network of service providers</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-undo" style="color: var(--color-red);"></i> Retail right of withdrawal and civil liability</div>
+    <p>Retail holders who purchase Title II crypto-assets directly from the offeror have a <strong>14-day right of withdrawal</strong> without incurring any fee. Civil liability attaches to the white paper: where information is incomplete, unfair or misleading, any natural or legal person responsible for the white paper is liable to holders of the crypto-asset for losses suffered.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 7: ARTs AND EMTs
+     ========================================================= -->
+<section class="section" id="art-emt">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Asset-referenced and e-money tokens</h2>
+  </div>
+  <p class="section__subtitle">Titles III and IV: the stablecoin regimes</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-amber);"></i> ART issuer requirements (Title III)</div>
+      <ul>
+        <li>Registered office in the Union</li>
+        <li>Authorisation from the competent authority, with consultation of EBA, ESMA and the ECB (or relevant national central bank for non-euro currencies); the central bank's opinion can be <strong>binding</strong> on financial-stability grounds</li>
+        <li>Approved crypto-asset white paper</li>
+        <li>Own funds proportionate to the value of assets referenced</li>
+        <li>A <strong>reserve of assets</strong> that is segregated, low-risk, held in custody by a credit institution or crypto-asset service provider, and matches outstanding liabilities</li>
+        <li>Permanent right of <strong>redemption</strong> at any time at market value (or net asset value) for holders</li>
+        <li><strong>No interest</strong> may be paid on ART holdings</li>
+        <li>Recovery and redemption plans for orderly wind-down</li>
+        <li>Authorisation not required below EUR 5 000 000 or for qualified-investor-only offers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-currency-eur" style="color: var(--color-green);"></i> EMT issuer requirements (Title IV)</div>
+      <ul>
+        <li>Issuable only by an authorised <strong>credit institution</strong> or <strong>electronic money institution</strong></li>
+        <li>Holders have a claim against the issuer and a permanent right of <strong>redemption at par</strong> (face value of the referenced currency) at any time</li>
+        <li><strong>No interest</strong> may be paid on EMT holdings</li>
+        <li>Supervised under the existing e-money framework, with additional MiCA obligations layered on top</li>
+        <li>If the EMT references a currency other than the euro, the relevant national central bank is consulted and may render a binding opinion on financial-stability grounds</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 8: SIGNIFICANT TOKENS
+     ========================================================= -->
+<section class="section" id="significant">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-star-outline"></i></div>
+    <h2 class="section__title">Significant tokens</h2>
+  </div>
+  <p class="section__subtitle">Recitals 59 to 62 and 102 to 107: EBA direct supervision and systemic safeguards</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-line" style="color: var(--color-red);"></i> What makes a token significant</div>
+    <p>ARTs and EMTs are designated <strong>significant</strong> when they meet certain thresholds, including a large customer base, high market capitalisation or a large number or value of transactions. The European Banking Authority and ESMA may jointly propose a significance designation. Significant tokens trigger a stricter requirements layer: higher own funds, mandatory interoperability measures, enhanced liquidity management policies, and a stricter remuneration policy.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-blue);"></i> EBA direct supervision and college of supervisors</div>
+    <p><strong>EBA directly supervises</strong> issuers of significant ARTs and significant EMTs (not the national competent authority), with powers including on-site inspections, supervisory measures and periodic penalty payments. For each significant ART issuer, EBA establishes a <strong>college of supervisors</strong> comprising the relevant competent authorities from Member States where the ART is offered, the competent authority of any trading platform on which it is admitted, and other relevant supervisors. The college facilitates information exchange and coordinated action.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> The "used widely as means of exchange" cap</div>
+    <p>Where an ART is used widely as a means of exchange within a single currency area, reaching more than <strong>1 million transactions and EUR 200 000 000 per day</strong>, the issuer is required to reduce activity (Article 23). This provision protects monetary sovereignty by preventing a private stablecoin from displacing the official currency in daily transactions at scale. The issuer must submit a plan for reducing activity; continued non-compliance may lead to authorisation withdrawal.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 9: CASP LICENSING
+     ========================================================= -->
+<section class="section" id="casp">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-key-outline"></i></div>
+    <h2 class="section__title">Crypto-asset service provider (CASP) licensing</h2>
+  </div>
+  <p class="section__subtitle">Title V and Article 3(1)(16): the ten services, authorisation and passporting</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clipboard-list-outline" style="color: var(--color-purple);"></i> The ten crypto-asset services</div>
+    <p>Article 3(1)(16) defines ten crypto-asset services for which authorisation is required:</p>
+    <ol style="padding-left: 1.25rem; color: var(--color-secondary);">
+      <li style="margin-bottom:0.3rem;">(a) Custody and administration of crypto-assets on behalf of clients</li>
+      <li style="margin-bottom:0.3rem;">(b) Operation of a trading platform for crypto-assets</li>
+      <li style="margin-bottom:0.3rem;">(c) Exchange of crypto-assets for funds (fiat)</li>
+      <li style="margin-bottom:0.3rem;">(d) Exchange of crypto-assets for other crypto-assets</li>
+      <li style="margin-bottom:0.3rem;">(e) Execution of orders for crypto-assets on behalf of clients</li>
+      <li style="margin-bottom:0.3rem;">(f) Placing of crypto-assets</li>
+      <li style="margin-bottom:0.3rem;">(g) Reception and transmission of orders for crypto-assets on behalf of clients</li>
+      <li style="margin-bottom:0.3rem;">(h) Providing advice on crypto-assets</li>
+      <li style="margin-bottom:0.3rem;">(i) Providing portfolio management on crypto-assets</li>
+      <li style="margin-bottom:0.3rem;">(j) Providing transfer services for crypto-assets on behalf of clients</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-green);"></i> Authorisation requirements</div>
+    <p>A CASP must have its <strong>registered office and place of effective management in the Union</strong>, with at least one director resident in the Union. It must meet prudential own funds requirements, safeguard client crypto-assets and funds (segregated from own assets), act honestly and professionally in clients' best interests, adopt conflicts-of-interest and complaints procedures, and meet ICT security and business-continuity requirements. Custodians face strict liability for loss of client crypto-assets held in custody.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-earth" style="color: var(--color-blue);"></i> Passporting and fast-track for regulated firms</div>
+    <p>A single CASP authorisation is valid Union-wide (<strong>passporting</strong>): a firm authorised in one Member State may provide services across all other Member States by notification. Certain already-authorised financial firms (credit institutions, investment firms, UCITS management companies, AIFMs, payment institutions, e-money institutions) may provide crypto-asset services by notification to their existing competent authority rather than a fresh authorisation, provided the crypto-asset service is comparable to a service they already hold a licence for.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 10: MARKET ABUSE
+     ========================================================= -->
+<section class="section" id="market-abuse">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-alert-circle-outline"></i></div>
+    <h2 class="section__title">Market abuse</h2>
+  </div>
+  <p class="section__subtitle">Title VI: insider dealing, market manipulation and disclosure obligations</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-eye-off-outline" style="color: var(--color-red);"></i> The three prohibited behaviours</div>
+    <p>Title VI of MiCA prohibits three types of market abuse for crypto-assets admitted to trading on a trading platform:</p>
+    <ul>
+      <li><strong>Insider dealing:</strong> acquiring or disposing of crypto-assets using inside information (price-sensitive non-public information)</li>
+      <li><strong>Unlawful disclosure of inside information:</strong> sharing inside information with third parties other than in the normal exercise of a function</li>
+      <li><strong>Market manipulation:</strong> transactions, orders or other behaviour that give false or misleading signals as to supply, demand or price, or that fix prices at an artificial level</li>
+    </ul>
+    <p>The regime is designed as a bespoke, lighter version of the Market Abuse Regulation (596/2014), acknowledging the prevalence of SMEs and retail participants in crypto markets while ensuring consistent investor protection.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-broadcast" style="color: var(--color-amber);"></i> Market-soundings and disclosure</div>
+    <p>CASPs operating trading platforms must establish and maintain effective systems to detect and report suspicious transactions. Issuers of crypto-assets admitted to trading must disclose inside information to the public as soon as possible, and may delay disclosure only in limited circumstances (to protect their legitimate interests, provided the delay is not likely to mislead the public and the issuer can keep the information confidential).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 11: SUPERVISORY ARCHITECTURE
+     ========================================================= -->
+<section class="section" id="supervisors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-domain"></i></div>
+    <h2 class="section__title">Competent authorities, EBA and ESMA</h2>
+  </div>
+  <p class="section__subtitle">Title VII: the three-tier supervisory architecture</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-flag-outline" style="color: var(--color-blue);"></i> National competent authorities</div>
+      <p>Each Member State designates one or more national competent authorities (NCAs) responsible for authorising and supervising: issuers of Title II crypto-assets; issuers of non-significant ARTs; and CASPs. NCAs have investigatory powers (information requests, on-site inspections), supervisory powers (withdrawal of authorisation, activity suspension, public warnings) and penalty powers.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank" style="color: var(--color-amber);"></i> EBA: direct supervision of significant tokens</div>
+      <p>EBA directly supervises issuers of <strong>significant ARTs and significant EMTs</strong>, with on-site inspection powers, supervisory measures and the ability to impose periodic penalty payments and fines. EBA sets supervisory fees for significant-token issuers. A college of supervisors is established for each significant ART issuer, drawing in NCAs from affected Member States.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-database-outline" style="color: var(--color-purple);"></i> ESMA: register and technical standards</div>
+      <p>ESMA maintains a public register of white papers, ART and EMT issuers, and authorised CASPs. ESMA issues binding technical standards (regulatory and implementing) on white-paper content and format, supervisory convergence, market-abuse reporting, and the crypto-asset / financial-instrument boundary guidelines. ESMA also produces an annual report on market developments.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 12: TRANSITIONAL PROVISIONS
+     ========================================================= -->
+<section class="section" id="transitional">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-clock-time-eight-outline"></i></div>
+    <h2 class="section__title">Transitional provisions and amendments</h2>
+  </div>
+  <p class="section__subtitle">Articles 143 to 149: grandfathering, amendments and the CASP window</p>
+
+  <div class="two-col-grid">
+    <div class="info-box info-box--green">
+      <h3><i class="mdi mdi-shield-half-full" style="color: var(--color-green);"></i> CASP grandfathering</h3>
+      <p>CASPs operating lawfully under national law before <strong>30 December 2024</strong> (the general application date) may continue to provide those services until <strong>1 July 2026</strong> or until they are authorised or refused under MiCA, whichever is earlier. Member States were permitted to shorten or disapply this transitional window. This gave existing national-regulated exchanges, custodians and other crypto-service firms an 18-month runway to obtain MiCA authorisation.</p>
+    </div>
+    <div class="info-box info-box--amber">
+      <h3><i class="mdi mdi-clock-alert-outline" style="color: var(--color-amber);"></i> ART grandfathering</h3>
+      <p>ART issuers operating under national law before <strong>30 June 2024</strong> (the stablecoin application date) may continue their activities if they submitted an application for MiCA authorisation before <strong>30 July 2024</strong>. They may continue while the application is pending, until it is granted or refused. This allowed incumbents in markets where national stablecoin frameworks already existed to seek MiCA authorisation without an immediate shutdown.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-edit-outline" style="color: var(--color-blue);"></i> Four instruments amended by MiCA (Articles 144 to 147)</div>
+    <p>MiCA amends four existing EU instruments to integrate crypto-assets into the broader regulatory framework:</p>
+    <ul>
+      <li><strong>Regulation (EU) 1093/2010 (EBA founding regulation):</strong> crypto-asset supervision tasks added to EBA's remit</li>
+      <li><strong>Regulation (EU) 1095/2010 (ESMA founding regulation):</strong> crypto-asset supervisory convergence tasks added to ESMA's remit</li>
+      <li><strong>Directive 2013/36/EU (Capital Requirements Directive, CRD):</strong> EMT and ART issuance and crypto-asset service provision added to Annex I (list of activities subject to mutual recognition), enabling credit institutions to passport crypto-asset activities across the EU</li>
+      <li><strong>Directive (EU) 2019/1937 (Whistleblower Directive):</strong> MiCA added to the list of Union acts covered, so that whistleblowers reporting MiCA violations benefit from the Directive's protection against retaliation</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 13: KEY DEFINITIONS
+     ========================================================= -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-book-alphabet"></i></div>
+    <h2 class="section__title">Key definitions</h2>
+  </div>
+  <p class="section__subtitle">Essential terms from Article 3 of Regulation (EU) 2023/1114</p>
+
+  <div class="three-col-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">Crypto-asset</div>
+      <div class="glossary-card__def">A digital representation of a value or of a right that is able to be transferred and stored electronically, using distributed ledger technology or similar technology (Article 3(1)(5)). This is the overarching category that MiCA sub-divides into EMTs, ARTs and others.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Asset-referenced token (ART)</div>
+      <div class="glossary-card__def">A crypto-asset that is not an e-money token and that purports to maintain a stable value by referencing another value or right, or a combination thereof, including one or more official currencies (Article 3(1)(6)). The catch-all stablecoin category.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">E-money token (EMT)</div>
+      <div class="glossary-card__def">A type of crypto-asset that purports to maintain a stable value by referencing the value of one official currency (Article 3(1)(7)). Functional equivalent of electronic money in the crypto space. Redeemable at par; no interest.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Utility token</div>
+      <div class="glossary-card__def">A type of crypto-asset that is only intended to provide access to a good or a service supplied by its issuer (Article 3(1)(9)). Regulated under Title II; lighter regime than ARTs or EMTs provided the service already exists or will exist.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Crypto-asset service provider (CASP)</div>
+      <div class="glossary-card__def">A legal person or other undertaking whose occupation or business is the provision of one or more crypto-asset services to clients on a professional basis, and which is authorised under MiCA (Article 3(1)(15)). Must be Union-registered; single authorisation valid EU-wide.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Crypto-asset white paper</div>
+      <div class="glossary-card__def">A document containing mandatory information about the issuer, the crypto-asset project, the offer or admission to trading, the rights and obligations attached, the underlying technology and risks, and the environmental impact of the consensus mechanism (Article 6). Civil liability attaches.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Significant token</div>
+      <div class="glossary-card__def">An ART or EMT designated as significant by EBA (with ESMA input) because it meets thresholds related to customer base, market capitalisation or transaction volumes. Triggers EBA direct supervision, a college of supervisors and enhanced own-funds and liquidity requirements.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 14: COMPARISON TABLE
+     ========================================================= -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-table"></i></div>
+    <h2 class="section__title">Comparison: EMT, ART and other crypto-assets</h2>
+  </div>
+  <p class="section__subtitle">The three token types side by side across the key regulatory dimensions</p>
+
+  <div style="overflow-x: auto;">
+  <table class="duty-table">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>E-money token (EMT)</th>
+        <th>Asset-referenced token (ART)</th>
+        <th>Other crypto-asset (incl. utility token)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>What it references</strong></td>
+        <td>One official currency (e.g. EUR or USD)</td>
+        <td>Basket of assets, currencies, commodities or crypto-assets</td>
+        <td>No stabilisation reference; or access to a service/product</td>
+      </tr>
+      <tr>
+        <td><strong>Who can issue</strong></td>
+        <td class="rate-green">Authorised credit institution or e-money institution only</td>
+        <td class="rate-amber">Any EU-registered entity with MiCA authorisation (unless below EUR 5m / QI-only)</td>
+        <td class="rate-blue">Any person; white-paper obligation applies (with exemptions)</td>
+      </tr>
+      <tr class="highlight-row">
+        <td><strong>Reserve requirement</strong></td>
+        <td>Covered under e-money rules (funds safeguarded)</td>
+        <td>Segregated low-risk reserve matching outstanding liabilities, held in custody</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td><strong>Right of redemption</strong></td>
+        <td class="rate-green">At par (face value), permanent</td>
+        <td class="rate-amber">At market value (or NAV), permanent</td>
+        <td>Not mandated by MiCA</td>
+      </tr>
+      <tr>
+        <td><strong>Interest permitted</strong></td>
+        <td class="rate-red">No</td>
+        <td class="rate-red">No</td>
+        <td>Not restricted by MiCA</td>
+      </tr>
+      <tr>
+        <td><strong>Primary supervisor</strong></td>
+        <td>NCA (e-money framework) + EBA for significant EMTs</td>
+        <td>NCA + EBA for significant ARTs</td>
+        <td>NCA of home Member State</td>
+      </tr>
+      <tr>
+        <td><strong>White paper</strong></td>
+        <td>Required as part of authorisation; approved by NCA</td>
+        <td>Required as part of authorisation; approved by NCA</td>
+        <td>Required; notified to NCA but not pre-approved (with exemptions)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: LEGISLATIVE CONTEXT
+     ========================================================= -->
+<section class="section" id="context">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-family-tree"></i></div>
+    <h2 class="section__title">Legislative context</h2>
+  </div>
+  <p class="section__subtitle">MiCA in the broader EU financial-regulation ecosystem</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-puzzle-outline" style="color: var(--color-blue);"></i> Relationship to existing financial-services law</div>
+    <p>MiCA occupies the regulatory space left by existing financial-services regulation. Crypto-assets that qualify as <strong>financial instruments</strong> under MiFID II are already regulated by that framework and are explicitly excluded from MiCA's scope. The same applies to assets regulated as deposits under the Banking Consolidation Directive or e-money under the E-Money Directive (except where re-characterised as EMTs). MiCA therefore acts as a <em>residual catch-all</em> for the crypto-asset space that existing sectoral law does not reach.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-purple);"></i> DLT Pilot Regime and DORA</div>
+    <p>MiCA sits alongside two other digital-finance instruments adopted as part of the EU Digital Finance Package. The <strong>DLT Pilot Regime</strong> (Regulation (EU) 2022/858) creates a temporary sandbox for market infrastructures (multilateral trading facilities and securities settlement systems) that use distributed ledger technology to trade and settle financial instruments, operating under relaxed MiFID II and CSDR requirements. <strong>DORA</strong> (Regulation (EU) 2022/2554, the Digital Operational Resilience Act) imposes ICT risk-management requirements on all financial entities including CASPs authorised under MiCA.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-account-outline" style="color: var(--color-green);"></i> AML and transfer-of-funds regulation</div>
+    <p>MiCA does not itself impose anti-money-laundering requirements. Those obligations are applied through the <strong>Transfer of Funds Regulation</strong> (as amended by Regulation (EU) 2023/1113 to extend the travel rule to crypto-assets) and the AML/CFT directives. MiCA authorisation does not substitute for AML/CFT obligations; CASPs must comply with both regimes in parallel.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-amber);"></i> ESAs Review and the supervisory toolkit</div>
+    <p>MiCA extends the supervisory convergence toolkit that the <strong>ESAs Review</strong> (Regulation (EU) 2019/2175, already in the Brubru Canon) gave to EBA and ESMA. The ESAs Review enhanced those authorities' powers to foster convergence, override gold-plating and investigate potential breaches of Union law. MiCA builds on that architecture by granting EBA <em>direct supervision</em> powers over significant tokens and ESMA register-keeping and standard-setting powers across the crypto sector.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 16: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossary</h2>
+  </div>
+  <p class="section__subtitle">Key abbreviations and instruments referenced in Regulation (EU) 2023/1114</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">MiCA</div>
+      <div class="glossary-card__def">Markets in Crypto-Assets Regulation: the common short name for Regulation (EU) 2023/1114. The official title does not use the acronym; it has become standard market usage.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ART</div>
+      <div class="glossary-card__def">Asset-referenced token: the catch-all stablecoin category under MiCA. References a basket of assets, currencies or crypto-assets rather than a single official currency.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">EMT</div>
+      <div class="glossary-card__def">E-money token: a crypto-asset referencing the value of one official currency. Issuable only by credit institutions or e-money institutions. The crypto equivalent of electronic money.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CASP</div>
+      <div class="glossary-card__def">Crypto-asset service provider: a firm authorised under Title V of MiCA to provide one or more of the ten defined crypto-asset services. Single authorisation valid Union-wide.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">EBA</div>
+      <div class="glossary-card__def">European Banking Authority: directly supervises issuers of significant ARTs and significant EMTs; sets supervisory fees; chairs colleges of supervisors for significant tokens. Founded under Regulation (EU) 1093/2010 (amended by MiCA).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ESMA</div>
+      <div class="glossary-card__def">European Securities and Markets Authority: maintains the public register of white papers, ART/EMT issuers and CASPs; issues technical standards; produces annual market reports; issues guidelines on the crypto/financial-instrument boundary. Founded under Regulation (EU) 1095/2010 (amended by MiCA).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">DLT</div>
+      <div class="glossary-card__def">Distributed ledger technology: the underlying technology referenced in MiCA's definition of crypto-asset. The regulation is technology-neutral and does not require a specific protocol or consensus mechanism.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">NFT</div>
+      <div class="glossary-card__def">Non-fungible token: a crypto-asset that is unique and non-fungible. Excluded from MiCA's scope under Article 2. ESMA was mandated to issue guidance on the boundary between genuinely non-fungible tokens and those that may in practice be fungible.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">DORA</div>
+      <div class="glossary-card__def">Digital Operational Resilience Act (Regulation (EU) 2022/2554): applies ICT risk-management requirements to financial entities including CASPs authorised under MiCA. A parallel obligation that does not substitute for MiCA compliance.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 17: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Legislative timeline</h2>
+  </div>
+  <p class="section__subtitle">From the Digital Finance Package to full application</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">September 2020</div>
+      <div class="timeline__text">The Commission publishes the <strong>Digital Finance Package</strong>, comprising four legislative proposals: MiCA, the DLT Pilot Regime, DORA and the Digital Finance Strategy. MiCA enters the ordinary legislative procedure.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 April 2023</div>
+      <div class="timeline__text">The European Parliament adopts its position on MiCA at first reading. EP position confirms the main architecture: three token types, white-paper regime, CASP licensing, EBA supervision of significant tokens.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 May 2023</div>
+      <div class="timeline__text">The Council of the EU adopts MiCA at first reading, accepting the Parliament's amendments. No second reading required.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 May 2023</div>
+      <div class="timeline__text">Regulation (EU) 2023/1114 <strong>adopted</strong>. Published in the Official Journal of the European Union, OJ L 150, 9 June 2023, p. 40.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">29 June 2023</div>
+      <div class="timeline__text">MiCA <strong>enters into force</strong> (20th day after publication in the Official Journal). The Commission begins drafting delegated acts and ESMA/EBA begin work on technical standards.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">30 June 2024</div>
+      <div class="timeline__text">Titles III and IV of MiCA begin to <strong>apply</strong>: the stablecoin rules for asset-referenced tokens and e-money tokens are now in force. Existing ART issuers that submitted authorisation applications by 30 July 2024 may continue while applications are processed.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">30 December 2024</div>
+      <div class="timeline__text">MiCA applies <strong>in full</strong>: the Title II white-paper regime, Title V CASP authorisation and operating conditions, Title VI market-abuse rules, and Title VII supervisory powers all become applicable. National grandfathering windows for CASPs begin running.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">1 July 2026</div>
+      <div class="timeline__text">The <strong>CASP grandfathering window closes</strong>. Any CASP not yet authorised or refused under MiCA must cease providing services. Member States may have set an earlier deadline. All remaining national-law-only CASPs must exit or obtain MiCA authorisation.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 18: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">Primary documentation for Regulation (EU) 2023/1114</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> EUR-Lex and Official Journal</div>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114" target="_blank" rel="noopener" style="color: var(--color-blue);">Regulation (EU) 2023/1114 on EUR-Lex (CELEX: 32023R1114)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2023:150:TOC" target="_blank" rel="noopener" style="color: var(--color-blue);">OJ L 150, 9.6.2023 (full issue)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114&from=EN" target="_blank" rel="noopener" style="color: var(--color-blue);">Full text with recitals and all Titles</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-purple);"></i> ESMA, EBA and Commission</div>
+      <ul>
+        <li><a href="https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-in-crypto-assets-regulation-mica" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA: MiCA hub (technical standards and registers)</a></li>
+        <li><a href="https://www.eba.europa.eu/activities/single-rulebook/regulatory-activities/crypto-assets" target="_blank" rel="noopener" style="color: var(--color-blue);">EBA: crypto-assets regulatory activity page</a></li>
+        <li><a href="https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/markets-crypto-assets-regulation_en" target="_blank" rel="noopener" style="color: var(--color-blue);">DG FISMA: MiCA implementing and delegated acts</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 19: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">The <code>eu_crypto_digital_finance</code> family in the Brubru EU Canon</p>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-information-outline"></i> First entry in the <code>eu_crypto_digital_finance</code> family</h3>
+    <p>Currently the only canon entry on EU crypto-assets and digital finance. As Brubru analyses sibling instruments such as the DLT Pilot Regime (Regulation (EU) 2022/858) and the Digital Operational Resilience Act (Regulation (EU) 2022/2554, DORA), they will appear here automatically.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 20: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore MiCA with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track and work with EU crypto-assets regulation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask any question about MiCA: which token type applies to your project, what the white-paper exemptions cover, how CASP passporting works, or what the significant-token thresholds mean in practice. Answers grounded in official EUR-Lex sources.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Load MiCA into the Amendator and draft amendment language directly against the official EUR-Lex text. Useful for policy professionals working on Commission delegated acts and ESMA/EBA technical standards implementing MiCA.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Track MiCA implementing acts, follow European Parliament debates on crypto regulation, monitor ESMA and EBA technical standard consultations, and receive alerts when the CASP register is updated or new significant tokens are designated.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a compliance gap analysis for your organisation against MiCA obligations: CASP authorisation requirements, white-paper content standards, reserve and custody rules for stablecoin issuers, and market-abuse surveillance obligations.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Find EU and Member State procurement opportunities related to crypto-asset supervision infrastructure, ESMA register technology, DLT pilot testbed projects and digital-finance innovation sandboxes across the Union.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatic access to EU legislation data, procedure tracking and institutional calendar events. Build your own MiCA compliance monitoring, CASP register checking and digital-finance intelligence workflows on Brubru's REST API.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">View API Docs</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image:
+  linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%),
+  url('https://images.pexels.com/photos/6771613/pexels-photo-6771613.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Get the full Brubru platform</h2>
+  <p class="cta-strip__sub">14-day free trial. No card needed.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start free trial</a>
+</div>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is the AI-powered EU policy intelligence assistant by <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start your 14-day free trial</a> - no card required.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon library</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">All canon entries</a></li>
+          <li><a href="../2013-575_crr/index.html">CRR - Capital Requirements Regulation</a></li>
+          <li><a href="../2019-2175_esas_review/index.html">ESAs Review - Reg 2019/2175</a></li>
+          <li><a href="../2016-429_animal_health_law/index.html">Animal Health Law - Reg 2016/429</a></li>
+          <li><a href="index.html">MiCA - Reg 2023/1114 (this page)</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114" target="_blank" rel="noopener">Reg 2023/1114 on EUR-Lex</a></li>
+          <li><a href="https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-in-crypto-assets-regulation-mica" target="_blank" rel="noopener">ESMA MiCA hub</a></li>
+          <li><a href="https://www.eba.europa.eu/activities/single-rulebook/regulatory-activities/crypto-assets" target="_blank" rel="noopener">EBA crypto-assets page</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Built by Beresol BV</p>
+        <p>Apeldoorn, Netherlands</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Regulation (EU) 2023/1114 and official EUR-Lex sources.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. All rights reserved. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Image credits: Hero photo by <a href="https://www.pexels.com/photo/8358144/" target="_blank" rel="noopener">Leeloo The First via Pexels</a> (photo ID 8358144) | CTA photo by <a href="https://www.pexels.com/photo/6771613/" target="_blank" rel="noopener">Alesia Kozik via Pexels</a> (photo ID 6771613).</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

@@ -33,7 +33,28 @@ export type InstitutionType =
   | 'EBA'
   | 'EIOPA'
   | 'COR'
-  | 'EESC';
+  | 'EESC'
+  | 'EDPS'
+  | 'OMBUDSMAN'
+  | 'EIB'
+  | 'ECA'
+  | 'ECHA'
+  | 'ENISA'
+  | 'EUIPO'
+  | 'EUAA'
+  | 'EUROJUST'
+  | 'FRA'
+  | 'EU_OSHA'
+  | 'EUROFOUND'
+  | 'ACER'
+  | 'ECDC'
+  | 'AMLA'
+  | 'CEPOL'
+  | 'EIT'
+  | 'CPVO'
+  | 'EMSA'
+  | 'EEAS'
+  | 'THIRD_PARTY';
 
 export type EventType =
   | 'plenary_session'
@@ -46,13 +67,19 @@ export type EventType =
   | 'european_council_summit'
   | 'eurogroup'
   | 'commission_college_meeting'
+  | 'commissioner_meeting'
   | 'court_hearing'
   | 'ecb_governing_council'
   | 'agency_event'
   | 'special_date'
   | 'comitology_meeting'
   | 'expert_group_meeting'
-  | 'grant_deadline';
+  | 'grant_deadline'
+  | 'conference'
+  | 'webinar'
+  | 'roundtable'
+  | 'training'
+  | 'workshop';
 
 export type EventStatus =
   | 'scheduled'
@@ -163,6 +190,27 @@ export const INSTITUTION_CONFIG: Record<InstitutionType, InstitutionConfig> = {
   EIOPA: { label: 'EIOPA', shortLabel: 'EIOPA', mdiIcon: 'mdi-shield-check', colour: '#6366f1' },
   COR: { label: 'Committee of the Regions', shortLabel: 'CoR', mdiIcon: 'mdi-map-marker-multiple', colour: '#e11d48' },
   EESC: { label: 'Economic and Social Committee', shortLabel: 'EESC', mdiIcon: 'mdi-handshake', colour: '#4f46e5' },
+  EDPS: { label: 'Data Protection Supervisor', shortLabel: 'EDPS', mdiIcon: 'mdi-shield-lock', colour: '#0ea5e9' },
+  OMBUDSMAN: { label: 'European Ombudsman', shortLabel: 'Ombudsman', mdiIcon: 'mdi-scale-balance', colour: '#0d9488' },
+  EIB: { label: 'European Investment Bank', shortLabel: 'EIB', mdiIcon: 'mdi-bank', colour: '#1d4ed8' },
+  ECA: { label: 'Court of Auditors', shortLabel: 'ECA', mdiIcon: 'mdi-clipboard-check', colour: '#7c3aed' },
+  ECHA: { label: 'Chemicals Agency', shortLabel: 'ECHA', mdiIcon: 'mdi-flask', colour: '#ca8a04' },
+  ENISA: { label: 'Cybersecurity Agency', shortLabel: 'ENISA', mdiIcon: 'mdi-lock-check', colour: '#2563eb' },
+  EUIPO: { label: 'Intellectual Property Office', shortLabel: 'EUIPO', mdiIcon: 'mdi-copyright', colour: '#db2777' },
+  EUAA: { label: 'Asylum Agency', shortLabel: 'EUAA', mdiIcon: 'mdi-account-group', colour: '#0891b2' },
+  EUROJUST: { label: 'Eurojust', shortLabel: 'Eurojust', mdiIcon: 'mdi-gavel', colour: '#9333ea' },
+  FRA: { label: 'Fundamental Rights Agency', shortLabel: 'FRA', mdiIcon: 'mdi-human-greeting', colour: '#16a34a' },
+  EU_OSHA: { label: 'Safety & Health at Work', shortLabel: 'EU-OSHA', mdiIcon: 'mdi-hard-hat', colour: '#ea580c' },
+  EUROFOUND: { label: 'Eurofound', shortLabel: 'Eurofound', mdiIcon: 'mdi-briefcase', colour: '#0284c7' },
+  ACER: { label: 'Energy Regulators (ACER)', shortLabel: 'ACER', mdiIcon: 'mdi-flash', colour: '#d97706' },
+  ECDC: { label: 'Disease Prevention & Control', shortLabel: 'ECDC', mdiIcon: 'mdi-virus', colour: '#dc2626' },
+  AMLA: { label: 'Anti-Money Laundering', shortLabel: 'AMLA', mdiIcon: 'mdi-cash-lock', colour: '#475569' },
+  CEPOL: { label: 'Law Enforcement Training', shortLabel: 'CEPOL', mdiIcon: 'mdi-police-badge', colour: '#1e40af' },
+  EIT: { label: 'Innovation & Technology', shortLabel: 'EIT', mdiIcon: 'mdi-lightbulb-on', colour: '#0d9488' },
+  CPVO: { label: 'Plant Variety Office', shortLabel: 'CPVO', mdiIcon: 'mdi-sprout', colour: '#65a30d' },
+  EMSA: { label: 'Maritime Safety Agency', shortLabel: 'EMSA', mdiIcon: 'mdi-ferry', colour: '#0369a1' },
+  EEAS: { label: 'External Action Service', shortLabel: 'EEAS', mdiIcon: 'mdi-earth', colour: '#1e3a8a' },
+  THIRD_PARTY: { label: 'Think Tanks & External', shortLabel: 'External', mdiIcon: 'mdi-earth', colour: '#64748b' },
 };
 
 export const POLICY_AREA_CONFIG: Record<string, { label: string; colour: string }> = {
@@ -187,6 +235,7 @@ export const EVENT_TYPE_LABELS: Record<EventType, string> = {
   european_council_summit: 'European Council Summit',
   eurogroup: 'Eurogroup',
   commission_college_meeting: 'College Meeting',
+  commissioner_meeting: 'Commissioner Meeting',
   court_hearing: 'Court Hearing',
   ecb_governing_council: 'Governing Council',
   agency_event: 'Agency Event',
@@ -194,6 +243,11 @@ export const EVENT_TYPE_LABELS: Record<EventType, string> = {
   comitology_meeting: 'Comitology',
   expert_group_meeting: 'Expert Group',
   grant_deadline: 'Grant Deadline',
+  conference: 'Conference',
+  webinar: 'Webinar',
+  roundtable: 'Roundtable',
+  training: 'Training',
+  workshop: 'Workshop',
 };
 
 // ============================================================================
@@ -210,6 +264,11 @@ export const euCalendarService = {
     institution?: string,
     policyArea?: string,
     committeeCode?: string,
+    myInterests?: boolean,
+    commissionDg?: string,
+    councilConfig?: string,
+    eventType?: string,
+    organiser?: string,
   ): Promise<{ date_from: string; date_to: string; total: number; events: CalendarEvent[] }> => {
     const params = new URLSearchParams();
     params.append('date_from', dateFrom);
@@ -217,8 +276,22 @@ export const euCalendarService = {
     if (institution) params.append('institution', institution);
     if (policyArea) params.append('policy_area', policyArea);
     if (committeeCode) params.append('committee_code', committeeCode);
+    if (commissionDg) params.append('commission_dg', commissionDg);
+    if (councilConfig) params.append('council_configuration', councilConfig);
+    if (eventType) params.append('event_type', eventType);
+    if (organiser) params.append('organiser', organiser);
+    if (myInterests) params.append('my_interests', 'true');
 
     const response = await axios.get(`${API_BASE}/events/range?${params.toString()}`, { headers: authHeaders() });
+    return response.data;
+  },
+
+  /**
+   * Institution -> selectable departments (committees / DGs / Council configs)
+   * for the cascading filter dropdowns.
+   */
+  getBodies: async (): Promise<Record<string, { code: string; name: string; kind?: string }[]>> => {
+    const response = await axios.get(`${API_BASE}/bodies`, { headers: authHeaders() });
     return response.data;
   },
 

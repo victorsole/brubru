@@ -239,7 +239,7 @@ for law in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v1";
 
-const res = await fetch(\`\${BASE}/laws?q=EU+US+trade+deal+tariff&limit=5\`, {
+const res = await fetch(\`\${BASE}/laws?q=victims+rights+directive&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();

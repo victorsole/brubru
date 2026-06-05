@@ -1,0 +1,642 @@
+/* Comparator tab — sub-tab of My EU Bubble between Position Analysis and My EU Calendar.
+   Brand: Brubru blue→purple gradient + Adobe Caslon Pro headings + Inter body. */
+
+.comparator-tab {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #2c2c2c;
+  padding: 32px 36px;
+}
+
+/* Tablet (≤1024px) — modest tightening */
+@media (max-width: 1024px) {
+  .comparator-tab-title { font-size: 28px; }
+  .comparator-spreadsheet { min-width: 720px; }
+  .comparator-file-pill-label,
+  .comparator-file-pill-sub { max-width: 180px; }
+}
+
+/* Mobile (≤768px) — stack the picker row, shrink chrome, allow long pill labels to wrap */
+@media (max-width: 768px) {
+  .comparator-tab { padding: 20px 16px; }
+  .comparator-tab-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .comparator-tab-title { font-size: 24px; }
+  .comparator-tab-subtitle { font-size: 13px; }
+  .comparator-tier-badge { font-size: 11px; padding: 3px 8px; }
+
+  .comparator-picker-row { flex-direction: column; align-items: stretch; }
+  .comparator-picker-wrap { min-width: 0; }
+  .comparator-input { min-width: 0; width: 100%; box-sizing: border-box; }
+
+  .comparator-toolbar { gap: 8px; }
+  .comparator-btn { padding: 7px 12px; font-size: 13px; }
+
+  .comparator-file-pill { max-width: 100%; flex-wrap: wrap; }
+  .comparator-file-pill-label,
+  .comparator-file-pill-sub { max-width: 100%; white-space: normal; }
+
+  .comparator-grid-item { flex-direction: column; align-items: flex-start; gap: 6px; }
+
+  .comparator-editor-pane { padding: 16px; }
+  .comparator-editor-section-title { font-size: 16px; }
+
+  .comparator-spreadsheet { min-width: 560px; font-size: 13px; }
+  .comparator-spreadsheet th,
+  .comparator-spreadsheet td { padding: 8px 10px; font-size: 13px; }
+
+  .comparator-modal { padding: 18px 16px; max-height: 90vh; }
+  .comparator-modal-header h3 { font-size: 18px; }
+}
+
+/* Very narrow screens (<420px) — keep the spreadsheet scrollable rather than shrunk */
+@media (max-width: 420px) {
+  .comparator-tab { padding: 16px 12px; }
+  .comparator-tab-title { font-size: 22px; }
+  .comparator-spreadsheet { min-width: 480px; }
+}
+
+.comparator-tab-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.comparator-tab-title {
+  font-family: 'Adobe Caslon Pro', 'EB Garamond', Georgia, serif;
+  font-size: 32px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2c5fbf, #7b3fc6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.comparator-tab-subtitle {
+  color: #555;
+  font-size: 14px;
+  max-width: 720px;
+  margin: 4px 0 0;
+}
+
+.comparator-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: #f0e9fa;
+  color: #5a2a9a;
+  font-weight: 600;
+}
+
+.comparator-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.comparator-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #d8d8e0;
+  background: #fff;
+  color: #2c2c2c;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comparator-btn:hover { background: #f5f5f8; border-color: #c8c8d0; }
+.comparator-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.comparator-btn-primary {
+  background: linear-gradient(135deg, #2c5fbf, #7b3fc6);
+  color: #fff;
+  border: 1px solid transparent;
+}
+/* Redeclare the gradient on hover; the base .comparator-btn:hover rule otherwise
+   replaces `background` with #f5f5f8, leaving white text on a near-white pill. */
+.comparator-btn-primary:hover {
+  background: linear-gradient(135deg, #1f4ea8, #6a2eb5);
+  border-color: transparent;
+  color: #fff;
+  filter: brightness(1.05);
+}
+
+.comparator-btn-danger {
+  color: #b81d1d;
+  border-color: #f0c8c8;
+  background: #fff;
+}
+.comparator-btn-danger:hover { background: #fdf3f3; }
+
+.comparator-input {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #d8d8e0;
+  border-radius: 8px;
+  background: #fff;
+  color: #2c2c2c;
+  font-family: inherit;
+  min-width: 240px;
+}
+.comparator-input:focus { outline: 2px solid #7b3fc6; outline-offset: 1px; }
+
+.comparator-grid-list { display: grid; gap: 12px; margin-top: 12px; }
+.comparator-grid-item {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.comparator-grid-item:hover { border-color: #7b3fc6; transform: translateY(-1px); }
+.comparator-grid-item h3 { margin: 0; font-size: 17px; }
+.comparator-grid-meta { color: #777; font-size: 13px; margin-top: 4px; }
+
+.comparator-editor-pane {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 12px;
+}
+.comparator-editor-section { margin-bottom: 20px; }
+.comparator-editor-section-title {
+  font-family: 'Adobe Caslon Pro', 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #2c2c2c;
+}
+
+.comparator-files-input { display: flex; flex-direction: column; gap: 8px; }
+
+.comparator-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.comparator-tag {
+  padding: 4px 10px 4px 12px;
+  background: #f0e9fa;
+  color: #5a2a9a;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.comparator-tag-remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+}
+
+.comparator-column-checkboxes { display: flex; flex-wrap: wrap; gap: 10px; }
+.comparator-column-checkbox {
+  padding: 6px 12px;
+  border: 1px solid #d8d8e0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  user-select: none;
+  background: #fff;
+  color: #2c2c2c;
+}
+.comparator-column-checkbox.selected {
+  background: #2c5fbf;
+  color: #fff;
+  border-color: #2c5fbf;
+}
+
+.comparator-spreadsheet-wrap {
+  overflow-x: auto;
+  margin-top: 12px;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  background: #fff;
+}
+.comparator-spreadsheet {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 800px;
+}
+.comparator-spreadsheet th,
+.comparator-spreadsheet td {
+  border-bottom: 1px solid #ececf2;
+  border-right: 1px solid #ececf2;
+  padding: 12px 14px;
+  vertical-align: top;
+  text-align: left;
+  font-size: 14px;
+}
+.comparator-spreadsheet th {
+  background: #f8f8fb;
+  font-weight: 700;
+  color: #2c2c2c;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.comparator-cell-row-header {
+  font-weight: 600;
+  background: #fafafe;
+  white-space: nowrap;
+}
+.comparator-cell-empty {
+  color: #888;
+  font-style: italic;
+  font-size: 13px;
+  max-width: 280px;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  line-height: 1.35;
+}
+.comparator-cell-failed { color: #b81d1d; background: #fff7f7; font-style: italic; }
+
+/* Deep-dive availability pill — used in picker hits, file pills, row headers */
+.comparator-deepdive-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, #2c5fbf, #7b3fc6);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.comparator-deepdive-pill:hover {
+  filter: brightness(1.1);
+  color: #fff;
+}
+.comparator-deepdive-pill::before {
+  content: "📕";
+  font-size: 9px;
+  filter: grayscale(0) brightness(1.2);
+}
+
+.comparator-cell-citation {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid #e0d4f0;
+  border-radius: 4px;
+  background: #fbf7ff;
+  color: #5a2a9a;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.comparator-cell-citation:hover { background: #f3e8ff; }
+
+.comparator-muted { color: #888; font-size: 13px; }
+
+.comparator-error-banner {
+  background: #fff5f5;
+  border: 1px solid #f0c8c8;
+  color: #b81d1d;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.comparator-success-banner {
+  background: #f0faf3;
+  border: 1px solid #c5e9d3;
+  color: #1e6b3d;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+/* Secondary button (alongside primary in picker row) */
+.comparator-btn-secondary {
+  background: #fff;
+  color: #2c5fbf;
+  border: 1px solid #b8c8e8;
+}
+.comparator-btn-secondary:hover {
+  background: #eef3fc;
+  border-color: #2c5fbf;
+}
+
+/* Picker (autocomplete combobox) */
+.comparator-picker-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.comparator-picker-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+.comparator-picker-wrap .comparator-input { width: 100%; min-width: 0; box-sizing: border-box; }
+
+.comparator-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  max-height: 360px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #d8d8e0;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(20, 20, 60, 0.08);
+}
+.comparator-picker-empty {
+  padding: 12px 14px;
+  color: #888;
+  font-size: 13px;
+  font-style: italic;
+}
+.comparator-picker-hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid #f0f0f4;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  color: #2c2c2c;
+}
+.comparator-picker-hit:last-child { border-bottom: none; }
+.comparator-picker-hit:hover { background: #f5f5fa; }
+.comparator-picker-hit-label {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.comparator-picker-hit-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #f0e9fa;
+  color: #5a2a9a;
+  letter-spacing: 0.4px;
+}
+.comparator-picker-hit-subtitle {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* File pills (replaces the bare comparator-tag for selected files) */
+.comparator-file-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  background: #fff;
+  border: 1px solid #d8d8e0;
+  border-radius: 12px;
+  font-size: 13px;
+  max-width: 480px;
+  line-height: 1.3;
+}
+.comparator-file-pill-label {
+  font-weight: 600;
+  color: #2c2c2c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.comparator-file-pill-sub {
+  font-size: 11px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+/* Spreadsheet row label */
+.comparator-row-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2c2c2c;
+}
+.comparator-row-sub {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+/* My Files modal — rendered via createPortal to document.body, so position: fixed
+   resolves against the viewport regardless of any framer-motion transform parents. */
+.comparator-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 40, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.comparator-modal {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px 28px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(20, 20, 60, 0.25);
+}
+.comparator-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.comparator-modal-header h3 {
+  font-family: 'Adobe Caslon Pro', 'EB Garamond', Georgia, serif;
+  font-size: 22px;
+  margin: 0;
+}
+.comparator-myfiles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.comparator-myfiles-item {
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  color: #2c2c2c;
+  transition: border-color 0.15s ease;
+}
+.comparator-myfiles-item:hover { border-color: #7b3fc6; }
+.comparator-myfiles-item.already-added { opacity: 0.55; cursor: default; }
+.comparator-myfiles-item.already-added:hover { border-color: #e5e5ea; }
+.comparator-myfiles-item-label {
+  font-weight: 600;
+  font-size: 14px;
+}
+.comparator-myfiles-item-sub {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Save step (final-step CTA after the flow) */
+.comparator-save-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed #e0e0e8;
+}
+.comparator-btn-save {
+  margin-top: 8px;
+  font-size: 15px;
+  padding: 10px 22px;
+}
+
+/* PI on-ramp: suggested files from the user's interest committees */
+.comparator-suggested {
+  margin-top: 16px;
+  padding: 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+.comparator-suggested-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.comparator-suggested-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+.comparator-btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+.comparator-suggest-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.75rem;
+}
+.comparator-chip {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+}
+.comparator-chip--active {
+  border-color: #cfe0f5;
+  background: #eaf2fd;
+  color: #0066cc;
+}
+.comparator-suggest-group { margin-bottom: 0.6rem; }
+.comparator-suggest-group-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #1a3a6b;
+  background: #eef4fc;
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  margin-bottom: 0.35rem;
+}
+.comparator-suggest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.comparator-suggest-hit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.6rem;
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.comparator-suggest-hit:hover { border-color: #cfe0f5; background: #f5f9ff; }
+.comparator-suggest-hit-label { font-size: 0.85rem; font-weight: 600; color: #1f2937; }
+.comparator-suggest-hit-ref { font-size: 0.75rem; color: #6b7280; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 640px) {
+  .comparator-suggested-head { flex-direction: column; align-items: stretch; }
+  .comparator-btn-sm { width: 100%; }
+}
+
+/* Grid section header: title + a Run-compute button next to the grid */
+.comparator-grid-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.comparator-grid-head .comparator-editor-section-title { margin: 0; }
+@media (max-width: 640px) {
+  .comparator-grid-head { flex-direction: column; align-items: stretch; }
+  .comparator-grid-head .comparator-btn-sm { width: 100%; }
+}

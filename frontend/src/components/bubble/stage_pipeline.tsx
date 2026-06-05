@@ -6,6 +6,7 @@
  */
 
 import Icon from '@mdi/react';
+import { useTranslation } from 'react-i18next';
 import { mdiCheck, mdiCircle } from '@mdi/js';
 import './stage_pipeline.css';
 
@@ -77,6 +78,7 @@ const stages = [
 ];
 
 export const StagePipeline = ({ currentStatus, compact = false }: StagePipelineProps) => {
+  const { t } = useTranslation();
   const currentStage = getStageFromStatus(currentStatus);
   const isWithdrawn = currentStatus.toLowerCase().includes('withdrawn');
   const isBlocked = currentStatus.toLowerCase().includes('blocked');
@@ -85,7 +87,7 @@ export const StagePipeline = ({ currentStatus, compact = false }: StagePipelineP
     return (
       <div className={`stage-pipeline ${compact ? 'stage-pipeline--compact' : ''}`}>
         <div className="stage-pipeline__withdrawn">
-          <span className="stage-pipeline__withdrawn-label">Withdrawn</span>
+          <span className="stage-pipeline__withdrawn-label">{t('amendmentsTab.statusWithdrawn')}</span>
         </div>
       </div>
     );
@@ -129,7 +131,7 @@ export const StagePipeline = ({ currentStatus, compact = false }: StagePipelineP
                   {compact ? stage.shortLabel : stage.label}
                 </span>
                 {isCurrent && isBlocked && (
-                  <span className="stage-pipeline__blocked-indicator">Blocked</span>
+                  <span className="stage-pipeline__blocked-indicator">{t('myFilesTab.blocked')}</span>
                 )}
               </div>
             </div>

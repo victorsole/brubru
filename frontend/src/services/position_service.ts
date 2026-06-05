@@ -89,38 +89,130 @@ export interface PositionResponse {
   generated_at?: string;
 }
 
+export interface AmendmentArticle {
+  article: string;
+  by_group: Record<string, number>;
+  attributed_total: number;
+  unattributed: number;
+  total: number;
+}
 export interface AmendmentDrilldown {
   carriage_id: string;
   procedure_ref: string;
-  articles: Array<{ article: string; by_group: Record<string, number>; total: number }>;
+  articles: AmendmentArticle[];
 }
 
-export interface TrackedPositionListItem {
+export interface PositionListItem {
   carriage_id: string;
-  procedure_ref: string;
+  procedure_ref?: string;
   title?: string;
-  confidence: string;
-  data_completeness: string;
-  parliament_summary: {
-    groups: number;
-    amendments: number;
-    rapporteur?: string;
-    rapporteur_group?: string;
-  };
-  council_summary: {
-    supporting_count?: number;
-    opposing_count?: number;
-    undecided_count?: number;
-  };
+  lead_committee?: string;
+  current_status?: string;
+  is_tracked: boolean;
+  is_recently_updated: boolean;
+  is_pi_match: boolean;
   user_stance?: string | null;
-  generated_at?: string;
+  has_snapshot: boolean;
+}
+
+export interface PositionListResponse {
+  pi_active: boolean;
+  tracked: PositionListItem[];
+  suggested: PositionListItem[];
+}
+
+export interface LobbyingOrg {
+  organisation: string;
+  website: string | null;
+  register_url: string | null;
+  transparency_register_id: string | null;
+  meetings: number;
+  reached_rapporteur: boolean;
+  best_access: number;
+  best_label: string | null;
+  meps: string[];
+  first_meeting: string | null;
+  last_meeting: string | null;
+}
+export interface LobbyingOutcome {
+  status: string | null;
+  has_vote: boolean;
+  result: string | null;
+  vote_date: string | null;
+  vote_level: string | null;
+}
+export interface LobbyingResult {
+  procedure_ref: string | null;
+  total: number;
+  organisations: LobbyingOrg[];
+  outcome?: LobbyingOutcome;
+}
+
+export interface ActualVote {
+  has_vote: boolean;
+  level?: string;
+  result?: string;
+  votes_for?: number;
+  votes_against?: number;
+  votes_abstention?: number;
+  group_breakdown?: Record<string, any>;
+  vote_date?: string | null;
+  ta_reference?: string | null;
+  title?: string;
+  source_url?: string | null;
+  committee_code?: string | null;
+}
+
+export interface OrgPosition {
+  stance: string;
+  summary: string | null;
+  excerpt: string | null;
+  consultation_title: string | null;
+  dg: string | null;
+  source_url: string | null;
+  date: string | null;
+}
+export interface AlignmentOrg {
+  organisation: string;
+  transparency_register_id: string | null;
+  meetings: number;
+  reached_rapporteur: boolean;
+  has_position: boolean;
+  positions: OrgPosition[];
+}
+export interface AlignmentResult {
+  procedure_ref: string | null;
+  outcome?: LobbyingOutcome;
+  coverage: { lobbying_orgs: number; with_position: number };
+  organisations: AlignmentOrg[];
 }
 
 export const positionService = {
-  async list(limit = 50): Promise<TrackedPositionListItem[]> {
-    const { data } = await axios.get<TrackedPositionListItem[]>(`${API_URL}/api/positions/`, {
+  async list(myInterests = true, limit = 40): Promise<PositionListResponse> {
+    const { data } = await axios.get<PositionListResponse>(`${API_URL}/api/positions/`, {
       headers: authHeaders(),
-      params: { limit },
+      params: { my_interests: myInterests, limit },
+    });
+    return data;
+  },
+
+  async lobbying(carriageId: string): Promise<LobbyingResult> {
+    const { data } = await axios.get<LobbyingResult>(`${API_URL}/api/positions/${carriageId}/lobbying`, {
+      headers: authHeaders(),
+    });
+    return data;
+  },
+
+  async actualVote(carriageId: string): Promise<ActualVote> {
+    const { data } = await axios.get<ActualVote>(`${API_URL}/api/positions/${carriageId}/actual-vote`, {
+      headers: authHeaders(),
+    });
+    return data;
+  },
+
+  async alignment(carriageId: string): Promise<AlignmentResult> {
+    const { data } = await axios.get<AlignmentResult>(`${API_URL}/api/positions/${carriageId}/alignment`, {
+      headers: authHeaders(),
     });
     return data;
   },

@@ -26,6 +26,8 @@ import { EUComplyPage } from './pages/eu_comply_page';
 import { TenderatorPage } from './pages/tenderator_page';
 import { AboutPage } from './pages/about_page';
 import { ApiPage } from './pages/api_page';
+import { ApiBillingPage } from './pages/api_billing_page';
+import { McpPage } from './pages/mcp_page';
 import { ContactPage } from './pages/contact_page';
 import { PrivacyPage } from './pages/privacy_page';
 import { TermsPage } from './pages/terms_page';
@@ -127,6 +129,24 @@ export const App = () => {
               <Header />
               <AnimatedPage>
                 <ApiPage />
+              </AnimatedPage>
+              <Footer isSidebarOpen={isSidebarOpen} />
+            </>
+          )} />
+          <Route path="/billing" element={(
+            <>
+              <Header />
+              <AnimatedPage>
+                <ApiBillingPage />
+              </AnimatedPage>
+              <Footer isSidebarOpen={isSidebarOpen} />
+            </>
+          )} />
+          <Route path="/mcp" element={(
+            <>
+              <Header />
+              <AnimatedPage>
+                <McpPage />
               </AnimatedPage>
               <Footer isSidebarOpen={isSidebarOpen} />
             </>
@@ -252,6 +272,10 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
+          {/* /comparator was briefly a top-level route on 6 May 2026.
+              Now it redirects into My EU Bubble where the Comparator lives as a sub-tab
+              between Position Analysis and My EU Calendar. */}
+          <Route path="/comparator" element={<Navigate to="/my-eu-bubble?tab=comparator" replace />} />
 
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" />} />

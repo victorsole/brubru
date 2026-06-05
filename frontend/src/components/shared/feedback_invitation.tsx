@@ -1,5 +1,6 @@
 // frontend/src/components/shared/feedback_invitation.tsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiMessageTextOutline, mdiEmailOutline, mdiFormTextbox } from '@mdi/js';
 import { FeedbackForm } from '../feedback/feedback_form';
@@ -18,18 +19,16 @@ export const FeedbackInvitation = ({
   variant = 'card',
   className = '',
 }: FeedbackInvitationProps) => {
+  const { t } = useTranslation();
   const [showInternalForm, setShowInternalForm] = useState(false);
 
   // Build mailto link with pre-filled subject and body
-  const mailtoSubject = encodeURIComponent(`Feedback on ${featureName}`);
-  const mailtoBody = encodeURIComponent(
-    `Hi Beresol team,\n\nI would like to share my feedback on ${featureName}:\n\n[Please write your feedback here]\n\nThank you!`
-  );
+  const mailtoSubject = encodeURIComponent(t('feedback.subject', { name: featureName }));
+  const mailtoBody = encodeURIComponent(t('feedback.bodyTemplate', { name: featureName }));
   const mailtoLink = `mailto:hello@beresol.eu?subject=${mailtoSubject}&body=${mailtoBody}`;
 
   // Default description if not provided
-  const description = featureDescription ||
-    `Help us improve ${featureName} by sharing your thoughts, suggestions, or reporting any issues. Your feedback helps us create better tools for the EU policy community.`;
+  const description = featureDescription || t('feedback.defaultDescription', { name: featureName });
 
   return (
     <section className={`feedback-invitation feedback-invitation--${variant} ${className}`}>
@@ -41,7 +40,7 @@ export const FeedbackInvitation = ({
         />
       </div>
 
-      <h3 className="feedback-invitation__title">We Value Your Feedback</h3>
+      <h3 className="feedback-invitation__title">{t('feedback.title')}</h3>
 
       <p className="feedback-invitation__description">{description}</p>
 
@@ -51,7 +50,7 @@ export const FeedbackInvitation = ({
           className="feedback-invitation__button feedback-invitation__button--primary"
         >
           <Icon path={mdiEmailOutline} size={0.9} />
-          <span>Give Feedback</span>
+          <span>{t('feedback.giveFeedback')}</span>
         </a>
 
         <button
@@ -60,7 +59,7 @@ export const FeedbackInvitation = ({
           onClick={() => setShowInternalForm(!showInternalForm)}
         >
           <Icon path={mdiFormTextbox} size={0.9} />
-          <span>{showInternalForm ? 'Close Form' : 'Submit via Form'}</span>
+          <span>{showInternalForm ? t('feedback.closeForm') : t('feedback.submitViaForm')}</span>
         </button>
       </div>
 
@@ -70,9 +69,7 @@ export const FeedbackInvitation = ({
         </div>
       )}
 
-      <p className="feedback-invitation__footer">
-        Your email will be sent to our team at hello@beresol.eu
-      </p>
+      <p className="feedback-invitation__footer">{t('feedback.emailFooter')}</p>
     </section>
   );
 };

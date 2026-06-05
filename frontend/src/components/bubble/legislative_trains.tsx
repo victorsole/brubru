@@ -6,14 +6,22 @@
  */
 
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiTrain, mdiFileDocument, mdiRobotOutline, mdiCheckCircle, mdiChevronDown, mdiChevronUp, mdiStar, mdiStarOutline } from '@mdi/js';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
+import type { LegislativeFile } from '../../hooks/use_legislative_trains';
 import { LegislativeFileDetail } from './legislative_file_detail';
+import { useAuth } from '../../hooks/use_auth';
+import axios from 'axios';
 import './legislative_trains.css';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 export const LegislativeTrains = () => {
+  const { t } = useTranslation();
   const {
     trains,
     isLoadingTrains,
@@ -32,12 +40,54 @@ export const LegislativeTrains = () => {
   } = useLegislativeTrains();
 
   const [expandedTrainIds, setExpandedTrainIds] = useState<string[]>([]);
+  const [searchParams] = useSearchParams();
+
+  // PI lens: train files carry no committee/policy metadata, so we match the
+  // user's Policy-Interest topic keywords against the file title.
+  const [piKeywords, setPiKeywords] = useState<string[]>([]);
+  const [piOnly, setPiOnly] = useState(false);
 
   useEffect(() => {
     // Fetch trains and tracked files on mount
     fetchTrains();
     fetchTrackedFiles();
+    (async () => {
+      try {
+        const token = useAuth.getState().token;
+        const res = await axios.get<{ keywords: string[] }>(
+          `${API_BASE}/legislative-train/my-interest-keywords`,
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+        );
+        setPiKeywords(res.data?.keywords || []);
+      } catch { /* no PI lens if unavailable */ }
+    })();
   }, []);
+
+  const matchesInterests = (file: LegislativeFile): boolean => {
+    if (piKeywords.length === 0) return false;
+    const hay = `${file.title || ''} ${(file.policy_areas || []).join(' ')}`.toLowerCase();
+    return piKeywords.some((k) => hay.includes(k));
+  };
+
+  // Per-train count of PI-matching files (for the train header badge).
+  const trainInterestCounts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const tr of trains) {
+      m[tr.id] = (tr.files || []).filter(matchesInterests).length;
+    }
+    return m;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trains, piKeywords]);
+
+  // Deep-link: ?file=<file_id> opens that file's detail card directly.
+  // Used by the EFPIA brief "tracking your files" links so a click lands on
+  // the file card inside My EU Bubble, not the Chat.
+  useEffect(() => {
+    const fileParam = searchParams.get('file');
+    if (fileParam) {
+      fetchFileDetail(fileParam);
+    }
+  }, [searchParams]);
 
   // Check if a file is tracked
   const isFileTracked = (fileId: string, oeilRef?: string) => {
@@ -112,7 +162,7 @@ export const LegislativeTrains = () => {
     return (
       <div className="legislative-trains">
         <div className="legislative-trains__loading">
-          Loading legislative trains...
+          {t('trains.loading') /* fallback to existing key */}
         </div>
       </div>
     );
@@ -124,10 +174,31 @@ export const LegislativeTrains = () => {
       <div className="legislative-trains__header">
         <div className="legislative-trains__header-left">
           <Icon path={mdiTrain} size={1.2} />
-          <h2>EU Commission Legislative Trains</h2>
+          <h2>{t('trains.title')}</h2>
         </div>
         <div className="legislative-trains__stats">
-          <span>{trains.reduce((sum, t) => sum + t.total_files, 0)} legislative files</span>
+          {piKeywords.length > 0 && (
+            <button
+              type="button"
+              className={`legislative-trains__pi-toggle ${piOnly ? 'legislative-trains__pi-toggle--active' : ''}`}
+              onClick={() => {
+                const next = !piOnly;
+                setPiOnly(next);
+                // Enabling the lens: auto-expand the trains that have matches so
+                // the user sees their PI-relevant files immediately.
+                if (next) {
+                  setExpandedTrainIds(
+                    trains.filter((tr) => (trainInterestCounts[tr.id] || 0) > 0).map((tr) => tr.id),
+                  );
+                }
+              }}
+              title={t('trains.myInterestsHint')}
+            >
+              <Icon path={piOnly ? mdiStar : mdiStarOutline} size={0.7} />
+              {t('trains.myInterests')}
+            </button>
+          )}
+          <span>{t('trains.filesCount', { count: trains.reduce((sum, tr) => sum + tr.total_files, 0) })}</span>
         </div>
       </div>
 
@@ -136,7 +207,7 @@ export const LegislativeTrains = () => {
         <div className="legislative-trains__batch-bar">
           <div className="legislative-trains__batch-info">
             <Icon path={mdiCheckCircle} size={0.9} />
-            <span>{selectedFileIds.length} files selected</span>
+            <span>{t('trains.filesSelected', { count: selectedFileIds.length })}</span>
           </div>
           <div className="legislative-trains__batch-actions">
             <button
@@ -144,7 +215,7 @@ export const LegislativeTrains = () => {
               onClick={clearFileSelection}
               disabled={isAnalyzing}
             >
-              Cancel
+              {t('trains.cancel')}
             </button>
             <button
               className="legislative-trains__batch-btn legislative-trains__batch-btn--analyze"
@@ -152,7 +223,7 @@ export const LegislativeTrains = () => {
               disabled={isAnalyzing}
             >
               <Icon path={mdiRobotOutline} size={0.8} />
-              {isAnalyzing ? 'Analyzing...' : 'AI Analyze Selected'}
+              {isAnalyzing ? t('trains.analyzing') : t('trains.aiAnalyzeSelected')}
             </button>
           </div>
         </div>
@@ -160,7 +231,12 @@ export const LegislativeTrains = () => {
 
       {/* Trains List */}
       <div className="legislative-trains__list">
-        {trains.map(train => (
+        {trains
+          .filter(train => !piOnly || (trainInterestCounts[train.id] || 0) > 0)
+          .map(train => {
+          const piCount = trainInterestCounts[train.id] || 0;
+          const visibleFiles = (train.files || []).filter(f => !piOnly || matchesInterests(f));
+          return (
           <div key={train.id} className="legislative-trains__train">
             {/* Train Header */}
             <div
@@ -169,13 +245,19 @@ export const LegislativeTrains = () => {
             >
               <div className="legislative-trains__train-title">
                 <span className="legislative-trains__train-number">
-                  Priority {train.priority_number}
+                  {t('trains.priority', { n: train.priority_number })}
                 </span>
                 <h3>{train.name}</h3>
               </div>
               <div className="legislative-trains__train-meta">
+                {piKeywords.length > 0 && piCount > 0 && (
+                  <span className="legislative-trains__train-pi" title={t('trains.matchesInterests')}>
+                    <Icon path={mdiStar} size={0.6} />
+                    {t('trains.inInterests', { count: piCount })}
+                  </span>
+                )}
                 <span className="legislative-trains__train-count">
-                  {train.total_files} files
+                  {t('trains.trainFilesCount', { count: train.total_files })}
                 </span>
                 <Icon
                   path={expandedTrainIds.includes(train.id) ? mdiChevronUp : mdiChevronDown}
@@ -187,7 +269,7 @@ export const LegislativeTrains = () => {
             {/* Files List */}
             {expandedTrainIds.includes(train.id) && train.files && (
               <div className="legislative-trains__files">
-                {train.files.map(file => {
+                {visibleFiles.map(file => {
                   const isSelected = selectedFileIds.includes(file.file_id);
                   const isEnriched = file.ai_summary && file.ai_policy_classifications;
 
@@ -218,8 +300,13 @@ export const LegislativeTrains = () => {
                         <div className="legislative-trains__file-header">
                           <Icon path={mdiFileDocument} size={0.7} />
                           <h4>{file.title}</h4>
+                          {matchesInterests(file) && (
+                            <span className="legislative-trains__file-pi" title={t('trains.matchesInterests')}>
+                              <Icon path={mdiStar} size={0.6} />
+                            </span>
+                          )}
                           {isEnriched && (
-                            <span className="legislative-trains__file-enriched" title="AI Enriched">
+                            <span className="legislative-trains__file-enriched" title={t('trains.aiEnriched')}>
                               <Icon path={mdiRobotOutline} size={0.6} />
                             </span>
                           )}
@@ -228,7 +315,7 @@ export const LegislativeTrains = () => {
                             className={`legislative-trains__file-track ${fileIsTracked ? 'legislative-trains__file-track--active' : ''}`}
                             onClick={(e) => handleTrackToggle(e, { id: file.id, file_id: file.file_id, oeil_procedure_ref: (file as any).oeil_procedure_ref })}
                             disabled={isTracking}
-                            title={fileIsTracked ? 'Stop tracking' : 'Track this file'}
+                            title={fileIsTracked ? t('common.stopTracking') : t('common.trackThisFile')}
                           >
                             <Icon path={fileIsTracked ? mdiStar : mdiStarOutline} size={0.7} />
                           </button>
@@ -242,7 +329,7 @@ export const LegislativeTrains = () => {
 
                         {file.ai_summary && (
                           <div className="legislative-trains__file-summary">
-                            <strong>AI Summary:</strong> {file.ai_summary}
+                            <strong>{t('trains.aiSummary')}</strong> {file.ai_summary}
                           </div>
                         )}
 
@@ -269,21 +356,22 @@ export const LegislativeTrains = () => {
                   );
                 })}
 
-                {train.files.length === 0 && (
+                {visibleFiles.length === 0 && (
                   <div className="legislative-trains__files-empty">
-                    No legislative files found for this train
+                    {piOnly ? t('trains.noFilesInInterests') : t('trains.noFilesForTrain')}
                   </div>
                 )}
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
 
         {trains.length === 0 && (
           <div className="legislative-trains__empty">
             <Icon path={mdiTrain} size={2} />
-            <p>No legislative trains found</p>
-            <small>Try refreshing the legislative trains in the admin panel</small>
+            <p>{t('trains.noTrains')}</p>
+            <small>{t('trains.tryRefresh')}</small>
           </div>
         )}
       </div>

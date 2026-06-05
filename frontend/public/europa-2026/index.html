@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dia d'Europa — Brubru</title>
+<meta name="description" content="Dia d'Europa 2026 — Brubru ha completat la traducció al català del cos canònic del dret de la Unió Europea.">
+<meta property="og:title" content="Tot el dret europeu, per primer cop en català">
+<meta property="og:description" content="Dia d'Europa 2026 — Brubru.">
+<meta property="og:image" content="https://brubru.beresol.eu/assets/brubru_og_image.png">
+<style>
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro Italic'; src: url('../New-Yorker-Font/ACaslonPro-Italic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+  @font-face { font-family: 'Adobe Caslon Pro Italic'; src: url('../New-Yorker-Font/ACaslonPro-BoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #08070d;
+    color: #f5f1e6;
+    font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---- Canvas ---- */
+  .stage {
+    position: fixed;
+    inset: 0;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    background: #08070d;
+  }
+
+  /* ---- Background layers (one per cluster) ---- */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1100ms cubic-bezier(.5,.05,.2,.95);
+    will-change: opacity, transform;
+    transform: scale(1.05);
+    animation: kenburns 24s ease-in-out infinite alternate;
+  }
+  .bg.is-on { opacity: 0.72; }
+
+  @keyframes kenburns {
+    0%   { transform: scale(1.04) translate(0,0); }
+    100% { transform: scale(1.12) translate(-1.5%, -1.0%); }
+  }
+
+  /* Per-cluster URLs from Pexels (large2x) */
+  .bg--hero { background-image: url('https://images.pexels.com/photos/12541592/pexels-photo-12541592.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  .bg--c1   { background-image: url('https://images.pexels.com/photos/36207460/pexels-photo-36207460.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  .bg--c2   { background-image: url('https://images.pexels.com/photos/30125720/pexels-photo-30125720.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  .bg--c3   { background-image: url('https://images.pexels.com/photos/7327876/pexels-photo-7327876.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+  .bg--c4   { background-image: url('https://images.pexels.com/photos/21069169/pexels-photo-21069169.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600'); }
+
+  /* ---- Tonal overlays per cluster ---- */
+  /* Lighter overlay so backgrounds breathe through; text stays readable
+     thanks to the strong text-shadow on .concept and .tagline-line. */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%),
+      linear-gradient(180deg, rgba(120,30,30,0.10) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.65) 100%);
+    transition: background 1100ms ease;
+  }
+  .overlay.is-c1 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%), linear-gradient(180deg, rgba(150,40,40,0.08) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.65) 100%); }
+  .overlay.is-c2 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%), linear-gradient(180deg, rgba(40,60,140,0.10) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.65) 100%); }
+  .overlay.is-c3 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.55) 80%), linear-gradient(180deg, rgba(20,50,80,0.18) 0%, rgba(8,7,13,0.30) 60%, rgba(8,7,13,0.70) 100%); }
+  .overlay.is-c4 { background: radial-gradient(ellipse at center, rgba(8,7,13,0.10) 0%, rgba(8,7,13,0.50) 80%), linear-gradient(180deg, rgba(180,140,40,0.10) 0%, rgba(8,7,13,0.28) 60%, rgba(8,7,13,0.65) 100%); }
+
+  /* ---- 12-star halo (subtle, present everywhere) ---- */
+  .stars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 900ms ease;
+    pointer-events: none;
+  }
+  .stars.is-on { opacity: 0.06; }
+  .stars svg { width: 70vmin; height: 70vmin; }
+
+  /* ---- Intro logo card ---- */
+  .intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 1.6vh, 24px);
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+  .intro.is-on { opacity: 1; }
+  .intro img.logo {
+    width: clamp(260px, 32vw, 520px);
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.55));
+  }
+  .intro .europe-day {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 38px);
+    letter-spacing: 0.06em;
+    color: #f5f1e6;
+    opacity: 0.9;
+  }
+
+  /* ---- Concept reel ---- */
+  .reel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4vh 6vw;
+    pointer-events: none;
+  }
+  .concept {
+    position: absolute;
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 600;
+    font-size: clamp(38px, 7.5vw, 128px);
+    line-height: 1.05;
+    letter-spacing: -0.012em;
+    color: #f7f0d9;
+    /* Stronger shadow gives bg images more headroom to breathe through */
+    text-shadow: 0 6px 24px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.7);
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 380ms cubic-bezier(.2,.65,.25,1), transform 460ms cubic-bezier(.2,.65,.25,1);
+    will-change: opacity, transform;
+    max-width: 88vw;
+    padding: 0 2vw;
+  }
+  .concept.is-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .concept.is-out {
+    opacity: 0;
+    transform: translateY(-32px);
+    transition: opacity 280ms ease, transform 320ms ease;
+  }
+
+  /* Bigger, italic accent for the Europe-Day date concept */
+  .concept.is-date {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #f4d690;
+  }
+
+  /* ---- Cluster label (small, top corner) ---- */
+  .clusterlbl {
+    position: absolute;
+    top: 4vh;
+    left: 5vw;
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.3vw, 18px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 230, 0.55);
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+  .clusterlbl.is-on { opacity: 1; }
+
+  /* ---- Tagline scene ---- */
+  .tagline {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(20px, 3vh, 40px);
+    text-align: center;
+    padding: 6vh 6vw;
+    opacity: 0;
+    transition: opacity 600ms ease;
+    pointer-events: none;
+  }
+  .tagline.is-on { opacity: 1; }
+  .tagline-line {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(36px, 6.5vw, 108px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: #f7f0d9;
+    text-shadow: 0 6px 36px rgba(0,0,0,0.6);
+    max-width: 90vw;
+  }
+  .tagline-line .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 600ms ease, transform 700ms cubic-bezier(.2,.65,.25,1);
+    margin-right: 0.22em;
+    will-change: opacity, transform;
+  }
+  .tagline-line .w.is-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- End frame ---- */
+  .endframe {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2vh, 28px);
+    opacity: 0;
+    transition: opacity 800ms ease;
+    pointer-events: none;
+  }
+  .endframe.is-on { opacity: 1; }
+  .endframe img.logo {
+    width: clamp(280px, 30vw, 480px);
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.55));
+  }
+  .endframe .url {
+    font-family: 'Adobe Caslon Pro', serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2.2vw, 30px);
+    letter-spacing: 0.08em;
+    color: #f4d690;
+  }
+  .endframe .smalltag {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: clamp(16px, 1.6vw, 22px);
+    color: rgba(245, 241, 230, 0.7);
+    margin-top: 6px;
+  }
+
+  /* ---- Footer (Beresol + credits) ---- */
+  .footer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .footer .beresol {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 800ms ease;
+  }
+  .footer .beresol.is-on { opacity: 0.85; }
+  .footer .beresol img { height: 28px; }
+  .footer .beresol span {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: rgba(245, 241, 230, 0.7);
+  }
+  .footer .credits {
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: rgba(245, 241, 230, 0.45);
+    text-align: right;
+    line-height: 1.5;
+    max-width: 60vw;
+    opacity: 0;
+    transition: opacity 800ms ease;
+  }
+  .footer .credits.is-on { opacity: 1; }
+  .footer .credits a { color: inherit; text-decoration: none; }
+
+  /* ---- Replay button ---- */
+  .replay {
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 20;
+    appearance: none;
+    border: 1px solid rgba(245,241,230,0.25);
+    background: rgba(8,7,13,0.55);
+    color: #f5f1e6;
+    padding: 8px 16px;
+    font-family: 'Adobe Caslon Pro Italic', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 600ms ease;
+  }
+  .replay.is-on { opacity: 0.85; }
+  .replay:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<button class="replay" id="replay" type="button">↻ Repeteix</button>
+
+<main class="stage">
+  <!-- Background image layers (cross-faded) -->
+  <div class="bg bg--hero" id="bgHero"></div>
+  <div class="bg bg--c1"   id="bgC1"></div>
+  <div class="bg bg--c2"   id="bgC2"></div>
+  <div class="bg bg--c3"   id="bgC3"></div>
+  <div class="bg bg--c4"   id="bgC4"></div>
+
+  <!-- Tonal overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- 12-star halo -->
+  <div class="stars" id="stars">
+    <!-- 12 yellow stars in a circle, classic EU motif -->
+    <svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#FFCC00">
+        <!-- 12 stars at 30° intervals, radius 70 -->
+        <!-- Each star is a 5-point star path centred on the rotation point -->
+        <g id="starGroup"></g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Cluster label (top-left) -->
+  <div class="clusterlbl" id="clusterlbl"></div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro">
+    <img class="logo" src="/assets/brubru_mainlogo.png" alt="Brubru">
+    <div class="europe-day">9 de maig · Dia d'Europa</div>
+  </div>
+
+  <!-- Concept reel -->
+  <div class="reel">
+    <div class="concept" id="concept"></div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline" id="tagline">
+    <div class="tagline-line" id="taglineLine">
+      <span class="w">Tot</span>
+      <span class="w">el</span>
+      <span class="w">dret</span>
+      <span class="w">europeu,</span>
+      <br>
+      <span class="w">per</span>
+      <span class="w">primer</span>
+      <span class="w">cop</span>
+      <span class="w">en</span>
+      <span class="w">català.</span>
+    </div>
+  </div>
+
+  <!-- End frame -->
+  <div class="endframe" id="endframe">
+    <img class="logo" src="/assets/brubru_mainlogo.png" alt="Brubru">
+    <div class="url">brubru.beresol.eu</div>
+    <div class="smalltag">Tot el dret europeu, per primer cop en català.</div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="beresol" id="beresol">
+      <img src="/assets/beresol-logo.png" alt="Beresol BV">
+      <span>© 2026 Beresol BV</span>
+    </div>
+    <div class="credits" id="credits">
+      Imatges: <a href="https://www.pexels.com/@dusancvetanovic" target="_blank">Dušan Cvetanović</a>,
+      <a href="https://www.pexels.com/@christianwasserfallen" target="_blank">Christian Wasserfallen</a>,
+      Grigoriy &amp;
+      <a href="https://www.pexels.com/@maxedraw" target="_blank">maxed. RAW</a> · Pexels.
+    </div>
+  </footer>
+</main>
+
+<script>
+  // ---- 12 EU stars (classic ratio: outer 6, inner 2.4, centred on circle r=70) ----
+  (function injectStars() {
+    const g = document.getElementById('starGroup');
+    if (!g) return;
+    const ns = 'http://www.w3.org/2000/svg';
+    const R = 72; // ring radius
+    const r1 = 6, r2 = 2.4;
+    function starPath(cx, cy) {
+      // 5-point star path
+      let d = '';
+      for (let i = 0; i < 10; i++) {
+        const ang = (-Math.PI / 2) + i * Math.PI / 5;
+        const r = i % 2 === 0 ? r1 : r2;
+        const x = cx + r * Math.cos(ang);
+        const y = cy + r * Math.sin(ang);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2);
+      }
+      return d + 'Z';
+    }
+    for (let k = 0; k < 12; k++) {
+      const ang = (k / 12) * Math.PI * 2 - Math.PI / 2;
+      const cx = R * Math.cos(ang);
+      const cy = R * Math.sin(ang);
+      const p = document.createElementNS(ns, 'path');
+      p.setAttribute('d', starPath(cx, cy));
+      g.appendChild(p);
+    }
+  })();
+
+  // ---- Concept reel (with cluster mapping for backgrounds + label) ----
+  const REEL = [
+    // Cluster 1 — preamble + acts (red library)
+    { t: 'tenint en compte',       cluster: 1, label: 'Preàmbul' },
+    { t: 'atenent que',            cluster: 1, label: 'Preàmbul' },
+    { t: 'considerant',            cluster: 1, label: 'Preàmbul' },
+    { t: 'reglament',              cluster: 1, label: 'Actes jurídics' },
+    { t: 'directiva',              cluster: 1, label: 'Actes jurídics' },
+    { t: 'decisió',                cluster: 1, label: 'Actes jurídics' },
+    { t: 'acte delegat',           cluster: 1, label: 'Actes jurídics' },
+    { t: "acte d'execució",        cluster: 1, label: 'Actes jurídics' },
+
+    // Cluster 2 — principles + freedoms (sky)
+    { t: 'subsidiarietat',         cluster: 2, label: 'Principis' },
+    { t: 'proporcionalitat',       cluster: 2, label: 'Principis' },
+    { t: 'camp de joc equitatiu',  cluster: 2, label: 'Principis' },
+    { t: 'lliure circulació',      cluster: 2, label: 'Llibertats' },
+    { t: 'mercat únic',            cluster: 2, label: 'Llibertats' },
+
+    // Cluster 3 — institutions (hemicycle)
+    { t: 'Comissió',               cluster: 3, label: 'Institucions' },
+    { t: 'Parlament',              cluster: 3, label: 'Institucions' },
+    { t: 'Consell',                cluster: 3, label: 'Institucions' },
+    { t: 'Tribunal de Justícia',   cluster: 3, label: 'Institucions' },
+    { t: 'Diari Oficial de la Unió', cluster: 3, label: 'Institucions' },
+    { t: 'Estats membres',         cluster: 3, label: 'Institucions' },
+
+    // Cluster 4 — big picture + Europe Day (Catalonia)
+    { t: 'regions',                cluster: 4, label: 'Pobles' },
+    { t: 'idiomes oficials de la Unió', cluster: 4, label: 'Pobles' },
+    { t: 'polítiques de la Unió',  cluster: 4, label: 'Unió' },
+    { t: 'Dret de la Unió',        cluster: 4, label: 'Unió' },
+    { t: '9 de maig de 1950',      cluster: 4, label: 'Dia d\'Europa', isDate: true },
+  ];
+
+  // ---- Timeline (in milliseconds) ----
+  const T = {
+    introInAt:    300,     // intro fades in at 0.3s
+    introOutAt:   2600,    // intro fades out at 2.6s
+    reelStartAt:  3000,    // first concept appears
+    perConcept:   1450,    // 1.45s per concept (slightly snappier)
+    silentBeat:   600,     // black beat between cluster 4 and tagline
+    taglineWord:  650,     // each word reveals every 650ms
+    taglineHold:  1400,    // hold the tagline before end frame
+    endFrameDur:  4500,    // end frame holds for 4.5s
+  };
+
+  const els = {
+    bgHero:  document.getElementById('bgHero'),
+    bgC1:    document.getElementById('bgC1'),
+    bgC2:    document.getElementById('bgC2'),
+    bgC3:    document.getElementById('bgC3'),
+    bgC4:    document.getElementById('bgC4'),
+    overlay: document.getElementById('overlay'),
+    stars:   document.getElementById('stars'),
+    intro:   document.getElementById('intro'),
+    concept: document.getElementById('concept'),
+    cluster: document.getElementById('clusterlbl'),
+    tagline: document.getElementById('tagline'),
+    taglineLine: document.getElementById('taglineLine'),
+    endframe:document.getElementById('endframe'),
+    beresol: document.getElementById('beresol'),
+    credits: document.getElementById('credits'),
+    replay:  document.getElementById('replay'),
+  };
+
+  let timeouts = [];
+  function schedule(fn, delay) { timeouts.push(setTimeout(fn, delay)); }
+  function clearAllTimers() { timeouts.forEach(clearTimeout); timeouts = []; }
+
+  function setBg(which) {
+    [els.bgHero, els.bgC1, els.bgC2, els.bgC3, els.bgC4].forEach(b => b.classList.remove('is-on'));
+    if (which) which.classList.add('is-on');
+  }
+  function setOverlay(cls) {
+    els.overlay.className = 'overlay ' + (cls || '');
+  }
+  function setCluster(label) {
+    if (!label) {
+      els.cluster.classList.remove('is-on');
+      return;
+    }
+    els.cluster.textContent = label;
+    els.cluster.classList.add('is-on');
+  }
+
+  function showConcept(text, isDate) {
+    els.concept.classList.remove('is-in', 'is-out', 'is-date');
+    els.concept.textContent = text;
+    if (isDate) els.concept.classList.add('is-date');
+    // force reflow before adding is-in
+    void els.concept.offsetWidth;
+    els.concept.classList.add('is-in');
+  }
+  function hideConcept() {
+    els.concept.classList.remove('is-in');
+    els.concept.classList.add('is-out');
+  }
+
+  function play() {
+    clearAllTimers();
+    // Reset all states
+    [els.bgHero, els.bgC1, els.bgC2, els.bgC3, els.bgC4].forEach(b => b.classList.remove('is-on'));
+    setOverlay('');
+    setCluster(null);
+    els.intro.classList.remove('is-on');
+    els.tagline.classList.remove('is-on');
+    els.endframe.classList.remove('is-on');
+    els.beresol.classList.remove('is-on');
+    els.credits.classList.remove('is-on');
+    els.stars.classList.remove('is-on');
+    els.replay.classList.remove('is-on');
+    document.querySelectorAll('.tagline-line .w').forEach(w => w.classList.remove('is-in'));
+    els.concept.classList.remove('is-in', 'is-out', 'is-date');
+    els.concept.textContent = '';
+
+    // ---- Intro ----
+    schedule(() => {
+      setBg(els.bgHero);
+      setOverlay('');
+      els.stars.classList.add('is-on');
+      els.intro.classList.add('is-on');
+    }, T.introInAt);
+
+    schedule(() => {
+      els.intro.classList.remove('is-on');
+    }, T.introOutAt);
+
+    // ---- Concept reel ----
+    let lastCluster = 0;
+    REEL.forEach((c, i) => {
+      const start = T.reelStartAt + i * T.perConcept;
+      // Cluster background swap when cluster index changes
+      if (c.cluster !== lastCluster) {
+        const target = c.cluster === 1 ? els.bgC1
+                     : c.cluster === 2 ? els.bgC2
+                     : c.cluster === 3 ? els.bgC3
+                     : els.bgC4;
+        const overlayCls = 'is-c' + c.cluster;
+        schedule(() => { setBg(target); setOverlay(overlayCls); }, start - 200);
+        lastCluster = c.cluster;
+      }
+      // Cluster label appears with the first concept of the cluster
+      schedule(() => { setCluster(c.label); }, start);
+      // Concept in
+      schedule(() => { showConcept(c.t, !!c.isDate); }, start);
+      // Concept out (slight overlap with the next one)
+      schedule(() => { hideConcept(); }, start + T.perConcept - 240);
+    });
+
+    const reelEndAt = T.reelStartAt + REEL.length * T.perConcept;
+
+    // ---- Silent beat ----
+    schedule(() => {
+      // dim background, drop cluster label
+      [els.bgHero, els.bgC1, els.bgC2, els.bgC3, els.bgC4].forEach(b => b.classList.remove('is-on'));
+      setOverlay('');
+      setCluster(null);
+    }, reelEndAt + 200);
+
+    const taglineStartAt = reelEndAt + T.silentBeat + 200;
+
+    // ---- Tagline reveal (word by word) ----
+    schedule(() => {
+      els.tagline.classList.add('is-on');
+      els.stars.classList.add('is-on');
+    }, taglineStartAt);
+
+    const words = document.querySelectorAll('.tagline-line .w');
+    words.forEach((w, i) => {
+      schedule(() => { w.classList.add('is-in'); }, taglineStartAt + 300 + i * T.taglineWord);
+    });
+
+    const taglineEndAt = taglineStartAt + 300 + words.length * T.taglineWord + T.taglineHold;
+
+    // ---- End frame ----
+    schedule(() => {
+      els.tagline.classList.remove('is-on');
+    }, taglineEndAt);
+
+    schedule(() => {
+      els.endframe.classList.add('is-on');
+      els.beresol.classList.add('is-on');
+      els.credits.classList.add('is-on');
+    }, taglineEndAt + 400);
+
+    // Replay button reveals once it's all over
+    schedule(() => {
+      els.replay.classList.add('is-on');
+    }, taglineEndAt + 400 + T.endFrameDur - 600);
+  }
+
+  els.replay.addEventListener('click', play);
+
+  // Wait for fonts to load (avoid FOUT in screen recordings)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(play);
+  } else {
+    window.addEventListener('load', play);
+  }
+</script>
+</body>
+</html>

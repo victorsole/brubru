@@ -8,6 +8,7 @@
 import { useState } from 'react';
 import Icon from '@mdi/react';
 import { mdiStarOutline, mdiStar, mdiLoading } from '@mdi/js';
+import { useTranslation } from 'react-i18next';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import './track_file_button.css';
 
@@ -26,6 +27,7 @@ export const TrackFileButton = ({
   variant = 'button',
   onTrackChange,
 }: TrackFileButtonProps) => {
+  const { t } = useTranslation();
   const { trackFile, untrackFile, isTracking, trackedFiles } = useLegislativeTrains();
   const [localIsTracked, setLocalIsTracked] = useState(initialIsTracked);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +79,7 @@ export const TrackFileButton = ({
         }`}
         onClick={handleClick}
         disabled={isTracking}
-        title={isCurrentlyTracked ? 'Stop tracking' : 'Track this file'}
+        title={isCurrentlyTracked ? t('common.stopTracking') : t('common.trackThisFile')}
       >
         {isTracking ? (
           <Icon path={mdiLoading} size={0.8} spin />
@@ -102,7 +104,7 @@ export const TrackFileButton = ({
         ) : (
           <Icon path={isCurrentlyTracked ? mdiStar : mdiStarOutline} size={0.6} />
         )}
-        <span>{isCurrentlyTracked ? 'Tracked' : 'Track'}</span>
+        <span>{isCurrentlyTracked ? t('tracking.tracked') : t('tracking.track')}</span>
       </button>
     );
   }
@@ -119,17 +121,17 @@ export const TrackFileButton = ({
         {isTracking ? (
           <>
             <Icon path={mdiLoading} size={0.8} spin />
-            <span>Processing...</span>
+            <span>{t('tracking.processing')}</span>
           </>
         ) : isCurrentlyTracked ? (
           <>
             <Icon path={mdiStar} size={0.8} />
-            <span>Tracking</span>
+            <span>{t('tracking.tracking')}</span>
           </>
         ) : (
           <>
             <Icon path={mdiStarOutline} size={0.8} />
-            <span>Track File</span>
+            <span>{t('tracking.trackFile')}</span>
           </>
         )}
       </button>

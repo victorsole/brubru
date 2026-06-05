@@ -63,6 +63,48 @@
           "position": 4,
           "url": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/nl.html",
           "name": "India and Indonesia Stainless Steel Countervailing Duties (Commission Implementing Regulation (EU) 2022/433, CELEX 32022R0433)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "url": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/nl.html",
+          "name": "The ESAs Review (Regulation (EU) 2019/2175, CELEX 32019R2175)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "url": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/nl.html",
+          "name": "The Animal Health Law (Regulation (EU) 2016/429, CELEX 32016R0429)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "url": "https://brubru.beresol.eu/eucanon/2023-1114_mica/nl.html",
+          "name": "MiCA, de verordening betreffende cryptoactivamarkten (Verordening (EU) 2023/1114)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "url": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/nl.html",
+          "name": "De EU-AI-verordening (Verordening (EU) 2024/1689)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "url": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/nl.html",
+          "name": "Aluminium wielen uit Marokko (Uitvoeringsverordening (EU) 2025/500)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "url": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/nl.html",
+          "name": "De verordening officiële controles (Verordening (EU) 2017/625)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "url": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/nl.html",
+          "name": "Optischevezelkabels uit China (Uitvoeringsverordening (EU) 2021/2011)"
         }
       ]
     }
@@ -252,12 +294,13 @@
     .prose a { color: var(--color-blue); text-decoration: none; }
     .prose a:hover { text-decoration: underline; }
 
-    /* Library section */
+    /* Library section: 11 cards = 3+3+3+2 grid */
     .library-wrapper {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
+    .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     .library-note {
       grid-column: 1 / -1;
     }
@@ -325,7 +368,7 @@
     .chip--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
     .canon-card__stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.75rem;
       margin-bottom: 1.5rem;
       padding: 1rem;
@@ -334,6 +377,7 @@
     }
     .stat-mini {
       text-align: center;
+      min-width: 0;
     }
     .stat-mini__value {
       font-size: 1.1rem;
@@ -343,6 +387,8 @@
       align-items: center;
       justify-content: center;
       gap: 0.3rem;
+      flex-wrap: wrap;
+      overflow-wrap: anywhere;
     }
     .stat-mini__value .mdi { font-size: 0.95rem; color: var(--color-blue); }
     .stat-mini__label { font-size: 0.72rem; color: var(--color-muted); margin-top: 0.2rem; }
@@ -598,6 +644,10 @@
     @media (max-width: 1024px) {
       .method-grid { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* drop to a plain 2-col grid; all cards flow automatically */
+      .library-wrapper { grid-template-columns: repeat(2, 1fr); }
+      .library-wrapper .canon-card { grid-column: auto; }
+      .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     }
     @media (max-width: 900px) {
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -669,7 +719,7 @@
       <p class="section__subtitle">Een naslagwerk voor iedereen die wil begrijpen wat een specifieke EU-wet werkelijk vereist.</p>
       <div class="prose">
         <p>De EU brengt elk jaar honderden bindende verordeningen en richtlijnen uit. Veel daarvan zijn lang, technisch complex en geschreven voor praktijkmensen die het kader al kennen. De EU Canon lost dit op. Elk artikel behandelt een enkele wet volledig: wat het dekt, wie het treft, wat de belangrijkste verplichtingen zijn, en hoe het aansluit op het bredere EU-rechtscorpus.</p>
-        <p>Dit is geen nieuwsbrief of beleidscijfer. Het is een naslagwerk. Of je nu beleidsmedewerker bent, compliance officer, onderzoeker, of gewoon een nieuwsgierige burger die een specifieke verordening tegenkomt en wil begrijpen wat die zegt, deze bibliotheek is voor jou. Momenteel omvat het vier wetten. Meer ingangen worden wekelijks of om de twee weken toegevoegd als de bibliotheek groeit.</p>
+        <p>Dit is geen nieuwsbrief of beleidscijfer. Het is een naslagwerk. Of je nu beleidsmedewerker bent, compliance officer, onderzoeker, of gewoon een nieuwsgierige burger die een specifieke verordening tegenkomt en wil begrijpen wat die zegt, deze bibliotheek is voor jou. Momenteel omvat het elf wetten. Meer ingangen worden wekelijks of om de twee weken toegevoegd als de bibliotheek groeit.</p>
         <p>De live wetgevingstracker, AI-chat en analyse van compliance-tekortkomingen bevinden zich in het Brubru-product op <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>. De Canon-bibliotheek is de gratis, openbare aanvulling op dat platform.</p>
       </div>
     </section>
@@ -684,7 +734,7 @@
         </div>
         <h2 class="section__title">De bibliotheek</h2>
       </div>
-      <p class="section__subtitle">Vier wetten in diepte. Meer op komst.</p>
+      <p class="section__subtitle">Elf wetten in diepte. Meer op komst.</p>
 
       <div class="library-wrapper">
         <article class="canon-card">
@@ -816,6 +866,235 @@
           </div>
           <a href="2022-433_india_indonesia_stainless_steel/nl.html" class="canon-card__cta" aria-label="Lees de analyse over de compenserende rechten op roestvrij staal">
             Lees de analyse <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32019R2175</div>
+          <h3 class="canon-card__title">De herziening van de Europese toezichthoudende autoriteiten</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2019/2175</p>
+          <p class="canon-card__desc">De hervorming van 2019 van de drie Europese toezichthoudende autoriteiten (EBA, EIOPA, ESMA). De EBA wordt het antiwitwascentrum van de EU; de ESMA krijgt rechtstreeks toezicht op aanbieders van handelsgegevens en kritieke benchmarks; nieuwe convergentie- en duurzaamheidsinstrumenten voor alle drie.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Financieel toezicht</span>
+            <span class="chip chip--green">Antiwitwassen</span>
+            <span class="chip chip--amber">Omnibushervorming</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-bank" aria-hidden="true"></span> 3</div>
+              <div class="stat-mini__label">Autoriteiten</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-file-document-multiple" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Gewijz. verord.</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-translate" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Talen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2019</div>
+              <div class="stat-mini__label">Vastgesteld</div>
+            </div>
+          </div>
+          <a href="2019-2175_esas_review/nl.html" class="canon-card__cta" aria-label="Lees de analyse over de ESA-herziening">
+            Lees de analyse <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32016R0429</div>
+          <h3 class="canon-card__title">De diergezondheidswet</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2016/429</p>
+          <p class="canon-card__desc">Het ene EU-kader voor overdraagbare dierziekten, dat ongeveer 40 oudere wetten verving. Het noemt vijf prioritaire ziekten, deelt elke vermelde ziekte in vijf actiecategorieën in en bestrijkt bioveiligheid, traceerbaarheid, dierverplaatsingen, invoer, reizen met huisdieren en noodmaatregelen bij uitbraken.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Diergezondheid</span>
+            <span class="chip chip--green">Voedselveiligheid</span>
+            <span class="chip chip--amber">Kaderwet</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 283</div>
+              <div class="stat-mini__label">Artikelen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-file-replace" aria-hidden="true"></span> ~40</div>
+              <div class="stat-mini__label">Vervangen wetten</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-translate" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Talen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2016</div>
+              <div class="stat-mini__label">Vastgesteld</div>
+            </div>
+          </div>
+          <a href="2016-429_animal_health_law/nl.html" class="canon-card__cta" aria-label="Lees de analyse over de diergezondheidswet">
+            Lees de analyse <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32023R1114</div>
+          <h3 class="canon-card__title">MiCA, de verordening betreffende cryptoactivamarkten</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2023/1114</p>
+          <p class="canon-card__desc">Het eerste alomvattende EU-kader voor cryptoactiva die niet onder de bestaande financiële wetgeving vallen. Het deelt cryptoactiva in drie categorieën in: elektronischgeldtokens, activagerelateerde tokens en andere tokens, en verleent vergunningen aan aanbieders van cryptoactivadiensten in de hele EU.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Digitale financiën</span>
+            <span class="chip chip--green">Cryptoactiva</span>
+            <span class="chip chip--purple">Artikel 114 VWEU</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 149</div>
+              <div class="stat-mini__label">Artikelen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-book-open-page-variant" aria-hidden="true"></span> 9</div>
+              <div class="stat-mini__label">Titels</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-btc" aria-hidden="true"></span> 3</div>
+              <div class="stat-mini__label">Tokentypes</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2024</div>
+              <div class="stat-mini__label">Van toepassing</div>
+            </div>
+          </div>
+          <a href="2023-1114_mica/nl.html" class="canon-card__cta" aria-label="Lees de MiCA-uitleg">
+            Lees de uitleg <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32024R1689</div>
+          <h3 class="canon-card__title">De EU-AI-verordening</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2024/1689</p>
+          <p class="canon-card__desc">De eerste alomvattende wet ter wereld over kunstmatige intelligentie. Een risicogebaseerd kader dat onaanvaardbare toepassingen verbiedt, AI-systemen met een hoog risico reguleert, transparantieverplichtingen oplegt en AI-modellen voor algemene doeleinden regelt, onder toezicht van een nieuw EU-bureau voor AI.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Kunstmatige intelligentie</span>
+            <span class="chip chip--green">Digitaal</span>
+            <span class="chip chip--purple">Artikel 114 VWEU</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 113</div>
+              <div class="stat-mini__label">Artikelen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-text-box-multiple" aria-hidden="true"></span> 180</div>
+              <div class="stat-mini__label">Overwegingen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-stairs" aria-hidden="true"></span> 4</div>
+              <div class="stat-mini__label">Risiconiveaus</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2026</div>
+              <div class="stat-mini__label">Van toepassing</div>
+            </div>
+          </div>
+          <a href="2024-1689_aiact/nl.html" class="canon-card__cta" aria-label="Lees de EU-AI-verordening-uitleg">
+            Lees de uitleg <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32025R0500</div>
+          <h3 class="canon-card__title">Aluminium wielen uit Marokko</h3>
+          <p class="canon-card__subtitle">Uitvoeringsverordening (EU) 2025/500</p>
+          <p class="canon-card__desc">De eerste antisubsidiemaatregel van de EU tegen Marokko. Compenserende rechten op aluminium wielen nadat Chinese financiering via de nieuwe zijderoute, gekanaliseerd via een Marokkaanse dochteronderneming, aan de Marokkaanse overheid werd toegerekend.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Handelsbescherming</span>
+            <span class="chip chip--green">Compenserende rechten</span>
+            <span class="chip chip--amber">Grensoverschrijdende subsidie</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 31,4%</div>
+              <div class="stat-mini__label">Hoogste recht</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 5,6%</div>
+              <div class="stat-mini__label">Residueel</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-factory" aria-hidden="true"></span> 2</div>
+              <div class="stat-mini__label">Producenten</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2025</div>
+              <div class="stat-mini__label">Vastgesteld</div>
+            </div>
+          </div>
+          <a href="2025-500_morocco_aluminium_wheels/nl.html" class="canon-card__cta" aria-label="Lees de uitleg over aluminium wielen uit Marokko">
+            Lees de uitleg <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32017R0625</div>
+          <h3 class="canon-card__title">De verordening officiële controles</h3>
+          <p class="canon-card__subtitle">Verordening (EU) 2017/625</p>
+          <p class="canon-card__desc">het ene EU-kader voor de handhaving van de wetgeving voor de hele agrovoedselketen, van boer tot bord. Het harmoniseert hoe nationale autoriteiten levensmiddelen, diervoeders, dieren en planten controleren en de invoer aan de grens controleren.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Voedselveiligheid</span>
+            <span class="chip chip--green">Agrovoedselketen</span>
+            <span class="chip chip--amber">Officiële controles</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 167</div>
+              <div class="stat-mini__label">Artikelen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-text-box-multiple" aria-hidden="true"></span> 99</div>
+              <div class="stat-mini__label">Overwegingen</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-view-grid" aria-hidden="true"></span> 10</div>
+              <div class="stat-mini__label">Gebieden</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2019</div>
+              <div class="stat-mini__label">Van toepassing</div>
+            </div>
+          </div>
+          <a href="2017-625_official_controls/nl.html" class="canon-card__cta" aria-label="Lees de uitleg over de verordening officiële controles">
+            Lees de uitleg <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32021R2011</div>
+          <h3 class="canon-card__title">Optischevezelkabels uit China</h3>
+          <p class="canon-card__subtitle">Uitvoeringsverordening (EU) 2021/2011</p>
+          <p class="canon-card__desc">Het antidumpingoptreden van de EU tegen Chinese optischevezelkabel, de ruggengraat van telecomnetwerken. De eerste antidumpingzaak in het Canon, naast de zaken over compenserende rechten.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Handelsbescherming</span>
+            <span class="chip chip--green">Antidumping</span>
+            <span class="chip chip--amber">Regel van het laagste recht</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 44,0%</div>
+              <div class="stat-mini__label">Hoogste recht</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 19,7%</div>
+              <div class="stat-mini__label">Laagste</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-chart-line-variant" aria-hidden="true"></span> 31,5%</div>
+              <div class="stat-mini__label">Prijsonderbieding</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2021</div>
+              <div class="stat-mini__label">Vastgesteld</div>
+            </div>
+          </div>
+          <a href="2021-2011_optical_fibre_cables/nl.html" class="canon-card__cta" aria-label="Lees de uitleg over antidumping op optischevezelkabels">
+            Lees de uitleg <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
           </a>
         </article>
         <p class="library-note">Meer Canon-ingangen verschijnen regelmatig. Wil je een specifieke wet zien? Stuur een e-mail naar <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>

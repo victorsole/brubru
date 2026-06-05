@@ -2,6 +2,7 @@
 // Shows tracking information when the loaded document matches a tracked file
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
@@ -21,6 +22,7 @@ export const LegislativeContextBanner = ({
   celex,
   onViewDetails
 }: LegislativeContextBannerProps) => {
+  const { t } = useTranslation();
   const { trackedFiles, fetchTrackedFiles, isTracking } = useLegislativeTrains();
   const [matchedFile, setMatchedFile] = useState<TrackedFile | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -136,7 +138,7 @@ export const LegislativeContextBanner = ({
       <div className="legislative-context-banner__header" onClick={() => setIsCollapsed(!isCollapsed)}>
         <span className="legislative-context-banner__icon mdi mdi-file-document"></span>
         <span className="legislative-context-banner__title">
-          This legislation is <strong>TRACKED</strong>
+          <strong>{t('amendatorExtras.tracked')}</strong>
         </span>
         <button className="legislative-context-banner__toggle">
           {isCollapsed ? '▼' : '▲'}

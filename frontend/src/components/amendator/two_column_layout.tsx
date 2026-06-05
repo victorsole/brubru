@@ -1,5 +1,6 @@
 // frontend/src/components/amendator/two_column_layout.tsx
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiDeleteOutline, mdiPlusBoxOutline, mdiAlphaM, mdiAutoFix, mdiContentSave, mdiCheck } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
@@ -65,7 +66,16 @@ export const TwoColumnLayout = ({
   pendingAmendments,
   onPendingAmendmentsProcessed,
 }: TwoColumnLayoutProps) => {
+  const { t } = useTranslation();
   const [showDocumentLoader, setShowDocumentLoader] = useState(!loadedDocument);
+
+  // Keep the document-loader pane in sync with deep-link navigation. Without
+  // this, arriving via /amendator?celex=... renders the editor AND the loader
+  // side-by-side because the initial useState ran while loadedDocument was
+  // still null.
+  useEffect(() => {
+    setShowDocumentLoader(!loadedDocument);
+  }, [loadedDocument]);
   const [elements, setElements] = useState<LegislativeElement[]>([]);
   const [editingCell, setEditingCell] = useState<number | null>(null);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
@@ -510,14 +520,14 @@ export const TwoColumnLayout = ({
       {showDocumentLoader && (
         <div className="two-column-layout__document-loader">
           <div className="two-column-layout__loader-container">
-            <h2 className="two-column-layout__loader-title">Load Legislative Document</h2>
+            <h2 className="two-column-layout__loader-title">{t('amendator.loadTitle')}</h2>
             <TrackedFilesLoader onDocumentFetched={handleDocumentFetched} />
             <div className="two-column-layout__divider">
-              <span className="two-column-layout__divider-text">OR</span>
+              <span className="two-column-layout__divider-text">{t('amendator.or')}</span>
             </div>
             <EURLexURLInput onDocumentFetched={handleDocumentFetched} />
             <div className="two-column-layout__divider">
-              <span className="two-column-layout__divider-text">OR</span>
+              <span className="two-column-layout__divider-text">{t('amendator.or')}</span>
             </div>
             <AmendatorDocumentUpload onDocumentUploaded={handleDocumentUploaded} />
           </div>
@@ -537,7 +547,7 @@ export const TwoColumnLayout = ({
                 className="button button-sm button-secondary"
                 onClick={() => setShowDocumentLoader(true)}
               >
-                Load New Document
+                {t('amendator.loadNewDocument')}
               </button>
             </div>
           </div>
@@ -545,20 +555,18 @@ export const TwoColumnLayout = ({
           {/* Table */}
           {elements.length === 0 ? (
             <div className="two-column-layout__empty">
-              <p>No legislative elements found in the document.</p>
-              <p className="two-column-layout__empty-hint">
-                The document might not contain recognizable legislative structure (recitals, articles, points).
-              </p>
+              <p>{t('amendator.noElements')}</p>
+              <p className="two-column-layout__empty-hint">{t('amendator.noElementsHint')}</p>
             </div>
           ) : (
             <div className="two-column-layout__table">
               {/* Column Headers */}
               <div className="two-column-layout__table-header-row">
                 <div className="two-column-layout__header-cell two-column-layout__header-cell--original">
-                  Original Document
+                  {t('amendator.originalDocument')}
                 </div>
                 <div className="two-column-layout__header-cell two-column-layout__header-cell--amendment">
-                  Amendment Editor
+                  {t('amendator.amendmentEditor')}
                 </div>
               </div>
 
@@ -573,6 +581,7 @@ export const TwoColumnLayout = ({
                     <React.Fragment key={index}>
                       <div
                         className={`two-column-layout__row two-column-layout__row--level-${element.level} two-column-layout__row--${element.type}`}
+                        data-element-index={index}
                       >
                         {/* Original Column (Read-Only) */}
                         <div className="two-column-layout__cell two-column-layout__cell--original">
@@ -602,24 +611,24 @@ export const TwoColumnLayout = ({
                               <button
                                 className="two-column-layout__amendment-icon"
                                 onClick={() => handleSuppression(index)}
-                                title="Suppression"
-                                aria-label="Delete text"
+                                title={t('amendator.suppression')}
+                                aria-label={t('amendator.deleteText')}
                               >
                                 <Icon path={mdiDeleteOutline} size={0.8} />
                               </button>
                               <button
                                 className="two-column-layout__amendment-icon"
                                 onClick={() => handleAddition(index)}
-                                title="Addition"
-                                aria-label="Add new text"
+                                title={t('amendator.addition')}
+                                aria-label={t('amendator.addNewText')}
                               >
                                 <Icon path={mdiPlusBoxOutline} size={0.8} />
                               </button>
                               <button
                                 className="two-column-layout__amendment-icon"
                                 onClick={() => handleModification(index)}
-                                title="Modification"
-                                aria-label="Modify text"
+                                title={t('amendator.modification')}
+                                aria-label={t('amendator.modifyText')}
                               >
                                 <Icon path={mdiAlphaM} size={0.8} />
                               </button>
@@ -650,29 +659,29 @@ export const TwoColumnLayout = ({
                                     className={`two-column-layout__improve-button ${improvingCell === index ? 'two-column-layout__improve-button--loading' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handleImproveText(index); }}
                                     disabled={improvingCell === index || !(amendment?.proposedText || element.text).trim()}
-                                    title="Improve with AI"
-                                    aria-label="Improve text with AI"
+                                    title={t('amendator.improveWithAi')}
+                                    aria-label={t('amendator.improveTextWithAi')}
                                   >
                                     <Icon path={mdiAutoFix} size={0.65} className={improvingCell === index ? 'two-column-layout__spin' : ''} />
-                                    <span>{improvingCell === index ? 'Improving...' : 'Improve'}</span>
+                                    <span>{improvingCell === index ? t('amendator.improving') : t('amendator.improve')}</span>
                                   </button>
                                 )}
                                 <button
                                   className={`two-column-layout__save-button ${savedCells.has(index) ? 'two-column-layout__save-button--saved' : ''}`}
                                   onClick={(e) => { e.stopPropagation(); handleSaveCell(index); }}
                                   disabled={savingCell === index || savedCells.has(index) || !(amendment?.proposedText || '').trim()}
-                                  title={savedCells.has(index) ? 'Saved' : 'Save amendment'}
-                                  aria-label="Save amendment"
+                                  title={savedCells.has(index) ? t('amendator.saved') : t('amendator.saveAmendment')}
+                                  aria-label={t('amendator.saveAmendment')}
                                 >
                                   <Icon path={savedCells.has(index) ? mdiCheck : mdiContentSave} size={0.65} />
-                                  <span>{savingCell === index ? 'Saving...' : savedCells.has(index) ? 'Saved' : 'Save'}</span>
+                                  <span>{savingCell === index ? t('amendator.saving') : savedCells.has(index) ? t('amendator.saved') : t('amendator.save')}</span>
                                 </button>
                                 {preImproveText && improvingCell !== index && editingCell === index && (
                                   <button
                                     className="two-column-layout__undo-improve"
                                     onClick={(e) => { e.stopPropagation(); handleCellChange(index, preImproveText); setPreImproveText(null); }}
                                   >
-                                    Undo
+                                    {t('amendator.undo')}
                                   </button>
                                 )}
                                 {improveError && editingCell === index && (
@@ -713,7 +722,7 @@ export const TwoColumnLayout = ({
                                 editingCell === additionKey ? 'two-column-layout__cell--editing' : ''
                               }`}
                             >
-                              <span className="two-column-layout__addition-badge">NEW</span>
+                              <span className="two-column-layout__addition-badge">{t('amendator.newBadge')}</span>
                               <button
                                 className="two-column-layout__addition-remove"
                                 onClick={() => {
@@ -722,8 +731,8 @@ export const TwoColumnLayout = ({
                                   setAmendments(newAmendments);
                                   if (editingCell === additionKey) setEditingCell(null);
                                 }}
-                                title="Remove addition"
-                                aria-label="Remove addition"
+                                title={t('amendator.removeAddition')}
+                                aria-label={t('amendator.removeAddition')}
                               >
                                 <Icon path={mdiDeleteOutline} size={0.7} />
                               </button>
@@ -734,7 +743,7 @@ export const TwoColumnLayout = ({
                                     value={additionAmendment.proposedText || ''}
                                     onChange={(e) => handleCellChange(additionKey, e.target.value)}
                                     onBlur={(e) => handleCellBlur(additionKey, e.target.value, e)}
-                                    placeholder="Enter new text to add..."
+                                    placeholder={t('amendator.enterNewText')}
                                     autoFocus
                                   />
                                   <div className="two-column-layout__cell-edit-actions">
@@ -747,18 +756,18 @@ export const TwoColumnLayout = ({
                                         aria-label="Improve text with AI"
                                       >
                                         <Icon path={mdiAutoFix} size={0.65} className={improvingCell === additionKey ? 'two-column-layout__spin' : ''} />
-                                        <span>{improvingCell === additionKey ? 'Improving...' : 'Improve'}</span>
+                                        <span>{improvingCell === additionKey ? t('amendator.improving') : t('amendator.improve')}</span>
                                       </button>
                                     )}
                                     <button
                                       className={`two-column-layout__save-button ${savedCells.has(additionKey) ? 'two-column-layout__save-button--saved' : ''}`}
                                       onClick={(e) => { e.stopPropagation(); handleSaveCell(additionKey); }}
                                       disabled={savingCell === additionKey || savedCells.has(additionKey) || !(additionAmendment.proposedText || '').trim()}
-                                      title={savedCells.has(additionKey) ? 'Saved' : 'Save amendment'}
-                                      aria-label="Save amendment"
+                                      title={savedCells.has(additionKey) ? t('amendator.saved') : t('amendator.saveAmendment')}
+                                      aria-label={t('amendator.saveAmendment')}
                                     >
                                       <Icon path={savedCells.has(additionKey) ? mdiCheck : mdiContentSave} size={0.65} />
-                                      <span>{savingCell === additionKey ? 'Saving...' : savedCells.has(additionKey) ? 'Saved' : 'Save'}</span>
+                                      <span>{savingCell === additionKey ? t('amendator.saving') : savedCells.has(additionKey) ? t('amendator.saved') : t('amendator.save')}</span>
                                     </button>
                                     {preImproveText && improvingCell !== additionKey && editingCell === additionKey && (
                                       <button
@@ -778,7 +787,7 @@ export const TwoColumnLayout = ({
                                   className="two-column-layout__text"
                                   onClick={() => setEditingCell(additionKey)}
                                 >
-                                  {additionAmendment.proposedText || 'Click to add text...'}
+                                  {additionAmendment.proposedText || t('amendator.clickToAdd')}
                                 </span>
                               )}
                             </div>

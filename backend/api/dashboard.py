@@ -1056,3 +1056,27 @@ async def get_dashboard_tiles(
         profile_completeness=_profile_completeness(db, current_user),
         generated_at=_utcnow(),
     )
+
+
+@router.get(
+    "/digest",
+    summary="What touched your workspace — cross-feature linking digest",
+    description=(
+        "**What it does**\nReturns the cross-surface connections to the files you "
+        "track and the areas you follow: votes on your dossiers, Official Journal "
+        "acts on your laws, MEP questions on your files, and news in your areas — "
+        "computed at query time by anchor intersection (the Phase-4 linking layer).\n\n"
+        "**When to use it**\nThe 'What touched your workspace' section of the My EU "
+        "Bubble Overview.\n\n"
+        "**You get back**\n`sections` (one per surface) each with a label, a drill-in "
+        "path, and a few items; plus `has_tracked_files`."
+    ),
+)
+async def get_workspace_digest(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    from services.linking.workspace_digest import workspace_digest
+    if not current_user or not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    return workspace_digest(db, current_user)

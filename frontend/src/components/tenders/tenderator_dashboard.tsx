@@ -124,7 +124,9 @@ export const TenderatorDashboard = ({
   const [source, setSource] = useState<SourceFilter>('all');
   const [error, setError] = useState<string | null>(null);
   const [drawerOpp, setDrawerOpp] = useState<UnifiedOpportunity | null>(null);
-  const [programmeQuery, setProgrammeQuery] = useState<string>('');
+  // Selected EU funding programme code (e.g. EU4H). Filters the proposals feed
+  // by topic_id prefix. Only applied while the proposals source is active.
+  const [programmeCode, setProgrammeCode] = useState<string>('');
   const [matchSubSource, setMatchSubSource] = useState<MatchSubSource>('all');
 
   const fetchStats = useCallback(async () => {
@@ -287,7 +289,7 @@ export const TenderatorDashboard = ({
         <button
           type="button"
           className={`tenderator-dashboard__chip ${source === 'ft_proposals' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => setSource('ft_proposals')}
+          onClick={() => { setProgrammeCode(''); setSource('ft_proposals'); }}
         >
           <span className="mdi mdi-flask-outline" aria-hidden="true" />
           Calls for proposals
@@ -367,7 +369,8 @@ export const TenderatorDashboard = ({
           <UnifiedOpportunityFeed
             source={source}
             matchSubSource={matchSubSource}
-            initialQuery={programmeQuery || incomingQuery}
+            programme={source === 'ft_proposals' ? programmeCode : ''}
+            initialQuery={incomingQuery}
             onSelectOpportunity={(opp) => {
               // For TED tenders with a real tenders.id, keep the existing
               // full-page TenderDetail route so saved/dismissed flows work.
@@ -501,7 +504,7 @@ export const TenderatorDashboard = ({
           {/* Phase 5: EU funding programmes catalogue */}
           <ProgrammesPanel
             onPickProgramme={(p) => {
-              setProgrammeQuery(p.name);
+              setProgrammeCode(p.programme_code);
               setSource('ft_proposals');
             }}
           />

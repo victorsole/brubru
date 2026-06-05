@@ -1,0 +1,688 @@
+/* ===========================================================================
+   Brubru — API Keys & Billing UI styles.
+
+   Used by:
+     /api  (Your keys panel + sign-in CTA)
+     /api/billing  (Phase B)
+
+   Responsive ladder (matches CLAUDE.md hard rule):
+     >1440px         full-width cards, table with all columns
+     1024-1440px     same, slightly tighter spacing
+     768-1024px      table loses Scopes column (chips become tooltip)
+     <768px          single-column cards, no horizontal scroll
+     <400px          tighter padding, font scaled
+
+   Colours follow the api_page.css palette:
+     primary blue   #0693e3
+     primary purple #9b51e0
+     ink           #1a1a1a
+     muted ink     #555
+     border        #e5e5e5
+     surface       #fff
+     warn yellow   #ffc107
+     danger red    #d32f2f
+   =========================================================================== */
+
+/* ----- Panel container ------------------------------------------------- */
+.api-keys-panel {
+  margin: 3rem 0;
+  padding: 2rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.api-keys-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.api-keys-panel__title {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.api-keys-panel__lede {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  max-width: 640px;
+}
+
+.api-keys-panel__cta-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ----- Buttons --------------------------------------------------------- */
+.api-keys-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.api-keys-btn--primary {
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  color: #fff;
+  border-color: transparent;
+}
+
+.api-keys-btn--primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.api-keys-btn--secondary {
+  background: #fff;
+  color: #1a1a1a;
+  border-color: #e5e5e5;
+}
+
+.api-keys-btn--secondary:hover:not(:disabled) {
+  border-color: #0693e3;
+  color: #0693e3;
+}
+
+.api-keys-btn--danger {
+  background: #fff;
+  color: #d32f2f;
+  border-color: #f5b3b3;
+}
+
+.api-keys-btn--danger:hover:not(:disabled) {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
+}
+
+.api-keys-btn--danger-solid {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
+}
+
+.api-keys-btn--danger-solid:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.api-keys-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ----- Empty state ----------------------------------------------------- */
+.api-keys-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1px dashed #e5e5e5;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.api-keys-empty__icon {
+  font-size: 3rem;
+  color: #c5c5c5;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.api-keys-empty__title {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 1.35rem;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.api-keys-empty__body {
+  margin: 0 auto 1.5rem auto;
+  color: #555;
+  max-width: 480px;
+  font-size: 0.95rem;
+}
+
+/* ----- Sign-in CTA (logged-out state) --------------------------------- */
+.api-keys-signin-cta {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, rgba(6, 147, 227, 0.04), rgba(155, 81, 224, 0.04));
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.api-keys-signin-cta__icon {
+  font-size: 2.75rem;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.api-keys-signin-cta__title {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 1.5rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.api-keys-signin-cta__body {
+  margin: 0 auto 1.5rem auto;
+  color: #555;
+  max-width: 540px;
+}
+
+/* ----- Keys table (desktop / large tablet) ----------------------------- */
+.api-keys-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.api-keys-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.api-keys-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 2px solid #e5e5e5;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.api-keys-table td {
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.api-keys-table tr:last-child td {
+  border-bottom: none;
+}
+
+.api-keys-table__name {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.api-keys-table__prefix {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  color: #555;
+  background: #f5f5f5;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.api-keys-table__date,
+.api-keys-table__never {
+  color: #555;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.api-keys-table__never {
+  font-style: italic;
+  color: #999;
+}
+
+.api-keys-table__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.api-keys-table__status--active {
+  background: #e7f6ee;
+  color: #1c7a3e;
+}
+
+.api-keys-table__status--revoked {
+  background: #f4f4f4;
+  color: #6b6b6b;
+}
+
+.api-keys-table__status--expired {
+  background: #fff4e5;
+  color: #b56a00;
+}
+
+/* Scopes column — visible >1024px only */
+.api-keys-table__scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-width: 240px;
+}
+
+.api-keys-scope-chip {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  background: #eef4ff;
+  color: #0a5fa8;
+  border-radius: 10px;
+  border: 1px solid #c8e0ff;
+  white-space: nowrap;
+}
+
+.api-keys-scope-chip--wildcard {
+  background: #f5e9ff;
+  color: #6a1b9a;
+  border-color: #d9bdf0;
+}
+
+/* Card layout for mobile — hidden >=768px */
+.api-keys-cards {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.api-keys-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.api-keys-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.api-keys-card__name {
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.api-keys-card__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.875rem;
+}
+
+.api-keys-card__row:last-child {
+  border-bottom: none;
+}
+
+.api-keys-card__label {
+  color: #777;
+  font-weight: 500;
+}
+
+.api-keys-card__value {
+  color: #1a1a1a;
+  text-align: right;
+}
+
+.api-keys-card__scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: flex-end;
+  max-width: 60%;
+}
+
+.api-keys-card__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ----- Modal ----------------------------------------------------------- */
+.api-keys-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 25, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: api-keys-fade-in 0.15s ease;
+}
+
+@keyframes api-keys-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.api-keys-modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.api-keys-modal__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.api-keys-modal__title {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 1.4rem;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.api-keys-modal__subtitle {
+  margin: 0.25rem 0 0 0;
+  color: #555;
+  font-size: 0.875rem;
+}
+
+.api-keys-modal__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.api-keys-modal__close:hover { color: #1a1a1a; }
+
+.api-keys-modal__body {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.api-keys-modal__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ----- Form fields ----------------------------------------------------- */
+.api-keys-field {
+  margin-bottom: 1.25rem;
+}
+
+.api-keys-field__label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.api-keys-field__hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.api-keys-input,
+.api-keys-select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: #fff;
+  color: #1a1a1a;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.api-keys-input:focus,
+.api-keys-select:focus {
+  outline: none;
+  border-color: #0693e3;
+}
+
+.api-keys-input--error {
+  border-color: #d32f2f;
+}
+
+.api-keys-field__error {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  display: block;
+}
+
+/* ----- Scope checkboxes ----------------------------------------------- */
+.api-keys-scopes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.api-keys-scope-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.api-keys-scope-row:hover {
+  background: #f7f9fc;
+}
+
+.api-keys-scope-row input[type="checkbox"] {
+  margin-top: 0.2rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.api-keys-scope-row__name {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.8rem;
+  color: #0a5fa8;
+  margin-right: 0.4rem;
+}
+
+.api-keys-scope-row__label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.api-keys-scope-row__desc {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.15rem;
+  line-height: 1.35;
+}
+
+/* ----- Reveal modal — plaintext key display --------------------------- */
+.api-keys-reveal__warning {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  color: #6a4d00;
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.api-keys-reveal__warning .mdi {
+  color: #b56a00;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.api-keys-reveal__keybox {
+  background: #1e1e2e;
+  color: #e6e6e6;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+  margin-bottom: 0.75rem;
+  position: relative;
+  user-select: all;
+  -webkit-user-select: all;
+}
+
+.api-keys-reveal__copy-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.api-keys-reveal__copied {
+  color: #1c7a3e;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.api-keys-reveal__metadata {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+  color: #555;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.api-keys-reveal__metadata-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.api-keys-reveal__metadata-label {
+  color: #888;
+  font-weight: 500;
+}
+
+/* ----- Error banner inside modals ------------------------------------- */
+.api-keys-error-banner {
+  background: #fdecec;
+  border: 1px solid #f5b3b3;
+  color: #a01818;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.api-keys-error-banner .mdi {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+/* ----- Loading state -------------------------------------------------- */
+.api-keys-loading {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* ===========================================================================
+   RESPONSIVE LADDER
+   =========================================================================== */
+
+/* Tablet portrait & smaller — drop the Scopes column */
+@media (max-width: 1024px) {
+  .api-keys-table__col-scopes { display: none; }
+}
+
+/* Below 768px — switch to card layout, hide table */
+@media (max-width: 767px) {
+  .api-keys-panel { padding: 1.5rem 1.25rem; }
+  .api-keys-panel__header { flex-direction: column; align-items: stretch; }
+  .api-keys-panel__title { font-size: 1.5rem; }
+  .api-keys-table { display: none; }
+  .api-keys-cards { display: flex; }
+  .api-keys-modal {
+    border-radius: 8px;
+    max-height: calc(100vh - 1rem);
+  }
+  .api-keys-modal__header,
+  .api-keys-modal__body,
+  .api-keys-modal__footer {
+    padding: 1rem 1.25rem;
+  }
+  .api-keys-modal__title { font-size: 1.25rem; }
+  .api-keys-empty { padding: 2rem 1rem; }
+  .api-keys-empty__icon { font-size: 2.5rem; }
+  .api-keys-signin-cta { padding: 2rem 1rem; }
+}
+
+/* Extra-small phones — tighter padding, smaller fonts */
+@media (max-width: 400px) {
+  .api-keys-panel { padding: 1.25rem 1rem; }
+  .api-keys-panel__title { font-size: 1.35rem; }
+  .api-keys-modal__header,
+  .api-keys-modal__body,
+  .api-keys-modal__footer {
+    padding: 0.9rem 1rem;
+  }
+  .api-keys-btn { font-size: 0.85rem; padding: 0.55rem 1rem; }
+}

@@ -13,9 +13,20 @@
 
 .ec-consultations-tab {
   padding: 1.5rem;
-  max-width: 1200px;
+  max-width: 1040px;
   margin: 0 auto;
 }
+
+/* Policy-Interest lens toggle (matches the My interests | All segmented control
+   used across MEUB Votes / Transcripts). */
+.ec-consultations-tab__pi-toggle {
+  display: inline-flex; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;
+}
+.ec-consultations-tab__pi-toggle button {
+  border: 0; background: #fff; padding: 0.45rem 0.95rem; cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; color: #475569;
+}
+.ec-consultations-tab__pi-toggle button.is-active { background: #1e3a8a; color: #fff; }
 
 .ec-consultations-tab__header {
   margin-bottom: 1.5rem;

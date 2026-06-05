@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiFire, mdiPlus, mdiOpenInNew, mdiLoading } from '@mdi/js';
 import axios from 'axios';
+import { plainLanguageTypeKey } from '../../utils/procedure_type';
 import './hot_this_week_widget.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -34,6 +35,8 @@ interface HotItem {
 
 interface HotThisWeekWidgetProps {
   onTrack?: (file: HotItem) => void | Promise<void>;
+  /** Open the in-app detail modal (the View pattern used by all other cards). */
+  onView?: (file: HotItem) => void;
   isAuthenticated?: boolean;
 }
 
@@ -70,7 +73,7 @@ const formatRelative = (iso: string | null): string => {
   return `${Math.floor(days / 7)}w ago`;
 };
 
-export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisWeekWidgetProps) => {
+export const HotThisWeekWidget = ({ onTrack, onView, isAuthenticated = false }: HotThisWeekWidgetProps) => {
   const { t } = useTranslation();
   const [items, setItems] = useState<HotItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -133,6 +136,11 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
         {items.map((item) => (
           <div key={item.carriage_id} className="hot-this-week-widget__card" role="listitem">
             <div className="hot-this-week-widget__card-meta">
+              {plainLanguageTypeKey(item.oeil_procedure_ref) && (
+                <span className="hot-this-week-widget__plain-type">
+                  {t(`myFilesTab.${plainLanguageTypeKey(item.oeil_procedure_ref)}`)}
+                </span>
+              )}
               {item.oeil_procedure_ref && (
                 <span className="hot-this-week-widget__ref">{item.oeil_procedure_ref}</span>
               )}
@@ -140,7 +148,12 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
                 <span className="hot-this-week-widget__committee">{item.lead_committee}</span>
               )}
             </div>
-            <h4 className="hot-this-week-widget__card-title" title={item.title}>
+            <h4
+              className={`hot-this-week-widget__card-title${onView ? ' hot-this-week-widget__card-title--clickable' : ''}`}
+              title={item.title}
+              onClick={onView ? () => onView(item) : undefined}
+              role={onView ? 'button' : undefined}
+            >
               {cleanTitle(item.title)}
             </h4>
             <div className="hot-this-week-widget__card-status">
@@ -154,6 +167,14 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
               )}
             </div>
             <div className="hot-this-week-widget__card-actions">
+              {onView && (
+                <button
+                  className="hot-this-week-widget__view-btn"
+                  onClick={() => onView(item)}
+                >
+                  {t('myFilesTab.viewBtn', 'View')}
+                </button>
+              )}
               {isAuthenticated && onTrack && (
                 <button
                   className="hot-this-week-widget__track-btn"
@@ -170,7 +191,7 @@ export const HotThisWeekWidget = ({ onTrack, isAuthenticated = false }: HotThisW
               {item.oeil_procedure_ref && (
                 <a
                   className="hot-this-week-widget__open-btn"
-                  href={`https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.oeil_procedure_ref)}`}
+                  href={`https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.oeil_procedure_ref)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   title={t('hotWeek.openInOeil')}

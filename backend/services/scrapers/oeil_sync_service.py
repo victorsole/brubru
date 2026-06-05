@@ -28,6 +28,7 @@ from models.legislative_train import (
     TextTypeEnum,
     CarriageSourceEnum
 )
+from services.tracking.policy_area_classifier import classify
 from services.api_clients.oeil_client import OEILClient, OEILFeedItem
 
 logger = logging.getLogger(__name__)
@@ -318,6 +319,7 @@ class OEILSyncService:
             scraped_at=now,
             first_seen=now,
             last_updated=now,
+            policy_areas=classify(item.title or "", description or "", committee=lead_committee),
         )
 
         return carriage

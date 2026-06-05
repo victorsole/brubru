@@ -1,6 +1,7 @@
 // frontend/src/components/shared/sidebar.tsx
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import './sidebar.css';
 
 interface SidebarProps {
@@ -11,6 +12,7 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ isOpen, onToggle, children, width }: SidebarProps) => {
+  const { t } = useTranslation();
   // Auto-collapse on mobile by default
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +34,7 @@ export const Sidebar = ({ isOpen, onToggle, children, width }: SidebarProps) => 
       <button
         className="sidebar__toggle"
         onClick={onToggle}
-        aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
+        aria-label={isOpen ? t('common.closeSidebar') : t('common.openSidebar')}
         aria-expanded={isOpen}
       >
         <span className={`sidebar__toggle-icon ${isOpen ? 'sidebar__toggle-icon--open' : ''}`}>

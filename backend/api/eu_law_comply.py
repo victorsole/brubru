@@ -18,6 +18,8 @@ from core.database import get_db
 from core.config import settings
 from models.user import User
 from models.eu_law import LawCluster, EULaw, LawRequirement, ClusterLaw
+from services.tracking.tracked_files_seeder import _interest_list
+from services.tracking.tracked_lens import tracked_anchors
 from models.compliance import (
     ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction
 )
@@ -172,6 +174,68 @@ async def list_clusters(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve clusters"
         )
+
+
+@router.get("/clusters/for-me",
+            summary="Compliance clusters for your interests and tracked files",
+            description=(
+                "**What it does**\nReturns the EU-law compliance clusters that match "
+                "your Policy Interests (soft) or contain a law from the files you track "
+                "(hard), each flagged with why it surfaced.\n\n"
+                "**When to use it**\nThe 'For you' section at the top of EU Law Comply.\n\n"
+                "**You get back**\nClusters with law/requirement counts + `matches_interests` "
+                "and `matches_tracked` registers."))
+async def clusters_for_me(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.subscription_tier not in ['yellow', 'blue']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="EU Law Comply is available for Yellow and Blue tier users only")
+    try:
+        interests = set(_interest_list(current_user))
+        tracked = tracked_anchors(db, str(current_user.id))
+        tracked_celex = tracked.get("celex", set())
+
+        # Hard register: clusters containing a law whose CELEX the user tracks.
+        hard_cluster_ids: set = set()
+        if tracked_celex:
+            law_ids = [r[0] for r in db.query(EULaw.id).filter(EULaw.celex.in_(list(tracked_celex))).all()]
+            if law_ids:
+                hard_cluster_ids = {r[0] for r in db.query(ClusterLaw.cluster_id)
+                                    .filter(ClusterLaw.law_id.in_(law_ids)).distinct().all()}
+
+        # Soft register: clusters whose policy_area is one of the user's interests.
+        soft_ids = set()
+        if interests:
+            soft_ids = {c.id for c in db.query(LawCluster.id)
+                        .filter(LawCluster.policy_area.in_(list(interests))).all()}
+
+        ids = soft_ids | hard_cluster_ids
+        if not ids:
+            return {"clusters": []}
+        clusters = db.query(LawCluster).filter(LawCluster.id.in_(ids)).order_by(LawCluster.id).all()
+
+        out = []
+        for c in clusters:
+            law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
+            req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+            out.append({
+                'id': c.id, 'name': c.name, 'description': c.description,
+                'applicability': c.applicability, 'policy_area': c.policy_area,
+                'priority_level': c.priority_level,
+                'law_count': law_count or 0, 'requirement_count': req_count or 0,
+                'matches_interests': c.policy_area in interests,
+                'matches_tracked': c.id in hard_cluster_ids,
+            })
+        # Hard matches first, then by id.
+        out.sort(key=lambda x: (not x['matches_tracked'], x['id']))
+        return {"clusters": out}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"clusters_for_me failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve your clusters")
 
 
 @router.get("/clusters/{cluster_id}")

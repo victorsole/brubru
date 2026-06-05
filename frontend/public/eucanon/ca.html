@@ -63,6 +63,48 @@
           "position": 4,
           "url": "https://brubru.beresol.eu/eucanon/2022-433_india_indonesia_stainless_steel/ca.html",
           "name": "India and Indonesia Stainless Steel Countervailing Duties (Commission Implementing Regulation (EU) 2022/433, CELEX 32022R0433)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "url": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/ca.html",
+          "name": "The ESAs Review (Regulation (EU) 2019/2175, CELEX 32019R2175)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "url": "https://brubru.beresol.eu/eucanon/2016-429_animal_health_law/ca.html",
+          "name": "The Animal Health Law (Regulation (EU) 2016/429, CELEX 32016R0429)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "url": "https://brubru.beresol.eu/eucanon/2023-1114_mica/ca.html",
+          "name": "MiCA, el Reglament sobre els mercats de criptoactius (Reglament (UE) 2023/1114)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "url": "https://brubru.beresol.eu/eucanon/2024-1689_aiact/ca.html",
+          "name": "La Llei d'IA de la UE (Reglament (UE) 2024/1689)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "url": "https://brubru.beresol.eu/eucanon/2025-500_morocco_aluminium_wheels/ca.html",
+          "name": "Llandes d'alumini del Marroc (Reglament d'execució (UE) 2025/500)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "url": "https://brubru.beresol.eu/eucanon/2017-625_official_controls/ca.html",
+          "name": "El Reglament sobre controls oficials (Reglament (UE) 2017/625)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "url": "https://brubru.beresol.eu/eucanon/2021-2011_optical_fibre_cables/ca.html",
+          "name": "Cables de fibra òptica de la Xina (Reglament d'execució (UE) 2021/2011)"
         }
       ]
     }
@@ -252,12 +294,13 @@
     .prose a { color: var(--color-blue); text-decoration: none; }
     .prose a:hover { text-decoration: underline; }
 
-    /* Library section */
+    /* Library section: 11 cards = 3+3+3+2 grid */
     .library-wrapper {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
+    .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     .library-note {
       grid-column: 1 / -1;
     }
@@ -325,7 +368,7 @@
     .chip--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
     .canon-card__stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.75rem;
       margin-bottom: 1.5rem;
       padding: 1rem;
@@ -334,6 +377,7 @@
     }
     .stat-mini {
       text-align: center;
+      min-width: 0;
     }
     .stat-mini__value {
       font-size: 1.1rem;
@@ -343,6 +387,8 @@
       align-items: center;
       justify-content: center;
       gap: 0.3rem;
+      flex-wrap: wrap;
+      overflow-wrap: anywhere;
     }
     .stat-mini__value .mdi { font-size: 0.95rem; color: var(--color-blue); }
     .stat-mini__label { font-size: 0.72rem; color: var(--color-muted); margin-top: 0.2rem; }
@@ -598,6 +644,10 @@
     @media (max-width: 1024px) {
       .method-grid { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* drop to a plain 2-col grid; all cards flow automatically */
+      .library-wrapper { grid-template-columns: repeat(2, 1fr); }
+      .library-wrapper .canon-card { grid-column: auto; }
+      .library-wrapper .canon-card:nth-child(10) { grid-column: auto; }
     }
     @media (max-width: 900px) {
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -669,7 +719,7 @@
       <p class="section__subtitle">Una biblioteca de referència per a qualsevol persona que intenti entendre què requereix realment una llei specific de la UE.</p>
       <div class="prose">
         <p>La UE produeix centenars de reglaments i directives vinculants cada any. Molts d'ells són llargs, densament tècnics i redactats per a professionals que ja coneixen el marc que els envolta. EU Canon existeix per a solucionar això. Cada entrada agafa una única llei i l'explica en la seva totalitat: què cobreix, a qui s'aplica, quines són les seves obligacions clau i com es connecta amb el corpus legal més ampli de la UE.</p>
-        <p>Això no és una síntesi de notícies ni un comentari de política. És un recurs de referència. Si sou un professional de política, un oficial de compliment, un investigador o simplement un ciutadà curiosa que ha arribat a una regulació específica i voleu entendre què diu, aquesta biblioteca és per a vosaltres. Actualment cobreix quatre lleis. Més entrades de canon arribin setmanalment o bimensualment mentre creix la biblioteca.</p>
+        <p>Això no és una síntesi de notícies ni un comentari de política. És un recurs de referència. Si sou un professional de política, un oficial de compliment, un investigador o simplement un ciutadà curiosa que ha arribat a una regulació específica i voleu entendre què diu, aquesta biblioteca és per a vosaltres. Actualment cobreix onze lleis. Més entrades de canon arribin setmanalment o bimensualment mentre creix la biblioteca.</p>
         <p>El rastreador legislatiu actiu, el xat d'IA i l'anàlisi de buits de compliment viuen dins del producte Brubru a <a href="https://brubru.beresol.eu">brubru.beresol.eu</a>. La biblioteca Canon és la companya gratuïta i públicament accessible per a aquesta plataforma.</p>
       </div>
     </section>
@@ -684,7 +734,7 @@
         </div>
         <h2 class="section__title">La biblioteca</h2>
       </div>
-      <p class="section__subtitle">Quatre lleis en profunditat. Més en camí.</p>
+      <p class="section__subtitle">Onze lleis en profunditat. Més en camí.</p>
 
       <div class="library-wrapper">
         <article class="canon-card">
@@ -816,6 +866,235 @@
           </div>
           <a href="2022-433_india_indonesia_stainless_steel/ca.html" class="canon-card__cta" aria-label="Llegir l'anàlisi sobre els drets compensatoris de l'acer inoxidable">
             Llegir l'analisi <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32019R2175</div>
+          <h3 class="canon-card__title">La revisió de les autoritats europees de supervisió</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2019/2175</p>
+          <p class="canon-card__desc">La reforma del 2019 de les tres autoritats europees de supervisió (EBA, EIOPA, ESMA). L'EBA esdevé el centre antiblanqueig de la UE; l'ESMA obté la supervisió directa dels proveïdors de dades de negociació i dels índexs de referència crítics; noves eines de convergència i sostenibilitat per a totes tres.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Supervisió financera</span>
+            <span class="chip chip--green">Antiblanqueig</span>
+            <span class="chip chip--amber">Reforma òmnibus</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-bank" aria-hidden="true"></span> 3</div>
+              <div class="stat-mini__label">Autoritats</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-file-document-multiple" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Regl. modif.</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-translate" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Idiomes</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2019</div>
+              <div class="stat-mini__label">Aprovat</div>
+            </div>
+          </div>
+          <a href="2019-2175_esas_review/ca.html" class="canon-card__cta" aria-label="Llegir l'anàlisi sobre la revisió de les AES">
+            Llegir l'anàlisi <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX: 32016R0429</div>
+          <h3 class="canon-card__title">La Llei de Sanitat Animal</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2016/429</p>
+          <p class="canon-card__desc">El marc únic de la UE per a les malalties animals transmissibles, que va substituir una quarantena de lleis anteriors. Anomena cinc malalties prioritàries, classifica cada malaltia llistada en cinc categories d'actuació i abasta la bioseguretat, la traçabilitat, els moviments d'animals, les importacions, els viatges amb animals de companyia i les mesures d'emergència davant brots.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Sanitat animal</span>
+            <span class="chip chip--green">Seguretat alimentària</span>
+            <span class="chip chip--amber">Llei marc</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 283</div>
+              <div class="stat-mini__label">Articles</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-file-replace" aria-hidden="true"></span> ~40</div>
+              <div class="stat-mini__label">Lleis substituïdes</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-translate" aria-hidden="true"></span> 6</div>
+              <div class="stat-mini__label">Idiomes</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2016</div>
+              <div class="stat-mini__label">Aprovat</div>
+            </div>
+          </div>
+          <a href="2016-429_animal_health_law/ca.html" class="canon-card__cta" aria-label="Llegir l'anàlisi sobre la Llei de Sanitat Animal">
+            Llegir l'anàlisi <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32023R1114</div>
+          <h3 class="canon-card__title">MiCA, el Reglament sobre els mercats de criptoactius</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2023/1114</p>
+          <p class="canon-card__desc">El primer marc normatiu integral de la UE per als criptoactius no regulats per la legislació financera vigent. Classifica els criptoactius en fitxes de diner electrònic, fitxes referenciades a actius i altres fitxes, i autoritza els proveïdors de serveis de criptoactius a tota la UE.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Finances digitals</span>
+            <span class="chip chip--green">Criptoactius</span>
+            <span class="chip chip--purple">Article 114 TFUE</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 149</div>
+              <div class="stat-mini__label">Articles</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-book-open-page-variant" aria-hidden="true"></span> 9</div>
+              <div class="stat-mini__label">Títols</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-btc" aria-hidden="true"></span> 3</div>
+              <div class="stat-mini__label">Tipus de fitxa</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2024</div>
+              <div class="stat-mini__label">Aplicable</div>
+            </div>
+          </div>
+          <a href="2023-1114_mica/ca.html" class="canon-card__cta" aria-label="Llegir l'explicació de MiCA">
+            Llegir l'explicació <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32024R1689</div>
+          <h3 class="canon-card__title">La Llei d'IA de la UE</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2024/1689</p>
+          <p class="canon-card__desc">La primera llei integral del món sobre intel·ligència artificial. Un marc basat en el risc que prohibeix els usos inacceptables, regula els sistemes d'alt risc, fixa obligacions de transparència i regeix els models d'IA d'ús general, sota la supervisió d'una nova Oficina d'IA de la UE.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Intel·ligència artificial</span>
+            <span class="chip chip--green">Digital</span>
+            <span class="chip chip--purple">Article 114 TFUE</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 113</div>
+              <div class="stat-mini__label">Articles</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-text-box-multiple" aria-hidden="true"></span> 180</div>
+              <div class="stat-mini__label">Considerands</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-stairs" aria-hidden="true"></span> 4</div>
+              <div class="stat-mini__label">Nivells de risc</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2026</div>
+              <div class="stat-mini__label">Aplicable</div>
+            </div>
+          </div>
+          <a href="2024-1689_aiact/ca.html" class="canon-card__cta" aria-label="Llegir l'explicació de la Llei d'IA">
+            Llegir l'explicació <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32025R0500</div>
+          <h3 class="canon-card__title">Llandes d'alumini del Marroc</h3>
+          <p class="canon-card__subtitle">Reglament d'execució (UE) 2025/500</p>
+          <p class="canon-card__desc">La primera acció antisubvenció de la UE contra el Marroc. Drets compensatoris sobre llandes d'alumini després d'atribuir al Govern del Marroc el finançament xinès de la Nova Ruta de la Seda canalitzat a través d'una filial marroquina.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Defensa comercial</span>
+            <span class="chip chip--green">Drets compensatoris</span>
+            <span class="chip chip--amber">Subvenció transfronterera</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 31,4%</div>
+              <div class="stat-mini__label">Dret màxim</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 5,6%</div>
+              <div class="stat-mini__label">Residual</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-factory" aria-hidden="true"></span> 2</div>
+              <div class="stat-mini__label">Productors</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2025</div>
+              <div class="stat-mini__label">Adoptat</div>
+            </div>
+          </div>
+          <a href="2025-500_morocco_aluminium_wheels/ca.html" class="canon-card__cta" aria-label="Llegir l'explicació de les llandes d'alumini del Marroc">
+            Llegir l'explicació <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32017R0625</div>
+          <h3 class="canon-card__title">El Reglament sobre controls oficials</h3>
+          <p class="canon-card__subtitle">Reglament (UE) 2017/625</p>
+          <p class="canon-card__desc">el marc únic de la UE per fer complir la legislació de tota la cadena agroalimentària, del camp a la taula. Harmonitza com les autoritats nacionals inspeccionen aliments, pinsos, animals i plantes, i controlen les importacions a la frontera.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Seguretat alimentària</span>
+            <span class="chip chip--green">Cadena agroalimentària</span>
+            <span class="chip chip--amber">Controls oficials</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 167</div>
+              <div class="stat-mini__label">Articles</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-text-box-multiple" aria-hidden="true"></span> 99</div>
+              <div class="stat-mini__label">Considerands</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-view-grid" aria-hidden="true"></span> 10</div>
+              <div class="stat-mini__label">Àmbits</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2019</div>
+              <div class="stat-mini__label">Aplicable</div>
+            </div>
+          </div>
+          <a href="2017-625_official_controls/ca.html" class="canon-card__cta" aria-label="Llegir l'explicació del Reglament sobre controls oficials">
+            Llegir l'explicació <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+          </a>
+        </article>
+        <article class="canon-card">
+          <div class="canon-card__celex">CELEX 32021R2011</div>
+          <h3 class="canon-card__title">Cables de fibra òptica de la Xina</h3>
+          <p class="canon-card__subtitle">Reglament d'execució (UE) 2021/2011</p>
+          <p class="canon-card__desc">L'actuació antidúmping de la UE sobre el cable de fibra òptica xinès, l'espina dorsal de les xarxes de telecomunicacions. El primer cas antidúmping del cànon, al costat dels casos de drets compensatoris.</p>
+          <div class="canon-card__chips">
+            <span class="chip chip--blue">Defensa comercial</span>
+            <span class="chip chip--green">Antidúmping</span>
+            <span class="chip chip--amber">Regla del dret inferior</span>
+          </div>
+          <div class="canon-card__stats">
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 44,0%</div>
+              <div class="stat-mini__label">Dret màxim</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-currency-eur" aria-hidden="true"></span> 19,7%</div>
+              <div class="stat-mini__label">Mínim</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-chart-line-variant" aria-hidden="true"></span> 31,5%</div>
+              <div class="stat-mini__label">Subcotització</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini__value"><span class="mdi mdi-calendar" aria-hidden="true"></span> 2021</div>
+              <div class="stat-mini__label">Adoptat</div>
+            </div>
+          </div>
+          <a href="2021-2011_optical_fibre_cables/ca.html" class="canon-card__cta" aria-label="Llegir l'explicació dels cables de fibra òptica">
+            Llegir l'explicació <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
           </a>
         </article>
         <p class="library-note">Més entrades de canon arriben regularment. Voleu una llei específica a continuació? Envieu un correu a <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>.</p>

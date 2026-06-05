@@ -14,7 +14,7 @@ committee is in the user's PI committee set.
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -22,6 +22,7 @@ from models.user import User
 from models.ep_vote import EpVote, EpVoteRecord
 from services.tracking.tracked_files_seeder import _interest_list
 from services.tracking.pi_committee_crosswalk import committees_for_interests
+from services.tracking.tracked_lens import tracked_anchors, tracked_clause, TrackedSpec
 from .auth_optional import get_current_user_optional
 
 import logging
@@ -51,11 +52,12 @@ def _margin(v: EpVote) -> int:
     return abs((v.votes_for or 0) - (v.votes_against or 0))
 
 
-def _vote_summary(v: EpVote, my_committees: List[str], both_levels: set) -> dict:
+def _vote_summary(v: EpVote, my_committees: List[str], both_levels: set, tracked_procs: set) -> dict:
     return {
         "id": str(v.id),
         "level": v.level,
         "procedure_ref": v.procedure_ref,
+        "matches_tracked": bool(v.procedure_ref and v.procedure_ref in tracked_procs),
         "carriage_id": str(v.carriage_id) if v.carriage_id else None,
         "report_ref": v.report_ref,
         "ta_reference": v.ta_reference,
@@ -108,9 +110,11 @@ def _sort(items: List[dict], sort_by: str) -> List[dict]:
 
 # ---- list endpoints -------------------------------------------------------
 
-def _list(level, db, user, my_interests, committees, search, sort_by, limit, offset):
+def _list(level, db, user, my_interests, committees, search, sort_by, limit, offset, my_files=False):
     my_committees = _user_committees(user)
     both = _procedures_with_both_levels(db)
+    tracked = tracked_anchors(db, str(user.id)) if user else {}
+    tracked_procs = tracked.get("procedures", set())
 
     q = db.query(EpVote).filter(EpVote.level == level)
 
@@ -122,12 +126,19 @@ def _list(level, db, user, my_interests, committees, search, sort_by, limit, off
     if filter_committees:
         q = q.filter(EpVote.committee_code.in_(filter_committees))
 
+    # My Tracked Files lens: votes on a procedure/committee the user tracks (hard).
+    if my_files and tracked:
+        tsql, tp = tracked_clause(tracked, TrackedSpec(procedure_col="procedure_ref",
+                                                       committee_col="committee_code"))
+        if tsql != "FALSE":
+            q = q.filter(text(tsql).bindparams(**tp))
+
     if search:
         q = q.filter(EpVote.title.ilike(f"%{search}%"))
 
     total = q.count()
     rows = q.all()  # bounded set; sort/paginate in Python for margin/dissent keys
-    items = [_vote_summary(v, my_committees, both) for v in rows]
+    items = [_vote_summary(v, my_committees, both, tracked_procs) for v in rows]
     items = _sort(items, sort_by)[offset:offset + limit]
 
     return {
@@ -136,6 +147,8 @@ def _list(level, db, user, my_interests, committees, search, sort_by, limit, off
         "level": level,
         "my_committees": my_committees,
         "pi_active": bool(my_interests and my_committees),
+        "files_active": bool(my_files and tracked_procs),
+        "has_tracked_files": bool(tracked_procs),
     }
 
 
@@ -152,6 +165,7 @@ def _list(level, db, user, my_interests, committees, search, sort_by, limit, off
                 "group breakdown, and whether a plenary delta is available."))
 async def list_committee(
     my_interests: bool = Query(False),
+    my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     sort_by: str = Query("date"),
@@ -161,7 +175,7 @@ async def list_committee(
     db: Session = Depends(get_db),
 ):
     try:
-        return _list("committee", db, current_user, my_interests, committees, search, sort_by, limit, offset)
+        return _list("committee", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files)
     except Exception as e:
         logger.exception(f"committee votes list failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to list committee votes")
@@ -178,6 +192,7 @@ async def list_committee(
                 "`has_delta=true` means a matching committee vote exists."))
 async def list_plenary(
     my_interests: bool = Query(False),
+    my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     sort_by: str = Query("date"),
@@ -187,7 +202,7 @@ async def list_plenary(
     db: Session = Depends(get_db),
 ):
     try:
-        return _list("plenary", db, current_user, my_interests, committees, search, sort_by, limit, offset)
+        return _list("plenary", db, current_user, my_interests, committees, search, sort_by, limit, offset, my_files)
     except Exception as e:
         logger.exception(f"plenary votes list failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to list plenary votes")

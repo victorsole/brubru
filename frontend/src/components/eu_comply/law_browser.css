@@ -375,3 +375,22 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Phase-3 "For you" bridge */
+.law-browser__section--forme .law-browser__section-title .mdi { color: #6c5ce7; }
+.law-browser__forme-card { position: relative; }
+.law-browser__forme-chip {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: #e3f0ff;
+  color: #0959a8;
+  font-size: 0.68rem;
+  font-weight: 700;
+}

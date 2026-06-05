@@ -1,6 +1,7 @@
 // frontend/src/components/bubble/tenderator_widget.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './tenderator_widget.css';
 
@@ -26,6 +27,7 @@ interface TenderStats {
 }
 
 export const TenderatorWidget = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { token, isAuthenticated } = useAuth();
   const [matches, setMatches] = useState<TenderMatch[]>([]);
@@ -88,10 +90,10 @@ export const TenderatorWidget = () => {
     const now = new Date();
     const deadlineDate = new Date(deadline);
     const days = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    if (days < 0) return 'Expired';
-    if (days === 0) return 'Today';
-    if (days === 1) return 'Tomorrow';
-    return `${days}d`;
+    if (days < 0) return t('tenderWidget.expired');
+    if (days === 0) return t('tenderWidget.today');
+    if (days === 1) return t('tenderWidget.tomorrow');
+    return t('tenderWidget.daysShort', { n: days });
   };
 
   // No access - show upgrade prompt
@@ -100,14 +102,14 @@ export const TenderatorWidget = () => {
       <div className="tenderator-widget tenderator-widget--locked">
         <div className="tenderator-widget__header">
           <span className="mdi mdi-gavel"></span>
-          <h4>Tenderator</h4>
-          <span className="tenderator-widget__badge tenderator-widget__badge--blue">Blue</span>
+          <h4>{t('tenderWidget.title')}</h4>
+          <span className="tenderator-widget__badge tenderator-widget__badge--blue">{t('tenderWidget.blue')}</span>
         </div>
         <div className="tenderator-widget__locked-content">
           <span className="mdi mdi-lock-outline"></span>
-          <p>EU Tender Monitoring</p>
+          <p>{t('tenderWidget.monitoring')}</p>
           <button onClick={() => navigate('/subscription')}>
-            Get Professional
+            {t('tenderWidget.getProfessional')}
           </button>
         </div>
       </div>
@@ -118,12 +120,12 @@ export const TenderatorWidget = () => {
     <div className="tenderator-widget">
       <div className="tenderator-widget__header">
         <span className="mdi mdi-gavel"></span>
-        <h4>Tenderator</h4>
+        <h4>{t('tenderWidget.title')}</h4>
         <button
           className="tenderator-widget__view-all"
           onClick={() => navigate('/tenderator')}
         >
-          View All
+          {t('tenderWidget.viewAll')}
           <span className="mdi mdi-arrow-right"></span>
         </button>
       </div>
@@ -139,15 +141,15 @@ export const TenderatorWidget = () => {
             <div className="tenderator-widget__stats">
               <div className="tenderator-widget__stat">
                 <span className="tenderator-widget__stat-value">{stats.total_matches}</span>
-                <span className="tenderator-widget__stat-label">Matches</span>
+                <span className="tenderator-widget__stat-label">{t('tenderWidget.matches')}</span>
               </div>
               <div className="tenderator-widget__stat">
                 <span className="tenderator-widget__stat-value">{stats.matches_this_week}</span>
-                <span className="tenderator-widget__stat-label">This Week</span>
+                <span className="tenderator-widget__stat-label">{t('tenderWidget.thisWeek')}</span>
               </div>
               <div className="tenderator-widget__stat">
                 <span className="tenderator-widget__stat-value">{stats.saved_tenders}</span>
-                <span className="tenderator-widget__stat-label">Saved</span>
+                <span className="tenderator-widget__stat-label">{t('tenderWidget.saved')}</span>
               </div>
             </div>
           )}
@@ -156,9 +158,9 @@ export const TenderatorWidget = () => {
           <div className="tenderator-widget__matches">
             {matches.length === 0 ? (
               <div className="tenderator-widget__empty">
-                <p>No matches yet</p>
+                <p>{t('tenderWidget.noMatches')}</p>
                 <button onClick={() => navigate('/tenderator')}>
-                  Set up profile
+                  {t('tenderWidget.setupProfile')}
                 </button>
               </div>
             ) : (

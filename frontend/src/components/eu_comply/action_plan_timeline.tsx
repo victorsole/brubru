@@ -1,4 +1,5 @@
 // frontend/src/components/eu_comply/action_plan_timeline.tsx
+import { useTranslation } from 'react-i18next';
 import type { GapFinding } from '../../pages/eu_comply_page';
 import './action_plan_timeline.css';
 
@@ -13,6 +14,7 @@ interface GroupedAction {
 }
 
 export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => {
+  const { t } = useTranslation();
   const groupByPriority = (): GroupedAction[] => {
     const groups = new Map<number, GapFinding[]>();
 
@@ -45,12 +47,12 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
 
   const getPriorityLabel = (priority: number): string => {
     switch (priority) {
-      case 1: return 'Critical';
-      case 2: return 'High';
-      case 3: return 'Medium';
-      case 4: return 'Low';
-      case 5: return 'Optional';
-      default: return 'Medium';
+      case 1: return t('comply.plan.priorityCritical');
+      case 2: return t('comply.plan.priorityHigh');
+      case 3: return t('comply.plan.priorityMedium');
+      case 4: return t('comply.plan.priorityLow');
+      case 5: return t('comply.plan.priorityOptional');
+      default: return t('comply.plan.priorityMedium');
     }
   };
 
@@ -87,12 +89,12 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
         <div className="action-plan-timeline__header">
           <h2>
             <span className="mdi mdi-checkbox-multiple-marked-outline"></span>
-            Action Plan
+            {t('comply.plan.title')}
           </h2>
         </div>
         <div className="action-plan-timeline__empty">
           <span className="mdi mdi-check-all"></span>
-          <p>All requirements met! No action items needed.</p>
+          <p>{t('comply.plan.allMet')}</p>
         </div>
       </div>
     );
@@ -103,10 +105,10 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
       <div className="action-plan-timeline__header">
         <h2>
           <span className="mdi mdi-format-list-checkbox"></span>
-          Action Plan
+          {t('comply.plan.title')}
         </h2>
         <div className="action-plan-timeline__summary">
-          {gapFindings.length} action {gapFindings.length === 1 ? 'item' : 'items'} requiring attention
+          {t('comply.plan.summary', { count: gapFindings.length })}
         </div>
       </div>
 
@@ -116,13 +118,13 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
             <div className="action-plan-timeline__group-header">
               <div className="action-plan-timeline__group-title">
                 <span className="action-plan-timeline__priority-badge">
-                  Priority {group.priority}
+                  {t('comply.plan.priority', { n: group.priority })}
                 </span>
                 <span className="action-plan-timeline__priority-label">
                   {getPriorityLabel(group.priority)}
                 </span>
                 <span className="action-plan-timeline__group-count">
-                  ({group.totalCount} {group.totalCount === 1 ? 'item' : 'items'})
+                  {t('comply.plan.items', { count: group.totalCount })}
                 </span>
               </div>
             </div>
@@ -138,7 +140,7 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
                       {finding.deadline_date && (
                         <span className={`action-plan-timeline__item-deadline ${isOverdue(finding.deadline_date) ? 'overdue' : ''}`}>
                           <span className="mdi mdi-calendar-clock"></span>
-                          {isOverdue(finding.deadline_date) ? 'Overdue: ' : 'Due: '}
+                          {isOverdue(finding.deadline_date) ? `${t('comply.plan.overdue')} ` : `${t('comply.plan.due')} `}
                           {new Date(finding.deadline_date).toLocaleDateString()}
                         </span>
                       )}
@@ -158,14 +160,14 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
                   {finding.recommendation && (
                     <div className="action-plan-timeline__item-recommendation">
                       <span className="mdi mdi-lightbulb-on-outline"></span>
-                      <strong>Action:</strong> {finding.recommendation}
+                      <strong>{t('comply.plan.actionLabel')}</strong> {finding.recommendation}
                     </div>
                   )}
 
                   {finding.gap_description && (
                     <div className="action-plan-timeline__item-gap">
                       <span className="mdi mdi-alert-circle-outline"></span>
-                      <strong>What's missing:</strong> {finding.gap_description}
+                      <strong>{t('comply.plan.missingLabel')}</strong> {finding.gap_description}
                     </div>
                   )}
                 </div>
@@ -176,27 +178,27 @@ export const ActionPlanTimeline = ({ gapFindings }: ActionPlanTimelineProps) => 
       </div>
 
       <div className="action-plan-timeline__legend">
-        <h3>Priority Guide:</h3>
+        <h3>{t('comply.plan.priorityGuide')}</h3>
         <ul>
           <li>
             <span className="action-plan-timeline__legend-badge priority-critical">1</span>
-            <strong>Critical:</strong> Immediate action required, significant legal risk
+            <strong>{t('comply.plan.priorityCritical')}:</strong> {t('comply.plan.criticalDesc')}
           </li>
           <li>
             <span className="action-plan-timeline__legend-badge priority-high">2</span>
-            <strong>High:</strong> Important compliance requirement, address soon
+            <strong>{t('comply.plan.priorityHigh')}:</strong> {t('comply.plan.highDesc')}
           </li>
           <li>
             <span className="action-plan-timeline__legend-badge priority-medium">3</span>
-            <strong>Medium:</strong> Standard compliance, plan implementation
+            <strong>{t('comply.plan.priorityMedium')}:</strong> {t('comply.plan.mediumDesc')}
           </li>
           <li>
             <span className="action-plan-timeline__legend-badge priority-low">4</span>
-            <strong>Low:</strong> Minor gaps, address when possible
+            <strong>{t('comply.plan.priorityLow')}:</strong> {t('comply.plan.lowDesc')}
           </li>
           <li>
             <span className="action-plan-timeline__legend-badge priority-optional">5</span>
-            <strong>Optional:</strong> Recommended best practices
+            <strong>{t('comply.plan.priorityOptional')}:</strong> {t('comply.plan.optionalDesc')}
           </li>
         </ul>
       </div>

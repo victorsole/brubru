@@ -16,8 +16,8 @@
  */
 
 import React, { useEffect, useCallback, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiCrystalBall,
@@ -40,20 +40,18 @@ import {
   mdiThumbUp,
   mdiThumbDown,
   mdiMinusCircle,
-  // mdiCheckDecagram,
+  mdiCheckDecagram,
   mdiLock,
   mdiStar,
   mdiInfinity,
-  mdiClose,
-  mdiMagnify,
-  mdiFileDocument,
+  mdiOpenInNew,
+  mdiScaleBalance,
+  mdiInformationOutline,
 } from '@mdi/js';
 
 import { useAuth } from '../../hooks/use_auth';
-import { useLegislativeTrains, type TrackedFile } from '../../hooks/use_legislative_trains';
 import {
   usePredictions,
-  LOADING_MESSAGES,
   EP_GROUPS,
 } from '../../hooks/use_predictions';
 import {
@@ -64,10 +62,15 @@ import {
   getCouncilRiskLabel,
   calculateGaugeOffset,
   getResolutionLeadingIndicators,
+  getCalibration,
+  getInterestFiles,
   type PredictionSummary,
   type GroupPosition,
   type ResolutionLeadingIndicatorResponse,
   type ResolutionIndicator,
+  type CalibrationResult,
+  type PredictionPickerFile,
+  type InterestFiles,
 } from '../../services/prediction_service';
 import './predictions_tab.css';
 
@@ -317,10 +320,28 @@ const PredictionCard: React.FC<{
   prediction: PredictionSummary;
   onToggleExpand: () => void;
 }> = ({ prediction, onToggleExpand }) => {
+  const { t } = useTranslation();
+  const [, setSearchParams] = useSearchParams();
   // Resolution data state
   const [resolutionData, setResolutionData] = useState<ResolutionLeadingIndicatorResponse | null>(null);
   const [isLoadingResolutions, setIsLoadingResolutions] = useState(false);
   const [resolutionError, setResolutionError] = useState<string | null>(null);
+  // Calibration: the actual roll-call, for predicted-vs-actual (fetched upfront).
+  const [calibration, setCalibration] = useState<CalibrationResult | null>(null);
+  useEffect(() => {
+    let alive = true;
+    getCalibration(prediction.procedure_ref).then((c) => { if (alive) setCalibration(c); }).catch(() => {});
+    return () => { alive = false; };
+  }, [prediction.procedure_ref]);
+
+  // Cross-link to the file's state-of-play (Position Analysis).
+  const seeStateOfPlay = () => setSearchParams({ tab: 'position_analysis', ref: prediction.procedure_ref });
+
+  // Forecast provenance (what the prediction is based on).
+  const provenance = prediction.outcome?.model_version
+    || prediction.timeline?.model_version
+    || 'baseline model';
+  const predictedOutcome = prediction.outcome ? getOutcomeLabel(prediction.outcome.predicted_outcome) : null;
 
   // Fetch resolution data when expanded
   useEffect(() => {
@@ -384,6 +405,20 @@ const PredictionCard: React.FC<{
         </div>
       </div>
 
+      {/* Calibration: actual outcome vs forecast (credibility) */}
+      {calibration?.has_vote && (
+        <div className="prediction-card__actual">
+          <Icon path={mdiCheckDecagram} size={0.85} />
+          <span>
+            {t('predictionsTab.actualOutcome', 'Actual outcome')}: <strong>{(calibration.level || '').toUpperCase()} {calibration.result}</strong>
+            {' '}{calibration.votes_for}-{calibration.votes_against}-{calibration.votes_abstention}
+            {calibration.vote_date ? ` (${new Date(calibration.vote_date).toLocaleDateString()})` : ''}
+            {predictedOutcome ? ` · ${t('predictionsTab.weForecast', 'forecast')}: ${predictedOutcome}` : ''}
+          </span>
+          {calibration.source_url && <a href={calibration.source_url} target="_blank" rel="noopener noreferrer"><Icon path={mdiOpenInNew} size={0.6} /></a>}
+        </div>
+      )}
+
       <div className="prediction-card__metrics">
         <div className="prediction-card__metric">
           <Icon
@@ -391,11 +426,11 @@ const PredictionCard: React.FC<{
             size={1.5}
             className="prediction-card__metric-icon"
           />
-          <div className="prediction-card__metric-label">Outcome</div>
+          <div className="prediction-card__metric-label">{t('predictionsTab.outcome')}</div>
           <div className="prediction-card__metric-value">
             {prediction.outcome
               ? getOutcomeLabel(prediction.outcome.predicted_outcome)
-              : 'Unknown'}
+              : t('predictionsTab.unknown')}
           </div>
           <ConfidenceDots confidence={prediction.outcome?.confidence || 0.5} />
         </div>
@@ -406,7 +441,7 @@ const PredictionCard: React.FC<{
             size={1.5}
             className="prediction-card__metric-icon"
           />
-          <div className="prediction-card__metric-label">Timeline</div>
+          <div className="prediction-card__metric-label">{t('predictionsTab.timeline')}</div>
           <div className="prediction-card__metric-value">{timelineDate}</div>
           <ConfidenceDots confidence={prediction.timeline?.confidence || 0.5} />
         </div>
@@ -417,7 +452,7 @@ const PredictionCard: React.FC<{
             size={1.5}
             className="prediction-card__metric-icon"
           />
-          <div className="prediction-card__metric-label">EP Vote</div>
+          <div className="prediction-card__metric-label">{t('predictionsTab.epVote')}</div>
           <div className="prediction-card__metric-value">{epVoteMargin}</div>
           <ConfidenceDots confidence={prediction.ep_vote?.confidence || 0.5} />
         </div>
@@ -428,11 +463,11 @@ const PredictionCard: React.FC<{
             size={1.5}
             className="prediction-card__metric-icon"
           />
-          <div className="prediction-card__metric-label">Council</div>
+          <div className="prediction-card__metric-label">{t('predictionsTab.council')}</div>
           <div className="prediction-card__metric-value">
             {prediction.council_risk
               ? getCouncilRiskLabel(prediction.council_risk)
-              : 'Unknown'}
+              : t('predictionsTab.unknown')}
           </div>
           <ConfidenceDots
             confidence={prediction.council_risk === 'low' ? 0.9 : 0.6}
@@ -440,21 +475,32 @@ const PredictionCard: React.FC<{
         </div>
       </div>
 
+      {/* Provenance: what the forecast is based on */}
+      <div className="prediction-card__provenance" title={t('predictionsTab.provenanceTip', 'A forecast, not a fact. This is what the model is based on.') as string}>
+        <Icon path={mdiInformationOutline} size={0.6} />
+        <span>{t('predictionsTab.forecastBasis', 'Forecast basis')}: {provenance}</span>
+      </div>
+
       <div className="prediction-card__footer">
-        <span className="prediction-card__date">Predicted {predictedDate}</span>
-        <button
-          className={`prediction-card__expand-btn ${
-            prediction.is_expanded ? 'prediction-card__expand-btn--expanded' : ''
-          }`}
-          onClick={onToggleExpand}
-        >
-          <span>{prediction.is_expanded ? 'Collapse' : 'Details'}</span>
-          <Icon
-            path={mdiChevronDown}
-            size={0.75}
-            className="prediction-card__expand-icon"
-          />
-        </button>
+        <span className="prediction-card__date">{t('predictionsTab.predicted', { date: predictedDate })}</span>
+        <div className="prediction-card__footer-actions">
+          <button className="prediction-card__crosslink" onClick={seeStateOfPlay}>
+            <Icon path={mdiScaleBalance} size={0.7} /> {t('predictionsTab.seeStateOfPlay', 'See state of play')}
+          </button>
+          <button
+            className={`prediction-card__expand-btn ${
+              prediction.is_expanded ? 'prediction-card__expand-btn--expanded' : ''
+            }`}
+            onClick={onToggleExpand}
+          >
+            <span>{prediction.is_expanded ? t('predictionsTab.collapse') : t('predictionsTab.details')}</span>
+            <Icon
+              path={mdiChevronDown}
+              size={0.75}
+              className="prediction-card__expand-icon"
+            />
+          </button>
+        </div>
       </div>
 
       {/* Expanded Details */}
@@ -472,7 +518,7 @@ const PredictionCard: React.FC<{
                 size={1}
                 className="prediction-card__detail-title-icon"
               />
-              EP Political Group Breakdown
+              {t('predictionsTab.epGroupBreakdown')}
             </h4>
             <div className="prediction-card__ep-groups">
               {prediction.ep_vote.group_predictions.map((gp) => (
@@ -496,39 +542,39 @@ const PredictionCard: React.FC<{
                 size={1}
                 className="prediction-card__detail-title-icon"
               />
-              Timeline Projection
+              {t('predictionsTab.timelineProjection')}
             </h4>
             <div className="prediction-card__timeline">
               <TimelineStage
-                label="Committee"
-                date="Done"
+                label={t('predictionsTab.committee')}
+                date={t('predictionsTab.done')}
                 icon={mdiCheck}
                 status="completed"
               />
               <div className="prediction-card__timeline-connector prediction-card__timeline-connector--active" />
               <TimelineStage
-                label="Plenary"
+                label={t('predictionsTab.plenary')}
                 date="Mar 2026"
                 icon={mdiAccountVoice}
                 status="current"
               />
               <div className="prediction-card__timeline-connector" />
               <TimelineStage
-                label="Trilogue"
+                label={t('predictionsTab.trilogue')}
                 date="Q2 2026"
                 icon={mdiHandshake}
                 status="pending"
               />
               <div className="prediction-card__timeline-connector" />
               <TimelineStage
-                label="Council"
+                label={t('predictionsTab.councilStage')}
                 date="Q3 2026"
                 icon={mdiGavel}
                 status="pending"
               />
               <div className="prediction-card__timeline-connector" />
               <TimelineStage
-                label="OJ"
+                label={t('predictionsTab.oj')}
                 date={timelineDate}
                 icon={mdiBookOpenPageVariant}
                 status="pending"
@@ -545,7 +591,7 @@ const PredictionCard: React.FC<{
               size={1}
               className="prediction-card__detail-title-icon"
             />
-            Council Risk Assessment
+            {t('predictionsTab.councilRiskAssessment')}
           </h4>
           <div className="prediction-card__council-risk">
             <div className="prediction-card__council-status">
@@ -562,13 +608,12 @@ const PredictionCard: React.FC<{
                 <Icon path={mdiCheckCircle} size={0.75} />
                 QMV:{' '}
                 {prediction.council_risk === 'low'
-                  ? 'Sufficient support'
-                  : 'At risk'}
+                  ? t('predictionsTab.qmvSufficient')
+                  : t('predictionsTab.qmvAtRisk')}
               </span>
             </div>
             <p className="prediction-card__council-note">
-              Detailed QMV analysis requires Council position data.
-              Risk level based on policy area and procedure type.
+              {t('predictionsTab.qmvNote')}
             </p>
           </div>
         </div>
@@ -581,14 +626,14 @@ const PredictionCard: React.FC<{
               size={1}
               className="prediction-card__detail-title-icon"
             />
-            Resolution Leading Indicators
+            {t('predictionsTab.resolutionLeading')}
           </h4>
           {isLoadingResolutions ? (
             <div className="prediction-card__resolution-loading">
               <span className="predictions-tab__loading-dot" />
               <span className="predictions-tab__loading-dot" />
               <span className="predictions-tab__loading-dot" />
-              <span>Loading resolution data...</span>
+              <span>{t('predictionsTab.loadingResolutionData')}</span>
             </div>
           ) : resolutionError ? (
             <div className="prediction-card__resolution-error">
@@ -603,21 +648,20 @@ const PredictionCard: React.FC<{
                   className={`prediction-card__resolution-sentiment prediction-card__resolution-sentiment--${resolutionData.summary.weighted_sentiment.toLowerCase().replace('_', '-')}`}
                 >
                   {resolutionData.summary.weighted_sentiment === 'STRONG_SUPPORT'
-                    ? 'Strong Support'
+                    ? t('predictionsTab.strongSupport')
                     : resolutionData.summary.weighted_sentiment === 'MODERATE_SUPPORT'
-                    ? 'Moderate Support'
+                    ? t('predictionsTab.moderateSupport')
                     : resolutionData.summary.weighted_sentiment === 'MIXED'
-                    ? 'Mixed'
+                    ? t('predictionsTab.mixed')
                     : resolutionData.summary.weighted_sentiment === 'LOW_SUPPORT'
-                    ? 'Low Support'
-                    : 'No Data'}
+                    ? t('predictionsTab.lowSupport')
+                    : t('predictionsTab.noData')}
                 </span>
                 <span className="prediction-card__resolution-count">
-                  {resolutionData.summary.total_resolutions} related resolution
-                  {resolutionData.summary.total_resolutions !== 1 ? 's' : ''}
+                  {t('predictionsTab.relatedResolutions', { count: resolutionData.summary.total_resolutions })}
                 </span>
                 <span className="prediction-card__resolution-avg-support">
-                  Avg: {resolutionData.summary.average_support.toFixed(1)}% support
+                  {t('predictionsTab.avgSupport', { n: resolutionData.summary.average_support.toFixed(1) })}
                 </span>
               </div>
 
@@ -633,18 +677,16 @@ const PredictionCard: React.FC<{
 
               {resolutionData.resolutions.length > 3 && (
                 <div className="prediction-card__resolution-more">
-                  +{resolutionData.resolutions.length - 3} more resolution
-                  {resolutionData.resolutions.length - 3 !== 1 ? 's' : ''}
+                  {t('predictionsTab.moreResolutions', { count: resolutionData.resolutions.length - 3 })}
                 </div>
               )}
             </div>
           ) : (
             <div className="prediction-card__resolution-empty">
               <Icon path={mdiFileDocumentCheck} size={1} />
-              <p>No related resolutions found.</p>
+              <p>{t('predictionsTab.noResolutionsFound')}</p>
               <p className="prediction-card__resolution-hint">
-                EP resolutions (INL, INI, RSP) that preceded this legislation
-                would appear here as predictive signals.
+                {t('predictionsTab.noResolutionsHint')}
               </p>
             </div>
           )}
@@ -662,6 +704,7 @@ const QuotaIndicator: React.FC<{
   total: number;
   resetDate: string;
 }> = ({ used, total, resetDate }) => {
+  const { t } = useTranslation();
   const remaining = total - used;
   const percentage = ((total - used) / total) * 100;
 
@@ -673,9 +716,9 @@ const QuotaIndicator: React.FC<{
         </div>
         <div className="predictions-tab__quota-text">
           <span className="predictions-tab__quota-count">
-            {remaining} of {total}
+            {t('predictionsTab.quotaRemaining', { remaining, total })}
           </span>{' '}
-          predictions remaining
+          {t('predictionsTab.predictionsRemaining')}
         </div>
       </div>
       <div className="predictions-tab__quota-bar-container">
@@ -686,241 +729,85 @@ const QuotaIndicator: React.FC<{
           />
         </div>
       </div>
-      <div className="predictions-tab__quota-reset">Resets {resetDate}</div>
+      <div className="predictions-tab__quota-reset">{t('predictionsTab.resets', { date: resetDate })}</div>
     </div>
   );
 };
 
-/**
- * Empty state component
- */
-const EmptyState: React.FC<{ onSelectFile: () => void }> = ({ onSelectFile }) => (
-  <div className="predictions-tab__empty">
-    <div className="predictions-tab__empty-illustration">
-      <div className="predictions-tab__empty-orb" />
-      <Icon
-        path={mdiCrystalBall}
-        size={3}
-        className="predictions-tab__empty-icon"
-      />
-      <div className="predictions-tab__empty-particles">
-        <span className="predictions-tab__particle" />
-        <span className="predictions-tab__particle" />
-        <span className="predictions-tab__particle" />
-      </div>
-    </div>
-    <h2 className="predictions-tab__empty-title">
-      Get predictions for your tracked files
-    </h2>
-    <p className="predictions-tab__empty-text">
-      See how likely your legislation is to pass, when it might be adopted, and
-      how the EP and Council are expected to vote.
-    </p>
-    <button className="predictions-tab__select-file" onClick={onSelectFile}>
-      Choose a file to predict
-      <Icon path={mdiChevronDown} size={0.875} />
-    </button>
-  </div>
-);
-
-/**
- * File Picker Modal component
- */
-interface FilePickerModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelect: (file: TrackedFile) => void;
-  trackedFiles: TrackedFile[];
-  isLoading: boolean;
-}
-
-const FilePickerModal: React.FC<FilePickerModalProps> = ({
-  isOpen,
-  onClose,
-  onSelect,
-  trackedFiles,
-  isLoading,
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  if (!isOpen) return null;
-
-  const filteredFiles = trackedFiles.filter((file) =>
-    file.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (file.oeil_procedure_ref?.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
-  const getStatusColor = (status: string): string => {
-    const statusLower = status.toLowerCase();
-    if (statusLower.includes('adopted') || statusLower.includes('completed')) return 'var(--color-accent-green)';
-    if (statusLower.includes('rejected') || statusLower.includes('withdrawn')) return 'var(--color-accent-red)';
-    if (statusLower.includes('committee') || statusLower.includes('plenary')) return 'var(--color-accent-blue)';
-    if (statusLower.includes('council')) return 'var(--color-accent-purple)';
-    return 'var(--color-gray-500)';
-  };
-
-  return createPortal(
-    <div className="predictions-tab__modal-overlay" onClick={onClose}>
-      <div
-        className="predictions-tab__modal"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="predictions-tab__modal-header">
-          <h2 className="predictions-tab__modal-title">
-            <Icon path={mdiFileDocument} size={1} />
-            Select a file to predict
-          </h2>
-          <button
-            className="predictions-tab__modal-close"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <Icon path={mdiClose} size={1} />
-          </button>
-        </div>
-
-        <div className="predictions-tab__modal-search">
-          <Icon path={mdiMagnify} size={0.875} className="predictions-tab__modal-search-icon" />
-          <input
-            type="text"
-            placeholder="Search your tracked files..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="predictions-tab__modal-search-input"
-            autoFocus
-          />
-        </div>
-
-        <div className="predictions-tab__modal-content">
-          {isLoading ? (
-            <div className="predictions-tab__modal-loading">
-              Loading your tracked files...
-            </div>
-          ) : filteredFiles.length === 0 ? (
-            <div className="predictions-tab__modal-empty">
-              {trackedFiles.length === 0 ? (
-                <>
-                  <p>You haven't tracked any files yet.</p>
-                  <p className="predictions-tab__modal-hint">
-                    Go to "My Files" tab to track legislative procedures.
-                  </p>
-                </>
-              ) : (
-                <p>No files match your search.</p>
-              )}
-            </div>
-          ) : (
-            <div className="predictions-tab__modal-list">
-              {filteredFiles.map((file) => (
-                <button
-                  key={file.id}
-                  className="predictions-tab__modal-item"
-                  onClick={() => onSelect(file)}
-                >
-                  <div className="predictions-tab__modal-item-main">
-                    <span className="predictions-tab__modal-item-title">
-                      {file.title}
-                    </span>
-                    {file.oeil_procedure_ref && (
-                      <span className="predictions-tab__modal-item-ref">
-                        {file.oeil_procedure_ref}
-                      </span>
-                    )}
-                  </div>
-                  <div className="predictions-tab__modal-item-meta">
-                    <span
-                      className="predictions-tab__modal-item-status"
-                      style={{ color: getStatusColor(file.current_status) }}
-                    >
-                      {file.current_status}
-                    </span>
-                    {file.lead_committee && (
-                      <span className="predictions-tab__modal-item-committee">
-                        {file.lead_committee}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>,
-    document.body
-  );
-};
 
 /**
  * Locked state component (White tier)
  */
-const LockedState: React.FC<{ onUpgrade: () => void }> = ({ onUpgrade }) => (
+const LockedState: React.FC<{ onUpgrade: () => void }> = ({ onUpgrade }) => {
+  const { t } = useTranslation();
+  return (
   <div className="predictions-tab__locked">
     <div className="predictions-tab__locked-illustration">
       <div className="predictions-tab__locked-orb" />
       <Icon path={mdiLock} size={2.5} className="predictions-tab__locked-lock" />
     </div>
     <h2 className="predictions-tab__locked-title">
-      Predictions require a subscription
+      {t('predictionsTab.lockedTitle')}
     </h2>
     <p className="predictions-tab__locked-text">
-      Know the odds of your legislation passing. See how MEPs and member states
-      are likely to vote. Plan your advocacy with data-driven insights.
+      {t('predictionsTab.lockedText')}
     </p>
     <button className="predictions-tab__upgrade-btn" onClick={onUpgrade}>
       <Icon path={mdiStar} size={0.875} />
-      Subscribe -- from EUR 39/month
+      {t('predictionsTab.subscribeFrom')}
     </button>
     <p className="predictions-tab__locked-note">
-      Available with Starter, Advocate, and Professional plans
+      {t('predictionsTab.lockedNote')}
     </p>
   </div>
-);
+  );
+};
 
 /**
  * Loading state component
  */
-const LoadingState: React.FC<{ message: string }> = ({ message }) => (
+const LoadingState: React.FC<{ message: string }> = ({ message }) => {
+  const { t } = useTranslation();
+  return (
   <div className="predictions-tab__loading">
     <div className="predictions-tab__loading-spinner">
       <span className="predictions-tab__loading-dot" />
       <span className="predictions-tab__loading-dot" />
       <span className="predictions-tab__loading-dot" />
     </div>
-    <p className="predictions-tab__loading-text">Analysing legislative signals...</p>
+    <p className="predictions-tab__loading-text">{t('predictionsTab.analysingSignals')}</p>
     <p className="predictions-tab__loading-status">{message}</p>
     <div className="predictions-tab__loading-bar">
       <div className="predictions-tab__loading-bar-fill" />
     </div>
   </div>
-);
+  );
+};
 
 // ============================================================================
 // Main Component
 // ============================================================================
 
 export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const {
     predictions,
     quota,
     loadingState,
-    isGeneratingPrediction,
     toggleExpanded,
     updateQuota,
     generatePrediction,
   } = usePredictions();
 
-  // Get tracked files from Legislative Trains
-  const {
-    trackedFiles,
-    fetchTrackedFiles,
-    isLoadingTrackedFiles,
-  } = useLegislativeTrains();
+  // PI-bucketed files for the picker (tracked + suggested-by-interests)
+  const [files, setFiles] = useState<InterestFiles | null>(null);
+  const [filesLoading, setFilesLoading] = useState(false);
+  const [myInterests, setMyInterests] = useState(true);
 
-  // State for file picker modal
-  const [showFilePicker, setShowFilePicker] = useState(false);
+  // Which files are currently forecasting (per-card spinner)
+  const [generatingRefs, setGeneratingRefs] = useState<Set<string>>(new Set());
 
   // Determine user tier
   const userTier = user?.subscription_tier || 'white';
@@ -928,12 +815,15 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
   const isYellowTier = userTier === 'yellow';
   const isBlueTier = userTier === 'blue';
 
-  // Fetch tracked files when component mounts
+  // Fetch the PI-bucketed file list (re-fetches when the interests toggle changes)
   useEffect(() => {
-    if (!isWhiteTier) {
-      fetchTrackedFiles();
-    }
-  }, [isWhiteTier, fetchTrackedFiles]);
+    if (isWhiteTier) return;
+    setFilesLoading(true);
+    getInterestFiles(myInterests)
+      .then(setFiles)
+      .catch(() => setFiles({ pi_active: false, tracked: [], suggested: [] }))
+      .finally(() => setFilesLoading(false));
+  }, [isWhiteTier, myInterests]);
 
   // Initialize quota for Yellow tier users
   useEffect(() => {
@@ -973,28 +863,34 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
     }
   }, [searchParams, predictions, generatePrediction, isWhiteTier, setSearchParams]);
 
-  // Handle file selection for prediction
-  const handleSelectFile = useCallback(() => {
-    setShowFilePicker(true);
-  }, []);
-
-  // Handle file selected from picker
-  const handleFileSelected = useCallback(async (file: TrackedFile) => {
-    setShowFilePicker(false);
-
-    // Generate prediction for the selected file
-    if (file.oeil_procedure_ref) {
-      await generatePrediction(
-        file.oeil_procedure_ref,
-        file.title,
-        file.lead_committee || undefined
-      );
-    }
+  // Generate the forecast for one file (per-card loading, no modal).
+  const generateOne = useCallback(async (file: PredictionPickerFile) => {
+    const ref = file.procedure_ref;
+    if (!ref) return;
+    setGeneratingRefs((s) => new Set(s).add(ref));
+    try { await generatePrediction(ref, file.title || ref, file.lead_committee || undefined); }
+    catch { /* quota / network - surfaced via store error */ }
+    finally { setGeneratingRefs((s) => { const n = new Set(s); n.delete(ref); return n; }); }
   }, [generatePrediction]);
+
+  // Auto-forecast the first few tracked files so the page renders populated (the rest
+  // are one-click stubs). Bounded to keep load fast and respect the Yellow quota.
+  const autoGenStarted = useRef(false);
+  useEffect(() => {
+    if (isWhiteTier || !files || autoGenStarted.current) return;
+    autoGenStarted.current = true;
+    const cap = isBlueTier ? 4 : 2;
+    const todo = (files.tracked.length ? files.tracked : files.suggested).slice(0, cap);
+    (async () => {
+      for (const f of todo) {
+        if (!f.procedure_ref) continue;
+        await generateOne(f);
+      }
+    })();
+  }, [files, isWhiteTier, isBlueTier, generateOne]);
 
   // Handle upgrade
   const handleUpgrade = useCallback(() => {
-    // Navigate to subscription page
     window.location.href = '/subscription';
   }, []);
 
@@ -1008,101 +904,74 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
     );
   }
 
-  // Render loading state
-  if (isGeneratingPrediction) {
-    return (
-      <div className={`predictions-tab ${className || ''}`}>
-        <GaugeSVGDefs />
-        {isYellowTier && quota && (
-          <QuotaIndicator
-            used={quota.used}
-            total={quota.total}
-            resetDate={quota.reset_date}
-          />
-        )}
-        <LoadingState message={loadingState.message || LOADING_MESSAGES[0]} />
-      </div>
-    );
-  }
+  // The PI file list, rendered immediately (tracked + suggested-by-interests). Each file
+  // is a card: the generated forecast if available, otherwise a one-click stub.
+  const displayFiles: PredictionPickerFile[] = [
+    ...(files?.tracked || []),
+    ...(myInterests ? (files?.suggested || []) : []),
+  ];
+  const predByRef = new Map(predictions.map((p) => [p.procedure_ref, p] as const));
+  // Predictions for files outside the current list (e.g. a deep-linked ?ref=) go on top.
+  const extraPreds = predictions.filter((p) => !displayFiles.some((f) => f.procedure_ref === p.procedure_ref));
 
-  // Render empty state
-  if (predictions.length === 0) {
-    return (
-      <div className={`predictions-tab ${className || ''}`}>
-        <GaugeSVGDefs />
-        {isYellowTier && quota && (
-          <QuotaIndicator
-            used={quota.used}
-            total={quota.total}
-            resetDate={quota.reset_date}
-          />
-        )}
-        <EmptyState onSelectFile={handleSelectFile} />
-        <FilePickerModal
-          isOpen={showFilePicker}
-          onClose={() => setShowFilePicker(false)}
-          onSelect={handleFileSelected}
-          trackedFiles={trackedFiles}
-          isLoading={isLoadingTrackedFiles}
-        />
-      </div>
-    );
-  }
-
-  // Render predictions list
   return (
     <div className={`predictions-tab ${className || ''}`}>
       <GaugeSVGDefs />
 
-      {/* Quota indicator (Yellow tier only) */}
-      {isYellowTier && quota && (
-        <QuotaIndicator
-          used={quota.used}
-          total={quota.total}
-          resetDate={quota.reset_date}
-        />
-      )}
-
-      {/* Predictions list */}
-      <div className="predictions-tab__list">
-        {predictions.map((prediction) => (
-          <PredictionCard
-            key={prediction.id}
-            prediction={prediction}
-            onToggleExpand={() => toggleExpanded(prediction.id)}
-          />
-        ))}
+      <div className="predictions-tab__toolbar">
+        <div className="predictions-tab__toggle">
+          <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('predictionsTab.mine', 'My interests')}</button>
+          <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('predictionsTab.allTracked', 'All tracked')}</button>
+        </div>
+        {isYellowTier && quota && (
+          <QuotaIndicator used={quota.used} total={quota.total} resetDate={quota.reset_date} />
+        )}
       </div>
 
-      {/* Add another prediction button */}
-      <button
-        className="predictions-tab__add-prediction"
-        onClick={handleSelectFile}
-      >
-        <Icon path={mdiCrystalBall} size={0.875} />
-        Add another prediction
-      </button>
-
-      {/* Professional plan unlimited note */}
-      {isBlueTier && (
-        <p className="predictions-tab__unlimited">
-          <Icon
-            path={mdiInfinity}
-            size={0.75}
-            className="predictions-tab__unlimited-icon"
-          />
-          Professional: Unlimited predictions
-        </p>
+      {filesLoading && displayFiles.length === 0 ? (
+        <LoadingState message={loadingState.message || t('predictionsTab.loadingYourFiles')} />
+      ) : displayFiles.length === 0 && extraPreds.length === 0 ? (
+        <div className="predictions-tab__hint">
+          <Icon path={mdiCrystalBall} size={1.2} />
+          <p>{t('predictionsTab.noneTracked')}</p>
+          <p className="predictions-tab__hint-sub">{t('predictionsTab.goToMyFiles')}</p>
+        </div>
+      ) : (
+        <div className="predictions-tab__list">
+          {extraPreds.map((p) => (
+            <PredictionCard key={p.id} prediction={p} onToggleExpand={() => toggleExpanded(p.id)} />
+          ))}
+          {displayFiles.map((f) => {
+            const pred = f.procedure_ref ? predByRef.get(f.procedure_ref) : undefined;
+            if (pred) {
+              return <PredictionCard key={pred.id} prediction={pred} onToggleExpand={() => toggleExpanded(pred.id)} />;
+            }
+            const gen = !!f.procedure_ref && generatingRefs.has(f.procedure_ref);
+            return (
+              <div key={f.carriage_id} className="prediction-stub">
+                <div className="prediction-stub__info">
+                  <h3 className="prediction-stub__title">{f.title || f.procedure_ref}</h3>
+                  <span className="prediction-stub__ref">
+                    {f.procedure_ref}{f.lead_committee ? ` · ${f.lead_committee}` : ''}
+                    {f.is_pi_match && !f.is_tracked ? ` · ${t('predictionsTab.suggested', 'Suggested for your interests')}` : ''}
+                  </span>
+                </div>
+                <button className="prediction-stub__btn" disabled={gen} onClick={() => generateOne(f)}>
+                  <Icon path={mdiCrystalBall} size={0.8} />
+                  {gen ? t('predictionsTab.generating', 'Forecasting...') : t('predictionsTab.generate', 'Forecast')}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       )}
 
-      {/* File picker modal */}
-      <FilePickerModal
-        isOpen={showFilePicker}
-        onClose={() => setShowFilePicker(false)}
-        onSelect={handleFileSelected}
-        trackedFiles={trackedFiles}
-        isLoading={isLoadingTrackedFiles}
-      />
+      {isBlueTier && (
+        <p className="predictions-tab__unlimited">
+          <Icon path={mdiInfinity} size={0.75} className="predictions-tab__unlimited-icon" />
+          {t('predictionsTab.unlimited', 'Professional: Unlimited predictions')}
+        </p>
+      )}
     </div>
   );
 };

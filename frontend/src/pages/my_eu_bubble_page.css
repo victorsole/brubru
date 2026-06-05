@@ -28,7 +28,7 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   padding: 1.5rem;
   background: white;
   border-radius: 16px;
@@ -44,6 +44,7 @@
 
 .my-eu-bubble-page__header-text {
   flex: 1;
+  min-width: 0;
 }
 
 .my-eu-bubble-page h1 {
@@ -59,87 +60,323 @@
   color: #666;
 }
 
+/* Mobile menu trigger (hidden on desktop) */
+.my-eu-bubble-page__mobile-menu {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  color: #0066cc;
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ========================================
+   LAYOUT: [ folding sidebar | workspace ]
+   ======================================== */
 .my-eu-bubble-page__layout {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
+  grid-template-columns: 248px 1fr;
+  gap: 1.5rem;
   align-items: start;
 }
 
-.my-eu-bubble-page__main {
+.my-eu-bubble-page__layout--collapsed {
+  grid-template-columns: 76px 1fr;
+}
+
+.my-eu-bubble-page__main,
+.my-eu-bubble-page__overview-main {
   background: white;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-}
-
-.my-eu-bubble-page__tabs {
-  display: flex;
-  border-bottom: 2px solid #e0e0e0;
-  background: #f8f9fa;
-}
-
-.my-eu-bubble-page__tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #666;
-}
-
-.my-eu-bubble-page__tab:hover {
-  background: #e9ecef;
-  color: #1a1a1a;
-}
-
-.my-eu-bubble-page__tab--active {
-  background: white;
-  border-bottom-color: #0066cc;
-  color: #0066cc;
-}
-
-.my-eu-bubble-page__tab-icon {
-  font-size: 1.5rem;
-}
-
-.my-eu-bubble-page__tab-label {
-  font-weight: 600;
+  min-width: 0;
 }
 
 .my-eu-bubble-page__content {
   background: white;
 }
 
-.my-eu-bubble-page__sidebar {
+/* Overview only: cockpit + the relocated "Latest Updates" feed side by side */
+.my-eu-bubble-page__overview {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  align-items: start;
+  min-width: 0;
+}
+
+.my-eu-bubble-page__overview-feed {
   position: sticky;
   top: 2rem;
   height: calc(100vh - 120px);
   overflow: hidden;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Responsive */
+/* ========================================
+   FOLDING LEFT SIDEBAR (module navigation)
+   ======================================== */
+.my-eu-bubble-nav {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 0.85rem 0.7rem;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+.my-eu-bubble-nav__head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.45rem 0.85rem;
+  border-bottom: 1px solid #eef1f4;
+  margin-bottom: 0.6rem;
+}
+
+.my-eu-bubble-nav__avatar {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  background: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+}
+
+.my-eu-bubble-nav__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.my-eu-bubble-nav__name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-eu-bubble-nav__role {
+  font-size: 0.75rem;
+  color: #8a97a4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-eu-bubble-nav__close {
+  display: none;
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: #5b6b7a;
+  cursor: pointer;
+}
+
+.my-eu-bubble-nav__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.my-eu-bubble-nav__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.35rem;
+}
+
+.my-eu-bubble-nav__section-title {
+  margin: 0.5rem 0.45rem 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9aa6b2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-eu-bubble-nav__section-rule {
+  height: 1px;
+  background: #eef1f4;
+  margin: 0.45rem 0.3rem;
+}
+
+.my-eu-bubble-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 0.55rem;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  color: #44515e;
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.my-eu-bubble-nav__item:hover {
+  background: #f1f6fb;
+  color: #1a1a1a;
+}
+
+.my-eu-bubble-nav__item--active {
+  background: rgba(6, 147, 227, 0.10);
+  color: #0066cc;
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #0693e3;
+}
+
+.my-eu-bubble-nav__item-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  width: 22px;
+  justify-content: center;
+}
+
+.my-eu-bubble-nav__item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Predictions special treatment */
+.my-eu-bubble-nav__item-label--gradient {
+  background: linear-gradient(135deg, #0693e3 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.my-eu-bubble-nav__sparkle {
+  animation: meub-sparkle 2s ease-in-out infinite;
+}
+
+@keyframes meub-sparkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.my-eu-bubble-nav__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.55rem;
+  border: none;
+  border-top: 1px solid #eef1f4;
+  background: transparent;
+  color: #8a97a4;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0 0 8px 8px;
+}
+
+.my-eu-bubble-nav__toggle:hover {
+  color: #0066cc;
+}
+
+/* ---- Collapsed (desktop icon rail) ---- */
+.my-eu-bubble-nav--collapsed {
+  padding: 0.85rem 0.45rem;
+  align-items: center;
+}
+
+.my-eu-bubble-nav--collapsed .my-eu-bubble-nav__head {
+  justify-content: center;
+  padding: 0.3rem 0 0.7rem;
+}
+
+.my-eu-bubble-nav--collapsed .my-eu-bubble-nav__item {
+  justify-content: center;
+  padding: 0.55rem 0;
+}
+
+.my-eu-bubble-nav--collapsed .my-eu-bubble-nav__item-label {
+  display: none;
+}
+
+.my-eu-bubble-nav--collapsed .my-eu-bubble-nav__item--active {
+  box-shadow: none;
+}
+
+.my-eu-bubble-nav--collapsed .my-eu-bubble-nav__toggle {
+  justify-content: center;
+}
+
+.my-eu-bubble-nav__scrim {
+  display: none;
+}
+
+/* ========================================
+   POLICY INTERESTS PANE
+   ======================================== */
+.my-eu-bubble-page__policy-pane {
+  padding: 1.5rem;
+}
+
+.my-eu-bubble-page__pane-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.my-eu-bubble-page__pane-intro {
+  margin: 0 0 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #5b6b7a;
+  max-width: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 1200px) {
-  .my-eu-bubble-page__layout {
-    grid-template-columns: 1fr 350px;
+  .my-eu-bubble-page__overview {
+    grid-template-columns: 1fr 320px;
   }
 }
 
 @media (max-width: 1024px) {
-  .my-eu-bubble-page__layout {
+  /* Overview feed stacks below the cockpit (no longer hidden as it was when a global rail) */
+  .my-eu-bubble-page__overview {
     grid-template-columns: 1fr;
   }
-
-  .my-eu-bubble-page__sidebar {
-    display: none;
+  .my-eu-bubble-page__overview-feed {
+    position: static;
+    height: 560px;
   }
 }
 
@@ -149,8 +386,8 @@
   }
 
   .my-eu-bubble-page__header {
-    flex-direction: column;
-    text-align: center;
+    flex-wrap: wrap;
+    gap: 1rem;
     padding: 1rem;
   }
 
@@ -163,85 +400,66 @@
   }
 
   .my-eu-bubble-page__icon {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
   }
 
-  .my-eu-bubble-page__tabs {
-    overflow-x: auto;
+  .my-eu-bubble-page__mobile-menu {
+    display: inline-flex;
+    margin-left: auto;
   }
 
-  .my-eu-bubble-page__tab {
-    flex: 0 0 auto;
-    min-width: 100px;
+  /* Layout collapses to a single column; sidebar becomes an off-canvas drawer */
+  .my-eu-bubble-page__layout,
+  .my-eu-bubble-page__layout--collapsed {
+    grid-template-columns: 1fr;
   }
 
-  .my-eu-bubble-page__tab-icon {
-    font-size: 1.25rem;
+  .my-eu-bubble-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    max-height: none;
+    border-radius: 0;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
   }
 
-  .my-eu-bubble-page__tab-label {
-    font-size: 0.75rem;
+  .my-eu-bubble-nav--open {
+    transform: translateX(0);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
   }
-}
 
-/* ========================================
-   PREDICTIONS TAB SPECIAL STYLING
-   ======================================== */
-
-/* Predictions tab gradient border when active */
-.my-eu-bubble-page__tab--predictions.my-eu-bubble-page__tab--active {
-  background: white;
-  border-bottom: 3px solid transparent;
-  border-image: linear-gradient(90deg, #0693e3, #06b6d4) 1;
-}
-
-/* Gradient text for predictions tab label when active */
-.my-eu-bubble-page__tab-label--gradient {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: linear-gradient(135deg, #0693e3 0%, #06b6d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Gradient icon styling */
-.my-eu-bubble-page__tab-icon--gradient {
-  color: #0693e3;
-}
-
-.my-eu-bubble-page__tab-icon--gradient svg {
-  fill: url(#predictionGradient);
-}
-
-/* Sparkle animation */
-.my-eu-bubble-page__sparkle {
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(0.8);
+  /* On mobile the drawer always shows full labels even if desktop was collapsed */
+  .my-eu-bubble-nav--collapsed.my-eu-bubble-nav--open {
+    padding: 0.85rem 0.7rem;
+    align-items: stretch;
   }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
+  .my-eu-bubble-nav--collapsed.my-eu-bubble-nav--open .my-eu-bubble-nav__item-label {
+    display: inline-flex;
   }
-}
+  .my-eu-bubble-nav--collapsed.my-eu-bubble-nav--open .my-eu-bubble-nav__item {
+    justify-content: flex-start;
+    padding: 0.55rem;
+  }
 
-/* P0 — Chat hand-off row sits between the page header and the tab nav,
-   right-aligned. Hidden when no prompt (handled inside the button). */
-.my-eu-bubble-page__chat-handoff {
-  display: flex;
-  justify-content: flex-end;
-  margin: 0 0 0.85rem 0;
-}
+  .my-eu-bubble-nav__close {
+    display: inline-flex;
+  }
 
-@media (max-width: 768px) {
-  .my-eu-bubble-page__chat-handoff {
-    justify-content: center;
+  /* Hide the desktop collapse toggle inside the mobile drawer */
+  .my-eu-bubble-nav__toggle {
+    display: none;
+  }
+
+  .my-eu-bubble-nav__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
   }
 }

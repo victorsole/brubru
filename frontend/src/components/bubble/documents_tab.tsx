@@ -1,12 +1,26 @@
 /**
  * Documents Tab Component
  *
- * Displays and manages user documents (amendments, analyses, strategies, notes, uploaded files).
- * Part of My EU Bubble - Phase 3: Frontend
+ * Displays and manages user documents (amendments, analyses, strategies, notes,
+ * uploaded files, AI-generated documents).
+ *
+ * Now also:
+ *   - merges rows from the amendments table (Amendator drafts) so the tab is the
+ *     single library for everything the user has built;
+ *   - exposes first-class filters for the 5 generated document types;
+ *   - lets users edit any document inline and download as DOCX/PDF;
+ *   - shows a version-history modal driven by /api/documents/{id}/versions;
+ *   - surfaces CELEX + alias context on cards;
+ *   - extends the include_in_ai_context toggle to every document type;
+ *   - opens the document-generator wizard when the URL carries
+ *     ?openWizard=1&docType=...&topic=...;
+ *   - links out to Amendator, Chat and EU Law Comply.
  */
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiRobotOutline,
@@ -15,46 +29,112 @@ import {
   mdiFileWordBox,
   mdiFileDocumentOutline,
   mdiBrain,
+  mdiPencilOutline,
+  mdiHistory,
+  mdiDownload,
+  mdiOpenInNew,
+  mdiChatOutline,
+  mdiClipboardCheckOutline,
+  mdiContentCopy,
+  mdiDotsHorizontal,
+  mdiTrayArrowDown,
+  mdiFileDocumentEditOutline,
+  mdiClose,
 } from '@mdi/js';
 import { marked } from 'marked';
 import { useBubble } from '../../hooks/use_bubble';
 import type { UserDocument } from '../../hooks/use_bubble';
 import { useAuth } from '../../hooks/use_auth';
 import { DocumentGeneratorWizard } from './document_generator_wizard';
+import { DocumentEditor } from './document_editor';
+import { formatCelexLabel, aliasOnly } from './celex_alias';
 import './documents_tab.css';
+
+/**
+ * Detect documents that embed raw layout HTML (e.g. the letter and event poster,
+ * which centre a logo). The markdown WYSIWYG editor can mangle raw HTML on round-trip,
+ * so these fall back to source editing until the visual canvas (later phase) lands.
+ */
+function hasRawHtmlBlock(content?: string | null): boolean {
+  if (!content) return false;
+  return /<(img|div|section|figure|iframe|style)\b/i.test(content);
+}
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 /** Strip markdown syntax for plain-text card excerpts */
 function stripMarkdown(text: string): string {
   return text
-    .replace(/```[\w]*\n?/g, '')        // ```markdown / ``` code fences
-    .replace(/\*\*(.*?)\*\*/g, '$1')   // **bold**
-    .replace(/\*(.*?)\*/g, '$1')        // *italic*
-    .replace(/^--\s*/gm, '\u2014 ')     // -- dashes
-    .replace(/^#+\s*/gm, '')            // # headings
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [links](url)
-    .replace(/`([^`]+)`/g, '$1')        // `code`
-    .replace(/^\d+\.\s+/gm, '')         // 1. numbered lists
-    .replace(/^[-*]\s+/gm, '')          // - bullet lists
+    .replace(/```[\w]*\n?/g, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/^--\s*/gm, '— ')
+    .replace(/^#+\s*/gm, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\d+\.\s+/gm, '')
+    .replace(/^[-*]\s+/gm, '')
     .trim();
 }
 
-/** Format file size for display */
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** Get file type icon path */
 function getFileTypeIcon(contentType?: string): string {
   if (contentType === 'application/pdf') return mdiFilePdfBox;
   if (contentType?.includes('word') || contentType?.includes('docx')) return mdiFileWordBox;
   return mdiFileDocumentOutline;
 }
 
+/** Resolve the visible kind (filter category) for a document. */
+function resolveKind(doc: UserDocument): string {
+  if (doc.document_type === 'amendment_carriage') return 'amendment';
+  if (doc.tags?.includes('position_paper')) return 'position_paper';
+  if (doc.tags?.includes('mep_briefing')) return 'mep_briefing';
+  if (doc.tags?.includes('talking_points')) return 'talking_points';
+  if (doc.tags?.includes('resolution')) return 'resolution';
+  if (doc.tags?.includes('petition')) return 'petition';
+  if (doc.tags?.includes('ep_question')) return 'ep_question';
+  if (doc.tags?.includes('eu_email')) return 'eu_email';
+  if (doc.tags?.includes('one_pager')) return 'one_pager';
+  if (doc.tags?.includes('press_release')) return 'press_release';
+  if (doc.tags?.includes('stakeholder_map')) return 'stakeholder_map';
+  if (doc.tags?.includes('impact_assessment')) return 'impact_assessment';
+  if (doc.tags?.includes('presentation')) return 'presentation';
+  if (doc.tags?.includes('event_poster')) return 'event_poster';
+  if (doc.tags?.includes('consultation_response')) return 'consultation_response';
+  return doc.document_type;
+}
+
+const KIND_LABELS: Record<string, string> = {
+  uploaded: 'Uploaded',
+  amendment: 'Amendment',
+  analysis: 'Analysis',
+  strategy: 'Strategy',
+  note: 'Note',
+  position_paper: 'Position paper',
+  mep_briefing: 'MEP briefing',
+  talking_points: 'Talking points',
+  resolution: 'EP resolution',
+  petition: 'EP petition',
+  ep_question: 'EP question',
+  eu_email: 'EU email',
+  one_pager: 'One-pager',
+  press_release: 'Press release',
+  stakeholder_map: 'Stakeholder map',
+  impact_assessment: 'Impact assessment',
+  presentation: 'Presentation',
+  event_poster: 'Event poster',
+  consultation_response: 'Consultation response',
+};
+
 export const DocumentsTab = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const {
     documents,
     isLoadingDocuments,
@@ -65,7 +145,7 @@ export const DocumentsTab = () => {
     selectDocument,
   } = useBubble();
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const userTier = user?.subscription_tier || 'white';
   const canUseResolution = userTier === 'yellow' || userTier === 'blue';
 
@@ -74,7 +154,21 @@ export const DocumentsTab = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showGeneratorWizard, setShowGeneratorWizard] = useState(false);
+  const [presetGenerator, setPresetGenerator] = useState<{ docType?: string; topic?: string } | null>(null);
   const [viewingDocument, setViewingDocument] = useState<UserDocument | null>(null);
+  const [editingDocument, setEditingDocument] = useState<UserDocument | null>(null);
+  const [versionsFor, setVersionsFor] = useState<UserDocument | null>(null);
+  const [versionList, setVersionList] = useState<Array<{ id: string; version: number; title: string; updated_at: string; created_at: string; word_count?: number }>>([]);
+  const [versionsLoading, setVersionsLoading] = useState(false);
+  const [editContent, setEditContent] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  // Full-screen WYSIWYG editor target (Phase 1). Null = closed.
+  const [fullEditDoc, setFullEditDoc] = useState<UserDocument | null>(null);
+
+  // Carriage-amendments (merged from /api/amendments)
+  const [carriageAmendments, setCarriageAmendments] = useState<UserDocument[]>([]);
 
   // Upload state
   const [isUploading, setIsUploading] = useState(false);
@@ -83,37 +177,119 @@ export const DocumentsTab = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Open the wizard if the URL says so (chat -> /my-eu-bubble?tab=documents&openWizard=1&docType=...)
   useEffect(() => {
-    fetchDocuments({
-      document_type: filterType !== 'all' ? filterType : undefined,
-      search: searchQuery || undefined,
-    });
-  }, [filterType, searchQuery]);
+    if (searchParams.get('openWizard') === '1') {
+      const docType = searchParams.get('docType') || undefined;
+      const topic = searchParams.get('topic') || undefined;
+      setPresetGenerator({ docType, topic });
+      setShowGeneratorWizard(true);
+
+      // Strip the params so refresh doesn't re-open it
+      const next = new URLSearchParams(searchParams);
+      next.delete('openWizard');
+      next.delete('docType');
+      next.delete('topic');
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  // Auto-open a freshly-drafted document when the chat hands us
+  // /my-eu-bubble?tab=documents&docId=<uuid>. Fetches that specific row,
+  // pops the View modal, then strips the param.
+  useEffect(() => {
+    const docId = searchParams.get('docId');
+    if (!docId || !token) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/documents/${docId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          console.warn('[Documents] Could not load drafted document:', res.status);
+          return;
+        }
+        const doc = await res.json();
+        if (cancelled) return;
+        selectDocument(doc);
+        setViewingDocument(doc);
+        // Make sure the new doc is also in the list so subsequent navigation works.
+        fetchDocuments({ search: searchQuery || undefined });
+      } catch (err) {
+        console.warn('[Documents] Failed to fetch drafted document:', err);
+      } finally {
+        const next = new URLSearchParams(searchParams);
+        next.delete('docId');
+        setSearchParams(next, { replace: true });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, token]);
+
+  useEffect(() => {
+    fetchDocuments({ search: searchQuery || undefined });
+  }, [searchQuery]);
+
+  // Fetch carriage-amendments in parallel so the tab is the single library.
+  useEffect(() => {
+    let cancelled = false;
+    const loadCarriage = async () => {
+      if (!token) {
+        setCarriageAmendments([]);
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/amendments?limit=100`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const rows = Array.isArray(data) ? data : data.amendments || [];
+        const extractCelex = (docId?: string | null): string | undefined => {
+          if (!docId) return undefined;
+          // amendments.document_id stores raw CELEX or "eurlex-<CELEX>"; both
+          // should produce the same deep-link target.
+          return docId.startsWith('eurlex-') ? docId.slice('eurlex-'.length) : docId;
+        };
+        const extractArticle = (positionText?: string | null): string | undefined => {
+          if (!positionText) return undefined;
+          const m = /Article\s+(\d+[a-z]?)/i.exec(positionText);
+          return m ? m[1] : undefined;
+        };
+        const mapped: UserDocument[] = rows.map((a: any) => ({
+          id: `amendment-${a.id}`,
+          document_type: 'amendment_carriage',
+          title: a.title || a.position_text || `Amendment ${a.amendment_number || ''}`.trim() || 'Amendment',
+          content: a.justification || a.amended_text || a.original_text || '',
+          celex_number: extractCelex(a.document_id),
+          procedure_reference: a.procedure_reference || undefined,
+          carriage_id: a.carriage_id || undefined,
+          amendment_type: a.amendment_type,
+          amendment_status: a.status || a.amendment_status,
+          article_number: extractArticle(a.position_text),
+          created_at: a.created_at,
+          updated_at: a.updated_at || a.created_at,
+          word_count: a.amended_text ? a.amended_text.split(/\s+/).length : 0,
+          tags: ['amendator'],
+        }));
+        if (!cancelled) setCarriageAmendments(mapped);
+      } catch (err) {
+        console.warn('Failed to fetch carriage amendments:', err);
+      }
+    };
+    loadCarriage();
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   const [createType, setCreateType] = useState('note');
-
-  const RESOLUTION_TEMPLATE = `**European Parliament resolution on [topic]**
-
-**The European Parliament,**
-
--- having regard to Articles 2 and 3 of the Treaty on European Union,
-
--- having regard to Rule 132(2) of its Rules of Procedure,
-
-A.  whereas [first contextual statement];
-
-B.  whereas [second contextual statement];
-
-C.  whereas [third contextual statement];
-
-1.  Calls on [the Commission/Council/Member States] to [specific action];
-
-2.  Urges [institution] to [specific action];
-
-3.  Stresses that [important principle];
-
-4.  Instructs its President to forward this resolution to the Council, the Commission, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy, and the governments and parliaments of the Member States.
-`;
+  const RESOLUTION_TEMPLATE = t('documentsTab.resolutionTemplate');
+  const PETITION_TEMPLATE = t('documentsTab.petitionTemplate');
 
   const handleCreateDocument = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,13 +298,13 @@ C.  whereas [third contextual statement];
     const selectedType = formData.get('type') as string;
     const isResolution = selectedType === 'resolution';
 
-    const userTags = (formData.get('tags') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [];
+    const userTags = (formData.get('tags') as string)?.split(',').map((s) => s.trim()).filter(Boolean) || [];
 
     const document = {
       document_type: (isResolution ? 'note' : selectedType) as 'amendment' | 'analysis' | 'strategy' | 'note',
       title: formData.get('title') as string,
       content: formData.get('content') as string,
-      policy_areas: (formData.get('policy_areas') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+      policy_areas: (formData.get('policy_areas') as string)?.split(',').map((s) => s.trim()).filter(Boolean) || [],
       tags: isResolution ? ['resolution', ...userTags] : userTags,
     };
 
@@ -144,19 +320,234 @@ C.  whereas [third contextual statement];
   };
 
   const handleDelete = async (id: string, title: string) => {
-    if (confirm(`Are you sure you want to delete "${title}"?`)) {
+    if (id.startsWith('amendment-')) {
+      // Delete carriage amendment
+      const realId = id.replace(/^amendment-/, '');
+      if (!confirm(t('documentsTab.confirmDelete', { title }))) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/amendments/${realId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          setCarriageAmendments((prev) => prev.filter((d) => d.id !== id));
+        }
+      } catch (err) {
+        console.error('Failed to delete amendment:', err);
+      }
+      return;
+    }
+    if (confirm(t('documentsTab.confirmDelete', { title }))) {
       await deleteDocument(id);
     }
   };
 
   const handleToggleAIContext = async (doc: UserDocument) => {
+    if (doc.document_type === 'amendment_carriage') {
+      return;
+    }
     try {
-      await updateDocument(doc.id, {
-        include_in_ai_context: !doc.include_in_ai_context,
-      });
+      await updateDocument(doc.id, { include_in_ai_context: !doc.include_in_ai_context });
     } catch (error) {
       console.error('Failed to toggle AI context:', error);
     }
+  };
+
+  const handleDownloadPptx = async (doc: UserDocument) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/documents/${doc.id}/export-pptx`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      triggerBlobDownload(await res.blob(), `${doc.title}.pptx`);
+    } catch (err) {
+      console.error('PPTX download failed:', err);
+      alert('PPTX download failed. Please try again.');
+    }
+  };
+
+  const handleDownload = async (doc: UserDocument, fmt: 'docx' | 'pdf') => {
+    if (doc.document_type === 'amendment_carriage') {
+      // No saved doc; render from in-memory content
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/generate/export`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            document_title: doc.title,
+            document_content: doc.content || '',
+            export_format: fmt,
+          }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        triggerBlobDownload(await res.blob(), `${doc.title}.${fmt}`);
+      } catch (err) {
+        console.error('Download failed:', err);
+        alert('Download failed. Please try again.');
+      }
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/documents/${doc.id}/export?format=${fmt}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      triggerBlobDownload(await res.blob(), `${doc.title}.${fmt}`);
+    } catch (err) {
+      console.error('Download failed:', err);
+      alert('Download failed. Please try again.');
+    }
+  };
+
+  const triggerBlobDownload = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = window.document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    window.document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const openEdit = (doc: UserDocument) => {
+    if (doc.document_type === 'uploaded' || doc.document_type === 'amendment_carriage') {
+      // Uploaded files are not editable from here; carriage amendments live in Amendator.
+      return;
+    }
+    const isSlideDoc = doc.tags?.includes('presentation') || doc.tags?.includes('event_poster');
+    if (isSlideDoc || hasRawHtmlBlock(doc.content)) {
+      // Slide docs (presentation, poster) are PowerPoint, not Word: they edit their
+      // source text here and export to PPTX. Raw-HTML layout docs also keep source editing.
+      setEditingDocument(doc);
+      setEditTitle(doc.title);
+      setEditContent(doc.content || '');
+      return;
+    }
+    // Default: full-screen WYSIWYG (Word-like) editor.
+    setFullEditDoc(doc);
+  };
+
+  /** Persist edits coming from the full-screen WYSIWYG editor (mirrors saveEdit). */
+  const saveFromEditor = async (title: string, markdown: string, asNewVersion: boolean) => {
+    if (!fullEditDoc) return;
+    if (asNewVersion) {
+      const res = await fetch(`${API_BASE_URL}/api/documents/${fullEditDoc.id}/version`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const newDoc = await res.json();
+      await updateDocument(newDoc.id, { title, content: markdown });
+    } else {
+      await updateDocument(fullEditDoc.id, { title, content: markdown });
+    }
+    fetchDocuments({ search: searchQuery || undefined });
+  };
+
+  const saveEdit = async (asNewVersion: boolean) => {
+    if (!editingDocument) return;
+    setSavingEdit(true);
+    try {
+      if (asNewVersion) {
+        // POST /version creates a copy with version+1; then PATCH the new copy with the edited content.
+        const res = await fetch(`${API_BASE_URL}/api/documents/${editingDocument.id}/version`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const newDoc = await res.json();
+        await updateDocument(newDoc.id, { title: editTitle, content: editContent });
+      } else {
+        await updateDocument(editingDocument.id, { title: editTitle, content: editContent });
+      }
+      setEditingDocument(null);
+      fetchDocuments({ search: searchQuery || undefined });
+    } catch (err) {
+      console.error('Failed to save edit:', err);
+      alert('Save failed. Please try again.');
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const openVersions = async (doc: UserDocument) => {
+    setVersionsFor(doc);
+    setVersionList([]);
+    setVersionsLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/documents/${doc.id}/versions`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVersionList(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch versions:', err);
+    } finally {
+      setVersionsLoading(false);
+    }
+  };
+
+  // CELEX shape: optional sector digit + 4-digit year + 1-2 type letters + 4 digits
+  // (handles 32016R0679 / 52022PC0123 / 12012E47 etc.)
+  const CELEX_RE = /^[0-9]?[0-9]{4}[A-Z]{1,2}[0-9]{2,4}[A-Z0-9-]*$/;
+
+  const openInAmendator = (doc: UserDocument) => {
+    const celex = doc.celex_number;
+    const isCarriage = doc.document_type === 'amendment_carriage';
+    const realId = isCarriage ? doc.id.replace(/^amendment-/, '') : '';
+
+    if (!celex) {
+      if (isCarriage) {
+        alert(
+          'This amendment was saved on an uploaded document, not an EUR-Lex law. ' +
+            'Re-upload the source file in the Amendator to continue editing it.',
+        );
+        return;
+      }
+      navigate('/amendator');
+      return;
+    }
+    if (!CELEX_RE.test(celex.toUpperCase())) {
+      if (isCarriage) {
+        alert(
+          `Cannot auto-open this amendment in the Amendator: the source identifier ` +
+            `"${celex}" is not an EUR-Lex CELEX number. The amendment is safe in My EU Bubble.`,
+        );
+        return;
+      }
+    }
+    const params = new URLSearchParams({ celex });
+    if (doc.article_number) params.set('article', doc.article_number);
+    if (isCarriage && realId) params.set('amendmentId', realId);
+    console.debug('[Documents] Open in Amendator', { celex, amendmentId: realId, article: doc.article_number });
+    navigate(`/amendator?${params.toString()}`);
+  };
+
+  const useInChat = (doc: UserDocument) => {
+    // Make sure the doc is fed into chat context, then drop the user into chat
+    // with a prefilled "use this document" hint.
+    if (doc.document_type !== 'amendment_carriage' && doc.document_type !== 'uploaded' && !doc.include_in_ai_context) {
+      updateDocument(doc.id, { include_in_ai_context: true });
+    }
+    navigate('/main', {
+      state: {
+        initialQuestion: `Use my document "${doc.title}" to answer the next question.`,
+        source: 'documents_tab',
+      },
+    });
+  };
+
+  const sendToComply = (doc: UserDocument) => {
+    const params = new URLSearchParams();
+    if (doc.celex_number) params.set('celex', doc.celex_number);
+    params.set('doc', doc.id);
+    navigate(`/eulawcomply?${params.toString()}`);
   };
 
   const handleUploadFile = async (files: FileList | File[]) => {
@@ -170,45 +561,32 @@ C.  whereas [third contextual statement];
     try {
       for (const file of fileArray) {
         if (file.size > 10 * 1024 * 1024) {
-          setUploadError(`${file.name} exceeds 10MB limit`);
+          setUploadError(t('documentsTab.exceedsLimit', { name: file.name }));
           continue;
         }
-
         const formData = new FormData();
         formData.append('file', file);
-
-        const token = useAuth.getState().token;
+        const tk = useAuth.getState().token;
         const response = await fetch(`${API_BASE_URL}/api/documents/upload`, {
           method: 'POST',
-          headers: {
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-          },
+          headers: { ...(tk ? { Authorization: `Bearer ${tk}` } : {}) },
           body: formData,
         });
-
         if (!response.ok) {
-          const err = await response.json().catch(() => ({ detail: 'Upload failed' }));
-          setUploadError(err.detail || `Failed to upload ${file.name}`);
+          const err = await response.json().catch(() => ({ detail: t('documentsTab.uploadFailed') }));
+          setUploadError(err.detail || t('documentsTab.failedUpload', { name: file.name }));
           continue;
         }
-
-        setUploadSuccess(`"${file.name}" uploaded successfully`);
+        setUploadSuccess(t('documentsTab.uploadSuccess', { name: file.name }));
       }
-
-      // Refresh document list
-      fetchDocuments({
-        document_type: filterType !== 'all' ? filterType : undefined,
-        search: searchQuery || undefined,
-      });
-
-      // Auto-close after success
+      fetchDocuments({ search: searchQuery || undefined });
       setTimeout(() => {
         setShowUploadModal(false);
         setUploadSuccess(null);
       }, 1500);
     } catch (error) {
       console.error('Upload failed:', error);
-      setUploadError('Failed to upload file');
+      setUploadError(t('documentsTab.failedUploadGeneric'));
     } finally {
       setIsUploading(false);
     }
@@ -222,64 +600,137 @@ C.  whereas [third contextual statement];
     }
   };
 
-  const filteredDocuments = documents.filter(doc => {
-    if (filterType === 'ep_question') {
-      if (!doc.tags?.includes('ep_question')) return false;
-    } else if (filterType !== 'all' && doc.document_type !== filterType) {
-      return false;
-    }
-    if (searchQuery && !doc.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    return true;
-  });
+  /** Merged + filtered + searched view. */
+  const filteredDocuments = useMemo(() => {
+    const merged: UserDocument[] = [...documents, ...carriageAmendments];
+    const filtered = merged.filter((doc) => {
+      const kind = resolveKind(doc);
+      if (filterType !== 'all') {
+        if (filterType === 'amendment') {
+          if (kind !== 'amendment') return false;
+        } else if (filterType === 'generated') {
+          if (
+            ![
+              'position_paper',
+              'mep_briefing',
+              'talking_points',
+              'resolution',
+              'ep_question',
+              'eu_email',
+              'one_pager',
+              'press_release',
+              'stakeholder_map',
+              'impact_assessment',
+              'presentation',
+              'event_poster',
+              'consultation_response',
+            ].includes(kind)
+          ) {
+            return false;
+          }
+        } else if (kind !== filterType) {
+          return false;
+        }
+      }
+      if (searchQuery && !doc.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+      return true;
+    });
+    filtered.sort((a, b) => (b.updated_at || '').localeCompare(a.updated_at || ''));
+    return filtered;
+  }, [documents, carriageAmendments, filterType, searchQuery]);
 
   return (
     <div className="documents-tab">
-      {/* Header */}
-      <div className="documents-tab__header">
-        <h2>My Documents</h2>
-        <div className="documents-tab__header-actions">
-          <button
-            className="documents-tab__upload-btn"
-            onClick={() => setShowUploadModal(true)}
-          >
-            <Icon path={mdiFileUploadOutline} size={0.9} />
-            Upload
-          </button>
-          <button
-            className="documents-tab__generate-btn"
-            onClick={() => setShowGeneratorWizard(true)}
-          >
-            <Icon path={mdiRobotOutline} size={0.9} />
-            Generate with AI
-          </button>
-          <button
-            className="documents-tab__create-btn"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + Create Document
-          </button>
+      {/* Header + memory-layer explainer */}
+      <header className="documents-tab__intro">
+        <div className="documents-tab__intro-top">
+          <div className="documents-tab__intro-heading">
+            <span className="documents-tab__intro-icon" aria-hidden="true">
+              <Icon path={mdiBrain} size={1.15} />
+            </span>
+            <div>
+              <h2>{t('documentsTab.title')}</h2>
+              <p className="documents-tab__intro-tagline">{t('documentsTab.subtitle')}</p>
+            </div>
+          </div>
+          <div className="documents-tab__header-actions">
+            <button className="documents-tab__upload-btn" onClick={() => setShowUploadModal(true)}>
+              <Icon path={mdiFileUploadOutline} size={0.9} />
+              {t('documentsTab.upload')}
+            </button>
+            <button
+              className="documents-tab__generate-btn"
+              onClick={() => {
+                setPresetGenerator(null);
+                setShowGeneratorWizard(true);
+              }}
+            >
+              <Icon path={mdiRobotOutline} size={0.9} />
+              {t('documentsTab.generateWithAi')}
+            </button>
+            <button className="documents-tab__create-btn" onClick={() => setShowCreateModal(true)}>
+              {t('documentsTab.createDocument')}
+            </button>
+          </div>
         </div>
-      </div>
+
+        <p className="documents-tab__intro-body">{t('documentsTab.intro')}</p>
+
+        <ul className="documents-tab__intro-points">
+          <li>
+            <Icon path={mdiTrayArrowDown} size={0.85} />
+            <div>
+              <strong>{t('documentsTab.point1Title')}</strong>
+              <span>{t('documentsTab.point1Body')}</span>
+            </div>
+          </li>
+          <li>
+            <Icon path={mdiFileDocumentEditOutline} size={0.85} />
+            <div>
+              <strong>{t('documentsTab.point2Title')}</strong>
+              <span>{t('documentsTab.point2Body')}</span>
+            </div>
+          </li>
+        </ul>
+      </header>
 
       {/* Filters */}
       <div className="documents-tab__filters">
         <div className="documents-tab__filter-group">
-          <label>Type:</label>
+          <label>{t('documentsTab.type')}</label>
           <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-            <option value="all">All</option>
-            <option value="uploaded">Uploaded Documents</option>
-            <option value="amendment">Amendments</option>
-            <option value="analysis">Analyses</option>
-            <option value="strategy">Strategies</option>
-            <option value="note">Notes</option>
-            <option value="ep_question">EP Questions</option>
+            <option value="all">{t('documentsTab.all')}</option>
+            <optgroup label="Uploaded & authored">
+              <option value="uploaded">{t('documentsTab.uploadedDocs')}</option>
+              <option value="note">{t('documentsTab.notes')}</option>
+              <option value="analysis">{t('documentsTab.analyses')}</option>
+              <option value="strategy">{t('documentsTab.strategies')}</option>
+              <option value="amendment">Amendments (all sources)</option>
+            </optgroup>
+            <optgroup label="AI-generated">
+              <option value="generated">All AI-generated</option>
+              <option value="position_paper">Position papers</option>
+              <option value="mep_briefing">MEP briefings</option>
+              <option value="talking_points">Talking points</option>
+              <option value="resolution">EP resolutions</option>
+              <option value="petition">EP petitions</option>
+              <option value="ep_question">EP questions</option>
+              <option value="eu_email">EU emails / letters</option>
+              <option value="one_pager">One-pagers</option>
+              <option value="press_release">Press releases</option>
+              <option value="stakeholder_map">Stakeholder maps</option>
+              <option value="impact_assessment">Impact assessments</option>
+              <option value="presentation">Presentations</option>
+              <option value="event_poster">Event posters</option>
+              <option value="consultation_response">Consultation responses</option>
+            </optgroup>
           </select>
         </div>
 
         <div className="documents-tab__filter-group documents-tab__filter-group--search">
           <input
             type="text"
-            placeholder="Search documents..."
+            placeholder={t('documentsTab.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -289,316 +740,722 @@ C.  whereas [third contextual statement];
       {/* Document Grid */}
       <div className="documents-tab__content">
         {isLoadingDocuments ? (
-          <div className="documents-tab__loading">Loading documents...</div>
+          <div className="documents-tab__loading">{t('documentsTab.loading')}</div>
         ) : filteredDocuments.length === 0 ? (
           <div className="documents-tab__empty">
-            <p>No documents found</p>
-            <button onClick={() => setShowCreateModal(true)}>
-              Create your first document
-            </button>
+            <p>{t('documentsTab.noDocs')}</p>
+            <button onClick={() => setShowCreateModal(true)}>{t('documentsTab.createFirstDoc')}</button>
           </div>
         ) : (
           <div className="documents-tab__grid">
-            {filteredDocuments.map(doc => {
-              const isEpQuestion = doc.tags?.includes('ep_question');
-              const displayType = isEpQuestion ? 'ep_question' : doc.document_type;
+            {filteredDocuments.map((doc) => {
+              const kind = resolveKind(doc);
+              const isCarriage = doc.document_type === 'amendment_carriage';
+              const isUploaded = doc.document_type === 'uploaded';
+              const isSlide =
+                doc.tags?.includes('presentation') || doc.tags?.includes('event_poster');
+              const celexLabel = doc.celex_number ? formatCelexLabel(doc.celex_number) : '';
+              const alias = doc.celex_number ? aliasOnly(doc.celex_number) : undefined;
               return (
-              <div key={doc.id} className="documents-tab__card" data-type={displayType}>
-                {/* Type Badge */}
-                <div className="documents-tab__card-badge">
-                  {doc.document_type === 'uploaded' ? (
-                    <span className="documents-tab__card-badge--uploaded">
-                      <Icon path={getFileTypeIcon(doc.file_content_type)} size={0.6} />
-                      uploaded
-                    </span>
-                  ) : isEpQuestion ? (
-                    'EP Question'
-                  ) : (
-                    doc.document_type
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="documents-tab__card-content">
-                  <h3 className="documents-tab__card-title">{doc.title}</h3>
-
-                  {/* Uploaded file info */}
-                  {doc.document_type === 'uploaded' && doc.original_filename && (
-                    <div className="documents-tab__file-meta">
-                      <span className="documents-tab__file-name">{doc.original_filename}</span>
-                      {doc.file_size_bytes && (
-                        <span className="documents-tab__file-size">{formatFileSize(doc.file_size_bytes)}</span>
+                <div key={doc.id} className="documents-tab__card" data-type={kind}>
+                  {/* Type Badge — type on the left, version pill + AI toggle on the right */}
+                  <div className="documents-tab__card-badge">
+                    <span className="documents-tab__card-badge-label">
+                      {isUploaded ? (
+                        <span className="documents-tab__card-badge--uploaded">
+                          <Icon path={getFileTypeIcon(doc.file_content_type)} size={0.6} />
+                          {t('documentsTab.uploadedBadge')}
+                        </span>
+                      ) : isCarriage ? (
+                        <>Amendator draft</>
+                      ) : (
+                        KIND_LABELS[kind] || kind
                       )}
-                    </div>
-                  )}
-
-                  {doc.content && (
-                    <p className="documents-tab__card-excerpt">
-                      {stripMarkdown(doc.content).slice(0, 150)}...
-                    </p>
-                  )}
-
-                  {/* Meta */}
-                  <div className="documents-tab__card-meta">
-                    <span>{new Date(doc.updated_at).toLocaleDateString()}</span>
-                    <span>•</span>
-                    <span>{doc.word_count || 0} words</span>
+                    </span>
+                    <span className="documents-tab__card-badge-right">
+                      {doc.version && doc.version > 1 && (
+                        <span className="documents-tab__version-pill" title="Document version">
+                          v{doc.version}
+                        </span>
+                      )}
+                      {!isCarriage && (
+                        <button
+                          className={`documents-tab__card-ai ${
+                            doc.include_in_ai_context ? 'documents-tab__card-ai--active' : ''
+                          }`}
+                          onClick={() => handleToggleAIContext(doc)}
+                          title={
+                            doc.include_in_ai_context
+                              ? 'Included in chat context — click to remove'
+                              : 'Feed this document into chat'
+                          }
+                        >
+                          <Icon path={mdiBrain} size={0.65} />
+                        </button>
+                      )}
+                    </span>
                   </div>
 
-                  {/* Policy Areas */}
-                  {doc.policy_areas && doc.policy_areas.length > 0 && (
-                    <div className="documents-tab__card-tags">
-                      {doc.policy_areas.slice(0, 3).map((area, idx) => (
-                        <span key={idx} className="documents-tab__tag">{area}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  {/* Content */}
+                  <div className="documents-tab__card-content">
+                    <h3 className="documents-tab__card-title">{doc.title}</h3>
 
-                {/* Actions */}
-                <div className="documents-tab__card-actions">
-                  {doc.document_type === 'uploaded' && (
+                    {celexLabel && (
+                      <div className="documents-tab__card-celex" title={doc.celex_number}>
+                        <Icon path={mdiClipboardCheckOutline} size={0.55} />
+                        <span>{celexLabel}</span>
+                        {alias && <span className="documents-tab__alias-chip">{alias}</span>}
+                      </div>
+                    )}
+
+                    {isUploaded && doc.original_filename && (
+                      <div className="documents-tab__file-meta">
+                        <span className="documents-tab__file-name">{doc.original_filename}</span>
+                        {doc.file_size_bytes && (
+                          <span className="documents-tab__file-size">{formatFileSize(doc.file_size_bytes)}</span>
+                        )}
+                      </div>
+                    )}
+
+                    {doc.content && (
+                      <p className="documents-tab__card-excerpt">
+                        {stripMarkdown(doc.content).slice(0, 150)}...
+                      </p>
+                    )}
+
+                    <div className="documents-tab__card-meta">
+                      <span>{new Date(doc.updated_at).toLocaleDateString()}</span>
+                      <span>•</span>
+                      <span>
+                        {doc.word_count || 0} {t('documentsTab.wordsLabel')}
+                      </span>
+                    </div>
+
+                    {doc.policy_areas && doc.policy_areas.length > 0 && (
+                      <div className="documents-tab__card-tags">
+                        {doc.policy_areas.slice(0, 3).map((area, idx) => (
+                          <span key={idx} className="documents-tab__tag">
+                            {area}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions: one primary CTA + overflow menu */}
+                  <div className="documents-tab__card-actions">
                     <button
-                      className={`documents-tab__action-btn documents-tab__ai-toggle ${
-                        doc.include_in_ai_context ? 'documents-tab__ai-toggle--active' : ''
-                      }`}
-                      onClick={() => handleToggleAIContext(doc)}
-                      title={doc.include_in_ai_context ? 'Included in AI context (click to exclude)' : 'Excluded from AI context (click to include)'}
+                      className="documents-tab__action-btn documents-tab__action-btn--primary"
+                      onClick={() => {
+                        if (isCarriage) {
+                          openInAmendator(doc);
+                        } else {
+                          selectDocument(doc);
+                          setViewingDocument(doc);
+                        }
+                      }}
                     >
-                      <Icon path={mdiBrain} size={0.7} />
+                      {isCarriage ? 'Open in Amendator' : t('documentsTab.viewBtn')}
                     </button>
-                  )}
-                  <button
-                    className="documents-tab__action-btn"
-                    onClick={() => { selectDocument(doc); setViewingDocument(doc); }}
-                  >
-                    View
-                  </button>
-                  <button
-                    className="documents-tab__action-btn documents-tab__action-btn--danger"
-                    onClick={() => handleDelete(doc.id, doc.title)}
-                  >
-                    Delete
-                  </button>
+
+                    <div className="documents-tab__menu-wrap">
+                      <button
+                        className="documents-tab__action-btn documents-tab__action-btn--icon"
+                        data-doc-menu-trigger={doc.id}
+                        onClick={() => setOpenMenuId(openMenuId === doc.id ? null : doc.id)}
+                        title="More actions"
+                        aria-label="More actions"
+                        aria-haspopup="menu"
+                        aria-expanded={openMenuId === doc.id}
+                      >
+                        <Icon path={mdiDotsHorizontal} size={0.9} />
+                      </button>
+                      {openMenuId === doc.id &&
+                        createPortal(
+                          <>
+                            <div
+                              className="documents-tab__menu-backdrop"
+                              onClick={() => setOpenMenuId(null)}
+                            />
+                            <div
+                              className="documents-tab__menu"
+                              role="menu"
+                              ref={(node) => {
+                                if (!node) return;
+                                // Position the portal-mounted menu relative to the trigger
+                                const trigger = (document.querySelector(
+                                  `[data-doc-menu-trigger="${doc.id}"]`,
+                                ) as HTMLElement) || null;
+                                const fallback = node.parentElement?.querySelector(
+                                  '.documents-tab__menu-wrap .documents-tab__action-btn--icon',
+                                ) as HTMLElement | null;
+                                const anchor = trigger || fallback;
+                                if (anchor) {
+                                  const r = anchor.getBoundingClientRect();
+                                  const menuW = 230;
+                                  node.style.top = `${r.bottom + 4}px`;
+                                  node.style.left = `${Math.min(r.right - menuW, window.innerWidth - menuW - 8)}px`;
+                                }
+                              }}
+                            >
+                              {!isCarriage && !isUploaded && (
+                                <button
+                                  role="menuitem"
+                                  onClick={() => {
+                                    setOpenMenuId(null);
+                                    openEdit(doc);
+                                  }}
+                                >
+                                  <Icon path={mdiPencilOutline} size={0.7} />
+                                  {isSlide ? 'Edit slide text' : 'Edit'}
+                                </button>
+                              )}
+                              {!isCarriage && (
+                                <button
+                                  role="menuitem"
+                                  onClick={() => {
+                                    setOpenMenuId(null);
+                                    openVersions(doc);
+                                  }}
+                                >
+                                  <Icon path={mdiHistory} size={0.7} />
+                                  Version history
+                                </button>
+                              )}
+                              <button
+                                role="menuitem"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  handleDownload(doc, 'docx');
+                                }}
+                              >
+                                <Icon path={mdiDownload} size={0.7} />
+                                Download DOCX
+                              </button>
+                              <button
+                                role="menuitem"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  handleDownload(doc, 'pdf');
+                                }}
+                              >
+                                <Icon path={mdiFilePdfBox} size={0.7} />
+                                Download PDF
+                              </button>
+                              {isSlide && (
+                                <button
+                                  role="menuitem"
+                                  onClick={() => {
+                                    setOpenMenuId(null);
+                                    handleDownloadPptx(doc);
+                                  }}
+                                >
+                                  <Icon path={mdiDownload} size={0.7} />
+                                  Download PowerPoint (PPTX)
+                                </button>
+                              )}
+                              {doc.celex_number && !isCarriage && (
+                                <button
+                                  role="menuitem"
+                                  onClick={() => {
+                                    setOpenMenuId(null);
+                                    openInAmendator(doc);
+                                  }}
+                                >
+                                  <Icon path={mdiOpenInNew} size={0.7} />
+                                  Open in Amendator
+                                </button>
+                              )}
+                              <button
+                                role="menuitem"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  useInChat(doc);
+                                }}
+                              >
+                                <Icon path={mdiChatOutline} size={0.7} />
+                                Use in Chat
+                              </button>
+                              <button
+                                role="menuitem"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  sendToComply(doc);
+                                }}
+                              >
+                                <Icon path={mdiClipboardCheckOutline} size={0.7} />
+                                Send to EU Law Comply
+                              </button>
+                              <div className="documents-tab__menu-sep" />
+                              <button
+                                role="menuitem"
+                                className="documents-tab__menu-item--danger"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  handleDelete(doc.id, doc.title);
+                                }}
+                              >
+                                {t('documentsTab.deleteBtn')}
+                              </button>
+                            </div>
+                          </>,
+                          document.body,
+                        )}
+                    </div>
+                  </div>
                 </div>
-              </div>
               );
             })}
           </div>
         )}
       </div>
 
-      {/* Upload Modal - rendered via portal to escape stacking context */}
-      {showUploadModal && createPortal(
-        <div className="documents-tab__modal-overlay" onClick={() => { setShowUploadModal(false); setUploadError(null); setUploadSuccess(null); }}>
-          <div className="documents-tab__modal documents-tab__upload-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="documents-tab__modal-header">
-              <h3>Upload Document</h3>
-              <button onClick={() => { setShowUploadModal(false); setUploadError(null); setUploadSuccess(null); }}>x</button>
-            </div>
-
+      {/* Upload Modal */}
+      {showUploadModal &&
+        createPortal(
+          <div
+            className="documents-tab__modal-overlay"
+            onClick={() => {
+              setShowUploadModal(false);
+              setUploadError(null);
+              setUploadSuccess(null);
+            }}
+          >
             <div
-              className={`documents-tab__dropzone ${uploadDragging ? 'documents-tab__dropzone--dragging' : ''} ${isUploading ? 'documents-tab__dropzone--uploading' : ''}`}
-              onDragEnter={(e) => { e.preventDefault(); setUploadDragging(true); }}
-              onDragOver={(e) => { e.preventDefault(); setUploadDragging(true); }}
-              onDragLeave={() => setUploadDragging(false)}
-              onDrop={handleUploadDrop}
-              onClick={() => !isUploading && fileInputRef.current?.click()}
+              className="documents-tab__modal documents-tab__upload-modal"
+              onClick={(e) => e.stopPropagation()}
             >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.docx,.doc"
-                style={{ display: 'none' }}
-                onChange={(e) => e.target.files && handleUploadFile(e.target.files)}
-              />
-              {isUploading ? (
-                <div className="documents-tab__dropzone-content">
-                  <div className="documents-tab__upload-spinner" />
-                  <p>Uploading...</p>
-                </div>
-              ) : (
-                <div className="documents-tab__dropzone-content">
-                  <Icon path={mdiFileUploadOutline} size={2} />
-                  <p>Drop files here or click to browse</p>
-                  <span className="documents-tab__dropzone-formats">PDF, DOCX, DOC - Max 10MB</span>
+              <div className="documents-tab__modal-header">
+                <h3>{t('documentsTab.uploadModalTitle')}</h3>
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadError(null);
+                    setUploadSuccess(null);
+                  }}
+                  aria-label={t('documentsTab.close')}
+                >
+                  <Icon path={mdiClose} size={0.85} />
+                </button>
+              </div>
+
+              <div
+                className={`documents-tab__dropzone ${uploadDragging ? 'documents-tab__dropzone--dragging' : ''} ${
+                  isUploading ? 'documents-tab__dropzone--uploading' : ''
+                }`}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  setUploadDragging(true);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setUploadDragging(true);
+                }}
+                onDragLeave={() => setUploadDragging(false)}
+                onDrop={handleUploadDrop}
+                onClick={() => !isUploading && fileInputRef.current?.click()}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.docx,.doc"
+                  style={{ display: 'none' }}
+                  onChange={(e) => e.target.files && handleUploadFile(e.target.files)}
+                />
+                {isUploading ? (
+                  <div className="documents-tab__dropzone-content">
+                    <div className="documents-tab__upload-spinner" />
+                    <p>{t('documentsTab.uploading')}</p>
+                  </div>
+                ) : (
+                  <div className="documents-tab__dropzone-content">
+                    <Icon path={mdiFileUploadOutline} size={2} />
+                    <p>{t('documentsTab.dropFiles')}</p>
+                    <span className="documents-tab__dropzone-formats">{t('documentsTab.fileTypes')}</span>
+                  </div>
+                )}
+              </div>
+
+              {uploadSuccess && (
+                <div className="documents-tab__upload-feedback documents-tab__upload-feedback--success">
+                  {uploadSuccess}
                 </div>
               )}
+              {uploadError && (
+                <div className="documents-tab__upload-feedback documents-tab__upload-feedback--error">
+                  {uploadError}
+                </div>
+              )}
+
+              <p className="documents-tab__upload-note">{t('documentsTab.uploadNote')}</p>
             </div>
+          </div>,
+          document.body,
+        )}
 
-            {uploadSuccess && (
-              <div className="documents-tab__upload-feedback documents-tab__upload-feedback--success">
-                {uploadSuccess}
-              </div>
-            )}
-            {uploadError && (
-              <div className="documents-tab__upload-feedback documents-tab__upload-feedback--error">
-                {uploadError}
-              </div>
-            )}
-
-            <p className="documents-tab__upload-note">
-              Uploaded documents will be available in your AI context to personalise Brubru's responses.
-            </p>
-          </div>
-        </div>,
-        document.body
-      )}
-
-      {/* Create Modal - rendered via portal to escape stacking context */}
-      {showCreateModal && createPortal(
-        <div className="documents-tab__modal-overlay" onClick={() => { setShowCreateModal(false); setCreateType('note'); }}>
-          <div className="documents-tab__modal" onClick={(e) => e.stopPropagation()}>
-            <div className="documents-tab__modal-header">
-              <h3>Create Document</h3>
-              <button onClick={() => { setShowCreateModal(false); setCreateType('note'); }}>x</button>
-            </div>
-
-            <form onSubmit={handleCreateDocument}>
-              <div className="documents-tab__form-group">
-                <label>Document Type *</label>
-                <select
-                  name="type"
-                  required
-                  value={createType}
-                  onChange={(e) => setCreateType(e.target.value)}
+      {/* Create Modal */}
+      {showCreateModal &&
+        createPortal(
+          <div
+            className="documents-tab__modal-overlay"
+            onClick={() => {
+              setShowCreateModal(false);
+              setCreateType('note');
+            }}
+          >
+            <div className="documents-tab__modal" onClick={(e) => e.stopPropagation()}>
+              <div className="documents-tab__modal-header">
+                <h3>{t('documentsTab.createModalTitle')}</h3>
+                <button
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    setCreateType('note');
+                  }}
+                  aria-label={t('documentsTab.close')}
                 >
-                  <option value="note">Note</option>
-                  <option value="amendment">Amendment</option>
-                  <option value="analysis">Analysis</option>
-                  <option value="strategy">Strategy</option>
-                  {canUseResolution && (
-                    <option value="resolution">EP Resolution</option>
-                  )}
-                </select>
+                  <Icon path={mdiClose} size={0.85} />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateDocument}>
+                <div className="documents-tab__form-group">
+                  <label>{t('documentsTab.docTypeLabel')}</label>
+                  <select
+                    name="type"
+                    required
+                    value={createType}
+                    onChange={(e) => setCreateType(e.target.value)}
+                  >
+                    <option value="note">{t('documentsTab.optionNote')}</option>
+                    <option value="amendment">{t('documentsTab.optionAmendment')}</option>
+                    <option value="analysis">{t('documentsTab.optionAnalysis')}</option>
+                    <option value="strategy">{t('documentsTab.optionStrategy')}</option>
+                    {canUseResolution && (
+                      <option value="resolution">{t('documentsTab.optionEpResolution')}</option>
+                    )}
+                    {canUseResolution && (
+                      <option value="petition">{t('documentsTab.optionEpPetition')}</option>
+                    )}
+                  </select>
+                </div>
+
+                <div className="documents-tab__form-group">
+                  <label>{t('documentsTab.titleLabel')}</label>
+                  <input
+                    type="text"
+                    name="title"
+                    required
+                    placeholder={
+                      createType === 'resolution'
+                        ? t('documentsTab.titlePlaceholderResolution')
+                        : t('documentsTab.titlePlaceholder')
+                    }
+                  />
+                </div>
+
+                <div className="documents-tab__form-group">
+                  <label>
+                    {createType === 'resolution'
+                      ? t('documentsTab.resolutionTextLabel')
+                      : t('documentsTab.contentLabel')}
+                  </label>
+                  <textarea
+                    name="content"
+                    rows={createType === 'resolution' || createType === 'petition' ? 12 : 6}
+                    placeholder={
+                      createType === 'resolution'
+                        ? t('documentsTab.resolutionTextPlaceholder')
+                        : t('documentsTab.contentPlaceholder')
+                    }
+                    defaultValue={createType === 'resolution' ? RESOLUTION_TEMPLATE : createType === 'petition' ? PETITION_TEMPLATE : ''}
+                    key={createType}
+                  />
+                </div>
+
+                <div className="documents-tab__form-group">
+                  <label>{t('documentsTab.policyAreasLabel')}</label>
+                  <input
+                    type="text"
+                    name="policy_areas"
+                    placeholder={t('documentsTab.policyAreasPlaceholder')}
+                  />
+                </div>
+
+                <div className="documents-tab__form-group">
+                  <label>{t('documentsTab.tagsLabel')}</label>
+                  <input type="text" name="tags" placeholder={t('documentsTab.tagsPlaceholder')} />
+                </div>
+
+                <div className="documents-tab__modal-actions">
+                  <button
+                    type="button"
+                    className="documents-tab__modal-btn documents-tab__modal-btn--secondary"
+                    onClick={() => {
+                      setShowCreateModal(false);
+                      setCreateType('note');
+                    }}
+                  >
+                    {t('documentsTab.cancelBtn')}
+                  </button>
+                  <button
+                    type="submit"
+                    className="documents-tab__modal-btn documents-tab__modal-btn--primary"
+                  >
+                    {t('documentsTab.createBtn')}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* View Modal */}
+      {viewingDocument &&
+        createPortal(
+          <div className="documents-tab__modal-overlay" onClick={() => setViewingDocument(null)}>
+            <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="documents-tab__modal-header">
+                <div>
+                  <span className="documents-tab__view-badge" data-type={viewingDocument.document_type}>
+                    {KIND_LABELS[resolveKind(viewingDocument)] || viewingDocument.document_type}
+                  </span>
+                  <h3>{viewingDocument.title}</h3>
+                </div>
+                <button onClick={() => setViewingDocument(null)} aria-label={t('documentsTab.close')}>
+                  <Icon path={mdiClose} size={0.85} />
+                </button>
+              </div>
+
+              <div className="documents-tab__view-meta">
+                <span>{new Date(viewingDocument.updated_at).toLocaleDateString()}</span>
+                <span>•</span>
+                <span>
+                  {viewingDocument.word_count || 0} {t('documentsTab.wordsLabel')}
+                </span>
+                {viewingDocument.celex_number && (
+                  <>
+                    <span>•</span>
+                    <span>{formatCelexLabel(viewingDocument.celex_number)}</span>
+                  </>
+                )}
+                {viewingDocument.document_type === 'uploaded' && viewingDocument.original_filename && (
+                  <>
+                    <span>•</span>
+                    <span>{viewingDocument.original_filename}</span>
+                    {viewingDocument.file_size_bytes && (
+                      <span>({formatFileSize(viewingDocument.file_size_bytes)})</span>
+                    )}
+                  </>
+                )}
+                {viewingDocument.policy_areas && viewingDocument.policy_areas.length > 0 && (
+                  <>
+                    <span>•</span>
+                    {viewingDocument.policy_areas.map((area, idx) => (
+                      <span key={idx} className="documents-tab__tag">
+                        {area}
+                      </span>
+                    ))}
+                  </>
+                )}
+              </div>
+
+              <div className="documents-tab__view-content">
+                {viewingDocument.content ? (
+                  <div
+                    className="markdown-content"
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(
+                        viewingDocument.content.replace(/^```[\w]*\n?/, '').replace(/\n?```\s*$/, ''),
+                      ) as string,
+                    }}
+                  />
+                ) : (
+                  <p className="documents-tab__view-empty">{t('documentsTab.noContent')}</p>
+                )}
+              </div>
+
+              <div className="documents-tab__view-footer">
+                <div className="documents-tab__view-footer-left">
+                  <button
+                    className="documents-tab__link-btn"
+                    onClick={() => navigator.clipboard.writeText(viewingDocument.content || '')}
+                  >
+                    <Icon path={mdiContentCopy} size={0.65} />
+                    Copy
+                  </button>
+                  <span className="documents-tab__view-footer-sep">·</span>
+                  <span className="documents-tab__view-footer-label">Download</span>
+                  <button
+                    className="documents-tab__link-btn"
+                    onClick={() => handleDownload(viewingDocument, 'docx')}
+                  >
+                    DOCX
+                  </button>
+                  <button
+                    className="documents-tab__link-btn"
+                    onClick={() => handleDownload(viewingDocument, 'pdf')}
+                  >
+                    PDF
+                  </button>
+                </div>
+                {viewingDocument.document_type !== 'uploaded' && (
+                  <button
+                    className="documents-tab__modal-btn documents-tab__modal-btn--primary"
+                    onClick={() => {
+                      const d = viewingDocument;
+                      setViewingDocument(null);
+                      openEdit(d);
+                    }}
+                  >
+                    <Icon path={mdiPencilOutline} size={0.7} />
+                    Edit
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* Edit Modal */}
+      {editingDocument &&
+        createPortal(
+          <div className="documents-tab__modal-overlay" onClick={() => setEditingDocument(null)}>
+            <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="documents-tab__modal-header">
+                <h3>Edit document</h3>
+                <button onClick={() => setEditingDocument(null)} aria-label={t('documentsTab.close')}>
+                  <Icon path={mdiClose} size={0.85} />
+                </button>
               </div>
 
               <div className="documents-tab__form-group">
-                <label>Title *</label>
-                <input
-                  type="text"
-                  name="title"
-                  required
-                  placeholder={createType === 'resolution' ? 'e.g., EP Resolution on the situation in Sudan' : 'Enter document title'}
-                />
+                <label>Title</label>
+                <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
               </div>
 
               <div className="documents-tab__form-group">
-                <label>{createType === 'resolution' ? 'Resolution Text' : 'Content'}</label>
+                <label>Content</label>
                 <textarea
-                  name="content"
-                  rows={createType === 'resolution' ? 12 : 6}
-                  placeholder={createType === 'resolution' ? 'Write or paste your resolution text following the EP format...' : 'Enter document content'}
-                  defaultValue={createType === 'resolution' ? RESOLUTION_TEMPLATE : ''}
-                  key={createType}
-                />
-              </div>
-
-              <div className="documents-tab__form-group">
-                <label>Policy Areas</label>
-                <input
-                  type="text"
-                  name="policy_areas"
-                  placeholder="e.g., Climate Action, Energy (comma-separated)"
-                />
-              </div>
-
-              <div className="documents-tab__form-group">
-                <label>Tags</label>
-                <input
-                  type="text"
-                  name="tags"
-                  placeholder="e.g., urgent, review (comma-separated)"
+                  rows={18}
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  style={{ fontSize: '0.95rem', lineHeight: 1.6 }}
                 />
               </div>
 
               <div className="documents-tab__modal-actions">
                 <button
-                  type="button"
                   className="documents-tab__modal-btn documents-tab__modal-btn--secondary"
-                  onClick={() => { setShowCreateModal(false); setCreateType('note'); }}
+                  onClick={() => setEditingDocument(null)}
+                  disabled={savingEdit}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className="documents-tab__modal-btn documents-tab__modal-btn--primary"
+                  className="documents-tab__modal-btn documents-tab__modal-btn--secondary"
+                  onClick={() => saveEdit(true)}
+                  disabled={savingEdit}
+                  title="Keep the current version and save edits as v+1"
                 >
-                  Create
+                  Save as new version
+                </button>
+                <button
+                  className="documents-tab__modal-btn documents-tab__modal-btn--primary"
+                  onClick={() => saveEdit(false)}
+                  disabled={savingEdit}
+                >
+                  {savingEdit ? 'Saving…' : 'Save'}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>,
-        document.body
-      )}
+            </div>
+          </div>,
+          document.body,
+        )}
 
-      {/* View Document Modal - rendered via portal to escape stacking context */}
-      {viewingDocument && createPortal(
-        <div className="documents-tab__modal-overlay" onClick={() => setViewingDocument(null)}>
-          <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="documents-tab__modal-header">
-              <div>
-                <span className="documents-tab__view-badge" data-type={viewingDocument.document_type}>
-                  {viewingDocument.document_type}
-                </span>
-                <h3>{viewingDocument.title}</h3>
+      {/* Versions Modal */}
+      {versionsFor &&
+        createPortal(
+          <div className="documents-tab__modal-overlay" onClick={() => setVersionsFor(null)}>
+            <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="documents-tab__modal-header">
+                <h3>Version history — {versionsFor.title}</h3>
+                <button onClick={() => setVersionsFor(null)} aria-label={t('documentsTab.close')}>
+                  <Icon path={mdiClose} size={0.85} />
+                </button>
               </div>
-              <button onClick={() => setViewingDocument(null)}>x</button>
-            </div>
 
-            <div className="documents-tab__view-meta">
-              <span>{new Date(viewingDocument.updated_at).toLocaleDateString()}</span>
-              <span>•</span>
-              <span>{viewingDocument.word_count || 0} words</span>
-              {viewingDocument.document_type === 'uploaded' && viewingDocument.original_filename && (
-                <>
-                  <span>•</span>
-                  <span>{viewingDocument.original_filename}</span>
-                  {viewingDocument.file_size_bytes && (
-                    <span>({formatFileSize(viewingDocument.file_size_bytes)})</span>
-                  )}
-                </>
-              )}
-              {viewingDocument.policy_areas && viewingDocument.policy_areas.length > 0 && (
-                <>
-                  <span>•</span>
-                  {viewingDocument.policy_areas.map((area, idx) => (
-                    <span key={idx} className="documents-tab__tag">{area}</span>
-                  ))}
-                </>
-              )}
+              <div className="documents-tab__view-content">
+                {versionsLoading ? (
+                  <p>Loading versions…</p>
+                ) : versionList.length === 0 ? (
+                  <p className="documents-tab__view-empty">
+                    Only the current version exists. Use “Save as new version” in Edit to start a history.
+                  </p>
+                ) : (
+                  <ul className="documents-tab__version-list">
+                    {versionList.map((v) => (
+                      <li key={v.id} className="documents-tab__version-row">
+                        <div>
+                          <strong>v{v.version}</strong> — {v.title}
+                          <div className="documents-tab__version-meta">
+                            {new Date(v.updated_at || v.created_at).toLocaleString()} ·{' '}
+                            {v.word_count || 0} {t('documentsTab.wordsLabel')}
+                          </div>
+                        </div>
+                        <button
+                          className="documents-tab__action-btn"
+                          onClick={async () => {
+                            // Open this version in the View modal
+                            try {
+                              const res = await fetch(`${API_BASE_URL}/api/documents/${v.id}`, {
+                                headers: { Authorization: `Bearer ${token}` },
+                              });
+                              if (res.ok) {
+                                const full = await res.json();
+                                setVersionsFor(null);
+                                setViewingDocument(full);
+                              }
+                            } catch (err) {
+                              console.error('Failed to load version:', err);
+                            }
+                          }}
+                        >
+                          Open
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
+          </div>,
+          document.body,
+        )}
 
-            <div className="documents-tab__view-content">
-              {viewingDocument.content ? (
-                <div
-                  className="markdown-content"
-                  dangerouslySetInnerHTML={{
-                    __html: marked.parse(
-                      viewingDocument.content.replace(/^```[\w]*\n?/, '').replace(/\n?```\s*$/, '')
-                    ) as string,
-                  }}
-                />
-              ) : (
-                <p className="documents-tab__view-empty">No content</p>
-              )}
-            </div>
-          </div>
-        </div>,
-        document.body
+      {/* Full-screen WYSIWYG editor (Phase 1) */}
+      {fullEditDoc && (
+        <DocumentEditor
+          key={fullEditDoc.id}
+          doc={fullEditDoc}
+          onClose={() => setFullEditDoc(null)}
+          onSave={saveFromEditor}
+        />
       )}
 
       {/* Document Generator Wizard */}
       <DocumentGeneratorWizard
         isOpen={showGeneratorWizard}
-        onClose={() => setShowGeneratorWizard(false)}
-        onDocumentGenerated={() => {
-          fetchDocuments({
-            document_type: filterType !== 'all' ? filterType : undefined,
-            search: searchQuery || undefined,
-          });
+        onClose={() => {
+          setShowGeneratorWizard(false);
+          setPresetGenerator(null);
         }}
+        onDocumentGenerated={() => {
+          fetchDocuments({ search: searchQuery || undefined });
+        }}
+        presetDocType={presetGenerator?.docType}
+        presetTopic={presetGenerator?.topic}
       />
     </div>
   );

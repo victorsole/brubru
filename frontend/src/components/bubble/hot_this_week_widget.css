@@ -88,6 +88,23 @@
   border-radius: 3px;
 }
 
+.hot-this-week-widget__plain-type {
+  background: #e0edff;
+  color: #1e3a5f;
+  border: 1px solid #c7ddff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: var(--font-weight-medium);
+}
+
+.hot-this-week-widget__card-title--clickable {
+  cursor: pointer;
+}
+
+.hot-this-week-widget__card-title--clickable:hover {
+  color: var(--color-accent-blue);
+}
+
 .hot-this-week-widget__committee {
   background: var(--color-accent-blue);
   color: white;
@@ -144,7 +161,8 @@
 }
 
 .hot-this-week-widget__track-btn,
-.hot-this-week-widget__open-btn {
+.hot-this-week-widget__open-btn,
+.hot-this-week-widget__view-btn {
   flex: 1;
   display: inline-flex;
   align-items: center;

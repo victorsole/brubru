@@ -82,7 +82,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
   dgs: [],
   policyAreas: [],
   totalItems: 0,
-  filters: { status: 'open' as ConsultationStatus },
+  filters: { status: 'open' as ConsultationStatus, my_interests: true },
   sortBy: 'end_date',
   sortDesc: false,
   limit: 50,
@@ -288,8 +288,9 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
 
   // Clear all filters
   clearFilters: () => {
+    // Keep the Policy-Interest lens; clear only the manual refinements.
     set({
-      filters: {},
+      filters: { my_interests: get().filters.my_interests ?? true },
       sortBy: 'end_date',
       sortDesc: false,
       offset: 0,

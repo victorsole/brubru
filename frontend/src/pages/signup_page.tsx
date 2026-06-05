@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/use_auth';
 import { trackPreUserEvent } from '../services/preuser_tracker';
 import './auth_pages.css';
@@ -9,6 +10,7 @@ import './auth_pages.css';
 const API_BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000';
 
 export const SignupPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { signup, loginWithGoogle, loginWithLinkedIn } = useAuth();
@@ -38,23 +40,23 @@ export const SignupPage = () => {
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.errors.passwordsDoNotMatch'));
       return;
     }
 
     // Validate password strength
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError(t('auth.errors.passwordTooShort'));
       return;
     }
 
     if (!/\d/.test(formData.password)) {
-      setError('Password must contain at least one digit');
+      setError(t('auth.errors.passwordNeedsDigit'));
       return;
     }
 
     if (!/[A-Z]/.test(formData.password)) {
-      setError('Password must contain at least one uppercase letter');
+      setError(t('auth.errors.passwordNeedsUppercase'));
       return;
     }
 
@@ -86,7 +88,7 @@ export const SignupPage = () => {
         navigate('/main');
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Signup failed');
+      setError(err.response?.data?.detail || t('auth.errors.signupFailed'));
     } finally {
       setLoading(false);
     }
@@ -115,14 +117,14 @@ export const SignupPage = () => {
         navigate('/main');
       }
     } catch (err: any) {
-      setError('Google signup failed');
+      setError(t('auth.errors.googleSignupFailed'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setError('Google signup failed');
+    setError(t('auth.errors.googleSignupFailed'));
   };
 
   const handleLinkedInLogin = () => {
@@ -144,11 +146,11 @@ export const SignupPage = () => {
       <div className="auth-page__container">
         <div className="auth-page__header">
           <img src="/assets/brubru_mainlogo.png" alt="Brubru" className="auth-page__logo" />
-          <h1>Create Your Account</h1>
+          <h1>{t('auth.createYourAccount')}</h1>
           <p>
             {preselectedTier === 'yellow'
-              ? 'Start your 14-day free trial'
-              : 'Create your account to get started'}
+              ? t('auth.signupTrialSubtitle')
+              : t('auth.signupSubtitle')}
           </p>
         </div>
 
@@ -160,7 +162,7 @@ export const SignupPage = () => {
 
         <form onSubmit={handleSubmit} className="auth-page__form">
           <div className="auth-page__field">
-            <label htmlFor="email">Email *</label>
+            <label htmlFor="email">{t('auth.emailRequired')}</label>
             <input
               id="email"
               name="email"
@@ -174,7 +176,7 @@ export const SignupPage = () => {
           </div>
 
           <div className="auth-page__field">
-            <label htmlFor="full_name">Full Name</label>
+            <label htmlFor="full_name">{t('auth.fullName')}</label>
             <input
               id="full_name"
               name="full_name"
@@ -187,7 +189,7 @@ export const SignupPage = () => {
           </div>
 
           <div className="auth-page__field">
-            <label htmlFor="organization">Organisation</label>
+            <label htmlFor="organization">{t('auth.organisation')}</label>
             <input
               id="organization"
               name="organization"
@@ -200,7 +202,7 @@ export const SignupPage = () => {
           </div>
 
           <div className="auth-page__field">
-            <label htmlFor="password">Password *</label>
+            <label htmlFor="password">{t('auth.passwordRequired')}</label>
             <input
               id="password"
               name="password"
@@ -211,11 +213,11 @@ export const SignupPage = () => {
               autoComplete="new-password"
               disabled={loading}
             />
-            <small>At least 8 characters, include uppercase and number</small>
+            <small>{t('auth.passwordHint')}</small>
           </div>
 
           <div className="auth-page__field">
-            <label htmlFor="confirmPassword">Confirm Password *</label>
+            <label htmlFor="confirmPassword">{t('auth.confirmPasswordRequired')}</label>
             <input
               id="confirmPassword"
               name="confirmPassword"
@@ -233,12 +235,12 @@ export const SignupPage = () => {
             className="btn btn--primary btn--full"
             disabled={loading}
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
           </button>
         </form>
 
         <div className="auth-page__divider">
-          <span>or sign up with</span>
+          <span>{t('auth.signUpWith')}</span>
         </div>
 
         <div className="auth-page__oauth">
@@ -256,7 +258,7 @@ export const SignupPage = () => {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              Sign up with Google
+              {t('auth.signUpWithGoogle')}
             </button>
           </div>
           <button
@@ -267,18 +269,18 @@ export const SignupPage = () => {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
             </svg>
-            Sign up with LinkedIn
+            {t('auth.signUpWithLinkedIn')}
           </button>
         </div>
 
         <div className="auth-page__footer">
           <p>
-            Already have an account? <Link to="/login">Log in</Link>
+            {t('auth.haveAccount')} <Link to="/login">{t('auth.logInLink')}</Link>
           </p>
           <p className="auth-page__terms">
-            By signing up, you agree to our{' '}
-            <a href="/terms" target="_blank">Terms of Service</a> and{' '}
-            <a href="/privacy" target="_blank">Privacy Policy</a>
+            {t('auth.termsAgreement')}{' '}
+            <a href="/terms" target="_blank">{t('auth.termsOfService')}</a> {t('auth.termsAnd')}{' '}
+            <a href="/privacy" target="_blank">{t('auth.privacyPolicy')}</a>
           </p>
         </div>
       </div>

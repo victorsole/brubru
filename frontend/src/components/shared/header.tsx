@@ -95,7 +95,7 @@ export const Header = () => {
           <Link to="/subscription" className="header__logo">
             <img
               src="/assets/brubru_mainlogo.png"
-              alt="Brubru Logo"
+              alt={t('header.brubruLogoAlt')}
               className="header__logo-image"
             />
             <span className="header__logo-text">Brubru</span>
@@ -165,7 +165,7 @@ export const Header = () => {
               value={i18n.language || 'en'}
               onChange={handleLanguageChange}
               disabled={isLoadingLanguage}
-              aria-label="Select language"
+              aria-label={t('common.selectLanguage')}
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
                 <option key={lang} value={lang}>
@@ -189,7 +189,7 @@ export const Header = () => {
                 <button
                   className="header__user-button"
                   onClick={() => setShowDropdown(!showDropdown)}
-                  aria-label="User menu"
+                  aria-label={t('header.userMenu')}
                 >
                   {user.is_trainer ? (
                     <TrainerStarRing size={28}>

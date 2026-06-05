@@ -103,6 +103,11 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
     }
   };
 
+  // Handle Policy-Interest lens (shared MEUB toggle)
+  const handlePiToggle = (mine: boolean) => {
+    setFilters({ ...filters, my_interests: mine });
+  };
+
   // Handle status filter
   const handleStatusFilter = (status: ConsultationStatus | undefined) => {
     setFilters({ ...filters, status });
@@ -172,6 +177,26 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
 
       {/* Filters */}
       <div className="ec-consultations-tab__filters">
+        {/* Policy-Interest lens (My interests | All) — shared across MEUB */}
+        <div className="ec-consultations-tab__pi-toggle" role="tablist">
+          <button
+            role="tab"
+            aria-selected={filters.my_interests !== false}
+            className={filters.my_interests !== false ? 'is-active' : ''}
+            onClick={() => handlePiToggle(true)}
+          >
+            {t('bubble.consultations.myInterests', 'My interests')}
+          </button>
+          <button
+            role="tab"
+            aria-selected={filters.my_interests === false}
+            className={filters.my_interests === false ? 'is-active' : ''}
+            onClick={() => handlePiToggle(false)}
+          >
+            {t('bubble.consultations.all', 'All')}
+          </button>
+        </div>
+
         {/* Status chips */}
         <div className="ec-consultations-tab__filter-group">
           <span className="ec-consultations-tab__filter-label">

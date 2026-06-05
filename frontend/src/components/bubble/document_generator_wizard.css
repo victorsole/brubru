@@ -132,44 +132,51 @@
   color: #1a1a1a;
 }
 
-/* Type Selection Grid -- 5 cards: top row 3, bottom row 2 centred */
+/* Type Selection Grid — responsive, auto-fits any number of cards cleanly */
 .doc-generator__type-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
-}
-
-.doc-generator__type-grid > :nth-child(1),
-.doc-generator__type-grid > :nth-child(2),
-.doc-generator__type-grid > :nth-child(3) {
-  grid-column: span 2;
-}
-
-.doc-generator__type-grid > :nth-child(4) {
-  grid-column: 2 / span 2;
-}
-
-.doc-generator__type-grid > :nth-child(5) {
-  grid-column: 4 / span 2;
+  align-items: stretch;
 }
 
 .doc-generator__type-card {
-  padding: 1.5rem;
-  border: 2px solid #e0e0e0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
+  background: #ffffff;
   cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  text-align: left;
+  min-height: 168px;
 }
 
 .doc-generator__type-card:hover {
-  border-color: #0066cc;
-  background: #f8f9ff;
+  border-color: #c5dcf2;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
 }
 
 .doc-generator__type-card.selected {
-  border-width: 2px;
-  background: #f0f7ff;
+  border-color: #0066cc;
+  background: #f6faff;
+  box-shadow: 0 6px 20px rgba(6, 102, 204, 0.12);
+}
+
+.doc-generator__type-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 10px;
+  height: 10px;
+  background: #0066cc;
+  border-radius: 999px;
 }
 
 .doc-generator__type-card--locked {
@@ -183,18 +190,40 @@
   font-style: italic;
 }
 
+/* Coloured square behind each icon, derived from the card's accent color */
+.doc-generator__type-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background: var(--card-accent-soft, #eef4fb);
+  color: var(--card-accent, #0066cc);
+  flex-shrink: 0;
+}
+
 .doc-generator__type-card h4 {
-  margin: 1rem 0 0.5rem 0;
-  font-size: 1rem;
+  margin: 0;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #111827;
+  line-height: 1.3;
 }
 
 .doc-generator__type-card p {
   margin: 0;
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.4;
+  font-size: 0.825rem;
+  color: #6b7280;
+  line-height: 1.45;
+  flex: 1;
+}
+
+@media (max-width: 480px) {
+  .doc-generator__type-grid {
+    grid-template-columns: 1fr;
+  }
+  .doc-generator__type-card { min-height: 0; }
 }
 
 /* Character counter */
@@ -605,4 +634,71 @@
   .doc-generator__footer {
     padding: 1rem 1.5rem;
   }
+}
+
+/* EU email form: section divider, logo upload, error notice */
+.doc-generator__form-section-divider {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.75rem;
+}
+
+.doc-generator__logo-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px dashed #c0c4cc;
+  border-radius: 8px;
+  background: #f9fafb;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  width: max-content;
+  transition: all 0.15s ease;
+}
+
+.doc-generator__logo-upload:hover {
+  border-color: #0066cc;
+  color: #0066cc;
+  background: #eef4fb;
+}
+
+.doc-generator__logo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-size: 0.825rem;
+  color: #374151;
+  max-width: max-content;
+}
+
+.doc-generator__logo-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+}
+
+.doc-generator__logo-remove:hover {
+  color: #b91c1c;
+}
+
+.doc-generator__form-error {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: #b91c1c;
 }

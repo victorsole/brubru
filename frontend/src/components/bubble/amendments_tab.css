@@ -612,3 +612,21 @@
     font-size: 1rem;
   }
 }
+
+/* Committee + plain-language kind badges on My Amendments group headers (MTF parity) */
+.amendments-tab__group-committee {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #1a3a6b;
+  background: #eef4fc;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+}
+.amendments-tab__group-kind {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0066cc;
+  background: #eaf2fd;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}

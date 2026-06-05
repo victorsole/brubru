@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiRefresh, mdiCog, mdiChevronDown, mdiChevronUp, mdiDatabaseRefresh, mdiTrain, mdiDownload, mdiRobotOutline } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
@@ -15,6 +16,7 @@ import './news_sidebar.css';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 export const NewsSidebar = () => {
+  const { t } = useTranslation();
   const {
     feedEntries,
     unreadCount,
@@ -253,7 +255,7 @@ export const NewsSidebar = () => {
       {/* Header */}
       <div className="news-sidebar__header">
         <div className="news-sidebar__header-left">
-          <h3>Latest Updates</h3>
+          <h3>{t('bubble.news.latestUpdates')}</h3>
           {unreadCount > 0 && (
             <span className="news-sidebar__unread-badge">{unreadCount}</span>
           )}
@@ -262,7 +264,7 @@ export const NewsSidebar = () => {
           className={`news-sidebar__refresh-btn ${isRefreshing ? 'news-sidebar__refresh-btn--spinning' : ''}`}
           onClick={refreshFeeds}
           disabled={isRefreshing}
-          title={`Last updated: ${lastRefreshTime.toLocaleTimeString()}`}
+          title={`${t('bubble.news.lastUpdated')} ${lastRefreshTime.toLocaleTimeString()}`}
         >
           <Icon path={mdiRefresh} size={0.8} />
         </button>
@@ -277,12 +279,12 @@ export const NewsSidebar = () => {
               checked={showUnreadOnly}
               onChange={(e) => setShowUnreadOnly(e.target.checked)}
             />
-            <span>Unread only</span>
+            <span>{t('bubble.news.unreadOnly')}</span>
           </label>
         </div>
 
         <div className="news-sidebar__sources">
-          <p className="news-sidebar__sources-label">Sources:</p>
+          <p className="news-sidebar__sources-label">{t('bubble.news.sources')}</p>
 
           {/* All Sources Button */}
           <button
@@ -291,7 +293,7 @@ export const NewsSidebar = () => {
             }`}
             onClick={handleAllSources}
           >
-            All
+            {t('bubble.news.all')}
           </button>
 
           {availableSources.map(source => (
@@ -316,7 +318,7 @@ export const NewsSidebar = () => {
           onClick={() => setShowAdminControls(!showAdminControls)}
         >
           <Icon path={mdiCog} size={0.7} />
-          <span>Admin Controls</span>
+          <span>{t('bubble.news.adminControls')}</span>
           <Icon path={showAdminControls ? mdiChevronUp : mdiChevronDown} size={0.7} />
         </button>
 
@@ -332,7 +334,7 @@ export const NewsSidebar = () => {
                 size={0.8}
                 className={isFetchingEntries ? 'spinning' : ''}
               />
-              <span>Fetch New Entries</span>
+              <span>{t('bubble.news.fetchNewEntries')}</span>
             </button>
 
             <button
@@ -345,7 +347,7 @@ export const NewsSidebar = () => {
                 size={0.8}
                 className={isRefreshingFeeds ? 'spinning' : ''}
               />
-              <span>Refresh Feed Sources</span>
+              <span>{t('bubble.news.refreshSources')}</span>
             </button>
 
             <button
@@ -380,7 +382,7 @@ export const NewsSidebar = () => {
               <span style={{ position: 'relative', zIndex: 1 }}>
                 {isRefreshingTrains
                   ? `${trainProgress}% - ${trainStatus}`
-                  : 'Refresh Legislative Trains'}
+                  : t('bubble.news.refreshTrains')}
               </span>
             </button>
 
@@ -395,16 +397,11 @@ export const NewsSidebar = () => {
                 className={isEnrichingAI ? 'spinning' : ''}
               />
               <span>
-                {isEnrichingAI ? 'Enriching with AI...' : 'AI Enrich Entries'}
+                {isEnrichingAI ? t('bubble.news.enrichingAi') : t('bubble.news.aiEnrichEntries')}
               </span>
             </button>
 
-            <p className="news-sidebar__admin-note">
-              <strong>Fetch New Entries:</strong> Gets latest articles from all feeds (use this first!)<br />
-              <strong>Refresh Sources:</strong> Updates feed list (adds EC Newsletters)<br />
-              <strong>Refresh Trains:</strong> Updates Legislative Tracker data<br />
-              <strong>AI Enrich:</strong> Generate summaries and classify policy areas with Hugging Face AI
-            </p>
+            <p className="news-sidebar__admin-note" dangerouslySetInnerHTML={{ __html: t('bubble.news.fetchHelp') }} />
           </div>
         )}
       </div>
@@ -412,11 +409,11 @@ export const NewsSidebar = () => {
       {/* Feed Entries */}
       <div className="news-sidebar__entries">
         {isLoadingFeeds ? (
-          <div className="news-sidebar__loading">Loading feeds...</div>
+          <div className="news-sidebar__loading">{t('newsSidebar.loadingFeeds')}</div>
         ) : feedEntries.length === 0 ? (
           <div className="news-sidebar__empty">
-            <p>No entries found</p>
-            <small>Try adjusting your filters or subscribing to more feeds</small>
+            <p>{t('bubble.news.noEntries')}</p>
+            <small>{t('bubble.news.tryFilters')}</small>
           </div>
         ) : (
           feedEntries.map(entry => (
@@ -461,7 +458,7 @@ export const NewsSidebar = () => {
                 <button
                   className={`news-sidebar__action-btn ${entry.is_saved ? 'news-sidebar__action-btn--active' : ''}`}
                   onClick={(e) => handleSaveEntry(e, entry.id)}
-                  title="Save"
+                  title={t('bubble.news.save')}
                 >
                   {entry.is_saved ? '★' : '☆'}
                 </button>

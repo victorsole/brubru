@@ -1,0 +1,254 @@
+/* ===========================================================================
+   Brubru — /api/billing page styles.
+   Builds on api_keys.css (cards, modals, buttons, status chips).
+   =========================================================================== */
+
+.api-billing-page__main {
+  padding-bottom: 3rem;
+}
+
+.billing-card {
+  margin: 1.5rem 0;
+  padding: 1.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.billing-card__heading {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.billing-card__lede {
+  margin: 0 0 1rem 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.billing-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.billing-card__row--main {
+  align-items: flex-start;
+}
+
+.billing-card__eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.billing-card__balance {
+  font-family: 'Adobe Caslon Pro', 'Caslon Pro', Georgia, serif;
+  font-size: 3rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.billing-card__balance--low {
+  background: #d32f2f;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.billing-card__sub {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* ----- Top-up presets ------------------------------------------------- */
+.billing-topup__presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.billing-topup__preset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.05s ease;
+}
+
+.billing-topup__preset:hover:not(:disabled) {
+  border-color: #0693e3;
+}
+
+.billing-topup__preset:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.billing-topup__preset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.billing-topup__preset-amount {
+  font-family: 'Adobe Caslon Pro', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.billing-topup__preset-calls {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+/* ----- Custom amount form -------------------------------------------- */
+.billing-topup__custom {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1.25rem;
+}
+
+.billing-topup__custom-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.billing-topup__custom-row .api-keys-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ----- Auto top-up ---------------------------------------------------- */
+.billing-auto-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.billing-auto-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.billing-auto-save {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.billing-auto-saved {
+  color: #1c7a3e;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ----- Usage table override (tighter rows) --------------------------- */
+.billing-usage__table {
+  font-size: 0.85rem;
+}
+
+.billing-usage__table td {
+  padding: 0.6rem 0.5rem;
+}
+
+.billing-usage__table .api-keys-table__prefix {
+  font-size: 0.78rem;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ----- Top-up history ------------------------------------------------ */
+.billing-topup__history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.billing-topup__history-item {
+  display: grid;
+  grid-template-columns: 100px auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  background: #fafafa;
+  font-size: 0.875rem;
+}
+
+.billing-topup__history-amount {
+  font-weight: 600;
+  font-family: 'Adobe Caslon Pro', Georgia, serif;
+  font-size: 1rem;
+}
+
+.billing-topup__history-date {
+  color: #777;
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+/* ===========================================================================
+   Responsive ladder
+   =========================================================================== */
+
+@media (max-width: 1024px) {
+  .billing-card__balance { font-size: 2.5rem; }
+  .billing-topup__presets { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .billing-card { padding: 1.25rem 1.25rem; margin: 1.25rem 0; }
+  .billing-card__balance { font-size: 2.25rem; }
+  .billing-card__row { flex-direction: column; align-items: stretch; }
+  .billing-card__row .api-keys-btn { width: 100%; justify-content: center; }
+  .billing-auto-fields { grid-template-columns: 1fr; gap: 0.5rem; }
+  .billing-topup__custom-row { flex-direction: column; }
+  .billing-topup__history-item {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+  .billing-topup__history-date { text-align: left; }
+}
+
+@media (max-width: 400px) {
+  .billing-card { padding: 1rem; }
+  .billing-card__balance { font-size: 2rem; }
+  .billing-topup__presets { gap: 0.5rem; }
+  .billing-topup__preset { padding: 0.75rem 0.4rem; }
+  .billing-topup__preset-amount { font-size: 1.25rem; }
+}

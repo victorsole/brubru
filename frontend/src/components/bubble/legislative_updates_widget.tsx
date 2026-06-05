@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiHistory,
@@ -22,6 +23,7 @@ interface LegislativeUpdatesWidgetProps {
 }
 
 export const LegislativeUpdatesWidget = ({ onNavigateToTrackedFiles }: LegislativeUpdatesWidgetProps) => {
+  const { t } = useTranslation();
   const {
     recentChanges,
     trackedFiles,
@@ -65,12 +67,12 @@ export const LegislativeUpdatesWidget = ({ onNavigateToTrackedFiles }: Legislati
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffDays > 0) {
-      return `${diffDays}d ago`;
+      return t('updates.daysAgo', { n: diffDays });
     }
     if (diffHours > 0) {
-      return `${diffHours}h ago`;
+      return t('updates.hoursAgo', { n: diffHours });
     }
-    return 'Just now';
+    return t('updates.justNow');
   };
 
   // Don't show widget if no tracked files
@@ -83,21 +85,21 @@ export const LegislativeUpdatesWidget = ({ onNavigateToTrackedFiles }: Legislati
       <div className="legislative-updates-widget__header">
         <div className="legislative-updates-widget__title">
           <Icon path={mdiHistory} size={0.9} />
-          <h3>Legislative Updates</h3>
+          <h3>{t('updates.title')}</h3>
         </div>
         <span className="legislative-updates-widget__badge">
-          {trackedFiles.length} tracked
+          {t('updates.tracked', { count: trackedFiles.length })}
         </span>
       </div>
 
       <div className="legislative-updates-widget__content">
         {isLoadingChanges ? (
           <div className="legislative-updates-widget__loading">
-            Loading updates...
+            {t('updates.loading')}
           </div>
         ) : recentChanges.length === 0 ? (
           <div className="legislative-updates-widget__empty">
-            <p>No recent changes to your tracked files</p>
+            <p>{t('updates.noChanges')}</p>
           </div>
         ) : (
           <div className="legislative-updates-widget__list">
@@ -123,8 +125,8 @@ export const LegislativeUpdatesWidget = ({ onNavigateToTrackedFiles }: Legislati
                         <strong>{change.new_value?.replace(/_/g, ' ')}</strong>
                       </>
                     )}
-                    {change.change_type === 'new_document' && 'New document published'}
-                    {change.change_type === 'blocking' && 'Blocked - no progress'}
+                    {change.change_type === 'new_document' && t('updates.newDocument')}
+                    {change.change_type === 'blocking' && t('updates.blocked')}
                   </div>
                 </div>
                 <div className="legislative-updates-widget__item-time">
@@ -141,7 +143,7 @@ export const LegislativeUpdatesWidget = ({ onNavigateToTrackedFiles }: Legislati
           className="legislative-updates-widget__view-all"
           onClick={onNavigateToTrackedFiles}
         >
-          View all tracked files
+          {t('updates.viewAll')}
           <Icon path={mdiArrowRight} size={0.7} />
         </button>
       )}

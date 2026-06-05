@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiTrendingUp, mdiNewspaperVariantOutline, mdiBookOpenBlankVariant, mdiFileTreeOutline, mdiLoading } from '@mdi/js';
 import './topic_spikes_panel.css';
@@ -36,6 +37,7 @@ const formatDate = (iso: string) => {
 };
 
 export const TopicSpikesPanel = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<TopicSpikesResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -75,7 +77,7 @@ export const TopicSpikesPanel = () => {
       <div className="topic-spikes-panel__header">
         <h3 className="topic-spikes-panel__title">
           <Icon path={mdiTrendingUp} size={0.9} />
-          Topic spikes: what moved this week
+          {t('topicSpikes.title')}
         </h3>
         <span className="topic-spikes-panel__period">
           {formatDate(data.period_start)} → {formatDate(data.period_end)}
@@ -89,17 +91,17 @@ export const TopicSpikesPanel = () => {
       </p>
 
       <div className="topic-spikes-panel__legend-keys">
-        <span className="topic-spikes-panel__legend-key" title="Daily-brief headlines surfaced by Brubru's news scraper">
+        <span className="topic-spikes-panel__legend-key" title={t('topicSpikes.newsAriaLabel')}>
           <Icon path={mdiNewspaperVariantOutline} size={0.7} />
-          <span>News headlines</span>
+          <span>{t('topicSpikes.newsHeadlines')}</span>
         </span>
-        <span className="topic-spikes-panel__legend-key" title="EPRS / STOA / JRC / ART research publications synced this week">
+        <span className="topic-spikes-panel__legend-key" title={t('topicSpikes.researchAriaLabel')}>
           <Icon path={mdiBookOpenBlankVariant} size={0.7} />
-          <span>Research publications</span>
+          <span>{t('topicSpikes.researchPublications')}</span>
         </span>
-        <span className="topic-spikes-panel__legend-key" title="Legislative files updated in OEIL or EUR-Lex this week">
+        <span className="topic-spikes-panel__legend-key" title={t('topicSpikes.legislativeAriaLabel')}>
           <Icon path={mdiFileTreeOutline} size={0.7} />
-          <span>Legislative files</span>
+          <span>{t('topicSpikes.legislativeFiles')}</span>
         </span>
       </div>
 
