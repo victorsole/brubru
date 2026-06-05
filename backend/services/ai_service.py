@@ -38,6 +38,18 @@ from models.chat_analytics import ChatAnalytics
 
 logger = logging.getLogger(__name__)
 
+# Ambiguous all-caps tokens that must NEVER be auto-linked to a EUR-Lex CELEX by
+# _linkify_legislation, even if present in legislation_acronyms.json. They collide
+# with non-legislation meanings and produce hallucinated citations the response
+# validator then correctly refuses (F-A, 5 June 2026). Roman numerals are handled
+# separately by a regex. Keep this list short and all-uppercase.
+# See memory/feedback_linkify_garbage_acronyms_fa.md.
+_LINKIFY_ACRONYM_DENYLIST = frozenset({
+    "ETF",   # EMA Emergency Task Force (not the Work-in-Fishing directive)
+    "ACT", "NEW", "API", "ART", "EOV", "SET", "END", "KEY", "ONE", "TWO",
+    "AID", "AIR", "GAS", "NET", "USE", "WAR",
+})
+
 
 # ---------------------------------------------------------------------------
 # Quality signal regexes (Playbook D: structured logging)
@@ -2378,6 +2390,19 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         for acronym in sorted_acronyms:
             # Skip very short or numeric-only entries that cause false matches
             if len(acronym) <= 2 or acronym.isdigit():
+                continue
+
+            # Defence-in-depth (5 June 2026): never linkify Roman-numeral tokens
+            # (e.g. "III" from "Annex III" or "Iron(III)") or a small denylist of
+            # ambiguous all-caps tokens that collide with non-legislation meanings
+            # (ETF = EMA Emergency Task Force, not the fishing directive; ACT, NEW,
+            # API, etc.). These slip past the <=2-char filter and produce
+            # hallucinated EUR-Lex links the validator then correctly refuses.
+            # Root cause class: CLAUDE.md EEC/GATT rule. See
+            # memory/feedback_linkify_garbage_acronyms_fa.md.
+            if re.fullmatch(r'[IVXLCDM]+', acronym):
+                continue
+            if acronym.upper() in _LINKIFY_ACRONYM_DENYLIST:
                 continue
 
             leg_info = acronyms_db[acronym]
