@@ -21,7 +21,7 @@ import re
 V1 = pathlib.Path("api/v1")
 OUT = pathlib.Path("api/v2/council")
 
-_URL_RE = re.compile(r"/api/v1/(council-documents|council-configurations)\b")
+_URL_RE = re.compile(r"/api/v1/(council-[a-z-]+)\b")
 
 
 def rewrite_urls(text: str) -> str:
@@ -35,6 +35,24 @@ OUTPUTS = {
          ["list_council_documents", "get_council_document_detail"]),
         ("configurations_router", "configurations_router", "/council-configurations", "v2-council-configurations",
          ["list_council_configurations"]),
+    ],
+    "council_register": [
+        ("meetings_router", "meetings_router", "/council-meetings", "v2-council-meetings",
+         ["list_council_meetings", "get_council_meeting"]),
+        ("votes_router", "votes_router", "/council-voting-results", "v2-council-voting-results",
+         ["list_council_voting_results", "get_council_voting_result"]),
+        ("register_router", "register_router", "/council-register", "v2-council-register",
+         ["list_council_register", "get_council_register_document"]),
+        ("oj_router", "oj_router", "/council-oj-agendas", "v2-council-oj-agendas",
+         ["list_council_oj_agendas", "get_council_oj_agenda"]),
+        ("prep_router", "prep_router", "/council-preparatory-bodies", "v2-council-preparatory-bodies",
+         ["list_council_preparatory_bodies", "get_council_preparatory_body"]),
+        ("press_router", "press_router", "/council-press-releases", "v2-council-press-releases",
+         ["list_council_press_releases", "get_council_press_release"]),
+        ("research_router", "research_router", "/council-research-papers", "v2-council-research-papers",
+         ["list_council_research_papers", "get_council_research_paper"]),
+        ("treaties_router", "treaties_router", "/council-treaties-agreements", "v2-council-treaties-agreements",
+         ["list_council_treaties_agreements", "get_council_treaty_agreement"]),
     ],
 }
 
@@ -76,13 +94,20 @@ def build_module(mod: str, routers: list) -> str:
     tree = ast.parse(src)
     lines = src.splitlines()
     funcs = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.AsyncFunctionDef)}
+    # Module-level names (for detecting underscore helpers referenced in
+    # decorators/signatures, which `import *` would skip — e.g. _DESC).
+    defined = set()
+    for n in tree.body:
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            defined.add(n.name)
+        elif isinstance(n, ast.Assign):
+            for t in n.targets:
+                if isinstance(t, ast.Name):
+                    defined.add(t.id)
 
     prefixes = " and ".join(f"/api/v2/council{p}/*" for _, _, p, _, _ in routers)
-    out = [PREAMBLE.format(prefixes=prefixes, mod=mod)]
-    for _v1var, v2var, prefix, tag, _ in routers:
-        out.append(f'{v2var} = APIRouter(prefix="{prefix}", tags=["{tag}"])')
-    out.append("")
-    out.append("")
+    body_chunks = []
+    underscore_imports: set = set()
     for v1var, v2var, _prefix, _tag, fnames in routers:
         for fname in fnames:
             fn = funcs[fname]
@@ -94,11 +119,25 @@ def build_module(mod: str, routers: list) -> str:
                 decos.append(rewrite_urls(seg))
             sig = "\n".join(lines[fn.lineno - 1: fn.body[0].lineno - 1])
             call = ", ".join(f"{n}={n}" for n in param_names(fn))
-            out.append("\n".join(decos))
-            out.append(sig)
-            out.append(f"    return await _v1.{fname}({call})")
-            out.append("")
-            out.append("")
+            blob = "\n".join(decos) + "\n" + sig
+            for tok in set(re.findall(r"\b_[A-Za-z0-9_]+\b", blob)):
+                if tok in defined:
+                    underscore_imports.add(tok)
+            body_chunks.append("\n".join(decos))
+            body_chunks.append(sig)
+            body_chunks.append(f"    return await _v1.{fname}({call})")
+            body_chunks.append("")
+            body_chunks.append("")
+
+    out = [PREAMBLE.format(prefixes=prefixes, mod=mod)]
+    if underscore_imports:
+        out.append(f"from api.v1.{mod} import {', '.join(sorted(underscore_imports))}  # noqa: F401 - used in decorators")
+        out.append("")
+    for _v1var, v2var, prefix, tag, _ in routers:
+        out.append(f'{v2var} = APIRouter(prefix="{prefix}", tags=["{tag}"])')
+    out.append("")
+    out.append("")
+    out.extend(body_chunks)
     return "\n".join(out).rstrip() + "\n"
 
 

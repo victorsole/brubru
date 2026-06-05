@@ -132,8 +132,21 @@ _COMM_SOURCE_ORDER = [
 _COUNCIL_ROUTING = [
     ("council-documents", "Council Documents"),
     ("council-configurations", "Council Configurations"),
+    ("council-meetings", "Council Meetings"),
+    ("council-voting-results", "Council Voting Results"),
+    ("council-register", "Council Register"),
+    ("council-oj-agendas", "Council OJ Agendas"),
+    ("council-preparatory-bodies", "Council Preparatory Bodies"),
+    ("council-press-releases", "Council Press Releases"),
+    ("council-research-papers", "Council Research Papers"),
+    ("council-treaties-agreements", "Council Treaties & Agreements"),
 ]
-_COUNCIL_SOURCE_ORDER = ["Council Documents", "Council Configurations"]
+_COUNCIL_SOURCE_ORDER = [
+    "Council Documents", "Council Configurations", "Council Meetings",
+    "Council Voting Results", "Council Register", "Council OJ Agendas",
+    "Council Preparatory Bodies", "Council Press Releases",
+    "Council Research Papers", "Council Treaties & Agreements",
+]
 
 _PARAM_DEFAULTS = {
     "celex": "32016R0679", "ref": "32016R0679", "reference": "2022/0047(COD)",

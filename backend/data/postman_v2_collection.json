@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n87 requests across 5 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n103 requests across 5 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -4554,6 +4554,918 @@
                   ]
                 },
                 "description": "**What it does**\nReturns the ten configurations the Council of the EU meets in (General Affairs, Foreign Affairs, ECOFIN, Justice and Home Affairs, EPSCO, Competitiveness, Transport/Telecommunications/Energy, Agriculture and Fisheries, Environment, Education/Youth/Culture/Sport) plus the informal Eurogroup. For each: the official name, the URL-slug, the consilium public-register entity id, the \"council-meetings-explained\" page, and a deep-link to the calendar filtered to that formation.\n\n**When to use it**\nAs a reference list to drive a configuration picker, to resolve a configuration code to its full name, or to get the canonical consilium URLs for a formation. Pair with `/api/v2/council/council-documents?` (meetings are tagged with `council_configuration`).\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/council/council-configurations\n```\n\n**You get back**\nA `PaginatedResponse[CouncilConfigurationItem]` with one row per configuration: `code`, `name`, `slug`, `register_entity_id`, `consilium_url`, `calendar_filter_url`, `informal`, plus the 5 envelope datapoints (`public_url` = the consilium page, `body_txt`/`body_html` = the description, `document_date` = null, `creation_date` = server time).\n\n**Data freshness**\nStatic reference data \u2014 the Council configurations are fixed by the Council's Rules of Procedure."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Meetings",
+          "item": [
+            {
+              "name": "Council of the EU meetings \u2014 ministerial meetings with agenda and outcomes",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-meetings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-meetings"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Council of the EU ministerial meetings (the ten configurations) with their date, configuration, and a body composed from the meeting facts \u2014 including the published 'Main results' outcome narrative for recent meetings.\n\n**When to use it**\nTo track what the Council decided in a given configuration (the co-legislator opposite the European Parliament), or to list upcoming and recent ministerial meetings by formation.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-meetings?council_configuration=ECOFIN\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of meetings. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council meeting by id \u2014 full body (agenda + outcomes)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-meetings/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-meetings",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council meeting by its Brubru UUID. Returns the same shape as the list endpoint with the five datapoints filled. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Voting Results",
+          "item": [
+            {
+              "name": "Council of the EU voting results \u2014 results of public Council votes",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-voting-results",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-voting-results"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the results of public Council votes from the Council's public document register \u2014 the document number (ST/CM), the act being voted, the interinstitutional procedure file, the subject matters, and a link to the full voting-result PDF on the un-walled data.consilium store.\n\n**When to use it**\nTo see how the Council voted on a legislative act (the per-member-state for/against/abstain tally is in the linked PDF), and to join a Council vote to its EP co-decision file via the interinstitutional reference.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-voting-results?interinstitutional_ref=2021/0297(COD)\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of voting-result documents. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council voting result by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-voting-results/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-voting-results",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council voting-result document by its Brubru UUID. Returns the five datapoints; the per-member-state tally is in the linked PDF. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Register",
+          "item": [
+            {
+              "name": "Council of the EU public register \u2014 latest documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-register"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the latest documents from the Council of the EU public document register \u2014 working-party notes, meeting documents (CM), Council notes (ST) \u2014 each with its document number, date, and a link to the PDF on the un-walled data.consilium store.\n\n**When to use it**\nTo monitor what the Council's working parties and COREPER are circulating in near-real-time \u2014 the earliest signal of Council-side legislative activity.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-register?q=working+party\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of register documents. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council register document by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-register/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-register",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council public-register document by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council OJ Agendas",
+          "item": [
+            {
+              "name": "Council of the EU OJ agendas \u2014 meeting agendas from the OJ of the Council",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-oj-agendas",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-oj-agendas"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the agendas of Council meetings as published in the OJ-of-the-Council section of the public register \u2014 one row per configuration meeting, with the agenda document number and a link to the agenda PDF.\n\n**When to use it**\nTo read the formal agenda of a Council meeting (the legal record of what each configuration was convened to decide), ahead of or after the meeting.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-oj-agendas?published_from=2026-01-01\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of meeting-agenda documents. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council OJ agenda by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-oj-agendas/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-oj-agendas",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council OJ meeting-agenda document by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Preparatory Bodies",
+          "item": [
+            {
+              "name": "Council of the EU preparatory bodies \u2014 COREPER and working-party meetings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-preparatory-bodies",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-preparatory-bodies"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns meetings of the Council's preparatory bodies \u2014 COREPER I/II and the working parties that do the technical groundwork before ministerial Council meetings.\n\n**When to use it**\nTo track where on the Council ladder a file currently sits (working party -> COREPER -> Council), the most granular view of Council-side progress on a dossier.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-preparatory-bodies?q=land+transport\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of preparatory-body meetings. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council preparatory-body meeting by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-preparatory-bodies/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-preparatory-bodies",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council preparatory-body (COREPER / working party) meeting by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Press Releases",
+          "item": [
+            {
+              "name": "Council of the EU press releases \u2014 press releases and statements",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-press-releases",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-press-releases"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Council of the EU press releases and statements with their full text body \u2014 the official communication of Council decisions, agreements and ministerial remarks.\n\n**When to use it**\nTo read the Council's own account of what it decided, in plain language, the moment it is published \u2014 the fastest authoritative narrative of Council outcomes.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-press-releases?q=defence\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of press releases. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council press release by id \u2014 full text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-press-releases/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-press-releases",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council press release by its Brubru UUID. The body is the full press-release text. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Research Papers",
+          "item": [
+            {
+              "name": "Council of the EU research papers \u2014 ART (Analysis and Research Team) papers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-research-papers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-research-papers"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Council research papers published by the General Secretariat's Analysis and Research Team (ART) \u2014 foresight and analytical papers feeding Council strategic discussions. Each row links to the paper PDF.\n\n**When to use it**\nTo mine the Council's in-house strategic analysis \u2014 an under-used source of where Council thinking is heading on cross-cutting themes.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-research-papers\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of research papers. `public_url`/`pdf_url` point to the paper PDF. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council research paper by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-research-papers/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-research-papers",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council ART research paper by its Brubru UUID. Returns the five datapoints; `pdf_url` is the paper PDF. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Council Treaties & Agreements",
+          "item": [
+            {
+              "name": "Council of the EU treaties & agreements \u2014 the Council's treaties database",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-treaties-agreements",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-treaties-agreements"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "council_configuration",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "interinstitutional_ref",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns a reference entry for the Council of the EU's Treaties and Agreements database (the Council is depositary for many EU international agreements), with the canonical search URL and the database description as the body.\n\n**When to use it**\nAs a pointer to the authoritative Council database of EU treaties and international agreements when you need to look one up by name or party.\n\n**Input**\n- `q` \u2014 substring search over title / body / document number.\n- `council_configuration` \u2014 GAC / FAC / ECOFIN / JHA / EPSCO / COMPET / TTE / AGRIFISH / ENVI / EYCS (where applicable).\n- `interinstitutional_ref` \u2014 exact procedure file (e.g. `2021/0297(COD)`).\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/council/council-treaties-agreements\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` with the treaties-database reference entry. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Council treaties/agreements entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/council/council-treaties-agreements/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "council",
+                    "council-treaties-agreements",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Council treaties-&-agreements entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
               },
               "response": []
             }

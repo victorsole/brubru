@@ -160,6 +160,14 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     # --- API v2: institution-based "Council of the EU" domain -------------
     (re.compile(r"^/api/v2/council/council-documents(/|$)"),                 "read:council"),
     (re.compile(r"^/api/v2/council/council-configurations(/|$)"),            "read:council"),
+    (re.compile(r"^/api/v2/council/council-meetings(/|$)"),                  "read:council"),
+    (re.compile(r"^/api/v2/council/council-voting-results(/|$)"),            "read:council"),
+    (re.compile(r"^/api/v2/council/council-register(/|$)"),                  "read:council"),
+    (re.compile(r"^/api/v2/council/council-oj-agendas(/|$)"),                "read:council"),
+    (re.compile(r"^/api/v2/council/council-preparatory-bodies(/|$)"),        "read:council"),
+    (re.compile(r"^/api/v2/council/council-press-releases(/|$)"),            "read:council"),
+    (re.compile(r"^/api/v2/council/council-research-papers(/|$)"),           "read:council"),
+    (re.compile(r"^/api/v2/council/council-treaties-agreements(/|$)"),       "read:council"),
 
     # --- API v2: "Brubru Proprietary Databases" domain --------------------
     (re.compile(r"^/api/v2/proprietary/guides(/|$)"),           "read:knowledge"),
@@ -222,6 +230,14 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     # read:council
     (re.compile(r"^/api/v1/council-documents(/|$)"),            "read:council"),
     (re.compile(r"^/api/v1/council-configurations(/|$)"),       "read:council"),
+    (re.compile(r"^/api/v1/council-meetings(/|$)"),             "read:council"),
+    (re.compile(r"^/api/v1/council-voting-results(/|$)"),       "read:council"),
+    (re.compile(r"^/api/v1/council-register(/|$)"),             "read:council"),
+    (re.compile(r"^/api/v1/council-oj-agendas(/|$)"),           "read:council"),
+    (re.compile(r"^/api/v1/council-preparatory-bodies(/|$)"),   "read:council"),
+    (re.compile(r"^/api/v1/council-press-releases(/|$)"),       "read:council"),
+    (re.compile(r"^/api/v1/council-research-papers(/|$)"),      "read:council"),
+    (re.compile(r"^/api/v1/council-treaties-agreements(/|$)"),  "read:council"),
 
     # read:knowledge
     (re.compile(r"^/api/v1/knowledge-guides(/|$)"),             "read:knowledge"),

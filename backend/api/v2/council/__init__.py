@@ -18,7 +18,16 @@ one implementation during the v1+v2 coexistence period.
 from fastapi import APIRouter
 
 from . import council_documents as _council_documents
+from . import council_register as _council_register
 
 router = APIRouter(prefix="/council")
 router.include_router(_council_documents.router)
 router.include_router(_council_documents.configurations_router)
+router.include_router(_council_register.meetings_router)
+router.include_router(_council_register.votes_router)
+router.include_router(_council_register.register_router)
+router.include_router(_council_register.oj_router)
+router.include_router(_council_register.prep_router)
+router.include_router(_council_register.press_router)
+router.include_router(_council_register.research_router)
+router.include_router(_council_register.treaties_router)

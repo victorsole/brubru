@@ -19,6 +19,7 @@ from . import committee_agendas as _committee_agendas
 from . import committees as _committees
 from . import consultations as _consultations
 from . import council_documents as _council_documents
+from . import council_register as _council_register
 from . import docs as _docs
 from . import ep_entities as _ep_entities
 from . import eprs as _eprs
@@ -80,6 +81,14 @@ router.include_router(_texts_adopted.texts_adopted_router)
 router.include_router(_texts_adopted.texts_submitted_router)
 router.include_router(_council_documents.router)
 router.include_router(_council_documents.configurations_router)
+router.include_router(_council_register.meetings_router)
+router.include_router(_council_register.votes_router)
+router.include_router(_council_register.register_router)
+router.include_router(_council_register.oj_router)
+router.include_router(_council_register.prep_router)
+router.include_router(_council_register.press_router)
+router.include_router(_council_register.research_router)
+router.include_router(_council_register.treaties_router)
 router.include_router(_metadata.router)
 router.include_router(_metadata.meta_router)
 router.include_router(_ep_entities.amendments_router)

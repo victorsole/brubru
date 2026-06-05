@@ -74,6 +74,12 @@
       "_doc": "Detail fetches + parses the doceo agenda PDF (cached after first access)."
     },
     {
+      "regex": "^/api/v[12]/(?:council/)?council-(?:meetings|voting-results|register|oj-agendas|preparatory-bodies|press-releases|research-papers|treaties-agreements)/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full Council register item body)",
+      "_doc": "Detail endpoints for the 8 Council-of-the-EU register surfaces return the full stored body. List endpoints fall to _default. Matches both v1 and v2 (the optional /council/ segment)."
+    },
+    {
       "regex": "^/api/v1/chat/.*$",
       "cost_micro": 20000,
       "label": "chat completion (passes through Claude Sonnet cost)"
