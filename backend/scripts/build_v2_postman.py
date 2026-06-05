@@ -148,6 +148,27 @@ _COUNCIL_SOURCE_ORDER = [
     "Council Research Papers", "Council Treaties & Agreements",
 ]
 
+# European Council: (path-tail prefix, source folder).
+_EUCO_ROUTING = [
+    ("euco-conclusions", "Conclusions"),
+    ("euco-meetings", "Meetings"),
+    ("euco-euro-summit", "Euro Summit"),
+    ("euco-strategic-agenda", "Strategic Agenda"),
+    ("euco-members", "Members"),
+    ("euco-about", "About"),
+]
+_EUCO_SOURCE_ORDER = ["Conclusions", "Meetings", "Euro Summit", "Strategic Agenda", "Members", "About"]
+
+# Eurogroup: (path-tail prefix, source folder).
+_EUROGROUP_ROUTING = [
+    ("eurogroup-meetings", "Meetings"),
+    ("eurogroup-documents", "Documents"),
+    ("eurogroup-work-programme", "Work Programme"),
+    ("eurogroup-members", "Members"),
+    ("eurogroup-about", "About"),
+]
+_EUROGROUP_SOURCE_ORDER = ["Meetings", "Documents", "Work Programme", "Members", "About"]
+
 _PARAM_DEFAULTS = {
     "celex": "32016R0679", "ref": "32016R0679", "reference": "2022/0047(COD)",
     "concept_id": "3030", "table": "corporate-bodies", "summary_id": "32016R0679",
@@ -209,6 +230,20 @@ def _council_route(tail: str) -> str:
         if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
             return source
     return "Council Documents"
+
+
+def _euco_route(tail: str) -> str:
+    for needle, source in _EUCO_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Conclusions"
+
+
+def _eurogroup_route(tail: str) -> str:
+    for needle, source in _EUROGROUP_ROUTING:
+        if tail == needle or tail.startswith(needle + "/") or tail.startswith(needle + "?"):
+            return source
+    return "Meetings"
 
 
 def _clean_path(path: str) -> str:
@@ -363,6 +398,36 @@ def _build_council_domain(paths: dict) -> dict:
     return {"name": "Council of the EU", "item": sources}
 
 
+def _build_european_council_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/european-council/" not in path:
+            continue
+        tail = path.split("/api/v2/european-council/", 1)[1]
+        source = _euco_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _EUCO_SOURCE_ORDER if s in tree]
+    return {"name": "European Council", "item": sources}
+
+
+def _build_eurogroup_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if "/api/v2/eurogroup/" not in path:
+            continue
+        tail = path.split("/api/v2/eurogroup/", 1)[1]
+        source = _eurogroup_route(tail)
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _EUROGROUP_SOURCE_ORDER if s in tree]
+    return {"name": "Eurogroup", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -377,6 +442,8 @@ def build_collection() -> dict:
         _build_parliament_domain(paths),
         _build_commission_domain(paths),
         _build_council_domain(paths),
+        _build_european_council_domain(paths),
+        _build_eurogroup_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)

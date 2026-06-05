@@ -20,6 +20,8 @@ from . import committees as _committees
 from . import consultations as _consultations
 from . import council_documents as _council_documents
 from . import council_register as _council_register
+from . import european_council as _european_council
+from . import eurogroup as _eurogroup
 from . import docs as _docs
 from . import ep_entities as _ep_entities
 from . import eprs as _eprs
@@ -89,6 +91,17 @@ router.include_router(_council_register.prep_router)
 router.include_router(_council_register.press_router)
 router.include_router(_council_register.research_router)
 router.include_router(_council_register.treaties_router)
+router.include_router(_european_council.conclusions_router)
+router.include_router(_european_council.meetings_router)
+router.include_router(_european_council.euro_summit_router)
+router.include_router(_european_council.strategic_agenda_router)
+router.include_router(_european_council.members_router)
+router.include_router(_european_council.about_router)
+router.include_router(_eurogroup.meetings_router)
+router.include_router(_eurogroup.documents_router)
+router.include_router(_eurogroup.work_programme_router)
+router.include_router(_eurogroup.members_router)
+router.include_router(_eurogroup.about_router)
 router.include_router(_metadata.router)
 router.include_router(_metadata.meta_router)
 router.include_router(_ep_entities.amendments_router)

@@ -51,6 +51,52 @@ SOURCES = {
     "preparatory_body": f"{BASE}/en/meetings/preparatory-bodies/",
     "research_paper":   f"{BASE}/en/documents-publications/council-research-papers/",
     "treaty_agreement": f"{BASE}/en/documents/treaties-agreements/",
+    # --- European Council (folder 2) ---
+    "euco_conclusions":  f"{BASE}/en/documents/public-register/euco-conclusions/",
+    "euco_meeting":      f"{BASE}/en/meetings/european-council/",
+    # --- Eurogroup (folder 3) ---
+    "eurogroup_meeting":  f"{BASE}/en/meetings/eurogroup/",
+    "eurogroup_document": f"{BASE}/en/eurogroup/eurogroup-documents-register/",
+}
+
+# Named-meeting content types -> (allowed URL slug, council_configuration|None).
+NAMED_MEETINGS = {
+    "euco_meeting":      ("european-council", None),
+    "eurogroup_meeting": ("eurogroup", "EUROGROUP"),
+}
+
+# Reference content types -> list of (url, title). Each page becomes one row
+# whose body is the page's own cleaned text (+ any PDF link). Honest reference
+# data — the consilium prose pages have no list/register backing.
+REFERENCE_PAGES = {
+    "euco_strategic_agenda": [
+        (f"{BASE}/en/european-council/strategic-agenda-2024-2029/", "Strategic Agenda 2024-2029"),
+    ],
+    "euro_summit": [
+        (f"{BASE}/en/european-council/euro-summit/", "Euro Summit"),
+    ],
+    "euco_member": [
+        (f"{BASE}/en/european-council/members/", "Members of the European Council"),
+    ],
+    "euco_about": [
+        (f"{BASE}/en/european-council/how-the-european-council-works/", "How the European Council works"),
+        (f"{BASE}/en/european-council/president/", "President of the European Council"),
+        (f"{BASE}/en/european-council/role-nominations-appointment/", "Role, nominations and appointment"),
+        (f"{BASE}/en/european-council/history/", "History of the European Council"),
+    ],
+    "eurogroup_work_programme": [
+        (f"{BASE}/en/eurogroup/work-programme/", "Eurogroup work programme"),
+    ],
+    "eurogroup_member": [
+        (f"{BASE}/en/eurogroup/eurogroup-members/", "Members of the Eurogroup"),
+        (f"{BASE}/en/eurogroup/eurogroup-members/eurogroup-inclusive-members/", "Members of the Eurogroup (inclusive format)"),
+    ],
+    "eurogroup_about": [
+        (f"{BASE}/en/eurogroup/how-the-eurogroup-works/", "How the Eurogroup works"),
+        (f"{BASE}/en/eurogroup/how-the-eurogroup-works/eurogroup-working-group/", "Eurogroup Working Group"),
+        (f"{BASE}/en/eurogroup/transparency/", "Eurogroup transparency"),
+        (f"{BASE}/en/eurogroup/history/", "History of the Eurogroup"),
+    ],
 }
 
 # Council configuration slug -> code (for meeting URLs /en/meetings/{slug}/...).
@@ -533,6 +579,145 @@ def parse_treaties(text: str, source_url: str) -> list:
     return [it]
 
 
+_MONTHS = {m: i for i, m in enumerate(
+    ["january", "february", "march", "april", "may", "june", "july", "august",
+     "september", "october", "november", "december"], 1)}
+_TEXTDATE = re.compile(
+    r"\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b",
+    re.I)
+
+
+def _parse_textdate(s: str) -> Optional[date]:
+    m = _TEXTDATE.search(s or "")
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), _MONTHS[m.group(2).lower()], int(m.group(1)))
+    except (ValueError, KeyError):
+        return None
+
+
+def parse_pdf_list(anchors, source_url: str, content_type: str, limit: int) -> list:
+    """Parse a list whose items are PDF anchors with a dated title (e.g. the
+    Eurogroup document register: 'Summing-up letter, Eurogroup, 22 May 2026')."""
+    seen = set()
+    out = []
+    for t, h in anchors:
+        if not h or not (h.lower().endswith(".pdf") or "data.consilium" in h):
+            continue
+        if "/media/" not in h and "data.consilium" not in h:
+            continue
+        if h in seen:
+            continue
+        title = (t or "").split("\n")[0].strip()
+        if len(title) < 8:
+            continue
+        seen.add(h)
+        it = ScrapedItem(
+            content_type=content_type, title=title[:500], public_url=h, pdf_url=h,
+            document_date=_parse_textdate(title), source_url=source_url,
+        )
+        facts = [("Document date", it.document_date.isoformat() if it.document_date else None),
+                 ("Type", "Eurogroup document")]
+        it.body_txt, it.body_html = _compose_simple_body(it.title, facts, h)
+        out.append(it)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def parse_named_meetings(anchors, source_url: str, content_type: str, slug: str,
+                         council_config, limit: int, fetcher=None, enrich: int = 0) -> list:
+    """Parse a meetings list for a specific slug (european-council / euro-summit /
+    eurogroup). Same shape as parse_meetings but for non-Council-configuration
+    institutions; enriches the first `enrich` with the detail 'Main results'."""
+    seen = set()
+    out = []
+    for t, h in anchors:
+        m = _MEETING_HREF.search(h or "")
+        if not m or m.group(1) != slug:
+            continue
+        if h in seen or len(t) < 6:
+            continue
+        seen.add(h)
+        y, mo, dd = m.group(2), m.group(3), m.group(4)
+        day = int(dd.split("-")[0])
+        try:
+            dt = date(int(y), int(mo), day)
+        except ValueError:
+            dt = None
+        out.append(ScrapedItem(
+            content_type=content_type, title=t.replace("\n", " ").strip()[:500],
+            public_url=h, document_date=dt, council_configuration=council_config,
+            source_url=source_url,
+        ))
+        if len(out) >= limit:
+            break
+    for it in out[:enrich]:
+        if fetcher is None:
+            break
+        results = _fetch_main_results(fetcher, it.public_url)
+        if results:
+            it.extra["main_results"] = True
+            it.body_txt = f"{it.title}\n\n{results}"
+            it.body_html = (f"<article><h2>{_html.escape(it.title)}</h2>"
+                            + "".join(f"<p>{_html.escape(p)}</p>" for p in results.split('\n') if p.strip())
+                            + "</article>")
+    for it in out:
+        if it.body_txt is None:
+            facts = [("Meeting date", it.document_date.isoformat() if it.document_date else None)]
+            it.body_txt, it.body_html = _compose_simple_body(it.title, facts, it.public_url)
+    return out
+
+
+_REF_NAV = {"about the institutions", "topics", "meetings", "news and media",
+            "documents and research", "search", "menu", "home", "en",
+            "current language", "current language,", "toggle navigation", "sections",
+            "documents", "european council", "council of the european union",
+            "skip to content", "share this page", "highlights"}
+_REF_NAV_PREFIX = ("We use cookies", "Visit our cookies", "I accept")
+
+
+def parse_reference_page(fetcher, url: str, title: str, content_type: str) -> Optional[ScrapedItem]:
+    """Fetch one consilium prose page and return a reference row whose body is the
+    page's own cleaned text (+ first PDF link). None if the page can't be read."""
+    try:
+        status, text, anchors = fetcher.get(url)
+    except Exception:
+        return None
+    if status != 200 or not text:
+        return None
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    # Start after the page's own title where possible; strip global nav.
+    start = 0
+    key = title.strip().lower()[:30]
+    for i, l in enumerate(lines):
+        if l.strip().lower().startswith(key):
+            start = i + 1
+            break
+    body = [l for l in lines[start:]
+            if l.strip().lower() not in _REF_NAV
+            and not any(l.startswith(p) for p in _REF_NAV_PREFIX)][:80]
+    desc = "\n".join(body).strip()
+    if len(desc) < 40:
+        desc = title
+    pdf = None
+    for _t, h in anchors:
+        if h and (h.lower().endswith(".pdf")) and ("/media/" in h or "data.consilium" in h):
+            pdf = h
+            break
+    it = ScrapedItem(
+        content_type=content_type, title=title[:500], public_url=url,
+        pdf_url=pdf, source_url=url, extra={"reference_entry": True},
+    )
+    it.body_txt = desc
+    it.body_html = ("<article><h2>" + _html.escape(title) + "</h2>"
+                    + "".join(f"<p>{_html.escape(p)}</p>" for p in desc.split('\n') if p.strip())
+                    + (f'<p><a href="{_html.escape(pdf)}">Document (PDF)</a></p>' if pdf else "")
+                    + "</article>")
+    return it
+
+
 # --------------------------------------------------------------------------- #
 # Orchestration                                                               #
 # --------------------------------------------------------------------------- #
@@ -543,6 +728,17 @@ def scrape(content_types: list, *, limit: int = 25, enrich: int = 6) -> list:
     items: list = []
     with _Fetcher() as f:
         for ct in content_types:
+            # Reference content types: fetch N prose pages, one row each.
+            if ct in REFERENCE_PAGES:
+                got = []
+                for url, title in REFERENCE_PAGES[ct]:
+                    row = parse_reference_page(f, url, title, ct)
+                    if row:
+                        got.append(row)
+                logger.info("[council-register] %s -> %d items", ct, len(got))
+                items.extend(got)
+                continue
+
             url = SOURCES.get(ct)
             if not url:
                 continue
@@ -554,10 +750,15 @@ def scrape(content_types: list, *, limit: int = 25, enrich: int = 6) -> list:
             if status != 200:
                 logger.warning("[council-register] %s -> HTTP %s (skipped)", ct, status)
                 continue
-            if ct in ("voting_result", "register_doc", "oj_agenda"):
+            if ct in ("voting_result", "register_doc", "oj_agenda", "euco_conclusions"):
                 got = parse_register(text, anchors, ct, url, limit)
+            elif ct == "eurogroup_document":
+                got = parse_pdf_list(anchors, url, ct, limit)
             elif ct == "meeting":
                 got = parse_meetings(anchors, url, limit, fetcher=f, enrich=enrich)
+            elif ct in NAMED_MEETINGS:
+                slug, cfg = NAMED_MEETINGS[ct]
+                got = parse_named_meetings(anchors, url, ct, slug, cfg, limit, fetcher=f, enrich=enrich)
             elif ct == "press_release":
                 got = parse_press(anchors, url, limit, fetcher=f, enrich=enrich)
             elif ct == "preparatory_body":
@@ -573,4 +774,4 @@ def scrape(content_types: list, *, limit: int = 25, enrich: int = 6) -> list:
     return items
 
 
-ALL_CONTENT_TYPES = list(SOURCES.keys())
+ALL_CONTENT_TYPES = list(SOURCES.keys()) + list(REFERENCE_PAGES.keys())

@@ -67,7 +67,17 @@ SCOPE_CATALOGUE: Tuple[Scope, ...] = (
     Scope(
         name="read:council",
         label="Council of the EU",
-        description="Council documents.",
+        description="Council documents, configurations, meetings, voting results, public register, OJ agendas, preparatory bodies, press releases, research papers, treaties.",
+    ),
+    Scope(
+        name="read:european_council",
+        label="European Council",
+        description="European Council conclusions, summit meetings, the Euro Summit, the Strategic Agenda 2024-2029, members, and institutional reference.",
+    ),
+    Scope(
+        name="read:eurogroup",
+        label="Eurogroup",
+        description="Eurogroup meetings, document register, work programme, members, and institutional reference.",
     ),
     Scope(
         name="read:knowledge",
@@ -169,6 +179,21 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/council/council-research-papers(/|$)"),           "read:council"),
     (re.compile(r"^/api/v2/council/council-treaties-agreements(/|$)"),       "read:council"),
 
+    # --- API v2: institution-based "European Council" domain --------------
+    (re.compile(r"^/api/v2/european-council/euco-conclusions(/|$)"),         "read:european_council"),
+    (re.compile(r"^/api/v2/european-council/euco-meetings(/|$)"),            "read:european_council"),
+    (re.compile(r"^/api/v2/european-council/euco-euro-summit(/|$)"),         "read:european_council"),
+    (re.compile(r"^/api/v2/european-council/euco-strategic-agenda(/|$)"),    "read:european_council"),
+    (re.compile(r"^/api/v2/european-council/euco-members(/|$)"),             "read:european_council"),
+    (re.compile(r"^/api/v2/european-council/euco-about(/|$)"),               "read:european_council"),
+
+    # --- API v2: institution-based "Eurogroup" domain ---------------------
+    (re.compile(r"^/api/v2/eurogroup/eurogroup-meetings(/|$)"),              "read:eurogroup"),
+    (re.compile(r"^/api/v2/eurogroup/eurogroup-documents(/|$)"),             "read:eurogroup"),
+    (re.compile(r"^/api/v2/eurogroup/eurogroup-work-programme(/|$)"),        "read:eurogroup"),
+    (re.compile(r"^/api/v2/eurogroup/eurogroup-members(/|$)"),               "read:eurogroup"),
+    (re.compile(r"^/api/v2/eurogroup/eurogroup-about(/|$)"),                 "read:eurogroup"),
+
     # --- API v2: "Brubru Proprietary Databases" domain --------------------
     (re.compile(r"^/api/v2/proprietary/guides(/|$)"),           "read:knowledge"),
     (re.compile(r"^/api/v2/proprietary/catalan(/|$)"),          "read:laws"),
@@ -238,6 +263,19 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v1/council-press-releases(/|$)"),       "read:council"),
     (re.compile(r"^/api/v1/council-research-papers(/|$)"),      "read:council"),
     (re.compile(r"^/api/v1/council-treaties-agreements(/|$)"),  "read:council"),
+    # European Council (v1)
+    (re.compile(r"^/api/v1/euco-conclusions(/|$)"),             "read:european_council"),
+    (re.compile(r"^/api/v1/euco-meetings(/|$)"),                "read:european_council"),
+    (re.compile(r"^/api/v1/euco-euro-summit(/|$)"),             "read:european_council"),
+    (re.compile(r"^/api/v1/euco-strategic-agenda(/|$)"),        "read:european_council"),
+    (re.compile(r"^/api/v1/euco-members(/|$)"),                 "read:european_council"),
+    (re.compile(r"^/api/v1/euco-about(/|$)"),                   "read:european_council"),
+    # Eurogroup (v1)
+    (re.compile(r"^/api/v1/eurogroup-meetings(/|$)"),           "read:eurogroup"),
+    (re.compile(r"^/api/v1/eurogroup-documents(/|$)"),          "read:eurogroup"),
+    (re.compile(r"^/api/v1/eurogroup-work-programme(/|$)"),     "read:eurogroup"),
+    (re.compile(r"^/api/v1/eurogroup-members(/|$)"),            "read:eurogroup"),
+    (re.compile(r"^/api/v1/eurogroup-about(/|$)"),              "read:eurogroup"),
 
     # read:knowledge
     (re.compile(r"^/api/v1/knowledge-guides(/|$)"),             "read:knowledge"),

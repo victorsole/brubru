@@ -80,6 +80,18 @@
       "_doc": "Detail endpoints for the 8 Council-of-the-EU register surfaces return the full stored body. List endpoints fall to _default. Matches both v1 and v2 (the optional /council/ segment)."
     },
     {
+      "regex": "^/api/v[12]/(?:european-council/)?euco-(?:conclusions|meetings|euro-summit|strategic-agenda|members|about)/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full European Council item body)",
+      "_doc": "Detail endpoints for the 6 European Council surfaces return the full stored body. List endpoints fall to _default. Matches both v1 and v2."
+    },
+    {
+      "regex": "^/api/v[12]/(?:eurogroup/)?eurogroup-(?:meetings|documents|work-programme|members|about)/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (full Eurogroup item body)",
+      "_doc": "Detail endpoints for the 5 Eurogroup surfaces return the full stored body. List endpoints fall to _default. Matches both v1 and v2."
+    },
+    {
       "regex": "^/api/v1/chat/.*$",
       "cost_micro": 20000,
       "label": "chat completion (passes through Claude Sonnet cost)"

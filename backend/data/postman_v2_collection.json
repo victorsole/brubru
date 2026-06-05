@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n103 requests across 5 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n125 requests across 7 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -5466,6 +5466,1160 @@
                   ]
                 },
                 "description": "Fetch a single Council treaties-&-agreements entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "European Council",
+      "item": [
+        {
+          "name": "Conclusions",
+          "item": [
+            {
+              "name": "European Council conclusions \u2014 the conclusions register (2004-present)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-conclusions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-conclusions"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns European Council conclusions from the conclusions register \u2014 the formal political guidance adopted by the EU heads of state or government at their summits, each with date, document number and a link to the PDF.\n\n**When to use it**\nTo read the most authoritative signal of EU political direction \u2014 European Council conclusions set the strategic agenda that Commission proposals and Council decisions follow.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-conclusions?published_from=2025-01-01\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of conclusions documents. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Council conclusions document by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-conclusions/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-conclusions",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single European Council conclusions document by its Brubru UUID. Returns the five datapoints. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Meetings",
+          "item": [
+            {
+              "name": "European Council meetings \u2014 summit meetings of EU leaders",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-meetings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-meetings"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns European Council summit meetings (the gatherings of EU heads of state or government), with date and a body composed from the meeting facts plus the published outcomes where available.\n\n**When to use it**\nTo track the European Council summit calendar and outcomes \u2014 the apex political meetings of the EU.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-meetings\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of summit meetings. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Council meeting by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-meetings/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-meetings",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single European Council meeting by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Euro Summit",
+          "item": [
+            {
+              "name": "Euro Summit \u2014 heads of state or government of the euro area",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-euro-summit",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-euro-summit"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the Euro Summit reference \u2014 the meeting format that brings together the heads of state or government of the euro-area countries to discuss euro-area governance (distinct from the Eurogroup, which is finance ministers).\n\n**When to use it**\nTo understand the Euro Summit's role and find its meeting calendar \u2014 the leaders'-level forum for the euro area.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-euro-summit\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` with the Euro Summit entry. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Euro Summit entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-euro-summit/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-euro-summit",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Euro Summit entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Strategic Agenda",
+          "item": [
+            {
+              "name": "European Council Strategic Agenda 2024-2029",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-strategic-agenda",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-strategic-agenda"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the European Council's Strategic Agenda 2024-2029 \u2014 the five-year political priorities agreed by EU leaders that frame the whole institutional cycle \u2014 with the agenda text and a link to the full PDF.\n\n**When to use it**\nTo ground any analysis in the EU's top-level political priorities for the 2024-2029 cycle.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-strategic-agenda\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` with the Strategic Agenda entry. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Strategic Agenda entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-strategic-agenda/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-strategic-agenda",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch the Strategic Agenda entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Members",
+          "item": [
+            {
+              "name": "Members of the European Council",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-members",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-members"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the members of the European Council \u2014 the EU heads of state or government, plus the President of the European Council and the President of the European Commission \u2014 as a reference entry with the membership listing.\n\n**When to use it**\nAs a reference for who sits on the European Council.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-members\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` with the members entry. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Council members entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-members/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-members",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch the European Council members entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "About",
+          "item": [
+            {
+              "name": "About the European Council \u2014 how it works, president, role, history",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-about",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-about"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns institutional reference pages about the European Council \u2014 how it works, the President of the European Council, the role/nominations/appointment process, and its history \u2014 each with the page text as body.\n\n**When to use it**\nAs background reference on the European Council as an institution.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/european-council/euco-about\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of reference entries. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One European Council reference page by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/european-council/euco-about/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "european-council",
+                    "euco-about",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single European Council reference page by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Eurogroup",
+      "item": [
+        {
+          "name": "Meetings",
+          "item": [
+            {
+              "name": "Eurogroup meetings \u2014 meetings of euro-area finance ministers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-meetings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-meetings"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns Eurogroup meetings (the euro-area finance ministers), with date and a body that includes the published 'Main results' outcome narrative for recent meetings \u2014 macroeconomic discussions, the digital euro, euro-area competitiveness, and more.\n\n**When to use it**\nTo track what euro-area finance ministers discussed and concluded \u2014 the political steer on euro-area economic policy.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/eurogroup/eurogroup-meetings\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of Eurogroup meetings. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Eurogroup meeting by id \u2014 full body (agenda + outcomes)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-meetings/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-meetings",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Eurogroup meeting by its Brubru UUID. Returns the five datapoints. 404 with `reason_code: not_found` if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Documents",
+          "item": [
+            {
+              "name": "Eurogroup documents \u2014 the Eurogroup document register",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-documents"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns documents from the Eurogroup document register \u2014 draft agendas, annotated agendas, summing-up letters, lists of participants, and the President's remarks \u2014 each with date and a link to the PDF.\n\n**When to use it**\nTo read the Eurogroup's own meeting documents, especially the summing-up letters that record the outcome of each meeting.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/eurogroup/eurogroup-documents?q=summing-up\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of Eurogroup documents. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Eurogroup document by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-documents/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-documents",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Eurogroup document by its Brubru UUID. Returns the five datapoints; `pdf_url` is the document PDF. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Work Programme",
+          "item": [
+            {
+              "name": "Eurogroup work programme",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-work-programme",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-work-programme"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the Eurogroup work programme \u2014 the rolling agenda of priorities the Eurogroup sets itself for the coming period \u2014 with the programme text and a link to the PDF.\n\n**When to use it**\nTo see what the Eurogroup plans to work on, the forward calendar of euro-area economic policy themes.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/eurogroup/eurogroup-work-programme\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` with the work-programme entry. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Eurogroup work-programme entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-work-programme/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-work-programme",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch the Eurogroup work-programme entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Members",
+          "item": [
+            {
+              "name": "Members of the Eurogroup",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-members",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-members"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns the members of the Eurogroup \u2014 the finance ministers of the euro-area member states, plus the Eurogroup President \u2014 including the inclusive-format membership, as a reference entry.\n\n**When to use it**\nAs a reference for who sits in the Eurogroup, in both regular and inclusive formats.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/eurogroup/eurogroup-members\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of members entries. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Eurogroup members entry by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-members/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-members",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Eurogroup members entry by its Brubru UUID. Returns the five datapoints. 404 if absent."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "About",
+          "item": [
+            {
+              "name": "About the Eurogroup \u2014 how it works, the working group, transparency, history",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-about",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-about"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_from",
+                      "value": "2026-05-01",
+                      "disabled": true
+                    },
+                    {
+                      "key": "published_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "updated_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns institutional reference pages about the Eurogroup \u2014 how it works, the Eurogroup Working Group (EWG) that prepares its meetings, its transparency arrangements, and its history \u2014 each with the page text as body.\n\n**When to use it**\nAs background reference on the Eurogroup as a body and how it operates.\n\n**Input**\n- `q` \u2014 substring search over title / body.\n- `published_from`, `published_to` \u2014 bound on the document/meeting date.\n- `updated_from`, `updated_to` \u2014 incremental sync on ingest time.\n- `limit` (default 25, max 100), `page` (1-indexed).\n\n**Try it**\n```\nGET /api/v2/eurogroup/eurogroup-about\n```\n\n**You get back**\nA `PaginatedResponse[CouncilRegisterItemModel]` of reference entries. Each item carries the five envelope datapoints: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`.\n\n**Data freshness**\nSynced from consilium.europa.eu (fresh-context browser fetch) + the un-walled data.consilium PDF store. Bodies are composed/captured at scrape time and stored, so the body is always present and the API never scrapes on the request path."
+              },
+              "response": []
+            },
+            {
+              "name": "One Eurogroup reference page by id \u2014 full body",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/eurogroup/eurogroup-about/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "eurogroup",
+                    "eurogroup-about",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "Fetch a single Eurogroup reference page by its Brubru UUID. Returns the five datapoints. 404 if absent."
               },
               "response": []
             }
