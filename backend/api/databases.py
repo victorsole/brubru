@@ -37,10 +37,17 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/databases", tags=["Brubru Databases"])
 
-_REPO = Path(__file__).resolve().parents[2]
+# Anchor on the backend/ dir, NOT the repo root: on Railway the deploy app-root
+# IS backend/ (Dockerfile lives there), so a repo-root assumption overshoots and
+# the canon manifest + guides resolve to a non-existent path -> 0 counts. Same
+# pattern as services/ai/context_builder.py. (frontend/public only exists in dev;
+# on Railway _PUBLIC simply won't resolve and the disk-based "featured items"
+# degrade to empty, which the callers already guard with .is_dir().)
+_BACKEND = Path(__file__).resolve().parents[1]
+_REPO = _BACKEND.parent
 _PUBLIC = _REPO / "frontend" / "public"
-_MANIFEST = _REPO / "backend" / "knowledge_base" / "canon_reports.json"
-_GUIDES = _REPO / "backend" / "knowledge_base" / "guides"
+_MANIFEST = _BACKEND / "knowledge_base" / "canon_reports.json"
+_GUIDES = _BACKEND / "knowledge_base" / "guides"
 
 # Friendly titles for the (few) Catalan translations that exist on disk.
 _CATALAN_TITLES = {
