@@ -11,6 +11,7 @@ import {
 } from '@mdi/js';
 import { plenaryAgendaService } from '../../services/plenary_agenda_service';
 import type { PlenaryOoB } from '../../services/plenary_agenda_service';
+import { MeubHeader } from './meub_header';
 import './plenary_agenda_tab.css';
 
 export function PlenaryAgendaTab() {
@@ -32,15 +33,11 @@ export function PlenaryAgendaTab() {
 
   return (
     <div className="plen-tab">
-      <header className="plen-tab__header">
-        <div className="plen-tab__title">
-          <Icon path={mdiGavel} size={1.1} />
-          <div>
-            <h2>{t('bubble.plen.title', 'Plenary - Order of Business')}</h2>
-            <p>{t('bubble.plen.subtitle', 'Upcoming plenary sittings and the dossiers recently adopted on your interests.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiGavel}
+        title={t('bubble.plen.title', 'Plenary - Order of Business')}
+        subtitle={t('bubble.plen.subtitle', 'Upcoming plenary sittings and the dossiers recently adopted on your interests.')}
+      />
 
       <div className="plen-tab__controls">
         <div className="plen-tab__toggle">

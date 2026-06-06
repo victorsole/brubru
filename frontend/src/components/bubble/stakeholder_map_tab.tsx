@@ -16,6 +16,7 @@ import {
 } from '@mdi/js';
 import { stakeholdersService } from '../../services/stakeholders_service';
 import type { SMGraph, SMNode, SMFile, SMContactsResult, SMDgContacts } from '../../services/stakeholders_service';
+import { MeubHeader } from './meub_header';
 import { GraphBoundary } from './graph_boundary';
 import './stakeholder_map_tab.css';
 
@@ -62,15 +63,11 @@ export function StakeholderMapTab() {
 
   return (
     <div className="sm-tab">
-      <header className="db-tab__header">
-        <div className="db-tab__title">
-          <Icon path={mdiGraphOutline} size={1.1} />
-          <div>
-            <h2>{t('bubble.stakeholder_mapping', 'Stakeholder Mapping')}</h2>
-            <p>{t('sm.subtitle', 'Who matters on your files and across your interests: the Parliament, Commission and Council actors and the organisations active around them.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiGraphOutline}
+        title={t('bubble.stakeholder_mapping', 'Stakeholder Mapping')}
+        subtitle={t('sm.subtitle', 'Who matters on your files and across your interests: the Parliament, Commission and Council actors and the organisations active around them.')}
+      />
 
       <div className="sm-controls">
         <div className="sm-toggle sm-scope">

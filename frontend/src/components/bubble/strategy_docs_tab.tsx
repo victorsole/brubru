@@ -22,6 +22,7 @@ import { useAuth } from '../../hooks/use_auth';
 import { stakeholdersService, type SMFile } from '../../services/stakeholders_service';
 import { DocumentEditor } from './document_editor';
 import { DocumentGeneratorWizard } from './document_generator_wizard';
+import { MeubHeader } from './meub_header';
 import './strategy_docs_tab.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -112,19 +113,17 @@ export function StrategyDocsTab() {
 
   return (
     <div className="sd-tab">
-      <header className="db-tab__header">
-        <div className="db-tab__title">
-          <Icon path={mdiBullseyeArrow} size={1.1} />
-          <div>
-            <h2>{t('bubble.strategy_docs', 'Strategy Docs')}</h2>
-            <p>{t('sd.subtitle2', 'Everything you produce to influence your files: strategies, position papers, briefings, emails, petitions, questions, amendments and more. In sync with My Documents.')}</p>
+      <MeubHeader
+        icon={mdiBullseyeArrow}
+        title={t('bubble.strategy_docs', 'Strategy Docs')}
+        subtitle={t('sd.subtitle2', 'Everything you produce to influence your files: strategies, position papers, briefings, emails, petitions, questions, amendments and more. In sync with My Documents.')}
+        aside={
+          <div className="sd-actions">
+            <button className="sd-ai" onClick={() => setShowWizard(true)}><Icon path={mdiAutoFix} size={0.8} /> {t('sd.generateAI', 'Generate with AI')}</button>
+            <button className="sd-new" onClick={() => setShowNew(true)}><Icon path={mdiPlus} size={0.8} /> {t('sd.new', 'New strategy')}</button>
           </div>
-        </div>
-        <div className="sd-actions">
-          <button className="sd-ai" onClick={() => setShowWizard(true)}><Icon path={mdiAutoFix} size={0.8} /> {t('sd.generateAI', 'Generate with AI')}</button>
-          <button className="sd-new" onClick={() => setShowNew(true)}><Icon path={mdiPlus} size={0.8} /> {t('sd.new', 'New strategy')}</button>
-        </div>
-      </header>
+        }
+      />
 
       {presentKinds.length > 1 && (
         <div className="sd-kinds">

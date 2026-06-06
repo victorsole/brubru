@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
+import { MeubHeader } from './meub_header';
 import {
   mdiNewspaperVariantOutline, mdiStar, mdiOpenInNew,
   mdiMagnify, mdiBookmarkCheck, mdiCalendarBlankOutline, mdiScaleBalance, mdiBullhornOutline,
@@ -145,19 +146,24 @@ export const OJTab = () => {
 
   return (
     <div className="oj-tab">
-      <header className="oj-head">
-        <div>
-          <h1>
-            <Icon path={mdiNewspaperVariantOutline} size={1.1} /> {t('oj.title', 'My OJ')}
+      <MeubHeader
+        icon={mdiNewspaperVariantOutline}
+        title={(
+          <>
+            {t('oj.title', 'My OJ')}
             <button className="oj-legendbtn" onClick={() => setLegendOpen((v) => !v)}
               aria-label={t('oj.whatIsThis', 'What do these codes mean?') as string}>
               <Icon path={mdiInformationOutline} size={0.85} />
             </button>
-          </h1>
-          <p>{t('oj.intro', 'The day’s Official Journal of the EU, filtered to your interests and linked to the files you track.')}</p>
-          <FreshnessChip sourceKey="oj" />
-        </div>
-        {dates.length > 0 && (
+          </>
+        )}
+        subtitle={(
+          <>
+            {t('oj.intro', 'The day’s Official Journal of the EU, filtered to your interests and linked to the files you track.')}
+            <FreshnessChip sourceKey="oj" />
+          </>
+        )}
+        aside={dates.length > 0 && (
           <label className="oj-datepick">
             <Icon path={mdiCalendarBlankOutline} size={0.8} />
             <select value={activeDate} onChange={(e) => setActiveDate(e.target.value)}>
@@ -167,7 +173,7 @@ export const OJTab = () => {
             </select>
           </label>
         )}
-      </header>
+      />
 
       {legendOpen && (
         <div className="oj-legend">

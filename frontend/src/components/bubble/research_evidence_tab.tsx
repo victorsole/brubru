@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MeubHeader } from './meub_header';
 import Icon from '@mdi/react';
 import {
   mdiFlaskOutline, mdiMicroscope, mdiBankOutline, mdiRocketLaunchOutline, mdiLightbulbOnOutline,
@@ -91,15 +92,11 @@ export function ResearchEvidenceTab() {
 
   return (
     <div className="db-tab">
-      <header className="db-tab__header">
-        <div className="db-tab__title">
-          <Icon path={mdiFlaskOutline} size={1.1} />
-          <div>
-            <h2>{t('bubble.research_evidence', 'Research & Evidence')}</h2>
-            <p>{t('db.researchHint2', 'EU research and evidence, tailored to your interests. Open recent documents and get an AI summary of any of them.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiFlaskOutline}
+        title={t('bubble.research_evidence', 'Research & Evidence')}
+        subtitle={t('db.researchHint2', 'EU research and evidence, tailored to your interests. Open recent documents and get an AI summary of any of them.')}
+      />
 
       {!cat ? <div className="db-loading">{t('db.loading', 'Loading...')}</div> : (
         <div className="db-section">

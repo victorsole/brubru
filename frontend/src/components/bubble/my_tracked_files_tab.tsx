@@ -47,6 +47,7 @@ import { useTextsAdopted } from '../../hooks/use_texts_adopted';
 import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
+import { MeubHeader } from './meub_header';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import { HotThisWeekWidget } from './hot_this_week_widget';
@@ -803,52 +804,52 @@ export const MyTrackedFilesTab = () => {
   return (
     <div className="my-tracked-files-tab">
       {/* Header */}
-      <div className="my-tracked-files-tab__header">
-        <div className="my-tracked-files-tab__header-left">
-          <h2>{t('myFilesTab.title')}</h2>
-          <p className="my-tracked-files-tab__subtitle">
-            {activeTab === 'legislative'
-              ? t('myFilesTab.filesTracked', { count: trackedFiles.length })
-              : activeTab === 'committee'
-              ? t('myFilesTab.committeeItems', { count: committeeWorkItems.length })
-              : activeTab === 'texts_adopted'
-              ? t('myFilesTab.adoptedTexts', { count: textsAdoptedItems.length })
-              : t('myFilesTab.commissionDocs', { count: commissionDocItems.length })
-            }
-          </p>
-        </div>
-        <div className="my-tracked-files-tab__header-actions">
-          <button
-            className="my-tracked-files-tab__btn my-tracked-files-tab__btn--icon"
-            onClick={handleRefresh}
-            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted || isLoadingCommissionDocs}
-            title={t('myFilesTab.refresh')}
-            aria-label={t('myFilesTab.refresh')}
-          >
-            <Icon path={mdiRefresh} size={0.85} />
-          </button>
-          {activeTab === 'legislative' && (
+      <MeubHeader
+        icon={mdiStarOutline}
+        title={t('myFilesTab.title')}
+        subtitle={
+          activeTab === 'legislative'
+            ? t('myFilesTab.filesTracked', { count: trackedFiles.length })
+            : activeTab === 'committee'
+            ? t('myFilesTab.committeeItems', { count: committeeWorkItems.length })
+            : activeTab === 'texts_adopted'
+            ? t('myFilesTab.adoptedTexts', { count: textsAdoptedItems.length })
+            : t('myFilesTab.commissionDocs', { count: commissionDocItems.length })
+        }
+        aside={
+          <div className="my-tracked-files-tab__header-actions">
             <button
-              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
-              onClick={handleSyncFromInterests}
-              disabled={isSyncing}
-              title={t('myFilesTab.syncFromInterestsHint')}
+              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--icon"
+              onClick={handleRefresh}
+              disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted || isLoadingCommissionDocs}
+              title={t('myFilesTab.refresh')}
+              aria-label={t('myFilesTab.refresh')}
             >
-              <Icon path={isSyncing ? mdiLoading : mdiPlaylistPlus} size={0.8} spin={isSyncing} />
-              {isSyncing ? t('myFilesTab.syncing') : t('myFilesTab.syncFromInterests')}
+              <Icon path={mdiRefresh} size={0.85} />
             </button>
-          )}
-          {activeTab === 'legislative' && (
-            <button
-              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
-              onClick={handleOpenAddModal}
-            >
-              <Icon path={mdiPlus} size={0.8} />
-              {t('myFilesTab.trackFile')}
-            </button>
-          )}
-        </div>
-      </div>
+            {activeTab === 'legislative' && (
+              <button
+                className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
+                onClick={handleSyncFromInterests}
+                disabled={isSyncing}
+                title={t('myFilesTab.syncFromInterestsHint')}
+              >
+                <Icon path={isSyncing ? mdiLoading : mdiPlaylistPlus} size={0.8} spin={isSyncing} />
+                {isSyncing ? t('myFilesTab.syncing') : t('myFilesTab.syncFromInterests')}
+              </button>
+            )}
+            {activeTab === 'legislative' && (
+              <button
+                className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
+                onClick={handleOpenAddModal}
+              >
+                <Icon path={mdiPlus} size={0.8} />
+                {t('myFilesTab.trackFile')}
+              </button>
+            )}
+          </div>
+        }
+      />
 
       {/* Tab Navigation */}
       <div className="my-tracked-files-tab__tabs">

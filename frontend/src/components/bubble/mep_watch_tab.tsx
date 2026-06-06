@@ -13,6 +13,7 @@ import {
 } from '@mdi/js';
 import { mepWatchService } from '../../services/mep_watch_service';
 import type { MepRow, MepQuestion } from '../../services/mep_watch_service';
+import { MeubHeader } from './meub_header';
 import './mep_watch_tab.css';
 
 export function MepWatchTab() {
@@ -44,15 +45,11 @@ export function MepWatchTab() {
 
   return (
     <div className="mepw-tab">
-      <header className="mepw-tab__header">
-        <div className="mepw-tab__title">
-          <Icon path={mdiAccountTieOutline} size={1.1} />
-          <div>
-            <h2>{t('bubble.mepw.title', 'MEP Watch')}</h2>
-            <p>{t('bubble.mepw.subtitle', 'The MEPs most active on your policy interests, and what they are asking.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiAccountTieOutline}
+        title={t('bubble.mepw.title', 'MEP Watch')}
+        subtitle={t('bubble.mepw.subtitle', 'The MEPs most active on your policy interests, and what they are asking.')}
+      />
 
       <div className="mepw-tab__controls">
         <div className="mepw-tab__toggle">

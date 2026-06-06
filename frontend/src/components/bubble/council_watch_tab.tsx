@@ -13,6 +13,7 @@ import {
 } from '@mdi/js';
 import { councilWatchService } from '../../services/council_watch_service';
 import type { CouncilItem, CouncilStats, PermRep } from '../../services/council_watch_service';
+import { MeubHeader } from './meub_header';
 import './council_watch_tab.css';
 
 export function CouncilWatchTab() {
@@ -63,15 +64,11 @@ export function CouncilWatchTab() {
 
   return (
     <div className="cwatch-tab">
-      <header className="cwatch-tab__header">
-        <div className="cwatch-tab__title">
-          <Icon path={mdiAccountGroup} size={1.1} />
-          <div>
-            <h2>{t('bubble.cwatch.title', 'Council Watch')}</h2>
-            <p>{t('bubble.cwatch.subtitle', 'What the Council of the EU is doing on your policy interests: meetings and outcomes.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiAccountGroup}
+        title={t('bubble.cwatch.title', 'Council Watch')}
+        subtitle={t('bubble.cwatch.subtitle', 'What the Council of the EU is doing on your policy interests: meetings and outcomes.')}
+      />
 
       <div className="cwatch-subtabs" role="tablist">
         <button role="tab" aria-selected={view === 'activity'} className={view === 'activity' ? 'is-active' : ''} onClick={() => setView('activity')}>

@@ -21,6 +21,7 @@ import { transcriptsService } from '../../services/transcripts_service';
 import type { TranscriptSummary, TranscriptDetail, AgendaItem } from '../../services/transcripts_service';
 import './transcripts_tab.css';
 import { FreshnessChip } from './freshness_chip';
+import { MeubHeader } from './meub_header';
 
 const POLL_MS = 6000;
 
@@ -162,16 +163,12 @@ export function TranscriptsTab() {
 
   return (
     <div className="transcripts-tab">
-      <header className="transcripts-tab__header">
-        <div className="transcripts-tab__title">
-          <Icon path={mdiMicrophoneMessage} size={1.1} />
-          <div>
-            <h2>{t('bubble.transcripts.title', 'Transcripts')}</h2>
-            <p>{t('bubble.transcripts.subtitle', 'AI transcripts of European Parliament committee debates. Open one, or transcribe a recording on demand.')}</p>
-            <FreshnessChip sourceKey="transcripts" />
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiMicrophoneMessage}
+        title={t('bubble.transcripts.title', 'Transcripts')}
+        subtitle={t('bubble.transcripts.subtitle', 'AI transcripts of European Parliament committee debates. Open one, or transcribe a recording on demand.')}
+        aside={<FreshnessChip sourceKey="transcripts" />}
+      />
 
       {/* Filters - apply to both Suggested and the catalog below */}
       <div className="transcripts-tab__controls">

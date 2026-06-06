@@ -21,6 +21,7 @@ import {
   mdiOpenInNew,
   mdiAccountGroupOutline,
   mdiScaleBalance,
+  mdiFileEdit,
 } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
@@ -28,6 +29,7 @@ import type { TrackedFile } from '../../hooks/use_legislative_trains';
 import { MEPAmendmentsTab } from './mep_amendments_tab';
 import { MEPComparativeTab } from './mep_comparative_tab';
 import { plainLanguageTypeKey } from '../../utils/procedure_type';
+import { MeubHeader } from './meub_header';
 import './amendments_tab.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -241,37 +243,40 @@ export const AmendmentsTab = () => {
       {activeSubTab === 'my-amendments' && (
       <>
       {/* Header */}
-      <div className="amendments-tab__header">
-        <div className="amendments-tab__header-left">
-          <h2>{t('amendmentsTab.myAmendments')}</h2>
-          <div className="amendments-tab__summary">
-            <span className="amendments-tab__summary-item">
-              {t('amendmentsTab.total')}: <strong>{amendments.length}</strong>
-            </span>
-            <span className="amendments-tab__summary-item">
-              {t('amendmentsTab.documents')}: <strong>{uniqueDocuments.length}</strong>
-            </span>
-          </div>
-        </div>
-        <div className="amendments-tab__view-toggle">
-          <button
-            className={`amendments-tab__view-btn ${viewMode === 'grouped' ? 'amendments-tab__view-btn--active' : ''}`}
-            onClick={() => setViewMode('grouped')}
-            title={t('amendmentsTab.groupByFile')}
-          >
-            <Icon path={mdiViewModule} size={0.8} />
-            {t('amendmentsTab.grouped')}
-          </button>
-          <button
-            className={`amendments-tab__view-btn ${viewMode === 'list' ? 'amendments-tab__view-btn--active' : ''}`}
-            onClick={() => setViewMode('list')}
-            title={t('amendmentsTab.listView')}
-          >
-            <Icon path={mdiViewList} size={0.8} />
-            {t('amendmentsTab.list')}
-          </button>
-        </div>
-      </div>
+      <MeubHeader
+        icon={mdiFileEdit}
+        title={t('amendmentsTab.myAmendments')}
+        aside={
+          <>
+            <div className="amendments-tab__summary">
+              <span className="amendments-tab__summary-item">
+                {t('amendmentsTab.total')}: <strong>{amendments.length}</strong>
+              </span>
+              <span className="amendments-tab__summary-item">
+                {t('amendmentsTab.documents')}: <strong>{uniqueDocuments.length}</strong>
+              </span>
+            </div>
+            <div className="amendments-tab__view-toggle">
+              <button
+                className={`amendments-tab__view-btn ${viewMode === 'grouped' ? 'amendments-tab__view-btn--active' : ''}`}
+                onClick={() => setViewMode('grouped')}
+                title={t('amendmentsTab.groupByFile')}
+              >
+                <Icon path={mdiViewModule} size={0.8} />
+                {t('amendmentsTab.grouped')}
+              </button>
+              <button
+                className={`amendments-tab__view-btn ${viewMode === 'list' ? 'amendments-tab__view-btn--active' : ''}`}
+                onClick={() => setViewMode('list')}
+                title={t('amendmentsTab.listView')}
+              >
+                <Icon path={mdiViewList} size={0.8} />
+                {t('amendmentsTab.list')}
+              </button>
+            </div>
+          </>
+        }
+      />
 
       {/* Document Filter */}
       {uniqueDocuments.length > 1 && (

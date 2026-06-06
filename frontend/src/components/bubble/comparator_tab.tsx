@@ -10,6 +10,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { mdiCompareHorizontal } from '@mdi/js';
+import { MeubHeader } from './meub_header';
 import './comparator_tab.css';
 import {
   comparatorService,
@@ -405,19 +407,22 @@ export const ComparatorTab = () => {
 
   return (
     <div className="comparator-tab">
-      <header className="comparator-tab-header">
-        <div>
-          <h2 className="comparator-tab-title">{t('comparator.title')}</h2>
-          <p className="comparator-tab-subtitle">{t('comparator.subtitle')}</p>
-        </div>
-        <span className="comparator-tier-badge">
-          {t('comparator.tierLimits', {
-            grids: tierLimits.max_grids === 9999 ? t('comparator.unlimited') : tierLimits.max_grids,
-            rows: tierLimits.max_rows,
-            cols: tierLimits.max_cols,
-          })}
-        </span>
-      </header>
+      <MeubHeader
+        icon={mdiCompareHorizontal}
+        accent="#7b3fc6"
+        title={t('comparator.title')}
+        titleClassName="meub-head__title--gradient"
+        subtitle={t('comparator.subtitle')}
+        aside={
+          <span className="comparator-tier-badge">
+            {t('comparator.tierLimits', {
+              grids: tierLimits.max_grids === 9999 ? t('comparator.unlimited') : tierLimits.max_grids,
+              rows: tierLimits.max_rows,
+              cols: tierLimits.max_cols,
+            })}
+          </span>
+        }
+      />
 
       {error && <div className="comparator-error-banner">{error}</div>}
       {success && <div className="comparator-success-banner">{success}</div>}

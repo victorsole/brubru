@@ -28,6 +28,7 @@ import type {
   LobbyMeeting, LobbyStats, MepMeeting, ParliamentResult, ComparisonResult,
   FootprintResult, OrgFootprint,
 } from '../../services/lobby_meetings_service';
+import { MeubHeader } from './meub_header';
 import './lobby_meetings_tab.css';
 
 type View = 'commission' | 'parliament' | 'comparison' | 'footprint';
@@ -146,15 +147,11 @@ export function LobbyMeetingsTab() {
 
   return (
     <div className="lobby-tab">
-      <header className="lobby-tab__header">
-        <div className="lobby-tab__title">
-          <Icon path={mdiHandshakeOutline} size={1.1} />
-          <div>
-            <h2>{t('bubble.lobby.title', 'Lobby Meetings')}</h2>
-            <p>{t('bubble.lobby.subtitle', 'Who is lobbying the EU institutions on your policy interests, and whom they met.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiHandshakeOutline}
+        title={t('bubble.lobby.title', 'Lobby Meetings')}
+        subtitle={t('bubble.lobby.subtitle', 'Who is lobbying the EU institutions on your policy interests, and whom they met.')}
+      />
 
       {/* Sub-tabs */}
       <div className="lobby-subtabs" role="tablist">

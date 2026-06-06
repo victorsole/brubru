@@ -41,6 +41,7 @@ import {
   formatDaysRemaining,
 } from '../../services/consultation_service';
 import { ConsultationDetail } from './consultation_detail';
+import { MeubHeader } from './meub_header';
 import './ec_consultations_tab.css';
 
 // ============================================================================
@@ -158,22 +159,15 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
   return (
     <div className={`ec-consultations-tab ${className || ''}`}>
       {/* Header */}
-      <div className="ec-consultations-tab__header">
-        <h2 className="ec-consultations-tab__title">
-          <Icon
-            path={mdiCalendarCollapseHorizontal}
-            size={1.2}
-            className="ec-consultations-tab__title-icon"
-          />
-          {t('bubble.consultations.title', 'EC Public Consultations')}
-        </h2>
-        <p className="ec-consultations-tab__subtitle">
-          {t(
-            'bubble.consultations.subtitle',
-            'Participate in EU policy-making through the "Have Your Say" portal'
-          )}
-        </p>
-      </div>
+      <MeubHeader
+        icon={mdiCalendarCollapseHorizontal}
+        accent="#f97316"
+        title={t('bubble.consultations.title', 'EC Public Consultations')}
+        subtitle={t(
+          'bubble.consultations.subtitle',
+          'Participate in EU policy-making through the "Have Your Say" portal'
+        )}
+      />
 
       {/* Filters */}
       <div className="ec-consultations-tab__filters">

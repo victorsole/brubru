@@ -48,6 +48,7 @@ import { useAuth } from '../../hooks/use_auth';
 import { DocumentGeneratorWizard } from './document_generator_wizard';
 import { DocumentEditor } from './document_editor';
 import { formatCelexLabel, aliasOnly } from './celex_alias';
+import { MeubHeader } from './meub_header';
 import './documents_tab.css';
 
 /**
@@ -642,17 +643,12 @@ export const DocumentsTab = () => {
   return (
     <div className="documents-tab">
       {/* Header + memory-layer explainer */}
-      <header className="documents-tab__intro">
-        <div className="documents-tab__intro-top">
-          <div className="documents-tab__intro-heading">
-            <span className="documents-tab__intro-icon" aria-hidden="true">
-              <Icon path={mdiBrain} size={1.15} />
-            </span>
-            <div>
-              <h2>{t('documentsTab.title')}</h2>
-              <p className="documents-tab__intro-tagline">{t('documentsTab.subtitle')}</p>
-            </div>
-          </div>
+      <MeubHeader
+        icon={mdiBrain}
+        accent="#0d9488"
+        title={t('documentsTab.title')}
+        subtitle={t('documentsTab.subtitle')}
+        aside={
           <div className="documents-tab__header-actions">
             <button className="documents-tab__upload-btn" onClick={() => setShowUploadModal(true)}>
               <Icon path={mdiFileUploadOutline} size={0.9} />
@@ -672,8 +668,11 @@ export const DocumentsTab = () => {
               {t('documentsTab.createDocument')}
             </button>
           </div>
-        </div>
+        }
+      />
 
+      {/* memory-layer explainer */}
+      <div className="documents-tab__intro">
         <p className="documents-tab__intro-body">{t('documentsTab.intro')}</p>
 
         <ul className="documents-tab__intro-points">
@@ -692,7 +691,7 @@ export const DocumentsTab = () => {
             </div>
           </li>
         </ul>
-      </header>
+      </div>
 
       {/* Filters */}
       <div className="documents-tab__filters">

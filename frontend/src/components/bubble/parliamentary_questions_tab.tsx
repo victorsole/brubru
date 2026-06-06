@@ -19,6 +19,7 @@ import { parliamentaryQuestionsService } from '../../services/parliamentary_ques
 import type { QuestionSummary, QuestionDetail } from '../../services/parliamentary_questions_service';
 import './parliamentary_questions_tab.css';
 import { LensToggle, TrackedBadge, type LensMode } from './lens_toggle';
+import { MeubHeader } from './meub_header';
 
 const TYPE_LABEL: Record<string, string> = {
   written: 'Written', oral: 'Oral', priority: 'Priority', question_time: 'Question Time',
@@ -73,21 +74,17 @@ export function ParliamentaryQuestionsTab() {
 
   return (
     <div className="parlq-tab">
-      <header className="parlq-tab__header">
-        <div className="parlq-tab__title">
-          <Icon path={mdiCommentQuestionOutline} size={1.1} />
-          <div>
-            <h2>{t('bubble.parlq.title', 'Parliamentary Questions')}</h2>
-            <p>{t('bubble.parlq.subtitle', 'Written and oral questions tabled by MEPs on your policy interests.')}</p>
-          </div>
-        </div>
-        {newCount > 0 && mode === 'pi' && (
+      <MeubHeader
+        icon={mdiCommentQuestionOutline}
+        title={t('bubble.parlq.title', 'Parliamentary Questions')}
+        subtitle={t('bubble.parlq.subtitle', 'Written and oral questions tabled by MEPs on your policy interests.')}
+        aside={newCount > 0 && mode === 'pi' ? (
           <div className="parlq-tab__badge" title={t('bubble.parlq.newHint', 'New questions tabled on your interests recently') as string}>
             <Icon path={mdiBellRingOutline} size={0.8} />
             {t('bubble.parlq.newCount', '{{count}} new on your interests', { count: newCount })}
           </div>
-        )}
-      </header>
+        ) : undefined}
+      />
 
       {/* Controls */}
       <div className="parlq-tab__controls">

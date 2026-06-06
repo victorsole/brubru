@@ -12,6 +12,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
+import { MeubHeader } from './meub_header';
 import {
   mdiNewspaperVariantMultipleOutline, mdiStar, mdiStarOutline, mdiOpenInNew,
   mdiBookmarkCheck, mdiBookmarkCheckOutline,
@@ -208,16 +209,19 @@ export const NewsTab = () => {
 
   return (
     <div className="news-tab">
-      <header className="news-head">
-        <div>
-          <h1><Icon path={mdiNewspaperVariantMultipleOutline} size={1.1} /> {t('news.title', 'News')}</h1>
-          <p>{t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}</p>
-          <FreshnessChip sourceKey={['news_dg', 'news_ep', 'news_bespoke']} />
-        </div>
-        {data && (
+      <MeubHeader
+        icon={mdiNewspaperVariantMultipleOutline}
+        title={t('news.title', 'News')}
+        subtitle={(
+          <>
+            {t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
+            <FreshnessChip sourceKey={['news_dg', 'news_ep', 'news_bespoke']} />
+          </>
+        )}
+        aside={data && (
           <div className="news-head__count"><b>{data.total}</b> {t('news.stories', 'stories')}</div>
         )}
-      </header>
+      />
 
       <div className="news-controls">
         {(hasPi || data?.has_tracked_files) && (

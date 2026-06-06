@@ -15,6 +15,7 @@ import {
 } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
+import { MeubHeader } from '../components/bubble/meub_header';
 import { DocumentsTab } from '../components/bubble/documents_tab';
 import { AmendmentsTab } from '../components/bubble/amendments_tab';
 import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_tab';
@@ -193,10 +194,11 @@ export const MyEUBubblePage = () => {
       case 'policy_interests':
         return (
           <div className="my-eu-bubble-page__policy-pane">
-            <h2 className="my-eu-bubble-page__pane-title">{t('bubble.tabs.policyInterests', 'Policy Interests')}</h2>
-            <p className="my-eu-bubble-page__pane-intro">
-              {t('bubble.policyInterestsIntro', "These are the European Commission's own policy areas. Choose the ones that matter to you and Brubru pre-selects the legislative and non-legislative files currently being worked on under them, above all at the European Parliament, so they flow into your feed, calendar and alerts. You can always fine-tune the list later by adding or removing individual files in My Tracked Files.")}
-            </p>
+            <MeubHeader
+              icon={mdiBookmarkMultipleOutline}
+              title={t('bubble.tabs.policyInterests', 'Policy Interests')}
+              subtitle={t('bubble.policyInterestsIntro', "These are the European Commission's own policy areas. Choose the ones that matter to you and Brubru pre-selects the legislative and non-legislative files currently being worked on under them, above all at the European Parliament, so they flow into your feed, calendar and alerts. You can always fine-tune the list later by adding or removing individual files in My Tracked Files.")}
+            />
             <PolicyPreferencesSelector selectedPolicies={policyInterests} onUpdate={handlePolicyUpdate} />
           </div>
         );

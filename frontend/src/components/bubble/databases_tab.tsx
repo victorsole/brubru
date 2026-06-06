@@ -20,6 +20,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MeubHeader } from './meub_header';
 import Icon from '@mdi/react';
 import {
   mdiBookshelf, mdiBookOpenPageVariantOutline, mdiFileDocumentMultipleOutline, mdiTranslate,
@@ -159,15 +160,11 @@ export function DatabasesTab() {
 
   return (
     <div className="db-tab">
-      <header className="db-tab__header">
-        <div className="db-tab__title">
-          <Icon path={mdiBookshelf} size={1.1} />
-          <div>
-            <h2>{t('bubble.databases', 'Brubru Databases')}</h2>
-            <p>{t('db.subtitle', 'Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.')}</p>
-          </div>
-        </div>
-      </header>
+      <MeubHeader
+        icon={mdiBookshelf}
+        title={t('bubble.databases', 'Brubru Databases')}
+        subtitle={t('db.subtitle', 'Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.')}
+      />
 
       <div className="db-subtabs" role="tablist">
         {tabs.map(([id, icon, label]) => (

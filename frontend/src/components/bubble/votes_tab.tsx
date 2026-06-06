@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
+import { MeubHeader } from './meub_header';
 import {
   mdiGavel, mdiAccountGroup, mdiStar, mdiClose, mdiMagnify,
   mdiOpenInNew, mdiSwapHorizontal, mdiCheckCircle, mdiCloseCircle, mdiScaleBalance,
@@ -649,13 +650,16 @@ export const VotesTab = () => {
 
   return (
     <div className="votes-tab">
-      <header className="votes-tab__head">
-        <div>
-          <h1><Icon path={mdiGavel} size={1.1} /> {t('votes.title', 'Votes')}</h1>
-          <p>{t('votes.intro', 'How the Parliament voted on the dossiers in your interests: committee and plenary, ordered the way the EP does not.')}</p>
-          <FreshnessChip sourceKey={['votes_ep', 'votes_council']} />
-        </div>
-        {stats && (
+      <MeubHeader
+        icon={mdiGavel}
+        title={t('votes.title', 'Votes')}
+        subtitle={(
+          <>
+            {t('votes.intro', 'How the Parliament voted on the dossiers in your interests: committee and plenary, ordered the way the EP does not.')}
+            <FreshnessChip sourceKey={['votes_ep', 'votes_council']} />
+          </>
+        )}
+        aside={stats && (
           <div className="votes-tab__stats">
             <span><b>{stats.committee}</b> {t('votes.committeeVotes', 'committee')}</span>
             <span><b>{stats.plenary}</b> {t('votes.plenaryVotes', 'plenary')}</span>
@@ -664,7 +668,7 @@ export const VotesTab = () => {
             <span><b>{stats.with_delta}</b> {t('votes.withDelta', 'with delta')}</span>
           </div>
         )}
-      </header>
+      />
 
       <div className="votes-tab__tabs" role="tablist">
         <button role="tab" aria-selected={level === 'committee'}
