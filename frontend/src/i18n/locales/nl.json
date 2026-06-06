@@ -173,7 +173,11 @@
       "summaryGenError": "Genereren van de samenvatting mislukt. Probeer het opnieuw.",
       "minutes": "notulen",
       "officialMinutes": "Officiële notulen (PDF)",
-      "officialMinutesTip": "Officiële aangenomen notulen beschikbaar"
+      "officialMinutesTip": "Officiële aangenomen notulen beschikbaar",
+      "summarise": "Samenvatten (AI)",
+      "summarising": "Samenvatten...",
+      "showSummary": "AI-samenvatting tonen",
+      "hideSummary": "AI-samenvatting verbergen"
     },
     "consultations": {
       "title": "EC Openbare Raadplegingen",
@@ -472,7 +476,8 @@
       "chat": "Chat",
       "eulawcomply": "EU Law Comply",
       "tenderator": "Tenderator",
-      "profile": "Profiel"
+      "profile": "Profiel",
+      "api": "API"
     },
     "overview": {
       "corner": "Begin hier",
@@ -2140,7 +2145,11 @@
     "allDelegations": "Alle delegaties",
     "politicalGroups": "Fracties",
     "epOther": "Overig",
-    "eprsEvents": "EPRS (onderzoeksevenementen)"
+    "eprsEvents": "EPRS (onderzoeksevenementen)",
+    "addToCalendar": "Aan agenda toevoegen",
+    "addGoogle": "Google Agenda",
+    "addOutlook": "Outlook",
+    "downloadIcs": ".ics downloaden (Apple, overige)"
   },
   "newsSidebar": {
     "loadingFeeds": "Feeds laden..."

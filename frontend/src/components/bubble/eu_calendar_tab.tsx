@@ -29,7 +29,12 @@ import {
   mdiFileEditOutline,
   mdiCalendarClock,
   mdiTagOutline,
+  mdiCalendarPlus,
+  mdiDownloadOutline,
 } from '@mdi/js';
+import {
+  googleCalendarUrl, outlookCalendarUrl, downloadIcs,
+} from '../../utils/calendar_export';
 import {
   useEUCalendar,
   groupEventsByDate,
@@ -835,6 +840,7 @@ function EventDetailModal() {
         </div>
 
         <div className="eu-calendar-tab__modal-footer">
+          <AddToCalendar event={event} />
           {event.agenda_url && (
             <a
               href={event.agenda_url}
@@ -867,6 +873,44 @@ function EventDetailModal() {
       </div>
     </div>,
     document.body
+  );
+}
+
+// "Add to calendar" control: Google / Outlook deep-links + a downloadable .ics
+// (Apple Calendar, Outlook desktop, any client). All client-side.
+function AddToCalendar({ event }: { event: CalendarEvent }) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="eu-calendar-tab__addcal">
+      <button
+        type="button"
+        className="eu-calendar-tab__modal-link-btn eu-calendar-tab__modal-link-btn--primary"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Icon path={mdiCalendarPlus} size={0.7} />
+        {t('calendar.addToCalendar', 'Add to calendar')}
+        <Icon path={mdiChevronDown} size={0.6} />
+      </button>
+      {open && (
+        <div className="eu-calendar-tab__addcal-menu" role="menu">
+          <a href={googleCalendarUrl(event)} target="_blank" rel="noopener noreferrer"
+            role="menuitem" onClick={() => setOpen(false)}>
+            <Icon path={mdiCalendarPlus} size={0.65} /> {t('calendar.addGoogle', 'Google Calendar')}
+          </a>
+          <a href={outlookCalendarUrl(event)} target="_blank" rel="noopener noreferrer"
+            role="menuitem" onClick={() => setOpen(false)}>
+            <Icon path={mdiCalendarPlus} size={0.65} /> {t('calendar.addOutlook', 'Outlook')}
+          </a>
+          <button type="button" role="menuitem"
+            onClick={() => { downloadIcs([event], `brubru-${event.id}.ics`); setOpen(false); }}>
+            <Icon path={mdiDownloadOutline} size={0.65} /> {t('calendar.downloadIcs', 'Download .ics (Apple, other)')}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -173,7 +173,11 @@
       "summaryGenError": "La generación del resumen ha fallado. Inténtalo de nuevo.",
       "minutes": "acta",
       "officialMinutes": "Acta oficial (PDF)",
-      "officialMinutesTip": "Acta oficial adoptada disponible"
+      "officialMinutesTip": "Acta oficial adoptada disponible",
+      "summarise": "Resumir (IA)",
+      "summarising": "Resumiendo...",
+      "showSummary": "Ver resumen IA",
+      "hideSummary": "Ocultar resumen IA"
     },
     "consultations": {
       "title": "Consultas Públicas de la CE",
@@ -472,7 +476,8 @@
       "chat": "Chat",
       "eulawcomply": "EU Law Comply",
       "tenderator": "Tenderator",
-      "profile": "Perfil"
+      "profile": "Perfil",
+      "api": "API"
     },
     "overview": {
       "corner": "Empieza aquí",
@@ -2140,7 +2145,11 @@
     "allDelegations": "Todas las delegaciones",
     "politicalGroups": "Grupos políticos",
     "epOther": "Otros",
-    "eprsEvents": "EPRS (eventos de investigación)"
+    "eprsEvents": "EPRS (eventos de investigación)",
+    "addToCalendar": "Añadir al calendario",
+    "addGoogle": "Google Calendar",
+    "addOutlook": "Outlook",
+    "downloadIcs": "Descargar .ics (Apple, otros)"
   },
   "newsSidebar": {
     "loadingFeeds": "Cargando fuentes..."

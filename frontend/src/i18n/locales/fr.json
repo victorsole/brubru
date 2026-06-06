@@ -173,7 +173,11 @@
       "summaryGenError": "Échec de la génération du résumé. Veuillez réessayer.",
       "minutes": "PV",
       "officialMinutes": "Procès-verbal officiel (PDF)",
-      "officialMinutesTip": "Procès-verbal officiel adopté disponible"
+      "officialMinutesTip": "Procès-verbal officiel adopté disponible",
+      "summarise": "Résumer (IA)",
+      "summarising": "Résumé en cours...",
+      "showSummary": "Voir le résumé IA",
+      "hideSummary": "Masquer le résumé IA"
     },
     "consultations": {
       "title": "Consultations Publiques de la CE",
@@ -472,7 +476,8 @@
       "chat": "Chat",
       "eulawcomply": "EU Law Comply",
       "tenderator": "Tenderator",
-      "profile": "Profil"
+      "profile": "Profil",
+      "api": "API"
     },
     "overview": {
       "corner": "Commencez ici",
@@ -2140,7 +2145,11 @@
     "allDelegations": "Toutes les délégations",
     "politicalGroups": "Groupes politiques",
     "epOther": "Autres",
-    "eprsEvents": "EPRS (événements de recherche)"
+    "eprsEvents": "EPRS (événements de recherche)",
+    "addToCalendar": "Ajouter au calendrier",
+    "addGoogle": "Google Agenda",
+    "addOutlook": "Outlook",
+    "downloadIcs": "Télécharger .ics (Apple, autres)"
   },
   "newsSidebar": {
     "loadingFeeds": "Chargement des flux..."

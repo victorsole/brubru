@@ -128,7 +128,7 @@ export const MyEUBubblePage = () => {
 
       <div className="my-eu-bubble-page__header">
         <img
-          src="/assets/brubru_myeububble.png"
+          src="/assets/brubru_mainlogo.png"
           alt={t('bubble.title')}
           className="my-eu-bubble-page__icon"
         />

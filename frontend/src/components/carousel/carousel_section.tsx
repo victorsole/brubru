@@ -13,7 +13,7 @@ const CAROUSEL_MESSAGES: Record<string, string> = {
   'brubru_profile.png': 'Your Personal EU Profile. Track your interests, saved searches, and stay updated on what matters to you.',
   'beresol_lito_ursi_robots.png': 'For those who want to know how Europe legislates AI.',
   'beresol_pixar.png': 'Beresol the Bear will always be there for you.',
-  'brubru_myeububble.png': 'Manage All Your EU Bubble Projects.',
+  'brubru_purple.png': 'Manage All Your EU Bubble Projects.',
   'cat_boxes.png': 'For those like Lito, trying to understand the EU\'s +50k laws.',
   'lito_beresol_drones.png': 'For those who will have to comply with the new EU defence policy.',
 };
@@ -29,7 +29,7 @@ const CAROUSEL_IMAGES = [
   'brubru_profile.png',
   'beresol_lito_ursi_robots.png',
   'beresol_pixar.png',
-  'brubru_myeububble.png',
+  'brubru_purple.png',
   'cat_boxes.png',
   'lito_beresol_drones.png',
 ];

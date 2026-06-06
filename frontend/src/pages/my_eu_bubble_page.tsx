@@ -11,7 +11,7 @@ import {
   mdiMenu, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiClose, mdiGavel,
   mdiNewspaperVariantOutline, mdiNewspaperVariantMultipleOutline, mdiBookshelf, mdiFlaskOutline,
   mdiGraphOutline, mdiBullseyeArrow,
-  mdiRobotOutline, mdiBriefcaseSearchOutline, mdiAccountCircleOutline,
+  mdiRobotOutline, mdiBriefcaseSearchOutline, mdiAccountCircleOutline, mdiApi,
 } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
@@ -102,6 +102,7 @@ const OTHER_FEATURES: { key: string; labelKey: string; fallback: string; icon: s
   { key: 'chat',        labelKey: 'bubble.feat.chat',        fallback: 'Chat',          icon: mdiRobotOutline,           route: '/main' },
   { key: 'eulawcomply', labelKey: 'bubble.feat.eulawcomply', fallback: 'EU Law Comply', icon: mdiScaleBalance,           route: '/eulawcomply' },
   { key: 'tenderator',  labelKey: 'bubble.feat.tenderator',  fallback: 'Tenderator',    icon: mdiBriefcaseSearchOutline, route: '/tenderator' },
+  { key: 'api',         labelKey: 'bubble.feat.api',         fallback: 'API',           icon: mdiApi,                    route: '/api' },
   { key: 'profile',     labelKey: 'bubble.feat.profile',     fallback: 'Profile',       icon: mdiAccountCircleOutline,   route: '/profile' },
 ];
 
@@ -315,7 +316,7 @@ export const MyEUBubblePage = () => {
 
       <div className="my-eu-bubble-page__header">
         <img
-          src="/assets/brubru_myeububble.png"
+          src="/assets/brubru_mainlogo.png"
           alt={t('bubble.title')}
           className="my-eu-bubble-page__icon"
         />

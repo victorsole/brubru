@@ -65,7 +65,7 @@ const FEATURE_CONFIGS: Record<string, FeatureConfig> = {
     title: 'My EU Bubble',
     subtitle: 'Your personalised EU policy dashboard',
     description: 'Track legislative files, monitor RSS feeds from EU institutions, and stay on top of policy developments that matter to you.',
-    screenshot: '/assets/brubru_myeububble.png',
+    screenshot: '/assets/brubru_purple.png',
     highlights: [
       { icon: mdiBellOutline, title: 'Custom Alerts', description: 'Get notified when tracked files are updated' },
       { icon: mdiChartLineVariant, title: 'Legislative Train', description: 'Track proposals through the legislative process' },

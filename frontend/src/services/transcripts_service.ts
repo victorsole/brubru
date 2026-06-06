@@ -134,4 +134,14 @@ export const transcriptsService = {
     const r = await axios.post(`${API_BASE}/${id}/summary?lang=${encodeURIComponent(lang)}`, {}, { headers: authHeaders() });
     return r.data;
   },
+
+  getMinutesSummary: async (pdfUrl: string): Promise<{ status: string; summary?: string; summary_engine?: string }> => {
+    const r = await axios.get(`${API_BASE}/minutes-summary?pdf_url=${encodeURIComponent(pdfUrl)}`, { headers: authHeaders() });
+    return r.data;
+  },
+
+  generateMinutesSummary: async (pdfUrl: string): Promise<{ status: string; summary?: string; summary_engine?: string; detail?: string }> => {
+    const r = await axios.post(`${API_BASE}/minutes-summary`, { pdf_url: pdfUrl }, { headers: authHeaders() });
+    return r.data;
+  },
 };

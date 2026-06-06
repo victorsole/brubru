@@ -198,3 +198,72 @@
   color: #1d6b46;
   font-weight: 600;
 }
+
+/* On-demand AI summary of official minutes (Task 1). */
+.transcript-minutes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.6rem 0;
+}
+.transcript-minutes__item {
+  border: 1px solid #ececf2;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  background: #fbfbfd;
+}
+.transcript-minutes__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.transcript-minutes__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #1d6b46;
+  font-weight: 600;
+  font-size: 0.84rem;
+  text-decoration: none;
+}
+.transcript-minutes__link:hover { text-decoration: underline; }
+.transcript-minutes__sum,
+.transcript-minutes__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b3fa0;
+  background: #f4f0fb;
+  border: 1px solid #e2d8f4;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  cursor: pointer;
+}
+.transcript-minutes__sum:disabled { opacity: 0.6; cursor: default; }
+.transcript-minutes__sum:hover:not(:disabled),
+.transcript-minutes__toggle:hover { background: #ece3f8; }
+.transcript-minutes__summary {
+  position: relative;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-top: 1px dashed #e8e8ef;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #33333f;
+}
+.transcript-minutes__summary p { margin: 0 0 0.35rem; }
+.transcript-minutes__ai {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #6b3fa0;
+  background: #f0e9fb;
+  padding: 0 5px;
+  border-radius: 999px;
+}

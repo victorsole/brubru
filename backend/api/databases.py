@@ -124,7 +124,7 @@ def _eucanon_index_cards() -> Dict[str, dict]:
 
 
 @router.get("/library-stats", summary="Knowledge-library counts + featured items (verified URLs)")
-def library_stats(current_user: User = Depends(get_current_user)):
+def library_stats(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Counts and a few featured, real-URL items for each Brubru knowledge library:
     EU Canon, Deep Dives, Knowledge Guides, Catalan EU law."""
     reports = _manifest()
@@ -138,7 +138,8 @@ def library_stats(current_user: User = Depends(get_current_user)):
             "celex": r.get("celex"),
         } for r in rows[:n]]
 
-    # Catalan: only the pages that actually exist on disk (no 404s).
+    # Catalan: featured items = the pages that actually exist on disk (no 404s);
+    # the COUNT is the authoritative DB total (matches the public landing page).
     catalan = []
     cat_dir = _PUBLIC / "legislacio-ue-catala"
     if cat_dir.is_dir():
@@ -146,7 +147,13 @@ def library_stats(current_user: User = Depends(get_current_user)):
             if d.is_dir() and (d / "index.html").exists():
                 catalan.append({"name": d.name,
                                 "title": _CATALAN_TITLES.get(d.name, d.name),
-                                "url": f"/legislacio-ue-catala/{d.name}/index.html"})
+                                "url": f"https://brubru.beresol.eu/legislacio-ue-catala/{d.name}/index.html"})
+    catalan_count = len(catalan)
+    try:
+        from models.catalan_translation import CatalanTranslation
+        catalan_count = db.query(CatalanTranslation).count() or catalan_count
+    except Exception:
+        db.rollback()
 
     guides_count = len(list(_GUIDES.glob("*.md"))) if _GUIDES.is_dir() else 0
 
@@ -154,7 +161,7 @@ def library_stats(current_user: User = Depends(get_current_user)):
         "canon": {"count": len(canon), "url": "/eucanon/index.html", "items": _items(canon)},
         "deep_dive": {"count": len(deep), "url": "/eucanon/index.html", "items": _items(deep)},
         "guides": {"count": guides_count, "url": "/guides/index.html"},
-        "catalan": {"count": len(catalan), "url": (catalan[0]["url"] if catalan else None), "items": catalan},
+        "catalan": {"count": catalan_count, "url": "https://brubru.beresol.eu/legislacio-ue-catala/", "items": catalan},
     }
 
 
@@ -265,9 +272,22 @@ def guides(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/catalan", summary="Dret europeu en català: EU law translated into Catalan")
-def catalan(current_user: User = Depends(get_current_user)):
-    """The EU legislation translated into Catalan that actually exists on disk
-    (no dead links), plus the CTA to the public Catalan-law landing page."""
+def catalan(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Catalan translations of EU law. The KPI count is the AUTHORITATIVE total
+    from the `catalan_translations` DB (the same source the public landing page
+    uses) — NOT a count of the few HTML deep-dives committed to disk. Featured
+    items are the on-disk pages that render in-app (no 404s); the CTA opens the
+    full public catalogue."""
+    # Authoritative count: every translated text in the DB (matches the landing
+    # page's total_translations, ~14.9k). Fail-soft to 0 if the table is absent.
+    count = 0
+    try:
+        from models.catalan_translation import CatalanTranslation
+        count = db.query(CatalanTranslation).count()
+    except Exception:
+        db.rollback()
+
+    # Featured items = the verified on-disk deep-dive pages (no dead links).
     items = []
     cat_dir = _PUBLIC / "legislacio-ue-catala"
     if cat_dir.is_dir():
@@ -276,9 +296,11 @@ def catalan(current_user: User = Depends(get_current_user)):
                 items.append({
                     "name": d.name,
                     "title": _CATALAN_TITLES.get(d.name, d.name),
-                    "url": f"/legislacio-ue-catala/{d.name}/index.html",
+                    "url": f"https://brubru.beresol.eu/legislacio-ue-catala/{d.name}/index.html",
                 })
-    return {"count": len(items), "url": "/legislacio-ue-catala/", "items": items}
+    # Absolute URL so the "Obre les traduccions" CTA always lands on the public
+    # static catalogue (a relative path can fall back to the SPA root).
+    return {"count": count, "url": "https://brubru.beresol.eu/legislacio-ue-catala/", "items": items}
 
 
 @router.get("/beresol-monitors", summary="Beresol Monitors: the partner policy-intelligence feed index")

@@ -173,7 +173,11 @@
       "summaryGenError": "Summary generation failed. Please try again.",
       "minutes": "minutes",
       "officialMinutes": "Official minutes (PDF)",
-      "officialMinutesTip": "Official adopted minutes available"
+      "officialMinutesTip": "Official adopted minutes available",
+      "summarise": "Summarise (AI)",
+      "summarising": "Summarising...",
+      "showSummary": "Show AI summary",
+      "hideSummary": "Hide AI summary"
     },
     "consultations": {
       "title": "EC Public Consultations",
@@ -472,7 +476,8 @@
       "chat": "Chat",
       "eulawcomply": "EU Law Comply",
       "tenderator": "Tenderator",
-      "profile": "Profile"
+      "profile": "Profile",
+      "api": "API"
     },
     "overview": {
       "corner": "Start here",
@@ -2140,7 +2145,11 @@
     "allDelegations": "All delegations",
     "politicalGroups": "Political groups",
     "epOther": "Other",
-    "eprsEvents": "EPRS (research events)"
+    "eprsEvents": "EPRS (research events)",
+    "addToCalendar": "Add to calendar",
+    "addGoogle": "Google Calendar",
+    "addOutlook": "Outlook",
+    "downloadIcs": "Download .ics (Apple, other)"
   },
   "newsSidebar": {
     "loadingFeeds": "Loading feeds..."

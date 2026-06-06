@@ -1303,3 +1303,45 @@
   .eu-calendar-tab__dropdown { min-width: 100%; }
   .eu-calendar-tab__dropdown select { max-width: 100%; }
 }
+
+/* Add-to-calendar control (Task 4) */
+.eu-calendar-tab__addcal {
+  position: relative;
+  display: inline-block;
+}
+.eu-calendar-tab__addcal-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid #e7e7ef;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  padding: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.eu-calendar-tab__addcal-menu a,
+.eu-calendar-tab__addcal-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.85rem;
+  color: #2b2b3a;
+  text-decoration: none;
+  cursor: pointer;
+}
+.eu-calendar-tab__addcal-menu a:hover,
+.eu-calendar-tab__addcal-menu button:hover {
+  background: #f2f0fb;
+  color: #5a3489;
+}

@@ -20,7 +20,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, Query, status
 from sqlalchemy import and_, or_, text
 from sqlalchemy.orm import Session
 
@@ -243,6 +243,45 @@ def suggestions(
     }
     rows = [r for r in rows if (r.committee_code, r.meeting_date.date()) not in done][:40]
     return {"items": [_summary(r) for r in rows], "can_transcribe": _is_blue_or_admin(user)}
+
+
+# Official minutes summary (on-demand, HF Qwen, cached per PDF). Defined BEFORE
+# the /{tid} catch-all so "minutes-summary" is not parsed as a transcript id.
+@router.get("/minutes-summary")
+def get_minutes_summary(
+    pdf_url: str = Query(..., description="The minutes PDF URL"),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Cached AI summary of an official committee-minutes PDF, or status=absent."""
+    _require_yellow(user)
+    from services.analysis.minutes_summary_service import get_summary
+    s = get_summary(db, pdf_url)
+    return {"status": "ready", **s} if s else {"status": "absent"}
+
+
+@router.post("/minutes-summary")
+async def generate_minutes_summary(
+    pdf_url: str = Body(..., embed=True, description="The minutes PDF URL"),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Summarise an official committee-minutes PDF on demand (HF Qwen, cached).
+
+    The URL must be a known eMeeting minutes document - we never summarise an
+    arbitrary URL.
+    """
+    _require_yellow(user)
+    ok = db.execute(text(
+        "SELECT 1 FROM ep_emeeting_documents WHERE pdf_url = :u AND doc_kind = 'minutes' LIMIT 1"
+    ), {"u": pdf_url}).first()
+    if not ok:
+        raise HTTPException(status_code=404, detail="Not a known minutes document")
+    from services.analysis.minutes_summary_service import summarise
+    s = await summarise(db, pdf_url)
+    if not s:
+        return {"status": "error", "detail": "Could not extract or summarise this document."}
+    return {"status": "ready", **s}
 
 
 @router.get("/{tid}")

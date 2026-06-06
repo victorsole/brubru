@@ -173,7 +173,11 @@
       "summaryGenError": "Generazione della sintesi non riuscita. Riprova.",
       "minutes": "verbale",
       "officialMinutes": "Verbale ufficiale (PDF)",
-      "officialMinutesTip": "Verbale ufficiale adottato disponibile"
+      "officialMinutesTip": "Verbale ufficiale adottato disponibile",
+      "summarise": "Riassumi (IA)",
+      "summarising": "Riassunto in corso...",
+      "showSummary": "Mostra il riassunto IA",
+      "hideSummary": "Nascondi il riassunto IA"
     },
     "consultations": {
       "title": "Consultazioni Pubbliche della CE",
@@ -472,7 +476,8 @@
       "chat": "Chat",
       "eulawcomply": "EU Law Comply",
       "tenderator": "Tenderator",
-      "profile": "Profilo"
+      "profile": "Profilo",
+      "api": "API"
     },
     "overview": {
       "corner": "Inizia qui",
@@ -2140,7 +2145,11 @@
     "allDelegations": "Tutte le delegazioni",
     "politicalGroups": "Gruppi politici",
     "epOther": "Altri",
-    "eprsEvents": "EPRS (eventi di ricerca)"
+    "eprsEvents": "EPRS (eventi di ricerca)",
+    "addToCalendar": "Aggiungi al calendario",
+    "addGoogle": "Google Calendar",
+    "addOutlook": "Outlook",
+    "downloadIcs": "Scarica .ics (Apple, altri)"
   },
   "newsSidebar": {
     "loadingFeeds": "Caricamento feed..."

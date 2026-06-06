@@ -306,6 +306,56 @@ export function TranscriptsTab() {
 // Detail modal: HLS video + agenda chapter rail + time-synced transcript
 // ---------------------------------------------------------------------------
 
+// Official minutes PDF + on-demand AI summary (HF Qwen, cached server-side).
+function MinutesItem({ pdfUrl }: { pdfUrl: string | null }) {
+  const { t } = useTranslation();
+  const [summary, setSummary] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!pdfUrl) return;
+    transcriptsService.getMinutesSummary(pdfUrl)
+      .then((r) => { if (r.status === 'ready' && r.summary) setSummary(r.summary); })
+      .catch(() => { });
+  }, [pdfUrl]);
+
+  const generate = async () => {
+    if (!pdfUrl) return;
+    setLoading(true);
+    try {
+      const r = await transcriptsService.generateMinutesSummary(pdfUrl);
+      if (r.summary) { setSummary(r.summary); setOpen(true); }
+    } finally { setLoading(false); }
+  };
+
+  return (
+    <div className="transcript-minutes__item">
+      <div className="transcript-minutes__head">
+        <a className="transcript-minutes__link" href={pdfUrl || undefined} target="_blank" rel="noopener noreferrer">
+          <Icon path={mdiFilePdfBox} size={0.7} /> {t('bubble.transcripts.officialMinutes', 'Official minutes (PDF)')}
+        </a>
+        {summary ? (
+          <button className="transcript-minutes__toggle" onClick={() => setOpen(!open)}>
+            <Icon path={mdiCreation} size={0.6} /> {open ? t('bubble.transcripts.hideSummary', 'Hide AI summary') : t('bubble.transcripts.showSummary', 'Show AI summary')}
+          </button>
+        ) : (
+          <button className="transcript-minutes__sum" onClick={generate} disabled={loading || !pdfUrl}>
+            <Icon path={loading ? mdiLoading : mdiCreation} size={0.6} spin={loading} />
+            {loading ? t('bubble.transcripts.summarising', 'Summarising...') : t('bubble.transcripts.summarise', 'Summarise (AI)')}
+          </button>
+        )}
+      </div>
+      {summary && open && (
+        <div className="transcript-minutes__summary">
+          {summary.split('\n').filter((l) => l.trim()).map((line, i) => <p key={i}>{line}</p>)}
+          <span className="transcript-minutes__ai">{t('journey.aiTag', 'AI')}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface DetailModalProps {
   detail: TranscriptDetail;
   onClose: () => void;
@@ -463,15 +513,16 @@ function TranscriptDetailModal({ detail, onClose, onSave, instClass, bodyBadge, 
               <Icon path={mdiOpenInNew} size={0.7} /> {t('bubble.transcripts.watchOnEp', 'Watch on EP')}
             </a>
           )}
-          {(detail.official_minutes || []).map((m, i) => (
-            <a key={i} className="transcript-card__btn is-ghost" href={m.pdf_url || m.source_url || undefined}
-              target="_blank" rel="noopener noreferrer"
-              title={t('bubble.transcripts.officialMinutesTip', 'Official adopted minutes available') as string}>
-              <Icon path={mdiFilePdfBox} size={0.7} /> {t('bubble.transcripts.officialMinutes', 'Official minutes (PDF)')}
-            </a>
-          ))}
         </div>
         {agendaMsg && <p className="transcripts-tab__hint">{agendaMsg}</p>}
+
+        {(detail.official_minutes || []).length > 0 && (
+          <div className="transcript-minutes">
+            {(detail.official_minutes || []).map((m, i) => (
+              <MinutesItem key={i} pdfUrl={m.pdf_url || m.source_url || null} />
+            ))}
+          </div>
+        )}
 
         {hasVideo && (
           <div className="transcript-modal__player">
