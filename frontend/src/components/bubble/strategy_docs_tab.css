@@ -1,5 +1,5 @@
 /* Strategy Docs tab. Reuses global db-tab__header / db-loading / sm-toggle / sm-search. */
-.sd-tab { padding: 0.5rem 0.25rem 2rem; max-width: 1040px; margin: 0 auto; }
+.sd-tab { padding: 1.5rem 1.5rem 2rem; max-width: 1040px; margin: 0 auto; }
 .sd-tab .db-tab__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .sd-tab .db-tab__title { display: flex; gap: 0.75rem; align-items: flex-start; color: #1e3a8a; }
 .sd-tab .db-tab__title h2 { margin: 0; font-size: 1.4rem; color: #0f172a; }

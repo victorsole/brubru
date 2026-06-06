@@ -1,4 +1,4 @@
-.lobby-tab { padding: 0.5rem 0.25rem 2rem; max-width: 1040px; margin: 0 auto; }
+.lobby-tab { padding: 1.5rem 1.5rem 2rem; max-width: 1040px; margin: 0 auto; }
 
 .lobby-tab__header { margin-bottom: 1.1rem; }
 .lobby-tab__title { display: flex; gap: 0.75rem; align-items: flex-start; }

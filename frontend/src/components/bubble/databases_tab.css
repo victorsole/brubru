@@ -1,4 +1,4 @@
-.db-tab { padding: 0.5rem 0.25rem 2rem; max-width: 1040px; margin: 0 auto; }
+.db-tab { padding: 1.5rem 1.5rem 2rem; max-width: 1040px; margin: 0 auto; }
 
 .db-tab__header { margin-bottom: 1rem; }
 .db-tab__title { display: flex; gap: 0.75rem; align-items: flex-start; color: #1e3a8a; }
