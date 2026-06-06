@@ -20,6 +20,7 @@ prompt is bounded so the GPT-4 / Mistral fallbacks still fit. Results cache in
 ``file_journey_analyses`` keyed by procedure + a hash of the contributing docs.
 """
 
+import asyncio
 import hashlib
 import json
 import logging
@@ -33,9 +34,18 @@ from services.analysis.pdf_text_extractor import get_pdf_text
 
 logger = logging.getLogger(__name__)
 
-# Total characters of source text sent to the model. 350k chars (~88k tokens)
-# fits every provider's window (Gemini 1M, GPT-4o 128k, Mistral 128k) so the
-# non-Anthropic fallback chain always works; truncation beyond is flagged.
+# Primary engine: the open-source HF Qwen3-30B (256K context) used for the
+# transcript summaries - cheap, non-Anthropic, sanctioned OSS path. GPT-4o /
+# Mistral are fallbacks if HF is unavailable.
+_HF_MODEL = "Qwen/Qwen3-30B-A3B-Instruct-2507:featherless-ai"
+
+# Per-engine source-text budget (chars, ~4 chars/token). The HF Inference
+# Providers router (featherless) serves Qwen on a shared tier that 429s
+# ("insufficient capacity") on very large requests, so we keep the HF request
+# at ~45K tokens - reliable and cheap, covers most dossiers in full via the
+# max-min allocation. The GPT-4o fallback gets the bigger budget for the few
+# giant files where HF declines.
+_HF_CHAR_CAP = 180_000
 _TOTAL_CHAR_CAP = 350_000
 
 # Legislative procedure suffixes (these carry a Commission proposal).
@@ -90,7 +100,8 @@ def resolve_doc_set(db: Session, procedure_ref: str) -> List[dict]:
     return out
 
 
-def _build_messages(procedure_ref: str, is_legislative: bool, layers: List[dict]) -> tuple[str, list]:
+def _build_messages(procedure_ref: str, is_legislative: bool, layers: List[dict],
+                    total_cap: int = _TOTAL_CHAR_CAP) -> tuple[str, list]:
     kind_word = "legislative file (it has a Commission proposal)" if is_legislative \
         else "non-legislative file (a resolution / own-initiative report, with no Commission proposal)"
     present = ", ".join(l["label"] for l in layers)
@@ -129,7 +140,7 @@ def _build_messages(procedure_ref: str, is_legislative: bool, layers: List[dict]
     # their FULL text and splits the rest between the big ones (proposal,
     # amendments) - so every layer is always represented, never starved by order.
     alloc: dict = {}
-    remaining_budget = _TOTAL_CHAR_CAP
+    remaining_budget = total_cap
     remaining_layers = len(layers)
     for l in sorted(layers, key=lambda x: len(x.get("_text") or "")):
         share = remaining_budget // remaining_layers if remaining_layers else 0
@@ -156,12 +167,40 @@ def _build_messages(procedure_ref: str, is_legislative: bool, layers: List[dict]
     return system_prompt, [{"role": "user", "content": user}]
 
 
-async def _call_llm(system_prompt: str, messages: list) -> tuple[Optional[dict], Optional[str], Optional[str]]:
-    """Non-Anthropic, long-context-first. Returns (parsed_json, engine, model)."""
-    from services.ai.multi_provider_service import MistralProvider, OpenAIProvider, GeminiProvider
-    # Gemini first for its long context; GPT-4o then Mistral as fallback.
+async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
+                    ) -> tuple[Optional[dict], Optional[str], Optional[str]]:
+    """Non-Anthropic. Primary = HF Qwen3-30B (256K ctx, big source budget);
+    fallbacks = GPT-4o then Mistral (smaller budget). Messages are reassembled
+    per engine so each gets as much text as its window allows. Returns
+    (parsed_json, engine, model)."""
     last_err = None
-    for Provider in (GeminiProvider, OpenAIProvider, MistralProvider):
+
+    # 1. HF Qwen (open-source, cheap, long context) - the sanctioned OSS path.
+    # featherless 429s intermittently on capacity, so retry a couple of times
+    # before giving up to the paid fallback.
+    try:
+        from services.ai.huggingface_service import get_huggingface_service
+        system_prompt, messages = _build_messages(procedure_ref, is_legislative, layers, _HF_CHAR_CAP)
+        hf = get_huggingface_service()
+        hf_messages = [{"role": "system", "content": system_prompt}] + messages
+        for attempt in range(3):
+            raw = await hf.chat_completion(
+                model=_HF_MODEL, messages=hf_messages, max_tokens=2600, temperature=0.2,
+            )
+            parsed = _parse_json(raw or "")
+            if parsed is not None:
+                return parsed, "HuggingFace", _HF_MODEL
+            if attempt < 2:
+                await asyncio.sleep(5 * (attempt + 1))  # 5s, 10s backoff
+        logger.warning("[journey] HF Qwen exhausted retries, falling back")
+    except Exception as e:
+        last_err = e
+        logger.warning("[journey] HF Qwen failed: %s", e)
+
+    # 2/3. GPT-4o then Mistral (smaller window -> smaller source budget).
+    from services.ai.multi_provider_service import MistralProvider, OpenAIProvider
+    system_prompt, messages = _build_messages(procedure_ref, is_legislative, layers, _TOTAL_CHAR_CAP)
+    for Provider in (OpenAIProvider, MistralProvider):
         try:
             provider = Provider()
             if not provider.is_available:
@@ -171,15 +210,14 @@ async def _call_llm(system_prompt: str, messages: list) -> tuple[Optional[dict],
                 max_tokens=2600, temperature=0.2,
             )
             raw = (resp.message or "").strip() if resp else ""
-            if not raw:
-                continue
             parsed = _parse_json(raw)
             if parsed is not None:
                 return parsed, getattr(provider, "name", Provider.__name__), getattr(Provider, "MODEL", None)
         except Exception as e:
             last_err = e
             logger.warning("[journey] %s failed: %s", Provider.__name__, e)
-    logger.error("[journey] all non-Anthropic providers failed: %s", last_err)
+
+    logger.error("[journey] all engines failed: %s", last_err)
     return None, None, None
 
 
@@ -232,8 +270,7 @@ async def generate_journey(db: Session, carriage) -> Optional[dict]:
     if not docs:
         return None
 
-    system_prompt, messages = _build_messages(procedure_ref, is_legislative, docs)
-    parsed, engine, model = await _call_llm(system_prompt, messages)
+    parsed, engine, model = await _call_llm(procedure_ref, is_legislative, docs)
     if parsed is None:
         _mark_error(db, procedure_ref, carriage)
         return None
@@ -336,24 +373,28 @@ def current_doc_set_hash(db: Session, procedure_ref: str) -> Optional[str]:
 
 
 async def precompute_tracked(db: Session, limit: int = 5) -> dict:
-    """Generate journeys for tracked dossiers that are missing or stale.
+    """Generate journeys for dossiers that are missing or stale, tracked first.
 
-    Throttled (``limit`` per run) so the warm cron tier backfills gradually
-    rather than in one expensive burst. Only touches carriages a user tracks and
-    that actually have committee documents; skips fresh ones via the doc hash.
+    Covers the whole universe of carriages with committee documents (tracked
+    ones prioritised), ``limit`` per run, sequential with a short pause so the
+    shared HF tier keeps serving the cheap engine rather than 429-ing into the
+    paid fallback. Skips fresh ones via the doc-set hash, so successive runs work
+    through the backlog and then just keep tracked files fresh.
     """
     from models.legislative_train import LegislativeCarriage
 
     rows = db.execute(text(
         """
-        SELECT DISTINCT c.id, c.oeil_procedure_ref
-        FROM user_carriage_tracks t
-        JOIN legislative_carriages c ON c.id = t.carriage_id
-        WHERE t.archived_at IS NULL AND c.oeil_procedure_ref IS NOT NULL
+        SELECT c.id, c.oeil_procedure_ref,
+               EXISTS (SELECT 1 FROM user_carriage_tracks t
+                       WHERE t.carriage_id = c.id AND t.archived_at IS NULL) AS is_tracked
+        FROM legislative_carriages c
+        WHERE c.oeil_procedure_ref IS NOT NULL
           AND EXISTS (SELECT 1 FROM ep_emeeting_documents d
                       WHERE d.procedure_ref = c.oeil_procedure_ref
                         AND d.doc_kind IN ('draft_report','amendment','compromise_amendments',
                                            'voting_list','opinion','draft_opinion','commission_document'))
+        ORDER BY is_tracked DESC, c.last_updated DESC NULLS LAST
         """
     )).mappings().all()
 
@@ -376,6 +417,7 @@ async def precompute_tracked(db: Session, limit: int = 5) -> dict:
                 done += 1
             else:
                 failed += 1
+            await asyncio.sleep(2)  # be gentle on the shared HF tier
         except Exception as exc:  # one bad dossier must not stop the batch
             logger.warning("[journey] precompute failed for %s: %s", ref, exc)
             db.rollback()

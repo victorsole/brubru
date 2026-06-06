@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiTimelineTextOutline, mdiFilePdfBox, mdiOpenInNew, mdiArrowRightCircleOutline,
-  mdiCreation, mdiLoading, mdiAlertOutline, mdiSwordCross,
+  mdiCreation, mdiLoading, mdiSwordCross,
 } from '@mdi/js';
 import { positionService } from '../../services/position_service';
 import type { JourneyResponse, JourneyLayer } from '../../services/position_service';
@@ -47,11 +47,6 @@ function LayerCard({ layer }: { layer: JourneyLayer }) {
       {layer.summary
         ? <p className="journey-layer__summary">{layer.summary}</p>
         : <p className="journey-layer__summary is-empty">{t('journey.noLayerText', 'No analysable text for this layer.')}</p>}
-      {layer.truncated && (
-        <p className="journey-layer__trunc">
-          <Icon path={mdiAlertOutline} size={0.55} /> {t('journey.truncated', 'Long document: analysis based on the leading portion of the text.')}
-        </p>
-      )}
     </div>
   );
 }
