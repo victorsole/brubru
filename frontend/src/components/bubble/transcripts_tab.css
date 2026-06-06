@@ -189,3 +189,12 @@
   }
   .transcript-modal__head h3 { font-size: 1rem; }
 }
+
+/* eMeeting official-minutes flag on a transcript card (step 6 dual-source). */
+.transcript-card__minutes-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #1d6b46;
+  font-weight: 600;
+}

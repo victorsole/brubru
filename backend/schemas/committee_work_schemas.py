@@ -143,6 +143,10 @@ class CommitteeWorkItemSummary(BaseModel):
     # are linked to a legislative carriage; null items fall back to OEIL.
     legislative_carriage_id: Optional[UUID] = None
     oeil_url: Optional[str] = None
+    # eMeeting enrichment: the opinion / draft opinion this committee tabled on
+    # this dossier (surface-not-ingest, matched by procedure + committee). Each
+    # entry: {doc_kind, title, item_title, meeting_date, pdf_url, source_url}.
+    committee_documents: List[Dict[str, Any]] = Field(default_factory=list)
 
     class Config:
         from_attributes = True

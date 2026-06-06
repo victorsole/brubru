@@ -34,6 +34,7 @@ import {
   mdiInformationOutline,
   mdiChevronDown,
   mdiChevronUp,
+  mdiFilePdfBox,
 } from '@mdi/js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getDeepDiveForProcedure, getDeepDiveUrl } from '../../utils/deep_dive_map';
@@ -1923,6 +1924,24 @@ const CommitteeWorkCard = ({ item, isJunkTitle, isTracked, onViewDetail, onTrack
           {t('myFilesTab.score', { n: item.relevance_score })}
         </span>
       </div>
+
+      {item.committee_documents && item.committee_documents.length > 0 && (
+        <div className="committee-work-card__opinions">
+          <span className="committee-work-card__opinions-label">
+            {t('myFilesTab.committeeOpinion', 'Opinion tabled by this committee')}
+          </span>
+          {item.committee_documents.map((d, i) => (
+            <a key={i} className="committee-work-card__opinion-link"
+              href={d.pdf_url || d.source_url || undefined} target="_blank" rel="noopener noreferrer">
+              <Icon path={mdiFilePdfBox} size={0.6} />
+              {d.doc_kind === 'draft_opinion'
+                ? t('committeeDocs.draftOpinion', 'Draft opinion')
+                : t('committeeDocs.opinion', 'Opinion')}
+              {d.meeting_date ? ` · ${d.meeting_date}` : ''}
+            </a>
+          ))}
+        </div>
+      )}
 
       <div className="committee-work-card__actions">
         {onViewDetail && (

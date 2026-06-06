@@ -170,7 +170,10 @@
       "summaryBlueHint": "AI summaries are a Professional feature.",
       "summaryProvenance": "AI-generated institutional summary. Verify against the transcript and the source recording.",
       "summaryError": "Could not load the summary.",
-      "summaryGenError": "Summary generation failed. Please try again."
+      "summaryGenError": "Summary generation failed. Please try again.",
+      "minutes": "minutes",
+      "officialMinutes": "Official minutes (PDF)",
+      "officialMinutesTip": "Official adopted minutes available"
     },
     "consultations": {
       "title": "EC Public Consultations",
@@ -1738,6 +1741,20 @@
     "generating": "Forecasting...",
     "unlimited": "Professional: Unlimited predictions"
   },
+  "committeeDocs": {
+    "title": "Committee documents",
+    "note": "Documents tabled in the committee that owns this file, straight from the European Parliament. Each links to the original PDF.",
+    "draftReport": "Draft report",
+    "amendments": "Amendments",
+    "compromiseAmendments": "Compromise amendments",
+    "opinion": "Opinion",
+    "draftOpinion": "Draft opinion",
+    "reasonedOpinion": "Reasoned opinion",
+    "agreedText": "Agreed text",
+    "letterOfAgreement": "Letter of agreement",
+    "draftResolution": "Draft resolution",
+    "workingDocument": "Working document"
+  },
   "positionTab": {
     "seeForecast": "See forecast",
     "fileOutcome": "File outcome",
@@ -2075,7 +2092,9 @@
     "advancedAddByRef": "Advanced: add by procedure reference",
     "loadMore": "Load more",
     "showingCount": "Showing {{shown}} of {{total}}",
-    "filters": "Filters"
+    "filters": "Filters",
+    "mine": "My interests",
+    "committeeOpinion": "Opinion tabled by this committee"
   },
   "calendar": {
     "myEuToday": "My EU Today",
@@ -2528,7 +2547,12 @@
   "commissionDoc": {
     "noDate": "No date",
     "openInEurlex": "Open in EUR-Lex",
-    "viewInEurlex": "View in EUR-Lex"
+    "viewInEurlex": "View in EUR-Lex",
+    "referredTo": "Referred to committee",
+    "matchesInterests": "In your Policy Interests",
+    "matchesTracked": "On a file you track",
+    "referralPdf": "Committee referral (PDF)",
+    "referralPdfTip": "The proposal as referred to the EP committee"
   },
   "textAdopted": {
     "voteCount": "Vote: {{forCount}} for / {{againstCount}} against / {{abstentions}} abstentions",
@@ -2848,6 +2872,17 @@
     }
   },
   "votes": {
+    "votingListsTab": "Voting lists",
+    "votingListsCount": "voting lists",
+    "votingList": {
+      "tabNote": "The committee order papers behind the votes - which amendments get voted, in what order, with the compromises. Mostly forward-looking.",
+      "attachTitle": "Voting list",
+      "attachNote": "The order paper this vote ran from - which amendments, in what order, with the compromises.",
+      "openPdf": "Open voting list (PDF)",
+      "empty": "No committee voting lists recorded yet.",
+      "emptyPi": "No voting lists yet for your interest committees.",
+      "emptyFiles": "No voting lists on the files you track."
+    },
     "title": "Votes",
     "intro": "How the Parliament voted on the dossiers in your interests: committee and plenary, ordered the way the EP does not.",
     "committee": "Committee",
@@ -3168,5 +3203,25 @@
     "kind_consultation_response": "Consultation response",
     "kind_stakeholder_map": "Stakeholder map",
     "kind_amendment": "Amendment"
+  },
+  "journey": {
+    "title": "Legislative journey",
+    "aiTag": "AI",
+    "absentBlurb": "See how this file changed from the Commission proposal through to the committee vote, analysed with AI.",
+    "generate": "Generate AI analysis",
+    "generating": "Analysing the documents...",
+    "cta": "See the full comparison in Position Analysis",
+    "stale": "New documents since",
+    "whereFight": "Where the fight is",
+    "builtWith": "Analysed with",
+    "regenerate": "Refresh analysis",
+    "openSource": "Open source document (PDF)",
+    "noLayerText": "No analysable text for this layer.",
+    "truncated": "Long document: analysis based on the leading portion of the text.",
+    "layerProposal": "Commission proposal",
+    "layerDraftReport": "Rapporteur's draft report",
+    "layerAmendments": "MEPs' amendments",
+    "layerCompromise": "Compromise amendments",
+    "layerVotingList": "Final voting list"
   }
 }

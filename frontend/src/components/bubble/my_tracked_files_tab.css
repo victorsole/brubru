@@ -1777,3 +1777,31 @@
     font-size: 0.7rem;
   }
 }
+
+/* eMeeting opinion links on a committee-work card (step 4 enrichment). */
+.committee-work-card__opinions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0.2rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed #e8e8ef;
+}
+.committee-work-card__opinions-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6a6a78;
+}
+.committee-work-card__opinion-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.74rem;
+  color: #1a73e8;
+  text-decoration: none;
+  background: #eef4fe;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.committee-work-card__opinion-link:hover { text-decoration: underline; }

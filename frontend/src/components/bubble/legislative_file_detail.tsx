@@ -37,6 +37,8 @@ import { TrackFileButton } from '../shared/track_file_button';
 import { PersonalisedImpact } from '../shared/personalised_impact';
 import { FutureComplyPreview } from '../shared/future_comply_preview';
 import { RegulatoryCascade } from '../shared/regulatory_cascade';
+import CommitteeDocumentsCard from './committee_documents_card';
+import LegislativeJourneyPanel from './legislative_journey_panel';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
 
@@ -256,6 +258,18 @@ export const LegislativeFileDetail = () => {
                 cenRelevant={cenRelevant}
               />
             )}
+
+            {/* Legislative journey - AI comparison summary + CTA to Position Analysis */}
+            <div className="legislative-file-detail__section">
+              <LegislativeJourneyPanel
+                carriageId={selectedFile.id}
+                mode="compact"
+                onOpenFullAnalysis={selectedFile.oeil_procedure_ref ? () => {
+                  closeFileDetail();
+                  navigate(`/my-eu-bubble?tab=position_analysis&ref=${encodeURIComponent(selectedFile.oeil_procedure_ref!)}`);
+                } : undefined}
+              />
+            </div>
 
             {/* Status */}
             <div className="legislative-file-detail__section">
@@ -599,6 +613,11 @@ export const LegislativeFileDetail = () => {
                 </>
               )}
             </div>
+
+            {/* EP committee documents on this dossier (draft report, amendments,
+                opinions, compromises) - surfaced from ep_emeeting_documents by
+                OEIL procedure. Renders nothing when the file has none. */}
+            <CommitteeDocumentsCard carriageId={selectedFile.id} compact />
 
             {/* AI Analyze Button */}
             {!selectedFile.ai_summary && (

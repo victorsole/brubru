@@ -208,10 +208,10 @@ async def list_events(
         .all()
     )
 
-    return CalendarEventListResponse(
-        total=total,
-        events=[CalendarEventResponse.model_validate(e) for e in events],
-    )
+    from services.linking.emeeting_links import attach_calendar_agendas
+    resp = [CalendarEventResponse.model_validate(e) for e in events]
+    attach_calendar_agendas(db, resp)
+    return CalendarEventListResponse(total=total, events=resp)
 
 
 @router.get("/events/range", response_model=CalendarRangeResponse)
@@ -277,11 +277,14 @@ async def get_events_in_range(
 
     events = query.order_by(EUCalendarEvent.start_date.asc()).all()
 
+    from services.linking.emeeting_links import attach_calendar_agendas
+    resp = [CalendarEventResponse.model_validate(e) for e in events]
+    attach_calendar_agendas(db, resp)
     return CalendarRangeResponse(
         date_from=date_from,
         date_to=date_to,
         total=len(events),
-        events=[CalendarEventResponse.model_validate(e) for e in events],
+        events=resp,
     )
 
 
@@ -321,11 +324,15 @@ async def get_today_digest(
     if _is_blue_tier(user) and today_events:
         ai_summary = _generate_today_summary(today_events)
 
+    from services.linking.emeeting_links import attach_calendar_agendas
+    today_resp = [CalendarEventResponse.model_validate(e) for e in today_events]
+    tomorrow_resp = [CalendarEventResponse.model_validate(e) for e in tomorrow_events]
+    attach_calendar_agendas(db, today_resp + tomorrow_resp)
     return TodayDigestResponse(
         today_count=len(today_events),
-        today_events=[CalendarEventResponse.model_validate(e) for e in today_events],
+        today_events=today_resp,
         tomorrow_count=len(tomorrow_events),
-        tomorrow_events=[CalendarEventResponse.model_validate(e) for e in tomorrow_events],
+        tomorrow_events=tomorrow_resp,
         ai_summary=ai_summary,
     )
 
@@ -343,7 +350,10 @@ async def get_event(
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
-    return CalendarEventResponse.model_validate(event)
+    from services.linking.emeeting_links import attach_calendar_agendas
+    resp = CalendarEventResponse.model_validate(event)
+    attach_calendar_agendas(db, [resp])
+    return resp
 
 
 # ============================================================================

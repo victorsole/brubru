@@ -170,7 +170,10 @@
       "summaryBlueHint": "Els resums amb IA són una funció Professional.",
       "summaryProvenance": "Resum institucional generat amb IA. Verifica'l amb la transcripció i la gravació original.",
       "summaryError": "No s'ha pogut carregar el resum.",
-      "summaryGenError": "La generació del resum ha fallat. Torna-ho a provar."
+      "summaryGenError": "La generació del resum ha fallat. Torna-ho a provar.",
+      "minutes": "acta",
+      "officialMinutes": "Acta oficial (PDF)",
+      "officialMinutesTip": "Acta oficial adoptada disponible"
     },
     "consultations": {
       "title": "Consultes Públiques de la CE",
@@ -1738,6 +1741,20 @@
     "generating": "Calculant...",
     "unlimited": "Professional: previsions il·limitades"
   },
+  "committeeDocs": {
+    "title": "Documents de comissió",
+    "note": "Documents presentats a la comissió responsable d'aquest expedient, directament del Parlament Europeu. Cadascun enllaça amb el PDF original.",
+    "draftReport": "Projecte d'informe",
+    "amendments": "Esmenes",
+    "compromiseAmendments": "Esmenes de compromís",
+    "opinion": "Opinió",
+    "draftOpinion": "Projecte d'opinió",
+    "reasonedOpinion": "Dictamen motivat",
+    "agreedText": "Text acordat",
+    "letterOfAgreement": "Carta d'acord",
+    "draftResolution": "Proposta de resolució",
+    "workingDocument": "Document de treball"
+  },
   "positionTab": {
     "seeForecast": "Mostra la previsió",
     "fileOutcome": "Resultat de l'expedient",
@@ -2075,7 +2092,9 @@
     "advancedAddByRef": "Avançat: afegir per referència de procediment",
     "loadMore": "Carrega'n més",
     "showingCount": "Mostrant {{shown}} de {{total}}",
-    "filters": "Filtres"
+    "filters": "Filtres",
+    "mine": "Els meus interessos",
+    "committeeOpinion": "Opinió presentada per aquesta comissió"
   },
   "calendar": {
     "myEuToday": "La meva UE avui",
@@ -2528,7 +2547,12 @@
   "commissionDoc": {
     "noDate": "Sense data",
     "openInEurlex": "Obre a EUR-Lex",
-    "viewInEurlex": "Veure a EUR-Lex"
+    "viewInEurlex": "Veure a EUR-Lex",
+    "referredTo": "Remès a la comissió",
+    "matchesInterests": "En els teus interessos polítics",
+    "matchesTracked": "En un expedient que segueixes",
+    "referralPdf": "Remissió a comissió (PDF)",
+    "referralPdfTip": "La proposta tal com es va remetre a la comissió del PE"
   },
   "textAdopted": {
     "voteCount": "Vot: {{forCount}} a favor / {{againstCount}} en contra / {{abstentions}} abstencions",
@@ -2827,6 +2851,17 @@
     }
   },
   "votes": {
+    "votingListsTab": "Llistes de votació",
+    "votingListsCount": "llistes de votació",
+    "votingList": {
+      "tabNote": "Els ordres de votació de les comissions que hi ha darrere dels vots: quines esmenes es voten, en quin ordre i amb quins compromisos. En la seva majoria són anticipades.",
+      "attachTitle": "Llista de votació",
+      "attachNote": "L'ordre de votació amb què es va fer aquesta votació: quines esmenes, en quin ordre i amb quins compromisos.",
+      "openPdf": "Obre la llista de votació (PDF)",
+      "empty": "Encara no hi ha llistes de votació de comissió registrades.",
+      "emptyPi": "Encara no hi ha llistes de votació per a les teves comissions d'interès.",
+      "emptyFiles": "No hi ha llistes de votació sobre els expedients que segueixes."
+    },
     "title": "Votacions",
     "intro": "Com ha votat el Parlament els expedients del teu interès: comissió i ple, ordenats com el PE no ho fa.",
     "committee": "Comissió",
@@ -3147,5 +3182,25 @@
     "kind_consultation_response": "Resposta a consulta",
     "kind_stakeholder_map": "Mapa d'actors",
     "kind_amendment": "Esmena"
+  },
+  "journey": {
+    "title": "Recorregut legislatiu",
+    "aiTag": "IA",
+    "absentBlurb": "Mira com ha canviat aquest expedient des de la proposta de la Comissió fins a la votació en comissió, analitzat amb IA.",
+    "generate": "Genera anàlisi amb IA",
+    "generating": "Analitzant els documents...",
+    "cta": "Mostra la comparació completa a Anàlisi de Posició",
+    "stale": "Nous documents des de",
+    "whereFight": "On és la disputa",
+    "builtWith": "Analitzat amb",
+    "regenerate": "Actualitza l'anàlisi",
+    "openSource": "Obre el document font (PDF)",
+    "noLayerText": "No hi ha text analitzable per a aquesta capa.",
+    "truncated": "Document extens: anàlisi basada en la part inicial del text.",
+    "layerProposal": "Proposta de la Comissió",
+    "layerDraftReport": "Projecte d'informe del ponent",
+    "layerAmendments": "Esmenes dels eurodiputats",
+    "layerCompromise": "Esmenes de compromís",
+    "layerVotingList": "Llista de votació final"
   }
 }

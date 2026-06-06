@@ -94,12 +94,17 @@ def _not_seed(q):
     )
 
 
-def _summary(r: CMT) -> dict:
+def _summary(r: CMT, minutes_map: Optional[dict] = None) -> dict:
+    d = r.meeting_date.date().isoformat() if r.meeting_date else None
+    # Dual-source: the official adopted minutes PDF for this meeting, matched by
+    # committee + date from eMeeting (the AI transcript and the official minutes
+    # are complementary records of the same sitting). Surface-not-ingest.
+    minutes = minutes_map.get((r.committee_code, d), []) if (minutes_map and d) else []
     return {
         "id": str(r.id),
         "institution": getattr(r, "institution", "EP") or "EP",
         "committee_code": r.committee_code,
-        "meeting_date": r.meeting_date.date().isoformat() if r.meeting_date else None,
+        "meeting_date": d,
         "title": r.title,
         "language": (r.language or "EN"),
         "word_count": r.word_count or 0,
@@ -108,6 +113,7 @@ def _summary(r: CMT) -> dict:
         "status": str(r.status.value if hasattr(r.status, "value") else r.status).lower(),
         "has_recording": bool(r.video_url),
         "has_agenda": bool(r.agenda_items),
+        "official_minutes": minutes,
     }
 
 
@@ -200,7 +206,9 @@ def list_transcripts(
         q = q.filter(or_(CMT.title.ilike(like), CMT.transcript_text.ilike(like)))
     total = q.count()
     rows = q.order_by(CMT.meeting_date.desc()).offset(offset).limit(limit).all()
-    return {"total": total, "items": [_summary(r) for r in rows]}
+    from services.linking.emeeting_links import docs_by_committee_date
+    minutes_map = docs_by_committee_date(db, "minutes")
+    return {"total": total, "items": [_summary(r, minutes_map) for r in rows]}
 
 
 @router.get("/suggestions")
@@ -247,7 +255,8 @@ def get_transcript(
     r = db.query(CMT).filter(CMT.id == tid).first()
     if not r:
         raise HTTPException(status_code=404, detail="Transcript not found.")
-    out = _summary(r)
+    from services.linking.emeeting_links import docs_by_committee_date
+    out = _summary(r, docs_by_committee_date(db, "minutes"))
     # Compact segments {s: start_sec, t: text} power the synchronised transcript
     # (click a line -> seek the video; auto-highlight the active line). Capped to
     # keep the payload lean; very long debates fall back to paragraph text.

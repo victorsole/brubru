@@ -1651,6 +1651,120 @@ async def get_carriage_amendments(
 
 
 @router.get(
+    "/carriages/{carriage_id}/emeeting-documents",
+    summary="EP committee documents for a tracked file",
+    description=(
+        "The substantive EP committee-meeting documents tied to this file's OEIL "
+        "procedure: the draft report, the amendments and compromise amendments, the "
+        "opinions and draft opinions from associated committees, reasoned opinions, "
+        "and any agreed text / letter of agreement / draft resolution / working "
+        "document. Grouped by document type, newest first, each with a direct PDF "
+        "URL. (Voting lists live in Votes; minutes in Transcripts; the agenda in My "
+        "EU Calendar — see the eMeeting routing.)"
+    ),
+)
+async def get_carriage_emeeting_documents(
+    carriage_id: UUID,
+    db: Session = Depends(get_db),
+):
+    from services.linking.emeeting_links import grouped_dossier_docs
+    carriage = db.query(LegislativeCarriage).filter(LegislativeCarriage.id == carriage_id).first()
+    if not carriage:
+        raise HTTPException(status_code=404, detail="Carriage not found")
+    procs = [carriage.oeil_procedure_ref] if carriage.oeil_procedure_ref else []
+    result = grouped_dossier_docs(db, procs)
+    return {"procedure_ref": carriage.oeil_procedure_ref, **result}
+
+
+def _journey_payload(row: Optional[dict], current_hash: Optional[str]) -> dict:
+    """Shape a stored journey row for the API, flagging staleness."""
+    if not row:
+        return {"status": "absent"}
+    import json as _json
+    layers = row["layers"] if isinstance(row["layers"], list) else _json.loads(row["layers"] or "[]")
+    comparison = row["comparison"] if isinstance(row["comparison"], dict) else _json.loads(row["comparison"] or "{}")
+    return {
+        "status": row["status"],
+        "procedure_ref": row["procedure_ref"],
+        "is_legislative": row["is_legislative"],
+        "summary": row["summary"],
+        "layers": layers,
+        "comparison": comparison,
+        "engine": row["engine"],
+        "model": row["model"],
+        "source_doc_count": row["source_doc_count"],
+        "generated_at": row["generated_at"],
+        "stale": bool(current_hash and current_hash != row["doc_set_hash"]),
+    }
+
+
+@router.get(
+    "/carriages/{carriage_id}/journey",
+    summary="AI comparative analysis of a dossier's text journey",
+    description=(
+        "**What it does**\nReturns the cached AI comparison of how this dossier's "
+        "text changes through the committee stage: the Commission proposal, the "
+        "rapporteur's draft report, MEPs' amendments, the compromise amendments, "
+        "and the final voting list (a resolution skips the proposal layer).\n\n"
+        "**When to use it**\nThe 'Legislative journey' summary in the file-detail "
+        "modal and the detailed panel in Position Analysis.\n\n"
+        "**Input**\nThe carriage id.\n\n"
+        "**You get back**\n`status` (ready / absent / generating / error), a short "
+        "`summary`, the per-layer analysis, and the cross-layer comparison. "
+        "`stale=true` means new committee documents have arrived since it was built."
+    ),
+)
+async def get_carriage_journey(
+    carriage_id: UUID,
+    db: Session = Depends(get_db),
+):
+    from services.analysis.legislative_journey_service import get_journey, current_doc_set_hash
+    carriage = db.query(LegislativeCarriage).filter(LegislativeCarriage.id == carriage_id).first()
+    if not carriage:
+        raise HTTPException(status_code=404, detail="Carriage not found")
+    ref = carriage.oeil_procedure_ref
+    if not ref:
+        return {"status": "absent"}
+    return _journey_payload(get_journey(db, ref), current_doc_set_hash(db, ref))
+
+
+@router.post(
+    "/carriages/{carriage_id}/journey",
+    summary="Generate (or refresh) the dossier journey analysis",
+    description=(
+        "Builds the AI comparative analysis on demand for this dossier and caches "
+        "it. Used when the analysis is absent or stale. Takes ~20-60s. The "
+        "precompute job fills most tracked files ahead of time, so this is the "
+        "gap-filler when a user opens a file that has not been analysed yet."
+    ),
+)
+async def generate_carriage_journey(
+    carriage_id: UUID,
+    force: bool = Query(False, description="Regenerate even if a fresh analysis exists"),
+    db: Session = Depends(get_db),
+):
+    from services.analysis.legislative_journey_service import (
+        get_journey, generate_journey, current_doc_set_hash,
+    )
+    carriage = db.query(LegislativeCarriage).filter(LegislativeCarriage.id == carriage_id).first()
+    if not carriage:
+        raise HTTPException(status_code=404, detail="Carriage not found")
+    ref = carriage.oeil_procedure_ref
+    if not ref:
+        raise HTTPException(status_code=400, detail="Carriage has no procedure reference")
+
+    cur_hash = current_doc_set_hash(db, ref)
+    existing = get_journey(db, ref)
+    if existing and not force and existing["status"] == "ready" and existing["doc_set_hash"] == cur_hash:
+        return _journey_payload(existing, cur_hash)
+
+    result = await generate_journey(db, carriage)
+    if result is None:
+        return {"status": "error", "detail": "No analysable committee documents for this dossier."}
+    return _journey_payload(result, current_doc_set_hash(db, ref))
+
+
+@router.get(
     "/tracked/amendment-counts",
     summary="Get amendment counts for tracked files",
     description="Get the number of amendments for each tracked legislative file"

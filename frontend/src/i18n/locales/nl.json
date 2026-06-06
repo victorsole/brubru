@@ -170,7 +170,10 @@
       "summaryBlueHint": "AI-samenvattingen zijn een Professional-functie.",
       "summaryProvenance": "Door AI gegenereerde institutionele samenvatting. Controleer aan de hand van het transcript en de bronopname.",
       "summaryError": "Kan de samenvatting niet laden.",
-      "summaryGenError": "Genereren van de samenvatting mislukt. Probeer het opnieuw."
+      "summaryGenError": "Genereren van de samenvatting mislukt. Probeer het opnieuw.",
+      "minutes": "notulen",
+      "officialMinutes": "Officiële notulen (PDF)",
+      "officialMinutesTip": "Officiële aangenomen notulen beschikbaar"
     },
     "consultations": {
       "title": "EC Openbare Raadplegingen",
@@ -1738,6 +1741,20 @@
     "generating": "Voorspellen...",
     "unlimited": "Professional: onbeperkte voorspellingen"
   },
+  "committeeDocs": {
+    "title": "Commissiedocumenten",
+    "note": "Documenten ingediend in de commissie die dit dossier behandelt, rechtstreeks van het Europees Parlement. Elk verwijst naar de originele PDF.",
+    "draftReport": "Ontwerpverslag",
+    "amendments": "Amendementen",
+    "compromiseAmendments": "Compromisamendementen",
+    "opinion": "Advies",
+    "draftOpinion": "Ontwerpadvies",
+    "reasonedOpinion": "Met redenen omkleed advies",
+    "agreedText": "Overeengekomen tekst",
+    "letterOfAgreement": "Akkoordbrief",
+    "draftResolution": "Ontwerpresolutie",
+    "workingDocument": "Werkdocument"
+  },
   "positionTab": {
     "seeForecast": "Bekijk voorspelling",
     "fileOutcome": "Uitkomst dossier",
@@ -2075,7 +2092,9 @@
     "advancedAddByRef": "Geavanceerd: toevoegen op procedurereferentie",
     "loadMore": "Meer laden",
     "showingCount": "{{shown}} van {{total}} weergegeven",
-    "filters": "Filters"
+    "filters": "Filters",
+    "mine": "Mijn interesses",
+    "committeeOpinion": "Advies ingediend door deze commissie"
   },
   "calendar": {
     "myEuToday": "Mijn EU vandaag",
@@ -2528,7 +2547,12 @@
   "commissionDoc": {
     "noDate": "Geen datum",
     "openInEurlex": "Open in EUR-Lex",
-    "viewInEurlex": "Bekijken in EUR-Lex"
+    "viewInEurlex": "Bekijken in EUR-Lex",
+    "referredTo": "Verwezen naar commissie",
+    "matchesInterests": "In uw beleidsinteresses",
+    "matchesTracked": "Op een dossier dat u volgt",
+    "referralPdf": "Verwijzing naar commissie (PDF)",
+    "referralPdfTip": "Het voorstel zoals verwezen naar de EP-commissie"
   },
   "textAdopted": {
     "voteCount": "Stem: {{forCount}} voor / {{againstCount}} tegen / {{abstentions}} onthoudingen",
@@ -2827,6 +2851,17 @@
     }
   },
   "votes": {
+    "votingListsTab": "Stemlijsten",
+    "votingListsCount": "stemlijsten",
+    "votingList": {
+      "tabNote": "De stemlijsten van de commissies achter de stemmingen: welke amendementen in stemming komen, in welke volgorde, met welke compromissen. Meestal vooruitblikkend.",
+      "attachTitle": "Stemlijst",
+      "attachNote": "De stemlijst waarop deze stemming is gebaseerd: welke amendementen, in welke volgorde, met welke compromissen.",
+      "openPdf": "Open stemlijst (PDF)",
+      "empty": "Nog geen commissiestemlijsten geregistreerd.",
+      "emptyPi": "Nog geen stemlijsten voor uw interessecommissies.",
+      "emptyFiles": "Geen stemlijsten over de dossiers die u volgt."
+    },
     "title": "Stemmingen",
     "intro": "Hoe het Parlement heeft gestemd over de dossiers van uw interesse: commissie en plenaire, geordend zoals het EP dat niet doet.",
     "committee": "Commissie",
@@ -3147,5 +3182,25 @@
     "kind_consultation_response": "Reactie op consultatie",
     "kind_stakeholder_map": "Stakeholderkaart",
     "kind_amendment": "Amendement"
+  },
+  "journey": {
+    "title": "Wetgevingstraject",
+    "aiTag": "AI",
+    "absentBlurb": "Zie hoe dit dossier veranderde van het Commissievoorstel tot de stemming in de commissie, geanalyseerd met AI.",
+    "generate": "AI-analyse genereren",
+    "generating": "Documenten analyseren...",
+    "cta": "Bekijk de volledige vergelijking in Positieanalyse",
+    "stale": "Nieuwe documenten sinds",
+    "whereFight": "Waar de strijd zit",
+    "builtWith": "Geanalyseerd met",
+    "regenerate": "Analyse vernieuwen",
+    "openSource": "Brondocument openen (PDF)",
+    "noLayerText": "Geen analyseerbare tekst voor deze laag.",
+    "truncated": "Lang document: analyse op basis van het eerste deel van de tekst.",
+    "layerProposal": "Commissievoorstel",
+    "layerDraftReport": "Ontwerpverslag van de rapporteur",
+    "layerAmendments": "Amendementen van de leden",
+    "layerCompromise": "Compromisamendementen",
+    "layerVotingList": "Definitieve stemlijst"
   }
 }

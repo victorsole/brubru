@@ -15,6 +15,10 @@ import {
   mdiDomain,
   mdiPlaylistPlus,
   mdiTrashCanOutline,
+  mdiAccountGroup,
+  mdiFilePdfBox,
+  mdiStar,
+  mdiBookmarkCheckOutline,
 } from '@mdi/js';
 import type { CommissionDocItem } from '../../hooks/use_commission_documents';
 import { DOC_TYPE_INFO } from '../../hooks/use_commission_documents';
@@ -51,6 +55,25 @@ export const CommissionDocumentCard = ({ item, isTracked, onTrack, onUntrack }: 
           <span className="commission-document-card__dg">
             <Icon path={mdiDomain} size={0.5} />
             {item.dg_responsible}
+          </span>
+        )}
+        {item.committee_code && (
+          <span className="commission-document-card__committee"
+            title={item.committee_name || t('commissionDoc.referredTo', 'Referred to committee') as string}>
+            <Icon path={mdiAccountGroup} size={0.5} />
+            {item.committee_code}
+          </span>
+        )}
+        {item.matches_interests && (
+          <span className="commission-document-card__badge is-pi"
+            title={t('commissionDoc.matchesInterests', 'In your Policy Interests') as string}>
+            <Icon path={mdiStar} size={0.5} /> {t('myFilesTab.mine', 'My interests')}
+          </span>
+        )}
+        {item.matches_tracked && (
+          <span className="commission-document-card__badge is-tracked"
+            title={t('commissionDoc.matchesTracked', 'On a file you track') as string}>
+            <Icon path={mdiBookmarkCheckOutline} size={0.5} /> {t('myFilesTab.tracked', 'Tracked')}
           </span>
         )}
       </div>
@@ -117,6 +140,18 @@ export const CommissionDocumentCard = ({ item, isTracked, onTrack, onUntrack }: 
           >
             <Icon path={mdiOpenInNew} size={0.7} />
             {t('commissionDoc.viewInEurlex')}
+          </a>
+        )}
+        {item.referral_pdf_url && (
+          <a
+            href={item.referral_pdf_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="commission-document-card__action-btn"
+            title={t('commissionDoc.referralPdfTip', 'The proposal as referred to the EP committee') as string}
+          >
+            <Icon path={mdiFilePdfBox} size={0.7} />
+            {t('commissionDoc.referralPdf', 'Committee referral (PDF)')}
           </a>
         )}
         {oeilUrl && (

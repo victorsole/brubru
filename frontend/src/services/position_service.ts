@@ -187,7 +187,91 @@ export interface AlignmentResult {
   organisations: AlignmentOrg[];
 }
 
+export interface EmeetingDoc {
+  doc_kind: string;
+  gepro_code: string | null;
+  reference: string | null;
+  title: string | null;
+  item_title: string | null;
+  committee_code: string | null;
+  committee_name: string | null;
+  meeting_date: string | null;
+  procedure_ref: string | null;
+  rapporteurs: string[] | null;
+  pdf_url: string | null;
+  languages: string[] | null;
+  source_url: string | null;
+}
+export interface EmeetingDocGroup {
+  kind: string;
+  label: string;
+  documents: EmeetingDoc[];
+}
+export interface EmeetingDocsResponse {
+  procedure_ref: string | null;
+  groups: EmeetingDocGroup[];
+  total: number;
+}
+
+export interface JourneyLayer {
+  kind: string;
+  label: string;
+  doc_ref: string | null;
+  committee_code: string | null;
+  meeting_date: string | null;
+  pdf_url: string | null;
+  source_url: string | null;
+  char_count: number;
+  truncated: boolean;
+  summary: string;
+}
+export interface JourneyComparison {
+  overview: string;
+  contested_points: string[];
+  where_the_fight_is: string;
+  caveats: string;
+}
+export interface JourneyResponse {
+  status: 'ready' | 'absent' | 'generating' | 'error';
+  procedure_ref?: string;
+  is_legislative?: boolean;
+  summary?: string | null;
+  layers?: JourneyLayer[];
+  comparison?: JourneyComparison;
+  engine?: string | null;
+  model?: string | null;
+  source_doc_count?: number;
+  generated_at?: string | null;
+  stale?: boolean;
+  detail?: string;
+}
+
 export const positionService = {
+  async journey(carriageId: string): Promise<JourneyResponse> {
+    const { data } = await axios.get<JourneyResponse>(
+      `${API_URL}/api/legislative-train/carriages/${carriageId}/journey`,
+      { headers: authHeaders() },
+    );
+    return data;
+  },
+
+  async generateJourney(carriageId: string, force = false): Promise<JourneyResponse> {
+    const { data } = await axios.post<JourneyResponse>(
+      `${API_URL}/api/legislative-train/carriages/${carriageId}/journey`,
+      {},
+      { headers: authHeaders(), params: force ? { force: true } : {} },
+    );
+    return data;
+  },
+
+  async emeetingDocuments(carriageId: string): Promise<EmeetingDocsResponse> {
+    const { data } = await axios.get<EmeetingDocsResponse>(
+      `${API_URL}/api/legislative-train/carriages/${carriageId}/emeeting-documents`,
+      { headers: authHeaders() },
+    );
+    return data;
+  },
+
   async list(myInterests = true, limit = 40): Promise<PositionListResponse> {
     const { data } = await axios.get<PositionListResponse>(`${API_URL}/api/positions/`, {
       headers: authHeaders(),

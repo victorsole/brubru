@@ -26,6 +26,15 @@ export interface TranscriptSummary {
   status: string;
   has_recording: boolean;
   has_agenda?: boolean;
+  // eMeeting dual-source: the official adopted minutes PDF(s) for this sitting,
+  // matched by committee + date.
+  official_minutes?: Array<{
+    item_title?: string | null;
+    title?: string | null;
+    meeting_date?: string | null;
+    pdf_url?: string | null;
+    source_url?: string | null;
+  }>;
 }
 
 export interface AgendaItem {

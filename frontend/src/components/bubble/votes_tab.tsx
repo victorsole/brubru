@@ -18,6 +18,7 @@ import {
   mdiGavel, mdiAccountGroup, mdiStar, mdiClose, mdiMagnify,
   mdiOpenInNew, mdiSwapHorizontal, mdiCheckCircle, mdiCloseCircle, mdiScaleBalance,
   mdiBankOutline, mdiInformationOutline, mdiImageFilterCenterFocus,
+  mdiClipboardListOutline, mdiFilePdfBox, mdiAccountVoice, mdiCalendarOutline,
 } from '@mdi/js';
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
@@ -58,7 +59,35 @@ const COUNCIL_VOTE_COLOR: Record<string, string> = {
   for: CHOICE_COLORS['+'], against: CHOICE_COLORS['-'], abstain: CHOICE_COLORS['0'],
 };
 
-type Level = 'committee' | 'plenary' | 'council';
+type Level = 'committee' | 'plenary' | 'council' | 'voting_lists';
+
+// A committee voting list (the amendment order paper behind a vote) - a document,
+// not a roll-call result, so a distinct shape from Vote.
+interface VotingList {
+  reference: string | null;
+  title: string | null;
+  item_title: string | null;
+  committee_code: string | null;
+  committee_name: string | null;
+  meeting_date: string | null;
+  procedure_ref: string | null;
+  rapporteurs: string[];
+  pdf_url: string | null;
+  source_url: string | null;
+  languages: string[];
+  matches_interests: boolean;
+  matches_tracked: boolean;
+}
+interface VotingListResponse {
+  items: VotingList[]; total: number; my_committees: string[]; pi_active: boolean;
+  has_tracked_files?: boolean; files_active?: boolean;
+}
+// The voting-list PDF(s) attached to a roll-call vote where the dossier matches.
+interface VoteVotingList {
+  committee_code: string | null; meeting_date: string | null;
+  item_title: string | null; title: string | null;
+  pdf_url: string | null; source_url: string | null;
+}
 
 // Council-specific breakdown shape (auto-read from the Council's image result sheet).
 interface CouncilBreakdown {
@@ -252,6 +281,7 @@ const DetailModal = ({ vote, onClose }: { vote: Vote; onClose: () => void }) => 
   const { t } = useTranslation();
   const [records, setRecords] = useState<MepRecord[]>([]);
   const [delta, setDelta] = useState<Delta | null>(null);
+  const [votingLists, setVotingLists] = useState<VoteVotingList[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState('');
 
@@ -260,6 +290,7 @@ const DetailModal = ({ vote, onClose }: { vote: Vote; onClose: () => void }) => 
       try {
         const d = await axios.get(`${API_BASE}/ep-votes/detail/${vote.id}`, authCfg());
         setRecords(d.data?.records || []);
+        setVotingLists(d.data?.voting_lists || []);
         if (vote.has_delta && vote.procedure_ref) {
           try {
             const p = await axios.get(
@@ -365,6 +396,27 @@ const DetailModal = ({ vote, onClose }: { vote: Vote; onClose: () => void }) => 
                 ? t('votes.delta.confirmed', 'Plenary confirmed the committee.')
                 : t('votes.delta.diverged', 'Plenary diverged from the committee.')}
             </p>
+          </div>
+        )}
+
+        {votingLists.length > 0 && (
+          <div className="votes-modal__section votes-votinglist-attach">
+            <h3><Icon path={mdiClipboardListOutline} size={0.8} /> {t('votes.votingList.attachTitle', 'Voting list')}</h3>
+            <p className="votes-muted votes-votinglist-attach__note">
+              {t('votes.votingList.attachNote', 'The order paper this vote ran from - which amendments, in what order, with the compromises.')}
+            </p>
+            <ul className="votes-votinglist-attach__list">
+              {votingLists.map((vl, i) => (
+                <li key={i}>
+                  <a href={vl.pdf_url || vl.source_url || undefined} target="_blank" rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}>
+                    <Icon path={mdiFilePdfBox} size={0.75} />
+                    {vl.committee_code} {vl.meeting_date ? `· ${vl.meeting_date}` : ''}
+                    <Icon path={mdiOpenInNew} size={0.55} />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -502,6 +554,54 @@ const VoteCard = ({ vote, onOpen }: { vote: Vote; onOpen: (v: Vote) => void }) =
   );
 };
 
+// A committee voting list - a document card (no tally), with a prominent PDF link.
+const VotingListCard = ({ vl }: { vl: VotingList }) => {
+  const { t } = useTranslation();
+  const href = vl.pdf_url || vl.source_url || undefined;
+  const label = vl.item_title || vl.title || vl.reference || vl.committee_name || '';
+  return (
+    <article className={`votes-card votes-vlcard ${vl.matches_interests ? 'is-pi' : ''}`}>
+      <div className="votes-card__top">
+        <div className="votes-card__tags">
+          {vl.committee_code && <span className="votes-chip">{vl.committee_code}</span>}
+          {vl.matches_tracked && <TrackedBadge />}
+          {vl.matches_interests && (
+            <span className="votes-chip is-pi" title={t('votes.matches', 'Matches your interests') as string}>
+              <Icon path={mdiStar} size={0.55} /> {t('votes.mine', 'My interests')}
+            </span>
+          )}
+        </div>
+        {vl.meeting_date && (
+          <span className="votes-card__date"><Icon path={mdiCalendarOutline} size={0.6} /> {vl.meeting_date}</span>
+        )}
+      </div>
+
+      <h3 className="votes-card__title">{label}</h3>
+      <div className="votes-vlcard__meta">
+        {vl.procedure_ref && <span className="votes-chip is-muted">{vl.procedure_ref}</span>}
+        {vl.rapporteurs.length > 0 && (
+          <span className="votes-vlcard__rapp"><Icon path={mdiAccountVoice} size={0.6} /> {vl.rapporteurs.join(', ')}</span>
+        )}
+      </div>
+
+      <div className="votes-card__foot">
+        {href && (
+          <a className="votes-link votes-vlcard__pdf" href={href} target="_blank" rel="noopener noreferrer">
+            <Icon path={mdiFilePdfBox} size={0.7} /> {t('votes.votingList.openPdf', 'Open voting list (PDF)')}
+            <Icon path={mdiOpenInNew} size={0.55} />
+          </a>
+        )}
+        {vl.procedure_ref && (
+          <a className="votes-link is-muted"
+            href={`/my-eu-bubble?tab=my_files&procedure=${encodeURIComponent(vl.procedure_ref)}`}>
+            <Icon path={mdiOpenInNew} size={0.6} /> {t('votes.openDossier', 'Open dossier')}
+          </a>
+        )}
+      </div>
+    </article>
+  );
+};
+
 // ---- main tab -------------------------------------------------------------
 
 export const VotesTab = () => {
@@ -511,9 +611,12 @@ export const VotesTab = () => {
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'margin' | 'dissent'>('date');
   const [data, setData] = useState<ListResponse | null>(null);
+  const [vlData, setVlData] = useState<VotingListResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<Vote | null>(null);
-  const [stats, setStats] = useState<{ committee: number; plenary: number; council: number; with_delta: number } | null>(null);
+  const [stats, setStats] = useState<{ committee: number; plenary: number; council: number; voting_lists: number; with_delta: number } | null>(null);
+
+  const isVL = level === 'voting_lists';
 
   useEffect(() => {
     axios.get(`${API_BASE}/ep-votes/stats`).then((r) => setStats(r.data)).catch(() => { });
@@ -525,15 +628,24 @@ export const VotesTab = () => {
     if (mode === 'pi') params.set('my_interests', 'true');
     if (mode === 'files') params.set('my_files', 'true');
     if (search.trim()) params.set('search', search.trim());
-    params.set('sort_by', sortBy);
-    axios.get<ListResponse>(`${API_BASE}/ep-votes/${level}?${params.toString()}`, authCfg())
-      .then((r) => setData(r.data))
-      .catch(() => setData({ items: [], total: 0, my_committees: [], pi_active: false }))
-      .finally(() => setLoading(false));
-  }, [level, mode, search, sortBy]);
+    if (isVL) {
+      axios.get<VotingListResponse>(`${API_BASE}/ep-votes/voting-lists?${params.toString()}`, authCfg())
+        .then((r) => setVlData(r.data))
+        .catch(() => setVlData({ items: [], total: 0, my_committees: [], pi_active: false }))
+        .finally(() => setLoading(false));
+    } else {
+      params.set('sort_by', sortBy);
+      axios.get<ListResponse>(`${API_BASE}/ep-votes/${level}?${params.toString()}`, authCfg())
+        .then((r) => setData(r.data))
+        .catch(() => setData({ items: [], total: 0, my_committees: [], pi_active: false }))
+        .finally(() => setLoading(false));
+    }
+  }, [level, mode, search, sortBy, isVL]);
 
   const items = data?.items || [];
-  const hasPi = (data?.my_committees || []).length > 0;
+  const vlItems = vlData?.items || [];
+  const active = isVL ? vlData : data;
+  const hasPi = (active?.my_committees || []).length > 0;
 
   return (
     <div className="votes-tab">
@@ -548,6 +660,7 @@ export const VotesTab = () => {
             <span><b>{stats.committee}</b> {t('votes.committeeVotes', 'committee')}</span>
             <span><b>{stats.plenary}</b> {t('votes.plenaryVotes', 'plenary')}</span>
             <span><b>{stats.council}</b> {t('votes.councilVotes', 'council')}</span>
+            <span><b>{stats.voting_lists}</b> {t('votes.votingListsCount', 'voting lists')}</span>
             <span><b>{stats.with_delta}</b> {t('votes.withDelta', 'with delta')}</span>
           </div>
         )}
@@ -566,30 +679,57 @@ export const VotesTab = () => {
           className={level === 'council' ? 'is-active' : ''} onClick={() => setLevel('council')}>
           <Icon path={mdiBankOutline} size={0.8} /> {t('votes.councilResults', 'Council results')}
         </button>
+        <button role="tab" aria-selected={level === 'voting_lists'}
+          className={level === 'voting_lists' ? 'is-active' : ''} onClick={() => setLevel('voting_lists')}>
+          <Icon path={mdiClipboardListOutline} size={0.8} /> {t('votes.votingListsTab', 'Voting lists')}
+        </button>
       </div>
 
       <div className="votes-tab__controls">
-        <LensToggle mode={mode} onChange={setMode} hasPi={hasPi} hasFiles={!!data?.has_tracked_files} />
+        <LensToggle mode={mode} onChange={setMode} hasPi={hasPi} hasFiles={!!active?.has_tracked_files} />
         <div className="votes-search">
           <Icon path={mdiMagnify} size={0.8} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder={t('votes.searchDossier', 'Search a dossier') as string} />
         </div>
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} className="votes-sort">
-          <option value="date">{t('votes.sortDate', 'Most recent')}</option>
-          <option value="margin">{t('votes.sortMargin', 'Closest margin')}</option>
-          <option value="dissent">{t('votes.sortDissent', 'Most contested')}</option>
-        </select>
+        {!isVL && (
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} className="votes-sort">
+            <option value="date">{t('votes.sortDate', 'Most recent')}</option>
+            <option value="margin">{t('votes.sortMargin', 'Closest margin')}</option>
+            <option value="dissent">{t('votes.sortDissent', 'Most contested')}</option>
+          </select>
+        )}
       </div>
 
-      {mode === 'pi' && data && (data.my_committees.length > 0) && (
+      {isVL && (
+        <p className="votes-tab__pinote votes-tab__vlnote">
+          {t('votes.votingList.tabNote', 'The committee order papers behind the votes - which amendments get voted, in what order, with the compromises. Mostly forward-looking.')}
+        </p>
+      )}
+
+      {mode === 'pi' && active && (active.my_committees.length > 0) && (
         <p className="votes-tab__pinote">
-          {t('votes.piNote', 'Showing your Policy-Interest committees:')} {data.my_committees.join(', ')}
+          {t('votes.piNote', 'Showing your Policy-Interest committees:')} {active.my_committees.join(', ')}
         </p>
       )}
 
       {loading ? (
         <p className="votes-muted votes-tab__empty">{t('common.loading', 'Loading…')}</p>
+      ) : isVL ? (
+        vlItems.length === 0 ? (
+          <div className="votes-tab__empty">
+            <Icon path={mdiClipboardListOutline} size={2} />
+            <p>{mode === 'pi'
+              ? t('votes.votingList.emptyPi', 'No voting lists yet for your interest committees.')
+              : mode === 'files'
+              ? t('votes.votingList.emptyFiles', 'No voting lists on the files you track.')
+              : t('votes.votingList.empty', 'No committee voting lists recorded yet.')}</p>
+          </div>
+        ) : (
+          <div className="votes-grid">
+            {vlItems.map((vl, i) => <VotingListCard key={vl.reference || `${vl.procedure_ref}-${i}`} vl={vl} />)}
+          </div>
+        )
       ) : items.length === 0 ? (
         <div className="votes-tab__empty">
           <Icon path={mdiGavel} size={2} />

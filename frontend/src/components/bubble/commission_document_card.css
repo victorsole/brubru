@@ -18,6 +18,37 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.commission-document-card__committee {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #44445a;
+  background: #eef0f6;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.commission-document-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.commission-document-card__badge.is-pi {
+  color: #8a6d00;
+  background: #fdf3d3;
+}
+.commission-document-card__badge.is-tracked {
+  color: #1d6b46;
+  background: #def5e8;
 }
 
 .commission-document-card__type {

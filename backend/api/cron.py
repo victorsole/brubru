@@ -407,6 +407,28 @@ async def cron_sync_warm_12h(
     return {"status": "success", "tier": "warm_12h", "results": results}
 
 
+@router.post("/precompute-journeys")
+async def cron_precompute_journeys(
+    authorization: str = Header(...),
+    limit: int = Query(5, ge=1, le=40, description="Max dossiers to analyse this run"),
+):
+    """
+    Precompute the legislative-journey AI analysis for tracked dossiers that are
+    missing or stale. Throttled (default 5/run) so it backfills gradually. Runs
+    in the warm tier alongside the committee-document syncs that feed it.
+    """
+    _verify_cron_secret(authorization)
+    from core.database import SessionLocal
+    from services.analysis.legislative_journey_service import precompute_tracked
+    db = SessionLocal()
+    try:
+        result = await precompute_tracked(db, limit=limit)
+    finally:
+        db.close()
+    logger.info(f"[CRON] precompute-journeys complete: {result}")
+    return {"status": "success", "results": result}
+
+
 @router.post("/sync/daily")
 async def cron_sync_daily(
     authorization: str = Header(...),

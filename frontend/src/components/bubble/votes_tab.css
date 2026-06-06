@@ -207,3 +207,56 @@
   .votes-tab__tabs { flex-wrap: wrap; }
   .votes-qmv__lbl { width: 76px; }
 }
+
+/* ---- Voting lists (committee amendment order papers) --------------------- */
+
+/* Document card - no tally, so a quieter card than a roll-call result. */
+.votes-vlcard {
+  cursor: default;
+}
+.votes-vlcard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.2rem;
+  font-size: 0.78rem;
+  color: #6a6a78;
+}
+.votes-vlcard__rapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.votes-vlcard__pdf {
+  font-weight: 600;
+}
+
+.votes-tab__vlnote {
+  font-style: italic;
+}
+
+/* Voting-list PDF(s) attached to a roll-call vote detail (the 64 overlap). */
+.votes-votinglist-attach__note {
+  margin: 0.15rem 0 0.5rem;
+  font-size: 0.82rem;
+}
+.votes-votinglist-attach__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.votes-votinglist-attach__list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  color: #1a73e8;
+  text-decoration: none;
+}
+.votes-votinglist-attach__list a:hover {
+  text-decoration: underline;
+}

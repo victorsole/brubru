@@ -132,6 +132,11 @@ class CalendarEventResponse(BaseModel):
     external_id: Optional[str] = None
     last_updated: Optional[datetime] = None
 
+    # eMeeting enrichment: the committee meeting's agenda document(s), matched by
+    # committee + date (surface-not-ingest). Each entry:
+    # {item_title, meeting_date, pdf_url, source_url}.
+    emeeting_agendas: List[Dict[str, Any]] = Field(default_factory=list)
+
     class Config:
         from_attributes = True
 

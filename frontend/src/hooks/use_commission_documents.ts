@@ -9,8 +9,15 @@
 
 import { create } from 'zustand';
 import axios from 'axios';
+import { useAuth } from './use_auth';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+
+// Auth header so the server can compute the PI / tracked lens for this user.
+const authCfg = () => {
+  const token = useAuth.getState().token;
+  return token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
+};
 
 // Types
 export type CommissionDocType = 'COM' | 'SWD' | 'SEC' | 'C' | 'JOIN' | 'OJ' | 'PV';
@@ -26,6 +33,12 @@ export interface CommissionDocItem {
   portal_url?: string;
   celex?: string;
   last_updated: string;
+  // eMeeting enrichment (the COM as referred to an EP committee).
+  committee_code?: string | null;
+  committee_name?: string | null;
+  referral_pdf_url?: string | null;
+  matches_interests?: boolean;
+  matches_tracked?: boolean;
 }
 
 export interface CommissionDocDetail extends CommissionDocItem {
@@ -125,7 +138,7 @@ export const useCommissionDocuments = create<CommissionDocumentsState>((set, get
         total: number;
         limit: number;
         offset: number;
-      }>(`${API_BASE}/commission-documents/items?${params.toString()}`);
+      }>(`${API_BASE}/commission-documents/items?${params.toString()}`, authCfg());
 
       set({
         items: response.data.items,

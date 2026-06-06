@@ -18,6 +18,8 @@ import {
   mdiInformationOutline, mdiTargetAccount, mdiMessageTextOutline,
 } from '@mdi/js';
 import { positionService } from '../../services/position_service';
+import CommitteeDocumentsCard from './committee_documents_card';
+import LegislativeJourneyPanel from './legislative_journey_panel';
 import type {
   PositionResponse, PositionListItem, PositionListResponse, UserPosition,
   AmendmentDrilldown, LobbyingResult, ActualVote, AlignmentResult, AlignmentOrg,
@@ -674,6 +676,9 @@ export const PositionAnalysisTab: React.FC = () => {
             </nav>
 
             {view === 'summary' && (
+              <>
+              {/* AI comparative analysis of the text journey (the centrepiece) */}
+              {selectedId && <div className="pos-journey-wrap"><LegislativeJourneyPanel carriageId={selectedId} mode="full" /></div>}
               <div className="pos-grid">
                 {/* Evidenced first, then predicted (the #5 reframing) */}
                 <CommissionCard commission={detail.commission_position} procedureRef={detail.procedure_ref} />
@@ -681,7 +686,9 @@ export const PositionAnalysisTab: React.FC = () => {
                 <GroupsCard parliament={detail.parliament_position} actual={actual} />
                 <CouncilCard council={detail.council_position} />
                 <UserPositionCard pos={detail} onSave={handleSaveUserPosition} onAction={handleAction} />
+                {selectedId && <CommitteeDocumentsCard carriageId={selectedId} />}
               </div>
+              </>
             )}
             {view === 'amendments' && <AmendmentDrilldownTable drilldown={drilldown} />}
             </>)}

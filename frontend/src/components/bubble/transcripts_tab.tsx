@@ -15,7 +15,7 @@ import {
   mdiMicrophoneMessage, mdiMagnify, mdiClose, mdiFileDownloadOutline,
   mdiPlayCircleOutline, mdiLoading, mdiCheckCircle, mdiAlertCircleOutline,
   mdiViewListOutline, mdiClockOutline, mdiAccountVoice, mdiOpenInNew, mdiPlaylistPlus,
-  mdiTextBoxOutline, mdiFormatListBulleted, mdiCreation,
+  mdiTextBoxOutline, mdiFormatListBulleted, mdiCreation, mdiFilePdfBox,
 } from '@mdi/js';
 import { transcriptsService } from '../../services/transcripts_service';
 import type { TranscriptSummary, TranscriptDetail, AgendaItem } from '../../services/transcripts_service';
@@ -271,6 +271,11 @@ export function TranscriptsTab() {
               <div className="transcript-card__meta">
                 {it.word_count.toLocaleString()} {t('bubble.transcripts.words', 'words')} · {it.duration_minutes} {t('bubble.transcripts.min', 'min')}
                 {it.procedure_refs.length > 0 && <> · {it.procedure_refs.length} {t('bubble.transcripts.refs', 'refs')}</>}
+                {it.official_minutes && it.official_minutes.length > 0 && (
+                  <span className="transcript-card__minutes-flag" title={t('bubble.transcripts.officialMinutesTip', 'Official adopted minutes available') as string}>
+                    {' '}· <Icon path={mdiFilePdfBox} size={0.55} /> {t('bubble.transcripts.minutes', 'minutes')}
+                  </span>
+                )}
               </div>
             </button>
           ))}
@@ -458,6 +463,13 @@ function TranscriptDetailModal({ detail, onClose, onSave, instClass, bodyBadge, 
               <Icon path={mdiOpenInNew} size={0.7} /> {t('bubble.transcripts.watchOnEp', 'Watch on EP')}
             </a>
           )}
+          {(detail.official_minutes || []).map((m, i) => (
+            <a key={i} className="transcript-card__btn is-ghost" href={m.pdf_url || m.source_url || undefined}
+              target="_blank" rel="noopener noreferrer"
+              title={t('bubble.transcripts.officialMinutesTip', 'Official adopted minutes available') as string}>
+              <Icon path={mdiFilePdfBox} size={0.7} /> {t('bubble.transcripts.officialMinutes', 'Official minutes (PDF)')}
+            </a>
+          ))}
         </div>
         {agendaMsg && <p className="transcripts-tab__hint">{agendaMsg}</p>}
 

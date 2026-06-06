@@ -103,6 +103,44 @@ def workspace_digest(db: Session, user) -> dict:
                            "url": r["source_url"]} for r in rows],
             })
 
+    # 3b. EP committee meeting DOCUMENTS on dossiers you track (hard: procedure
+    # join to ep_emeeting_documents — the classified draft reports, amendments,
+    # voting lists, compromise amendments, with direct PDF links). doc_kind is
+    # the classified type. See memory/reference_ep_emeeting.md.
+    if procs:
+        kind_label = {
+            "draft_report": "Draft report", "amendment": "Amendments",
+            "voting_list": "Voting list", "compromise_amendments": "Compromise amendments",
+            "report": "Report", "adopted_text": "Adopted text",
+            "opinion": "Opinion", "draft_opinion": "Draft opinion", "agenda": "Agenda",
+        }
+        keys = ", ".join(f":ed{i}" for i in range(len(procs)))
+        params = {f"ed{i}": p for i, p in enumerate(procs)}
+        params["lim"] = LIMIT
+        rows = _q(db,
+            f"""
+            SELECT doc_kind, title, item_title, committee_code, procedure_ref,
+                   meeting_date::text AS d, pdf_url, source_url
+            FROM ep_emeeting_documents
+            WHERE procedure_ref = ANY(ARRAY[{keys}])
+              AND doc_kind IN ('draft_report','amendment','voting_list','compromise_amendments',
+                               'report','adopted_text','opinion','draft_opinion')
+            ORDER BY meeting_date DESC NULLS LAST LIMIT :lim
+            """, params)
+        if rows:
+            sections.append({
+                "key": "emeeting",
+                "label": "Committee documents on files you track",
+                "drill": "/my-eu-bubble?tab=my_files",
+                "items": [{
+                    "title": f"{kind_label.get(r['doc_kind'], r['doc_kind'])}: "
+                             f"{r['item_title'] or r['title'] or r['committee_code']}",
+                    "date": r["d"],
+                    "ref": r["procedure_ref"],
+                    "url": r["pdf_url"] or r["source_url"],
+                } for r in rows],
+            })
+
     # 4. News in your areas / about files you track (soft: policy-area overlap).
     if tracked_pa or interests:
         areas = tracked_pa or interests

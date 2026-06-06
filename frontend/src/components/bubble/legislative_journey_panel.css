@@ -1,0 +1,217 @@
+/* Legislative journey AI panel - narrow, reading-first. */
+
+.journey-panel {
+  border: 1px solid #e7e7ef;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  background: linear-gradient(180deg, #fbfbfe 0%, #ffffff 60%);
+}
+.journey-panel--compact {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.journey-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.journey-panel__head h3,
+.journey-panel__head h4 {
+  margin: 0;
+  font-weight: 600;
+}
+.journey-panel__head h3 { font-size: 1.02rem; }
+.journey-panel__head h4 { font-size: 0.92rem; }
+.journey-panel__ai {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #6b3fa0;
+  background: #f0e9fb;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.journey-panel__stale {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #8a6d00;
+  background: #fdf3d3;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.journey-panel__summary {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #2b2b3a;
+}
+.journey-panel__overview {
+  margin: 0 0 0.85rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #55556a;
+}
+.journey-panel__note {
+  margin: 0 0 0.6rem;
+  font-size: 0.84rem;
+  color: #6a6a78;
+  line-height: 1.45;
+}
+
+.journey-panel__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+  background: #6b3fa0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.journey-panel__cta:hover { background: #5a3489; }
+
+.journey-panel__gen,
+.journey-panel__regen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.journey-panel__gen {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  color: #6b3fa0;
+  background: #f4f0fb;
+  border: 1px solid #e2d8f4;
+}
+.journey-panel__gen:hover:not(:disabled) { background: #ece3f8; }
+.journey-panel__gen:disabled { opacity: 0.6; cursor: default; }
+
+.journey-panel__generating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b3fa0;
+}
+
+/* Per-layer cards */
+.journey-panel__layers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0.4rem 0 0.9rem;
+}
+.journey-layer {
+  border: 1px solid #ececf2;
+  border-left: 3px solid #cbb8e8;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+}
+.journey-layer__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.3rem;
+}
+.journey-layer__label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #44445a;
+}
+.journey-layer__cmt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #5b5b6b;
+  background: #eef0f6;
+  padding: 0 6px;
+  border-radius: 999px;
+}
+.journey-layer__date { font-size: 0.7rem; color: #8a8a98; }
+.journey-layer__pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  margin-left: auto;
+  color: #1a73e8;
+}
+.journey-layer__summary {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #33333f;
+}
+.journey-layer__summary.is-empty { color: #9a9aa8; font-style: italic; }
+.journey-layer__trunc {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.7rem;
+  color: #8a6d00;
+}
+
+/* Where the fight is */
+.journey-panel__fight {
+  border-top: 1px dashed #e8e8ef;
+  padding-top: 0.7rem;
+  margin-top: 0.3rem;
+}
+.journey-panel__fight h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #b5121b;
+}
+.journey-panel__fight p { margin: 0 0 0.4rem; font-size: 0.85rem; line-height: 1.5; color: #33333f; }
+.journey-panel__contested {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: #55556a;
+}
+.journey-panel__contested li { margin-bottom: 0.2rem; }
+
+.journey-panel__caveats {
+  margin: 0.6rem 0 0;
+  font-size: 0.74rem;
+  color: #8a8a98;
+  font-style: italic;
+}
+
+.journey-panel__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #f0f0f5;
+  font-size: 0.72rem;
+  color: #9a9aa8;
+}
+.journey-panel__regen {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  color: #6b3fa0;
+  background: transparent;
+  border: 1px solid #e2d8f4;
+}
+.journey-panel__regen:hover:not(:disabled) { background: #f4f0fb; }
+.journey-panel__regen:disabled { opacity: 0.6; cursor: default; }

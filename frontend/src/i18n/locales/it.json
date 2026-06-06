@@ -170,7 +170,10 @@
       "summaryBlueHint": "Le sintesi con IA sono una funzionalità Professional.",
       "summaryProvenance": "Sintesi istituzionale generata con IA. Da verificare con la trascrizione e la registrazione originale.",
       "summaryError": "Impossibile caricare la sintesi.",
-      "summaryGenError": "Generazione della sintesi non riuscita. Riprova."
+      "summaryGenError": "Generazione della sintesi non riuscita. Riprova.",
+      "minutes": "verbale",
+      "officialMinutes": "Verbale ufficiale (PDF)",
+      "officialMinutesTip": "Verbale ufficiale adottato disponibile"
     },
     "consultations": {
       "title": "Consultazioni Pubbliche della CE",
@@ -1738,6 +1741,20 @@
     "generating": "Calcolo...",
     "unlimited": "Professional: previsioni illimitate"
   },
+  "committeeDocs": {
+    "title": "Documenti di commissione",
+    "note": "Documenti presentati nella commissione competente per questo fascicolo, direttamente dal Parlamento europeo. Ciascuno rimanda al PDF originale.",
+    "draftReport": "Progetto di relazione",
+    "amendments": "Emendamenti",
+    "compromiseAmendments": "Emendamenti di compromesso",
+    "opinion": "Parere",
+    "draftOpinion": "Progetto di parere",
+    "reasonedOpinion": "Parere motivato",
+    "agreedText": "Testo concordato",
+    "letterOfAgreement": "Lettera di accordo",
+    "draftResolution": "Proposta di risoluzione",
+    "workingDocument": "Documento di lavoro"
+  },
   "positionTab": {
     "seeForecast": "Vedi previsione",
     "fileOutcome": "Esito del fascicolo",
@@ -2075,7 +2092,9 @@
     "advancedAddByRef": "Avanzato: aggiungi per riferimento di procedura",
     "loadMore": "Carica altri",
     "showingCount": "Visualizzati {{shown}} di {{total}}",
-    "filters": "Filtri"
+    "filters": "Filtri",
+    "mine": "I miei interessi",
+    "committeeOpinion": "Parere presentato da questa commissione"
   },
   "calendar": {
     "myEuToday": "La mia UE oggi",
@@ -2528,7 +2547,12 @@
   "commissionDoc": {
     "noDate": "Senza data",
     "openInEurlex": "Apri in EUR-Lex",
-    "viewInEurlex": "Vedi in EUR-Lex"
+    "viewInEurlex": "Vedi in EUR-Lex",
+    "referredTo": "Deferito alla commissione",
+    "matchesInterests": "Nei tuoi interessi politici",
+    "matchesTracked": "Su un fascicolo che segui",
+    "referralPdf": "Deferimento in commissione (PDF)",
+    "referralPdfTip": "La proposta come deferita alla commissione del PE"
   },
   "textAdopted": {
     "voteCount": "Voto: {{forCount}} a favore / {{againstCount}} contrari / {{abstentions}} astensioni",
@@ -2827,6 +2851,17 @@
     }
   },
   "votes": {
+    "votingListsTab": "Liste di voto",
+    "votingListsCount": "liste di voto",
+    "votingList": {
+      "tabNote": "Gli ordini di voto delle commissioni dietro le votazioni: quali emendamenti si votano, in che ordine e con quali compromessi. Per lo più prospettiche.",
+      "attachTitle": "Lista di voto",
+      "attachNote": "L'ordine di voto su cui si è basata questa votazione: quali emendamenti, in che ordine e con quali compromessi.",
+      "openPdf": "Apri la lista di voto (PDF)",
+      "empty": "Nessuna lista di voto di commissione registrata finora.",
+      "emptyPi": "Nessuna lista di voto per le tue commissioni di interesse.",
+      "emptyFiles": "Nessuna lista di voto sui fascicoli che segui."
+    },
     "title": "Votazioni",
     "intro": "Come ha votato il Parlamento i dossier di tuo interesse: commissione e plenaria, ordinati come il PE non fa.",
     "committee": "Commissione",
@@ -3147,5 +3182,25 @@
     "kind_consultation_response": "Risposta a consultazione",
     "kind_stakeholder_map": "Mappa degli attori",
     "kind_amendment": "Emendamento"
+  },
+  "journey": {
+    "title": "Percorso legislativo",
+    "aiTag": "IA",
+    "absentBlurb": "Scopri come è cambiato questo fascicolo dalla proposta della Commissione fino al voto in commissione, analizzato con l'IA.",
+    "generate": "Genera analisi con IA",
+    "generating": "Analisi dei documenti...",
+    "cta": "Vedi il confronto completo in Analisi di Posizione",
+    "stale": "Nuovi documenti da",
+    "whereFight": "Dov'è lo scontro",
+    "builtWith": "Analizzato con",
+    "regenerate": "Aggiorna analisi",
+    "openSource": "Apri il documento di origine (PDF)",
+    "noLayerText": "Nessun testo analizzabile per questo livello.",
+    "truncated": "Documento lungo: analisi basata sulla parte iniziale del testo.",
+    "layerProposal": "Proposta della Commissione",
+    "layerDraftReport": "Progetto di relazione del relatore",
+    "layerAmendments": "Emendamenti degli eurodeputati",
+    "layerCompromise": "Emendamenti di compromesso",
+    "layerVotingList": "Lista di voto finale"
   }
 }

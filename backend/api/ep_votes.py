@@ -52,7 +52,7 @@ def _margin(v: EpVote) -> int:
     return abs((v.votes_for or 0) - (v.votes_against or 0))
 
 
-def _vote_summary(v: EpVote, my_committees: List[str], both_levels: set, tracked_procs: set) -> dict:
+def _vote_summary(v: EpVote, my_committees: List[str], both_levels: set, tracked_procs: set = frozenset()) -> dict:
     return {
         "id": str(v.id),
         "level": v.level,
@@ -249,7 +249,104 @@ async def list_council(
         raise HTTPException(status_code=500, detail="Failed to list council votes")
 
 
+# ---- voting lists (committee amendment order papers) ----------------------
+
+def _voting_list_card(r: dict, my_committees: List[str], tracked_procs: set, tracked_committees: set) -> dict:
+    cc = r.get("committee_code")
+    proc = r.get("procedure_ref")
+    return {
+        "reference": r.get("reference"),
+        "title": r.get("title"),
+        "item_title": r.get("item_title"),
+        "committee_code": cc,
+        "committee_name": r.get("committee_name"),
+        "meeting_date": r.get("meeting_date"),
+        "procedure_ref": proc,
+        "rapporteurs": r.get("rapporteurs") or [],
+        "pdf_url": r.get("pdf_url"),
+        "source_url": r.get("source_url"),
+        "languages": r.get("languages") or [],
+        "matches_interests": bool(cc and cc in my_committees),
+        "matches_tracked": bool((proc and proc in tracked_procs) or (cc and cc in tracked_committees)),
+    }
+
+
+@router.get("/voting-lists", summary="Committee voting lists (amendment order papers)",
+            description=(
+                "**What it does**\nLists the European Parliament *committee voting "
+                "lists* — the order paper a committee votes from: which amendments, "
+                "in what order, with the compromise groupings. These are the document "
+                "behind a vote, not the roll-call result, and most are forward-looking "
+                "(an upcoming or just-held committee vote).\n\n"
+                "**When to use it**\nThe 'Voting lists' tab of MEUB Votes.\n\n"
+                "**Input**\n`my_interests=true` to restrict to your Policy-Interest "
+                "committees; `my_files=true` for lists on dossiers/committees you "
+                "track; `committees=AGRI,PECH`; `search`.\n\n"
+                "**You get back**\nVoting-list cards: committee, meeting date, dossier, "
+                "rapporteur, and a direct PDF link."))
+async def list_voting_lists(
+    my_interests: bool = Query(False),
+    my_files: bool = Query(False),
+    committees: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    current_user: Optional[User] = Depends(get_current_user_optional),
+    db: Session = Depends(get_db),
+):
+    from services.linking.emeeting_links import voting_list_documents
+    try:
+        my_committees = _user_committees(current_user)
+        tracked = tracked_anchors(db, str(current_user.id)) if current_user else {}
+        tracked_procs = tracked.get("procedures", set())
+        tracked_committees = tracked.get("committees", set())
+
+        filter_committees: List[str] = []
+        if my_interests and my_committees:
+            filter_committees = my_committees
+        elif committees:
+            filter_committees = [c.strip().upper() for c in committees.split(",") if c.strip()]
+
+        res = voting_list_documents(
+            db,
+            committees=filter_committees or None,
+            tracked_procs=(tracked_procs if my_files else None),
+            tracked_committees=(tracked_committees if my_files else None),
+            search=search,
+            limit=limit,
+            offset=offset,
+        )
+        items = [_voting_list_card(r, my_committees, tracked_procs, tracked_committees) for r in res["items"]]
+        return {
+            "items": items,
+            "total": res["total"],
+            "level": "voting_lists",
+            "my_committees": my_committees,
+            "pi_active": bool(my_interests and my_committees),
+            "files_active": bool(my_files and (tracked_procs or tracked_committees)),
+            "has_tracked_files": bool(tracked_procs or tracked_committees),
+        }
+    except Exception as e:
+        logger.exception(f"voting lists list failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to list voting lists")
+
+
 # ---- detail + delta -------------------------------------------------------
+
+def _voting_lists_for(db: Session, procedure_ref: Optional[str]) -> List[dict]:
+    """The committee voting-list PDF(s) for this dossier, if any (the order paper
+    behind the vote). Surfaced on the vote detail where a procedure matches."""
+    if not procedure_ref:
+        return []
+    from services.linking.emeeting_links import emeeting_docs_for, KINDS_VOTES
+    docs = emeeting_docs_for(db, [procedure_ref], kinds=KINDS_VOTES, limit=20)
+    return [
+        {"committee_code": d.get("committee_code"), "meeting_date": d.get("meeting_date"),
+         "item_title": d.get("item_title"), "title": d.get("title"),
+         "pdf_url": d.get("pdf_url"), "source_url": d.get("source_url")}
+        for d in docs
+    ]
+
 
 def _records_payload(db: Session, vote: EpVote) -> dict:
     recs = (
@@ -288,6 +385,7 @@ async def vote_detail(
         both = _procedures_with_both_levels(db)
         payload = _vote_summary(vote, my_committees, both)
         payload.update(_records_payload(db, vote))
+        payload["voting_lists"] = _voting_lists_for(db, vote.procedure_ref)
         return payload
     except HTTPException:
         raise
@@ -336,6 +434,7 @@ async def procedure_votes(
             "committee": _vote_summary(committee, my_committees, both) if committee else None,
             "plenary": _vote_summary(plenary, my_committees, both) if plenary else None,
             "delta": delta,
+            "voting_lists": _voting_lists_for(db, procedure_ref),
         }
     except HTTPException:
         raise
@@ -363,10 +462,14 @@ async def stats(db: Session = Depends(get_db)):
         by_level = dict(
             db.query(EpVote.level, func.count(EpVote.id)).group_by(EpVote.level).all()
         )
+        voting_lists = db.execute(
+            text("SELECT count(*) FROM ep_emeeting_documents WHERE doc_kind = 'voting_list'")
+        ).scalar() or 0
         return {
             "committee": int(by_level.get("committee", 0)),
             "plenary": int(by_level.get("plenary", 0)),
             "council": int(by_level.get("council", 0)),
+            "voting_lists": int(voting_lists),
             "with_delta": len(_procedures_with_both_levels(db)),
         }
     except Exception as e:

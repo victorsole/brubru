@@ -18,6 +18,7 @@ Schedule (from backend/config/sync_cadence.json):
     monthly   → 1st of month hour 02 UTC                  (once per month)
     daily-brief         → hour 11 UTC                     (Brubru Brief email)
     authority-labels    → hour 03 UTC                     (NAL sync)
+    journey-precompute  → hours 01, 09, 17 UTC            (legislative-journey AI, limit=8)
 
 Each fire is a POST to the main backend (BACKEND_URL) at
     /api/cron/sync/<tier>
@@ -92,6 +93,11 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     # Warm tier: every 12 hours (02 + 14 UTC, offset from hot tier)
     if hour in (2, 14):
         fires.append(("warm_12h", "/api/cron/sync/warm-12h"))
+
+    # Legislative-journey AI precompute: 3x/day (01, 09, 17 UTC), throttled per
+    # run (limit=8) so it backfills tracked dossiers gradually without a burst.
+    if hour in (1, 9, 17):
+        fires.append(("journey_precompute", "/api/cron/precompute-journeys?limit=8"))
 
     # Authority labels: 03:00 UTC daily
     if hour == 3:

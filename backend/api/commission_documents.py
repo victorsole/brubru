@@ -38,8 +38,11 @@ from schemas.commission_document_schemas import (
     SyncResultResponse,
 )
 from .auth import get_current_user
-from services.tracking.pi_committee_crosswalk import dgs_for_interests
+from .auth_optional import get_current_user_optional
+from services.tracking.pi_committee_crosswalk import dgs_for_interests, committees_for_interests
 from services.tracking.tracked_files_seeder import _interest_list
+from services.tracking.tracked_lens import tracked_anchors
+from services.linking.emeeting_links import canon_commission_ref, commission_doc_enrichment
 
 import logging
 
@@ -81,13 +84,23 @@ async def get_items(
     search: Optional[str] = Query(None, description="Search in title or reference"),
     date_from: Optional[str] = Query(None, description="From date (YYYY-MM-DD)"),
     date_to: Optional[str] = Query(None, description="To date (YYYY-MM-DD)"),
+    my_interests: bool = Query(False, description="Restrict to your Policy-Interest committees (via eMeeting referral)"),
+    my_files: bool = Query(False, description="Restrict to documents on dossiers/committees you track"),
     sort_by: str = Query("publication_date", description="Sort field"),
     sort_desc: bool = Query(True, description="Sort descending"),
     limit: int = Query(50, ge=1, le=500, description="Items per page"),
     offset: int = Query(0, ge=0, description="Offset for pagination"),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db)
 ) -> CommissionDocListResponse:
-    """Get Commission documents with optional filters."""
+    """Get Commission documents with optional filters.
+
+    Each document is enriched at query time with its EP committee-referral
+    context (committee + procedure + referral PDF) by canonical-reference join to
+    the eMeeting ``commission_document`` rows, which makes the feed PI- and
+    tracked-filterable even though the EC scrape itself carries almost no
+    procedure. Surface-not-ingest: no eMeeting rows are added to this feed.
+    """
     try:
         query = db.query(CommissionDocument)
         filters_applied = {}
@@ -127,25 +140,72 @@ async def get_items(
             except ValueError:
                 pass
 
-        # Get total count
-        total = query.count()
+        # --- eMeeting enrichment + PI/tracked lens ---------------------------
+        enrich = commission_doc_enrichment(db)
+        my_committees = sorted(committees_for_interests(_interest_list(current_user))) if current_user else []
+        tracked = tracked_anchors(db, str(current_user.id)) if current_user else {}
+        tracked_procs = tracked.get("procedures", set())
+        tracked_committees = tracked.get("committees", set())
+        has_tracked = bool(tracked_procs or tracked_committees)
+        pi_active = bool(my_interests and my_committees)
+        files_active = bool(my_files and has_tracked)
 
-        # Sort
-        sort_column = getattr(CommissionDocument, sort_by, CommissionDocument.publication_date)
-        if sort_desc:
-            query = query.order_by(sort_column.desc().nullslast())
+        def build(item) -> CommissionDocumentSummary:
+            e = enrich.get(canon_commission_ref(item.reference))
+            committees = e["committees"] if e else set()
+            proc = (e and e.get("procedure_ref")) or item.procedure_ref
+            mi = bool(committees & set(my_committees))
+            mt = bool((proc and proc in tracked_procs) or (committees & tracked_committees))
+            s = CommissionDocumentSummary.model_validate(item)
+            if e:
+                s.committee_code = e.get("committee_code")
+                s.committee_name = e.get("committee_name")
+                s.referral_pdf_url = e.get("pdf_url")
+                if not s.procedure_ref:
+                    s.procedure_ref = e.get("procedure_ref")
+            s.matches_interests = mi
+            s.matches_tracked = mt
+            return s
+
+        lens_active = pi_active or files_active
+        if lens_active:
+            # Small feed (<1k) - enrich + filter + sort + paginate in Python.
+            all_rows = query.all()
+            built = [build(it) for it in all_rows]
+            if pi_active:
+                built = [b for b in built if b.matches_interests]
+            if files_active:
+                built = [b for b in built if b.matches_tracked]
+
+            field = sort_by if sort_by in (
+                "publication_date", "reference", "title", "last_updated", "dg_responsible"
+            ) else "publication_date"
+            non_null = [b for b in built if getattr(b, field, None) is not None]
+            nulls = [b for b in built if getattr(b, field, None) is None]
+            non_null.sort(key=lambda b: getattr(b, field), reverse=sort_desc)
+            built = non_null + nulls  # nulls always last, both directions
+            total = len(built)
+            page = built[offset:offset + limit]
         else:
-            query = query.order_by(sort_column.asc().nullsfirst())
-
-        # Paginate
-        items = query.offset(offset).limit(limit).all()
+            total = query.count()
+            sort_column = getattr(CommissionDocument, sort_by, CommissionDocument.publication_date)
+            if sort_desc:
+                query = query.order_by(sort_column.desc().nullslast())
+            else:
+                query = query.order_by(sort_column.asc().nullsfirst())
+            items = query.offset(offset).limit(limit).all()
+            page = [build(it) for it in items]
 
         return CommissionDocListResponse(
-            items=[CommissionDocumentSummary.model_validate(item) for item in items],
+            items=page,
             total=total,
             limit=limit,
             offset=offset,
-            filters_applied=filters_applied if filters_applied else None
+            filters_applied=filters_applied if filters_applied else None,
+            my_committees=my_committees,
+            pi_active=pi_active,
+            files_active=files_active,
+            has_tracked_files=has_tracked,
         )
 
     except Exception as e:

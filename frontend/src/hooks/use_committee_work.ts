@@ -49,6 +49,15 @@ export interface CommitteeWorkItem {
   last_updated: string;
   first_seen?: string;
   legislative_carriage_id?: string | null;
+  // eMeeting enrichment: the opinion / draft opinion this committee tabled.
+  committee_documents?: Array<{
+    doc_kind: string;
+    title?: string | null;
+    item_title?: string | null;
+    meeting_date?: string | null;
+    pdf_url?: string | null;
+    source_url?: string | null;
+  }>;
 }
 
 export interface CommitteeWorkItemDetail extends CommitteeWorkItem {

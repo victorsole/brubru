@@ -135,8 +135,18 @@ async def get_work_items(
         # Apply pagination
         items = query.offset(offset).limit(limit).all()
 
+        # eMeeting enrichment: attach the opinion / draft opinion this committee
+        # tabled on this dossier (matched by procedure + committee). Surface-only.
+        from services.linking.emeeting_links import docs_by_proc_committee
+        opinions = docs_by_proc_committee(db, ("opinion", "draft_opinion"))
+        summaries = []
+        for item in items:
+            s = CommitteeWorkItemSummary.model_validate(item)
+            s.committee_documents = opinions.get((item.procedure_ref, item.committee_code), [])
+            summaries.append(s)
+
         return CommitteeWorkListResponse(
-            items=[CommitteeWorkItemSummary.model_validate(item) for item in items],
+            items=summaries,
             total=total,
             limit=limit,
             offset=offset,

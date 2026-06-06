@@ -40,6 +40,15 @@ class CommissionDocumentSummary(BaseModel):
     celex: Optional[str] = None
     last_updated: datetime
 
+    # eMeeting enrichment (the COM as referred to an EP committee). Populated at
+    # query time by canon-ref join to ep_emeeting_documents - gives the feed the
+    # committee + dossier + referral-PDF anchors the EC scrape lacks.
+    committee_code: Optional[str] = None
+    committee_name: Optional[str] = None
+    referral_pdf_url: Optional[str] = None
+    matches_interests: bool = False
+    matches_tracked: bool = False
+
     class Config:
         from_attributes = True
 
@@ -78,6 +87,11 @@ class CommissionDocListResponse(BaseModel):
     limit: int
     offset: int
     filters_applied: Optional[Dict[str, Any]] = None
+    # PI / tracked lens meta (powered by the eMeeting enrichment).
+    my_committees: List[str] = Field(default_factory=list)
+    pi_active: bool = False
+    files_active: bool = False
+    has_tracked_files: bool = False
 
 
 # ===== Tracking Schemas =====
