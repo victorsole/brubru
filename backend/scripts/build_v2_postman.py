@@ -554,6 +554,28 @@ def _build_ecb_domain(paths: dict) -> dict:
     return {"name": "European Central Bank", "item": sources}
 
 
+# Economic & Financial Institutions of the EU — one sub-folder per body (acronym).
+_EU_FIN_ORDER = ["Directory", "EBA", "ESMA", "EIOPA", "ESRB", "SRB", "EIB", "AMLA", "EPPO"]
+
+
+def _build_eu_fin_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if path != "/api/v2/eu-financial-institutions" and "/api/v2/eu-financial-institutions/" not in path:
+            continue
+        tail = path.split("/api/v2/eu-financial-institutions", 1)[1].lstrip("/")
+        seg = tail.split("/")[0] if tail else ""
+        source = seg.upper() if seg else "Directory"
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _EU_FIN_ORDER if s in tree]
+    sources += [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)}
+                for s in tree if s not in _EU_FIN_ORDER]
+    return {"name": "Economic & Financial Institutions of the EU", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -575,6 +597,7 @@ def build_collection() -> dict:
         _build_who_is_who_domain(paths),
         _build_general_publications_domain(paths),
         _build_ecb_domain(paths),
+        _build_eu_fin_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)

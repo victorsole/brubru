@@ -1,6 +1,6 @@
 """
-Shared models + resource-registration helper for the /api/v2/ecb folder
-(ECB + ECB Banking Supervision). All resources read from economy_items
+Shared models + resource-registration helper for the economy & finance v2 folders
+(ECB, the EU financial institutions, ESM). All resources read from economy_items
 (migration 119) and expose the 5 mandatory datapoints.
 
 List endpoints return metadata + the datapoint contract with bodies nulled

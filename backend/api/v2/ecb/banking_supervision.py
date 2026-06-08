@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from ._common import register_resource
+from ..economy_endpoints import register_resource
 
 router = APIRouter(prefix="/banking-supervision")
 

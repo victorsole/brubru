@@ -22,6 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from services.scrapers import economy_ecb as e          # noqa: E402
+from services.scrapers import economy_eba as eba        # noqa: E402
 from scripts._specialised_helpers import ChunkedDb       # noqa: E402
 
 # (body_code, item_type) -> callable returning list[Item]
@@ -33,6 +34,9 @@ INGESTORS = {
     ("ecb_ssm", "news"):        e.ingest_ssm_news,
     ("ecb_ssm", "publication"): e.ingest_ssm_publications,
     ("ecb_ssm", "event"):       e.ingest_ssm_events,
+    ("eba", "news"):            eba.ingest_eba_news,
+    ("eba", "publication"):     eba.ingest_eba_publications,
+    ("eba", "event"):           eba.ingest_eba_events,
 }
 
 _UPSERT = """
@@ -79,7 +83,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
-    ap.add_argument("--body", choices=["ecb", "ecb_ssm"])
+    ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba"])
     ap.add_argument("--type", default="all",
                     choices=["all", "news", "publication", "event", "legal"])
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
