@@ -43,16 +43,19 @@ _CB = "http://publications.europa.eu/resource/authority/corporate-body/"
 _ADMIN_RE = re.compile(
     r"^(management plan|annual activity report|consolidated annual activity|annual management plan|"
     r"strategic plan|list of |organisation chart|mission letter|decision of the|"
-    r"register of|code of conduct|declaration of)",
+    r"register of|code of conduct|declaration of|"
+    r"vacancy notice|vacancy for|statement of revenue|call for expression|call for tender|"
+    r"call for proposal|call for application|budget of|financial statements?|publication of the annual)",
     re.I,
 )
 
 
 def _src(id, group, icon, color, name, full, landing, search, pi_tags,
-         feed_landing=None, cb_code=None, sparql_cb=None):
+         feed_landing=None, cb_code=None, sparql_cb=None, rss_url=None):
     return dict(id=id, group=group, icon=icon, color=color, name=name, full=full,
                 landing=landing, search=search, pi_tags=pi_tags,
-                feed_landing=feed_landing, cb_code=cb_code, sparql_cb=sparql_cb)
+                feed_landing=feed_landing, cb_code=cb_code, sparql_cb=sparql_cb,
+                rss_url=rss_url)
 
 
 # Brand colours reused across cards.
@@ -218,6 +221,26 @@ SOURCES: List[dict] = [
          ["external", "foreign", "security", "defence", "enlargement", "neighbourhood",
           "sanctions", "diploma", "global gateway", "trade"],
          sparql_cb="EEAS"),
+
+    # ---- Economic & financial supervision (native RSS — real research, no WAF) ----
+    _src("ecb", "research", "bank", _B, "ECB",
+         "European Central Bank research: Working Papers, Occasional Papers, the Economic Bulletin and the Financial Stability Review",
+         "https://www.ecb.europa.eu/press/research-publications/html/index.en.html",
+         "https://www.ecb.europa.eu/search/search/html/index.en.html?searchterm={q}",
+         ["econom", "financ", "monetary", "bank", "euro", "inflation", "interest rate", "fiscal"],
+         rss_url="https://www.ecb.europa.eu/rss/pub.html"),
+    _src("esma", "research", "chart-line", _P, "ESMA",
+         "European Securities and Markets Authority: reports, technical standards, guidelines and risk assessments on EU securities markets",
+         "https://www.esma.europa.eu/document-library",
+         "https://www.esma.europa.eu/search?search_api_fulltext={q}",
+         ["market", "securit", "financ", "invest", "fund", "trading", "capital market", "mifid"],
+         rss_url="https://www.esma.europa.eu/rss.xml"),
+    _src("esrb", "research", "shield-alert", _R, "ESRB",
+         "European Systemic Risk Board: macroprudential recommendations, warnings and reports on systemic risk and financial stability",
+         "https://www.esrb.europa.eu/pub/html/index.en.html",
+         "https://www.esrb.europa.eu/home/search/html/index.en.html?searchterm={q}",
+         ["systemic risk", "financ", "macroprudential", "stability", "bank", "risk", "econom"],
+         sparql_cb="ESRB"),
 ]
 
 
@@ -252,6 +275,12 @@ def _strip(s: str) -> str:
     return re.sub(r"<[^>]+>", "", s or "").strip()
 
 
+# Some EU feeds (notably the ECB) emit bare ampersands ("R&D") which are invalid
+# XML. Escape any & that is not already part of a character/entity reference.
+_BARE_AMP = re.compile(r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)")
+_DC = "{http://purl.org/dc/elements/1.1/}"
+
+
 def fetch_feed(feed_url: str, limit: int = 12) -> List[dict]:
     """Parse an RSS feed into recent items (admin noise filtered out). Cached."""
     now = time.time()
@@ -260,7 +289,8 @@ def fetch_feed(feed_url: str, limit: int = 12) -> List[dict]:
         return hit[1]
     items: List[dict] = []
     try:
-        root = ET.fromstring(_http(feed_url))
+        xml = _BARE_AMP.sub("&amp;", _http(feed_url).decode("utf-8", "replace"))
+        root = ET.fromstring(xml)
         for it in root.iter("item"):
             def gx(tag: str) -> str:
                 el = it.find(tag)
@@ -269,7 +299,8 @@ def fetch_feed(feed_url: str, limit: int = 12) -> List[dict]:
             link = gx("link") or gx("guid")
             if not (title and link) or _ADMIN_RE.match(title):
                 continue
-            items.append({"title": title, "url": link, "date": gx("pubDate"),
+            date = gx("pubDate") or gx(f"{_DC}date") or gx("date") or gx("published")
+            items.append({"title": title, "url": link, "date": date,
                           "snippet": _strip(gx("description"))[:240]})
             if len(items) >= limit:
                 break
@@ -362,7 +393,7 @@ def build_catalogue(pi: List[str]) -> dict:
             "id": s["id"], "group": s["group"], "icon": s["icon"], "color": s["color"],
             "name": s["name"], "full": s["full"], "landing": s["landing"],
             "search": _seed_search(s, pi),
-            "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb")),
+            "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb") or s.get("rss_url")),
             "is_pi_match": _is_pi_match(s, pi_lower),
         })
     # group order, then PI matches first within a group.
@@ -380,6 +411,8 @@ def read_through(source_id: str, limit: int = 12) -> List[dict]:
         return fetch_feed(rss, limit) if rss else []
     if src.get("cb_code"):
         return fetch_feed(_cb_feed_url(src["cb_code"]), limit)
+    if src.get("rss_url"):
+        return fetch_feed(src["rss_url"], limit)
     if src.get("sparql_cb"):
         return fetch_cellar_works(src["sparql_cb"], limit)
     return []
