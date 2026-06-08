@@ -136,6 +136,15 @@ _NUM_DATE_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
 _NAME_DATE_RE = re.compile(r"\b(\d{1,2})(?:\s*[-–]\s*\d{1,2})?\s+([A-Za-z]{3,9})\.?\s+(\d{4})\b")
 
 
+def _iso_dt(s: str | None) -> datetime | None:
+    if not s:
+        return None
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def parse_listing_date(text: str) -> datetime | None:
     text = text or ""
     m = _NUM_DATE_RE.search(text)                # 11/06/2026 (ranges -> first match = start)
@@ -155,3 +164,79 @@ def parse_listing_date(text: str) -> datetime | None:
         except ValueError:
             return None
     return None
+
+
+# --- generic EU ECL (Europa Component Library) listing scraper --------------
+# Many europa.eu bodies (EIOPA, AMLA, EPPO, Commission DGs) render listings as
+# .ecl-content-item cards with a <time datetime> date, a standalone title link
+# and a description. Server-rendered + ?page=N paginated.
+
+
+def _parse_ecl_cards(html: str, base: str):
+    soup = BeautifulSoup(html, "html.parser")
+    out = []
+    for ci in soup.select(".ecl-content-item"):
+        a = ci.select_one(".ecl-content-block__title a[href]") or ci.select_one("a[href]")
+        if not a or not a.get("href"):
+            continue
+        href = a["href"]
+        url = norm_url(href if href.startswith("http") else base + href)
+        title = clean(a.get_text(" ", strip=True))
+        if not title:
+            continue
+        t = ci.select_one("time[datetime]")
+        doc_dt = _iso_dt(t["datetime"]) if (t and t.get("datetime")) else None
+        if doc_dt is None:
+            # ECL date-block component (events): day / month / year split spans.
+            db = ci.select_one(".ecl-date-block")
+            if db:
+                day = db.select_one(".ecl-date-block__day")
+                mon = db.select_one(".ecl-date-block__month")
+                yr = db.select_one(".ecl-date-block__year")
+                mon_txt = (mon.get("title") or mon.get_text(strip=True)) if mon else ""
+                if day and mon_txt and yr:
+                    doc_dt = parse_listing_date(
+                        f"{day.get_text(strip=True)} {mon_txt} {yr.get_text(strip=True)}")
+        if doc_dt is None:
+            meta = ci.select_one(".ecl-content-block__primary-meta-item time") or t
+            doc_dt = parse_listing_date(meta.get_text(" ", strip=True)) if meta else None
+        desc = ci.select_one(".ecl-content-block__description")
+        summary = clean(desc.get_text(" ", strip=True)[:1000]) if desc else None
+        out.append((url, title, doc_dt, summary))
+    return out
+
+
+def scrape_ecl_listing(body_code: str, item_type: str, listing_urls, base: str,
+                       *, fetch_bodies: bool = True, max_pages: int = 6):
+    """Page through ECL .ecl-content-item listings and build Items."""
+    items = []
+    seen: set[str] = set()
+    now = datetime.now(timezone.utc)
+    for listing in listing_urls:
+        for page in range(max_pages):
+            sep = "&" if "?" in listing else "?"
+            url = listing if page == 0 else f"{listing}{sep}page={page}"
+            r = http_get(url)
+            if r is None:
+                break
+            rows = _parse_ecl_cards(r.text, base)
+            if not rows:
+                break
+            new = 0
+            for url_i, title, doc_dt, summary in rows:
+                if url_i in seen:
+                    continue
+                seen.add(url_i)
+                new += 1
+                items.append(Item(body_code=body_code, item_type=item_type, title=title,
+                                  public_url=url_i, summary=summary, document_date=doc_dt,
+                                  creation_date=now, source_kind="html", guid=url_i))
+            if new == 0:
+                break
+    if fetch_bodies:
+        for it in items:
+            body_txt, body_html, kind = fetch_detail(it.public_url)
+            it.body_txt, it.body_html = body_txt, body_html
+            if kind == "pdf":
+                it.source_kind = "pdf"
+    return items

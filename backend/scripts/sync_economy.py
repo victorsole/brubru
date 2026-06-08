@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from services.scrapers import economy_ecb as e          # noqa: E402
 from services.scrapers import economy_eba as eba        # noqa: E402
 from services.scrapers import economy_esma as esma      # noqa: E402
+from services.scrapers import economy_eiopa as eiopa     # noqa: E402
 from scripts._specialised_helpers import ChunkedDb       # noqa: E402
 
 # (body_code, item_type) -> callable returning list[Item]
@@ -40,6 +41,9 @@ INGESTORS = {
     ("eba", "event"):           eba.ingest_eba_events,
     ("esma", "news"):           esma.ingest_esma_news,
     ("esma", "publication"):    esma.ingest_esma_publications,
+    ("eiopa", "news"):          eiopa.ingest_eiopa_news,
+    ("eiopa", "publication"):   eiopa.ingest_eiopa_publications,
+    ("eiopa", "event"):         eiopa.ingest_eiopa_events,
 }
 
 _UPSERT = """
@@ -86,7 +90,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
-    ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma"])
+    ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa"])
     ap.add_argument("--type", default="all",
                     choices=["all", "news", "publication", "event", "legal"])
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
