@@ -18,6 +18,7 @@ import {
   mdiInformationOutline, mdiTargetAccount, mdiMessageTextOutline,
 } from '@mdi/js';
 import { positionService } from '../../services/position_service';
+import { MeubHeader } from './meub_header';
 import CommitteeDocumentsCard from './committee_documents_card';
 import LegislativeJourneyPanel from './legislative_journey_panel';
 import type {
@@ -578,13 +579,14 @@ export const PositionAnalysisTab: React.FC = () => {
   );
 
   return (
-    <div className="pos-tab">
+    <div className="pos-tab-page">
+      <MeubHeader
+        icon={mdiScaleBalance}
+        title={t('positionTab.headerTitle')}
+        subtitle={t('positionTab.headerSubtitle')}
+      />
+      <div className="pos-tab">
       <aside className="pos-tab__sidebar">
-        <header className="pos-tab__sidebar-header">
-          <Icon path={mdiScaleBalance} size={1} />
-          <div><h2>{t('positionTab.headerTitle')}</h2><p>{t('positionTab.headerSubtitle')}</p></div>
-        </header>
-
         <div className="pos-toggle">
           <button className={myInterests ? 'is-active' : ''} onClick={() => setMyInterests(true)}>{t('positionTab.mine', 'My interests')}</button>
           <button className={!myInterests ? 'is-active' : ''} onClick={() => setMyInterests(false)}>{t('positionTab.all', 'All tracked')}</button>
@@ -697,6 +699,7 @@ export const PositionAnalysisTab: React.FC = () => {
           </>
         )}
       </section>
+      </div>
     </div>
   );
 };

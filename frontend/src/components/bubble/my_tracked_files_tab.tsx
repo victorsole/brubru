@@ -807,15 +807,22 @@ export const MyTrackedFilesTab = () => {
       <MeubHeader
         icon={mdiStarOutline}
         title={t('myFilesTab.title')}
-        subtitle={
-          activeTab === 'legislative'
-            ? t('myFilesTab.filesTracked', { count: trackedFiles.length })
-            : activeTab === 'committee'
-            ? t('myFilesTab.committeeItems', { count: committeeWorkItems.length })
-            : activeTab === 'texts_adopted'
-            ? t('myFilesTab.adoptedTexts', { count: textsAdoptedItems.length })
-            : t('myFilesTab.commissionDocs', { count: commissionDocItems.length })
-        }
+        subtitle={(
+          <>
+            {t('myFilesTab.subtitle', 'The EU dossiers and documents you follow, in one place. Add files from Policy Interests or any feed, and Brubru keeps their status, amendments and votes current here.')}
+            {' '}
+            <span className="my-tracked-files-tab__subtitle-count">
+              ·{' '}
+              {activeTab === 'legislative'
+                ? t('myFilesTab.filesTracked', { count: trackedFiles.length })
+                : activeTab === 'committee'
+                ? t('myFilesTab.committeeItems', { count: committeeWorkItems.length })
+                : activeTab === 'texts_adopted'
+                ? t('myFilesTab.adoptedTexts', { count: textsAdoptedItems.length })
+                : t('myFilesTab.commissionDocs', { count: commissionDocItems.length })}
+            </span>
+          </>
+        )}
         aside={
           <div className="my-tracked-files-tab__header-actions">
             <button

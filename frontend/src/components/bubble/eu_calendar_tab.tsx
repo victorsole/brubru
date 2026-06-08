@@ -35,6 +35,7 @@ import {
 import {
   googleCalendarUrl, outlookCalendarUrl, downloadIcs,
 } from '../../utils/calendar_export';
+import { MeubHeader } from './meub_header';
 import {
   useEUCalendar,
   groupEventsByDate,
@@ -935,6 +936,7 @@ function formatDateISO(d: Date): string {
 let _calendarFiltersResetForSession = false;
 
 export const EUCalendarTab = () => {
+  const { t } = useTranslation();
   const { viewMode, isLoading, fetchEvents, clearFilters } = useEUCalendar();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
 
@@ -986,6 +988,11 @@ export const EUCalendarTab = () => {
 
   return (
     <div className="eu-calendar-tab">
+      <MeubHeader
+        icon={mdiCalendarMonth}
+        title={t('calendar.title', 'My EU Calendar')}
+        subtitle={t('calendar.intro', 'Every EU institutional date in one place — plenary sittings, Council meetings, committee hearings and consultation deadlines — filtered to your interests. Click any event for details, or add it to your own calendar.')}
+      />
       <MyEUTodayDigest />
       <CalendarToolbar />
       <CalendarFilters />
