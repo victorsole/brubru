@@ -151,6 +151,11 @@ def main():
         flush=True,
     )
 
+    # Liveness heartbeat — fire EVERY hour, before the no-tiers early-exit, so
+    # /api/sync/health can confirm the hourly dispatcher itself is alive (vs the
+    # app being up but the Railway cron not scheduled).
+    _fire("/api/cron/heartbeat", timeout=60)
+
     fires = decide_tiers(now)
     if not fires:
         print(f"[CRON-DISPATCH] No tiers due at hour {now.hour:02d} UTC. Exiting.", flush=True)

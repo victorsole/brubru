@@ -531,6 +531,24 @@ def _send_staleness_email(stale: list[dict]) -> None:
         logger.warning("[CRON] Staleness email failed: %s", exc)
 
 
+@router.post("/heartbeat")
+async def cron_heartbeat(authorization: str = Header(...)):
+    """Dispatcher liveness ping.
+
+    `scripts/cron_dispatch.py` fires this every hour regardless of which tiers
+    run, so `/api/sync/health` can tell whether the hourly Railway cron is
+    actually alive (vs the app being up but the cron not scheduled).
+    """
+    _verify_cron_secret(authorization)
+    from services.sync.freshness import record_run
+    db = SessionLocal()
+    try:
+        record_run(db, source_key="cron_dispatch", tier="heartbeat", status="ok", items_added=0)
+    finally:
+        db.close()
+    return {"status": "ok"}
+
+
 @router.post("/sync/tier/{tier}")
 async def cron_sync_tier(
     tier: str,
