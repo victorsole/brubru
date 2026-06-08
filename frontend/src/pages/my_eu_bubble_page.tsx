@@ -61,6 +61,33 @@ const VALID_TABS: TabType[] = [
   'position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs',
 ];
 
+// Defensive aliases: the canonical tab id, the component filename, and the name
+// used in the Chat system prompt / nav label do not always match (e.g. the tab
+// id is `legislative` but the file is legislative_tracker_tab and the prompt
+// says "Legislative Tracker"). If any cross-link emits one of those alternative
+// spellings, resolve it to the canonical id instead of falling back to the
+// dashboard. Canonical ids are unchanged, so every existing link keeps working.
+const TAB_ALIASES: Record<string, TabType> = {
+  legislative_tracker: 'legislative',
+  legislative_train: 'legislative',
+  legislative_trains: 'legislative',
+  ec_consultations: 'consultations',
+  ec_public_consultations: 'consultations',
+  stakeholder_map: 'stakeholder_mapping',
+  stakeholder: 'stakeholder_mapping',
+  tracked_files: 'my_files',
+  my_tracked_files: 'my_files',
+  overview: 'dashboard',
+  my_oj: 'oj',
+};
+
+/** Resolve a raw `?tab=` value to a canonical TabType, or null if unknown. */
+const resolveTab = (raw: string | null): TabType | null => {
+  if (!raw) return null;
+  if (VALID_TABS.includes(raw as TabType)) return raw as TabType;
+  return TAB_ALIASES[raw] ?? null;
+};
+
 // Per-tab metadata: label key + icon. `dashboard` keeps its id but is now
 // labelled "Overview"; `legislative` keeps its id but is now "Legislative Train".
 const TAB_META: Record<TabType, { labelKey: string; fallback: string; icon: string; isPredictions?: boolean }> = {
@@ -118,11 +145,7 @@ export const MyEUBubblePage = () => {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<TabType>(() => {
-    const tabParam = searchParams.get('tab');
-    if (tabParam && VALID_TABS.includes(tabParam as TabType)) {
-      return tabParam as TabType;
-    }
-    return 'dashboard';
+    return resolveTab(searchParams.get('tab')) ?? 'dashboard';
   });
 
   // Folding sidebar (desktop) + drawer (mobile)
@@ -169,9 +192,9 @@ export const MyEUBubblePage = () => {
 
   // Respond to URL param changes (e.g. from calendar deep-links)
   useEffect(() => {
-    const tabParam = searchParams.get('tab');
-    if (tabParam && VALID_TABS.includes(tabParam as TabType)) {
-      setActiveTab(tabParam as TabType);
+    const resolved = resolveTab(searchParams.get('tab'));
+    if (resolved) {
+      setActiveTab(resolved);
     }
   }, [searchParams]);
 
