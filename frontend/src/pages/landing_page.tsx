@@ -511,12 +511,12 @@ export const LandingPage = () => {
               marginBottom: '32px',
             }}>
               {[
-                { icon: 'mdi-scale-balance', name: 'GET /api/v1/laws', desc: '28,505 adopted EU laws, full-text + filters' },
-                { icon: 'mdi-train', name: 'GET /api/v1/procedures', desc: '1,200+ legislative files in flight' },
-                { icon: 'mdi-account-tie', name: 'GET /api/v1/commissioners/{name}/agenda', desc: 'Live calendar for all 27 college members' },
-                { icon: 'mdi-message-text', name: 'GET /api/v1/consultations/.../feedback', desc: 'Live Have Your Say stakeholder input' },
-                { icon: 'mdi-book-search', name: 'GET /api/v1/legal-text/{celex}/recital-article-map', desc: 'TF-IDF recital-article linker' },
-                { icon: 'mdi-text-search', name: 'POST /api/v1/legal-text/resolve-aliases', desc: '680+ GDPR/DSA/AI Act/CBAM aliases to CELEX' },
+                { icon: 'mdi-bullhorn-variant', name: 'GET /api/v2/proprietary/brussels-lobbies', desc: 'Every Brussels-based EUTR org, ranked, with their own news' },
+                { icon: 'mdi-scale-balance', name: 'GET /api/v2/legislative/eur-lex/laws', desc: '28,505 adopted EU laws, full-text + filters' },
+                { icon: 'mdi-train', name: 'GET /api/v2/legislative/oeil/procedures', desc: '1,200+ legislative files in flight' },
+                { icon: 'mdi-account-tie', name: 'GET /api/v2/commission/commissioners/{name}/agenda', desc: 'Live calendar for all 27 college members' },
+                { icon: 'mdi-message-text', name: 'GET /api/v2/commission/consultations/.../feedback', desc: 'Live Have Your Say stakeholder input' },
+                { icon: 'mdi-book-search', name: 'GET /api/v2/legislative/eur-lex/laws/{celex}/recital-article-map', desc: 'TF-IDF recital-article linker' },
               ].map((tool) => (
                 <div key={tool.name} style={{
                   background: 'white',
