@@ -2190,7 +2190,17 @@
     "addOutlook": "Outlook",
     "downloadIcs": "Download .ics (Apple, other)",
     "title": "My EU Calendar",
-    "intro": "Every EU institutional date in one place — plenary sittings, Council meetings, committee hearings and consultation deadlines — filtered to your interests. Click any event for details, or add it to your own calendar."
+    "intro": "Every EU institutional date in one place — plenary sittings, Council meetings, committee hearings and consultation deadlines — filtered to your interests. Click any event for details, or add it to your own calendar.",
+    "wd": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "allDay": "All day"
   },
   "newsSidebar": {
     "loadingFeeds": "Loading feeds..."

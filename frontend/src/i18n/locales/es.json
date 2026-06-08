@@ -2190,7 +2190,17 @@
     "addOutlook": "Outlook",
     "downloadIcs": "Descargar .ics (Apple, otros)",
     "title": "Mi Calendario UE",
-    "intro": "Todas las fechas institucionales de la UE en un solo lugar: plenos, reuniones del Consejo, audiencias de comisión y plazos de consulta, filtrados según tus intereses. Haz clic en cualquier evento para ver los detalles o añádelo a tu propio calendario."
+    "intro": "Todas las fechas institucionales de la UE en un solo lugar: plenos, reuniones del Consejo, audiencias de comisión y plazos de consulta, filtrados según tus intereses. Haz clic en cualquier evento para ver los detalles o añádelo a tu propio calendario.",
+    "wd": {
+      "mon": "lun",
+      "tue": "mar",
+      "wed": "mié",
+      "thu": "jue",
+      "fri": "vie",
+      "sat": "sáb",
+      "sun": "dom"
+    },
+    "allDay": "Todo el día"
   },
   "newsSidebar": {
     "loadingFeeds": "Cargando fuentes..."

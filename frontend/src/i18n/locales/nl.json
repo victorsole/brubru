@@ -2190,7 +2190,17 @@
     "addOutlook": "Outlook",
     "downloadIcs": ".ics downloaden (Apple, overige)",
     "title": "Mijn EU-kalender",
-    "intro": "Alle institutionele EU-data op één plek: plenaire vergaderingen, Raadsvergaderingen, commissiehoorzittingen en consultatiedeadlines, gefilterd op jouw interesses. Klik op een gebeurtenis voor details of voeg deze toe aan je eigen agenda."
+    "intro": "Alle institutionele EU-data op één plek: plenaire vergaderingen, Raadsvergaderingen, commissiehoorzittingen en consultatiedeadlines, gefilterd op jouw interesses. Klik op een gebeurtenis voor details of voeg deze toe aan je eigen agenda.",
+    "wd": {
+      "mon": "ma",
+      "tue": "di",
+      "wed": "wo",
+      "thu": "do",
+      "fri": "vr",
+      "sat": "za",
+      "sun": "zo"
+    },
+    "allDay": "Hele dag"
   },
   "newsSidebar": {
     "loadingFeeds": "Feeds laden..."

@@ -2190,7 +2190,17 @@
     "addOutlook": "Outlook",
     "downloadIcs": "Scarica .ics (Apple, altri)",
     "title": "Il Mio Calendario UE",
-    "intro": "Tutte le date istituzionali dell'UE in un unico posto: sedute plenarie, riunioni del Consiglio, audizioni in commissione e scadenze di consultazione, filtrate in base ai tuoi interessi. Clicca su un evento per i dettagli o aggiungilo al tuo calendario."
+    "intro": "Tutte le date istituzionali dell'UE in un unico posto: sedute plenarie, riunioni del Consiglio, audizioni in commissione e scadenze di consultazione, filtrate in base ai tuoi interessi. Clicca su un evento per i dettagli o aggiungilo al tuo calendario.",
+    "wd": {
+      "mon": "lun",
+      "tue": "mar",
+      "wed": "mer",
+      "thu": "gio",
+      "fri": "ven",
+      "sat": "sab",
+      "sun": "dom"
+    },
+    "allDay": "Tutto il giorno"
   },
   "newsSidebar": {
     "loadingFeeds": "Caricamento feed..."

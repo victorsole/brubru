@@ -2190,7 +2190,17 @@
     "addOutlook": "Outlook",
     "downloadIcs": "Baixa .ics (Apple, altres)",
     "title": "El Meu Calendari UE",
-    "intro": "Totes les dates institucionals de la UE en un sol lloc: plens, reunions del Consell, audiències de comissió i terminis de consulta, filtrats segons els teus interessos. Fes clic a qualsevol esdeveniment per veure'n els detalls o afegeix-lo al teu propi calendari."
+    "intro": "Totes les dates institucionals de la UE en un sol lloc: plens, reunions del Consell, audiències de comissió i terminis de consulta, filtrats segons els teus interessos. Fes clic a qualsevol esdeveniment per veure'n els detalls o afegeix-lo al teu propi calendari.",
+    "wd": {
+      "mon": "dl.",
+      "tue": "dt.",
+      "wed": "dc.",
+      "thu": "dj.",
+      "fri": "dv.",
+      "sat": "ds.",
+      "sun": "dg."
+    },
+    "allDay": "Tot el dia"
   },
   "newsSidebar": {
     "loadingFeeds": "Carregant fonts..."

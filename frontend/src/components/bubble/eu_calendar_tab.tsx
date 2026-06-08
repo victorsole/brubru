@@ -69,7 +69,8 @@ import './eu_calendar_tab.css';
 // Constants
 // ============================================================================
 
-const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// Monday-first weekday keys; labels come from i18n (calendar.wd.*).
+const WD_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const MAX_EVENTS_PER_CELL = 4;
 
 // ============================================================================
@@ -412,6 +413,7 @@ function CalendarFilters() {
 // ============================================================================
 
 function MonthView() {
+  const { t } = useTranslation();
   const { events, currentDate, goToDate, selectEvent } = useEUCalendar();
   const eventsByDate = groupEventsByDate(events);
 
@@ -450,8 +452,8 @@ function MonthView() {
     <>
       {/* Desktop month grid */}
       <div className="eu-calendar-tab__month-grid">
-        {WEEKDAY_LABELS.map((label) => (
-          <div key={label} className="eu-calendar-tab__month-header">{label}</div>
+        {WD_KEYS.map((wk) => (
+          <div key={wk} className="eu-calendar-tab__month-header">{t('calendar.wd.' + wk)}</div>
         ))}
         {cells.map((cell) => {
           const dayEvents = eventsByDate.get(cell.dateStr) || [];
@@ -509,6 +511,7 @@ function MonthView() {
 // ============================================================================
 
 function WeekView() {
+  const { t } = useTranslation();
   const { events, currentDate, selectEvent } = useEUCalendar();
   const eventsByDate = groupEventsByDate(events);
 
@@ -540,7 +543,7 @@ function WeekView() {
           >
             <div className="eu-calendar-tab__week-day-header">
               <div className="eu-calendar-tab__week-day-name">
-                {WEEKDAY_LABELS[day.date.getDay() === 0 ? 6 : day.date.getDay() - 1]}
+                {t('calendar.wd.' + WD_KEYS[day.date.getDay() === 0 ? 6 : day.date.getDay() - 1])}
               </div>
               <div className="eu-calendar-tab__week-day-number">
                 {day.date.getDate()}
@@ -607,7 +610,7 @@ function DayView() {
             onClick={() => selectEvent(event)}
           >
             <div className="eu-calendar-tab__day-event-time">
-              {event.all_day ? 'All day' : formatCalendarTime(event.start_time) || ''}
+              {event.all_day ? t('calendar.allDay', 'All day') : formatCalendarTime(event.start_time) || ''}
             </div>
             <div className="eu-calendar-tab__day-event-content">
               <h4 className="eu-calendar-tab__day-event-title">{event.title}</h4>
@@ -643,6 +646,7 @@ function DayView() {
 // ============================================================================
 
 function MobileEventList({ events }: { events: CalendarEvent[] }) {
+  const { t } = useTranslation();
   const { selectEvent } = useEUCalendar();
 
   if (events.length === 0) return null;
@@ -674,7 +678,7 @@ function MobileEventList({ events }: { events: CalendarEvent[] }) {
                   onClick={() => selectEvent(event)}
                 >
                   <div className="eu-calendar-tab__day-event-time">
-                    {event.all_day ? 'All day' : formatCalendarTime(event.start_time) || ''}
+                    {event.all_day ? t('calendar.allDay', 'All day') : formatCalendarTime(event.start_time) || ''}
                   </div>
                   <div className="eu-calendar-tab__day-event-content">
                     <h4 className="eu-calendar-tab__day-event-title">{event.title}</h4>
@@ -955,8 +959,8 @@ export const EUCalendarTab = () => {
       return (
         <div className="eu-calendar-tab__skeleton">
           <div className="eu-calendar-tab__skeleton-header">
-            {WEEKDAY_LABELS.map((label) => (
-              <div key={label} className="eu-calendar-tab__skeleton-weekday">{label}</div>
+            {WD_KEYS.map((wk) => (
+              <div key={wk} className="eu-calendar-tab__skeleton-weekday">{t('calendar.wd.' + wk)}</div>
             ))}
           </div>
           <div className="eu-calendar-tab__skeleton-grid">
