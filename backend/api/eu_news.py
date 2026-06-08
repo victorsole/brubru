@@ -11,6 +11,7 @@ files you track).
 """
 
 import logging
+import re
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -189,3 +190,226 @@ async def list_news(
 async def my_keywords(current_user: Optional[User] = Depends(get_current_user_optional)):
     interests = _interest_list(current_user) if current_user else []
     return {"keywords": sorted(keywords_for_interests(interests)), "dgs": sorted(dgs_for_interests(interests))}
+
+
+# --------------------------------------------------------------------------- #
+# Stakeholders feed — the Brussels-lobbies moat, session-authed for MEUB.      #
+# Same response contract as /items so the News tab renders it unchanged.       #
+# Reads brussels_lobby_news_items + brussels_lobby_profiles (migration 117);   #
+# the paid external door is /api/v2/proprietary/brussels-lobbies.              #
+# --------------------------------------------------------------------------- #
+
+_SIX_LANGS = {"en", "es", "ca", "fr", "it", "nl"}
+
+# Friendly labels live in the frontend; the API returns the raw normalised type.
+_ORG_TYPE_LABEL = {
+    "ngo": "NGO", "trade_association": "Trade association", "company": "Company",
+    "think_tank": "Think tank", "consultancy": "Consultancy", "law_firm": "Law firm",
+    "trade_union": "Trade union", "academic": "Academic", "religious": "Religious",
+    "public_authority": "Public authority", "third_country": "Third-country entity",
+    "self_employed": "Self-employed", "other": "Other",
+}
+
+
+_TAG_RE = re.compile(r"<[^>]+>")
+_WS_RE = re.compile(r"\s+")
+
+
+def _clean_text(s: Optional[str], limit: Optional[int] = None) -> Optional[str]:
+    """Strip HTML tags + entities and collapse whitespace from feed text."""
+    if not s:
+        return None
+    import html
+    t = html.unescape(_TAG_RE.sub(" ", s))
+    t = _WS_RE.sub(" ", t).strip()
+    if not t:
+        return None
+    if limit and len(t) > limit:
+        t = t[:limit].rsplit(" ", 1)[0] + "…"
+    return t
+
+
+def _stakeholder_dict(r, interests: set, keywords: List[str], trans: Optional[dict] = None) -> dict:
+    """Map a lobby news item (+ its org profile) into the News-tab card shape.
+
+    `trans` (when present) is a cached translation for the requested UI language —
+    used for foreign items so the card reads in the user's language.
+    """
+    org_interests = set(r.get("interests") or [])
+    detected = r.get("detected_lang")
+    if trans and (trans.get("title") or trans.get("summary")):
+        title = _clean_text(trans.get("title"), 180) or _clean_text(r.get("title"), 180)
+        summary = _clean_text(trans.get("summary"), 300)
+        translated_from = detected
+    else:
+        title = _clean_text(r.get("title"), 180)
+        summary = _clean_text(r.get("summary"), 300)
+        translated_from = None
+    img = (r.get("image_url") or "").strip() or None
+    overlap = {i for i in org_interests if i in interests}
+    hay = f"{title or ''} {summary or ''}".lower()
+    soft = None
+    if overlap:
+        soft = "In your interests: " + ", ".join(sorted(overlap))
+    elif any(k in hay for k in keywords):
+        soft = "Mentions a topic in your interests"
+    # Date-only string (matches the institutional feed + the frontend date parser).
+    # Fall back to the crawl date so an item always shows a date, never "Invalid date".
+    dt = r.get("published_at") or r.get("fetched_at")
+    news_date = dt.date().isoformat() if dt else None
+    org_type = r.get("org_type")
+    org_type_label = _ORG_TYPE_LABEL.get(org_type, org_type) or "Organisation"
+    # Never let the numeric register code surface as a label: always resolve a name.
+    org_name = r.get("original_name") or r.get("acronym") or org_type_label
+    return {
+        "id": str(r.get("id")),
+        "title": title,
+        "summary": summary,
+        "news_date": news_date,
+        # institution carries the org_type so the shared facet filter works as-is.
+        "institution": org_type,
+        "commission_dg": None,
+        "dg_name": org_name,                         # card source label = org name (guaranteed)
+        "item_type": None,                           # source_kind (rss/sitemap) is not a user tag
+        "source_key": None,                          # do not display the register code
+        "org_code": r.get("identification_code"),    # non-displayed key for future deep-link
+        "policy_areas": sorted(org_interests),
+        "image_url": img,
+        "source_url": r.get("item_url"),
+        "matches_interests": bool(soft),
+        "interest_reason": soft,
+        "matches_tracked": False,
+        "tracked_reason": None,
+        "org_type_label": org_type_label,
+        "detected_lang": detected,
+        "translated_from": translated_from,
+    }
+
+
+@router.get("/stakeholders", summary="Brussels stakeholders news feed",
+            description=(
+                "**What it does**\nReturns what the Brussels advocacy ecosystem is "
+                "publishing on its own websites: every Brussels-based EU Transparency "
+                "Register organisation (NGO, trade association, company, think tank, "
+                "consultancy, law firm, ...), newest-first, in the same card shape as "
+                "the institutional feed. This is the other half of 'News' — what the "
+                "bubble is saying, not what the institutions are doing.\n\n"
+                "**When to use it**\nThe MEUB 'News' tab, 'Brussels stakeholders' "
+                "segment. The paid external API door is "
+                "`/api/v2/proprietary/brussels-lobbies`.\n\n"
+                "**Input**\n`my_interests=true` keeps only orgs whose declared policy "
+                "interests overlap yours; `institution` filters by normalised org type; "
+                "`search`; `include_global_corp=true` re-includes multinationals' global "
+                "newsrooms (excluded by default); `limit`/`offset`.\n\n"
+                "**You get back**\nThe same News-card shape (title, summary, date, "
+                "source = org name, link), each flagged against your interests, plus an "
+                "org-type facet."))
+async def list_stakeholder_news(
+    my_interests: bool = Query(False),
+    institution: Optional[str] = Query(None, description="Normalised org type (ngo, trade_association, ...)."),
+    search: Optional[str] = Query(None),
+    include_global_corp: bool = Query(False),
+    lang: str = Query("en", description="UI language; foreign items are served translated into it."),
+    limit: int = Query(60, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    current_user: Optional[User] = Depends(get_current_user_optional),
+    db: Session = Depends(get_db),
+):
+    lang = (lang or "en").lower()[:5]
+    try:
+        interests = set(_interest_list(current_user)) if current_user else set()
+        keywords = sorted(keywords_for_interests(interests))
+
+        # Quality guard: drop path-fragment / too-short titles that slip through the crawl.
+        where = ["n.title IS NOT NULL", "n.title NOT LIKE '/%'", "length(n.title) >= 12"]
+        params: dict = {}
+        if not include_global_corp:
+            where.append("p.is_global_corp = false")
+        if institution:
+            where.append("p.org_type = :org_type"); params["org_type"] = institution
+        if search:
+            where.append("(n.title ILIKE :s OR n.summary ILIKE :s)"); params["s"] = f"%{search}%"
+        # Soft Policy-Interest filter: org interests overlap OR keyword in title/summary.
+        if my_interests and (interests or keywords):
+            clauses = []
+            if interests:
+                clauses.append("EXISTS (SELECT 1 FROM unnest(p.interests) oi "
+                               "WHERE oi = ANY(:pi_list))")
+                params["pi_list"] = sorted(interests)
+            if keywords:
+                clauses.append("(n.title ILIKE ANY(:kw) OR n.summary ILIKE ANY(:kw))")
+                params["kw"] = [f"%{k}%" for k in keywords]
+            if clauses:
+                where.append("(" + " OR ".join(clauses) + ")")
+        where_sql = "WHERE " + " AND ".join(where)
+
+        total = int(db.execute(text(
+            f"""SELECT COUNT(*) FROM brussels_lobby_news_items n
+                JOIN brussels_lobby_profiles p ON p.identification_code = n.identification_code
+                {where_sql}"""), params).scalar() or 0)
+
+        rows = db.execute(text(f"""
+            SELECT n.id, n.title, n.summary, n.item_url, n.published_at, n.fetched_at,
+                   n.source_kind, n.detected_lang, n.image_url,
+                   p.identification_code, p.original_name, p.acronym,
+                   p.org_type, p.interests
+              FROM brussels_lobby_news_items n
+              JOIN brussels_lobby_profiles p ON p.identification_code = n.identification_code
+              {where_sql}
+             ORDER BY n.published_at DESC NULLS LAST, n.id DESC
+             LIMIT :limit OFFSET :offset
+        """), {**params, "limit": limit, "offset": offset}).mappings().all()
+
+        # Collapse rows sharing a canonical item URL (cross-listed / re-crawled).
+        seen: set = set()
+        deduped = []
+        for r in rows:
+            key = r.get("item_url") or str(r.get("id"))
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped.append(r)
+
+        # Foreign items (detected lang not in our 6) get served in the UI language.
+        trans_map: dict = {}
+        if lang in _SIX_LANGS:
+            foreign_ids = [r["id"] for r in deduped
+                           if r.get("detected_lang") and r["detected_lang"] not in _SIX_LANGS]
+            if foreign_ids:
+                trows = db.execute(text("""
+                    SELECT news_item_id, title, summary
+                      FROM brussels_lobby_news_translations
+                     WHERE lang = :lang AND news_item_id = ANY(:ids)
+                """), {"lang": lang, "ids": foreign_ids}).mappings().all()
+                trans_map = {tr["news_item_id"]: dict(tr) for tr in trows}
+
+        items = [_stakeholder_dict(r, interests, keywords, trans_map.get(r["id"]))
+                 for r in deduped]
+
+        # Org-type facet (over the whole register, not just this page) for the filter.
+        type_rows = db.execute(text("""
+            SELECT p.org_type, COUNT(*) AS n
+              FROM brussels_lobby_news_items ni
+              JOIN brussels_lobby_profiles p ON p.identification_code = ni.identification_code
+             WHERE p.is_global_corp = false AND ni.title IS NOT NULL
+                   AND ni.title NOT LIKE '/%' AND length(ni.title) >= 12
+             GROUP BY p.org_type ORDER BY n DESC
+        """)).mappings().all()
+
+        return {
+            "items": items,
+            "featured": [],  # lobby items are text-first; no hero, the News tab handles it
+            "total": total,
+            "pi_active": bool(my_interests and (interests or keywords)),
+            "files_active": False,
+            "has_tracked_files": False,
+            "facets": {
+                "institution": {r["org_type"]: int(r["n"]) for r in type_rows if r["org_type"]},
+                "commission_dg": {},
+                "item_type": {},
+            },
+            "org_type_labels": _ORG_TYPE_LABEL,
+        }
+    except Exception as e:
+        logger.exception(f"stakeholder news list failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load stakeholder news")
