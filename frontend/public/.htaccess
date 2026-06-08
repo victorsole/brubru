@@ -39,3 +39,16 @@
   ExpiresByType application/javascript "access plus 1 week"
   ExpiresByType font/woff2 "access plus 1 month"
 </IfModule>
+
+# Never cache the HTML shells or the SEO/AI surfaces. The JS/CSS are
+# content-hashed (immutable, cached long above), but index.html / app.html /
+# prerendered pages, robots.txt, llms.txt and the sitemaps must always reflect
+# the latest deploy. no-cache headers also make SiteGround's dynamic cache skip
+# them, so a new build is served immediately without a manual cache flush.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$|\.xml$|^(robots|llms)\.txt$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
