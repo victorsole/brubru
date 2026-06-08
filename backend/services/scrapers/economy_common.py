@@ -240,3 +240,64 @@ def scrape_ecl_listing(body_code: str, item_type: str, listing_urls, base: str,
             if kind == "pdf":
                 it.source_kind = "pdf"
     return items
+
+
+# --- generic ECB/ESRB date-indexed <dl> listing scraper --------------------
+# ECB-CMS bodies (ECB, ESRB) render listings as <dt>(date) + <dd>(title+link).
+# Some index pages are server-rendered; others inject the <dl> client-side
+# (use_playwright=True). parse_dl_cards handles either rendered HTML.
+def parse_dl_cards(html: str, base: str):
+    soup = BeautifulSoup(html, "html.parser")
+    out = []
+    for dd in soup.find_all("dd"):
+        a = dd.find("a", href=True)
+        if not a:
+            continue
+        href = a["href"]
+        url = norm_url(href if href.startswith("http") else base + href)
+        if "/shared/" in url:
+            continue
+        title = clean(a.get_text(" ", strip=True))
+        if not title:
+            continue
+        dt_node = dd.find_previous_sibling("dt")
+        doc_dt = parse_listing_date(dt_node.get_text(" ", strip=True)) if dt_node else None
+        out.append((url, title, doc_dt))
+    return out
+
+
+def scrape_dl_listing(body_code: str, item_type: str, pages, base: str, *,
+                      use_playwright: bool = False, fetch_bodies: bool = True,
+                      settle_ms: int = 6000):
+    items = []
+    seen: set[str] = set()
+    now = datetime.now(timezone.utc)
+
+    def _collect(html: str):
+        for url, title, doc_dt in parse_dl_cards(html or "", base):
+            if url in seen:
+                continue
+            seen.add(url)
+            items.append(Item(body_code=body_code, item_type=item_type, title=title,
+                              public_url=url, document_date=doc_dt, creation_date=now,
+                              source_kind="html", guid=url))
+
+    if use_playwright:
+        from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+        with WafBrowserFetcher(settle_ms=settle_ms) as f:
+            for page in pages:
+                res = f.fetch(page, strip_chrome=False)
+                _collect(res.html)
+    else:
+        for page in pages:
+            r = http_get(page)
+            if r is not None:
+                _collect(r.text)
+
+    if fetch_bodies:
+        for it in items:
+            body_txt, body_html, kind = fetch_detail(it.public_url)
+            it.body_txt, it.body_html = body_txt, body_html
+            if kind == "pdf":
+                it.source_kind = "pdf"
+    return items

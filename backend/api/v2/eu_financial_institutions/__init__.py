@@ -24,6 +24,7 @@ from api.v1._deps import api_user_with_rate_limit
 from . import eba as _eba
 from . import esma as _esma
 from . import eiopa as _eiopa
+from . import esrb as _esrb
 
 router = APIRouter(prefix="/eu-financial-institutions", tags=["v2-eu-financial-institutions"])
 
@@ -90,3 +91,4 @@ async def fin_directory(
 router.include_router(_eba.router)
 router.include_router(_esma.router)
 router.include_router(_eiopa.router)
+router.include_router(_esrb.router)
