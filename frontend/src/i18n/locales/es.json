@@ -2534,7 +2534,12 @@
     "optionEpResolution": "Resolución del PE",
     "optionEpPetition": "Petición al PE",
     "petitionTemplate": "**Petición al Parlamento Europeo**\n\n**Base jurídica:** artículos 24 y 227 del TFUE; artículo 44 de la Carta de los Derechos Fundamentales.\n\n**Peticionario:** [nombre u organización; ciudadano de la UE, residente en un Estado miembro, u organización con domicilio social en la UE]\n\n**Asunto:** [una frase]\n\n**Dimensión europea (admisibilidad):** se refiere a un ámbito de actividad de la UE porque [artículo del tratado / reglamento / programa de la UE] y afecta directamente al peticionario porque [motivo].\n\n**Hechos:**\n- [hecho 1]\n- [hecho 2]\n\n**El peticionario solicita que el Parlamento Europeo, a través de su Comisión de Peticiones:**\n1. [acción concreta];\n2. [acción concreta].\n\n**Cómo presentarla:** a través del Portal de Peticiones (petitions.europarl.europa.eu) en una de las 24 lenguas oficiales de la UE. Una petición plantea e investiga un asunto; no modifica por sí misma el Derecho de la UE.",
-    "resolutionTemplate": "**Resolución del Parlamento Europeo sobre [tema]**\n\n**El Parlamento Europeo,**\n\n-- visto los artículos 2 y 3 del Tratado de la Unión Europea,\n\n-- visto el artículo 132, apartado 2, de su Reglamento interno,\n\nA.  considerando que [primera declaración contextual];\n\nB.  considerando que [segunda declaración contextual];\n\nC.  considerando que [tercera declaración contextual];\n\n1.  Pide a [la Comisión / el Consejo / los Estados miembros] que [acción específica];\n\n2.  Insta a [institución] a que [acción específica];\n\n3.  Subraya que [principio importante];\n\n4.  Encarga a su Presidenta que transmita la presente Resolución al Consejo, a la Comisión, al Vicepresidente de la Comisión / Alto Representante de la Unión para Asuntos Exteriores y Política de Seguridad y a los Gobiernos y Parlamentos de los Estados miembros.\n"
+    "resolutionTemplate": "**Resolución del Parlamento Europeo sobre [tema]**\n\n**El Parlamento Europeo,**\n\n-- visto los artículos 2 y 3 del Tratado de la Unión Europea,\n\n-- visto el artículo 132, apartado 2, de su Reglamento interno,\n\nA.  considerando que [primera declaración contextual];\n\nB.  considerando que [segunda declaración contextual];\n\nC.  considerando que [tercera declaración contextual];\n\n1.  Pide a [la Comisión / el Consejo / los Estados miembros] que [acción específica];\n\n2.  Insta a [institución] a que [acción específica];\n\n3.  Subraya que [principio importante];\n\n4.  Encarga a su Presidenta que transmita la presente Resolución al Consejo, a la Comisión, al Vicepresidente de la Comisión / Alto Representante de la Unión para Asuntos Exteriores y Política de Seguridad y a los Gobiernos y Parlamentos de los Estados miembros.\n",
+    "pptxFailed": "Error al descargar el PPTX. Inténtalo de nuevo.",
+    "downloadFailed": "Error al descargar. Inténtalo de nuevo.",
+    "saveFailed": "Error al guardar. Inténtalo de nuevo.",
+    "reuploadNote": "Esta enmienda se guardó sobre un documento subido, no una ley de EUR-Lex. Vuelve a subir el archivo de origen en el Amendator para seguir editándola.",
+    "celexNote": "No se puede abrir esta enmienda automáticamente en el Amendator: el identificador de origen \"{{celex}}\" no es un número CELEX de EUR-Lex. La enmienda está a salvo en My EU Bubble."
   },
   "analyticsTab": {
     "title": "Analíticas e insights",
@@ -3274,7 +3279,12 @@
     "kind_resolution": "Resolución del PE",
     "kind_consultation_response": "Respuesta a consulta",
     "kind_stakeholder_map": "Mapa de actores",
-    "kind_amendment": "Enmienda"
+    "kind_amendment": "Enmienda",
+    "scaffold": {
+      "advocacy": "## Objetivo\n¿Qué resultado quieres en este expediente y para cuándo?\n\n## Mensajes clave\n- \n- \n\n## Destinatarios\nQuién decide y quién influye (ponente, ponentes en la sombra, DG líder, presidencia del Consejo).\n\n## Tácticas y calendario\n- \n\n## Peticiones\nEl cambio concreto que solicitas.\n",
+      "engagement": "## Objetivo\n\n## Mapa de actores\n| Actor | Posición | Influencia | Responsable | Próximo paso |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n\n## Aliados\n\n## Opositores\n\n## Calendario de contactos\n- \n",
+      "positioning": "## Resumen\n\n## Nuestra posición\n\n## Justificación\n\n## Contraargumentos y respuestas\n\n## Próximos pasos recomendados\n- \n"
+    }
   },
   "journey": {
     "title": "Recorrido legislativo",
@@ -3295,5 +3305,75 @@
     "layerAmendments": "Enmiendas de los eurodiputados",
     "layerCompromise": "Enmiendas de transacción",
     "layerVotingList": "Lista de votación final"
+  },
+  "cockpit": {
+    "tile": {
+      "new_this_week": "Novedades de esta semana para ti",
+      "tracked_files_moving": "Tus expedientes en movimiento",
+      "positions_under_stress": "Posiciones bajo presión",
+      "next_seven_days": "Próximos 7 días",
+      "compliance_signals": "Señales de cumplimiento",
+      "voice_opportunities": "Oportunidades para influir"
+    },
+    "tileOpen": {
+      "new_this_week": "Abrir Tren Legislativo",
+      "tracked_files_moving": "Abrir Mis Expedientes",
+      "positions_under_stress": "Abrir Análisis de Posiciones",
+      "next_seven_days": "Abrir Mi Calendario UE",
+      "compliance_signals": "Abrir EU Law Comply",
+      "voice_opportunities": "Abrir Consultas de la CE"
+    },
+    "error": "No hemos podido cargar el panel ahora mismo.",
+    "profileComplete": "Tu perfil está completo al {{pct}}%.",
+    "profileFinish": "Complétalo y Brubru personalizará estos paneles para ti.",
+    "completeProfile": "Completar perfil",
+    "open": "Abrir"
+  },
+  "glossary": {
+    "COD": "Procedimiento legislativo ordinario: una nueva ley de la UE decidida conjuntamente por el Parlamento y el Consejo",
+    "CNS": "Procedimiento de consulta: el Consejo decide tras consultar al Parlamento",
+    "APP": "Procedimiento de aprobación: el Parlamento debe aprobar sin enmendar",
+    "NLE": "Aprobación de un acuerdo internacional",
+    "INL": "Informe de iniciativa legislativa: el Parlamento pide a la Comisión que proponga una ley",
+    "INI": "Informe de propia iniciativa: posición política del Parlamento, sin valor legal vinculante",
+    "RSP": "Resolución sobre un asunto de actualidad",
+    "RSO": "Resolución sobre un asunto interno del Parlamento",
+    "DEA": "Control de un acto delegado",
+    "RPS": "Control de un acto de ejecución",
+    "BUD": "Procedimiento presupuestario anual",
+    "DEC": "Aprobación de la gestión presupuestaria",
+    "IMM": "Asunto de inmunidad parlamentaria",
+    "REG": "Reglamento interno del Parlamento",
+    "QMV": "Voto por mayoría cualificada: 55 % de los Estados miembros que representen al menos el 65 % de la población de la UE",
+    "OEIL": "El Observatorio Legislativo del Parlamento (fichas de procedimiento)",
+    "CELEX": "Identificador único de EUR-Lex para un documento jurídico de la UE",
+    "PI": "Tus Intereses Políticos"
+  },
+  "docType": {
+    "uploaded": "Subido",
+    "amendment": "Enmienda",
+    "amendmentAll": "Enmiendas (todas las fuentes)",
+    "analysis": "Análisis",
+    "strategy": "Estrategia",
+    "note": "Nota",
+    "generated": "Generado por IA",
+    "generatedAll": "Todo lo generado por IA",
+    "position_paper": "Documento de posición",
+    "mep_briefing": "Informe para eurodiputados",
+    "talking_points": "Argumentario",
+    "resolution": "Resolución del PE",
+    "petition": "Petición al PE",
+    "ep_question": "Pregunta al PE",
+    "eu_email": "Correo / carta UE",
+    "one_pager": "Resumen de una página",
+    "press_release": "Nota de prensa",
+    "stakeholder_map": "Mapa de actores",
+    "impact_assessment": "Evaluación de impacto",
+    "presentation": "Presentación",
+    "event_poster": "Cartel de evento",
+    "consultation_response": "Respuesta a consulta",
+    "grpUploaded": "Subidos y propios",
+    "grpAi": "Generados por IA",
+    "amendatorDraft": "Borrador de Amendator"
   }
 }

@@ -235,7 +235,7 @@ const TileShell = ({
           <Icon path={TILE_ICONS[tileKey]} size={1} color="#0693E3" />
         </span>
         <h3 className="dashboard-cockpit__tile-title">
-          {TILE_LABELS[tileKey]}
+          {t('cockpit.tile.' + tileKey, TILE_LABELS[tileKey])}
         </h3>
         {!emptyState && total > 0 && (
           <span className="dashboard-cockpit__tile-count">{total}</span>
@@ -284,7 +284,7 @@ const TileShell = ({
                 className="dashboard-cockpit__tile-action"
                 onClick={onDrill}
               >
-                {TILE_OPEN_LABELS[tileKey] || 'Open'}
+                {t('cockpit.tileOpen.' + tileKey, TILE_OPEN_LABELS[tileKey] || 'Open')}
                 <Icon path={mdiArrowRight} size={0.7} />
               </button>
               {chatPrompt && (
@@ -524,7 +524,7 @@ export const DashboardCockpit = () => {
   if (error && !data) {
     return (
       <section className="dashboard-cockpit dashboard-cockpit--error">
-        <p>We could not load the cockpit right now. {error}</p>
+        <p>{i18nT('cockpit.error', 'We could not load the cockpit right now.')} {error}</p>
       </section>
     );
   }
@@ -562,15 +562,15 @@ export const DashboardCockpit = () => {
         <div className="dashboard-cockpit__banner">
           <Icon path={mdiAccountCircleOutline} size={0.9} color="#0693E3" />
           <div className="dashboard-cockpit__banner-text">
-            <strong>Your profile is {completenessPct}% complete.</strong>{' '}
-            Finish it and Brubru will personalise these tiles for you.
+            <strong>{i18nT('cockpit.profileComplete', { pct: completenessPct, defaultValue: 'Your profile is {{pct}}% complete.' })}</strong>{' '}
+            {i18nT('cockpit.profileFinish', 'Finish it and Brubru will personalise these tiles for you.')}
           </div>
           <button
             type="button"
             className="dashboard-cockpit__banner-cta"
             onClick={() => navigate('/profile')}
           >
-            Complete profile
+            {i18nT('cockpit.completeProfile', 'Complete profile')}
           </button>
         </div>
       )}

@@ -49,6 +49,7 @@ import { DocumentGeneratorWizard } from './document_generator_wizard';
 import { DocumentEditor } from './document_editor';
 import { formatCelexLabel, aliasOnly } from './celex_alias';
 import { MeubHeader } from './meub_header';
+import { toast } from '../shared/feedback_host';
 import './documents_tab.css';
 
 /**
@@ -363,7 +364,7 @@ export const DocumentsTab = () => {
       triggerBlobDownload(await res.blob(), `${doc.title}.pptx`);
     } catch (err) {
       console.error('PPTX download failed:', err);
-      alert('PPTX download failed. Please try again.');
+      toast(t('documentsTab.pptxFailed', 'PPTX download failed. Please try again.'), 'error');
     }
   };
 
@@ -387,7 +388,7 @@ export const DocumentsTab = () => {
         triggerBlobDownload(await res.blob(), `${doc.title}.${fmt}`);
       } catch (err) {
         console.error('Download failed:', err);
-        alert('Download failed. Please try again.');
+        toast(t('documentsTab.downloadFailed', 'Download failed. Please try again.'), 'error');
       }
       return;
     }
@@ -399,7 +400,7 @@ export const DocumentsTab = () => {
       triggerBlobDownload(await res.blob(), `${doc.title}.${fmt}`);
     } catch (err) {
       console.error('Download failed:', err);
-      alert('Download failed. Please try again.');
+      toast(t('documentsTab.downloadFailed', 'Download failed. Please try again.'), 'error');
     }
   };
 
@@ -469,7 +470,7 @@ export const DocumentsTab = () => {
       fetchDocuments({ search: searchQuery || undefined });
     } catch (err) {
       console.error('Failed to save edit:', err);
-      alert('Save failed. Please try again.');
+      toast(t('documentsTab.saveFailed', 'Save failed. Please try again.'), 'error');
     } finally {
       setSavingEdit(false);
     }
@@ -505,10 +506,7 @@ export const DocumentsTab = () => {
 
     if (!celex) {
       if (isCarriage) {
-        alert(
-          'This amendment was saved on an uploaded document, not an EUR-Lex law. ' +
-            'Re-upload the source file in the Amendator to continue editing it.',
-        );
+        toast(t('documentsTab.reuploadNote', 'This amendment was saved on an uploaded document, not an EUR-Lex law. Re-upload the source file in the Amendator to continue editing it.'), 'error');
         return;
       }
       navigate('/amendator');
@@ -516,10 +514,7 @@ export const DocumentsTab = () => {
     }
     if (!CELEX_RE.test(celex.toUpperCase())) {
       if (isCarriage) {
-        alert(
-          `Cannot auto-open this amendment in the Amendator: the source identifier ` +
-            `"${celex}" is not an EUR-Lex CELEX number. The amendment is safe in My EU Bubble.`,
-        );
+        toast(t('documentsTab.celexNote', { celex, defaultValue: 'Cannot auto-open this amendment in the Amendator: the source identifier "{{celex}}" is not an EUR-Lex CELEX number. The amendment is safe in My EU Bubble.' }), 'error');
         return;
       }
     }
@@ -699,29 +694,29 @@ export const DocumentsTab = () => {
           <label>{t('documentsTab.type')}</label>
           <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
             <option value="all">{t('documentsTab.all')}</option>
-            <optgroup label="Uploaded & authored">
+            <optgroup label={t('docType.grpUploaded') as string}>
               <option value="uploaded">{t('documentsTab.uploadedDocs')}</option>
               <option value="note">{t('documentsTab.notes')}</option>
               <option value="analysis">{t('documentsTab.analyses')}</option>
               <option value="strategy">{t('documentsTab.strategies')}</option>
-              <option value="amendment">Amendments (all sources)</option>
+              <option value="amendment">{t('docType.amendmentAll')}</option>
             </optgroup>
-            <optgroup label="AI-generated">
-              <option value="generated">All AI-generated</option>
-              <option value="position_paper">Position papers</option>
-              <option value="mep_briefing">MEP briefings</option>
-              <option value="talking_points">Talking points</option>
-              <option value="resolution">EP resolutions</option>
-              <option value="petition">EP petitions</option>
-              <option value="ep_question">EP questions</option>
-              <option value="eu_email">EU emails / letters</option>
-              <option value="one_pager">One-pagers</option>
-              <option value="press_release">Press releases</option>
-              <option value="stakeholder_map">Stakeholder maps</option>
-              <option value="impact_assessment">Impact assessments</option>
-              <option value="presentation">Presentations</option>
-              <option value="event_poster">Event posters</option>
-              <option value="consultation_response">Consultation responses</option>
+            <optgroup label={t('docType.grpAi') as string}>
+              <option value="generated">{t('docType.generatedAll')}</option>
+              <option value="position_paper">{t('docType.position_paper')}</option>
+              <option value="mep_briefing">{t('docType.mep_briefing')}</option>
+              <option value="talking_points">{t('docType.talking_points')}</option>
+              <option value="resolution">{t('docType.resolution')}</option>
+              <option value="petition">{t('docType.petition')}</option>
+              <option value="ep_question">{t('docType.ep_question')}</option>
+              <option value="eu_email">{t('docType.eu_email')}</option>
+              <option value="one_pager">{t('docType.one_pager')}</option>
+              <option value="press_release">{t('docType.press_release')}</option>
+              <option value="stakeholder_map">{t('docType.stakeholder_map')}</option>
+              <option value="impact_assessment">{t('docType.impact_assessment')}</option>
+              <option value="presentation">{t('docType.presentation')}</option>
+              <option value="event_poster">{t('docType.event_poster')}</option>
+              <option value="consultation_response">{t('docType.consultation_response')}</option>
             </optgroup>
           </select>
         </div>
@@ -766,9 +761,9 @@ export const DocumentsTab = () => {
                           {t('documentsTab.uploadedBadge')}
                         </span>
                       ) : isCarriage ? (
-                        <>Amendator draft</>
+                        <>{t('docType.amendatorDraft', 'Amendator draft')}</>
                       ) : (
-                        KIND_LABELS[kind] || kind
+                        t('docType.' + kind, KIND_LABELS[kind] || kind)
                       )}
                     </span>
                     <span className="documents-tab__card-badge-right">
@@ -1217,7 +1212,7 @@ export const DocumentsTab = () => {
               <div className="documents-tab__modal-header">
                 <div>
                   <span className="documents-tab__view-badge" data-type={viewingDocument.document_type}>
-                    {KIND_LABELS[resolveKind(viewingDocument)] || viewingDocument.document_type}
+                    {t('docType.' + resolveKind(viewingDocument), KIND_LABELS[resolveKind(viewingDocument)] || viewingDocument.document_type)}
                   </span>
                   <h3>{viewingDocument.title}</h3>
                 </div>

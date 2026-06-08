@@ -13,6 +13,7 @@
  */
 
 import Icon from '@mdi/react';
+import { useTranslation } from 'react-i18next';
 import { mdiInformationOutline } from '@mdi/js';
 import { glossaryFor } from '../../utils/code_glossary';
 import './info_dot.css';
@@ -44,7 +45,12 @@ interface CodeChipProps {
 }
 
 export const CodeChip = ({ code, label, className }: CodeChipProps) => {
-  const expansion = glossaryFor(code);
+  const { t } = useTranslation();
+  const fallback = glossaryFor(code);
+  // Localised expansion if present (glossary.<CODE>); else the English fallback.
+  const expansion = fallback
+    ? t('glossary.' + code.trim().toUpperCase(), { defaultValue: fallback })
+    : null;
   if (!expansion) {
     return <span className={`code-chip ${className || ''}`}>{label || code}</span>;
   }

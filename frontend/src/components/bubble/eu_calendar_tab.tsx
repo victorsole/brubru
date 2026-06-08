@@ -165,11 +165,12 @@ function MyEUTodayDigest() {
 // ============================================================================
 
 function CalendarToolbar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     viewMode, setViewMode, currentDate, navigateDate,
     searchQuery, setSearchQuery,
   } = useEUCalendar();
+  const loc = i18n.language || 'en-GB';
 
   const viewModes: { mode: ViewMode; label: string; icon: string }[] = [
     { mode: 'month', label: t('calendarTab.month'), icon: mdiCalendarMonth },
@@ -192,7 +193,7 @@ function CalendarToolbar() {
         monday.setDate(d.getDate() - mondayOffset);
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6);
-        return `${monday.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} \u2013 ${sunday.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+        return `${monday.toLocaleDateString(loc, { day: 'numeric', month: 'short' })} \u2013 ${sunday.toLocaleDateString(loc, { day: 'numeric', month: 'short', year: 'numeric' })}`;
       }
       case 'day':
         opts.weekday = 'long';
@@ -201,7 +202,7 @@ function CalendarToolbar() {
         opts.year = 'numeric';
         break;
     }
-    return currentDate.toLocaleDateString('en-GB', opts);
+    return currentDate.toLocaleDateString(loc, opts);
   })();
 
   return (

@@ -29,20 +29,11 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const STATUSES = ['draft', 'active', 'archived'] as const;
 const STATUS_COLOR: Record<string, string> = { draft: '#94a3b8', active: '#059669', archived: '#cbd5e1' };
 
-interface Template { id: string; icon: string; titleKey: string; scaffold: string }
+interface Template { id: string; icon: string; titleKey: string; scaffoldKey: string }
 const TEMPLATES: Template[] = [
-  {
-    id: 'advocacy', icon: mdiBullhornOutline, titleKey: 'sd.tplAdvocacy',
-    scaffold: '## Objective\nWhat outcome do you want on this file, and by when.\n\n## Key messages\n- \n- \n\n## Targets\nWho decides and who influences (rapporteur, shadows, lead DG, Council presidency).\n\n## Tactics and timeline\n- \n\n## Asks\nThe specific change you are requesting.\n',
-  },
-  {
-    id: 'engagement', icon: mdiAccountGroupOutline, titleKey: 'sd.tplEngagement',
-    scaffold: '## Objective\n\n## Stakeholder map\n| Stakeholder | Position | Influence | Owner | Next step |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n\n## Allies\n\n## Opponents\n\n## Engagement calendar\n- \n',
-  },
-  {
-    id: 'positioning', icon: mdiChessKnight, titleKey: 'sd.tplPositioning',
-    scaffold: '## Summary\n\n## Our position\n\n## Rationale\n\n## Counter-arguments and responses\n\n## Recommended next steps\n- \n',
-  },
+  { id: 'advocacy', icon: mdiBullhornOutline, titleKey: 'sd.tplAdvocacy', scaffoldKey: 'sd.scaffold.advocacy' },
+  { id: 'engagement', icon: mdiAccountGroupOutline, titleKey: 'sd.tplEngagement', scaffoldKey: 'sd.scaffold.engagement' },
+  { id: 'positioning', icon: mdiChessKnight, titleKey: 'sd.tplPositioning', scaffoldKey: 'sd.scaffold.positioning' },
 ];
 
 export function StrategyDocsTab() {
@@ -232,7 +223,7 @@ function NewStrategyModal({ t, onClose, onCreate }: { t: any; onClose: () => voi
       } else {
         await onCreate({
           title: title.trim() || t(tpl.titleKey),
-          content: tpl.scaffold,
+          content: t(tpl.scaffoldKey),
           objectives: objective.trim() || undefined,
           procedure_reference: fileRef || undefined,
         });

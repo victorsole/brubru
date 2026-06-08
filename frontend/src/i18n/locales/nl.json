@@ -2534,7 +2534,12 @@
     "optionEpResolution": "EP-resolutie",
     "optionEpPetition": "Verzoekschrift aan het EP",
     "petitionTemplate": "**Verzoekschrift aan het Europees Parlement**\n\n**Rechtsgrondslag:** artikelen 24 en 227 VWEU; artikel 44 van het Handvest van de grondrechten.\n\n**Indiener:** [naam of organisatie; EU-burger, ingezetene van een lidstaat, of organisatie met statutaire zetel in de EU]\n\n**Onderwerp:** [één zin]\n\n**Europese dimensie (ontvankelijkheid):** betreft een EU-werkterrein omdat [verdragsartikel / verordening / EU-programma] en raakt de indiener rechtstreeks omdat [reden].\n\n**Feiten:**\n- [feit 1]\n- [feit 2]\n\n**De indiener verzoekt het Europees Parlement, via de Commissie verzoekschriften:**\n1. [specifieke actie];\n2. [specifieke actie].\n\n**Hoe in te dienen:** via het verzoekschriftenportaal (petitions.europarl.europa.eu) in een van de 24 officiële EU-talen. Een verzoekschrift kaart een kwestie aan en laat deze onderzoeken; het wijzigt op zichzelf het EU-recht niet.",
-    "resolutionTemplate": "**Resolutie van het Europees Parlement over [onderwerp]**\n\n**Het Europees Parlement,**\n\n-- gezien de artikelen 2 en 3 van het Verdrag betreffende de Europese Unie,\n\n-- gezien artikel 132, lid 2, van zijn Reglement,\n\nA.  overwegende dat [eerste contextuele verklaring];\n\nB.  overwegende dat [tweede contextuele verklaring];\n\nC.  overwegende dat [derde contextuele verklaring];\n\n1.  verzoekt [de Commissie / de Raad / de lidstaten] om [specifieke actie];\n\n2.  dringt er bij [instelling] op aan om [specifieke actie];\n\n3.  benadrukt dat [belangrijk beginsel];\n\n4.  verzoekt zijn Voorzitter deze resolutie te doen toekomen aan de Raad, de Commissie, de vicevoorzitter van de Commissie / hoge vertegenwoordiger van de Unie voor buitenlandse zaken en veiligheidsbeleid en de regeringen en parlementen van de lidstaten.\n"
+    "resolutionTemplate": "**Resolutie van het Europees Parlement over [onderwerp]**\n\n**Het Europees Parlement,**\n\n-- gezien de artikelen 2 en 3 van het Verdrag betreffende de Europese Unie,\n\n-- gezien artikel 132, lid 2, van zijn Reglement,\n\nA.  overwegende dat [eerste contextuele verklaring];\n\nB.  overwegende dat [tweede contextuele verklaring];\n\nC.  overwegende dat [derde contextuele verklaring];\n\n1.  verzoekt [de Commissie / de Raad / de lidstaten] om [specifieke actie];\n\n2.  dringt er bij [instelling] op aan om [specifieke actie];\n\n3.  benadrukt dat [belangrijk beginsel];\n\n4.  verzoekt zijn Voorzitter deze resolutie te doen toekomen aan de Raad, de Commissie, de vicevoorzitter van de Commissie / hoge vertegenwoordiger van de Unie voor buitenlandse zaken en veiligheidsbeleid en de regeringen en parlementen van de lidstaten.\n",
+    "pptxFailed": "PPTX-download mislukt. Probeer opnieuw.",
+    "downloadFailed": "Download mislukt. Probeer opnieuw.",
+    "saveFailed": "Opslaan mislukt. Probeer opnieuw.",
+    "reuploadNote": "Dit amendement is opgeslagen op een geüpload document, niet op een EUR-Lex-wet. Upload het bronbestand opnieuw in de Amendator om het te blijven bewerken.",
+    "celexNote": "Kan dit amendement niet automatisch openen in de Amendator: de bron-identificatie \"{{celex}}\" is geen EUR-Lex CELEX-nummer. Het amendement is veilig in My EU Bubble."
   },
   "analyticsTab": {
     "title": "Analytics & inzichten",
@@ -3274,7 +3279,12 @@
     "kind_resolution": "EP-resolutie",
     "kind_consultation_response": "Reactie op consultatie",
     "kind_stakeholder_map": "Stakeholderkaart",
-    "kind_amendment": "Amendement"
+    "kind_amendment": "Amendement",
+    "scaffold": {
+      "advocacy": "## Doel\nWelk resultaat wil je op dit dossier, en wanneer?\n\n## Kernboodschappen\n- \n- \n\n## Doelgroepen\nWie beslist en wie beïnvloedt (rapporteur, schaduwrapporteurs, leidend DG, Raadsvoorzitterschap).\n\n## Tactieken en tijdlijn\n- \n\n## Verzoeken\nDe specifieke wijziging die je vraagt.\n",
+      "engagement": "## Doel\n\n## Stakeholderkaart\n| Stakeholder | Positie | Invloed | Eigenaar | Volgende stap |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n\n## Bondgenoten\n\n## Tegenstanders\n\n## Engagementkalender\n- \n",
+      "positioning": "## Samenvatting\n\n## Ons standpunt\n\n## Onderbouwing\n\n## Tegenargumenten en reacties\n\n## Aanbevolen volgende stappen\n- \n"
+    }
   },
   "journey": {
     "title": "Wetgevingstraject",
@@ -3295,5 +3305,75 @@
     "layerAmendments": "Amendementen van de leden",
     "layerCompromise": "Compromisamendementen",
     "layerVotingList": "Definitieve stemlijst"
+  },
+  "cockpit": {
+    "tile": {
+      "new_this_week": "Nieuw deze week voor jou",
+      "tracked_files_moving": "Je gevolgde dossiers in beweging",
+      "positions_under_stress": "Standpunten onder druk",
+      "next_seven_days": "Komende 7 dagen",
+      "compliance_signals": "Nalevingssignalen",
+      "voice_opportunities": "Kansen om je stem te laten horen"
+    },
+    "tileOpen": {
+      "new_this_week": "Open Wetgevingstrein",
+      "tracked_files_moving": "Open Mijn Dossiers",
+      "positions_under_stress": "Open Positieanalyse",
+      "next_seven_days": "Open Mijn EU-kalender",
+      "compliance_signals": "Open EU Law Comply",
+      "voice_opportunities": "Open EC-raadplegingen"
+    },
+    "error": "We konden het cockpit nu niet laden.",
+    "profileComplete": "Je profiel is voor {{pct}}% compleet.",
+    "profileFinish": "Maak het af en Brubru personaliseert deze tegels voor jou.",
+    "completeProfile": "Profiel voltooien",
+    "open": "Open"
+  },
+  "glossary": {
+    "COD": "Gewone wetgevingsprocedure: een nieuwe EU-wet die door Parlement en Raad samen wordt beslist",
+    "CNS": "Raadplegingsprocedure: de Raad beslist na raadpleging van het Parlement",
+    "APP": "Goedkeuringsprocedure: het Parlement moet goedkeuren zonder te amenderen",
+    "NLE": "Goedkeuring van een internationale overeenkomst",
+    "INL": "Wetgevingsinitiatiefverslag: het Parlement vraagt de Commissie een wet voor te stellen",
+    "INI": "Initiatiefverslag: politiek standpunt van het Parlement, geen bindende wet",
+    "RSP": "Resolutie over een actueel onderwerp",
+    "RSO": "Resolutie over een interne aangelegenheid van het Parlement",
+    "DEA": "Toetsing van een gedelegeerde handeling",
+    "RPS": "Toetsing van een uitvoeringshandeling",
+    "BUD": "Jaarlijkse begrotingsprocedure",
+    "DEC": "Kwijting van de begroting",
+    "IMM": "Kwestie van parlementaire immuniteit",
+    "REG": "Reglement van orde van het Parlement",
+    "QMV": "Stemming met gekwalificeerde meerderheid: 55% van de lidstaten die ten minste 65% van de EU-bevolking vertegenwoordigen",
+    "OEIL": "Het Wetgevingsobservatorium van het Parlement (procedurefiches)",
+    "CELEX": "De unieke identificatie van EUR-Lex voor een EU-rechtsdocument",
+    "PI": "Jouw beleidsinteresses"
+  },
+  "docType": {
+    "uploaded": "Geüpload",
+    "amendment": "Amendement",
+    "amendmentAll": "Amendementen (alle bronnen)",
+    "analysis": "Analyse",
+    "strategy": "Strategie",
+    "note": "Notitie",
+    "generated": "AI-gegenereerd",
+    "generatedAll": "Alle AI-gegenereerde",
+    "position_paper": "Standpuntnota",
+    "mep_briefing": "Briefing voor EP-leden",
+    "talking_points": "Gesprekspunten",
+    "resolution": "EP-resolutie",
+    "petition": "EP-petitie",
+    "ep_question": "EP-vraag",
+    "eu_email": "EU-e-mail / brief",
+    "one_pager": "Eénpagina-overzicht",
+    "press_release": "Persbericht",
+    "stakeholder_map": "Stakeholderkaart",
+    "impact_assessment": "Effectbeoordeling",
+    "presentation": "Presentatie",
+    "event_poster": "Evenementposter",
+    "consultation_response": "Reactie op raadpleging",
+    "grpUploaded": "Geüpload en geschreven",
+    "grpAi": "AI-gegenereerd",
+    "amendatorDraft": "Amendator-concept"
   }
 }

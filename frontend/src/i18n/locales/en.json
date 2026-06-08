@@ -2534,7 +2534,12 @@
     "optionEpResolution": "EP Resolution",
     "optionEpPetition": "EP petition",
     "petitionTemplate": "**Petition to the European Parliament**\n\n**Legal basis:** Articles 24 and 227 TFEU; Article 44 of the Charter of Fundamental Rights.\n\n**Petitioner:** [name or organisation; an EU citizen, a resident of a Member State, or an organisation with a registered office in the EU]\n\n**Subject:** [one sentence]\n\n**EU dimension (admissibility):** this concerns an EU field of activity because [treaty article / regulation / EU programme], and it directly affects the petitioner because [reason].\n\n**Facts:**\n- [fact 1]\n- [fact 2]\n\n**The petitioner requests that the European Parliament, through its Committee on Petitions:**\n1. [specific action];\n2. [specific action].\n\n**How to submit:** lodge via the Petitions Web Portal (petitions.europarl.europa.eu) in one of the 24 official EU languages. A petition raises and investigates an issue; it does not by itself change EU law.",
-    "resolutionTemplate": "**European Parliament resolution on [topic]**\n\n**The European Parliament,**\n\n-- having regard to Articles 2 and 3 of the Treaty on European Union,\n\n-- having regard to Rule 132(2) of its Rules of Procedure,\n\nA.  whereas [first contextual statement];\n\nB.  whereas [second contextual statement];\n\nC.  whereas [third contextual statement];\n\n1.  Calls on [the Commission/Council/Member States] to [specific action];\n\n2.  Urges [institution] to [specific action];\n\n3.  Stresses that [important principle];\n\n4.  Instructs its President to forward this resolution to the Council, the Commission, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy, and the governments and parliaments of the Member States.\n"
+    "resolutionTemplate": "**European Parliament resolution on [topic]**\n\n**The European Parliament,**\n\n-- having regard to Articles 2 and 3 of the Treaty on European Union,\n\n-- having regard to Rule 132(2) of its Rules of Procedure,\n\nA.  whereas [first contextual statement];\n\nB.  whereas [second contextual statement];\n\nC.  whereas [third contextual statement];\n\n1.  Calls on [the Commission/Council/Member States] to [specific action];\n\n2.  Urges [institution] to [specific action];\n\n3.  Stresses that [important principle];\n\n4.  Instructs its President to forward this resolution to the Council, the Commission, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy, and the governments and parliaments of the Member States.\n",
+    "pptxFailed": "PPTX download failed. Please try again.",
+    "downloadFailed": "Download failed. Please try again.",
+    "saveFailed": "Save failed. Please try again.",
+    "reuploadNote": "This amendment was saved on an uploaded document, not an EUR-Lex law. Re-upload the source file in the Amendator to continue editing it.",
+    "celexNote": "Cannot auto-open this amendment in the Amendator: the source identifier \"{{celex}}\" is not an EUR-Lex CELEX number. The amendment is safe in My EU Bubble."
   },
   "analyticsTab": {
     "title": "Analytics & Insights",
@@ -3295,7 +3300,12 @@
     "kind_resolution": "EP resolution",
     "kind_consultation_response": "Consultation response",
     "kind_stakeholder_map": "Stakeholder map",
-    "kind_amendment": "Amendment"
+    "kind_amendment": "Amendment",
+    "scaffold": {
+      "advocacy": "## Objective\nWhat outcome do you want on this file, and by when.\n\n## Key messages\n- \n- \n\n## Targets\nWho decides and who influences (rapporteur, shadows, lead DG, Council presidency).\n\n## Tactics and timeline\n- \n\n## Asks\nThe specific change you are requesting.\n",
+      "engagement": "## Objective\n\n## Stakeholder map\n| Stakeholder | Position | Influence | Owner | Next step |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n\n## Allies\n\n## Opponents\n\n## Engagement calendar\n- \n",
+      "positioning": "## Summary\n\n## Our position\n\n## Rationale\n\n## Counter-arguments and responses\n\n## Recommended next steps\n- \n"
+    }
   },
   "journey": {
     "title": "Legislative journey",
@@ -3316,5 +3326,75 @@
     "layerAmendments": "MEPs' amendments",
     "layerCompromise": "Compromise amendments",
     "layerVotingList": "Final voting list"
+  },
+  "cockpit": {
+    "tile": {
+      "new_this_week": "New this week for you",
+      "tracked_files_moving": "Your tracked files moving",
+      "positions_under_stress": "Positions under stress",
+      "next_seven_days": "Next 7 days",
+      "compliance_signals": "Compliance signals",
+      "voice_opportunities": "Voice opportunities"
+    },
+    "tileOpen": {
+      "new_this_week": "Open Legislative Tracker",
+      "tracked_files_moving": "Open My Files",
+      "positions_under_stress": "Open Position Analysis",
+      "next_seven_days": "Open My EU Calendar",
+      "compliance_signals": "Open EU Law Comply",
+      "voice_opportunities": "Open EC Consultations"
+    },
+    "error": "We could not load the cockpit right now.",
+    "profileComplete": "Your profile is {{pct}}% complete.",
+    "profileFinish": "Finish it and Brubru will personalise these tiles for you.",
+    "completeProfile": "Complete profile",
+    "open": "Open"
+  },
+  "glossary": {
+    "COD": "Ordinary legislative procedure — a new EU law decided jointly by Parliament and Council",
+    "CNS": "Consultation procedure — Council decides after consulting Parliament",
+    "APP": "Consent procedure — Parliament must approve without amending",
+    "NLE": "Consent to an international agreement",
+    "INL": "Legislative-initiative report — Parliament asks the Commission to propose a law",
+    "INI": "Own-initiative report — Parliament's political position, not binding law",
+    "RSP": "Resolution on a topical subject",
+    "RSO": "Resolution on an internal Parliament matter",
+    "DEA": "Scrutiny of a delegated act",
+    "RPS": "Scrutiny of an implementing act",
+    "BUD": "Annual budget procedure",
+    "DEC": "Budgetary discharge",
+    "IMM": "Parliamentary immunity matter",
+    "REG": "Parliament's Rules of Procedure",
+    "QMV": "Qualified majority voting — 55% of member states representing at least 65% of the EU population",
+    "OEIL": "The Parliament's Legislative Observatory (procedure files)",
+    "CELEX": "EUR-Lex's unique identifier for an EU legal document",
+    "PI": "Your Policy Interests"
+  },
+  "docType": {
+    "uploaded": "Uploaded",
+    "amendment": "Amendment",
+    "amendmentAll": "Amendments (all sources)",
+    "analysis": "Analysis",
+    "strategy": "Strategy",
+    "note": "Note",
+    "generated": "AI-generated",
+    "generatedAll": "All AI-generated",
+    "position_paper": "Position paper",
+    "mep_briefing": "MEP briefing",
+    "talking_points": "Talking points",
+    "resolution": "EP resolution",
+    "petition": "EP petition",
+    "ep_question": "EP question",
+    "eu_email": "EU email / letter",
+    "one_pager": "One-pager",
+    "press_release": "Press release",
+    "stakeholder_map": "Stakeholder map",
+    "impact_assessment": "Impact assessment",
+    "presentation": "Presentation",
+    "event_poster": "Event poster",
+    "consultation_response": "Consultation response",
+    "grpUploaded": "Uploaded & authored",
+    "grpAi": "AI-generated",
+    "amendatorDraft": "Amendator draft"
   }
 }

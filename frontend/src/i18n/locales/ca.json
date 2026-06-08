@@ -2534,7 +2534,12 @@
     "optionEpResolution": "Resolució del PE",
     "optionEpPetition": "Petició al PE",
     "petitionTemplate": "**Petició al Parlament Europeu**\n\n**Base jurídica:** articles 24 i 227 del TFUE; article 44 de la Carta dels Drets Fonamentals.\n\n**Peticionari:** [nom o organització; ciutadà de la UE, resident en un Estat membre, o organització amb domicili social a la UE]\n\n**Assumpte:** [una frase]\n\n**Dimensió europea (admissibilitat):** es refereix a un àmbit d'activitat de la UE perquè [article del tractat / reglament / programa de la UE] i afecta directament el peticionari perquè [motiu].\n\n**Fets:**\n- [fet 1]\n- [fet 2]\n\n**El peticionari demana que el Parlament Europeu, a través de la seva Comissió de Peticions:**\n1. [acció concreta];\n2. [acció concreta].\n\n**Com presentar-la:** a través del Portal de Peticions (petitions.europarl.europa.eu) en una de les 24 llengües oficials de la UE. Una petició planteja i investiga un assumpte; no modifica per si sola el Dret de la UE.",
-    "resolutionTemplate": "**Resolució del Parlament Europeu sobre [tema]**\n\n**El Parlament Europeu,**\n\n-- vistos els articles 2 i 3 del Tractat de la Unió Europea,\n\n-- vist l'article 132, apartat 2, del seu Reglament,\n\nA.  considerant que [primera declaració contextual];\n\nB.  considerant que [segona declaració contextual];\n\nC.  considerant que [tercera declaració contextual];\n\n1.  Demana a [la Comissió / el Consell / els Estats membres] que [acció específica];\n\n2.  Insta [institució] a [acció específica];\n\n3.  Subratlla que [principi important];\n\n4.  Encarrega a la seva Presidenta que transmeti aquesta Resolució al Consell, a la Comissió, al Vicepresident de la Comissió / Alt Representant de la Unió per a Afers Exteriors i Política de Seguretat i als governs i parlaments dels Estats membres.\n"
+    "resolutionTemplate": "**Resolució del Parlament Europeu sobre [tema]**\n\n**El Parlament Europeu,**\n\n-- vistos els articles 2 i 3 del Tractat de la Unió Europea,\n\n-- vist l'article 132, apartat 2, del seu Reglament,\n\nA.  considerant que [primera declaració contextual];\n\nB.  considerant que [segona declaració contextual];\n\nC.  considerant que [tercera declaració contextual];\n\n1.  Demana a [la Comissió / el Consell / els Estats membres] que [acció específica];\n\n2.  Insta [institució] a [acció específica];\n\n3.  Subratlla que [principi important];\n\n4.  Encarrega a la seva Presidenta que transmeti aquesta Resolució al Consell, a la Comissió, al Vicepresident de la Comissió / Alt Representant de la Unió per a Afers Exteriors i Política de Seguretat i als governs i parlaments dels Estats membres.\n",
+    "pptxFailed": "Error en descarregar el PPTX. Torna-ho a provar.",
+    "downloadFailed": "Error en descarregar. Torna-ho a provar.",
+    "saveFailed": "Error en desar. Torna-ho a provar.",
+    "reuploadNote": "Aquesta esmena es va desar sobre un document pujat, no una llei d'EUR-Lex. Torna a pujar el fitxer d'origen a l'Amendator per continuar editant-la.",
+    "celexNote": "No es pot obrir aquesta esmena automàticament a l'Amendator: l'identificador d'origen \"{{celex}}\" no és un número CELEX d'EUR-Lex. L'esmena està segura a My EU Bubble."
   },
   "analyticsTab": {
     "title": "Analítiques i insights",
@@ -3274,7 +3279,12 @@
     "kind_resolution": "Resolució del PE",
     "kind_consultation_response": "Resposta a consulta",
     "kind_stakeholder_map": "Mapa d'actors",
-    "kind_amendment": "Esmena"
+    "kind_amendment": "Esmena",
+    "scaffold": {
+      "advocacy": "## Objectiu\nQuin resultat vols en aquest expedient i per a quan?\n\n## Missatges clau\n- \n- \n\n## Destinataris\nQui decideix i qui influeix (ponent, ponents a l'ombra, DG líder, presidència del Consell).\n\n## Tàctiques i calendari\n- \n\n## Peticions\nEl canvi concret que demanes.\n",
+      "engagement": "## Objectiu\n\n## Mapa d'actors\n| Actor | Posició | Influència | Responsable | Pròxim pas |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n\n## Aliats\n\n## Opositors\n\n## Calendari de contactes\n- \n",
+      "positioning": "## Resum\n\n## La nostra posició\n\n## Justificació\n\n## Contraarguments i respostes\n\n## Pròxims passos recomanats\n- \n"
+    }
   },
   "journey": {
     "title": "Recorregut legislatiu",
@@ -3295,5 +3305,75 @@
     "layerAmendments": "Esmenes dels eurodiputats",
     "layerCompromise": "Esmenes de compromís",
     "layerVotingList": "Llista de votació final"
+  },
+  "cockpit": {
+    "tile": {
+      "new_this_week": "Novetats d'aquesta setmana per a tu",
+      "tracked_files_moving": "Els teus expedients en moviment",
+      "positions_under_stress": "Posicions sota pressió",
+      "next_seven_days": "Pròxims 7 dies",
+      "compliance_signals": "Senyals de compliment",
+      "voice_opportunities": "Oportunitats per influir"
+    },
+    "tileOpen": {
+      "new_this_week": "Obre el Tren Legislatiu",
+      "tracked_files_moving": "Obre Els Meus Expedients",
+      "positions_under_stress": "Obre l'Anàlisi de Posicions",
+      "next_seven_days": "Obre El Meu Calendari UE",
+      "compliance_signals": "Obre EU Law Comply",
+      "voice_opportunities": "Obre Consultes de la CE"
+    },
+    "error": "No hem pogut carregar el tauler ara mateix.",
+    "profileComplete": "El teu perfil està complet al {{pct}}%.",
+    "profileFinish": "Completa'l i Brubru personalitzarà aquests panells per a tu.",
+    "completeProfile": "Completa el perfil",
+    "open": "Obre"
+  },
+  "glossary": {
+    "COD": "Procediment legislatiu ordinari: una nova llei de la UE decidida conjuntament pel Parlament i el Consell",
+    "CNS": "Procediment de consulta: el Consell decideix després de consultar el Parlament",
+    "APP": "Procediment d'aprovació: el Parlament ha d'aprovar sense esmenar",
+    "NLE": "Aprovació d'un acord internacional",
+    "INL": "Informe d'iniciativa legislativa: el Parlament demana a la Comissió que proposi una llei",
+    "INI": "Informe d'iniciativa pròpia: posició política del Parlament, sense valor legal vinculant",
+    "RSP": "Resolució sobre un assumpte d'actualitat",
+    "RSO": "Resolució sobre un assumpte intern del Parlament",
+    "DEA": "Control d'un acte delegat",
+    "RPS": "Control d'un acte d'execució",
+    "BUD": "Procediment pressupostari anual",
+    "DEC": "Aprovació de la gestió pressupostària",
+    "IMM": "Assumpte d'immunitat parlamentària",
+    "REG": "Reglament intern del Parlament",
+    "QMV": "Vot per majoria qualificada: 55 % dels estats membres que representin almenys el 65 % de la població de la UE",
+    "OEIL": "L'Observatori Legislatiu del Parlament (fitxes de procediment)",
+    "CELEX": "Identificador únic d'EUR-Lex per a un document jurídic de la UE",
+    "PI": "Els teus Interessos Polítics"
+  },
+  "docType": {
+    "uploaded": "Pujat",
+    "amendment": "Esmena",
+    "amendmentAll": "Esmenes (totes les fonts)",
+    "analysis": "Anàlisi",
+    "strategy": "Estratègia",
+    "note": "Nota",
+    "generated": "Generat per IA",
+    "generatedAll": "Tot el generat per IA",
+    "position_paper": "Document de posició",
+    "mep_briefing": "Informe per a eurodiputats",
+    "talking_points": "Argumentari",
+    "resolution": "Resolució del PE",
+    "petition": "Petició al PE",
+    "ep_question": "Pregunta al PE",
+    "eu_email": "Correu / carta UE",
+    "one_pager": "Resum d'una pàgina",
+    "press_release": "Nota de premsa",
+    "stakeholder_map": "Mapa d'actors",
+    "impact_assessment": "Avaluació d'impacte",
+    "presentation": "Presentació",
+    "event_poster": "Cartell d'esdeveniment",
+    "consultation_response": "Resposta a consulta",
+    "grpUploaded": "Pujats i propis",
+    "grpAi": "Generats per IA",
+    "amendatorDraft": "Esborrany d'Amendator"
   }
 }
