@@ -535,6 +535,25 @@ def _build_who_is_who_domain(paths: dict) -> dict:
     return {"name": "Who is Who", "item": sources}
 
 
+# Economy & Finance — ECB folder. Two sub-folders: ECB proper + Banking Supervision.
+_ECB_SOURCE_ORDER = ["ECB", "Banking Supervision (SSM)"]
+
+
+def _build_ecb_domain(paths: dict) -> dict:
+    tree: dict[str, list] = {}
+    for path, methods in paths.items():
+        if path != "/api/v2/ecb" and "/api/v2/ecb/" not in path:
+            continue
+        tail = path.split("/api/v2/ecb", 1)[1].lstrip("/")
+        source = "Banking Supervision (SSM)" if tail.startswith("banking-supervision") else "ECB"
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            tree.setdefault(source, []).append(_build_request(path, method, op))
+    sources = [{"name": s, "item": sorted(tree[s], key=_prop_sort_key)} for s in _ECB_SOURCE_ORDER if s in tree]
+    return {"name": "European Central Bank", "item": sources}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -555,6 +574,7 @@ def build_collection() -> dict:
         _build_open_data_domain(paths),
         _build_who_is_who_domain(paths),
         _build_general_publications_domain(paths),
+        _build_ecb_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)
