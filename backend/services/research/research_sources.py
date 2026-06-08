@@ -49,10 +49,10 @@ _ADMIN_RE = re.compile(
 
 
 def _src(id, group, icon, color, name, full, landing, search, pi_tags,
-         feed_landing=None, cb_code=None):
+         feed_landing=None, cb_code=None, sparql_cb=None):
     return dict(id=id, group=group, icon=icon, color=color, name=name, full=full,
                 landing=landing, search=search, pi_tags=pi_tags,
-                feed_landing=feed_landing, cb_code=cb_code)
+                feed_landing=feed_landing, cb_code=cb_code, sparql_cb=sparql_cb)
 
 
 # Brand colours reused across cards.
@@ -210,6 +210,14 @@ SOURCES: List[dict] = [
          "https://www.eacea.ec.europa.eu/publications-0_en",
          "https://www.eacea.ec.europa.eu/publications-0_en",
          ["education", "culture", "youth", "sport", "erasmus"]),
+    # External action via Cellar SPARQL (EEAS is not in the Commission central feed).
+    _src("eeas", "department", "earth", _B, "EEAS",
+         "European External Action Service: joint communications, joint reports and external-action documents on EU foreign and security policy",
+         "https://www.eeas.europa.eu/eeas/annual-reports_en",
+         "https://www.eeas.europa.eu/search_en?fulltext={q}",
+         ["external", "foreign", "security", "defence", "enlargement", "neighbourhood",
+          "sanctions", "diploma", "global gateway", "trade"],
+         sparql_cb="EEAS"),
 ]
 
 
@@ -271,6 +279,53 @@ def fetch_feed(feed_url: str, limit: int = 12) -> List[dict]:
     return items
 
 
+_SPARQL = "http://publications.europa.eu/webapi/rdf/sparql"
+
+
+def fetch_cellar_works(cb_code: str, limit: int = 12) -> List[dict]:
+    """Recent works authored by a corporate body, via Cellar SPARQL (no WAF).
+
+    Used for EU bodies absent from the Commission central publications feed
+    (e.g. EEAS). Each work links to its public EUR-Lex page by CELEX. Cached.
+    """
+    import json as _json
+    now = time.time()
+    key = f"cellar:{cb_code}"
+    hit = _feed_cache.get(key)
+    if hit and hit[0] > now:
+        return hit[1]
+    q = (
+        "PREFIX cdm:<http://publications.europa.eu/ontology/cdm#> "
+        "SELECT DISTINCT ?title ?date ?celex ?w WHERE { "
+        f"?w cdm:work_created_by_agent <{_CB}{cb_code}> . "
+        "?expr cdm:expression_belongs_to_work ?w ; cdm:expression_title ?title ; "
+        "cdm:expression_uses_language <http://publications.europa.eu/resource/authority/language/ENG> . "
+        "OPTIONAL { ?w cdm:resource_legal_id_celex ?celex } "
+        "OPTIONAL { ?w cdm:work_date_creation_legacy ?date } "
+        f"}} ORDER BY DESC(?date) LIMIT {int(limit)}"
+    )
+    url = (_SPARQL + "?query=" + urllib.parse.quote(q)
+           + "&format=" + urllib.parse.quote("application/sparql-results+json"))
+    items: List[dict] = []
+    try:
+        data = _json.loads(_http(url, timeout=30))
+        seen = set()
+        for b in data.get("results", {}).get("bindings", []):
+            title = _strip(b.get("title", {}).get("value", ""))
+            if not title or title in seen or _ADMIN_RE.match(title):
+                continue
+            seen.add(title)
+            celex = (b.get("celex") or {}).get("value")
+            link = (f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+                    if celex else (b.get("w") or {}).get("value", ""))
+            items.append({"title": title, "url": link,
+                          "date": (b.get("date") or {}).get("value", ""), "snippet": ""})
+    except Exception as e:
+        logger.warning("[research] cellar SPARQL failed for %s: %s", cb_code, e)
+    _feed_cache[key] = (now + _TTL, items)
+    return items
+
+
 def _is_pi_match(src: dict, pi_lower: List[str]) -> bool:
     tags = src.get("pi_tags") or []
     if "*" in tags:
@@ -307,7 +362,7 @@ def build_catalogue(pi: List[str]) -> dict:
             "id": s["id"], "group": s["group"], "icon": s["icon"], "color": s["color"],
             "name": s["name"], "full": s["full"], "landing": s["landing"],
             "search": _seed_search(s, pi),
-            "has_feed": bool(s.get("feed_landing") or s.get("cb_code")),
+            "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb")),
             "is_pi_match": _is_pi_match(s, pi_lower),
         })
     # group order, then PI matches first within a group.
@@ -325,4 +380,6 @@ def read_through(source_id: str, limit: int = 12) -> List[dict]:
         return fetch_feed(rss, limit) if rss else []
     if src.get("cb_code"):
         return fetch_feed(_cb_feed_url(src["cb_code"]), limit)
+    if src.get("sparql_cb"):
+        return fetch_cellar_works(src["sparql_cb"], limit)
     return []
