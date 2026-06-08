@@ -197,6 +197,23 @@ export const LegislativeFileDetail = () => {
               />
             )}
             <button
+              type="button"
+              className="legislative-file-modal__ask"
+              onClick={() => {
+                const ref = selectedFile.oeil_procedure_ref
+                  ? ` (${selectedFile.oeil_procedure_ref})` : '';
+                const q = t('fileDetail.askPrompt', {
+                  title: selectedFile.title, ref,
+                  defaultValue: `Tell me about ${selectedFile.title}${ref}: where it stands, who is driving it, and what I should do.`,
+                });
+                navigate(`/main?q=${encodeURIComponent(q)}&autofire=1`);
+              }}
+              title={t('fileDetail.askTitle', 'Ask Brubru about this file')}
+            >
+              <Icon path={mdiRobotOutline} size={0.8} />
+              {t('fileDetail.ask', 'Ask Brubru')}
+            </button>
+            <button
               className="legislative-file-modal__close"
               onClick={closeFileDetail}
               title={t('fileDetail.closeTitle')}

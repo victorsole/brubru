@@ -50,6 +50,7 @@ import {
 } from '@mdi/js';
 
 import { useAuth } from '../../hooks/use_auth';
+import { MeubHeader } from './meub_header';
 import {
   usePredictions,
   EP_GROUPS,
@@ -554,21 +555,21 @@ const PredictionCard: React.FC<{
               <div className="prediction-card__timeline-connector prediction-card__timeline-connector--active" />
               <TimelineStage
                 label={t('predictionsTab.plenary')}
-                date="Mar 2026"
+                date={t('predictionsTab.nextUp', 'Next up')}
                 icon={mdiAccountVoice}
                 status="current"
               />
               <div className="prediction-card__timeline-connector" />
               <TimelineStage
                 label={t('predictionsTab.trilogue')}
-                date="Q2 2026"
+                date={t('predictionsTab.later', 'Later')}
                 icon={mdiHandshake}
                 status="pending"
               />
               <div className="prediction-card__timeline-connector" />
               <TimelineStage
                 label={t('predictionsTab.councilStage')}
-                date="Q3 2026"
+                date={t('predictionsTab.later', 'Later')}
                 icon={mdiGavel}
                 status="pending"
               />
@@ -917,6 +918,12 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
   return (
     <div className={`predictions-tab ${className || ''}`}>
       <GaugeSVGDefs />
+
+      <MeubHeader
+        icon={mdiCrystalBall}
+        title={t('predictionsTab.headerTitle', 'Predictions')}
+        subtitle={t('predictionsTab.headerSubtitle', 'AI forecasts for the dossiers you track: likely outcome, timing, the Parliament vote and Council risk, each with a confidence level. Forecasts, not facts.')}
+      />
 
       <div className="predictions-tab__toolbar">
         <div className="predictions-tab__toggle">

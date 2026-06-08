@@ -505,6 +505,15 @@
       "desc_legislative": "Volg wetgevingsdossiers en hun documenten: gevolgde dossiers, Publicatieblad, amendementen, vergelijkingen, de wetgevingstrein en stemmingen.",
       "desc_institutional": "Volg de EU-instellingen: kalender, nieuws, commissietranscripties, Raad- en Europarlementariër-activiteit, plenaire, vragen, consultaties en lobbyontmoetingen.",
       "desc_strategy": "Analyseer en handel: standpunten, voorspellingen, de Brubru-bibliotheken, EU-onderzoek, stakeholderkaarten en je belangenbehartigingsdocumenten."
+    },
+    "ask": {
+      "title": "Vraag het Brubru",
+      "fab": "Vraag het Brubru",
+      "placeholder": "Vraag alles over de EU…",
+      "send": "Vragen",
+      "context": "Je bent bij {{tab}}. Vraag me alles over deze sectie of over de EU.",
+      "suggestTab": "Wat is {{tab}} en hoe gebruik ik het?",
+      "suggestPi": "Wat speelt er nu op mijn beleidsinteresses?"
     }
   },
   "amendments": {
@@ -1005,6 +1014,7 @@
       "mcpDescription": "Brubru biedt een Model Context Protocol (MCP)-server. Verbind deze met Claude, ChatGPT, Gemini, Mistral of een andere MCP-compatibele AI-agent om uw assistent live EU-wetgevingsintelligentie te bieden."
     },
     "endpoints": {
+      "brusselsLobbies": "Elke in Brussel gevestigde organisatie uit het EU-transparantieregister, gerangschikt, met het nieuws en de updates die elk op de eigen website publiceert. Filters op organisatietype, beleidsinteresse en lobby-uitgaven; indicatoren voor nieuwsbeschikbaarheid per organisatie.",
       "catalanTranslations": "8.710 bindende EU-wetten vertaald naar het Catalaans (MIT). Open data - geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
       "laws": "Ruim 28.500 aangenomen EU-wetten. Filters op CELEX, doctype, beleidsgebied, publicatiedatum, volledige-tekst zoeken.",
       "procedures": "Ruim 1.200 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
@@ -1760,7 +1770,11 @@
     "analysingSignals": "Wetgevingssignalen analyseren...",
     "generate": "Voorspel",
     "generating": "Voorspellen...",
-    "unlimited": "Professional: onbeperkte voorspellingen"
+    "unlimited": "Professional: onbeperkte voorspellingen",
+    "headerTitle": "Voorspellingen",
+    "headerSubtitle": "AI-voorspellingen voor de dossiers die je volgt: waarschijnlijke uitkomst, timing, de stemming in het Parlement en het risico in de Raad, elk met een betrouwbaarheidsniveau. Voorspellingen, geen feiten.",
+    "nextUp": "Volgende",
+    "later": "Later"
   },
   "committeeDocs": {
     "title": "Commissiedocumenten",
@@ -2097,7 +2111,7 @@
     "groupScrutiny": "Toetsing van uitvoeringsregels",
     "groupBudget": "Begroting & uitgaven",
     "groupOther": "Overige dossiers",
-    "tipLegislative": "Wetgevende en niet-wetgevende documenten die momenteel worden besproken in de EU-instellingen.",
+    "tipLegislative": "De dossiers die je persoonlijk volgt. Voor het volledige programma van de Commissie, open het tabblad Wetgevingstrein.",
     "tipCommittee": "Dossiers die in de commissies van het Europees Parlement worden behandeld, met de bevoegde commissie en rapporteur.",
     "tipTextsAdopted": "Teksten die het Europees Parlement formeel in de plenaire vergadering heeft aangenomen, zoals resoluties en besluiten.",
     "tipCommissionDocs": "Documenten die door de Europese Commissie zijn gepubliceerd: voorstellen, werkdocumenten en mededelingen.",
@@ -2208,7 +2222,10 @@
     "ariaModal": "Detail van wetgevingsdossier",
     "closeTitle": "Sluiten",
     "loadingAmendments": "Amendementen laden…",
-    "noAmendmentsDrafted": "Voor dit dossier zijn nog geen amendementen opgesteld."
+    "noAmendmentsDrafted": "Voor dit dossier zijn nog geen amendementen opgesteld.",
+    "ask": "Vraag het Brubru",
+    "askTitle": "Vraag Brubru over dit dossier",
+    "askPrompt": "Vertel me over {{title}}{{ref}}: hoe het ervoor staat, wie het trekt en wat ik zou moeten doen."
   },
   "stagePipeline": {
     "withdrawn": "Ingetrokken",
@@ -2242,7 +2259,8 @@
     "stage": "Fase",
     "celexBadge": "CELEX",
     "viewInOeil": "Bekijk in OEIL",
-    "lastUpdated": "Laatst bijgewerkt:"
+    "lastUpdated": "Laatst bijgewerkt:",
+    "subtitle": "Het volledige wetgevingsprogramma van de Commissie, gegroepeerd op politieke prioriteit. Blader door elk dossier en volg de dossiers die je interesseren. Voor alleen de dossiers die je al volgt, zie Mijn Gevolgde Dossiers."
   },
   "topicSpikes": {
     "newsAriaLabel": "Door Brubru uitgelichte koppen uit de dagelijkse briefing",

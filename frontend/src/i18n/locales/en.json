@@ -505,6 +505,15 @@
       "desc_legislative": "Track legislative files and their paperwork: tracked files, the Official Journal, amendments, comparisons, the legislative train and votes.",
       "desc_institutional": "Follow the EU institutions: calendar, news, committee transcripts, Council and MEP activity, plenary, parliamentary questions, consultations and lobby meetings.",
       "desc_strategy": "Analyse and act: positions, predictions, the Brubru libraries, EU research, stakeholder maps and your advocacy documents."
+    },
+    "ask": {
+      "title": "Ask Brubru",
+      "fab": "Ask Brubru",
+      "placeholder": "Ask anything about the EU…",
+      "send": "Ask",
+      "context": "You're on {{tab}}. Ask me anything about it, or the EU.",
+      "suggestTab": "What is {{tab}} and how do I use it?",
+      "suggestPi": "What is happening on my policy interests right now?"
     }
   },
   "amendments": {
@@ -1005,6 +1014,7 @@
       "mcpDescription": "Brubru exposes a Model Context Protocol (MCP) server. Connect it to Claude, ChatGPT, Gemini, Mistral, or any MCP-compatible AI agent to give your assistant live EU legislative intelligence."
     },
     "endpoints": {
+      "brusselsLobbies": "Every Brussels-based EU Transparency Register organisation, ranked, with the news and updates each one publishes on its own website. Filters by organisation type, policy interest and lobbying spend; news-availability flags per org.",
       "catalanTranslations": "8,710 binding EU laws translated into Catalan (MIT). Open data - no API key required. Filter by doc_type, category, engine; full-text search.",
       "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",
       "procedures": "1,200+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
@@ -1760,7 +1770,11 @@
     "analysingSignals": "Analysing legislative signals...",
     "generate": "Forecast",
     "generating": "Forecasting...",
-    "unlimited": "Professional: Unlimited predictions"
+    "unlimited": "Professional: Unlimited predictions",
+    "headerTitle": "Predictions",
+    "headerSubtitle": "AI forecasts for the dossiers you track: likely outcome, timing, the Parliament vote and Council risk, each with a confidence level. Forecasts, not facts.",
+    "nextUp": "Next up",
+    "later": "Later"
   },
   "committeeDocs": {
     "title": "Committee documents",
@@ -2097,7 +2111,7 @@
     "groupScrutiny": "Scrutiny of detailed rules",
     "groupBudget": "Budget & spending",
     "groupOther": "Other files",
-    "tipLegislative": "Legislative and non-legislative documents currently being discussed in the EU institutions.",
+    "tipLegislative": "The dossiers you personally track. For the Commission's full schedule, open the Legislative Train tab.",
     "tipCommittee": "Files being worked on inside European Parliament committees, with the lead committee and rapporteur.",
     "tipTextsAdopted": "Texts the European Parliament has formally adopted in plenary, such as resolutions and decisions.",
     "tipCommissionDocs": "Documents published by the European Commission: proposals, staff working documents and communications.",
@@ -2208,7 +2222,10 @@
     "ariaModal": "Legislative file detail",
     "closeTitle": "Close",
     "loadingAmendments": "Loading amendments...",
-    "noAmendmentsDrafted": "No amendments drafted yet for this file."
+    "noAmendmentsDrafted": "No amendments drafted yet for this file.",
+    "ask": "Ask Brubru",
+    "askTitle": "Ask Brubru about this file",
+    "askPrompt": "Tell me about {{title}}{{ref}}: where it stands, who is driving it, and what I should do."
   },
   "stagePipeline": {
     "withdrawn": "Withdrawn",
@@ -2242,7 +2259,8 @@
     "stage": "Stage",
     "celexBadge": "CELEX",
     "viewInOeil": "View in OEIL",
-    "lastUpdated": "Last updated:"
+    "lastUpdated": "Last updated:",
+    "subtitle": "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files."
   },
   "topicSpikes": {
     "newsAriaLabel": "Daily-brief headlines surfaced by Brubru",

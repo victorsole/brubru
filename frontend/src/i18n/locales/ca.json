@@ -505,6 +505,15 @@
       "desc_legislative": "Segueix els expedients legislatius i la seva documentació: expedients seguits, Diari Oficial, esmenes, comparacions, tren legislatiu i votacions.",
       "desc_institutional": "Segueix les institucions de la UE: calendari, notícies, transcripcions de comissions, activitat del Consell i dels eurodiputats, ple, preguntes, consultes i reunions de lobby.",
       "desc_strategy": "Analitza i actua: posicions, prediccions, les biblioteques de Brubru, recerca de la UE, mapes d'actors i els teus documents d'incidència."
+    },
+    "ask": {
+      "title": "Pregunta a Brubru",
+      "fab": "Pregunta a Brubru",
+      "placeholder": "Pregunta el que vulguis sobre la UE…",
+      "send": "Pregunta",
+      "context": "Ets a {{tab}}. Pregunta'm el que vulguis sobre aquesta secció o sobre la UE.",
+      "suggestTab": "Què és {{tab}} i com s'utilitza?",
+      "suggestPi": "Què està passant ara mateix en els meus interessos polítics?"
     }
   },
   "amendments": {
@@ -1005,6 +1014,7 @@
       "mcpDescription": "Brubru exposa un servidor Model Context Protocol (MCP). Connecta'l a Claude, ChatGPT, Gemini, Mistral o qualsevol agent d'IA compatible amb MCP per donar al teu assistent intel·ligència legislativa europea en temps real."
     },
     "endpoints": {
+      "brusselsLobbies": "Cada organització del Registre de Transparència de la UE amb seu a Brussel·les, classificada, amb les notícies i actualitzacions que cadascuna publica al seu propi web. Filtres per tipus d'organització, interès polític i despesa en lobby; indicadors de disponibilitat de notícies per organització.",
       "catalanTranslations": "8.710 lleis vinculants de la UE traduïdes al català (MIT). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
       "laws": "Més de 28.500 lleis de la UE. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
       "procedures": "Més de 1.200 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
@@ -1760,7 +1770,11 @@
     "analysingSignals": "Analitzant senyals legislatius...",
     "generate": "Preveu",
     "generating": "Calculant...",
-    "unlimited": "Professional: previsions il·limitades"
+    "unlimited": "Professional: previsions il·limitades",
+    "headerTitle": "Prediccions",
+    "headerSubtitle": "Pronòstics amb IA per als expedients que segueixes: resultat probable, terminis, la votació del Parlament i el risc al Consell, cadascun amb un nivell de confiança. Pronòstics, no fets.",
+    "nextUp": "Següent",
+    "later": "Més endavant"
   },
   "committeeDocs": {
     "title": "Documents de comissió",
@@ -2097,7 +2111,7 @@
     "groupScrutiny": "Control de normes detallades",
     "groupBudget": "Pressupost i despesa",
     "groupOther": "Altres fitxers",
-    "tipLegislative": "Documents legislatius i no legislatius que actualment s'estan debatent a les institucions de la UE.",
+    "tipLegislative": "Els expedients que segueixes personalment. Per al programa complet de la Comissió, obre la pestanya del Tren Legislatiu.",
     "tipCommittee": "Expedients que s'estan treballant a les comissions del Parlament Europeu, amb la comissió competent i el ponent.",
     "tipTextsAdopted": "Textos que el Parlament Europeu ha aprovat formalment en el ple, com ara resolucions i decisions.",
     "tipCommissionDocs": "Documents publicats per la Comissió Europea: propostes, documents de treball i comunicacions.",
@@ -2208,7 +2222,10 @@
     "ariaModal": "Detall de l'expedient legislatiu",
     "closeTitle": "Tanca",
     "loadingAmendments": "Carregant esmenes…",
-    "noAmendmentsDrafted": "Encara no s'han redactat esmenes per a aquest fitxer."
+    "noAmendmentsDrafted": "Encara no s'han redactat esmenes per a aquest fitxer.",
+    "ask": "Pregunta a Brubru",
+    "askTitle": "Pregunta a Brubru sobre aquest expedient",
+    "askPrompt": "Parla'm de {{title}}{{ref}}: en quin punt està, qui l'impulsa i què hauria de fer."
   },
   "stagePipeline": {
     "withdrawn": "Retirat",
@@ -2242,7 +2259,8 @@
     "stage": "Etapa",
     "celexBadge": "CELEX",
     "viewInOeil": "Veure a OEIL",
-    "lastUpdated": "Última actualització:"
+    "lastUpdated": "Última actualització:",
+    "subtitle": "El programa legislatiu complet de la Comissió, agrupat per prioritat política. Explora cada expedient i fes seguiment dels que t'interessin. Per veure només els fitxers que ja segueixes, consulta Els Meus Expedients."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titulars del resum diari destacats per Brubru",

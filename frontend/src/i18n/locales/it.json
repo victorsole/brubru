@@ -505,6 +505,15 @@
       "desc_legislative": "Segui i dossier legislativi e i loro documenti: dossier seguiti, Gazzetta ufficiale, emendamenti, confronti, treno legislativo e votazioni.",
       "desc_institutional": "Segui le istituzioni UE: calendario, notizie, trascrizioni delle commissioni, attività di Consiglio ed eurodeputati, plenaria, interrogazioni, consultazioni e incontri di lobby.",
       "desc_strategy": "Analizza e agisci: posizioni, previsioni, le biblioteche Brubru, la ricerca UE, le mappe degli attori e i tuoi documenti di advocacy."
+    },
+    "ask": {
+      "title": "Chiedi a Brubru",
+      "fab": "Chiedi a Brubru",
+      "placeholder": "Chiedi qualsiasi cosa sull'UE…",
+      "send": "Chiedi",
+      "context": "Sei su {{tab}}. Chiedimi qualsiasi cosa su questa sezione o sull'UE.",
+      "suggestTab": "Cos'è {{tab}} e come si usa?",
+      "suggestPi": "Cosa sta succedendo in questo momento sui miei interessi politici?"
     }
   },
   "amendments": {
@@ -1005,6 +1014,7 @@
       "mcpDescription": "Brubru espone un server Model Context Protocol (MCP). Collegalo a Claude, ChatGPT, Gemini, Mistral o a qualsiasi agente IA compatibile con MCP per fornire al tuo assistente un'intelligenza legislativa europea in tempo reale."
     },
     "endpoints": {
+      "brusselsLobbies": "Ogni organizzazione del registro per la trasparenza dell'UE con sede a Bruxelles, classificata, con le notizie e gli aggiornamenti che ciascuna pubblica sul proprio sito. Filtri per tipo di organizzazione, interesse politico e spesa per lobbying; indicatori di disponibilità delle notizie per organizzazione.",
       "catalanTranslations": "8.710 atti vincolanti UE tradotti in catalano (MIT). Dati aperti, senza chiave API. Filtri per tipo, categoria, engine; ricerca full-text.",
       "laws": "Oltre 28.500 leggi UE. Filtri per CELEX, tipo documento, area politica, data pubblicazione, ricerca full-text.",
       "procedures": "Oltre 1.200 dossier legislativi, da proposta ad adozione. Filtri per riferimento OEIL, commissione, relatore, ultimo aggiornamento.",
@@ -1760,7 +1770,11 @@
     "analysingSignals": "Analisi dei segnali legislativi...",
     "generate": "Prevedi",
     "generating": "Calcolo...",
-    "unlimited": "Professional: previsioni illimitate"
+    "unlimited": "Professional: previsioni illimitate",
+    "headerTitle": "Previsioni",
+    "headerSubtitle": "Previsioni con IA per i dossier che segui: esito probabile, tempistiche, il voto del Parlamento e il rischio in Consiglio, ciascuno con un livello di confidenza. Previsioni, non fatti.",
+    "nextUp": "Prossimo",
+    "later": "Più avanti"
   },
   "committeeDocs": {
     "title": "Documenti di commissione",
@@ -2097,7 +2111,7 @@
     "groupScrutiny": "Controllo delle norme di dettaglio",
     "groupBudget": "Bilancio e spesa",
     "groupOther": "Altri dossier",
-    "tipLegislative": "Documenti legislativi e non legislativi attualmente in discussione nelle istituzioni dell'UE.",
+    "tipLegislative": "I dossier che segui personalmente. Per il programma completo della Commissione, apri la scheda del Treno legislativo.",
     "tipCommittee": "Dossier in lavorazione nelle commissioni del Parlamento europeo, con la commissione competente e il relatore.",
     "tipTextsAdopted": "Testi che il Parlamento europeo ha formalmente approvato in plenaria, come risoluzioni e decisioni.",
     "tipCommissionDocs": "Documenti pubblicati dalla Commissione europea: proposte, documenti di lavoro e comunicazioni.",
@@ -2208,7 +2222,10 @@
     "ariaModal": "Dettaglio del fascicolo legislativo",
     "closeTitle": "Chiudi",
     "loadingAmendments": "Caricamento degli emendamenti…",
-    "noAmendmentsDrafted": "Non sono ancora stati redatti emendamenti per questo fascicolo."
+    "noAmendmentsDrafted": "Non sono ancora stati redatti emendamenti per questo fascicolo.",
+    "ask": "Chiedi a Brubru",
+    "askTitle": "Chiedi a Brubru di questo dossier",
+    "askPrompt": "Parlami di {{title}}{{ref}}: a che punto è, chi lo guida e cosa dovrei fare."
   },
   "stagePipeline": {
     "withdrawn": "Ritirato",
@@ -2242,7 +2259,8 @@
     "stage": "Fase",
     "celexBadge": "CELEX",
     "viewInOeil": "Vedi in OEIL",
-    "lastUpdated": "Ultimo aggiornamento:"
+    "lastUpdated": "Ultimo aggiornamento:",
+    "subtitle": "Il programma legislativo completo della Commissione, raggruppato per priorità politica. Esplora ogni dossier e segui quelli che ti interessano. Per i soli file che già segui, vedi I Miei Dossier."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titoli del riepilogo quotidiano evidenziati da Brubru",

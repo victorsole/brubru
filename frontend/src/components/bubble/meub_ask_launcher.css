@@ -1,0 +1,150 @@
+/* Persistent "Ask Brubru" launcher — pinned bottom-right of the MEUB shell. */
+
+.meub-ask {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+/* ---- Floating action button ---- */
+.meub-ask__fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0693e3 0%, #7b2ff7 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(123, 47, 247, 0.32);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.meub-ask__fab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 28px rgba(6, 147, 227, 0.36);
+}
+.meub-ask__fab.is-open {
+  background: #334155;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.28);
+}
+.meub-ask__fab-label {
+  white-space: nowrap;
+}
+
+/* ---- Popover ---- */
+.meub-ask__pop {
+  width: min(360px, calc(100vw - 2rem));
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+  animation: meub-ask-rise 0.14s ease-out;
+}
+@keyframes meub-ask-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.meub-ask__pop-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  color: #fff;
+  background: linear-gradient(135deg, #0693e3 0%, #7b2ff7 100%);
+}
+.meub-ask__pop-title {
+  font-weight: 700;
+  font-size: 1rem;
+  flex: 1;
+}
+.meub-ask__close {
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.meub-ask__close:hover { background: rgba(255, 255, 255, 0.3); }
+
+.meub-ask__context {
+  margin: 0;
+  padding: 0.85rem 1rem 0.5rem;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.meub-ask__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0 1rem 0.6rem;
+}
+.meub-ask__chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.85rem;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.meub-ask__chip:hover { background: #eef2ff; border-color: #c7b3ff; }
+.meub-ask__chip svg { color: #7b2ff7; flex: none; }
+
+.meub-ask__form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+.meub-ask__input {
+  flex: 1;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  color: #0f172a;
+  outline: none;
+}
+.meub-ask__input:focus { border-color: #0693e3; }
+.meub-ask__send {
+  flex: none;
+  width: 40px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0693e3 0%, #7b2ff7 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.meub-ask__send:disabled { opacity: 0.45; cursor: default; }
+
+/* ---- Mobile: icon-only FAB, tighter inset ---- */
+@media (max-width: 767px) {
+  .meub-ask { right: 1rem; bottom: 1rem; }
+  .meub-ask__fab-label { display: none; }
+  .meub-ask__fab { padding: 0.7rem; }
+}

@@ -12,6 +12,7 @@ import { mdiTrain, mdiFileDocument, mdiRobotOutline, mdiCheckCircle, mdiChevronD
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { LegislativeFile } from '../../hooks/use_legislative_trains';
 import { LegislativeFileDetail } from './legislative_file_detail';
+import { MeubHeader } from './meub_header';
 import { useAuth } from '../../hooks/use_auth';
 import axios from 'axios';
 import './legislative_trains.css';
@@ -171,36 +172,37 @@ export const LegislativeTrains = () => {
   return (
     <div className="legislative-trains">
       {/* Header */}
-      <div className="legislative-trains__header">
-        <div className="legislative-trains__header-left">
-          <Icon path={mdiTrain} size={1.2} />
-          <h2>{t('trains.title')}</h2>
-        </div>
-        <div className="legislative-trains__stats">
-          {piKeywords.length > 0 && (
-            <button
-              type="button"
-              className={`legislative-trains__pi-toggle ${piOnly ? 'legislative-trains__pi-toggle--active' : ''}`}
-              onClick={() => {
-                const next = !piOnly;
-                setPiOnly(next);
-                // Enabling the lens: auto-expand the trains that have matches so
-                // the user sees their PI-relevant files immediately.
-                if (next) {
-                  setExpandedTrainIds(
-                    trains.filter((tr) => (trainInterestCounts[tr.id] || 0) > 0).map((tr) => tr.id),
-                  );
-                }
-              }}
-              title={t('trains.myInterestsHint')}
-            >
-              <Icon path={piOnly ? mdiStar : mdiStarOutline} size={0.7} />
-              {t('trains.myInterests')}
-            </button>
-          )}
-          <span>{t('trains.filesCount', { count: trains.reduce((sum, tr) => sum + tr.total_files, 0) })}</span>
-        </div>
-      </div>
+      <MeubHeader
+        icon={mdiTrain}
+        title={t('trains.title')}
+        subtitle={t('trains.subtitle', "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files.")}
+        aside={(
+          <div className="legislative-trains__stats">
+            {piKeywords.length > 0 && (
+              <button
+                type="button"
+                className={`legislative-trains__pi-toggle ${piOnly ? 'legislative-trains__pi-toggle--active' : ''}`}
+                onClick={() => {
+                  const next = !piOnly;
+                  setPiOnly(next);
+                  // Enabling the lens: auto-expand the trains that have matches so
+                  // the user sees their PI-relevant files immediately.
+                  if (next) {
+                    setExpandedTrainIds(
+                      trains.filter((tr) => (trainInterestCounts[tr.id] || 0) > 0).map((tr) => tr.id),
+                    );
+                  }
+                }}
+                title={t('trains.myInterestsHint')}
+              >
+                <Icon path={piOnly ? mdiStar : mdiStarOutline} size={0.7} />
+                {t('trains.myInterests')}
+              </button>
+            )}
+            <span>{t('trains.filesCount', { count: trains.reduce((sum, tr) => sum + tr.total_files, 0) })}</span>
+          </div>
+        )}
+      />
 
       {/* Batch Analysis Bar */}
       {selectedFileIds.length > 0 && (

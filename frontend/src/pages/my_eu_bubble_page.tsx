@@ -16,6 +16,7 @@ import {
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { MeubHeader } from '../components/bubble/meub_header';
+import { MeubAskLauncher } from '../components/bubble/meub_ask_launcher';
 import { DocumentsTab } from '../components/bubble/documents_tab';
 import { AmendmentsTab } from '../components/bubble/amendments_tab';
 import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_tab';
@@ -428,6 +429,9 @@ export const MyEUBubblePage = () => {
         featureDescription={t('bubble.feedbackDescription')}
         variant="card"
       />
+
+      {/* Persistent, context-aware Chat entry point — one launcher for the whole shell. */}
+      <MeubAskLauncher tabLabel={tabLabel(activeTab)} />
     </div>
   );
 };
