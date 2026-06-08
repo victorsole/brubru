@@ -352,7 +352,8 @@
       "relatedLaws": "Leggi correlate",
       "question": "Interrogazione",
       "answer": "Risposta",
-      "officialDoc": "Documento ufficiale su EP doceo"
+      "officialDoc": "Documento ufficiale su EP doceo",
+      "toMeps": "Scopri quali eurodeputati interrogano di più in MEP Watch"
     },
     "lobby": {
       "title": "Incontri di lobbying",
@@ -465,7 +466,8 @@
       "profile": "Profilo al PE",
       "questionsOnYours": "Interrogazioni sui tuoi interessi",
       "allQuestions": "Interrogazioni recenti",
-      "noQ": "Nessuna interrogazione trovata."
+      "noQ": "Nessuna interrogazione trovata.",
+      "toQuestions": "Sfoglia le singole interrogazioni in Interrogazioni parlamentari"
     },
     "plen": {
       "title": "Ordine del giorno della plenaria",
@@ -481,7 +483,8 @@
       "note": "Nota: l'ordine del giorno dettagliato (agenda in tempo reale) è in fase di integrazione. I voti per appello nominale della plenaria sono nella scheda Voti.",
       "votes": "voti plenari registrati",
       "adoptedText": "Testo approvato",
-      "procedureFile": "Scheda di procedura"
+      "procedureFile": "Scheda di procedura",
+      "toVotes": "Apri la scheda Votazioni"
     },
     "databases": "Database di Brubru",
     "research_evidence": "Ricerca ed evidenze",

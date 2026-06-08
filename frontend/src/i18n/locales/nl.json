@@ -352,7 +352,8 @@
       "relatedLaws": "Gerelateerde wetten",
       "question": "Vraag",
       "answer": "Antwoord",
-      "officialDoc": "Officieel document op EP doceo"
+      "officialDoc": "Officieel document op EP doceo",
+      "toMeps": "Bekijk welke EP-leden de meeste vragen stellen in MEP Watch"
     },
     "lobby": {
       "title": "Lobbyontmoetingen",
@@ -465,7 +466,8 @@
       "profile": "EP-profiel",
       "questionsOnYours": "Vragen over jouw interesses",
       "allQuestions": "Recente vragen",
-      "noQ": "Geen vragen gevonden."
+      "noQ": "Geen vragen gevonden.",
+      "toQuestions": "Blader door de afzonderlijke vragen in Parlementaire Vragen"
     },
     "plen": {
       "title": "Plenaire agenda",
@@ -481,7 +483,8 @@
       "note": "Let op: de gedetailleerde agenda (live) wordt nog gekoppeld. Hoofdelijke plenaire stemmingen staan in het tabblad Stemmingen.",
       "votes": "plenaire stemmingen geregistreerd",
       "adoptedText": "Aangenomen tekst",
-      "procedureFile": "Procedurefiche"
+      "procedureFile": "Procedurefiche",
+      "toVotes": "Open het tabblad Stemmingen"
     },
     "databases": "Brubru-databanken",
     "research_evidence": "Onderzoek & bewijs",

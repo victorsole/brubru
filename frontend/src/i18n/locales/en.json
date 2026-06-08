@@ -352,7 +352,8 @@
       "relatedLaws": "Related laws",
       "question": "Question",
       "answer": "Answer",
-      "officialDoc": "Official document on EP doceo"
+      "officialDoc": "Official document on EP doceo",
+      "toMeps": "See which MEPs ask the most in MEP Watch"
     },
     "lobby": {
       "title": "Lobby Meetings",
@@ -465,7 +466,8 @@
       "profile": "EP profile",
       "questionsOnYours": "Questions on your interests",
       "allQuestions": "Recent questions",
-      "noQ": "No questions found."
+      "noQ": "No questions found.",
+      "toQuestions": "Browse the individual questions in Parliamentary Questions"
     },
     "plen": {
       "title": "Plenary - Order of Business",
@@ -481,7 +483,8 @@
       "note": "Note: the forthcoming item-level order of business (live agenda) is being wired in. Plenary roll-call votes are in the Votes tab.",
       "votes": "plenary votes recorded",
       "adoptedText": "Adopted text",
-      "procedureFile": "Procedure file"
+      "procedureFile": "Procedure file",
+      "toVotes": "Open the Votes tab"
     },
     "databases": "Brubru Databases",
     "research_evidence": "Research & Evidence",

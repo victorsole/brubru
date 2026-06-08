@@ -8,6 +8,7 @@
  */
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
@@ -29,6 +30,7 @@ const eurlex = (celex: string) =>
 
 export function ParliamentaryQuestionsTab() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [mode, setMode] = useState<LensMode>('pi');
   const [hasTracked, setHasTracked] = useState(false);
   const [questionType, setQuestionType] = useState('');
@@ -85,6 +87,11 @@ export function ParliamentaryQuestionsTab() {
           </div>
         ) : undefined}
       />
+
+      <button type="button" className="meub-crosslink" onClick={() => navigate('/my-eu-bubble?tab=mep_watch')}>
+        {t('bubble.parlq.toMeps', 'See which MEPs ask the most in MEP Watch')}
+        <span className="meub-crosslink__arrow" aria-hidden="true">&rarr;</span>
+      </button>
 
       {/* Controls */}
       <div className="parlq-tab__controls">

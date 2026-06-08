@@ -3,6 +3,7 @@
  * dossiers plenary recently adopted on the user's interests, PI-filtered.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
@@ -17,6 +18,7 @@ import './plenary_agenda_tab.css';
 
 export function PlenaryAgendaTab() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [myInterests, setMyInterests] = useState(true);
   const [search, setSearch] = useState('');
   const [data, setData] = useState<PlenaryOoB | null>(null);
@@ -110,6 +112,10 @@ export function PlenaryAgendaTab() {
           </section>
 
           <p className="plen-note">{t('bubble.plen.note', 'Note: the forthcoming item-level order of business (live agenda) is being wired in. Plenary roll-call votes are in the Votes tab.')} ({data.plenary_votes} {t('bubble.plen.votes', 'plenary votes recorded')})</p>
+          <button type="button" className="meub-crosslink" onClick={() => navigate('/my-eu-bubble?tab=votes')}>
+            {t('bubble.plen.toVotes', 'Open the Votes tab')}
+            <span className="meub-crosslink__arrow" aria-hidden="true">&rarr;</span>
+          </button>
         </>
       )}
     </div>

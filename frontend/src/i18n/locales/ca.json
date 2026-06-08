@@ -352,7 +352,8 @@
       "relatedLaws": "Lleis relacionades",
       "question": "Pregunta",
       "answer": "Resposta",
-      "officialDoc": "Document oficial a EP doceo"
+      "officialDoc": "Document oficial a EP doceo",
+      "toMeps": "Mira quins eurodiputats pregunten més a MEP Watch"
     },
     "lobby": {
       "title": "Reunions de lobby",
@@ -465,7 +466,8 @@
       "profile": "Perfil al PE",
       "questionsOnYours": "Preguntes sobre els teus interessos",
       "allQuestions": "Preguntes recents",
-      "noQ": "No s'han trobat preguntes."
+      "noQ": "No s'han trobat preguntes.",
+      "toQuestions": "Explora les preguntes individuals a Preguntes Parlamentàries"
     },
     "plen": {
       "title": "Ordre del dia del Ple",
@@ -481,7 +483,8 @@
       "note": "Nota: l'ordre del dia detallat (agenda en directe) s'està integrant. Les votacions nominals del Ple són a la pestanya Votacions.",
       "votes": "votacions del Ple registrades",
       "adoptedText": "Text aprovat",
-      "procedureFile": "Fitxa de procediment"
+      "procedureFile": "Fitxa de procediment",
+      "toVotes": "Obre la pestanya de Votacions"
     },
     "databases": "Bases de dades de Brubru",
     "research_evidence": "Recerca i evidència",

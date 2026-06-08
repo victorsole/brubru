@@ -352,7 +352,8 @@
       "relatedLaws": "Leyes relacionadas",
       "question": "Pregunta",
       "answer": "Respuesta",
-      "officialDoc": "Documento oficial en EP doceo"
+      "officialDoc": "Documento oficial en EP doceo",
+      "toMeps": "Mira qué eurodiputados preguntan más en MEP Watch"
     },
     "lobby": {
       "title": "Reuniones de lobby",
@@ -465,7 +466,8 @@
       "profile": "Perfil en el PE",
       "questionsOnYours": "Preguntas sobre tus intereses",
       "allQuestions": "Preguntas recientes",
-      "noQ": "No se han encontrado preguntas."
+      "noQ": "No se han encontrado preguntas.",
+      "toQuestions": "Explora las preguntas individuales en Preguntas Parlamentarias"
     },
     "plen": {
       "title": "Orden del día del Pleno",
@@ -481,7 +483,8 @@
       "note": "Nota: el orden del día detallado (agenda en directo) se está integrando. Las votaciones nominales del Pleno están en la pestaña Votaciones.",
       "votes": "votaciones del Pleno registradas",
       "adoptedText": "Texto aprobado",
-      "procedureFile": "Ficha de procedimiento"
+      "procedureFile": "Ficha de procedimiento",
+      "toVotes": "Abrir la pestaña de Votaciones"
     },
     "databases": "Bases de datos de Brubru",
     "research_evidence": "Investigación y evidencia",

@@ -5,6 +5,7 @@
  */
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
@@ -18,6 +19,7 @@ import './mep_watch_tab.css';
 
 export function MepWatchTab() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [myInterests, setMyInterests] = useState(true);
   const [search, setSearch] = useState('');
   const [items, setItems] = useState<MepRow[]>([]);
@@ -50,6 +52,11 @@ export function MepWatchTab() {
         title={t('bubble.mepw.title', 'MEP Watch')}
         subtitle={t('bubble.mepw.subtitle', 'The MEPs most active on your policy interests, and what they are asking.')}
       />
+
+      <button type="button" className="meub-crosslink" onClick={() => navigate('/my-eu-bubble?tab=parliamentary_questions')}>
+        {t('bubble.mepw.toQuestions', 'Browse the individual questions in Parliamentary Questions')}
+        <span className="meub-crosslink__arrow" aria-hidden="true">&rarr;</span>
+      </button>
 
       <div className="mepw-tab__controls">
         <div className="mepw-tab__toggle">
