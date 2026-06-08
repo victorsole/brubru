@@ -75,7 +75,23 @@
     "docInviteUploadFailedGeneric": "Échec du téléchargement. Veuillez réessayer.",
     "addToInterests": "Ajouter à vos intérêts politiques :",
     "interestsAdded": "Ajouté :",
-    "openPolicyInterests": "Ouvrir Intérêts politiques"
+    "openPolicyInterests": "Ouvrir Intérêts politiques",
+    "preuser": {
+      "headline": "Toute l'UE, avec l'IA.",
+      "tagline": "Brubru suit chaque loi, institution, politique, lobby et idée de l'UE... le tout au même endroit. Posez-moi n'importe quelle question pour voir l'intérieur, ou démarrez votre essai pour ouvrir le cockpit complet.",
+      "placeholder": "Posez-moi n'importe quelle question sur l'UE : je vous montrerai où elle vit dans Brubru.",
+      "cta": "Démarrer l'essai gratuit : ouvrir le cockpit",
+      "note": "Essai de 14 jours, sans carte pour explorer. Ouvre My EU Bubble.",
+      "meta": "Qu'est-ce que Brubru et que peut-il faire pour moi ?",
+      "peek": {
+        "tracker": "Suivi législatif",
+        "lobby": "Réunions de lobbying",
+        "calendar": "Calendrier UE",
+        "amendments": "Amendements",
+        "compliance": "Conformité",
+        "tenders": "Appels d'offres"
+      }
+    }
   },
   "docs": {
     "title": "Documents",
@@ -3008,7 +3024,31 @@
       "campaign": "Campagne",
       "other": "Autre"
     },
-    "allInstitutions": "Toutes les institutions"
+    "allInstitutions": "Toutes les institutions",
+    "introStakeholders": "Ce que publie l'écosystème de lobbying bruxellois, en un seul flux.",
+    "updates": "mises à jour",
+    "srcInstitutions": "Institutions de l'UE",
+    "srcStakeholders": "Acteurs bruxellois",
+    "allTypesStk": "Tous les types",
+    "searchPlaceholderStk": "Rechercher des mises à jour d'acteurs",
+    "emptyStk": "Aucune mise à jour d'acteur trouvée.",
+    "orgType": {
+      "ngo": "ONG",
+      "trade_association": "Association professionnelle",
+      "company": "Entreprise",
+      "think_tank": "Think tank",
+      "consultancy": "Cabinet de conseil",
+      "law_firm": "Cabinet d'avocats",
+      "trade_union": "Syndicat",
+      "academic": "Universitaire",
+      "religious": "Religieux",
+      "public_authority": "Autorité publique",
+      "third_country": "Entité de pays tiers",
+      "self_employed": "Indépendant",
+      "other": "Autre"
+    },
+    "translated": "Traduit",
+    "translatedFrom": "Traduit du {{lang}}"
   },
   "db": {
     "subtitle": "Les bibliothèques de connaissances de Brubru et une carte de qui fait quoi dans l'UE, adaptée à vos intérêts.",

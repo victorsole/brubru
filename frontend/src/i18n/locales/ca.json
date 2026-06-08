@@ -75,7 +75,23 @@
     "docInviteUploadFailedGeneric": "Error en la pujada. Torna-ho a provar.",
     "addToInterests": "Afegeix als teus interessos polítics:",
     "interestsAdded": "Afegit:",
-    "openPolicyInterests": "Obre Interessos Polítics"
+    "openPolicyInterests": "Obre Interessos Polítics",
+    "preuser": {
+      "headline": "Tota la UE, amb IA.",
+      "tagline": "Brubru segueix cada llei, institució, política, lobby i idea de la UE... tot en un sol lloc. Pregunta'm el que vulguis per veure-ho per dins, o comença la teva prova per obrir el tauler complet.",
+      "placeholder": "Pregunta'm el que vulguis sobre la UE: et mostraré on viu dins de Brubru.",
+      "cta": "Comença la prova gratuïta: obre el tauler",
+      "note": "Prova de 14 dies, sense targeta per explorar. Obre My EU Bubble.",
+      "meta": "Què és Brubru i què pot fer per mi?",
+      "peek": {
+        "tracker": "Seguiment legislatiu",
+        "lobby": "Reunions de lobby",
+        "calendar": "Calendari UE",
+        "amendments": "Esmenes",
+        "compliance": "Compliment",
+        "tenders": "Licitacions"
+      }
+    }
   },
   "docs": {
     "title": "Documents",
@@ -3008,7 +3024,31 @@
       "campaign": "Campanya",
       "other": "Altres"
     },
-    "allInstitutions": "Totes les institucions"
+    "allInstitutions": "Totes les institucions",
+    "introStakeholders": "El que publica l'ecosistema de lobby de Brussel·les, en un sol feed.",
+    "updates": "actualitzacions",
+    "srcInstitutions": "Institucions de la UE",
+    "srcStakeholders": "Actors de Brussel·les",
+    "allTypesStk": "Tots els tipus",
+    "searchPlaceholderStk": "Cerca actualitzacions d'actors",
+    "emptyStk": "No s'han trobat actualitzacions d'actors.",
+    "orgType": {
+      "ngo": "ONG",
+      "trade_association": "Associació sectorial",
+      "company": "Empresa",
+      "think_tank": "Think tank",
+      "consultancy": "Consultoria",
+      "law_firm": "Bufet",
+      "trade_union": "Sindicat",
+      "academic": "Acadèmic",
+      "religious": "Religiós",
+      "public_authority": "Autoritat pública",
+      "third_country": "Entitat de tercer país",
+      "self_employed": "Autònom",
+      "other": "Altres"
+    },
+    "translated": "Traduït",
+    "translatedFrom": "Traduït del {{lang}}"
   },
   "db": {
     "subtitle": "Les biblioteques de coneixement de Brubru i un mapa de qui fa què a la UE, adaptat als teus interessos.",

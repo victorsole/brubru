@@ -75,7 +75,23 @@
     "docInviteUploadFailedGeneric": "Upload mislukt. Probeer het opnieuw.",
     "addToInterests": "Toevoegen aan je beleidsinteresses:",
     "interestsAdded": "Toegevoegd:",
-    "openPolicyInterests": "Open Beleidsinteresses"
+    "openPolicyInterests": "Open Beleidsinteresses",
+    "preuser": {
+      "headline": "De hele EU, met AI.",
+      "tagline": "Brubru volgt elke EU-wet, instelling, beleidslijn, lobby en idee... allemaal op één plek. Vraag me alles om binnen te kijken, of start je proefperiode om de volledige cockpit te openen.",
+      "placeholder": "Vraag me alles over de EU: ik laat je zien waar het in Brubru leeft.",
+      "cta": "Start gratis proef: open de cockpit",
+      "note": "Proef van 14 dagen, geen kaart om rond te kijken. Opent My EU Bubble.",
+      "meta": "Wat is Brubru en wat kan het voor mij doen?",
+      "peek": {
+        "tracker": "Wetgevingstracker",
+        "lobby": "Lobbygesprekken",
+        "calendar": "EU-kalender",
+        "amendments": "Amendementen",
+        "compliance": "Naleving",
+        "tenders": "Aanbestedingen"
+      }
+    }
   },
   "docs": {
     "title": "Documenten",
@@ -3008,7 +3024,31 @@
       "campaign": "Campagne",
       "other": "Overig"
     },
-    "allInstitutions": "Alle instellingen"
+    "allInstitutions": "Alle instellingen",
+    "introStakeholders": "Wat het Brusselse lobby-ecosysteem publiceert, in één feed.",
+    "updates": "updates",
+    "srcInstitutions": "EU-instellingen",
+    "srcStakeholders": "Brusselse stakeholders",
+    "allTypesStk": "Alle types",
+    "searchPlaceholderStk": "Zoek stakeholder-updates",
+    "emptyStk": "Geen stakeholder-updates gevonden.",
+    "orgType": {
+      "ngo": "Ngo",
+      "trade_association": "Brancheorganisatie",
+      "company": "Bedrijf",
+      "think_tank": "Denktank",
+      "consultancy": "Adviesbureau",
+      "law_firm": "Advocatenkantoor",
+      "trade_union": "Vakbond",
+      "academic": "Academisch",
+      "religious": "Religieus",
+      "public_authority": "Overheidsinstantie",
+      "third_country": "Entiteit uit derde land",
+      "self_employed": "Zzp'er",
+      "other": "Overig"
+    },
+    "translated": "Vertaald",
+    "translatedFrom": "Vertaald uit {{lang}}"
   },
   "db": {
     "subtitle": "Brubru’s kennisbibliotheken en een kaart van wie wat doet in de EU, afgestemd op jouw interesses.",

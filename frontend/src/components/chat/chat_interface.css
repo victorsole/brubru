@@ -43,6 +43,21 @@
   animation: slideUp var(--transition-base);
 }
 
+/* Pre-user lead tagline: the "all the EU" pitch under the headline. */
+.chat-interface__lead-tagline {
+  max-width: 62ch;
+  margin: -0.5rem auto 0;
+  color: #334155;
+  font-size: 1.04rem;
+  line-height: 1.5;
+  text-align: center;
+  animation: slideUp var(--transition-base);
+}
+
+@media (max-width: 767px) {
+  .chat-interface__lead-tagline { font-size: 0.95rem; }
+}
+
 /* Proactive policy hooks: Brubru speaking under the greeting.
    Each hook is a clickable speech-row, not a tiny pill. */
 .chat-interface__hooks {

@@ -75,7 +75,23 @@
     "docInviteUploadFailedGeneric": "Error al subir. Vuelve a intentarlo.",
     "addToInterests": "Añadir a tus intereses políticos:",
     "interestsAdded": "Añadido:",
-    "openPolicyInterests": "Abrir Intereses Políticos"
+    "openPolicyInterests": "Abrir Intereses Políticos",
+    "preuser": {
+      "headline": "Toda la UE, con IA.",
+      "tagline": "Brubru sigue cada ley, institución, política, lobby e idea de la UE... todo en un mismo lugar. Pregúntame lo que quieras para ver por dentro, o empieza tu prueba para abrir el panel completo.",
+      "placeholder": "Pregúntame lo que quieras sobre la UE: te mostraré dónde vive en Brubru.",
+      "cta": "Empieza la prueba gratis: abre el panel",
+      "note": "Prueba de 14 días, sin tarjeta para explorar. Abre My EU Bubble.",
+      "meta": "¿Qué es Brubru y qué puede hacer por mí?",
+      "peek": {
+        "tracker": "Seguimiento legislativo",
+        "lobby": "Reuniones de lobby",
+        "calendar": "Calendario UE",
+        "amendments": "Enmiendas",
+        "compliance": "Cumplimiento",
+        "tenders": "Licitaciones"
+      }
+    }
   },
   "docs": {
     "title": "Documentos",
@@ -3008,7 +3024,31 @@
       "campaign": "Campaña",
       "other": "Otro"
     },
-    "allInstitutions": "Todas las instituciones"
+    "allInstitutions": "Todas las instituciones",
+    "introStakeholders": "Lo que publica el ecosistema de lobby de Bruselas, en un solo feed.",
+    "updates": "actualizaciones",
+    "srcInstitutions": "Instituciones de la UE",
+    "srcStakeholders": "Actores de Bruselas",
+    "allTypesStk": "Todos los tipos",
+    "searchPlaceholderStk": "Buscar actualizaciones de actores",
+    "emptyStk": "No se han encontrado actualizaciones de actores.",
+    "orgType": {
+      "ngo": "ONG",
+      "trade_association": "Asociación sectorial",
+      "company": "Empresa",
+      "think_tank": "Think tank",
+      "consultancy": "Consultoría",
+      "law_firm": "Bufete",
+      "trade_union": "Sindicato",
+      "academic": "Académico",
+      "religious": "Religioso",
+      "public_authority": "Autoridad pública",
+      "third_country": "Entidad de tercer país",
+      "self_employed": "Autónomo",
+      "other": "Otros"
+    },
+    "translated": "Traducido",
+    "translatedFrom": "Traducido del {{lang}}"
   },
   "db": {
     "subtitle": "Las bibliotecas de conocimiento de Brubru y un mapa de quién hace qué en la UE, adaptado a tus intereses.",

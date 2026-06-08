@@ -82,3 +82,11 @@
   .news-hero--big .news-hero__title { font-size: 1.2rem; }
   .news-select { max-width: 100%; flex: 1; }
 }
+
+/* Source axis (institutions vs Brussels stakeholders) - sits above the lens/filters. */
+.news-segmented--source {
+  margin-bottom: 0.85rem;
+}
+.news-segmented--source button {
+  font-weight: 600;
+}

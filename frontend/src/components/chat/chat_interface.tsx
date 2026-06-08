@@ -9,6 +9,7 @@ import { DailyBrief } from './daily_brief';
 import { OnboardingTour } from './onboarding_tour';
 import { EmailCapture } from './email_capture';
 import { InlineDocumentInvite } from './inline_document_invite';
+import { PreUserPeek } from './preuser_peek';
 import { BrubruIcon } from '../../icons/brubru_icon';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
@@ -802,7 +803,19 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         {messages.length === 0 ? (
           <div className="chat-interface__empty">
             <BrubruIcon size={3} color="var(--color-primary)" className="chat-interface__empty-icon" />
-            <h2>{personalizedGreeting || t('chat.welcome')}</h2>
+            <h2>{!isAuthenticated ? t('chat.preuser.headline') : (personalizedGreeting || t('chat.welcome'))}</h2>
+
+            {!isAuthenticated && (
+              <>
+                <p className="chat-interface__lead-tagline">{t('chat.preuser.tagline')}</p>
+                <PreUserPeek
+                  onStartTrial={() => {
+                    trackPreUserEvent(getPreUserId(), 'peek_cta_clicked');
+                    navigate('/signup');
+                  }}
+                />
+              </>
+            )}
 
             {policyHooks.length > 0 && (
               <div className="chat-interface__hooks" role="group" aria-label={t('chat.brubruNoticed')}>
@@ -843,12 +856,16 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                 setInputValue(query);
                 requestAnimationFrame(() => textareaRef.current?.focus());
               }}
-              examplePrompts={examplePrompts && examplePrompts.length > 0 ? examplePrompts : [
-                { id: 'f1', text: t('chat.example1') },
-                { id: 'f2', text: t('chat.example2') },
-                { id: 'f3', text: t('chat.example3') },
-                { id: 'f4', text: t('chat.example4') },
-              ]}
+              examplePrompts={(() => {
+                const base = examplePrompts && examplePrompts.length > 0 ? examplePrompts : [
+                  { id: 'f1', text: t('chat.example1') },
+                  { id: 'f2', text: t('chat.example2') },
+                  { id: 'f3', text: t('chat.example3') },
+                  { id: 'f4', text: t('chat.example4') },
+                ];
+                // Pre-users lead with the meta "what is Brubru" prompt (the (1) narration).
+                return isAuthenticated ? base : [{ id: 'meta', text: t('chat.preuser.meta') }, ...base];
+              })()}
               onExampleClick={handleExampleClick}
             />
           </div>
@@ -948,7 +965,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
       <div className="chat-interface__input-container">
         <textarea
           className="chat-interface__input"
-          placeholder={t('chat.placeholder')}
+          placeholder={isAuthenticated ? t('chat.placeholder') : t('chat.preuser.placeholder')}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}

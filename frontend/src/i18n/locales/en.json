@@ -75,7 +75,23 @@
     "docInviteUploadFailedGeneric": "Upload failed. Please try again.",
     "addToInterests": "Add to your policy interests:",
     "interestsAdded": "Added:",
-    "openPolicyInterests": "Open Policy Interests"
+    "openPolicyInterests": "Open Policy Interests",
+    "preuser": {
+      "headline": "All the EU, with AI.",
+      "tagline": "Brubru tracks every EU law, institution, policy, lobby, idea... all in one place. Ask me anything to see inside, or start your trial to open the full cockpit.",
+      "placeholder": "Ask me anything about the EU - I'll show you where it lives in Brubru.",
+      "cta": "Start free trial - open the cockpit",
+      "note": "14-day trial, no card to look around. Opens My EU Bubble.",
+      "meta": "What is Brubru, and what can it do for me?",
+      "peek": {
+        "tracker": "Legislative tracker",
+        "lobby": "Lobby meetings",
+        "calendar": "EU calendar",
+        "amendments": "Amendments",
+        "compliance": "Compliance",
+        "tenders": "Tenders"
+      }
+    }
   },
   "docs": {
     "title": "Documents",
@@ -3029,7 +3045,31 @@
       "campaign": "Campaign",
       "other": "Other"
     },
-    "allInstitutions": "All institutions"
+    "allInstitutions": "All institutions",
+    "introStakeholders": "What the Brussels advocacy ecosystem is publishing, in one feed.",
+    "updates": "updates",
+    "srcInstitutions": "EU institutions",
+    "srcStakeholders": "Brussels stakeholders",
+    "allTypesStk": "All types",
+    "searchPlaceholderStk": "Search stakeholder updates",
+    "emptyStk": "No stakeholder updates found.",
+    "orgType": {
+      "ngo": "NGO",
+      "trade_association": "Trade association",
+      "company": "Company",
+      "think_tank": "Think tank",
+      "consultancy": "Consultancy",
+      "law_firm": "Law firm",
+      "trade_union": "Trade union",
+      "academic": "Academic",
+      "religious": "Religious",
+      "public_authority": "Public authority",
+      "third_country": "Third-country entity",
+      "self_employed": "Self-employed",
+      "other": "Other"
+    },
+    "translated": "Translated",
+    "translatedFrom": "Translated from {{lang}}"
   },
   "db": {
     "subtitle": "Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.",

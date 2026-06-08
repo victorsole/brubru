@@ -17,6 +17,7 @@ import {
   mdiNewspaperVariantMultipleOutline, mdiStar, mdiStarOutline, mdiOpenInNew,
   mdiBookmarkCheck, mdiBookmarkCheckOutline,
   mdiMagnify, mdiImageOutline,
+  mdiBankOutline, mdiAccountTieVoiceOutline, mdiTranslate,
 } from '@mdi/js';
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
@@ -53,6 +54,10 @@ interface NewsItem {
   matches_tracked?: boolean;
   tracked_reason?: string | null;
   policy_areas?: string[];
+  org_type_label?: string | null;
+  org_code?: string | null;
+  translated_from?: string | null;
+  detected_lang?: string | null;
 }
 interface Facets { institution: Record<string, number>; commission_dg: Record<string, number>; item_type: Record<string, number>; }
 
@@ -83,7 +88,9 @@ const INST_LABELS: Record<string, string> = {
   EEAS: 'External Action Service (EEAS)',
 };
 const instLabel = (code: string) => INST_LABELS[code] || code;
-interface NewsResponse { items: NewsItem[]; featured: NewsItem[]; total: number; pi_active: boolean; files_active?: boolean; has_tracked_files?: boolean; facets: Facets; }
+interface NewsResponse { items: NewsItem[]; featured: NewsItem[]; total: number; pi_active: boolean; files_active?: boolean; has_tracked_files?: boolean; facets: Facets; org_type_labels?: Record<string, string>; }
+
+type NewsSource = 'institutions' | 'stakeholders';
 
 const authCfg = () => {
   const token = useAuth.getState().token;
@@ -97,7 +104,11 @@ const fmtDate = (iso: string | null) => {
 };
 
 const DgChip = ({ item }: { item: NewsItem }) => {
-  const label = item.commission_dg || item.source_key || item.institution || 'EU';
+  const { t } = useTranslation();
+  // Stakeholder items have no DG: show the localised org-type, never the register code.
+  const label = item.commission_dg
+    || (item.org_type_label ? t(`news.orgType.${item.institution}`, item.org_type_label) : null)
+    || item.source_key || item.institution || 'EU';
   return <span className="news-dgchip" style={{ background: dgColor(item.commission_dg) }}>{label}</span>;
 };
 
@@ -144,6 +155,11 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
       <div className="news-card__body">
         <div className="news-card__meta">
           <DgChip item={item} />
+          {item.translated_from && (
+            <span className="news-chip is-muted" title={t('news.translatedFrom', { lang: item.translated_from }) as string}>
+              <Icon path={mdiTranslate} size={0.45} /> {t('news.translated', 'Translated')}
+            </span>
+          )}
           {item.item_type && item.item_type !== 'news' && (
             <span className="news-chip is-muted">{t(`news.type.${item.item_type}`, item.item_type)}</span>
           )}
@@ -168,7 +184,9 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
 };
 
 export const NewsTab = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const uiLang = (i18n.language || 'en').split('-')[0];
+  const [source, setSource] = useState<NewsSource>('institutions');
   const [mode, setMode] = useState<'all' | 'pi' | 'files'>('all');
   const [institution, setInstitution] = useState('');
   const [dg, setDg] = useState('');
@@ -178,26 +196,38 @@ export const NewsTab = () => {
   const [loading, setLoading] = useState(true);
   const [hasPi, setHasPi] = useState(false);
 
+  const stakeholders = source === 'stakeholders';
+
   useEffect(() => {
     axios.get<{ keywords: string[] }>(`${API_BASE}/eu-news/my-keywords`, authCfg())
       .then((r) => setHasPi((r.data.keywords || []).length > 0)).catch(() => { });
   }, []);
 
+  // Switching source swaps the facet vocabulary; reset facet filters (keep search).
+  const switchSource = (next: NewsSource) => {
+    if (next === source) return;
+    setSource(next);
+    setInstitution(''); setDg(''); setItemType('');
+    if (next === 'stakeholders' && mode === 'files') setMode('all');
+  };
+
   useEffect(() => {
     setLoading(true);
     const p = new URLSearchParams();
     if (mode === 'pi') p.set('my_interests', 'true');
-    if (mode === 'files') p.set('my_files', 'true');
+    if (mode === 'files' && !stakeholders) p.set('my_files', 'true');
     if (institution) p.set('institution', institution);
-    if (dg) p.set('commission_dg', dg);
-    if (itemType) p.set('item_type', itemType);
+    if (dg && !stakeholders) p.set('commission_dg', dg);
+    if (itemType && !stakeholders) p.set('item_type', itemType);
     if (search.trim()) p.set('search', search.trim());
+    if (stakeholders) p.set('lang', uiLang);
     p.set('limit', '80');
-    axios.get<NewsResponse>(`${API_BASE}/eu-news/items?${p.toString()}`, authCfg())
+    const endpoint = stakeholders ? 'stakeholders' : 'items';
+    axios.get<NewsResponse>(`${API_BASE}/eu-news/${endpoint}?${p.toString()}`, authCfg())
       .then((r) => setData(r.data))
       .catch(() => setData(null))
       .finally(() => setLoading(false));
-  }, [mode, institution, dg, itemType, search]);
+  }, [source, mode, institution, dg, itemType, search, uiLang]);
 
   const facets = data?.facets;
   // The hero shows the featured set; the grid shows the rest (de-duplicated).
@@ -214,14 +244,26 @@ export const NewsTab = () => {
         title={t('news.title', 'News')}
         subtitle={(
           <>
-            {t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
-            <FreshnessChip sourceKey={['news_dg', 'news_ep', 'news_bespoke']} />
+            {stakeholders
+              ? t('news.introStakeholders', 'What the Brussels advocacy ecosystem is publishing, in one feed.')
+              : t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
+            <FreshnessChip sourceKey={stakeholders ? ['brussels_lobbies'] : ['news_dg', 'news_ep', 'news_bespoke']} />
           </>
         )}
         aside={data && (
-          <div className="news-head__count"><b>{data.total}</b> {t('news.stories', 'stories')}</div>
+          <div className="news-head__count"><b>{data.total}</b> {stakeholders ? t('news.updates', 'updates') : t('news.stories', 'stories')}</div>
         )}
       />
+
+      {/* Source axis: institutions (what the EU does) vs stakeholders (what the bubble says). */}
+      <div className="news-segmented news-segmented--source">
+        <button className={!stakeholders ? 'is-active' : ''} onClick={() => switchSource('institutions')}>
+          <Icon path={mdiBankOutline} size={0.7} /> {t('news.srcInstitutions', 'EU institutions')}
+        </button>
+        <button className={stakeholders ? 'is-active' : ''} onClick={() => switchSource('stakeholders')}>
+          <Icon path={mdiAccountTieVoiceOutline} size={0.7} /> {t('news.srcStakeholders', 'Brussels stakeholders')}
+        </button>
+      </div>
 
       <div className="news-controls">
         {(hasPi || data?.has_tracked_files) && (
@@ -241,13 +283,15 @@ export const NewsTab = () => {
         )}
         {facets && (
           <select className="news-select" value={institution} onChange={(e) => { setInstitution(e.target.value); setDg(''); }}>
-            <option value="">{t('news.allInstitutions', 'All institutions')}</option>
+            <option value="">{stakeholders ? t('news.allTypesStk', 'All types') : t('news.allInstitutions', 'All institutions')}</option>
             {Object.entries(facets.institution).map(([code, n]) => (
-              <option key={code} value={code}>{instLabel(code)} ({n})</option>
+              <option key={code} value={code}>
+                {stakeholders ? t(`news.orgType.${code}`, data?.org_type_labels?.[code] || code) : instLabel(code)} ({n})
+              </option>
             ))}
           </select>
         )}
-        {facets && (!institution || institution === 'COMMISSION') && (
+        {!stakeholders && facets && (!institution || institution === 'COMMISSION') && (
           <select className="news-select" value={dg} onChange={(e) => setDg(e.target.value)}>
             <option value="">{t('news.allDgs', 'All departments')}</option>
             {Object.entries(facets.commission_dg).map(([code, n]) => (
@@ -255,7 +299,7 @@ export const NewsTab = () => {
             ))}
           </select>
         )}
-        {facets && (
+        {!stakeholders && facets && (
           <select className="news-select" value={itemType} onChange={(e) => setItemType(e.target.value)}>
             <option value="">{t('news.allTypes', 'All types')}</option>
             {Object.keys(facets.item_type).map((ty) => (
@@ -266,7 +310,7 @@ export const NewsTab = () => {
         <div className="news-search">
           <Icon path={mdiMagnify} size={0.8} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('news.searchPlaceholder', 'Search EU news') as string} />
+            placeholder={(stakeholders ? t('news.searchPlaceholderStk', 'Search stakeholder updates') : t('news.searchPlaceholder', 'Search EU news')) as string} />
         </div>
       </div>
 
@@ -277,6 +321,7 @@ export const NewsTab = () => {
           <Icon path={mdiNewspaperVariantMultipleOutline} size={2} />
           <p>{mode === 'pi' ? t('news.emptyPi', 'No news in your interests right now.')
               : mode === 'files' ? t('news.emptyFiles', 'No news related to the files you track right now.')
+              : stakeholders ? t('news.emptyStk', 'No stakeholder updates found.')
               : t('news.empty', 'No news found.')}</p>
         </div>
       ) : (
