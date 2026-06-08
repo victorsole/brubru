@@ -22,7 +22,7 @@ export const LoginPage = () => {
 
     try {
       await login(email, password);
-      navigate('/main');
+      navigate('/my-eu-bubble');
     } catch (err: any) {
       setError(err.response?.data?.detail || t('auth.errors.loginFailed'));
     } finally {
@@ -35,7 +35,7 @@ export const LoginPage = () => {
     setError('');
     try {
       await loginWithGoogle(credentialResponse);
-      navigate('/main');
+      navigate('/my-eu-bubble');
     } catch (err: any) {
       setError(t('auth.errors.googleLoginFailed'));
     } finally {

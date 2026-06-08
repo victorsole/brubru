@@ -85,7 +85,7 @@ export const SignupPage = () => {
       if (preselectedTier === 'yellow') {
         navigate('/checkout?tier=yellow');
       } else {
-        navigate('/main');
+        navigate('/my-eu-bubble');
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || t('auth.errors.signupFailed'));
@@ -114,7 +114,7 @@ export const SignupPage = () => {
       if (preselectedTier === 'yellow') {
         navigate('/checkout?tier=yellow');
       } else {
-        navigate('/main');
+        navigate('/my-eu-bubble');
       }
     } catch (err: any) {
       setError(t('auth.errors.googleSignupFailed'));

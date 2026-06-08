@@ -57,17 +57,17 @@ export const App = () => {
         <RoutePresence>
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={isAuthenticated ? <Navigate to="/main" /> : (
+          <Route path="/" element={isAuthenticated ? <Navigate to="/my-eu-bubble" /> : (
             <AnimatedPage>
               <LandingPage />
             </AnimatedPage>
           )} />
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/main" /> : (
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/my-eu-bubble" /> : (
             <AnimatedPage>
               <LoginPage />
             </AnimatedPage>
           )} />
-          <Route path="/signup" element={isAuthenticated ? <Navigate to="/main" /> : (
+          <Route path="/signup" element={isAuthenticated ? <Navigate to="/my-eu-bubble" /> : (
             <AnimatedPage>
               <SignupPage />
             </AnimatedPage>

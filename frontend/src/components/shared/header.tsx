@@ -104,9 +104,9 @@ export const Header = () => {
 
         <nav className="header__nav">
           {[
-            { path: '/main', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
             { path: '/my-eu-bubble', icon: mdiGlassMugVariant, labelKey: 'header.myEuBubble', color: 'purple' },
             { path: '/amendator', icon: mdiFileEditOutline, labelKey: 'header.amendator', color: 'green' },
+            { path: '/main', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
             { path: '/eulawcomply', icon: mdiScaleBalance, labelKey: 'header.euLawComply', color: 'silver' },
             { path: '/tenderator', icon: mdiPiggyBankOutline, labelKey: 'header.tenderator', color: 'gold', requiresBlue: true },
             { path: '/api', icon: mdiApi, labelKey: 'header.api', color: 'blue', external: true },
