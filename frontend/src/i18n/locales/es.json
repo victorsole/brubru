@@ -2129,7 +2129,8 @@
     "showingCount": "Mostrando {{shown}} de {{total}}",
     "filters": "Filtros",
     "mine": "Mis intereses",
-    "committeeOpinion": "Opinión presentada por esta comisión"
+    "committeeOpinion": "Opinión presentada por esta comisión",
+    "subtitle": "Los expedientes y documentos de la UE que sigues, en un solo lugar. Añade archivos desde Intereses Políticos o cualquier feed, y Brubru mantiene aquí su estado, enmiendas y votaciones al día."
   },
   "calendar": {
     "myEuToday": "Mi UE hoy",
@@ -2179,7 +2180,9 @@
     "addToCalendar": "Añadir al calendario",
     "addGoogle": "Google Calendar",
     "addOutlook": "Outlook",
-    "downloadIcs": "Descargar .ics (Apple, otros)"
+    "downloadIcs": "Descargar .ics (Apple, otros)",
+    "title": "Mi Calendario UE",
+    "intro": "Todas las fechas institucionales de la UE en un solo lugar: plenos, reuniones del Consejo, audiencias de comisión y plazos de consulta, filtrados según tus intereses. Haz clic en cualquier evento para ver los detalles o añádelo a tu propio calendario."
   },
   "newsSidebar": {
     "loadingFeeds": "Cargando fuentes..."

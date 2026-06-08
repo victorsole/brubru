@@ -2129,7 +2129,8 @@
     "showingCount": "{{shown}} van {{total}} weergegeven",
     "filters": "Filters",
     "mine": "Mijn interesses",
-    "committeeOpinion": "Advies ingediend door deze commissie"
+    "committeeOpinion": "Advies ingediend door deze commissie",
+    "subtitle": "De EU-dossiers en documenten die je volgt, op één plek. Voeg dossiers toe vanuit Beleidsinteresses of een feed, en Brubru houdt hier hun status, amendementen en stemmingen actueel."
   },
   "calendar": {
     "myEuToday": "Mijn EU vandaag",
@@ -2179,7 +2180,9 @@
     "addToCalendar": "Aan agenda toevoegen",
     "addGoogle": "Google Agenda",
     "addOutlook": "Outlook",
-    "downloadIcs": ".ics downloaden (Apple, overige)"
+    "downloadIcs": ".ics downloaden (Apple, overige)",
+    "title": "Mijn EU-kalender",
+    "intro": "Alle institutionele EU-data op één plek: plenaire vergaderingen, Raadsvergaderingen, commissiehoorzittingen en consultatiedeadlines, gefilterd op jouw interesses. Klik op een gebeurtenis voor details of voeg deze toe aan je eigen agenda."
   },
   "newsSidebar": {
     "loadingFeeds": "Feeds laden..."

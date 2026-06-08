@@ -564,7 +564,7 @@ export const LandingPage = () => {
 
             <p style={{ color: '#9ca3af', fontSize: '0.85rem' }}>
               Same canonical pagination envelope across every endpoint. OpenAPI 3.1 spec at{' '}
-              <a href="/api/v1/openapi.json" style={{ color: '#0693e3' }}>/api/v1/openapi.json</a>{' '}
+              <a href="/api/v2/openapi.json" style={{ color: '#0693e3' }}>/api/v2/openapi.json</a>{' '}
               &mdash; importable into Postman in one click.
               <br />
               Interested in integrating? Contact <a href="mailto:hello@beresol.eu" style={{ color: '#0693e3' }}>hello@beresol.eu</a>

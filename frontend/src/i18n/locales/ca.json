@@ -2129,7 +2129,8 @@
     "showingCount": "Mostrant {{shown}} de {{total}}",
     "filters": "Filtres",
     "mine": "Els meus interessos",
-    "committeeOpinion": "Opinió presentada per aquesta comissió"
+    "committeeOpinion": "Opinió presentada per aquesta comissió",
+    "subtitle": "Els expedients i documents de la UE que segueixes, en un sol lloc. Afegeix fitxers des d'Interessos Polítics o qualsevol feed, i Brubru hi manté actualitzats l'estat, les esmenes i les votacions."
   },
   "calendar": {
     "myEuToday": "La meva UE avui",
@@ -2179,7 +2180,9 @@
     "addToCalendar": "Afegeix al calendari",
     "addGoogle": "Google Calendar",
     "addOutlook": "Outlook",
-    "downloadIcs": "Baixa .ics (Apple, altres)"
+    "downloadIcs": "Baixa .ics (Apple, altres)",
+    "title": "El Meu Calendari UE",
+    "intro": "Totes les dates institucionals de la UE en un sol lloc: plens, reunions del Consell, audiències de comissió i terminis de consulta, filtrats segons els teus interessos. Fes clic a qualsevol esdeveniment per veure'n els detalls o afegeix-lo al teu propi calendari."
   },
   "newsSidebar": {
     "loadingFeeds": "Carregant fonts..."

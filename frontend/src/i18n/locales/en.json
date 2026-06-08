@@ -2129,7 +2129,8 @@
     "showingCount": "Showing {{shown}} of {{total}}",
     "filters": "Filters",
     "mine": "My interests",
-    "committeeOpinion": "Opinion tabled by this committee"
+    "committeeOpinion": "Opinion tabled by this committee",
+    "subtitle": "The EU dossiers and documents you follow, in one place. Add files from Policy Interests or any feed, and Brubru keeps their status, amendments and votes current here."
   },
   "calendar": {
     "myEuToday": "My EU Today",
@@ -2179,7 +2180,9 @@
     "addToCalendar": "Add to calendar",
     "addGoogle": "Google Calendar",
     "addOutlook": "Outlook",
-    "downloadIcs": "Download .ics (Apple, other)"
+    "downloadIcs": "Download .ics (Apple, other)",
+    "title": "My EU Calendar",
+    "intro": "Every EU institutional date in one place — plenary sittings, Council meetings, committee hearings and consultation deadlines — filtered to your interests. Click any event for details, or add it to your own calendar."
   },
   "newsSidebar": {
     "loadingFeeds": "Loading feeds..."

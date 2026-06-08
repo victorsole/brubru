@@ -255,16 +255,21 @@ app.include_router(language_analytics.router, tags=["Language Analytics"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 # Data Provider API v1 (public paid surface, /api/v1/*)
-from api.v1 import router as v1_router, docs_alias_router as v1_docs_alias
+# v1 endpoints + raw /api/v1/openapi.json stay live for existing integrations,
+# but the v1 Scalar docs viewer and the /api/docs→v1 alias are retired:
+# v2 is now the only public API reference (see below). v1_docs_alias is no
+# longer included.
+from api.v1 import router as v1_router
 from api.v1._errors import register_v1_error_handlers
 app.include_router(v1_router)
-app.include_router(v1_docs_alias)
 register_v1_error_handlers(app)  # error envelope covers /api/v1/* AND /api/v2/*
 
 # Data Provider API v2 (institution-based surface, /api/v2/*)
 # Reuses the v1 auth/scope/billing dependency, envelope and error handlers.
-from api.v2 import router as v2_router
+# v2_docs_alias owns the canonical public docs: /api/docs + /api/openapi.json.
+from api.v2 import router as v2_router, docs_alias_router as v2_docs_alias
 app.include_router(v2_router)
+app.include_router(v2_docs_alias)
 
 
 @app.middleware("http")

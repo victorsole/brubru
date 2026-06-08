@@ -13,17 +13,19 @@ export const ApiPage = () => {
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const [activeSection, setActiveSection] = useState('your-keys');
 
-  // Public landing surface — only GET endpoints are listed here.
-  // POST endpoints (legal-text/resolve-*) are documented in /api/docs/endpoints
-  // for partners; we intentionally do not surface them on this page.
+  // Public landing surface — only GET endpoints are listed here, all from the
+  // v2 (institution-based) API, which is the only public surface we document.
+  // POST endpoints (resolve-*) are documented in /api/docs for partners; we
+  // intentionally do not surface them on this page.
   const endpoints = [
-    { m: 'GET',  p: '/api/v1/catalan-translations',                           k: 'catalanTranslations' },
-    { m: 'GET',  p: '/api/v1/laws',                                           k: 'laws' },
-    { m: 'GET',  p: '/api/v1/procedures',                                     k: 'procedures' },
-    { m: 'GET',  p: '/api/v1/consultations/by-initiative/{id}/feedback',      k: 'consultations' },
-    { m: 'GET',  p: '/api/v1/commissioners/{name}/agenda',                    k: 'commissioners' },
-    { m: 'GET',  p: '/api/v1/legal-text/{celex}/recital-article-map',         k: 'recitalMap' },
-    { m: 'GET',  p: '/api/v1/legal-text/{celex}/defined-terms',               k: 'definedTerms' },
+    { m: 'GET',  p: '/api/v2/proprietary/brussels-lobbies',                          k: 'brusselsLobbies' },
+    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws',                              k: 'laws' },
+    { m: 'GET',  p: '/api/v2/legislative/oeil/procedures',                           k: 'procedures' },
+    { m: 'GET',  p: '/api/v2/proprietary/catalan',                                   k: 'catalanTranslations' },
+    { m: 'GET',  p: '/api/v2/commission/consultations/by-initiative/{id}/feedback',  k: 'consultations' },
+    { m: 'GET',  p: '/api/v2/commission/commissioners/{name}/agenda',                k: 'commissioners' },
+    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map',  k: 'recitalMap' },
+    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/defined-terms',        k: 'definedTerms' },
   ];
 
   const errorRows: Array<{ code: string; key: string }> = [
@@ -169,7 +171,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?q=victims+rights+directive&limit=5"`}</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=victims+rights+directive&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -187,7 +189,7 @@ export const ApiPage = () => {
             <h2>{t('api.sections.authentication')}</h2>
             <p>{t('api.auth.description')}</p>
             <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?policy_area=Trade&limit=10"`}</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?policy_area=Trade&limit=10"`}</code></pre>
             <p className="api-page__note">{t('api.auth.note')}</p>
           </section>
 
@@ -227,19 +229,27 @@ export const ApiPage = () => {
             <pre className="api-page__pre"><code>{`import requests
 
 API_KEY = "brubru_live_..."
-BASE    = "https://brubru.beresol.eu/api/v1"
+BASE    = "https://brubru.beresol.eu/api/v2"
 
-# Search laws by keyword (today's hot topic: EU-China WTO Article XXVIII exchange of letters published in OJ L of 18 May 2026 — bilateral tariff concession adjustment)
-resp = requests.get(f"{BASE}/laws", params={"q": "EU China WTO Article XXVIII", "limit": 5},
+# Search laws by keyword
+resp = requests.get(f"{BASE}/legislative/eur-lex/laws",
+                    params={"q": "victims rights directive", "limit": 5},
                     headers={"Authorization": f"Bearer {API_KEY}"})
 for law in resp.json()["data"]:
-    print(f'{law["celex"]}  {law["title"][:80]}')`}</code></pre>
+    print(f'{law["celex"]}  {law["title"][:80]}')
+
+# Or browse the moat: ranked Brussels-based lobby orgs with their own news
+resp = requests.get(f"{BASE}/proprietary/brussels-lobbies",
+                    params={"has_news": "true", "order": "recent", "limit": 10},
+                    headers={"Authorization": f"Bearer {API_KEY}"})
+for org in resp.json()["data"]:
+    print(org["name"], "—", org["org_type"], "—", org["last_item_date"])`}</code></pre>
 
             <h3>JavaScript / Node.js</h3>
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
-const BASE    = "https://brubru.beresol.eu/api/v1";
+const BASE    = "https://brubru.beresol.eu/api/v2";
 
-const res = await fetch(\`\${BASE}/laws?q=victims+rights+directive&limit=5\`, {
+const res = await fetch(\`\${BASE}/legislative/eur-lex/laws?q=victims+rights+directive&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();

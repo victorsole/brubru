@@ -155,8 +155,6 @@ router.include_router(_specialised_jrc.router)
 router.include_router(_specialised_sanctions.router)
 router.include_router(_specialised_trade_defence.router)
 router.include_router(_specialised_tr.router)
+# Raw filtered v1 spec only (/api/v1/openapi.json). The v1 Scalar viewer and the
+# /api/docs→v1 alias have been retired; v2 is now the only public API reference.
 router.include_router(_docs.router)
-
-# Pretty docs also served at /api/docs (convenience alias).
-docs_alias_router = APIRouter(prefix="/api")
-docs_alias_router.include_router(_docs.router)
