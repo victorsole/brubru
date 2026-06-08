@@ -34,6 +34,7 @@ from .open_data import router as _open_data_router
 from .who_is_who import router as _who_is_who_router
 from .general_publications import router as _general_publications_router
 from .proprietary import router as _proprietary_router
+from .ecb import router as _ecb_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -48,6 +49,9 @@ router.include_router(_open_data_router)
 router.include_router(_who_is_who_router)
 router.include_router(_general_publications_router)
 router.include_router(_proprietary_router)
+# Economy & Finance — folder #1 (ECB + SSM). The eu-financial-institutions and
+# esm folders join here as they are built.
+router.include_router(_ecb_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 

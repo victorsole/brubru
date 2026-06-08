@@ -47,6 +47,12 @@
       "_doc": "Returns up to 50 dated news items each with body_txt/body_html. The directory list + /types fall to _default."
     },
     {
+      "regex": "^/api/v2/ecb/(?:banking-supervision/)?(?:news|publications|events|legal-acts)/[^/]+/?$",
+      "cost_micro": 5000,
+      "label": "content retrieval (ECB/SSM item with full body)",
+      "_doc": "Detail endpoints for the ECB folder return the full body_txt/body_html (news/speeches HTML, publications PDF text). List endpoints + the /api/v2/ecb directory fall to _default."
+    },
+    {
       "regex": "^/api/v1/laws/[^/]+/text/?$",
       "cost_micro": 10000,
       "label": "full-text retrieval",

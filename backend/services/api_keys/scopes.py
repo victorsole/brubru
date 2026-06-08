@@ -89,6 +89,11 @@ SCOPE_CATALOGUE: Tuple[Scope, ...] = (
         label="EU publications and vocabularies",
         description="Cross-institutional press releases and EU controlled vocabularies (NALs, ontologies).",
     ),
+    Scope(
+        name="read:economy",
+        label="Economy & finance institutions",
+        description="ECB, ECB Banking Supervision, the EU financial-supervision authorities (EBA/ESMA/EIOPA/ESRB/SRB/EIB/AMLA/EPPO) and the ESM: their news, publications, events and legal acts.",
+    ),
 )
 
 SCOPE_NAMES: Tuple[str, ...] = tuple(s.name for s in SCOPE_CATALOGUE)
@@ -222,6 +227,11 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/proprietary/catalan(/|$)"),          "read:laws"),
     (re.compile(r"^/api/v2/proprietary/canon(/|$)"),            "read:knowledge"),
     (re.compile(r"^/api/v2/proprietary/brussels-lobbies(/|$)"), "read:knowledge"),
+
+    # Economy & Finance institutions (3 folders, one scope).
+    (re.compile(r"^/api/v2/ecb(/|$)"),                          "read:economy"),
+    (re.compile(r"^/api/v2/eu-financial-institutions(/|$)"),    "read:economy"),
+    (re.compile(r"^/api/v2/esm(/|$)"),                          "read:economy"),
 
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),
