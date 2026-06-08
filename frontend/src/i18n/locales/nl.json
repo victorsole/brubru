@@ -2263,7 +2263,9 @@
     "celexBadge": "CELEX",
     "viewInOeil": "Bekijk in OEIL",
     "lastUpdated": "Laatst bijgewerkt:",
-    "subtitle": "Het volledige wetgevingsprogramma van de Commissie, gegroepeerd op politieke prioriteit. Blader door elk dossier en volg de dossiers die je interesseren. Voor alleen de dossiers die je al volgt, zie Mijn Gevolgde Dossiers."
+    "subtitle": "Het volledige wetgevingsprogramma van de Commissie, gegroepeerd op politieke prioriteit. Blader door elk dossier en volg de dossiers die je interesseren. Voor alleen de dossiers die je al volgt, zie Mijn Gevolgde Dossiers.",
+    "priorityHint": "De politieke prioriteiten van de Commissie (de von der Leyen-agenda); dossiers worden gegroepeerd onder de prioriteit die ze dienen.",
+    "selectForAnalysis": "Selecteer dit dossier voor AI-analyse"
   },
   "topicSpikes": {
     "newsAriaLabel": "Door Brubru uitgelichte koppen uit de dagelijkse briefing",

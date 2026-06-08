@@ -246,7 +246,10 @@ export const LegislativeTrains = () => {
               onClick={() => toggleTrain(train.id)}
             >
               <div className="legislative-trains__train-title">
-                <span className="legislative-trains__train-number">
+                <span
+                  className="legislative-trains__train-number"
+                  title={t('trains.priorityHint', "The Commission's political priorities (the von der Leyen agenda); dossiers are grouped under the priority they serve.")}
+                >
                   {t('trains.priority', { n: train.priority_number })}
                 </span>
                 <h3>{train.name}</h3>
@@ -287,6 +290,8 @@ export const LegislativeTrains = () => {
                         <input
                           type="checkbox"
                           checked={isSelected}
+                          aria-label={t('trains.selectForAnalysis', 'Select this file for AI analysis')}
+                          title={t('trains.selectForAnalysis', 'Select this file for AI analysis')}
                           onChange={(e) => {
                             e.stopPropagation();
                             toggleFileSelection(file.file_id);

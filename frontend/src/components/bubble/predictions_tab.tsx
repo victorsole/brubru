@@ -51,6 +51,7 @@ import {
 
 import { useAuth } from '../../hooks/use_auth';
 import { MeubHeader } from './meub_header';
+import { glossaryFor } from '../../utils/code_glossary';
 import {
   usePredictions,
   EP_GROUPS,
@@ -231,6 +232,7 @@ const ResolutionIndicatorRow: React.FC<{
         <span
           className="prediction-card__resolution-type"
           style={{ backgroundColor: getTypeColor(resolution.resolution_type) }}
+          title={glossaryFor(resolution.resolution_type) || undefined}
         >
           {resolution.resolution_type}
         </span>
@@ -597,6 +599,7 @@ const PredictionCard: React.FC<{
           <div className="prediction-card__council-risk">
             <div className="prediction-card__council-status">
               <span
+                title={glossaryFor('QMV') || undefined}
                 className={`prediction-card__council-badge ${
                   prediction.council_risk === 'high' ||
                   prediction.council_risk === 'critical'

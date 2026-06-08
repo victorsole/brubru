@@ -14,6 +14,7 @@ import {
 import { councilWatchService } from '../../services/council_watch_service';
 import type { CouncilItem, CouncilStats, PermRep } from '../../services/council_watch_service';
 import { MeubHeader } from './meub_header';
+import { CodeChip } from '../shared/info_dot';
 import './council_watch_tab.css';
 
 export function CouncilWatchTab() {
@@ -104,7 +105,7 @@ export function CouncilWatchTab() {
           <div className="cwatch-kpi cwatch-kpi--configs">
             <Icon path={mdiDomain} size={0.9} />
             <div><span>{t('bubble.cwatch.yourConfigs', 'Your configurations')}</span>
-              <div className="cwatch-configs">{stats.your_configurations.map((c) => <span key={c} className="cwatch-chip">{c}</span>)}
+              <div className="cwatch-configs">{stats.your_configurations.map((c) => <CodeChip key={c} code={c} className="cwatch-chip" />)}
                 {stats.your_configurations.length === 0 && <span className="cwatch-muted">-</span>}</div>
             </div>
           </div>
@@ -125,7 +126,7 @@ export function CouncilWatchTab() {
               <div className="cwatch-item__body">
                 <div className="cwatch-item__top">
                   <span className={`cwatch-kindchip is-${it.kind}`}>{it.kind === 'meeting' ? t('bubble.cwatch.meeting', 'Meeting') : t('bubble.cwatch.outcome', 'Outcome')}</span>
-                  {it.configuration && <span className="cwatch-chip">{it.configuration}</span>}
+                  {it.configuration && <CodeChip code={it.configuration} className="cwatch-chip" />}
                   {it.date && (it.kind === 'meeting' && it.date >= today) && <span className="cwatch-soon">{t('bubble.cwatch.upcoming', 'Upcoming')}</span>}
                   <span className="cwatch-item__date">{fmtDate(it.date)}</span>
                 </div>
@@ -177,7 +178,7 @@ export function CouncilWatchTab() {
               <div>
                 <div className="cwatch-modal__tags">
                   <span className={`cwatch-kindchip is-${detail.kind}`}>{detail.kind === 'meeting' ? t('bubble.cwatch.meeting', 'Meeting') : t('bubble.cwatch.outcome', 'Outcome')}</span>
-                  {detail.configuration && <span className="cwatch-chip">{detail.configuration}</span>}
+                  {detail.configuration && <CodeChip code={detail.configuration} className="cwatch-chip" />}
                   <span className="cwatch-modal__date">{fmtDate(detail.date)}</span>
                 </div>
                 <h3>{detail.title}</h3>

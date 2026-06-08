@@ -2263,7 +2263,9 @@
     "celexBadge": "CELEX",
     "viewInOeil": "View in OEIL",
     "lastUpdated": "Last updated:",
-    "subtitle": "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files."
+    "subtitle": "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files.",
+    "priorityHint": "The Commission's political priorities (the von der Leyen agenda); dossiers are grouped under the priority they serve.",
+    "selectForAnalysis": "Select this file for AI analysis"
   },
   "topicSpikes": {
     "newsAriaLabel": "Daily-brief headlines surfaced by Brubru",

@@ -12,6 +12,7 @@ import {
 import { plenaryAgendaService } from '../../services/plenary_agenda_service';
 import type { PlenaryOoB } from '../../services/plenary_agenda_service';
 import { MeubHeader } from './meub_header';
+import { CodeChip } from '../shared/info_dot';
 import './plenary_agenda_tab.css';
 
 export function PlenaryAgendaTab() {
@@ -88,7 +89,7 @@ export function PlenaryAgendaTab() {
                   <li key={i} className="plen-bizitem">
                     <div className="plen-bizitem__top">
                       {b.procedure_ref && <span className="plen-chip">{b.procedure_ref}</span>}
-                      {b.committees.slice(0, 3).map((c) => <span key={c} className="plen-chip is-cmte">{c}</span>)}
+                      {b.committees.slice(0, 3).map((c) => <CodeChip key={c} code={c} className="plen-chip is-cmte" />)}
                       <span className="plen-bizitem__date">{fmtDate(b.adoption_date)}</span>
                     </div>
                     <div className="plen-bizitem__title">

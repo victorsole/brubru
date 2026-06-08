@@ -2263,7 +2263,9 @@
     "celexBadge": "CELEX",
     "viewInOeil": "Veure a OEIL",
     "lastUpdated": "Última actualització:",
-    "subtitle": "El programa legislatiu complet de la Comissió, agrupat per prioritat política. Explora cada expedient i fes seguiment dels que t'interessin. Per veure només els fitxers que ja segueixes, consulta Els Meus Expedients."
+    "subtitle": "El programa legislatiu complet de la Comissió, agrupat per prioritat política. Explora cada expedient i fes seguiment dels que t'interessin. Per veure només els fitxers que ja segueixes, consulta Els Meus Expedients.",
+    "priorityHint": "Les prioritats polítiques de la Comissió (l'agenda von der Leyen); els expedients s'agrupen segons la prioritat a la qual serveixen.",
+    "selectForAnalysis": "Selecciona aquest expedient per a l'anàlisi amb IA"
   },
   "topicSpikes": {
     "newsAriaLabel": "Titulars del resum diari destacats per Brubru",

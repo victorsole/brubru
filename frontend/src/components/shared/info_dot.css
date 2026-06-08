@@ -1,0 +1,78 @@
+/* Shared InfoDot + CodeChip affordances. */
+
+.info-dot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: #94a3b8;
+  cursor: help;
+  vertical-align: middle;
+  outline: none;
+}
+.info-dot:hover,
+.info-dot:focus-visible { color: #0693e3; }
+
+.code-chip {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+/* A known code gets a dotted underline cue + help cursor so users know it explains itself. */
+.code-chip--known {
+  text-decoration: underline dotted rgba(100, 116, 139, 0.6);
+  text-underline-offset: 2px;
+  cursor: help;
+  outline: none;
+}
+
+/* Shared popover bubble (used by both). Hidden until hover/focus. */
+.info-dot__pop,
+.code-chip__pop {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  z-index: 50;
+  min-width: 160px;
+  max-width: 260px;
+  padding: 0.5rem 0.65rem;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  white-space: normal;
+}
+.info-dot__pop::after,
+.code-chip__pop::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #0f172a;
+}
+.info-dot:hover .info-dot__pop,
+.info-dot:focus-visible .info-dot__pop,
+.code-chip--known:hover .code-chip__pop,
+.code-chip--known:focus-visible .code-chip__pop {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Near the left edge the centred bubble can clip; keep it readable on small screens. */
+@media (max-width: 520px) {
+  .info-dot__pop,
+  .code-chip__pop { left: 0; transform: translateX(0) translateY(4px); min-width: 140px; }
+  .info-dot__pop::after,
+  .code-chip__pop::after { left: 12px; }
+  .info-dot:hover .info-dot__pop,
+  .code-chip--known:hover .code-chip__pop { transform: translateX(0) translateY(0); }
+}

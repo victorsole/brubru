@@ -2263,7 +2263,9 @@
     "celexBadge": "CELEX",
     "viewInOeil": "Ver en OEIL",
     "lastUpdated": "Última actualización:",
-    "subtitle": "El programa legislativo completo de la Comisión, agrupado por prioridad política. Explora cada expediente y haz seguimiento de los que te interesen. Para ver solo los archivos que ya sigues, consulta Mis Expedientes."
+    "subtitle": "El programa legislativo completo de la Comisión, agrupado por prioridad política. Explora cada expediente y haz seguimiento de los que te interesen. Para ver solo los archivos que ya sigues, consulta Mis Expedientes.",
+    "priorityHint": "Las prioridades políticas de la Comisión (la agenda von der Leyen); los expedientes se agrupan según la prioridad a la que sirven.",
+    "selectForAnalysis": "Selecciona este expediente para el análisis con IA"
   },
   "topicSpikes": {
     "newsAriaLabel": "Titulares del resumen diario destacados por Brubru",

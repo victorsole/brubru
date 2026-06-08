@@ -2263,7 +2263,9 @@
     "celexBadge": "CELEX",
     "viewInOeil": "Voir dans OEIL",
     "lastUpdated": "Dernière mise à jour :",
-    "subtitle": "Le programme législatif complet de la Commission, regroupé par priorité politique. Parcourez chaque dossier et suivez ceux qui vous intéressent. Pour les seuls dossiers que vous suivez déjà, voir Mes Dossiers suivis."
+    "subtitle": "Le programme législatif complet de la Commission, regroupé par priorité politique. Parcourez chaque dossier et suivez ceux qui vous intéressent. Pour les seuls dossiers que vous suivez déjà, voir Mes Dossiers suivis.",
+    "priorityHint": "Les priorités politiques de la Commission (l'agenda von der Leyen) ; les dossiers sont regroupés selon la priorité qu'ils servent.",
+    "selectForAnalysis": "Sélectionner ce dossier pour l'analyse par IA"
   },
   "topicSpikes": {
     "newsAriaLabel": "Titres du brief quotidien mis en avant par Brubru",
