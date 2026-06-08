@@ -88,8 +88,8 @@ _LEG_SOURCE_ORDER = ["EUR-Lex", "Legislative Observatory (OEIL)", "Legislative T
 _EURLEX_SUBORDER = ["Identifiers & resolution", "Documents", "Search & summaries", "Relationships & lifecycle", "Official Journal"]
 
 # Proprietary: (path-tail prefix, source folder). Flat — no sub-sub-folders.
-_PROP_ROUTING = [("guides", "Knowledge Guides"), ("catalan", "Catalan Translations"), ("canon", "Canon & Deep-Dives")]
-_PROP_SOURCE_ORDER = ["Knowledge Guides", "Catalan Translations", "Canon & Deep-Dives"]
+_PROP_ROUTING = [("guides", "Knowledge Guides"), ("catalan", "Catalan Translations"), ("canon", "Canon & Deep-Dives"), ("brussels-lobbies", "Brussels Lobbies")]
+_PROP_SOURCE_ORDER = ["Knowledge Guides", "Catalan Translations", "Canon & Deep-Dives", "Brussels Lobbies"]
 
 # Parliament: (path-tail prefix, source folder). Flat — no sub-sub-folders.
 _PARL_ROUTING = [

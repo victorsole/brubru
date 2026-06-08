@@ -26,8 +26,10 @@ from fastapi import APIRouter
 from . import guides as _guides
 from . import catalan as _catalan
 from . import canon as _canon
+from . import brussels_lobbies as _brussels_lobbies
 
 router = APIRouter(prefix="/proprietary")
 router.include_router(_guides.router)
 router.include_router(_catalan.router)
 router.include_router(_canon.router)
+router.include_router(_brussels_lobbies.router)

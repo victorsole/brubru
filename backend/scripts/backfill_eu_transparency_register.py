@@ -24,6 +24,7 @@ import io
 import re
 import sys
 import urllib.request as ureq
+from typing import Match
 try:
     from lxml import etree as ET  # tolerant parser; handles invalid char refs
     _USE_LXML = True
@@ -62,6 +63,43 @@ def fetch_xml(url: str = SOURCE_URL, dest: Path = Path("/tmp/tr.xml")) -> Path:
     return dest
 
 
+# ─────────────────────── XML sanitiser ───────────────────────────────────
+# The TR export is well-formed for entities (it escapes ampersands as
+# `&amp;`) BUT contains a handful of numeric character references that are
+# INVALID in XML 1.0 (control chars such as &#xb; / &#x2; / &#x1d;). The old
+# code worked around them with lxml's recover=True — which, as a side effect,
+# intermittently DROPS valid `&amp;` entities mid-stream (a recover-mode /
+# chunk-boundary quirk), silently corrupting values like "Companies & groups"
+# -> "Companies  groups" and "Loyens & Loeff" -> "Loyens  Loeff" in ~half the
+# rows. Fix: strip ONLY the genuinely-invalid char refs, then parse STRICTLY
+# (recover=False) so every `&amp;` resolves correctly. See migration 059.
+
+_CHARREF_RE = re.compile(rb"&#(x[0-9a-fA-F]+|[0-9]+);")
+
+
+def _strip_invalid_charref(m: "Match[bytes]") -> bytes:
+    s = m.group(1).decode("ascii")
+    cp = int(s[1:], 16) if s[0] in ("x", "X") else int(s)
+    # Valid XML 1.0 chars: #x9 #xA #xD, #x20–#xD7FF, #xE000–#xFFFD, #x10000–#x10FFFF
+    if (cp in (0x9, 0xA, 0xD)
+            or 0x20 <= cp <= 0xD7FF
+            or 0xE000 <= cp <= 0xFFFD
+            or 0x10000 <= cp <= 0x10FFFF):
+        return m.group(0)
+    return b""
+
+
+def sanitise_xml(path: Path) -> io.BytesIO:
+    """Read the TR XML, strip invalid numeric char refs, return a clean
+    file-like ready for a STRICT iterparse (recover=False)."""
+    raw = path.read_bytes()
+    clean, n = _CHARREF_RE.subn(_strip_invalid_charref, raw)
+    removed = len(_CHARREF_RE.findall(raw)) - len(_CHARREF_RE.findall(clean))
+    if removed:
+        print(f"[INFO] Stripped {removed} invalid char ref(s) before strict parse", flush=True)
+    return io.BytesIO(clean)
+
+
 # ─────────────────────── XML helpers ─────────────────────────────────────
 
 
@@ -88,7 +126,7 @@ def text_of(parent, *path) -> Optional[str]:
 def texts_of_all(parent, *path) -> list[str]:
     """Return a list of leaf texts at the given path. The last segment can
     repeat (e.g. interests/interest/name has multiple <interest> siblings)."""
-    if not parent:
+    if parent is None:
         return []
     cur_list = [parent]
     for tag in path[:-1]:
@@ -380,9 +418,11 @@ def main():
 
     print(f"[INFO] Streaming {xml_path}... (parser={'lxml' if _USE_LXML else 'stdlib'})", flush=True)
     if _USE_LXML:
-        # lxml.iterparse takes recover/huge_tree directly as kwargs.
-        context = ET.iterparse(str(xml_path), events=("end",),
-                               recover=True, huge_tree=True)
+        # Sanitise the 8 invalid char refs, then parse STRICTLY. recover=True
+        # corrupts `&amp;` entities (see sanitise_xml docstring), so it is gone.
+        clean = sanitise_xml(xml_path)
+        context = ET.iterparse(clean, events=("end",),
+                               recover=False, huge_tree=True)
     else:
         context = ET.iterparse(str(xml_path), events=("end",))
     i = 0
