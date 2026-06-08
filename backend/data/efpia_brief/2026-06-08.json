@@ -1,0 +1,116 @@
+{
+  "issue_date": "2026-06-08",
+  "day_of_week": "Monday",
+  "hero_intro": "Good morning, and welcome to your Monday Brubru EFPIA Brief. The weekend was quiet on the wires, but the substance still moved. Europe's official medicines control laboratories closed a two-day summit in Prague reaffirming the fight against falsified and illegal medicines, Brussels published its consolidated response to the Ebola outbreak and convened the health security committee, and a decisive fortnight now opens for your files. The medicines safety committee sits this week, the agency's board meets mid-week, and health ministers gather in Council on 16 June with the pharmaceutical package and the Critical Medicines Act on the table. The most consequential first, with every headline linking straight to the source or to the answer inside Brubru.",
+  "headlines": [
+    {
+      "title": "Europe's medicines control laboratories close ranks against falsified and illegal medicines",
+      "source": "European Directorate for the Quality of Medicines and HealthCare, 5 June 2026",
+      "snippet": "The General European Official Medicines Control Laboratories Network held its fifth symposium on combating falsified and illegal medicines in Prague on 3 and 4 June, drawing thirty-four laboratories from thirty-two countries alongside law enforcement, regulators and forensic experts. The discussions tracked the trends in falsified medicines across Europe, the analytical and screening technologies used to detect them, enforcement actions and the impact of the laboratories' work on regulatory texts. Trafficking in falsified medicines remains a high-profit crime that endangers patients and erodes trust in authorised products, which is exactly what the EU's supply-chain safety rules are built to stop.",
+      "ask": "How does the EU prevent falsified and illegal medicines from reaching patients?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=How%20does%20the%20EU%20prevent%20falsified%20and%20illegal%20medicines%20from%20reaching%20patients",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Brussels publishes its consolidated response to the Ebola outbreak and convenes the health security committee",
+      "source": "European Commission, Directorate-General for Health and Food Safety, 5 June 2026",
+      "snippet": "The Commission released a factsheet setting out the EU's response to the Ebola Bundibugyo outbreak in the Democratic Republic of the Congo and Uganda, the same emergency the World Health Organization declared an international concern on 17 May. On the same day it published the flash report from the health security committee's general working group, which met on 3 June to coordinate Member States on preparedness and the cross-border threat. This is the governmental machinery that sits behind the regulatory work the medicines agency and its African counterpart began last week, and it shapes how vaccines and treatments would be deployed if the outbreak spreads.",
+      "ask": "How does the EU coordinate its response to serious cross-border health threats?",
+      "feature_label": "European Commission",
+      "feature_url": "https://health.ec.europa.eu/latest-updates/factsheet-eu-response-ebola-bundibugyo-outbreak-2026-06-05_en",
+      "color": "#059669"
+    },
+    {
+      "title": "The medicines safety committee sits this week, starting today",
+      "source": "European Medicines Agency, week of 8 June 2026",
+      "snippet": "The agency's safety committee, PRAC, meets from today until 11 June, and the EMA Management Board sits on 10 and 11 June, with a joint meeting between the medicines agency and the European Chemicals Agency in between. PRAC is where the EU reviews safety signals, periodic safety reports and post-authorisation studies, and decides whether a medicine's labelling, warnings or authorisation need to change. Any referral opened or recommendation issued this week can touch a product on your members' shelves, so it is worth watching the outcomes when they publish.",
+      "ask": "What does the EMA PRAC safety committee do?",
+      "feature_label": "My EU Calendar",
+      "feature_url": "https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar",
+      "color": "#9b51e0"
+    },
+    {
+      "title": "A decisive fortnight opens for the medicines files, heading into the health ministers' Council",
+      "source": "European Parliament and Council of the EU, week of 8 June 2026",
+      "snippet": "Health ministers meet in Council on 16 June, and several of the files you track sit on the road to that table. The Critical Medicines Act reached a provisional agreement between Parliament and Council on 11 and 12 May and now awaits legal revision and formal adoption. The wider pharmaceutical package, the revision of the medicines law, remains close to adoption with the Council expected to confirm it later this year. As the week opens, the question for members is timing: when these move from provisional deals to binding law, and what the transition windows will be.",
+      "ask": "What is the Critical Medicines Act and what will it change?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20is%20the%20Critical%20Medicines%20Act%20and%20what%20will%20it%20change",
+      "color": "#ca8a04"
+    }
+  ],
+  "brussels_lobbies": {
+    "intro": "New this week. Beyond the institutions, here is what Brussels-based health, pharma and adjacent organisations have published in the last few days, drawn from Brubru's new lobby-monitoring feed across the EU Transparency Register. Medical technology and biotechnology first, then company and patient-group news. Items are listed by organisation, with the sector labelled so you can see where each one sits.",
+    "groups": [
+      {
+        "label": "Medical technology &middot; MedTech Europe (trade association)",
+        "items": [
+          {
+            "date": "2026-06-04",
+            "title": "EUDAMED reaches a major milestone: first four modules become mandatory",
+            "note": "From 28 May the first four modules of EUDAMED, the EU's medical-devices database, moved from voluntary to legally required. Actor registration, device identification, notified-body certificates and market surveillance are now an operational compliance requirement under the Medical Devices and IVD Regulations. Relevant to the device side of drug-device combinations.",
+            "url": "https://www.medtecheurope.org/2026/06/04/eudamed-reaches-a-major-milestone-mandatory-use-of-the-first-four-modules-begins/"
+          },
+          {
+            "date": "2026-06-04",
+            "title": "MedTech Europe's reaction to the provisional Digital Omnibus on AI",
+            "note": "The medtech federation's read on the provisional agreement: high-risk AI rules for AI embedded in products, medical technologies included, are postponed from August 2026 to August 2028, with no separate sectoral track, so the AI Act and the device rules still apply in parallel. Final text expected in the Official Journal in July. A useful precedent for how AI obligations may land on medicines.",
+            "url": "https://www.medtecheurope.org/2026/06/04/medtech-europe-reaction-to-the-provisional-agreement-on-the-digital-omnibus-on-ai/"
+          },
+          {
+            "date": "2026-06-04",
+            "title": "Key Innovative Health Initiative support and upcoming opportunities",
+            "note": "A rundown of current Innovative Health Initiative funding calls and the opportunities open to health research consortia.",
+            "url": "https://www.medtecheurope.org/2026/06/04/key-ihi-support-and-upcoming-opportunities/"
+          }
+        ]
+      },
+      {
+        "label": "Biotechnology &middot; EuropaBio (trade association)",
+        "items": [
+          {
+            "date": "2026-06-05",
+            "title": "The Baker Company Benelux joins EuropaBio",
+            "note": "The EU biotechnology federation welcomed a new member bringing cell-culture and lab-safety expertise, as the European Biotech Act you track moves through the institutions.",
+            "url": "https://www.europabio.org/the-baker-company-benelux-bv-joins-europabio-advancing-cell-culture-and-lab-safety-technologies/"
+          },
+          {
+            "date": "2026-06-04",
+            "title": "Bio-based and Biodegradable Industries Association joins EuropaBio",
+            "note": "Membership news widening the federation's bio-based economy base.",
+            "url": "https://www.europabio.org/bio-based-and-biodegradable-industries-association-bbia-joins-europabio-supporting-the-bio-based-economy/"
+          }
+        ]
+      },
+      {
+        "label": "Pharmaceutical company &middot; AstraZeneca",
+        "items": [
+          {
+            "date": "2026-06-06",
+            "title": "Ultomiris cut proteinuria by 43.4% in a Phase III kidney-disease trial",
+            "note": "AstraZeneca reported Phase III results showing Ultomiris reduced proteinuria by 43.4% against placebo at 34 weeks in adults with immunoglobulin A nephropathy, a rare progressive kidney disease.",
+            "url": "https://www.astrazeneca.com/content/astraz/media-centre/press-releases/2026/ultomiris-demonstrated-43-4-reduction-in-proteinuri-vs-placebo-in-adults-with-immunoglobulin-i-can-phase-iii-trial.html"
+          }
+        ]
+      },
+      {
+        "label": "Patient advocacy",
+        "items": [
+          {
+            "date": "2026-06-05",
+            "title": "EATG takes stock of the HIV Long-Term Survivors Summit",
+            "note": "The European AIDS Treatment Group marked Survivors Awareness Day with the outcomes of its HIV Long-Term Survivors Summit.",
+            "url": "https://www.eatg.org/news/our-stories-built-the-movement-taking-stock-of-the-hiv-long-term-survivors-summit-outcomes-on-survivors-awareness-day/"
+          },
+          {
+            "date": "2026-06-03",
+            "title": "Parkinson's Europe shares reflections from the World Parkinson Congress 2026",
+            "note": "Community reflections from the patient organisation following this year's World Parkinson Congress.",
+            "url": "https://parkinsonseurope.org/parkinsonslife/world-parkinson-congress-2026-my-journey/"
+          }
+        ]
+      }
+    ]
+  }
+}

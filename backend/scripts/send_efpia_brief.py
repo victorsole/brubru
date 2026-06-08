@@ -215,7 +215,8 @@ def _verify_url(url: str, timeout: float = 8.0) -> tuple[bool, int]:
             return False, 0
 
 
-def _verify_all_urls(headlines: list[dict], priority_files: list[dict]) -> bool:
+def _verify_all_urls(headlines: list[dict], priority_files: list[dict],
+                     lobbies: dict | None = None) -> bool:
     print("Verifying URLs (HEAD + GET fallback)...")
     ok = True
     for i, h in enumerate(headlines, 1):
@@ -232,6 +233,18 @@ def _verify_all_urls(headlines: list[dict], priority_files: list[dict]) -> bool:
         print(f"  PF [{status}] [{flag}] {pf.get('label')} -> {url}")
         if not success:
             ok = False
+    # Brussels-lobby links come from the orgs' own validated RSS/Atom feeds.
+    # Several publishers (MedTech Europe, AstraZeneca) sit behind a WAF that
+    # rejects non-browser clients with 403; those are SOFT warnings, not blockers.
+    if lobbies:
+        for g in lobbies.get("groups", []):
+            for it in g.get("items", []):
+                url = it.get("url") or ""
+                success, status = _verify_url(url)
+                flag = "OK" if success else ("WAF/soft" if status in (401, 403, 0) else "FAIL")
+                print(f"  LOBBY [{status}] [{flag}] {it.get('title', '')[:40]} -> {url}")
+                if not success and status not in (401, 403, 0):
+                    ok = False
     return ok
 
 
@@ -306,6 +319,67 @@ def _build_tracking_block(priority_files: list[dict]) -> str:
 """
 
 
+def _pretty_item_date(iso: str) -> str:
+    """'2026-06-04' -> '4 June'. Returns the input unchanged on parse failure."""
+    try:
+        dt = datetime.strptime(iso, "%Y-%m-%d")
+        return f"{dt.day} {dt.strftime('%B')}"
+    except (ValueError, TypeError):
+        return iso or ""
+
+
+def _build_lobbies_block(lobbies: dict) -> str:
+    """Render the 'From the Brussels advocacy ecosystem' section.
+
+    Items come from the proprietary brussels-lobbies feed (EU Transparency
+    Register orgs' own RSS/Atom). Grouped by organisation/sector, clearly
+    labelled, health and pharma first.
+    """
+    if not lobbies:
+        return ""
+    intro = lobbies.get("intro", "")
+    groups = lobbies.get("groups") or []
+    if not groups:
+        return ""
+
+    group_html: list[str] = []
+    for g in groups:
+        items_html: list[str] = []
+        for it in g.get("items", []):
+            d = _pretty_item_date(it.get("date", ""))
+            items_html.append(
+                f"""
+          <li style="margin-bottom: 12px;">
+            <a href="{it['url']}" style="color: #6d28d9; text-decoration: none; font-weight: 600; font-size: 14px;">{it['title']}</a>
+            <span style="font-size: 11px; color: #9ca3af;">&nbsp;&middot; {d}</span>
+            <div style="font-size: 13px; color: #4b5563; line-height: 1.55; margin-top: 3px;">{it.get('note', '')}</div>
+          </li>"""
+            )
+        group_html.append(
+            f"""
+        <div style="margin-top: 14px;">
+          <div style="font-size: 12px; font-weight: 700; color: #6d28d9; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px;">
+            {g.get('label', '')}
+          </div>
+          <ul style="margin: 0; padding-left: 18px;">
+            {''.join(items_html)}
+          </ul>
+        </div>"""
+        )
+
+    return f"""
+<div style="margin-top: 24px; padding: 18px 20px; background: #faf5ff; border-left: 3px solid #6d28d9; border-radius: 6px;">
+  <div style="font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 8px;">
+    From the Brussels advocacy ecosystem
+  </div>
+  <div style="font-size: 13px; color: #6b7280; line-height: 1.55; margin-bottom: 4px;">
+    {intro}
+  </div>
+  {''.join(group_html)}
+</div>
+"""
+
+
 def _build_updates_block(updates: list[dict]) -> str:
     if not updates:
         body = (
@@ -347,6 +421,7 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
         _build_headline_block(h, i) for i, h in enumerate(payload["headlines"])
     )
     tracking_block = _build_tracking_block(priority_files)
+    lobbies_block = _build_lobbies_block(payload.get("brussels_lobbies") or {})
     pretty_date = _pretty_date(issue_date, day_label)
 
     return f"""<!DOCTYPE html>
@@ -377,6 +452,9 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             {headline_rows}
           </table>
+        </td></tr>
+        <tr><td style="padding: 0 32px;">
+          {lobbies_block}
         </td></tr>
         <tr><td style="padding: 0 32px 8px 32px;">
           {tracking_block}
@@ -490,7 +568,8 @@ def main() -> int:
         return 0
 
     if args.verify_urls:
-        ok = _verify_all_urls(payload["headlines"], config["files"])
+        ok = _verify_all_urls(payload["headlines"], config["files"],
+                              payload.get("brussels_lobbies"))
         if not ok:
             print("[FAIL] one or more URLs are unreachable. Fix them before sending.")
             return 2
