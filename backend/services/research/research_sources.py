@@ -45,17 +45,19 @@ _ADMIN_RE = re.compile(
     r"strategic plan|list of |organisation chart|mission letter|decision of the|"
     r"register of|code of conduct|declaration of|"
     r"vacancy notice|vacancy for|statement of revenue|call for expression|call for tender|"
-    r"call for proposal|call for application|budget of|financial statements?|publication of the annual)",
+    r"call for proposal|call for application|budget of|financial statements?|publication of the annual|"
+    r"minutes of|board of supervisors|sb composition|composition of|contact persons|it solutions|"
+    r"agenda of|summary of conclusions|publication of the final)",
     re.I,
 )
 
 
 def _src(id, group, icon, color, name, full, landing, search, pi_tags,
-         feed_landing=None, cb_code=None, sparql_cb=None, rss_url=None):
+         feed_landing=None, cb_code=None, sparql_cb=None, rss_url=None, scrape_cfg=None):
     return dict(id=id, group=group, icon=icon, color=color, name=name, full=full,
                 landing=landing, search=search, pi_tags=pi_tags,
                 feed_landing=feed_landing, cb_code=cb_code, sparql_cb=sparql_cb,
-                rss_url=rss_url)
+                rss_url=rss_url, scrape_cfg=scrape_cfg)
 
 
 # Brand colours reused across cards.
@@ -241,6 +243,23 @@ SOURCES: List[dict] = [
          "https://www.esrb.europa.eu/home/search/html/index.en.html?searchterm={q}",
          ["systemic risk", "financ", "macroprudential", "stability", "bank", "risk", "econom"],
          sparql_cb="ESRB"),
+    # EBA + EIOPA research isn't in Cellar/RSS — scrape their server-rendered
+    # (no-WAF) publication lists and filter admin noise (minutes, IT solutions).
+    _src("eba", "research", "bank-outline", _O, "EBA",
+         "European Banking Authority: reports, guidelines, technical standards (ITS/RTS), consultation papers and EU-wide stress-test results",
+         "https://www.eba.europa.eu/publications-and-media/publications",
+         "https://www.eba.europa.eu/search-results?text={q}",
+         ["bank", "financ", "credit", "capital", "prudential", "basel", "stress test", "risk"],
+         scrape_cfg={"url": "https://www.eba.europa.eu/publications-and-media/publications",
+                     "item": ".teaser", "title": ".teaser__title a, a", "date": ".teaser__metadata"}),
+    _src("eiopa", "research", "umbrella", _G, "EIOPA",
+         "European Insurance and Occupational Pensions Authority: reports, studies, consultations and risk dashboards on insurance and pensions",
+         "https://www.eiopa.europa.eu/publications_en",
+         "https://www.eiopa.europa.eu/search_en?search_api_fulltext={q}",
+         ["insur", "pension", "financ", "occupational", "solvency", "risk"],
+         scrape_cfg={"url": "https://www.eiopa.europa.eu/publications_en",
+                     "item": ".ecl-content-item", "title": "a.ecl-link, .ecl-content-block__title a, a",
+                     "date": ".ecl-content-block__primary-meta-container, [class*=meta]"}),
 ]
 
 
@@ -357,6 +376,52 @@ def fetch_cellar_works(cb_code: str, limit: int = 12) -> List[dict]:
     return items
 
 
+_DATE_TXT = re.compile(r"\d{1,2}\s+[A-Za-z]+\s+20\d{2}|\d{2}[/.]\d{2}[/.]20\d{2}")
+# Operational noise that can appear MID-title (so ^-anchored _ADMIN_RE misses it):
+# "EBA - SB Composition", "...meeting minutes", "Agenda workshop on...".
+_NOISE_RE = re.compile(r"\b(meeting minutes|\bminutes\b|sb composition|board composition|"
+                       r"workshop|meeting agenda|list of participants)\b", re.I)
+
+
+def _scrape_html_list(cfg: dict, limit: int = 12) -> List[dict]:
+    """Scrape a server-rendered (no-WAF) publications list via CSS selectors.
+
+    cfg = {url, item, title, date}. Admin/operational titles are filtered out.
+    Cached. Used for bodies whose research is on-site, not in Cellar or RSS.
+    """
+    from bs4 import BeautifulSoup
+    url = cfg["url"]
+    now = time.time()
+    key = f"scrape:{url}"
+    hit = _feed_cache.get(key)
+    if hit and hit[0] > now:
+        return hit[1]
+    items: List[dict] = []
+    try:
+        soup = BeautifulSoup(_http(url, timeout=20).decode("utf-8", "replace"), "html.parser")
+        seen = set()
+        for card in soup.select(cfg["item"]):
+            a = card.select_one(cfg["title"])
+            if not a or not a.get("href"):
+                continue
+            title = a.get_text(" ", strip=True)
+            href = urllib.parse.urljoin(url, a["href"])
+            if (not title or len(title) < 12 or href in seen
+                    or _ADMIN_RE.match(title) or _NOISE_RE.search(title)):
+                continue
+            seen.add(href)
+            de = card.select_one(cfg["date"]) if cfg.get("date") else None
+            dm = _DATE_TXT.search(de.get_text(" ", strip=True)) if de else None
+            items.append({"title": title[:300], "url": href,
+                          "date": dm.group(0) if dm else "", "snippet": ""})
+            if len(items) >= limit:
+                break
+    except Exception as e:
+        logger.warning("[research] scrape failed for %s: %s", url, e)
+    _feed_cache[key] = (now + _TTL, items)
+    return items
+
+
 def _is_pi_match(src: dict, pi_lower: List[str]) -> bool:
     tags = src.get("pi_tags") or []
     if "*" in tags:
@@ -393,7 +458,8 @@ def build_catalogue(pi: List[str]) -> dict:
             "id": s["id"], "group": s["group"], "icon": s["icon"], "color": s["color"],
             "name": s["name"], "full": s["full"], "landing": s["landing"],
             "search": _seed_search(s, pi),
-            "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb") or s.get("rss_url")),
+            "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb")
+                             or s.get("rss_url") or s.get("scrape_cfg")),
             "is_pi_match": _is_pi_match(s, pi_lower),
         })
     # group order, then PI matches first within a group.
@@ -415,4 +481,6 @@ def read_through(source_id: str, limit: int = 12) -> List[dict]:
         return fetch_feed(src["rss_url"], limit)
     if src.get("sparql_cb"):
         return fetch_cellar_works(src["sparql_cb"], limit)
+    if src.get("scrape_cfg"):
+        return _scrape_html_list(src["scrape_cfg"], limit)
     return []
