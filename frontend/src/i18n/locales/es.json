@@ -824,7 +824,8 @@
     "stopTracking": "Dejar de seguir",
     "showHistory": "Mostrar historial",
     "hideHistory": "Ocultar historial",
-    "there": "hola"
+    "there": "hola",
+    "retry": "Reintentar"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filtros",
     "mine": "Mis intereses",
     "committeeOpinion": "Opinión presentada por esta comisión",
-    "subtitle": "Los expedientes y documentos de la UE que sigues, en un solo lugar. Añade archivos desde Intereses Políticos o cualquier feed, y Brubru mantiene aquí su estado, enmiendas y votaciones al día."
+    "subtitle": "Los expedientes y documentos de la UE que sigues, en un solo lugar. Añade archivos desde Intereses Políticos o cualquier feed, y Brubru mantiene aquí su estado, enmiendas y votaciones al día.",
+    "confirmUntrack": "¿Dejar de seguir este expediente?",
+    "stopTracking": "Dejar de seguir",
+    "untrackFailed": "No se pudo dejar de seguir. Inténtalo de nuevo.",
+    "loginToTrack": "Inicia sesión para seguir expedientes."
   },
   "calendar": {
     "myEuToday": "Mi UE hoy",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Última actualización:",
     "subtitle": "El programa legislativo completo de la Comisión, agrupado por prioridad política. Explora cada expediente y haz seguimiento de los que te interesen. Para ver solo los archivos que ya sigues, consulta Mis Expedientes.",
     "priorityHint": "Las prioridades políticas de la Comisión (la agenda von der Leyen); los expedientes se agrupan según la prioridad a la que sirven.",
-    "selectForAnalysis": "Selecciona este expediente para el análisis con IA"
+    "selectForAnalysis": "Selecciona este expediente para el análisis con IA",
+    "analyzeSuccess": "Se han analizado {{count}} expedientes.",
+    "analyzeFailed": "No se han podido analizar los expedientes. Inténtalo de nuevo."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titulares del resumen diario destacados por Brubru",
@@ -3071,7 +3078,8 @@
       "other": "Otros"
     },
     "translated": "Traducido",
-    "translatedFrom": "Traducido del {{lang}}"
+    "translatedFrom": "Traducido del {{lang}}",
+    "error": "No hemos podido cargar las noticias ahora mismo. Inténtalo de nuevo en un momento."
   },
   "db": {
     "subtitle": "Las bibliotecas de conocimiento de Brubru y un mapa de quién hace qué en la UE, adaptado a tus intereses.",

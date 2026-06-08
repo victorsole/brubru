@@ -824,7 +824,8 @@
     "stopTracking": "Arrêter le suivi",
     "showHistory": "Afficher l'historique",
     "hideHistory": "Masquer l'historique",
-    "there": "vous"
+    "there": "vous",
+    "retry": "Réessayer"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filtres",
     "mine": "Mes intérêts",
     "committeeOpinion": "Avis déposé par cette commission",
-    "subtitle": "Les dossiers et documents de l'UE que vous suivez, au même endroit. Ajoutez des dossiers depuis Intérêts politiques ou n'importe quel flux, et Brubru y maintient à jour leur statut, leurs amendements et leurs votes."
+    "subtitle": "Les dossiers et documents de l'UE que vous suivez, au même endroit. Ajoutez des dossiers depuis Intérêts politiques ou n'importe quel flux, et Brubru y maintient à jour leur statut, leurs amendements et leurs votes.",
+    "confirmUntrack": "Arrêter de suivre ce dossier ?",
+    "stopTracking": "Arrêter le suivi",
+    "untrackFailed": "Impossible d'arrêter le suivi. Veuillez réessayer.",
+    "loginToTrack": "Connectez-vous pour suivre des dossiers."
   },
   "calendar": {
     "myEuToday": "Mon UE aujourd'hui",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Dernière mise à jour :",
     "subtitle": "Le programme législatif complet de la Commission, regroupé par priorité politique. Parcourez chaque dossier et suivez ceux qui vous intéressent. Pour les seuls dossiers que vous suivez déjà, voir Mes Dossiers suivis.",
     "priorityHint": "Les priorités politiques de la Commission (l'agenda von der Leyen) ; les dossiers sont regroupés selon la priorité qu'ils servent.",
-    "selectForAnalysis": "Sélectionner ce dossier pour l'analyse par IA"
+    "selectForAnalysis": "Sélectionner ce dossier pour l'analyse par IA",
+    "analyzeSuccess": "{{count}} dossiers analysés.",
+    "analyzeFailed": "Impossible d'analyser les dossiers. Veuillez réessayer."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titres du brief quotidien mis en avant par Brubru",
@@ -3071,7 +3078,8 @@
       "other": "Autre"
     },
     "translated": "Traduit",
-    "translatedFrom": "Traduit du {{lang}}"
+    "translatedFrom": "Traduit du {{lang}}",
+    "error": "Nous n'avons pas pu charger les actualités pour le moment. Veuillez réessayer dans un instant."
   },
   "db": {
     "subtitle": "Les bibliothèques de connaissances de Brubru et une carte de qui fait quoi dans l'UE, adaptée à vos intérêts.",

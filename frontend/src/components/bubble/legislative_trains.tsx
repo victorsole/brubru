@@ -13,6 +13,7 @@ import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { LegislativeFile } from '../../hooks/use_legislative_trains';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import { MeubHeader } from './meub_header';
+import { toast } from '../shared/feedback_host';
 import { useAuth } from '../../hooks/use_auth';
 import axios from 'axios';
 import './legislative_trains.css';
@@ -140,9 +141,9 @@ export const LegislativeTrains = () => {
 
     try {
       await analyzeBatch(selectedFileIds);
-      alert(`Successfully analyzed ${selectedFileIds.length} legislative files!`);
+      toast(t('trains.analyzeSuccess', { count: selectedFileIds.length }), 'success');
     } catch (error) {
-      alert('Failed to analyze files. Please try again.');
+      toast(t('trains.analyzeFailed', 'Could not analyse the files. Please try again.'), 'error');
     }
   };
 

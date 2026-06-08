@@ -17,6 +17,7 @@ import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { MeubHeader } from '../components/bubble/meub_header';
 import { MeubAskLauncher } from '../components/bubble/meub_ask_launcher';
+import { FeedbackHost } from '../components/shared/feedback_host';
 import { DocumentsTab } from '../components/bubble/documents_tab';
 import { AmendmentsTab } from '../components/bubble/amendments_tab';
 import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_tab';
@@ -432,6 +433,9 @@ export const MyEUBubblePage = () => {
 
       {/* Persistent, context-aware Chat entry point — one launcher for the whole shell. */}
       <MeubAskLauncher tabLabel={tabLabel(activeTab)} />
+
+      {/* App-level toasts + confirm dialog (replaces native alert/confirm). */}
+      <FeedbackHost />
     </div>
   );
 };

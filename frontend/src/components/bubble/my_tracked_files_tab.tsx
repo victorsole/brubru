@@ -48,6 +48,7 @@ import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { MeubHeader } from './meub_header';
+import { toast, confirmDialog } from '../shared/feedback_host';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import { HotThisWeekWidget } from './hot_this_week_widget';
@@ -338,23 +339,27 @@ export const MyTrackedFilesTab = () => {
       await fetchTrackedFiles();
       await fetchRecentChanges(168);
       const n = res.data?.seeded ?? 0;
-      alert(n > 0 ? t('myFilesTab.syncAdded', { count: n }) : t('myFilesTab.syncNone'));
+      toast(n > 0 ? t('myFilesTab.syncAdded', { count: n }) : t('myFilesTab.syncNone'), n > 0 ? 'success' : 'info');
     } catch {
-      alert(t('myFilesTab.syncFailed'));
+      toast(t('myFilesTab.syncFailed'), 'error');
     } finally {
       setIsSyncing(false);
     }
   };
 
   const handleUntrack = async (file: TrackedFile) => {
-    if (window.confirm('Are you sure you want to stop tracking this file?')) {
+    const ok = await confirmDialog(
+      t('myFilesTab.confirmUntrack', 'Stop tracking this file?'),
+      { confirmLabel: t('myFilesTab.stopTracking', 'Stop tracking'), cancelLabel: t('common.cancel', 'Cancel'), danger: true },
+    );
+    if (ok) {
       try {
         // Use procedure ref if available, otherwise use carriage_id (UUID)
         const useCarriageId = !file.oeil_procedure_ref;
         const identifier = file.oeil_procedure_ref || file.carriage_id;
         await untrackFile(identifier, useCarriageId);
       } catch {
-        alert('Failed to untrack file. Please try again.');
+        toast(t('myFilesTab.untrackFailed', 'Could not stop tracking. Please try again.'), 'error');
       }
     }
   };
@@ -410,9 +415,9 @@ export const MyTrackedFilesTab = () => {
       // Show specific error message
       const axiosError = error as { response?: { status?: number; data?: { detail?: string } } };
       if (axiosError.response?.status === 401) {
-        alert('Please log in to track files.');
+        toast(t('myFilesTab.loginToTrack', 'Please log in to track files.'), 'error');
       } else {
-        alert(axiosError.response?.data?.detail || 'Failed to track file. Please try again.');
+        toast(axiosError.response?.data?.detail || t('myFilesTab.trackFailed'), 'error');
       }
     } finally {
       setTrackingFileId(null);
@@ -653,14 +658,14 @@ export const MyTrackedFilesTab = () => {
     try {
       await trackCommitteeItem(item.id);
     } catch {
-      alert(t('myFilesTab.trackFailed'));
+      toast(t('myFilesTab.trackFailed'), 'error');
     }
   };
   const handleCommitteeUntrack = async (item: CommitteeWorkItem) => {
     try {
       await untrackCommitteeItem(item.id);
     } catch {
-      alert(t('myFilesTab.trackFailed'));
+      toast(t('myFilesTab.trackFailed'), 'error');
     }
   };
   // View details: open the in-app file modal when the item is linked to a
@@ -720,10 +725,10 @@ export const MyTrackedFilesTab = () => {
     [textsTrackedItems],
   );
   const handleTextTrack = async (item: { id: string }) => {
-    try { await trackTextItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+    try { await trackTextItem(item.id); } catch { toast(t('myFilesTab.trackFailed'), 'error'); }
   };
   const handleTextUntrack = async (item: { id: string }) => {
-    try { await untrackTextItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+    try { await untrackTextItem(item.id); } catch { toast(t('myFilesTab.trackFailed'), 'error'); }
   };
   const handleTextViewDetail = (item: { legislative_carriage_id?: string; procedure_ref?: string }) => {
     if (item.legislative_carriage_id) {
@@ -788,10 +793,10 @@ export const MyTrackedFilesTab = () => {
     [commissionTrackedItems],
   );
   const handleDocTrack = async (item: { id: string }) => {
-    try { await trackCommissionItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+    try { await trackCommissionItem(item.id); } catch { toast(t('myFilesTab.trackFailed'), 'error'); }
   };
   const handleDocUntrack = async (item: { id: string }) => {
-    try { await untrackCommissionItem(item.id); } catch { alert(t('myFilesTab.trackFailed')); }
+    try { await untrackCommissionItem(item.id); } catch { toast(t('myFilesTab.trackFailed'), 'error'); }
   };
 
   // Cross-link to the Amendments sub-feature (MEP Amendments) with this
@@ -935,9 +940,9 @@ export const MyTrackedFilesTab = () => {
               } catch (error: unknown) {
                 const ax = error as { response?: { status?: number; data?: { detail?: string } } };
                 if (ax.response?.status === 401) {
-                  alert(t('myFilesTab.alertLogin'));
+                  toast(t('myFilesTab.alertLogin'), 'error');
                 } else {
-                  alert(ax.response?.data?.detail || t('myFilesTab.alertFailedTrack'));
+                  toast(ax.response?.data?.detail || t('myFilesTab.alertFailedTrack'), 'error');
                 }
               }
             }}

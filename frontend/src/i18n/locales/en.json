@@ -824,7 +824,8 @@
     "stopTracking": "Stop tracking",
     "showHistory": "Show history",
     "hideHistory": "Hide history",
-    "there": "there"
+    "there": "there",
+    "retry": "Retry"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filters",
     "mine": "My interests",
     "committeeOpinion": "Opinion tabled by this committee",
-    "subtitle": "The EU dossiers and documents you follow, in one place. Add files from Policy Interests or any feed, and Brubru keeps their status, amendments and votes current here."
+    "subtitle": "The EU dossiers and documents you follow, in one place. Add files from Policy Interests or any feed, and Brubru keeps their status, amendments and votes current here.",
+    "confirmUntrack": "Stop tracking this file?",
+    "stopTracking": "Stop tracking",
+    "untrackFailed": "Could not stop tracking. Please try again.",
+    "loginToTrack": "Please log in to track files."
   },
   "calendar": {
     "myEuToday": "My EU Today",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Last updated:",
     "subtitle": "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files.",
     "priorityHint": "The Commission's political priorities (the von der Leyen agenda); dossiers are grouped under the priority they serve.",
-    "selectForAnalysis": "Select this file for AI analysis"
+    "selectForAnalysis": "Select this file for AI analysis",
+    "analyzeSuccess": "Analysed {{count}} files.",
+    "analyzeFailed": "Could not analyse the files. Please try again."
   },
   "topicSpikes": {
     "newsAriaLabel": "Daily-brief headlines surfaced by Brubru",
@@ -3092,7 +3099,8 @@
       "other": "Other"
     },
     "translated": "Translated",
-    "translatedFrom": "Translated from {{lang}}"
+    "translatedFrom": "Translated from {{lang}}",
+    "error": "We could not load the news right now. Please try again in a moment."
   },
   "db": {
     "subtitle": "Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.",

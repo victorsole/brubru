@@ -802,7 +802,7 @@
     "error": "Error",
     "success": "Èxit",
     "save": "Desar",
-    "cancel": "Cancel·lar",
+    "cancel": "Cancel·la",
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Cercar",
@@ -824,7 +824,8 @@
     "stopTracking": "Deixa de seguir",
     "showHistory": "Mostra l'historial",
     "hideHistory": "Amaga l'historial",
-    "there": "hola"
+    "there": "hola",
+    "retry": "Torna-ho a provar"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filtres",
     "mine": "Els meus interessos",
     "committeeOpinion": "Opinió presentada per aquesta comissió",
-    "subtitle": "Els expedients i documents de la UE que segueixes, en un sol lloc. Afegeix fitxers des d'Interessos Polítics o qualsevol feed, i Brubru hi manté actualitzats l'estat, les esmenes i les votacions."
+    "subtitle": "Els expedients i documents de la UE que segueixes, en un sol lloc. Afegeix fitxers des d'Interessos Polítics o qualsevol feed, i Brubru hi manté actualitzats l'estat, les esmenes i les votacions.",
+    "confirmUntrack": "Vols deixar de seguir aquest expedient?",
+    "stopTracking": "Deixa de seguir",
+    "untrackFailed": "No s'ha pogut deixar de seguir. Torna-ho a provar.",
+    "loginToTrack": "Inicia la sessió per seguir expedients."
   },
   "calendar": {
     "myEuToday": "La meva UE avui",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Última actualització:",
     "subtitle": "El programa legislatiu complet de la Comissió, agrupat per prioritat política. Explora cada expedient i fes seguiment dels que t'interessin. Per veure només els fitxers que ja segueixes, consulta Els Meus Expedients.",
     "priorityHint": "Les prioritats polítiques de la Comissió (l'agenda von der Leyen); els expedients s'agrupen segons la prioritat a la qual serveixen.",
-    "selectForAnalysis": "Selecciona aquest expedient per a l'anàlisi amb IA"
+    "selectForAnalysis": "Selecciona aquest expedient per a l'anàlisi amb IA",
+    "analyzeSuccess": "S'han analitzat {{count}} expedients.",
+    "analyzeFailed": "No s'han pogut analitzar els expedients. Torna-ho a provar."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titulars del resum diari destacats per Brubru",
@@ -3071,7 +3078,8 @@
       "other": "Altres"
     },
     "translated": "Traduït",
-    "translatedFrom": "Traduït del {{lang}}"
+    "translatedFrom": "Traduït del {{lang}}",
+    "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment."
   },
   "db": {
     "subtitle": "Les biblioteques de coneixement de Brubru i un mapa de qui fa què a la UE, adaptat als teus interessos.",

@@ -824,7 +824,8 @@
     "stopTracking": "Stop met volgen",
     "showHistory": "Geschiedenis tonen",
     "hideHistory": "Geschiedenis verbergen",
-    "there": "daar"
+    "there": "daar",
+    "retry": "Opnieuw"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filters",
     "mine": "Mijn interesses",
     "committeeOpinion": "Advies ingediend door deze commissie",
-    "subtitle": "De EU-dossiers en documenten die je volgt, op één plek. Voeg dossiers toe vanuit Beleidsinteresses of een feed, en Brubru houdt hier hun status, amendementen en stemmingen actueel."
+    "subtitle": "De EU-dossiers en documenten die je volgt, op één plek. Voeg dossiers toe vanuit Beleidsinteresses of een feed, en Brubru houdt hier hun status, amendementen en stemmingen actueel.",
+    "confirmUntrack": "Dit dossier niet meer volgen?",
+    "stopTracking": "Niet meer volgen",
+    "untrackFailed": "Kan het volgen niet stoppen. Probeer opnieuw.",
+    "loginToTrack": "Log in om dossiers te volgen."
   },
   "calendar": {
     "myEuToday": "Mijn EU vandaag",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Laatst bijgewerkt:",
     "subtitle": "Het volledige wetgevingsprogramma van de Commissie, gegroepeerd op politieke prioriteit. Blader door elk dossier en volg de dossiers die je interesseren. Voor alleen de dossiers die je al volgt, zie Mijn Gevolgde Dossiers.",
     "priorityHint": "De politieke prioriteiten van de Commissie (de von der Leyen-agenda); dossiers worden gegroepeerd onder de prioriteit die ze dienen.",
-    "selectForAnalysis": "Selecteer dit dossier voor AI-analyse"
+    "selectForAnalysis": "Selecteer dit dossier voor AI-analyse",
+    "analyzeSuccess": "{{count}} dossiers geanalyseerd.",
+    "analyzeFailed": "Kan de dossiers niet analyseren. Probeer opnieuw."
   },
   "topicSpikes": {
     "newsAriaLabel": "Door Brubru uitgelichte koppen uit de dagelijkse briefing",
@@ -3071,7 +3078,8 @@
       "other": "Overig"
     },
     "translated": "Vertaald",
-    "translatedFrom": "Vertaald uit {{lang}}"
+    "translatedFrom": "Vertaald uit {{lang}}",
+    "error": "We konden het nieuws nu niet laden. Probeer het zo opnieuw."
   },
   "db": {
     "subtitle": "Brubru’s kennisbibliotheken en een kaart van wie wat doet in de EU, afgestemd op jouw interesses.",

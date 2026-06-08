@@ -17,7 +17,7 @@ import {
   mdiNewspaperVariantMultipleOutline, mdiStar, mdiStarOutline, mdiOpenInNew,
   mdiBookmarkCheck, mdiBookmarkCheckOutline,
   mdiMagnify, mdiImageOutline,
-  mdiBankOutline, mdiAccountTieVoiceOutline, mdiTranslate,
+  mdiBankOutline, mdiAccountTieVoiceOutline, mdiTranslate, mdiAlertCircleOutline,
 } from '@mdi/js';
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
@@ -193,6 +193,8 @@ export const NewsTab = () => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState<NewsResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [retryNonce, setRetryNonce] = useState(0);
   const [hasPi, setHasPi] = useState(false);
 
   const stakeholders = source === 'stakeholders';
@@ -212,6 +214,7 @@ export const NewsTab = () => {
 
   useEffect(() => {
     setLoading(true);
+    setError(false);
     const p = new URLSearchParams();
     if (mode === 'pi') p.set('my_interests', 'true');
     if (mode === 'files' && !stakeholders) p.set('my_files', 'true');
@@ -224,9 +227,9 @@ export const NewsTab = () => {
     const endpoint = stakeholders ? 'stakeholders' : 'items';
     axios.get<NewsResponse>(`${API_BASE}/eu-news/${endpoint}?${p.toString()}`, authCfg())
       .then((r) => setData(r.data))
-      .catch(() => setData(null))
+      .catch(() => { setData(null); setError(true); })
       .finally(() => setLoading(false));
-  }, [source, mode, institution, dg, itemType, search, uiLang]);
+  }, [source, mode, institution, dg, itemType, search, uiLang, retryNonce]);
 
   const facets = data?.facets;
   // The hero shows the featured set; the grid shows the rest (de-duplicated).
@@ -310,6 +313,14 @@ export const NewsTab = () => {
 
       {loading ? (
         <p className="news-muted news-empty">{t('common.loading', 'Loading…')}</p>
+      ) : error ? (
+        <div className="news-empty news-error">
+          <Icon path={mdiAlertCircleOutline} size={2} />
+          <p>{t('news.error', 'We could not load the news right now. Please try again in a moment.')}</p>
+          <button type="button" className="news-retry" onClick={() => setRetryNonce((n) => n + 1)}>
+            {t('common.retry', 'Retry')}
+          </button>
+        </div>
       ) : !data || data.items.length === 0 ? (
         <div className="news-empty">
           <Icon path={mdiNewspaperVariantMultipleOutline} size={2} />

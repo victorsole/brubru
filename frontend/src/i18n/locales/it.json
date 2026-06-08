@@ -824,7 +824,8 @@
     "stopTracking": "Smetti di seguire",
     "showHistory": "Mostra cronologia",
     "hideHistory": "Nascondi cronologia",
-    "there": "ciao"
+    "there": "ciao",
+    "retry": "Riprova"
   },
   "landing": {
     "nav": {
@@ -2130,7 +2131,11 @@
     "filters": "Filtri",
     "mine": "I miei interessi",
     "committeeOpinion": "Parere presentato da questa commissione",
-    "subtitle": "I dossier e i documenti dell'UE che segui, in un unico posto. Aggiungi file da Interessi Politici o da qualsiasi feed, e Brubru ne mantiene aggiornati stato, emendamenti e votazioni."
+    "subtitle": "I dossier e i documenti dell'UE che segui, in un unico posto. Aggiungi file da Interessi Politici o da qualsiasi feed, e Brubru ne mantiene aggiornati stato, emendamenti e votazioni.",
+    "confirmUntrack": "Smettere di seguire questo dossier?",
+    "stopTracking": "Smetti di seguire",
+    "untrackFailed": "Impossibile interrompere il monitoraggio. Riprova.",
+    "loginToTrack": "Accedi per seguire i dossier."
   },
   "calendar": {
     "myEuToday": "La mia UE oggi",
@@ -2265,7 +2270,9 @@
     "lastUpdated": "Ultimo aggiornamento:",
     "subtitle": "Il programma legislativo completo della Commissione, raggruppato per priorità politica. Esplora ogni dossier e segui quelli che ti interessano. Per i soli file che già segui, vedi I Miei Dossier.",
     "priorityHint": "Le priorità politiche della Commissione (l'agenda von der Leyen); i dossier sono raggruppati in base alla priorità che servono.",
-    "selectForAnalysis": "Seleziona questo dossier per l'analisi con IA"
+    "selectForAnalysis": "Seleziona questo dossier per l'analisi con IA",
+    "analyzeSuccess": "{{count}} dossier analizzati.",
+    "analyzeFailed": "Impossibile analizzare i dossier. Riprova."
   },
   "topicSpikes": {
     "newsAriaLabel": "Titoli del riepilogo quotidiano evidenziati da Brubru",
@@ -3071,7 +3078,8 @@
       "other": "Altro"
     },
     "translated": "Tradotto",
-    "translatedFrom": "Tradotto dal {{lang}}"
+    "translatedFrom": "Tradotto dal {{lang}}",
+    "error": "Non è stato possibile caricare le notizie in questo momento. Riprova tra poco."
   },
   "db": {
     "subtitle": "Le biblioteche di conoscenza di Brubru e una mappa di chi fa cosa nell'UE, su misura per i tuoi interessi.",
