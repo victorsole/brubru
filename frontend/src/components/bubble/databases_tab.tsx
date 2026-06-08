@@ -30,6 +30,7 @@ import {
   mdiPill, mdiAccessPointNetwork, mdiShieldAlertOutline, mdiTerrain,
   mdiShieldOutline, mdiSwapHorizontal, mdiRobotOutline, mdiAtomVariant, mdiRocketLaunchOutline,
   mdiGold, mdiChartLine, mdiChevronDown, mdiChevronUp,
+  mdiHistory, mdiPlusCircleOutline, mdiPencilOutline, mdiBookPlusOutline,
 } from '@mdi/js';
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie,
@@ -37,7 +38,7 @@ import {
 import { databasesService } from '../../services/databases_service';
 import type {
   CanonResult, GuidesResult, CatalanResult, PolicyAreasResult, PolicyArea,
-  BeresolMonitorsResult, BeresolMonitorDetail,
+  BeresolMonitorsResult, BeresolMonitorDetail, KbChangelogResult, KbChangelogEntry,
 } from '../../services/databases_service';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import './databases_tab.css';
@@ -132,6 +133,7 @@ export function DatabasesTab() {
   const [sub, setSub] = useState<Sub>('canon');
   const [canon, setCanon] = useState<CanonResult | null>(null);
   const [guides, setGuides] = useState<GuidesResult | null>(null);
+  const [changelog, setChangelog] = useState<KbChangelogResult | null>(null);
   const [catalan, setCatalan] = useState<CatalanResult | null>(null);
   const [pa, setPa] = useState<PolicyAreasResult | null>(null);
   const [paMine, setPaMine] = useState(true);
@@ -143,6 +145,7 @@ export function DatabasesTab() {
   // Lazy-load each library when its tab is first opened.
   useEffect(() => { if (sub === 'canon' && !canon) databasesService.canon().then(setCanon).catch(() => {}); }, [sub, canon]);
   useEffect(() => { if (sub === 'guides' && !guides) databasesService.guides().then(setGuides).catch(() => {}); }, [sub, guides]);
+  useEffect(() => { if (sub === 'guides' && !changelog) databasesService.kbChangelog().then(setChangelog).catch(() => {}); }, [sub, changelog]);
   useEffect(() => { if (sub === 'catalan' && !catalan) databasesService.catalan().then(setCatalan).catch(() => {}); }, [sub, catalan]);
   useEffect(() => {
     if (sub !== 'policy') return;
@@ -178,7 +181,7 @@ export function DatabasesTab() {
         <motion.div key={sub} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           {sub === 'canon' && <CanonLibrary data={canon} t={t} lang={i18n.language} />}
           {sub === 'deep' && <DeepDives t={t} lang={i18n.language} />}
-          {sub === 'guides' && <KnowledgeGuides data={guides} t={t} />}
+          {sub === 'guides' && <KnowledgeGuides data={guides} changelog={changelog} t={t} />}
           {sub === 'catalan' && <CatalanLibrary data={catalan} t={t} />}
           {sub === 'policy' && <PolicyAreas pa={pa} mine={paMine} setMine={setPaMine} sel={selArea} setSel={setSelArea} t={t} />}
           {sub === 'partners' && <BeresolMonitors t={t} />}
@@ -285,7 +288,51 @@ function DeepDives({ t, lang }: { t: any; lang: string }) {
 }
 
 // -------------------------------------------------------------- Knowledge Guides
-function KnowledgeGuides({ data, t }: { data: GuidesResult | null; t: any }) {
+const CHANGELOG_ACTION_META: Record<string, { icon: string; color: string; label: string }> = {
+  added:     { icon: mdiBookPlusOutline,    color: '#16a34a', label: 'New guide' },
+  updated:   { icon: mdiPencilOutline,      color: '#0693e3', label: 'Updated' },
+  canon:     { icon: mdiPlusCircleOutline,  color: '#7c3aed', label: 'Canon' },
+  deep_dive: { icon: mdiPlusCircleOutline,  color: '#db2777', label: 'Deep dive' },
+};
+
+function WhatsNew({ entries, t }: { entries: KbChangelogEntry[]; t: any }) {
+  if (!entries || entries.length === 0) return null;
+  return (
+    <div className="db-whatsnew">
+      <div className="db-whatsnew__head">
+        <span className="mdi" aria-hidden="true">
+          <Icon path={mdiHistory} size={0.8} />
+        </span>
+        <h4>{t('db.whatsNew', "What's new in the knowledge base")}</h4>
+      </div>
+      <ol className="db-whatsnew__list">
+        {entries.map((e, i) => {
+          const meta = CHANGELOG_ACTION_META[e.action] || CHANGELOG_ACTION_META.updated;
+          return (
+            <motion.li key={`${e.date}-${e.guide}-${i}`} className="db-whatsnew__item"
+              custom={i} variants={cardVariants} initial="hidden" animate="show">
+              <span className="db-whatsnew__badge" style={{ background: meta.color }}>
+                <Icon path={meta.icon} size={0.62} />
+              </span>
+              <div className="db-whatsnew__body">
+                <div className="db-whatsnew__line1">
+                  <strong>{e.title}</strong>
+                  <span className="db-whatsnew__tag" style={{ color: meta.color, borderColor: meta.color }}>
+                    {t(`db.action.${e.action}`, meta.label)}
+                  </span>
+                  <time className="db-whatsnew__date">{e.date}</time>
+                </div>
+                <p className="db-whatsnew__summary">{e.summary}</p>
+              </div>
+            </motion.li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+function KnowledgeGuides({ data, changelog, t }: { data: GuidesResult | null; changelog: KbChangelogResult | null; t: any }) {
   if (!data) return <div className="db-loading">{t('db.loading', 'Loading...')}</div>;
   return (
     <div className="db-section">
@@ -299,6 +346,7 @@ function KnowledgeGuides({ data, t }: { data: GuidesResult | null; t: any }) {
         ]}
         cta={{ label: t('db.openGuides', 'Browse all guides'), url: data.url }}
       />
+      {changelog && <WhatsNew entries={changelog.entries} t={t} />}
       <div className="db-guide-grid">
         {data.categories.map((cat, i) => (
           <motion.a key={cat.title} className="db-guide-card" href={`${data.url}#${slugify(cat.title)}`} target="_blank" rel="noopener noreferrer"

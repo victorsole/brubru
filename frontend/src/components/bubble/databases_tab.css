@@ -220,3 +220,22 @@
   .db-area__head { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .db-guide-grid, .db-monitor-grid { grid-template-columns: 1fr; }
 }
+
+/* What's new in the KB (Knowledge Guides sub-tab) ----------------------------- */
+.db-whatsnew { background: #fff; border: 1px solid #e8edf3; border-radius: 16px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+.db-whatsnew__head { display: flex; align-items: center; gap: 0.55rem; color: #1e3a8a; margin-bottom: 0.85rem; }
+.db-whatsnew__head h4 { margin: 0; font-size: 0.98rem; font-weight: 800; color: #1e3a8a; }
+.db-whatsnew__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.db-whatsnew__item { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.65rem 0.7rem; background: #f8fafc; border: 1px solid #eef2f7; border-radius: 12px; }
+.db-whatsnew__badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; color: #fff; flex-shrink: 0; margin-top: 0.1rem; }
+.db-whatsnew__body { min-width: 0; }
+.db-whatsnew__line1 { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
+.db-whatsnew__line1 strong { font-size: 0.9rem; color: #0f172a; }
+.db-whatsnew__tag { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; border: 1px solid; border-radius: 999px; padding: 0.05rem 0.5rem; }
+.db-whatsnew__date { font-size: 0.72rem; color: #94a3b8; font-variant-numeric: tabular-nums; margin-left: auto; }
+.db-whatsnew__summary { margin: 0.25rem 0 0; font-size: 0.83rem; color: #475569; line-height: 1.5; }
+
+@media (max-width: 600px) {
+  .db-whatsnew { padding: 0.85rem 0.9rem; }
+  .db-whatsnew__date { margin-left: 0; width: 100%; }
+}

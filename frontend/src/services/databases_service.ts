@@ -56,6 +56,16 @@ export interface GuidesResult {
   url: string;
 }
 
+export interface KbChangelogEntry {
+  date: string;
+  action: 'added' | 'updated' | 'canon' | 'deep_dive';
+  guide: string;
+  title: string;
+  summary: string;
+  refs: string[];
+}
+export interface KbChangelogResult { count: number; entries: KbChangelogEntry[] }
+
 export interface CatalanItem { name: string; title: string; url: string }
 export interface CatalanResult { count: number; url: string; items: CatalanItem[] }
 
@@ -135,6 +145,10 @@ export const databasesService = {
   },
   guides: async (): Promise<GuidesResult> => {
     const r = await axios.get(`${API_BASE}/guides`, { headers: authHeaders() });
+    return r.data;
+  },
+  kbChangelog: async (limit = 20): Promise<KbChangelogResult> => {
+    const r = await axios.get(`${API_BASE}/kb-changelog?limit=${limit}`, { headers: authHeaders() });
     return r.data;
   },
   catalan: async (): Promise<CatalanResult> => {

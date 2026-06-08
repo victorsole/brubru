@@ -48,6 +48,7 @@ _REPO = _BACKEND.parent
 _PUBLIC = _REPO / "frontend" / "public"
 _MANIFEST = _BACKEND / "knowledge_base" / "canon_reports.json"
 _GUIDES = _BACKEND / "knowledge_base" / "guides"
+_KB_CHANGELOG = _BACKEND / "knowledge_base" / "kb_changelog.json"
 
 # Friendly titles for the (few) Catalan translations that exist on disk.
 _CATALAN_TITLES = {
@@ -276,6 +277,39 @@ def guides(current_user: User = Depends(get_current_user)):
         "categories": categories,
         "url": "/guides/index.html",
     }
+
+
+class KbChangelogEntry(BaseModel):
+    date: str
+    action: str            # added | updated | canon | deep_dive
+    guide: str
+    title: str
+    summary: str
+    refs: List[str] = []
+
+
+class KbChangelogResult(BaseModel):
+    count: int             # total entries on file
+    entries: List[KbChangelogEntry]
+
+
+@router.get("/kb-changelog", response_model=KbChangelogResult,
+            summary="What's new in the knowledge base: dated feed of guide additions and updates")
+def kb_changelog(limit: int = Query(20, ge=1, le=200),
+                 current_user: User = Depends(get_current_user)):
+    """A dated changelog of knowledge-base activity — every guide added or
+    materially updated, newest first. Powers the "What's new" strip on the
+    Knowledge Guides sub-tab so KB work is visible in the product, not only in
+    the chatbot. Source: `knowledge_base/kb_changelog.json`, appended by
+    `scripts/kb_changelog.py` whenever the KB changes. Fail-soft to empty."""
+    entries: List[dict] = []
+    try:
+        doc = json.loads(_KB_CHANGELOG.read_text(encoding="utf-8"))
+        entries = [e for e in (doc.get("entries") or []) if isinstance(e, dict) and e.get("date")]
+    except Exception as e:
+        logger.warning("[databases] kb_changelog unreadable: %s", e)
+    total = len(entries)
+    return {"count": total, "entries": entries[:limit]}
 
 
 @router.get("/catalan", summary="Dret europeu en català: EU law translated into Catalan")

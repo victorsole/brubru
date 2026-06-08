@@ -1,6 +1,7 @@
 # EU Customs Reform
 
 ## QUICK FACTS
+- **LATEST (Friday 5 June 2026)**: **Temporary EUR 3 customs duty on low-value imported parcels** — Commission Implementing Regulation (EU) 2026/1200 (CELEX: 32026R1200), published 5 June 2026, amends UCC Implementing Regulation (EU) 2015/2447 to set the rules implementing a temporary EUR 3 customs duty on distance sales of imported goods in a consignment with an intrinsic value not exceeding EUR 150. This is the interim e-commerce measure (the Shein/Temu low-value-parcels context) that bridges to the full Customs Reform's planned abolition of the EUR 150 de minimis duty relief. EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1200
 - Proposal: COM(2023) 258, 17 May 2023
 - Procedure: 2023/0156(COD), ordinary legislative procedure
 - Legal basis: Articles 33, 114, 207 TFEU

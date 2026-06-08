@@ -1,0 +1,63 @@
+{
+  "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
+  "entries": [
+    {
+      "date": "2026-06-08",
+      "action": "updated",
+      "guide": "union_customs_code_reform",
+      "title": "Union Customs Code Reform",
+      "summary": "Added the temporary EUR 3 customs duty on low-value imported parcels (Implementing Reg 2026/1200), bridging to the full reform's de minimis abolition.",
+      "refs": [
+        "32026R1200"
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "action": "updated",
+      "guide": "eu_fisheries_control",
+      "title": "EU Fisheries Policy",
+      "summary": "Added the Commission's sustainable-fishing orientations for 2027 and the European Ocean Pact one-year review.",
+      "refs": [
+        "52026DC0271"
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Added the temporary EUR 3 customs duty on low-value imported parcels (distance sales up to EUR 150), Implementing Reg 2026/1200.",
+      "refs": [
+        "32026R1200"
+      ]
+    },
+    {
+      "date": "2026-06-06",
+      "action": "canon",
+      "guide": "efpia_pharma_canon",
+      "title": "EFPIA pharma canon: 10 EU pharma laws",
+      "summary": "Ten core EU pharmaceutical laws shipped end to end: 10 Chat guides, 60 deep-dive pages (6 languages), 10 EU Law Comply clusters.",
+      "refs": []
+    },
+    {
+      "date": "2026-06-06",
+      "action": "canon",
+      "guide": "framework_directives_canon",
+      "title": "Three framework directives canon",
+      "summary": "EECC, Solvency II and MiFID II shipped: 3 Chat guides, 18 deep-dive pages with transposition maps, 3 EU Law Comply clusters.",
+      "refs": [
+        "32018L1972",
+        "32009L0138",
+        "32014L0065"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "action": "updated",
+      "guide": "european_semester_communication",
+      "title": "European Semester",
+      "summary": "Added the 2026 Spring Package (country-specific recommendations, reformed Stability and Growth Pact dimension).",
+      "refs": []
+    }
+  ]
+}
