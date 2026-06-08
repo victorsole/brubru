@@ -218,10 +218,31 @@ EEAS_SOURCES: List[Dict] = [
     {"type": "news",        "url": "https://www.eeas.europa.eu/search_en?fulltext=&created=&created_1=&f%5B0%5D=ct%3Astory"},
 ]
 
-_EEAS_CARD = re.compile(r'<div class="card\b.*?(?=<div class="card\b|<footer|</main)', re.S)
+# Match a FULL result card. NB: `card\b` is wrong here — `\b` also matches the
+# nested card-body / card-footer / card-title divs (hyphen is a word boundary),
+# which fragments each card and loses the footer date. Anchor on `card` followed
+# by a space or the closing quote so only the top-level card div starts a block.
+_EEAS_CARD = re.compile(r'<div class="card[ "].*?(?=<div class="card[ "]|<footer|</main)', re.S)
 _EEAS_TITLE = re.compile(r'card-title[^"]*"[^>]*>\s*<a[^>]*href="([^"#?]+)"[^>]*>(.*?)</a>', re.S)
+# Each card footer carries the publication date: e.g. node__meta ... 08.06.2026
+_EEAS_DATE = re.compile(r'node__meta[^>]*>.*?(\d{1,2}\.\d{2}\.\d{4}|\d{1,2}\s+[A-Za-z]+\s+\d{4})', re.S)
 _EEAS_HOST = "eeas.europa.eu"
 _EEAS_LIMIT = 50
+
+
+def _eeas_date(block: str):
+    """Pull the card-footer date ('08.06.2026' or '8 June 2026') -> date, or None."""
+    from datetime import datetime as _dt
+    m = _EEAS_DATE.search(block or "")
+    if not m:
+        return None
+    s = m.group(1).strip()
+    for fmt in ("%d.%m.%Y", "%d %B %Y", "%d %b %Y"):
+        try:
+            return _dt.strptime(s, fmt).date()
+        except ValueError:
+            continue
+    return None
 
 
 def _eeas_internal(href: str) -> bool:
@@ -253,7 +274,8 @@ def parse_eeas_cards(html: str, src: Dict) -> List[Dict]:
             continue
         seen.add(key)
         out.append({
-            "title": title[:480], "summary": None, "news_date": None, "image_url": None,
+            "title": title[:480], "summary": None, "news_date": _eeas_date(block.group(0)),
+            "image_url": None,
             "source_url": url, "external_id": _slug_id(url), "item_type": item_type,
             "institution": "EEAS", "commission_dg": None, "source_key": "EEAS",
             "entry_key": key,
