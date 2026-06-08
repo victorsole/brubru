@@ -53,11 +53,12 @@ _ADMIN_RE = re.compile(
 
 
 def _src(id, group, icon, color, name, full, landing, search, pi_tags,
-         feed_landing=None, cb_code=None, sparql_cb=None, rss_url=None, scrape_cfg=None):
+         feed_landing=None, cb_code=None, sparql_cb=None, rss_url=None, scrape_cfg=None,
+         economy_body=None):
     return dict(id=id, group=group, icon=icon, color=color, name=name, full=full,
                 landing=landing, search=search, pi_tags=pi_tags,
                 feed_landing=feed_landing, cb_code=cb_code, sparql_cb=sparql_cb,
-                rss_url=rss_url, scrape_cfg=scrape_cfg)
+                rss_url=rss_url, scrape_cfg=scrape_cfg, economy_body=economy_body)
 
 
 # Brand colours reused across cards.
@@ -224,42 +225,40 @@ SOURCES: List[dict] = [
           "sanctions", "diploma", "global gateway", "trade"],
          sparql_cb="EEAS"),
 
-    # ---- Economic & financial supervision (native RSS — real research, no WAF) ----
+    # ---- Economic & financial supervision ----
+    # Read Brubru's canonical economy_items layer (the api/v2/eu-financial-institutions
+    # folders + scripts/sync_economy.py, migration 119) for item_type=publication.
+    # One maintained source of truth, with full bodies; we just filter admin noise.
     _src("ecb", "research", "bank", _B, "ECB",
          "European Central Bank research: Working Papers, Occasional Papers, the Economic Bulletin and the Financial Stability Review",
          "https://www.ecb.europa.eu/press/research-publications/html/index.en.html",
          "https://www.ecb.europa.eu/search/search/html/index.en.html?searchterm={q}",
          ["econom", "financ", "monetary", "bank", "euro", "inflation", "interest rate", "fiscal"],
-         rss_url="https://www.ecb.europa.eu/rss/pub.html"),
+         economy_body="ecb"),
     _src("esma", "research", "chart-line", _P, "ESMA",
          "European Securities and Markets Authority: reports, technical standards, guidelines and risk assessments on EU securities markets",
          "https://www.esma.europa.eu/document-library",
          "https://www.esma.europa.eu/search?search_api_fulltext={q}",
          ["market", "securit", "financ", "invest", "fund", "trading", "capital market", "mifid"],
-         rss_url="https://www.esma.europa.eu/rss.xml"),
+         economy_body="esma"),
     _src("esrb", "research", "shield-alert", _R, "ESRB",
          "European Systemic Risk Board: macroprudential recommendations, warnings and reports on systemic risk and financial stability",
          "https://www.esrb.europa.eu/pub/html/index.en.html",
          "https://www.esrb.europa.eu/home/search/html/index.en.html?searchterm={q}",
          ["systemic risk", "financ", "macroprudential", "stability", "bank", "risk", "econom"],
-         sparql_cb="ESRB"),
-    # EBA + EIOPA research isn't in Cellar/RSS — scrape their server-rendered
-    # (no-WAF) publication lists and filter admin noise (minutes, IT solutions).
+         sparql_cb="ESRB"),   # ESRB is not in economy_items; keep Cellar
     _src("eba", "research", "bank-outline", _O, "EBA",
          "European Banking Authority: reports, guidelines, technical standards (ITS/RTS), consultation papers and EU-wide stress-test results",
          "https://www.eba.europa.eu/publications-and-media/publications",
          "https://www.eba.europa.eu/search-results?text={q}",
          ["bank", "financ", "credit", "capital", "prudential", "basel", "stress test", "risk"],
-         scrape_cfg={"url": "https://www.eba.europa.eu/publications-and-media/publications",
-                     "item": ".teaser", "title": ".teaser__title a, a", "date": ".teaser__metadata"}),
+         economy_body="eba"),
     _src("eiopa", "research", "umbrella", _G, "EIOPA",
          "European Insurance and Occupational Pensions Authority: reports, studies, consultations and risk dashboards on insurance and pensions",
          "https://www.eiopa.europa.eu/publications_en",
          "https://www.eiopa.europa.eu/search_en?search_api_fulltext={q}",
          ["insur", "pension", "financ", "occupational", "solvency", "risk"],
-         scrape_cfg={"url": "https://www.eiopa.europa.eu/publications_en",
-                     "item": ".ecl-content-item", "title": "a.ecl-link, .ecl-content-block__title a, a",
-                     "date": ".ecl-content-block__primary-meta-container, [class*=meta]"}),
+         economy_body="eiopa"),
 ]
 
 
@@ -422,6 +421,47 @@ def _scrape_html_list(cfg: dict, limit: int = 12) -> List[dict]:
     return items
 
 
+def _fetch_economy_publications(body_code: str, limit: int = 12) -> List[dict]:
+    """Read item_type=publication for a body from Brubru's canonical economy_items
+    table (the api/v2/eu-financial-institutions layer, kept fresh by
+    scripts/sync_economy.py). Admin/operational noise is filtered out. Cached.
+    """
+    from sqlalchemy import text
+    from core.database import SessionLocal
+    now = time.time()
+    key = f"economy:{body_code}"
+    hit = _feed_cache.get(key)
+    if hit and hit[0] > now:
+        return hit[1]
+    items: List[dict] = []
+    db = SessionLocal()
+    try:
+        rows = db.execute(text(
+            "SELECT title, public_url, document_date, summary FROM economy_items "
+            "WHERE body_code = :bc AND item_type = 'publication' "
+            "ORDER BY document_date DESC NULLS LAST, id DESC LIMIT :lim"
+        ), {"bc": body_code, "lim": limit * 4}).fetchall()
+    except Exception as e:
+        logger.warning("[research] economy_items read failed for %s: %s", body_code, e)
+        rows = []
+    finally:
+        db.close()
+    for r in rows:
+        title = (r.title or "").strip()
+        if not title or len(title) < 12 or _ADMIN_RE.match(title) or _NOISE_RE.search(title):
+            continue
+        items.append({
+            "title": title[:300],
+            "url": r.public_url or "",
+            "date": r.document_date.strftime("%d %B %Y") if r.document_date else "",
+            "snippet": _strip(r.summary or "")[:240],
+        })
+        if len(items) >= limit:
+            break
+    _feed_cache[key] = (now + 1800, items)
+    return items
+
+
 def _is_pi_match(src: dict, pi_lower: List[str]) -> bool:
     tags = src.get("pi_tags") or []
     if "*" in tags:
@@ -459,7 +499,7 @@ def build_catalogue(pi: List[str]) -> dict:
             "name": s["name"], "full": s["full"], "landing": s["landing"],
             "search": _seed_search(s, pi),
             "has_feed": bool(s.get("feed_landing") or s.get("cb_code") or s.get("sparql_cb")
-                             or s.get("rss_url") or s.get("scrape_cfg")),
+                             or s.get("rss_url") or s.get("scrape_cfg") or s.get("economy_body")),
             "is_pi_match": _is_pi_match(s, pi_lower),
         })
     # group order, then PI matches first within a group.
@@ -477,6 +517,8 @@ def read_through(source_id: str, limit: int = 12) -> List[dict]:
         return fetch_feed(rss, limit) if rss else []
     if src.get("cb_code"):
         return fetch_feed(_cb_feed_url(src["cb_code"]), limit)
+    if src.get("economy_body"):
+        return _fetch_economy_publications(src["economy_body"], limit)
     if src.get("rss_url"):
         return fetch_feed(src["rss_url"], limit)
     if src.get("sparql_cb"):
