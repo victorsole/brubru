@@ -22,7 +22,6 @@ import {
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
 import './news_tab.css';
-import { FreshnessChip } from './freshness_chip';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
@@ -242,14 +241,9 @@ export const NewsTab = () => {
       <MeubHeader
         icon={mdiNewspaperVariantMultipleOutline}
         title={t('news.title', 'News')}
-        subtitle={(
-          <>
-            {stakeholders
-              ? t('news.introStakeholders', 'What the Brussels advocacy ecosystem is publishing, in one feed.')
-              : t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
-            <FreshnessChip sourceKey={stakeholders ? ['brussels_lobbies'] : ['news_dg', 'news_ep', 'news_bespoke']} />
-          </>
-        )}
+        subtitle={stakeholders
+          ? t('news.introStakeholders', 'What the Brussels advocacy ecosystem is publishing, in one feed.')
+          : t('news.intro', 'Every EU institution’s news in one feed, tuned to your interests.')}
         aside={data && (
           <div className="news-head__count"><b>{data.total}</b> {stakeholders ? t('news.updates', 'updates') : t('news.stories', 'stories')}</div>
         )}

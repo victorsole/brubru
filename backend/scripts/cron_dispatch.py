@@ -94,6 +94,18 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour in (2, 14):
         fires.append(("warm_12h", "/api/cron/sync/warm-12h"))
 
+    # Registry FAST tier — the MEUB feeds the EU publishes intraday: News
+    # (DG/EP/bespoke), My OJ, Votes (EP/Council). Runs sync_*_news.py etc. and
+    # records freshness. ~every 6h on otherwise-light hours (no other tier fires
+    # at 07/13/19/23). This is what keeps eu_news_items current.
+    if hour in (7, 13, 19, 23):
+        fires.append(("registry_fast", "/api/cron/sync/tier/fast"))
+
+    # Registry WARM tier — slower MEUB feeds: My EU Calendar, Transcripts,
+    # Lobby Meetings, Parliamentary Questions. Twice a day on light hours.
+    if hour in (8, 20):
+        fires.append(("registry_warm", "/api/cron/sync/tier/warm"))
+
     # Legislative-journey AI precompute: 3x/day (01, 09, 17 UTC), throttled per
     # run (limit=8) so it backfills tracked dossiers gradually without a burst.
     if hour in (1, 9, 17):
