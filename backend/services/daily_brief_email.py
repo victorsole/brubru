@@ -413,11 +413,41 @@ def _get_all_recipient_emails(db_session) -> tuple:
     from models.pre_user_event import PreUserEvent
     from sqlalchemy import func
 
-    # 1. Registered users who have NOT unsubscribed
+    # Reserved / invalid domains that will always bounce (RFC 2606 + local test markers).
+    # Seed/test fixtures (e.g. v2_parl_*@example.com) leak into the users table and waste
+    # sends + risk Gmail throttling; never email them. Set 8 June 2026 after a Brubru Brief
+    # send produced 6 @example.com DSN bounces.
+    _RESERVED_DOMAINS = ("example.com", "example.org", "example.net",
+                         "test", "invalid", "localhost", "example")
+
+    def _is_sendable(addr: str) -> bool:
+        if not addr or "@" not in addr:
+            return False
+        return addr.rsplit("@", 1)[-1].strip().lower() not in _RESERVED_DOMAINS
+
+    # 0. Unsubscribe events apply to BOTH registered users and pre-users (the
+    #    pre_user_events unsubscribe table is the single opt-out ledger). Previously
+    #    this filter was applied to pre-users only, so an unsubscribe event for a
+    #    REGISTERED address had no effect. Fixed 8 June 2026.
+    unsub_rows = (
+        db_session.query(
+            func.distinct(PreUserEvent.event_metadata["email"].astext)
+        )
+        .filter(PreUserEvent.event_type.in_(["daily_brief_unsubscribe", "unsubscribe"]))
+        .all()
+    )
+    unsubscribed = {r[0].lower() for r in unsub_rows if r[0]}
+
+    # 1. Registered users who have NOT unsubscribed (prefs flag OR ledger event)
+    #    and whose address is on a real, sendable domain.
     all_users = db_session.query(User.email, User.preferences).filter(User.email.isnot(None)).all()
     registered_emails = set()
     for email, prefs in all_users:
         if prefs and prefs.get("daily_brief_unsubscribed"):
+            continue
+        if email.lower() in unsubscribed:
+            continue
+        if not _is_sendable(email):
             continue
         registered_emails.add(email)
 
@@ -431,20 +461,10 @@ def _get_all_recipient_emails(db_session) -> tuple:
     )
     preuser_emails = {r[0] for r in preuser_rows if r[0]}
 
-    # 2b. Pre-user unsubscribes (chronic bouncers + explicit opt-outs)
-    unsub_rows = (
-        db_session.query(
-            func.distinct(PreUserEvent.event_metadata["email"].astext)
-        )
-        .filter(PreUserEvent.event_type.in_(["daily_brief_unsubscribe", "unsubscribe"]))
-        .all()
-    )
-    unsubscribed_preusers = {r[0].lower() for r in unsub_rows if r[0]}
-
-    # Remove pre-user emails that are already registered (avoid duplicates)
-    # Also remove any pre-user email that has an unsubscribe event (case-insensitive)
+    # Remove pre-user emails that are already registered (avoid duplicates), any
+    # with an unsubscribe event (case-insensitive), and any on a reserved domain.
     preuser_only = {e for e in (preuser_emails - registered_emails)
-                    if e.lower() not in unsubscribed_preusers}
+                    if e.lower() not in unsubscribed and _is_sendable(e)}
 
     return registered_emails, preuser_only
 
