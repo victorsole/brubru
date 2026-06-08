@@ -22,7 +22,6 @@ import {
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
 import './oj_tab.css';
-import { FreshnessChip } from './freshness_chip';
 import { LensToggle, type LensMode } from './lens_toggle';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -157,12 +156,7 @@ export const OJTab = () => {
             </button>
           </>
         )}
-        subtitle={(
-          <>
-            {t('oj.intro', 'The day’s Official Journal of the EU, filtered to your interests and linked to the files you track.')}
-            <FreshnessChip sourceKey="oj" />
-          </>
-        )}
+        subtitle={t('oj.intro', 'The day’s Official Journal of the EU, filtered to your interests and linked to the files you track.')}
         aside={dates.length > 0 && (
           <label className="oj-datepick">
             <Icon path={mdiCalendarBlankOutline} size={0.8} />

@@ -64,7 +64,6 @@ import type {
   CalendarEvent,
 } from '../../services/eu_calendar_service';
 import './eu_calendar_tab.css';
-import { FreshnessChip } from './freshness_chip';
 
 // ============================================================================
 // Constants
@@ -256,7 +255,6 @@ function CalendarToolbar() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <FreshnessChip sourceKey={['calendar', 'calendar_dg_events']} />
       </div>
     </div>
   );

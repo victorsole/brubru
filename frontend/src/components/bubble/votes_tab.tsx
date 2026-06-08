@@ -24,7 +24,6 @@ import {
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
 import './votes_tab.css';
-import { FreshnessChip } from './freshness_chip';
 import { LensToggle, TrackedBadge, type LensMode } from './lens_toggle';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -653,12 +652,7 @@ export const VotesTab = () => {
       <MeubHeader
         icon={mdiGavel}
         title={t('votes.title', 'Votes')}
-        subtitle={(
-          <>
-            {t('votes.intro', 'How the Parliament voted on the dossiers in your interests: committee and plenary, ordered the way the EP does not.')}
-            <FreshnessChip sourceKey={['votes_ep', 'votes_council']} />
-          </>
-        )}
+        subtitle={t('votes.intro', 'How the Parliament voted on the dossiers in your interests: committee and plenary, ordered the way the EP does not.')}
         aside={stats && (
           <div className="votes-tab__stats">
             <span><b>{stats.committee}</b> {t('votes.committeeVotes', 'committee')}</span>

@@ -1,6 +1,12 @@
 /* Position Analysis tab -- responsive layout */
 /* Redesigned 16 April 2026: single-column card flow, full-width data tables */
 
+/* Outer page wrapper holds the top MeubHeader + the two-pane grid, matching the
+   standard 2rem content-area padding used across MEUB tabs. */
+.pos-tab-page {
+  padding: 2rem;
+}
+
 .pos-tab {
   --pos-green: #059669;
   --pos-red: #dc2626;
