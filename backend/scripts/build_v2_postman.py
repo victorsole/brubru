@@ -707,6 +707,9 @@ if __name__ == "__main__":
     for domain in coll["item"]:
         print(f"  {domain['name']} ({_count(domain)} requests)")
         for src in domain["item"]:
+            if "request" in src:
+                # flat domain (single body): requests sit directly under it.
+                continue
             if src.get("item") and "request" in src["item"][0]:
                 print(f"    {src['name']}: {len(src['item'])}")
             else:
