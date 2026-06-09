@@ -38,6 +38,10 @@ from services.scrapers import economy_enisa as enisa     # noqa: E402
 from services.scrapers import economy_eulisa as eulisa   # noqa: E402
 from services.scrapers import economy_euipo as euipo     # noqa: E402
 from services.scrapers import economy_cpvo as cpvo       # noqa: E402
+from services.scrapers import economy_ema as ema         # noqa: E402
+from services.scrapers import economy_ecdc as ecdc       # noqa: E402
+from services.scrapers import economy_efsa as efsa       # noqa: E402
+from services.scrapers import economy_eu_osha as eu_osha # noqa: E402
 from scripts._specialised_helpers import ChunkedDb       # noqa: E402
 
 # (body_code, item_type) -> callable returning list[Item]
@@ -91,6 +95,15 @@ INGESTORS = {
     ("cpvo", "news"):           cpvo.ingest_cpvo_news,
     ("cpvo", "publication"):    cpvo.ingest_cpvo_publications,
     ("cpvo", "event"):          cpvo.ingest_cpvo_events,
+    ("ema", "news"):            ema.ingest_ema_news,
+    ("ema", "event"):           ema.ingest_ema_events,
+    ("ecdc", "news"):           ecdc.ingest_ecdc_news,
+    ("ecdc", "publication"):    ecdc.ingest_ecdc_publications,
+    ("efsa", "news"):           efsa.ingest_efsa_news,
+    ("efsa", "publication"):    efsa.ingest_efsa_publications,
+    ("eu_osha", "news"):        eu_osha.ingest_eu_osha_news,
+    ("eu_osha", "publication"): eu_osha.ingest_eu_osha_publications,
+    ("eu_osha", "event"):       eu_osha.ingest_eu_osha_events,
 }
 
 _UPSERT = """
@@ -137,7 +150,8 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
-    ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo"])
+    ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
+                             "ema", "ecdc", "efsa", "eu_osha"])
     ap.add_argument("--type", default="all",
                     choices=["all", "news", "publication", "event", "legal"])
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")

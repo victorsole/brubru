@@ -604,6 +604,11 @@ _AGENCY_DOMAINS = [
     ("eu-lisa", "eu-LISA — Large-Scale IT Systems"),
     ("euipo", "EUIPO — Intellectual Property"),
     ("cpvo", "CPVO — Plant Variety Rights"),
+    # Health agencies (api_health.md), one flat folder each.
+    ("ema", "EMA — Medicines"),
+    ("ecdc", "ECDC — Disease Prevention & Control"),
+    ("efsa", "EFSA — Food Safety"),
+    ("eu-osha", "EU-OSHA — Safety & Health at Work"),
 ]
 
 

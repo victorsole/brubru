@@ -44,6 +44,10 @@ from .enisa import router as _enisa_router
 from .eu_lisa import router as _eu_lisa_router
 from .euipo import router as _euipo_router
 from .cpvo import router as _cpvo_router
+from .ema import router as _ema_router
+from .ecdc import router as _ecdc_router
+from .efsa import router as _efsa_router
+from .eu_osha import router as _eu_osha_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -71,6 +75,11 @@ router.include_router(_enisa_router)
 router.include_router(_eu_lisa_router)
 router.include_router(_euipo_router)
 router.include_router(_cpvo_router)
+# Health agencies (api_health.md), each its own folder.
+router.include_router(_ema_router)
+router.include_router(_ecdc_router)
+router.include_router(_efsa_router)
+router.include_router(_eu_osha_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
