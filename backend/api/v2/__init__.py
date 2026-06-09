@@ -42,6 +42,7 @@ from .acer import router as _acer_router
 from .eit import router as _eit_router
 from .enisa import router as _enisa_router
 from .eu_lisa import router as _eu_lisa_router
+from .euipo import router as _euipo_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -67,6 +68,7 @@ router.include_router(_acer_router)
 router.include_router(_eit_router)
 router.include_router(_enisa_router)
 router.include_router(_eu_lisa_router)
+router.include_router(_euipo_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
