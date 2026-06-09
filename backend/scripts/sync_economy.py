@@ -97,6 +97,7 @@ INGESTORS = {
     ("cpvo", "event"):          cpvo.ingest_cpvo_events,
     ("ema", "news"):            ema.ingest_ema_news,
     ("ema", "event"):           ema.ingest_ema_events,
+    ("ema", "medicine"):        ema.ingest_ema_medicines,
     ("ecdc", "news"):           ecdc.ingest_ecdc_news,
     ("ecdc", "publication"):    ecdc.ingest_ecdc_publications,
     ("efsa", "news"):           efsa.ingest_efsa_news,
@@ -153,7 +154,7 @@ def main() -> None:
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
                              "ema", "ecdc", "efsa", "eu_osha"])
     ap.add_argument("--type", default="all",
-                    choices=["all", "news", "publication", "event", "legal"])
+                    choices=["all", "news", "publication", "event", "legal", "medicine"])
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
     ap.add_argument("--no-bodies", action="store_true", help="skip detail-page body fetch (faster)")
     ap.add_argument("--legal-limit", type=int, default=200)
@@ -162,7 +163,7 @@ def main() -> None:
     if args.all_ecb:
         targets = [k for k in INGESTORS]
     elif args.body:
-        wanted = [args.type] if args.type != "all" else ["news", "publication", "event", "legal"]
+        wanted = [args.type] if args.type != "all" else ["news", "publication", "event", "legal", "medicine"]
         targets = [(args.body, t) for t in wanted if (args.body, t) in INGESTORS]
     else:
         ap.error("pass --body or --all-ecb")

@@ -130,6 +130,87 @@ def ingest_ema_news(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[It
     return _scrape("news", f"{_BASE}/en/news", _parse_news, fetch_bodies=fetch_bodies, max_pages=max_pages)
 
 
+# --- medicines / EPARs (structured dataset) --------------------------------
+# EMA's published assessment reports (EPARs) are not exposed as a clean listing
+# on the website, but the full register is downloadable as an .xlsx. Each row is
+# one medicine (name, EMA product number, status, INN, therapeutic area, key
+# dates, EPAR URL) — the row IS the content, so no per-medicine HTTP fetch.
+_MEDICINES_XLSX = f"{_BASE}/en/documents/report/medicines-output-medicines-report_en.xlsx"
+_MED_FIELDS = [  # (column header substring, label) — rendered into the body
+    ("Category", "Category"), ("EMA product number", "EMA product number"),
+    ("Medicine status", "Status"), ("International non-proprietary name", "INN"),
+    ("Active substance", "Active substance"), ("Therapeutic area", "Therapeutic area"),
+    ("Therapeutic indication", "Therapeutic indication"),
+    ("Marketing authorisation developer", "Marketing-authorisation holder"),
+    ("ATC code", "ATC code"), ("Orphan medicine", "Orphan"),
+    ("European Commission decision date", "EC decision date"),
+    ("Marketing authorisation date", "Marketing-authorisation date"),
+    ("First published date", "First published"), ("Last updated date", "Last updated"),
+]
+
+
+def _ema_date(val) -> datetime | None:
+    from datetime import date as _date
+    if isinstance(val, datetime):
+        return val.replace(tzinfo=timezone.utc)
+    if isinstance(val, _date):
+        return datetime(val.year, val.month, val.day, tzinfo=timezone.utc)
+    return parse_listing_date(str(val)) if val else None
+
+
+def ingest_ema_medicines(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    import io
+    from openpyxl import load_workbook
+    r = http_get(_MEDICINES_XLSX)
+    if r is None:
+        return []
+    wb = load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
+    ws = wb.active
+    rows = list(ws.iter_rows(values_only=True))
+    # locate the header row (the one containing "Name of medicine")
+    hdr_idx = next((i for i, row in enumerate(rows)
+                    if any(isinstance(c, str) and "Name of medicine" in c for c in row)), None)
+    if hdr_idx is None:
+        return []
+    header = [str(c).replace("\n", " ").strip() if c is not None else "" for c in rows[hdr_idx]]
+
+    def col(substr):
+        return next((i for i, h in enumerate(header) if substr.lower() in h.lower()), None)
+
+    i_name, i_url = col("Name of medicine"), col("Medicine URL")
+    i_pub, i_upd = col("First published date"), col("Last updated date")
+    field_cols = [(label, col(sub)) for sub, label in _MED_FIELDS]
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set[str] = set()
+    for row in rows[hdr_idx + 1:]:
+        if i_name is None or i_name >= len(row) or not row[i_name]:
+            continue
+        name = clean(str(row[i_name]).strip())
+        url = (str(row[i_url]).strip() if i_url is not None and row[i_url] else None)
+        guid = url or name
+        if not name or guid in seen:
+            continue
+        seen.add(guid)
+        doc_dt = _ema_date(row[i_pub]) if (i_pub is not None and i_pub < len(row)) else None
+        if doc_dt is None and i_upd is not None and i_upd < len(row):
+            doc_dt = _ema_date(row[i_upd])
+        lines = []
+        for label, ci in field_cols:
+            if ci is not None and ci < len(row) and row[ci] not in (None, ""):
+                lines.append(f"{label}: {str(row[ci]).strip()}")
+        body_txt = clean("\n".join(lines)) or None
+        body_html = clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>") if lines else None
+        summary = clean(" | ".join(lines[:4])) if lines else None
+        items.append(Item(
+            body_code="ema", item_type="medicine", title=name,
+            public_url=norm_url(url) if url else f"{_BASE}/en/medicines",
+            summary=summary, body_txt=body_txt, body_html=body_html,
+            document_date=doc_dt, creation_date=now, source_kind="dataset", guid=guid,
+        ))
+    return items
+
+
 def ingest_ema_events(*, fetch_bodies: bool = True, max_pages: int = 4) -> list[Item]:
     return _scrape("event", f"{_BASE}/en/events/upcoming-events", _parse_events,
                    fetch_bodies=fetch_bodies, max_pages=max_pages)

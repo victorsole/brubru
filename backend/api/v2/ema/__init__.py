@@ -2,8 +2,9 @@
 /api/v2/ema — European Medicines Agency.
 
 EU health agency (api_health.md), its own folder. Resources under the folder
-prefix: /api/v2/ema/{news,events}. EMA's publications list renders client-side
-(EAMS) with no server-side items, so news + events only.
+prefix: /api/v2/ema/{news,events,medicines}. EMA's publications page is a nav
+landing (no server-side list), so its published outputs are surfaced via the
+medicines/EPAR dataset instead.
 
 Reads from economy_items (migrations 119 + 121); 5 mandatory datapoints. Scope: read:economy.
 """
@@ -21,5 +22,8 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the EMA upcoming-events listing.",
          "extra": "Committee meetings (CHMP, PRAC, CVMP and others), info days and training, with their dates."},
+        {"item_type": "medicine", "slug": "medicines", "noun": "medicines",
+         "source": "the EMA medicines dataset (the full register of EU-evaluated medicines / EPARs).",
+         "extra": "Every medicine evaluated by EMA — name, EMA product number, status, INN, active substance, therapeutic area, marketing-authorisation holder, key dates and the EPAR URL. Filter with q (e.g. an active substance or therapeutic area)."},
     ],
 )
