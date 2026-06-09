@@ -319,6 +319,37 @@ def _build_tracking_block(priority_files: list[dict]) -> str:
 """
 
 
+def _build_farewell_block(farewell: dict) -> str:
+    """Render an optional warm closing card (used for the final pilot brief).
+
+    Expects {"heading": str, "paragraphs": [str, ...], "signoff": str}.
+    Returns '' when no farewell is supplied so ordinary briefs are unchanged.
+    """
+    if not farewell:
+        return ""
+    heading = farewell.get("heading", "A closing note")
+    paragraphs = farewell.get("paragraphs") or []
+    signoff = farewell.get("signoff", "")
+    body = "".join(
+        f"""<p style="font-size: 14px; color: #374151; line-height: 1.65; margin: 0 0 14px 0;">{p}</p>"""
+        for p in paragraphs
+    )
+    signoff_html = (
+        f"""<p style="font-size: 14px; color: #111827; line-height: 1.6; margin: 4px 0 0 0; font-weight: 600;">{signoff}</p>"""
+        if signoff
+        else ""
+    )
+    return f"""
+<div style="margin-top: 28px; padding: 22px 24px; background: linear-gradient(135deg, #faf5ff 0%, #eff6ff 100%); border: 1px solid #e9d5ff; border-radius: 10px;">
+  <div style="font-family: 'Adobe Caslon Pro', Georgia, serif; font-size: 18px; font-weight: 700; color: #6d28d9; margin-bottom: 12px;">
+    {heading}
+  </div>
+  {body}
+  {signoff_html}
+</div>
+"""
+
+
 def _pretty_item_date(iso: str) -> str:
     """'2026-06-04' -> '4 June'. Returns the input unchanged on parse failure."""
     try:
@@ -422,6 +453,7 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
     )
     tracking_block = _build_tracking_block(priority_files)
     lobbies_block = _build_lobbies_block(payload.get("brussels_lobbies") or {})
+    farewell_block = _build_farewell_block(payload.get("farewell") or {})
     pretty_date = _pretty_date(issue_date, day_label)
 
     return f"""<!DOCTYPE html>
@@ -458,6 +490,9 @@ def _build_html(payload: dict, priority_files: list[dict], updates: list[dict]) 
         </td></tr>
         <tr><td style="padding: 0 32px 8px 32px;">
           {tracking_block}
+        </td></tr>
+        <tr><td style="padding: 0 32px;">
+          {farewell_block}
         </td></tr>
         <tr><td style="padding: 20px 32px 28px 32px; font-size: 11px; color: #9ca3af; line-height: 1.5;">
           You are receiving the Brubru EFPIA Brief as part of the EFPIA pilot access window

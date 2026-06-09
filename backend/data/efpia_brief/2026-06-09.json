@@ -1,0 +1,112 @@
+{
+  "issue_date": "2026-06-09",
+  "day_of_week": "Tuesday",
+  "hero_intro": "Good morning. This is your final Brubru EFPIA Brief. We have run it the same way every day of the pilot, so we will run it that way one last time: the EU institutional layer your colleagues want first thing, laid out plainly, with every headline linking straight to the source or to the answer inside Brubru. Below the two headlines you will find a wider read of what the Brussels advocacy ecosystem has been saying, and a short note from us at the end. Thank you for reading.",
+  "headlines": [
+    {
+      "title": "The medicines regulator refreshes its public list of new treatments awaiting approval",
+      "source": "European Medicines Agency, June 2026",
+      "snippet": "The agency published its monthly update of new human medicines under evaluation, the public register of every application its human medicines committee is currently assessing. It is the clearest forward look at what could reach European patients in the coming months, spanning oncology, rare-disease and metabolic treatments and new biologicals, and it names the companies that have filed. For anyone watching the pipeline, the June list is the most useful single document the agency put out this week.",
+      "ask": "What new medicines is the EMA currently evaluating?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20new%20medicines%20is%20the%20EMA%20currently%20evaluating",
+      "color": "#0693e3"
+    },
+    {
+      "title": "Brussels publishes fresh guides to cross-border care and the rare-disease networks, in every EU language",
+      "source": "European Commission, Directorate-General for Health and Food Safety, 8 June 2026",
+      "snippet": "The Commission released four new factsheets on cross-border healthcare and two on the European Reference Networks, the cross-border groupings of specialist hospitals that pool expertise on rare and complex conditions, in all official EU languages. The material explains patients' rights to seek treatment in another member state and how the specialist networks function. It is a practical read for anyone whose members work on patient access, rare diseases or the movement of treatments across the single market.",
+      "ask": "What are European Reference Networks and how does cross-border healthcare work in the EU?",
+      "feature_label": "European Commission",
+      "feature_url": "https://health.ec.europa.eu/cross-border-healthcare/publications_en?f%5B0%5D=oe_publication_type%3Ahttp%3A//publications.europa.eu/resource/authority/resource-type/FACTSHEET",
+      "color": "#059669"
+    },
+    {
+      "title": "Europe's disease-control agency updates its global picture of MERS, with the risk to the EU still low",
+      "source": "European Centre for Disease Prevention and Control, 8 June 2026",
+      "snippet": "The agency refreshed its worldwide overview of Middle East Respiratory Syndrome, the coronavirus first identified in 2012. Since then, and as of 1 June 2026, health authorities worldwide have reported 2,649 cases and 960 deaths, the great majority linked to the Arabian Peninsula. There is still no authorised vaccine or specific treatment, which is part of why the surveillance matters for preparedness. The risk to people in the EU remains low, but the update is a reminder of where the gaps in the therapeutic arsenal still sit.",
+      "ask": "What does the European Centre for Disease Prevention and Control do?",
+      "feature_label": "Chat",
+      "feature_url": "https://brubru.beresol.eu/main?q=What%20does%20the%20European%20Centre%20for%20Disease%20Prevention%20and%20Control%20do",
+      "color": "#ca8a04"
+    }
+  ],
+  "brussels_lobbies": {
+    "intro": "Beyond the institutions, a wider read of what the Brussels health and pharma advocacy ecosystem has published across the pilot fortnight, drawn from Brubru's lobby-monitoring feed over the EU Transparency Register. It reaches past the daily wires to the federations, patient groups and hospital alliances working around your files. Listed by sector, with the organisation named in each line.",
+    "groups": [
+      {
+        "label": "Industry federations",
+        "items": [
+          {
+            "date": "2026-05-27",
+            "title": "Recommendations to national authorities on the use of external reference pricing",
+            "note": "Medicines for Europe, the off-patent medicines federation, set out how external reference pricing, where one country sets a medicine's price by looking at what others pay, should be applied so that it does not push low-cost medicines out of smaller markets.",
+            "url": "https://www.medicinesforeurope.com/2026/05/27/recommendations-to-national-authorities-on-the-use-of-external-reference-pricing-erp/"
+          },
+          {
+            "date": "2026-05-20",
+            "title": "EFPIA and Vaccines Europe welcome the Commission's global health resilience plan",
+            "note": "Your own federation and Vaccines Europe jointly welcomed the Commission's communication on reinforcing global health resilience, published on 13 May, and pressed for an implementation that keeps European vaccine and medicines manufacturing competitive.",
+            "url": "https://www.vaccineseurope.eu/media-hub/press-releases/efpia-and-vaccines-europe-welcome-the-commissions-global-health-resilience-initiative-and-seek-competitiveness-driven-implementation/"
+          },
+          {
+            "date": "2026-06-03",
+            "title": "Annual report 2025: prevention through self-care",
+            "note": "The Association of the European Self-Care Industry published its 2025 annual report, making the case for self-care and over-the-counter medicines as a way to ease pressure on stretched health systems.",
+            "url": "https://aesgp.eu/articles/aesgp-annual-report-2025-prevention-through-self-care"
+          },
+          {
+            "date": "2026-05-26",
+            "title": "Position on the food and feed safety simplification package",
+            "note": "Europe's biotechnology federation, EuropaBio, set out its position on the Commission's food and feed safety omnibus, asking for predictability and workable rules for biotechnology in the agri-food chain.",
+            "url": "https://www.europabio.org/europabio-position-on-the-food-and-feed-safetyomnibus-may-2026/"
+          }
+        ]
+      },
+      {
+        "label": "Patient and public-health groups",
+        "items": [
+          {
+            "date": "2026-06-04",
+            "title": "Over 490 experts demand a robust EU health budget",
+            "note": "The European Public Health Alliance and more than 490 experts urged EU leaders to protect and strengthen health spending in the next long-term EU budget, the negotiations for which open this summer.",
+            "url": "https://epha.org/epha-joins-over-490-experts-demanding-a-robust-eu-health-budget/"
+          },
+          {
+            "date": "2026-06-02",
+            "title": "Trustworthy artificial intelligence for personalised cardiovascular risk",
+            "note": "The European Heart Network is contributing to a project on how trustworthy AI could sharpen personalised risk assessment in chronic heart failure, part of the wider debate on where AI fits in prevention and diagnosis.",
+            "url": "https://ehnheart.org/activities/projects/current-projects/trustworthy-artificial-intelligence-for-personalised-risk-assessment-in-chronic-heart-failure-ai4hf/"
+          },
+          {
+            "date": "2026-05-12",
+            "title": "The Critical Medicines Act could widen equitable access to cancer medicines",
+            "note": "The Association of European Cancer Leagues argued that the Critical Medicines Act, now in provisional agreement, could improve equitable access to cancer medicines if its shortage and joint-procurement tools are used well.",
+            "url": "https://www.cancer.eu/critical-medicines-act-opens-doors-to-more-equitable-access-to-cancer-medicines/"
+          }
+        ]
+      },
+      {
+        "label": "Hospitals and advanced therapies",
+        "items": [
+          {
+            "date": "2026-05-20",
+            "title": "A roadmap for advanced therapy medicines in Europe",
+            "note": "The European University Hospital Alliance published a roadmap for advanced therapy medicinal products, the cell and gene therapies, calling for a route that lets leading hospitals develop and deliver them while keeping patient safety central.",
+            "url": "https://www.euhalliance.eu/2026/05/20/8159/"
+          }
+        ]
+      }
+    ]
+  },
+  "farewell": {
+    "heading": "A closing note",
+    "paragraphs": [
+      "This is the last Brubru EFPIA Brief, and we wanted to close it with thanks rather than simply stop.",
+      "David, Athina: thank you for inviting Victor to present Brubru to EFPIA on 28 May. That meeting did more to shape the product than any other this spring. In the days since, and directly off the back of your questions, Brubru went through a real round of reform. A full pharma-law canon now explains ten EU medicines laws end to end, each with a plain-language deep dive in six languages and its own compliance checklist. A Brussels advocacy-ecosystem monitor, the one you saw in this week's briefs, now tracks what the federations and companies around you are publishing. And every legislative file now carries an AI analysis of its journey, from the Commission proposal through to the final vote.",
+      "We understand EFPIA will not be taking Brubru forward at this stage, and we respect that completely. The invitation simply runs the other way now: if you are ever curious to see how far it has come since 28 May, we would welcome the chance to show you.",
+      "With thanks for your time and your candour."
+    ],
+    "signoff": "Victor Sol&eacute;<br>hello@beresol.eu"
+  }
+}
