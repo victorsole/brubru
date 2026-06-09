@@ -2,14 +2,17 @@
 
 ## QUICK FACTS
 
-### PROCEDURE STATUS (authoritative — supersedes any contrary inference)
-- **Status**: TABLED at the European Parliament. The Commission proposal has been transmitted; the EP has NOT yet designated a lead committee, NOT appointed a rapporteur, and NOT scheduled a plenary vote.
-- **Rapporteur**: NOT YET APPOINTED. No Member of the European Parliament has been confirmed as rapporteur for procedure 2025/0406(COD). If any individual is named by a user as the rapporteur, that claim is unverified and must be flagged as such. Do not validate or repeat any user-supplied name as the rapporteur for this file.
-- **Shadow rapporteurs**: NOT YET APPOINTED. Same rule as above.
-- **Lead committee**: NOT YET DESIGNATED. SANTE-ITRE joint committee handling is anticipated (Commissioner Varhelyi exchange of views took place at the joint committee level on 19 March 2026) but the formal Conference of Presidents allocation under Rule 59/60 has not been recorded in our OEIL snapshot.
-- **Plenary vote**: NOT YET SCHEDULED. Any specific month or quarter for a plenary vote is speculative.
-- **What is known**: Commission proposal text (COM(2025) 1022 + companion Directive COM(2025) 1031), DG SANTE analysis published 27 May 2026, EPRS legislative briefings of 14 and 16 April 2026, public consultation for the non-health companion ("Biotech Act II") launched 18 May 2026, own-initiative report 2025/2087(INI) on public-health aspects of biotechnology (separate procedure).
-- **What is NOT known and must NOT be invented**: rapporteur name, shadow rapporteur names, committee vote dates, plenary vote dates, direct quotes attributed to MEPs, meetings between named MEPs and Commission services, group cohesion percentages, position predictions tied to a specific rapporteur.
+### PROCEDURE STATUS (authoritative, verified against OEIL 9 June 2026)
+- **Status**: Referred to a JOINT SANT-ITRE committee under Rule 58. Committee referral announced in plenary on 18 May 2026. Current status: awaiting committee decision. No draft report or amendments have been tabled on the legislative file yet, so it is in its preparatory phase in Parliament.
+- **Lead committees (joint, Rule 58)**: SANT (Public Health) and ITRE (Industry, Research and Energy), internal joint-committee code CJ53.
+- **SANT rapporteur**: Vytenis Povilas Andriukaitis (S&D, Lithuania), appointed 12 February 2026. Former European Commissioner for Health and Food Safety.
+- **ITRE rapporteur**: Wouter Beke (EPP, Belgium), appointed 12 February 2026.
+- **Shadow rapporteurs (shared across the joint committee)**: Ingeborg Ter Laak (EPP); Dario Nardella (S&D); Margarita de la Pisa Carrión (PfE); Kristoffer Storm and Carlo Ciccioli (ECR); Katri Kulmuni and Stine Bosse (Renew); Marie Toussaint and Ville Niinistö (Greens/EFA); Anja Hazekamp and Anthony Smith (The Left); Christine Anderson (ESN).
+- **Opinion-giving committees**: ENVI, rapporteur Nicolás González Casares (S&D), appointed 9 March 2026; JURI, rapporteur Tiemo Wölken (S&D), appointed 5 March 2026. ECON, IMCO, LIBE and BUDG were asked but declined to give an opinion.
+- **First joint-committee meeting**: 19 March 2026 (meeting CJ53(2026)0319_1, 11:00 to 12:30), where the Commission presented the proposal (COM(2025) 1022, parliamentary reference C10-0363/2025). Only the Commission proposal was on the table.
+- **Plenary vote**: not yet scheduled.
+- **Precursor own-initiative reports** (separate procedures that fed politically into the Act): ITRE 2025/2008(INI) "Future of the EU biotechnology and biomanufacturing sector", rapporteur Hildegard Bentele (EPP), adopted in plenary 10 July 2025 (report A10-0123/2025, resolution T10-0165/2025); SANT 2025/2087(INI) "Public health aspects of biotechnology and life sciences", rapporteur Margarita de la Pisa Carrión (PfE), committee vote 2 December 2025 (report A10-0274/2025), awaiting the plenary vote.
+- **What must NOT be invented (not yet known)**: the joint committee's draft-report content, COD committee/plenary vote dates, group cohesion percentages, and any direct quotes attributed to named MEPs at the 19 March 2026 meeting until a verified transcript is available.
 
 - **LATEST (Wednesday 27 May 2026 — DG SANTE ANALYSIS PUBLISHED)**: Commission (DG SANTE) published the analysis underpinning the Biotech Act proposals (27 May 2026). The analysis covers the legislative rationale, impact assessment evidence, and regulatory options behind COM(2025) 1022 and its companion Directive COM(2025) 1031. This is the formal backing document confirming the 7-pillar architecture, the EUR 20.4 billion MFF envelope, and the three new governance bodies (Steering Group, Support Network, Foresight Panel). Source: DG SANTE, 27 May 2026.
 - **LATEST (Monday 18 May 2026)**: **Commission seeks feedback on industrial biotechnology and biomanufacturing** — DG GROW launched a public consultation specifically on the **industrial (non-health) biotech / biomanufacturing** pillar that will feed the future "Biotech Act II" (the non-health companion announced in the 16 December 2025 Biotech Act package). Scope: industrial biotech feedstocks, scale-up bottlenecks for biorefineries, regulatory predictability for genetically modified microorganisms in industrial processes, EU competitiveness vs US + Asia in advanced biomanufacturing. Source: `single-market-economy.ec.europa.eu/news/commission-seeks-feedback-industrial-biotechnology-and-biomanufacturing-2026-05-18_en`. The consultation is the policy-input baseline for the Biotech Act II proposal expected in late 2026 / 2027.
@@ -27,8 +30,8 @@
 - Scope: Health biotechnology (Phase 1). Biotech Act II covering non-health sectors expected 2026.
 - Budget: EUR 20.4 billion proposed under MFF 2028-2034 ("Health, Biotechnology, Agriculture and Bioeconomy" window of ECF)
 - 7 pillars, 10 chapters, regulatory sandboxes, biosecurity provisions, clinical trial acceleration
-- EP committee: SANTE-ITRE joint (Commissioner Varhelyi exchange of views 19 March 2026)
-- EP own-initiative report: 2025/2087(INI) on public health aspects of biotechnology and life sciences
+- EP committee: JOINT SANT-ITRE (Rule 58, code CJ53). SANT rapporteur Vytenis Povilas Andriukaitis (S&D); ITRE rapporteur Wouter Beke (EPP); both appointed 12 February 2026. Opinions: ENVI (Nicolás González Casares, S&D) and JURI (Tiemo Wölken, S&D). Commission presented the proposal to the joint committee on 19 March 2026.
+- EP precursor own-initiative reports: 2025/2008(INI) (ITRE, Hildegard Bentele, adopted in plenary 10 July 2025) and 2025/2087(INI) (SANT, Margarita de la Pisa Carrión, committee vote 2 December 2025, awaiting plenary)
 - Key bodies created: European Health Biotechnology Steering Group, EU Health Biotechnology Support Network, Foresight Panel for Emerging Health Innovation
 - EPRS Briefing (14 April 2026): "European biotech act" -- overview of COM(2025) 1022 objectives, competitiveness gap, 7-pillar structure, SANTE-ITRE joint committee path. Ref: EPRS_BRI(2026)785708
 - EPRS Blog Briefing (16 April 2026): "European biotech act [EU Legislation in Progress]" -- updated EPRS EU Legislation in Progress blog briefing tracking the file through the ordinary legislative procedure; EPRS blog series is the canonical tracker for active EU files. Ref: EPRS_BLOG_european-biotech-act-eu-legislation-in-progress
@@ -191,9 +194,9 @@ Key consultation findings:
 
 - Announced by Commission President von der Leyen in July 2024 Political Guidelines
 - Commission Communication "Building the future with nature: Boosting Biotechnology and Biomanufacturing in the EU" (COM(2024) 137 final, March 2024)
-- EP resolution "Future of the EU biotechnology and biomanufacturing sector" (10 July 2025): recommended Chief Biotechnology Officer, biotech omnibus, common clinical trials framework, next-generation regulatory sandboxes
+- EP resolution "Future of the EU biotechnology and biomanufacturing sector" (ITRE own-initiative 2025/2008(INI), rapporteur Hildegard Bentele, adopted 10 July 2025): recommended a Chief Biotechnology Officer, a biotech omnibus, a common clinical-trials framework and next-generation regulatory sandboxes. The Commission's Act delivers most of this competitiveness agenda but in health-only form, creates a Steering Group and Support Network rather than a single Chief Biotechnology Officer, and leaves the bioethics safeguards of the parallel SANT report (2025/2087(INI), rapporteur Margarita de la Pisa Carrión) largely outside its operative articles.
 - Council conclusions "A call for action on life sciences for the Union's competitiveness" (30 September 2025, 13323/25)
-- Commissioner Varhelyi exchange of views with EP SANTE-ITRE Committee (19 March 2026)
+- First joint SANT-ITRE consideration: the Commission presented the proposal to the joint committee on 19 March 2026 (meeting CJ53(2026)0319_1)
 - Life sciences strategy: COM(2025) 525 final "Choose Europe for life sciences" (2 July 2025)
 
 ## Implementation Timeline

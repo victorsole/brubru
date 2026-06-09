@@ -3,6 +3,19 @@
   "entries": [
     {
       "date": "2026-06-09",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Added verified joint SANT-ITRE committee (Rule 58), rapporteurs Andriukaitis (S&D) and Beke (EPP), 13 shadows, ENVI/JURI opinions, the two precursor INI reports and the 19 March 2026 joint-committee presentation; replaced the stale 'no rapporteur appointed' status block.",
+      "refs": [
+        "2025/0406(COD)",
+        "2025/2008(INI)",
+        "2025/2087(INI)",
+        "COM(2025)1022"
+      ]
+    },
+    {
+      "date": "2026-06-09",
       "action": "added",
       "guide": "eu_health_security_framework",
       "title": "EU Health Security Framework (Health Union)",
