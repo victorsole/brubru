@@ -375,3 +375,113 @@ def scrape_dl_listing(body_code: str, item_type: str, pages, base: str, *,
             if kind == "pdf":
                 it.source_kind = "pdf"
     return items
+
+
+# --- generic .xlsx dataset ingestor ----------------------------------------
+# Many EU agencies publish a register/database as a downloadable .xlsx whose rows
+# are entities (medicines, shortages, varieties, ...). Each row IS the content,
+# so no per-row HTTP fetch. Header is auto-detected (the row with the most cells).
+def _xlsx_date(val):
+    from datetime import date as _date
+    if isinstance(val, datetime):
+        return val.replace(tzinfo=timezone.utc)
+    if isinstance(val, _date):
+        return datetime(val.year, val.month, val.day, tzinfo=timezone.utc)
+    return parse_listing_date(str(val)) if val else None
+
+
+def ingest_xlsx_dataset(xlsx_url, body_code, item_type, *,
+                        title_cols, url_cols=(), date_cols=(), max_body_cols=40,
+                        sheet=None, record_url=None, timeout=180):
+    """Build Items from a downloadable .xlsx register.
+
+    title_cols / url_cols / date_cols are ordered lists of header substrings;
+    the first match (that is non-empty for the row, for the title) wins.
+
+    sheet      : worksheet name to read (default: the active sheet).
+    record_url : canonical dataset URL; when a row has no own URL, the item's
+                 public_url is synthesised as ``{record_url}#row=<n>`` so the
+                 (body_code, item_type, public_url) UNIQUE constraint holds.
+    """
+    import io
+    try:
+        from openpyxl import load_workbook
+    except ImportError:
+        return []
+    try:
+        resp = requests.get(xlsx_url, headers={"User-Agent": _UA}, timeout=timeout,
+                            allow_redirects=True)
+        if resp.status_code != 200:
+            return []
+    except requests.RequestException:
+        return []
+    wb = load_workbook(io.BytesIO(resp.content), read_only=True, data_only=True)
+    ws = wb[sheet] if (sheet and sheet in wb.sheetnames) else wb.active
+    rows = list(ws.iter_rows(values_only=True))
+    if not rows:
+        return []
+    scan = min(15, len(rows))
+    hdr_idx = max(range(scan), key=lambda i: sum(1 for c in rows[i] if c is not None))
+    header = [str(c).replace("\n", " ").strip() if c is not None else "" for c in rows[hdr_idx]]
+
+    def cols_for(cands):
+        out = []
+        for cand in cands:
+            for i, h in enumerate(header):
+                if cand.lower() in h.lower() and i not in out:
+                    out.append(i)
+        return out
+
+    title_idxs = cols_for(title_cols)
+    url_idxs = cols_for(url_cols)
+    date_idxs = cols_for(list(date_cols) + ["date"])
+    now = datetime.now(timezone.utc)
+    items, seen = [], set()
+    for rownum, row in enumerate(rows[hdr_idx + 1:]):
+        title = None
+        for ti in title_idxs:
+            if ti < len(row) and row[ti] not in (None, ""):
+                title = clean(str(row[ti]).strip())
+                if title:
+                    break
+        if not title:
+            # fallback: first non-empty text cell whose header is not a url/date
+            for i, h in enumerate(header):
+                if i < len(row) and isinstance(row[i], str) and row[i].strip() \
+                        and "url" not in h.lower() and "date" not in h.lower():
+                    title = clean(row[i].strip())
+                    if title:
+                        break
+        if not title:
+            continue
+        url = None
+        for ui in url_idxs:
+            if ui < len(row) and row[ui]:
+                url = str(row[ui]).strip()
+                break
+        if not url and record_url:
+            # no per-row URL: synthesise a unique one so the UNIQUE constraint holds
+            url = f"{record_url}#row={rownum + 1}"
+        guid = url or f"{item_type}:{title}:{rownum}"
+        if guid in seen:
+            continue
+        seen.add(guid)
+        doc_dt = None
+        for di in date_idxs:
+            if di < len(row):
+                doc_dt = _xlsx_date(row[di])
+                if doc_dt:
+                    break
+        lines = []
+        for i, h in enumerate(header[:max_body_cols]):
+            if h and i < len(row) and row[i] not in (None, "") and "url" not in h.lower():
+                lines.append(f"{h}: {str(row[i]).strip()}")
+        body_txt = clean("\n".join(lines)) or None
+        body_html = clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>") if lines else None
+        summary = clean(" | ".join(lines[:4])) if lines else None
+        items.append(Item(body_code=body_code, item_type=item_type, title=title,
+                          public_url=norm_url(url) if url else None,
+                          summary=summary, body_txt=body_txt, body_html=body_html,
+                          document_date=doc_dt, creation_date=now,
+                          source_kind="dataset", guid=guid))
+    return items

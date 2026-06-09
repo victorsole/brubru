@@ -107,6 +107,13 @@ INGESTORS = {
     ("eu_osha", "event"):       eu_osha.ingest_eu_osha_events,
 }
 
+# EMA register datasets (downloadable .xlsx) — one resource per dataset.
+INGESTORS.update({("ema", _c["item_type"]): ema.EMA_DATASET_INGESTORS[_c["item_type"]]
+                  for _c in ema.EMA_DATASETS})
+# EFSA scientific databases (Zenodo .xlsx).
+INGESTORS.update({("efsa", _c["item_type"]): efsa.EFSA_DATASET_INGESTORS[_c["item_type"]]
+                  for _c in efsa.EFSA_DATASETS})
+
 _UPSERT = """
 INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,
@@ -154,7 +161,7 @@ def main() -> None:
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
                              "ema", "ecdc", "efsa", "eu_osha"])
     ap.add_argument("--type", default="all",
-                    choices=["all", "news", "publication", "event", "legal", "medicine"])
+                    help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
     ap.add_argument("--no-bodies", action="store_true", help="skip detail-page body fetch (faster)")
     ap.add_argument("--legal-limit", type=int, default=200)
@@ -163,8 +170,12 @@ def main() -> None:
     if args.all_ecb:
         targets = [k for k in INGESTORS]
     elif args.body:
-        wanted = [args.type] if args.type != "all" else ["news", "publication", "event", "legal", "medicine"]
-        targets = [(args.body, t) for t in wanted if (args.body, t) in INGESTORS]
+        if args.type == "all":
+            targets = [(b, t) for (b, t) in INGESTORS if b == args.body]
+        else:
+            targets = [(args.body, args.type)] if (args.body, args.type) in INGESTORS else []
+        if not targets:
+            ap.error(f"no ingestor for body={args.body} type={args.type}")
     else:
         ap.error("pass --body or --all-ecb")
 

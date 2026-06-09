@@ -76,3 +76,38 @@ def ingest_efsa_publications(*, fetch_bodies: bool = True, max_pages: int = 6) -
             if kind == "pdf":
                 it.source_kind = "pdf"
     return items
+
+
+# --- EFSA scientific databases (Zenodo .xlsx) -------------------------------
+# EFSA publishes its databases as Zenodo datasets. The clean entity tables are
+# ingested row-per-record via the shared xlsx ingestor (sheet-aware; rows get a
+# synthesised public_url from the dataset page so the UNIQUE constraint holds).
+EFSA_DATASETS = [
+    {"item_type": "openfoodtox_substance", "slug": "openfoodtox", "noun": "OpenFoodTox substances",
+     "xlsx": "https://zenodo.org/api/records/19388272/files/OFT3.0%20export%20repository.xlsx/content",
+     "sheet": "REF_SUB",
+     "title_cols": ["IupacName", "ChemicalName", "Description"], "url_cols": [], "date_cols": [],
+     "record_url": "https://www.efsa.europa.eu/en/data-report/chemical-hazards-database-openfoodtox",
+     "extra": "OpenFoodTox 3.0 — EFSA's chemical hazards database: substances with CAS number, IUPAC name and regulatory references."},
+    {"item_type": "xylella_host", "slug": "xylella-host-plants", "noun": "Xylella host-plant records",
+     "xlsx": "https://zenodo.org/api/records/18195508/files/Xylella%20spp%20host%20plant%20database_VERSION%2013.xlsx/content",
+     "sheet": "observation",
+     "title_cols": ["PlantSpecies", "PlantGenus", "PlantName", "Plant"], "url_cols": [], "date_cols": [],
+     "record_url": "https://www.efsa.europa.eu/en/data-report/xylella-spp-host-plant-database",
+     "extra": "Host plants of Xylella fastidiosa — one record per observation (plant taxon, Xylella species/subspecies, reference, infection type)."},
+]
+
+
+def make_efsa_dataset_ingestor(cfg):
+    from services.scrapers.economy_common import ingest_xlsx_dataset
+
+    def _ingest(*, fetch_bodies: bool = True, **_):
+        return ingest_xlsx_dataset(cfg["xlsx"], "efsa", cfg["item_type"],
+                                   title_cols=cfg["title_cols"], url_cols=cfg["url_cols"],
+                                   date_cols=cfg["date_cols"], sheet=cfg.get("sheet"),
+                                   record_url=cfg["record_url"])
+    _ingest.__name__ = f"ingest_efsa_{cfg['item_type']}"
+    return _ingest
+
+
+EFSA_DATASET_INGESTORS = {cfg["item_type"]: make_efsa_dataset_ingestor(cfg) for cfg in EFSA_DATASETS}

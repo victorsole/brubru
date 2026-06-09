@@ -214,3 +214,80 @@ def ingest_ema_medicines(*, fetch_bodies: bool = True, **_) -> list[Item]:
 def ingest_ema_events(*, fetch_bodies: bool = True, max_pages: int = 4) -> list[Item]:
     return _scrape("event", f"{_BASE}/en/events/upcoming-events", _parse_events,
                    fetch_bodies=fetch_bodies, max_pages=max_pages)
+
+
+# --- EMA register datasets (downloadable .xlsx) -----------------------------
+# Each of EMA's medicine-output registers is published as an .xlsx; one row per
+# entity. Same ingestion as medicines (the row IS the content). Each becomes a
+# resource under /api/v2/ema/<slug>.
+_DOC = f"{_BASE}/en/documents/report/"
+EMA_DATASETS = [
+    {"item_type": "shortage", "slug": "shortages", "noun": "shortages",
+     "file": "medicines-output-shortages-report_en.xlsx",
+     "title_cols": ["Medicine affected", "Active substance"], "url_cols": ["Shortage URL"],
+     "date_cols": ["First published date", "Start of shortage date"],
+     "extra": "Medicine shortages reported to EMA — affected medicine, status and key dates."},
+    {"item_type": "referral", "slug": "referrals", "noun": "referral procedures",
+     "file": "medicines-output-referrals-report_en.xlsx",
+     "title_cols": ["Referral name"], "url_cols": ["Referral URL"],
+     "date_cols": ["First published date", "Procedure start date"],
+     "extra": "EU referral procedures (safety/scientific reviews) handled by EMA committees."},
+    {"item_type": "orphan_designation", "slug": "orphan-designations", "noun": "orphan designations",
+     "file": "medicines-output-orphan_designations-report_en.xlsx",
+     "title_cols": ["Medicine name", "Active substance"], "url_cols": ["Orphan designation URL"],
+     "date_cols": ["First published date", "Date of designation"],
+     "extra": "Orphan-medicine designations — active substance, intended use, status and dates."},
+    {"item_type": "post_authorisation", "slug": "post-authorisation", "noun": "post-authorisation procedures",
+     "file": "medicines-output-post_authorisation-report_en.xlsx",
+     "title_cols": ["Name of medicine", "Active substance"],
+     "url_cols": ["Medicine post-authorisation procedure URL"],
+     "date_cols": ["First published date", "Post-authorisation opinion date"],
+     "extra": "Post-authorisation procedures affecting authorised medicines."},
+    {"item_type": "paediatric_plan", "slug": "paediatric-investigation-plans", "noun": "paediatric investigation plans",
+     "file": "medicines-output-paediatric_investigation_plans-report_en.xlsx",
+     "title_cols": ["Invented name", "Active substance"], "url_cols": ["PIP URL"],
+     "date_cols": ["First published date", "Decision date"],
+     "extra": "Paediatric investigation plans (PIPs) agreed by the EMA Paediatric Committee."},
+    {"item_type": "psusa", "slug": "psusa", "noun": "PSUSA assessments",
+     "file": "medicines-output-periodic_safety_update_report_single_assessments-report_en.xlsx",
+     "title_cols": ["Active substances in scope", "Active substance"], "url_cols": ["PSUSA URL"],
+     "date_cols": ["First published date"],
+     "extra": "Periodic safety update single assessments (PSUSA) — active substance and outcome."},
+    {"item_type": "herbal", "slug": "herbal-medicines", "noun": "herbal medicines",
+     "file": "medicines-output-herbal_medicines-report_en.xlsx",
+     "title_cols": ["Botanical name", "Latin name", "Combination", "Active substance"],
+     "url_cols": ["Herbal medicine URL"],
+     "date_cols": ["First published date", "Date added to the inventory"],
+     "extra": "Herbal medicinal substances assessed by the EMA HMPC."},
+    {"item_type": "mrl", "slug": "maximum-residue-limits", "noun": "maximum residue limits",
+     "file": "medicines-output-maximum_residue_limits-report_en.xlsx",
+     "title_cols": ["Title", "Active substance"], "url_cols": ["URL"],
+     "date_cols": ["First published date", "Date of Commission implementing decision"],
+     "extra": "Maximum residue limits (MRLs) for veterinary substances in food."},
+    {"item_type": "dhpc", "slug": "dhpc", "noun": "direct healthcare professional communications",
+     "file": "medicines-output-dhpc-report_en.xlsx",
+     "title_cols": ["Name of medicine"], "url_cols": ["DHPC URL"],
+     "date_cols": ["First published date", "Dissemination date"],
+     "extra": "Direct healthcare professional communications (DHPCs) — urgent safety information."},
+    {"item_type": "opinion_outside_eu", "slug": "opinions-outside-eu", "noun": "opinions for use outside the EU",
+     "file": "medicines-output-opinions_outside_eu-report_en.xlsx",
+     "title_cols": ["Medicine name", "EMA opinion number", "Active substance"],
+     "url_cols": ["Opinion on medicines for use outside EU URL"],
+     "date_cols": ["First published date", "Date of opinion"],
+     "extra": "Scientific opinions on medicines intended for markets outside the EU (Article 58)."},
+]
+
+
+def make_ema_dataset_ingestor(cfg):
+    from services.scrapers.economy_common import ingest_xlsx_dataset
+
+    def _ingest(*, fetch_bodies: bool = True, **_):
+        src = _DOC + cfg["file"]
+        return ingest_xlsx_dataset(src, "ema", cfg["item_type"],
+                                   title_cols=cfg["title_cols"], url_cols=cfg["url_cols"],
+                                   date_cols=cfg["date_cols"], record_url=src)
+    _ingest.__name__ = f"ingest_ema_{cfg['item_type']}"
+    return _ingest
+
+
+EMA_DATASET_INGESTORS = {cfg["item_type"]: make_ema_dataset_ingestor(cfg) for cfg in EMA_DATASETS}
