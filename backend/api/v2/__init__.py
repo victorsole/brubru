@@ -39,6 +39,7 @@ from .eu_financial_institutions import router as _eu_fin_router
 from .esm import router as _esm_router
 from .berec import router as _berec_router
 from .acer import router as _acer_router
+from .eit import router as _eit_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -61,6 +62,7 @@ router.include_router(_esm_router)
 # Single-market / digital EU agencies (api_market.md), each its own folder.
 router.include_router(_berec_router)
 router.include_router(_acer_router)
+router.include_router(_eit_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
