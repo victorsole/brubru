@@ -21,5 +21,10 @@ router = make_single_body_folder(
         {"item_type": "publication", "slug": "publications", "noun": "publications",
          "source": "the ECDC publications search feed.",
          "extra": "Surveillance reports, risk assessments, threat reports and guidance from ECDC."},
+        {"item_type": "surveillance_topic", "slug": "surveillance", "noun": "surveillance topics",
+         "source": "the ECDC Surveillance Atlas of Infectious Diseases (REST API).",
+         "extra": "Catalogue of the infectious diseases under EU surveillance — each with its Atlas "
+                  "link and the REST API for the case figures by country and period. The Atlas holds "
+                  "time-series surveillance data, so this is a catalogue of topics, not the numbers."},
     ],
 )

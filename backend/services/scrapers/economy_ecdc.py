@@ -83,3 +83,45 @@ def ingest_ecdc_news(*, fetch_bodies: bool = True, max_pages: int = 4) -> list[I
 
 def ingest_ecdc_publications(*, fetch_bodies: bool = True, max_pages: int = 4) -> list[Item]:
     return _scrape("publication", fetch_bodies=fetch_bodies, max_pages=max_pages)
+
+
+# --- ECDC Surveillance Atlas: catalogue of surveilled diseases --------------
+# The Surveillance Atlas of Infectious Diseases is statistical (case counts by
+# country/period), so the honest shape is a CATALOGUE: one item per disease
+# (health topic) ECDC monitors, with the Atlas link + REST API for the figures.
+# API found by capturing the Atlas SPA's XHRs: atlas.ecdc.europa.eu/public/AtlasService/rest.
+def ingest_ecdc_surveillance(*, fetch_bodies: bool = True, **_):
+    import requests
+    from datetime import datetime, timezone
+    from services.scrapers.economy_common import Item, clean
+    B = "https://atlas.ecdc.europa.eu/public/AtlasService/rest"
+    H = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "Accept": "application/json"}
+    topics: dict = {}
+    for did in (27, 1):
+        try:
+            r = requests.get(f"{B}/GetHealthTopicsForDataset?datasetId={did}", headers=H, timeout=30)
+            if r.status_code == 200:
+                for t in (r.json().get("HealthTopics") or []):
+                    code = t.get("Code")
+                    if code:
+                        topics.setdefault(code, t.get("Label") or code)
+        except requests.RequestException:
+            continue
+    now = datetime.now(timezone.utc)
+    items = []
+    for code, label in topics.items():
+        url = f"https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic={code}"
+        lines = [
+            f"Disease / health topic: {label}",
+            f"Surveillance code: {code}",
+            f"Surveillance Atlas: {url}",
+            f"Data (REST): {B}/GetDatasets and /GetHealthTopicsForDataset?datasetId=27",
+        ]
+        body_txt = clean("\n".join(lines))
+        body_html = clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>")
+        items.append(Item(body_code="ecdc", item_type="surveillance_topic", title=clean(label),
+                          public_url=url, summary=clean(f"ECDC surveillance: {label} ({code})"),
+                          body_txt=body_txt, body_html=body_html, document_date=None,
+                          creation_date=now, source_kind="atlas-catalogue", guid=code))
+    return items

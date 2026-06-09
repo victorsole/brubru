@@ -103,6 +103,7 @@ INGESTORS = {
     ("ema", "medicine"):        ema.ingest_ema_medicines,
     ("ecdc", "news"):           ecdc.ingest_ecdc_news,
     ("ecdc", "publication"):    ecdc.ingest_ecdc_publications,
+    ("ecdc", "surveillance_topic"): ecdc.ingest_ecdc_surveillance,
     ("efsa", "news"):           efsa.ingest_efsa_news,
     ("efsa", "publication"):    efsa.ingest_efsa_publications,
     ("eu_osha", "news"):        eu_osha.ingest_eu_osha_news,
