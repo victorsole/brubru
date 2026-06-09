@@ -180,3 +180,65 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         description=_DESC_DETAIL.format(body=body_name, noun_singular=noun_singular, path=path_hint,
                                         source=source),
     )
+
+
+# ---------------------------------------------------------------------------
+# Single-body own-folder factory — used by the single-market / digital agencies
+# (BEREC, ACER, EIT, ENISA, eu-LISA, EUIPO, CPVO). Each is one body in its own
+# folder, so its resources sit directly under the folder prefix plus a small
+# directory endpoint. Mirrors the hand-written ESM folder.
+# ---------------------------------------------------------------------------
+def make_single_body_folder(*, body_code, prefix, body_name, acronym, tag, resources):
+    """Return an APIRouter for a single-body own-folder.
+
+    resources: list of dicts with keys item_type, slug, noun, source, extra.
+    """
+    from fastapi import APIRouter
+    from typing import List, Optional
+    from pydantic import BaseModel as _BM, Field as _F
+
+    router = APIRouter(prefix=prefix, tags=[tag])
+
+    class _AgencyBody(_BM):
+        code: str
+        acronym: str
+        name: str
+        mandate: Optional[str] = None
+        website: Optional[str] = None
+        item_counts: dict = _F(default_factory=dict)
+
+    async def _directory(
+        request: Request,
+        db: Session = Depends(get_db),
+        user: User = Depends(api_user_with_rate_limit),
+    ):
+        bodies = db.execute(
+            text("SELECT code, acronym, name, mandate, website FROM economy_bodies WHERE code = :c"),
+            {"c": body_code},
+        ).fetchall()
+        counts = db.execute(
+            text("SELECT item_type, count(*) AS n FROM economy_items WHERE body_code = :c GROUP BY item_type"),
+            {"c": body_code},
+        ).fetchall()
+        cmap = {c.item_type: c.n for c in counts}
+        return [_AgencyBody(code=b.code, acronym=b.acronym, name=b.name, mandate=b.mandate,
+                            website=b.website, item_counts=cmap) for b in bodies]
+
+    router.add_api_route(
+        "", _directory, methods=["GET"], response_model=List[_AgencyBody], tags=[tag],
+        summary=f"{acronym} folder directory — what {acronym} carries",
+        description=(
+            f"**What it does**\nReturns {body_name} ({acronym}) with a count of stored items per "
+            f"resource type.\n\n**When to use it**\nA one-call overview before drilling into a "
+            f"specific feed.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2{prefix}\n```\n\n"
+            f"**You get back**\nOne body record with acronym, name, mandate, website and an "
+            f"`item_counts` map.\n\n**Data freshness**\nCounts are live from the database."
+        ),
+    )
+    for r in resources:
+        register_resource(
+            router, body_code=body_code, item_type=r["item_type"], slug=r["slug"],
+            noun=r["noun"], body_name=body_name, acronym=acronym, tag=tag,
+            source=r["source"], extra=r.get("extra", ""),
+        )
+    return router

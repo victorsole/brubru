@@ -576,16 +576,35 @@ def _build_eu_fin_domain(paths: dict) -> dict:
     return {"name": "Economic & Financial Institutions of the EU", "item": sources}
 
 
-def _build_esm_domain(paths: dict) -> dict:
+def _build_flat_domain(paths: dict, prefix: str, name: str) -> dict:
+    """A single-body own-folder domain (ESM and the single-market agencies):
+    all requests under /api/v2/<prefix> sit directly under one domain folder."""
     items = []
+    root = f"/api/v2/{prefix}"
     for path, methods in paths.items():
-        if path != "/api/v2/esm" and "/api/v2/esm/" not in path:
+        if path != root and f"{root}/" not in path:
             continue
         for method, op in methods.items():
             if method.lower() not in ("get", "post"):
                 continue
             items.append(_build_request(path, method, op))
-    return {"name": "European Stability Mechanism", "item": sorted(items, key=_prop_sort_key)}
+    return {"name": name, "item": sorted(items, key=_prop_sort_key)}
+
+
+def _build_esm_domain(paths: dict) -> dict:
+    return _build_flat_domain(paths, "esm", "European Stability Mechanism")
+
+
+# Single-market / digital EU agencies (api_market.md) — one flat folder each.
+_AGENCY_DOMAINS = [
+    ("berec", "BEREC — Electronic Communications"),
+    ("acer", "ACER — Energy Regulators"),
+    ("eit", "EIT — Innovation & Technology"),
+    ("enisa", "ENISA — Cybersecurity"),
+    ("eu-lisa", "eu-LISA — Large-Scale IT Systems"),
+    ("euipo", "EUIPO — Intellectual Property"),
+    ("cpvo", "CPVO — Plant Variety Rights"),
+]
 
 
 def _count(folder: dict) -> int:
@@ -611,8 +630,11 @@ def build_collection() -> dict:
         _build_ecb_domain(paths),
         _build_eu_fin_domain(paths),
         _build_esm_domain(paths),
+        *(_build_flat_domain(paths, prefix, name) for prefix, name in _AGENCY_DOMAINS),
         _build_proprietary_domain(paths),
     ]
+    # Drop agency domains that have no built endpoints yet.
+    domains = [d for d in domains if d.get("item")]
     n_requests = sum(_count(d) for d in domains)
     return {
         "info": {
