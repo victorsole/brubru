@@ -2137,18 +2137,18 @@
       "source_file": "L_202502056EN.000101.fmx.xml"
     },
     "CRR": {
-      "celex": "32019D0483",
-      "full_title": "Council Decision (EU) 2019/483 of 19 March 2019 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee, concerning the amendment of Annex IX (Financial services",
+      "celex": "32013R0575",
+      "full_title": "Regulation (EU) No 575/2013 of the European Parliament and of the Council of 26 June 2013 on prudential requirements for credit institutions and investment firms and amending Regulation (EU) No 648/2012 (Capital Requirements Regulation)",
+      "source_file": "manual_fix_2026_06_09",
       "type": "Regulation",
-      "year": 2019,
-      "source_file": "L_2019082EN.01002901.xml"
+      "year": 2013
     },
     "CRD IV": {
-      "celex": "32019D0483",
-      "full_title": "Council Decision (EU) 2019/483 of 19 March 2019 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee, concerning the amendment of Annex IX (Financial services",
-      "type": "Regulation",
-      "year": 2019,
-      "source_file": "L_2019082EN.01002901.xml"
+      "celex": "32013L0036",
+      "full_title": "Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms (Capital Requirements Directive IV)",
+      "source_file": "manual_fix_2026_06_09",
+      "type": "Directive",
+      "year": 2013
     },
     "FADO": {
       "celex": "32020R0493",
