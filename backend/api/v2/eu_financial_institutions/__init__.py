@@ -28,6 +28,7 @@ from . import esrb as _esrb
 from . import srb as _srb
 from . import eib as _eib
 from . import amla as _amla
+from . import eppo as _eppo
 
 router = APIRouter(prefix="/eu-financial-institutions", tags=["v2-eu-financial-institutions"])
 
@@ -98,3 +99,4 @@ router.include_router(_esrb.router)
 router.include_router(_srb.router)
 router.include_router(_eib.router)
 router.include_router(_amla.router)
+router.include_router(_eppo.router)
