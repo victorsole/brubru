@@ -242,6 +242,70 @@ def scrape_ecl_listing(body_code: str, item_type: str, listing_urls, base: str,
     return items
 
 
+# --- generic EU ECL file-library scraper -----------------------------------
+# ECL document libraries (AMLA, and other europa.eu bodies) render each document
+# as an .ecl-file card: a title in .ecl-file__title, type + date in
+# .ecl-file__detail-meta-item spans, and a /document/download/<uuid> PDF link.
+# Server-rendered + ?page=N paginated.
+def _parse_ecl_file_cards(html: str, base: str):
+    soup = BeautifulSoup(html, "html.parser")
+    out = []
+    for f in soup.select(".ecl-file"):
+        a = f.select_one("a[href]")
+        title_el = f.select_one(".ecl-file__title")
+        if not a or not a.get("href") or not title_el:
+            continue
+        href = a["href"]
+        url = norm_url(href if href.startswith("http") else base + href)
+        title = clean(title_el.get_text(" ", strip=True))
+        if not title:
+            continue
+        doc_dt = None
+        metas = f.select(".ecl-file__detail-meta-item")
+        for m in metas:                       # the date meta is the one that parses
+            d = parse_listing_date(m.get_text(" ", strip=True))
+            if d:
+                doc_dt = d
+                break
+        out.append((url, title, doc_dt))
+    return out
+
+
+def scrape_ecl_file_listing(body_code: str, item_type: str, listing_urls, base: str,
+                            *, fetch_bodies: bool = True, max_pages: int = 8):
+    """Page through ECL .ecl-file document libraries and build Items (PDFs)."""
+    items = []
+    seen: set[str] = set()
+    now = datetime.now(timezone.utc)
+    for listing in listing_urls:
+        for page in range(max_pages):
+            sep = "&" if "?" in listing else "?"
+            url = listing if page == 0 else f"{listing}{sep}page={page}"
+            r = http_get(url)
+            if r is None:
+                break
+            rows = _parse_ecl_file_cards(r.text, base)
+            if not rows:
+                break
+            new = 0
+            for url_i, title, doc_dt in rows:
+                if url_i in seen:
+                    continue
+                seen.add(url_i)
+                new += 1
+                items.append(Item(body_code=body_code, item_type=item_type, title=title,
+                                  public_url=url_i, document_date=doc_dt, creation_date=now,
+                                  source_kind="pdf", guid=url_i))
+            if new == 0:
+                break
+    if fetch_bodies:
+        for it in items:
+            body_txt, body_html, kind = fetch_detail(it.public_url)
+            it.body_txt, it.body_html = body_txt, body_html
+            it.source_kind = kind if kind in ("pdf", "html") else it.source_kind
+    return items
+
+
 # --- generic ECB/ESRB date-indexed <dl> listing scraper --------------------
 # ECB-CMS bodies (ECB, ESRB) render listings as <dt>(date) + <dd>(title+link).
 # Some index pages are server-rendered; others inject the <dl> client-side
