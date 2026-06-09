@@ -124,8 +124,9 @@ def fetch_detail(url: str) -> tuple[str | None, str | None, str]:
 
 
 # --- date parsing ----------------------------------------------------------
-# Handles: 11/06/2026 ; "8 June 2026" / "8 JUNE 2026" ; "8 Dec 2026" ;
-# ranges "11/06/2026 - 12/06/2026" and "18-19 Nov 2026" (-> the start day).
+# Handles: 11/06/2026 ; 29.05.2026 ; "8 June 2026" / "8 JUNE 2026" ; "8 Dec 2026" ;
+# ordinals "2nd June 2026" ; ranges "11/06/2026 - 12/06/2026" and "18-19 Nov 2026"
+# (-> the start day).
 _MONTHS = {
     "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
     "apr": 4, "april": 4, "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7,
@@ -133,6 +134,8 @@ _MONTHS = {
     "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12,
 }
 _NUM_DATE_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
+_DOT_DATE_RE = re.compile(r"\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b")
+_ORDINAL_RE = re.compile(r"\b(\d{1,2})(?:st|nd|rd|th)\b", re.IGNORECASE)
 _NAME_DATE_RE = re.compile(r"\b(\d{1,2})(?:\s*[-–]\s*\d{1,2})?\s+([A-Za-z]{3,9})\.?\s+(\d{4})\b")
 
 
@@ -146,8 +149,15 @@ def _iso_dt(s: str | None) -> datetime | None:
 
 
 def parse_listing_date(text: str) -> datetime | None:
-    text = text or ""
+    text = _ORDINAL_RE.sub(r"\1", text or "")    # "2nd June 2026" -> "2 June 2026"
     m = _NUM_DATE_RE.search(text)                # 11/06/2026 (ranges -> first match = start)
+    if m:
+        day, month, year = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        try:
+            return datetime(year, month, day, tzinfo=timezone.utc)
+        except ValueError:
+            return None
+    m = _DOT_DATE_RE.search(text)                # 29.05.2026 (day.month.year)
     if m:
         day, month, year = int(m.group(1)), int(m.group(2)), int(m.group(3))
         try:
