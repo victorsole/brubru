@@ -29,3 +29,12 @@ register_resource(
     source="the EBA events listing (server-rendered).",
     extra="Board of Supervisors meetings, research workshops, hearings and conferences, with their dates.",
 )
+# Database: the EUCLID Credit Institutions Register (CIR).
+register_resource(
+    router, body_code="eba", item_type="credit_institution", slug="credit-institutions",
+    noun="credit institutions", body_name=_BODY, acronym=_ACRO, tag=_TAG,
+    source="the EBA EUCLID Credit Institutions Register (CIR) API.",
+    extra="Every credit institution and branch authorised in the EEA — name, LEI/entity code, "
+          "national reference code, country, town, authorisation date, competent authority and "
+          "deposit-guarantee scheme. Filter with q (e.g. an institution name, LEI or country code).",
+)

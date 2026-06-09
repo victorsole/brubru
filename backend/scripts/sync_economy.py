@@ -56,6 +56,7 @@ INGESTORS = {
     ("eba", "news"):            eba.ingest_eba_news,
     ("eba", "publication"):     eba.ingest_eba_publications,
     ("eba", "event"):           eba.ingest_eba_events,
+    ("eba", "credit_institution"): eba.ingest_eba_credit_institutions,
     ("esma", "news"):           esma.ingest_esma_news,
     ("esma", "publication"):    esma.ingest_esma_publications,
     ("eiopa", "news"):          eiopa.ingest_eiopa_news,

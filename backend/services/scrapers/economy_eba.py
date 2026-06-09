@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date,
+    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, _iso_dt,
 )
 
 _BASE = "https://www.eba.europa.eu"
@@ -122,3 +122,101 @@ def ingest_eba_publications(**kw) -> list[Item]:
 
 def ingest_eba_events(**kw) -> list[Item]:
     return scrape_listings("eba", "event", EBA_LISTINGS["event"], **kw)
+
+
+# --- EBA EUCLID: credit institutions register (CIR) -------------------------
+# Reverse-engineering note (how this was found):
+#   euclid.eba.europa.eu/register/cir is a SPA behind a "Continue" disclaimer
+#   gate. After clicking through, the search form submits
+#     POST /register/api/search/entities
+#   with a Mongo-style query DSL. The DEFAULT (empty-form) query
+#     {"$and": [{"_messagetype": "EUCLIDMD"}]}
+#   returns the ENTIRE register in one response (~4,500 entities, no pagination).
+#   Each record is wrapped in "_payload" with EntityType + EntityCode + a
+#   Properties list of single-key dicts. The schema is at GET /register/cir-api/metadata.
+#   Key lesson: the query payload only appears on a real form submit behind the
+#   disclaimer — capture it with Playwright form interaction, do NOT guess it.
+import json as _json
+
+_EUCLID_API = "https://euclid.eba.europa.eu/register/api/search/entities"
+_EUCLID_QUERY = {"$and": [{"_messagetype": "EUCLIDMD"}]}
+_EUCLID_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Content-Type": "application/json", "Accept": "application/json",
+    "Origin": "https://euclid.eba.europa.eu",
+    "Referer": "https://euclid.eba.europa.eu/register/cir/search",
+}
+_ENTITY_TYPE = {
+    "CRD_CRE_INS": "Credit institution",
+    "CRD_EEA_BRA": "Branch of an EEA credit institution",
+    "CRD_NON_EEA_BRA": "Branch of a non-EEA credit institution",
+}
+_PROP_LABELS = {
+    "ENT_NAM": "Name", "ENT_NAM_NON_LAT": "Name (non-Latin)",
+    "ENT_COD": "Entity code", "ENT_COD_TYP": "Code type",
+    "ENT_NAT_REF_COD": "National reference code",
+    "ENT_COU_RES": "Country of residence", "ENT_TOW_CIT_RES": "Town/city",
+    "ENT_AUT": "Authorisation date", "EEA_DEP_GUA_SCH": "Deposit guarantee scheme",
+    "NON_EEA_DEP_GUA_SCH": "Non-EEA deposit guarantee scheme", "COM_AUT": "Competent authority",
+    "ENT_COD_CRE_INS_EST_BRA": "Establishing credit institution (code)",
+    "NAM_CRE_INS_EST_BRA": "Establishing credit institution (name)",
+    "COU_CRE_INS_EST_BRA": "Establishing credit institution (country)",
+}
+
+
+def ingest_eba_credit_institutions(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    import requests
+    try:
+        r = requests.post(_EUCLID_API, headers=_EUCLID_HEADERS,
+                          data=_json.dumps(_EUCLID_QUERY), timeout=120)
+        if r.status_code != 200:
+            return []
+        rows = r.json()
+    except (requests.RequestException, ValueError):
+        return []
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set[str] = set()
+    for raw in rows:
+        rec = raw.get("_payload", raw)
+        props: dict = {}
+        for p in rec.get("Properties", []):
+            for k, v in p.items():
+                props[k] = v
+        code = rec.get("EntityCode") or props.get("ENT_COD")
+        if not code:
+            continue
+        url = f"https://euclid.eba.europa.eu/register/cir/{code}"
+        if url in seen:
+            continue
+        seen.add(url)
+        name = clean(props.get("ENT_NAM") or props.get("ENT_NAM_NON_LAT") or code)
+        et = rec.get("EntityType")
+        # authorisation date (a list like ["2026-06-08"])
+        aut = props.get("ENT_AUT")
+        if isinstance(aut, list):
+            aut = aut[0] if aut else None
+        doc_dt = _iso_dt(str(aut)) if aut else None
+        if doc_dt is None and aut:
+            doc_dt = parse_listing_date(str(aut))
+        # body: entity type + every labelled property
+        lines = [f"Entity type: {_ENTITY_TYPE.get(et, et)}"] if et else []
+        for k, v in props.items():
+            if v in (None, "", []):
+                continue
+            val = ", ".join(str(x) for x in v) if isinstance(v, list) else str(v)
+            lines.append(f"{_PROP_LABELS.get(k, k)}: {val}")
+        body_txt = clean("\n".join(lines)) or None
+        body_html = clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>") if lines else None
+        def _s(v):
+            return ", ".join(str(x) for x in v) if isinstance(v, list) else (str(v) if v else "")
+        summary = clean(" | ".join(x for x in [
+            _ENTITY_TYPE.get(et, et) or "",
+            _s(props.get("ENT_COU_RES")), _s(props.get("ENT_TOW_CIT_RES")),
+            f"code {code}",
+        ] if x).strip(" |"))
+        items.append(Item(body_code="eba", item_type="credit_institution", title=name,
+                          public_url=url, summary=summary, body_txt=body_txt, body_html=body_html,
+                          document_date=doc_dt, creation_date=now, source_kind="euclid", guid=code))
+    return items
