@@ -576,6 +576,18 @@ def _build_eu_fin_domain(paths: dict) -> dict:
     return {"name": "Economic & Financial Institutions of the EU", "item": sources}
 
 
+def _build_esm_domain(paths: dict) -> dict:
+    items = []
+    for path, methods in paths.items():
+        if path != "/api/v2/esm" and "/api/v2/esm/" not in path:
+            continue
+        for method, op in methods.items():
+            if method.lower() not in ("get", "post"):
+                continue
+            items.append(_build_request(path, method, op))
+    return {"name": "European Stability Mechanism", "item": sorted(items, key=_prop_sort_key)}
+
+
 def _count(folder: dict) -> int:
     items = folder.get("item", [])
     if items and "request" in items[0]:
@@ -598,6 +610,7 @@ def build_collection() -> dict:
         _build_general_publications_domain(paths),
         _build_ecb_domain(paths),
         _build_eu_fin_domain(paths),
+        _build_esm_domain(paths),
         _build_proprietary_domain(paths),
     ]
     n_requests = sum(_count(d) for d in domains)
