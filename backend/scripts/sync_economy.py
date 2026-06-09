@@ -93,6 +93,7 @@ INGESTORS = {
     ("eu_lisa", "event"):       eulisa.ingest_eulisa_events,
     ("euipo", "news"):          euipo.ingest_euipo_news,
     ("euipo", "event"):         euipo.ingest_euipo_events,
+    ("euipo", "trademark"):     euipo.ingest_euipo_trademarks,
     ("cpvo", "news"):           cpvo.ingest_cpvo_news,
     ("cpvo", "publication"):    cpvo.ingest_cpvo_publications,
     ("cpvo", "event"):          cpvo.ingest_cpvo_events,

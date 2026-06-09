@@ -23,5 +23,10 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the EUIPO events index.",
          "extra": "Conferences, webinars, IPforYOU sessions and DesignEuropa events, with their dates."},
+        {"item_type": "trademark", "slug": "trademarks", "noun": "trade marks",
+         "source": "the TMview database (EUIPO/EM office), most recent first.",
+         "extra": "A bounded slice of the most recent EU trade marks from TMview — name, application "
+                  "number, applicant, status, Nice classes and filing date (TMview holds millions of "
+                  "EUTMs; this surfaces the latest filings). Filter with q (e.g. an applicant or mark name)."},
     ],
 )
