@@ -25,6 +25,7 @@ from . import eba as _eba
 from . import esma as _esma
 from . import eiopa as _eiopa
 from . import esrb as _esrb
+from . import srb as _srb
 
 router = APIRouter(prefix="/eu-financial-institutions", tags=["v2-eu-financial-institutions"])
 
@@ -92,3 +93,4 @@ router.include_router(_eba.router)
 router.include_router(_esma.router)
 router.include_router(_eiopa.router)
 router.include_router(_esrb.router)
+router.include_router(_srb.router)
