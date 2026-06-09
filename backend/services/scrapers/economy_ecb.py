@@ -202,3 +202,56 @@ LIMIT {int(limit)}
                           creation_date=now, source_kind="cellar", guid=celex,
                           extras={"celex": celex}))
     return items
+
+
+# --- ECB Data Portal: catalogue of statistical datasets (dataflows) ---------
+# The ECB Data Portal is a statistical/time-series database (millions of series),
+# which does NOT fit the row-per-item model. The honest representation is a
+# CATALOGUE: one item per SDMX dataflow (dataset), pointing to where the data
+# lives + how to query it. The dataflow list comes from the SDMX structure API
+# (returns SDMX-ML XML; the JSON variants 406 here).
+def ingest_ecb_datasets(*, fetch_bodies: bool = True, **_):
+    from xml.etree import ElementTree as ET
+    from datetime import datetime, timezone
+    from services.scrapers.economy_common import Item, clean
+    url = "https://data-api.ecb.europa.eu/service/dataflow/ECB"
+    r = http_get(url)
+    if r is None:
+        return []
+    try:
+        root = ET.fromstring(r.text)
+    except ET.ParseError:
+        return []
+    ns = {"s": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
+          "c": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"}
+    now = datetime.now(timezone.utc)
+    items = []
+    seen = set()
+    for df in root.findall(".//s:Dataflow", ns):
+        did = df.get("id")
+        if not did or did in seen:
+            continue
+        seen.add(did)
+        nm = df.find("c:Name", ns)
+        name = clean(nm.text) if nm is not None and nm.text else did
+        desc = df.find("c:Description", ns)
+        portal = f"https://data.ecb.europa.eu/data/datasets/{did}"
+        struct = f"https://data-api.ecb.europa.eu/service/datastructure/ECB/{did}"
+        data_api = f"https://data-api.ecb.europa.eu/service/data/{did}"
+        lines = [
+            f"Dataset: {name}",
+            f"Dataflow code: {did}",
+            f"Description: {clean(desc.text)}" if (desc is not None and desc.text) else "",
+            f"Browse: {portal}",
+            f"Data (SDMX): {data_api}/<series key>?format=csvdata",
+            f"Structure (SDMX): {struct}",
+        ]
+        lines = [l for l in lines if l]
+        body_txt = clean("\n".join(lines))
+        body_html = clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>")
+        items.append(Item(body_code="ecb", item_type="dataset", title=name,
+                          public_url=portal, summary=clean(f"ECB statistical dataset {did} — {name}"),
+                          body_txt=body_txt, body_html=body_html,
+                          document_date=None, creation_date=now,
+                          source_kind="sdmx-catalogue", guid=did))
+    return items

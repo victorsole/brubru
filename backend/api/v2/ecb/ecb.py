@@ -35,3 +35,13 @@ register_resource(
     source="the EU Publications Office (Cellar SPARQL), with ECB as author. CELEX is taken verbatim, never derived.",
     extra="ECB regulations, decisions, guidelines and opinions, each linking to its EUR-Lex record.",
 )
+# Database: catalogue of ECB Data Portal statistical datasets (SDMX dataflows).
+register_resource(
+    router, body_code="ecb", item_type="dataset", slug="datasets", noun="statistical datasets",
+    body_name=_BODY, acronym=_ACRO, tag=_TAG,
+    source="the ECB Data Portal SDMX dataflow catalogue.",
+    extra="The catalogue of ECB statistical datasets (dataflows) — e.g. exchange rates, bank "
+          "lending survey, balance-sheet items. Each item gives the dataflow code, the Data Portal "
+          "browse link and the SDMX data/structure API URLs so you can pull the actual time series. "
+          "The ECB Data Portal is time-series data, so this is a catalogue, not the numbers themselves.",
+)

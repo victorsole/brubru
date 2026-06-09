@@ -46,6 +46,7 @@ from scripts._specialised_helpers import ChunkedDb       # noqa: E402
 
 # (body_code, item_type) -> callable returning list[Item]
 INGESTORS = {
+    ("ecb", "dataset"):         e.ingest_ecb_datasets,
     ("ecb", "news"):            e.ingest_ecb_news,
     ("ecb", "publication"):     e.ingest_ecb_publications,
     ("ecb", "event"):           e.ingest_ecb_events,
