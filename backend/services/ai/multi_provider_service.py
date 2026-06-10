@@ -6,10 +6,11 @@ Provides resilient AI chat with automatic failover.
 Since the 10 June 2026 OSS migration (memory/project_chat_oss_migration.md) the
 chat generator runs on a stacked chain of FREE open-model tiers, in this order:
 
-    Groq (open, PRIMARY) → Gemini (free, big-context catcher) →
-    Mistral (free, EU, open-weight) → Cerebras (open, deep fallback) →
-    Anthropic Sonnet (OPPORTUNISTIC — only when the free chain is exhausted AND
-    funded) → OpenAI (paid last resort)
+    Cerebras gpt-oss-120b (OPEN, PRIMARY — 60K TPM fits Brubru's ~19K-token
+    prompt) → Mistral (free, EU, open-weight, reliable catch) → Gemini (free,
+    daily quota) → Groq (open but 12K free TPM 413s on Brubru's prompt; idle
+    unless the prompt is trimmed) → Anthropic Sonnet (OPPORTUNISTIC — only when
+    the free chain is exhausted AND funded) → OpenAI (paid last resort)
 
 The chain order in `self.providers` IS the priority. `prefer_claude` is now a
 no-op (the legacy `sonnet_primary_provider` slot is left None), so `generate()`
@@ -654,30 +655,35 @@ class MultiProviderService:
         # NOTE: sonnet_primary_provider is intentionally left None so generate()
         # iterates this chain in order instead of routing to Claude first.
 
-        # 1. Groq (OPEN-SOURCE PRIMARY — fast, clean multilingual incl. Catalan).
-        groq = GroqProvider()
-        if groq.is_available:
-            self.providers.append(groq)
-            logger.info(f"Groq provider available (open primary, model={groq.model})")
-
-        # 2. Gemini (free; 1M context — catches large-context queries that exceed
-        #    Groq's free TPM, plus Groq RPD overflow).
-        gemini = GeminiProvider(gemini_key)
-        if gemini.is_available:
-            self.providers.append(gemini)
-            logger.info("Gemini provider available (free big-context catcher)")
-
-        # 3. Mistral (free tier, EU, open-weight).
-        mistral = MistralProvider(mistral_key)
-        if mistral.is_available:
-            self.providers.append(mistral)
-            logger.info("Mistral provider available (free EU fallback)")
-
-        # 4. Cerebras (OPEN; high TPD deep fallback).
+        # 1. Cerebras (OPEN-SOURCE PRIMARY — gpt-oss-120b, ~60K TPM fits Brubru's
+        #    large (~19K-token) prompt; 1M tokens/day free; ~0.8s. Groq was the
+        #    original primary but its 12K free TPM 413s on every Brubru request
+        #    (the prompt alone exceeds it), so it is demoted below.)
         cerebras = CerebrasProvider()
         if cerebras.is_available:
             self.providers.append(cerebras)
-            logger.info(f"Cerebras provider available (open deep fallback, model={cerebras.model})")
+            logger.info(f"Cerebras provider available (OPEN primary, model={cerebras.model})")
+
+        # 2. Mistral (free tier, EU, open-weight) — reliable catch for Cerebras's
+        #    occasional queue_exceeded congestion.
+        mistral = MistralProvider(mistral_key)
+        if mistral.is_available:
+            self.providers.append(mistral)
+            logger.info("Mistral provider available (free EU catch)")
+
+        # 3. Gemini (free; 1M context) — when its daily quota is available.
+        gemini = GeminiProvider(gemini_key)
+        if gemini.is_available:
+            self.providers.append(gemini)
+            logger.info("Gemini provider available (free, daily quota)")
+
+        # 4. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
+        #    queries; kept only for the rare small prompt / if the system prompt
+        #    is later trimmed).
+        groq = GroqProvider()
+        if groq.is_available:
+            self.providers.append(groq)
+            logger.info(f"Groq provider available (open, TPM-limited, model={groq.model})")
 
         # 5. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
         #    is exhausted; fails fast when unfunded, then the chain continues).
