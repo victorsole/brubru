@@ -128,11 +128,12 @@ _COMM_ROUTING = [
     ("consultations", "Consultations"),
     ("tris-notifications", "TRIS Notifications"),
     ("financial-sanctions", "Financial Sanctions"),
+    ("research-projects", "Research Projects"),
 ]
 _COMM_SOURCE_ORDER = [
     "Commissioners", "Commission Register", "Meetings", "RSB Opinions",
     "Infringements", "Consultations", "TRIS Notifications",
-    "Financial Sanctions",
+    "Financial Sanctions", "Research Projects",
 ]
 
 # Council: (path-tail prefix, source folder). Flat — no sub-sub-folders.

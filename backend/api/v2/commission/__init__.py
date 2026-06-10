@@ -33,6 +33,7 @@ from . import consultations as _consultations
 from . import tris_notifications as _tris_notifications
 # EC database folders (economy_items-backed; one per database).
 from . import financial_sanctions as _financial_sanctions
+from . import research_projects as _research_projects
 
 router = APIRouter(prefix="/commission")
 router.include_router(_commissioners.router)
@@ -43,3 +44,4 @@ router.include_router(_infringements.router)
 router.include_router(_consultations.router)
 router.include_router(_tris_notifications.router)
 router.include_router(_financial_sanctions.router)
+router.include_router(_research_projects.router)

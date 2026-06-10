@@ -36,6 +36,7 @@ from services.scrapers import economy_eppo as eppo       # noqa: E402
 from services.scrapers import economy_esm as esm         # noqa: E402
 from services.scrapers import commission_sanctions as commission_sanctions  # noqa: E402
 from services.scrapers import commission_funding as commission_funding  # noqa: E402
+from services.scrapers import commission_research as commission_research  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -91,6 +92,7 @@ INGESTORS = {
     # European Commission database folders.
     ("commission", "financial_sanction"): commission_sanctions.ingest_financial_sanctions,
     ("commission", "funding_recipient"): commission_funding.ingest_eu_funding_recipients,
+    ("commission", "research_project"): commission_research.ingest_research_projects,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
