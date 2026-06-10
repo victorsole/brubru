@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date,
+    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, _iso_dt,
 )
 
 _BASE = "https://www.esma.europa.eu"
@@ -132,3 +132,126 @@ def ingest_esma_news(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[I
 
 def ingest_esma_publications(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[Item]:
     return _scrape_paged(ESMA_PUB_PAGES, _parse_pub_page, fetch_bodies=fetch_bodies, max_pages=max_pages)
+
+
+# --- ESMA FIRDS: Financial Instruments Reference Data System ----------------
+# Reverse-engineering note:
+#   FIRDS is ESMA's register of ~30M financial instruments. The Solr search
+#   (registers.esma.europa.eu/.../doMainSearch) works for NARROW keyword queries
+#   but TIMES OUT on broad ones (wildcard over 30M rows), so it can't list
+#   "recent" instruments. The canonical bounded source is the daily DELTA file
+#   (DLTINS) — ISO 20022 XML in a zip, listed in the `esma_registers_firds_files`
+#   Solr core. We take the latest delta and stream-parse a bounded slice.
+#   The search endpoint needs the exact Accept header
+#   "application/json, text/javascript, */*; q=0.01" (else it returns HTML) and a
+#   prior GET on the register page to establish the session.
+_FIRDS_SEARCH = "https://registers.esma.europa.eu/publication/searchRegister/doMainSearch"
+_FIRDS_FILES_PAGE = "https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_firds_files"
+_FIRDS_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Content-Type": "application/json",
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+    "X-Requested-With": "XMLHttpRequest",
+    "Referer": _FIRDS_FILES_PAGE,
+}
+
+
+def _latest_dltins_link():
+    import requests, json as _json, time
+    s = requests.Session()
+    s.headers.update({"User-Agent": _FIRDS_HEADERS["User-Agent"]})
+    for _ in range(4):
+        try:
+            s.get(_FIRDS_FILES_PAGE, timeout=45)
+            break
+        except requests.RequestException:
+            time.sleep(2)
+    body = {"core": "esma_registers_firds_files", "pagingSize": "1", "start": 0,
+            "keyword": "DLTINS", "sortField": "publication_date desc", "criteria": [], "wt": "json"}
+    for _ in range(3):
+        try:
+            r = s.post(_FIRDS_SEARCH, headers=_FIRDS_HEADERS, data=_json.dumps(body), timeout=60)
+            if r.text.strip().startswith("{"):
+                docs = r.json().get("response", {}).get("docs", [])
+                if docs:
+                    return docs[0].get("download_link"), docs[0].get("publication_date")
+        except requests.RequestException:
+            time.sleep(2)
+    return None, None
+
+
+def ingest_esma_financial_instruments(*, fetch_bodies: bool = True, max_instruments: int = 5000):
+    import io
+    import zipfile
+    import requests
+    from xml.etree import ElementTree as ET
+
+    link, pub = _latest_dltins_link()
+    if not link:
+        return []
+    try:
+        zb = requests.get(link, headers={"User-Agent": _FIRDS_HEADERS["User-Agent"]}, timeout=240).content
+        z = zipfile.ZipFile(io.BytesIO(zb))
+    except (requests.RequestException, zipfile.BadZipFile):
+        return []
+
+    def ln(t):
+        return t.rsplit("}", 1)[-1]
+
+    def first(el, tag):
+        for d in el.iter():
+            if ln(d.tag) == tag and d.text:
+                return d.text
+        return None
+
+    def venue_and_date(el):
+        for d in el.iter():
+            if ln(d.tag) == "TradgVnRltdAttrbts":
+                mic = ftd = None
+                for c in d:
+                    if ln(c.tag) == "Id" and c.text:
+                        mic = c.text
+                    elif ln(c.tag) == "FrstTradDt" and c.text:
+                        ftd = c.text
+                return mic, ftd
+        return None, None
+
+    now = datetime.now(timezone.utc)
+    items = []
+    seen = set()
+    with z.open(z.namelist()[0]) as f:
+        for _ev, el in ET.iterparse(f, events=("end",)):
+            if ln(el.tag) != "FinInstrm":
+                continue
+            gnl = next((d for d in el.iter() if ln(d.tag) == "FinInstrmGnlAttrbts"), None)
+            isin = first(gnl, "Id") if gnl is not None else None
+            if isin and isin not in seen:
+                seen.add(isin)
+                name = clean(first(gnl, "FullNm")) or isin
+                cfi = first(gnl, "ClssfctnTp")
+                ccy = first(gnl, "NtnlCcy")
+                lei = first(el, "Issr")
+                mic, ftd = venue_and_date(el)
+                doc_dt = _iso_dt(ftd) if ftd else None
+                url = norm_url(f"https://registers.esma.europa.eu/publication/searchRegister"
+                               f"?core=esma_registers_firds&keyword={isin}")
+                lines = [
+                    f"ISIN: {isin}", f"Instrument: {name}",
+                    f"CFI classification: {cfi}" if cfi else "",
+                    f"Notional currency: {ccy}" if ccy else "",
+                    f"Issuer (LEI): {lei}" if lei else "",
+                    f"Trading venue (MIC): {mic}" if mic else "",
+                    f"First trading date: {ftd[:10]}" if ftd else "",
+                ]
+                lines = [l for l in lines if l]
+                items.append(Item(
+                    body_code="esma", item_type="financial_instrument", title=name,
+                    public_url=url, summary=clean(f"{isin} — {name}" + (f" ({cfi})" if cfi else "")),
+                    body_txt=clean("\n".join(lines)),
+                    body_html=clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>"),
+                    document_date=doc_dt, creation_date=now, source_kind="firds", guid=isin))
+            el.clear()
+            if len(items) >= max_instruments:
+                break
+    return items

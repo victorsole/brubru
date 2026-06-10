@@ -28,3 +28,13 @@ register_resource(
     source="the ESMA consultations/library listing (server-rendered); bodies are extracted from the source PDFs.",
     extra="Consultation papers, reply forms and related library documents.",
 )
+# Database: FIRDS (Financial Instruments Reference Data System) — recent slice.
+register_resource(
+    router, body_code="esma", item_type="financial_instrument", slug="financial-instruments",
+    noun="financial instruments", body_name=_BODY, acronym=_ACRO, tag=_TAG,
+    source="ESMA FIRDS — the latest daily delta file (ISO 20022), stream-parsed.",
+    extra="A bounded recent slice of the Financial Instruments Reference Data System — ISIN, name, "
+          "CFI classification, currency, issuer LEI, trading venue (MIC) and first-trading date. "
+          "FIRDS holds ~30M instruments; this surfaces the most recent admissions/changes. "
+          "Filter with q (e.g. an ISIN, issuer LEI or instrument name).",
+)
