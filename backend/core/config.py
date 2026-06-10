@@ -33,11 +33,19 @@ class Settings(BaseSettings):
     DATABASE_URL: str  # PostgreSQL connection string
 
     # AI Services
-    MISTRAL_API_KEY: str | None = None  # Mistral (primary - cost-effective)
-    ANTHROPIC_API_KEY: str  # Claude (fallback 1)
-    OPENAI_API_KEY: str  # GPT-4 (fallback 2)
+    # Chat generation runs on a stacked chain of FREE open-model tiers (10 June
+    # 2026 migration, see memory/project_chat_oss_migration.md). Order:
+    # Groq (open, primary) -> Gemini (free) -> Mistral (free, EU) -> Cerebras
+    # (open, deep fallback) -> Anthropic (opportunistic, when funded) -> OpenAI.
+    GROQ_API_KEY: str | None = None  # Groq free tier (open models: Llama/Qwen/gpt-oss) — chat primary
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"  # clean multilingual incl. Catalan; swap to qwen/qwen3-32b if needed
+    CEREBRAS_API_KEY: str | None = None  # Cerebras free tier (gpt-oss-120b, zai-glm-4.7) — deep open fallback
+    CEREBRAS_MODEL: str = "gpt-oss-120b"  # high TPD; reasoning model (reasoning_effort=low, content/<think> handled)
+    MISTRAL_API_KEY: str | None = None  # Mistral (free tier, EU, open-weight) — fallback
+    ANTHROPIC_API_KEY: str  # Claude (opportunistic — used only when free chain exhausted AND funded)
+    OPENAI_API_KEY: str  # GPT-4 (paid last resort)
     OPENAI_ORG_ID: str | None = None
-    GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini (fallback 3)
+    GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini 2.0 Flash (free, 1M ctx) — big-context catcher
 
     # Beresol Monitor API (partner policy-intelligence feeds, MEUB 4.2 Beresol Monitors)
     BERESOL_API_KEY: str | None = None

@@ -1,32 +1,30 @@
 """
 Multi-Provider AI Service with Fallback Chain
 
-Provides resilient AI chat with automatic failover. The runtime routing
-depends on whether the query matches a knowledge guide (most real Brubru
-queries do):
+Provides resilient AI chat with automatic failover.
 
-  prefer_claude=True (knowledge-bearing queries — the default for Brubru):
-    Claude Sonnet (primary, $10/day cap) → Mistral → Claude Sonnet (fallback 1)
-    → GPT-4 → Gemini
+Since the 10 June 2026 OSS migration (memory/project_chat_oss_migration.md) the
+chat generator runs on a stacked chain of FREE open-model tiers, in this order:
 
-  prefer_claude=False (no knowledge match) OR Sonnet daily cap reached:
-    Mistral → Claude Sonnet (fallback 1) → GPT-4 → Gemini
+    Groq (open, PRIMARY) → Gemini (free, big-context catcher) →
+    Mistral (free, EU, open-weight) → Cerebras (open, deep fallback) →
+    Anthropic Sonnet (OPPORTUNISTIC — only when the free chain is exhausted AND
+    funded) → OpenAI (paid last resort)
+
+The chain order in `self.providers` IS the priority. `prefer_claude` is now a
+no-op (the legacy `sonnet_primary_provider` slot is left None), so `generate()`
+simply iterates the chain and returns the first provider that succeeds; a
+rate-limit (429) or error on a free tier degrades to the next provider, never
+to paid usage unless the whole free chain is down.
 
 Each provider implements the same interface, allowing seamless switching.
 
-The base chain (the `self.providers` list) is ordered by cost-effectiveness;
-`self.sonnet_primary_provider` is a separate slot that is consulted FIRST
-when prefer_claude=True. See `feedback_claude_is_runtime_primary.md` for
-the runtime-vs-base-chain distinction.
-
-Pricing reference:
-  - Mistral Small 3: $0.20/1M input, $0.60/1M output (15× cheaper than Claude)
-  - Claude Sonnet 4: $3.00/1M input, $15.00/1M output
-  - GPT-4 Turbo: $10.00/1M input, $30.00/1M output
-  - Gemini 1.5 Pro: $1.25/1M input, $5.00/1M output
+Cost: €0 at current volume — Groq/Cerebras free tiers (open models) + Gemini/
+Mistral free tiers. Anthropic/OpenAI are reached only as a last resort.
 """
 
 import logging
+import re
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 from datetime import datetime, date
@@ -335,6 +333,181 @@ class OpenAIProvider(AIProvider):
         )
 
 
+class _OpenAICompatibleProvider(AIProvider):
+    """Base for OpenAI-compatible FREE open-model endpoints (Groq, Cerebras).
+
+    Reuses the OpenAI async SDK with a custom ``base_url`` — no extra dependency.
+    Handles reasoning models (gpt-oss, GLM-4.7, Qwen3) that may (a) leave
+    ``content`` empty and put the answer in ``reasoning_content`` or (b) wrap
+    thinking in ``<think>...</think>`` tags. NO Anthropic — this is the
+    sanctioned free open-model generation path (10 June 2026 migration, see
+    memory/project_chat_oss_migration.md).
+    """
+
+    BASE_URL: str = ""
+    MODEL: str = ""
+    _NAME: str = ""
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None,
+                 extra_body: Optional[Dict[str, Any]] = None):
+        self.api_key = api_key
+        self.model = model or self.MODEL
+        self.extra_body = extra_body or {}
+        self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.BASE_URL) if self.api_key else None
+
+    @property
+    def name(self) -> str:
+        return self._NAME
+
+    @property
+    def is_available(self) -> bool:
+        return bool(self.api_key and self.client)
+
+    async def generate(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3
+    ) -> ProviderResponse:
+        if not self.is_available:
+            raise RuntimeError(f"{self._NAME} provider not configured")
+
+        oai_messages = [{"role": "system", "content": system_prompt}]
+        for msg in messages:
+            if isinstance(msg.get("content"), list):
+                text_parts = [b.get("text", "") for b in msg["content"] if b.get("type") == "text"]
+                oai_messages.append({"role": msg["role"], "content": "\n".join(text_parts)})
+            else:
+                oai_messages.append({"role": msg["role"], "content": msg["content"]})
+
+        kwargs: Dict[str, Any] = dict(
+            model=self.model,
+            messages=oai_messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+        if self.extra_body:
+            kwargs["extra_body"] = dict(self.extra_body)
+
+        response = await self.client.chat.completions.create(**kwargs)
+        choice = response.choices[0]
+        content = (choice.message.content or "").strip()
+        # Reasoning-model recovery: some open models leave content empty and put
+        # the answer in reasoning_content, or wrap thinking in <think>...</think>.
+        if not content:
+            content = (getattr(choice.message, "reasoning_content", None) or "").strip()
+        content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
+        tokens = response.usage.total_tokens if response.usage else 0
+
+        if not content:
+            raise RuntimeError(f"{self._NAME} returned empty content (finish={choice.finish_reason})")
+
+        return ProviderResponse(
+            message=content,
+            tokens_used=tokens,
+            model=self.model,
+            provider=self.name
+        )
+
+    async def generate_stream(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3
+    ):
+        """Yield assistant `content` deltas via OpenAI-compatible SSE streaming.
+
+        Reasoning deltas are skipped. The default Groq model
+        (llama-3.3-70b-versatile) is non-thinking, so the stream is clean;
+        thinking models (qwen3-32b, gpt-oss) interleave reasoning we drop, with
+        a cheap inline <think>...</think> suppressor as a safety net.
+        """
+        if not self.is_available:
+            raise RuntimeError(f"{self._NAME} provider not configured")
+
+        oai_messages = [{"role": "system", "content": system_prompt}]
+        for msg in messages:
+            if isinstance(msg.get("content"), list):
+                text_parts = [b.get("text", "") for b in msg["content"] if b.get("type") == "text"]
+                oai_messages.append({"role": msg["role"], "content": "\n".join(text_parts)})
+            else:
+                oai_messages.append({"role": msg["role"], "content": msg["content"]})
+
+        kwargs: Dict[str, Any] = dict(
+            model=self.model,
+            messages=oai_messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            stream=True,
+        )
+        if self.extra_body:
+            kwargs["extra_body"] = dict(self.extra_body)
+
+        stream = await self.client.chat.completions.create(**kwargs)
+        in_think = False
+        async for chunk in stream:
+            if not chunk.choices:
+                continue
+            piece = getattr(chunk.choices[0].delta, "content", None)
+            if not piece:
+                continue
+            # Inline <think> suppression (the default model never emits it).
+            if in_think:
+                if "</think>" in piece:
+                    in_think = False
+                    piece = piece.split("</think>", 1)[1]
+                else:
+                    continue
+            if "<think>" in piece:
+                before, _, after = piece.partition("<think>")
+                if "</think>" in after:
+                    piece = before + after.split("</think>", 1)[1]
+                else:
+                    in_think = True
+                    piece = before
+            if piece:
+                yield piece
+
+
+class GroqProvider(_OpenAICompatibleProvider):
+    """Groq free tier — chat PRIMARY. Open models (default Llama 3.3 70B; swap
+    to qwen/qwen3-32b via GROQ_MODEL for stronger Catalan). Fast, clean,
+    multilingual. Free TPM is tight (~12K) so very large contexts 429 and fall
+    through to Gemini — intended (Gemini is the big-context catcher)."""
+
+    BASE_URL = "https://api.groq.com/openai/v1"
+    MODEL = "llama-3.3-70b-versatile"
+    _NAME = "Groq"
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        super().__init__(
+            api_key=api_key or getattr(settings, 'GROQ_API_KEY', None),
+            model=model or getattr(settings, 'GROQ_MODEL', None) or self.MODEL,
+        )
+
+
+class CerebrasProvider(_OpenAICompatibleProvider):
+    """Cerebras free tier — deep OPEN fallback (high TPD, ~60K TPM). Default
+    gpt-oss-120b (reasoning model -> reasoning_effort=low, only sent for
+    gpt-oss; GLM/Qwen variants handled via reasoning_content recovery)."""
+
+    BASE_URL = "https://api.cerebras.ai/v1"
+    MODEL = "gpt-oss-120b"
+    _NAME = "Cerebras"
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        resolved = model or getattr(settings, 'CEREBRAS_MODEL', None) or self.MODEL
+        # reasoning_effort is a gpt-oss parameter; don't send it to GLM/Qwen.
+        extra = {"reasoning_effort": "low"} if str(resolved).startswith("gpt-oss") else None
+        super().__init__(
+            api_key=api_key or getattr(settings, 'CEREBRAS_API_KEY', None),
+            model=resolved,
+            extra_body=extra,
+        )
+
+
 class GeminiProvider(AIProvider):
     """Google Gemini provider (fallback 3)"""
 
@@ -476,38 +649,48 @@ class MultiProviderService:
         self._sonnet_daily_tokens = 0
         self._sonnet_daily_date = date.today()
 
-        # Initialise providers in base-chain priority order (cost-effectiveness).
+        # Free open-model chain (10 June 2026 migration, see
+        # memory/project_chat_oss_migration.md). List order = fallback priority.
+        # NOTE: sonnet_primary_provider is intentionally left None so generate()
+        # iterates this chain in order instead of routing to Claude first.
 
-        # 1. Mistral (base-chain head; cap-day primary; cheapest).
-        mistral = MistralProvider(mistral_key)
-        if mistral.is_available:
-            self.providers.append(mistral)
-            logger.info("Mistral provider available (base-chain head, cap-day primary)")
+        # 1. Groq (OPEN-SOURCE PRIMARY — fast, clean multilingual incl. Catalan).
+        groq = GroqProvider()
+        if groq.is_available:
+            self.providers.append(groq)
+            logger.info(f"Groq provider available (open primary, model={groq.model})")
 
-        # 1b. Claude Sonnet (runtime primary for knowledge-heavy queries via
-        # prefer_claude=True; $10/day cap before falling back to base chain).
-        sonnet_primary = AnthropicSonnetPrimaryProvider(anthropic_key)
-        if sonnet_primary.is_available:
-            self.sonnet_primary_provider = sonnet_primary
-            logger.info("Anthropic Sonnet (primary) provider available (runtime primary for knowledge-heavy queries)")
-
-        # 2. Claude Sonnet (fallback 1)
-        anthropic = AnthropicProvider(anthropic_key)
-        if anthropic.is_available:
-            self.providers.append(anthropic)
-            logger.info("Anthropic Sonnet provider available (fallback 1)")
-
-        # 3. OpenAI (fallback 2)
-        openai_provider = OpenAIProvider(openai_key)
-        if openai_provider.is_available:
-            self.providers.append(openai_provider)
-            logger.info("OpenAI provider available (fallback 2)")
-
-        # 4. Gemini (fallback 3)
+        # 2. Gemini (free; 1M context — catches large-context queries that exceed
+        #    Groq's free TPM, plus Groq RPD overflow).
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
-            logger.info("Gemini provider available (fallback 3)")
+            logger.info("Gemini provider available (free big-context catcher)")
+
+        # 3. Mistral (free tier, EU, open-weight).
+        mistral = MistralProvider(mistral_key)
+        if mistral.is_available:
+            self.providers.append(mistral)
+            logger.info("Mistral provider available (free EU fallback)")
+
+        # 4. Cerebras (OPEN; high TPD deep fallback).
+        cerebras = CerebrasProvider()
+        if cerebras.is_available:
+            self.providers.append(cerebras)
+            logger.info(f"Cerebras provider available (open deep fallback, model={cerebras.model})")
+
+        # 5. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
+        #    is exhausted; fails fast when unfunded, then the chain continues).
+        anthropic = AnthropicProvider(anthropic_key)
+        if anthropic.is_available:
+            self.providers.append(anthropic)
+            logger.info("Anthropic Sonnet provider available (opportunistic, when funded)")
+
+        # 6. OpenAI (paid last resort).
+        openai_provider = OpenAIProvider(openai_key)
+        if openai_provider.is_available:
+            self.providers.append(openai_provider)
+            logger.info("OpenAI provider available (paid last resort)")
 
         if not self.providers:
             raise RuntimeError("No AI providers configured. Set at least one API key.")
@@ -642,6 +825,53 @@ class MultiProviderService:
         error_summary = "; ".join(errors)
         logger.error(f"All AI providers failed: {error_summary}")
         raise RuntimeError(f"All AI providers failed: {error_summary}")
+
+    async def generate_stream(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3,
+    ):
+        """Stream text from the first provider in the chain that works.
+
+        OpenAI-compatible providers (Groq, Cerebras) stream token deltas
+        natively; the others (Gemini, Mistral, Anthropic, OpenAI) fall back to a
+        single full-text chunk via generate(). Fallback semantics mirror
+        generate(): a connect/429 error BEFORE any output falls through to the
+        next provider; a mid-stream error AFTER output has started cannot rewind,
+        so it re-raises rather than garble the answer with a second provider.
+        """
+        errors: List[str] = []
+        for provider in self.providers:
+            produced = False
+            try:
+                if isinstance(provider, _OpenAICompatibleProvider):
+                    async for delta in provider.generate_stream(
+                        system_prompt, messages, max_tokens, temperature
+                    ):
+                        produced = True
+                        yield delta
+                else:
+                    resp = await provider.generate(
+                        system_prompt, messages, max_tokens, temperature
+                    )
+                    if resp.message:
+                        produced = True
+                        yield resp.message
+                if produced:
+                    logger.info(f"[stream] {provider.name} produced response")
+                    return
+                raise RuntimeError("empty output")
+            except Exception as e:
+                if produced:
+                    logger.error(f"[stream] {provider.name} failed mid-stream (cannot fall back): {e}")
+                    raise
+                errors.append(f"{provider.name}: {type(e).__name__}")
+                logger.warning(f"[stream] {provider.name} unavailable, trying next: {e}")
+                continue
+
+        raise RuntimeError(f"All AI providers failed (stream): {'; '.join(errors)}")
 
     def get_status(self) -> Dict[str, Any]:
         """Get status of all providers"""

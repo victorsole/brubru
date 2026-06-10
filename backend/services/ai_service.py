@@ -889,16 +889,37 @@ class AIService:
             documents=document_content or None,
         )
 
-        # Stream response
-        async with self.client.messages.stream(
-            model=self.model,
-            max_tokens=self.max_output_tokens,
-            temperature=self.temperature,
-            system=system_prompt,
-            messages=messages
-        ) as stream:
-            async for text in stream.text_stream:
-                yield text
+        # Stream response via the FREE open-model chain (Groq -> Gemini ->
+        # Mistral -> Cerebras -> Anthropic opportunistic). OpenAI-compatible
+        # providers stream token deltas natively; others yield a single full
+        # chunk. This is the 10 June 2026 migration that ends the streaming
+        # path's Anthropic-only dependency (see project_chat_oss_migration.md).
+        # Falls back to direct Anthropic streaming only if the multi-provider
+        # chain is unavailable (no keys configured at all).
+        if self.use_fallback and self.multi_provider:
+            try:
+                async for piece in self.multi_provider.generate_stream(
+                    system_prompt=system_prompt,
+                    messages=messages,
+                    max_tokens=self.max_output_tokens,
+                    temperature=self.temperature,
+                ):
+                    yield piece
+            except Exception as e:
+                logger.error(f"[stream] free open-model chain failed: {e}")
+                yield ("I could not generate a response just now because the AI "
+                       "providers are temporarily unavailable. Please try again "
+                       "in a moment.")
+        else:
+            async with self.client.messages.stream(
+                model=self.model,
+                max_tokens=self.max_output_tokens,
+                temperature=self.temperature,
+                system=system_prompt,
+                messages=messages
+            ) as stream:
+                async for text in stream.text_stream:
+                    yield text
 
         # After streaming completes, compute and emit action buttons
         if use_context:
