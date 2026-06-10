@@ -1,0 +1,2 @@
+{"celex": "32018R1612", "issues": [{"celex": "32018R1612", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
+{"celex": "32018R1631", "issues": [{"celex": "32018R1631", "rule_id": "untranslated_member_state", "severity": "high", "count": 1, "why": "Untranslated 'Member State(s)'", "suggestion": "Estat membre / Estats membres", "samples": ["Member States"]}]}
