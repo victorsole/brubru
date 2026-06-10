@@ -1,0 +1,3 @@
+{"celex": "32018R1237", "issues": [{"celex": "32018R1237", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
+{"celex": "32018R1545", "issues": [{"celex": "32018R1545", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
+{"celex": "32018R1551", "issues": [{"celex": "32018R1551", "rule_id": "glossary_implementing", "severity": "mid", "count": 1, "why": "English 'implementing' leftover (translate to 'd'execuci\u00f3')", "suggestion": "d'execuci\u00f3", "samples": ["Implementing"]}]}
