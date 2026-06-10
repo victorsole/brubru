@@ -182,6 +182,7 @@ _FUNDING_ROUTING = [
     ("ft-calls-for-proposals", "Calls for Proposals"),
     ("ft-calls-for-tenders", "Calls for Tenders"),
     ("ft-funded-projects", "Funded Projects"),
+    ("eu-funding-recipients", "Funded Projects"),
     ("tenders", "TED Tenders"),
 ]
 _FUNDING_SOURCE_ORDER = ["Funding Opportunities", "Calls for Proposals", "Calls for Tenders",

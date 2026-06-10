@@ -19,6 +19,9 @@ import argparse
 import sys
 from pathlib import Path
 
+import psycopg2  # noqa: E402
+from psycopg2.extras import execute_values  # noqa: E402
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from services.scrapers import economy_ecb as e          # noqa: E402
@@ -32,6 +35,7 @@ from services.scrapers import economy_amla as amla       # noqa: E402
 from services.scrapers import economy_eppo as eppo       # noqa: E402
 from services.scrapers import economy_esm as esm         # noqa: E402
 from services.scrapers import commission_sanctions as commission_sanctions  # noqa: E402
+from services.scrapers import commission_funding as commission_funding  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -86,6 +90,7 @@ INGESTORS = {
     ("esm", "programme"):       esm.ingest_esm_programmes,
     # European Commission database folders.
     ("commission", "financial_sanction"): commission_sanctions.ingest_financial_sanctions,
+    ("commission", "funding_recipient"): commission_funding.ingest_eu_funding_recipients,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
@@ -145,24 +150,65 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 """
 
 
+_UPSERT_BATCH = """
+INSERT INTO economy_items
+  (body_code, item_type, title, summary, public_url, body_txt, body_html,
+   document_date, creation_date, source_kind, guid)
+VALUES %s
+ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
+  title         = EXCLUDED.title,
+  summary       = EXCLUDED.summary,
+  body_txt      = EXCLUDED.body_txt,
+  body_html     = EXCLUDED.body_html,
+  document_date = EXCLUDED.document_date,
+  source_kind   = EXCLUDED.source_kind,
+  guid          = EXCLUDED.guid,
+  creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
+  fetched_at    = now();
+"""
+
+
 def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_limit: int) -> int:
     fn = INGESTORS[(body, itype)]
     if itype == "legal":
         items = fn(limit=legal_limit)
     else:
         items = fn(fetch_bodies=fetch_bodies)
-    n = 0
+    # Dedupe within this run by the conflict target so a single multi-row INSERT
+    # never tries to upsert the same (body_code, item_type, public_url) twice
+    # (ON CONFLICT DO UPDATE cannot affect one row twice in the same statement).
+    by_url: dict = {}
     for it in items:
-        db.execute(_UPSERT, {
-            "body_code": it.body_code, "item_type": it.item_type, "title": it.title,
-            "summary": it.summary, "public_url": it.public_url, "body_txt": it.body_txt,
-            "body_html": it.body_html, "document_date": it.document_date,
-            "creation_date": it.creation_date, "source_kind": it.source_kind, "guid": it.guid,
-        })
-        n += 1
-        if n % 25 == 0:
-            db.commit()
-    db.commit()
+        if it.public_url:
+            by_url[(it.body_code, it.item_type, it.public_url)] = it
+    rows = [(it.body_code, it.item_type, it.title, it.summary, it.public_url, it.body_txt,
+             it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid)
+            for it in by_url.values()]
+    # Batched multi-row upsert via execute_values — orders of magnitude fewer
+    # round-trips than row-by-row (essential for large datasets like FTS ~118k).
+    batch = 500
+    n = 0
+    for i in range(0, len(rows), batch):
+        chunk = rows[i:i + batch]
+        for attempt in range(3):
+            try:
+                execute_values(db.cur, _UPSERT_BATCH, chunk, page_size=batch)
+                db.commit()
+                break
+            except (psycopg2.OperationalError, psycopg2.InterfaceError):
+                # Supabase dropped the connection — reconnect and retry the chunk.
+                try:
+                    db.cur.close(); db.conn.close()
+                except Exception:
+                    pass
+                db.conn = psycopg2.connect(db._dsn, connect_timeout=15)
+                db.conn.autocommit = db._autocommit
+                db.cur = db.conn.cursor()
+                if attempt == 2:
+                    raise
+        n += len(chunk)
+        if n % 5000 == 0 or i + batch >= len(rows):
+            print(f"    {body}/{itype}: {n}/{len(rows)} upserted", flush=True)
     print(f"[OK] {body}/{itype}: upserted {n} items", flush=True)
     return n
 
