@@ -174,3 +174,79 @@ def ingest_euipo_trademarks(*, fetch_bodies: bool = True, max_pages: int = 50,
         if new == 0:
             break
     return items
+
+
+# --- EUIPO GIView: EU geographical indications register ---------------------
+# Reverse-engineering note: tmdn.org/giview is an Angular SPA (same family as
+# TMview). A search POSTs to /giview/api/search/union_register with
+# {databases:[...], name, pageNumber, ...}. An empty name over the two EU union
+# registers returns the WHOLE EU GI register (~3,960) in one response — no
+# pagination. Each record carries basicData (protectedNames, giType PDO/PGI/GI,
+# productType, countries, euProtectionDate, fileNumber, status).
+_GIVIEW_API = "https://www.tmdn.org/giview/api/search/union_register"
+_GIVIEW_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Content-Type": "application/json", "Accept": "application/json",
+    "Origin": "https://www.tmdn.org", "Referer": "https://www.tmdn.org/giview/",
+}
+_GIVIEW_EU_DBS = ["UNION_REGISTER_AGRI_GI", "UNION_REGISTER_CRAFT_INDUSTRIAL_GI"]
+_GI_TYPE = {"PDO": "Protected Designation of Origin (PDO)",
+            "PGI": "Protected Geographical Indication (PGI)",
+            "GI": "Geographical Indication (GI, spirits/wines)"}
+
+
+def ingest_euipo_giview(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    import json as _json
+    body = {"databases": _GIVIEW_EU_DBS, "name": "", "pageNumber": 1,
+            "productTypes": [], "giTypes": [], "applicationTypes": [], "statuses": [],
+            "agreementType": None, "agriRegisterCategories": [], "craftRegisterCategories": []}
+    try:
+        r = requests.post(_GIVIEW_API, headers=_GIVIEW_HEADERS, data=_json.dumps(body), timeout=90)
+        if r.status_code != 200:
+            return []
+        recs = r.json().get("resultRecords", [])
+    except (requests.RequestException, ValueError):
+        return []
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    seen: set[str] = set()
+    for rec in recs:
+        gid = rec.get("id")
+        if not gid or gid in seen:
+            continue
+        seen.add(gid)
+        bd = rec.get("basicData") or {}
+        names = bd.get("protectedNames") or []
+        if isinstance(names, str):
+            names = [names]
+        title = clean(names[0]) if names else gid
+        gi_type = bd.get("giType")
+        product = bd.get("productType")
+        countries = bd.get("countries") or []
+        if isinstance(countries, str):
+            countries = [countries]
+        prot = bd.get("euProtectionDate") or bd.get("date")
+        doc_dt = _iso_dt(str(prot)) if prot else None
+        url = norm_url(f"https://www.tmdn.org/giview/gi/{gid}")
+        lines = [
+            f"Geographical indication: {title}",
+            f"Other/transcribed names: {', '.join(names[1:])}" if len(names) > 1 else "",
+            f"Type: {_GI_TYPE.get(gi_type, gi_type)}" if gi_type else "",
+            f"Product type: {product}" if product else "",
+            f"Country/ies: {', '.join(str(c) for c in countries)}" if countries else "",
+            f"File number: {bd.get('fileNumber')}" if bd.get("fileNumber") else "",
+            f"EU protection date: {str(prot)[:10]}" if prot else "",
+            f"Status: {rec.get('status')}" if rec.get("status") else "",
+            f"Register: {rec.get('database')}" if rec.get("database") else "",
+        ]
+        lines = [l for l in lines if l]
+        items.append(Item(
+            body_code="euipo", item_type="geographical_indication", title=title,
+            public_url=url,
+            summary=clean(" | ".join(x for x in [title, _GI_TYPE.get(gi_type, gi_type) or "",
+                                                 product or "", ", ".join(str(c) for c in countries)] if x)),
+            body_txt=clean("\n".join(lines)),
+            body_html=clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>"),
+            document_date=doc_dt, creation_date=now, source_kind="giview", guid=gid))
+    return items

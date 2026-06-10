@@ -28,5 +28,10 @@ router = make_single_body_folder(
          "extra": "A bounded slice of the most recent EU trade marks from TMview — name, application "
                   "number, applicant, status, Nice classes and filing date (TMview holds millions of "
                   "EUTMs; this surfaces the latest filings). Filter with q (e.g. an applicant or mark name)."},
+        {"item_type": "geographical_indication", "slug": "giview", "noun": "geographical indications",
+         "source": "the GIView EU geographical-indications register (the full union register).",
+         "extra": "Every EU geographical indication (PDO, PGI and GI for spirits/wines) — protected name, "
+                  "type, product type, country, EU protection date, file number and status. ~3,960 entries "
+                  "from the agri and craft/industrial union registers. Filter with q (e.g. a name, country or product)."},
     ],
 )
