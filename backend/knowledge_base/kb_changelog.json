@@ -2,6 +2,26 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-10",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "21st Russia sanctions package proposed 9 Jun 2026 (shadow fleet +30 vessels, first-time targeting of assisting vessels + crypto + fishing industry + entry ban on Russia-side fighters); not yet adopted",
+      "refs": [
+        "32014R0833"
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "Commission imposed first-ever DMA Article 24 interim measures on Meta (9 Jun 2026): restore free WhatsApp access for rival AI assistants within 5 working days, in force until June 2029",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
       "date": "2026-06-09",
       "action": "updated",
       "guide": "biotech_act",

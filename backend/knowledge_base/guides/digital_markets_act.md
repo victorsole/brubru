@@ -1,6 +1,7 @@
 # Digital Markets Act (DMA)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 9 June 2026, IP/26/1276)**: **Commission IMPOSED interim measures on Meta** ordering it to restore **free** access to WhatsApp for rival general-purpose AI assistants. This is the formal escalation of the 15 April 2026 charge sheet (the case has now moved from "preparing interim measures" to "imposed"). Key terms: Meta must restore free access **within 5 working days**; the measures stay in force **until June 2029 or until the investigation closes** (the underlying probe, opened December 2025, has no fixed deadline). Meta's earlier proposed access fee was rejected as "not economically sustainable for competitors" (pay-to-play remedy refused). Non-compliance exposes Meta to fines up to **10% of annual worldwide turnover**. Legal hook: DMA Article 7 (interoperability of messaging services) + Article 24 (interim-measures power for urgency / risk of serious and irreparable harm to competition). EVP Teresa Ribera (DG COMP) led the announcement (press remarks 9 June). This is the FIRST use of DMA Article 24 interim measures against a gatekeeper. Cross-link to `ai_act` (general-purpose AI assistants) and `competition_law_enforcement`.
 - Full name: Digital Markets Act
 - Reference: Regulation (EU) 2022/1925
 - CELEX: 32022R1925
