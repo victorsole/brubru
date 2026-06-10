@@ -82,6 +82,7 @@ INGESTORS = {
     ("esm", "news"):            esm.ingest_esm_news,
     ("esm", "publication"):     esm.ingest_esm_publications,
     ("esm", "event"):           esm.ingest_esm_events,
+    ("esm", "programme"):       esm.ingest_esm_programmes,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,

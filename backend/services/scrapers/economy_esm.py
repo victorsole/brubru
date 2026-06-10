@@ -151,3 +151,30 @@ def ingest_esm_publications(*, fetch_bodies: bool = True, max_pages: int = 8) ->
 
 def ingest_esm_events(*, fetch_bodies: bool = True, max_pages: int = 4) -> list[Item]:
     return _scrape("event", "/events", date_mode="event", fetch_bodies=fetch_bodies, max_pages=max_pages)
+
+
+# --- ESM/EFSF financial-assistance programmes -------------------------------
+# ESM's "programme database" overview/disbursements pages are a Power BI embedded
+# report (analysis.windows.net) — its query protocol is disproportionately
+# complex to mirror. But the programmes themselves are a small, fixed set with
+# server-rendered country pages at /assistance/<country>; we catalogue those.
+_ESM_PROGRAMMES = ["greece", "ireland", "portugal", "spain", "cyprus"]
+
+
+def ingest_esm_programmes(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    from services.scrapers.economy_common import extract_html
+    now = datetime.now(timezone.utc)
+    items: list[Item] = []
+    for country in _ESM_PROGRAMMES:
+        url = f"{_BASE}/assistance/{country}"
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = extract_html(r.text)
+        title = f"{country.capitalize()} — ESM/EFSF financial-assistance programme"
+        summary = clean((body_txt or "")[:300]) if body_txt else None
+        items.append(Item(
+            body_code="esm", item_type="programme", title=title, public_url=norm_url(url),
+            summary=summary, body_txt=body_txt, body_html=body_html,
+            document_date=None, creation_date=now, source_kind="html", guid=country))
+    return items

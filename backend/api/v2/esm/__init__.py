@@ -101,3 +101,12 @@ register_resource(
     source="the ESM events listing.",
     extra="Eurogroup meetings, Board of Governors meetings and other ESM events, with their dates.",
 )
+# Database: ESM/EFSF financial-assistance programmes.
+register_resource(
+    router, body_code="esm", item_type="programme", slug="programmes", noun="programmes",
+    body_name=_BODY, acronym=_ACRO, tag=_TAG,
+    source="the ESM/EFSF country financial-assistance programme pages.",
+    extra="The ESM/EFSF financial-assistance programmes (Greece, Ireland, Portugal, Spain, Cyprus), "
+          "each with its programme overview. The detailed disbursement figures live in ESM's Power BI "
+          "report; this catalogues the programmes and their narrative.",
+)
