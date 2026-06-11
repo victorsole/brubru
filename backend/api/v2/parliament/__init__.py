@@ -37,6 +37,7 @@ from . import parliamentary_questions as _parliamentary_questions
 from . import ep_emeeting as _ep_emeeting
 from . import transcripts as _transcripts
 from . import committee_agendas as _committee_agendas
+from . import mep_declarations as _mep_declarations
 
 router = APIRouter(prefix="/parliament")
 router.include_router(_meps.router)
@@ -56,3 +57,4 @@ router.include_router(_ep_emeeting.router)
 router.include_router(_ep_emeeting.documents_router)
 router.include_router(_transcripts.router)
 router.include_router(_committee_agendas.router)
+router.include_router(_mep_declarations.router)
