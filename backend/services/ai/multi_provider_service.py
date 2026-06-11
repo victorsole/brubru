@@ -530,7 +530,7 @@ class NvidiaProvider(_OpenAICompatibleProvider):
 class GeminiProvider(AIProvider):
     """Google Gemini provider (fallback 3)"""
 
-    MODEL = "gemini-2.0-flash"  # 20 Apr 2026: was 'gemini-1.5-pro' which is no longer supported for generateContent on v1beta
+    MODEL = "gemini-2.5-flash"  # 11 Jun 2026: gemini-2.0-flash free tier was zeroed by Google (limit:0, persistent, not a daily reset); 2.5-flash has working free quota on the same key. Was 'gemini-1.5-pro' (Apr 2026, dropped from v1beta).
 
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or settings.GOOGLE_GEMINI_API_KEY
