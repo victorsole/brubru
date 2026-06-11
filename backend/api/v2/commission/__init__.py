@@ -35,6 +35,7 @@ from . import tris_notifications as _tris_notifications
 from . import financial_sanctions as _financial_sanctions
 from . import research_projects as _research_projects
 from . import tariff_rulings as _tariff_rulings
+from . import taric_tariffs as _taric_tariffs
 
 router = APIRouter(prefix="/commission")
 router.include_router(_commissioners.router)
@@ -47,3 +48,4 @@ router.include_router(_tris_notifications.router)
 router.include_router(_financial_sanctions.router)
 router.include_router(_research_projects.router)
 router.include_router(_tariff_rulings.router)
+router.include_router(_taric_tariffs.router)

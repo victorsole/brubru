@@ -38,6 +38,7 @@ from services.scrapers import commission_sanctions as commission_sanctions  # no
 from services.scrapers import commission_funding as commission_funding  # noqa: E402
 from services.scrapers import commission_research as commission_research  # noqa: E402
 from services.scrapers import commission_tariff_rulings as commission_tariff_rulings  # noqa: E402
+from services.scrapers import commission_taric as commission_taric  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -95,6 +96,7 @@ INGESTORS = {
     ("commission", "funding_recipient"): commission_funding.ingest_eu_funding_recipients,
     ("commission", "research_project"): commission_research.ingest_research_projects,
     ("commission", "tariff_ruling"): commission_tariff_rulings.ingest_tariff_rulings,
+    ("commission", "tariff_code"): commission_taric.ingest_taric_tariffs,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
