@@ -133,13 +133,14 @@ _COMM_ROUTING = [
     ("taric-tariffs", "TARIC / Combined Nomenclature"),
     ("agridata", "Agridata"),
     ("cap-beneficiaries", "Common Agricultural Policy Beneficiaries"),
+    ("trade-defence", "Trade Defence"),
 ]
 _COMM_SOURCE_ORDER = [
     "Commissioners", "Commission Register", "Meetings", "RSB Opinions",
     "Infringements", "Consultations", "TRIS Notifications",
     "Financial Sanctions", "Research Projects", "Tariff Rulings",
     "TARIC / Combined Nomenclature", "Agridata",
-    "Common Agricultural Policy Beneficiaries",
+    "Common Agricultural Policy Beneficiaries", "Trade Defence",
 ]
 
 # Council: (path-tail prefix, source folder). Flat — no sub-sub-folders.
