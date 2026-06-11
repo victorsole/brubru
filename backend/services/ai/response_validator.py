@@ -14,10 +14,14 @@ in the context? Are list answers complete? Is the response refusing data that
 is actually present? Is the response validating a user-asserted role that
 the context does not confirm?"
 
-Validator engine: Claude Haiku (Anthropic). Chat-related code is the explicit
-exception to the "no new Anthropic code" hard rule -- the whole chat path
-(generator + validator) stays on Anthropic for quality and consistency.
-See memory/feedback_chat_must_use_anthropic.md.
+Validator engine: the shared free open-model chain (Cerebras gpt-oss-120b ->
+NVIDIA Llama-3.3-70B -> Mistral -> Gemini -> Groq -> Anthropic -> OpenAI), the
+SAME MultiProviderService the generator uses. Migrated off the direct
+Anthropic-Haiku client on 11 June 2026: the old client failed every call when
+Anthropic ran out of funds, and because the validator fails OPEN that silently
+disabled the anti-hallucination net at the exact moment a weaker open generator
+needs it most (a fabricated DSA CELEX shipped to production unvalidated). Going
+through the chain means the validator is funded-independent.
 
 Failure mode: fail-soft. If the validator errors (network, JSON parse, timeout)
 the result returns passed=True with an error field set, and the caller logs
@@ -29,6 +33,8 @@ History:
   Chat = Anthropic, full stop.
 - 28 May 2026 (pm): expanded violation taxonomy after EFPIA-demo
   Biotech Act / Andriukaitis fabrication incident.
+- 11 June 2026: migrated to the shared open-model chain (Anthropic-independent)
+  after the chat OSS migration left the Haiku validator dead while unfunded.
 """
 
 from __future__ import annotations
@@ -36,19 +42,15 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import os
 import re
 import time
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-try:
-    from anthropic import AsyncAnthropic
-    _ANTHROPIC_AVAILABLE = True
-except ImportError:  # pragma: no cover -- defensive
-    AsyncAnthropic = None  # type: ignore
-    _ANTHROPIC_AVAILABLE = False
-
+from services.ai.multi_provider_service import (
+    MultiProviderService,
+    get_multi_provider_service,
+)
 from services.ai.validator_settings import (
     VALIDATOR_CONTEXT_CHAR_CAP,
     VALIDATOR_MODEL,
@@ -218,30 +220,26 @@ class ResponseValidator:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: Optional[str] = None,  # retained for signature compatibility; unused
         model: str = VALIDATOR_MODEL,
         timeout: int = VALIDATOR_TIMEOUT_SECONDS,
         context_cap: int = VALIDATOR_CONTEXT_CHAR_CAP,
+        service: Optional[MultiProviderService] = None,
     ):
-        self.model = model
+        self.model = model  # label only; the real engine is the chain's first working provider
         self.timeout = timeout
         self.context_cap = context_cap
-        self._client: Optional[AsyncAnthropic] = None
+        self._service: Optional[MultiProviderService] = None
 
-        if not _ANTHROPIC_AVAILABLE:
-            logger.warning("anthropic SDK not importable -- validator disabled")
-            return
-
-        key = api_key or os.environ.get("ANTHROPIC_API_KEY")
-        if not key:
-            logger.warning("ANTHROPIC_API_KEY not set -- validator disabled")
-            return
-
-        self._client = AsyncAnthropic(api_key=key)
+        try:
+            self._service = service or get_multi_provider_service()
+        except Exception as exc:  # noqa: BLE001 -- no providers configured at all
+            logger.warning("validator disabled -- no AI providers available: %s", exc)
+            self._service = None
 
     @property
     def is_available(self) -> bool:
-        return self._client is not None
+        return self._service is not None and bool(self._service.providers)
 
     def _truncate_context(self, context_blocks: str) -> str:
         if len(context_blocks) <= self.context_cap:
@@ -276,22 +274,28 @@ class ResponseValidator:
         user_msg = _build_user_message(query, bounded_context, response)
 
         start = time.monotonic()
+        engine = self.model
         try:
-            api_response = await asyncio.wait_for(
-                self._client.messages.create(
-                    model=self.model,
-                    max_tokens=1200,
-                    temperature=0.0,
-                    system=_VALIDATOR_SYSTEM,
+            # prefer_claude=False keeps the validator on the open chain's first
+            # working provider (Cerebras gpt-oss-120b) rather than routing to
+            # Sonnet; max_tokens bumped to 2000 so a reasoning model's JSON is
+            # not truncated. temperature 0.0 for a deterministic verdict.
+            provider_response = await asyncio.wait_for(
+                self._service.generate(
+                    system_prompt=_VALIDATOR_SYSTEM,
                     messages=[{"role": "user", "content": user_msg}],
+                    max_tokens=2000,
+                    temperature=0.0,
+                    prefer_claude=False,
                 ),
                 timeout=self.timeout,
             )
+            engine = provider_response.model or provider_response.provider or self.model
         except asyncio.TimeoutError:
             return ValidationResult(
                 passed=True,
                 severity="info",
-                validator_model=self.model,
+                validator_model=engine,
                 latency_ms=int((time.monotonic() - start) * 1000),
                 error="timeout",
             )
@@ -300,7 +304,7 @@ class ResponseValidator:
             return ValidationResult(
                 passed=True,
                 severity="info",
-                validator_model=self.model,
+                validator_model=engine,
                 latency_ms=int((time.monotonic() - start) * 1000),
                 error=f"{type(exc).__name__}: {exc}",
             )
@@ -308,14 +312,14 @@ class ResponseValidator:
         latency_ms = int((time.monotonic() - start) * 1000)
 
         try:
-            raw = api_response.content[0].text if api_response.content else ""
+            raw = provider_response.message or ""
             parsed = _extract_json(raw)
         except (ValueError, json.JSONDecodeError, IndexError, AttributeError) as exc:
             logger.warning("validator returned unparseable output: %s", exc)
             return ValidationResult(
                 passed=True,
                 severity="info",
-                validator_model=self.model,
+                validator_model=engine,
                 latency_ms=latency_ms,
                 error=f"parse_error: {exc}",
             )
@@ -343,7 +347,7 @@ class ResponseValidator:
             passed=passed,
             severity=severity,
             violations=violations,
-            validator_model=self.model,
+            validator_model=engine,
             latency_ms=latency_ms,
         )
 

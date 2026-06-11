@@ -56,10 +56,13 @@ VALIDATOR_CRITICAL_ACTION = os.environ.get("VALIDATOR_CRITICAL_ACTION", "overrid
 # Maximum regeneration retries when VALIDATOR_CRITICAL_ACTION="regenerate".
 VALIDATOR_MAX_RETRIES = _env_int("VALIDATOR_MAX_RETRIES", 1)
 
-# Validator model. Claude Haiku 4.5 (cheap, fast, sufficient for bounded
-# fact-checking task). Override only for experiments. Chat-related code stays
-# on Anthropic per memory/feedback_chat_must_use_anthropic.md.
-VALIDATOR_MODEL = os.environ.get("VALIDATOR_MODEL", "claude-haiku-4-5-20251001")
+# Validator model. LABEL ONLY since 11 June 2026 -- the validator now runs on
+# the shared open-model chain (MultiProviderService), so the real engine is the
+# first working provider (Cerebras gpt-oss-120b, then NVIDIA Llama-3.3-70B, ...)
+# and the resolved provider/model is recorded per-call in ValidationResult.
+# Migrated off direct Anthropic Haiku because that client died (fail-open ->
+# validator silently disabled) the moment Anthropic ran out of funds.
+VALIDATOR_MODEL = os.environ.get("VALIDATOR_MODEL", "open-chain")
 
 # Hard cap on the context fed to the validator.
 VALIDATOR_CONTEXT_CHAR_CAP = _env_int("VALIDATOR_CONTEXT_CHAR_CAP", 80_000)
