@@ -9,9 +9,9 @@ country and a direct link to that MEP's declarations page (which lists the DPI
 declaration PDFs for the current term).
 
 Current MEPs come from the EP Open Data Portal
-(data.europarl.europa.eu/api/v2/meps?parliamentary-term=10); the per-MEP detail
-gives the exact name slug and country used to build the declarations URL. Row IS
-the content.
+(data.europarl.europa.eu/api/v2/meps/show-current = the 718 currently-sitting
+MEPs, not the whole-term superset); the per-MEP detail gives the exact name slug
+and country used to build the declarations URL. Row IS the content.
 """
 from __future__ import annotations
 
@@ -23,7 +23,10 @@ import requests
 from services.scrapers.economy_common import Item, clean
 
 _API = "https://data.europarl.europa.eu/api/v2/meps"
-_TERM = 10  # current parliamentary term
+# Currently-sitting MEPs only. `?parliamentary-term=10` returns the whole-term
+# superset (741: current + MEPs who left mid-term and were replaced); the
+# declarations register should reflect the 718 currently-sitting MEPs.
+_CURRENT = "https://data.europarl.europa.eu/api/v2/meps/show-current"
 _DECL = "https://www.europarl.europa.eu/meps/en/{mid}/{slug}/declarations"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
@@ -46,7 +49,7 @@ def _country(detail: dict) -> str:
 def ingest_mep_declarations(*, fetch_bodies: bool = True, **_) -> list[Item]:
     s = requests.Session()
     s.headers.update(_HEADERS)
-    lst = s.get(_API, params={"parliamentary-term": _TERM, "limit": 1000}, timeout=40).json()
+    lst = s.get(_CURRENT, params={"limit": 2000}, timeout=40).json()
     meps = lst.get("data") or []
     now = datetime.now(timezone.utc)
     items: list[Item] = []

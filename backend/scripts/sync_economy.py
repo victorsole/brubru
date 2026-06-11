@@ -48,6 +48,7 @@ from services.scrapers import commission_expert_groups as commission_expert_grou
 from services.scrapers import commission_competition_search as commission_competition_search  # noqa: E402
 from services.scrapers import commission_rasff as commission_rasff  # noqa: E402
 from services.scrapers import ep_mep_declarations as ep_mep_declarations  # noqa: E402
+from services.scrapers import ep_mep_assistants as ep_mep_assistants  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -117,6 +118,7 @@ INGESTORS = {
     ("commission", "state_aid_case"): commission_competition_search.ingest_state_aid,
     ("commission", "rasff_notification"): commission_rasff.ingest_rasff,
     ("parliament", "mep_declaration"): ep_mep_declarations.ingest_mep_declarations,
+    ("parliament", "mep_assistant_register"): ep_mep_assistants.ingest_mep_assistants,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
