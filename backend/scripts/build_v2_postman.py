@@ -134,6 +134,11 @@ _COMM_ROUTING = [
     ("agridata", "Agridata"),
     ("cap-beneficiaries", "Common Agricultural Policy Beneficiaries"),
     ("trade-defence", "Trade Defence"),
+    ("comitology", "Comitology"),
+    ("expert-groups", "Expert Groups"),
+    ("dma-cases", "Digital Markets Act Cases"),
+    ("state-aid", "State Aid"),
+    ("rasff", "RASFF Food & Feed Safety"),
 ]
 _COMM_SOURCE_ORDER = [
     "Commissioners", "Commission Register", "Meetings", "RSB Opinions",
@@ -141,6 +146,8 @@ _COMM_SOURCE_ORDER = [
     "Financial Sanctions", "Research Projects", "Tariff Rulings",
     "TARIC / Combined Nomenclature", "Agridata",
     "Common Agricultural Policy Beneficiaries", "Trade Defence",
+    "Comitology", "Expert Groups", "Digital Markets Act Cases", "State Aid",
+    "RASFF Food & Feed Safety",
 ]
 
 # Council: (path-tail prefix, source folder). Flat — no sub-sub-folders.

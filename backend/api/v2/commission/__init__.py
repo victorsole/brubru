@@ -39,6 +39,11 @@ from . import taric_tariffs as _taric_tariffs
 from . import agridata as _agridata
 from . import cap_beneficiaries as _cap_beneficiaries
 from . import trade_defence as _trade_defence
+from . import comitology as _comitology
+from . import expert_groups as _expert_groups
+from . import dma_cases as _dma_cases
+from . import state_aid as _state_aid
+from . import rasff as _rasff
 
 router = APIRouter(prefix="/commission")
 router.include_router(_commissioners.router)
@@ -55,3 +60,8 @@ router.include_router(_taric_tariffs.router)
 router.include_router(_agridata.router)
 router.include_router(_cap_beneficiaries.router)
 router.include_router(_trade_defence.router)
+router.include_router(_comitology.router)
+router.include_router(_expert_groups.router)
+router.include_router(_dma_cases.router)
+router.include_router(_state_aid.router)
+router.include_router(_rasff.router)
