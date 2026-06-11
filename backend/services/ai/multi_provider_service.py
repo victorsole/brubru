@@ -682,26 +682,33 @@ class MultiProviderService:
             self.providers.append(cerebras)
             logger.info(f"Cerebras provider available (OPEN primary, model={cerebras.model})")
 
-        # 2. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
-        #    permanent free tier). Second big-context open model, catches when
-        #    Cerebras queues/rate-limits before any non-open provider is reached.
-        nvidia = NvidiaProvider()
-        if nvidia.is_available:
-            self.providers.append(nvidia)
-            logger.info(f"NVIDIA provider available (open, 128K ctx, model={nvidia.model})")
-
-        # 3. Mistral (free tier, EU, open-weight) — reliable catch for Cerebras's
-        #    occasional queue_exceeded congestion.
+        # 2. Mistral (free tier, EU, open-weight) — fast, reliable catch for
+        #    Cerebras's occasional queue_exceeded congestion. Promoted above
+        #    NVIDIA on 11 June 2026: NVIDIA's free tier queues badly (a real
+        #    query fell through to it and took 165s), so the fast EU catch should
+        #    fire first; NVIDIA is a deeper open backstop below.
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
             logger.info("Mistral provider available (free EU catch)")
 
-        # 4. Gemini (free; 1M context) — when its daily quota is available.
+        # 3. Gemini (free; 1M context) — when its daily quota is available.
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
             logger.info("Gemini provider available (free, daily quota)")
+
+        # 4. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
+        #    permanent free tier). Deep OPEN availability-backstop: only reached
+        #    when Cerebras AND the fast free catches (Mistral/Gemini) are all
+        #    unavailable. Demoted from slot 2 on 11 June 2026 because its free
+        #    tier queues to ~165s; keeping it below the fast catches means users
+        #    rarely hit that latency, while it still backstops a multi-provider
+        #    outage with an open model.
+        nvidia = NvidiaProvider()
+        if nvidia.is_available:
+            self.providers.append(nvidia)
+            logger.info(f"NVIDIA provider available (open backstop, 128K ctx, model={nvidia.model})")
 
         # 5. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
         #    queries; kept only for the rare small prompt / if the system prompt
