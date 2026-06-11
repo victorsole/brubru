@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n349 requests across 26 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n359 requests across 26 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -5581,6 +5581,501 @@
                   ]
                 },
                 "description": "**What it does**\nReturns one the EU trade-defence case database (DG TRADE / TRON) trade-defence case in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /trade-defence/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Commission's TRON investigations database (the full EU trade-defence case set).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Comitology",
+          "item": [
+            {
+              "name": "the Comitology register \u2014 comitology committees (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/comitology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "comitology"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Comitology register's comitology committees, newest first. The Member-State committees that assist the Commission when it adopts implementing acts: the committee code, title, lead Directorate-General and whether it is active or abolished. ~628 committees. Filter with q (e.g. a topic such as 'food' or a DG such as 'SANTE').\n\n**When to use it**\nTrack what the EC is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /comitology?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU Comitology register (the full list of comitology committees).."
+              },
+              "response": []
+            },
+            {
+              "name": "the Comitology register \u2014 one comitology committee (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/comitology/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "comitology",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the Comitology register comitology committee in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /comitology/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU Comitology register (the full list of comitology committees).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Expert Groups",
+          "item": [
+            {
+              "name": "the Register of Commission Expert Groups \u2014 expert groups (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/expert-groups",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "expert-groups"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Register of Commission Expert Groups's expert groups, newest first. The expert groups and sub-groups that advise the Commission in preparing legislation and policy: the group code, name, lead Directorate-General and type (formal, informal, sub-group). ~2,047 entries. Filter with q (e.g. a topic such as 'AI' or a DG name).\n\n**When to use it**\nTrack what the EC is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /expert-groups?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Register of Commission Expert Groups (all groups and sub-groups).."
+              },
+              "response": []
+            },
+            {
+              "name": "the Register of Commission Expert Groups \u2014 one expert group (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/expert-groups/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "expert-groups",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the Register of Commission Expert Groups expert group in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /expert-groups/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Register of Commission Expert Groups (all groups and sub-groups).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Digital Markets Act Cases",
+          "item": [
+            {
+              "name": "the Digital Markets Act case register (DG COMP) \u2014 Digital Markets Act cases (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/dma-cases",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "dma-cases"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the Digital Markets Act case register (DG COMP)'s Digital Markets Act cases, newest first. The Commission's Digital Markets Act cases \u2014 gatekeeper designations, specification and non-compliance proceedings against the designated gatekeepers (Alphabet, Amazon, Apple, Booking, ByteDance, Meta, Microsoft): the case number, title, type and core platform service concerned, linking to the case page. Filter with q (e.g. 'Apple' or 'app stores').\n\n**When to use it**\nTrack what DG COMP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /dma-cases?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the Digital Markets Act cases portal (the full DMA case set).."
+              },
+              "response": []
+            },
+            {
+              "name": "the Digital Markets Act case register (DG COMP) \u2014 one Digital Markets Act case (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/dma-cases/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "dma-cases",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the Digital Markets Act case register (DG COMP) Digital Markets Act case in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /dma-cases/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the Digital Markets Act cases portal (the full DMA case set).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "State Aid",
+          "item": [
+            {
+              "name": "the State aid case register (DG COMP) \u2014 State aid cases (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/state-aid",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "state-aid"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the State aid case register (DG COMP)'s State aid cases, newest first. The Commission's State aid cases (SA.*): the case number, title, case type, member State, lead Directorate-General, economic sector, aid category and last decision date, linking to the case page. Covers all member states. Filter with q (e.g. a company, a sector such as 'aviation', a member State or a case number such as 'SA.100000').\n\n**When to use it**\nTrack what DG COMP is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /state-aid?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EU competition case database, State aid cases (the full set, by member state).."
+              },
+              "response": []
+            },
+            {
+              "name": "the State aid case register (DG COMP) \u2014 one State aid case (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/state-aid/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "state-aid",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the State aid case register (DG COMP) State aid case in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /state-aid/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EU competition case database, State aid cases (the full set, by member state).."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "RASFF Food & Feed Safety",
+          "item": [
+            {
+              "name": "RASFF (Rapid Alert System for Food and Feed) \u2014 RASFF food and feed safety notifications (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/rasff",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "rasff"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists RASFF (Rapid Alert System for Food and Feed)'s RASFF food and feed safety notifications, newest first. Cross-border food, feed and food-contact-material safety notifications between EU/EEA members: the reference, subject, notifying country, product category and type, classification (alert, border rejection, information), risk decision and origin countries. ~31,000 notifications. Filter with q (e.g. a product such as 'fish', a hazard such as 'salmonella' or 'mercury', or a country).\n\n**When to use it**\nTrack what DG SANTE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /rasff?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the RASFF Window consolidated notification search (the full notification set).."
+              },
+              "response": []
+            },
+            {
+              "name": "RASFF (Rapid Alert System for Food and Feed) \u2014 one RASFF food and feed safety notification (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/commission/rasff/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "commission",
+                    "rasff",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one RASFF (Rapid Alert System for Food and Feed) RASFF food and feed safety notification in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /rasff/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the RASFF Window consolidated notification search (the full notification set).."
               },
               "response": []
             }
