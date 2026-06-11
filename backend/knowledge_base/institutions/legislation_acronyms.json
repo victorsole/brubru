@@ -660,11 +660,11 @@
       "source_file": "L_2019257EN.01001801.xml"
     },
     "IPA II": {
-      "celex": "32014R0447",
-      "full_title": "Commission Implementing Regulation (EU) No 447/2014 of 2 May 2014 on the specific rules for implementing Regulation (EU) No 231/2014 of the European Parliament and of the Council establishing an Instr",
+      "celex": "32014R0231",
+      "full_title": "Regulation (EU) No 231/2014 of the European Parliament and of the Council of 11 March 2014 establishing an Instrument for Pre-accession Assistance (IPA II)",
       "type": "Regulation",
       "year": 2014,
-      "source_file": "L_2014132EN.01003201.xml"
+      "full_name": "Instrument for Pre-accession Assistance II"
     },
     "2017": {
       "celex": "32017R1538",
@@ -2598,13 +2598,6 @@
       "year": 2003,
       "source_file": "L_2007285EN.01004201.xml"
     },
-    "Renewable Energy Sources Act": {
-      "celex": "32023D1978",
-      "full_title": "Commission Implementing Decision (EU) 2023/1978 of 21 September 2023 on the applicability of Article 34 of Directive 2014/25/EU of the European Parliament and of the Council to the award of contracts ",
-      "type": "Directive",
-      "year": 2023,
-      "source_file": "L_2023235EN.01001301.xml"
-    },
     "ECB/2019/25": {
       "celex": "32019D1349",
       "full_title": "Decision (EU) 2019/1349 of the European Central Bank of 26 July 2019 on the procedure and conditions for exercise by a competent authority of certain powers in relation to oversight of systemically im",
@@ -2660,13 +2653,6 @@
       "type": "Decision",
       "year": 2016,
       "source_file": "L_2016037EN.01010401.xml"
-    },
-    "Personal Information Protection Act": {
-      "celex": "32016R0679",
-      "full_title": "Commission Implementing Decision (EU) 2022/254 of 17 December 2021 pursuant to Regulation (EU) 2016/679 of the European Parliament and of the Council on the adequate protection of personal data by the",
-      "type": "Regulation",
-      "year": 2022,
-      "source_file": "L_2022044EN.01000101.xml"
     },
     "ECB/2023/3": {
       "celex": "32023D0549",

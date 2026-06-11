@@ -51,6 +51,26 @@ _LINKIFY_ACRONYM_DENYLIST = frozenset({
     "AID", "AIR", "GAS", "NET", "USE", "WAR",
 })
 
+# Safe-by-default linkifier rule (11 June 2026). legislation_acronyms.json was
+# bulk auto-ingested from Formex XML, and the ingestion mis-keyed popular names
+# / acronyms onto IMPLEMENTING and DELEGATED instruments that merely *reference*
+# the base act (the DSA -> 32023R1201 production bug; ~120 such rows: WEEE ->
+# an implementing reg, UCITS -> a delegated reg, etc.). A popular acronym must
+# never resolve to an implementing/delegated act, so _linkify_legislation (both
+# the STEP 0 inline-correction map and STEP 2 bare-acronym pass) skips any entry
+# whose full_title marks it as one. This neutralises the whole poisoned long
+# tail at once, deterministically, without trusting each individual CELEX. Base
+# acts and corrigenda (corrigendum CELEX == base CELEX) still linkify.
+# See memory/feedback_linkify_override_celex.md.
+_NON_BASE_ACT_MARKERS = ("Implementing ", "Delegated ")
+
+
+def _is_linkify_safe_act(full_title: Optional[str]) -> bool:
+    """False if the entry's full_title is an Implementing/Delegated act -- those
+    are never the canonical target for a popular acronym and must not auto-link."""
+    ft = full_title or ""
+    return not any(marker in ft for marker in _NON_BASE_ACT_MARKERS)
+
 
 # ---------------------------------------------------------------------------
 # Quality signal regexes (Playbook D: structured logging)
@@ -2379,6 +2399,8 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 continue
             if re.fullmatch(r'[IVXLCDM]+', _acr):
                 continue
+            if not _is_linkify_safe_act((_info or {}).get('full_title')):
+                continue  # implementing/delegated act -> never a popular acronym's target
             _celex = (_info or {}).get('celex')
             if not _celex:
                 continue
@@ -2481,6 +2503,11 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 continue
 
             leg_info = acronyms_db[acronym]
+            # Safe-by-default: skip entries whose full_title is an implementing
+            # or delegated act -- the auto-ingestion mis-keyed popular acronyms
+            # onto those (DSA->implementing-reg class). See _is_linkify_safe_act.
+            if not _is_linkify_safe_act(leg_info.get('full_title')):
+                continue
             celex = leg_info['celex']
 
             # Build EUR-Lex URL

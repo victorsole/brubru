@@ -358,3 +358,44 @@ class TestLinkifyLegislationCelexOverride:
                 names[full].add(celex)
         conflicts = {k: s for k, s in names.items() if len(s) > 1}
         assert conflicts == {}, f"name->CELEX conflicts present: {conflicts}"
+
+
+# ---------------------------------------------------------------------------
+# Safe-by-default rule (11 June 2026): never auto-link an acronym whose DB entry
+# is an Implementing/Delegated act. The acronyms DB was bulk auto-ingested and
+# mis-keyed popular acronyms onto such instruments (DSA->implementing-reg class,
+# plus WEEE, UCITS, FLEGT, ELTIF, ...). _is_linkify_safe_act neutralises the
+# whole poisoned long tail deterministically.
+# ---------------------------------------------------------------------------
+class TestLinkifySafeByDefault:
+    def test_helper_rejects_implementing_and_delegated(self):
+        from services.ai_service import _is_linkify_safe_act
+        assert _is_linkify_safe_act("Regulation (EU) 2022/2065 ... (Digital Services Act)") is True
+        assert _is_linkify_safe_act("Commission Implementing Regulation (EU) 2017/699 ...") is False
+        assert _is_linkify_safe_act("Commission Delegated Regulation (EU) 2024/911 ...") is False
+        assert _is_linkify_safe_act("Council Implementing Decision (EU) 2018/748 ...") is False
+        assert _is_linkify_safe_act(None) is True  # absence of marker = treat as base
+
+    def test_poison_acronyms_do_not_linkify(self, service):
+        # WEEE/UCITS/FLEGT/ELTIF entries point at implementing/delegated acts.
+        for acr in ("WEEE", "UCITS", "FLEGT", "ELTIF"):
+            out = service._linkify_legislation(f"The {acr} framework applies.")
+            assert f"[{acr}](" not in out, f"{acr} should not auto-link (non-base act)"
+
+    def test_base_marquee_laws_still_linkify(self, service):
+        for acr in ("DSA", "GDPR", "CBAM", "DMA"):
+            out = service._linkify_legislation(f"The {acr} framework applies.")
+            assert f"[{acr}](" in out and "eur-lex" in out, f"{acr} must still link (base act)"
+
+    def test_removed_non_eu_keys_are_gone(self):
+        import json
+        from pathlib import Path
+        path = (
+            Path(__file__).resolve().parent.parent
+            / "knowledge_base" / "institutions" / "legislation_acronyms.json"
+        )
+        db = json.loads(path.read_text(encoding="utf-8"))["acronyms"]
+        assert "Personal Information Protection Act" not in db
+        assert "Renewable Energy Sources Act" not in db
+        # IPA II repointed to its base regulation, not the implementing reg.
+        assert db["IPA II"]["celex"] == "32014R0231"
