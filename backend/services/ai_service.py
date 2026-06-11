@@ -145,17 +145,20 @@ def _response_needs_validation(response: str) -> bool:
 # pipeline + a provider call, wasting both latency and scarce free-tier provider
 # capacity under load. Detect a WHOLE-message greeting (anchored, so "hello, what
 # is the AI Act?" is NOT caught) and return a templated localized intro directly.
-_GREETING_RE = re.compile(
-    r"^\s*(hi|hello|hey|hiya|yo|greetings|good\s+(morning|afternoon|evening)|howdy"
+# A greeting may chain several greeting phrases ("hola, qui ets?", "hi, who are
+# you?"), so the message must be COMPOSED of one-or-more greeting tokens separated
+# by spaces/punctuation -- not a single token. Anchored so "what is the AI Act?"
+# (real query) is never caught.
+_GREET_TOKEN = (
+    r"(?:hi|hello|hey|hiya|yo|greetings|good\s+(?:morning|afternoon|evening)|howdy"
     r"|hola|buenas|buenos\s+d[ií]as|quien\s+eres|qui[eé]n\s+eres|qu[eé]\s+eres"
-    r"|bon\s?dia|bona\s+tarda|qui\s+ets|qui\s+ets\?|ets\s+un\s+bot"
-    r"|ciao|salve|buongiorno|chi\s+sei"
-    r"|bonjour|salut|coucou|qui\s+es[\s\-]?tu|qui\s+est[\s\-]?tu"
-    r"|hallo|hoi|goedemorgen|wie\s+ben\s+je"
-    r"|who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do|who\s+r\s+u|whats\s+brubru|what\s+is\s+brubru)"
-    r"[\s,!?.¿¡]*$",
-    re.IGNORECASE,
+    r"|bon\s?dia|bona\s+tarda|qui\s+ets|ets\s+un\s+bot|que\s+pots\s+fer"
+    r"|ciao|salve|buongiorno|chi\s+sei|cosa\s+sai\s+fare"
+    r"|bonjour|salut|coucou|qui\s+es[\s\-]?tu|qui\s+est[\s\-]?tu|que\s+sais[\s\-]?tu\s+faire"
+    r"|hallo|hoi|goedemorgen|wie\s+ben\s+je|wat\s+kun\s+je"
+    r"|who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do|who\s+r\s+u|what'?s\s+brubru|what\s+is\s+brubru)"
 )
+_GREETING_RE = re.compile(r"^\s*(?:" + _GREET_TOKEN + r"[\s,!?.¿¡y]*)+$", re.IGNORECASE)
 _GREETING_LANG = [
     (re.compile(r"\b(qui\s+ets|bon\s?dia|bona\s+tarda|ets\s+un\s+bot)\b", re.IGNORECASE), "ca"),
     (re.compile(r"\b(hola|buenas|buenos|qui[eé]n\s+eres|qu[eé]\s+eres)\b", re.IGNORECASE), "es"),
