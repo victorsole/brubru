@@ -1,6 +1,7 @@
 # EU Defence Procurement
 
 ## QUICK FACTS
+- **LATEST (Wednesday 8 June 2026 — provisional agreement)**: **Parliament and Council negotiators strike a provisional political agreement on the "Omnibus V" defence simplification package** (EP press 20260608IPR44910, 8 June 2026). Three linked files, all ordinary legislative procedure: **permit-granting acceleration for defence-readiness projects — 2025/0172(COD)** (EU-wide default decision deadline of **42 working days**, extendable twice by up to 60 days, capped at 102 working days; rapporteurs Lucia Yar + Henrik Dahl); **simplification of intra-EU transfers of defence-related products and of procurement — 2025/0177(COD)** (rapporteurs Pekka Toveri + Anna-Maja Henriksson); and **facilitating defence investments and conditions for the defence industry — 2025/0176(COD)** (rapporteurs Sven Mikser, Aura Salla, Pierfrancesco Maran). The package removes regulatory obstacles to support up to **EUR 800 billion** of defence investment over four years under the **ReArm Europe / Readiness 2030** framework. Both Parliament and Council must still formally adopt the provisional agreements before entry into force — never assert final adoption yet. Cross-link: `european_defence_union`, `eu_us_trade_deal_2026` (security-economic nexus).
 - Full name: EU Joint Defence Procurement Framework
 - Key instruments: EDIP (Regulation (EU) 2025/2643, CELEX 32025R2643), EDF (Regulation (EU) 2021/697), SAFE (Article 122 TFEU)
 - EPRS briefing: "EU joint defence procurement" (13 March 2026)
