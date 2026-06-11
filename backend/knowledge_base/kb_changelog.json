@@ -4,6 +4,24 @@
     {
       "date": "2026-06-11",
       "action": "updated",
+      "guide": "digital_omnibus_package",
+      "title": "Digital Omnibus Package",
+      "summary": "EDPB position to LIBE (8 Jun): supports simplification but opposes personal-data definition change; LIBE postponed AI Act Joint Working Group + AI Omnibus trilogue report-back (rapporteur absent)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-11",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "GDPR / Data Protection",
+      "summary": "EDPB Chair Anu Talus presented the 2025 Annual Report to LIBE (8 Jun): EUR 1.1bn DPA fines, 572 cross-border decisions, DMA/DSA/AI Act-GDPR joint guidance, Helsinki Statement, opposes Digital Omnibus personal-data redefinition",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
+      "date": "2026-06-11",
+      "action": "updated",
       "guide": "eu_trade_policy",
       "title": "EU Trade Policy",
       "summary": "EU-Korea Digital Trade Agreement signed at 11th Summit (10 Jun 2026): e-contracts/e-signatures, cross-border data flows, no forced source-code transfer; EU's 2nd standalone DTA, ratification pending",
