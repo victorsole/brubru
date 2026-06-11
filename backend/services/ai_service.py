@@ -2361,6 +2361,59 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         if not acronyms_db:
             return text
 
+        # STEP 0 (11 June 2026): correct a WRONG CELEX the generator emitted
+        # INLINE. A weaker open model (e.g. NVIDIA Llama-3.3-70B) sometimes
+        # writes a full EUR-Lex markdown link with a fabricated CELEX -- the
+        # production DSA bug was [Digital Services Act](...CELEX:32023R1201)
+        # when the real number is 32022R2065. STEP 2 below only links BARE
+        # acronyms and deliberately skips already-linked text, so without this
+        # the wrong CELEX ships and the validator can only refuse the whole
+        # answer (degraded UX). Here we authoritatively rewrite the CELEX when
+        # the link TEXT exactly matches a known acronym or its popular name in
+        # our curated DB. Conservative: only acts when the text is an exact
+        # name match AND the URL's CELEX differs; never touches non-EUR-Lex
+        # links or ambiguous text. See memory/feedback_linkify_override_celex.md.
+        name_to_celex: Dict[str, str] = {}
+        for _acr, _info in acronyms_db.items():
+            if _acr.upper() in _LINKIFY_ACRONYM_DENYLIST:
+                continue
+            if re.fullmatch(r'[IVXLCDM]+', _acr):
+                continue
+            _celex = (_info or {}).get('celex')
+            if not _celex:
+                continue
+            if len(_acr) > 2 and not _acr.isdigit():
+                name_to_celex.setdefault(_acr.strip().lower(), _celex)
+            _full = (_info.get('full_name') or '').strip().lower()
+            if len(_full) > 3:
+                name_to_celex.setdefault(_full, _celex)
+
+        celex_link_pattern = re.compile(
+            r'\[([^\]]+)\]\(https://eur-lex\.europa\.eu/legal-content/[^)]*?'
+            r'CELEX(?::|%3A)([0-9][0-9A-Za-z]+)[^)]*\)'
+        )
+        celex_corrected = 0
+
+        def _fix_inline_celex(match):
+            nonlocal celex_corrected
+            link_text = match.group(1)
+            url_celex = match.group(2).upper()
+            key = link_text.replace('**', '').strip().lower()
+            correct = name_to_celex.get(key)
+            if correct and correct.upper() != url_celex:
+                celex_corrected += 1
+                return (
+                    f'[{link_text}](https://eur-lex.europa.eu/legal-content/'
+                    f'EN/TXT/?uri=CELEX:{correct})'
+                )
+            return match.group(0)
+
+        text = celex_link_pattern.sub(_fix_inline_celex, text)
+        if celex_corrected > 0:
+            logger.info(
+                f"Corrected {celex_corrected} wrong inline CELEX link(s) to canonical EUR-Lex"
+            )
+
         # STEP 1: Remove incorrect committee hyperlinks for legislation acronyms
         # Claude sometimes treats legislation acronyms (CBAM, GDPR) as committees
         # We only remove committee links for acronyms IN our legislation database

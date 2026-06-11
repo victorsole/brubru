@@ -284,3 +284,77 @@ class TestLinkifyLegislation:
         result = service._linkify_legislation(text)
         # ENVI committee link should be preserved (it's a real committee)
         assert "committees/en/ENVI" in result
+
+
+# ---------------------------------------------------------------------------
+# _linkify_legislation STEP 0 -- correct a WRONG CELEX the generator emitted
+# inline. Regression guard for the 11 June 2026 production bug where a weaker
+# open model wrote [Digital Services Act](...CELEX:32023R1201) (an implementing
+# regulation) instead of the real DSA (32022R2065). DSA is asserted by exact
+# CELEX because it is a marquee law whose number is fixed by CLAUDE.md.
+# ---------------------------------------------------------------------------
+class TestLinkifyLegislationCelexOverride:
+    DSA = "32022R2065"
+    WRONG = "32023R1201"
+
+    def _eurlex(self, celex):
+        return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+    def test_corrects_wrong_inline_celex_for_full_name(self, service):
+        text = f"[Digital Services Act]({self._eurlex(self.WRONG)}) governs platforms."
+        result = service._linkify_legislation(text)
+        assert self.WRONG not in result
+        assert self.DSA in result
+
+    def test_corrects_wrong_inline_celex_for_acronym(self, service):
+        text = f"The [DSA]({self._eurlex(self.WRONG)}) governs platforms."
+        result = service._linkify_legislation(text)
+        assert self.WRONG not in result
+        assert self.DSA in result
+
+    def test_leaves_correct_inline_celex_untouched(self, service):
+        text = f"[Digital Services Act]({self._eurlex(self.DSA)}) governs platforms."
+        result = service._linkify_legislation(text)
+        assert self.DSA in result
+        assert result.count(self.DSA) == 1  # not duplicated
+
+    def test_bare_full_name_links_to_correct_celex(self, service):
+        # The DB key "Digital Services Act" must map to the real DSA, not the
+        # implementing regulation (the poisoned entry that caused the prod bug).
+        result = service._linkify_legislation("The Digital Services Act governs platforms.")
+        assert self.WRONG not in result
+        assert self.DSA in result
+
+    def test_does_not_touch_unknown_link_text(self, service):
+        # An unmapped link text must be left exactly as-is (conservative).
+        text = f"[some niche measure]({self._eurlex(self.WRONG)})."
+        result = service._linkify_legislation(text)
+        assert result == text
+
+    def test_does_not_touch_non_eurlex_domain(self, service):
+        text = f"[Digital Services Act](https://example.com/CELEX:{self.WRONG})."
+        result = service._linkify_legislation(text)
+        assert result == text
+
+    def test_db_has_no_name_celex_conflicts(self):
+        # The conflict that caused the prod bug (DSA -> two CELEX) must stay gone.
+        import json
+        from pathlib import Path
+        from collections import defaultdict
+
+        path = (
+            Path(__file__).resolve().parent.parent
+            / "knowledge_base" / "institutions" / "legislation_acronyms.json"
+        )
+        db = json.loads(path.read_text(encoding="utf-8"))["acronyms"]
+        names = defaultdict(set)
+        for key, info in db.items():
+            celex = info.get("celex")
+            if not celex:
+                continue
+            names[key.strip().lower()].add(celex)
+            full = (info.get("full_name") or "").strip().lower()
+            if full:
+                names[full].add(celex)
+        conflicts = {k: s for k, s in names.items() if len(s) > 1}
+        assert conflicts == {}, f"name->CELEX conflicts present: {conflicts}"
