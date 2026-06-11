@@ -41,6 +41,8 @@ class Settings(BaseSettings):
     GROQ_MODEL: str = "llama-3.3-70b-versatile"  # clean multilingual incl. Catalan; swap to qwen/qwen3-32b if needed
     CEREBRAS_API_KEY: str | None = None  # Cerebras free tier (gpt-oss-120b, zai-glm-4.7) — deep open fallback
     CEREBRAS_MODEL: str = "gpt-oss-120b"  # high TPD; reasoning model (reasoning_effort=low, content/<think> handled)
+    NVIDIA_API_KEY: str | None = None  # NVIDIA NIM free tier (Llama-3.3-70B, 128K ctx) — 2nd open fallback below Cerebras
+    NVIDIA_MODEL: str = "meta/llama-3.3-70b-instruct"  # permanent free; fits the ~19K-token Brubru prompt
     MISTRAL_API_KEY: str | None = None  # Mistral (free tier, EU, open-weight) — fallback
     ANTHROPIC_API_KEY: str  # Claude (opportunistic — used only when free chain exhausted AND funded)
     OPENAI_API_KEY: str  # GPT-4 (paid last resort)

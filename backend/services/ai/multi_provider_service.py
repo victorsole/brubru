@@ -509,6 +509,24 @@ class CerebrasProvider(_OpenAICompatibleProvider):
         )
 
 
+class NvidiaProvider(_OpenAICompatibleProvider):
+    """NVIDIA NIM free tier — strong OPEN fallback (Llama-3.3-70B-Instruct,
+    128K context so it comfortably fits Brubru's ~19K-token prompt; permanent
+    free tier, no card). OpenAI-compatible at integrate.api.nvidia.com. Sits
+    right below Cerebras as the second big-context open model — if Cerebras
+    queues/rate-limits, NVIDIA catches before any non-open provider."""
+
+    BASE_URL = "https://integrate.api.nvidia.com/v1"
+    MODEL = "meta/llama-3.3-70b-instruct"
+    _NAME = "NVIDIA"
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        super().__init__(
+            api_key=api_key or getattr(settings, 'NVIDIA_API_KEY', None),
+            model=model or getattr(settings, 'NVIDIA_MODEL', None) or self.MODEL,
+        )
+
+
 class GeminiProvider(AIProvider):
     """Google Gemini provider (fallback 3)"""
 
@@ -664,20 +682,28 @@ class MultiProviderService:
             self.providers.append(cerebras)
             logger.info(f"Cerebras provider available (OPEN primary, model={cerebras.model})")
 
-        # 2. Mistral (free tier, EU, open-weight) — reliable catch for Cerebras's
+        # 2. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
+        #    permanent free tier). Second big-context open model, catches when
+        #    Cerebras queues/rate-limits before any non-open provider is reached.
+        nvidia = NvidiaProvider()
+        if nvidia.is_available:
+            self.providers.append(nvidia)
+            logger.info(f"NVIDIA provider available (open, 128K ctx, model={nvidia.model})")
+
+        # 3. Mistral (free tier, EU, open-weight) — reliable catch for Cerebras's
         #    occasional queue_exceeded congestion.
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
             logger.info("Mistral provider available (free EU catch)")
 
-        # 3. Gemini (free; 1M context) — when its daily quota is available.
+        # 4. Gemini (free; 1M context) — when its daily quota is available.
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
             logger.info("Gemini provider available (free, daily quota)")
 
-        # 4. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
+        # 5. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
         #    queries; kept only for the rare small prompt / if the system prompt
         #    is later trimmed).
         groq = GroqProvider()
@@ -685,14 +711,14 @@ class MultiProviderService:
             self.providers.append(groq)
             logger.info(f"Groq provider available (open, TPM-limited, model={groq.model})")
 
-        # 5. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
+        # 6. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
         #    is exhausted; fails fast when unfunded, then the chain continues).
         anthropic = AnthropicProvider(anthropic_key)
         if anthropic.is_available:
             self.providers.append(anthropic)
             logger.info("Anthropic Sonnet provider available (opportunistic, when funded)")
 
-        # 6. OpenAI (paid last resort).
+        # 7. OpenAI (paid last resort).
         openai_provider = OpenAIProvider(openai_key)
         if openai_provider.is_available:
             self.providers.append(openai_provider)
