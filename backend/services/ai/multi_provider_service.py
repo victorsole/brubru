@@ -682,30 +682,39 @@ class MultiProviderService:
             self.providers.append(cerebras)
             logger.info(f"Cerebras provider available (OPEN primary, model={cerebras.model})")
 
-        # 2. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
-        #    permanent free tier). Second open model, the immediate catch when
-        #    Cerebras queues/rate-limits, before any non-open provider. Victor's
-        #    preference (11 June 2026) is open-model-first: NVIDIA's free tier can
-        #    queue to ~165s on a deep fallthrough, but that path is rare and the
-        #    earlier 'Llama got the DSA wrong' was a poisoned acronyms-DB row (now
-        #    fixed), not a model accuracy problem — so it stays at slot 2.
-        nvidia = NvidiaProvider()
-        if nvidia.is_available:
-            self.providers.append(nvidia)
-            logger.info(f"NVIDIA provider available (open, 128K ctx, model={nvidia.model})")
+        # FULL-CONTEXT readers come first (11 June 2026). Only Cerebras, Gemini,
+        # and NVIDIA actually read Brubru's full ~19K-token KB context; Mistral
+        # ignores ~70% of it (shallow answers) and Groq's 12K TPM can't fit the
+        # prompt, so both drop BELOW the full-context readers as last-resort
+        # degraded fallbacks. See memory/feedback_mistral_ignores_context.md.
 
-        # 3. Mistral (free tier, EU, open-weight) — reliable catch for Cerebras's
-        #    occasional queue_exceeded congestion.
-        mistral = MistralProvider(mistral_key)
-        if mistral.is_available:
-            self.providers.append(mistral)
-            logger.info("Mistral provider available (free EU catch)")
-
-        # 4. Gemini (free; 1M context) — when its daily quota is available.
+        # 2. Gemini (free; 1M context) — fast AND full-context, so it is the
+        #    immediate catch when Cerebras 429s. Most Cerebras-rate-limit events
+        #    stay fast here; only if Gemini's daily quota is ALSO exhausted does
+        #    the request fall to NVIDIA's slow path below.
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
-            logger.info("Gemini provider available (free, daily quota)")
+            logger.info("Gemini provider available (full-context fast catch, daily quota)")
+
+        # 3. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
+        #    permanent free tier). Reliable full-context open backstop, reached
+        #    when Cerebras 429s AND Gemini's daily quota is out. Its free tier can
+        #    queue to ~165s, so it sits below Gemini (the fast full-context catch)
+        #    but still above the shallow providers.
+        nvidia = NvidiaProvider()
+        if nvidia.is_available:
+            self.providers.append(nvidia)
+            logger.info(f"NVIDIA provider available (open full-context backstop, model={nvidia.model})")
+
+        # 4. Mistral (free, EU, open-weight) — DEGRADED last-resort: fast but
+        #    reads only ~30% of the injected context, so answers are shallow.
+        #    Below all full-context readers; only used when Cerebras/Gemini/NVIDIA
+        #    are all unavailable, to keep Chat answering at all.
+        mistral = MistralProvider(mistral_key)
+        if mistral.is_available:
+            self.providers.append(mistral)
+            logger.info("Mistral provider available (DEGRADED: ~30% context, last-resort)")
 
         # 5. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
         #    queries; kept only for the rare small prompt / if the system prompt
