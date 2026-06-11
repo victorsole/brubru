@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n339 requests across 25 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n343 requests across 26 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -5288,6 +5288,293 @@
               "response": []
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Geographical Indications",
+      "item": [
+        {
+          "name": "GIView (EUIPO) \u2014 geographical indications (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/giview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "giview"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists GIView (EUIPO)'s geographical indications, newest first. Every EU geographical indication (PDO, PGI and GI for spirits/wines) as held in EUIPO's GIView portal \u2014 protected name, type, product type, country, EU protection date, file number and status. ~3,960 entries from the agri and craft/industrial union registers. Filter with q (e.g. a name, country or product).\n\n**When to use it**\nTrack what EUIPO is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /giview?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the GIView EU geographical-indications register (the full union register).."
+          },
+          "response": []
+        },
+        {
+          "name": "eAmbrosia (third-country GIs) \u2014 third-country geographical indications (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/third-country",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "third-country"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists eAmbrosia (third-country GIs)'s third-country geographical indications, newest first. Geographical indications from non-EU countries protected in the EU via bilateral or multilateral trade agreements (e.g. EU-Mercosur) \u2014 protected name, third country, product category, protection type, status and the agreement under which it is protected. ~2,044 entries. Filter with q (e.g. a country or product).\n\n**When to use it**\nTrack what DG AGRI / DG TRADE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /third-country?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from eAmbrosia, the third-country GIs protected in the EU under international trade agreements.."
+          },
+          "response": []
+        },
+        {
+          "name": "the EU geographical-indications register (eAmbrosia) \u2014 EU geographical indications (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/eu-register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "eu-register"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists the EU geographical-indications register (eAmbrosia)'s EU geographical indications, newest first. Every EU geographical indication for wine, spirits, agricultural products and foodstuffs (PDO, PGI, GI and TSG) \u2014 protected name, type, product type, country, status, file number, EU protection date, legal instrument, CN classification, producer-group contact (where published) and Official Journal publications. ~3,997 entries. Filter with q (e.g. a name, country or product such as 'Champagne', 'cheese' or 'ES').\n\n**When to use it**\nTrack what DG AGRI is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /eu-register?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from eAmbrosia, the official EU GI register maintained by DG AGRI (the full register).."
+          },
+          "response": []
+        },
+        {
+          "name": "GIView (EUIPO) \u2014 one geographical indication (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/giview/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "giview",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one GIView (EUIPO) geographical indication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /giview/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the GIView EU geographical-indications register (the full union register).."
+          },
+          "response": []
+        },
+        {
+          "name": "eAmbrosia (third-country GIs) \u2014 one third-country geographical indication (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/third-country/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "third-country",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one eAmbrosia (third-country GIs) third-country geographical indication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /third-country/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from eAmbrosia, the third-country GIs protected in the EU under international trade agreements.."
+          },
+          "response": []
+        },
+        {
+          "name": "the EU geographical-indications register (eAmbrosia) \u2014 one EU geographical indication (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/geographical-indications/eu-register/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "geographical-indications",
+                "eu-register",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one the EU geographical-indications register (eAmbrosia) EU geographical indication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /eu-register/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from eAmbrosia, the official EU GI register maintained by DG AGRI (the full register).."
+          },
+          "response": []
         }
       ]
     },
@@ -13870,65 +14157,6 @@
           "response": []
         },
         {
-          "name": "European Union Intellectual Property Office \u2014 geographical indications (newest first)",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "X-API-Key",
-                "value": "{{api_key}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v2/euipo/giview",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v2",
-                "euipo",
-                "giview"
-              ],
-              "query": [
-                {
-                  "key": "q",
-                  "value": "data protection",
-                  "disabled": true
-                },
-                {
-                  "key": "since",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "until",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "order",
-                  "value": "recent",
-                  "disabled": true
-                },
-                {
-                  "key": "page",
-                  "value": "1",
-                  "disabled": true
-                },
-                {
-                  "key": "limit",
-                  "value": "20",
-                  "disabled": true
-                }
-              ]
-            },
-            "description": "**What it does**\nLists European Union Intellectual Property Office's geographical indications, newest first. Every EU geographical indication (PDO, PGI and GI for spirits/wines) \u2014 protected name, type, product type, country, EU protection date, file number and status. ~3,960 entries from the agri and craft/industrial union registers. Filter with q (e.g. a name, country or product).\n\n**When to use it**\nTrack what EUIPO is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /giview?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the GIView EU geographical-indications register (the full union register).."
-          },
-          "response": []
-        },
-        {
           "name": "European Union Intellectual Property Office \u2014 news items (newest first)",
           "request": {
             "method": "GET",
@@ -14104,41 +14332,6 @@
               ]
             },
             "description": "**What it does**\nReturns one European Union Intellectual Property Office event in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /events/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EUIPO events index.."
-          },
-          "response": []
-        },
-        {
-          "name": "European Union Intellectual Property Office \u2014 one geographical indication (full body)",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "X-API-Key",
-                "value": "{{api_key}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v2/euipo/giview/:item_id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v2",
-                "euipo",
-                "giview",
-                ":item_id"
-              ],
-              "variable": [
-                {
-                  "key": "item_id",
-                  "value": "",
-                  "description": "(path variable)"
-                }
-              ]
-            },
-            "description": "**What it does**\nReturns one European Union Intellectual Property Office geographical indication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /giview/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the GIView EU geographical-indications register (the full union register).."
           },
           "response": []
         },
