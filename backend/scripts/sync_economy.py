@@ -40,6 +40,7 @@ from services.scrapers import commission_research as commission_research  # noqa
 from services.scrapers import commission_tariff_rulings as commission_tariff_rulings  # noqa: E402
 from services.scrapers import commission_taric as commission_taric  # noqa: E402
 from services.scrapers import eambrosia as eambrosia  # noqa: E402
+from services.scrapers import commission_agridata as commission_agridata  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -100,6 +101,7 @@ INGESTORS = {
     ("commission", "tariff_code"): commission_taric.ingest_taric_tariffs,
     ("commission", "geographical_indication"): eambrosia.ingest_eambrosia_gis,
     ("commission", "third_country_gi"): eambrosia.ingest_eambrosia_third_country,
+    ("commission", "agri_data_series"): commission_agridata.ingest_agridata_catalogue,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,

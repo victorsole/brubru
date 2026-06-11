@@ -36,6 +36,7 @@ from . import financial_sanctions as _financial_sanctions
 from . import research_projects as _research_projects
 from . import tariff_rulings as _tariff_rulings
 from . import taric_tariffs as _taric_tariffs
+from . import agridata as _agridata
 
 router = APIRouter(prefix="/commission")
 router.include_router(_commissioners.router)
@@ -49,3 +50,4 @@ router.include_router(_financial_sanctions.router)
 router.include_router(_research_projects.router)
 router.include_router(_tariff_rulings.router)
 router.include_router(_taric_tariffs.router)
+router.include_router(_agridata.router)
