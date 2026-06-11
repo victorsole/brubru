@@ -99,6 +99,92 @@ _DONT_HAVE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Fix A (11 June 2026): deterministic risk pre-filter for the response validator.
+# The LLM validator is a SECOND provider call per chat (the measured concurrency
+# doubler — see memory/query_audit.md). It only earns its cost when the answer
+# contains a CHECKABLE-FABRICATION surface the linkifier can't police: a named
+# person given a role, a PE/A/T identifier, a vote tally, a fabricated meeting, a
+# fine figure, or an outlet-attributed quote. (Bare CELEX no longer needs it —
+# the de-poisoned linkifier + safe-by-default rule handle CELEX deterministically.)
+# Low-risk answers (definitions, mechanism explanations, procedural how-tos) have
+# no such surface and skip the validator => 1 provider call instead of 2.
+_VALIDATE_TRIGGER_RE = re.compile(
+    r"\bPE[\s\-]?\d{3,}"                                   # PE working-doc numbers
+    r"|\b[ABT]\d{1,2}[\s\-]?\d{3,4}/\d{4}\b"               # A-/B-/T- report/resolution refs
+    r"|\bP\d{1,2}_TA\b"                                    # adopted-text refs
+    r"|\b\d{2,3}\s*(?:votes?|in\s+favou?r|against|abstentions?)\b"   # vote tally words
+    r"|\b\d{2,3}\s*[-–/]\s*\d{2,3}\s*[-–/]\s*\d{1,3}\b"    # tally like 228-311-92
+    r"|\bmet\s+with\b|\bmeeting\s+with\b"                  # fabricated meeting
+    r"|€\s?\d[\d.,]*\s*(?:million|billion|bn|m)\b"         # fine / figure
+    r"|\b(?:Politico|Reuters|Bloomberg|Euractiv|Contexte|Financial\s+Times|Bruegel)\b"  # outlet attribution
+    r"|\btrilogue\b",
+    re.IGNORECASE,
+)
+_NAMED_ROLE_RE = re.compile(
+    r"rapporteur|shadow|ponente|relator[ei]|berichterstatter|coordinator|lead\s+negotiator",
+    re.IGNORECASE,
+)
+_CAP_NAME_RE = re.compile(r"\b[A-ZÀ-Þ][a-zà-ÿ]+\s+[A-ZÀ-Þ][A-Za-zÀ-ÿ'\-]+")  # First Last
+
+
+def _response_needs_validation(response: str) -> bool:
+    """True if the response has a checkable-fabrication surface worth the second
+    (validator) provider call. False for low-risk answers -> skip the validator."""
+    if not response:
+        return False
+    if _VALIDATE_TRIGGER_RE.search(response):
+        return True
+    # A role claim is risky only when a specific name is attached.
+    if _NAMED_ROLE_RE.search(response) and _CAP_NAME_RE.search(response):
+        return True
+    return False
+
+
+# Fix B (11 June 2026): greeting / identity short-circuit. A "hi" or "who are
+# you" needs no KB context and no LLM call -- it ran the full ~14K-prompt
+# pipeline + a provider call, wasting both latency and scarce free-tier provider
+# capacity under load. Detect a WHOLE-message greeting (anchored, so "hello, what
+# is the AI Act?" is NOT caught) and return a templated localized intro directly.
+_GREETING_RE = re.compile(
+    r"^\s*(hi|hello|hey|hiya|yo|greetings|good\s+(morning|afternoon|evening)|howdy"
+    r"|hola|buenas|buenos\s+d[ií]as|quien\s+eres|qui[eé]n\s+eres|qu[eé]\s+eres"
+    r"|bon\s?dia|bona\s+tarda|qui\s+ets|qui\s+ets\?|ets\s+un\s+bot"
+    r"|ciao|salve|buongiorno|chi\s+sei"
+    r"|bonjour|salut|coucou|qui\s+es[\s\-]?tu|qui\s+est[\s\-]?tu"
+    r"|hallo|hoi|goedemorgen|wie\s+ben\s+je"
+    r"|who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do|who\s+r\s+u|whats\s+brubru|what\s+is\s+brubru)"
+    r"[\s,!?.¿¡]*$",
+    re.IGNORECASE,
+)
+_GREETING_LANG = [
+    (re.compile(r"\b(qui\s+ets|bon\s?dia|bona\s+tarda|ets\s+un\s+bot)\b", re.IGNORECASE), "ca"),
+    (re.compile(r"\b(hola|buenas|buenos|qui[eé]n\s+eres|qu[eé]\s+eres)\b", re.IGNORECASE), "es"),
+    (re.compile(r"\b(ciao|salve|buongiorno|chi\s+sei)\b", re.IGNORECASE), "it"),
+    (re.compile(r"\b(bonjour|salut|coucou|qui\s+es[\s\-]?tu|qui\s+est)\b", re.IGNORECASE), "fr"),
+    (re.compile(r"\b(hallo|hoi|goedemorgen|wie\s+ben\s+je)\b", re.IGNORECASE), "nl"),
+]
+_GREETING_REPLIES = {
+    "en": "Hello! I'm Brubru, your AI assistant for EU legislative affairs. I can help you understand EU legislation, track procedures, find MEPs and committees, draft amendments, and analyse policy. What would you like to explore?",
+    "es": "¡Hola! Soy Brubru, tu asistente de IA para asuntos legislativos de la UE. Puedo ayudarte a entender la legislación europea, seguir procedimientos, encontrar eurodiputados y comisiones, redactar enmiendas y analizar políticas. ¿Qué te gustaría explorar?",
+    "ca": "Hola! Sóc Brubru, el teu assistent d'IA per als afers legislatius de la UE. Et puc ajudar a entendre la legislació europea, seguir procediments, trobar eurodiputats i comissions, redactar esmenes i analitzar polítiques. Què t'agradaria explorar?",
+    "fr": "Bonjour! Je suis Brubru, votre assistant IA pour les affaires législatives de l'UE. Je peux vous aider à comprendre la législation européenne, suivre les procédures, trouver des députés et des commissions, rédiger des amendements et analyser les politiques. Que souhaitez-vous explorer?",
+    "it": "Ciao! Sono Brubru, il tuo assistente IA per gli affari legislativi dell'UE. Posso aiutarti a capire la legislazione europea, seguire le procedure, trovare eurodeputati e commissioni, redigere emendamenti e analizzare le politiche. Cosa vorresti esplorare?",
+    "nl": "Hallo! Ik ben Brubru, je AI-assistent voor EU-wetgevingszaken. Ik kan je helpen EU-wetgeving te begrijpen, procedures te volgen, Europarlementariërs en commissies te vinden, amendementen op te stellen en beleid te analyseren. Wat wil je verkennen?",
+}
+
+
+def _greeting_response(user_message: str) -> Optional[str]:
+    """Return a templated localized intro if the WHOLE message is a greeting /
+    identity question, else None. No context-build, no LLM call."""
+    if not user_message or not _GREETING_RE.match(user_message.strip()):
+        return None
+    lang = "en"
+    for rx, lg in _GREETING_LANG:
+        if rx.search(user_message):
+            lang = lg
+            break
+    return _GREETING_REPLIES.get(lang, _GREETING_REPLIES["en"])
+
 # Lightweight language markers for query/response language detection.
 # Matches eval_quality.py so runtime and offline scoring agree.
 _LANG_MARKERS = {
@@ -267,6 +353,20 @@ class AIService:
             >>> print(response.citations)
         """
         start_time = datetime.now()
+
+        # Fix B: greeting / identity short-circuit -- no context-build, no LLM call.
+        _greet = _greeting_response(user_message)
+        if _greet is not None:
+            return ChatResponse(
+                message=_greet,
+                citations=[],
+                tokens_used=0,
+                model="brubru-greeting",
+                search_time_ms=0.0,
+                total_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                actions=[],
+                drafted_document=None,
+            )
 
         # Build EU context if enabled
         context_str = ""
@@ -485,7 +585,10 @@ class AIService:
                 VALIDATOR_SHADOW_MODE,
                 VALIDATOR_CRITICAL_ACTION,
             )
-            if VALIDATOR_ENABLED and use_context:
+            # Fix A: skip the validator (a 2nd provider call) unless the answer
+            # has a checkable-fabrication surface. Halves provider load on the
+            # common low-risk answer, preserving the override on risky ones.
+            if VALIDATOR_ENABLED and use_context and _response_needs_validation(assistant_message):
                 from services.ai.response_validator import get_response_validator
                 _validator = get_response_validator()
                 if _validator.is_available:
@@ -758,6 +861,13 @@ class AIService:
             logger.info(
                 f"Streamed policy-nav response in {(datetime.now() - start_time).total_seconds():.2f}s"
             )
+            return
+
+        # Fix B: greeting / identity short-circuit -- no context-build, no LLM call.
+        _greet = _greeting_response(user_message)
+        if _greet is not None:
+            yield _greet
+            logger.info("Streamed templated greeting (no context, no LLM)")
             return
 
         # --- Emit entity-aware status events before context building ---

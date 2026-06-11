@@ -698,47 +698,44 @@ class MultiProviderService:
             self.providers.append(cerebras)
             logger.info(f"Cerebras provider available (OPEN primary, model={cerebras.model})")
 
-        # FULL-CONTEXT readers come first (11 June 2026). Only Cerebras, Gemini,
-        # and NVIDIA actually read Brubru's full ~19K-token KB context; Mistral
-        # ignores ~70% of it (shallow answers) and Groq's 12K TPM can't fit the
-        # prompt, so both drop BELOW the full-context readers as last-resort
-        # degraded fallbacks. See memory/feedback_mistral_ignores_context.md.
+        # THREE FAST full-context lanes first (11 June 2026, fix C). Cerebras,
+        # Gemini, and Groq all read Brubru's full KB context AND respond fast.
+        # Stacking all three near the top triples the concurrent-request ceiling
+        # before traffic falls to the slow NVIDIA backstop (measured: the free-
+        # tier provider layer, not the backend, is the responsiveness wall — see
+        # memory/query_audit.md). Mistral (~30% context, shallow) stays a
+        # last-resort; see memory/feedback_mistral_ignores_context.md.
 
-        # 2. Gemini (free; 1M context) — fast AND full-context, so it is the
-        #    immediate catch when Cerebras 429s. Most Cerebras-rate-limit events
-        #    stay fast here; only if Gemini's daily quota is ALSO exhausted does
-        #    the request fall to NVIDIA's slow path below.
+        # 2. Gemini 2.5-flash (free; 1M context, thinking off) — fast full-context
+        #    catch when Cerebras 429s.
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
-            logger.info("Gemini provider available (full-context fast catch, daily quota)")
+            logger.info("Gemini provider available (full-context fast catch)")
 
-        # 3. NVIDIA NIM (OPEN — Llama-3.3-70B, 128K ctx fits the ~19K prompt;
-        #    permanent free tier). Reliable full-context open backstop, reached
-        #    when Cerebras 429s AND Gemini's daily quota is out. Its free tier can
-        #    queue to ~165s, so it sits below Gemini (the fast full-context catch)
-        #    but still above the shallow providers.
+        # 3. Groq llama-3.3-70b (OPEN, fast, full-context) — second fast catch.
+        #    Its free TPM 413'd on the old ~19K prompt; the 11 June prompt trim
+        #    (-25.7%, ~14K) brought it under the limit (measured: accepts the
+        #    trimmed prompt), so it is promoted from last-resort to a fast lane.
+        groq = GroqProvider()
+        if groq.is_available:
+            self.providers.append(groq)
+            logger.info(f"Groq provider available (open fast full-context lane, model={groq.model})")
+
+        # 4. NVIDIA NIM (OPEN Llama-3.3-70B, 128K ctx) — full-context backstop,
+        #    reached only when the three fast lanes are all saturated. Its free
+        #    tier can queue to ~165s, so it sits below them.
         nvidia = NvidiaProvider()
         if nvidia.is_available:
             self.providers.append(nvidia)
             logger.info(f"NVIDIA provider available (open full-context backstop, model={nvidia.model})")
 
-        # 4. Mistral (free, EU, open-weight) — DEGRADED last-resort: fast but
-        #    reads only ~30% of the injected context, so answers are shallow.
-        #    Below all full-context readers; only used when Cerebras/Gemini/NVIDIA
-        #    are all unavailable, to keep Chat answering at all.
+        # 5. Mistral (free, EU) — DEGRADED last-resort: fast but reads only ~30%
+        #    of the injected context. Below all full-context readers.
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
             logger.info("Mistral provider available (DEGRADED: ~30% context, last-resort)")
-
-        # 5. Groq (OPEN, but 12K free TPM < Brubru's prompt -> 413s on real
-        #    queries; kept only for the rare small prompt / if the system prompt
-        #    is later trimmed).
-        groq = GroqProvider()
-        if groq.is_available:
-            self.providers.append(groq)
-            logger.info(f"Groq provider available (open, TPM-limited, model={groq.model})")
 
         # 6. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
         #    is exhausted; fails fast when unfunded, then the chain continues).
