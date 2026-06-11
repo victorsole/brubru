@@ -632,6 +632,7 @@ def build_collection() -> dict:
         _build_legislative_domain(paths),
         _build_parliament_domain(paths),
         _build_commission_domain(paths),
+        _build_flat_domain(paths, "geographical-indications", "Geographical Indications"),
         _build_council_domain(paths),
         _build_european_council_domain(paths),
         _build_eurogroup_domain(paths),
