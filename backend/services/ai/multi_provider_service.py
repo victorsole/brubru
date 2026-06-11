@@ -591,29 +591,45 @@ class GeminiProvider(AIProvider):
 
         full_prompt = "".join(conversation_parts)
 
-        # Configure generation
-        generation_config = genai.types.GenerationConfig(
-            max_output_tokens=max_tokens,
-            temperature=temperature
+        # Call the REST endpoint directly (not the SDK) so we can disable
+        # thinking. gemini-2.5-flash is a "thinking" model that burns reasoning
+        # tokens before answering (~30-150s on Brubru's large prompt); the
+        # installed google-generativeai 0.8.0 SDK has no ThinkingConfig support,
+        # so GenerationConfig rejects thinking_budget. The v1beta REST API does
+        # accept generationConfig.thinkingConfig.thinkingBudget=0, which turns
+        # thinking off entirely for a big latency win with no quality loss on
+        # this bounded RAG task. See memory/feedback_mistral_ignores_context.md.
+        gen_cfg: Dict[str, Any] = {
+            "temperature": temperature,
+            "maxOutputTokens": max_tokens,
+        }
+        # thinkingBudget=0 is only valid on 2.5 thinking models (not -lite / 2.0).
+        if "2.5-flash" in self.MODEL and "lite" not in self.MODEL:
+            gen_cfg["thinkingConfig"] = {"thinkingBudget": 0}
+
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{self.MODEL}:generateContent?key={self.api_key}"
         )
+        payload = {
+            "contents": [{"parts": [{"text": full_prompt}]}],
+            "generationConfig": gen_cfg,
+        }
 
-        # Generate response (Gemini SDK is sync, wrap for async context)
-        import asyncio
-        loop = asyncio.get_event_loop()
-        response = await loop.run_in_executor(
-            None,
-            lambda: self.client.generate_content(
-                full_prompt,
-                generation_config=generation_config
-            )
-        )
+        import httpx
+        async with httpx.AsyncClient(timeout=120.0) as http_client:
+            resp = await http_client.post(url, json=payload)
+        if resp.status_code != 200:
+            # 429 / quota / other -> raise so the chain falls through to the next provider
+            raise RuntimeError(f"Gemini REST {resp.status_code}: {resp.text[:200]}")
 
-        content = response.text if response.text else ""
-
-        # Gemini doesn't always provide token counts
-        tokens = 0
-        if hasattr(response, 'usage_metadata') and response.usage_metadata:
-            tokens = getattr(response.usage_metadata, 'total_token_count', 0)
+        data = resp.json()
+        candidates = data.get("candidates") or []
+        content = ""
+        if candidates:
+            parts = candidates[0].get("content", {}).get("parts", []) or []
+            content = "".join(p.get("text", "") for p in parts)
+        tokens = (data.get("usageMetadata") or {}).get("totalTokenCount", 0)
 
         return ProviderResponse(
             message=content,
