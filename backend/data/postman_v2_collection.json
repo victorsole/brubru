@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n408 requests across 33 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n412 requests across 33 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9074,6 +9074,124 @@
               "response": []
             },
             {
+              "name": "the European Fisheries Control Agency \u2014 EFCA calls for expression of interest (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/efca-calls",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "efca-calls"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the European Fisheries Control Agency's EFCA calls for expression of interest, newest first. EFCA calls for expression of interest (experts, service providers), with reference and deadline. Filter with q.\n\n**When to use it**\nTrack what EFCA is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /efca-calls?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EFCA calls for expression of interest.."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Fisheries Control Agency \u2014 EFCA calls for tender (newest first)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/efca-tenders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "efca-tenders"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "since",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "until",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order",
+                      "value": "recent",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the European Fisheries Control Agency's EFCA calls for tender, newest first. The European Fisheries Control Agency's own public procurement: each call for tender with its reference number, status and deadline, linking to the tender page. Decentralised procurement that does not appear in TED below threshold. Filter with q (e.g. a reference or a topic such as 'vessel').\n\n**When to use it**\nTrack what EFCA is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /efca-tenders?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EFCA public-procurement pages (open calls for tender + negotiated procedures).."
+              },
+              "response": []
+            },
+            {
               "name": "Look up one EU funding opportunity by its topic_id",
               "request": {
                 "method": "GET",
@@ -9112,6 +9230,76 @@
                   ]
                 },
                 "description": "**What it does**\nFetches a single EU funding opportunity by its topic_id. Returns the same shape as the list endpoint, with the full description + body composition.\n\n**When to use it**\nAfter locating an opportunity via the list endpoint, use this for the full record before drafting a bid.\n\n**Input**\n- `topic_id` (path) \u2014 the EU's topic identifier (e.g. `HORIZON-CL5-2026-D2-01-01`). The `:path` matcher accepts hyphens + dots verbatim.\n\n**Try it**\n```\nGET /api/v1/funding/HORIZON-CL5-2026-D2-01-01\n```\n\n**You get back**\nA single `FundingItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.\n\n**Data freshness**\nSame as the list endpoint \u2014 daily 04:00 UTC sync from the F&T Portal."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Fisheries Control Agency \u2014 one EFCA calls for expression of interest (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/efca-calls/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "efca-calls",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the European Fisheries Control Agency EFCA calls for expression of interest in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /efca-calls/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EFCA calls for expression of interest.."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Fisheries Control Agency \u2014 one EFCA calls for tender (full body)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/efca-tenders/:item_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "efca-tenders",
+                    ":item_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one the European Fisheries Control Agency EFCA calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /efca-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EFCA public-procurement pages (open calls for tender + negotiated procedures).."
               },
               "response": []
             }
