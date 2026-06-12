@@ -63,11 +63,26 @@ interface SimilarResponse {
   note?: string;
 }
 
+interface FtsRecipient {
+  id: number;
+  title: string;
+  summary: string | null;
+  source_url: string;
+  document_date: string | null;
+}
+
+interface FtsRecipientsResponse {
+  opportunity_id: string | null;
+  anchor: { programme: string; title: string };
+  items: FtsRecipient[];
+}
+
 const SOURCE_LABEL: Record<UnifiedOpportunity['source'], { label: string; icon: string }> = {
   ted: { label: 'TED tender', icon: 'mdi-gavel' },
   ft_proposals: { label: 'F&T call for proposals', icon: 'mdi-flask-outline' },
   ft_tenders: { label: 'F&T call for tenders', icon: 'mdi-file-document-outline' },
   ft_projects: { label: 'F&T funded project', icon: 'mdi-trophy-outline' },
+  agency: { label: 'Agency procurement', icon: 'mdi-office-building-outline' },
 };
 
 const BRIEF_FIELDS: Array<{ key: keyof BriefFields; label: string; icon: string }> = [
@@ -104,12 +119,15 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   const [briefError, setBriefError] = useState<string | null>(null);
   const [similar, setSimilar] = useState<SimilarResponse | null>(null);
   const [similarLoading, setSimilarLoading] = useState(false);
+  const [recipients, setRecipients] = useState<FtsRecipientsResponse | null>(null);
+  const [recipientsLoading, setRecipientsLoading] = useState(false);
 
   // Reset state when opportunity changes
   useEffect(() => {
     setBrief(null);
     setBriefError(null);
     setSimilar(null);
+    setRecipients(null);
   }, [opportunity?.id]);
 
   // Auto-fetch similar projects for F&T proposals + projects
@@ -136,6 +154,38 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   useEffect(() => {
     void fetchSimilar();
   }, [fetchSimilar]);
+
+  // Step 6: FTS recipients ("who's won this kind of money before?"). Anchored
+  // on the opportunity's programme; fetched for any source — TED tenders also
+  // get useful recipient overlap via the keyword anchor.
+  const fetchRecipients = useCallback(async () => {
+    if (!opportunity || !token) return;
+    setRecipientsLoading(true);
+    try {
+      const params = new URLSearchParams({ opportunity_id: opportunity.id, limit: '6' });
+      // Use the opportunity's programme as a coarse anchor when the
+      // opportunity_id alone doesn't resolve a programme on the server
+      // (e.g. TED / ft_tenders / agency rows). Adds an extra ILIKE filter.
+      if (opportunity.programme && !opportunity.id.startsWith('ft_proposals:') && !opportunity.id.startsWith('ft_projects:')) {
+        params.set('programme', opportunity.programme);
+      }
+      const res = await fetch(`${API_URL}/api/tenders/recipients?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setRecipients(data);
+      }
+    } catch (e) {
+      console.error('fts recipients fetch failed:', e);
+    } finally {
+      setRecipientsLoading(false);
+    }
+  }, [opportunity, token]);
+
+  useEffect(() => {
+    void fetchRecipients();
+  }, [fetchRecipients]);
 
   // Close on Escape
   useEffect(() => {
@@ -235,7 +285,13 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             )}
             {opportunity.organisation && (
               <div>
-                <dt>{opportunity.source === 'ft_projects' ? 'Coordinator' : 'Organisation'}</dt>
+                <dt>
+                  {opportunity.source === 'ft_projects'
+                    ? 'Coordinator'
+                    : opportunity.source === 'agency'
+                    ? 'Agency'
+                    : 'Organisation'}
+                </dt>
                 <dd>{opportunity.organisation}</dd>
               </div>
             )}
@@ -379,6 +435,38 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                           <span>{formatDate(p.start_date)} - {formatDate(p.end_date)}</span>
                         )}
                       </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
+          {/* Step 6: FTS recipients — who has won this kind of EU money
+              before (Funder's Lens evidence pack). Hides cleanly when the
+              endpoint returns no matches. */}
+          {(recipientsLoading || (recipients && recipients.items.length > 0)) && (
+            <section className="opportunity-drawer__section">
+              <h3>
+                <span className="mdi mdi-trophy-award" aria-hidden="true" />
+                Who has won this kind of EU money before
+              </h3>
+              {recipientsLoading && (
+                <div className="opportunity-drawer__similar-loading">
+                  <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
+                  Checking the EU Financial Transparency System for past direct-management recipients...
+                </div>
+              )}
+              {!recipientsLoading && recipients && recipients.items.length > 0 && (
+                <ul className="opportunity-drawer__similar-list">
+                  {recipients.items.map((r) => (
+                    <li key={r.id} className="opportunity-drawer__similar-item">
+                      <a href={r.source_url} target="_blank" rel="noreferrer" className="opportunity-drawer__similar-title">
+                        {r.title}
+                      </a>
+                      {r.summary && (
+                        <p className="opportunity-drawer__similar-objective">{r.summary}</p>
+                      )}
                     </li>
                   ))}
                 </ul>

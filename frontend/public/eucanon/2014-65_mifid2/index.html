@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiFID II (Directive 2014/65/EU): EU financial markets framework explained | Brubru</title>
+  <meta name="description" content="Complete guide to MiFID II (Directive 2014/65/EU): venue taxonomy (regulated market, MTF, OTF), investment firm authorisation, algorithmic trading Art 17, investor protection (suitability, best execution), commodity position limits, data reporting services, and the 2024 review.">
+  <meta property="og:title" content="MiFID II (Directive 2014/65/EU): Markets in Financial Instruments | Brubru EU Canon">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:description" content="97 articles, 4 annexes. The master framework for EU investment services and organised financial trading: three-venue taxonomy, algorithmic trading controls, investor protection, commodity position limits and data reporting services.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MiFID II (Directive 2014/65/EU): the EU financial markets rulebook | Brubru EU Canon">
+  <meta name="twitter:description" content="97 articles, 63 definitions, OTF as the new venue category, Art 17 algorithmic trading, best execution, suitability, commodity position limits, APAs, CTPs and ARMs. The full MiFID II deep-dive.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Directive 2014/65/EU of the European Parliament and of the Council of 15 May 2014 on markets in financial instruments and amending Directive 2002/92/EC and Directive 2011/61/EU (recast)",
+    "alternateName": "MiFID II",
+    "identifier": "CELEX:32014L0065",
+    "legislationIdentifier": "32014L0065",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065",
+    "datePublished": "2014-06-12",
+    "dateModified": "2026-06-06",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "investment services, financial markets, regulated market, MTF, OTF, algorithmic trading, best execution, suitability, commodity position limits, MiFIR, ESMA"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem; text-align: center;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    .canon-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .cta-strip {
+      padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue); background: white;
+      text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem; font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    .section__head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__num {
+      background: var(--color-green); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem;
+      border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .lede { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1rem; line-height: 1.65; }
+
+    /* Transposition section */
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+      .canon-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .canon-related-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .transp-map { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU policy intelligence</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language">
+    <option value="index.html" selected>English</option>
+    <option value="fr.html">Francais</option>
+    <option value="es.html">Espanol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Try Brubru free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / EU Financial Markets
+  </div>
+  <h1 class="hero__title"><span>MiFID II</span>: Markets in Financial Instruments</h1>
+  <p class="hero__subtitle">
+    Directive 2014/65/EU is the master framework governing who may provide investment services in the EU and how organised financial trading must work. It introduced the OTF as a new venue category, imposed sweeping algorithmic trading controls, and overhauled investor protection rules for 27 Member States from 3 January 2018.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar"></i> Adopted 15 May 2014</span>
+    <span><i class="mdi mdi-book-open-outline"></i> OJ L 173, 12.6.2014, p. 349</span>
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32014L0065</span>
+    <span><i class="mdi mdi-gavel"></i> Art 53(1) TFEU</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600"
+    alt="Trading screens showing financial market data, representing the organised trading venues regulated under MiFID II"
+    loading="lazy"
+  >
+  <figcaption>
+    Photo: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a>
+    via <a href="https://www.pexels.com/photo/6801874/" target="_blank" rel="noopener">Pexels</a>
+    | MiFID II governs every organised financial trading venue and investment firm in the EU
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">97</div>
+    <div class="figure-card__label">Articles in 7 Titles</div>
+    <div class="figure-card__context">170 recitals and 97 articles across Titles I to VII plus 4 Annexes. The most comprehensive reform of EU financial markets law since MiFID I (2004/39/EC).</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">63</div>
+    <div class="figure-card__label">Defined terms (Art 4)</div>
+    <div class="figure-card__context">Art 4 contains 63 key definitions, including the new OTF, algorithmic trading and high-frequency algorithmic trading technique, forming the precise vocabulary of the EU financial markets framework.</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">3</div>
+    <div class="figure-card__label">Venue categories</div>
+    <div class="figure-card__context">Regulated market, MTF and the new OTF (organised trading facility). Art 1(7) closes the system: no multilateral trading outside these three categories is permitted. MiFIR governs the transparency obligations on all three.</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">3 Jan 2018</div>
+    <div class="figure-card__label">Application date</div>
+    <div class="figure-card__context">Original application 3 January 2017 and transposition 3 July 2016 were both postponed one year by Directive (EU) 2016/1034. MiFID II applied from 3 January 2018; MiFID I (2004/39/EC) was repealed on the same date.</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#mifid-mifir-split" class="toc__link"><i class="mdi mdi-scale-balance"></i> MiFID II / MiFIR split</a>
+    <a href="#title1" class="toc__link"><i class="mdi mdi-alphabetical-variant"></i> Title I: Scope and definitions</a>
+    <a href="#title2-auth" class="toc__link"><i class="mdi mdi-certificate-outline"></i> Title II: Authorisation</a>
+    <a href="#title2-ops" class="toc__link"><i class="mdi mdi-cog-outline"></i> Title II: Operating conditions</a>
+    <a href="#algo-hft" class="toc__link"><i class="mdi mdi-robot-outline"></i> Art 17: Algorithmic and HFT</a>
+    <a href="#venue-taxonomy" class="toc__link"><i class="mdi mdi-graph-outline"></i> Venue taxonomy (RM/MTF/OTF)</a>
+    <a href="#investor-protection" class="toc__link"><i class="mdi mdi-shield-account-outline"></i> Investor protection</a>
+    <a href="#title3" class="toc__link"><i class="mdi mdi-bank-outline"></i> Title III: Regulated markets</a>
+    <a href="#title4-positions" class="toc__link"><i class="mdi mdi-chart-bar"></i> Title IV: Position limits</a>
+    <a href="#title5-data" class="toc__link"><i class="mdi mdi-database-outline"></i> Title V: Data reporting</a>
+    <a href="#title6-authorities" class="toc__link"><i class="mdi mdi-shield-outline"></i> Title VI: Competent authorities</a>
+    <a href="#definitions-box" class="toc__link"><i class="mdi mdi-book-alphabet"></i> Key definitions</a>
+    <a href="#at-a-glance" class="toc__link"><i class="mdi mdi-compare"></i> At-a-glance table</a>
+    <a href="#timeline-section" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Legislative timeline</a>
+    <a href="#transposition" class="toc__link"><i class="mdi mdi-map-outline"></i> Transposition</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossary</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-link"></i> Related canon entries</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overview</h2>
+  </div>
+  <p class="section__subtitle">The EU's master framework for investment services and organised financial trading</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> Why MiFID II was needed</div>
+    <p>MiFID I (Directive 2004/39/EC) introduced the passport for investment firms, client categorisation, best execution and a three-venue taxonomy of regulated markets, MTFs and systematic internalisers. By 2008, however, the system showed serious weaknesses. Broker crossing networks operated entirely outside all three venue categories, executing trades without transparency obligations. Algorithmic and high-frequency trading had grown dramatically, outpacing the regulatory framework. Commodity derivative markets had experienced price dislocations partly attributed to speculative positions. Investor protection rules were inconsistently applied across Member States.</p>
+    <p>The Commission proposed MiFID II and its companion MiFIR together in October 2011. Parliament adopted the texts in April 2014 and the Council approved them in May 2014. Both were published in OJ L 173 on 12 June 2014 and signed in Brussels on 15 May 2014 by EP President Martin Schulz and Council Presidency Minister Dimitris Kourkoulas. The legal base is <strong>Article 53(1) TFEU</strong> (conditions for taking up and pursuing activities of self-employed persons), reflecting that the directive harmonises the conditions under which investment firms operate across the single market.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-calendar-check-outline" style="color: var(--color-amber);"></i> Application date: 3 January 2018</div>
+    <p>The original text of Directive 2014/65/EU set a transposition deadline of <strong>3 July 2016</strong> (Art 93) and application from <strong>3 January 2017</strong>. Both dates were postponed by exactly one year by <strong>Directive (EU) 2016/1034</strong> (and companion Regulation (EU) 2016/1033 for MiFIR), on the grounds that technical standards were not ready and ESMA IT systems needed more time. Accordingly:</p>
+    <ul>
+      <li>Transposition deadline: <strong>3 July 2017</strong></li>
+      <li>Application date: <strong>3 January 2018</strong> (general provisions)</li>
+      <li>Non-equity consolidated tape (Art 65(2)): <strong>3 September 2019</strong></li>
+      <li>MiFID I (Directive 2004/39/EC) repealed: <strong>3 January 2018</strong></li>
+    </ul>
+    <p>The directive is a recast: it fully replaces MiFID I rather than amending it, and Annex IV contains the correlation table between the two instruments.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-view-list-outline" style="color: var(--color-purple);"></i> Structure at a glance</div>
+    <p>The directive is structured into <strong>170 recitals</strong> and <strong>97 articles</strong> in seven Titles:</p>
+    <ul>
+      <li><strong>Title I</strong> (Arts 1-4): Scope and definitions</li>
+      <li><strong>Title II</strong> (Arts 5-43): Authorisation and operating conditions for investment firms (Chapters I-IV including third-country firms)</li>
+      <li><strong>Title III</strong> (Arts 44-56): Regulated markets</li>
+      <li><strong>Title IV</strong> (Arts 57-58): Position limits and position management in commodity derivatives</li>
+      <li><strong>Title V</strong> (Arts 59-66): Data reporting services (APAs, CTPs, ARMs)</li>
+      <li><strong>Title VI</strong> (Arts 67-88): Competent authorities, supervisory powers, sanctions and cooperation</li>
+      <li><strong>Title VII</strong> (Art 89): Delegated acts</li>
+      <li><strong>Arts 90-97</strong>: Final provisions (reports, amendments to other directives, transposition, repeal)</li>
+    </ul>
+    <p>Four Annexes complete the instrument: Annex I (services, activities and financial instruments), Annex II (professional clients), Annex III (repeals), Annex IV (MiFID I/II correlation table).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 2: MIFID II / MIFIR SPLIT
+     ========================================================= -->
+<section class="section" id="mifid-mifir-split">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">The MiFID II / MiFIR split</h2>
+  </div>
+  <p class="section__subtitle">Directive for the framework; Regulation for transparency. Recital 7: "This Directive should therefore be read together with that Regulation."</p>
+
+  <div class="info-box info-box--green">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-green);"></i> Why a directive AND a regulation?</h3>
+    <p>The choice to split the 2014 reform into a directive (MiFID II) and a directly applicable regulation (MiFIR, Regulation (EU) No 600/2014, CELEX 32014R0600) was deliberate. The <strong>authorisation framework, organisational requirements and conduct-of-business rules</strong> needed flexibility for national legal systems to implement them within their existing legal traditions -- hence a directive. But <strong>pre- and post-trade transparency obligations and transaction-reporting requirements</strong> must operate identically in every Member State to create a level playing field -- hence a regulation, directly applicable without transposition.</p>
+    <p>Recital 7 of the directive makes the relationship explicit: "This Directive should therefore be read together with that Regulation." The two instruments are published in the same Official Journal issue (OJ L 173, 12 June 2014).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> In MiFID II (this directive)</div>
+      <ul>
+        <li>Authorisation and revocation of investment firms (Arts 5-8)</li>
+        <li>Management body requirements (Art 9)</li>
+        <li>Qualifying holdings (Arts 10-13)</li>
+        <li>Organisational requirements: product governance, client assets, record keeping, call recording (Art 16)</li>
+        <li>Algorithmic trading obligations on investment firms (Art 17)</li>
+        <li>MTF and OTF operating conditions (Arts 18-20)</li>
+        <li>Conduct of business: conflicts of interest (Art 23), general principles and inducements (Art 24), suitability and appropriateness (Art 25), best execution (Art 27), order handling (Art 28)</li>
+        <li>Eligible counterparty regime (Art 30)</li>
+        <li>SME growth markets (Art 33)</li>
+        <li>Regulated market authorisation and governance (Arts 44-56)</li>
+        <li>Commodity position limits and management (Arts 57-58)</li>
+        <li>Data reporting services authorisation (Arts 59-66)</li>
+        <li>Competent authority designation, supervisory powers, sanctions (Arts 67-88)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-cog-outline" style="color: var(--color-purple);"></i> In MiFIR (Regulation 600/2014)</div>
+      <ul>
+        <li>Pre- and post-trade transparency for equity instruments (Arts 3-11)</li>
+        <li>Pre- and post-trade transparency for non-equity instruments (Arts 8-11)</li>
+        <li>Systematic internaliser transparency obligations (Arts 14-18)</li>
+        <li>Transaction reporting to competent authorities (Art 26)</li>
+        <li>Trading obligation for shares (Art 23)</li>
+        <li>Trading obligation for derivatives (Art 28)</li>
+        <li>Third-country firm access regime under equivalence (Arts 46-49)</li>
+        <li>Product intervention powers (Arts 40-42)</li>
+        <li>Data reporting for commodity derivatives (Art 44)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3: TITLE I -- SCOPE AND DEFINITIONS
+     ========================================================= -->
+<section class="section" id="title1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical-variant"></i></div>
+    <h2 class="section__title">Title I: Scope and definitions (Arts 1-4)</h2>
+  </div>
+  <p class="section__subtitle">Art 1(7) closes the system. Art 4 provides 63 defined terms.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lock-outline" style="color: var(--color-red);"></i> Art 1(7): the closed-system principle</div>
+    <p>Article 1(7) is architecturally pivotal: all multilateral systems in financial instruments must operate as a regulated market, MTF or OTF. There is no legitimate space for unregulated multilateral trading. This provision directly addresses the broker crossing networks that had proliferated outside the MiFID I venue framework. Any multilateral arrangement where multiple third-party buying and selling interests interact to produce a contract in a financial instrument must be authorised under one of the three venue regimes.</p>
+    <p>The directive applies to investment firms, market operators, data reporting services providers, and third-country firms providing investment services through EU branches. Credit institutions providing investment services are also bound (Art 1(3)). Structured deposits are covered when sold with advice (Art 1(4)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-checkbox-blank-circle-outline" style="color: var(--color-blue);"></i> Art 2: Key exemptions including the ancillary activity exemption</div>
+    <p>Article 2 exempts: insurance undertakings; persons providing services only within their group; incidental service providers; operators of commodity derivative or emission allowance positions ancillary to their main group business (the "ancillary activity exemption" under Art 2(1)(j)); ETS compliance operators; ESCB members; collective investment undertakings; pension funds; transmission system operators; and CSDs regulated under Union law.</p>
+    <p>The <strong>ancillary activity exemption</strong> is commercially significant for non-financial firms active in energy, commodity and carbon markets. It requires: (a) the activity is ancillary to and does not constitute a significant part of the main group business; (b) the firm does not apply high-frequency algorithmic trading techniques; (c) annual notification to the competent authority. ESMA develops the RTS methodology for what constitutes "ancillary" to the group's main business.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-purple);"></i> Art 4: 63 defined terms</div>
+    <p>Article 4(1) contains 63 definitions forming the precise vocabulary of EU financial markets law. Key definitions include:</p>
+    <ul>
+      <li><strong>Investment firm</strong> (no. 1): a legal person whose regular occupation or business is the professional provision of investment services or activities.</li>
+      <li><strong>Regulated market</strong> (no. 21): a multilateral system operated by a market operator, bringing together multiple third-party buying and selling interests under non-discretionary rules, resulting in a contract, authorised under Title III.</li>
+      <li><strong>MTF</strong> (no. 22): same structure as a regulated market but authorised under Title II, operated by an investment firm or market operator.</li>
+      <li><strong>OTF</strong> (no. 23): a multilateral system that is not a regulated market or MTF, covering bonds, structured finance products, emission allowances and derivatives, where third-party interests interact under discretionary execution. New in MiFID II.</li>
+      <li><strong>Trading venue</strong> (no. 24): a regulated market, MTF or OTF.</li>
+      <li><strong>Systematic internaliser (SI)</strong> (no. 20): an investment firm which, on an organised, frequent, systematic and substantial basis, deals on own account when executing client orders outside a regulated market, MTF or OTF.</li>
+      <li><strong>Algorithmic trading</strong> (no. 39): trading where a computer algorithm automatically determines individual order parameters with limited or no human intervention. Post-trade processing is excluded.</li>
+      <li><strong>High-frequency algorithmic trading technique</strong> (no. 40): characterised by all three of: (a) latency-minimising infrastructure (co-location, proximity hosting, high-speed DEA); (b) system-determination of orders without human intervention; (c) high intraday message rates of orders, quotes or cancellations.</li>
+      <li><strong>Direct electronic access (DEA)</strong> (no. 41): arrangement whereby a venue member permits a third party to use its trading code to transmit orders directly to the trading venue.</li>
+      <li><strong>Professional client</strong> (no. 10): a client meeting the Annex II criteria (per se: credit institutions, investment firms, large corporates; elective: clients opting in after meeting two of three tests -- balance sheet over EUR 500,000, portfolio over EUR 500,000, or one year's financial sector experience).</li>
+      <li><strong>Retail client</strong> (no. 11): any client who is not a professional client.</li>
+      <li><strong>Eligible counterparty</strong> (no. 18): investment firms, credit institutions, insurance companies, UCITS, pension funds and other authorised financial institutions -- transactions with them benefit from reduced conduct-of-business obligations.</li>
+      <li><strong>SME</strong> (no. 13): for this directive, companies with average market capitalisation below EUR 200 million over the previous three calendar years.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4: TITLE II -- AUTHORISATION
+     ========================================================= -->
+<section class="section" id="title2-auth">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+    <h2 class="section__title">Title II, Chapter I: Authorisation (Arts 5-15)</h2>
+  </div>
+  <p class="section__subtitle">Prior authorisation by the home Member State is the gateway to providing investment services across the EU single market</p>
+
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">5</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 5 - Requirement for authorisation</div>
+        <div class="scope-card__desc">All professional investment service provision must have prior authorisation from the home Member State competent authority. Market operators may also be authorised to operate MTFs or OTFs. ESMA maintains the Union-wide register of authorised investment firms.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-green);">6</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 6 - Scope of authorisation</div>
+        <div class="scope-card__desc">Authorisation is activity-specific, specifies the permitted investment services and activities, and is valid throughout the Union (the single-market passport). Authorisation solely for ancillary services is not permitted.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">7</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 7 - Procedure</div>
+        <div class="scope-card__desc">The competent authority must inform the applicant within six months of a complete application whether authorisation is granted or refused. ESMA develops RTS on information requirements (submitted by July 2015) and ITS on standard forms (by January 2016).</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-red);">9</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 9 - Management body</div>
+        <div class="scope-card__desc">Investment firms must comply with CRD IV management body requirements (Arts 88 and 91 of Directive 2013/36/EU): fitness and propriety, governance arrangements, remuneration policy oversight, and product and service policy. At least two persons must effectively direct the business (four-eyes principle). The competent authority must refuse authorisation if the management body fails fitness and propriety.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-purple);">10</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Arts 10-13 - Qualifying holdings</div>
+        <div class="scope-card__desc">Proposed acquisitions above 10%, and increases to 20%, 30% or 50%, must be notified. Assessment period: 60 working days from written acknowledgement, extendable by 20 days for an information request. Five assessment criteria (Art 13): acquirer reputation; proposed directors' reputation and experience; acquirer's financial soundness; continued prudential compliance; money laundering risk.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">14</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 14 - Investor compensation scheme</div>
+        <div class="scope-card__desc">Membership of an investor compensation scheme is a mandatory condition of authorisation. Art 15 further requires sufficient initial capital consistent with Regulation (EU) No 575/2013 (CRR), calibrated to the nature of the investment service.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box info-box--amber">
+    <h3><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> Third-country firms: Articles 39-43</h3>
+    <p>Member States may require third-country firms to establish a branch before providing services to retail and certain professional clients. Branch authorisation conditions under Art 39 include: home country authorisation and adequate supervision; a cooperation agreement between the home country supervisor and the Member State competent authority; sufficient initial capital; management fitness and propriety; a tax information exchange agreement; and investor compensation scheme membership.</p>
+    <p>Branches must comply with the same conduct-of-business and organisational requirements as EU investment firms (Art 41(2)). No third-country firm may be treated more favourably than Union firms. Where a client approaches a third-country firm on its own exclusive initiative, no branch requirement applies (Art 42). The directly applicable third-country equivalence regime is in MiFIR Arts 46-49, not the directive.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 5: TITLE II -- OPERATING CONDITIONS + ART 17
+     ========================================================= -->
+<section class="section" id="title2-ops">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-cog-outline"></i></div>
+    <h2 class="section__title">Title II, Chapter II: Operating conditions (Arts 16-38)</h2>
+  </div>
+  <p class="section__subtitle">Article 16 sets the organisational backbone. Product governance, call recording, client asset safeguarding and SME growth markets all live here.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-blue);"></i> Article 16: Organisational requirements</div>
+    <p>Article 16 is the backbone of firm-level obligations. Key sub-requirements include:</p>
+    <ul>
+      <li><strong>Art 16(2)</strong>: compliance policies, procedures and personal transaction rules</li>
+      <li><strong>Art 16(3) first paragraph</strong>: conflicts of interest prevention; Art 16(3) second to sixth paragraphs: <strong>product governance</strong> -- manufacturers must run a product approval process, define a target market, review products regularly, and make target market information available to distributors; distributors must obtain and understand product information and not recommend outside the target market</li>
+      <li><strong>Art 16(4)</strong>: business continuity arrangements</li>
+      <li><strong>Art 16(5)</strong>: outsourcing conditions (functions may be outsourced subject to defined conditions; the firm retains full responsibility)</li>
+      <li><strong>Art 16(6)</strong>: record keeping of all services, activities and transactions for at least five years, up to seven years at the competent authority's request</li>
+      <li><strong>Art 16(7)</strong>: <strong>telephone and electronic communications recording</strong> -- all calls that result or may result in transactions must be recorded; clients must be notified in advance; five-year (up to seven-year) retention</li>
+      <li><strong>Arts 16(8)-(9)</strong>: <strong>client asset safeguarding</strong> -- client funds and financial instruments must be kept separate from firm assets; no use of client assets for own account without express consent</li>
+      <li><strong>Art 16(10)</strong>: prohibition on title transfer financial collateral arrangements with retail clients</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-sankey-variant" style="color: var(--color-purple);"></i> Article 33: SME growth markets</div>
+    <p>An MTF operator may apply to the home competent authority to be registered as an SME growth market. Conditions: at least 50% of issuers on the market must be SMEs at the time of registration and, assessed annually, for each subsequent calendar year; appropriate admission criteria; sufficient public information at admission; ongoing periodic financial reporting; compliance with the market abuse regulation; and effective systems for market abuse prevention.</p>
+    <p>ESMA publishes and maintains the list of registered SME growth markets. The registration does not alter the MTF's authorisation but provides a marketing designation and lighter touch under various EU rules, particularly for smaller issuers seeking to access capital markets.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 6: ART 17 -- ALGORITHMIC AND HFT
+     ========================================================= -->
+<section class="section" id="algo-hft">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Article 17: Algorithmic and high-frequency trading</h2>
+  </div>
+  <p class="section__subtitle">Art 17 is the foundational provision for algo and HFT regulation -- a direct response to the 2010 Flash Crash and European market structure concerns</p>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-purple);"></i> Why Art 17 was needed</h3>
+    <p>By 2010, algorithmic and high-frequency trading accounted for a significant share of European equity market volume. The 2010 Flash Crash in the United States and several European market dislocations highlighted the risks of erroneous orders, cascading liquidity withdrawal, and the potential use of automated systems for market manipulation. Recitals 59-68 of MiFID II set out the legislative rationale for Art 17's comprehensive requirements.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-blue);"></i> Art 17(1): System requirements</div>
+      <p>Investment firms engaged in algorithmic trading must have resilient and capacity-sufficient trading systems with appropriate thresholds and limits. Systems must prevent sending erroneous orders, creating or contributing to disorderly market conditions, and must not be used for market abuse purposes. Firms must have business continuity arrangements for any failure of their trading systems.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-green);"></i> Art 17(2): Notification and record keeping</div>
+      <p>Firms must notify their home competent authority and the trading venue(s) on which they trade. The competent authority may require a description of the nature of the firm's algorithmic trading strategies, details of trading parameters or limits, and key compliance and risk controls. HFT firms specifically must store accurate, time-sequenced records of all placed orders including cancellations in an approved form and make them available to competent authorities.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-handshake-outline" style="color: var(--color-purple);"></i> Arts 17(3)-(4): Market making obligations</div>
+      <p>Where a firm pursues a market making strategy by algorithmic trading, it must carry out market making continuously during a specified proportion of the trading venue's trading hours (save under exceptional circumstances). The firm must enter a binding written agreement with the trading venue specifying its obligations, and have systems capable of fulfilling those obligations at all times.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-transit-connection-variant" style="color: var(--color-amber);"></i> Art 17(5): Direct electronic access (DEA)</div>
+      <p>Firms providing DEA to clients must assess client suitability before granting access; impose pre-set trading and credit thresholds; monitor client trading in real time; retain the right to stop transmitting client orders; retain full and unconditional responsibility for client orders transmitted under their trading code; and enter a binding written agreement with each DEA client specifying rights and obligations.</p>
+    </div>
+  </div>
+
+  <div class="info-box info-box--red">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Level 2: Commission Delegated Regulation (EU) 2017/589</h3>
+    <p>The detailed organisational requirements for investment firms engaged in algorithmic trading are set out in Commission Delegated Regulation (EU) 2017/589, which implements Art 17 in full. It specifies: governance arrangements; annual review of the trading systems; pre-trade and post-trade controls; real-time market-data monitoring; kill-switch requirements; DEA policies; log-file and record-keeping requirements; conformance testing; and the form and content of required notifications. Firms active in algorithmic or HFT strategies must comply with both Art 17 of the directive and the technical detail in Delegated Regulation 2017/589.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 7: VENUE TAXONOMY
+     ========================================================= -->
+<section class="section" id="venue-taxonomy">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-graph-outline"></i></div>
+    <h2 class="section__title">The venue taxonomy: RM, MTF and OTF</h2>
+  </div>
+  <p class="section__subtitle">Three authorised venue categories, each with distinct governance requirements. The OTF is the critical new addition in MiFID II.</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-blue);"></i> Regulated Market (RM)</div>
+      <p><strong>Title III (Arts 44-56).</strong> A multilateral system operated by a market operator. Execution is non-discretionary: rules are transparent and pre-set. Admission of members (Art 53) follows transparent, non-discriminatory, objective criteria. The market operator may not execute client orders against proprietary capital or engage in matched principal trading (Art 47(2)).</p>
+      <p>Regulated markets must have resilient trading systems (Art 48), circuit breakers for significant price movements (Art 48(5)), order-to-trade ratio limits for algorithmic trading (Art 48(6)), tick size regimes calibrated to liquidity (Art 49), and clock synchronisation (Art 50). ESMA maintains the Union list of regulated markets (Art 56).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-swap-horizontal" style="color: var(--color-green);"></i> Multilateral Trading Facility (MTF)</div>
+      <p><strong>Title II, Arts 18-19.</strong> A multilateral system operated by an investment firm or market operator under Title II. Like regulated markets, execution is non-discretionary: the rules determine which orders interact and how contracts are concluded. MTFs may not execute client orders against proprietary capital or engage in matched principal trading (Art 19(5)).</p>
+      <p>MTFs must have at least three materially active members or users (Art 18(7)). They may be registered as SME growth markets (Art 33). The transparency obligations (pre- and post-trade) for MTFs are set out in MiFIR, not the directive.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-tune-variant" style="color: var(--color-purple);"></i> Organised Trading Facility (OTF) -- New</div>
+      <p><strong>Title II, Art 20.</strong> The OTF is the new venue category introduced by MiFID II to capture broker crossing networks and other hybrid arrangements. It covers bonds, structured finance products, emission allowances and derivatives (not equity instruments). Execution on an OTF is <strong>discretionary</strong>: the operator decides whether to place or retract an order and whether to match a specific client order (Art 20(6)).</p>
+      <p>Critical constraints: the OTF operator may not execute against its own or any group entity's proprietary capital (Art 20(1)). Matched principal trading is permitted only in bonds, structured finance products, emission allowances and certain derivatives with client consent, and is prohibited for cleared derivatives (Art 20(2)). Dealing on own account (other than matched principal) is permitted only in sovereign debt for which there is no liquid market (Art 20(3)). An OTF and a systematic internaliser cannot operate within the same legal entity; an OTF cannot connect with an SI (Art 20(4)).</p>
+    </div>
+  </div>
+
+  <div class="duty-table" style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Regulated Market (RM)</th>
+          <th>MTF</th>
+          <th>OTF</th>
+          <th>Systematic Internaliser (SI)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Authorisation title</td>
+          <td>Title III</td>
+          <td>Title II</td>
+          <td>Title II</td>
+          <td>N/A (bilateral -- no venue auth.)</td>
+        </tr>
+        <tr>
+          <td>Instruments covered</td>
+          <td>All Annex I Section C</td>
+          <td>All Annex I Section C</td>
+          <td class="rate-purple">Bonds, SFPs, emission allowances, derivatives only (no equity)</td>
+          <td>All instruments (bilateral)</td>
+        </tr>
+        <tr>
+          <td>Execution</td>
+          <td class="rate-blue">Non-discretionary</td>
+          <td class="rate-blue">Non-discretionary</td>
+          <td class="rate-purple">Discretionary</td>
+          <td>Own account</td>
+        </tr>
+        <tr>
+          <td>Matched principal trading</td>
+          <td class="rate-red">Prohibited</td>
+          <td class="rate-red">Prohibited</td>
+          <td class="rate-amber">Permitted (bonds/SFPs/emiss./deriv.) with consent; banned for cleared derivatives</td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td>Own account dealing</td>
+          <td class="rate-red">Prohibited</td>
+          <td class="rate-red">Prohibited</td>
+          <td class="rate-red">Prohibited (save sovereign debt without liquid market)</td>
+          <td class="rate-green">Core activity</td>
+        </tr>
+        <tr>
+          <td>Minimum active members</td>
+          <td>Not specified separately</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td>N/A</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>New in MiFID II?</td>
+          <td>No (MiFID I)</td>
+          <td>No (MiFID I)</td>
+          <td class="rate-purple">Yes (new category)</td>
+          <td>No (MiFID I)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 8: INVESTOR PROTECTION
+     ========================================================= -->
+<section class="section" id="investor-protection">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-account-outline"></i></div>
+    <h2 class="section__title">Investor protection: Arts 23-30</h2>
+  </div>
+  <p class="section__subtitle">Suitability and appropriateness (Art 25), best execution (Art 27), product governance, conflicts and inducements regime</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-heart-outline" style="color: var(--color-blue);"></i> Art 24: General principles -- the headline conduct rule</div>
+    <p>Article 24(1) states the overarching obligation: investment firms must act honestly, fairly and professionally in the <strong>best interests of clients</strong>. Article 24(2) imposes product governance obligations on both manufacturers (design instruments for an identified target market) and distributors (ensure recommendations are in clients' best interests and stay within the target market).</p>
+    <p>All information, including marketing communications, must be <strong>fair, clear and not misleading</strong> (Art 24(3)). Pre-service disclosure requirements cover: the nature and independence of advice; financial instruments and strategies proposed; execution venues; and -- critically -- <strong>all costs and charges including third-party payments</strong>, aggregated to show the cumulative effect on return, with an itemised breakdown available on request (Art 24(4)).</p>
+    <p>The inducements regime (Art 24(9)) permits a firm to receive or pay a fee or commission from or to a third party only if three conditions are met: (a) the payment enhances service quality; (b) it does not impair the duty to act in the client's best interests; (c) it is disclosed. For <strong>independent advice</strong> and portfolio management, the firm must additionally assess a sufficiently diverse range of products not limited to group products, and must not accept or retain any third-party fee or commission (Arts 24(7)-(8)).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-clipboard-check-outline" style="color: var(--color-green);"></i> Art 25: Suitability and appropriateness</div>
+      <p>For <strong>investment advice and portfolio management</strong>, the suitability assessment must cover three dimensions: (a) knowledge and experience of the client relevant to the investment type; (b) financial situation including ability to bear losses; (c) investment objectives including risk tolerance. A written suitability statement must be provided to the client before the transaction is executed (Art 25(6)).</p>
+      <p>For <strong>other investment services</strong> (execution of orders etc.), an appropriateness test assesses the client's knowledge and experience in relation to the specific product. If the product is inappropriate, the firm must issue a warning (Art 25(3)).</p>
+      <p>The <strong>execution-only concession</strong> (Art 25(4)) removes the appropriateness requirement for non-complex instruments (shares, bonds, money-market instruments, standard UCITS) where the service is provided at the client's own initiative, the client is clearly warned, and the firm meets its conflict-of-interest obligations. This is the basis for execution-only stockbroking platforms.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-podium-gold" style="color: var(--color-amber);"></i> Art 27: Best execution</div>
+      <p>Investment firms must take all sufficient steps to obtain the <strong>best possible result</strong> for clients, taking into account: price; costs; speed; likelihood of execution and settlement; size; nature; and any other relevant consideration. For retail clients, best possible result is determined by total consideration (price plus all execution costs), not price alone.</p>
+      <p>Firms must establish and implement an order execution policy (Art 27(4)-(5)). Prior client consent to the execution policy is required; separate express consent is required before executing outside a trading venue. Firms must publish annually the <strong>top five execution venues per financial instrument class</strong> and a quality of execution summary (Art 27(6)). The execution policy must be reviewed at least annually (Art 27(7)).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-purple);"></i> Client categorisation: retail, professional and eligible counterparty</div>
+    <p>MiFID II's three-tier client categorisation determines the level of protection each client receives. <strong>Retail clients</strong> (any client who is not a professional client) receive the highest protection: full suitability/appropriateness obligations, all disclosure requirements, execution only with their express consent. <strong>Professional clients</strong> (per Annex II: credit institutions, investment firms, large corporates with balance sheet over EUR 20 million or net turnover over EUR 40 million or own funds over EUR 2 million, and other institutional investors; elective professionals meeting two of three tests -- balance sheet EUR 500,000+, portfolio EUR 500,000+, one year's financial sector experience) have reduced protection on certain provisions. <strong>Eligible counterparties</strong> (investment firms, credit institutions, insurance companies, UCITS, pension funds, national governments, central banks and other authorised financial institutions -- Art 30) are exempt from Arts 24 (save paragraphs 4 and 5), 25 (save paragraph 6), 27 and 28(1). The basic obligation to act honestly, fairly and professionally and communicate in a clear manner remains.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Art 23: Conflicts of interest</div>
+    <p>Investment firms must take all appropriate steps to identify, prevent and manage conflicts of interest between the firm, its managers, employees, tied agents and their clients, and between clients inter se. Where management through organisational arrangements is not sufficient to prevent harm to client interests, prior disclosure to the client in a durable medium is required. The disclosure must explain the nature and source of the conflict clearly enough for the client to make an informed decision (Art 23(2)). Disclosure is a last resort, not a substitute for adequate organisational measures.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 9: TITLE III -- REGULATED MARKETS
+     ========================================================= -->
+<section class="section" id="title3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Title III: Regulated markets (Arts 44-56)</h2>
+  </div>
+  <p class="section__subtitle">Authorisation, governance, systems resilience, circuit breakers, tick sizes and admission to trading</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-check-decagram-outline" style="color: var(--color-blue);"></i> Authorisation and governance (Arts 44-47)</div>
+      <p>Only systems complying with Title III may be authorised as regulated markets (Art 44). The public law governing trading is that of the home Member State. Market operators of significant regulated markets must have a nomination committee and comply with directorship limits: one executive plus two non-executive directors, or four non-executive directors (Art 45(4)). Diversity policies are required.</p>
+      <p>Regulated markets must manage conflicts of interest, have sound risk management, maintain sound technical operations, ensure fair and orderly trading rules, provide for efficient settlement, and maintain adequate financial resources (Art 47). Market operators may not execute client orders against proprietary capital (Art 47(2)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Systems resilience and circuit breakers (Art 48)</div>
+      <p>Regulated markets must have trading systems with sufficient capacity to handle peak order volumes and survive extreme market conditions. Written market making agreements are required (Art 48(2)-(3)). <strong>Circuit breakers</strong> (automatic trading halts on significant price movements) are mandatory (Art 48(5)). Regulated markets must implement order-to-trade ratio limits to prevent algorithmic trading strategies from flooding the order book (Art 48(6)). DEA controls (Art 48(7)) mirror Art 17(5) requirements. Co-location services must be offered on a transparent, fair and non-discriminatory basis (Art 48(8)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-ruler-square" style="color: var(--color-purple);"></i> Tick sizes (Art 49) and clock synchronisation (Art 50)</div>
+      <p>Regulated markets must adopt tick size regimes calibrated to the liquidity profiles and average bid-ask spreads of the relevant instruments. The tick size regime prevents artificial price improvement below minimum price increments, reducing certain latency-arbitrage strategies. ESMA develops the minimum tick size RTS. All trading venues and their members must synchronise business clocks to a level of accuracy specified in ESMA RTS (Art 50).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-plus-outline" style="color: var(--color-amber);"></i> Admission to trading (Art 51) and CCP access (Art 55)</div>
+      <p>Regulated markets must apply clear, transparent and non-discriminatory rules for admission of financial instruments to trading (Art 51). For derivative contracts, admission rules must ensure orderly pricing and effective settlement. Regulated markets must verify that issuers of transferable securities comply with EU disclosure obligations. Secondary trading admission without issuer consent is permitted (Art 51(5)).</p>
+      <p>Regulated markets may not restrict the use of CCPs or clearing systems from other Member States unless necessary for orderly functioning (Art 55). ESMA maintains the Union list of regulated markets (Art 56).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 10: TITLE IV -- POSITION LIMITS
+     ========================================================= -->
+<section class="section" id="title4-positions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Title IV: Commodity derivative position limits and reporting (Arts 57-58)</h2>
+  </div>
+  <p class="section__subtitle">A direct response to concerns about speculative positions in agricultural and energy commodity derivatives</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-format-list-numbered" style="color: var(--color-amber);"></i> Art 57: Position limits</div>
+    <p>Competent authorities must establish and apply position limits on the maximum net position in commodity derivatives traded on trading venues and economically equivalent OTC contracts. Limits apply at aggregate group level. Two stated purposes: (a) prevent market abuse; (b) support orderly pricing and settlement conditions, including convergence between derivative delivery-month prices and spot prices.</p>
+    <p>Limits do not apply to positions held by non-financial entities that objectively reduce risks directly relating to the commercial activity of that entity. ESMA develops the RTS methodology taking into account at least: contract maturity; deliverable supply; open interest; volatility; number and size of market participants; characteristics of the underlying commodity market; and development of new contracts.</p>
+    <p>Where the same derivative is traded significantly in more than one jurisdiction, the competent authority of the venue with the largest volume is the central competent authority and sets the single position limit for all trading in that contract (Art 57(6)). ESMA publishes a database of position limits and position management controls (Art 57(10)). Competent authorities must notify ESMA at least 24 hours before measures take effect.</p>
+    <p>Position management controls must empower trading venues to: monitor open interest; access information on the size and purpose of positions; require position reduction or termination; and require liquidity provision back to the market on a temporary basis (Art 57(8)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-newspaper-variant-outline" style="color: var(--color-blue);"></i> Art 58: Position reporting</div>
+    <p>Trading venues that trade commodity derivatives must publish a <strong>weekly aggregated position report</strong> by category of holder: investment firms and credit institutions; investment funds; other financial institutions; commercial undertakings; and ETS compliance operators. The report must specify long and short positions, changes since the previous report, percentage of total open interest, and number of persons in each category.</p>
+    <p>Investment firms trading OTC commodity derivatives must provide <strong>daily complete breakdowns</strong> of their positions to the competent authority. All reports must distinguish positions qualifying for the commercial hedge exemption from other positions.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 11: TITLE V -- DATA REPORTING SERVICES
+     ========================================================= -->
+<section class="section" id="title5-data">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-database-outline"></i></div>
+    <h2 class="section__title">Title V: Data reporting services (Arts 59-66)</h2>
+  </div>
+  <p class="section__subtitle">Three authorised service types: APAs publish trade reports, CTPs consolidate them, ARMs report transactions to regulators</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-broadcast" style="color: var(--color-blue);"></i> APA: Approved Publication Arrangement</div>
+      <p>An APA publishes post-trade reports on behalf of investment firms pursuant to MiFIR Arts 20-21. APAs must publish trade information as close to real-time as technically possible. Data must be available <strong>free of charge 15 minutes after publication</strong> (Art 64(3)). APAs must prevent conflicts of interest and maintain sound security mechanisms.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-layers-outline" style="color: var(--color-purple);"></i> CTP: Consolidated Tape Provider</div>
+      <p>A CTP collects trade reports from all regulated markets, MTFs, OTFs and APAs and consolidates them into a continuous electronic live data stream (Art 65). Real-time publication (free after 15 minutes). For equity instruments, the stream must include an algorithmic trading indicator (Art 65(1)(h)). Application of Art 65(2) for non-equity instruments was deferred to 3 September 2019. If commercial CTPs fail, the Commission may initiate public procurement (Art 90(2)-(3)) -- a backstop triggered under the 2024 review.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-send-outline" style="color: var(--color-green);"></i> ARM: Approved Reporting Mechanism</div>
+      <p>An ARM reports transaction details to competent authorities or ESMA on behalf of investment firms pursuant to MiFIR Art 26. ARMs must report as quickly as possible and no later than close of business on the following working day (Art 66). Market operators that operate regulated markets may also be authorised to provide APA, CTP or ARM services within their existing authorisation (Art 59(2)).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 12: TITLE VI -- COMPETENT AUTHORITIES
+     ========================================================= -->
+<section class="section" id="title6-authorities">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-outline"></i></div>
+    <h2 class="section__title">Title VI: Competent authorities, sanctions and cooperation (Arts 67-88)</h2>
+  </div>
+  <p class="section__subtitle">Designation, supervisory powers, minimum maximum fines, name-and-shame publication, whistleblowing and cross-border cooperation</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-magnify" style="color: var(--color-blue);"></i> Art 69: Supervisory powers -- minimum list</div>
+    <p>Article 69(2) sets out the minimum supervisory powers that competent authorities must possess. The list includes: access to documents and records; power to summon and question persons; conduct on-site inspections; require recordings of telephone and electronic communications; freeze or sequester assets; temporarily ban professional activity; refer to criminal prosecution; require provision of commodity position information; require cessation of practices; suspend or remove financial instruments from trading; require position reduction; limit commodity derivative positions (Art 69(2)(p)); issue public notices; suspend marketing or sale of financial instruments or structured deposits; remove a natural person from a management board (Art 69(2)(u)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-red);"></i> Art 70: Administrative sanctions -- minimum maximum levels</div>
+    <p>Member States must ensure effective, proportionate and dissuasive administrative sanctions for all infringements. For the most serious infringements the minimum maximum fine levels are:</p>
+    <ul>
+      <li><strong>Legal persons</strong>: maximum fines of at least <strong>EUR 5,000,000</strong> or <strong>10% of total annual turnover</strong> (whichever is higher)</li>
+      <li><strong>Natural persons</strong>: maximum fines of at least <strong>EUR 5,000,000</strong></li>
+      <li><strong>Benefit-based</strong>: maximum fines of at least twice the benefit derived</li>
+    </ul>
+    <p>Other sanctions include public statements identifying the person and the infringement; withdrawal or suspension of authorisation; temporary or permanent ban on management functions; and temporary bans on regulated market membership.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bullhorn-outline" style="color: var(--color-amber);"></i> Art 71: Publication of decisions</div>
+      <p>Sanctions must be published on the competent authority website without undue delay, identifying the natural or legal person and describing the infringement. <strong>Minimum retention: five years</strong>. Anonymous or delayed publication is permitted where publication would cause disproportionate harm, jeopardise financial market stability, or prejudice an ongoing investigation. Sanctions not published publicly must be reported to ESMA's central database.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-whistle-outline" style="color: var(--color-green);"></i> Art 73: Whistleblowing</div>
+      <p>Competent authorities must establish effective mechanisms for reporting potential or actual infringements, with appropriate protection for employees who report against retaliation, discrimination and unfair treatment. Member States may provide for financial incentives for whistleblowers under national law. Reported information must be held in confidence subject to criminal procedure rules.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 13: KEY DEFINITIONS BOX
+     ========================================================= -->
+<section class="section" id="definitions-box">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-alphabet"></i></div>
+    <h2 class="section__title">Key definitions (Art 4)</h2>
+  </div>
+  <p class="section__subtitle">The 63 definitions in Art 4(1) form the vocabulary of EU financial markets law</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">Investment firm</div>
+      <div class="glossary-card__def">A legal person whose regular occupation or business is the professional provision of one or more investment services or activities. Non-legal persons may qualify if subject to equivalent prudential rules (Art 4(1)(1)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Regulated market (RM)</div>
+      <div class="glossary-card__def">A multilateral system operated by a market operator, bringing together multiple third-party buying and selling interests under non-discretionary rules, resulting in a contract, authorised under Title III (Art 4(1)(21)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MTF</div>
+      <div class="glossary-card__def">Multilateral trading facility: same structural definition as RM but authorised under Title II and operated by an investment firm or market operator. Non-discretionary execution rules (Art 4(1)(22)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">OTF</div>
+      <div class="glossary-card__def">Organised trading facility: a multilateral system that is not an RM or MTF, covering bonds, structured finance products, emission allowances and derivatives, where third-party interests interact under discretionary execution. New in MiFID II (Art 4(1)(23)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Systematic internaliser (SI)</div>
+      <div class="glossary-card__def">An investment firm which, on an organised, frequent, systematic and substantial basis, deals on own account when executing client orders outside an RM, MTF or OTF (Art 4(1)(20)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Trading venue</div>
+      <div class="glossary-card__def">A regulated market, MTF or OTF -- the three authorised venue categories (Art 4(1)(24)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Algorithmic trading</div>
+      <div class="glossary-card__def">Trading in financial instruments where a computer algorithm automatically determines individual order parameters with limited or no human intervention. Post-trade processing is excluded (Art 4(1)(39)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">HFT technique</div>
+      <div class="glossary-card__def">High-frequency algorithmic trading technique: all three of (a) latency-minimising infrastructure; (b) system-determined orders without human intervention; (c) high intraday message rates of orders, quotes or cancellations (Art 4(1)(40)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">DEA</div>
+      <div class="glossary-card__def">Direct electronic access: an arrangement whereby a member of a trading venue permits a person to use its trading code to transmit orders electronically directly to the trading venue (Art 4(1)(41)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Professional client</div>
+      <div class="glossary-card__def">A client meeting the criteria in Annex II: per se (credit institutions, investment firms, large corporates) or elective (two of three tests: balance sheet EUR 500,000+, portfolio EUR 500,000+, or one year's financial sector experience).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Eligible counterparty</div>
+      <div class="glossary-card__def">Investment firms, credit institutions, insurance companies, UCITS, pension funds, national governments and central banks. Reduced conduct rules apply: exempt from Arts 24 (save paras 4-5), 25 (save para 6), 27 and 28(1) (Art 30).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">SME (for this directive)</div>
+      <div class="glossary-card__def">Companies with average market capitalisation below EUR 200 million based on end-year quotes for the previous three calendar years. Relevant for SME growth market eligibility (Art 4(1)(13)).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 14: AT-A-GLANCE TABLE
+     ========================================================= -->
+<section class="section" id="at-a-glance">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-compare"></i></div>
+    <h2 class="section__title">At-a-glance: key figures and thresholds</h2>
+  </div>
+  <p class="section__subtitle">The numbers that every MiFID II practitioner needs</p>
+
+  <div style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Figure / Rule</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td>Application date</td>
+          <td class="rate-blue">3 January 2018 (deferred from 3 January 2017 by Directive (EU) 2016/1034)</td>
+          <td>Art 93; Dir 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Transposition deadline</td>
+          <td>3 July 2017 (deferred from 3 July 2016)</td>
+          <td>Art 93; Dir 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Non-equity consolidated tape</td>
+          <td>3 September 2019</td>
+          <td>Art 65(2)</td>
+        </tr>
+        <tr>
+          <td>Defined terms</td>
+          <td>63 (Art 4)</td>
+          <td>Art 4</td>
+        </tr>
+        <tr>
+          <td>Authorisation response deadline</td>
+          <td class="rate-green">6 months from complete application</td>
+          <td>Art 7</td>
+        </tr>
+        <tr>
+          <td>Qualifying holding assessment period</td>
+          <td>60 working days from written acknowledgement (+20 working days for information request)</td>
+          <td>Art 12</td>
+        </tr>
+        <tr>
+          <td>Qualifying holding notification thresholds</td>
+          <td>10% (definition); notify at 20%, 30%, 50%</td>
+          <td>Arts 10-11</td>
+        </tr>
+        <tr>
+          <td>Records retention</td>
+          <td class="rate-green">5 years (up to 7 at competent authority request)</td>
+          <td>Art 16(6)</td>
+        </tr>
+        <tr>
+          <td>Call recording retention</td>
+          <td>5 years (up to 7)</td>
+          <td>Art 16(7)</td>
+        </tr>
+        <tr>
+          <td>MTF/OTF minimum active members</td>
+          <td>3</td>
+          <td>Art 18(7)</td>
+        </tr>
+        <tr>
+          <td>SME market cap threshold</td>
+          <td class="rate-purple">EUR 200 million (3-year average)</td>
+          <td>Art 4(1)(13)</td>
+        </tr>
+        <tr>
+          <td>Professional client elective opt-in test</td>
+          <td>2 of 3: balance sheet EUR 500,000+; portfolio EUR 500,000+; 1 year financial sector experience</td>
+          <td>Annex II, Section II</td>
+        </tr>
+        <tr>
+          <td>Minimum fine -- legal persons</td>
+          <td class="rate-red">EUR 5,000,000 or 10% of annual turnover (higher applies)</td>
+          <td>Art 70(6)(d)</td>
+        </tr>
+        <tr>
+          <td>Minimum fine -- natural persons</td>
+          <td class="rate-red">EUR 5,000,000</td>
+          <td>Art 70(6)(e)</td>
+        </tr>
+        <tr>
+          <td>Benefit-based fine</td>
+          <td class="rate-red">At least twice the benefit derived</td>
+          <td>Art 70(6)(f)</td>
+        </tr>
+        <tr>
+          <td>Published sanction retention on CA website</td>
+          <td>At least 5 years</td>
+          <td>Art 71(2)</td>
+        </tr>
+        <tr>
+          <td>APA/CTP free data delay</td>
+          <td>15 minutes after publication</td>
+          <td>Arts 64(3), 65(4)</td>
+        </tr>
+        <tr>
+          <td>Position limit notification to ESMA</td>
+          <td>At least 24 hours before measures take effect</td>
+          <td>Art 79(5)</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>2024 review transposition deadline</td>
+          <td class="rate-amber">29 September 2025 (Directive (EU) 2024/790)</td>
+          <td>Dir 2024/790</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Legislative timeline</h2>
+  </div>
+  <p class="section__subtitle">From Council Directive 93/22/EEC to the 2024 MiFID II review</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">10 May 1993</div>
+      <div class="timeline__text"><strong>Council Directive 93/22/EEC (Investment Services Directive)</strong> -- the predecessor, creating the investment firm passport across the EU single market. Applied from 1 January 1996. Did not create a best execution obligation nor a level playing field for equities trading.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">21 April 2004</div>
+      <div class="timeline__text"><strong>Directive 2004/39/EC (MiFID I)</strong> published. Applied from 1 November 2007. Introduced best execution, client categorisation, the regulated market / MTF / systematic internaliser venue taxonomy, and passporting for investment services. Implemented by Commission Directive 2006/73/EC (organisational requirements and conduct of business) and Commission Regulation 1287/2006 (transparency).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 October 2011</div>
+      <div class="timeline__text"><strong>Commission proposes MiFID II and MiFIR</strong> -- the reform package responding to the financial crisis, the growth of algorithmic trading, commodity market concerns, and broker crossing network arbitrage. Recitals 4-6 set out the post-crisis rationale.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 April 2014</div>
+      <div class="timeline__text"><strong>European Parliament adopts MiFID II and MiFIR</strong> in plenary. ECON committee rapporteur: Markus Ferber (EPP/Germany).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 May 2014</div>
+      <div class="timeline__text"><strong>MiFID II (Directive 2014/65/EU) and MiFIR (Regulation (EU) No 600/2014) signed</strong> in Brussels by EP President Martin Schulz and Council Presidency Minister Dimitris Kourkoulas.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">12 June 2014</div>
+      <div class="timeline__text"><strong>Publication in OJ L 173</strong>, pp. 349 and 84 respectively. Entry into force: 2 July 2014 (20th day after publication). Original transposition deadline: 3 July 2016. Original application: 3 January 2017.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">30 June 2016</div>
+      <div class="timeline__text"><strong>Directive (EU) 2016/1034</strong> published, postponing transposition deadline by one year to <strong>3 July 2017</strong> and application date to <strong>3 January 2018</strong>. Companion Regulation (EU) 2016/1033 does the same for MiFIR. Reason: ESMA technical standards not complete; National IT systems not ready.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 January 2018</div>
+      <div class="timeline__text"><strong>MiFID II and MiFIR apply</strong>. MiFID I (Directive 2004/39/EC) is repealed. The EU's financial markets framework is modernised across 27 Member States simultaneously. ESMA Level 2 framework (Delegated Regulation 2017/565, 2017/567, 2017/589 etc.) also applies from this date.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 September 2019</div>
+      <div class="timeline__text"><strong>Non-equity consolidated tape obligations</strong> (Art 65(2) of the directive, as applied by Regulation (EU) 2016/1033) take effect. Commercial CTP market for bonds remained underdeveloped, contributing to the eventual 2024 review mandate for a procurement-based tape.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">7 March 2022</div>
+      <div class="timeline__text"><strong>Commission proposes MiFID II / MiFIR review package</strong> as part of the Capital Markets Union action plan. Key proposals: mandatory consolidated tape; payment for order flow ban; revised equity transparency waivers; updated systematic internaliser regime; partial re-bundling of research for SMEs.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 March 2024</div>
+      <div class="timeline__text"><strong>Directive (EU) 2024/790 and Regulation (EU) 2024/791 published</strong> -- the 2024 MiFID II and MiFIR amendments. Transposition deadline for Directive 2024/790: <strong>29 September 2025</strong>. Key changes: payment for order flow ban; mandatory consolidated tape for bonds and equities via ESMA procurement; revised consolidated tape provider selection; updated systematic internaliser provisions; equity transparency waiver reform.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+  <!-- Transposition (directive-only section) -->
+  <section class="section transposition" id="transposition">
+    <div class="section__head">
+      <span class="section__num">Transposition</span>
+      <h2 class="section__title">How the Member States transposed it</h2>
+    </div>
+    <p class="lede">
+      A directive is not directly applicable: each Member State must write it into its own national law by a
+      transposition deadline. For MiFID II (Directive 2014/65/EU) the EU transposition deadline was <strong>2017-07-03</strong>.
+      The map shows, for each Member State, the principal national measure it notified to the Commission and its
+      date. 27 of 27 Member States have notified measures parsed here; the full, authoritative list of
+      national transposition measures for every Member State is on
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener">EUR-Lex (National transposition measures)</a>.
+    </p>
+    <div id="transp-map-32014L0065" class="transp-map" role="img"
+         aria-label="Map of EU Member State transposition of MiFID II (Directive 2014/65/EU)"></div>
+    <p class="transp-note">
+      Click a Member State marker for the transposed national law and its publication date. Source: EUR-Lex
+      National Implementing Measures, retrieved May 2026. Where a marker
+      reads "Notified via EUR-Lex", consult the EUR-Lex link above for that country's measures.
+    </p>
+  </section>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <style>
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+  </style>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "BMF: Umsetzung von Art. 92 mit Bundesgesetz über die Sanierung und Abwicklung von Banken sowie Änderung des Bankwesengesetzes, des Finanzmarktaufsichtsbehördeng", "date": "2014-12-29", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "FEDERALE OVERHEIDSDIENST FINANCIEN - 27 JUNI 2016. - Wet tot wijziging, met het oog op de omzetting van richtlijn 2013/50/EU en de tenuitvoerlegging van verorde", "date": "2016-07-01", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Закон за пазарите на финансови инструменти", "date": "2018-02-16", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o alternativnim investicijskim fondovima", "date": "1001-01-01", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Διαχειριστών Οργανισμών Εναλλακτικών Επενδύσεων (Τροποιητικός) (αρ. 2) Νόμος του 2015.", "date": "2015-07-03", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 563/1991 Sb., o účetnictví", "date": "1991-12-31", "status": "Transposed", "count": 96}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "LFF - Bekendtgørelse af lov om forsikringsformidling (LBK nr. 1065 af 22. august 2013)", "date": "2013-09-04", "status": "Transposed", "count": 24}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Väärtpaberituru seaduse muutmise ja sellega seonduvalt teiste seaduste muutmise seadus", "date": "1001-01-01", "status": "Transposed", "count": 16}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Laki sijoitusrahastolain muuttamisesta / Lag om ändring av lagen om placeringsfonder (1077/2017) 28/12/2017", "date": "2017-12-30", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "art 28 de la Loi n°2014-1662 du 30 décembre 2014 portant diverses dispositions d'adaptation de la législation au droit de l'Union européenne en matière économiq", "date": "2014-12-31", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Zweites Gesetz zur Novellierung von Finanzmarktvorschriften auf Grund europäischer Rechtsakte (Zweites Finanzmarktnovellierungsgesetz - 2. FiMaNoG)", "date": "2017-06-24", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Αγορές χρηματοπιστωτικών μέσων και άλλες διατάξεις.", "date": "2018-01-30", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "2001. évi CXX. törvény a tőkepiacról", "date": "2001-12-18", "status": "Transposed", "count": 14}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "EUROPEAN UNION (MARKETS IN FINANCIAL INSTRUMENTS) REGULATIONS 2017", "date": "2017-08-18", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Attuazione della Direttiva 2014/65/UE del Parlamento europeo e del Consiglio, del 15.5.2014, relativa ai mercati degli strumenti finanziari e che modifica la di", "date": "2017-08-25", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Ieguldtāju aizsardzības likums", "date": "2001-11-23", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos Lietuvos banko įstatymas Nr. I-678 (galiojanti suvestinė redakcija nuo 2017-07-15)", "date": "1994-12-23", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 10 mai 2016 – portant transposition de la directive 2014/91/UE du Parlement européen et du Conseil du 23 juillet 2014 modifiant la directive 2009/65/CE p", "date": "2016-05-12", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "CONDUCT OF BUSINESS RULEBOOK", "date": "2017-12-20", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "Besluit van 20 december 2017 tot vaststelling van het tijdstip van inwerkingtreding van de Wet implementatie richtlijn markten voor financiële instrumenten 2014", "date": "2017-12-28", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "Rozporządzenie Ministra Finansów z dnia 24 września 2012 r. w sprawie trybu i warunków postępowania firm inwestycyjnych, banków, o których mowa w art. 70 ust. 2", "date": "2015-06-25", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "DECRETO-LEI N.º 124/2015 - DIÁRIO DA REPÚBALICA N.º 130/2015, SÉRIE I DE 2015-07-07 Ministério das Finanças Consagra medidas nacionais para a transposição da Dir", "date": "2015-07-07", "status": "Transposed", "count": 45}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Lege nr.126/2018 privind pieţele de instrumente financiare", "date": "2018-06-26", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Zákon č. 483/2001 Z. z. o bankách a o zmene a dopl\u00není niektorých zákonov", "date": "2001-11-29", "status": "Transposed", "count": 13}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o trgu finančnih instrumentov", "date": "2007-07-27", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "Ley 11/2015, de 18 de junio, de recuperación y resolución de entidades de crédito y empresas de servicios de inversión", "date": "2015-06-19", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Lag om ändring i lagen (2007:528) om värdepappersmarknaden", "date": "1001-01-01", "status": "Transposed", "count": 9}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32014L0065",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 16: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossary</h2>
+  </div>
+  <p class="section__subtitle">Common terms and abbreviations used across MiFID II and MiFIR</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">APA</div>
+      <div class="glossary-card__def">Approved Publication Arrangement. A data reporting services provider authorised to publish post-trade transparency reports on behalf of investment firms pursuant to MiFIR Arts 20-21 (Art 4(1)(52)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ARM</div>
+      <div class="glossary-card__def">Approved Reporting Mechanism. A data reporting services provider authorised to report transaction details to competent authorities or ESMA on behalf of investment firms pursuant to MiFIR Art 26 (Art 4(1)(54)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CTP</div>
+      <div class="glossary-card__def">Consolidated Tape Provider. A data reporting services provider authorised to collect post-trade reports from all trading venues and APAs and consolidate them into a continuous electronic live data stream (Art 4(1)(53)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ESMA</div>
+      <div class="glossary-card__def">European Securities and Markets Authority. The EU supervisory authority for financial markets, mandated by MiFID II to develop RTS and ITS, maintain registers (investment firms, regulated markets, data reporting services providers) and publish guidance.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MiFIR</div>
+      <div class="glossary-card__def">Markets in Financial Instruments Regulation. Regulation (EU) No 600/2014 (CELEX 32014R0600), the companion directly applicable regulation covering transparency and transaction reporting. Published in OJ L 173 on the same date as MiFID II.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Level 2</div>
+      <div class="glossary-card__def">The delegated regulations and implementing regulations adopted by the Commission on the basis of MiFID II's technical standard mandates, forming the detailed technical framework. Principal texts: CDR 2017/565 (organisational requirements), CDR 2017/589 (algorithmic trading), CDR 2017/590 (transaction reporting).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Product governance</div>
+      <div class="glossary-card__def">Obligations under Arts 16(3) and 24(2) requiring manufacturers of financial instruments to define a target market, design products for that market, and make target market information available to distributors; and requiring distributors to understand products and stay within the target market.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Inducements</div>
+      <div class="glossary-card__def">Fees, commissions or non-monetary benefits paid or received by an investment firm from or to a third party in connection with providing services to clients. Permitted only if they enhance service quality, do not impair the best-interest duty, and are disclosed (Art 24(9)). Prohibited for independent advice and portfolio management.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">PFOF</div>
+      <div class="glossary-card__def">Payment for order flow. The practice of brokers receiving payments from market makers or other liquidity providers in return for routing orders to them. Prohibited in several Member States under national law and banned EU-wide by Regulation (EU) 2024/791 (the 2024 MiFIR amendment).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 17: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">Primary documentation for Directive 2014/65/EU and its companion MiFIR</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> EUR-Lex and Official Journal</div>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Directive 2014/65/EU on EUR-Lex (CELEX 32014L0065)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener" style="color: var(--color-blue);">MiFIR Regulation (EU) No 600/2014 (CELEX 32014R0600)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">National transposition measures on EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">All amendments and consolidated versions on EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L0790" target="_blank" rel="noopener" style="color: var(--color-blue);">Directive (EU) 2024/790 -- 2024 MiFID II amendment</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R0791" target="_blank" rel="noopener" style="color: var(--color-blue);">Regulation (EU) 2024/791 -- 2024 MiFIR amendment</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-purple);"></i> ESMA and Commission</div>
+      <ul>
+        <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA Interactive Single Rulebook (MiFID II)</a></li>
+        <li><a href="https://registers.esma.europa.eu/" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA register of authorised investment firms</a></li>
+        <li><a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA list of regulated markets</a></li>
+        <li><a href="https://www.esma.europa.eu/trading/mifid-ii-and-mifir-review" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA MiFID II review page</a></li>
+        <li><a href="https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/financial-markets/securities-markets/markets-financial-instruments-mifid-ii-and-mifir_en" target="_blank" rel="noopener" style="color: var(--color-blue);">DG FISMA: MiFID II and MiFIR</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 18: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">The eu_financial_markets and eu_insurance families in the Brubru EU Canon</p>
+
+  <div class="canon-related-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">eu_insurance family</div>
+      <div class="canon-related__title">
+        <a href="../2009-138_solvency2/index.html">Solvency II (Directive 2009/138/EC)</a>
+      </div>
+      <div class="canon-related__desc">Directive 2009/138/EC is the prudential framework for the EU insurance and reinsurance industry: risk-based capital (SCR and MCR), valuation of technical provisions at market-consistent values, ORSA, supervisory review (Pillar II), and public disclosure (Pillar III). Solvency II applies to insurers providing insurance-based investment products (IBIPs); the distribution of IBIPs is subject to the IDD (formerly the Insurance Mediation Directive amended by Art 91 of MiFID II).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">eu_telecoms family</div>
+      <div class="canon-related__title">
+        <a href="../2018-1972_eecc/index.html">European Electronic Communications Code (Directive (EU) 2018/1972)</a>
+      </div>
+      <div class="canon-related__desc">Directive (EU) 2018/1972 codified and modernised the EU telecoms framework into a single instrument. Its connectivity infrastructure rules are relevant to trading venues and financial infrastructure operators that depend on electronic communications to run market systems and data reporting services.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">eu_financial_markets family</div>
+      <div class="canon-related__title">MiFIR -- Regulation (EU) No 600/2014</div>
+      <div class="canon-related__desc">The companion directly applicable regulation: pre- and post-trade transparency for equity and non-equity instruments, transaction reporting to competent authorities (Art 26), trading obligations for shares and derivatives, systematic internaliser obligations, third-country firm equivalence access regime, and product intervention powers. Published in the same OJ as MiFID II. The 2024 amendment (Regulation (EU) 2024/791) introduces a mandatory consolidated tape and the payment for order flow ban.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 19: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore MiFID II with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track and work with EU financial markets legislation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask any question about MiFID II: the venue taxonomy, algorithmic trading obligations, suitability versus appropriateness, best execution policy requirements, commodity position limits, the APA/CTP/ARM distinction, the 2024 review changes, or the MiFID II/MiFIR split. Answers grounded in the official EUR-Lex text.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Load Directive 2014/65/EU or Directive (EU) 2024/790 (the 2024 MiFID II amendment) into the Amendator and draft amendment language directly against the official EUR-Lex text. Ideal for financial sector associations, compliance counsel and policy teams working on transposition or Level 2 consultations.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Track ESMA consultation papers and technical standards on MiFID II, monitor EP ECON committee developments on the 2024 review transposition, follow DG FISMA capital markets publications, and receive real-time alerts on regulated market and investment firm register changes.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a compliance gap analysis for your organisation against MiFID II obligations: authorisation conditions, Art 16 organisational requirements, product governance target market definition, call recording obligations, suitability assessment process, best execution policy, and the inducements disclosure framework.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Find EU procurement opportunities related to financial market supervision, trading surveillance systems, MiFID II transaction reporting infrastructure, ESMA data services, national competent authority IT projects, and APA/ARM technology contracts across the EU Member States.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatic access to EU legislation data, procedure tracking and institutional calendar events. Build MiFID II compliance monitoring workflows, ESMA consultation tracker, trading venue register alerts and regulatory timeline feeds on top of Brubru's v1 REST API.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">View API Docs</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.82) 100%), url('https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Get the full Brubru platform</h2>
+  <p class="cta-strip__sub">14-day free trial. No card needed.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start free trial</a>
+</div>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is the AI-powered EU policy intelligence assistant by <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start your 14-day free trial</a> - no card required.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon library</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">All canon entries</a></li>
+          <li><a href="index.html">MiFID II Dir 2014/65 (this page)</a></li>
+          <li><a href="../2009-138_solvency2/index.html">Solvency II Dir 2009/138</a></li>
+          <li><a href="../2018-1972_eecc/index.html">EECC Dir 2018/1972</a></li>
+          <li><a href="../2001-83_community_code/index.html">Community Code Dir 2001/83</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener">Dir 2014/65 on EUR-Lex</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener">MiFIR Regulation 600/2014</a></li>
+          <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener">ESMA Interactive Single Rulebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Built by Beresol BV</p>
+        <p>Apeldoorn, Netherlands</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Directive 2014/65/EU and official EUR-Lex sources.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. All rights reserved. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Photography: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a> and <a href="https://www.pexels.com/photo/259027/" target="_blank" rel="noopener">Pixabay</a> via Pexels.</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
+
+

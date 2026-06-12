@@ -32,6 +32,19 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32010L0084': '/eucanon/2010-84_pharmacovigilance/',
   '32011L0062': '/eucanon/2011-62_falsified_medicines/',
   '32012L0026': '/eucanon/2012-26_pv_amend/',
+  '32018L1972': '/eucanon/2018-1972_eecc/',
+  '32009L0138': '/eucanon/2009-138_solvency2/',
+  '32014L0065': '/eucanon/2014-65_mifid2/',
+  '32018D0859': '/eucanon/2018-859_amazon_state_aid/',
+  '32017D1283': '/eucanon/2017-1283_apple_state_aid/',
+  '32023D1683': '/eucanon/2023-1683_la_rochelle_airport/',
+  '32016D0633': '/eucanon/2016-633_nimes_airport/',
+  '32025D1963': '/eucanon/2025-1963_cineca/',
+  '32020D1412': '/eucanon/2020-1412_tirrenia/',
+  '32016R0679': '/eucanon/2016-679_gdpr/',
+  '32022R2065': '/eucanon/2022-2065_dsa/',
+  '32022R1925': '/eucanon/2022-1925_dma/',
+  '32022L2555': '/eucanon/2022-2555_nis2/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -52,6 +65,19 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Clinical Trials Regulation (Reg 536/2014)': '/eucanon/2014-536_ctr/',
   'Advanced Therapy Medicinal Products (Reg 1394/2007)': '/eucanon/2007-1394_atmp/',
   'Paediatric Medicines (Reg 1901/2006)': '/eucanon/2006-1901_paediatric/',
+  'European Electronic Communications Code (Directive 2018/1972)': '/eucanon/2018-1972_eecc/',
+  'Solvency II (Directive 2009/138/EC)': '/eucanon/2009-138_solvency2/',
+  'MiFID II (Directive 2014/65/EU)': '/eucanon/2014-65_mifid2/',
+  'Amazon State Aid Decision (Decision (EU) 2018/859)': '/eucanon/2018-859_amazon_state_aid/',
+  'Apple State Aid Decision (Decision (EU) 2017/1283)': '/eucanon/2017-1283_apple_state_aid/',
+  'La Rochelle Airport State Aid Decision (Decision (EU) 2023/1683)': '/eucanon/2023-1683_la_rochelle_airport/',
+  'Nimes Airport State Aid Decision (Decision (EU) 2016/633)': '/eucanon/2016-633_nimes_airport/',
+  'Cineca State Aid Decision (Decision (EU) 2025/1963)': '/eucanon/2025-1963_cineca/',
+  'Tirrenia State Aid Decision (Decision (EU) 2020/1412)': '/eucanon/2020-1412_tirrenia/',
+  'GDPR (Regulation (EU) 2016/679)': '/eucanon/2016-679_gdpr/',
+  'Digital Services Act (Regulation (EU) 2022/2065)': '/eucanon/2022-2065_dsa/',
+  'Digital Markets Act (Regulation (EU) 2022/1925)': '/eucanon/2022-1925_dma/',
+  'NIS2 Directive (Directive (EU) 2022/2555)': '/eucanon/2022-2555_nis2/',
 };
 
 export interface EucanonLookupInput {

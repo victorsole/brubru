@@ -176,6 +176,11 @@
   color: #065f46;
 }
 
+.tenderator-feed__source--agency {
+  background: rgba(99, 102, 241, 0.1);
+  color: #3730a3;
+}
+
 .tenderator-feed__score {
   display: inline-flex;
   align-items: center;

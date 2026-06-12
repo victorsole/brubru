@@ -18,12 +18,13 @@ import { useAuth } from '../../hooks/use_auth';
 import { UnifiedOpportunityFeed, type UnifiedOpportunity, type MatchSubSource } from './unified_opportunity_feed';
 import { OpportunityDrawer } from './opportunity_drawer';
 import { ProgrammesPanel } from './programmes_panel';
+import { BodiesPanel } from './bodies_panel';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import './tenderator_dashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'programmes';
+export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'programmes';
 
 interface ClosingSoonItem {
   tender_id: number;
@@ -56,6 +57,7 @@ interface DashboardStats {
     ft_proposals: number;
     ft_tenders: number;
     ft_projects: number;
+    agency: number;
   };
   closing_soon: ClosingSoonItem[];
   generated_at: string;
@@ -120,13 +122,23 @@ export const TenderatorDashboard = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const incomingQuery = searchParams.get('q') || '';
+  // Chat → Tenderator deep links can ship a `source` (e.g. 'agency') and a
+  // `body` (e.g. 'efsa') so the dashboard opens directly on the right view.
+  const incomingSourceParam = searchParams.get('source') as SourceFilter | null;
+  const incomingBody = searchParams.get('body') || '';
+  const validInitialSource: SourceFilter | null = incomingSourceParam &&
+    (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency'] as SourceFilter[])
+      .includes(incomingSourceParam) ? incomingSourceParam : null;
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [source, setSource] = useState<SourceFilter>('all');
+  const [source, setSource] = useState<SourceFilter>(validInitialSource || 'all');
   const [error, setError] = useState<string | null>(null);
   const [drawerOpp, setDrawerOpp] = useState<UnifiedOpportunity | null>(null);
   // Selected EU funding programme code (e.g. EU4H). Filters the proposals feed
   // by topic_id prefix. Only applied while the proposals source is active.
   const [programmeCode, setProgrammeCode] = useState<string>('');
+  // Selected agency body slug (e.g. 'efsa'). Only applied while the agency
+  // source is active. Carried via URL on Chat → Tenderator deep links.
+  const [agencyBody, setAgencyBody] = useState<string>(incomingBody);
   const [matchSubSource, setMatchSubSource] = useState<MatchSubSource>('all');
 
   const fetchStats = useCallback(async () => {
@@ -273,7 +285,7 @@ export const TenderatorDashboard = ({
           All sources
           {bySource && (
             <span className="tenderator-dashboard__chip-count">
-              {formatNumber((bySource.ted || 0) + (bySource.ft_proposals || 0) + (bySource.ft_tenders || 0))}
+              {formatNumber((bySource.ted || 0) + (bySource.ft_proposals || 0) + (bySource.ft_tenders || 0) + (bySource.agency || 0))}
             </span>
           )}
         </button>
@@ -312,6 +324,27 @@ export const TenderatorDashboard = ({
           <span className="mdi mdi-trophy-outline" aria-hidden="true" />
           Funded projects
           {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_projects)}</span>}
+        </button>
+        <button
+          type="button"
+          className={`tenderator-dashboard__chip ${source === 'agency' ? 'tenderator-dashboard__chip--active' : ''}`}
+          onClick={() => { setProgrammeCode(''); setAgencyBody(''); setSource('agency'); }}
+          title="Tenders, grants and calls for expression of interest published by EU agencies on their own sites — below TED threshold, not on the central F&T Portal."
+        >
+          <span className="mdi mdi-office-building-outline" aria-hidden="true" />
+          Agency procurement
+          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.agency)}</span>}
+        </button>
+        {/* Step 6: dedicated startup/SME chip — pre-filters proposals to the EIC programme
+            (EIC Accelerator, Pathfinder, Transition, STEP, prizes). */}
+        <button
+          type="button"
+          className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode === 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
+          onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); }}
+          title="EIC funding for startups + SMEs — Accelerator, Pathfinder, Transition, STEP, prizes."
+        >
+          <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
+          Startups &amp; SMEs (EIC)
         </button>
       </section>
 
@@ -364,12 +397,22 @@ export const TenderatorDashboard = ({
                 <span className="mdi mdi-file-document-outline" aria-hidden="true" />
                 Calls for tenders
               </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__sub-chip ${matchSubSource === 'agency' ? 'tenderator-dashboard__sub-chip--active' : ''}`}
+                onClick={() => setMatchSubSource('agency')}
+                title="Decentralised EU agency procurement (EFCA, EMA, EFSA, Eurojust, ETF, Cedefop, …)"
+              >
+                <span className="mdi mdi-office-building-outline" aria-hidden="true" />
+                Agencies
+              </button>
             </div>
           )}
           <UnifiedOpportunityFeed
             source={source}
             matchSubSource={matchSubSource}
             programme={source === 'ft_proposals' ? programmeCode : ''}
+            body={source === 'agency' ? agencyBody : ''}
             initialQuery={incomingQuery}
             onSelectOpportunity={(opp) => {
               // For TED tenders with a real tenders.id, keep the existing
@@ -497,6 +540,7 @@ export const TenderatorDashboard = ({
                 <li><span>F&amp;T calls for proposals</span><span>{formatNumber(bySource.ft_proposals)}</span></li>
                 <li><span>F&amp;T calls for tenders</span><span>{formatNumber(bySource.ft_tenders)}</span></li>
                 <li><span>F&amp;T funded projects</span><span>{formatNumber(bySource.ft_projects)}</span></li>
+                <li><span>Agency procurement</span><span>{formatNumber(bySource.agency)}</span></li>
               </ul>
             </div>
           )}
@@ -506,6 +550,16 @@ export const TenderatorDashboard = ({
             onPickProgramme={(p) => {
               setProgrammeCode(p.programme_code);
               setSource('ft_proposals');
+            }}
+          />
+
+          {/* Step 5 (All EU): EU agencies running their own procurement */}
+          <BodiesPanel
+            activeBodyCode={source === 'agency' ? agencyBody : ''}
+            onPickBody={(b) => {
+              setProgrammeCode('');
+              setAgencyBody(b.body_code);
+              setSource('agency');
             }}
           />
         </aside>

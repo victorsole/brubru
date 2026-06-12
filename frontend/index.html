@@ -40,8 +40,18 @@
           "@type": "Organization",
           "@id": "https://beresol.eu/#organization",
           "name": "Beresol BV",
+          "alternateName": ["Beresol", "Beresol B.V."],
           "url": "https://beresol.eu",
           "logo": "https://brubru.beresol.eu/assets/brubru_mainlogo.png",
+          "founder": {
+            "@type": "Person",
+            "name": "Víctor Solé Ferioli",
+            "sameAs": "https://www.linkedin.com/in/victor-sole/"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/company/beresol",
+            "https://beresol.eu"
+          ],
           "contactPoint": {
             "@type": "ContactPoint",
             "email": "hello@beresol.eu",
@@ -52,18 +62,32 @@
           "@type": "WebSite",
           "@id": "https://brubru.beresol.eu/#website",
           "name": "Brubru",
+          "alternateName": "Brubru - AI Companion for EU Advocacy",
           "url": "https://brubru.beresol.eu",
           "publisher": { "@id": "https://beresol.eu/#organization" },
-          "inLanguage": "en-GB"
+          "inLanguage": ["en-GB", "fr-FR", "nl-NL", "es-ES", "ca-ES", "it-IT"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://brubru.beresol.eu/main?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
         },
         {
           "@type": "SoftwareApplication",
+          "@id": "https://brubru.beresol.eu/#software",
           "name": "Brubru",
+          "alternateName": ["Brubru AI", "Brubru EU Advocacy Assistant"],
           "url": "https://brubru.beresol.eu",
           "applicationCategory": "BusinessApplication",
+          "applicationSubCategory": "Legal Technology",
           "operatingSystem": "Web",
           "description": "AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, track legislative procedures, and navigate EU institutional processes.",
           "creator": { "@id": "https://beresol.eu/#organization" },
+          "publisher": { "@id": "https://beresol.eu/#organization" },
+          "sameAs": [
+            "https://www.linkedin.com/company/brubru",
+            "https://beresol.eu"
+          ],
           "offers": [
             {
               "@type": "Offer",

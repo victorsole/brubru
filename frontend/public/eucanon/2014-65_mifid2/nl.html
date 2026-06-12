@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiFID II (Richtlijn 2014/65/EU): Kader voor EU-financiële markten toegelicht | Brubru</title>
+  <meta name="description" content="Compleet overzicht van MiFID II (Richtlijn 2014/65/EU): taxonomie van handelsplatforms (gereglementeerde markt, MTF, OTF), autorisatie van beleggingsfirma's, algoritmische handel Art 17, beleggersbescherming (geschiktheid, best execution), grenswaarden voor grondstoffenpositie, diensten voor gegevensrapportage, en de beoordeling uit 2024.">
+  <meta property="og:title" content="MiFID II (Richtlijn 2014/65/EU): Markten in financiële instrumenten | Brubru EU Canon">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:description" content="97 artikelen, 4 bijlagen. Het hoofdkader voor beleggingsdiensten en gereglementeerde financiële handel in de EU: taxonomie met drie handelsplatforms, controles op algoritmische handel, beleggersbescherming, grenswaarden voor grondstoffenpositie en diensten voor gegevensrapportage.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MiFID II (Richtlijn 2014/65/EU): regelgeving voor EU-financiële markten | Brubru EU Canon">
+  <meta name="twitter:description" content="97 artikelen, 63 definities, OTF als nieuwe categorie voor handelsplatforms, Art 17 algoritmische handel, best execution, geschiktheid, grenswaarden voor grondstoffenpositie, APAs, CTPs en ARMs. De volledige MiFID II deep-dive.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Richtlijn 2014/65/EU van het Europees Parlement en de Raad van 15 mei 2014 betreffende markten in financiële instrumenten en tot wijziging van Richtlijn 2002/92/EG en Richtlijn 2011/61/EU (herschikking)",
+    "alternateName": "MiFID II",
+    "identifier": "CELEX:32014L0065",
+    "legislationIdentifier": "32014L0065",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065",
+    "datePublished": "2014-06-12",
+    "dateModified": "2026-06-06",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "Europese Unie"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Europees Parlement en Raad van de Europese Unie"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "beleggingsdiensten, financiële markten, gereglementeerde markt, MTF, OTF, algoritmische handel, best execution, geschiktheid, grenswaarden voor grondstoffenpositie, MiFIR, ESMA"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem; text-align: center;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    .canon-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .cta-strip {
+      padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue); background: white;
+      text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem; font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    .section__head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__num {
+      background: var(--color-green); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem;
+      border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .lede { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1rem; line-height: 1.65; }
+
+    /* Transposition section */
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+      .canon-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .canon-related-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .transp-map { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU-beleidsinteligentie</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Taal">
+    <option value="index.html">English</option>
+    <option value="fr.html">Francais</option>
+    <option value="es.html">Espanol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+    <option value="ca.html">Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Probeer Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / EU-financiële markten
+  </div>
+  <h1 class="hero__title"><span>MiFID II</span>: Markten in financiële instrumenten</h1>
+  <p class="hero__subtitle">
+    Richtlijn 2014/65/EU is het hoofdkader dat bepaalt wie beleggingsdiensten in de EU mag leveren en hoe gereglementeerde financiële handel moet werken. Het introduceerde de OTF als nieuwe categorie voor handelsplatforms, stelde alomvattende controles op algoritmische handel in, en herzag de regels voor beleggersbescherming voor 27 lidstaten vanaf 3 januari 2018.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar"></i> Aangenomen 15 mei 2014</span>
+    <span><i class="mdi mdi-book-open-outline"></i> PB L 173, 12.6.2014, blz. 349</span>
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32014L0065</span>
+    <span><i class="mdi mdi-gavel"></i> Art 53(1) VWEU</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600"
+    alt="Handelschermen met financiële marktgegevens, die de gereglementeerde handelsplatforms onder MiFID II weergeven"
+    loading="lazy"
+  >
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a>
+    via <a href="https://www.pexels.com/photo/6801874/" target="_blank" rel="noopener">Pexels</a>
+    | MiFID II regelt elk gereglementeerd handelsplatform en beleggingsfirma in de EU
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">97</div>
+    <div class="figure-card__label">Artikelen in 7 titels</div>
+    <div class="figure-card__context">170 overwegende bepalingen en 97 artikelen verdeeld over titel I tot VII plus 4 bijlagen. De meest omvangrijke hervorming van EU-financieel marktrecht sinds MiFID I (2004/39/EG).</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">63</div>
+    <div class="figure-card__label">Gedefinieerde termen (Art 4)</div>
+    <div class="figure-card__context">Art 4 bevat 63 belangrijke definities, inclusief de nieuwe OTF, algoritmische handel en technier voor hoogfrequente algoritmische handel, die de precieze terminologie van het EU-kader voor financiële markten vormen.</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">3</div>
+    <div class="figure-card__label">Categorieën handelsplatforms</div>
+    <div class="figure-card__context">Gereglementeerde markt, MTF en de nieuwe OTF (gereglementeerde handelsplaats). Art 1(7) sluit het systeem: multilaterale handel buiten deze drie categorieën is niet toegestaan. MiFIR bepaalt de transparantieverplichting voor alle drie.</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">3 jan 2018</div>
+    <div class="figure-card__label">Toepassingsdatum</div>
+    <div class="figure-card__context">De oorspronkelijke toepassingsdatum van 3 januari 2017 en de omzettingsdatum van 3 juli 2016 werden beide met precies een jaar uitgesteld door Richtlijn (EU) 2016/1034. MiFID II was van toepassing vanaf 3 januari 2018; MiFID I (2004/39/EG) werd op dezelfde datum ingetrokken.</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Inhoudsopgave</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overzicht</a>
+    <a href="#mifid-mifir-split" class="toc__link"><i class="mdi mdi-scale-balance"></i> MiFID II / MiFIR scheiding</a>
+    <a href="#title1" class="toc__link"><i class="mdi mdi-alphabetical-variant"></i> Titel I: Toepassingsgebied en definities</a>
+    <a href="#title2-auth" class="toc__link"><i class="mdi mdi-certificate-outline"></i> Titel II: Autorisatie</a>
+    <a href="#title2-ops" class="toc__link"><i class="mdi mdi-cog-outline"></i> Titel II: Bedrijfsvoeringsvoorwaarden</a>
+    <a href="#algo-hft" class="toc__link"><i class="mdi mdi-robot-outline"></i> Art 17: Algoritmische en HFT</a>
+    <a href="#venue-taxonomy" class="toc__link"><i class="mdi mdi-graph-outline"></i> Taxonomie handelsplatforms (RM/MTF/OTF)</a>
+    <a href="#investor-protection" class="toc__link"><i class="mdi mdi-shield-account-outline"></i> Beleggersbescherming</a>
+    <a href="#title3" class="toc__link"><i class="mdi mdi-bank-outline"></i> Titel III: Gereglementeerde markten</a>
+    <a href="#title4-positions" class="toc__link"><i class="mdi mdi-chart-bar"></i> Titel IV: Grenswaarden positie</a>
+    <a href="#title5-data" class="toc__link"><i class="mdi mdi-database-outline"></i> Titel V: Diensten voor gegevensrapportage</a>
+    <a href="#title6-authorities" class="toc__link"><i class="mdi mdi-shield-outline"></i> Titel VI: Bevoegde autoriteiten</a>
+    <a href="#definitions-box" class="toc__link"><i class="mdi mdi-book-alphabet"></i> Belangrijke definities</a>
+    <a href="#at-a-glance" class="toc__link"><i class="mdi mdi-compare"></i> Overzichtstabel</a>
+    <a href="#timeline-section" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Wetgevingstijdlijn</a>
+    <a href="#transposition" class="toc__link"><i class="mdi mdi-map-outline"></i> Omzetting</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Verklarende woordenlijst</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Officiële bronnen</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-link"></i> Gerelateerde canon-ingangen</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Verken met Brubru</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overzicht</h2>
+  </div>
+  <p class="section__subtitle">Het hoofdkader van de EU voor beleggingsdiensten en gereglementeerde financiële handel</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> Waarom MiFID II nodig was</div>
+    <p>MiFID I (Richtlijn 2004/39/EG) introduceerde het paspoort voor beleggingsfirma's, clientencategorisatie, best execution en een taxonomie met drie handelsplatforms: gereglementeerde markten, MTF's en systematische internaliserders. Maar tegen 2008 vertoonde het systeem ernstige gebreken. Broker-netwerkuitwisselingen opereerden geheel buiten alle drie de platformcategorieën en voerden transacties zonder transparantieverplichting uit. Algoritmische en hoogfrequente handel was sterk gegroeid en oversteeg het regelgeving. Markten voor grondstoffenderivaten hadden prijsverschuivingen ondergaan die deels aan speculatieve posities werden toegeschreven. Regels voor beleggersbescherming werden inconsistent toegepast in lidstaten.</p>
+    <p>De Commissie stelde MiFID II en haar begeleiding MiFIR samen voor in oktober 2011. Het Parlement nam de teksten in april 2014 aan en de Raad keurde ze in mei 2014 goed. Beide werden op 12 juni 2014 in PB L 173 gepubliceerd en ondertekend in Brussel op 15 mei 2014 door EP-voorzitter Martin Schulz en Raadsvoorzitter Dimitris Kourkoulas. De juridische grondslag is <strong>artikel 53(1) VWEU</strong> (voorwaarden voor oprichting en uitoefening van werkzaamheid als zelfstandige), wat weerspiegelt dat de richtlijn de voorwaarden harmoniseert waaronder beleggingsfirma's over de interne markt werken.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-calendar-check-outline" style="color: var(--color-amber);"></i> Toepassingsdatum: 3 januari 2018</div>
+    <p>De oorspronkelijke tekst van Richtlijn 2014/65/EU stelde een omzettingsdatum vast van <strong>3 juli 2016</strong> (Art 93) en toepassing vanaf <strong>3 januari 2017</strong>. Beide datums werden met precies een jaar uitgesteld door <strong>Richtlijn (EU) 2016/1034</strong> (en begeleiding Verordening (EU) 2016/1033 voor MiFIR), op grond van het feit dat technische standaarden niet gereed waren en ESMA-IT-systemen meer tijd nodig hadden. Dienovereenkomstig:</p>
+    <ul>
+      <li>Omzettingsdatum: <strong>3 juli 2017</strong></li>
+      <li>Toepassingsdatum: <strong>3 januari 2018</strong> (algemene bepalingen)</li>
+      <li>Niet-aandelen geconsolideerde tape (Art 65(2)): <strong>3 september 2019</strong></li>
+      <li>MiFID I (Richtlijn 2004/39/EG) ingetrokken: <strong>3 januari 2018</strong></li>
+    </ul>
+    <p>De richtlijn is een herschikking: zij vervangt MiFID I volledig in plaats van dit te wijzigen, en bijlage IV bevat de corrigeringstabel tussen de twee instrumenten.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-view-list-outline" style="color: var(--color-purple);"></i> Structuur in het kort</div>
+    <p>De richtlijn is gestructureerd in <strong>170 overwegende bepalingen</strong> en <strong>97 artikelen</strong> in zeven titels:</p>
+    <ul>
+      <li><strong>Titel I</strong> (Art 1-4): Toepassingsgebied en definities</li>
+      <li><strong>Titel II</strong> (Art 5-43): Autorisatie en bedrijfsvoeringsvoorwaarden voor beleggingsfirma's (Hoofdstukken I-IV inclusief bedrijven van derden landen)</li>
+      <li><strong>Titel III</strong> (Art 44-56): Gereglementeerde markten</li>
+      <li><strong>Titel IV</strong> (Art 57-58): Grenswaarden en positiebeheer in grondstoffenderivaten</li>
+      <li><strong>Titel V</strong> (Art 59-66): Diensten voor gegevensrapportage (APA's, CTP's, ARM's)</li>
+      <li><strong>Titel VI</strong> (Art 67-88): Bevoegde autoriteiten, toezichtsbevoegdheden, sancties en samenwerking</li>
+      <li><strong>Titel VII</strong> (Art 89): Gedelegeerde handelingen</li>
+      <li><strong>Art 90-97</strong>: Slotbepalingen (verslagen, wijzigingen van andere richtlijnen, omzetting, intrekking)</li>
+    </ul>
+    <p>Vier bijlagen vullen het instrument aan: Bijlage I (diensten, werkzaamheden en financiële instrumenten), Bijlage II (professionele clienten), Bijlage III (intrekkingen), Bijlage IV (correctietabel MiFID I/II).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 2: MIFID II / MIFIR SPLIT
+     ========================================================= -->
+<section class="section" id="mifid-mifir-split">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">De scheiding MiFID II / MiFIR</h2>
+  </div>
+  <p class="section__subtitle">Richtlijn voor het kader; Verordening voor transparantie. Overweging 7: "Deze richtlijn dient daarom samen met die verordening te worden gelezen."</p>
+
+  <div class="info-box info-box--green">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-green);"></i> Waarom zowel een richtlijn als een verordening?</h3>
+    <p>De keuze om de hervorming van 2014 op te splitsen in een richtlijn (MiFID II) en een direct toepasselijke verordening (MiFIR, Verordening (EU) nr. 600/2014, CELEX 32014R0600) was bewust. Het <strong>autorisatiekader, organisatorische vereisten en gedragsregels</strong> hadden flexibiliteit nodig zodat nationale rechtsstelsels deze konden uitvoeren volgens hun eigen rechtstraditie, vandaar een richtlijn. Maar <strong>verplichtingen inzake pre- en posttransactietransparantie en transactierappurtageringsvereisten</strong> moeten identiek in elke lidstaat werken om gelijke medingingsverhoudingen te creëren, vandaar een verordening die rechtstreeks toepasselijk is zonder omzetting.</p>
+    <p>Overweging 7 van de richtlijn maakt de relatie expliciet: "Deze richtlijn dient daarom samen met die verordening te worden gelezen." De twee instrumenten worden gepubliceerd in hetzelfde nummer van het Publicatieblad (PB L 173, 12 juni 2014).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> In MiFID II (deze richtlijn)</div>
+      <ul>
+        <li>Autorisatie en intrekking van beleggingsfirma's (Art 5-8)</li>
+        <li>Vereisten voor het bestuursorgaan (Art 9)</li>
+        <li>Kwalificerende deelnemingen (Art 10-13)</li>
+        <li>Organisatorische vereisten: productgovernance, clientenactiva, administratiebeheer, opnameregistratie (Art 16)</li>
+        <li>Verplichtingen voor beleggingsfirma's inzake algoritmische handel (Art 17)</li>
+        <li>MTF- en OTF-bedrijfsvoorwaarden (Art 18-20)</li>
+        <li>Gedragsregels: belangenconflicten (Art 23), algemene beginselen en provisies (Art 24), geschiktheid en geschikt­heid (Art 25), best execution (Art 27), orderverwer­king (Art 28)</li>
+        <li>Regelgeving voor geschikte tegenpartijen (Art 30)</li>
+        <li>KMO-groeimarkten (Art 33)</li>
+        <li>Autorisatie en bestuur gereglementeerde markten (Art 44-56)</li>
+        <li>Grenswaarden voor grondstoffenpositie en beheer (Art 57-58)</li>
+        <li>Autorisatie diensten voor gegevensrapportage (Art 59-66)</li>
+        <li>Aanwijzing bevoegde autoriteit, toezichtsbevoegdheden, sancties (Art 67-88)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-cog-outline" style="color: var(--color-purple);"></i> In MiFIR (Verordening 600/2014)</div>
+      <ul>
+        <li>Pre- en posttransactietransparantie voor aandeelinstrumenten (Art 3-11)</li>
+        <li>Pre- en posttransactietransparantie voor niet-aandeelinstrumenten (Art 8-11)</li>
+        <li>Transparantieverplichting voor systematische internaliserders (Art 14-18)</li>
+        <li>Transactierappurtering aan bevoegde autoriteiten (Art 26)</li>
+        <li>Handelverplichting voor aandelen (Art 23)</li>
+        <li>Handelverplichting voor derivaten (Art 28)</li>
+        <li>Toegangsregeling voor bedrijven van derden landen onder gelijkwaardigheid (Art 46-49)</li>
+        <li>Bevoegdheden voor productinterventie (Art 40-42)</li>
+        <li>Gegevensrapportage voor grondstoffenderivaten (Art 44)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3: TITLE I -- SCOPE AND DEFINITIONS
+     ========================================================= -->
+<section class="section" id="title1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical-variant"></i></div>
+    <h2 class="section__title">Titel I: Toepassingsgebied en definities (Art 1-4)</h2>
+  </div>
+  <p class="section__subtitle">Art 1(7) sluit het systeem. Art 4 voorziet in 63 gedefinieerde termen.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lock-outline" style="color: var(--color-red);"></i> Art 1(7): het beginsel van gesloten systeem</div>
+    <p>Artikel 1(7) is architectonisch van essentieel belang: alle multilaterale systemen in financiële instrumenten moeten als gereglementeerde markt, MTF of OTF werken. Er is geen legitieme ruimte voor niet-gereglementeerde multilaterale handel. Deze bepaling spreekt rechtstreeks de broker-netwerkuitwisselingen aan die buiten het MiFID I-platform­kader waren uitgegroeid. Elke multilaterale regeling waar meerdere derden­belangenstellingen voor aankoop en verkoop samenkomen en resulteren in een overeenkomst in een financieel instrument moet onder een van de drie platformregimes zijn geautoriseerd.</p>
+    <p>De richtlijn is van toepassing op beleggingsfirma's, marktexploitanten, diensten voor gegevensrapportage en bedrijven van derden landen die beleggingsdiensten via EU-takken verlenen. Ook kredietinstellingen die beleggingsdiensten verlenen zijn gebonden (Art 1(3)). Gestructureerde deposito's vallen onder de toepassing wanneer zij met advies worden verkocht (Art 1(4)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-checkbox-blank-circle-outline" style="color: var(--color-blue);"></i> Art 2: Belangrijke uitzonderingen inclusief de uitzonderingen voor nevenwerkzaamheden</div>
+    <p>Artikel 2 stelt vrijstelling in voor: verzekeringsondernemingen; personen die diensten alleen binnen hun groep verlenen; dienstverleners die dit incidenteel doen; exploitanten van posities in grondstoffenderivaten of emissie-mogelijkheden die nevenwerkzaamheden zijn van het belangrijkste groepsbedrijf (de "uitzonderingen voor nevenwerkzaamheden" onder Art 2(1)(j)); ETS-nalevingsexploitanten; ESCB-leden; beleggingsfondsen; pensioenfondsen; exploitanten van transmissiesystemen; en CSD's onder EU-regelgeving.</p>
+    <p>De <strong>uitzonderingen voor nevenwerkzaamheden</strong> is commercieel significant voor niet-financiële bedrijven actief op energie-, grondstof- en koolstofmarkten. Het vereist: (a) de werkzaamheid is nevenwerkzaamheid van en vormt geen significant deel van het belangrijkste groepsbedrijf; (b) het bedrijf past geen technier voor hoogfrequente algoritmische handel toe; (c) jaarlijkse kennisgeving aan de bevoegde autoriteit. ESMA ontwikkelt de RTS-methodologie voor wat "nevenwerkzaamheid" van het groepsbedrijf inhoudt.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-purple);"></i> Art 4: 63 gedefinieerde termen</div>
+    <p>Artikel 4(1) bevat 63 definities die de precieze terminologie van het EU-financieel marktrecht vormen. Belangrijke definities zijn onder meer:</p>
+    <ul>
+      <li><strong>Beleggingsfirma</strong> (nr. 1): een rechtspersoon wiens regelmatige werkzaamheid of bedrijf bestaat uit het beroepsmatig verlenen van beleggingsdiensten of werkzaamheden.</li>
+      <li><strong>Gereglementeerde markt</strong> (nr. 21): een multilateraal systeem geëxploiteerd door een marktexploitant dat meerdere derdenbelangen voor aankoop en verkoop samenbrengt onder niet-discretionaire regels, resulterend in een overeenkomst, geautoriseerd onder Titel III.</li>
+      <li><strong>MTF</strong> (nr. 22): dezelfde structuur als een gereglementeerde markt maar geautoriseerd onder Titel II, geëxploiteerd door een beleggingsfirma of marktexploitant.</li>
+      <li><strong>OTF</strong> (nr. 23): een multilateraal systeem dat geen gereglementeerde markt of MTF is, voor obligaties, gestructureerde financieringsproducten, emissie-mogelijkheden en derivaten, waar derdenbelangen onder discretionaire uitvoering samenkomen. Nieuw in MiFID II.</li>
+      <li><strong>Handelsplatform</strong> (nr. 24): een gereglementeerde markt, MTF of OTF.</li>
+      <li><strong>Systematische internaliserder (SI)</strong> (nr. 20): een beleggingsfirma die op georganiseerde, frequente, systematische en aanzienlijke basis voor eigen rekening handelt bij uitvoering van clientenorders buiten een gereglementeerde markt, MTF of OTF.</li>
+      <li><strong>Algoritmische handel</strong> (nr. 39): handel waarbij een computeralgoritme automatisch afzonderlijke orderparameters bepaalt met beperkt of geen menselijk ingrijpen. Verwerking na transactie is uitgesloten.</li>
+      <li><strong>Technier voor hoogfrequente algoritmische handel</strong> (nr. 40): gekenmerkt door alle drie: (a) latentie-minimaliserende infrastructuur (co-locatie, nabijheidshosting, snelle DEA); (b) systeembepaling van orders zonder menselijk ingrijpen; (c) hoge intradag-berichtentarief van orders, offertes of annuleringen.</li>
+      <li><strong>Directe elektronische toegang (DEA)</strong> (nr. 41): regeling waarbij een lid van een handelsplatform een derde toestemming geeft zijn handelscode te gebruiken om orders rechtstreeks naar het handelsplatform in te dienen.</li>
+      <li><strong>Professionele client</strong> (nr. 10): een client die aan de criteria in bijlage II voldoet (ipso facto: kredietinstellingen, beleggingsfirma's, grote ondernemingen; keuze: clienten die zich aanmelden nadat zij aan twee van drie testen voldoen - balans boven EUR 500.000, portefeuille boven EUR 500.000, of een jaar werkervaring in de financiële sector).</li>
+      <li><strong>Particuliere client</strong> (nr. 11): elke client die geen professionele client is.</li>
+      <li><strong>Geschikte tegenpartij</strong> (nr. 18): beleggingsfirma's, kredietinstellingen, verzekeringsmaatschappijen, UCITS, pensioenfondsen en andere geautoriseerde financiële instellingen, transacties met hen profiteren van verminderde gedragsregels.</li>
+      <li><strong>KMO</strong> (nr. 13): voor deze richtlijn ondernemingen met gemiddelde marktkapitalisatie onder EUR 200 miljoen over de vorige drie kalenderjaren.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4: TITLE II -- AUTHORISATION
+     ========================================================= -->
+<section class="section" id="title2-auth">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+    <h2 class="section__title">Titel II, Hoofdstuk I: Autorisatie (Art 5-15)</h2>
+  </div>
+  <p class="section__subtitle">Voorafgaande autorisatie door de home lidstaat is de doorgang tot verlening van beleggingsdiensten over de EU-interne markt</p>
+
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">5</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 5 - Vereiste voor autorisatie</div>
+        <div class="scope-card__desc">Alle beroepsmatige verlening van beleggingsdiensten moet voorafgaande autorisatie van de bevoegde autoriteit van de home lidstaat hebben. Marktexploitanten kunnen ook worden geautoriseerd MTF's of OTF's te exploiteren. ESMA onderhoudt het uniewijd register van geautoriseerde beleggingsfirma's.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-green);">6</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 6 - Toepassingsgebied autorisatie</div>
+        <div class="scope-card__desc">Autorisatie is werkzaamheid-specifiek, bepaalt de toegestane beleggingsdiensten en werkzaamheden, en is geldig over de hele Unie (het paspoort van de interne markt). Autorisatie alleen voor nevendiensten is niet toegestaan.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">7</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 7 - Procedure</div>
+        <div class="scope-card__desc">De bevoegde autoriteit moet de aanvrager binnen zes maanden na ontvangst van een volledige aanvraag informeren of autorisatie wordt verleend of geweigerd. ESMA ontwikkelt RTS op informatie-vereisten (ingediend tegen juli 2015) en ITS op standaardformulieren (tegen januari 2016).</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-red);">9</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 9 - Bestuursorgaan</div>
+        <div class="scope-card__desc">Beleggingsfirma's moeten voldoen aan CRR IV-vereisten voor het bestuursorgaan (Art 88 en 91 van Richtlijn 2013/36/EU): geschiktheid en betrouwbaarheid, bestuurlijke regelingen, toezicht op beleidsstelling voor vergoeding, en beleid voor producten en diensten. Minstens twee personen moeten het bedrijf effectief leiden (vier-ogenprincipe). De bevoegde autoriteit moet autorisatie weigeren als het bestuursorgaan niet geschikt en betrouwbaar is.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-purple);">10</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 10-13 - Kwalificerende deelnemingen</div>
+        <div class="scope-card__desc">Voorgestelde verwervingen boven de 10%, en verhogingen naar 20%, 30% of 50%, moeten worden gemeld. Beoordelingstermijn: 60 werkdagen vanaf schriftelijke bevestiging, verlengbaar met 20 dagen voor verzoek om informatie. Vijf beoordelingscriteria (Art 13): reputatie verwerver; reputatie en ervaring voorgestelde bestuurders; financiële soliditeit verwerver; voortdurende prudentiële naleving; risico's voor witwasprevatie.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">14</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 14 - Beleggersbeschermingsregeling</div>
+        <div class="scope-card__desc">Lidmaatschap van een beleggersbeschermingsregeling is een verplichte voorwaarde voor autorisatie. Art 15 vereist bovendien voldoende startkapitaal consistent met Verordening (EU) nr. 575/2013 (CRR), afgestemd op de aard van de beleggingsdienst.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box info-box--amber">
+    <h3><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> Bedrijven van derden landen: Artikelen 39-43</h3>
+    <p>Lidstaten kunnen bedrijven van derden landen verplichten een tak op te richten voordat zij diensten aan particuliere en bepaalde professionele clienten verlenen. Voorwaarden voor takautorizatie onder Art 39 zijn: autorisatie in thuisland en toereikend toezicht; overeenkomst voor samenwerking tussen toezichthouder in het thuisland en bevoegde autoriteit van de lidstaat; voldoende startkapitaal; geschiktheid en betrouwbaarheid bestuursorgaan; belastinginformatieuitwisselingsakkoord; en lidmaatschap van beleggersbeschermingsregeling.</p>
+    <p>Takken moeten voldoen aan dezelfde gedragsregels en organisatorische vereisten als EU-beleggingsfirma's (Art 41(2)). Geen bedrijf van derde landen mag gunstiger behandeld worden dan Unionsbedrijven. Wanneer een client een bedrijf van derde landen uit zijn eigen exclusief initiatief nadert, geldt geen takvereiste (Art 42). Het rechtstreeks toepasselijke regime voor gelijkwaardigheid van derden landen staat in MiFIR Art 46-49, niet in de richtlijn.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 5: TITLE II -- OPERATING CONDITIONS + ART 17
+     ========================================================= -->
+<section class="section" id="title2-ops">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-cog-outline"></i></div>
+    <h2 class="section__title">Titel II, Hoofdstuk II: Bedrijfsvoeringsvoorwaarden (Art 16-38)</h2>
+  </div>
+  <p class="section__subtitle">Artikel 16 vormt het organisatorisch fundament. Productgovernance, opnameregistratie, veiligstelling clientenactiva en KMO-groeimarkten bevinden zich hier allemaal.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-blue);"></i> Artikel 16: Organisatorische vereisten</div>
+    <p>Artikel 16 is het fundament van bedrijfsniveauverplichting. Belangrijkste onderdelen zijn:</p>
+    <ul>
+      <li><strong>Art 16(2)</strong>: nalevingsbeleid, procedures en persoonlijke transactieregels</li>
+      <li><strong>Art 16(3) eerste alinea</strong>: preventie belangenconflicten; Art 16(3) tweede tot zesde alinea: <strong>productgovernance</strong> -- fabrikanten moeten een productgoedkeuringsprocedure voeren, een doelmarkt bepalen, producten regelmatig beoordelen, en doelmarktinformatie beschikbaar stellen aan distributeurs; distributeurs moeten productinformatie verkrijgen en begrijpen en niet buiten de doelmarkt aanbevelen</li>
+      <li><strong>Art 16(4)</strong>: bedrijfscontinuïteitsmaatregelen</li>
+      <li><strong>Art 16(5)</strong>: outsourcingvoorwaarden (werkzaamheden mogen onder bepaalde voorwaarden worden uitbesteed; het bedrijf draagt volledige verantwoordelijkheid)</li>
+      <li><strong>Art 16(6)</strong>: administratiebeheer van alle diensten, werkzaamheden en transacties voor minstens vijf jaar, tot zeven jaar op verzoek van de bevoegde autoriteit</li>
+      <li><strong>Art 16(7)</strong>: <strong>opnameregistratie van telefoon- en elektronische communicatie</strong> -- alle gesprekken die tot transacties leiden of kunnen leiden moeten worden opgenomen; clienten moeten vooraf worden ingelicht; vijfjaar (tot zevenjaars) bewaring</li>
+      <li><strong>Art 16(8)-(9)</strong>: <strong>veiligstelling clientenactiva</strong> -- clientengelden en financiële instrumenten moeten gescheiden van bedrijfsactiva worden gehouden; geen gebruik van clientenactiva voor eigen rekening zonder uitdrukkelijke toestemming</li>
+      <li><strong>Art 16(10)</strong>: verbod op akkoorden voor financiële zekerheidstelling met eigendomsoverdracht met particuliere clienten</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-sankey-variant" style="color: var(--color-purple);"></i> Artikel 33: KMO-groeimarkten</div>
+    <p>Een MTF-exploitant kan zich aanmelden bij de bevoegde autoriteit van de home lidstaat om als KMO-groeimarkt te worden ingeschreven. Voorwaarden: op het moment van inschrijving moeten minstens 50% van de uitgevers op de markt KMO's zijn en dit moet jaarlijks getoetst aan elkaar voor elk daaropvolgend kalenderjaar; passende toelatingscriteria; voldoende openbare informatie bij toelating; regelmatige periodieke financiële rapportage; naleving van de marktmisbruikverordening; en effectieve systemen ter voorkoming van marktmisbruik.</p>
+    <p>ESMA publiceert en onderhoudt de lijst van ingeschreven KMO-groeimarkten. De inschrijving wijzigt de autorisatie van de MTF niet maar verschaft een marketingaanduiding en lichter toezicht onder diverse EU-regels, met name voor kleinere uitgevers die toepassing naar kapitaalmarkten zoeken.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 6: ART 17 -- ALGORITHMIC AND HFT
+     ========================================================= -->
+<section class="section" id="algo-hft">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Artikel 17: Algoritmische en hoogfrequente handel</h2>
+  </div>
+  <p class="section__subtitle">Art 17 is de fundamentele bepaling voor algo- en HFT-regelgeving, een rechtstreeks antwoord op de Flash Crash van 2010 en zorgen over de Europese marktstructuur</p>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-purple);"></i> Waarom Art 17 nodig was</h3>
+    <p>Tegen 2010 maakten algoritmische en hoogfrequente handel een aanzienlijk deel uit van het handelsvolume op Europese aandelen­markten. De Flash Crash van 2010 in de Verenigde Staten en verschillende Europese marktdislokaties markeerden risico's van foutieve orders, cascadische liquiditeitsterugtrekking, en potentieel misbruik van geautomatiseerde systemen voor marktmanipulatie. Overwegingen 59-68 van MiFID II stellen de wetgevingsredenen voor Art 17's uitgebreide vereisten uiteen.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-blue);"></i> Art 17(1): Systeemvereisten</div>
+      <p>Beleggingsfirma's betrokken bij algoritmische handel moeten handelsystemen hebben met veerkracht en voldoende capaciteit met passende drempels en grenzen. Systemen moeten voorkomen dat foutieve orders worden verzonden, marktomstandigheden in wanorde raken of bijdragen, en mogen niet voor marktmisbruik worden gebruikt. Bedrijven moeten bedrijfscontinuïteitsmaatregelen hebben voor elk falen van hun handelssystemen.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-green);"></i> Art 17(2): Kennisgeving en administratiebeheer</div>
+      <p>Bedrijven moeten hun bevoegde autoriteit en handelsplatform(en) waarop zij handelen kennisgeving doen. De bevoegde autoriteit kan beschrijving van de aard van de algoritmusche handelsstrategieën van het bedrijf, details van handelsparameters of grenzen, en belangrijke nalevings- en risicocontroles verzoeken. HFT-bedrijven moeten specifiek nauwkeurige, chronologisch georderde verslagen van alle geplaatste orders inclusief annuleringen in een goedgekeurde vorm opslaan en aan bevoegde autoriteiten beschikbaar stellen.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-handshake-outline" style="color: var(--color-purple);"></i> Art 17(3)-(4): Marktmakerverplicht­ingen</div>
+      <p>Wanneer een bedrijf een marktmakerstrategie via algoritmische handel voert, moet het voortdurend marktmaken gedurende een bepaald deel van de handelsuren van het handelsplatform (tenzij onder uitzonderlijke omstandigheden). Het bedrijf moet een bindende schriftelijke overeenkomst met het handelsplatform sluiten waarin zijn verplichtingen zijn vastgesteld, en systemen hebben die in staat zijn deze verplichtingen te allen tijde na te komen.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-transit-connection-variant" style="color: var(--color-amber);"></i> Art 17(5): Directe elektronische toegang (DEA)</div>
+      <p>Bedrijven die DEA aan clienten verstrekken moeten clientgeschiktheid beoordelen voordat toegang wordt verleend; vooraf ingestelde handels- en kredietdrempels opleggen; clienthandel in realtime monitoren; het recht behouden orders van clienten in te houden; volledige en onvoorwaardelijke verantwoordelijkheid voor orders van clienten verzonden onder hun handelscode behouden; en een bindende schriftelijke overeenkomst met elke DEA-client sluiten waarin rechten en verplichtingen zijn vastgesteld.</p>
+    </div>
+  </div>
+
+  <div class="info-box info-box--red">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Niveau 2: Gedelegeerde Verordening (EU) 2017/589 van de Commissie</h3>
+    <p>De gedetailleerde organisatorische vereisten voor beleggingsfirma's betrokken bij algoritmische handel zijn vastgelegd in Gedelegeerde Verordening (EU) 2017/589 van de Commissie, die Art 17 volledig implementeert. Het bepaalt: bestuurlijke regelingen; jaarlijkse beoordeling van handelssystemen; pre- en posttransactiecontroles; realtime marktgegevensbewaking; kill-switch-vereisten; DEA-beleid; logbestand- en administratiebeheer vereisten; conformance testing; en vorm en inhoud van vereiste kennisgevingen. Bedrijven actief in algoritmische of HFT-strategieën moeten voldoen aan zowel Art 17 van de richtlijn als de technische details in Gedelegeerde Verordening 2017/589.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 7: VENUE TAXONOMY
+     ========================================================= -->
+<section class="section" id="venue-taxonomy">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-graph-outline"></i></div>
+    <h2 class="section__title">De taxonomie handelsplatforms: RM, MTF en OTF</h2>
+  </div>
+  <p class="section__subtitle">Drie geautoriseerde platformcategorieën, elk met duidelijke bestuurvereisten. De OTF is de kritieke toevoeging in MiFID II.</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-blue);"></i> Gereglementeerde markt (RM)</div>
+      <p><strong>Titel III (Art 44-56).</strong> Een multilateraal systeem geëxploiteerd door een marktexploitant. Uitvoering is niet-discretionair: regels zijn transparant en vooraf vastgesteld. Toelating van leden (Art 53) volgt transparante, niet-discriminatoire, objectieve criteria. De marktexploitant mag geen clientenorders tegen eigenkapitaal uitvoeren en mag geen matched principal trading bedrijven (Art 47(2)).</p>
+      <p>Gereglementeerde markten moeten handelsystemen met veerkracht hebben (Art 48), circuit breakers voor aanzienlijke koersveranderingen (Art 48(5)), order-to-trade ratio grenzen voor algoritmische handel (Art 48(6)), tickgrootte regimes afgestemd op liquiditeit (Art 49), en kloksynchronisatie (Art 50). ESMA onderhoudt de Unielijst van gereglementeerde markten (Art 56).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-swap-horizontal" style="color: var(--color-green);"></i> Multilateraal handelsplatform (MTF)</div>
+      <p><strong>Titel II, Art 18-19.</strong> Een multilateraal systeem geëxploiteerd door een beleggingsfirma of marktexploitant onder Titel II. Zoals gereglementeerde markten is uitvoering niet-discretionair: de regels bepalen welke orders samenkomen en hoe overeenkomsten worden gesloten. MTF's mogen geen clientenorders tegen eigenkapitaal uitvoeren en mogen geen matched principal trading bedrijven (Art 19(5)).</p>
+      <p>MTF's moeten minstens drie materieel actieve leden of gebruikers hebben (Art 18(7)). Zij kunnen als KMO-groeimarkten worden ingeschreven (Art 33). De transparantieverplichting (pre- en posttransactie) voor MTF's staat in MiFIR, niet in de richtlijn.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-tune-variant" style="color: var(--color-purple);"></i> Gereglementeerde handelsplaats (OTF) -- Nieuw</div>
+      <p><strong>Titel II, Art 20.</strong> De OTF is de nieuwe platformcategorie geïntroduceerd door MiFID II om broker-netwerk­uitwisselingen en andere hybride regelingen op te vangen. Het beslaat obligaties, gestructureerde financieringsproducten, emissie-mogelijkheden en derivaten (geen aandelen). Uitvoering op een OTF is <strong>discretionair</strong>: de exploitant bepaalt of een order moet worden geplaatst of ingetrokken en of een specifieke clientenorder moet worden gematcht (Art 20(6)).</p>
+      <p>Kritische beperkingen: de OTF-exploitant mag niet tegen zijn eigen of enige groepsentiteit's eigenkapitaal uitvoeren (Art 20(1)). Matched principal trading is alleen in obligaties, gestructureerde financieringsproducten, emissie-mogelijkheden en bepaalde derivaten met clienttoestemming toegestaan, en is verboden voor gecleared derivaten (Art 20(2)). Handel op eigen rekening (anders dan matched principal) is alleen in staatspapieren waarop geen liquide markt bestaat toegestaan (Art 20(3)). Een OTF en een systematische internaliserder kunnen niet binnen dezelfde rechtspersoon opereren; een OTF kan niet met een SI verbinden (Art 20(4)).</p>
+    </div>
+  </div>
+
+  <div class="duty-table" style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Kenmerk</th>
+          <th>Gereglementeerde markt (RM)</th>
+          <th>MTF</th>
+          <th>OTF</th>
+          <th>Systematische internaliserder (SI)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Autorisatietitel</td>
+          <td>Titel III</td>
+          <td>Titel II</td>
+          <td>Titel II</td>
+          <td>N/V (bilateraal -- geen platformauth.)</td>
+        </tr>
+        <tr>
+          <td>Gedekte instrumenten</td>
+          <td>Alle Bijlage I Sectie C</td>
+          <td>Alle Bijlage I Sectie C</td>
+          <td class="rate-purple">Alleen obligaties, GFP, emissie-mogelijkheden, derivaten (geen aandelen)</td>
+          <td>Alle instrumenten (bilateraal)</td>
+        </tr>
+        <tr>
+          <td>Uitvoering</td>
+          <td class="rate-blue">Niet-discretionair</td>
+          <td class="rate-blue">Niet-discretionair</td>
+          <td class="rate-purple">Discretionair</td>
+          <td>Eigen rekening</td>
+        </tr>
+        <tr>
+          <td>Matched principal trading</td>
+          <td class="rate-red">Verboden</td>
+          <td class="rate-red">Verboden</td>
+          <td class="rate-amber">Toegestaan (oblig./GFP/emiss./deriv.) met toestemming; verboden voor gecleared derivaten</td>
+          <td>N/V</td>
+        </tr>
+        <tr>
+          <td>Eigen rekening bedrijf</td>
+          <td class="rate-red">Verboden</td>
+          <td class="rate-red">Verboden</td>
+          <td class="rate-red">Verboden (tenzij staatspapieren zonder liquide markt)</td>
+          <td class="rate-green">Kernwerkzaamheid</td>
+        </tr>
+        <tr>
+          <td>Minimaal actieve leden</td>
+          <td>Niet apart bepaald</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td>N/V</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Nieuw in MiFID II?</td>
+          <td>Nee (MiFID I)</td>
+          <td>Nee (MiFID I)</td>
+          <td class="rate-purple">Ja (nieuwe categorie)</td>
+          <td>Nee (MiFID I)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 8: INVESTOR PROTECTION
+     ========================================================= -->
+<section class="section" id="investor-protection">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-account-outline"></i></div>
+    <h2 class="section__title">Beleggersbescherming: Art 23-30</h2>
+  </div>
+  <p class="section__subtitle">Geschiktheid en geschikt­heid (Art 25), best execution (Art 27), productgovernance, belangenconflicten en provisiesregeling</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-heart-outline" style="color: var(--color-blue);"></i> Art 24: Algemene beginselen - de kerngedragsregel</div>
+    <p>Artikel 24(1) bepaalt de alomvattende verplichting: beleggingsfirma's moeten eerlijk, billijk en deskundig handelen in het <strong>belang van clienten</strong>. Artikel 24(2) legt productgovernanceverplichtingen op zowel fabrikanten (instrumenten voor een bepaalde doelmarkt ontwerpen) en distributeurs (aanbevelingen liggen in clients' belang en blijven in de doelmarkt).</p>
+    <p>Alle informatie, inclusief marketingcommunicatie, moet <strong>eerlijk, duidelijk en niet misleidend</strong> zijn (Art 24(3)). Voorafgaande informatievereisten behandelen: aard en onafhankelijkheid van advies; voorgestelde financiële instrumenten en strategieën; uitvoeringsvenues; en critisch -- <strong>alle kosten en lasten inclusief derden betalingen</strong>, opgeteld om cumulatief effect op rendement te tonen, met een posten­uitsplitsing beschikbaar op aanvraag (Art 24(4)).</p>
+    <p>De provisiesregeling (Art 24(9)) staat een bedrijf toe een vergoeding of provisie van of aan een derde te ontvangen of betalen alleen als drie voorwaarden zijn vervuld: (a) de betaling verbetert servicekwaliteit; (b) het beperkt niet de verplichting in clients' belang op te treden; (c) het wordt bekendgemaakt. Voor <strong>onafhankelijk advies</strong> en portfoliobeheer moet het bedrijf bovendien een voldoende diverse productengamma beoordelen niet beperkt tot groepsproducten, en mag het geen derdenvergoeding of provisie aanvaarden of behouden (Art 24(7)-(8)).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-clipboard-check-outline" style="color: var(--color-green);"></i> Art 25: Geschiktheid en geschikt­heid</div>
+      <p>Voor <strong>beleggingsadvies en portefeuillbeheer</strong> moet de geschiktsheidsbeoordeling drie dimensies bestrijken: (a) kennis en ervaring van de client relevant voor het investeringstype; (b) financiële toestand inclusief vermogen verliezen te dragen; (c) investeringsdoelen inclusief risicobereidheid. Een schriftelijke geschiktheidsverklaring moet de client vóór uitvoering van de transactie worden verstrekt (Art 25(6)).</p>
+      <p>Voor <strong>andere beleggingsdiensten</strong> (uitvoering van orders enz.) beoordeelt een geschikt­heidstest clientkennis en -ervaring in verhouding tot het specifieke product. Wanneer het product niet geschikt is, moet het bedrijf een waarschuwing afgeven (Art 25(3)).</p>
+      <p>De <strong>uitvoering-alleen uitzondering</strong> (Art 25(4)) verwijdert de geschikt­heidsvereiste voor niet-complexe instrumenten (aandelen, obligaties, geldmarktinstrumenten, standaard UCITS) waar de dienst op clients' eigen initiatief wordt verstrekt, de client duidelijk wordt gewaarschuwd, en het bedrijf zijn belangenconflictverplichting nakomt. Dit is de basis voor uitvoering-alleen beursmakelaars.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-podium-gold" style="color: var(--color-amber);"></i> Art 27: Best execution</div>
+      <p>Beleggingsfirma's moeten alle voldoende stappen ondernemen om het <strong>best mogelijke resultaat</strong> voor clienten te bereiken, rekening houdend met: prijs; kosten; snelheid; waarschijnlijkheid van uitvoering en afwikkeling; grootte; aard; en elke andere relevante overweging. Voor particuliere clienten wordt het best mogelijke resultaat bepaald door totale overweging (prijs plus alle uitvoeringskosten), niet alleen prijs.</p>
+      <p>Bedrijven moeten een orderuitvoeringsbeleid vaststellen en implementeren (Art 27(4)-(5)). Voorafgaande clienttoestemming voor het uitvoeringsbeleid is vereist; afzonderlijke uitdrukkelijke toestemming is vereist vooraleer buiten een handelsplatform uit te voeren. Bedrijven moeten jaarlijks de <strong>top vijf uitvoeringsvenues per financieel instrumentklasse</strong> publiceren en een samenvatting van uitvoeringskwaliteit (Art 27(6)). Het uitvoeringsbeleid moet minstens jaarlijks worden herzien (Art 27(7)).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-purple);"></i> Clientencategorisatie: particuliere, professionele en geschikte tegenpartij</div>
+    <p>MiFID II's drietrapsclassificatie van clienten bepaalt het beschermingsniveau dat elke client ontvangt. <strong>Particuliere clienten</strong> (elke client die geen professionele client is) ontvangen de hoogste bescherming: volledige geschiktheid/geschikt­heidsverplichting, alle informatievereisten, uitvoering alleen met hun uitdrukkelijke toestemming. <strong>Professionele clienten</strong> (per Bijlage II: kredietinstellingen, beleggingsfirma's, grote ondernemingen met balans boven EUR 20 miljoen of nettoomzet boven EUR 40 miljoen of eigen vermogen boven EUR 2 miljoen, en andere institutionele beleggers; keuze professionals die aan twee van drie testen voldoen -- balans EUR 500.000+, portefeuille EUR 500.000+, een jaar financieel sector ervaring) krijgen verminderde bescherming op bepaalde bepalingen. <strong>Geschikte tegenpartijen</strong> (beleggingsfirma's, kredietinstellingen, verzekeringsmaatschappijen, UCITS, pensioenfondsen, nationale regeringen, centrale banken en andere geautoriseerde financiële instellingen -- Art 30) zijn vrijgesteld van Art 24 (behalve leden 4 en 5), 25 (behalve lid 6), 27 en 28(1). De basisverplichting eerlijk, billijk en deskundig op te treden en duidelijk te communiceren blijft.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Art 23: Belangenconflicten</div>
+    <p>Beleggingsfirma's moeten alle passende stappen ondernemen om belangenconflicten tussen het bedrijf, zijn leidinggevenden, werknemers, verbonden personen en hun clienten, en tussen clienten onderling, op te sporen, voorkomen en beheren. Wanneer beheersing door organisatorische regelingen onvoldoende is om schadebepaling voor clientbelangen te voorkomen, is voorafgaande openbaring aan de client in een duurzaam medium vereist. De openbaring moet de aard en bron van het conflict duidelijk genoeg uitleggen zodat de client een geïnformeerd besluit kan nemen (Art 23(2)). Openbaring is een laatste toevlucht, geen substituut voor toereikende organisatorische maatregelen.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 9: TITLE III -- REGULATED MARKETS
+     ========================================================= -->
+<section class="section" id="title3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Titel III: Gereglementeerde markten (Art 44-56)</h2>
+  </div>
+  <p class="section__subtitle">Autorisatie, bestuur, systeemveerkracht, circuit breakers, tickgrootten en toelating voor handel</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-check-decagram-outline" style="color: var(--color-blue);"></i> Autorisatie en bestuur (Art 44-47)</div>
+      <p>Alleen systemen die aan Titel III voldoen kunnen als gereglementeerde markten worden geautoriseerd (Art 44). Het openbare recht voor handel is dat van de home lidstaat. Exploitanten van aanzienlijke gereglementeerde markten moeten een nominatiecommissie hebben en zich aan directeurslimieten houden: één uitvoerend plus twee niet-uitvoerende bestuurders, of vier niet-uitvoerende bestuurders (Art 45(4)). Diversiteitsbeleid is vereist.</p>
+      <p>Gereglementeerde markten moeten belangenconflicten beheren, gezond risicobeheer hebben, gezonde technische operaties onderhouden, billijke en ordelijke handelsregels waarborgen, efficiënte afwikkeling verzekeren, en toereikende financiële middelen onderhouden (Art 47). Marktexploitanten mogen geen clientenorders tegen eigenkapitaal uitvoeren (Art 47(2)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Systeemveerkracht en circuit breakers (Art 48)</div>
+      <p>Gereglementeerde markten moeten handelssystemen hebben met voldoende capaciteit om piekordervolumes af te handelen en extreem marktomstandigheden te doorstaan. Schriftelijke marktmakerovereenkomsten zijn vereist (Art 48(2)-(3)). <strong>Circuit breakers</strong> (automatische handelshaltes bij aanzienlijke koersveranderingen) zijn verplicht (Art 48(5)). Gereglementeerde markten moeten order-to-trade ratio grenzen implementeren om algoritmische handelsstrategieën te voorkomen het orderboek overstromen (Art 48(6)). DEA-controles (Art 48(7)) spiegelen Art 17(5) vereisten. Co-locatiediensten moeten op transparante, billijke en niet-discriminatoire basis worden aangeboden (Art 48(8)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-ruler-square" style="color: var(--color-purple);"></i> Tickgrootten (Art 49) en kloksynchronisatie (Art 50)</div>
+      <p>Gereglementeerde markten moeten tickgrootte-regelingen aannemen afgestemd op de liquiditeitprofielen en gemiddelde bid-ask spreads van de relevante instrumenten. Het tickgrootte-regime voorkomt kunstmatige prijsverbetering onder minimale prijsincrementen, wat bepaalde latentie-arbitragestrategieën vermindert. ESMA ontwikkelt de minimale tickgrootte RTS. Alle handelsplatforms en hun leden moeten zakelijke klokken synchroniseren tot een in ESMA RTS bepaald nauwkeurigheidsniveau (Art 50).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-plus-outline" style="color: var(--color-amber);"></i> Toelating voor handel (Art 51) en CCP-toegang (Art 55)</div>
+      <p>Gereglementeerde markten moeten duidelijke, transparante en niet-discriminatoire regels voor toelating van financiële instrumenten voor handel toepassen (Art 51). Voor derivatencontracten moeten toelatingsregels ordelijke prijsstelling en effectieve afwikkeling waarborgen. Gereglementeerde markten moeten controleren dat uitgevers van overdraagbare waardepapieren voldoen aan EU-informatievereisten. Toelating van secundaire handel zonder toestemming van de uitgever is toegestaan (Art 51(5)).</p>
+      <p>Gereglementeerde markten mogen het gebruik van CCP's of clearingsystemen van andere lidstaten niet beperken tenzij nodig voor ordelijke werking (Art 55). ESMA onderhoudt de Unielijst van gereglementeerde markten (Art 56).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 10: TITLE IV -- POSITION LIMITS
+     ========================================================= -->
+<section class="section" id="title4-positions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Titel IV: Grenswaarden voor grondstoffenpositie en rapportage (Art 57-58)</h2>
+  </div>
+  <p class="section__subtitle">Een rechtstreeks antwoord op zorgen over speculatieve posities in landbouw- en energiegrondstoffenderivaten</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-format-list-numbered" style="color: var(--color-amber);"></i> Art 57: Grenswaarden positie</div>
+    <p>Bevoegde autoriteiten moeten grenswaarden voor de maximale nettopositie in grondstoffenderivaten op handelsplatforms en economisch gelijkwaardige OTC-contracten vaststellen en toepassen. Grenzen zijn van toepassing op geaggregeerd groepsniveau. Twee aangegeven doelen: (a) marktmisbruik voorkomen; (b) ordelijke prijsstelling en afwikkelingvoorwaarden ondersteunen, inclusief convergentie tussen leveringsmaandprijzen derivaten en contantprijzen.</p>
+    <p>Grenzen zijn niet van toepassing op posities gehouden door niet-financiële rechtspersonen die doeltreffend risico's reduceren rechtstreeks verband houdend met de commerciële werkzaamheid van die rechtspersoon. ESMA ontwikkelt de RTS-methodologie rekening houdend met minstens: contractlooptijd; leverbare voorraden; open rente; volatiliteit; aantal en grootte marktdeelnemers; kenmerken van de onderliggende grondstoffenmarkt; en ontwikkeling van nieuwe contracten.</p>
+    <p>Waar dezelfde derivaat significant in meer dan één rechtsmacht wordt verhandeld, is de bevoegde autoriteit van het platform met het grootste volume de centrale bevoegde autoriteit en stelt de enkele positiegrens voor alle handel in dat contract vast (Art 57(6)). ESMA publiceert een databank van grenswaarden en positiebeheercontroles (Art 57(10)). Bevoegde autoriteiten moeten ESMA minstens 24 uur voor maatregelen van kracht worden notificatie geven.</p>
+    <p>Positiebeheercontroles moeten handelsplatforms machtigen: open rente monitoren; toegang tot informatie over grootte en doel van posities verkrijgen; positiereductie of beëindiging vereisen; en liquiditeitslevering terug naar de markt op temporaire basis vereisen (Art 57(8)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-newspaper-variant-outline" style="color: var(--color-blue);"></i> Art 58: Positierappurtering</div>
+    <p>Handelsplatforms die grondstoffenderivaten verhandelen moeten een <strong>wekelijks geaggregeerd positierapport</strong> naar categorie houder publiceren: beleggingsfirma's en kredietinstellingen; beleggingsfondsen; andere financiële instellingen; commerciële ondernemingen; en ETS-nalevingsexploitanten. Het rapport moet lange en korte posities, wijzigingen sinds het vorige rapport, percentage van totale open rente, en aantal personen in elke categorie bepalen.</p>
+    <p>Beleggingsfirma's die OTC-grondstoffenderivaten verhandelen moeten dagelijkse volledige uitsplitsingen van hun posities aan de bevoegde autoriteit verstrekken. Alle rapporten moeten posities kwalificeren voor de commerciële afdekkingsvrijstelling van andere posities.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 11: TITLE V -- DATA REPORTING SERVICES
+     ========================================================= -->
+<section class="section" id="title5-data">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-database-outline"></i></div>
+    <h2 class="section__title">Titel V: Diensten voor gegevensrapportage (Art 59-66)</h2>
+  </div>
+  <p class="section__subtitle">Drie geautoriseerde servicetypes: APA's publiceren handelsrapporten, CTP's consolideren ze, ARM's rapporteren transacties aan regelgevers</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-broadcast" style="color: var(--color-blue);"></i> APA: Goedgekeurd publicatiemechanisme</div>
+      <p>Een APA publiceert posttransactierapporten namens beleggingsfirma's overeenkomstig MiFIR Art 20-21. APA's moeten handelsgegevens zo dicht mogelijk bij realtime publiceren. Gegevens moeten <strong>gratis beschikbaar 15 minuten na publicatie</strong> zijn (Art 64(3)). APA's moeten belangenconflicten voorkomen en gezonde veiligheidsmechanismen onderhouden.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-layers-outline" style="color: var(--color-purple);"></i> CTP: Geconsolideerde tapeprovider</div>
+      <p>Een CTP verzamelt handelsrapporten van alle gereglementeerde markten, MTF's, OTF's en APA's en consolideert ze in een continue elektronische live gegevensstroom (Art 65). Realtime publicatie (gratis na 15 minuten). Voor aandeelinstrumenten moet de stroom een indicator voor algoritmische handel bevatten (Art 65(1)(h)). Toepassing van Art 65(2) voor niet-aandeelinstrumenten werd tot 3 september 2019 uitgesteld. Wanneer commerciële CTP's falen kan de Commissie openbare aankoop initiëren (Art 90(2)-(3)) -- een terugval geactiveerd onder de 2024 beoordeling.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-send-outline" style="color: var(--color-green);"></i> ARM: Goed­gekeurd rapportmechanisme</div>
+      <p>Een ARM rapporteert transactiedetails aan bevoegde autoriteiten of ESMA namens beleggingsfirma's overeenkomstig MiFIR Art 26. ARM's moeten zo snel mogelijk rapporteren en niet later dan einde werkdag van volgende werkdag (Art 66). Marktexploitanten die gereglementeerde markten exploiteren kunnen ook worden geautoriseerd APA-, CTP- of ARM-diensten binnen hun bestaande autorisatie te verlenen (Art 59(2)).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 12: TITLE VI -- COMPETENT AUTHORITIES
+     ========================================================= -->
+<section class="section" id="title6-authorities">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-outline"></i></div>
+    <h2 class="section__title">Titel VI: Bevoegde autoriteiten, sancties en samenwerking (Art 67-88)</h2>
+  </div>
+  <p class="section__subtitle">Aanwijzing, toezichtsbevoegdheden, minimaal maximale geldboetes, publicatie van sancties, klokkenluidersbescherming en grensoverschrijdende samenwerking</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-magnify" style="color: var(--color-blue);"></i> Art 69: Toezichtsbevoegdheden -- minimale lijst</div>
+    <p>Artikel 69(2) bepaalt de minimale toezichtsbevoegdheden die bevoegde autoriteiten moeten hebben. De lijst omvat: toegang tot documenten en verslagen; bevoegdheid personen op te roepen en te ondervragen; inspectie ter plaatse uitvoeren; opnamen van telefoon- en elektronische communicatie vereisen; activa bevriezen of in beslag nemen; professionele werkzaamheid tijdelijk verbieden; doorverwijzing naar strafrechtelijke vervolging; verstrekking van grondstoffenpositie­informatie vereisen; staking van praktijken vereisen; financiële instrumenten van handel opschorten of verwijderen; positiereductie vereisen; grondstoffenderivaten­posities beperken (Art 69(2)(p)); openbare kennisgeving afgeven; marketing of verkoop van financiële instrumenten of gestructureerde deposito's opschorten; persoon uit bestuur verwijderen (Art 69(2)(u)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-red);"></i> Art 70: Bestuursrechtelijke sancties -- minimaal maximale niveaus</div>
+    <p>Lidstaten moeten effectieve, evenredige en afschrikkende bestuursrechtelijke sancties voor alle schendingen waarborgen. Voor de meest ernstige schendingen zijn de minimaal maximale geldboete niveaus:</p>
+    <ul>
+      <li><strong>Rechtspersonen</strong>: maximale geldboetes van minstens <strong>EUR 5.000.000</strong> of <strong>10% van de jaarlijkse omzet</strong> (welke het hoogst is)</li>
+      <li><strong>Natuurlijke personen</strong>: maximale geldboetes van minstens <strong>EUR 5.000.000</strong></li>
+      <li><strong>Voordeel-gebaseerd</strong>: maximale geldboetes van minstens twee maal het verkregen voordeel</li>
+    </ul>
+    <p>Overige sancties omvatten openbare verklaringen die de persoon en schending aanduiden; intrekking of opschorting van autorisatie; tijdelijk of permanent verbod op bestuursfuncties; en tijdelijke verboden op lidmaatschap gereglementeerde markt.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bullhorn-outline" style="color: var(--color-amber);"></i> Art 71: Publicatie van besluiten</div>
+      <p>Sancties moeten zonder onnodig uitstel op de website van de bevoegde autoriteit worden gepubliceerd, met aanduiding van de natuurlijke of rechtspersoon en beschrijving van de schending. <strong>Minimale vasthouding: vijf jaar</strong>. Anonieme of uitgestelde publicatie is toegestaan waar publicatie onevenredige schade zou veroorzaken, financiële marktstabiliteit in gevaar brengen, of een lopend onderzoek belemmeren. Sancties die niet openbaar worden gepubliceerd moeten aan ESMA's centrale databank worden gemeld.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-whistle-outline" style="color: var(--color-green);"></i> Art 73: Klokkenluidersbescherming</div>
+      <p>Bevoegde autoriteiten moeten effectieve mechanismen voor rapportage van potentiële of werkelijke schendingen vaststellen, met passende bescherming voor werknemers die melden tegen vergelding, discriminatie en oneerlijke behandeling. Lidstaten kunnen volgens nationaal recht financiële stimulansen voor klokkenluiders voorzien. Gerapporteerde informatie moet vertrouwelijk worden gehouden overeenkomstig strafvorderingsregels.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 13: KEY DEFINITIONS BOX
+     ========================================================= -->
+<section class="section" id="definitions-box">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-alphabet"></i></div>
+    <h2 class="section__title">Sleuteldefinities (Art. 4)</h2>
+  </div>
+  <p class="section__subtitle">De 63 definities in Art. 4(1) vormen het vocabulaire van de Europese wetgeving voor financiële markten</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">Beleggingsonderneming</div>
+      <div class="glossary-card__def">Een rechtspersoon waarvan de normale bedrijfsactiviteit bestaat uit het beroepsmatig verlenen van één of meer beleggingsdiensten of -activiteiten. Niet-rechtspersonen kunnen kwalificeren als zij aan gelijkwaardige prudentiële regels onderworpen zijn (Art. 4(1)(1)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Gereglementeerde markt (RM)</div>
+      <div class="glossary-card__def">Een multilateraal systeem beheerd door een marktexploitant, dat meerdere aanbod- en vraagbelangen van derden samenbrengt onder niet-discretionaire regels, resulterend in een contract, geautoriseerd onder Titel III (Art. 4(1)(21)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MTF</div>
+      <div class="glossary-card__def">Multilateraal handelssysteem: dezelfde structurele definitie als RM maar geautoriseerd onder Titel II en beheerd door een beleggingsonderneming of marktexploitant. Niet-discretionaire uitvoeringsregels (Art. 4(1)(22)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">OTF</div>
+      <div class="glossary-card__def">Organiseringsfaciliteit voor handel: een multilateraal systeem dat geen RM of MTF is, met betrekking tot obligaties, gestructureerde financieringsproducten, emissierechten en derivaten, waar belangen van derden onder discretionaire uitvoering samenkomen. Nieuw in MiFID II (Art. 4(1)(23)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Systematische internaliseraar (SI)</div>
+      <div class="glossary-card__def">Een beleggingsonderneming die op een georganiseerde, regelmatige, systematische en substantiële basis voor eigen rekening handelt bij uitvoering van cliëntorders buiten een RM, MTF of OTF (Art. 4(1)(20)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Handelsplatform</div>
+      <div class="glossary-card__def">Een gereglementeerde markt, MTF of OTF -- de drie geautoriseerde platformcategorieën (Art. 4(1)(24)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Algoritmische handel</div>
+      <div class="glossary-card__def">Handel in financiële instrumenten waarbij een computeralgoritme automatisch individuele orderparameters bepaalt met minimale of geen menselijke tussenkomst. Verwerking na transactie is uitgesloten (Art. 4(1)(39)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">HFT-techniek</div>
+      <div class="glossary-card__def">Techniek voor snelle algoritmische handel: alle drie van (a) latentie-minimaliserende infrastructuur; (b) door het systeem bepaalde orders zonder menselijke tussenkomst; (c) hoge intradag berichtsnelheid van orders, offertes of annuleringen (Art. 4(1)(40)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">DEA</div>
+      <div class="glossary-card__def">Directe elektronische toegang: een regeling waarbij een lid van een handelsplatform een persoon toestaat zijn handelscode te gebruiken om orders elektronisch rechtstreeks naar het handelsplatform door te sturen (Art. 4(1)(41)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Professionele cliënt</div>
+      <div class="glossary-card__def">Een cliënt die aan de criteria in Bijlage II voldoet: van rechtswege (kredietinstellingen, beleggingsondernemingen, grote ondernemingen) of optioneel (twee van drie tests: balanstotaal EUR 500.000+, portefeuille EUR 500.000+, of één jaar ervaring in de financiële sector).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">In aanmerking komende tegenpartij</div>
+      <div class="glossary-card__def">Beleggingsondernemingen, kredietinstellingen, verzekeringsmaatschappijen, ICBE's, pensioenfondsen, nationale regeringen en centrale banken. Vereenvoudigde gedragsregels zijn van toepassing: vrijgesteld van Art. 24 (behalve leden 4-5), 25 (behalve lid 6), 27 en 28(1) (Art. 30).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">KMO (voor deze richtlijn)</div>
+      <div class="glossary-card__def">Ondernemingen met een gemiddelde marktkapitalisatie onder EUR 200 miljoen gebaseerd op eindjaarkoersen voor de voorgaande drie kalenderjaren. Relevant voor geschiktheid op de KMO-groeismarkt (Art. 4(1)(13)).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 14: AT-A-GLANCE TABLE
+     ========================================================= -->
+<section class="section" id="at-a-glance">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-compare"></i></div>
+    <h2 class="section__title">In één oogopslag: kerngetallen en drempels</h2>
+  </div>
+  <p class="section__subtitle">De getallen die elke MiFID II-beoefenaar moet kennen</p>
+
+  <div style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Getal / Regel</th>
+          <th>Bron</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td>Toepassingsdatum</td>
+          <td class="rate-blue">3 januari 2018 (uitgesteld van 3 januari 2017 door Richtlijn (EU) 2016/1034)</td>
+          <td>Art. 93; Richtlijn 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Implementatietermijn</td>
+          <td>3 juli 2017 (uitgesteld van 3 juli 2016)</td>
+          <td>Art. 93; Richtlijn 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Niet-equity geconsolideerde band</td>
+          <td>3 september 2019</td>
+          <td>Art. 65(2)</td>
+        </tr>
+        <tr>
+          <td>Gedefinieerde termen</td>
+          <td>63 (Art. 4)</td>
+          <td>Art. 4</td>
+        </tr>
+        <tr>
+          <td>Termijn voor goedkeuringsbesluit</td>
+          <td class="rate-green">6 maanden na volledige aanvraag</td>
+          <td>Art. 7</td>
+        </tr>
+        <tr>
+          <td>Beoordelingsperiode gekwalificeerde deelneming</td>
+          <td>60 werkdagen na schriftelijke bevestiging (+20 werkdagen voor informatieverzoek)</td>
+          <td>Art. 12</td>
+        </tr>
+        <tr>
+          <td>Meldingsdrempels gekwalificeerde deelneming</td>
+          <td>10% (definitie); melden bij 20%, 30%, 50%</td>
+          <td>Art. 10-11</td>
+        </tr>
+        <tr>
+          <td>Registerbewaring</td>
+          <td class="rate-green">5 jaar (tot 7 op verzoek van bevoegde autoriteit)</td>
+          <td>Art. 16(6)</td>
+        </tr>
+        <tr>
+          <td>Bewaring gespreksopnamen</td>
+          <td>5 jaar (tot 7)</td>
+          <td>Art. 16(7)</td>
+        </tr>
+        <tr>
+          <td>MTF/OTF minimum actieve leden</td>
+          <td>3</td>
+          <td>Art. 18(7)</td>
+        </tr>
+        <tr>
+          <td>KMO-marktkapitalisatiedrempel</td>
+          <td class="rate-purple">EUR 200 miljoen (gemiddelde 3 jaar)</td>
+          <td>Art. 4(1)(13)</td>
+        </tr>
+        <tr>
+          <td>Optionele test professionele cliënt</td>
+          <td>2 van 3: balanstotaal EUR 500.000+; portefeuille EUR 500.000+; 1 jaar ervaring in financiële sector</td>
+          <td>Bijlage II, Afdeling II</td>
+        </tr>
+        <tr>
+          <td>Minimumboete -- rechtspersonen</td>
+          <td class="rate-red">EUR 5.000.000 of 10% van jaarlijkse omzet (de grootste bedrag)</td>
+          <td>Art. 70(6)(d)</td>
+        </tr>
+        <tr>
+          <td>Minimumboete -- natuurlijke personen</td>
+          <td class="rate-red">EUR 5.000.000</td>
+          <td>Art. 70(6)(e)</td>
+        </tr>
+        <tr>
+          <td>Op voordeel gebaseerde boete</td>
+          <td class="rate-red">Minstens tweemaal het verkregen voordeel</td>
+          <td>Art. 70(6)(f)</td>
+        </tr>
+        <tr>
+          <td>Bewaring gepubliceerde sanctie op CA-website</td>
+          <td>Minimaal 5 jaar</td>
+          <td>Art. 71(2)</td>
+        </tr>
+        <tr>
+          <td>APA/CTP gratis gegevensvertraging</td>
+          <td>15 minuten na publicatie</td>
+          <td>Art. 64(3), 65(4)</td>
+        </tr>
+        <tr>
+          <td>Positielimitmelding aan ESMA</td>
+          <td>Minimaal 24 uur voor maatregelen van kracht worden</td>
+          <td>Art. 79(5)</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Implementatietermijn beoordeling 2024</td>
+          <td class="rate-amber">29 september 2025 (Richtlijn (EU) 2024/790)</td>
+          <td>Richtlijn 2024/790</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">Van Richtlijn van de Raad 93/22/EEG naar de beoordeling van MiFID II uit 2024</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">10 mei 1993</div>
+      <div class="timeline__text"><strong>Richtlijn van de Raad 93/22/EEG (Richtlijn voor beleggingsdiensten)</strong> -- de voorloper, die het paspoort voor beleggingsondernemingen in de interne markt van de EU oprichtte. Van toepassing vanaf 1 januari 1996. Maakte geen best execution-verplichting of gelijk speelveld voor aandelen handelen.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">21 april 2004</div>
+      <div class="timeline__text"><strong>Richtlijn 2004/39/EG (MiFID I)</strong> gepubliceerd. Van toepassing vanaf 1 november 2007. Introduceerde best execution, cliëntcategorisering, de taxonomie van gereglementeerde markt / MTF / systematische internaliseraar-platforms, en paspoort voor beleggingsdiensten. Geïmplementeerd door Richtlijn van de Commissie 2006/73/EG (organisatievereisten en gedragsregels) en Verordening van de Commissie 1287/2006 (transparantie).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 oktober 2011</div>
+      <div class="timeline__text"><strong>Commissie stelt MiFID II en MiFIR voor</strong> -- het hervormpakket als reactie op de financiële crisis, de groei van algoritmische handel, zorgen op de grondstoffenmarkt, en arbitrage van makelaars die netwerken kruisen. Overwegingen 4-6 leggen de rationale na de crisis uit.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 april 2014</div>
+      <div class="timeline__text"><strong>Europees Parlement aanvaardt MiFID II en MiFIR</strong> in plenair. Rapporteur ECON-commissie: Markus Ferber (EVP/Duitsland).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 mei 2014</div>
+      <div class="timeline__text"><strong>MiFID II (Richtlijn 2014/65/EU) en MiFIR (Verordening (EU) nr. 600/2014) ondertekend</strong> in Brussel door EP-voorzitter Martin Schulz en Minister voorzitterschap Raad Dimitris Kourkoulas.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">12 juni 2014</div>
+      <div class="timeline__text"><strong>Publicatie in PB L 173</strong>, blz. 349 en 84 respectievelijk. Inwerkingtreding: 2 juli 2014 (twintigste dag na publicatie). Oorspronkelijke implementatietermijn: 3 juli 2016. Oorspronkelijke toepassing: 3 januari 2017.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">30 juni 2016</div>
+      <div class="timeline__text"><strong>Richtlijn (EU) 2016/1034</strong> gepubliceerd, stelde implementatietermijn met één jaar uit naar <strong>3 juli 2017</strong> en toepassingsdatum naar <strong>3 januari 2018</strong>. Verordening (EU) 2016/1033 doet hetzelfde voor MiFIR. Reden: technische normen van ESMA niet voltooid; nationale IT-systemen niet klaar.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 januari 2018</div>
+      <div class="timeline__text"><strong>MiFID II en MiFIR van toepassing</strong>. MiFID I (Richtlijn 2004/39/EG) wordt ingetrokken. Het regelkader voor financiële markten van de EU wordt tegelijkertijd in alle 27 lidstaten gemoderniseerd. ESMA Niveau 2-kader (Gedelegeerde Verordeningen 2017/565, 2017/567, 2017/589 enz.) is ook van toepassing vanaf deze datum.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 september 2019</div>
+      <div class="timeline__text"><strong>Verplichtingen voor geconsolideerde band voor niet-equity-instrumenten</strong> (Art. 65(2) van de richtlijn, zoals toegepast door Verordening (EU) 2016/1033) treden in werking. De commerciële CTP-markt voor obligaties bleef onderontwikkeld, wat bijdroeg aan het uiteindelijke 2024-mandaat voor een op inschakeling gebaseerde band.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">7 maart 2022</div>
+      <div class="timeline__text"><strong>Commissie stelt beoordeling van MiFID II / MiFIR voor</strong> als onderdeel van het actieplan voor de kapitaalmarktuunie. Belangrijkste voorstellen: verplichte geconsolideerde band; verbod op betaling voor orderflow; herziene waivers voor equity-transparantie; herzien regime systematische internaliseraar; gedeeltelijke herinbundeling van onderzoek voor KMO's.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 maart 2024</div>
+      <div class="timeline__text"><strong>Richtlijn (EU) 2024/790 en Verordening (EU) 2024/791 gepubliceerd</strong> -- de wijzigingen op MiFID II en MiFIR uit 2024. Implementatietermijn voor Richtlijn 2024/790: <strong>29 september 2025</strong>. Belangrijkste wijzigingen: verbod op betaling voor orderflow; verplichte geconsolideerde band voor obligaties en aandelen via ESMA-inschakeling; herziene selectie van geconsolideerde bandprovider; herziene bepalingen systematische internaliseraar; herziening waiver voor equity-transparantie.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+  <!-- Transposition (directive-only section) -->
+  <section class="section transposition" id="transposition">
+    <div class="section__head">
+      <span class="section__num">Omzetting</span>
+      <h2 class="section__title">Hoe de lidstaten het omzetten</h2>
+    </div>
+    <p class="lede">
+      Een richtlijn is niet rechtstreeks toepasselijk: elke lidstaat moet deze in zijn eigen nationale wetgeving opnemen voor een omzettingsdatum. Voor MiFID II (Richtlijn 2014/65/EU) was de EU-omzettingsdatum <strong>2017-07-03</strong>.
+      De kaart toont voor elke lidstaat de voornaamste nationale maatregel die hij aan de Commissie heeft gemeld en de datum. 27 van de 27 lidstaten hebben gemelde maatregelen; de volledige, gezaghebbende lijst met nationale omzettingsmaatregelen voor alle lidstaten is beschikbaar op
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener">EUR-Lex (Nationale omzettingsmaatregelen)</a>.
+    </p>
+    <div id="transp-map-32014L0065" class="transp-map" role="img"
+         aria-label="Kaart van omzetting van MiFID II (Richtlijn 2014/65/EU) door EU-lidstaten"></div>
+    <p class="transp-note">
+      Klik op een lidstaat-marker voor de omgezette nationale wet en de publicatiedatum. Bron: EUR-Lex
+      Nationale implementatiebepalingen, opgehaald mei 2026. Waar een marker
+      luidt "Via EUR-Lex gemeld", raadpleeg de EUR-Lex-link hierboven voor de maatregelen van dat land.
+    </p>
+  </section>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <style>
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+  </style>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "BMF: Umsetzung von Art. 92 mit Bundesgesetz über die Sanierung und Abwicklung von Banken sowie Änderung des Bankwesengesetzes, des Finanzmarktaufsichtsbehördeng", "date": "2014-12-29", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "FEDERALE OVERHEIDSDIENST FINANCIEN - 27 JUNI 2016. - Wet tot wijziging, met het oog op de omzetting van richtlijn 2013/50/EU en de tenuitvoerlegging van verorde", "date": "2016-07-01", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Закон за пазарите на финансови инструменти", "date": "2018-02-16", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o alternativnim investicijskim fondovima", "date": "1001-01-01", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Διαχειριστών Οργανισμών Εναλλακτικών Επενδύσεων (Τροποιητικός) (αρ. 2) Νόμος του 2015.", "date": "2015-07-03", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 563/1991 Sb., o účetnictví", "date": "1991-12-31", "status": "Transposed", "count": 96}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "LFF - Bekendtgørelse af lov om forsikringsformidling (LBK nr. 1065 af 22. august 2013)", "date": "2013-09-04", "status": "Transposed", "count": 24}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Väärtpaberituru seaduse muutmise ja sellega seonduvalt teiste seaduste muutmise seadus", "date": "1001-01-01", "status": "Transposed", "count": 16}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Laki sijoitusrahastolain muuttamisesta / Lag om ändring av lagen om placeringsfonder (1077/2017) 28/12/2017", "date": "2017-12-30", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "art 28 de la Loi n°2014-1662 du 30 décembre 2014 portant diverses dispositions d'adaptation de la législation au droit de l'Union européenne en matière économiq", "date": "2014-12-31", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Zweites Gesetz zur Novellierung von Finanzmarktvorschriften auf Grund europäischer Rechtsakte (Zweites Finanzmarktnovellierungsgesetz - 2. FiMaNoG)", "date": "2017-06-24", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Αγορές χρηματοπιστωτικών μέσων και άλλες διατάξεις.", "date": "2018-01-30", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "2001. évi CXX. törvény a tőkepiacról", "date": "2001-12-18", "status": "Transposed", "count": 14}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "EUROPEAN UNION (MARKETS IN FINANCIAL INSTRUMENTS) REGULATIONS 2017", "date": "2017-08-18", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Attuazione della Direttiva 2014/65/UE del Parlamento europeo e del Consiglio, del 15.5.2014, relativa ai mercati degli strumenti finanziari e che modifica la di", "date": "2017-08-25", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Ieguldtāju aizsardzības likums", "date": "2001-11-23", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos Lietuvos banko įstatymas Nr. I-678 (galiojanti suvestinė redakcija nuo 2017-07-15)", "date": "1994-12-23", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 10 mai 2016 – portant transposition de la directive 2014/91/UE du Parlement européen et du Conseil du 23 juillet 2014 modifiant la directive 2009/65/CE p", "date": "2016-05-12", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "CONDUCT OF BUSINESS RULEBOOK", "date": "2017-12-20", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "Besluit van 20 december 2017 tot vaststelling van het tijdstip van inwerkingtreding van de Wet implementatie richtlijn markten voor financiële instrumenten 2014", "date": "2017-12-28", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "Rozporządzenie Ministra Finansów z dnia 24 września 2012 r. w sprawie trybu i warunków postępowania firm inwestycyjnych, banków, o których mowa w art. 70 ust. 2", "date": "2015-06-25", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "DECRETO-LEI N.º 124/2015 - DIÁRIO DA REPÚBALICA N.º 130/2015, SÉRIE I DE 2015-07-07 Ministério das Finanças Consagra medidas nacionais para a transposição da Dir", "date": "2015-07-07", "status": "Transposed", "count": 45}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Lege nr.126/2018 privind pieţele de instrumente financiare", "date": "2018-06-26", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Zákon č. 483/2001 Z. z. o bankách a o zmene a dopl\u00ении niektorých zákonov", "date": "2001-11-29", "status": "Transposed", "count": 13}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o trgu finančnih instrumentov", "date": "2007-07-27", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "Ley 11/2015, de 18 de junio, de recuperación y resolución de entidades de crédito y empresas de servicios de inversión", "date": "2015-06-19", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Lag om ändring i lagen (2007:528) om värdepappersmarknaden", "date": "1001-01-01", "status": "Transposed", "count": 9}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32014L0065",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 16: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Woordenlijst</h2>
+  </div>
+  <p class="section__subtitle">Veelgebruikte termen en afkortingen in MiFID II en MiFIR</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">APA</div>
+      <div class="glossary-card__def">Goedgekeurde publicatieregeling. Een gegevensrapportagedienst geautoriseerd om na-transactierapporten namens beleggingsondernemingen te publiceren onder MiFIR Art. 20-21 (Art. 4(1)(52)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ARM</div>
+      <div class="glossary-card__def">Goedgekeurde rapportmechanisme. Een gegevensrapportagedienst geautoriseerd om transactiedetails namens beleggingsondernemingen aan bevoegde autoriteiten of ESMA te rapporteren onder MiFIR Art. 26 (Art. 4(1)(54)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CTP</div>
+      <div class="glossary-card__def">Geconsolideerde bandprovider. Een gegevensrapportagedienst geautoriseerd voor het verzamelen van na-transactierapporten van alle handelsplatformen en APA's en het consolideren ervan in een continue elektronische live gegevensstroom (Art. 4(1)(53)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ESMA</div>
+      <div class="glossary-card__def">Europese Autoriteit voor effecten en markten. De EU-toezichthoudende autoriteit voor financiële markten, gemandateerd door MiFID II om RTS en ITS te ontwikkelen, registers te onderhouden (beleggingsondernemingen, gereglementeerde markten, gegevensrapportagediensten) en richtlijnen uit te geven.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MiFIR</div>
+      <div class="glossary-card__def">Verordening markten voor financiële instrumenten. Verordening (EU) nr. 600/2014 (CELEX 32014R0600), de bijbehorende rechtstreeks toepasselijke verordening voor transparantie en transactierapportage. Gepubliceerd in PB L 173 op dezelfde datum als MiFID II.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Niveau 2</div>
+      <div class="glossary-card__def">De gedelegeerde verordeningen en uitvoeringsverordeningen aangenomen door de Commissie op basis van de mandaten voor technische normen van MiFID II, vormend het gedetailleerde technische regelkader. Voornaamste teksten: DVR 2017/565 (organisatievereisten), DVR 2017/589 (algoritmische handel), DVR 2017/590 (transactierapportage).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Productgovernance</div>
+      <div class="glossary-card__def">Verplichtingen onder Art. 16(3) en 24(2) die vereisen dat fabrikanten van financiële instrumenten een doelmarkt bepalen, producten voor die markt ontwerpen, en doelmarktgegevens beschikbaar stellen aan distributeurs; en die vereisen dat distributeurs producten begrijpen en binnen de doelmarkt blijven.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Betalingen of voordelen</div>
+      <div class="glossary-card__def">Vergoedingen, provisies of niet-geldelijke voordelen betaald of ontvangen door een beleggingsonderneming van of naar een derde in verband met dienstverlening aan cliënten. Alleen toegestaan als zij de servicekwaliteit verbeteren, de best-interest-verplichting niet aantasten, en openheid betrachten (Art. 24(9)). Verboden voor onafhankelijk advies en vermogensbeheer.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">PFOF</div>
+      <div class="glossary-card__def">Betaling voor orderflow. De praktijk dat beleggingsondernemingen van marktmakers of andere liquiditeitsverschaffers betalingen ontvangen in ruil voor routering van orders naar hen. Verboden in verscheidene lidstaten onder nationale wetgeving en EU-wijd verboden door Verordening (EU) 2024/791 (de wijziging van MiFIR uit 2024).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 17: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">Primaire documentatie voor Richtlijn 2014/65/EU en haar bijbehorende MiFIR</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> EUR-Lex en Publicatieblad</div>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Richtlijn 2014/65/EU op EUR-Lex (CELEX 32014L0065)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener" style="color: var(--color-blue);">MiFIR Verordening (EU) nr. 600/2014 (CELEX 32014R0600)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Nationale omzettingsmaatregelen op EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Alle wijzigingen en geconsolideerde versies op EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L0790" target="_blank" rel="noopener" style="color: var(--color-blue);">Richtlijn (EU) 2024/790 -- wijziging van MiFID II uit 2024</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R0791" target="_blank" rel="noopener" style="color: var(--color-blue);">Verordening (EU) 2024/791 -- wijziging van MiFIR uit 2024</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-purple);"></i> ESMA en Commissie</div>
+      <ul>
+        <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA interactieve uniforme regelgeving (MiFID II)</a></li>
+        <li><a href="https://registers.esma.europa.eu/" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA-register van geautoriseerde beleggingsondernemingen</a></li>
+        <li><a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA-lijst van gereglementeerde markten</a></li>
+        <li><a href="https://www.esma.europa.eu/trading/mifid-ii-and-mifir-review" target="_blank" rel="noopener" style="color: var(--color-blue);">ESMA MiFID II beoordelingspagina</a></li>
+        <li><a href="https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/financial-markets/securities-markets/markets-financial-instruments-mifid-ii-and-mifir_en" target="_blank" rel="noopener" style="color: var(--color-blue);">DG FISMA: MiFID II en MiFIR</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 18: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Gerelateerde canoninvoeren</h2>
+  </div>
+  <p class="section__subtitle">De families eu_financial_markets en eu_insurance in de Brubru EU-canon</p>
+
+  <div class="canon-related-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">eu_insurance family</div>
+      <div class="canon-related__title">
+        <a href="../2009-138_solvency2/index.html">Solvabiliteit II (Richtlijn 2009/138/EG)</a>
+      </div>
+      <div class="canon-related__desc">Richtlijn 2009/138/EG is het prudentiële regelkader voor de EU-verzekerings- en herverzekeringsbranche: op risico gebaseerd kapitaal (SCR en MCR), waardering van technische voorzieningen tegen marktconsistente waarden, ORSA, toezichthoudende beoordeling (Pijler II), en openbare openbaarmaking (Pijler III). Solvabiliteit II is van toepassing op verzekeraars die op verzekering gebaseerde beleggingsproducten (IBIP's) aanbieden; de verspreiding van IBIP's is onderworpen aan de IDD (voorheen de Richtlijn inzake intermediairs in verzekeringen, gewijzigd door Art. 91 van MiFID II).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">eu_telecoms family</div>
+      <div class="canon-related__title">
+        <a href="../2018-1972_eecc/index.html">Europese Elektronischcommunicatiecode (Richtlijn (EU) 2018/1972)</a>
+      </div>
+      <div class="canon-related__desc">Richtlijn (EU) 2018/1972 codificeerde en moderniseerde het EU-telecommunicatieramen in één enkel instrument. De connectiviteitsinfrastructuurregels ervan zijn relevant voor handelsplatformen en exploitanten van financiële infrastructuur die voor hun marktoperaties en gegevensrapportagediensten afhankelijk zijn van elektronische communicatie.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">eu_financial_markets family</div>
+      <div class="canon-related__title">MiFIR -- Verordening (EU) nr. 600/2014</div>
+      <div class="canon-related__desc">De bijbehorende rechtstreeks toepasselijke verordening: transparantie voor en na transacties voor aandelen- en niet-aandeleninstrumenten, transactierapportage aan bevoegde autoriteiten (Art. 26), handelsverplichtingen voor aandelen en derivaten, verplichtingen voor systematische internaliseraar, equivalentietoegangsstelsel voor bedrijven van derdelanden, en bevoegdheden voor productinterventie. Gepubliceerd in dezelfde PB als MiFID II. De wijziging uit 2024 (Verordening (EU) 2024/791) voert een verplichte geconsolideerde band en het verbod op betaling voor orderflow in.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 19: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Verken MiFID II met Brubru</h2>
+  </div>
+  <p class="section__subtitle">Zes gereedschappen om EU-wetgeving voor financiële markten te analyseren, volgen en bewerken</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Stel een vraag over MiFID II: de platformtaxonomie, verplichting voor algoritmische handel, geschiktheid versus geschiktheidsbeoordeling, vereisten voor best-executionbeleid, grondstoffenpositielimieten, het onderscheid APA/CTP/ARM, de wijzigingen uit de beoordeling van 2024, of de verdeling MiFID II/MiFIR. Antwoorden gebaseerd op de officiële EUR-Lex-tekst.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Laad Richtlijn 2014/65/EU of Richtlijn (EU) 2024/790 (de wijziging van MiFID II uit 2024) in de Amendator en ontwerp wijzigingslanguage direct tegen de officiële EUR-Lex-tekst. Ideaal voor beleggingssector-verenigingen, compliance-advocaten en beleidsploegen die aan omzetting of Niveau 2-raadplegingen werken.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Volg ESMA-raadplegingsdocumenten en technische normen voor MiFID II, houd toezicht op EP ECON-commissie-ontwikkelingen bij de omzetting van de beoordeling uit 2024, volg DG FISMA kapitaalmarktpublicaties, en ontvang real-time waarschuwingen over wijzigingen in het register van gereglementeerde markten en beleggingsondernemingen.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Voer een nalevingsgapanalyse voor uw organisatie uit tegen MiFID II-verplichtingen: autorisatievoorwaarden, Art. 16 organisatievereisten, productgovernance doelmarktdefinitie, verplichtingen voor gespreksopnamen, geschiktheidsbeoordeling, best-executionbeleid, en het openbaarmakingsraamwerk voor betalingen of voordelen.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Vind EU-inkoopkansen in verband met toezicht op financiële markten, handelstoezichtsystemen, MiFID II transactierapporten, ESMA-gegevensservices, nationale bevoegde autoriteit IT-projecten, en APA/ARM-technologiecontracten in alle EU-lidstaten.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatische toegang tot EU-wetgevingsgegevens, proceduretracking en institutionele kalendergebeurtenissen. Bouw MiFID II-nalevingstoezichtworkflows, ESMA-raadplegingstracker, registerwaarschuwingen voor handelsplatformen en regelgevingstijdlijnfeeds bovenop de v1 REST-API van Brubru.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">API-documenten bekijken</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.82) 100%), url('https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Haal het volledige Brubru-platform</h2>
+  <p class="cta-strip__sub">Gratis proefperiode van 14 dagen. Geen kaart nodig.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start gratis proefperiode</a>
+</div>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is de AI-gestuurde EU-beleidsintelligenteassistent van <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start uw gratis proefperiode van 14 dagen</a> - geen kaart vereist.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon-bibliotheek</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">Alle canoninvoeren</a></li>
+          <li><a href="index.html">MiFID II Richtlijn 2014/65 (deze pagina)</a></li>
+          <li><a href="../2009-138_solvency2/index.html">Solvabiliteit II Richtlijn 2009/138</a></li>
+          <li><a href="../2018-1972_eecc/index.html">EECC Richtlijn 2018/1972</a></li>
+          <li><a href="../2001-83_community_code/index.html">Community Code Richtlijn 2001/83</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Officiële bronnen</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener">Richtlijn 2014/65 op EUR-Lex</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener">MiFIR Verordening 600/2014</a></li>
+          <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener">ESMA Interactieve Uniforme Regelgeving</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Gebouwd door Beresol BV</p>
+        <p>Apeldoorn, Nederland</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">Dit is een onafhankelijke analyse en is geen officieel EU-document. Alle feiten zijn teruggevoerd naar Richtlijn 2014/65/EU en officiële EUR-Lex-bronnen.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. Alle rechten voorbehouden. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Fotografie: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a> en <a href="https://www.pexels.com/photo/259027/" target="_blank" rel="noopener">Pixabay</a> via Pexels.</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

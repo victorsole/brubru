@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiFID II (Directiva 2014/65/UE): Marc regulador dels mercats financers de la UE explicat | Brubru</title>
+  <meta name="description" content="Guia completa de MiFID II (Directiva 2014/65/UE): taxonomia de venues (mercat regulat, MTF, OTF), autorització de firms d'inversió, negociació algorítmica Art 17, protecció de l'inversor (adequació, millor execució), límits de posicions en mercats de derivatives sobre matèries primeres, serveis de comunicació de dades, i la revisió 2024.">
+  <meta property="og:title" content="MiFID II (Directiva 2014/65/UE): Mercats en Instruments Financers | Brubru EU Canon">
+  <meta property="og:locale" content="ca_ES">
+  <meta property="og:description" content="97 articles, 4 annexos. El marc regulador principal dels serveis d'inversió i negociació financera organitzada en la UE: taxonomia de tres venues, controls de negociació algorítmica, protecció de l'inversor, límits de posicions en mercats de derivatives sobre matèries primeres i serveis de comunicació de dades.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MiFID II (Directiva 2014/65/UE): el reglament dels mercats financers de la UE | Brubru EU Canon">
+  <meta name="twitter:description" content="97 articles, 63 definicions, OTF com la nova categoria de venue, Art 17 negociació algorítmica, millor execució, adequació, límits de posicions en mercats de derivatives sobre matèries primeres, APAs, CTPs i ARMs. La revisió completa de MiFID II.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Directiva 2014/65/UE del Parlament Europeu i del Consell, de 15 de maig de 2014, relativa als mercats d'instruments financers i per la qual es modifiquen les Directives 2002/92/CE i 2011/61/UE (refusió)",
+    "alternateName": "MiFID II",
+    "identifier": "CELEX:32014L0065",
+    "legislationIdentifier": "32014L0065",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/CA/TXT/?uri=CELEX:32014L0065",
+    "datePublished": "2014-06-12",
+    "dateModified": "2026-06-06",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "Unió Europea"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Parlament Europeu i Consell de la Unió Europea"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "serveis d'inversió, mercats financers, mercat regulat, MTF, OTF, negociació algorítmica, millor execució, adequació, límits de posicions en mercats de derivatives sobre matèries primeres, MiFIR, ESMA"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem; text-align: center;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    .canon-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .cta-strip {
+      padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue); background: white;
+      text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem; font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    .section__head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__num {
+      background: var(--color-green); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem;
+      border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .lede { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1rem; line-height: 1.65; }
+
+    /* Transposition section */
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+      .canon-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .canon-related-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .transp-map { height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">Intelligència en política europea</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Idioma">
+    <option value="index.html">English</option>
+    <option value="fr.html">Francais</option>
+    <option value="es.html">Espanol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html" selected>Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Prova Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / Mercats Financers de la UE
+  </div>
+  <h1 class="hero__title"><span>MiFID II</span>: Mercats en Instruments Financers</h1>
+  <p class="hero__subtitle">
+    La Directiva 2014/65/UE és el marc regulador principal que governa qui pot proporcionar serveis d'inversió a la UE i com ha de funcionar la negociació financera organitzada. Va introduir l'OTF com a nova categoria de venue, va imposar controls exhaustius sobre la negociació algorítmica i va reformular les normes de protecció de l'inversor per a 27 Estats membres a partir del 3 de gener de 2018.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar"></i> Adoptada el 15 de maig de 2014</span>
+    <span><i class="mdi mdi-book-open-outline"></i> DO L 173, 12.6.2014, pàg. 349</span>
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32014L0065</span>
+    <span><i class="mdi mdi-gavel"></i> Art 53(1) TFUE</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/6801874/pexels-photo-6801874.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600"
+    alt="Pantalles de negociació que mostren dades de mercats financers, representant els venues de negociació organitzada regulats sota MiFID II"
+    loading="lazy"
+  >
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a>
+    via <a href="https://www.pexels.com/photo/6801874/" target="_blank" rel="noopener">Pexels</a>
+    | MiFID II governa cada venue de negociació financera organitzada i firma d'inversió a la UE
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">97</div>
+    <div class="figure-card__label">Articles en 7 Títols</div>
+    <div class="figure-card__context">170 considerands i 97 articles en els Títols I a VII més 4 Annexos. La reforma més integral del dret dels mercats financers de la UE des de MiFID I (2004/39/CE).</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">63</div>
+    <div class="figure-card__label">Termes definits (Art 4)</div>
+    <div class="figure-card__context">L'art 4 conté 63 definicions clau, incloent-hi el nou OTF, negociació algorítmica i tècnica de negociació algorítmica d'alta freqüència, formant el vocabulari precís del marc regulador dels mercats financers de la UE.</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">3</div>
+    <div class="figure-card__label">Categories de venue</div>
+    <div class="figure-card__context">Mercat regulat, MTF i el nou OTF (instal·lació de negociació organitzada). L'art 1(7) tanca el sistema: no es permet negociació multilateral fora d'aquestes tres categories. MiFIR governa les obligacions de transparència en les tres.</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">3 gen 2018</div>
+    <div class="figure-card__label">Data d'aplicació</div>
+    <div class="figure-card__context">L'aplicació original el 3 de gener de 2017 i la transposició el 3 de juliol de 2016 van ser ajornades un any per la Directiva (UE) 2016/1034. MiFID II es va aplicar a partir del 3 de gener de 2018; MiFID I (2004/39/CE) va ser derogada la mateixa data.</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Continguts</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Resum</a>
+    <a href="#mifid-mifir-split" class="toc__link"><i class="mdi mdi-scale-balance"></i> Divisió MiFID II / MiFIR</a>
+    <a href="#title1" class="toc__link"><i class="mdi mdi-alphabetical-variant"></i> Títol I: Àmbit i definicions</a>
+    <a href="#title2-auth" class="toc__link"><i class="mdi mdi-certificate-outline"></i> Títol II: Autorització</a>
+    <a href="#title2-ops" class="toc__link"><i class="mdi mdi-cog-outline"></i> Títol II: Condicions de funcionament</a>
+    <a href="#algo-hft" class="toc__link"><i class="mdi mdi-robot-outline"></i> Art 17: Negociació algorítmica i HFT</a>
+    <a href="#venue-taxonomy" class="toc__link"><i class="mdi mdi-graph-outline"></i> Taxonomia de venues (RM/MTF/OTF)</a>
+    <a href="#investor-protection" class="toc__link"><i class="mdi mdi-shield-account-outline"></i> Protecció de l'inversor</a>
+    <a href="#title3" class="toc__link"><i class="mdi mdi-bank-outline"></i> Títol III: Mercats regulats</a>
+    <a href="#title4-positions" class="toc__link"><i class="mdi mdi-chart-bar"></i> Títol IV: Límits de posicions</a>
+    <a href="#title5-data" class="toc__link"><i class="mdi mdi-database-outline"></i> Títol V: Serveis de comunicació de dades</a>
+    <a href="#title6-authorities" class="toc__link"><i class="mdi mdi-shield-outline"></i> Títol VI: Autoritats competents</a>
+    <a href="#definitions-box" class="toc__link"><i class="mdi mdi-book-alphabet"></i> Definicions clau</a>
+    <a href="#at-a-glance" class="toc__link"><i class="mdi mdi-compare"></i> Taula de d'una ullada</a>
+    <a href="#timeline-section" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Cronologia legislativa</a>
+    <a href="#transposition" class="toc__link"><i class="mdi mdi-map-outline"></i> Transposició</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossari</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Fonts oficials</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-link"></i> Entries canon relacionades</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explorar amb Brubru</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Resum</h2>
+  </div>
+  <p class="section__subtitle">El marc regulador principal de la UE per als serveis d'inversió i negociació financera organitzada</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> Per què es va necessitar MiFID II</div>
+    <p>MiFID I (Directiva 2004/39/CE) va introduir el passaport per a les firms d'inversió, la categorització de clients, la millor execució i una taxonomia de tres venues de mercats regulats, MTFs i sistemàtics internalisadors. Tot i això, el 2008, el sistema va mostrar greus debilitats. Les xarxes de creuament de correctors operaven completament fora de les tres categories de venue, executant operacions sense obligacions de transparència. La negociació algorítmica i d'alta freqüència havia crescut dramàticament, superant el marc regulador. Els mercats de derivatives sobre matèries primeres havien experimentat dislocacions de preus parcialment atribuïdes a posicions especulatives. Les normes de protecció de l'inversor es van aplicar de forma inconsistent entre els Estats membres.</p>
+    <p>La Comissió va proposar MiFID II i el seu company MiFIR junts a l'octubre de 2011. El Parlament va adoptar els textos a l'abril de 2014 i el Consell els va aprovar a maig de 2014. Tots dos van ser publicats a la DO L 173 el 12 de juny de 2014 i signats a Brussel·les el 15 de maig de 2014 pel President del Parlament Europeu Martin Schulz i el ministre de la Presidència del Consell Dimitris Kourkoulas. La base jurídica és l'<strong>article 53(1) del TFUE</strong> (condicions per al desenvolupament d'activitats per compte propi), reflectint que la directiva harmonitza les condicions sota les quals les firms d'inversió operen en tot el mercat únic.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-calendar-check-outline" style="color: var(--color-amber);"></i> Data d'aplicació: 3 de gener de 2018</div>
+    <p>El text original de la Directiva 2014/65/UE va establir un termini de transposició del <strong>3 de juliol de 2016</strong> (Art 93) i aplicació a partir del <strong>3 de gener de 2017</strong>. Tots dos terminis van ser ajornats exactament un any per la <strong>Directiva (UE) 2016/1034</strong> (i el Reglament acompanyant (UE) 2016/1033 per a MiFIR), sobre la base que els estàndards tècnics no estaven llests i els sistemes de TI de l'ESMA necessitaven més temps. Per consegüent:</p>
+    <ul>
+      <li>Termini de transposició: <strong>3 de juliol de 2017</strong></li>
+      <li>Data d'aplicació: <strong>3 de gener de 2018</strong> (disposicions generals)</li>
+      <li>Cinta consolidada de negociació no relacionada amb accions (Art 65(2)): <strong>3 de setembre de 2019</strong></li>
+      <li>MiFID I (Directiva 2004/39/CE) derogada: <strong>3 de gener de 2018</strong></li>
+    </ul>
+    <p>La directiva és una refusió: reemplaça completament MiFID I en lloc de modificar-la, i l'Annex IV conté la taula de correlació entre els dos instruments.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-view-list-outline" style="color: var(--color-purple);"></i> Estructura d'una ullada</div>
+    <p>La directiva està estructurada en <strong>170 considerands</strong> i <strong>97 articles</strong> en set Títols:</p>
+    <ul>
+      <li><strong>Títol I</strong> (Arts 1-4): Àmbit d'aplicació i definicions</li>
+      <li><strong>Títol II</strong> (Arts 5-43): Autorització i condicions de funcionament de les firms d'inversió (Capítols I-IV incloent firms de tercers países)</li>
+      <li><strong>Títol III</strong> (Arts 44-56): Mercats regulats</li>
+      <li><strong>Títol IV</strong> (Arts 57-58): Límits de posicions i gestió de posicions en derivatives sobre matèries primeres</li>
+      <li><strong>Títol V</strong> (Arts 59-66): Serveis de comunicació de dades (APAs, CTPs, ARMs)</li>
+      <li><strong>Títol VI</strong> (Arts 67-88): Autoritats competents, poders de supervisió, sancions i cooperació</li>
+      <li><strong>Títol VII</strong> (Art 89): Actes delegats</li>
+      <li><strong>Arts 90-97</strong>: Disposicions finals (informes, modificacions d'altres directives, transposició, derogació)</li>
+    </ul>
+    <p>Quatre Annexos complementen l'instrument: Annex I (serveis, activitats i instruments financers), Annex II (clients professionals), Annex III (derogacions), Annex IV (taula de correlació MiFID I/II).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 2: MIFID II / MIFIR SPLIT
+     ========================================================= -->
+<section class="section" id="mifid-mifir-split">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">La divisió MiFID II / MiFIR</h2>
+  </div>
+  <p class="section__subtitle">Directiva per al marc regulador; Reglament per a la transparència. Considerand 7: "Aquesta Directiva ha de llegir-se juntament amb aquest Reglament."</p>
+
+  <div class="info-box info-box--green">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-green);"></i> Per què una directiva I un reglament?</h3>
+    <p>L'opció de dividir la reforma de 2014 en una directiva (MiFID II) i un reglament directament aplicable (MiFIR, Reglament (UE) nº 600/2014, CELEX 32014R0600) va ser deliberada. El <strong>marc d'autorització, requisits organitzatius i normes de conducta en relació amb la clientela</strong> necessitaven flexibilitat perquè els sistemes legals nacionals els implementessin dins de les seves tradicions legals existents -- per tant una directiva. Però les <strong>obligacions de transparència pre i post-negociació i requisits de comunicació de transaccions</strong> han de funcionar idènticament en cada Estat membre per a crear una competència justa -- per tant un reglament, directament aplicable sense transposició.</p>
+    <p>El considerand 7 de la directiva fa la relació explícita: "Aquesta Directiva ha de llegir-se juntament amb aquest Reglament." Els dos instruments es publiquen en el mateix número del Diari Oficial (DO L 173, 12 de juny de 2014).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> En MiFID II (aquesta directiva)</div>
+      <ul>
+        <li>Autorització i revocació de firms d'inversió (Arts 5-8)</li>
+        <li>Requisits de l'òrgan de govern (Art 9)</li>
+        <li>Participacions qualificades (Arts 10-13)</li>
+        <li>Requisits organitzatius: governança de productes, actius de clients, manteniment de registres, enregistrament de trucades (Art 16)</li>
+        <li>Obligacions de negociació algorítmica de les firms d'inversió (Art 17)</li>
+        <li>Condicions de funcionament de MTF i OTF (Arts 18-20)</li>
+        <li>Conducta en relació amb la clientela: conflictes d'interès (Art 23), principis generals i induïments (Art 24), adequació i pertinència (Art 25), millor execució (Art 27), maneig d'ordres (Art 28)</li>
+        <li>Règim de contrapart elegible (Art 30)</li>
+        <li>Mercats de creixement per a PIMES (Art 33)</li>
+        <li>Autorització i governança de mercats regulats (Arts 44-56)</li>
+        <li>Límits de posicions en derivatives sobre matèries primeres i gestió (Arts 57-58)</li>
+        <li>Autorització de serveis de comunicació de dades (Arts 59-66)</li>
+        <li>Designació de l'autoritat competent, poders de supervisió, sancions (Arts 67-88)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-cog-outline" style="color: var(--color-purple);"></i> En MiFIR (Reglament 600/2014)</div>
+      <ul>
+        <li>Transparència pre i post-negociació per a instruments relacionats amb accions (Arts 3-11)</li>
+        <li>Transparència pre i post-negociació per a instruments no relacionats amb accions (Arts 8-11)</li>
+        <li>Obligacions de transparència dels sistemàtics internalisadors (Arts 14-18)</li>
+        <li>Comunicació de transaccions a les autoritats competents (Art 26)</li>
+        <li>Obligació de negociació per a accions (Art 23)</li>
+        <li>Obligació de negociació per a derivatives (Art 28)</li>
+        <li>Règim d'accés de firms de tercers països sota equivalència (Arts 46-49)</li>
+        <li>Poders d'intervenció en matèria de productes (Arts 40-42)</li>
+        <li>Comunicació de dades per a derivatives sobre matèries primeres (Art 44)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3: TITLE I -- SCOPE AND DEFINITIONS
+     ========================================================= -->
+<section class="section" id="title1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical-variant"></i></div>
+    <h2 class="section__title">Títol I: Àmbit d'aplicació i definicions (Arts 1-4)</h2>
+  </div>
+  <p class="section__subtitle">L'art 1(7) tanca el sistema. L'art 4 proporciona 63 termes definits.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lock-outline" style="color: var(--color-red);"></i> Art 1(7): el principi del sistema tancat</div>
+    <p>L'article 1(7) és arquitectònicament pivotal: tots els sistemes multilaterals en instruments financers han de funcionar com a mercat regulat, MTF o OTF. No hi ha espai legítim per a negociació multilateral no regulada. Aquesta disposició aborda directament les xarxes de creuament de correctors que s'havien proliferat fora del marc de venues de MiFID I. Qualsevol disposició multilateral on múltiples interessos de compra i venda de tercers interactuen per produir un contracte en un instrument financer ha de ser autoritzada sota un dels tres règims de venue.</p>
+    <p>La directiva s'aplica a les firms d'inversió, operadores de mercats, proveïdors de serveis de comunicació de dades, i firms de tercers països que proporcionen serveis d'inversió a través de sucursals de la UE. Les institucions de crèdit que proporcionen serveis d'inversió també estan vinculades (Art 1(3)). Els dipòsits estructurats estan coberts quan es venen amb assessorament (Art 1(4)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-checkbox-blank-circle-outline" style="color: var(--color-blue);"></i> Art 2: Exempcions clau incloent l'exempció d'activitat accessòria</div>
+    <p>L'article 2 exemptes: les entitats asseguradores; les persones que proporcionen serveis només dins del seu grup; proveïdors de serveis incidentals; operadores de posicions de derivatives sobre matèries primeres o permissos d'emissió accessòries a la negociació principal del grup (l'exempció "d'activitat accessòria" sota Art 2(1)(j)); operadores de conformitat amb el SEJC; membres del SEJC; entitats col·lectives d'inversió; fons de pensions; operadores de sistemes de transmissió; i CSDs regulats per la legislació de la Unió.</p>
+    <p>L'<strong>exempció d'activitat accessòria</strong> és comercialment significativa per a firms no financeres actives en mercats energètics, de matèries primeres i de carboni. Requereix: (a) l'activitat és accessòria a i no constitueix una part significativa del negoci principal del grup; (b) la firma no aplica tècniques de negociació algorítmica d'alta freqüència; (c) notificació anual a l'autoritat competent. L'ESMA desenvolupa la metodologia RTS per a qual es considera "accessòria" al negoci principal del grup.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-purple);"></i> Art 4: 63 termes definits</div>
+    <p>L'article 4(1) conté 63 definicions que formen el vocabulari precís del dret dels mercats financers de la UE. Les definicions clau inclouen:</p>
+    <ul>
+      <li><strong>Firma d'inversió</strong> (nº 1): una persona jurídica l'ocupació regular o negoci de la qual és la prestació professional de serveis o activitats d'inversió.</li>
+      <li><strong>Mercat regulat</strong> (nº 21): un sistema multilateral operat per una operadora de mercats, reunint múltiples interessos de compra i venda de tercers sota regles no discrecionals, resultant en un contracte, autoritzat sota el Títol III.</li>
+      <li><strong>MTF</strong> (nº 22): la mateixa estructura que un mercat regulat però autoritzat sota el Títol II, operat per una firma d'inversió o operadora de mercats.</li>
+      <li><strong>OTF</strong> (nº 23): un sistema multilateral que no és un mercat regulat o MTF, cobreix bons, productes de finances estructurades, permissos d'emissió i derivatives, on els interessos de tercers interactuen sota execució discrecional. Nova en MiFID II.</li>
+      <li><strong>Venue de negociació</strong> (nº 24): un mercat regulat, MTF o OTF.</li>
+      <li><strong>Sistemàtic internalisador (SI)</strong> (nº 20): una firma d'inversió que, sobre una base organitzada, freqüent, sistemàtica i substancial, opera per compte propi quan executa ordres de clients fora d'un mercat regulat, MTF o OTF.</li>
+      <li><strong>Negociació algorítmica</strong> (nº 39): negociació on un algoritme informàtic determina automàticament paràmetres individuals d'ordres amb intervencció humana limitada o nul·la. El processament post-negociació està exclòs.</li>
+      <li><strong>Tècnica de negociació algorítmica d'alta freqüència</strong> (nº 40): caracteritzada per tots tres de: (a) infraestructura de minimització de latència (coubicació, allotjament de proximitat, DEA d'alta velocitat); (b) determinació de sistemes d'ordres sense intervenció humana; (c) alts índexs de missatges intradiaris d'ordres, cometes o cancel·lacions.</li>
+      <li><strong>Accés electrònic directe (DEA)</strong> (nº 41): disposició mitjançant la qual un membre d'un venue permet a un tercerper usar el seu codi de negociació per transmetre ordres directament al venue de negociació.</li>
+      <li><strong>Client professional</strong> (nº 10): un client que compleix els criteris de l'Annex II (per se: institucions de crèdit, firms d'inversió, grans corporacions; electiu: clients que opten per dins del compliment de dos de tres proves -- balanç superior a EUR 500.000, cartera superior a EUR 500.000, o un any d'experiència en el sector financer).</li>
+      <li><strong>Client de retail</strong> (nº 11): qualsevol client que no és un client professional.</li>
+      <li><strong>Contrapart elegible</strong> (nº 18): firms d'inversió, institucions de crèdit, empreses d'assegurances, UCITS, fons de pensions i altres institucions financeres autoritzades -- les transaccions amb ells gaudeixen d'obligacions de conducta en relació amb la clientela reduïdes.</li>
+      <li><strong>PIME</strong> (nº 13): per a aquesta directiva, empreses amb capitalització de mercat mitjana inferior a EUR 200 milions durant els tres anys de calendari anteriors.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4: TITLE II -- AUTHORISATION
+     ========================================================= -->
+<section class="section" id="title2-auth">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+    <h2 class="section__title">Títol II, Capítol I: Autorització (Arts 5-15)</h2>
+  </div>
+  <p class="section__subtitle">L'autorització prèvia per part de l'Estat membre d'origen és la porta d'entrada per proporcionar serveis d'inversió en tot el mercat únic de la UE</p>
+
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">5</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 5 - Requisit d'autorització</div>
+        <div class="scope-card__desc">Tota prestació professional de serveis d'inversió ha de tenir autorització prèvia de l'autoritat competent de l'Estat membre d'origen. Les operadores de mercats també poden ser autoritzades a operar MTFs o OTFs. L'ESMA manté el registre de tots els serveis de la Unió de firms d'inversió autoritzades.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-green);">6</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 6 - Àmbit de l'autorització</div>
+        <div class="scope-card__desc">L'autorització és específica d'activitat, especifica els serveis i activitats d'inversió permesos, i és vàlida en tota la Unió (el passaport del mercat únic). L'autorització únicament per a serveis accessòries no es permet.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">7</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 7 - Procediment</div>
+        <div class="scope-card__desc">L'autoritat competent ha d'informar al sol·licitant dins de sis mesos d'una sol·licitud completa si l'autorització es concedeix o es denegada. L'ESMA desenvolupa RTS sobre requisits d'informació (presentats de juliol de 2015) i ITS sobre formularis estàndard (de gener de 2016).</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-red);">9</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 9 - Òrgan de govern</div>
+        <div class="scope-card__desc">Les firms d'inversió han de complir els requisits de l'òrgan de govern de la DRC IV (Arts 88 i 91 de la Directiva 2013/36/UE): idoneïtat i honestedat, disposicions de govern corporatiu, supervisió de la política de remuneració, i governança de productes i serveis. Almenys dues persones han de dirigir efectivament el negoci (principi de quatre ulls). L'autoritat competent ha de denegar l'autorització si l'òrgan de govern no compleix la idoneïtat i honestedat.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-purple);">10</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Arts 10-13 - Participacions qualificades</div>
+        <div class="scope-card__desc">Les adquisicions proposades superiors al 10%, i augments al 20%, 30% o 50%, han de ser notificades. Període d'avaluació: 60 dies laborals des de l'acknowledgement escrit, ampliables per 20 dies per a una sol·licitud d'informació. Cinc criteris d'avaluació (Art 13): reputació del comprador; reputació i experiència dels directors proposats; solidesa financera del comprador; conformitat prudencial continuada; risc de blanqueig de capitals.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">14</div>
+      <div class="scope-card__content">
+        <div class="scope-card__title">Art 14 - Esquema de compensació de l'inversor</div>
+        <div class="scope-card__desc">La pertinença a un esquema de compensació de l'inversor és una condició obligatòria d'autorització. L'art 15 requereix encara capital inicial suficient consistent amb el Reglament (UE) nº 575/2013 (CRR), calibrat a la naturalesa del servei d'inversió.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box info-box--amber">
+    <h3><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> Firms de tercers països: Articles 39-43</h3>
+    <p>Els Estats membres poden requerir a les firms de tercers països establir una sucursal abans de proporcionar serveis a clients de retail i certs clients professionals. Les condicions d'autorització de sucursals bajo Art 39 inclouen: autorització en el país d'origen i supervisió adequada; un acord de cooperació entre el supervisor del país d'origen i l'autoritat competent de l'Estat membre; capital inicial suficient; idoneïtat i honestedat de la gestió; un acord d'intercanvi de informació fiscal; i afiliació a un esquema de compensació de l'inversor.</p>
+    <p>Les sucursals han de complir els mateixos requisits de conducta en relació amb la clientela i organitzatius que les firms d'inversió de la UE (Art 41(2)). Cap firma de tercers país pot ser tractada més favorablement que les firms de la Unió. Quan un client s'adreça a una firma de tercers país per iniciativa exclusiva pròpia, no s'aplica cap requisit de sucursal (Art 42). El règim d'equivalència de tercers países directament aplicable és a MiFIR Arts 46-49, no la directiva.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 5: TITLE II -- OPERATING CONDITIONS + ART 17
+     ========================================================= -->
+<section class="section" id="title2-ops">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-cog-outline"></i></div>
+    <h2 class="section__title">Títol II, Capítol II: Condicions de funcionament (Arts 16-38)</h2>
+  </div>
+  <p class="section__subtitle">L'article 16 estableix l'estructura organitzativa principal. La governança de productes, enregistrament de trucades, salvaguarda de béns dels clients i mercats de creixement per a PIMES viuen aquí.</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-blue);"></i> Article 16: Requisits organitzatius</div>
+    <p>L'article 16 és la columna vertebral de les obligacions a nivell de firma. Els requisits sub-clau inclouen:</p>
+    <ul>
+      <li><strong>Art 16(2)</strong>: polítiques i procediments de conformitat i regles de transaccions personals</li>
+      <li><strong>Art 16(3) primer paràgraf</strong>: prevenció de conflictes d'interès; Art 16(3) segon a sisè paràgrafs: <strong>governança de productes</strong> -- els fabricants han de executar un procés d'aprovació de productes, definir un mercat objectiu, revisar productes regularment, i fer la informació del mercat objectiu disponible als distribuïdors; els distribuïdors han de obtenir i entendre la informació del producte i no recomanar fora del mercat objectiu</li>
+      <li><strong>Art 16(4)</strong>: disposicions de continuïtat del negoci</li>
+      <li><strong>Art 16(5)</strong>: condicions de subcontractació (les funcions es poden subcontractar sota condicions definides; la firma manté la responsabilitat completa)</li>
+      <li><strong>Art 16(6)</strong>: manteniment de registres de tots els serveis, activitats i transaccions durant almenys cinc anys, fins a set anys a sol·licitud de l'autoritat competent</li>
+      <li><strong>Art 16(7)</strong>: <strong>enregistrament de comunicacions telefòniques i electròniques</strong> -- totes les trucades que resultin o puguin resultar en transaccions han de ser enregistrades; els clients han de ser notificats per avançat; retenció de cinc anys (fins a set anys)</li>
+      <li><strong>Arts 16(8)-(9)</strong>: <strong>salvaguarda de béns dels clients</strong> -- els fons dels clients i instruments financers han de mantenir-se separats dels béns de la firma; cap ús de béns dels clients per compte propi sense consentiment exprés</li>
+      <li><strong>Art 16(10)</strong>: prohibició d'acords de garantia col·lateral financera per transferència de títol amb clients de retail</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-sankey-variant" style="color: var(--color-purple);"></i> Article 33: Mercats de creixement per a PIMES</div>
+    <p>Un operadora d'MTF pot sol·licitar a l'autoritat competent de l'Estat membre d'origen ser registrada com a mercat de creixement per a PIMES. Condicions: almenys el 50% dels emissors en el mercat han de ser PIMES en el moment del registre i, avaluat anualment, per a cada any de calendari subsegüent; criteris d'admissió apropriats; informació pública suficient en l'admissió; informació financera periòdica contínua; conformitat amb la regulació d'abús de mercat; i sistemes efectius per a la prevenció d'abusos de mercat.</p>
+    <p>L'ESMA publica i manté la llista de mercats de creixement per a PIMES registrats. El registre no altera l'autorització de l'MTF però proporciona una designació de màrqueting i un tractament més lleuger sota diverses normes de la UE, particularment per a emissors més petits que busquen accedir a mercats de capitals.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 6: ART 17 -- ALGORITHMIC AND HFT
+     ========================================================= -->
+<section class="section" id="algo-hft">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Article 17: Negociació algorítmica i d'alta freqüència</h2>
+  </div>
+  <p class="section__subtitle">L'art 17 és la disposició fonamental per a la regulació de negociació algorítmica i HFT -- una resposta directa al Flash Crash de 2010 i preocupacions de l'estructura de mercats europeus</p>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-purple);"></i> Per què es va necessitar l'Art 17</h3>
+    <p>En 2010, la negociació algorítmica i d'alta freqüència representava una proporció significativa del volum del mercat de capital europeu. El Flash Crash de 2010 als EUA i diversos dislocacions de mercats europeus van posar de manifest els riscos de les ordres errònies, la retirada de liquiditat en cascada, i l'ús potencial de sistemes automatitzats per a la manipulació del mercat. Els considerands 59-68 de MiFID II estableixen el fonament legislatiu per a les obligacions completes de l'Art 17.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-check-outline" style="color: var(--color-blue);"></i> Art 17(1): Requisits del sistema</div>
+      <p>Les firms d'inversió dedicades a la negociació algorítmica han de tenir sistemes de negociació resilients i amb capacitat suficient amb límits i llindar apropiat. Els sistemes han de prevenir l'enviament de les ordres errònies, crear o contribuir a condicions de mercat desordenades, i no han de ser usats per a propòsits de manipulació del mercat. Les firms han de tenir disposicions de continuïtat del negoci per a qualsevol fallada dels seus sistemes de negociació.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-green);"></i> Art 17(2): Notificació i manteniment de registres</div>
+      <p>Les firms han de notificar a l'autoritat competent de l'Estat membre d'origen i als venues de negociació on negocien. L'autoritat competent pot requerir una descripció de la naturalesa de les estratègies de negociació algorítmica de la firma, detalls dels paràmetres o límits de negociació, i els controls de conformitat i gestió de riscos clau. Les firms HFT específicament han de emmagatzemar registres precisos i seqüenciats temporalment de totes les ordres col·locades incloent-hi cancel·lacions en una forma aprovada i posar-les a disposició de les autoritats competents.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-handshake-outline" style="color: var(--color-purple);"></i> Arts 17(3)-(4): Obligacions de creació de mercat</div>
+      <p>On una firma persegueix una estratègia de creació de mercat mitjançant negociació algorítmica, ha de portar a terme creació de mercat contínuament durant una proporció especificada de les hores de negociació del venue de negociació (excepte sob circumstàncies excepcionals). La firma ha de entrar en un acord escrit vinculant amb el venue de negociació especificant les seves obligacions, i tenir sistemes capaços de complir amb aquelles obligacions en tot moment.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-transit-connection-variant" style="color: var(--color-amber);"></i> Art 17(5): Accés electrònic directe (DEA)</div>
+      <p>Les firms que proporcionen DEA als clients han de avaluar l'adequació del client abans de concedir l'accés; imposar límits de negociació i crèdit preestablerts; monitoritzar la negociació del client en temps real; retenir el dret de detenir la transmissió de les ordres del client; mantenir la responsabilitat plena i incondicional per a les ordres de client transmeses sota el seu codi de negociació; i entrar en un acord escrit vinculant amb cada client DEA especificant drets i obligacions.</p>
+    </div>
+  </div>
+
+  <div class="info-box info-box--red">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Nivell 2: Reglament Delegat (UE) 2017/589 de la Comissió</h3>
+    <p>Els requisits organitzatius detallats per a les firms d'inversió dedicades a la negociació algorítmica es estableixen en el Reglament Delegat (UE) 2017/589 de la Comissió, que implementa completament l'Art 17. Especifica: disposicions de govern corporatiu; revisió anual dels sistemes de negociació; controls pre-negociació i post-negociació; monitorització del dades del mercat en temps real; requisits d'interruptor de mort; polítiques DEA; requisits de fitxer de registre i manteniment de registres; proves de conformitat; i la forma i contingut de les notificacions requerides. Les firms actives en estratègies de negociació algorítmica o HFT han de complir tant amb l'Art 17 de la directiva com amb el detall tècnic en el Reglament Delegat 2017/589.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 7: VENUE TAXONOMY
+     ========================================================= -->
+<section class="section" id="venue-taxonomy">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-graph-outline"></i></div>
+    <h2 class="section__title">La taxonomia de venues: RM, MTF i OTF</h2>
+  </div>
+  <p class="section__subtitle">Tres categories de venue autoritzades, cadascuna amb requisits de govern distinct. L'OTF és l'addició críticament nova en MiFID II.</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bank-outline" style="color: var(--color-blue);"></i> Mercat Regulat (RM)</div>
+      <p><strong>Títol III (Arts 44-56).</strong> Un sistema multilateral operat per una operadora de mercats. L'execució no és discrecional: les regles són transparents i preestablertes. L'admissió de membres (Art 53) segueix criteris transparents, no discriminatoris i objectius. L'operadora de mercats no pot executar ordres de clients contra capital de propietat o enganxar negociació de principal emparellada (Art 47(2)).</p>
+      <p>Els mercats regulats han de tenir sistemes de negociació resilients (Art 48), interruptors de circuit per a moviments significatius de preus (Art 48(5)), límits de proporció ordre-negociació per a negociació algorítmica (Art 48(6)), règims de mida de tick calibrats a la liquiditat (Art 49), i sincronització de rellotge (Art 50). L'ESMA manté la llista de la Unió de mercats regulats (Art 56).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-swap-horizontal" style="color: var(--color-green);"></i> Instal·lació de Negociació Multilateral (MTF)</div>
+      <p><strong>Títol II, Arts 18-19.</strong> Un sistema multilateral operat per una firma d'inversió o operadora de mercats sota el Títol II. Com els mercats regulats, l'execució no és discrecional: les regles determinen quines ordres interactuen i com es conclouen els contractes. Els MTFs no poden executar ordres de clients contra capital de propietat o enganxar negociació de principal emparellada (Art 19(5)).</p>
+      <p>Els MTFs han de tenir almenys tres membres o usuaris materialment actius (Art 18(7)). Es poden registrar com a mercats de creixement per a PIMES (Art 33). Les obligacions de transparència (pre i post-negociació) per a MTFs es estableixen en MiFIR, no en la directiva.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-tune-variant" style="color: var(--color-purple);"></i> Instal·lació de Negociació Organitzada (OTF) -- Nova</div>
+      <p><strong>Títol II, Art 20.</strong> L'OTF és la nova categoria de venue introduïda per MiFID II per captar xarxes de creuament de correctors i altres disposicions híbrides. Cobreix bons, productes de finances estructurades, permissos d'emissió i derivatives (no instruments relacionats amb accions). L'execució en un OTF és <strong>discrecional</strong>: l'operadora decideix si col·locar o retirar una ordre i si fer coincidir una ordre de client específica (Art 20(6)).</p>
+      <p>Restriccions crítiques: l'operadora d'OTF no pot executar contra el capital de propietat seu o de qualsevol entitat de grup (Art 20(1)). La negociació de principal emparellada es permet només en bons, productes de finances estructurades, permissos d'emissió i certs derivatives amb consentiment del client, i està prohibida pels derivatives compensats (Art 20(2)). La negociació per compte propi (diferent de principal emparellada) es permet únicament en deute sobirà per al qual no hi ha mercat líquid (Art 20(3)). Un OTF i un sistemàtic internalisador no pot operar dins de la mateixa entitat legal; un OTF no pot connectar amb un SI (Art 20(4)).</p>
+    </div>
+  </div>
+
+  <div class="duty-table" style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>Mercat Regulat (RM)</th>
+          <th>MTF</th>
+          <th>OTF</th>
+          <th>Sistemàtic Internalisador (SI)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Títol d'autorització</td>
+          <td>Títol III</td>
+          <td>Títol II</td>
+          <td>Títol II</td>
+          <td>N/A (bilateral -- cap autorització de venue)</td>
+        </tr>
+        <tr>
+          <td>Instruments coberts</td>
+          <td>Tots Annex I Secció C</td>
+          <td>Tots Annex I Secció C</td>
+          <td class="rate-purple">Bons, PFS, permissos d'emissió, derivatives només (sense accions)</td>
+          <td>Tots els instruments (bilateral)</td>
+        </tr>
+        <tr>
+          <td>Execució</td>
+          <td class="rate-blue">No discrecional</td>
+          <td class="rate-blue">No discrecional</td>
+          <td class="rate-purple">Discrecional</td>
+          <td>Per compte propi</td>
+        </tr>
+        <tr>
+          <td>Negociació de principal emparellada</td>
+          <td class="rate-red">Prohibida</td>
+          <td class="rate-red">Prohibida</td>
+          <td class="rate-amber">Permesa (bons/PFS/emiss./deriv.) amb consentiment; prohibida pels derivatives compensats</td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td>Negociació per compte propi</td>
+          <td class="rate-red">Prohibida</td>
+          <td class="rate-red">Prohibida</td>
+          <td class="rate-red">Prohibida (excepte deute sobirà sense mercat líquid)</td>
+          <td class="rate-green">Activitat principal</td>
+        </tr>
+        <tr>
+          <td>Membres actius mínims</td>
+          <td>No especificat separadament</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td class="rate-green">3 (Art 18(7))</td>
+          <td>N/A</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Nova en MiFID II?</td>
+          <td>No (MiFID I)</td>
+          <td>No (MiFID I)</td>
+          <td class="rate-purple">Sí (categoria nova)</td>
+          <td>No (MiFID I)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 8: INVESTOR PROTECTION
+     ========================================================= -->
+<section class="section" id="investor-protection">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-account-outline"></i></div>
+    <h2 class="section__title">Protecció de l'inversor: Arts 23-30</h2>
+  </div>
+  <p class="section__subtitle">Adequació i pertinença (Art 25), millor execució (Art 27), governança de productes, règim de conflictes i induïments</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-heart-outline" style="color: var(--color-blue);"></i> Art 24: Principis generals -- la norma de conducta principal</div>
+    <p>L'article 24(1) estableix l'obligació general: les firms d'inversió han d'actuar de manera honest, justa i professional en el <strong>millor interès dels clients</strong>. L'article 24(2) imposa obligacions de governança de productes tant als fabricants (dissenyar instruments per a un mercat objectiu identificat) com als distribuïdors (assegurar que les recomanacions estan en el millor interès dels clients i romanen dins del mercat objectiu).</p>
+    <p>Tota la informació, incloent comunicacions de màrqueting, ha de ser <strong>justa, clara i no enganyosa</strong> (Art 24(3)). Els requisits de divulgació pre-servei cobreixen: la naturalesa i independència de la recomanació; instruments financers i estratègies proposades; venues d'execució; i -- críticament -- <strong>tots els costos i càrregues incloent pagaments de tercers</strong>, agregats per mostrar l'efecte commulatiu sobre el retorn, amb un desglossament itemitzat disponible a sol·licitud (Art 24(4)).</p>
+    <p>El règim de induïments (Art 24(9)) permet a una firma rebre o pagar una comissió o fee d'un tercera part només si es compleixen tres condicions: (a) el pagament millora la qualitat del servei; (b) no perjudica el deure d'actuar en el millor interès del client; (c) es divulga. Per a <strong>recomanació independent</strong> i gestió de cartera, la firma ha d'avaluar addicionalment una gamma suficientment diversa de productes no limitada a productes de grup, i no ha d'acceptar o retenir cap fee o comissió de tercera part (Arts 24(7)-(8)).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-clipboard-check-outline" style="color: var(--color-green);"></i> Art 25: Adequació i pertinença</div>
+      <p>Per a <strong>recomanació d'inversió i gestió de cartera</strong>, l'avaluació d'adequació ha de cobrir tres dimensions: (a) coneixement i experiència del client rellevant al tipus d'inversió; (b) situació financera incloent capacitat de suportar pèrdues; (c) objectius d'inversió incloent tolerància al risc. Una declaració escrita d'adequació ha de ser proporcionada al client abans que la transacció sigui executada (Art 25(6)).</p>
+      <p>Per a <strong>altres serveis d'inversió</strong> (execució d'ordres etc.), una prova de pertinença avalua el coneixement i experiència del client en relació amb el producte específic. Si el producte és impertinent, la firma ha d'emettre un avís (Art 25(3)).</p>
+      <p>La <strong>concesió de només execució</strong> (Art 25(4)) elimina el requisit de pertinença per a instruments no complexes (accions, bons, instruments del mercat monetari, UCITS estàndard) on el servei és proporcionat per iniciativa pròpia del client, el client és clarament advertit, i la firma compleix amb les obligacions de conflictes d'interès. Aquesta és la base per a plataformes de correllatge de només execució.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-podium-gold" style="color: var(--color-amber);"></i> Art 27: Millor execució</div>
+      <p>Les firms d'inversió han de prendre tots els passos suficients per obtenir el <strong>millor resultat possible</strong> pels clients, prenent en consideració: preu; costos; velocitat; probabilitat d'execució i liquidació; mida; naturalesa; i qualsevol altra consideració rellevant. Per a clients de retail, el millor resultat possible es determina per consideració total (preu més tots els costos d'execució), no només preu.</p>
+      <p>Les firms han d'establir i implementar una política d'execució de d'ordres (Art 27(4)-(5)). El consentiment previ del client a la política d'execució és requerit; el consentiment exprés separat es requereix abans d'executar fora d'un venue de negociació. Les firms han de publicar anualment els <strong>cinc top venues d'execució per classe d'instrument financer</strong> i un resum de qualitat d'execució (Art 27(6)). La política d'execució ha de ser revisada almenys anualment (Art 27(7)).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-purple);"></i> Categorització de client: retail, professional i contrapart elegible</div>
+    <p>La categorització de client de tres nivells de MiFID II determina el nivell de protecció que rebem cada client. Els <strong>clients de retail</strong> (qualsevol client que no és un client professional) reben la protecció més alt: obligacions completes de adequació/pertinença, tots els requisits de divulgació, només execució amb consentiment exprés del seu. Els <strong>clients professionals</strong> (per Annex II: institucions de crèdit, firms d'inversió, grans corporacions amb balanç superior a EUR 20 milions o volada neta superior a EUR 40 milions o fons propis superior a EUR 2 milions, i altres inversors institucionals; els professionals electius que compleixen dues de tres proves -- balanç EUR 500.000+, cartera EUR 500.000+, un any d'experiència en el sector financer) té protecció reduïda en certs disposicions. Les <strong>contaparts elegibles</strong> (firms d'inversió, institucions de crèdit, empreses d'assegurances, UCITS, fons de pensions, governs nacionals, bancs centrals i altres institucions financeres autoritzades -- Art 30) estan exemptes dels Arts 24 (excepte paràgrafs 4 i 5), 25 (excepte paràgraf 6), 27 i 28(1). L'obligació bàsica d'actuar de manera honest, justa i professional i comunicar de manera clara roman.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Art 23: Conflictes d'interès</div>
+    <p>Les firms d'inversió han de prendre tots els passos apropiat per identificar, prevenir i gestionar conflictes d'interès entre la firma, els seus directius, empleats, agents lligats i els seus clients, i entre clients inter se. On la gestió através de disposicions organitzatives no és suficient per prevenir prejudici als interessos del client, la divulgació prèvia al client en un mitjà durador és requerida. La divulgació ha d'explicar la naturalesa i font del conflicte de manera prou clara perquè el client faci una decisió informada (Art 23(2)). La divulgació és un últim recurs, no un substitut per a mesures organitzatives adequades.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 9: TITLE III -- REGULATED MARKETS
+     ========================================================= -->
+<section class="section" id="title3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Títol III: Mercats regulats (Arts 44-56)</h2>
+  </div>
+  <p class="section__subtitle">Autorització, governança, resilència de sistemes, interruptors de circuit, mides de tick i admissió a la negociació</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-check-decagram-outline" style="color: var(--color-blue);"></i> Autorització i governança (Arts 44-47)</div>
+      <p>Només sistemes que compleixen el Títol III es poden autoritzar com a mercats regulats (Art 44). El dret públic que governa la negociació és el de l'Estat membre d'origen. Les operadores de mercats significatius ha de tenir un comitè de nominació i complir amb límits de directius: un executiu més dos directors no-executius, o quatre directors no-executius (Art 45(4)). Es requereixen polítiques de diversitat.</p>
+      <p>Els mercats regulats han de gestionar conflictes d'interès, tenir gestió sòlida de riscos, mantenir sòlides operacions tècniques, assegurar regles de negociació justes i ordenades, proporcionar liquidació eficient, i mantenir recursos financers adequats (Art 47). Les operadores de mercats no podem executar ordres de clients contra capital de propietat (Art 47(2)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Resilència de sistemes i interruptors de circuit (Art 48)</div>
+      <p>Els mercats regulats han de tenir sistemes de negociació amb capacitat suficient per manejar volums de pic d'ordres i sobreviure condicions de mercat extremes. Es requereixen acords de creació de mercat escrits (Art 48(2)-(3)). Els <strong>interruptors de circuit</strong> (parades de negociació automàtiques en moviments significatius de preus) són obligatoris (Art 48(5)). Els mercats regulats han d'implementar límits de proporció ordre-negociació per prevenir estratègies de negociació algorítmica de inundar el llibre d'ordres (Art 48(6)). Els controls DEA (Art 48(7)) espellen requisits de Art 17(5). Els serveis de coubicació han de ser oferits sobre una base transparent, justa i no discriminatòria (Art 48(8)).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-ruler-square" style="color: var(--color-purple);"></i> Mides de tick (Art 49) i sincronització de rellotge (Art 50)</div>
+      <p>Els mercats regulats han d'adoptar règims de mida de tick calibrats als perfils de liquiditat i mitjanes de spreads bid-ask dels instruments rellevants. El règim de mida de tick prevé millora de preu artificial sota increments de preu mínim, reduint certes estratègies d'arbitratge de latència. L'ESMA desenvolupa les RTS de mida mínima de tick. Tots els venues de negociació i els seus membres han de sincronitzar rellotges de negoci a un nivell de precisió especificat a RTS de l'ESMA (Art 50).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-plus-outline" style="color: var(--color-amber);"></i> Admissió a la negociació (Art 51) i accés CCP (Art 55)</div>
+      <p>Els mercats regulats han d'aplicar regles clares, transparents i no discriminatòries per a l'admissió d'instruments financers a la negociació (Art 51). Per a contractes de derivative, les regles d'admissió han d'assegurar preus ordenats i liquidació efectiva. Els mercats regulats han de verificar que els emissors de valors transferibles compleixen les obligacions de divulgació de la UE. L'admissió a la negociació de secundari sense consentiment de l'emissor es permet (Art 51(5)).</p>
+      <p>Els mercats regulats no es poden restringir l'ús de CCPs o sistemes de compensació d'altres Estats membres tret que sigui necessari per al funcionament ordenat (Art 55). L'ESMA manté la llista de la Unió de mercats regulats (Art 56).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 10: TITLE IV -- POSITION LIMITS
+     ========================================================= -->
+<section class="section" id="title4-positions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-chart-bar"></i></div>
+    <h2 class="section__title">Títol IV: Límits de posicions en derivatives sobre matèries primeres i comunicació (Arts 57-58)</h2>
+  </div>
+  <p class="section__subtitle">Una resposta directa a les preocupacions pels posicions especulatives en derivatives de matèries primeres agrícoles i energètiques</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-format-list-numbered" style="color: var(--color-amber);"></i> Art 57: Límits de posicions</div>
+    <p>Les autoritats competents han d'establir i aplicar límits de posicions sobre la posició neta màxima en derivatives sobre matèries primeres negociades en venues de negociació i contractes econòmicament equivalents OTC. Els límits s'apliquen a nivell de grup agregat. Dos propòsits establerts: (a) prevenir abusos de mercat; (b) suportar condicions de preus i liquidació ordenades, incloent-hi convergència entre preus de mes de lliurament de derivative i preus de spot.</p>
+    <p>Els límits no s'apliquen a posicions mantingudes per entitats no financeres que objectivament reduïxen riscos que es relacionen directament a l'activitat comercial d'aquesta entitat. L'ESMA desenvolupa la metodologia de RTS prenent en consideració almenys: maduresa del contracte; subministrament lliurable; interès obert; volatilitat; nombre i mida dels participants del mercat; característiques del mercat de matèria primera subjacent; i desenvolupament de nous contractes.</p>
+    <p>On el mateix derivative es negocia significativament en més d'una jurisdicció, l'autoritat competent del venue amb el volum més gran és l'autoritat competent central i estableix el límit de posicions únics per a tota negociació en aquest contracte (Art 57(6)). L'ESMA publica una base de dades de límits de posicions i controls de gestió de posicions (Art 57(10)). Les autoritats competents han d'informar a l'ESMA almenys 24 hores abans que les mesures entrin en vigor.</p>
+    <p>Els controls de gestió de posicions han d'empodera venues de negociació a: monitoritzar interès obert; accedir a informació sobre la mida i propòsit de posicions; requerir reducció o terminació de posicions; i requerir provisió de liquiditat de nou al mercat sobre una base temporal (Art 57(8)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-newspaper-variant-outline" style="color: var(--color-blue);"></i> Art 58: Comunicació de posicions</div>
+    <p>Els venues de negociació que negocien derivatives sobre matèries primeres han de publicar un <strong>informe de posicions agregada setmanal</strong> per categoria de titular: firms d'inversió i institucions de crèdit; fons d'inversió; altres institucions financeres; entitats comercials; i operadores de conformitat amb el SEJC. L'informe ha de especificar posicions llargues i curtes, canvis des de l'informe anterior, percentatge de l'interès obert total, i nombre de persones en cadascuna categoria.</p>
+    <p>Les firms d'inversió que negocien derivatives sobre matèries primeres OTC han de proporcionar <strong>desglossaments complets diaris</strong> de les seves posicions a l'autoritat competent. Tots els informes han de distingir posicions que es qualifiquen per a l'exempció de cobertura comercial d'altres posicions.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 11: TITLE V -- DATA REPORTING SERVICES
+     ========================================================= -->
+<section class="section" id="title5-data">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-database-outline"></i></div>
+    <h2 class="section__title">Títol V: Serveis de comunicació de dades (Arts 59-66)</h2>
+  </div>
+  <p class="section__subtitle">Tres tipus de serveis autoritzats: APAs publiquen informes de negociació, CTPs els consoliden, ARMs comuniquen transaccions als reguladors</p>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-broadcast" style="color: var(--color-blue);"></i> APA: Disposició d'Aprovació de Publicació</div>
+      <p>Una APA publica informes post-negociació en nom de les firms d'inversió pursuant als Arts 20-21 de MiFIR. Els APAs han de publicar informació de negociació com a proper a temps real que és tècnicament possible. Les dades han de estar disponibles <strong>de manera lliure de càrrec 15 minuts després de la publicació</strong> (Art 64(3)). Els APAs han de prevenir conflictes d'interès i mantenir mecanismes de seguretat sòlids.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-layers-outline" style="color: var(--color-purple);"></i> CTP: Proveïdor de Cinta Consolidada</div>
+      <p>Una CTP recol·lecta informes de negociació de tots els mercats regulats, MTFs, OTFs i APAs i els consolida en un flux continu de dades en viu electrònic (Art 65). Publicació en temps real (lliure após 15 minuts). Per a instruments relacionats amb accions, el flux ha de incloure un indicador de negociació algorítmica (Art 65(1)(h)). L'aplicació de Art 65(2) per a instruments no relacionats amb accions va ser ajornada fins al 3 de setembre de 2019. Si els CTPs comercials fallen, la Comissió pot iniciar contratació pública (Art 90(2)-(3)) -- un mecanisme de seguretat activat sota la revisió de 2024.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-send-outline" style="color: var(--color-green);"></i> ARM: Mecanisme Aprovatar de Comunicació</div>
+      <p>Una ARM comunica detalls de transaccions a les autoritats competents o l'ESMA en nom de les firms d'inversió pursuant als Art 26 de MiFIR. Els ARMs han de informar tan ràpid com és possible i no més tard que el tancament del negoci al dia laborable següent (Art 66). Les operadores de mercats que operen mercats regulats també es pot autoritzar a proporcionar serveis d'APA, CTP o ARM dins de l'autorització existent (Art 59(2)).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 12: TITLE VI -- COMPETENT AUTHORITIES
+     ========================================================= -->
+<section class="section" id="title6-authorities">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-outline"></i></div>
+    <h2 class="section__title">Títol VI: Autoritats competents, sancions i cooperació (Arts 67-88)</h2>
+  </div>
+  <p class="section__subtitle">Designació, poders de supervisió, multes màximes mínimes, publicació de noms i vergonya, denunciació d'abuses i cooperació transfronterera</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-magnify" style="color: var(--color-blue);"></i> Art 69: Poders de supervisió -- llista mínima</div>
+    <p>L'article 69(2) estableix els poders de supervisió mínims que les autoritats competents han de posseir. La llista inclou: accés a documents i registres; poder de convocar i interrogar persones; conducció d'inspeccions in situ; requisició de gravacions de comunicacions telefòniques i electròniques; congelació o seqüestre d'actius; prohibició temporal d'activitat professional; remissió a procesament criminal; requisició de provisió de informació de posicions en derivatives sobre matèries primeres; requisició de cessació de pràctiques; suspensió o eliminació d'instruments financers de la negociació; requisició de reducció de posicions; límit de posicions de derivatives sobre matèries primeres (Art 69(2)(p)); emissió d'avís públic; suspensió de màrqueting o venda d'instruments financers o dipòsits estructurats; eliminació d'una persona natural d'un consell de govern (Art 69(2)(u)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-red);"></i> Art 70: Sancions administratives -- nivells máxims mínims</div>
+    <p>Els Estats membres han d'assegurar que les sancions administratives són efectives, proporcionals i dissuasives per a tots els infringiments. Per als infringiments més seriosos els nivells de multes máximes mínimes són:</p>
+    <ul>
+      <li><strong>Persones jurídiques</strong>: multes máximes d'almenys <strong>EUR 5.000.000</strong> o <strong>10% del volum anual total</strong> (el que sigui més alt)</li>
+      <li><strong>Persones naturals</strong>: multes máximes d'almenys <strong>EUR 5.000.000</strong></li>
+      <li><strong>Basada en benefici</strong>: multes máximes d'almenys el doble del benefici derivat</li>
+    </ul>
+    <p>Altres sancions inclouen declaracions públiques que identifiquen la persona i l'infringiment; retirada o suspensió d'autorització; prohibicions temporal o permanent de funcions de directiu; i prohibicions temporals de pertinença a mercat regulat.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-bullhorn-outline" style="color: var(--color-amber);"></i> Art 71: Publicació de decisions</div>
+      <p>Les sancions han de ser publicades en el lloc web de l'autoritat competent sense demora indeguda, identificant la persona natural o jurídica i descrivint l'infringiment. <strong>Retenció mínima: cinc anys</strong>. La publicació anònim o retardada es permet on la publicació causaria prejudici desproporcionat, perjudicaria la estabilitat del mercat financer, o prejudicaria una investigació en curs. Les sancions no publicades públicament han de ser comunicades a la base de dades central de l'ESMA.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-whistle-outline" style="color: var(--color-green);"></i> Art 73: Denunciació d'abuses</div>
+      <p>Les autoritats competents han d'establir mecanismes efectius per reportar infringiments potencials o actuals, amb protecció apropriada per als empleats que denuncien contra represàlies, discriminació i tractament injust. Els Estats membres es pot proporcionar incentius financers per als denunciants sota dret nacional. La informació reportada ha de ser mantinguda en confiança subject a normes de procediment criminal.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+<section class="section" id="definitions-box">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-alphabet"></i></div>
+    <h2 class="section__title">Definicions clau (Art 4)</h2>
+  </div>
+  <p class="section__subtitle">Les 63 definicions a l'Art 4(1) formen el vocabulari de la llei de mercats financers de la UE</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">Empresa d'inversió</div>
+      <div class="glossary-card__def">Persona jurídica l'ocupació o negoci habitual de la qual és la prestació professional d'un o més serveis o activitats d'inversió. Les persones no jurídiques poden qualificar si estan subjectes a règles prudencials equivalents (Art 4(1)(1)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Mercat regulat (RM)</div>
+      <div class="glossary-card__def">Sistema multilateral operat per un operador de mercat que reuneix múltiples interessos de compra i venda de tercers en virtut de normes no discrecionals, originant un contracte, autoritzat en el Títol III (Art 4(1)(21)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MTF</div>
+      <div class="glossary-card__def">Sistema multilateral de negociació: mateixa definició estructural que RM però autoritzat en el Títol II i operat per una empresa d'inversió o operador de mercat. Normes d'execució no discrecionals (Art 4(1)(22)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">OTF</div>
+      <div class="glossary-card__def">Sistema organitzat de negociació: sistema multilateral que no és RM ni MTF, que cobreix bons, productes de finances estructurades, drets d'emissió i derivats, on els interessos de tercers interactuen en virtut d'una execució discrecional. Nou a MiFID II (Art 4(1)(23)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Intermediari sistemàtic (SI)</div>
+      <div class="glossary-card__def">Empresa d'inversió que, de manera organitzada, freqüent, sistemàtica i substancial, actua per compte propi en executar ordres de clients fora d'RM, MTF o OTF (Art 4(1)(20)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Lloc de negociació</div>
+      <div class="glossary-card__def">Mercat regulat, MTF o OTF -- les tres categories de llocs autoritzats (Art 4(1)(24)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Negociació algorítmica</div>
+      <div class="glossary-card__def">Negociació d'instruments financers on un algorisme informàtic determina automàticament els paràmetres individuals de l'ordre amb intervenció humana limitada o nul·la. Es tracta del processament post-comercial (Art 4(1)(39)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Tècnica HFT</div>
+      <div class="glossary-card__def">Tècnica de negociació algorítmica d'alta freqüència: tots tres (a) infraestructura que minimitza la latència; (b) ordres determinades pel sistema sense intervenció humana; (c) taxes altes de missatges dins del dia d'ordres, cotitzacions o cancel·lacions (Art 4(1)(40)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">DEA</div>
+      <div class="glossary-card__def">Accés electrònic directe: acord pels quals un membre d'un lloc de negociació permet a una persona usar el seu codi de negociació per transmetre ordres electrònicament directament al lloc de negociació (Art 4(1)(41)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Client professional</div>
+      <div class="glossary-card__def">Client que reuneix els criteris de l'Annex II: per se (institucions de crèdit, empreses d'inversió, grans empreses corporatives) o elect (dos de tres proves: balanç EUR 500.000+, cartera EUR 500.000+, o un any d'experiència en el sector financer).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Contraparte eligible</div>
+      <div class="glossary-card__def">Empreses d'inversió, institucions de crèdit, companyies d'assegurança, OICVM, fons de pensió, governs nacionals i bancs centrals. S'apliquen normes de conducta reduïdes: exempts dels Arts 24 (excepte pàrrafs 4-5), 25 (excepte pàrraf 6), 27 i 28(1) (Art 30).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">PIME (per a aquesta directiva)</div>
+      <div class="glossary-card__def">Empreses amb capitalització de mercat mitjana per sota d'EUR 200 milions basada en cotitzacions de finals d'any dels tres anys de calendari anteriors. Rellevant per a l'elegibilitat del mercat de creixement PIME (Art 4(1)(13)).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 14: AT-A-GLANCE TABLE
+     ========================================================= -->
+<section class="section" id="at-a-glance">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-compare"></i></div>
+    <h2 class="section__title">Vista ràpida: xifres i llindes clau</h2>
+  </div>
+  <p class="section__subtitle">Els números que cada professional de MiFID II necessita</p>
+
+  <div style="overflow-x:auto;">
+    <table class="duty-table">
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Xifra / Regla</th>
+          <th>Font</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td>Data d'aplicació</td>
+          <td class="rate-blue">3 de gener de 2018 (ajornada del 3 de gener de 2017 per la Directiva (UE) 2016/1034)</td>
+          <td>Art 93; Dir 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Termini de transposició</td>
+          <td>3 de juliol de 2017 (ajornat del 3 de juliol de 2016)</td>
+          <td>Art 93; Dir 2016/1034</td>
+        </tr>
+        <tr>
+          <td>Cinta consolidada no accionista</td>
+          <td>3 de setembre de 2019</td>
+          <td>Art 65(2)</td>
+        </tr>
+        <tr>
+          <td>Termes definits</td>
+          <td>63 (Art 4)</td>
+          <td>Art 4</td>
+        </tr>
+        <tr>
+          <td>Termini de resposta d'autorització</td>
+          <td class="rate-green">6 mesos des de la sol·licitud completa</td>
+          <td>Art 7</td>
+        </tr>
+        <tr>
+          <td>Període d'avaluació de participació qualificada</td>
+          <td>60 dies laborals des de l'acusament de rebut escrit (+20 dies laborals per a la sol·licitud d'informació)</td>
+          <td>Art 12</td>
+        </tr>
+        <tr>
+          <td>Llindes de notificació de participació qualificada</td>
+          <td>10% (definició); notificar en 20%, 30%, 50%</td>
+          <td>Arts 10-11</td>
+        </tr>
+        <tr>
+          <td>Retenció de registres</td>
+          <td class="rate-green">5 anys (fins a 7 a sol·licitud de l'autoritat competent)</td>
+          <td>Art 16(6)</td>
+        </tr>
+        <tr>
+          <td>Retenció de gravacions de trucades</td>
+          <td>5 anys (fins a 7)</td>
+          <td>Art 16(7)</td>
+        </tr>
+        <tr>
+          <td>Membres actius mínims MTF/OTF</td>
+          <td>3</td>
+          <td>Art 18(7)</td>
+        </tr>
+        <tr>
+          <td>Llindar de capitalització de mercat PIME</td>
+          <td class="rate-purple">EUR 200 milions (mitjana de 3 anys)</td>
+          <td>Art 4(1)(13)</td>
+        </tr>
+        <tr>
+          <td>Prova d'opt-in elect client professional</td>
+          <td>2 de 3: balanç EUR 500.000+; cartera EUR 500.000+; 1 any d'experiència en el sector financer</td>
+          <td>Annex II, Secció II</td>
+        </tr>
+        <tr>
+          <td>Multa mínima -- persones jurídiques</td>
+          <td class="rate-red">EUR 5.000.000 o 10% de la facturació anual (s'aplica la més alta)</td>
+          <td>Art 70(6)(d)</td>
+        </tr>
+        <tr>
+          <td>Multa mínima -- persones físiques</td>
+          <td class="rate-red">EUR 5.000.000</td>
+          <td>Art 70(6)(e)</td>
+        </tr>
+        <tr>
+          <td>Multa basada en benefici</td>
+          <td class="rate-red">Almenys el doble del benefici derivat</td>
+          <td>Art 70(6)(f)</td>
+        </tr>
+        <tr>
+          <td>Retenció de sancions publicades al lloc web CA</td>
+          <td>Almenys 5 anys</td>
+          <td>Art 71(2)</td>
+        </tr>
+        <tr>
+          <td>Retard de dades gratuïtes APA/CTP</td>
+          <td>15 minuts després de la publicació</td>
+          <td>Arts 64(3), 65(4)</td>
+        </tr>
+        <tr>
+          <td>Notificació de límit de posició a ESMA</td>
+          <td>Almenys 24 hores abans de que les mesures tinguin efecte</td>
+          <td>Art 79(5)</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Termini de transposició de revisió 2024</td>
+          <td class="rate-amber">29 de setembre de 2025 (Directiva (UE) 2024/790)</td>
+          <td>Dir 2024/790</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Cronologia legislativa</h2>
+  </div>
+  <p class="section__subtitle">Del Consell Directiva 93/22/CEE a la revisió MiFID II 2024</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">10 de maig de 1993</div>
+      <div class="timeline__text"><strong>Directiva del Consell 93/22/CEE (Directiva de serveis d'inversió)</strong> -- la predecessor, creant el passaport de empresa d'inversió en tot el mercat únic europeu. Applied from 1 January 1996. Did not create a best execution obligation nor a level playing field for equities trading.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">21 d'abril de 2004</div>
+      <div class="timeline__text"><strong>Directiva 2004/39/CE (MiFID I)</strong> publicada. Aplicada des del 1 de novembre de 2007. Introdueix millor execució, categorització de clients, la taxonomia de mercats regulats / MTF / intermediari sistemàtic, i passaport pels serveis d'inversió. Implementada per la Directiva de la Comissió 2006/73/CE (requisits organitzatius i conducta de negocis) i Reglament de la Comissió 1287/2006 (transparència).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">20 d'octubre de 2011</div>
+      <div class="timeline__text"><strong>La Comissió proposa MiFID II i MiFIR</strong> -- el paquet de reforma responent a la crisi financera, el creixement de la negociació algorítmica, preocupacions del mercat de matèries primeres, i arbitratge de xarxes de creuament de corredors. Els considerands 4-6 estableixen la ratió post-crisi.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 d'abril de 2014</div>
+      <div class="timeline__text"><strong>El Parlament Europeu adopta MiFID II i MiFIR</strong> en sessió plenària. Ponent de la comissió ECON: Markus Ferber (EPP/Alemanya).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">15 de maig de 2014</div>
+      <div class="timeline__text"><strong>MiFID II (Directiva 2014/65/UE) i MiFIR (Reglament (UE) núm. 600/2014) signats</strong> a Brussel·les pel President del PE Martin Schulz i ministre de Presidència del Consell Dimitris Kourkoulas.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">12 de juny de 2014</div>
+      <div class="timeline__text"><strong>Publicació a DO L 173</strong>, pàgines 349 i 84 respectivament. Entrada en vigor: 2 de juliol de 2014 (20é dia després de la publicació). Termini de transposició original: 3 de juliol de 2016. Aplicació original: 3 de gener de 2017.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">30 de juny de 2016</div>
+      <div class="timeline__text"><strong>Directiva (UE) 2016/1034</strong> publicada, posposant el termini de transposició un any a <strong>3 de juliol de 2017</strong> i data d'aplicació a <strong>3 de gener de 2018</strong>. Reglament complementari (UE) 2016/1033 fa el mateix per MiFIR. Raó: normes tècniques de l'AESFEM no completes; sistemes IT nacionals no preparats.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 de gener de 2018</div>
+      <div class="timeline__text"><strong>MiFID II i MiFIR s'apliquen</strong>. MiFID I (Directiva 2004/39/CE) es deroga. El marc de mercats financers de la UE es modernitza en 27 Estats membres simultàniament. El marc AESFEM Nivell 2 (Reglament delegat 2017/565, 2017/567, 2017/589, etc.) també s'aplica des d'aquesta data.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 de setembre de 2019</div>
+      <div class="timeline__text"><strong>Obligacions de cinta consolidada no accionista</strong> (Art 65(2) de la directiva, com s'aplica en el Reglament (UE) 2016/1033) entren en vigor. El mercat comercial de CTP per a bons va romandre subdesenvolupat, contribuint a l'eventual mandat de revisió 2024 d'una cinta basada en compra pública.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">7 de març de 2022</div>
+      <div class="timeline__text"><strong>La Comissió proposa paquet de revisió MiFID II / MiFIR</strong> com a part del pla d'acció de la Unió de mercats de capitals. Propostes clau: cinta consolidada obligatòria; prohibició de pagament per flux d'ordres; transparència d'accions revistada; règim intermediari sistemàtic actualitzat; re-agrupació parcial de recerca per a PIME.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">28 de març de 2024</div>
+      <div class="timeline__text"><strong>Directiva (UE) 2024/790 i Reglament (UE) 2024/791 publicats</strong> -- les esmenes MiFID II i MiFIR 2024. Termini de transposició per a la Directiva 2024/790: <strong>29 de setembre de 2025</strong>. Canvis clau: prohibició de pagament per flux d'ordres; cinta consolidada obligatòria per a bons i accions via compra pública AESFEM; selecció de proveïdor de cinta consolidada revisada; disposicions intermediari sistemàtic actualitzades; reforma de transparència d'accions.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+  <!-- Transposition (directive-only section) -->
+  <section class="section transposition" id="transposition">
+    <div class="section__head">
+      <span class="section__num">Transposició</span>
+      <h2 class="section__title">Com els Estats membres la van transposar</h2>
+    </div>
+    <p class="lede">
+      Una directiva no és directament aplicable: cada Estat membre ha de redactar-la en la seva pròpia llei nacional dins el termini de transposició. Per a MiFID II (Directiva 2014/65/UE) el termini de transposició de la UE va ser <strong>2017-07-03</strong>.
+      El mapa mostra, per a cada Estat membre, la mesura nacional principal que va notificar a la Comissió i la seva
+      data. 27 de 27 Estats membres han notificat mesures analitzades aquí; la llista completa i autoritzada de
+      mesures de transposició nacionals per a cada Estat membre està a
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener">EUR-Lex (Mesures de transposició nacional)</a>.
+    </p>
+    <div id="transp-map-32014L0065" class="transp-map" role="img"
+         aria-label="Mapa de transposició de MiFID II (Directiva 2014/65/UE) dels Estats membres de la UE"></div>
+    <p class="transp-note">
+      Feu clic a un marcador d'Estat membre per a la llei nacional transposada i la seva data de publicació. Font: EUR-Lex
+      Mesures d'implementació nacional, recuperat maig de 2026. On un marcador
+      diu "Notificat via EUR-Lex", consulteu l'enllaç EUR-Lex anterior per a les mesures d'aquest país.
+    </p>
+  </section>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <style>
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+  </style>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "BMF: Umsetzung von Art. 92 mit Bundesgesetz über die Sanierung und Abwicklung von Banken sowie Änderung des Bankwesengesetzes, des Finanzmarktaufsichtsbehördeng", "date": "2014-12-29", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "FEDERALE OVERHEIDSDIENST FINANCIEN - 27 JUNI 2016. - Wet tot wijziging, met het oog op de omzetting van richtlijn 2013/50/EU en de tenuitvoerlegging van verorde", "date": "2016-07-01", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Закон за пазарите на финансови инструменти", "date": "2018-02-16", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o alternativnim investicijskim fondovima", "date": "1001-01-01", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Διαχειριστών Οργανισμών Εναλλακτικών Επενδύσεων (Τροποιητικός) (αρ. 2) Νόμος του 2015.", "date": "2015-07-03", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 563/1991 Sb., o účetnictví", "date": "1991-12-31", "status": "Transposed", "count": 96}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "LFF - Bekendtgørelse af lov om forsikringsformidling (LBK nr. 1065 af 22. august 2013)", "date": "2013-09-04", "status": "Transposed", "count": 24}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Väärtpaberituru seaduse muutmise ja sellega seonduvalt teiste seaduste muutmise seadus", "date": "1001-01-01", "status": "Transposed", "count": 16}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Laki sijoitusrahastolain muuttamisesta / Lag om ändring av lagen om placeringsfonder (1077/2017) 28/12/2017", "date": "2017-12-30", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "art 28 de la Loi n°2014-1662 du 30 décembre 2014 portant diverses dispositions d'adaptation de la législation au droit de l'Union européenne en matière économiq", "date": "2014-12-31", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Zweites Gesetz zur Novellierung von Finanzmarktvorschriften auf Grund europäischer Rechtsakte (Zweites Finanzmarktnovellierungsgesetz - 2. FiMaNoG)", "date": "2017-06-24", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Αγορές χρηματοπιστωτικών μέσων και άλλες διατάξεις.", "date": "2018-01-30", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "2001. évi CXX. törvény a tőkepiacról", "date": "2001-12-18", "status": "Transposed", "count": 14}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "EUROPEAN UNION (MARKETS IN FINANCIAL INSTRUMENTS) REGULATIONS 2017", "date": "2017-08-18", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Attuazione della Direttiva 2014/65/UE del Parlamento europeo e del Consiglio, del 15.5.2014, relativa ai mercati degli strumenti finanziari e che modifica la di", "date": "2017-08-25", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Ieguldtāju aizsardzības likums", "date": "2001-11-23", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos Lietuvos banko įstatymas Nr. I-678 (galiojanti suvestinė redakcija nuo 2017-07-15)", "date": "1994-12-23", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 10 mai 2016 – portant transposition de la directive 2014/91/UE du Parlement européen et du Conseil du 23 juillet 2014 modifiant la directive 2009/65/CE p", "date": "2016-05-12", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "CONDUCT OF BUSINESS RULEBOOK", "date": "2017-12-20", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "Besluit van 20 december 2017 tot vaststelling van het tijdstip van inwerkingtreding van de Wet implementatie richtlijn markten voor financiële instrumenten 2014", "date": "2017-12-28", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "Rozporządzenie Ministra Finansów z dnia 24 września 2012 r. w sprawie trybu i warunków postępowania firm inwestycyjnych, banków, o których mowa w art. 70 ust. 2", "date": "2015-06-25", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "DECRETO-LEI N.º 124/2015 - DIÁRIO DA REPÚBALICA N.º 130/2015, SÉRIE I DE 2015-07-07 Ministério das Finanças Consagra medidas nacionais para a transposição da Dir", "date": "2015-07-07", "status": "Transposed", "count": 45}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Lege nr.126/2018 privind pieţele de instrumente financiare", "date": "2018-06-26", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Zákon č. 483/2001 Z. z. o bankách a o zmene a dopl\u00união niektorých zákonov", "date": "2001-11-29", "status": "Transposed", "count": 13}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o trgu finančnih instrumentov", "date": "2007-07-27", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "Ley 11/2015, de 18 de junio, de recuperación y resolución de entidades de crédito y empresas de servicios de inversión", "date": "2015-06-19", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Lag om ändring i lagen (2007:528) om värdepappersmarknaden", "date": "1001-01-01", "status": "Transposed", "count": 9}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32014L0065",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 16: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossari</h2>
+  </div>
+  <p class="section__subtitle">Termes comuns i abreviacions utilitzades en MiFID II i MiFIR</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">APA</div>
+      <div class="glossary-card__def">Servei d'informació aprovat. Proveïdor de serveis de dades autoritzat a publicar informes de transparència post-comercial en nom d'empreses d'inversió d'acord amb els Arts 20-21 de MiFIR (Art 4(1)(52)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ARM</div>
+      <div class="glossary-card__def">Mecanisme d'informació aprovat. Proveïdor de serveis de dades autoritzat a informar detalls de transaccions a autoritats competents o AESFEM en nom d'empreses d'inversió d'acord amb l'Art 26 de MiFIR (Art 4(1)(54)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CTP</div>
+      <div class="glossary-card__def">Proveïdor de cinta consolidada. Proveïdor de serveis de dades autoritzat a recollir informes post-comercials de tots els llocs de negociació i APAs i consolidar-los en un flux de dades continu electrònic en viu (Art 4(1)(53)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">AESFEM</div>
+      <div class="glossary-card__def">Autoritat Europea de Valors i Mercats. L'autoritat supervisora de la UE per als mercats financers, mandata per MiFID II a desenvolupar normes tècniques, mantenir registres (empreses d'inversió, mercats regulats, proveïdors de serveis de dades) i publicar orientació.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MiFIR</div>
+      <div class="glossary-card__def">Reglament sobre mercats d'instruments financers. Reglament (UE) núm. 600/2014 (CELEX 32014R0600), el reglament directament aplicable que acompanya la cobertura de transparència i presentació de transaccions. Publicat en DO L 173 la mateixa data que MiFID II.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Nivell 2</div>
+      <div class="glossary-card__def">Els reglaments delegats i reglaments d'implementació adoptats per la Comissió basant-se en els mandats de normes tècniques de MiFID II, formant el marc tècnic detallat. Textos principals: CDR 2017/565 (requisits organitzatius), CDR 2017/589 (negociació algorítmica), CDR 2017/590 (presentació de transaccions).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Governança de productes</div>
+      <div class="glossary-card__def">Obligacions dels Arts 16(3) i 24(2) que requereixen als fabricants d'instruments financers definir un mercat objectiu, dissenyar productes per a aquest mercat, i fer informació del mercat objectiu disponible als distribuïdors; i requerint distribuïdors a comprendre productes i mantenir-se dins del mercat objectiu.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Inducements</div>
+      <div class="glossary-card__def">Comissions, honoraris o beneficis no monetaris pagats o rebuts per una empresa d'inversió per a o de tercers en connexió amb la prestació de serveis a clients. Permesos només si milloren la qualitat de servei, no deterioren la obligació de millor interès, i són divulgats (Art 24(9)). Prohibits per a consell independent i gestió de cartera.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">PFOF</div>
+      <div class="glossary-card__def">Pagament per flux d'ordres. La pràctica de corredors rebre pagaments de fabricants de mercats o altres proveïdors de liquiditat a canvi de encaminar ordres a ells. Prohibit en diversos Estats membres sota llei nacional i prohibit a nivell de la UE pel Reglament (UE) 2024/791 (l'esmena MiFIR 2024).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 17: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Documentació primària per a la Directiva 2014/65/UE i la seva MiFIR complementària</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> EUR-Lex i Diari Oficial</div>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Directiva 2014/65/UE en EUR-Lex (CELEX 32014L0065)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener" style="color: var(--color-blue);">Reglament MiFIR (UE) núm. 600/2014 (CELEX 32014R0600)</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Mesures de transposició nacional en EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32014L0065" target="_blank" rel="noopener" style="color: var(--color-blue);">Totes les esmenes i versions consolidades en EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L0790" target="_blank" rel="noopener" style="color: var(--color-blue);">Directiva (UE) 2024/790 -- esmena MiFID II 2024</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R0791" target="_blank" rel="noopener" style="color: var(--color-blue);">Reglament (UE) 2024/791 -- esmena MiFIR 2024</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-purple);"></i> AESFEM i Comissió</div>
+      <ul>
+        <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener" style="color: var(--color-blue);">Compendi Interactiu Únic AESFEM (MiFID II)</a></li>
+        <li><a href="https://registers.esma.europa.eu/" target="_blank" rel="noopener" style="color: var(--color-blue);">Registre AESFEM d'empreses d'inversió autoritzades</a></li>
+        <li><a href="https://registers.esma.europa.eu/publication/searchRegister?core=esma_registers_upreg" target="_blank" rel="noopener" style="color: var(--color-blue);">Llista AESFEM de mercats regulats</a></li>
+        <li><a href="https://www.esma.europa.eu/trading/mifid-ii-and-mifir-review" target="_blank" rel="noopener" style="color: var(--color-blue);">Pàgina de revisió AESFEM MiFID II</a></li>
+        <li><a href="https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/financial-markets/securities-markets/markets-financial-instruments-mifid-ii-and-mifir_en" target="_blank" rel="noopener" style="color: var(--color-blue);">DG FISMA: MiFID II i MiFIR</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 18: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Entrades de canon relacionades</h2>
+  </div>
+  <p class="section__subtitle">Les famílies eu_financial_markets i eu_insurance en el Canon UE de Brubru</p>
+
+  <div class="canon-related-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">Família eu_insurance</div>
+      <div class="canon-related__title">
+        <a href="../2009-138_solvency2/index.html">Solvència II (Directiva 2009/138/CE)</a>
+      </div>
+      <div class="canon-related__desc">La Directiva 2009/138/CE és el marc prudencial per a la indústria d'assegurances i reassegurances de la UE: capital basat en risc (SCR i MCR), valoració de provisions tècniques en valors consistent de mercat, ORSA, revisió supervisora (Pilar II), i divulgació pública (Pilar III). Solvència II s'aplica a asseguradors que proporcionen productes d'inversió basats en assegurança (IBIPs); la distribució d'IBIPs està subjecta a la IDD (anteriorment la Directiva de mediació d'assegurances esmenant per l'Art 91 de MiFID II).</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Família eu_telecoms</div>
+      <div class="canon-related__title">
+        <a href="../2018-1972_eecc/index.html">Codi Europeu de Comunicacions Electròniques (Directiva (UE) 2018/1972)</a>
+      </div>
+      <div class="canon-related__desc">La Directiva (UE) 2018/1972 codificar i modernitzar el marc de telecomunicacions de la UE en un únic instrument. Les seves normes d'infraestructura de connectivitat són rellevants per a llocs de negociació i operadors d'infraestructura financera que depenen de comunicacions electròniques per executar sistemes de mercat i serveis de presentació de dades.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Família eu_financial_markets</div>
+      <div class="canon-related__title">MiFIR -- Reglament (UE) núm. 600/2014</div>
+      <div class="canon-related__desc">El reglament directament aplicable que acompanya: transparència pre i post-comercial per a instruments accionarials i no accionarials, presentació de transaccions a autoritats competents (Art 26), obligacions de negociació per a accions i derivats, obligacions intermediari sistemàtic, règim d'accés equivalència de tercers países, i poders d'intervenció de productes. Publicat en el mateix DO que MiFID II. L'esmena 2024 (Reglament (UE) 2024/791) introdueix una cinta consolidada obligatòria i la prohibició de pagament per flux d'ordres.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 19: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explorar MiFID II amb Brubru</h2>
+  </div>
+  <p class="section__subtitle">Sis eines per analitzar, seguir i treballar amb la legislació de mercats financers de la UE</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Xat Brubru</div>
+      <div class="feature-card__desc">Fem qualsevol pregunta sobre MiFID II: la taxonomia de llocs, obligacions de negociació algorítmica, idoneïtat versus adequació, requisits de política de millor execució, límits de posició de matèries primeres, la distinció APA/CTP/ARM, els canvis de revisió 2024, o la divisió MiFID II/MiFIR. Les respostes es basen en el text oficial d'EUR-Lex.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Obrir Xat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Carregui la Directiva 2014/65/UE o la Directiva (UE) 2024/790 (l'esmena MiFID II 2024) a l'Amendator i redacti el llenguatge de l'esmena directament contra el text oficial d'EUR-Lex. Ideal per a associacions del sector financer, assessors de conformitat i equips de política que treballen en transposició o consultes del Nivell 2.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Obrir Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">La Meva Bombolla UE</div>
+      <div class="feature-card__desc">Seguir papers de consulta de l'AESFEM i normes tècniques sobre MiFID II, monitoritzar desenvolupaments de la comissió PE ECON sobre la transposició de revisió 2024, seguir publicacions de mercats de capitals de DG FISMA, i rebre alertes en temps real sobre canvis en el registre de mercats regulats i empreses d'inversió.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Obrir La Meva Bombolla UE</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">Conformitat de la Llei de la UE</div>
+      <div class="feature-card__desc">Realitzar análisi de buits de conformitat per a la vostra organització contra obligacions de MiFID II: condicions d'autorització, requisits organitzatius de l'Art 16, definició del mercat objectiu de governança de productes, obligacions de gravació de trucades, procés d'avaluació d'idoneïtat, política de millor execució, i marc de divulgació d'inducements.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Obrir Conformitat de la Llei de la UE</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Trobar oportunitats de compra pública de la UE relacionades amb supervisió de mercats financers, sistemes de vigilància de negociació, infraestructura de presentació de transaccions de MiFID II, serveis de dades de l'AESFEM, projectes d'IT d'autoritat competent nacional, i contractes de tecnologia APA/ARM en els Estats membres de la UE.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Obrir Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">API Brubru</div>
+      <div class="feature-card__desc">Accés programàtic a dades de legislació de la UE, seguiment de procediments i events del calendari institucional. Construir fluxos de treball de monitorització de conformitat de MiFID II, rastreador de consultacions de l'AESFEM, alertes de registre de llocs de negociació i aliments de cronologia regulatòria en la part superior de l'API REST v1 de Brubru.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">Veure Docs API</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.82) 0%, rgba(155,81,224,0.82) 100%), url('https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Obtenir la plataforma Brubru completa</h2>
+  <p class="cta-strip__sub">Prova gratuïta de 14 dies. Sense targeta necessària.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Comença prova gratuïta</a>
+</div>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru és l'assistent d'intel·ligència de política de la UE impulsat per IA de <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Comença la teva prova gratuïta de 14 dies</a> - sense targeta requerida.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Xat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">La Meva Bombolla UE</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">Conformitat de la Llei de la UE</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">Biblioteca de canon UE</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">Totes les entrades de canon</a></li>
+          <li><a href="index.html">MiFID II Dir 2014/65 (aquesta pàgina)</a></li>
+          <li><a href="../2009-138_solvency2/index.html">Solvència II Dir 2009/138</a></li>
+          <li><a href="../2018-1972_eecc/index.html">EECC Dir 2018/1972</a></li>
+          <li><a href="../2001-83_community_code/index.html">Codi Comunitari Dir 2001/83</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Fonts oficials</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065" target="_blank" rel="noopener">Dir 2014/65 en EUR-Lex</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0600" target="_blank" rel="noopener">Reglament MiFIR 600/2014</a></li>
+          <li><a href="https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii" target="_blank" rel="noopener">Compendi Interactiu Únic AESFEM</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Construït per Beresol BV</p>
+        <p>Apeldoorn, Països Baixos</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">Aquesta és una anàlisi independent i no és un document oficial de la UE. Tots els fets es traçen a la Directiva 2014/65/UE i fonts oficials d'EUR-Lex.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. Tots els drets reservats. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Fotografia: <a href="https://www.pexels.com/@tima-miroshnichenko" target="_blank" rel="noopener">Tima Miroshnichenko</a> i <a href="https://www.pexels.com/photo/259027/" target="_blank" rel="noopener">Pixabay</a> via Pexels.</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

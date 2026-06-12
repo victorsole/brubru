@@ -1,0 +1,1433 @@
+html
+<html lang="ca">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>La Directiva NIS2 explica: Directiva (UE) 2022/2555 sobre Seguretat de les Xarxes i la Informació  ·  Brubru</title>
+<meta content="Guia completa de la Directiva NIS2 (UE) 2022/2555: abast, entitats essencials vs importants, les 10 mesures mínimes de ciberseguretat, informes d'incidents en 24h/72h/1 mes, supervisió, execució i multes de fins a 10 milions d'euros o 2% de la facturació global." name="description"/>
+<meta content="Directiva NIS2 (UE) 2022/2555: el marc de ciberseguretat de la UE  ·  Brubru Canon UE" property="og:title"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="El NIS2 substitueix el NIS1 per un abast més ampli (18 sectors), una rendició de comptes més estricta a nivell de junta, un informe d'incidències de 24h/72h/1-mes i multes de fins a 10 milions d'euros o un 2% de facturació global per a entitats essencials." property="og:description"/>
+<meta content="https://brubru.beresol.eu/eucanon/2022-2555_nis2/" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Directiva NIS2 (UE) 2022/2555  ·  Brubru Canon UE" name="twitter:title"/>
+<meta content="18 sectors, entitats essencials vs importants, 10 mesures mínimes, informes d'incidències 24h/72h/1-mes, multes de 10 milions d'euros o del 2%. Aplicacions del 18 d'octubre de 2024." name="twitter:description"/>
+<meta content="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" name="twitter:image"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/" rel="canonical"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html" hreflang="en" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/es.html" hreflang="es" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/fr.html" hreflang="fr" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/it.html" hreflang="it" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/nl.html" hreflang="nl" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/ca.html" hreflang="ca" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html" hreflang="x-default" rel="alternate"/>
+<link href="../../assets/brubru_icon.png" rel="icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="shortcut icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="apple-touch-icon"/>
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"/>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Directive (EU) 2022/2555 of the European Parliament and of the Council of 14 December 2022 on measures for a high common level of cybersecurity across the Union",
+    "alternateName": "NIS2 Directive",
+    "identifier": "CELEX:32022L2555",
+    "legislationIdentifier": "32022L2555",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555",
+    "datePublished": "2022-12-27",
+    "dateModified": "2026-06-10",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "cybersecurity, network and information security, NIS2, incident reporting, essential entities, important entities, ENISA, CSIRTs, supply-chain security, cyber risk management"
+    }
+  }
+  </script>
+<style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number  { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    /* TOC */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    /* Tables */
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue   { color: var(--color-blue);   font-weight: 700; }
+    .duty-table .rate-green  { color: var(--color-green);  font-weight: 700; }
+    .duty-table .rate-amber  { color: var(--color-amber);  font-weight: 700; }
+    .duty-table .rate-red    { color: var(--color-red);    font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    /* Scope grid (2 cols) */
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Two / three col grids */
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid   { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    /* Glossary */
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term  { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def   { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Brubru features CTA grid */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem;
+      text-align: center; transition: all 0.2s;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc  { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pills */
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue   { background: rgba(6,147,227,0.1);   color: var(--color-blue); }
+    .pill--green  { background: rgba(5,150,105,0.1);   color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1);  color: var(--color-purple); }
+    .pill--amber  { background: rgba(217,119,6,0.1);   color: var(--color-amber); }
+    .pill--red    { background: rgba(220,38,38,0.1);   color: var(--color-red); }
+
+    /* Related canon card */
+    .canon-related {
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 1.75rem; margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    /* CTA Strip */
+    .cta-strip { padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius); }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue);
+      background: white; text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru  { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border); padding-top: 1rem;
+      font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<!-- Sticky header -->
+<header class="header" id="top">
+<a aria-label="Brubru home" href="https://brubru.beresol.eu"><img alt="Brubru" class="header__logo" src="../../assets/brubru_mainlogo.png"/></a>
+<div class="header__text">
+<div class="header__title">Brubru</div>
+<div class="header__subtitle">Intel·ligència política de la UE</div>
+</div>
+<select aria-label="Llengua" class="header__lang" onchange="window.location.href=this.value">
+<option value="index.html">English</option>
+<option value="fr.html">Francais</option>
+<option value="es.html">Espanol</option>
+<option value="it.html">Italiano</option>
+<option value="nl.html">Nederlands</option>
+<option selected value="ca.html">Catala</option>
+</select>
+<a class="header__cta" href="https://brubru.beresol.eu/signup">Prova Brubru lliure</a>
+</header>
+<div class="container">
+<!-- Hero -->
+<section class="hero">
+<div class="hero__tag">
+<a href="../index.html">Canon UE</a> / Llei de ciberseguretat de la UE
+  </div>
+<h1 class="hero__title">El <span>Directiva NIS2</span></h1>
+<p class="hero__subtitle">
+    La Directiva (UE) 2022/2555 és la llei horitzontal de ciberseguretat de la UE, en substitució de la NIS1 (Directiva 2016/1148) amb efecte a partir del 18 d'octubre de 2024, que abasta 18 sectors, imposa responsabilitat a nivell de junta, prescriu deu mesures mínimes de seguretat, requereix informes d'incidents en 24 hores, 72 hores i un mes, i estableix multes màximes de 10 milions d'euros o el 2% de la facturació anual global per a les entitats essencials.
+  </p>
+<div class="hero__meta">
+<span><i class="mdi mdi-calendar"></i> Aprovat el 14 de desembre de 2022</span>
+<span><i class="mdi mdi-book-open-outline"></i> OJ L 333, 27.12.2022</span>
+<span><i class="mdi mdi-tag-outline"></i> CELEX 32022L2555</span>
+<span><i class="mdi mdi-gavel"></i> Art 114 TFEU</span>
+</div>
+</section>
+<!-- Hero image -->
+<figure class="hero-image">
+<img alt="Concepte d'escut de seguretat de xarxa digital que representa la protecció de la ciberseguretat per a la infraestructura crítica" loading="lazy" src="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=1600"/>
+<figcaption>
+    Foto: <a href="https://www.pexels.com/@pixabay" rel="noopener" target="_blank">Pixabay</a>
+    via <a href="https://www.pexels.com/photo/60504/" rel="noopener" target="_blank">Pexels</a>
+     ·  NIS2 situa la gestió del risc de ciberseguretat al centre de la governança de les infraestructures crítiques de la UE
+  </figcaption>
+</figure>
+<!-- Key figures strip -->
+<div class="figures">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">18</div>
+<div class="figure-card__label">Sectors coberts</div>
+<div class="figure-card__context">11 sectors d'alta crítica de l'Annex I (energia, transport, salut, infraestructura digital...) i 7 sectors crítics més de l'Annex II (fabricació, alimentació, proveïdors digitals...).</div>
+</div>
+<div class="figure-card fc-red">
+<div class="figure-card__number">24h</div>
+<div class="figure-card__label">Termini d'avís anticipat</div>
+<div class="figure-card__context">Art 23(4)(a): En prendre consciència d'un incident significatiu, les entitats han de presentar un avís anticipat al CSIRT o a l'autoritat competent en un termini de 24 hores.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">10% / 2%</div>
+<div class="figure-card__label">Sostre fi d'entitat essencial</div>
+<div class="figure-card__context">Art 34(4): fins a un mínim de 10.000.000 d'euros o almenys el 2% del total de la facturació anual mundial, sigui el que sigui superior. NB: la xifra del 10% es refereix a 10 milions d'euros, no a un percentatge.</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">10</div>
+<div class="figure-card__label">Mesures mínimes de seguretat</div>
+<div class="figure-card__context">Art 21(2): 10 mesures mínimes explícites des de l'anàlisi de riscos i la manipulació d'incidències fins a l'autenticació multifactorial i la seguretat de la cadena de subministrament -- obligatòries per a totes les entitats en l'àmbit.</div>
+</div>
+</div>
+<!-- Table of Contents -->
+<nav class="toc">
+<div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Continguts</div>
+<div class="toc__grid">
+<a class="toc__link" href="#overview"><i class="mdi mdi-information-outline"></i> Vista general</a>
+<a class="toc__link" href="#scope"><i class="mdi mdi-view-grid-outline"></i> Àmbit i sectors</a>
+<a class="toc__link" href="#entities"><i class="mdi mdi-account-group-outline"></i> Essencial vs important</a>
+<a class="toc__link" href="#governance"><i class="mdi mdi-shield-account-outline"></i> Responsabilitat de la gestió</a>
+<a class="toc__link" href="#measures"><i class="mdi mdi-shield-check-outline"></i> Les 10 mesures de seguretat</a>
+<a class="toc__link" href="#reporting"><i class="mdi mdi-bell-alert-outline"></i> Informe d'incidents</a>
+<a class="toc__link" href="#supervision"><i class="mdi mdi-eye-outline"></i> Supervisió i execució</a>
+<a class="toc__link" href="#fines"><i class="mdi mdi-cash-multiple"></i> Fines</a>
+<a class="toc__link" href="#transposition"><i class="mdi mdi-map-outline"></i> Transposició</a>
+<a class="toc__link" href="#cooperation"><i class="mdi mdi-handshake-outline"></i> Organismes de cooperació</a>
+<a class="toc__link" href="#timeline-section"><i class="mdi mdi-timeline-outline"></i> Línia de temps</a>
+<a class="toc__link" href="#glossary"><i class="mdi mdi-alphabetical"></i> Glossari</a>
+<a class="toc__link" href="#faq"><i class="mdi mdi-frequently-asked-questions"></i> PM</a>
+<a class="toc__link" href="#sources"><i class="mdi mdi-link-variant"></i> Fonts oficials</a>
+<a class="toc__link" href="#brubru"><i class="mdi mdi-robot-outline"></i> Explora amb Brubru</a>
+</div>
+</nav>
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+<h2 class="section__title">Vista general</h2>
+</div>
+<p class="section__subtitle">per què NIS2 va substituir NIS1 i què va canviar</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> De NIS1 a NIS2: el canvi del nucli</div>
+<p>La primera Directiva NIS (2016/1148) va ser la llei de ciberseguretat horitzontal inaugural de la UE. La seva feblesa fonamental va ser estructural: va demanar als Estats membres que identifiquessin "operadors de serveis essencials" a través d'un procediment nacional, amb restriccions mínimes sobre com s'havia de fer aquesta identificació. El resultat va ser la fragmentació predictible.</p>
+<p>El NIS2 ho corregeix a través de tres torns estructurals: en primer lloc, una regla de la talla substitueix l'exercici d'identificació discrecional: qualsevol entitat mitjana o gran d'un sector cobert té un abast automàtic; en segon lloc, les deu mesures mínimes de l'apartat 2 de l'article 21 estableixen un sòl harmonitzat en lloc de deixar els requisits de seguretat a la discreció nacional; en tercer lloc, es reforça el marc de supervisió i penalització, amb multes màximes lligades a la facturació global en el mateix model que el RGPD.</p>
+<p>La directiva es basa en l'article 114 del TFUE (aproximació al mercat interior), adoptat el 14 de desembre de 2022, publicat a l'OJ L 333 de 27 de desembre de 2022, va entrar en vigor el 16 de gener de 2023, i els Estats membres van tenir fins al 17 d'octubre de 2024 per transposar-lo.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-green);"></i> Arquitectura jurídica i instruments clau</div>
+<p>El NIS2 és una directiva, no un reglament: estableix objectius vinculants que els Estats membres han d'aconseguir a través de mesures de transposició nacionals, la qual cosa permet flexibilitat en la forma en què les normes s'integren en els sistemes jurídics nacionals, però les obligacions substantives -les deu mesures mínimes, els terminis d'informació d'incidents, els màxims fins- són mínims harmonitzats, cosa que significa que els Estats membres poden anar més enllà, però no per sota del sòl.</p>
+<p>El NIS2 està flanquejat per diversos instruments relacionats que cal llegir al seu costat:</p>
+<ul>
+<li><strong>DORA (Reglament 2022/2554):</strong> La llei de ciberseguretat específica del sector per a les entitats financeres. Quan DORA s'aplica a una entitat i els seus requisits són almenys equivalents a NIS2, les disposicions pertinents de NIS2 no s'apliquen a aquesta entitat (article 4 del NIS2). Les autoritats competents sota tots dos instruments han de cooperar estretament.</li>
+<li><strong>Directiva CER (2022/2557):</strong> Qualsevol entitat identificada com a crítica sota el CER és automàticament una entitat essencial sota el NIS2 (article 2(3)).</li>
+<li><strong>RGPD (Reglament 2016/679):</strong> Quan un incident de NIS2 comporti una violació de les dades personals notificable en virtut de l'article 33 del RGPD, els dos marcs de supervisió han de coordinar-se. Una multa de GDPR per a la mateixa conducta bloqueja una multa de NIS2 separada (article 35).</li>
+<li><strong>Reglament ENISA (2019/881 -- la Llei de Ciberseguretat):</strong> governa ENISA i crea el marc de certificació de ciberseguretat de la UE que sustenta l'article 24 del NIS2.</li>
+</ul>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 2: SCOPE AND SECTORS
+     ========================================================= -->
+<section class="section" id="scope">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-view-grid-outline"></i></div>
+<h2 class="section__title">Àmbit i sectors</h2>
+</div>
+<p class="section__subtitle">qui està cobert: la regla del límit de grandària i el marc del sector 18</p>
+<div class="info-box">
+<h3><i class="mdi mdi-ruler-square" style="color: var(--color-blue);"></i> La regla del casquet de mida (article 2(1))</h3>
+<p>El NIS2 s'aplica a les entitats públiques o privades dels sectors de l'Annex I o II que qualifiquen com a empreses mitjanes o superen aquests límits màxims. Segons la Recomanació 2003/361/CE, una empresa mitjana té 50 o més empleats i una facturació o balanç anual per sobre dels 10 milions d'euros. Les entitats que superen els límits màxims de mitjana empresa (250 o més empleats, la facturació per sobre dels 50 milions d'euros o el balanç per sobre dels 43 milions d'euros) de l'Annex I estan classificades com a entitats essencials.</p>
+<p>Les micro i petites entitats (per sota de 50 empleats, per sota de 10 milions d'euros de facturació) generalment estan fora de l'abast, tret que caiguin en una de les categories especials de mida buida a continuació.</p>
+</div>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Entitats en l'àmbit d'aplicació independentment de la mida (article 2(2)-(4))</h3>
+<ul>
+<li>Proveïdors de xarxes públiques de comunicacions electròniques o serveis de comunicacions electròniques públicament disponibles</li>
+<li>Proveïdors de serveis de confiança (qualificats o no qualificats)</li>
+<li>Registres de noms TLD i proveïdors de serveis DNS</li>
+<li>Entitats que ofereixen serveis de registre de noms de domini</li>
+<li>L'únic proveïdor en un Estat membre d'un servei essencial per a activitats socials o econòmiques crítiques</li>
+<li>Entitats la disrupció de les quals podria causar un risc sistèmic significatiu o un impacte transfronterer, o un impacte significatiu en la seguretat pública, la seguretat o la salut</li>
+<li>Entitats d'administració pública del govern central (i, després d'una avaluació de riscos, entitats d'àmbit regional)</li>
+<li>Entitats identificades com a crítiques en virtut de la Directiva CER (2022/2557)</li>
+</ul>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 1rem;">Annex I -- Sectors d'alta crítica (11)</h3>
+<div class="scope-grid">
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">1</div>
+<div><div class="scope-card__title">Energia</div><div class="scope-card__desc">Operadors elèctrics, operadors i distribuïdors de petroli i gas, operadors de calefacció i refrigeració de districte, operadors d'hidrogen.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">2</div>
+<div><div class="scope-card__title">Transport</div><div class="scope-card__desc">Companyies aèries, aeroports, operadors ferroviaris, operadors de vies navegables interiors i marítims, autoritats viàries i operadors de sistemes de transport intel·ligents.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">3</div>
+<div><div class="scope-card__title">Banca</div><div class="scope-card__desc">Entitats de crèdit definides en el Reglament (UE) núm. 575/2013.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">4</div>
+<div><div class="scope-card__title">Infraestructures del mercat financer</div><div class="scope-card__desc">Operadors de locals comercials i contraparts centrals tal com es defineix en el Reglament (UE) núm. 648/2012.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">5</div>
+<div><div class="scope-card__title">Salut</div><div class="scope-card__desc">Proveïdors sanitaris, laboratoris de referència de la UE, fabricants farmacèutics, fabricants crítics de dispositius mèdics, entitats de recerca i desenvolupament de medicaments.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">6</div>
+<div><div class="scope-card__title">Aigua potable i aigües residuals</div><div class="scope-card__desc">Proveïdors i distribuïdors d'aigua destinada al consum humà; empreses de recollida, eliminació o tractament d'aigües residuals urbanes o domèstiques.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">7</div>
+<div><div class="scope-card__title">Infraestructura digital</div><div class="scope-card__desc">Punts d'intercanvi d'Internet, proveïdors de DNS, registres de TLD, proveïdors de serveis de cloud computing, proveïdors de serveis de centres de dades, proveïdors de CDN, proveïdors de serveis de confiança, xarxes/serveis de comunicacions electròniques públiques.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">8</div>
+<div><div class="scope-card__title">Gestió de serveis TIC (B2B)</div><div class="scope-card__desc">Proveïdors de serveis gestionats (MSP) i proveïdors de serveis de seguretat gestionats (MSSP).</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">9</div>
+<div><div class="scope-card__title">Administració pública</div><div class="scope-card__desc">Entitats de govern central. Entitats de govern regional que els Estats membres identifiquen després d'una avaluació basada en el risc com la prestació de serveis la interrupció dels quals podria afectar significativament les activitats socials o econòmiques crítiques.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">10</div>
+<div><div class="scope-card__title">Espai</div><div class="scope-card__desc">Operadors d'infraestructures terrestres propietat, gestionada o operada per Estats membres o parts privades que donen suport a la prestació de serveis basats en l'espai, excloent els proveïdors de xarxes públiques de comunicacions electròniques.</div></div>
+</div>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 1rem;">Annex II -- Altres sectors crítics (7)</h3>
+<div class="scope-grid">
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">11</div>
+<div><div class="scope-card__title">Serveis postals i de missatgeria</div><div class="scope-card__desc">Proveïdors de serveis postals i de missatgeria, inclòs el lliurament de paqueteria.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">12</div>
+<div><div class="scope-card__title">Gestió de residus</div><div class="scope-card__desc">Els operadors de gestió de residus, sense incloure les empreses per a les quals la gestió de residus no és la seva activitat principal.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">13</div>
+<div><div class="scope-card__title">Productes químics</div><div class="scope-card__desc">S'ocupa de la fabricació, producció i distribució de productes químics, així com de productors de preparats químics o articles.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">14</div>
+<div><div class="scope-card__title">Aliments</div><div class="scope-card__desc">Operadors d'empreses alimentàries implicats en la distribució a l'engròs i la producció industrial i el processament d'aliments.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">15</div>
+<div><div class="scope-card__title">Fabricació</div><div class="scope-card__desc">Fabricants de dispositius mèdics (incloent diagnòstic in vitro), equips electrònics i elèctrics, maquinària, vehicles de motor i altres equips de transport.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">16</div>
+<div><div class="scope-card__title">Proveïdors digitals</div><div class="scope-card__desc">Proveïdors de mercats en línia, motors de cerca en línia i plataformes de serveis de xarxes socials.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">17</div>
+<div><div class="scope-card__title">Recerca</div><div class="scope-card__desc">Organitzacions de recerca que tenen com a objectiu principal la recerca aplicada o el desenvolupament experimental per a l'explotació comercial.</div></div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 3: ESSENTIAL vs IMPORTANT ENTITIES
+     ========================================================= -->
+<section class="section" id="entities">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+<h2 class="section__title">Entitats essencials versus importants</h2>
+</div>
+<p class="section__subtitle">la classificació de dos nivells i per què importa la supervisió</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0; border-left: 4px solid var(--color-blue);">
+<div class="card__title"><i class="mdi mdi-shield-star-outline" style="color: var(--color-blue);"></i> Entitats essencials (Art 3(1))</div>
+<p>A grans trets, les entitats més grans i sistèmicament importants. La categoria inclou:</p>
+<ul>
+<li>Annex I entitats que superin els límits màxims de mitjana empresa (250 + empleats o 50 milions d'euros + facturació)</li>
+<li>Proveïdors de serveis de confiança qualificats i registres de TLD i proveïdors de DNS (independentment de la mida)</li>
+<li>Proveïdors de xarxes de comunicacions electròniques públiques i serveis de comunicacions electròniques disponibles públicament que siguin almenys de mida mitjana</li>
+<li>Entitats d'administració pública del govern central</li>
+<li>Entitats identificades com a crítiques en virtut de la Directiva CER (2022/2557)</li>
+<li>Entitats prèviament identificades pels Estats membres com a operadors de serveis essencials en el marc del NIS1, on l'Estat membre així ho presta</li>
+</ul>
+<p style="margin-top: 0.75rem;"><strong>Supervisió:</strong> Ex ante i ex post (article 32). Seguiment proactiu, inspeccions, auditories i exploracions sense esperar proves d'incompliment.</p>
+</div>
+<div class="card" style="margin-bottom: 0; border-left: 4px solid var(--color-green);">
+<div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Entitats importants (Art 3(2))</div>
+<p>Totes les altres entitats inscope: entitats de mida mitjana de l'Annex I que no es qualifiquen d'essencials, i entitats de l'Annex II (llevat que es tracti d'una categoria especial de talla-exempta). La classificació cobreix una població d'empreses molt més àmplia de la mai aconseguida NIS1.</p>
+<p>Les entitats importants estan subjectes a les mateixes obligacions substancials que les entitats essencials (article 21 mesures de gestió de riscos, article 23 informes d'incidents, registre) però s'enfronten a un toc de supervisió més lleuger: les autoritats competents les supervisen de manera reactiva (ex post), desencadenades per proves, indicació o informació que suggereixi incompliment.</p>
+<p><strong>Supervisió:</strong> Només ex post (article 33). L'autoritat ha de tenir una base abans d'actuar; no pot dur a terme auditories proactives a l'atzar com pot per a les entitats essencials.</p>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.25rem;">
+<h3><i class="mdi mdi-calendar-clock" style="color: var(--color-green);"></i> Llista d'entitats: Data límit 17 d'abril de 2025 (Art 3(3))</h3>
+<p>Els Estats membres havien d'establir, publicar i notificar a la Comissió la llista d'entitats essencials i importants (i proveïdors de serveis de registre de noms de domini) abans del 17 d'abril de 2025. La llista s'ha de revisar i actualitzar almenys cada dos anys. Les entitats havien de presentar informació de registre, incloent el nom, l'adreça, les dades de contacte, el sector i els rangs d'IP.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 4: MANAGEMENT ACCOUNTABILITY
+     ========================================================= -->
+<section class="section" id="governance">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-account-outline"></i></div>
+<h2 class="section__title">Responsabilitat de la gestió</h2>
+</div>
+<p class="section__subtitle">Article 20: la responsabilitat del consell i el deure de formació</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-amber);"></i> Per què importa l'article 20</div>
+<p>El NIS1 no contenia cap clàusula de rendició de comptes a nivell de gestió. La ciberseguretat es va tractar com una funció de TI. El NIS2 canvia fonamentalment això: ara la directiva col·loca la responsabilitat de la ciberseguretat de manera quadrada amb l'òrgan de govern, no amb l'equip tecnològic.</p>
+<p>L'apartat 1 de l'article 20 obliga els Estats membres a garantir que <strong>òrgans de gestió</strong> Les entitats essencials i importants aproven les mesures de gestió de riscos de ciberseguretat adoptades en virtut de l'article 21, i en poden responsabilitzar-se per les infraccions de l'article 21, la qual cosa crea una línia directa de rendició de comptes des de la junta o òrgan de govern equivalent a la postura de ciberseguretat de l'organització.</p>
+<p>L'apartat 2 de l'article 20 afegeix una obligació de formació: els membres dels òrgans de gestió han de seguir la formació en ciberseguretat per obtenir els coneixements i habilitats suficients per identificar els riscos i avaluar les pràctiques de gestió de riscos en ciberseguretat i el seu impacte en els serveis prestats.</p>
+</div>
+<div class="info-box info-box--red">
+<h3><i class="mdi mdi-alert-outline" style="color: var(--color-red);"></i> Responsabilitat personal del gestor (Art 32(5)-(6))</h3>
+<p>Per a les entitats essencials, l'apartat 5 de l'article 32 permet a les autoritats competents, com a últim recurs, sol·licitar la prohibició temporal a qualsevol persona física responsable o que actuï com a representant legal de l'entitat d'exercir funcions directives en aquesta entitat, només quan s'hagin esgotat altres mesures d'execució i l'entitat no hagi pogut remeiar la deficiència dins d'un termini establert.</p>
+<p>L'apartat 6 de l'article 32 exigeix per separat als Estats membres que garanteixin que les persones físiques que actuïn com a representants legals, que assumeixin la responsabilitat de la direcció o que tinguin autoritat per a prendre decisions en nom d'una entitat essencial, puguin ser personalment responsables de l'incompliment de la seva obligació de garantir el compliment de la Directiva, igual que les entitats importants per referència creuada en l'apartat 5 de l'article 33. Aquesta disposició de responsabilitat personal és un dels canvis de governança més significatius introduïts per la NIS2.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 5: THE 10 SECURITY MEASURES
+     ========================================================= -->
+<section class="section" id="measures">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-check-outline"></i></div>
+<h2 class="section__title">Les deu mesures mínimes de seguretat</h2>
+</div>
+<p class="section__subtitle">Article 21 -- l'enfocament de tots els perills i el pis mínim obligatori</p>
+<div class="info-box">
+<h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> L'enfocament de tots els perills</h3>
+<p>L'apartat 1 de l'article 21 obliga les entitats a adoptar mesures tècniques, operatives i organitzatives adequades i proporcionades <strong>enfocament de tots els perills</strong>. Això significa que el marc de gestió del risc ha d'abordar totes les amenaces plausibles, no només els atacs de TI, sinó també les amenaces físiques a l'entorn físic dels sistemes (inundació, foc, pèrdua d'energia), les amenaces internes i el compromís de la cadena de subministrament. La proporcionalitat s'avalua contra l'exposició de l'entitat als riscos, la seva mida, la probabilitat i la gravetat dels incidents, i el seu impacte social i econòmic.</p>
+<p>L'apartat 5 de l'article 21 obliga la Comissió a adoptar abans del 17 d'octubre de 2024 els actes d'execució que especifiquen els requisits tècnics i metodològics per a les mesures de l'apartat 2 per a determinats proveïdors de serveis digitals, actes d'aplicació que concreten el que les deu mesures signifiquen en la pràctica per als proveïdors de serveis en el núvol, els serveis de DNS, els proveïdors de serveis gestionats i altres.</p>
+</div>
+<table class="duty-table">
+<thead>
+<tr>
+<th>Mesura</th>
+<th>Article</th>
+<th>Àmbit</th>
+<th>Obligació de clau</th>
+</tr>
+</thead>
+<tbody>
+<tr class="highlight-row">
+<td>Anàlisi de riscos i polítiques de seguretat del sistema d'informació</td>
+<td>Art 21(2)(a)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Documenta els resultats de l'anàlisi de riscos i manté les polítiques actualitzades de seguretat del sistema d'informació.</td>
+</tr>
+<tr>
+<td>Gestió d'incidències</td>
+<td>Art 21(2)(b)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Establir procediments de prevenció, detecció, anàlisi, contenció, resposta i recuperació d'incidències.</td>
+</tr>
+<tr class="highlight-row">
+<td>Continuïtat empresarial, backup, recuperació de desastres</td>
+<td>Art 21(2)(c)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Implementar la gestió de còpies de seguretat, plans de recuperació de desastres i arranjaments de gestió de crisi per mantenir la continuïtat del servei després d'un incident.</td>
+</tr>
+<tr>
+<td>Seguretat de la cadena de subministrament</td>
+<td>Art 21(2)(d)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Atendre la seguretat en les relacions amb proveïdors directes i proveïdors de serveis; avaluar les seves vulnerabilitats, la qualitat de la ciberseguretat i els procediments de desenvolupament segur. Tenir en compte les avaluacions crítiques de risc de cadena de subministrament a nivell de la UE (Art 22).</td>
+</tr>
+<tr class="highlight-row">
+<td>Adquisició, desenvolupament i manteniment segur</td>
+<td>Art 21(2)(e)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Atendre la seguretat en l'adquisició, el desenvolupament i el manteniment de sistemes de xarxa i informació, incloent la manipulació i divulgació de la vulnerabilitat.</td>
+</tr>
+<tr>
+<td>Polítiques d'avaluació d'eficàcia</td>
+<td>Art 21(2)(f)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Establir polítiques i procediments per avaluar l'eficàcia de les mesures de gestió de riscos de ciberseguretat de forma regular.</td>
+</tr>
+<tr class="highlight-row">
+<td>Higiene cibernètica i formació</td>
+<td>Art 21(2)(g)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Implementar pràctiques bàsiques d'higiene cibernètica i mantenir un programa de formació en ciberseguretat per al personal.</td>
+</tr>
+<tr>
+<td>Criptografia i xifratge</td>
+<td>Art 21(2)(h)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Adoptar polítiques i procediments sobre l'ús de la criptografia i, si escau, l'encriptació. L'estratègia nacional de ciberseguretat ha de promoure l'encriptació d'extrem a extrem sota l'art 7.</td>
+</tr>
+<tr class="highlight-row">
+<td>Seguretat dels recursos humans i control d'accés</td>
+<td>Art 21(2)(i)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Implementar mesures de seguretat de recursos humans, polítiques de control d'accés i gestió d'actius per limitar la superfície d'amenaça interior.</td>
+</tr>
+<tr>
+<td>Autenticació multifactor</td>
+<td>Art 21(2)(j)</td>
+<td><span class="pill pill--blue">Totes les entitats</span></td>
+<td>Utilitzar solucions d'autenticació multifactor (MFA) o d'autenticació contínua, comunicacions de veu/vídeo/text segures i sistemes de comunicació d'emergència assegurades si escau.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 6: INCIDENT REPORTING
+     ========================================================= -->
+<section class="section" id="reporting">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-bell-alert-outline"></i></div>
+<h2 class="section__title">Informe d'incidents</h2>
+</div>
+<p class="section__subtitle">Article 23 -- avís anticipat, notificació i informe final</p>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-alert-rhombus-outline" style="color: var(--color-amber);"></i> Què és un incident significatiu? (Art 23(3))</h3>
+<p>Un incident és significatiu si ha causat o és capaç de causar: (a) una interrupció operativa severa dels serveis o pèrdua financera de l'entitat; o (b) un dany material o no material considerable a altres persones físiques o jurídiques. La mera capacitat de causar aquesta interrupció és suficient: no cal que s'hagi produït cap dany real. El considerant 101 aclareix que l'avaluació inicial hauria de considerar la importància dels sistemes afectats, la gravetat i les característiques tècniques de l'amenaça, les vulnerabilitats subjacents i l'experiència de l'entitat amb incidents similars.</p>
+</div>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">Dins de les 24 hores següents a prendre consciència -- Early warning (Art 23(4)(a))</div>
+<div class="timeline__text">L'avís previ ha d'indicar: (i) si l'incident significatiu és sospitós d'actes il·lícits o maliciosos; i (ii) si pot tenir un impacte transfronterer; només ha de contenir la informació necessària per sensibilitzar l'autoritat i permetre que l'entitat sol·liciti assistència. <strong>Proveïdors de serveis de confiança:</strong> Ha d'enviar una notificació completa d'incidència (no només un avís anticipat) en un termini de 24 hores.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">Dins de les 72 hores següents a prendre consciència -- Notificació d'incidents (Art 23(4)(b))</div>
+<div class="timeline__text">Actualització de l'avís anticipat. La notificació ha d'incloure una avaluació inicial de l'incident significatiu que cobreixi la seva gravetat i impacte, i, si està disponible, els indicadors de compromís. Aquest és el principal esdeveniment d'informació per a la majoria dels fins i el que desencadena l'obligació del CSIRT o autoritat competent de proporcionar retroalimentació inicial dins de les 24 hores següents a la recepció.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">A petició -- Informe intermedi (Art 23(4)(c))</div>
+<div class="timeline__text">El CSIRT o l'autoritat competent poden sol·licitar en qualsevol moment un informe intermedi que cobreixi les actualitzacions d'estat rellevants. No hi ha un termini específic per a aquest tipus d'informes; es proporciona dins d'un termini raonable.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">En el termini d'un mes des de la notificació d'incidència -- Informe final (Art 23(4)(d))</div>
+<div class="timeline__text">L'informe final ha de cobrir: (i) una descripció detallada de l'incident incloent la seva gravetat i impacte; (ii) el tipus d'amenaça o causa d'arrel que és probable que l'hagi desencadenat; (iii) mesures de mitigació aplicades i en curs; i (iv) l'impacte transfronterer si escau. Si l'incident és <strong>encara en curs</strong> En el termini d'un mes, llavors es presenta un informe de progrés i l'informe final segueix en el termini d'un mes a partir de la resolució total de l'incident.</div>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.5rem;">
+<h3><i class="mdi mdi-shield-lock-outline" style="color: var(--color-green);"></i> No hi ha més responsabilitat per notificar (art 23(1))</h3>
+<p>Les notificacions voluntàries en virtut de l'article 30 (per a incidents no significatius, faltes properes i amenaces cibernètiques) no donen lloc a cap obligació addicional més enllà de les que s'aplicarien si l'entitat no es notifiqués. Aquestes disposicions estan dissenyades per fomentar la presentació d'informes ràpids i desinhibits sense que les entitats es frenin per por que la divulgació s'utilitzi contra ells.</p>
+</div>
+<div class="info-box info-box--purple" style="margin-top: 1rem;">
+<h3><i class="mdi mdi-database-outline" style="color: var(--color-purple);"></i> Base de dades Europea de Vulnerabilitat (Art 12(2))</h3>
+<p>EnISA ha de desenvolupar i mantenir una base de dades de vulnerabilitat europea, oberta a tots els grups d'interès, incloses les entitats fora de l'àmbit de NIS2. La base de dades llista les vulnerabilitats conegudes públicament en els productes i serveis TIC, inclosos els productes afectats, la gravetat, els pegats disponibles i l'orientació sobre la mitigació de riscos on els pegats no estan disponibles. Cada Estat membre ha de designar un CSIRT com a coordinador per a la divulgació de vulnerabilitat coordinada, actuant com un intermediari de confiança entre investigadors i proveïdors.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 7: SUPERVISION AND ENFORCEMENT
+     ========================================================= -->
+<section class="section" id="supervision">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-eye-outline"></i></div>
+<h2 class="section__title">Supervisió i execució</h2>
+</div>
+<p class="section__subtitle">Articles 31-37 -- règim diferenciat per a entitats essencials i importants</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-shield-star-outline" style="color: var(--color-blue);"></i> Entitats essencials -- ex ante i ex post (Art 32)</div>
+<p>Les autoritats competents tenen una àmplia gamma de poders de supervisió proactiva sobre les entitats essencials, incloent:</p>
+<ul>
+<li>Inspeccions in situ i supervisió off-site, incloent controls aleatoris realitzats per professionals formats</li>
+<li>Auditories de seguretat regulars i específiques per part d'un organisme independent o de l'autoritat competent</li>
+<li>Auditories ad hoc desencadenades per un incident o evidència significativa d'infracció</li>
+<li>Escanejos de seguretat basats en criteris de risc objectius i no discriminatoris</li>
+<li>Sol·licituds de documentació, dades i evidències d'execució de polítiques</li>
+</ul>
+<p>Les competències d'execució inclouen: avisos; instruccions vinculants; ordres de cessament de la conducta d'infracció; designació d'un funcionari de seguiment; divulgació pública d'infraccions; multes administratives; i, com a últim recurs, suspensió temporal de les certificacions o prohibició temporal d'un gestor individual que exerceixi funcions directives.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Entitats importants -- només ex post (Art 33)</div>
+<p>La supervisió d'entitats importants és reactiva. L'autoritat competent ha de tenir proves, indicacions o informació que suggereixi incompliment abans que pugui actuar. Un cop activada, les eines de supervisió disponibles i els poders d'execució són els mateixos que per a les entitats essencials.</p>
+<p>Les entitats importants no estan obligades a documentar sistemàticament el compliment de les mesures de gestió de riscos de ciberseguretat per a la seva submissió a l'autoritat competent en absència d'una acció de supervisió, però han de mantenir la documentació internament i poder-la presentar prèvia sol·licitud.</p>
+<p>La Comissió va estimar que la distinció entre supervisió ex-ante i ex post representa la palanca clau per a la proporcionalitat: el cost de la documentació proactiva de compliment i la preparació per a l'auditoria és substancial, i reservar-la per a les entitats de major risc evita imposar càrregues desproporcionades a les empreses mitjanes en sectors menys crítics.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 8: FINES
+     ========================================================= -->
+<section class="section" id="fines">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-cash-multiple"></i></div>
+<h2 class="section__title">Sancions administratives</h2>
+</div>
+<p class="section__subtitle">Article 34: llindars fins màxims i factors agreujants</p>
+<table class="duty-table">
+<thead>
+<tr>
+<th>Categoria d'entitat</th>
+<th>Màxima fina</th>
+<th>Article</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="highlight-row">
+<td><strong>Entitats essencials</strong></td>
+<td class="rate-red">10.000.000  ·  o 2% del total de facturació anual mundial (el que sigui superior)</td>
+<td>Art 34(4)</td>
+<td>El volum de negoci de l'empresa a la qual pertany l'entitat; s'aplica a les infraccions de les Arts 21 o 23.</td>
+</tr>
+<tr>
+<td><strong>Entitats importants</strong></td>
+<td class="rate-amber">7.000.000 d'euros o 1,4% del total de la facturació anual mundial (el que sigui superior)</td>
+<td>Art 34(5)</td>
+<td>El volum de negoci de l'empresa a la qual pertany l'entitat; s'aplica a les infraccions de les Arts 21 o 23.</td>
+</tr>
+<tr>
+<td>Pagaments periòdics de penalització</td>
+<td class="rate-purple">Discreció nacional</td>
+<td>Art 34(6)</td>
+<td>Els Estats membres poden preveure pagaments periòdics de sancions per obligar una entitat a cessar una infracció.</td>
+</tr>
+<tr>
+<td>Entitats d'administració pública</td>
+<td class="rate-blue">Discreció nacional</td>
+<td>Art 34(7)</td>
+<td>Els Estats membres determinen si s'apliquen multes administratives als organismes públics i en quina mesura.</td>
+</tr>
+</tbody>
+</table>
+<div class="info-box">
+<h3><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> Factors en la valoració de la multa (Art 32(7))</h3>
+<p>A l'hora d'imposar una multa, les autoritats competents han de tenir en compte com a mínim:</p>
+<ul>
+<li>La gravetat de la infracció i la importància de les disposicions incomplides (infraccions repetides, incompliment de notificar o remeiar incidències, incompliment d'instruccions vinculants, obstrucció d'auditories i subministrament d'informació falsa es consideren greus en qualsevol cas)</li>
+<li>La durada de la infracció</li>
+<li>Qualsevol infracció prèvia rellevant</li>
+<li>Els danys materials o no materials causats, inclosa la pèrdua financera o econòmica, els efectes en altres serveis i el nombre d'usuaris afectats</li>
+<li>Qualsevol intenció o negligència</li>
+<li>Mesures adoptades per l'entitat per prevenir o mitigar els danys</li>
+<li>Adherència a codis de conducta o mecanismes de certificació homologats</li>
+<li>El nivell de cooperació amb l'autoritat competent</li>
+</ul>
+<p>Quan la mateixa conducta constitueixi tant una infracció de NIS2 com una violació de les dades personals en virtut de l'RGPD, i s'hagi imposat una multa GDPR, l'autoritat competent no pot imposar una multa NIS2 separada per a la mateixa conducta (article 35(2)).</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- Transposition (directive-only section) -->
+<section class="section transposition" id="transposition">
+<div class="section__head">
+<span class="section__num">Transposició</span>
+<h2 class="section__title">Com ho han transposat els Estats membres</h2>
+</div>
+<p class="lede">
+      Una directiva no és directament aplicable: cada Estat membre ha d'escriure-la en la seva pròpia legislació nacional per un termini de transposició. Per a la Directiva NIS2 el termini de transposició de la UE era <strong>17 d'octubre de 2024</strong>. El mapa mostra, per a cada Estat membre, la principal mesura nacional que va notificar a la Comissió i la seva data. 23 dels 27 Estats membres han notificat mesures analitzades aquí; la llista completa i autoritzada de mesures nacionals de transposició per a cada Estat membre està en
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32022L2555" rel="noopener" target="_blank">EUR-Lex (Mesures nacionals de transposició)</a>.
+    </p>
+<div aria-label="Map of EU Member State transposition of NIS2 Directive" class="transp-map" id="transp-map-32022L2555" role="img"></div>
+<p class="transp-note">
+      Font: EUR-Lex National Implementing Measures, recuperada el maig de 2026. On un marcador llegeix "Notificat via EUR-Lex", consulta l'enllaç EUR-Lex anterior per a les mesures d'aquest país.
+    </p>
+</section>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<style>
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+    @media (max-width: 767px) { .transp-map { height: 420px; } }
+  </style>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "Art. 49 Abs. 1 des Bundes-Verfassungsgesetz (B-VG); Stammfassung BGBl. Nr. 1/1930, zuletzt geändert durch BGBl. I Nr. 89/2024", "date": "1930-01-02", "status": "Transposed", "count": 8}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "Loi du 26 avril 2024 établissant un cadre pour la cybersécurité des réseaux et des systèmes d'information d’intérêt général pour la sécurité publique (loi NIS2)", "date": "2024-05-17", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Закон за изменение и допълнение на Закона за киберсигурност", "date": "2026-02-13", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o kibernetičkoj sigurnosti", "date": "2024-02-07", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Ασφάλειας Δικτύων και Συστημάτων Πληροφοριών (Τροποποιητικός) Νόμος του 2025.", "date": "2025-04-25", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 21/1992 Sb., o bankách", "date": "1992-01-20", "status": "Transposed", "count": 83}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "Lov nr. 481 af 22. maj 2024 om ændring af lov om finansiel virksomhed mv", "date": "1001-01-01", "status": "Transposed", "count": 10}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Elutähtsa teenuse kirjeldus ja toimepidevuse nõuded elektroonilise isikutuvastamise ja digitaalse allkirjastamise tagamisel", "date": "2019-01-15", "status": "Transposed", "count": 28}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Laki sähköisen viestinnän palveluista / Lag om tjänster inom elektronisk kommunikation (917/2014) 7.11.2014, viimeksi muutettuna / ändrad senast genom (126/2025", "date": "1001-01-01", "status": "Transposed", "count": 13}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Explanatory documents", "date": "2009-07-30", "status": "Transposed", "count": 20}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Εθνική Υπηρεσία Πληροφοριών και άλλες διατάξεις.", "date": "2008-03-03", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "2003. évi C. törvény az elektronikus hírközlésről", "date": "2003-11-27", "status": "Transposed", "count": 32}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Decreto legislativo 4 settembre 2024, n. 138, di recepimento nell’ordinamento italiano della direttiva 2022/2555. Notifica provvediemento di attuazione.", "date": "1001-01-01", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Nacionālās kiberdrošības likums", "date": "2024-07-04", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos viešojo administravimo įstatymas Nr. VIII-1234 (suvestinė redakcija nuo 2022-01-29 iki 2022-12-31).", "date": "1999-07-09", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 5 mai 2026 concernant des mesures destinées à assurer un niveau élevé de cybersécurité et portant modification de : 1° la loi modifiée du 14 août 2000 re", "date": "2026-05-06", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "Measures for a High Common Level of Cybersecurity across the European Union (Malta) Order, 2025", "date": "2025-04-08", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "Ustawa z dnia 26 kwietnia 2007 r. o zarządzaniu kryzysowym (Dz.U. z 2023 r. poz. 122 z póżn. zm.)", "date": "2023-01-16", "status": "Transposed", "count": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "Decreto-Lei n.º 125/2025, de 4 de dezembro, Diário da República n.º 234/2025, Série I de 2025-12-04, Transpõe a Diretiva (UE) 2022/2555, relativa a medidas dest", "date": "1001-01-01", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Ordonanţa Guvernului nr. 2/2001 privind regimul juridic al contravențiilor", "date": "2001-07-25", "status": "Transposed", "count": 16}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Zákon č. 40/1964 Zb. Občiansky zákonník v platnom znení (consolidated version as amended by zákon č. 254/2024 Z. z., ktorým sa mení a dopĺňa zákon č. 40/1964 Zb", "date": "1964-03-05", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o informacijski varnosti (ZInfV-1)", "date": "2025-06-04", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Cybersäkerhetslag (2025:1506)", "date": "2025-12-17", "status": "Transposed", "count": 13}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32022L2555",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+<!-- =========================================================
+     SECTION 9: COOPERATION BODIES
+     ========================================================= -->
+<section class="section" id="cooperation">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-handshake-outline"></i></div>
+<h2 class="section__title">Organismes de cooperació a nivell de la UE</h2>
+</div>
+<p class="section__subtitle">Grup de Cooperació, Xarxa CSIRTs i EU-CyCLONe</p>
+<div class="three-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-blue);"></i> Grup de Cooperació (Art 14)</div>
+<p>L'òrgan de cooperació estratègica, format per representants dels Estats membres, la Comissió i la ENISA, orienta sobre la transposició i l'aplicació, intercanvia les millors pràctiques i supervisa les avaluacions coordinades dels riscos de seguretat de les cadenes de subministrament crítiques en virtut de l'article 22; informa el Parlament Europeu i al Consell; es reuneix almenys anualment amb el Grup de Resiliència d'Entitats Crítiques en virtut de la Directiva CER.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-server-network" style="color: var(--color-green);"></i> Xarxa CSIRTs (Art 15)</div>
+<p>La capa de cooperació operativa: una xarxa d'equips nacionals de resposta a incidents de seguretat informàtica més CERT-EU. Intercanvia informació sobre capacitats, incidents, vulnerabilitats i fallades properes, pot coordinar la resposta a incidents transfronterers i dona suport als Estats membres amb assistència a incidents transfronterers. La Comissió participa com a observador; ENISA proporciona la secretaria.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-lightning-bolt-circle" style="color: var(--color-red);"></i> EU-CyCLONe (Art 16)</div>
+<p>La Xarxa Europea d'Organització d'Enllaços per a la Cibercrisi gestiona incidents i crisis de ciberseguretat a gran escala a nivell operatiu, formada per autoritats nacionals de gestió de crisi cibernètica, i quan un incident podria afectar significativament a la Unió, la Comissió s'uneix com a participant de ple dret en lloc d'observador, i informa cada 18 mesos al Parlament Europeu i al Consell.</p>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.25rem;">
+<h3><i class="mdi mdi-shield-lock-outline" style="color: var(--color-green);"></i> El rol d'ENISA</h3>
+<p>L'ENISA (Agència de la UE per a la Ciberseguretat) exerceix un paper central a tot el NIS2. Proporciona la secretaria de la Xarxa CSIRTs i de la UE-CyCLONe, desenvolupa i manté la base de dades de vulnerabilitat europea (article 12), manté el registre ENISA de certs proveïdors de serveis digitals (article 27), publica un informe biennal sobre l'estat de la ciberseguretat a la Unió (article 18), i proporciona directrius i assistència tècnica als Estats membres sobre el desenvolupament de CSIRTs i estratègies nacionals de ciberseguretat.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 10: TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+<h2 class="section__title">Línia de temps legislativa</h2>
+</div>
+<p class="section__subtitle">de l'aplicació NIS1 a NIS2 i el camí a seguir</p>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">6 de juliol de 2016</div>
+<div class="timeline__text"><strong>NIS1 adoptat</strong> (Directiva (UE) 2016/1148). La primera llei horitzontal de ciberseguretat de la UE.Els Estats membres van tenir fins al 9 de maig de 2018 per transposar-la i identificar operadors de serveis essencials.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">16 de desembre de 2020</div>
+<div class="timeline__text">La Comissió publica el <strong>Estratègia de ciberseguretat de la UE per a la Dècada Digital</strong> Al costat de la proposta NIS2, reconeixent les limitacions de NIS1 en l'abast i la consistència de l'aplicació.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">13 maig 2022</div>
+<div class="timeline__text"><strong>Acord polític</strong> entre el Parlament Europeu i el Consell sobre el text NIS2, després de les negociacions a tres bandes.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">14 desembre 2022</div>
+<div class="timeline__text"><strong>NIS2 adoptat formalment</strong> pel Parlament Europeu (signat per la Presidenta Roberta Metsola) i pel Consell (signat pel President Mikael Damberg) adoptat a Estrasburg.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">27 de desembre de 2022</div>
+<div class="timeline__text">Publicat a <strong>OJ L 333</strong>, pp. 80-152.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">16 de gener de 2023</div>
+<div class="timeline__text"><strong>El NIS2 va entrar en vigor</strong> (el vintè dia després de la publicació).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 d'octubre de 2024</div>
+<div class="timeline__text"><strong>Data límit de la transposició.</strong> Els Estats membres han d'haver adoptat i publicat mesures nacionals d'execució, i els actes d'execució de la Comissió sobre els requisits tècnics per a determinats proveïdors de serveis digitals també hauran d'aplicar-se en aquesta data (apartat 5 de l'article 21).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">18 d'octubre de 2024</div>
+<div class="timeline__text"><strong>S'aplica NIS2; NIS1 derogat.</strong> La Directiva (UE) 2016/1148 va ser derogada amb efecte a partir d'aquesta data (article 44). Les referències a NIS1 en una altra legislació s'interpreten com a referències a NIS2 per la taula de correlació de l'Annex III.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 gener 2025</div>
+<div class="timeline__text">Alguns proveïdors de serveis digitals han de registrar-se en ENISA a través del mecanisme de l'Estat membre (apartat 2 de l'article 27).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 d'abril de 2025</div>
+<div class="timeline__text">Els Estats membres han de publicar i notificar la llista d'entitats essencials i importants (apartat 3 de l'article 3).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 d'octubre de 2027</div>
+<div class="timeline__text">Primera revisió de la directiva per part de la Comissió, amb un informe al Parlament i al Consell, i les revisions es fan cada 36 mesos (article 40).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 11: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-alphabetical"></i></div>
+<h2 class="section__title">Glossari</h2>
+</div>
+<p class="section__subtitle">termes i conceptes clau definits en el marc NIS2</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-card__term">Entitat essencial</div>
+<div class="glossary-card__def">En general, les entitats més grans de l'Annex I, els proveïdors de serveis de confiança qualificats, els proveïdors de TLD/DNS i les entitats de l'administració pública del govern central.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Entitat important</div>
+<div class="glossary-card__def">Totes les altres entitats en l'àmbit de l'art 3(2). subjectes a la supervisió ex post (art 33), desencadenada per proves d'incompliment. Cobreix les entitats de mida mitjana de l'Annex I i la majoria de les entitats de l'Annex II.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Incidència significativa</div>
+<div class="glossary-card__def">En virtut de l'art 23(3): un incident que ha causat o és capaç de causar greus trastorns operacionals o pèrdues financeres, o que ha afectat o podria afectar altres persones causant considerables danys materials o no materials.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Incident</div>
+<div class="glossary-card__def">En virtut de l'Art 6 (6): un esdeveniment que comprometi la disponibilitat, autenticitat, integritat o confidencialitat de les dades emmagatzemades, transmeses o tractades, o dels serveis oferts o accessibles a través de la xarxa i els sistemes d'informació.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Prop de la falta</div>
+<div class="glossary-card__def">D'acord amb l'Art 6 (5): un esdeveniment que podria haver compromès els sistemes de xarxa i informació o les dades, però que es va impedir amb èxit de materialitzar-se o no es va materialitzar. S'incentiva la notificació voluntària a l'Art 30.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">CSIRT</div>
+<div class="glossary-card__def">Equip de resposta a incidents de seguretat informàtica. Cada Estat membre ha de designar o establir un o més CSIRT sota l'art 10 per gestionar la resposta a incidents, proporcionar avisos primerencs i coordinar la divulgació de la vulnerabilitat. Els CSIRT nacionals estan vinculats a través de la Xarxa CSIRTs.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Proveïdor de serveis gestionats (MSP)</div>
+<div class="glossary-card__def">En virtut de l'Art 6(39): entitat prestadora de serveis relacionats amb la instal·lació, gestió, operació o manteniment de productes, xarxes, infraestructures o aplicacions TIC a través de l'assistència o l'administració activa, ja sigui a les instal·lacions dels clients o a distància.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Seguretat de la cadena de subministrament</div>
+<div class="glossary-card__def">Una de les deu mesures mínimes de l'Art 21(2)(d) requereix que les entitats avaluïn i gestionin els riscos de seguretat derivats dels seus proveïdors i proveïdors de serveis directes, inclosa la qualitat de les seves pràctiques de ciberseguretat i els procediments de desenvolupament segur.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Enfocament de tots els perills</div>
+<div class="glossary-card__def">El principi de gestió de riscos a l'Art 21(1) que obliga les entitats a abordar totes les amenaces plausibles als seus sistemes de xarxa i informació: atacs informàtics, amenaces físiques al medi ambient dels sistemes, amenaces internes, compromís amb la cadena de subministrament i esdeveniments naturals. No es pot excloure cap categoria d'amenaça única.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">EU-CyCLONe</div>
+<div class="glossary-card__def">European Cyber Crisis Liaison Organisation Network (Art 16) dona suport a la gestió coordinada d'incidents i crisis de ciberseguretat a gran escala a nivell operatiu. Distintiu de la Xarxa CSIRTs (cooperació operativa) i del Grup de Cooperació (cooperació estratègica).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Establiment principal</div>
+<div class="glossary-card__def">Per a determinats proveïdors de serveis digitals de l'apartat 2 de l'article 26: l'Estat membre en el qual es prenen predominantment les decisions relatives a les mesures de gestió de riscos de ciberseguretat, determina quina autoritat competent té jurisdicció.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Vulnerabilitat</div>
+<div class="glossary-card__def">En el marc de l'Art 6 (15): una debilitat, susceptibilitat o defecte dels productes o serveis TIC que poden ser explotats per una amenaça cibernètica. ENISA manté la base de dades europea de vulnerabilitats públicament conegudes (Art 12).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 12: FAQ
+     ========================================================= -->
+<section class="section" id="faq">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-frequently-asked-questions"></i></div>
+<h2 class="section__title">Preguntes freqüents</h2>
+</div>
+<p class="section__subtitle">preguntes pràctiques de compliment</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-blue);"></i> Com puc saber si la meva organització està en el seu abast?</div>
+<p>Dues preguntes determinen l'abast. Primer: la vostra organització proporciona serveis en un dels 18 sectors dels annexos I o II de NIS2? Segon: té 50 o més empleats, i la facturació anual o el balanç total per sobre de 10 milions d'euros? Si les dues respostes són sí, esteu en l'abast. Tingueu en compte que, fins i tot si esteu per sota d'aquests llindars, encara podeu estar en l'àmbit d'aplicació si pertanyeu a una de les categories especials de l'apartat 4 de l'article 2 - per exemple, si sou l'únic proveïdor d'un servei essencial en un Estat membre, o si sou un proveïdor de serveis de confiança o proveïdor de serveis DNS.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-green);"></i> El NIS2 s'aplica a organitzacions de fora de la UE?</div>
+<p>Sí, si presten serveis dins de la Unió. Certes categories d'entitats: proveïdors de serveis de DNS, registres de noms TLD, proveïdors de serveis de cloud computing, proveïdors de serveis de centres de dades, proveïdors de serveis de CDN, proveïdors de serveis gestionats, proveïdors de serveis de seguretat gestionats i proveïdors de mercats en línia, motors de cerca i xarxes socials. Si aquesta entitat no està establerta a la UE però ofereix serveis dins d'ella, ha de designar un representant a la Unió (article 26(3)). La no designació d'un representant no l'eximeix de les obligacions de la directiva; qualsevol Estat membre on l'entitat presta serveis pot emprendre accions legals per infraccions.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-purple);"></i> Pot el mateix incident desencadenar tant les obligacions d'informació NIS2 com GDPR?</div>
+<p>Sí. Un sol incident de ciberseguretat pot constituir tant un incident significatiu de NIS2 (triggering the 24h/72h/1-month reporting cascade under Article 23) com una violació de les dades personals notificable d'acord amb l'article 33 del RGPD (72-hour deadline to the supervisory authority). Quan això succeeixi, l'article 35(1) requereix que l'autoritat competent i l'autoritat de control de protecció de dades cooperin.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-amber);"></i> Què significa la "factura anual mundial" per a càlculs fins?</div>
+<p>Els apartats 4 i 5 de l'article 34 fan referència a la facturació anual total a tot el món en l'exercici financer anterior de l'"empresa a la qual pertany l'entitat essencial." El concepte d'empresa segueix la definició de la llei de competència en els articles 101 i 102 del TFUE, cosa que significa que abasta tot el grup d'empreses sota control comú, no només la persona jurídica que va cometre la infracció. Per a una filial d'un gran grup multinacional, això pot donar lloc a un sostre de multa significativament més alt que si només s'utilitzés la facturació pròpia de la filial.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-red);"></i> El nostre sector té les seves pròpies normes de ciberseguretat (p. ex. DORA for finance).També complim amb NIS2?</div>
+<p>L'apartat 1 de l'article 4 del NIS2 estableix que quan un acte jurídic de la Unió específica del sector requereixi que les entitats adoptin mesures de gestió de riscos de ciberseguretat o notifiquin incidents significatius, i que aquests requisits siguin almenys equivalents a les obligacions del NIS2, no s'apliquen les disposicions pertinents del NIS2. DORA (Reglament 2022/2554) n'és l'exemple principal: les entitats financeres subjectes a DORA estan exemptes de les disposicions de gestió de riscos i d'informació d'incidents del NIS2 en la mesura contemplada per DORA, però la Comissió va emetre directrius al juliol de 2023 per assistir a aquesta anàlisi, i no totes les entitats financeres estan cobertes per DORA en el mateix grau.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- CTA STRIP -->
+<div class="cta-strip" style="background-image: url('https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940'), linear-gradient(135deg, rgba(6,147,227,0.88) 0%, rgba(155,81,224,0.88) 100%); background-size: cover, cover; background-position: center, center; background-blend-mode: overlay;">
+<div class="cta-strip__title">Navega amb el NIS2 Brubru</div>
+<div class="cta-strip__sub">Xatejar amb la nostra IA, fer una anàlisi de la bretxa de compliment, fer un seguiment de la transposició en els 27 Estats membres i obtenir alertes polítiques - tot en un sol lloc.</div>
+<a class="cta-strip__btn" href="https://brubru.beresol.eu/signup">Inicia un judici lliure</a>
+</div>
+<p style="font-size: 0.75rem; color: var(--color-muted); text-align: right; margin-top: -1.5rem; margin-bottom: 2rem;">
+  Foto: <a href="https://www.pexels.com/@christina-morillo-1471555" rel="noopener" style="color: var(--color-muted);" target="_blank">Christina Morillo</a> via <a href="https://www.pexels.com/photo/1181467/" rel="noopener" style="color: var(--color-muted);" target="_blank">Pexels</a>
+</p>
+<!-- =========================================================
+     SECTION 13: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-link-variant"></i></div>
+<h2 class="section__title">Fonts oficials</h2>
+</div>
+<p class="section__subtitle">fonts primàries per al NIS2 i la transposició nacional</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-file-pdf-box" style="color: var(--color-blue);"></i> EUR-Lex: CELEX 32022L2555</div>
+<p>El text complet de la Directiva (UE) 2022/2555 sobre EUR-Lex, incloent tots els considerants, articles operatius i annexos I-III. CELEX 32022L2555El text consolidat incorpora qualsevol acte de modificació posterior.</p>
+<p style="margin-top: 0.75rem;"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Obre a EUR-Lex</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-web" style="color: var(--color-green);"></i> ENISA: NIS2 implementation guidance</div>
+<p>La pàgina NIS2 d'ENISA proporciona documents d'orientació, eines d'execució, la base de dades de vulnerabilitat europea i informació sobre la transposició dels Estats membres. ENISA és el principal organisme de la UE que dona suport a la implementació de NIS2.</p>
+<p style="margin-top: 0.75rem;"><a href="https://www.enisa.europa.eu/topics/cybersecurity-policy/nis-directive-new" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Pàgina d'ENISA NIS2</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> Directrius de la Comissió (art 4(3))</div>
+<p>Directrius emeses per la Comissió al juliol de 2023 que aclareixen quan les normes sectorials específiques (com DORA) són equivalents en efecte a NIS2, publicades sobre EUR-Lex. Lectura essencial per a entitats de sectors regulats que avaluïn quin règim les regeix.</p>
+<p style="margin-top: 0.75rem;"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.C_.2023.305.01.0001.01.ENG" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Directrius de la Comissió</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-chart-timeline-variant" style="color: var(--color-amber);"></i> Fitxer de procediment legislatiu OEIL</div>
+<p>L'expedient del procediment legislatiu del Parlament Europeu per al NIS2, seguint tota la història legislativa de la proposta de la Comissió a través de la primera lectura, el diàleg a tres bandes i l'adopció final.</p>
+<p style="margin-top: 0.75rem;"><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2020/0359%28COD%29" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Fitxer de procediment OEIL</a></p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 14: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+<h2 class="section__title">Explora amb Brubru</h2>
+</div>
+<p class="section__subtitle">usa BrubruEines amb IA per navegar pel compliment de NIS2 i la llei de ciberseguretat de la UE</p>
+<div class="features-grid">
+<div class="feature-card">
+<i class="mdi mdi-chat-outline"></i>
+<div class="feature-card__title">Pregunta Brubru Xat</div>
+<div class="feature-card__desc">Fer preguntes sobre l'abast de NIS2, les entitats essencials vs importants, les deu mesures mínimes, els terminis d'informació d'incidents, els requisits de seguretat de la cadena de subministrament i com NIS2 interactua amb DORA i GDPR.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/main">Obre un xat</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-shield-check-outline"></i>
+<div class="feature-card__title">Compliment de la llei de la UE</div>
+<div class="feature-card__desc">Realitza una anàlisi de la bretxa de compliment contra NIS2 i la legislació en ciberseguretat relacionada. Identifica quines obligacions s'apliquen a la teva organització i on la teva postura actual és curta.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Comprova el compliment</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-newspaper-variant-outline"></i>
+<div class="feature-card__title">La meva bombolla de la UE</div>
+<div class="feature-card__desc">Seguiment de les notícies de transposició de NIS2, les actualitzacions d'orientació d'ENISA, els actes d'aplicació de la Comissió i l'evolució de la política de ciberseguretat de la UE en un únic canal personalitzat.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/my-eu-bubble">Obre la bombolla</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-file-edit-outline"></i>
+<div class="feature-card__title">Amendator</div>
+<div class="feature-card__desc">Redactar i analitzar les esmenes legislatives a les mesures d'aplicació del NIS2 o la legislació relacionada amb la ciberseguretat a mesura que evoluciona.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/amendator">Obre l'assistent</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-book-open-page-variant-outline"></i>
+<div class="feature-card__title">Biblioteca Canon de la UE</div>
+<div class="feature-card__desc">Navega per totes les pàgines d'anàlisi d'immersió profunda a través de la biblioteca canònica de la UE, que cobreix la regulació digital, el dret financer, el dret farmacèutic, els remeis comercials i molt més.</div>
+<a class="feature-card__btn" href="../index.html">Navega per Canon</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-api"></i>
+<div class="feature-card__title">Brubru API</div>
+<div class="feature-card__desc">Accedir a dades estructurades sobre els procediments legislatius de la UE, els esdeveniments del calendari i la intel·ligència política a través de Brubru API. Integra el seguiment del compliment de NIS2 en les teves pròpies eines.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/api/docs">Visualitza els documents API</a>
+</div>
+</div>
+</section>
+</div><!-- .container -->
+<!-- Footer -->
+<footer class="footer">
+<div class="footer__inner">
+<div class="footer__col">
+<div class="footer__logos">
+<img alt="Brubru" class="footer__logo-brubru" src="../../assets/brubru_mainlogo.png"/>
+<img alt="Beresol" class="footer__logo-beresol" src="../../assets/beresol-logo.png"/>
+</div>
+<div class="footer__text">
+<strong>Brubru</strong> és una plataforma d'intel·ligència política de la UE <a href="https://beresol.eu" rel="noopener" target="_blank">Beresol BV</a>Apeldoorn, Països Baixos.<br/>
+        Aquesta pàgina forma part de <a href="../index.html">Biblioteca Canon de la UE</a> -- anàlisi pública lliure de la legislació de referència de la UE.<br/><br/>
+        Fotografia: <a href="https://www.pexels.com/@pixabay" rel="noopener" target="_blank">Pixabay</a> i <a href="https://www.pexels.com/@christina-morillo-1471555" rel="noopener" target="_blank">Christina Morillo</a> via <a href="https://www.pexels.com" rel="noopener" target="_blank">Pexels</a>.
+      </div>
+</div>
+<div class="footer__col">
+<ul class="footer__nav">
+<li><a href="https://brubru.beresol.eu">Brubru home</a></li>
+<li><a href="https://brubru.beresol.eu/signup">Inicia una prova gratuïta</a></li>
+<li><a href="https://brubru.beresol.eu/main">Brubru Xat</a></li>
+<li><a href="https://brubru.beresol.eu/amendator">Amendator</a></li>
+<li><a href="https://brubru.beresol.eu/my-eu-bubble">La meva bombolla de la UE</a></li>
+<li><a href="https://brubru.beresol.eu/eulawcomply">Compliment de la llei de la UE</a></li>
+</ul>
+</div>
+<div class="footer__col">
+<ul class="footer__nav">
+<li><a href="../index.html">Biblioteca Canon de la UE</a></li>
+<li><a href="../2022-1925_dma/">Llei de Mercats Digitals (DMA)</a></li>
+<li><a href="../2022-2065_dsa/">Llei de serveis digitals (DSA)</a></li>
+<li><a href="../2024-1689_aiact/">Acte d'IA</a></li>
+<li><a href="../2016-679_gdpr/">GDPR</a></li>
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" rel="noopener" target="_blank">EUR-Lex CELEX 32022L2555</a></li>
+</ul>
+</div>
+</div>
+<div class="footer__bottom">
+     ·  2026 Beresol BV. Tots els drets reservats.
+    <span style="margin: 0 0.5rem;"> · </span>
+<a href="https://brubru.beresol.eu/privacy">Privacitat</a>
+<span style="margin: 0 0.5rem;"> · </span>
+<a href="https://brubru.beresol.eu/terms">Termes</a>
+<span style="margin: 0 0.5rem;"> · </span>
+    Anàlisi basada en el text EUR-Lex/Cellar de la Directiva (UE) 2022/2555 (CELEX 32022L2555) tal com es va publicar a OJ L 333, 27.12.2022. S'aplica des del 18 d'octubre de 2024.
+  </div>
+</footer>
+<!-- Back to top -->
+<a aria-label="Torna a la part superior" class="back-to-top" href="#top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+<script>
+  // Back to top button
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  // Language selector active state
+  (function() {
+    var sel = document.querySelector('.header__lang');
+    var path = window.location.pathname;
+    if (path.endsWith('fr.html')) sel.value = 'fr.html';
+    else if (path.endsWith('es.html')) sel.value = 'es.html';
+    else if (path.endsWith('it.html')) sel.value = 'it.html';
+    else if (path.endsWith('nl.html')) sel.value = 'nl.html';
+    else if (path.endsWith('ca.html')) sel.value = 'ca.html';
+    else sel.value = 'index.html';
+  })();
+</script>
+</body>
+</html>

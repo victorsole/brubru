@@ -1,0 +1,1435 @@
+Deze tekst is leeg.
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>De NIS2-richtlijn uitgelegd: Richtlijn (EU) 2022/2555 betreffende de beveiliging van netwerken en informatie. Brubru</title>
+<meta content="Uitgebreide handleiding tot de NIS2 Richtlijn (EU) 2022/2555: reikwijdte, essentiële versus belangrijke entiteiten, de 10 minimale cybersecurity maatregelen, incidentrapportage binnen 24/72 uur of 1 maand, toezicht, handhaving en boetes tot EUR 10 miljoen of 2% van de wereldomzet." name="description"/>
+<meta content="Richtlijn NIS2 (EU) 2022/2555: Het Europese kader voor cyberbeveiliging | Brubru EU Canon" property="og:title"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="NIS2 vervangt NIS1 met een breder toepassingsgebied (18 sectoren), strengere verantwoordelijkheid op bestuursniveau, rapportage van incidenten binnen 24/72/1 maand, en boetes tot EUR 10 miljoen of 2% van de wereldwijde omzet voor essentiële entiteiten. Van toepassing vanaf 18 oktober 2024." property="og:description"/>
+<meta content="https://brubru.beresol.eu/eucanon/2022-2555_nis2/" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Richtlijn NIS2 (EU) 2022/2555 Brubru EU Canon" name="twitter:title"/>
+<meta content="18 sectoren, essentiële versus belangrijke entiteiten, 10 minimale maatregelen, 24/7 of 72-uurs/1-maands incidentrapportage, boetes van EUR 10 miljoen of 2%. Van toepassing vanaf 18 oktober 2024." name="twitter:description"/>
+<meta content="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" name="twitter:image"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/" rel="canonical"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html" hreflang="en" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/es.html" hreflang="es" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/fr.html" hreflang="fr" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/it.html" hreflang="it" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/nl.html" hreflang="nl" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/ca.html" hreflang="ca" rel="alternate"/>
+<link href="https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html" hreflang="x-default" rel="alternate"/>
+<link href="../../assets/brubru_icon.png" rel="icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="shortcut icon" type="image/png"/>
+<link href="../../assets/brubru_icon.png" rel="apple-touch-icon"/>
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"/>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Directive (EU) 2022/2555 of the European Parliament and of the Council of 14 December 2022 on measures for a high common level of cybersecurity across the Union",
+    "alternateName": "NIS2 Directive",
+    "identifier": "CELEX:32022L2555",
+    "legislationIdentifier": "32022L2555",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555",
+    "datePublished": "2022-12-27",
+    "dateModified": "2026-06-10",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "cybersecurity, network and information security, NIS2, incident reporting, essential entities, important entities, ENISA, CSIRTs, supply-chain security, cyber risk management"
+    }
+  }
+  </script>
+<style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Hero image */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number  { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    /* TOC */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    /* Tables */
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue   { color: var(--color-blue);   font-weight: 700; }
+    .duty-table .rate-green  { color: var(--color-green);  font-weight: 700; }
+    .duty-table .rate-amber  { color: var(--color-amber);  font-weight: 700; }
+    .duty-table .rate-red    { color: var(--color-red);    font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    /* Scope grid (2 cols) */
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Two / three col grids */
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid   { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    /* Glossary */
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term  { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def   { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* Brubru features CTA grid */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem;
+      text-align: center; transition: all 0.2s;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc  { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* Pills */
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue   { background: rgba(6,147,227,0.1);   color: var(--color-blue); }
+    .pill--green  { background: rgba(5,150,105,0.1);   color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1);  color: var(--color-purple); }
+    .pill--amber  { background: rgba(217,119,6,0.1);   color: var(--color-amber); }
+    .pill--red    { background: rgba(220,38,38,0.1);   color: var(--color-red); }
+
+    /* Related canon card */
+    .canon-related {
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      padding: 1.75rem; margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    /* CTA Strip */
+    .cta-strip { padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius); }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue);
+      background: white; text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru  { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border); padding-top: 1rem;
+      font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<!-- Sticky header -->
+<header class="header" id="top">
+<a aria-label="Brubru huis" href="https://brubru.beresol.eu"><img alt="Brubru" class="header__logo" src="../../assets/brubru_mainlogo.png"/></a>
+<div class="header__text">
+<div class="header__title">Brubru</div>
+<div class="header__subtitle">EU-beleidsanalyse</div>
+</div>
+<select aria-label="Taal" class="header__lang" onchange="window.location.href=this.value">
+<option value="index.html">English</option>
+<option value="fr.html">Francais</option>
+<option value="es.html">Espanol</option>
+<option value="it.html">Italiano</option>
+<option selected value="nl.html">Nederlands</option>
+<option value="ca.html">Catala</option>
+</select>
+<a class="header__cta" href="https://brubru.beresol.eu/signup">Probeer. Brubru gratis</a>
+</header>
+<div class="container">
+<!-- Hero -->
+<section class="hero">
+<div class="hero__tag">
+<a href="../index.html">EU Canon</a> / Europese Cyberbeveiligingswetgeving
+  </div>
+<h1 class="hero__title">De <span>Richtlijn NIS2</span></h1>
+<p class="hero__subtitle">
+    Richtlijn (EU) 2022/2555 is de horizontale cybersecurity-wet van de EU, die de NIS1-richtlijn (2016/1148) vervangt, met ingang van 18 oktober 2024. Deze richtlijn omvat 18 sectoren, vereist verantwoordelijkheid op bestuursniveau, beschrijft tien minimale beveiligingsmaatregelen, vereist incidentrapportage binnen 24 uur, 72 uur en één maand, en stelt maximale boetes van € 10 miljoen of 2% van de jaaromzet vast voor essentiële entiteiten.
+  </p>
+<div class="hero__meta">
+<span><i class="mdi mdi-calendar"></i> Aangenomen op 14 december 2022</span>
+<span><i class="mdi mdi-book-open-outline"></i> OJ L 333, 27 december 2022</span>
+<span><i class="mdi mdi-tag-outline"></i> CELEX 32022L2555</span>
+<span><i class="mdi mdi-gavel"></i> Artikel 114 VWE.</span>
+</div>
+</section>
+<!-- Hero image -->
+<figure class="hero-image">
+<img alt="Concept voor een digitaal netwerkbeveiligingsschild, dat cyberbeveiliging voor kritieke infrastructuur vertegenwoordigt." loading="lazy" src="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=1600"/>
+<figcaption>
+    Foto: <a href="https://www.pexels.com/@pixabay" rel="noopener" target="_blank">Pixabay</a>
+    via <a href="https://www.pexels.com/photo/60504/" rel="noopener" target="_blank">Pexels</a>
+    NIS2 plaatst cyberbeveiligingsrisicobeheer centraal in de Europese governance van kritieke infrastructuur.
+  </figcaption>
+</figure>
+<!-- Key figures strip -->
+<div class="figures">
+<div class="figure-card fc-blue">
+<div class="figure-card__number">18</div>
+<div class="figure-card__label">Behandelingsgebieden</div>
+<div class="figure-card__context">De elf sectoren met de hoogste prioriteit (energie, transport, gezondheidszorg, digitale infrastructuur…) en zeven andere kritieke sectoren in Bijlage II (fabricage, voedsel, digitale dienstverleners…).</div>
+</div>
+<div class="figure-card fc-red">
+<div class="figure-card__number">24 uur</div>
+<div class="figure-card__label">Vroegtijdig waarschuwingsdrempel</div>
+<div class="figure-card__context">Artikel 23(4)(a): Zodra een significant incident wordt vastgesteld, moeten de betrokken partijen binnen 24 uur een vroegtijdige melding doen aan de CSIRT of de bevoegde autoriteit.</div>
+</div>
+<div class="figure-card fc-amber">
+<div class="figure-card__number">10% / 2%</div>
+<div class="figure-card__label">Boeteplafond voor essentiële entiteiten</div>
+<div class="figure-card__context">Artikel 34(4): tot ten minste € 10.000.000 of ten minste 2% van de totale jaarlijkse wereldwijde omzet, afhankelijk van welk bedrag hoger is. NB: de 10%-waarde betreft € 10 miljoen, niet een percentage.</div>
+</div>
+<div class="figure-card fc-green">
+<div class="figure-card__number">10</div>
+<div class="figure-card__label">Minimale beveiligingsmaatregelen</div>
+<div class="figure-card__context">Artikel 21(2): tien expliciete minimale maatregelen, variërend van risicoanalyse en incidentbehandeling tot multi-factor authenticatie en beveiliging van de toeleveringsketen – verplicht voor alle entiteiten die onder de reikwijdte vallen.</div>
+</div>
+</div>
+<!-- Table of Contents -->
+<nav class="toc">
+<div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Inhoud</div>
+<div class="toc__grid">
+<a class="toc__link" href="#overview"><i class="mdi mdi-information-outline"></i> Overzicht</a>
+<a class="toc__link" href="#scope"><i class="mdi mdi-view-grid-outline"></i> Omvang en sectoren</a>
+<a class="toc__link" href="#entities"><i class="mdi mdi-account-group-outline"></i> Essentieel versus belangrijk</a>
+<a class="toc__link" href="#governance"><i class="mdi mdi-shield-account-outline"></i> Verantwoordelijkheid van het management</a>
+<a class="toc__link" href="#measures"><i class="mdi mdi-shield-check-outline"></i> De 10 beveiligingsmaatregelen</a>
+<a class="toc__link" href="#reporting"><i class="mdi mdi-bell-alert-outline"></i> Melding van incidenten</a>
+<a class="toc__link" href="#supervision"><i class="mdi mdi-eye-outline"></i> Toezicht en handhaving</a>
+<a class="toc__link" href="#fines"><i class="mdi mdi-cash-multiple"></i> Boetes</a>
+<a class="toc__link" href="#transposition"><i class="mdi mdi-map-outline"></i> Transpositie</a>
+<a class="toc__link" href="#cooperation"><i class="mdi mdi-handshake-outline"></i> Samenwerkingsorganen</a>
+<a class="toc__link" href="#timeline-section"><i class="mdi mdi-timeline-outline"></i> Tijdslijn</a>
+<a class="toc__link" href="#glossary"><i class="mdi mdi-alphabetical"></i> Lexicon</a>
+<a class="toc__link" href="#faq"><i class="mdi mdi-frequently-asked-questions"></i> Veelgestelde vragen</a>
+<a class="toc__link" href="#sources"><i class="mdi mdi-link-variant"></i> Officiële bronnen</a>
+<a class="toc__link" href="#brubru"><i class="mdi mdi-robot-outline"></i> Verken Brubru</a>
+</div>
+</nav>
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+<h2 class="section__title">Overzicht</h2>
+</div>
+<p class="section__subtitle">Waarom NIS2 NIS1 heeft vervangen en wat er is veranderd.</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> Van NIS1 naar NIS2: de fundamentele verschuiving</div>
+<p>De eerste NIS-richtlijn (2016/1148) was de eerste horizontale cyberveiligheidswet van de EU. Haar belangrijkste zwakte lag aan de structuur: deze vereiste van de lidstaten dat zij "aanbieders van essentiële diensten" identificeerden via een nationaal proces, zonder veel restricties over hoe deze identificatie zou moeten plaatsvinden. Het resultaat was voorspelbare fragmentatie. Verschillende lidstaten identificeerden verschillende entiteiten, legden verschillende beveiligingseisen op en stelden sancties op, variërend van onbeduidend tot aanzienlijk. De interne markt functioneerde met meer dan achttien verschillende cyberveiligheidssystemen.</p>
+<p>NIS2 verhelpt dit door drie structurele veranderingen. Ten eerste vervangt een regel met een groottebeperking de huidige discretionaire beoordelingsprocedure: elk middelgroot of groter bedrijf in een betrokken sector wordt automatisch onder de reikwijdte gebracht. Ten tweede stellen de tien minimale maatregelen in Artikel 21(2) een gestandaard minimum vast, in plaats van beveiligingseisen aan nationale discretion over te laten. Ten derde wordt het toezicht- en sanctie kader aangescherpt, waarbij de maximale boetes gebaseerd zijn op de wereldomzet, op dezelfde manier als bij de AVG.</p>
+<p>De richtlijn is gebaseerd op Artikel 114 van het TFUE (harmoniseren van de interne markt), werd aangenomen op 14 december 2022, en is gepubliceerd in de OJ L 333 van 27 december 2022. Deze is van kracht vanaf 16 januari 2023. De lidstaten hadden tot 17 oktober 2024 de tijd om deze te implementeren. NIS1 (Richtlijn 2016/1148) is met ingang van 18 oktober 2024 ingetrokken (Artikel 44).</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-green);"></i> Juridische structuur en belangrijkste instrumenten</div>
+<p>NIS2 is een richtlijn, niet een regelgeving: het stelt bindende doelen vast waaraan de lidstaten moeten voldoen via nationale implementatiemaatregelen. Dit biedt flexibiliteit in de manier waarop de regels in nationale rechtssystemen worden verwerkt, maar de inhoudelijke verplichtingen – de tien minimale maatregelen, de tijdlijnen voor incidentrapportage, de maximale boetes – zijn minimale harmonisaties, wat betekent dat de lidstaten verder kunnen gaan, maar niet onder de basis.</p>
+<p>NIS2 wordt ondersteund door verschillende gerelateerde instrumenten, die samen met deze moeten worden gelezen.</p>
+<ul>
+<li><strong>DORA (Regeling 2022/2554):</strong> De sector-specifieke cyberwetgeving voor financiële instellingen. Indien DORA van toepassing is op een instelling en de eisen daaruit tenminste gelijkwaardig zijn aan die van NIS2, gelden de relevante bepalingen van NIS2 niet voor die instelling (Artikel 4 van NIS2). De bevoegde autoriteiten, onder beide instrumenten, moeten nauw samenwerken.</li>
+<li><strong>Richtlijn CER (2022/2557):</strong> beschrijft de fysieke veerkracht van kritieke entiteiten. Elke entiteit die als kritisch wordt aangemerkt binnen CER, is automatisch een essentiële entiteit binnen NIS2 (Artikel 2(3)).</li>
+<li><strong>AVG (Verordening 2016/679):</strong> Indien een incident onder NIS2 resulteert in een datalek dat onder Artikel 33 van de AVG moet worden gemeld, moeten beide toezichthoudende kaders samenwerken. Een boete op basis van de AVG voor dezelfde handeling verhindert een aparte boete op basis van NIS2 (Artikel 35).</li>
+<li><strong>De ENISA-regelgeving (2019/881 – de Cybersecuritywet):</strong> Leidt ENISA en creëert het EU-framework voor cybersecurity-certificering, dat ten grondslag ligt aan Artikel 24 van NIS2.</li>
+</ul>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 2: SCOPE AND SECTORS
+     ========================================================= -->
+<section class="section" id="scope">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-view-grid-outline"></i></div>
+<h2 class="section__title">Omvang en sectoren</h2>
+</div>
+<p class="section__subtitle">Wie wordt behandeld: de regel van de groottebeperking en het 18-sector model.</p>
+<div class="info-box">
+<h3><i class="mdi mdi-ruler-square" style="color: var(--color-blue);"></i> De limietregel (Artikel 2(1))</h3>
+<p>NIS2 is van toepassing op publieke of private entiteiten in de sectoren vermeld in Bijlage I of II, die als middelgrote ondernemingen worden geclassificeerd of deze drempel overschrijden. Op basis van Aanbeveling 2003/361/EC wordt een middelgrote onderneming gedefinieerd als een bedrijf met 50 of meer werknemers en een jaaromzet of balanstotaal boven EUR 10 miljoen. Entiteiten die de drempels voor middelgrote ondernemingen overschrijden (250 of meer werknemers, een jaaromzet boven EUR 50 miljoen of een balanstotaal boven EUR 43 miljoen) in Bijlage I, worden als essentiële entiteiten geclassificeerd.</p>
+<p>Kleine en middelgrote ondernemingen (minder dan 50 werknemers, omzet lager dan € 10 miljoen) vallen over het algemeen buiten de reikwijdte, tenzij ze onder één van de hieronder genoemde specifieke uitzonderingscategorieën vallen.</p>
+</div>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Entiteiten binnen het bestek, onafhankelijk van hun grootte (Artikel 2(2)-(4))</h3>
+<ul>
+<li>Aanbieders van openbare elektronische communicatienetwerken of openbaar toegankelijke elektronische communicadiensten</li>
+<li>Verleners van vertrouwensdiensten (gekwalificeerd of niet-gekwalificeerd).</li>
+<li>Registraties voor domeinnamen (TLD) en DNS-dienstverleners</li>
+<li>Entiteiten die domeinnaamregistratiediensten aanbieden</li>
+<li>De enige leverancier binnen een lidstaat van een dienst die essentieel is voor kritieke maatschappelijke of economische activiteiten.</li>
+<li>Entiteiten waarvan de verstoring aanzienlijke systemische risico’s, grensoverschrijdende gevolgen, of een significant effect op de volksveiligheid, de veiligheid of de gezondheid kan veroorzaken.</li>
+<li>Overheidsinstanties op nationaal niveau (en, na een risicoanalyse, instanties op regionaal niveau).</li>
+<li>Entiteiten die onder de CER-richtlijn (2022/2557) als kritiek worden aangemerkt.</li>
+</ul>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 1rem;">Bijlage I – Sectoren met zeer hoge prioriteit (11)</h3>
+<div class="scope-grid">
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">1</div>
+<div><div class="scope-card__title">Energie</div><div class="scope-card__desc">Elektriciteitsbedrijven, olie- en gasbedrijven, distributeurs, bedrijven die warmte- en koelsystemen bedienen, en bedrijven die werken met waterstof.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">2</div>
+<div><div class="scope-card__title">Vervoer</div><div class="scope-card__desc">Luchtvaartmaatschappijen, luchthavens, spoorwegbedrijven, bedrijven die scheepvaart en waterwegen exploiteren, wegautoriteiten en operators van intelligente transportsystemen.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">3</div>
+<div><div class="scope-card__title">Bankieren</div><div class="scope-card__desc">Financiële instellingen, zoals gedefinieerd in Verordening (EU) nr. 575/2013.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">4</div>
+<div><div class="scope-card__title">Financiële marktstructuren</div><div class="scope-card__desc">Entiteiten die een handelsplatform bedienen en centrale tegenpartijen, zoals gedefinieerd in Verordening (EU) nr. 648/2012.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">5</div>
+<div><div class="scope-card__title">Gezondheid</div><div class="scope-card__desc">Zorgverleners, EU-referentielaboratoria, farmaceutische fabrikanten, fabrikanten van kritische medische apparatuur, en onderzoek- en ontwikkelingsorganisaties voor geneesmiddelen.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">6</div>
+<div><div class="scope-card__title">Drinkwater en afvalwater</div><div class="scope-card__desc">Leveranciers en distributeurs van water bestemd voor menselijke consumptie; bedrijven die verantwoordelijk zijn voor het ophalen, afvoeren of behandelen van stedelijk of huishoudelijk afvalwater.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">7</div>
+<div><div class="scope-card__title">Digitale infrastructuur</div><div class="scope-card__desc">Internet-uitwisselingspunten, DNS-leveranciers, TLD-registraties, leveranciers van cloud computing, leveranciers van datacenters, CDN-leveranciers, leveranciers van vertrouwensdiensten, publieke elektronische communicatienetwerken/diensten.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">8</div>
+<div><div class="scope-card__title">ICT-dienstverlening (B2B)</div><div class="scope-card__desc">Beheerde dienstverleners (MSP's) en beheerde beveiligingsdienstverleners (MSSP's).</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">9</div>
+<div><div class="scope-card__title">Publieke dienstverlening</div><div class="scope-card__desc">Centrale overheidsonderdelen. Regionale overheidsonderdelen die de lidstaten identificeren op basis van een risicoanalyse, omdat deze onderdelen diensten leveren waarvan de verstoring een significant effect zou kunnen hebben op kritieke maatschappelijke of economische activiteiten.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">10</div>
+<div><div class="scope-card__title">Ruimte</div><div class="scope-card__desc">Bedrijven die grondgebonden infrastructuur bezitten, beheren of exploiteren, die door lidstaten of private partijen wordt aangeboden en die bijdragen aan de levering van ruimtegebonden diensten, met uitzondering van aanbieders van publieke elektronische communicatienetwerken.</div></div>
+</div>
+</div>
+<h3 style="font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 1rem;">Bijlage II – Andere cruciale sectoren (7)</h3>
+<div class="scope-grid">
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-blue);">11</div>
+<div><div class="scope-card__title">Post- en koeriersdiensten</div><div class="scope-card__desc">Bedrijven die post- en koeriersdiensten aanbieden, waaronder verzending van pakketten.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">12</div>
+<div><div class="scope-card__title">Afvalbeheer</div><div class="scope-card__desc">Afvalbeheerbedrijven, met uitzondering van ondernemingen waarbij afvalbeheer geen hoofdactiviteit is.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-green);">13</div>
+<div><div class="scope-card__title">Chemicaliën</div><div class="scope-card__desc">Bedrijven die chemicaliën produceren, distribueren en verkopen, evenals fabrikanten van chemische preparaten of producten.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-amber);">14</div>
+<div><div class="scope-card__title">Voedsel</div><div class="scope-card__desc">Bedrijven die actief zijn in de voedingsmiddelenindustrie, met name in de groothandelsdistributie en de industriële productie en verwerking van voedingsmiddelen.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-red);">15</div>
+<div><div class="scope-card__title">Productie</div><div class="scope-card__desc">Fabrikanten van medische apparatuur (inclusief in vitro diagnostische apparatuur), elektronische en elektrische apparatuur, machines, voertuigen en andere transportmiddelen.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">16</div>
+<div><div class="scope-card__title">Digitale aanbieders</div><div class="scope-card__desc">Bedrijven die online markten, zoekmachines en platforms voor sociale netwerken aanbieden.</div></div>
+</div>
+<div class="scope-card">
+<div class="scope-card__letter" style="background: var(--color-purple);">17</div>
+<div><div class="scope-card__title">Onderzoek</div><div class="scope-card__desc">Onderzoeksorganisaties wiens belangrijkste doel is toegepast onderzoek of experimentele ontwikkeling voor commerciële exploitatie.</div></div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 3: ESSENTIAL vs IMPORTANT ENTITIES
+     ========================================================= -->
+<section class="section" id="entities">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group-outline"></i></div>
+<h2 class="section__title">Essentiële versus belangrijke entiteiten</h2>
+</div>
+<p class="section__subtitle">De tweeledige classificatie en waarom dit belangrijk is voor toezicht.</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0; border-left: 4px solid var(--color-blue);">
+<div class="card__title"><i class="mdi mdi-shield-star-outline" style="color: var(--color-blue);"></i> Essentiële entiteiten (Artikel 3(1))</div>
+<p>Over het algemeen, de grotere en meer fundamenteel belangrijke entiteiten. Deze categorie omvat:</p>
+<ul>
+<li>Entiteiten uit Bijlage I die de drempels voor het middenbedrijf (250+ werknemers of €50m+ omzet) overschrijden.</li>
+<li>Geautoriseerde fiduciaal dienstverleners, TLD-registraties en DNS-leveranciers (ongeacht de grootte).</li>
+<li>Aanbieders van openbare elektronische communicatienetwerken en publiek toegankelijke elektronische communicadiensten, die van doorsnee tot middelgroot zijn.</li>
+<li>Overheidsinstanties op nationaal niveau</li>
+<li>Entiteiten die onder de CER-richtlijn (2022/2557) als kritiek worden aangemerkt.</li>
+<li>Entiteiten die eerder door de lidstaten als aanbieders van essentiële diensten binnen NIS1 zijn geïdentificeerd, waar de betreffende lidstaat dit verstrekt.</li>
+</ul>
+<p style="margin-top: 0.75rem;"><strong>Toezicht</strong> ex ante en ex post (artikel 32). Proactieve monitoring, inspecties, audits en scans zonder te wachten op bewijs van niet-naleving.</p>
+</div>
+<div class="card" style="margin-bottom: 0; border-left: 4px solid var(--color-green);">
+<div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Belangrijke entiteiten (Artikel 3(2))</div>
+<p>Alle andere relevante entiteiten: middelgrote entiteiten uit Bijlage I die niet als essentieel worden beschouwd, en entiteiten uit Bijlage II (tenzij ze vallen binnen een speciale, afwijkende categorie). Deze classificatie omvat een veel grotere groep bedrijven dan de NIS1 ooit bereikt heeft.</p>
+<p>Belangrijke entiteiten zijn onderworpen aan dezelfde belangrijke verplichtingen als essentiële entiteiten (Artikel 21: risicobeheersingsmaatregelen, Artikel 23: incidentrapportage, registratie), maar worden minder nauwlettend toezien: de bevoegde autoriteiten controleren ze reactief (ex post), op basis van bewijs, aanwijzingen of informatie die niet-naleving suggereert.</p>
+<p><strong>Toezicht</strong> Ex post facto alleen (Artikel 33). De autoriteit moet een grondslag hebben voordat ze handelt; deze mag geen willekeurige proactieve controles uitvoeren, zoals zij dat voor essentiële entiteiten zou doen.</p>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.25rem;">
+<h3><i class="mdi mdi-calendar-clock" style="color: var(--color-green);"></i> Entiteitenlijst: deadline 17 april 2025 (Artikel 3(3))</h3>
+<p>De lidstaten moesten vóór 17 april 2025 een lijst opstellen, publiceren en aan de Commissie verstrekken, met een overzicht van essentiële en belangrijke entiteiten (en leveranciers van domeinnaamregistratie). Deze lijst moest ten minste elke twee jaar worden herzien en bijgewerkt. De entiteiten moesten registratiegegevens verstrekken, waaronder naam, adres, contactgegevens, sector en IP-bereiken.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 4: MANAGEMENT ACCOUNTABILITY
+     ========================================================= -->
+<section class="section" id="governance">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-account-outline"></i></div>
+<h2 class="section__title">Verantwoordelijkheid van het management</h2>
+</div>
+<p class="section__subtitle">Artikel 20 – verantwoordelijkheid op bestuursniveau en de taak van opleiding.</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-amber);"></i> Waarom Artikel 20 belangrijk is</div>
+<p>NIS1 had geen clausule met betrekking tot verantwoordelijkheid op directieniveau. Cybersecurity werd beschouwd als een IT-functie. NIS2 verandert dit fundamenteel: de richtlijn wijst nu de verantwoordelijkheid voor cybersecurity rechtstreeks toe aan het bestuur, niet aan het technologie team.</p>
+<p>Artikel 20(1) vereist dat de lidstaten ervoor zorgen dat de… <strong>bestuurlijke organen</strong> Belangrijke en essentiële entiteiten kunnen de genomen maatregelen met betrekking tot risicobeheer op basis van Artikel 21 beoordelen, deze implementeren, en kunnen aansprakelijk worden gesteld indien er sprake is van een inbreuk op Artikel 21. Dit creëert een directe verantwoordelijkheid van het bestuur of een vergelijkbare besluitvormingsorganisatie naar de cybersecurity-positie van de organisatie.</p>
+<p>Artikel 20(2) brengt een opleidingsplicht: leden van bestuursorganen moeten cybersecurity-training volgen om voldoende kennis en vaardigheden te verwerven, zodat ze risico's kunnen identificeren en de cybersecurity risicobeheerspraktijken en hun impact op de aangeboden diensten kunnen beoordelen. Organisaties worden aangemoedigd (hoewel dit op EU-niveau niet verplicht is) om soortgelijke training aan hun werknemers regelmatig aan te bieden.</p>
+</div>
+<div class="info-box info-box--red">
+<h3><i class="mdi mdi-alert-outline" style="color: var(--color-red);"></i> Verantwoordelijkheid van de manager (artikel 32(5)-(6))</h3>
+<p>Voor essentiële entiteiten staat in artikel 32(5) toe dat bevoegde autoriteiten, als laatste redmiddel, een tijdelijk verbod opleggen aan elke natuurlijke persoon die verantwoordelijk is voor of als vertegenwoordiger van de entiteit optreedt, om functies met daadwerkelijke bevoegdheid binnen die entiteit uit te oefenen. Deze bevoegdheid is alleen beschikbaar nadat andere handhavingsmaatregelen zijn uitgewerkt en de entiteit niet binnen een vastgestelde termijn tot een oplossing is gekomen.</p>
+<p>Artikel 32(6) vereist bovendien dat de lidstaten ervoor zorgen dat natuurlijke personen die optreden als vertegenwoordigers, verantwoordelijk zijn voor het beheer van een essentiële entiteit, of bevoegd zijn beslissingen namens deze entiteit te nemen, persoonlijk aansprakelijk kunnen worden gesteld voor het niet naleven van de richtlijn. Dit geldt ook voor belangrijke entiteiten, zoals verwezen in artikel 33(5). Deze bepaling inzake persoonlijke aansprakelijkheid is een van de belangrijkste verschuivingen op het gebied van toezicht die door NIS2 zijn geïntroduceerd.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 5: THE 10 SECURITY MEASURES
+     ========================================================= -->
+<section class="section" id="measures">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-check-outline"></i></div>
+<h2 class="section__title">De tien belangrijkste beveiligingsmaatregelen</h2>
+</div>
+<p class="section__subtitle">Artikel 21 – de aanpak voor alle soorten risico’s en het verplichte minimale vloerniveau.</p>
+<div class="info-box">
+<h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> De aanpak voor alle soorten risico’s</h3>
+<p>Artikel 21(1) vereist dat entiteiten passende en evenredige technische, operationele en organisatorische maatregelen nemen, gebaseerd op een <strong>een aanpak voor alle scenario's</strong>Dit betekent dat de risicobeheersingsramwerk alle mogelijke bedreigingen moet aanpakken – niet alleen IT-aanvallen, maar ook fysieke bedreigingen voor de omgeving van systemen (overstromingen, brand, stroomuitval), interne bedreigingen en aantasting van de toeleveringsketen. De verhouding wordt beoordeeld aan de hand van de blootstelling aan risico’s, de grootte van de organisatie, de waarschijnlijkheid en ernst van incidenten, en hun maatschappelijke en economische impact.</p>
+<p>Artikel 21(5) vereist dat de Commissie vóór 17 oktober 2024 uitvoeringsmaatregelen aannemt, waarin technische en methodologische vereisten voor de in artikel 2 voor bepaalde digitale dienstverleners worden gespecificeerd. Deze uitvoeringsmaatregelen verduidelijken wat de tien maatregelen in de praktijk betekenen voor cloud providers, DNS-diensten, beheerde dienstverleners en andere.</p>
+</div>
+<table class="duty-table">
+<thead>
+<tr>
+<th>Meten</th>
+<th>Artikel</th>
+<th>Omvang</th>
+<th>Belangrijke verplichting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="highlight-row">
+<td>Risicoanalyse en beleid voor de beveiliging van informatiesystemen</td>
+<td>Artikel 21(2)(a)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>De resultaten van de risicoanalyse van documenten, en het onderhouden van actuele informatiebeveiligingsbeleid.</td>
+</tr>
+<tr>
+<td>Incidentbehandeling</td>
+<td>Artikel 21(2)(b)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Implementeer procedures die dekken over preventie, detectie, analyse, isolatie, reactie en herstel na incidenten.</td>
+</tr>
+<tr class="highlight-row">
+<td>Businesscontinuïteit, back-up, ramp-up bij rampen.</td>
+<td>Artikel 21(2)(c)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Implementeer een systeem voor het beheren van backups, noodherstelplannen en crisismanagementprocedures, om de continuïteit van de dienstverlening te waarborgen na een incident.</td>
+</tr>
+<tr>
+<td>Supply chain beveiliging</td>
+<td>Artikel 21(2)(d)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Beoordeel de beveiliging van relaties met directe leveranciers en dienstverleners; evalueer hun kwetsbaarheden, cybersecurity kwaliteit en veilige ontwikkelingsprocedures. Houd rekening met de risicoanalyses op EU-niveau met betrekking tot de supply chain (artikel 22).</td>
+</tr>
+<tr class="highlight-row">
+<td>Veilig verwerven, ontwikkelen en onderhouden</td>
+<td>Artikel 21(2)(e)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Beveiliging van netwerk- en informatiesystemen, inclusief de aanschaf, ontwikkeling en onderhoud, met aandacht voor kwetsbaarheidsbeheer en -openbaarmaking.</td>
+</tr>
+<tr>
+<td>Richtlijnen voor de evaluatie van effectiviteit</td>
+<td>Artikel 21(2)(f)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Ontwikkel beleid en procedures om de effectiviteit van maatregelen voor cyberbeveiligingsrisicobeheer regelmatig te beoordelen.</td>
+</tr>
+<tr class="highlight-row">
+<td>Cyberhygiene en training</td>
+<td>Artikel 21(2)(g)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Implementeer basisprincipes voor cyberhygiëne en onderhoud een programma voor cybersecuritytraining voor het personeel.</td>
+</tr>
+<tr>
+<td>Cryptografie en encryptie</td>
+<td>Artikel 21(2)(h)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Implementeer beleid en procedures met betrekking tot het gebruik van cryptografie en, waar relevant, encryptie. De nationale cyberbeveiligingsstrategie moet de toepassing van end-to-end encryptie, zoals vastgelegd in artikel 7, stimuleren.</td>
+</tr>
+<tr class="highlight-row">
+<td>Beveiliging en toegangsbeheer van personeelszaken</td>
+<td>Artikel 21(2)(i)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Implementeer maatregelen voor personeelsbeveiliging, toegangsbeheerbeleid en assetbeheer om de oppervlakte van interne bedreigingen te verminderen.</td>
+</tr>
+<tr>
+<td>Meervoudige authenticatie</td>
+<td>Artikel 21(2)(j)</td>
+<td><span class="pill pill--blue">Alle entiteiten</span></td>
+<td>Gebruik multi-factor authenticatie (MFA) of oplossingen voor continue authenticatie, beveiligde voice-/video-/tekstcommunicatie en beveiligde noodcommunicatiesystemen waar relevant.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 6: INCIDENT REPORTING
+     ========================================================= -->
+<section class="section" id="reporting">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-bell-alert-outline"></i></div>
+<h2 class="section__title">Melding van incidenten</h2>
+</div>
+<p class="section__subtitle">Artikel 23 – vroegtijdige waarschuwing, melding en definitieve rapport</p>
+<div class="info-box info-box--amber">
+<h3><i class="mdi mdi-alert-rhombus-outline" style="color: var(--color-amber);"></i> Wat is een significant incident? (Artikel 23(3))</h3>
+<p>Een incident wordt als significant beschouwd als het heeft geleid tot, of in staat is om te leiden tot: (a) ernstige verstoring van de dienstverlening of financiële schade voor de betrokken entiteit; of (b) aanzienlijke materiële of niet-materiële schade voor andere natuurlijke of rechtspersonen. Het alleen al hebben van de mogelijkheid om dergelijke verstoring te veroorzaken is voldoende – daadwerkelijke schade hoeft niet te zijn opgetreden. Overweging 101 verduidelijkt dat de initiële beoordeling rekening moet houden met de belangrijkheid van de getroffen systemen, de ernst en technische kenmerken van de bedreiging, eventuele onderliggende kwetsbaarheden, en de ervaring van de entiteit met soortgelijke incidenten.</p>
+</div>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">Binnen 24 uur nadat de melding is ontvangen – Vroegtijdig waarschuwing (Artikel 23(4)(a)).</div>
+<div class="timeline__text">Informeer de CSIRT of, indien relevant, de bevoegde autoriteit over een vroegtijdige waarschuwing. Deze waarschuwing moet aantonen: (i) of de ernstige incident vermoedelijk verband houdt met onrechtmatige of kwaadaardige handelingen; en (ii) of deze een grensoverschrijdend effect kan hebben. Het hoeft alleen de benodigde informatie te bevatten om de autoriteit op de hoogte te stellen en het bedrijf te laten zoeken naar hulp. <strong>Verleners van vertrouwensdiensten:</strong> Het is vereist om binnen 24 uur een volledige melding van het incident (niet alleen een vroege waarschuwing) te verstrekken.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">Binnen 72 uur nadat melding is gedaan – Incidentmelding (Artikel 23(4)(b))</div>
+<div class="timeline__text">Update de vroege waarschuwing. De melding moet een eerste beoordeling van het ernstige incident bevatten, inclusief de ernst en de impact ervan, en, indien beschikbaar, de aanwijzingen voor inbreuk. Dit is het belangrijkste meldingspunt voor de meeste doeleinden en het punt dat de CSIRT of de bevoegde autoriteit dwingt om binnen 24 uur na ontvangst eerste feedback te geven.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">Op verzoek – tussentijds rapport (artikel 23(4)(c))</div>
+<div class="timeline__text">De CSIRT of de bevoegde autoriteit kan op elk moment een tussentijds rapport aanvragen, waarin relevante statusupdates worden opgenomen. Er is geen specifieke deadline voor dit soort rapport; het wordt binnen een redelijke termijn verstrekt.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">Binnen één maand na de melding van het incident – Eindrapport (Artikel 23(4)(d))</div>
+<div class="timeline__text">De definitieve rapport moet de volgende punten behandelen: (i) een gedetailleerde beschrijving van het incident, inclusief de ernst en de impact; (ii) het type bedreiging of de onderliggende oorzaak dat waarschijnlijk heeft geleid tot het incident; (iii) de toegepaste en lopende mitigatiemaatregelen; en (iv) de grensoverschrijdende impact, indien van toepassing. Indien het incident… <strong>nog in behandeling</strong> Bij de éénmaandsdeadline wordt een voortgangsrapport ingediend, en het definitieve rapport volgt binnen één maand nadat het incident volledig is opgelost.</div>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.5rem;">
+<h3><i class="mdi mdi-shield-lock-outline" style="color: var(--color-green);"></i> Geen verhoogde aansprakelijkheid voor het melden (Artikel 23(1)).</h3>
+<p>Het enkele feit dat er melding wordt gedaan, brengt de meldende partij niet onnodig extra verantwoordelijkheid op. Meldingen op basis van artikel 30 (voor incidenten die niet significant zijn, bijna-ongevallen en cyberdreigingen) leiden eveneens niet tot extra verplichtingen, behalve die welke gelden als de entiteit niet had gemeld. Deze bepalingen zijn bedoeld om een snelle en onbeperkte rapportage te stimuleren, zonder dat entiteiten achterhouden uit angst dat hun melding tegen hen gebruikt zal worden.</p>
+</div>
+<div class="info-box info-box--purple" style="margin-top: 1rem;">
+<h3><i class="mdi mdi-database-outline" style="color: var(--color-purple);"></i> Europees Kwetsbaarheidshandboek (Artikel 12(2))</h3>
+<p>ENISA moet een Europese database van kwetsbaarheden ontwikkelen en onderhouden, die openstaat voor alle belanghebbenden, waaronder entiteiten buiten het toepassingsgebied van NIS2. Deze database bevat publiekelijk bekende kwetsbaarheden in ICT-producten en -diensten, inclusief de betrokken producten, de ernst, beschikbare patches en richtlijnen voor risicobeperking, indien patches niet beschikbaar zijn. Elk lidstaat moet één CSIRT (Computer Security Incident Response Team) aanwijzen als coördinator voor gecentraliseerde kwetsbaarheidsrapportage, die als een vertrouwde tussenpersoon fungeert tussen onderzoekers en leveranciers.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 7: SUPERVISION AND ENFORCEMENT
+     ========================================================= -->
+<section class="section" id="supervision">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-eye-outline"></i></div>
+<h2 class="section__title">Toezicht en handhaving</h2>
+</div>
+<p class="section__subtitle">Artikelen 31-37 – een aangepast regime voor essentiële en belangrijke entiteiten.</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-shield-star-outline" style="color: var(--color-blue);"></i> Essentiële entiteiten – zowel vooraf als achteraf (Artikel 32)</div>
+<p>Behoorlijke autoriteiten hebben een uitgebreid scala aan proactieve toezichthoudende bevoegdheden over essentiële entiteiten, waaronder:</p>
+<ul>
+<li>Regelmatige inspecties ter plaatse en externe bewaking, waaronder willekeurige controles die worden uitgevoerd door getrainde professionals.</li>
+<li>Regelmatige en gerichte beveiligingscontroles door een onafhankelijke instantie of de bevoegde autoriteit.</li>
+<li>Ad-hoc audits die worden geactiveerd door een significant incident of bewijs van overtreding.</li>
+<li>Beveiligingsscans gebaseerd op objectieve, niet-discriminerende risicocriteria.</li>
+<li>Verzoeken om documentatie, data en bewijs van de implementatie van beleid.</li>
+</ul>
+<p>De handhavingsbevoegdheden omvatten: waarschuwingen; bindende instructies; bevelen om inbreukgedrag te staken; aanwijzing van een toezichthouder; openbare bekendmaking van inbreuken; administratieve boetes; en, als laatste redmiddel, tijdelijke intrekking van certificaten of een tijdelijke verbod voor een individuele manager om managementfuncties uit te oefenen.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-shield-outline" style="color: var(--color-green);"></i> Belangrijke entiteiten – uitsluitend ex post (Artikel 33)</div>
+<p>De toezicht op belangrijke entiteiten is reactief. De bevoegde autoriteit moet bewijs, aanwijzingen of informatie hebben die aantonen dat er geen naleving plaatsvindt, voordat deze kan optreden. Zodra dit is geactiveerd, zijn de beschikbare toezichtsmiddelen en handhavingstaken hetzelfde als voor essentiële entiteiten.</p>
+<p>Belangrijke entiteiten zijn niet verplicht om systematisch de naleving van cybersecurity risicobeheersingsmaatregelen te documenteren, tenzij er een toezichthoudende handeling is. Echter, zij moeten deze documentatie intern bijhouden en deze op verzoek kunnen overleggen.</p>
+<p>De Commissie schatte dat het onderscheid tussen *ex ante* en *ex post* supervisie de belangrijkste factor is voor proportionaliteit: de kosten van proactieve naleving en voorbereiding op audits zijn aanzienlijk, en door deze te reserveren voor de hoogst risicovolle entiteiten, worden onevenredige lasten voor middelgrote bedrijven in minder kritieke sectoren vermeden.</p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 8: FINES
+     ========================================================= -->
+<section class="section" id="fines">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-cash-multiple"></i></div>
+<h2 class="section__title">Administratieve boetes</h2>
+</div>
+<p class="section__subtitle">Artikel 34 – maximum boetebedragen en verergerende omstandigheden</p>
+<table class="duty-table">
+<thead>
+<tr>
+<th>Entiteitscategorie</th>
+<th>Maximale boete</th>
+<th>Artikel</th>
+<th>Notities</th>
+</tr>
+</thead>
+<tbody>
+<tr class="highlight-row">
+<td><strong>Essentiële entiteiten</strong></td>
+<td class="rate-red">€ 10.000.000 of 2% van de totale jaarlijkse wereldwijde omzet (wat het hoogste is).</td>
+<td>Artikel 34(4)</td>
+<td>Omzet van het bedrijf waartoe de entiteit behoort; betrekking heeft op overtredingen van artikel 21 of 23.</td>
+</tr>
+<tr>
+<td><strong>Belangrijke entiteiten</strong></td>
+<td class="rate-amber">7.000.000 EUR of 1,4% van de totale jaarlijkse omzet wereldwijd (wat het hoogste is).</td>
+<td>Artikel 34(5)</td>
+<td>Omzet van het bedrijf waartoe de entiteit behoort; betrekking heeft op overtredingen van artikel 21 of 23.</td>
+</tr>
+<tr>
+<td>Regelmatige boetevorderingen</td>
+<td class="rate-purple">Nationale beoordelingsvrijheid</td>
+<td>Artikel 34(6)</td>
+<td>De lidstaten kunnen voorzien in periodieke boete-betalingen om een entiteit te dwingen een inbreuk te staken.</td>
+</tr>
+<tr>
+<td>Publieke overheidsinstanties</td>
+<td class="rate-blue">Nationale beoordelingsvrijheid</td>
+<td>Artikel 34(7)</td>
+<td>De lidstaten bepalen of en in welke mate administratieve boetes van toepassing zijn op openbare instellingen.</td>
+</tr>
+</tbody>
+</table>
+<div class="info-box">
+<h3><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> Factoren bij het beoordelen (Artikel 32(7))</h3>
+<p>Wanneer een boete wordt opgelegd, moeten bevoegde autoriteiten daarbij in ieder geval rekening houden met:</p>
+<ul>
+<li>De ernst van de overtreding en de belangrijkheid van de bepalingen die zijn geschonden (herhaalde overtredingen, het niet melden of oplossen van incidenten, het niet voldoen aan bindende instructies, het belemmeren van audits en het verstrekken van valse informatie worden allemaal als ernstig beschouwd)</li>
+<li>De duur van de inbreuk</li>
+<li>Alle relevante eerdere overtredingen</li>
+<li>Schade, of deze kan leiden tot schade, in welke vorm dan ook (inclusief financieel of economisch verlies), gevolgen voor andere diensten en het aantal aangedane gebruikers.</li>
+<li>Elke intentie of nalatigheid.</li>
+<li>De maatregelen die de entiteit neemt om schade te voorkomen of te verminderen.</li>
+<li>Voldoen aan goedgekeurde ethische codes of certificatiemechanismen</li>
+<li>Het niveau van samenwerking met de bevoegde autoriteit.</li>
+</ul>
+<p>Indien dezelfde handeling zowel een inbreuk op de NIS2-richtlijn, een schending van de privacywetgeving op grond van de AVG, en een boete op grond van de AVG veroorzaakt, kan de bevoegde autoriteit geen afzonderlijke boete op grond van de NIS2-richtlijn opleggen voor dezelfde handeling (Artikel 35(2)).</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- Transposition (directive-only section) -->
+<section class="section transposition" id="transposition">
+<div class="section__head">
+<span class="section__num">Transpositie</span>
+<h2 class="section__title">Hoe de lidstaten dit hebben geïmplementeerd</h2>
+</div>
+<p class="lede">
+      Een richtlijn is niet direct van toepassing: elk lidstaat moet deze in haar eigen nationale wet verwerken, binnen een vastgestelde overdrachtsdeadline. Voor de NIS2-richtlijn was de Europese overdrachtsdeadline: <strong>17 oktober 2024</strong>De kaart toont, voor elk lidstaat, de belangrijkste nationale maatregel die deze aan de Commissie heeft gemeld, en de datum waarop dit is gebeurd. Van de 23 van de 27 lidstaten is een maatregel vermeld in deze lijst; de volledige, officiële lijst van nationale maatregelen voor elke lidstaat is te vinden op…
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32022L2555" rel="noopener" target="_blank">EUR-Lex (Nationale implementatemaatregelen)</a>.
+    </p>
+<div aria-label="Map of EU Member State transposition of NIS2 Directive" class="transp-map" id="transp-map-32022L2555" role="img"></div>
+<p class="transp-note">
+      Klik op een marker van een lidstaat om de betreffende nationale wet en de publicatiedatum te zien. Bron: EUR-Lex.
+
+Nationale implementatiewetten, verkregen in mei 2026. Indien een marker "Via EUR-Lex" aangeeft, raadpleeg dan de EUR-Lex link hierboven voor de maatregelen van die betreffende staat.
+    </p>
+</section>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<style>
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+    @media (max-width: 767px) { .transp-map { height: 420px; } }
+  </style>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "Art. 49 Abs. 1 des Bundes-Verfassungsgesetz (B-VG); Stammfassung BGBl. Nr. 1/1930, zuletzt geändert durch BGBl. I Nr. 89/2024", "date": "1930-01-02", "status": "Transposed", "count": 8}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "Loi du 26 avril 2024 établissant un cadre pour la cybersécurité des réseaux et des systèmes d'information d’intérêt général pour la sécurité publique (loi NIS2)", "date": "2024-05-17", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Закон за изменение и допълнение на Закона за киберсигурност", "date": "2026-02-13", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o kibernetičkoj sigurnosti", "date": "2024-02-07", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Ασφάλειας Δικτύων και Συστημάτων Πληροφοριών (Τροποποιητικός) Νόμος του 2025.", "date": "2025-04-25", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 21/1992 Sb., o bankách", "date": "1992-01-20", "status": "Transposed", "count": 83}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "Lov nr. 481 af 22. maj 2024 om ændring af lov om finansiel virksomhed mv", "date": "1001-01-01", "status": "Transposed", "count": 10}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Elutähtsa teenuse kirjeldus ja toimepidevuse nõuded elektroonilise isikutuvastamise ja digitaalse allkirjastamise tagamisel", "date": "2019-01-15", "status": "Transposed", "count": 28}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Laki sähköisen viestinnän palveluista / Lag om tjänster inom elektronisk kommunikation (917/2014) 7.11.2014, viimeksi muutettuna / ändrad senast genom (126/2025", "date": "1001-01-01", "status": "Transposed", "count": 13}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Explanatory documents", "date": "2009-07-30", "status": "Transposed", "count": 20}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Εθνική Υπηρεσία Πληροφοριών και άλλες διατάξεις.", "date": "2008-03-03", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "2003. évi C. törvény az elektronikus hírközlésről", "date": "2003-11-27", "status": "Transposed", "count": 32}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Decreto legislativo 4 settembre 2024, n. 138, di recepimento nell’ordinamento italiano della direttiva 2022/2555. Notifica provvediemento di attuazione.", "date": "1001-01-01", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Nacionālās kiberdrošības likums", "date": "2024-07-04", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos viešojo administravimo įstatymas Nr. VIII-1234 (suvestinė redakcija nuo 2022-01-29 iki 2022-12-31).", "date": "1999-07-09", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 5 mai 2026 concernant des mesures destinées à assurer un niveau élevé de cybersécurité et portant modification de : 1° la loi modifiée du 14 août 2000 re", "date": "2026-05-06", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "Measures for a High Common Level of Cybersecurity across the European Union (Malta) Order, 2025", "date": "2025-04-08", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "Ustawa z dnia 26 kwietnia 2007 r. o zarządzaniu kryzysowym (Dz.U. z 2023 r. poz. 122 z póżn. zm.)", "date": "2023-01-16", "status": "Transposed", "count": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "Decreto-Lei n.º 125/2025, de 4 de dezembro, Diário da República n.º 234/2025, Série I de 2025-12-04, Transpõe a Diretiva (UE) 2022/2555, relativa a medidas dest", "date": "1001-01-01", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Ordonanţa Guvernului nr. 2/2001 privind regimul juridic al contravențiilor", "date": "2001-07-25", "status": "Transposed", "count": 16}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Zákon č. 40/1964 Zb. Občiansky zákonník v platnom znení (consolidated version as amended by zákon č. 254/2024 Z. z., ktorým sa mení a dopĺňa zákon č. 40/1964 Zb", "date": "1964-03-05", "status": "Transposed", "count": 9}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o informacijski varnosti (ZInfV-1)", "date": "2025-06-04", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "", "date": "", "status": "Notified via EUR-Lex", "count": 0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Cybersäkerhetslag (2025:1506)", "date": "2025-12-17", "status": "Transposed", "count": 13}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32022L2555",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+<!-- =========================================================
+     SECTION 9: COOPERATION BODIES
+     ========================================================= -->
+<section class="section" id="cooperation">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-handshake-outline"></i></div>
+<h2 class="section__title">Europese samenwerkingsorganen op EU-niveau</h2>
+</div>
+<p class="section__subtitle">De Samenwerkingsgroep, het CSIRTs Netwerk en EU-CyCLONe</p>
+<div class="three-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-blue);"></i> Coöperatiegroep (Artikel 14)</div>
+<p>De strategische samenwerkingsinstantie, bestaande uit vertegenwoordigers van de lidstaten, de Commissie en ENISA, biedt begeleiding bij de implementatie en overdracht, de uitwisseling van best practices en toezicht op de gecoördineerde risico-beoordelingen van kritieke toeleveringsketens, conform artikel 22. Deze instantie rapporteert aan het Europees Parlement en de Raad. Ze komt ten minste jaarlijks samen met de Groep voor de veerkracht van kritieke entiteiten, in het kader van de CER-richtlijn.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-server-network" style="color: var(--color-green);"></i> CSIRTs Netwerk (Artikel 15)</div>
+<p>De operationele samenwerkingslaag: een netwerk van nationale Computer Security Incident Response Teams, plus CERT-EU. Deze wisselen informatie uit over capaciteiten, incidenten, kwetsbaarheden en bijna-incidenten, kunnen grensoverschrijdende incidentrespons coördineren en ondersteunen de lidstaten bij grensoverschrijdend incidentbeheer. De Commissie neemt hierbij deel als waarnemer; ENISA levert het secretariaat.</p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-lightning-bolt-circle" style="color: var(--color-red);"></i> EU-CyCLONe (Artikel 16)</div>
+<p>Het Europees Netwerk voor Crisisbeheer in de Cyberruimte coördineert grote cyberincidenten en -crisis op operationeel niveau. Dit netwerk bestaat uit nationale autoriteiten voor cybercrisisbeheer. Wanneer een incident de Unie aanzienlijk kan beïnvloeden, neemt de Commissie deel als volwaardig deelnemer, in plaats van als waarnemer. Het rapporteert elke 18 maanden aan het Europees Parlement en de Raad.</p>
+</div>
+</div>
+<div class="info-box info-box--green" style="margin-top: 1.25rem;">
+<h3><i class="mdi mdi-shield-lock-outline" style="color: var(--color-green);"></i> De rol van ENISA</h3>
+<p>ENISA (de EU-agentie voor cybersecurity) speelt een centrale rol binnen het NIS2- Kader. Het fungeert als secretariaat voor het netwerk van CSIRTs en EU-CyCLONe, ontwikkelt en onderhoudt de Europese database van kwetsbaarheden (Artikel 12), beheert de ENISA-lijst van bepaalde digitale dienstverleners (Artikel 27), publiceert een twejaarlijks rapport over de stand van zaken op het gebied van cybersecurity binnen de Unie (Artikel 18) en biedt lidstaten richtlijnen en technische ondersteuning bij de ontwikkeling van CSIRTs en nationale cybersecurity strategieën. In vergelijking met NIS1, is ENISA’s rol aanzienlijk uitgebreid binnen het NIS2- Kader.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 10: TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+<h2 class="section__title">Wetgevingsplanning</h2>
+</div>
+<p class="section__subtitle">Van NIS1 naar NIS2, en de weg vooruit.</p>
+<div class="timeline">
+<div class="timeline__item">
+<div class="timeline__date">6 juli 2016</div>
+<div class="timeline__text"><strong>NIS1 is aangenomen.</strong> (Richtlijn (EU) 2016/1148). De eerste horizontale cyberveiligheidswet van de EU. Lidstaten hadden tot 9 mei 2018 de tijd om deze te implementeren en de exploitanten van essentiële diensten te identificeren.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">16 december 2020</div>
+<div class="timeline__text">De commissie publiceert de… <strong>EU-Cyberbeveiligingsstrategie voor het Digitale Decennium</strong> Naast het NIS2-voorstel, met erkenning van de beperkingen in scope en de inconsistentie in handhaving van NIS1.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">13 mei 2022</div>
+<div class="timeline__text"><strong>Politieke overeenkomst</strong> Tussen het Europees Parlement en de Raad met betrekking tot de NIS2-tekst, na de trilogonderhandelingen.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">14 december 2022</div>
+<div class="timeline__text"><strong>NIS2 is formeel aangenomen.</strong> Door het Europees Parlement (ondertekend door Voorzitter Roberta Metsola) en de Raad (ondertekend door Voorzitter Mikael Damberg). Aangenomen te Straatsburg.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">27 december 2022</div>
+<div class="timeline__text">Gepubliceerd in <strong>OJ L 333</strong>, pp. 80-152.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">16 januari 2023</div>
+<div class="timeline__text"><strong>De NIS2 is van kracht.</strong> (de twintigste dag na publicatie).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 oktober 2024</div>
+<div class="timeline__text"><strong>Termijn voor herziening.</strong> De lidstaten moeten de relevante nationale maatregelen hebben aangenomen en gepubliceerd. Daarnaast moeten ook de uitvoeringsmaatregelen van de Commissie met betrekking tot technische vereisten voor bepaalde digitale dienstverleners tegen deze datum (Artikel 21(5)).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">18 oktober 2024</div>
+<div class="timeline__text"><strong>NIS2 is van toepassing; NIS1 is ingetrokken.</strong> Richtlijn (EU) 2016/1148 is met ingang vanaf deze datum ingetrokken (Artikel 44). Verwijzingen naar NIS1 in andere wetgeving worden beschouwd als verwijzingen naar NIS2, conform de correlatietabel in Bijlage III.</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 januari 2025</div>
+<div class="timeline__text">Bepaalde digitale dienstverleners moeten zich registreren bij ENISA via het mechanisme van de lidstaat (artikel 27(2)).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 april 2025</div>
+<div class="timeline__text">De lidstaten moeten de lijst van essentiële en belangrijke entiteiten publiceren en aan de Commissie verstrekken (Artikel 3(3)).</div>
+</div>
+<div class="timeline__item">
+<div class="timeline__date">17 oktober 2027</div>
+<div class="timeline__text">De eerste evaluatie van de richtlijn door de Commissie, met een rapport voor het Parlement en de Raad. Vervolgens vinden evaluaties plaats om de 36 maanden (Artikel 40).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 11: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-alphabetical"></i></div>
+<h2 class="section__title">Lexicon</h2>
+</div>
+<p class="section__subtitle">belangrijke definities en concepten in het NIS2-kader</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-card__term">Essentiële entiteit</div>
+<div class="glossary-card__def">Een entiteit die binnen het bereik valt en onder Artikel 3(1) valt. Onderworpen aan zowel voor- als na-controle (Artikel 32). Over het algemeen: grotere entiteiten uit Bijlage I, gekwalificeerde trust service providers, TLD/DNS providers en overheidsinstanties van de centrale overheid.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Belangrijk element</div>
+<div class="glossary-card__def">Alle andere entiteiten die onder Artikel 3(2) vallen. Onderworpen aan ex post supervisie uitsluitend (Artikel 33), die wordt geactiveerd door bewijs van niet-naleving. Betreft middelgrote entiteiten uit Bijlage I en de meeste entiteiten uit Bijlage II.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Aanzienlijk incident</div>
+<div class="glossary-card__def">Volgens artikel 23(3): een incident dat ernstige operationele verstoring of financiële schade heeft veroorzaakt of kan veroorzaken, of andere personen heeft of kan beïnvloeden door aanzienlijke materiële of niet-materiële schade te veroorzaken. Dit activeert de 24/72- of 1-maands meldingsprocedure.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Incident</div>
+<div class="glossary-card__def">Volgens artikel 6(6): een gebeurtenis die de beschikbaarheid, authenticiteit, integriteit of vertrouwelijkheid van opgeslagen, verzonden of verwerkte data, of van de diensten die aangeboden of via netwerk- en informatiesystemen toegankelijk zijn, aantast.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Bijna-incident</div>
+<div class="glossary-card__def">Volgens artikel 6(5): een gebeurtenis die een aantasting van netwerken en informatiesystemen of data had kunnen veroorzaken, maar die succesvol is voorkomen of niet is plaatsgevonden. Vrijwillige melding conform artikel 30 wordt aanbevolen.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">CSIRT</div>
+<div class="glossary-card__def">Computer Security Incident Response Team. Elke lidstaat moet één of meerdere CSIRTs aanwijzen of oprichten, conform artikel 10, om incidenten te behandelen, vroegtijdige waarschuwingen te verstrekken en kwetsbaarheidsrapportage te coördineren. Nationale CSIRTs zijn verbonden via het CSIRTs Netwerk.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Managed service provider (MSP)</div>
+<div class="glossary-card__def">Volgens Artikel 6(39): een entiteit die diensten levert met betrekking tot de installatie, het beheer, de operationele werking of de onderhoud van ICT-producten, netwerken, infrastructuur of applicaties, via ondersteuning of actieve administratie, ofwel op de locatie van de klant of op afstand. MSP's vallen onder Bijlage I (ICT-dienstbeheer B2B).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Supply chain beveiliging</div>
+<div class="glossary-card__def">Een van de tien minimale maatregelen, zoals beschreven in artikel 21(2)(d). Vereist dat entiteiten de risico's op het gebied van beveiliging beoordelen en beheren, die voortkomen uit hun directe leveranciers en dienstverleners, inclusief de kwaliteit van hun cybersecuritypraktijken en veilige ontwikkelingsprocedures.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Een aanpak die rekening houdt met alle mogelijke gevaren.</div>
+<div class="glossary-card__def">Het risicobeheerprincipe in artikel 21(1) vereist dat entiteiten alle mogelijke bedreigingen voor hun netwerken en informatiesystemen adresseren: inclusief IT-aanvallen, fysieke bedreigingen voor de omgeving van de systemen, interne bedreigingen, aantasting via de toeleveringsketen en natuurrampen. Er mag geen enkele bedreigingscategorie worden uitgesloten.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">EU-CyCLONe</div>
+<div class="glossary-card__def">Europees Netwerk voor Contactpersonen bij Cybercrisis (Artikel 16). Ondersteunt de gecoördineerde aanpak van grote cyberincidenten en -crisis op operationeel niveau. Verschilt van het Netwerk van CSIRTs (operationele samenwerking) en de Samenwerkingsgroep (strategische samenwerking).</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Hoofdvestiging</div>
+<div class="glossary-card__def">Voor bepaalde digitale dienstverleners, in het kader van artikel 26(2): het lidstaat waar de beslissingen met betrekking tot maatregelen voor cyberveiligheidsrisicobeheer voornamelijk worden genomen. Bepaalt welke bevoegdheid van welke lidstaat de rechtsbevoegdheid heeft.</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-card__term">Kwetsbaarheid</div>
+<div class="glossary-card__def">Volgens Artikel 6(15): een zwakte, kwetsbaarheid of fout in ICT-producten of ICT-diensten die door een cyberbedreiging kan worden misbruikt. ENISA onderhoudt de Europese database met kwetsbaarheden, waarin openlijk bekende kwetsbaarheden worden vermeld (Artikel 12).</div>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 12: FAQ
+     ========================================================= -->
+<section class="section" id="faq">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-frequently-asked-questions"></i></div>
+<h2 class="section__title">Vaak gestelde vragen</h2>
+</div>
+<p class="section__subtitle">praktische compliance-vragen</p>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-blue);"></i> Hoe weet ik of mijn organisatie binnen de scope valt?</div>
+<p>Twee vragen bepalen of een organisatie onder de reikwijdte valt. Ten eerste: biedt uw organisatie diensten aan in een van de 18 sectoren vermeld in Bijlage I of II van NIS2? Ten tweede: heeft het 50 of meer werknemers, en is de jaaromzet of het totaal van de balans boven EUR 10 miljoen? Als beide antwoorden ‘ja’ zijn, dan valt uw organisatie onder de reikwijdte. Let op: zelfs als u onder deze drempel ligt, kunt u nog steeds onder de reikwijdte vallen als u in een van de speciale categorieën vermeld in Artikel 2(2)-(4) valt – bijvoorbeeld als u de enige leverancier bent van een essentiële dienst in een lidstaat, of als u een trust dienstverlener of DNS dienstverlener bent.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-green);"></i> Is de NIS2-regelgeving van toepassing op organisaties buiten de EU?</div>
+<p>Ja, indien zij diensten binnen de Unie verlenen. Bepaalde categorieën van entiteiten – zoals DNS-dienstverleners, TLD-registraties, leveranciers van cloud computing, datacentrumleveranciers, CDN-leveranciers, leveranciers van beheerde diensten, leveranciers van beheerde beveiligingsdiensten en aanbieders van online marketplaces, zoekmachines en sociale netwerken – vallen onder de bevoegdheid van de EU-lidstaat waar zij hun hoofdzetel in de Unie hebben. Indien een dergelijke entiteit niet in de EU gevestigd is, maar diensten binnen de Unie aanbiedt, moet zij een vertegenwoordiger in de Unie aanwijzen (Artikel 26(3)). Het niet aanwijzen van een vertegenwoordiger ontheft de entiteit niet van de verplichtingen van de richtlijn; een van de lidstaten waar de entiteit diensten verleent, kan rechtsmaatregelen nemen wegens overtredingen.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-purple);"></i> Kan dezelfde gebeurtenis leiden tot zowel verplichtingen voor rapportage binnen het NIS2- Kader als binnen de GDPR?</div>
+<p>Ja. Een enkele cybersecurityincident kan zowel als een significant incident volgens NIS2 (wat de rapportageketen van 24/72/1 maand onder Artikel 23 activeert) als een datalek dat onder Artikel 33 van de GDPR meldingsplichtig is (met een deadline van 72 uur naar de toezichthouder) worden beschouwd. Indien dit gebeurt, vereist Artikel 35(1) van NIS2 dat de bevoegde autoriteit en de autoriteit voor gegevensbescherming samenwerken. Belangrijk is dat Artikel 35(2) voorschrijft dat als de autoriteit voor gegevensbescherming al een boete heeft opgelegd onder Artikel 58(2)(i) van de GDPR voor dezelfde handeling, de bevoegde NIS2-autoriteit geen afzonderlijke NIS2-administratieve boete voor diezelfde handeling oplegt. Andere handhavingsmaatregelen van NIS2 (waarschuwingen, bindende instructies, etc.) kunnen echter nog steeds worden toegepast.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-amber);"></i> Wat betekent "jaarlijkomzet wereldwijd" voor nauwkeurige berekeningen?</div>
+<p>Artikel 34(4) en (5) verwijzen naar de totale wereldwijde jaaromzet van het "bedrijf waar de essentiële entiteit deel van uitmaakt" in het voorgaande boekjaar. Hierbij wordt het begrip "bedrijf" gevolgd door de definitie binnen de mededingingswet, zoals beschreven in artikelen 101 en 102 van het EU-Werkingsverdrag, wat betekent dat het de gehele groep bedrijven onder gemeenschappelijke controle omvat, niet alleen de rechtspersoon die de overtreding heeft begaan. Voor een dochteronderneming van een groot multinationalbedrijf kan dit leiden tot een aanzienlijk hogere boete dan wanneer alleen de omzet van de dochteronderneming zou worden gebruikt. Overweging 130 van NIS2 bevestigt deze interpretatie.</p>
+</div>
+<div class="card">
+<div class="card__title"><i class="mdi mdi-help-circle-outline" style="color: var(--color-red);"></i> Onze sector heeft zijn eigen cybersecurityregels (bijvoorbeeld DORA voor de financiële sector). Voldoen we ook aan de eisen van NIS2?</div>
+<p>Het hangt af van of de specifieke regels voor een sector gelijke effect hebben. Artikel 4(1) van NIS2 stelt dat, indien een sector-specifieke Unie wet een eis stelt om entiteiten te verplichten cybersecurity risicobeheermaatregelen te nemen of significante incidenten te melden, en wanneer deze eisen ten minste even effect hebben als de NIS2-verplichtingen, dan gelden de relevante NIS2-bepalingen niet. DORA (Regeling 2022/2554) is een belangrijk voorbeeld: financiële entiteiten die aan DORA onderworpen zijn, zijn vrijgesteld van de NIS2-bepalingen met betrekking tot risicobeheer en incidentrapportage, in die mate waarin dit door DORA wordt gedekt. Echter, de Commissie heeft in juli 2023 richtlijnen uitgebracht om te helpen bij deze analyse, en niet alle financiële entiteiten worden volledig door DORA gedekt. Indien er twijfel bestaat, is het aan te raden juridisch advies in te winnen om te bepalen of uw sector-specifieke verplichtingen daadwerkelijk aan de NIS2-equivalentietest voldoen.</p>
+</div>
+</section>
+<hr class="divider"/>
+<!-- CTA STRIP -->
+<div class="cta-strip" style="background-image: url('https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940'), linear-gradient(135deg, rgba(6,147,227,0.88) 0%, rgba(155,81,224,0.88) 100%); background-size: cover, cover; background-position: center, center; background-blend-mode: overlay;">
+<div class="cta-strip__title">Navigeer door de NIS2 met Brubru</div>
+<div class="cta-strip__sub">Bespreek met onze AI, voer een analyse uit naar compliance-verschillen, volg de transitie in alle 27 lidstaten, en ontvang meldingen over beleid – allemaal op één plek.</div>
+<a class="cta-strip__btn" href="https://brubru.beresol.eu/signup">Begin met een gratis proefperiode</a>
+</div>
+<p style="font-size: 0.75rem; color: var(--color-muted); text-align: right; margin-top: -1.5rem; margin-bottom: 2rem;">
+  Foto: <a href="https://www.pexels.com/@christina-morillo-1471555" rel="noopener" style="color: var(--color-muted);" target="_blank">Christina Morillo</a> via <a href="https://www.pexels.com/photo/1181467/" rel="noopener" style="color: var(--color-muted);" target="_blank">Pexels</a>
+</p>
+<!-- =========================================================
+     SECTION 13: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-link-variant"></i></div>
+<h2 class="section__title">Officiële bronnen</h2>
+</div>
+<p class="section__subtitle">Primaire bronnen voor NIS2 en nationale implementatie</p>
+<div class="two-col-grid">
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-file-pdf-box" style="color: var(--color-blue);"></i> EUR-Lex: CELEX 32022L2555</div>
+<p>De volledige tekst van Richtlijn (EU) 2022/2555 met betrekking tot EUR-Lex, inclusief alle toelichtingen, bepalingen en Bijlagen I-III. CELEX 32022L2555De samengevoegde tekst bevat alle latere wijzigingsbesluiten.</p>
+<p style="margin-top: 0.75rem;"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Bekijk op EUR-Lex</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-web" style="color: var(--color-green);"></i> NIS2: Richtlijnen voor de implementatie</div>
+<p>De pagina van ENISA over NIS2 biedt handleiding, implementatiepakketten, de Europese database van kwetsbaarheden, en informatie over de implementatie binnen de lidstaten. ENISA is de belangrijkste EU-instantie die de implementatie van NIS2 ondersteunt.</p>
+<p style="margin-top: 0.75rem;"><a href="https://www.enisa.europa.eu/topics/cybersecurity-policy/nis-directive-new" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> ENISA NIS2 pagina</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> Richtlijnen voor commissies (Artikel 4(3))</div>
+<p>Richtlijnen uitgevaardigd door de Commissie in juli 2023, die verduidelijken wanneer sector-specifieke regels (zoals DORA) in werking gelijk zijn aan NIS2, gepubliceerd op EUR-Lex. Essentieel voor organisaties in gereguleerde sectoren, bij het bepalen welke regelgeving op hen van toepassing is.</p>
+<p style="margin-top: 0.75rem;"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.C_.2023.305.01.0001.01.ENG" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Richtlijnen van de commissie</a></p>
+</div>
+<div class="card" style="margin-bottom: 0;">
+<div class="card__title"><i class="mdi mdi-chart-timeline-variant" style="color: var(--color-amber);"></i> Procedurebestand voor de Oeil</div>
+<p>Het parlementaire procedurebestand van het Europees Parlement met betrekking tot NIS2, dat de volledige wetgevingsgeschiedenis volgt, van de initiatiefvoorstel van de Commissie via de eerste lezing, de trilogonderhandelingen en de uiteindelijke goedkeuring. Referentie 2020/0359(COD).</p>
+<p style="margin-top: 0.75rem;"><a href="https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2020/0359%28COD%29" rel="noopener" style="color: var(--color-blue); text-decoration: none; font-weight: 600;" target="_blank"><i class="mdi mdi-open-in-new"></i> Procedurebestand OEIL</a></p>
+</div>
+</div>
+</section>
+<hr class="divider"/>
+<!-- =========================================================
+     SECTION 14: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+<div class="section__header">
+<div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+<h2 class="section__title">Verken Brubru</h2>
+</div>
+<p class="section__subtitle">Gebruik de AI-gedreven tools van Brubru om te navigeren in de naleving van NIS2 en de EU-cyberwetgeving.</p>
+<div class="features-grid">
+<div class="feature-card">
+<i class="mdi mdi-chat-outline"></i>
+<div class="feature-card__title">Vraag Brubru Chat</div>
+<div class="feature-card__desc">Vraag naar de reikwijdte van NIS2, het onderscheid tussen essentiële en belangrijke entiteiten, de tien minimale maatregelen, deadlines voor incidentrapportage, eisen voor de beveiliging van de toeleveringsketen, en hoe NIS2 samenwerkt met DORA en GDPR.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/main">Open discussie</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-shield-check-outline"></i>
+<div class="feature-card__title">Naleving van EU-wetgeving</div>
+<div class="feature-card__desc">Voer een analyse uit van de afwijkingen ten opzichte van de NIS2 en gerelateerde cyberwetgeving. Identificeer welke verplichtingen van toepassing zijn op uw organisatie en waar uw huidige situatie tekortschiet.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/eulawcomply">Controleer de naleving</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-newspaper-variant-outline"></i>
+<div class="feature-card__title">Mijn EU-bubbel</div>
+<div class="feature-card__desc">Volg de laatste ontwikkelingen met betrekking tot de implementatie van NIS2, updates van ENISA, uitvoeringsmaatregelen van de Commissie en ontwikkelingen in de EU-cyberveiligheidsbeleid, allemaal in één gepersonaliseerde feed.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/my-eu-bubble">Open blaas</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-file-edit-outline"></i>
+<div class="feature-card__title">Wijzigingsartikel</div>
+<div class="feature-card__desc">Ontwerp en analyse wijzigingen in de wetgeving van NIS2, inclusief maatregelen of gerelateerde cyberwetgeving, naarmate deze zich ontwikkelt.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/amendator">Open Amendator</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-book-open-page-variant-outline"></i>
+<div class="feature-card__title">EU Canon Bibliotheek</div>
+<div class="feature-card__desc">Bekijk alle diepgaande analysepagina's in de EU Canon bibliotheek, die verslag geven over digitale regulering, financieel recht, geneesmiddelenrecht, handelsmaatregelen en meer.</div>
+<a class="feature-card__btn" href="../index.html">Bekijk Canon</a>
+</div>
+<div class="feature-card">
+<i class="mdi mdi-api"></i>
+<div class="feature-card__title">Brubru API</div>
+<div class="feature-card__desc">Toegang tot gestructureerde data over EU-wetgevingsprocedures, agenda-items en beleidsinformatie via de Brubru API. Integreer het volgen van NIS2-conformiteit in uw eigen tools.</div>
+<a class="feature-card__btn" href="https://brubru.beresol.eu/api/docs">Bekijk de API-documentatie</a>
+</div>
+</div>
+</section>
+</div><!-- .container -->
+<!-- Footer -->
+<footer class="footer">
+<div class="footer__inner">
+<div class="footer__col">
+<div class="footer__logos">
+<img alt="Brubru" class="footer__logo-brubru" src="../../assets/brubru_mainlogo.png"/>
+<img alt="Beresol" class="footer__logo-beresol" src="../../assets/beresol-logo.png"/>
+</div>
+<div class="footer__text">
+<strong>Brubru</strong> is een EU-beleidsanalyseplatform van <a href="https://beresol.eu" rel="noopener" target="_blank">Beresol BV</a>Apeldoorn, Nederland.<br/>
+        Deze pagina is onderdeel van… <a href="../index.html">EU Canon Bibliotheek</a> Gratis openbare analyse van belangrijke EU-wetgeving.<br/><br/>
+        Fotografie: <a href="https://www.pexels.com/@pixabay" rel="noopener" target="_blank">Pixabay</a> en <a href="https://www.pexels.com/@christina-morillo-1471555" rel="noopener" target="_blank">Christina Morillo</a> via <a href="https://www.pexels.com" rel="noopener" target="_blank">Pexels</a>.
+      </div>
+</div>
+<div class="footer__col">
+<ul class="footer__nav">
+<li><a href="https://brubru.beresol.eu">Brubru huis</a></li>
+<li><a href="https://brubru.beresol.eu/signup">Begin met een gratis proefperiode</a></li>
+<li><a href="https://brubru.beresol.eu/main">Brubru Chat</a></li>
+<li><a href="https://brubru.beresol.eu/amendator">Wijzigingsartikel</a></li>
+<li><a href="https://brubru.beresol.eu/my-eu-bubble">Mijn EU-bubbel</a></li>
+<li><a href="https://brubru.beresol.eu/eulawcomply">Naleving van EU-wetgeving</a></li>
+</ul>
+</div>
+<div class="footer__col">
+<ul class="footer__nav">
+<li><a href="../index.html">EU Canon Bibliotheek</a></li>
+<li><a href="../2022-1925_dma/">Digitale Marktenwet (DMA)</a></li>
+<li><a href="../2022-2065_dsa/">De Digitale Dienstenwet (DSW)</a></li>
+<li><a href="../2024-1689_aiact/">AI-wet</a></li>
+<li><a href="../2016-679_gdpr/">GDPR</a></li>
+<li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" rel="noopener" target="_blank">EUR-Lex CELEX 32022L2555</a></li>
+</ul>
+</div>
+</div>
+<div class="footer__bottom">
+    © 2026 Beresol Alle rechten voorbehouden.
+    <span style="margin: 0 0.5rem;">|</span>
+<a href="https://brubru.beresol.eu/privacy">Privacy</a>
+<span style="margin: 0 0.5rem;">|</span>
+<a href="https://brubru.beresol.eu/terms">Definities</a>
+<span style="margin: 0 0.5rem;">|</span>
+    Analyse gebaseerd op de EUR-Lex/Cellar tekst van Richtlijn (EU) 2022/2555 (CELEX 32022L2555Zoals gepubliceerd in OJ L 333, 27 december 2022. Van toepassing vanaf 18 oktober 2024.
+  </div>
+</footer>
+<!-- Back to top -->
+<a aria-label="Terug naar boven" class="back-to-top" href="#top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+<script>
+  // Back to top button
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  // Language selector active state
+  (function() {
+    var sel = document.querySelector('.header__lang');
+    var path = window.location.pathname;
+    if (path.endsWith('fr.html')) sel.value = 'fr.html';
+    else if (path.endsWith('es.html')) sel.value = 'es.html';
+    else if (path.endsWith('it.html')) sel.value = 'it.html';
+    else if (path.endsWith('nl.html')) sel.value = 'nl.html';
+    else if (path.endsWith('ca.html')) sel.value = 'ca.html';
+    else sel.value = 'index.html';
+  })();
+</script>
+</body>
+</html>

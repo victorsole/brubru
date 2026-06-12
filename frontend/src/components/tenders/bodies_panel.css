@@ -1,0 +1,121 @@
+/* Step 5: BodiesPanel — right-rail companion to ProgrammesPanel. */
+
+.bodies-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.bodies-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #3730a3;
+  margin-bottom: 0.75rem;
+}
+
+.bodies-panel__loading {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+  color: #6b7280;
+}
+
+.bodies-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bodies-panel__item {
+  margin: 0;
+}
+
+.bodies-panel__item-button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.bodies-panel__item-button:hover {
+  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+.bodies-panel__item-button--active {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.bodies-panel__acronym {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  padding: 0.2rem 0.45rem;
+  background: rgba(99, 102, 241, 0.12);
+  color: #3730a3;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+}
+
+.bodies-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.bodies-panel__name {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bodies-panel__count {
+  font-size: 0.72rem;
+  color: #6b7280;
+}
+
+.bodies-panel__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #4f46e5;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.bodies-panel__toggle:hover {
+  background: rgba(79, 70, 229, 0.06);
+}

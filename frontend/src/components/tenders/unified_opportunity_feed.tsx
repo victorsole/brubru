@@ -14,7 +14,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export interface UnifiedOpportunity {
   id: string;
-  source: 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects';
+  source: 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency';
   external_id: string;
   title: string;
   description: string | null;
@@ -34,13 +34,15 @@ export interface UnifiedOpportunity {
   is_applied?: boolean;
 }
 
-export type MatchSubSource = 'all' | 'ted' | 'ft_proposals' | 'ft_tenders';
+export type MatchSubSource = 'all' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'agency';
 
 interface UnifiedFeedProps {
   source: SourceFilter;
   matchSubSource?: MatchSubSource;
   initialQuery?: string;
   programme?: string;
+  // When source=='agency': scope the feed to one body_code (e.g. 'efsa').
+  body?: string;
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
@@ -49,6 +51,7 @@ const SOURCE_LABELS: Record<UnifiedOpportunity['source'], { label: string; icon:
   ft_proposals: { label: 'Call for proposals', icon: 'mdi-flask-outline', colour: 'tenderator-feed__source--proposals' },
   ft_tenders: { label: 'Call for tenders', icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders' },
   ft_projects: { label: 'Funded project', icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects' },
+  agency: { label: 'Agency', icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency' },
 };
 
 const formatValue = (value: number | null, currency: string = 'EUR'): string | null => {
@@ -75,7 +78,7 @@ const formatDeadline = (iso: string | null): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', onSelectOpportunity }: UnifiedFeedProps) => {
+export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
   const [items, setItems] = useState<UnifiedOpportunity[]>([]);
   const [loading, setLoading] = useState(false);
@@ -113,6 +116,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       }
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
       if (programme) params.set('programme', programme);
+      if (body && source === 'agency') params.set('body', body);
       if (clientFilter) params.set('client_filter', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -134,7 +138,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, clientFilter]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, body, clientFilter]);
 
   useEffect(() => {
     setPage(1);

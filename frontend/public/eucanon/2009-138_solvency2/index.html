@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directive 2009/138/EC: Solvency II explained | Brubru EU Canon</title>
+  <meta name="description" content="Complete guide to Solvency II (Directive 2009/138/EC): the EU prudential supervisory framework for insurance and reinsurance. Three Pillars, 312 articles, 99.5% VaR SCR, MCR corridor, ORSA, SFCR, group supervision and the Omnibus II transposition timeline.">
+  <meta property="og:title" content="Solvency II (Directive 2009/138/EC) | Brubru EU Canon">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:description" content="The risk-based prudential framework for EU insurers: Pillar 1 SCR at 99.5% VaR, MCR at 85% VaR, own-funds tiering, ORSA, SFCR, and group supervision via colleges of supervisors.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2009-138_solvency2/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Solvency II (Dir 2009/138): Three Pillars, 99.5% VaR SCR, ORSA, SFCR | Brubru EU Canon">
+  <meta name="twitter:description" content="312 articles, 14 directives recast, 99.5% VaR SCR, MCR corridor 25-45% of SCR, own-funds tiering, ORSA, SFCR, group supervision. The EU's risk-based insurance prudential framework.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2009-138_solvency2/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Directive 2009/138/EC of the European Parliament and of the Council of 25 November 2009 on the taking-up and pursuit of the business of Insurance and Reinsurance (Solvency II) (recast)",
+    "alternateName": "Solvency II",
+    "identifier": "CELEX:32009L0138",
+    "legislationIdentifier": "32009L0138",
+    "legislationType": "Directive",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32009L0138",
+    "datePublished": "2009-12-17",
+    "dateModified": "2026-06-06",
+    "jurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "European Union"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the European Union"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "insurance, reinsurance, solvency, SCR, MCR, ORSA, SFCR, own funds, technical provisions, group supervision, EIOPA, prudential supervision"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+    }
+    .info-box--purple {
+      background: linear-gradient(135deg, rgba(155,81,224,0.08) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(155,81,224,0.2);
+    }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.07) 0%, rgba(217,119,6,0.04) 100%);
+      border-color: rgba(220,38,38,0.2);
+    }
+
+    .duty-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .duty-table th, .duty-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .duty-table th {
+      font-weight: 700; font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    .duty-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .duty-table .rate-blue { color: var(--color-blue); font-weight: 700; }
+    .duty-table .rate-green { color: var(--color-green); font-weight: 700; }
+    .duty-table .rate-amber { color: var(--color-amber); font-weight: 700; }
+    .duty-table .rate-red { color: var(--color-red); font-weight: 700; }
+    .duty-table .rate-purple { color: var(--color-purple); font-weight: 700; }
+    .duty-table tr.highlight-row td { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-blue); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .scope-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--color-bg); transition: all 0.2s;
+    }
+    .scope-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(6,147,227,0.1); }
+    .scope-card__letter {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; flex-shrink: 0; color: white;
+    }
+    .scope-card__title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .scope-card__desc { font-size: 0.8rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .three-col-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .glossary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .glossary-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); padding: 1.25rem; transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .feature-card {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.5rem; text-align: center;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block; padding: 0.4rem 1rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.82rem; color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: ''; position: absolute; left: -2rem; top: 0.5rem;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 3px solid var(--color-blue); background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .canon-related {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.04) 0%, rgba(155,81,224,0.04) 100%);
+      transition: all 0.2s;
+    }
+    .canon-related:hover { border-color: var(--color-blue); }
+    .canon-related__label { font-size: 0.78rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .canon-related__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .canon-related__title a { color: var(--color-text); text-decoration: none; }
+    .canon-related__title a:hover { color: var(--color-blue); }
+    .canon-related__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.6; }
+
+    .canon-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+
+    .cta-strip {
+      padding: 4rem 2rem; text-align: center; margin: 3rem 0; border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block; padding: 0.85rem 2.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-blue); background: white;
+      text-decoration: none; transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px; margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem; font-size: 0.78rem; color: var(--color-muted); text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* Transposition section */
+    .section__head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__num {
+      background: var(--color-green); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem;
+      border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .lede { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1rem; line-height: 1.65; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .three-col-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+      .canon-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.85rem; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .three-col-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .canon-related-grid { grid-template-columns: 1fr; }
+      .duty-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sticky header -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home"><img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU policy intelligence</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language">
+    <option value="index.html" selected>English</option>
+    <option value="fr.html">Francais</option>
+    <option value="es.html">Espanol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Try Brubru free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / EU Insurance &amp; Finance
+  </div>
+  <h1 class="hero__title"><span>Solvency II</span>: the EU Prudential Framework for Insurance</h1>
+  <p class="hero__subtitle">
+    Directive 2009/138/EC is the risk-based prudential rulebook for EU insurance and reinsurance. A recast of 14 earlier directives, it introduced a three-pillar architecture: quantitative capital requirements anchored to a 99.5% Value-at-Risk, a governance and supervisory pillar including the ORSA, and a transparency pillar built on the SFCR and supervisory reporting.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar"></i> Adopted 25 November 2009</span>
+    <span><i class="mdi mdi-book-open-outline"></i> OJ L 335, 17.12.2009</span>
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32009L0138</span>
+    <span><i class="mdi mdi-gavel"></i> Arts 53(1) and 62 TFEU</span>
+    <span><i class="mdi mdi-calendar-check"></i> Applied 1 January 2016</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600"
+    alt="Insurance documents, policy papers and financial data representing the Solvency II prudential framework for EU insurers"
+    loading="lazy"
+  >
+  <figcaption>
+    Photo: <a href="https://www.pexels.com/@karolina-grabowska" target="_blank" rel="noopener">Karolina Grabowska</a>
+    via <a href="https://www.pexels.com/photo/6801648/" target="_blank" rel="noopener">Pexels</a>
+    | Solvency II replaced 14 older directives with a single risk-based prudential rulebook
+  </figcaption>
+</figure>
+
+<!-- Key figures strip -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">312</div>
+    <div class="figure-card__label">Articles, 6 Titles</div>
+    <div class="figure-card__context">Title I general rules; Title II specific provisions; Title III group supervision; Title IV reorganisation and winding-up; Title V other provisions; Title VI transitional and final. Plus 7 Annexes covering insurance classes, standard formula structure and repealed directives.</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">99.5%</div>
+    <div class="figure-card__label">VaR confidence: SCR</div>
+    <div class="figure-card__context">Art 101(3): the Solvency Capital Requirement is calibrated to the Value-at-Risk of basic own funds at a 99.5% confidence level over one year. Equivalently, ruin should occur no more than once in every 200 years (Recital 64).</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">14</div>
+    <div class="figure-card__label">Directives recast</div>
+    <div class="figure-card__context">Art 310 repeals 13 directives effective 1 November 2012 including Dir 73/239, 88/357, 92/49, 2002/83, and 2005/68. Together with Dir 64/225 on reinsurance freedom of establishment, the recast replaces 14 instruments spanning 45 years of EU insurance law.</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">3</div>
+    <div class="figure-card__label">Pillars</div>
+    <div class="figure-card__context">Pillar 1 (quantitative: SCR, MCR, technical provisions, own funds, investments); Pillar 2 (governance: ORSA, fit-and-proper, system of governance, supervisory review); Pillar 3 (transparency: SFCR public report and RSR supervisory reporting).</div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#recast" class="toc__link"><i class="mdi mdi-book-multiple-outline"></i> What it recasts</a>
+    <a href="#pillar1" class="toc__link"><i class="mdi mdi-bank-outline"></i> Pillar 1: Quantitative requirements</a>
+    <a href="#techprovisions" class="toc__link"><i class="mdi mdi-calculator-variant-outline"></i> Technical provisions</a>
+    <a href="#ownfunds" class="toc__link"><i class="mdi mdi-cash-multiple"></i> Own funds and tiering</a>
+    <a href="#scr" class="toc__link"><i class="mdi mdi-shield-check-outline"></i> SCR and standard formula</a>
+    <a href="#mcr" class="toc__link"><i class="mdi mdi-alert-outline"></i> Minimum Capital Requirement</a>
+    <a href="#pillar2" class="toc__link"><i class="mdi mdi-cog-outline"></i> Pillar 2: Governance</a>
+    <a href="#orsa" class="toc__link"><i class="mdi mdi-head-cog-outline"></i> ORSA</a>
+    <a href="#pillar3" class="toc__link"><i class="mdi mdi-eye-outline"></i> Pillar 3: Transparency</a>
+    <a href="#title-walkthrough" class="toc__link"><i class="mdi mdi-layers-outline"></i> Title-by-Title walkthrough</a>
+    <a href="#group" class="toc__link"><i class="mdi mdi-sitemap-outline"></i> Group supervision</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-alphabet"></i> Key definitions</a>
+    <a href="#atagglance" class="toc__link"><i class="mdi mdi-compare"></i> At-a-glance table</a>
+    <a href="#timeline-section" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Legislative timeline</a>
+    <a href="#transposition" class="toc__link"><i class="mdi mdi-map-outline"></i> Transposition</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossary</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-link"></i> Related canon entries</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     SECTION 1: OVERVIEW
+     ========================================================= -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overview</h2>
+  </div>
+  <p class="section__subtitle">The risk-based prudential framework that replaced 14 earlier directives</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-history" style="color: var(--color-blue);"></i> From Solvency I to Solvency II</div>
+    <p>Solvency II replaced a patchwork of national insurance supervisory regimes and EU minimum-harmonisation directives that dated from 1973. The older system, informally called Solvency I, was based on fixed factor-driven capital charges bearing no direct relationship to an undertaking's actual risk profile. Premium income and claims reserves were used as simple proxies for required capital. By the mid-2000s this system was widely recognised as inadequate to capture the risks of modern insurance groups engaged in complex asset-liability management, derivative use, and cross-border reinsurance.</p>
+    <p>The Solvency II project, launched under the Lamfalussy process, drew on the Basel II/III framework used in banking and on work by the International Association of Insurance Supervisors. Its central innovation is an economic, mark-to-market valuation of the entire balance sheet -- assets and liabilities -- and a risk-calibrated Solvency Capital Requirement. The directive was adopted on 25 November 2009 and published in OJ L 335 on 17 December 2009.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-green);"></i> Legal basis and objectives</div>
+    <p>The directive is based on <strong>Articles 47(2) and 55 EC Treaty</strong> (now Articles 53(1) and 62 TFEU), the internal market provisions relating to the taking-up and pursuit of self-employed activities. It was adopted via the codecision procedure. The stated primary objective, set out in Article 27, is the <strong>protection of policyholders and beneficiaries</strong>. Financial stability and fair markets are secondary objectives and may not override policyholder protection (Article 28). This hierarchy is enforced throughout the supervisory framework: a supervisor may not justify inaction on grounds of financial stability if policyholder protection requires intervention.</p>
+    <p>Omnibus II (Directive 2014/51/EU) subsequently amended Solvency II, most importantly by introducing a long-term guarantee package, extending the transposition deadline to <strong>31 March 2015</strong>, and setting <strong>1 January 2016</strong> as the application date. A further major review (Solvency II 2020 Review) led to Directive 2025/2 amending various provisions including the long-term guarantee measures and proportionality framework.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-view-dashboard-outline" style="color: var(--color-purple);"></i> The Three-Pillar architecture</div>
+    <p>Solvency II is structured around three interdependent pillars that together form a comprehensive supervisory system:</p>
+    <ul>
+      <li><strong>Pillar 1</strong> covers quantitative financial requirements: market-consistent valuation of technical provisions, a tiered own-funds regime, the Solvency Capital Requirement (SCR) calibrated at 99.5% Value-at-Risk over one year, the Minimum Capital Requirement (MCR) as the absolute intervention floor, and the prudent-person investment principle.</li>
+      <li><strong>Pillar 2</strong> covers qualitative governance and supervisory requirements: the mandatory system of governance including four key functions, the Own Risk and Solvency Assessment (ORSA), fit-and-proper requirements for key function holders, the supervisory review process, and the capital add-on power.</li>
+      <li><strong>Pillar 3</strong> covers public and supervisory transparency: the annual Solvency and Financial Condition Report (SFCR) and Regular Supervisory Reporting (RSR) covering governance, valuation, risks, risk management, and capital structure.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 2: WHAT IT RECASTS
+     ========================================================= -->
+<section class="section" id="recast">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-book-multiple-outline"></i></div>
+    <h2 class="section__title">What it recasts</h2>
+  </div>
+  <p class="section__subtitle">Article 310 and Recital 1: the 14 predecessor instruments repealed on 1 November 2012</p>
+
+  <div class="info-box info-box--green">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-green);"></i> A recast, not a fresh codification</h3>
+    <p>Solvency II is formally a <em>recast</em>, meaning it incorporates both codification of predecessor texts and substantive new provisions in a single instrument. Article 310 repeals 13 instruments with effect from 1 November 2012. The user framing of 14 directives recast includes Directive 64/225/EEC on freedom of establishment in reinsurance. The 14 predecessor instruments were:</p>
+  </div>
+
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">1</div>
+      <div>
+        <div class="scope-card__title">Council Directive 64/225/EEC</div>
+        <div class="scope-card__desc">Reinsurance: freedom of establishment and freedom to provide services. The founding instrument for EU-wide reinsurance activity.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">2</div>
+      <div>
+        <div class="scope-card__title">First Non-Life Directive 73/239/EEC</div>
+        <div class="scope-card__desc">Taking-up and pursuit of non-life insurance. The foundational harmonisation for non-life business including the 18 insurance classes in what became Annex I.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-purple);">3</div>
+      <div>
+        <div class="scope-card__title">Council Directive 73/240/EEC</div>
+        <div class="scope-card__desc">Abolition of restrictions on freedom of establishment in non-life insurance.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-purple);">4</div>
+      <div>
+        <div class="scope-card__title">Council Directive 78/473/EEC</div>
+        <div class="scope-card__desc">Community co-insurance: coordinating access to co-insurance arrangements for large risks across Member States.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">5</div>
+      <div>
+        <div class="scope-card__title">Second Non-Life Directive 88/357/EEC</div>
+        <div class="scope-card__desc">Freedom to provide services in non-life insurance: the single market for cross-border non-life policies.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-amber);">6</div>
+      <div>
+        <div class="scope-card__title">Third Non-Life Directive 92/49/EEC</div>
+        <div class="scope-card__desc">Completion of the non-life single market: a single authorisation valid throughout the EU, the home-state supervision principle, and the abolition of prior approval of policy conditions.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-green);">7</div>
+      <div>
+        <div class="scope-card__title">Directive 98/78/EC</div>
+        <div class="scope-card__desc">Supplementary supervision of insurance groups: the precursor to the comprehensive group supervision Title III of Solvency II.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-green);">8</div>
+      <div>
+        <div class="scope-card__title">Life Assurance Directive 2002/83/EC</div>
+        <div class="scope-card__desc">The consolidated single market framework for life insurance: authorisation, prudential requirements, policyholder information, freedom of services for life business.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-red);">9</div>
+      <div>
+        <div class="scope-card__title">Reinsurance Directive 2005/68/EC</div>
+        <div class="scope-card__desc">The first directive specifically dedicated to reinsurance: single authorisation, home-state supervision principle, and introduction of a framework for special purpose vehicles.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-red);">10</div>
+      <div>
+        <div class="scope-card__title">Reorganisation and Winding-Up Directive 2001/17/EC</div>
+        <div class="scope-card__desc">Mutual recognition of home-state reorganisation and winding-up proceedings throughout the EU: the predecessor to Solvency II Title IV.</div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-card__letter" style="background: var(--color-blue);">11-14</div>
+      <div>
+        <div class="scope-card__title">Further instruments repealed</div>
+        <div class="scope-card__desc">Dir 73/240, 76/580, 84/641 (tourist assistance), 87/344 (legal expenses): completing the consolidation of niche non-life and sectoral instruments into the unified Solvency II framework.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3: PILLAR 1 OVERVIEW
+     ========================================================= -->
+<section class="section" id="pillar1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-bank-outline"></i></div>
+    <h2 class="section__title">Pillar 1: Quantitative requirements</h2>
+  </div>
+  <p class="section__subtitle">The economic balance sheet, own funds, SCR, MCR and the prudent-person investment principle</p>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> The economic balance sheet (Article 75)</h3>
+    <p>The entire Solvency II quantitative framework is built on a market-consistent economic balance sheet. Assets are measured at the amount for which they could be exchanged between knowledgeable willing parties in an arm's-length transaction -- effectively fair value. Liabilities are measured at the amount for which they could be transferred or settled between knowledgeable willing parties, with no adjustment for own credit standing. Own funds are the residual of market-consistent assets over market-consistent liabilities, and the SCR protects that residual against unexpected losses over a one-year horizon.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3a: TECHNICAL PROVISIONS
+     ========================================================= -->
+<section class="section" id="techprovisions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-calculator-variant-outline"></i></div>
+    <h2 class="section__title">Technical provisions (Arts 76-86)</h2>
+  </div>
+  <p class="section__subtitle">Best estimate plus risk margin: the market-consistent value of insurance obligations</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-line" style="color: var(--color-purple);"></i> The fundamental requirement (Art 76)</div>
+    <p>Technical provisions represent the current amount an undertaking would need to transfer its insurance and reinsurance obligations to another undertaking in an arm's-length transaction immediately (Article 76(2)). They must be market-consistent and are calculated as the sum of a <strong>best estimate</strong> and a <strong>risk margin</strong> (Article 77(1)).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-numeric-1-circle-outline" style="color: var(--color-blue);"></i> Best estimate (Art 77(2))</div>
+      <p>The probability-weighted average of future cash flows, taking account of the time value of money using the relevant risk-free interest rate term structure. It is calculated gross of reinsurance: recoverable amounts from reinsurance contracts and special purpose vehicles are calculated separately and adjusted for expected losses due to counterparty default (Article 81). Segmentation by homogeneous risk groups and lines of business is mandatory (Article 80).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-numeric-2-circle-outline" style="color: var(--color-purple);"></i> Risk margin (Art 77(3) and (5))</div>
+      <p>The Cost-of-Capital (CoC) approach: the cost of providing eligible own funds equal to the SCR necessary to support the insurance and reinsurance obligations over their lifetime. The CoC rate must reflect the additional rate above the risk-free rate that an undertaking would incur holding eligible own funds, and is identical for all undertakings (set at 6% in Commission Delegated Regulation 2015/35, Article 39).</p>
+    </div>
+  </div>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-swap-horizontal" style="color: var(--color-purple);"></i> Replicating portfolio exception (Art 77(4))</h3>
+    <p>Where future cash flows can be reliably replicated using financial instruments with observable market values, technical provisions may be set equal to the market value of those instruments without a separate best-estimate/risk-margin split. This exception is narrow: both reliable replication and observable market values are required.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3b: OWN FUNDS AND TIERING
+     ========================================================= -->
+<section class="section" id="ownfunds">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-cash-multiple"></i></div>
+    <h2 class="section__title">Own funds and tiering (Arts 87-99)</h2>
+  </div>
+  <p class="section__subtitle">Basic own funds, ancillary own funds, and the three-tier eligibility system</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-layers-triple-outline" style="color: var(--color-amber);"></i> Structure of own funds (Arts 87-91)</div>
+    <p><strong>Basic own funds</strong> (Article 88): (1) excess of assets over liabilities both valued under Article 75; and (2) subordinated liabilities. <strong>Ancillary own funds</strong> are items callable to absorb losses that are not basic own funds -- including unpaid share capital, letters of credit, and guarantees (Article 89). These require prior supervisory approval (Article 90). <strong>Surplus funds</strong> -- accumulated profits not made available for distribution -- are deemed Tier 1 where they meet the permanence criteria (Articles 91 and 96).</p>
+  </div>
+
+  <table class="duty-table">
+    <thead>
+      <tr>
+        <th>Tier</th>
+        <th>Key characteristics (Arts 93-96)</th>
+        <th>SCR eligibility limit (Art 98(1))</th>
+        <th>MCR eligibility limit (Art 98(2))</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row">
+        <td><strong>Tier 1</strong></td>
+        <td>Permanent availability; fully subordinated on winding-up; no fixed charges; no incentive to redeem. Most loss-absorbing category.</td>
+        <td class="rate-green">Must exceed 1/3 of total eligible own funds</td>
+        <td class="rate-green">Must exceed 1/2 of total eligible basic own funds</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 2</strong></td>
+        <td>Substantially possesses subordination but not necessarily full permanence.</td>
+        <td class="rate-blue">Fills the gap above Tier 1</td>
+        <td class="rate-blue">Balance after Tier 1 applied</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 3</strong></td>
+        <td>Items meeting neither criterion fully. Deferred tax assets are the principal Tier 3 item.</td>
+        <td class="rate-amber">Must be less than 1/3 of total eligible own funds</td>
+        <td class="rate-red">Not eligible for MCR coverage</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3c: SCR AND STANDARD FORMULA
+     ========================================================= -->
+<section class="section" id="scr">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">Solvency Capital Requirement (Arts 100-127)</h2>
+  </div>
+  <p class="section__subtitle">The 99.5% VaR central capital requirement: standard formula and internal models</p>
+
+  <div class="info-box info-box--green">
+    <h3><i class="mdi mdi-percent-outline" style="color: var(--color-green);"></i> The SCR calibration (Art 101(3))</h3>
+    <p>The SCR corresponds to the Value-at-Risk of the basic own funds of an insurance or reinsurance undertaking subject to a <strong>confidence level of 99.5% over a one-year period</strong>. This is the verbatim requirement of Article 101(3). As Recital 64 explains, ruin should occur no more than once in every 200 cases -- i.e., the undertaking should be able to meet its obligations over the next 12 months with at least 99.5% probability. All undertakings must hold eligible own funds covering the SCR at all times (Article 100). SCR non-compliance triggers immediate notification and a recovery plan within two months; restoration within six months, extendable to nine months in exceptional market conditions (Article 138).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-chart-bar" style="color: var(--color-blue);"></i> Risks the SCR must cover (Art 101(4))</div>
+    <p>At a minimum the SCR must cover:</p>
+    <ul>
+      <li>Non-life underwriting risk</li>
+      <li>Life underwriting risk</li>
+      <li>Health underwriting risk</li>
+      <li>Market risk</li>
+      <li>Credit risk (counterparty default risk)</li>
+      <li>Operational risk -- includes legal risk but excludes strategic and reputational risk</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-math-compass" style="color: var(--color-green);"></i> Standard formula structure (Arts 103-111)</div>
+    <p>The standard formula SCR = Basic SCR + operational risk capital charge + adjustment for loss-absorbing capacity of technical provisions and deferred taxes (Article 103). The <strong>Basic SCR</strong> (Article 104) aggregates five risk modules using a correlation matrix, each calibrated at 99.5% VaR one-year (Article 104(4)):</p>
+    <ul>
+      <li><strong>Non-life underwriting risk module</strong> (Art 105(2)): sub-modules for premium and reserve risk and catastrophe risk.</li>
+      <li><strong>Life underwriting risk module</strong> (Art 105(3)): sub-modules for mortality, longevity, disability/morbidity, life expense, revision, lapse, and life catastrophe.</li>
+      <li><strong>Health underwriting risk module</strong> (Art 105(4)): covers expense risk, claims risk, and epidemic/catastrophe risk.</li>
+      <li><strong>Market risk module</strong> (Art 105(5)): sub-modules for interest rate, equity, property, spread, currency, and market risk concentrations.</li>
+      <li><strong>Counterparty default risk module</strong> (Art 105(6)): covers reinsurance arrangements, securitisations, derivatives, and intermediary receivables.</li>
+    </ul>
+    <p>Key calibration constraints: the operational risk charge is capped at <strong>30% of the Basic SCR</strong> for non-life business (Art 107(3)); the equity symmetric adjustment may not deviate from the standard charge by more than <strong>plus or minus 10 percentage points</strong> (Art 106(3)).</p>
+    <p>Undertakings may replace a subset of standard formula parameters with undertaking-specific parameters derived from their own data, subject to supervisory approval (Art 104(7)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cog-outline" style="color: var(--color-purple);"></i> Internal models (Arts 112-127)</div>
+    <p>Full or partial internal models may replace the standard formula after supervisory approval (Article 112). Partial models may cover one or more risk modules or sub-modules, or specific business units (Article 112(2)). Five approval standards must be satisfied:</p>
+    <ul>
+      <li><strong>Use test (Art 120):</strong> The model must be widely used in risk management and decision-making and play an important role in the governance system.</li>
+      <li><strong>Statistical quality standards (Art 121):</strong> Methods actuarially and statistically sound; data accurate, complete, and updated at least annually.</li>
+      <li><strong>Calibration standards (Art 122):</strong> Results equivalent to the 99.5% VaR one-year measure; alternative measures permissible only where resulting capital provides equivalent policyholder protection.</li>
+      <li><strong>Validation standards (Art 124):</strong> Regular validation cycle including back-testing, statistical testing, and sensitivity analysis.</li>
+      <li><strong>Documentation standards (Art 125):</strong> Full documentation of theory, assumptions, and known limitations.</li>
+    </ul>
+    <p>Once approved, reversion to the standard formula requires duly justified circumstances and supervisory approval (Article 117). A capital add-on may be imposed where the standard formula risk profile deviates significantly from assumptions and internal modelling is inappropriate or under development (Article 37).</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3d: MCR
+     ========================================================= -->
+<section class="section" id="mcr">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-alert-outline"></i></div>
+    <h2 class="section__title">Minimum Capital Requirement (Arts 128-131)</h2>
+  </div>
+  <p class="section__subtitle">The absolute floor below which authorisation must be withdrawn: the 85% VaR linear function</p>
+
+  <div class="info-box info-box--red">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-red);"></i> Intervention ladder</h3>
+    <p>The SCR and MCR form a two-rung intervention ladder. Non-compliance with the SCR triggers a recovery plan but does not immediately require withdrawal of authorisation. Non-compliance with the MCR is the absolute floor: failure to restore own funds within three months leads to mandatory withdrawal of authorisation (Article 144). MCR non-compliance must be notified immediately; a short-term finance scheme must be submitted within one month (Article 139).</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-math-cos" style="color: var(--color-red);"></i> MCR calibration and calculation (Art 129)</div>
+      <p>The MCR is calibrated to a <strong>Value-at-Risk of 85% confidence over one year</strong> -- a lower threshold than the SCR reflecting the final intervention point (Article 129(1)(c)). It is calculated as a simple, auditable linear function of technical provisions, written premiums, capital-at-risk, deferred taxes, and administrative expenses (Article 129(2)). It must be calculated quarterly (Article 129(4)).</p>
+      <p><strong>MCR corridor (Art 129(3)):</strong> The MCR must not fall below <strong>25%</strong> nor exceed <strong>45%</strong> of the SCR. This corridor maintains the intervention ladder: the MCR can never exceed the SCR, and the gap between them cannot become trivially small.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-currency-eur" style="color: var(--color-amber);"></i> MCR absolute floors (Art 129(1)(d))</div>
+      <ul>
+        <li>Non-life insurance (standard): <strong>EUR 2,200,000</strong></li>
+        <li>Non-life (liability, credit, suretyship classes 10-15): <strong>EUR 3,200,000</strong></li>
+        <li>Life insurance: <strong>EUR 3,200,000</strong></li>
+        <li>Reinsurance: <strong>EUR 3,200,000</strong></li>
+        <li>Captive reinsurance: <strong>EUR 1,000,000</strong></li>
+        <li>Composite (life + non-life): sum of the respective floors</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 3e: PRUDENT PERSON PRINCIPLE
+     ========================================================= -->
+<section class="section" id="investments">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-chart-areaspline"></i></div>
+    <h2 class="section__title">Prudent-person investment principle (Arts 132-135)</h2>
+  </div>
+  <p class="section__subtitle">Asset management: security, quality, liquidity and profitability -- no mandatory allocations</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> Article 132: the prudent person standard</div>
+    <p>All assets must be managed in accordance with the prudent person principle (Article 132). The key requirements are:</p>
+    <ul>
+      <li>Only invest in assets whose risks can be properly identified, measured, monitored, managed, controlled, and reported.</li>
+      <li>Assets must ensure security, quality, liquidity, and profitability of the portfolio as a whole.</li>
+      <li>Assets covering technical provisions must be invested appropriately to the nature and duration of the liabilities and in the best interest of policyholders and beneficiaries.</li>
+      <li>Derivatives are permissible only to reduce risk or facilitate efficient portfolio management.</li>
+      <li>Unregulated market assets must be kept at prudent levels; assets must be properly diversified.</li>
+    </ul>
+    <p>Critically, Article 133 prohibits Member States from requiring undertakings to invest in particular categories of assets (<strong>no mandatory asset allocation</strong>) and from requiring prior approval or systematic notification of investment decisions. This principle-based approach replaced the prescriptive asset-by-asset limits of Solvency I.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4: PILLAR 2 -- GOVERNANCE
+     ========================================================= -->
+<section class="section" id="pillar2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cog-outline"></i></div>
+    <h2 class="section__title">Pillar 2: System of governance (Arts 41-50)</h2>
+  </div>
+  <p class="section__subtitle">Four mandatory governance functions, fit-and-proper requirements, and the ORSA</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-office-building-outline" style="color: var(--color-purple);"></i> The system of governance requirement (Art 41)</div>
+    <p>Every undertaking must have an effective system of governance providing for sound and prudent management of its business (Article 41). The system must be proportionate to the nature, scale, and complexity of the undertaking's operations. It must include: adequate organisational structure with clear allocation of responsibilities; transparent decision-making processes; written policies on risk management, internal control, internal audit, and outsourcing reviewed at least annually; and continuity and contingency plans.</p>
+    <p>The management body bears ultimate responsibility for the system of governance and for ensuring ongoing compliance with Solvency II requirements.</p>
+  </div>
+
+  <div class="three-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-radar" style="color: var(--color-blue);"></i> Risk management function (Art 44)</div>
+      <p>Must cover all material risk categories: underwriting and reserving, asset-liability management, investment (including derivatives), liquidity and concentration risk, operational risk, and reinsurance and other risk-mitigation techniques. For internal model users, the risk management function also oversees model design, implementation, testing, documentation, and performance monitoring.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-green);"></i> Compliance function (Art 46)</div>
+      <p>Advises the management body on compliance with applicable laws and regulations and assesses the possible impact of changes in the legal environment on the undertaking's operations. Reports findings to the management body.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-magnify-scan" style="color: var(--color-amber);"></i> Internal audit function (Art 47)</div>
+      <p>Evaluates the adequacy and effectiveness of the internal control system and other elements of the system of governance. Must be objective and independent from all operational functions. Audit findings and recommendations reported directly to the management body. This function cannot be combined with other governance functions (Recital 32).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-calculator" style="color: var(--color-purple);"></i> Actuarial function (Art 48)</div>
+    <p>Coordinates the calculation of technical provisions; ensures appropriateness of methodologies, underlying models, and assumptions; assesses the sufficiency and quality of data; compares best estimates against experience; informs the management body and supervisors of the reliability and adequacy of the technical provisions calculation; expresses an opinion on the overall underwriting policy and on the adequacy of reinsurance arrangements.</p>
+    <p>Multiple governance functions may be combined in smaller undertakings -- except the internal audit function, which must remain independent at all times (Recital 32).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-check-outline" style="color: var(--color-blue);"></i> Fit and proper (Art 42)</div>
+    <p>All persons who effectively run the undertaking or hold other key functions must at all times be: (a) <strong>professionally qualified, knowledgeable, and experienced</strong> relative to their role (fit); and (b) of <strong>good repute and integrity</strong> (proper). These are ongoing requirements: a person who ceases to meet them must be replaced. Changes to key function holders must be notified to the supervisory authority.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-amber);"></i> Outsourcing (Art 49)</div>
+    <p>Undertakings remain fully responsible for discharging all their obligations when outsourcing. Outsourcing of critical or important functions must not: impair the quality of the governance system; increase operational risk; impair supervisory monitoring; undermine continuous service to policyholders. Supervisors must be notified prior to outsourcing critical or important functions.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 4a: ORSA
+     ========================================================= -->
+<section class="section" id="orsa">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-head-cog-outline"></i></div>
+    <h2 class="section__title">Own Risk and Solvency Assessment (Art 45)</h2>
+  </div>
+  <p class="section__subtitle">The undertaking's prospective self-assessment: not a capital requirement, but a strategic governance tool</p>
+
+  <div class="info-box info-box--purple">
+    <h3><i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i> What the ORSA must cover</h3>
+    <p>As an integral part of the risk management system, every undertaking must conduct its own risk and solvency assessment covering three elements (Article 45(1)):</p>
+    <ul>
+      <li>(a) <strong>Overall solvency needs</strong> with respect to its specific risk profile, approved risk tolerance limits, and business strategy -- the forward-looking assessment of the capital the undertaking needs given its own risks.</li>
+      <li>(b) <strong>Continuous compliance</strong> with SCR, MCR, and technical provision requirements -- how the undertaking will remain solvent throughout its planning horizon.</li>
+      <li>(c) <strong>Degree of deviation</strong> of the undertaking's risk profile from the SCR assumptions -- which standard formula or internal model assumptions do not reflect the undertaking's actual risks, and why.</li>
+    </ul>
+    <p>The ORSA must be conducted at least annually and following any significant change in risk profile (Article 45(5)). Results are reported to the supervisory authority as part of supervisory reporting. <strong>Critically, the ORSA does not serve to calculate a capital requirement different from the SCR or MCR (Article 45(7)).</strong> It is a governance and strategy tool, not an additional capital floor.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 5: PILLAR 3 -- TRANSPARENCY
+     ========================================================= -->
+<section class="section" id="pillar3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-eye-outline"></i></div>
+    <h2 class="section__title">Pillar 3: Transparency and reporting</h2>
+  </div>
+  <p class="section__subtitle">The SFCR (public disclosure) and RSR (supervisory reporting): making the balance sheet legible</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-blue);"></i> Solvency and Financial Condition Report (Arts 51-56)</div>
+      <p>Every undertaking must publish an annual SFCR within two weeks of supervisory approval. The SFCR must contain five sections (Article 51):</p>
+      <ul>
+        <li>(a) Business description and performance.</li>
+        <li>(b) System of governance and assessment of its adequacy.</li>
+        <li>(c) Risk exposure, concentration, mitigation, and sensitivity by risk category.</li>
+        <li>(d) Valuation bases for assets, technical provisions, and other liabilities with explanation of material differences from financial statement valuations.</li>
+        <li>(e) Capital management: structure and amount of own funds; SCR and MCR amounts; SCR calculation method; significant deviations from standard formula or internal model assumptions; any MCR non-compliance or significant SCR non-compliance.</li>
+      </ul>
+      <p>Supervisors may permit non-disclosure where information would give competitors significant undue advantage or is subject to confidentiality obligations (Article 53), but this exemption cannot apply to capital management disclosures (Article 53(4)). MCR breach or significant SCR breach triggers additional immediate public disclosure (Article 54).</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-clipboard-text-outline" style="color: var(--color-purple);"></i> Regular Supervisory Reporting (Art 35)</div>
+      <p>Undertakings must submit to supervisors all information necessary for supervision: governance system assessments, valuation principles and technical provision details, risk exposures, risk management systems, and capital structure. Reporting occurs at predefined periods, on predefined events, or during enquiries (Article 35(1)-(2)).</p>
+      <p>The RSR is not publicly disclosed (unlike the SFCR) and may contain commercially sensitive information. It forms the basis of the supervisory review process and enables the supervisor to determine whether a capital add-on under Article 37 is warranted.</p>
+      <p>EIOPA collects aggregate data from national supervisors and reports annually to the European Parliament, the Council, and the Commission on supervisory convergence and the application of Solvency II (Article 52).</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 6: TITLE-BY-TITLE WALKTHROUGH
+     ========================================================= -->
+<section class="section" id="title-walkthrough">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-layers-outline"></i></div>
+    <h2 class="section__title">Structure of the directive: Title by Title</h2>
+  </div>
+  <p class="section__subtitle">312 articles across 6 Titles: from authorisation to winding-up</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-roman-numeral-1" style="color: var(--color-blue);"></i> Title I -- General rules on taking-up and pursuit (the main operative Title)</div>
+    <p><strong>Chapter I (Arts 1-13): Subject matter, scope, definitions.</strong> Article 2 defines scope as all direct life and non-life insurance and reinsurance undertakings established in the EU. Article 3 excludes statutory social security schemes. Article 4 excludes small undertakings with gross premium income below EUR 5 million, technical provisions below EUR 25 million, no liability/credit/suretyship business, and reinsurance below EUR 0.5 million or 10% of gross premiums -- but only where no threshold has been exceeded for three consecutive years. Article 13 provides 39 definitions, including qualifying holding (10% or more of capital or voting rights).</p>
+    <p><strong>Chapter II (Arts 14-26): Taking-up of business.</strong> Authorisation is required before any insurance or reinsurance business may commence (Article 14). A single EU authorisation covers both freedom of establishment and freedom to provide services across all Member States (Article 15). Authorisation conditions include: limitation of objects; scheme of operations demonstrating financial soundness; eligible basic own funds at least equal to the MCR absolute floor; governance system compliance.</p>
+    <p><strong>Chapter III (Arts 27-39): Supervisory authorities.</strong> Primary objective of supervision: policyholder and beneficiary protection (Art 27). Home Member State bears exclusive financial supervision responsibility for the entire business (Art 30). General supervisory powers include preventive and corrective measures, on-site inspections, and information requests extending to outsourced service providers (Art 34). Capital add-on power (Art 37) is a last resort following the supervisory review process.</p>
+    <p><strong>Chapter IV (Arts 40-74): Conditions governing business.</strong> The governance pillar (Arts 41-50), public disclosure pillar (Arts 51-56), qualifying holdings (Arts 57-63), professional secrecy and information exchange (Arts 64-71), and auditor duties (Art 72). Auditors must promptly report MCR/SCR non-compliance and refusal to certify accounts to supervisors.</p>
+    <p><strong>Chapters VI-VIII (Arts 75-177): Quantitative requirements and cross-border business.</strong> The Pillar 1 core covered above. Chapter VII (Arts 136-144) covers the intervention ladder for undertakings in difficulty. Chapter VIII (Arts 145-177) covers freedom of establishment via branches (three-month clearance procedure) and freedom to provide services (one-month notification). Third-country branches must hold assets equal to at least half the MCR absolute floor and deposit one quarter as security (Art 162).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-roman-numeral-2" style="color: var(--color-green);"></i> Title II -- Specific provisions for insurance and reinsurance (Arts 178-211)</div>
+    <p>Rome I applies to insurance contracts (Art 178). Member States may not require prior approval or systematic notification of policy conditions or premium scales (Arts 181-182), though life undertakings may be required to notify technical bases for actuarial compliance verification. Life insurance policyholders must receive pre-contractual information on benefits, terms, options, and unit-linking; a 14-30 day cooling-off period applies to individual life contracts (Art 186).</p>
+    <p>Non-life specific provisions cover community co-insurance for large risks (Arts 190-196), tourist assistance as class 18 (Art 197), legal expenses insurance (Arts 198-205 -- independent claims management and free choice of lawyer guaranteed), and health insurance as an alternative to social security (Art 206). Special purpose vehicles require prior supervisory approval (Art 211).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-roman-numeral-4" style="color: var(--color-red);"></i> Title IV -- Reorganisation and winding-up (Arts 267-296)</div>
+    <p>Only the competent authorities of the <strong>home Member State</strong> may take reorganisation decisions or open winding-up proceedings (Arts 269, 273). Both are automatically recognised and effective throughout the EU without formalities. Insurance claims have priority over other claims in winding-up (Art 275). Supervisory authorities of all other Member States must be informed urgently of reorganisation decisions. The Title builds on the mutual-recognition principle established by Dir 2001/17/EC, which Solvency II recasts.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 7: GROUP SUPERVISION
+     ========================================================= -->
+<section class="section" id="group">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-sitemap-outline"></i></div>
+    <h2 class="section__title">Title III: Group supervision (Arts 212-266)</h2>
+  </div>
+  <p class="section__subtitle">Group solvency, the college of supervisors, and the group supervisor</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-blue);"></i> Scope and group solvency</div>
+    <p>Group supervision under Title III applies in addition to solo supervision -- it does not replace it (Article 213). Participating undertakings in an insurance or reinsurance group must ensure that eligible own funds within the group are always at least equal to the group SCR (Article 218(1)). The group SCR must be calculated at least annually; continuous monitoring is required.</p>
+    <p>Two calculation methods are available:</p>
+    <ul>
+      <li><strong>Method 1 (default, Arts 230-232):</strong> Accounting consolidation. The group SCR is calculated on the basis of consolidated accounts. The consolidated group SCR must be at least equal to the sum of individual MCRs -- it cannot be lower than the worst-case floor.</li>
+      <li><strong>Method 2 (alternative, Arts 233-234):</strong> Deduction and aggregation. The group SCR is the sum of individual SCRs at proportional shares. Used where Method 1 is not appropriate.</li>
+    </ul>
+    <p>Double-counting of own funds across group entities is prohibited (Arts 222-223). Reciprocal financing -- intra-group creation of own funds -- is excluded.</p>
+  </div>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-star-circle-outline" style="color: var(--color-purple);"></i> Group supervisor (Art 247)</div>
+      <p>One supervisor is designated from the supervisory authorities of the Member States concerned. Selection is based on the location of the EU ultimate parent undertaking (or, for groups not headed by an insurer, the entity with the largest balance sheet total). The group supervisor coordinates supervisory activity, chairs the college, and leads on group solvency assessments and group internal model approvals.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-google-circles-communities" style="color: var(--color-green);"></i> College of supervisors (Art 248)</div>
+      <p>A college of supervisors must be established for every insurance group, chaired by the group supervisor. Membership includes supervisors of all Member States where subsidiary head offices are located. Supervisors of significant branches may participate with limited roles. The college facilitates cooperation, information exchange, consultation, and convergence of supervisory decisions. Disagreements between college members may be referred to EIOPA for binding mediation.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-earth" style="color: var(--color-amber);"></i> Third-country equivalence (Arts 260-264)</div>
+    <p>Where a group is headed by a third-country parent, supervisory authorities verify whether the third country's group supervision is equivalent to Title III. The Commission may formally assess equivalence. Where equivalent, supervisors rely on the third-country regime. Where not equivalent, Article 218-258 applies mutatis mutandis -- i.e., the EU group supervision framework is applied as if the EU supervisory authority were the group supervisor.</p>
+    <p>Equivalence decisions have been adopted for Switzerland, Bermuda, Japan, and several other jurisdictions, enabling substantial deference to those regimes for groups headquartered there.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 8: KEY DEFINITIONS
+     ========================================================= -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-alphabet"></i></div>
+    <h2 class="section__title">Key definitions (Art 13)</h2>
+  </div>
+  <p class="section__subtitle">Article 13 provides 39 definitions; the most operationally significant are set out below</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">SCR</div>
+      <div class="glossary-card__def">Solvency Capital Requirement. The principal capital standard: the Value-at-Risk of basic own funds at a 99.5% confidence level over one year (Art 101(3)). Eligible own funds must cover it at all times.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">MCR</div>
+      <div class="glossary-card__def">Minimum Capital Requirement. The absolute floor: a simple linear function calibrated to 85% VaR over one year (Art 129). Must remain between 25% and 45% of the SCR. Breach triggers mandatory withdrawal of authorisation if not restored within three months.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ORSA</div>
+      <div class="glossary-card__def">Own Risk and Solvency Assessment (Art 45). The undertaking's own prospective assessment of its solvency needs, continuous compliance, and risk profile deviation from SCR assumptions. Not a capital requirement; a governance and strategy tool.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">SFCR</div>
+      <div class="glossary-card__def">Solvency and Financial Condition Report (Arts 51-56). The mandatory annual public disclosure covering business performance, governance, risk profile, valuation, and capital management including SCR and MCR amounts.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Best estimate</div>
+      <div class="glossary-card__def">Art 77(2). The probability-weighted average of future cash flows, discounted at the risk-free interest rate term structure. Gross of reinsurance; calculated net of reinsurance only after separate adjustment for counterparty default risk.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Risk margin</div>
+      <div class="glossary-card__def">Art 77(3). The Cost-of-Capital component of technical provisions: the cost of holding eligible own funds equal to the SCR needed to support the obligations over their lifetime. CoC rate set at 6% under Delegated Regulation 2015/35.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Basic own funds</div>
+      <div class="glossary-card__def">Art 88. The excess of assets over liabilities (both at market-consistent values under Art 75) plus subordinated liabilities. The starting point for the own-funds tiering framework.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Qualifying holding</div>
+      <div class="glossary-card__def">Art 13(21). A direct or indirect holding in an undertaking representing 10% or more of the capital or voting rights, or which makes it possible to exercise a significant influence over the management. Acquisition at 20%, 30%, and 50% thresholds requires supervisory notification.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">EIOPA</div>
+      <div class="glossary-card__def">European Insurance and Occupational Pensions Authority. The Level 3 supervisor established by Regulation 1094/2010, replacing CEIOPS. Issues binding regulatory and implementing technical standards under Solvency II; chairs mediation between college members; reports annually to EU institutions.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Home Member State</div>
+      <div class="glossary-card__def">Art 13(8). The Member State in which the undertaking's registered office is located. The home Member State bears exclusive responsibility for financial supervision of the undertaking's entire business, including cross-border branches and services (Art 30).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Prudent person principle</div>
+      <div class="glossary-card__def">Art 132. The investment standard: assets whose risks cannot be properly identified, measured, monitored, managed, controlled, and reported may not be held. Assets covering technical provisions must match the nature and duration of liabilities.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Omnibus II</div>
+      <div class="glossary-card__def">Directive 2014/51/EU. The principal post-2009 amendment: extended transposition deadline to 31 March 2015; set application date as 1 January 2016; introduced long-term guarantee measures (matching adjustment, volatility adjustment, transitional measures for risk-free rates and technical provisions).</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 9: AT-A-GLANCE TABLE
+     ========================================================= -->
+<section class="section" id="atagglance">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-compare"></i></div>
+    <h2 class="section__title">Key provisions at a glance</h2>
+  </div>
+  <p class="section__subtitle">The most operationally critical article references</p>
+
+  <table class="duty-table">
+    <thead>
+      <tr>
+        <th>Topic</th>
+        <th>Articles</th>
+        <th>Key content</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row">
+        <td><strong>SCR calibration</strong></td>
+        <td class="rate-green">Art 101(3)</td>
+        <td>99.5% Value-at-Risk over one year. Ruin no more than once in 200 years.</td>
+      </tr>
+      <tr>
+        <td><strong>MCR calibration</strong></td>
+        <td class="rate-amber">Art 129(1)(c)</td>
+        <td>85% Value-at-Risk over one year. Simple linear function.</td>
+      </tr>
+      <tr class="highlight-row">
+        <td><strong>MCR corridor</strong></td>
+        <td class="rate-blue">Art 129(3)</td>
+        <td>MCR must be at least 25% and at most 45% of the SCR.</td>
+      </tr>
+      <tr>
+        <td><strong>Technical provisions</strong></td>
+        <td>Art 77</td>
+        <td>Best estimate + risk margin; market-consistent; gross of reinsurance.</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 1 floor (SCR)</strong></td>
+        <td>Art 98(1)(a)</td>
+        <td>Tier 1 eligible own funds must exceed one-third of total eligible own funds covering SCR.</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 3 ceiling (SCR)</strong></td>
+        <td>Art 98(1)(b)</td>
+        <td>Tier 3 own funds must amount to less than one-third of total eligible own funds covering SCR.</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 1 floor (MCR)</strong></td>
+        <td>Art 98(2)</td>
+        <td>Tier 1 eligible basic own funds must exceed one-half of the MCR.</td>
+      </tr>
+      <tr>
+        <td><strong>Equity symmetric adjustment</strong></td>
+        <td>Art 106(3)</td>
+        <td>Deviation from standard equity charge capped at plus or minus 10 percentage points.</td>
+      </tr>
+      <tr>
+        <td><strong>OpRisk cap</strong></td>
+        <td>Art 107(3)</td>
+        <td>Operational risk capital charge must not exceed 30% of the Basic SCR for non-life business.</td>
+      </tr>
+      <tr>
+        <td><strong>SCR recovery period</strong></td>
+        <td>Art 138(3)-(4)</td>
+        <td>Six months to restore, extendable to nine months in exceptional market conditions.</td>
+      </tr>
+      <tr>
+        <td><strong>MCR restoration period</strong></td>
+        <td>Art 139(2)</td>
+        <td>Three months. Failure leads to mandatory authorisation withdrawal (Art 144).</td>
+      </tr>
+      <tr>
+        <td><strong>Small undertaking exclusion</strong></td>
+        <td>Art 4</td>
+        <td>Gross premium income below EUR 5 million and technical provisions below EUR 25 million (both conditions must hold; exceeded for three consecutive years = applies from fourth year).</td>
+      </tr>
+      <tr>
+        <td><strong>ORSA</strong></td>
+        <td>Art 45</td>
+        <td>Prospective; covers solvency needs, continuous compliance, and risk-profile deviation. Not a capital requirement. Annual minimum.</td>
+      </tr>
+      <tr>
+        <td><strong>Group supervisor</strong></td>
+        <td>Art 247</td>
+        <td>Single designated supervisor for the group; chairs the college of supervisors.</td>
+      </tr>
+      <tr>
+        <td><strong>Group solvency -- Method 1</strong></td>
+        <td>Arts 230-232</td>
+        <td>Accounting consolidation; consolidated group SCR at least equal to sum of solo MCRs.</td>
+      </tr>
+      <tr>
+        <td><strong>Prudent person principle</strong></td>
+        <td>Art 132-133</td>
+        <td>All assets; no mandatory allocation; no prior approval required; derivatives only to reduce risk or for efficient portfolio management.</td>
+      </tr>
+      <tr>
+        <td><strong>Home-state supervision</strong></td>
+        <td>Art 30</td>
+        <td>Exclusive financial supervision responsibility for entire business including cross-border.</td>
+      </tr>
+      <tr>
+        <td><strong>Repeal of predecessors</strong></td>
+        <td>Art 310</td>
+        <td>13 predecessor directives repealed effective 1 November 2012.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 10: LEGISLATIVE TIMELINE
+     ========================================================= -->
+<section class="section" id="timeline-section">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Legislative timeline</h2>
+  </div>
+  <p class="section__subtitle">From Solvency I patchwork to risk-based framework applied from 1 January 2016</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">1973-2005</div>
+      <div class="timeline__text">Solvency I era: national-minimum-harmonisation directives govern EU insurance prudential requirements. Capital requirements use fixed factors applied to premiums and claims reserves, with no direct link to actual risk profile. The patchwork includes Dir 73/239 (First Non-Life), Dir 2002/83 (Life Assurance), Dir 2005/68 (Reinsurance), and nine others.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2001-2009</div>
+      <div class="timeline__text">The Solvency II project develops under the Lamfalussy four-level process. CEIOPS conducts Quantitative Impact Studies (QIS1 to QIS5) to calibrate the framework, involving hundreds of undertakings across all Member States.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">25 November 2009</div>
+      <div class="timeline__text">Directive 2009/138/EC adopted by the European Parliament and the Council. Published in <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32009L0138" target="_blank" rel="noopener">OJ L 335, 17.12.2009, p. 1</a>. Original transposition deadline: 31 October 2012.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 April 2014</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0051" target="_blank" rel="noopener">Directive 2014/51/EU (Omnibus II)</a> amends Solvency II. Transposition deadline extended to <strong>31 March 2015</strong>; application date set to <strong>1 January 2016</strong>; long-term guarantee package introduced (matching adjustment, volatility adjustment, transitional measures); EIOPA formally embedded as Level 3 supervisor issuing binding technical standards.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 March 2015</div>
+      <div class="timeline__text">EU transposition deadline. All 27 Member States notified transposition measures to the Commission. See the interactive map in the Transposition section below.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">1 January 2016</div>
+      <div class="timeline__text">Solvency II enters into full application. Full SCR, MCR, SFCR, ORSA, and group supervision requirements take effect. Predecessor directives had been formally repealed effective 1 November 2012 (Art 310), with transitional arrangements bridging the gap.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2021-2022</div>
+      <div class="timeline__text">Solvency II 2020 Review: Commission publishes legislative proposal COM(2021)581 following EIOPA technical advice. Focus areas: long-term guarantee measures, proportionality, macro-prudential tools, and reporting simplification.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2025</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L0002" target="_blank" rel="noopener">Directive (EU) 2025/2</a> (Solvency II Review Directive) published, amending the 2009 framework. Key changes include revised long-term guarantee measures, proportionality improvements, macro-prudential tools, and sustainability risk provisions.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+  <!-- Transposition (directive-only section) -->
+  <section class="section transposition" id="transposition">
+    <div class="section__head">
+      <span class="section__num">Transposition</span>
+      <h2 class="section__title">How the Member States transposed it</h2>
+    </div>
+    <p class="lede">
+      A directive is not directly applicable: each Member State must write it into its own national law by a
+      transposition deadline. For Solvency II (Directive 2009/138/EC) the EU transposition deadline was <strong>2015-03-31</strong>.
+      The map shows, for each Member State, the principal national measure it notified to the Commission and its
+      date. 27 of 27 Member States have notified measures parsed here; the full, authoritative list of
+      national transposition measures for every Member State is on
+      <a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32009L0138" target="_blank" rel="noopener">EUR-Lex (National transposition measures)</a>.
+    </p>
+    <div id="transp-map-32009L0138" class="transp-map" role="img"
+         aria-label="Map of EU Member State transposition of Solvency II (Directive 2009/138/EC)"></div>
+    <p class="transp-note">
+      Click a Member State marker for the transposed national law and its publication date. Source: EUR-Lex
+      National Implementing Measures, retrieved May 2026. Where a marker
+      reads "Notified via EUR-Lex", consult the EUR-Lex link above for that country's measures.
+    </p>
+  </section>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <style>
+    .transp-map { width: 100%; height: 540px; border-radius: var(--radius, 12px);
+      border: 1px solid var(--color-border, #e5e7eb); margin: 1.5rem 0 0.75rem; }
+    .transp-note { font-size: 0.85rem; color: var(--color-secondary, #6b7280); }
+    .maplibregl-popup-content { font-family: inherit; border-radius: 10px; padding: 0.9rem 1rem;
+      max-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .transp-pop__c { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .transp-pop__law { font-size: 0.85rem; line-height: 1.45; }
+    .transp-pop__meta { font-size: 0.78rem; color: var(--color-secondary, #6b7280); margin-top: 0.35rem; }
+    @media (max-width: 767px) { .transp-map { height: 420px; } }
+  </style>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+  (function () {
+    if (typeof maplibregl === "undefined") return;
+    var data = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.1, 47.6]}, "properties": {"name": "Austria", "law": "Versicherungsaufsichtsgesetznovelle", "date": "2015-02-20", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.7, 50.6]}, "properties": {"name": "Belgium", "law": "SERVICE PUBLIC FEDERAL ECONOMIE, P.M.E., CLASSES MOYENNES ET ENERGIE - 4 AVRIL 2014. - Loi relative aux assurances (Solvency II).", "date": "2014-04-30", "status": "Transposed", "count": 5}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.3, 42.7]}, "properties": {"name": "Bulgaria", "law": "Кодекс за застраховането", "date": "2015-12-29", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.0, 45.1]}, "properties": {"name": "Croatia", "law": "Zakon o izmjenama i dopunama Zakona o trgovačkim društvima", "date": "1001-01-01", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [33.2, 35.0]}, "properties": {"name": "Cyprus", "law": "Ο Περί Ασφαλιστικών και Αντασφαλιστικών Εργασιών και Άλλων Συναφών Θεμάτων Νόμος του 2016.", "date": "1001-01-01", "status": "Transposed", "count": 6}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.5, 49.8]}, "properties": {"name": "Czechia", "law": "Zákon č. 38/2004 Sb., o pojišťovacích zprostředkovatelích a samostatných likvidátorech pojistných událostí a o změně živnostenského zákona (zákon o pojišťovacíc", "date": "2004-02-05", "status": "Transposed", "count": 72}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.0, 56.0]}, "properties": {"name": "Denmark", "law": "Lov om ændring af lov om finansiel virksomhed", "date": "2015-03-31", "status": "Transposed", "count": 60}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.5, 58.7]}, "properties": {"name": "Estonia", "law": "Kindlustustegevuse seadus1", "date": "1001-01-01", "status": "Transposed", "count": 15}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [26.0, 62.5]}, "properties": {"name": "Finland", "law": "Oikeusministeriön asetus henkivakuutuksesta annettavista tiedoista / Justitieministeriets förordning om information om livförsäkring (177/2011) 17/02/2011", "date": "2011-03-02", "status": "Transposed", "count": 15}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.5, 46.6]}, "properties": {"name": "France", "law": "LOI no 2014-1662 du 30 décembre 2014 portant diverses dispositions d'adaptation de la législation au droit de l'Union européenne en matière économique et financ", "date": "2014-12-31", "status": "Transposed", "count": 12}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [10.4, 51.2]}, "properties": {"name": "Germany", "law": "Gesetz zur Modernisierung der FInanzaufsicht über Versicherungen", "date": "2015-04-10", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [22.5, 39.0]}, "properties": {"name": "Greece", "law": "Προσαρμογή της ελληνικής νομοθεσίας στην Οδηγία 2009/138/ΕΚ του Ευρωπαϊκού Κοινοβουλίου και του Συμβουλίου, της 25ης Νοεμβρίου 2009, σχετικά με την ανάληψη και ", "date": "2016-02-05", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 47.2]}, "properties": {"name": "Hungary", "law": "A pénzügyminiszter 44/1996. (XII. 29.) PM rendelete a biztosítóban az élet- és nem-életbiztosítási ágak elkülönítéséről", "date": "1996-12-29", "status": "Transposed", "count": 22}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 53.2]}, "properties": {"name": "Ireland", "law": "European Union (Insurance and Reinsurance) Regulations 2015", "date": "2015-11-10", "status": "Transposed", "count": 8}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [12.8, 42.8]}, "properties": {"name": "Italy", "law": "Attuazione della Direttiva 2009/138/CE in materia di accesso ed esercizio delle attività di assicurazione e riassicurazione (solvibilità II).", "date": "2015-06-15", "status": "Transposed", "count": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [24.6, 56.9]}, "properties": {"name": "Latvia", "law": "Apdrošināšanas un pārapdrošināšanas likums", "date": "2015-06-30", "status": "Transposed", "count": 8}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [23.9, 55.2]}, "properties": {"name": "Lithuania", "law": "Lietuvos Respublikos Lietuvos banko įstatymo pakeitimo įstatymas Nr. IX-205", "date": "2001-03-30", "status": "Transposed", "count": 18}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [6.1, 49.8]}, "properties": {"name": "Luxembourg", "law": "Loi du 7 décembre 2015 sur le secteur des assurances.", "date": "2015-12-09", "status": "Transposed", "count": 3}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.4, 35.9]}, "properties": {"name": "Malta", "law": "Malta Financial Services Authority Act (Cap 330 of the Laws of Malta)", "date": "1989-01-20", "status": "Transposed", "count": 28}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.5, 52.2]}, "properties": {"name": "Netherlands", "law": "Wet van 13 december 2012 tot wijziging van de Wet op het financieel toezicht en het Burgerlijk Wetboek ter implementatie van de richtlijn solvabiliteit II en in", "date": "2012-12-21", "status": "Transposed", "count": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.3, 52.0]}, "properties": {"name": "Poland", "law": "ustawa z dnia 11 września 2015 r. o działalności ubezpieczeniowej i reasekuracyjnej", "date": "2015-11-10", "status": "Transposed", "count": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-8.0, 39.5]}, "properties": {"name": "Portugal", "law": "LEI N.º 147/2015 - DIÁRIO DA REPÚBLICA N.º 176/2015, SÉRIE I DE 2015-09-09 Assembleia da República Aprova o regime jurídico de acesso e exercício da atividade s", "date": "2015-09-09", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [25.0, 45.9]}, "properties": {"name": "Romania", "law": "Legea nr. 204/2006 privind pensiile facultative", "date": "2006-05-31", "status": "Transposed", "count": 10}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [19.5, 48.7]}, "properties": {"name": "Slovakia", "law": "Opatrenie Národnej banky Slovenska zo 14. júla 2015 č. 6/2015 o solventnosti pre poisťovne, na ktoré sa neuplatňuje osobitný režim, a pre zaisťovne, pobočky zah", "date": "2015-07-22", "status": "Transposed", "count": 7}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [14.8, 46.1]}, "properties": {"name": "Slovenia", "law": "Zakon o zavarovalništvu", "date": "2015-12-07", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-3.7, 40.2]}, "properties": {"name": "Spain", "law": "Ley 20/2015, de 14 de julio, de ordenación, supervisión y solvencia de las entidades aseguradoras y reaseguradoras.", "date": "2015-07-15", "status": "Transposed", "count": 2}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [15.6, 62.0]}, "properties": {"name": "Sweden", "law": "Lag om ändring i försäkringsrörelselagen (2010:2043)", "date": "2015-12-01", "status": "Transposed", "count": 6}}]};
+    var map = new maplibregl.Map({
+      container: "transp-map-32009L0138",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 52], zoom: 3.1, attributionControl: true
+    });
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.on("load", function () {
+      map.addSource("ms", { type: "geojson", data: data });
+      map.addLayer({
+        id: "ms-pts", type: "circle", source: "ms",
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 7, 6, 12],
+          "circle-color": ["case", ["==", ["get", "status"], "Transposed"], "#059669", "#9ca3af"],
+          "circle-stroke-width": 1.5, "circle-stroke-color": "#ffffff", "circle-opacity": 0.9
+        }
+      });
+      map.on("click", "ms-pts", function (e) {
+        var p = e.features[0].properties;
+        var coords = e.features[0].geometry.coordinates.slice();
+        var law = p.law ? '<div class="transp-pop__law">' + p.law + '</div>' : '';
+        var meta = p.status === "Transposed"
+          ? '<div class="transp-pop__meta">Publication date: ' + p.date +
+            (p.count > 1 ? ' &middot; ' + p.count + ' measures notified' : '') + '</div>'
+          : '<div class="transp-pop__meta">See EUR-Lex for this country\'s notified measures.</div>';
+        new maplibregl.Popup({ closeButton: true })
+          .setLngLat(coords)
+          .setHTML('<div class="transp-pop__c">' + p.name + '</div>' + law + meta)
+          .addTo(map);
+      });
+      map.on("mouseenter", "ms-pts", function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ms-pts", function () { map.getCanvas().style.cursor = ""; });
+    });
+  })();
+  </script>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 12: GLOSSARY
+     ========================================================= -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossary</h2>
+  </div>
+  <p class="section__subtitle">Technical terms from the Solvency II framework explained</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">VaR (Value-at-Risk)</div>
+      <div class="glossary-card__def">Value-at-Risk. The maximum loss that will not be exceeded with a given probability (confidence level) over a defined time period. Under Solvency II, the SCR is set at the 99.5% VaR over one year: the own-funds loss that occurs with at most 0.5% probability over the next 12 months.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Technical provisions</div>
+      <div class="glossary-card__def">The market-consistent value of insurance liabilities: best estimate plus risk margin (Art 77). The central balance-sheet liability under Solvency II. Must reflect the current transfer value of obligations, not historic premium calculations.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Cost-of-Capital (CoC)</div>
+      <div class="glossary-card__def">The rate used to compute the risk margin in technical provisions. Represents the additional return above the risk-free rate that an acquirer would require for holding the SCR-level own funds needed to run off the portfolio. Set at 6% under Commission Delegated Regulation 2015/35, Article 39.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Basic SCR (BSCR)</div>
+      <div class="glossary-card__def">The aggregate of the five standard-formula risk modules -- non-life underwriting, life underwriting, health underwriting, market risk, and counterparty default risk -- using a correlation matrix. The operational risk charge and loss-absorbing capacity adjustment are added to the BSCR to give the overall SCR (Art 103).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Matching adjustment</div>
+      <div class="glossary-card__def">An Omnibus II LTG measure: permits life insurers with matched portfolios of fixed-income assets and predictable liabilities to adjust the risk-free rate upward by the portion of the credit spread on the assets that reflects the undertaking's own liquidity premium. Requires supervisory approval and strict asset-liability matching conditions.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Volatility adjustment</div>
+      <div class="glossary-card__def">A second Omnibus II LTG measure: a country-specific or currency-specific adjustment to the risk-free rate term structure, derived from the spread of assets backing technical provisions in the relevant market, to dampen artificial volatility from short-term spread movements.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Captive reinsurer</div>
+      <div class="glossary-card__def">A reinsurance undertaking owned by a non-financial undertaking (the parent), the purpose of which is to provide reinsurance coverage exclusively for the risks of the group or of the parent. Subject to a lower MCR absolute floor of EUR 1,000,000 (Art 129(1)(d)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Composite undertaking</div>
+      <div class="glossary-card__def">An undertaking authorised to carry on both life and non-life insurance (Art 73). Composites are largely prohibited under Solvency II; grandfathering applies only for undertakings active at specified accession dates. Where permitted, both activities must be managed separately and separately financed at the MCR level (Art 74).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">College of supervisors</div>
+      <div class="glossary-card__def">A permanent coordination structure established for every insurance group (Art 248), chaired by the group supervisor. Facilitates supervisory cooperation, joint assessments, and convergence of supervisory decisions. EIOPA participates as observer and may mediate binding disputes between members.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Special Purpose Vehicle (SPV)</div>
+      <div class="glossary-card__def">An entity that assumes risks from insurance undertakings via reinsurance or other mechanisms, and fully funds its exposure through debt issuance, letters of credit, or other financing. Must receive prior supervisory approval (Art 211). Securitisation of insurance risk (insurance-linked securities / catastrophe bonds) uses SPVs under Solvency II.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Surplus funds</div>
+      <div class="glossary-card__def">Accumulated profits not made available for distribution (Arts 91 and 96). Treated as Tier 1 own funds where they meet the permanence and subordination criteria. Common in mutual insurers and with-profits life funds where policyholders hold a beneficial interest in accumulated reserves.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Loss-absorbing capacity (LAC)</div>
+      <div class="glossary-card__def">The adjustment under Art 108 by which the SCR may be reduced to reflect the potential for future discretionary benefits (e.g., profit-participation reductions) and deferred tax liabilities to absorb losses under stress, reducing the own funds needed to cover the net SCR charge.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 13: OFFICIAL SOURCES
+     ========================================================= -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">Primary documentation for Directive 2009/138/EC</p>
+
+  <div class="two-col-grid">
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-link-variant" style="color: var(--color-blue);"></i> EUR-Lex and Official Journal</div>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32009L0138" target="_blank" rel="noopener" style="color: var(--color-blue);">Directive 2009/138/EC on EUR-Lex (CELEX: 32009L0138)</a></li>
+        <li><a href="http://data.europa.eu/eli/dir/2009/138/oj" target="_blank" rel="noopener" style="color: var(--color-blue);">ELI: data.europa.eu/eli/dir/2009/138/oj</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32009L0138" target="_blank" rel="noopener" style="color: var(--color-blue);">All amendments and consolidated versions on EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32009L0138" target="_blank" rel="noopener" style="color: var(--color-blue);">National transposition measures on EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0051" target="_blank" rel="noopener" style="color: var(--color-blue);">Omnibus II Directive 2014/51/EU on EUR-Lex</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32015R0035" target="_blank" rel="noopener" style="color: var(--color-blue);">Commission Delegated Regulation 2015/35 (Level 2)</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color: var(--color-purple);"></i> EIOPA and Commission</div>
+      <ul>
+        <li><a href="https://www.eiopa.europa.eu/insurance/solvency-ii_en" target="_blank" rel="noopener" style="color: var(--color-blue);">EIOPA: Solvency II overview and regulatory products</a></li>
+        <li><a href="https://www.eiopa.europa.eu/regulations-and-guidance/insurance-insurance-regulation/solvency-ii-technical-standards-and-guidelines_en" target="_blank" rel="noopener" style="color: var(--color-blue);">EIOPA: Technical Standards and Guidelines</a></li>
+        <li><a href="https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/solvency-ii-directive_en" target="_blank" rel="noopener" style="color: var(--color-blue);">DG FISMA: Solvency II implementing and delegated acts</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52021PC0581" target="_blank" rel="noopener" style="color: var(--color-blue);">COM(2021)581: Solvency II 2020 Review proposal</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 14: RELATED CANON ENTRIES
+     ========================================================= -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">The EU financial regulation family in the Brubru EU Canon</p>
+
+  <div class="canon-related-grid">
+    <div class="canon-related">
+      <div class="canon-related__label">EU Financial Regulation family</div>
+      <div class="canon-related__title">
+        <a href="../2014-65_mifid2/index.html">MiFID II (Directive 2014/65/EU)</a>
+      </div>
+      <div class="canon-related__desc">The Markets in Financial Instruments Directive II: the governance, conduct of business, transparency, and market structure framework for investment firms and trading venues. MiFID II applies to insurers distributing investment products; the Insurance Distribution Directive (IDD) applies in parallel for IBIP products.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU Financial Regulation family</div>
+      <div class="canon-related__title">
+        <a href="../2018-1972_eecc/index.html">European Electronic Communications Code (Dir 2018/1972)</a>
+      </div>
+      <div class="canon-related__desc">The horizontal regulatory framework for electronic communications networks and services: spectrum, access obligations, universal service, and NRA powers. Relevant to insurers as operators of telecommunications-dependent digital infrastructure.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU Financial Regulation family</div>
+      <div class="canon-related__title">Insurance Distribution Directive (Directive 2016/97/EU)</div>
+      <div class="canon-related__desc">The conduct-of-business and distribution rules for insurance intermediaries and direct insurers. Solvency II governs the prudential soundness of the undertaking; IDD governs the distribution process -- the two directives are complementary pillars of EU insurance law.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">Banking parallel</div>
+      <div class="canon-related__title">Capital Requirements Regulation (CRR) and Directive (CRD)</div>
+      <div class="canon-related__desc">The banking prudential counterpart to Solvency II: the CRR/CRD IV and CRR2/CRD V framework implements Basel III for EU credit institutions and investment firms. Solvency II drew on Basel II/III methodology (particularly the VaR approach and tiered capital) and developed in parallel with banking reform. Group supervisors of mixed financial conglomerates must coordinate across both frameworks.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU Financial Supervision</div>
+      <div class="canon-related__title">EIOPA Founding Regulation (Regulation 1094/2010)</div>
+      <div class="canon-related__desc">Regulation 1094/2010 established EIOPA as the European Supervisory Authority for insurance and occupational pensions, replacing CEIOPS. EIOPA issues binding regulatory and implementing technical standards under Solvency II, conducts stress tests, publishes opinions on supervisory convergence, and acts as binding mediator in college of supervisors disputes.</div>
+    </div>
+    <div class="canon-related">
+      <div class="canon-related__label">EU Pensions</div>
+      <div class="canon-related__title">IORP II Directive (Directive 2016/2341/EU)</div>
+      <div class="canon-related__desc">The prudential and governance framework for Institutions for Occupational Retirement Provision (pension funds). IORP II follows Solvency II's governance architecture (own risk assessment, fit-and-proper, key functions) while maintaining a separate, less prescriptive quantitative framework for pension-specific risks and national pension regulatory traditions.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =========================================================
+     SECTION 15: EXPLORE WITH BRUBRU
+     ========================================================= -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore Solvency II with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track, and work with EU insurance and prudential legislation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask any question about the three-pillar architecture, SCR calibration, own-funds tiering, ORSA requirements, SFCR disclosure obligations, group supervision procedures, or the Omnibus II long-term guarantee measures. Answers grounded in the official EUR-Lex text and EIOPA technical standards.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Load Directive 2009/138/EC or Commission Delegated Regulation 2015/35 into the Amendator and draft amendment language directly against the official EUR-Lex text. Ideal for insurance lawyers, supervisors, and industry associations working on the Solvency II 2020 Review implementation.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Track the Solvency II 2020 Review, monitor EIOPA regulatory technical standards consultations, EP ECON committee developments, Council financial services working group progress, and DG FISMA publications in real time.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a compliance gap analysis against Solvency II obligations: SCR and MCR coverage, own-funds tiering compliance, system of governance requirements, ORSA process adequacy, SFCR disclosure completeness, and fit-and-proper notification obligations.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Find EU procurement opportunities related to national supervisory authority IT systems, Solvency II reporting and data platforms, actuarial modelling services, internal model validation, and EIOPA technical assistance projects across EU Member States.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatic access to EU legislation data, procedure tracking, and institutional calendar events. Build Solvency II SCR monitoring, SFCR publication tracking, EIOPA technical standards change alerts, and group supervision college activity workflows on top of Brubru's v1 REST API.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">View API Docs</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- CTA Strip -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/6801649/pexels-photo-6801649.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Get the full Brubru platform</h2>
+  <p class="cta-strip__sub">14-day free trial. No card needed.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start free trial</a>
+</div>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is the AI-powered EU policy intelligence assistant by <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start your 14-day free trial</a> -- no card required.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon library</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">All canon entries</a></li>
+          <li><a href="index.html">Solvency II Dir 2009/138 (this page)</a></li>
+          <li><a href="../2014-65_mifid2/index.html">MiFID II Directive 2014/65</a></li>
+          <li><a href="../2018-1972_eecc/index.html">EECC Directive 2018/1972</a></li>
+          <li><a href="../2001-83_community_code/index.html">Community Code Dir 2001/83</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32009L0138" target="_blank" rel="noopener">Dir 2009/138 on EUR-Lex</a></li>
+          <li><a href="https://www.eiopa.europa.eu/insurance/solvency-ii_en" target="_blank" rel="noopener">EIOPA: Solvency II</a></li>
+          <li><a href="https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/solvency-ii-directive_en" target="_blank" rel="noopener">DG FISMA: Solvency II acts</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Built by Beresol BV</p>
+        <p>Apeldoorn, Netherlands</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Directive 2009/138/EC and official EUR-Lex sources.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. All rights reserved. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Photography: <a href="https://www.pexels.com/@karolina-grabowska" target="_blank" rel="noopener">Karolina Grabowska</a> via <a href="https://www.pexels.com/photo/6801648/" target="_blank" rel="noopener">Pexels</a>.</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
