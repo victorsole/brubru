@@ -156,6 +156,7 @@ INGESTORS = {
     ("etf", "tender"): agency_procurement.ingest_etf_tenders,
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
+    ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,

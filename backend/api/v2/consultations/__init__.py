@@ -39,4 +39,13 @@ register_resource(
           "regulation. Filter with q (e.g. 'roaming' or 'net neutrality').",
 )
 
+# --- EIOPA — insurance & pensions supervisory consultations --------------- #
+register_resource(
+    router, body_code="eiopa", item_type="consultation", slug="eiopa",
+    noun="EIOPA public consultations", body_name="EIOPA", acronym="EIOPA", tag="v2-consultations",
+    source="the EIOPA consultations & surveys.",
+    extra="EIOPA's public consultations and surveys on insurance and occupational-pensions "
+          "supervision. Filter with q (e.g. 'Solvency II' or 'IORP').",
+)
+
 router.include_router(_consultations_all.router)
