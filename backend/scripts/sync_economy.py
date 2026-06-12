@@ -152,6 +152,7 @@ INGESTORS = {
     ("ema", "tender"): agency_procurement.ingest_ema_tenders,
     ("efsa", "tender"): agency_procurement.ingest_efsa_tenders,
     ("eurojust", "tender"): agency_procurement.ingest_eurojust_tenders,
+    ("etf", "tender"): agency_procurement.ingest_etf_tenders,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,
@@ -283,7 +284,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa", "fra", "efca", "eurojust"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa", "fra", "efca", "eurojust", "etf"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")

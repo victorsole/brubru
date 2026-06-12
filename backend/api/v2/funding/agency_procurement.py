@@ -82,3 +82,13 @@ register_resource(
           "below the EU threshold and never appear in TED. Each with reference, status and closing "
           "date. Filter with q (e.g. a reference or a topic such as 'security').",
 )
+
+# --- ETF — European Training Foundation ----------------------------------- #
+register_resource(
+    router, body_code="etf", item_type="tender", slug="etf-tenders",
+    noun="ETF calls for tender", body_name="the European Training Foundation", acronym="ETF",
+    tag="v2-funding",
+    source="the ETF procurement listing.",
+    extra="The European Training Foundation's own procurement (tenders and expression-of-interest "
+          "calls), each with its closing date. Filter with q.",
+)

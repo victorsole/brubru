@@ -278,3 +278,14 @@ def ingest_eurojust_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     # keep only real tenders (those carrying a tender reference, not nav links)
     return [i for i in merged if i.guid and not i.guid.startswith("http")]
 
+# --- ETF — field-cards with linked short-title + deadline in body --------- #
+_ETF = "https://www.etf.europa.eu"
+
+
+def ingest_etf_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    # deadline_field="deadline" finds the field; the closing date also appears in
+    # the card body ("Deadline ... DD/MM/YYYY"), which the window date-search picks up.
+    return parse_field_cards(
+        _fetch(_ETF + "/en/about/procurement"), _ETF, body_code="etf", item_type="tender",
+        source_kind="etf_procurement", title_substr="/en/about/procurement/",
+        ref_field="deadline", deadline_field="deadline", status="Open")
