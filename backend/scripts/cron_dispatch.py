@@ -119,6 +119,17 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour == 4:
         fires.append(("daily", "/api/cron/sync/daily"))
 
+    # Economy folders (v2 institutional/agency/database endpoints backed by
+    # economy_items: per-body news, events, publications, databases, tenders,
+    # grants, calls, consultations). Daily, split into three batches on quiet
+    # hours so ~34 EU sites aren't all scraped at once.
+    if hour == 10:
+        fires.append(("economy_b0", "/api/cron/sync/economy?batch=0"))
+    if hour == 15:
+        fires.append(("economy_b1", "/api/cron/sync/economy?batch=1"))
+    if hour == 21:
+        fires.append(("economy_b2", "/api/cron/sync/economy?batch=2"))
+
     # Brubru Brief: 11:00 UTC daily
     if hour == 11:
         fires.append(("daily_brief", "/api/cron/daily-brief"))

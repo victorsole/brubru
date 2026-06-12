@@ -2,7 +2,6 @@
   "$schema_version": "1.0",
   "$generated_by": "manual (14 May 2026, Victor + Claude) — single source of truth for endpoint sync cadence",
   "$how_to_use": "Each entry maps a v1 endpoint path prefix to its upstream data source, the sync script that refreshes it, and the cadence tier. The audit_endpoint_docs.py script uses this file to inject a 'Data freshness' line into every endpoint description. brubru-cron-sync (Railway) reads this file to dispatch the right script at the right time.",
-
   "tiers": {
     "live_passthrough": {
       "description": "No cache — the endpoint hits the upstream source on every request.",
@@ -24,6 +23,11 @@
       "cron": "0 4 * * *",
       "freshness_label": "Synced once per day at 04:00 UTC from {source}."
     },
+    "economy_daily": {
+      "description": "v2 institutional/agency/database endpoints (economy_items). Refreshed daily, batched across 10:00 / 15:00 / 21:00 UTC to spread scraper load over ~34 EU bodies.",
+      "cron": "0 10,15,21 * * *",
+      "freshness_label": "Synced once per day (10:00 / 15:00 / 21:00 UTC, batched by body) from {source}."
+    },
     "weekly": {
       "description": "Refreshed once per week. For slow-moving universes (FTAs, GIs, vocabularies).",
       "cron": "0 3 * * 0",
@@ -40,7 +44,6 @@
       "freshness_label": "Backfilled manually via CLI (no automated cron). Last full backfill: see ingestion notes."
     }
   },
-
   "endpoints": [
     {
       "path_prefix": "/api/v1/publications",
@@ -447,6 +450,27 @@
       "script": "(no script — generated at import time)",
       "tier": "live_passthrough",
       "notes": "Updated whenever the codebase is redeployed."
+    },
+    {
+      "path_prefix": "/api/v2/funding",
+      "source": "EU agency procurement / grants / calls pages + EIC (decentralised Funding & Tenders)",
+      "script": "scripts/sync_economy.py --body <body> --type all (via POST /api/cron/sync/economy)",
+      "tier": "economy_daily",
+      "notes": "Batched daily economy sweep. Central F&T Portal + TED stay on the daily tier (/api/v1/tenders)."
+    },
+    {
+      "path_prefix": "/api/v2/consultations",
+      "source": "Decentralised EU agency consultation pages (EMA, BEREC, EIOPA, AMLA, ECHA)",
+      "script": "scripts/sync_economy.py --body <body> --type all (via POST /api/cron/sync/economy)",
+      "tier": "economy_daily",
+      "notes": "Central EC Have Your Say consultations stay at /api/v1/consultations (daily tier)."
+    },
+    {
+      "path_prefix": "/api/v2",
+      "source": "Per-body EU institutional, agency and database content: news, events, publications, databases",
+      "script": "scripts/sync_economy.py --body <body> --type all (via POST /api/cron/sync/economy, batches 0-2)",
+      "tier": "economy_daily",
+      "notes": "~34 bodies split across 10:00/15:00/21:00 UTC. 'commission' excluded -- its specialised sources (sanctions, comitology, GIs, trade defence, JRC, transparency) are on the daily/weekly tiers."
     }
   ]
 }

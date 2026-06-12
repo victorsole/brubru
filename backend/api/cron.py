@@ -458,6 +458,54 @@ async def cron_sync_daily(
     return {"status": "success", "tier": "daily", "results": results}
 
 
+# Economy folders (economy_items): the v2 institutional, agency and database
+# endpoints (/api/v2/<body>/* + Funding & Tenders + Public Consultations). One
+# sync_economy.py run per body backfills that body's news, events, publications,
+# databases, tenders, grants, calls and consultations. ~34 bodies are split into
+# three daily batches fired at 10:00 / 15:00 / 21:00 UTC (otherwise-quiet hours)
+# so the scraper load is spread rather than hitting every EU site at once.
+# `commission` is intentionally excluded: its sources (sanctions, comitology,
+# GIs, trade defence, JRC, transparency register) are already on the daily and
+# weekly tiers via their dedicated backfill scripts.
+_ECONOMY_BATCHES: list[list[str]] = [
+    # batch 0 (10:00 UTC) — financial-sector + early-alphabet bodies
+    ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa"],
+    # batch 1 (15:00 UTC)
+    ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "esm", "esma"],
+    # batch 2 (21:00 UTC)
+    ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "euipo", "eurojust", "fra", "parliament", "srb"],
+]
+
+
+@router.post("/sync/economy")
+async def cron_sync_economy(
+    batch: int = Query(0, ge=0, le=2, description="Economy body batch (0=10:00, 1=15:00, 2=21:00 UTC)."),
+    authorization: str = Header(...),
+):
+    """
+    Economy folders sync (daily, batched): refreshes the v2 institutional,
+    agency and database endpoints backed by economy_items -- news, events,
+    publications, databases, tenders/grants/calls and agency consultations --
+    across ~34 EU bodies. Split into three batches (10:00 / 15:00 / 21:00 UTC)
+    to spread scraper load. Fail-soft per body: one body's scraper failing
+    never blocks the rest.
+
+    Cadence: once per day per body. `commission` is excluded (its sources are
+    already scheduled via the dedicated daily/weekly backfill scripts).
+    """
+    _verify_cron_secret(authorization)
+    bodies = _ECONOMY_BATCHES[batch] if 0 <= batch < len(_ECONOMY_BATCHES) else []
+    results = {}
+    for body in bodies:
+        results[body] = _run_script(
+            f"economy_{body}", "scripts/sync_economy.py",
+            ["--body", body, "--type", "all"], timeout=600,
+        )
+    logger.info(f"[CRON] economy batch {batch} sync complete: "
+                f"{ {k: v.get('status') for k, v in results.items()} }")
+    return {"status": "success", "tier": f"economy_b{batch}", "results": results}
+
+
 @router.post("/sync/weekly")
 async def cron_sync_weekly(
     authorization: str = Header(...),
