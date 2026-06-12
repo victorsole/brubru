@@ -51,6 +51,7 @@ from services.scrapers import ep_mep_declarations as ep_mep_declarations  # noqa
 from services.scrapers import ep_mep_assistants as ep_mep_assistants  # noqa: E402
 from services.scrapers import ep_supporting_analyses as ep_supporting_analyses  # noqa: E402
 from services.scrapers import council_sanctions as council_sanctions  # noqa: E402
+from services.scrapers import eea_indicators as eea_indicators  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
 from services.scrapers import economy_eit as eit         # noqa: E402
@@ -123,6 +124,7 @@ INGESTORS = {
     ("parliament", "mep_assistant_register"): ep_mep_assistants.ingest_mep_assistants,
     ("parliament", "supporting_analysis"): ep_supporting_analyses.ingest_supporting_analyses,
     ("council", "sanctions_regime"): council_sanctions.ingest_council_sanctions,
+    ("eea", "environmental_indicator"): eea_indicators.ingest_eea_indicators,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
@@ -248,7 +250,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
