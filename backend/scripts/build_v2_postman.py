@@ -112,6 +112,7 @@ _PARL_ROUTING = [
     ("committee-agendas", "Committee Agendas"),
     ("mep-declarations", "MEP Declarations of Financial Interests"),
     ("mep-assistants", "Parliamentary Assistants Register"),
+    ("supporting-analyses", "Committee Supporting Analyses"),
 ]
 _PARL_SOURCE_ORDER = [
     "MEPs", "Amendments", "Votes", "EP Documents", "Reports", "Opinions",
@@ -119,6 +120,7 @@ _PARL_SOURCE_ORDER = [
     "Webstreams", "Parliamentary Questions", "eMeeting", "eMeeting Documents",
     "Committee Transcripts", "Committee Agendas",
     "MEP Declarations of Financial Interests", "Parliamentary Assistants Register",
+    "Committee Supporting Analyses",
 ]
 
 # Commission: (path-tail prefix, source folder). Flat — no sub-sub-folders.
