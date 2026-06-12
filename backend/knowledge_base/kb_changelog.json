@@ -4,6 +4,14 @@
     {
       "date": "2026-06-12",
       "action": "updated",
+      "guide": "digital_networks_act",
+      "title": "Digital Networks Act",
+      "summary": "Corrected opinion rapporteurs (IMCO=Yon-Courtin 8 May, LIBE=Vasconcelos); removed false 5 May draft-report claim (OEIL: no report tabled, awaiting committee decision); added 28 Jan Virkkunen structured dialogue + Council Working Party examination",
+      "refs": []
+    },
+    {
+      "date": "2026-06-12",
+      "action": "updated",
       "guide": "eurodac_asylum_migration",
       "title": "Eurodac and the New Pact",
       "summary": "Recast Eurodac now applying from 12 June 2026: facial images + fingerprints, age threshold lowered to 6, SIS/VIS/ETIAS interoperability",
