@@ -30,4 +30,13 @@ register_resource(
           "to the document. Filter with q (e.g. a substance or guideline topic).",
 )
 
+# --- BEREC — public consultations & calls for inputs ---------------------- #
+register_resource(
+    router, body_code="berec", item_type="consultation", slug="berec",
+    noun="BEREC public consultations", body_name="BEREC", acronym="BEREC", tag="v2-consultations",
+    source="the BEREC public consultations & calls for inputs.",
+    extra="BEREC's public consultations and calls for inputs on electronic-communications "
+          "regulation. Filter with q (e.g. 'roaming' or 'net neutrality').",
+)
+
 router.include_router(_consultations_all.router)

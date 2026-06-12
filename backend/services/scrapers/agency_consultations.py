@@ -91,3 +91,13 @@ def ingest_ema_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
                           deadline=None, start=_parse_date(dm.group(1)) if dm else None,
                           now=now, source_kind="ema_consultations")
     return list(out.values())
+
+
+# --------------------------------------------------------------------------- #
+# BEREC — clean anchor-title listing (reuse the generic walker).
+# --------------------------------------------------------------------------- #
+def ingest_berec_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    from services.scrapers.eu_agency_listing import walk
+    return walk("https://www.berec.europa.eu", "/en/public-consultations-calls-for-inputs",
+                "berec", "consultation", "/en/public-consultations-calls-for-inputs/",
+                "berec_consultations")
