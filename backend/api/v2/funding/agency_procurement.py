@@ -35,3 +35,30 @@ register_resource(
     extra="EFCA calls for expression of interest (experts, service providers), with reference and "
           "deadline. Filter with q.",
 )
+
+# --- Cedefop -------------------------------------------------------------- #
+register_resource(
+    router, body_code="cedefop", item_type="tender", slug="cedefop-tenders",
+    noun="Cedefop calls for tender", body_name="Cedefop", acronym="Cedefop", tag="v2-funding",
+    source="the Cedefop public-procurement listing.",
+    extra="Cedefop's own public procurement: each call for tender with reference, status and "
+          "closing date. Decentralised procurement (sub-threshold not in TED). Filter with q.",
+)
+register_resource(
+    router, body_code="cedefop", item_type="eoi_call", slug="cedefop-calls",
+    noun="Cedefop calls for expression of interest", body_name="Cedefop", acronym="Cedefop",
+    tag="v2-funding",
+    source="the Cedefop public-procurement listing (expression-of-interest entries).",
+    extra="Cedefop calls for expression of interest (e.g. lists of remunerated experts), with "
+          "reference and closing date. Filter with q.",
+)
+
+# --- EMA — European Medicines Agency -------------------------------------- #
+register_resource(
+    router, body_code="ema", item_type="tender", slug="ema-tenders",
+    noun="EMA calls for tender", body_name="the European Medicines Agency", acronym="EMA",
+    tag="v2-funding",
+    source="the EMA procurement & grants listing.",
+    extra="The European Medicines Agency's own open procurement: each call for tender with "
+          "reference and deadline. Filter with q (e.g. a reference or topic).",
+)
