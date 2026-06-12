@@ -72,3 +72,13 @@ register_resource(
     extra="The European Food Safety Authority's own calls for tender, each with its publication "
           "and closing dates. Filter with q (e.g. a scientific topic).",
 )
+
+# --- Eurojust ------------------------------------------------------------- #
+register_resource(
+    router, body_code="eurojust", item_type="tender", slug="eurojust-tenders",
+    noun="Eurojust calls for tender", body_name="Eurojust", acronym="Eurojust", tag="v2-funding",
+    source="the Eurojust procurement pages (ongoing calls for tender + low/middle-value contracts).",
+    extra="Eurojust's own procurement, including the low- and middle-value contracts that are "
+          "below the EU threshold and never appear in TED. Each with reference, status and closing "
+          "date. Filter with q (e.g. a reference or a topic such as 'security').",
+)

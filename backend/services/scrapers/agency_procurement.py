@@ -226,3 +226,55 @@ def ingest_efsa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
         _fetch(_EFSA + "/en/calls/procurement"), _EFSA, body_code="efsa",
         item_type="tender", source_kind="efsa_procurement",
         title_col=0, deadline_col=2, status="Open")
+
+def parse_field_cards(html: str, base: str, *, body_code: str, item_type: str, source_kind: str,
+                      title_substr: str, ref_field: str, deadline_field: str,
+                      status: str = "") -> list[Item]:
+    """Drupal field-card listings (e.g. Eurojust): one card per item, each with a
+    title link plus field--name-field-<X> divs for reference and closing date."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    title_re = re.compile(r'<a href="([^"]*' + re.escape(title_substr) + r'[^"#?]*)"[^>]*>(.*?)</a>', re.S)
+    matches = list(title_re.finditer(html))
+    seen = set()
+    for i, m in enumerate(matches):
+        href, raw = m.group(1), m.group(2)
+        title = _txt(raw)
+        if not title or len(title) < 8:
+            continue
+        url = href if href.startswith("http") else base + href
+        if url in seen:
+            continue
+        seen.add(url)
+        win = html[m.end(): matches[i + 1].start() if i + 1 < len(matches) else m.end() + 1800]
+        rm = re.search(rf'field--name-field-{re.escape(ref_field)}.*?field__item"[^>]*>([^<]+)', win, re.S)
+        reference = _txt(rm.group(1)) if rm else ""
+        dm = re.search(
+            rf'field--name-field-{re.escape(deadline_field)}.*?(\d{{4}}-\d{{2}}-\d{{2}}|\d{{1,2}}[/.]\d{{1,2}}[/.]\d{{4}}|\d{{1,2}}\s+[A-Z][a-z]+\s+\d{{4}})',
+            win, re.S)
+        dl = _parse_date(dm.group(1)) if dm else None
+        out.append(_build(body_code=body_code, item_type=item_type, title=title, url=url,
+                          reference=reference, status=status, deadline=dl, now=now,
+                          source_kind=source_kind))
+    return out
+
+
+# --- Eurojust — Drupal field-cards --------------------------------------- #
+_EUROJUST = "https://www.eurojust.europa.eu"
+
+
+def ingest_eurojust_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    items = parse_field_cards(_fetch(_EUROJUST + "/about-us/procurement/ongoing-calls-for-tender"),
+                              _EUROJUST, body_code="eurojust", item_type="tender",
+                              source_kind="eurojust_procurement", title_substr="/procurement/",
+                              ref_field="tender-reference", deadline_field="end-date", status="Open")
+    low = parse_field_cards(_fetch(_EUROJUST + "/about-us/procurement/low-value-contracts"),
+                            _EUROJUST, body_code="eurojust", item_type="tender",
+                            source_kind="eurojust_procurement", title_substr="/procurement/",
+                            ref_field="tender-reference", deadline_field="end-date",
+                            status="Low-value contract")
+    seen = {i.public_url for i in items}
+    merged = items + [i for i in low if i.public_url not in seen]
+    # keep only real tenders (those carrying a tender reference, not nav links)
+    return [i for i in merged if i.guid and not i.guid.startswith("http")]
+
