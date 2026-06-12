@@ -62,6 +62,8 @@ def compute_actions(
     # Phase 4: Tenderator bridge entities
     funding_topic_ids = getattr(entities, 'funding_topic_ids', []) or []
     funding_programmes = getattr(entities, 'funding_programmes', []) or []
+    # Step 4 (All EU): decentralised agency codes — route to the agency view.
+    agency_codes = getattr(entities, 'agency_codes', []) or []
 
     is_drafting = drafting_intent and getattr(drafting_intent, 'is_drafting_query', False)
 
@@ -167,23 +169,42 @@ def compute_actions(
         ))
 
     # --- Priority 3c: Open Tenderator when funding context is detected ---
-    # If the user mentioned a topic_id or a programme acronym, the action
-    # router surfaces a deep link straight into the Tenderator. The link
-    # carries a `q=` query so the dashboard pre-filters the unified feed.
-    if (funding_topic_ids or funding_programmes) and len(actions) < MAX_ACTIONS:
-        if funding_topic_ids:
+    # If the user mentioned a topic_id, a programme acronym, OR a decentralised
+    # EU agency (EFSA, EMA, EFCA, Eurojust, ETF, Cedefop, …), the action router
+    # surfaces a deep link straight into the Tenderator. Agency mentions take
+    # precedence — they route to the agency-source view (`source=agency&body=`)
+    # which is more targeted than the generic q-filter.
+    if (agency_codes or funding_topic_ids or funding_programmes) and len(actions) < MAX_ACTIONS:
+        _agency_display = {
+            "efca": "EFCA", "cedefop": "Cedefop", "ema": "EMA", "efsa": "EFSA",
+            "eurojust": "Eurojust", "etf": "ETF", "eige": "EIGE", "euaa": "EUAA",
+            "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
+            "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "enisa": "ENISA",
+            "eu_osha": "EU-OSHA",
+        }
+        if agency_codes:
+            body = agency_codes[0]
+            display = _agency_display.get(body, body.upper())
+            label = f"Open {display} procurement in Tenderator"
+            route = f"/tenderator?source=agency&body={body}"
+            params = {"source": "agency", "body": body}
+        elif funding_topic_ids:
             q_token = funding_topic_ids[0]
             label = f"Open {q_token[:32]}{'...' if len(q_token) > 32 else ''} in Tenderator"
+            route = f"/tenderator?q={q_token}"
+            params = {"q": q_token, "programme": funding_programmes[0] if funding_programmes else None}
         else:
             q_token = funding_programmes[0]
             label = f"Open {q_token} in Tenderator"
+            route = f"/tenderator?q={q_token}"
+            params = {"q": q_token, "programme": funding_programmes[0]}
         actions.append(ChatAction(
             action_type="open_tenderator",
             label=label,
             icon="mdi-piggy-bank-outline",
             colour="#d97706",
-            route=f"/tenderator?q={q_token}",
-            params={"q": q_token, "programme": funding_programmes[0] if funding_programmes else None},
+            route=route,
+            params=params,
             requires_auth=True,
             pre_user_label="Sign up to use the Tenderator",
         ))

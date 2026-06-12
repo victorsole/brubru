@@ -128,6 +128,32 @@ _PROGRAMME_ALIASES = [
     ("FP7", re.compile(r"\bFP7\b")),
 ]
 
+# EU agency acronyms → economy_items.body_code. Used to route a Chat query
+# that mentions a decentralised agency straight into the Tenderator's
+# `source=agency&body=<slug>` view. Acronyms that collide with common
+# vocabulary (FRA = France, ERA = era, EEA = European Economic Area) are
+# scoped to ALL-CAPS-only matches; the rest are case-insensitive.
+_AGENCY_ALIASES = [
+    # (body_code, regex)
+    ("efca", re.compile(r"\bEFCA\b")),
+    ("cedefop", re.compile(r"\bCedefop\b", re.IGNORECASE)),
+    ("ema", re.compile(r"\bEMA\b")),
+    ("efsa", re.compile(r"\bEFSA\b")),
+    ("eurojust", re.compile(r"\bEurojust\b", re.IGNORECASE)),
+    ("etf", re.compile(r"\bETF\b")),
+    ("eige", re.compile(r"\bEIGE\b")),
+    ("euaa", re.compile(r"\bEUAA\b")),
+    ("fra", re.compile(r"\bFRA\b")),          # all-caps only — avoids "France" collisions
+    ("era", re.compile(r"\bERA\b")),          # all-caps only — avoids "era" word
+    ("eurofound", re.compile(r"\bEurofound\b", re.IGNORECASE)),
+    ("eea", re.compile(r"\bEEA\b")),          # all-caps only
+    ("echa", re.compile(r"\bECHA\b")),
+    ("euda", re.compile(r"\bEUDA\b")),
+    ("ecdc", re.compile(r"\bECDC\b")),
+    ("enisa", re.compile(r"\bENISA\b")),
+    ("eu_osha", re.compile(r"\bEU[-\s]?OSHA\b")),
+]
+
 
 def _extract_funding_topic_ids(text: str) -> List[str]:
     """Pull EU funding topic_ids out of free-form chat text. e.g.
@@ -152,6 +178,22 @@ def _extract_funding_programmes(text: str) -> List[str]:
     out: List[str] = []
     seen = set()
     for code, regex in _PROGRAMME_ALIASES:
+        if code in seen:
+            continue
+        if regex.search(text):
+            seen.add(code)
+            out.append(code)
+    return out
+
+
+def _extract_agency_codes(text: str) -> List[str]:
+    """Decentralised EU agency acronyms named in the text → body_code list
+    (e.g. 'EFSA tenders' → ['efsa']). Stable, deduped, in regex order."""
+    if not text:
+        return []
+    out: List[str] = []
+    seen = set()
+    for code, regex in _AGENCY_ALIASES:
         if code in seen:
             continue
         if regex.search(text):
@@ -563,6 +605,10 @@ class ExtractedEntities:
     # Phase 4: Tenderator bridge entities
     funding_topic_ids: List[str] = field(default_factory=list)  # e.g. HORIZON-CL4-2026-DIGITAL-EMERGING-01-01
     funding_programmes: List[str] = field(default_factory=list)  # canonical codes: HORIZON, LIFE, CEF, DEP, EU4H, ERASMUS
+    # All-EU funding extension: decentralised agency body_codes the user
+    # named (efca, efsa, ema, eurojust, etf, cedefop, eige, …). Routes the
+    # Tenderator deep link to source=agency&body=<code>.
+    agency_codes: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -1938,6 +1984,7 @@ class ContextBuilder:
         # Phase 4: Tenderator bridge entities
         funding_topic_ids = _extract_funding_topic_ids(text)
         funding_programmes = _extract_funding_programmes(text)
+        agency_codes = _extract_agency_codes(text)
 
         return ExtractedEntities(
             celex_numbers=extracted['celex_numbers'],
@@ -1950,6 +1997,7 @@ class ContextBuilder:
             assistant_intent=assistant_intent,
             funding_topic_ids=funding_topic_ids,
             funding_programmes=funding_programmes,
+            agency_codes=agency_codes,
         )
 
     def _extract_dg_codes(self, text: str) -> List[str]:

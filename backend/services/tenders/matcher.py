@@ -274,33 +274,42 @@ class TenderMatcher:
                     opportunities=[]
                 )
 
+        # Each scorer returns Optional[float]:
+        #   - float in [0,1] = a real signal (good or bad)
+        #   - None           = no signal (the dimension is absent; skip in the
+        #                      weighted aggregate so a tender without CPV data
+        #                      no longer gets phantom "neutral 0.5" credit that
+        #                      lets it out-rank explicit non-matches).
+
         # 1. CPV Code Match (30%)
         scores["cpv_match"] = self._score_cpv_match(tender, profile)
-        if scores["cpv_match"] >= 0.8:
-            opportunities.append("Strong sector alignment with your business")
-        elif scores["cpv_match"] < 0.3:
-            barriers.append("Low sector match - different CPV codes")
+        if scores["cpv_match"] is not None:
+            if scores["cpv_match"] >= 0.8:
+                opportunities.append("Strong sector alignment with your business")
+            elif scores["cpv_match"] < 0.3:
+                barriers.append("Low sector match - different CPV codes")
 
         # 2. Country Match (20%)
         scores["country_match"] = self._score_country_match(tender, profile)
-        if scores["country_match"] >= 0.8:
+        if scores["country_match"] is not None and scores["country_match"] >= 0.8:
             opportunities.append(f"Located in your target country ({tender.buyer_country})")
 
         # 3. Value Match (20%)
         scores["value_match"] = self._score_value_match(tender, profile)
-        if scores["value_match"] < 0.5:
+        if scores["value_match"] is not None and scores["value_match"] < 0.5:
             if tender.estimated_value and profile.max_tender_value:
                 if tender.estimated_value > profile.max_tender_value:
                     barriers.append(f"Contract value (€{tender.estimated_value:,.0f}) exceeds your maximum (€{profile.max_tender_value:,.0f})")
 
         # 4. Deadline Match (10%)
         scores["deadline_match"] = self._score_deadline_match(tender, profile)
-        if scores["deadline_match"] < 0.5:
-            if tender.submission_deadline:
-                days_left = (tender.submission_deadline - datetime.now(timezone.utc)).days
-                barriers.append(f"Tight deadline - only {days_left} days remaining")
-        elif scores["deadline_match"] >= 0.8:
-            opportunities.append("Comfortable deadline for bid preparation")
+        if scores["deadline_match"] is not None:
+            if scores["deadline_match"] < 0.5:
+                if tender.submission_deadline:
+                    days_left = (tender.submission_deadline - datetime.now(timezone.utc)).days
+                    barriers.append(f"Tight deadline - only {days_left} days remaining")
+            elif scores["deadline_match"] >= 0.8:
+                opportunities.append("Comfortable deadline for bid preparation")
 
         # 5. SME Score (10%)
         scores["sme_score"] = self._score_sme_suitability(tender, profile)
@@ -311,7 +320,7 @@ class TenderMatcher:
 
         # 6. Keyword Match (5%)
         scores["keyword_match"] = self._score_keyword_match(tender, profile)
-        if scores["keyword_match"] >= 0.5:
+        if scores["keyword_match"] is not None and scores["keyword_match"] >= 0.5:
             opportunities.append("Keywords match your expertise areas")
 
         # 7. Procedure Match (5%)
@@ -346,15 +355,28 @@ class TenderMatcher:
         except Exception:
             risk_data = {"score_adjustment": 0}
 
-        # Calculate weighted total
-        total_score = sum(
-            scores.get(key, 0) * self.weights.get(key, 0)
-            for key in self.weights.keys()
-        ) * 100  # Scale to 0-100
+        # Weighted aggregate over the dimensions that produced a real signal
+        # (None = absent). Re-weight the remaining dimensions to sum to the
+        # full weight pool so that, e.g., a tender with no CPV data is scored
+        # only on what's actually known about it instead of being credited
+        # with a phantom 0.5*0.30=0.15 CPV contribution.
+        weighted_sum = 0.0
+        active_weight = 0.0
+        for key, weight in self.weights.items():
+            s = scores.get(key)
+            if s is None:
+                continue
+            weighted_sum += float(s) * weight
+            active_weight += weight
+        total_score = (weighted_sum / active_weight * 100) if active_weight > 0 else 0.0
 
         # Apply DG GROW regulatory risk adjustment
         total_score += risk_data.get("score_adjustment", 0)
         total_score = max(0, min(100, total_score))  # Clamp to 0-100
+
+        # Strip None entries from the persisted breakdown so the JSONB stays
+        # compact and downstream readers don't have to handle nulls.
+        scores = {k: v for k, v in scores.items() if v is not None}
 
         # Generate match details summary
         match_details = self._generate_match_details(
@@ -372,14 +394,12 @@ class TenderMatcher:
             opportunities=opportunities
         )
 
-    def _score_cpv_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score CPV code overlap (0-1)."""
+    def _score_cpv_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score CPV code overlap (0-1). Returns None if no signal."""
         if not profile.cpv_codes and not profile.cpv_categories:
-            return 0.5  # Neutral if no preferences
-
-        # If tender has no CPV data, treat as neutral rather than penalizing
+            return None  # No signal from profile
         if not tender.cpv_main and not tender.cpv_codes:
-            return 0.5  # Unknown sector - neutral score
+            return None  # No signal from tender
 
         score = 0.0
 
@@ -406,10 +426,10 @@ class TenderMatcher:
 
         return score
 
-    def _score_country_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score geographic match (0-1)."""
+    def _score_country_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score geographic match (0-1). Returns None if no signal."""
         if not tender.buyer_country:
-            return 0.5  # Unknown country
+            return None  # No signal — tender has no country
 
         # If specific countries are selected, those take priority
         if profile.countries_of_interest:
@@ -424,34 +444,29 @@ class TenderMatcher:
         if profile.eu_wide:
             return 0.8  # Open to all EU
 
-        return 0.5  # No preference specified
+        return None  # No preference specified
 
-    def _score_value_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score value range compatibility (0-1)."""
+    def _score_value_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score value range compatibility (0-1). Returns None if no signal."""
         if tender.estimated_value is None:
-            return 0.5  # Unknown value
+            return None  # No signal — value unknown
+        if not profile.min_tender_value and not profile.max_tender_value:
+            return None  # No signal — profile has no value bounds
 
         # Check minimum
         if profile.min_tender_value and tender.estimated_value < profile.min_tender_value:
-            # Below minimum - lower score
             return 0.3
-
         # Check maximum
         if profile.max_tender_value and tender.estimated_value > profile.max_tender_value:
-            # Above maximum - check how much over
             overage = tender.estimated_value / profile.max_tender_value
-            if overage > 2:
-                return 0.1  # Way over budget
-            else:
-                return 0.4  # Slightly over
-
+            return 0.1 if overage > 2 else 0.4
         # Within range
         return 1.0
 
-    def _score_deadline_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score deadline feasibility (0-1)."""
+    def _score_deadline_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score deadline feasibility (0-1). Returns None if no signal."""
         if not tender.submission_deadline:
-            return 0.5  # Unknown deadline
+            return None  # No signal — deadline unknown
 
         days_until = (tender.submission_deadline - datetime.now(timezone.utc)).days
         min_days = profile.min_deadline_days or 30
@@ -471,21 +486,18 @@ class TenderMatcher:
         # Proportional score
         return 0.5 + 0.5 * (days_until - min_days) / min_days
 
-    def _score_sme_suitability(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score based on tender's SME suitability (0-1)."""
+    def _score_sme_suitability(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score based on tender's SME suitability (0-1). None if unscored."""
         if tender.sme_suitability_score is None:
-            return 0.5  # Unknown
-
-        # Normalize 0-100 score to 0-1
+            return None
         return tender.sme_suitability_score / 100
 
-    def _score_keyword_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score keyword overlap (0-1)."""
+    def _score_keyword_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score keyword overlap (0-1). Returns None if no signal."""
         if not profile.keywords:
-            return 0.5  # No keywords specified
-
+            return None  # No signal from profile
         if not tender.title and not tender.description:
-            return 0.5
+            return None  # No signal from tender
 
         text = f"{tender.title or ''} {tender.description or ''}".lower()
 
@@ -506,10 +518,10 @@ class TenderMatcher:
 
         return min(1.0, 0.5 + (matches / len(profile.keywords)) * 0.5)
 
-    def _score_procedure_match(self, tender: Tender, profile: TenderProfile) -> float:
-        """Score procedure type preference (0-1)."""
+    def _score_procedure_match(self, tender: Tender, profile: TenderProfile) -> Optional[float]:
+        """Score procedure type preference (0-1). Returns None if no signal."""
         if not tender.procedure_type:
-            return 0.5
+            return None
 
         if not profile.preferred_procedures:
             # Default preferences for SMEs

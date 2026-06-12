@@ -50,6 +50,20 @@
   color: var(--color-primary, #0693e3);
 }
 
+.opportunity-drawer__lang-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.6rem;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: lowercase;
+}
+
 .opportunity-drawer__close {
   width: 36px;
   height: 36px;

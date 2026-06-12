@@ -6,6 +6,7 @@
 // source-filter chip switches the `source` prop.
 
 import { useEffect, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './unified_opportunity_feed.css';
 import type { SourceFilter } from './tenderator_dashboard';
@@ -27,6 +28,11 @@ export interface UnifiedOpportunity {
   country: string | null;
   programme: string | null;
   published_at: string | null;
+  // Translation overlay (MEUB-news pattern): source language Brubru detected,
+  // and — when title/description were served from a translations sidecar —
+  // the source language they were translated FROM.
+  detected_lang?: string | null;
+  translated_from?: string;
   // Only present when the feed was requested with source='matches':
   match_score?: number | null;
   match_id?: number;
@@ -80,6 +86,11 @@ const formatDeadline = (iso: string | null): string => {
 
 export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
+  const { i18n } = useTranslation();
+  // Brubru's 6 — falls back to 'en' for any other UI locale.
+  const _BRUBRU_LANGS = ['en', 'es', 'ca', 'fr', 'it', 'nl'];
+  const uiLang = (i18n.language || 'en').slice(0, 2).toLowerCase();
+  const feedLang = _BRUBRU_LANGS.includes(uiLang) ? uiLang : 'en';
   const [items, setItems] = useState<UnifiedOpportunity[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,6 +128,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
       if (programme) params.set('programme', programme);
       if (body && source === 'agency') params.set('body', body);
+      params.set('lang', feedLang);
       if (clientFilter) params.set('client_filter', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -138,7 +150,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, body, clientFilter]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter]);
 
   useEffect(() => {
     setPage(1);
@@ -267,6 +279,12 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                     )}
                     {item.external_id && (
                       <span className="tenderator-feed__ref">{item.external_id}</span>
+                    )}
+                    {item.translated_from && (
+                      <span className="tenderator-feed__lang-badge" title={`Original language: ${item.translated_from}`}>
+                        <span className="mdi mdi-translate" aria-hidden="true" />
+                        translated from {item.translated_from}
+                      </span>
                     )}
                   </div>
                   <div className="tenderator-feed__item-title">{item.title}</div>

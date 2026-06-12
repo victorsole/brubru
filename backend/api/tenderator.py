@@ -1026,6 +1026,101 @@ async def get_similar_projects(
 
 
 # ============================================================================
+# Step 6: FTS recipients ("who's won this kind of money before") for the
+# drawer evidence block. Reads economy_items (body_code='commission',
+# item_type='funding_recipient') — same data the public
+# /api/v2/funding/eu-funding-recipients endpoint serves.
+# ============================================================================
+
+@router.get(
+    "/recipients",
+    summary="Past EU funding recipients matching the opportunity's programme/keyword",
+    description=(
+        "Returns up to 8 EU Financial Transparency System (FTS) recipients "
+        "whose programme or subject text overlaps with the opportunity's "
+        "programme/title. Surfaces who has won this kind of EU money "
+        "before — the Funder's Lens evidence-pack widget. Blue tier only."
+    ),
+)
+async def get_fts_recipients(
+    opportunity_id: Optional[str] = Query(None, description="<source>:<id>"),
+    programme: Optional[str] = Query(None, description="Free-text programme substring (overrides the one inferred from opportunity_id)."),
+    q: Optional[str] = Query(None, description="Free-text overlay on title/summary."),
+    limit: int = Query(8, ge=1, le=50),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.funding_tenders import FtCallForProposals, FtFundedProject
+
+    # Infer a programme + a title-anchor from the opportunity_id if given.
+    inferred_programme: Optional[str] = None
+    inferred_anchor: str = ""
+    if opportunity_id:
+        try:
+            kind, raw_id = opportunity_id.split(":", 1)
+        except ValueError:
+            kind, raw_id = "", ""
+        if kind == "ft_proposals":
+            row = db.query(FtCallForProposals).filter(FtCallForProposals.id == raw_id).first()
+            if row:
+                inferred_programme = row.framework_programme
+                inferred_anchor = row.title or ""
+        elif kind == "ft_projects":
+            row = db.query(FtFundedProject).filter(FtFundedProject.id == raw_id).first()
+            if row:
+                inferred_programme = row.framework_programme
+                inferred_anchor = row.title or ""
+
+    eff_programme = (programme or inferred_programme or "").strip()
+    eff_q = (q or "").strip()
+
+    if not eff_programme and not eff_q:
+        # Nothing to anchor on → return an empty list, not 404. The frontend
+        # hides the block cleanly when items is empty.
+        return {"opportunity_id": opportunity_id, "anchor": {"programme": eff_programme, "title": inferred_anchor}, "items": []}
+
+    where = ["item_type = 'funding_recipient'"]
+    params: Dict[str, Any] = {}
+    if eff_programme:
+        where.append("(summary ILIKE :prog OR title ILIKE :prog)")
+        params["prog"] = f"%{eff_programme}%"
+    if eff_q:
+        where.append("(title ILIKE :q OR summary ILIKE :q)")
+        params["q"] = f"%{eff_q}%"
+    params["limit"] = limit
+
+    try:
+        rows = db.execute(
+            text(
+                "SELECT id, body_code, title, summary, public_url, document_date "
+                "FROM economy_items WHERE " + " AND ".join(where) + " "
+                "ORDER BY document_date DESC NULLS LAST, id DESC LIMIT :limit"
+            ),
+            params,
+        ).fetchall()
+    except Exception as exc:
+        logger.warning("get_fts_recipients failed: %s", exc)
+        db.rollback()
+        rows = []
+
+    items = [
+        {
+            "id": r.id,
+            "title": r.title,
+            "summary": (r.summary or "")[:240] if r.summary else None,
+            "source_url": r.public_url,
+            "document_date": r.document_date.isoformat() if r.document_date else None,
+        }
+        for r in rows
+    ]
+    return {
+        "opportunity_id": opportunity_id,
+        "anchor": {"programme": eff_programme, "title": inferred_anchor},
+        "items": items,
+    }
+
+
+# ============================================================================
 # Unified F&T feed for the dashboard cockpit
 #
 # The Tenderator dashboard exposes 4 sources behind a single list view:
@@ -1047,11 +1142,13 @@ async def get_similar_projects(
     ),
 )
 async def get_unified_feed(
-    source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | matches | all"),
-    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders"),
+    source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | agency | matches | all"),
+    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders | agency"),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     programme: Optional[str] = Query(None, description="EU funding programme code (e.g. EU4H, HE, CEF) — filters F&T calls/projects by topic_id prefix"),
+    body: Optional[str] = Query(None, description="When source=agency: economy_items.body_code (e.g. efsa, ema, efca) — filters to one decentralised agency."),
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
+    lang: Optional[str] = Query(None, description="Render titles + descriptions in this Brubru language (en/es/ca/fr/it/nl). Items whose detected_lang is outside the 6 get served from <table>_translations when available; English-source items pass through."),
     client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
@@ -1142,7 +1239,7 @@ async def get_unified_feed(
             ored.append(FtFundedProject.coordinator_country == c)
         return qry.filter(or_(*ored)) if ored else qry
 
-    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects"}
+    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects", "agency"}
     if source not in valid_sources:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -1151,8 +1248,121 @@ async def get_unified_feed(
 
     offset = (page - 1) * limit
     items: List[dict] = []
-    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0}
+    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0, "agency": 0}
     now = datetime.utcnow()
+
+    # Translation overlay (MEUB-news pattern, migration 133).
+    # Brubru's 6 are en/es/ca/fr/it/nl. Items whose detected_lang is outside
+    # the 6 (PL/DE/CS/PT/BG/SV/FI/…) get their title+summary served from the
+    # per-source <table>_translations sidecar when a row exists for the
+    # requested lang. Items already in one of the 6 pass through. The
+    # `lang` query param is the target; we default to 'en' if unset.
+    _SIX_LANGS = {"en", "es", "ca", "fr", "it", "nl"}
+    target_lang = (lang or "en").lower()
+    if target_lang not in _SIX_LANGS:
+        target_lang = "en"
+
+    # Translation maps keyed by source-tag → {row_id (as str): (title, summary)}.
+    _tmaps: Dict[str, Dict[str, Tuple[Optional[str], Optional[str]]]] = {
+        "ted": {}, "ft_proposals": {}, "ft_tenders": {},
+        "ft_projects": {}, "agency": {},
+    }
+
+    def _fetch_translations(src_tag: str, table: str, fk: str, ids: List[Any]) -> None:
+        """Populate _tmaps[src_tag] for the given row ids in target_lang.
+
+        Empty ids = no-op. Both INTEGER and UUID PK columns are supported —
+        we cast the FK to text on BOTH sides so the comparison is uniform.
+        """
+        if not ids:
+            return
+        try:
+            rows = db.execute(
+                _sql_text(
+                    f"SELECT {fk}::text AS rid, title, summary "
+                    f"FROM {table} WHERE lang = :lang AND {fk}::text = ANY(:ids)"
+                ),
+                {"lang": target_lang, "ids": [str(i) for i in ids]},
+            ).fetchall()
+            for r in rows:
+                _tmaps[src_tag][r.rid] = (r.title, r.summary)
+        except Exception as exc:
+            logger.warning("translation overlay (%s) failed: %s", src_tag, exc)
+            db.rollback()
+
+    def _apply_translation(item: Dict[str, Any]) -> Dict[str, Any]:
+        """If a translated row exists for this item, swap title + description
+        and surface the detected_lang as translated_from. Otherwise pass-through."""
+        src = item.get("source")
+        if not src or src not in _tmaps:
+            return item
+        # Item id format is "<source>:<row_id>" — recover the row part.
+        raw_id = item.get("id", "")
+        rid = raw_id.split(":", 1)[-1] if ":" in raw_id else raw_id
+        cached = _tmaps[src].get(rid)
+        detected = item.get("detected_lang")
+        if cached and cached[0] and detected and detected != target_lang:
+            t_title, t_sum = cached
+            item["title"] = t_title or item["title"]
+            if t_sum:
+                item["description"] = t_sum[:600]
+            item["translated_from"] = detected
+        return item
+
+    # Per-source sidecar metadata: (table, fk-column).
+    _TRANSLATION_TABLES = {
+        "ted":          ("tenders_translations",                  "tender_id"),
+        "ft_proposals": ("ft_calls_for_proposals_translations",   "call_id"),
+        "ft_tenders":   ("ft_calls_for_tenders_translations",     "tender_uuid"),
+        "ft_projects":  ("ft_funded_projects_translations",       "project_uuid"),
+        "agency":       ("economy_items_translations",            "item_id"),
+    }
+
+    def _overlay_translations(item_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """For every item whose detected_lang is foreign (outside the 6) AND
+        != target_lang, batched-look-up the sidecar translation and swap in
+        title + description. Single pass per source. No-op on EN target +
+        EN-source items."""
+        if not item_list:
+            return item_list
+        # Bucket the foreign-language items by source.
+        foreign_by_src: Dict[str, List[str]] = {k: [] for k in _TRANSLATION_TABLES}
+        for it in item_list:
+            src = it.get("source")
+            if src not in foreign_by_src:
+                continue
+            d = it.get("detected_lang")
+            if not d or d == target_lang:
+                continue
+            if d in _SIX_LANGS:
+                # Already in a Brubru lang. If it's not the target lang, we
+                # still want to translate it (e.g. Italian title shown in
+                # Spanish), so don't skip.
+                pass
+            raw_id = it.get("id", "")
+            rid = raw_id.split(":", 1)[-1] if ":" in raw_id else raw_id
+            if rid:
+                foreign_by_src[src].append(rid)
+        for src, ids in foreign_by_src.items():
+            if not ids:
+                continue
+            table, fk = _TRANSLATION_TABLES[src]
+            _fetch_translations(src, table, fk, ids)
+        return [_apply_translation(it) for it in item_list]
+
+    # economy_items funding item_types — populated by services/scrapers/agency_procurement.py
+    # via the register_resource pattern in api/v2/funding/agency_procurement.py.
+    _AGENCY_ITEM_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
+    # Map body_code → display acronym for the organisation slot. Anything not
+    # listed falls back to body_code.upper(); add new entries when new agency
+    # folders are registered.
+    _AGENCY_LABELS = {
+        "efca": "EFCA", "cedefop": "Cedefop", "ema": "EMA", "efsa": "EFSA",
+        "eurojust": "Eurojust", "etf": "ETF", "eige": "EIGE", "euaa": "EUAA",
+        "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
+        "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "eu_osha": "EU-OSHA",
+        "enisa": "ENISA", "commission": "European Commission",
+    }
 
     # Map an EU funding programme code to the topic_id / call_id prefixes used on
     # the F&T portal. The programme is NOT in framework_programme (that holds the
@@ -1229,6 +1439,75 @@ async def get_unified_feed(
         qry = _apply_pursuits_filter_projects(qry)
         return qry
 
+    # --- Agency (decentralised EU bodies' own procurement) -------------------
+    # Reads economy_items, the same store the public /api/v2/funding/{agency}-*
+    # endpoints serve. body_code = agency slug, item_type ∈ tender|grant|
+    # eoi_call|startup_funding. document_date is the deadline. New agencies
+    # appear here automatically as soon as a scraper backfills their rows.
+    def _agency_where_params(extra_body: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
+        where = ["item_type = ANY(:agency_types)"]
+        params: Dict[str, Any] = {"agency_types": list(_AGENCY_ITEM_TYPES)}
+        if status_filter == "closed":
+            where.append("document_date < :now")
+            params["now"] = now
+        elif status_filter == "open":
+            where.append("(document_date > :now OR document_date IS NULL)")
+            params["now"] = now
+        else:
+            where.append("(document_date >= :now OR document_date IS NULL)")
+            params["now"] = now
+        if q:
+            where.append("(title ILIKE :q OR summary ILIKE :q)")
+            params["q"] = f"%{q}%"
+        # `body` is the query-param scope (one agency); `extra_body` is a
+        # closure-call override (unused so far but kept for future use).
+        scoped_body = extra_body or body
+        if scoped_body:
+            where.append("body_code = :body")
+            params["body"] = scoped_body
+        if pursuits:
+            kws = pursuits.get("keywords") or []
+            if kws:
+                kw_ors = []
+                for i, kw in enumerate(kws):
+                    pn = f"kw_{i}"
+                    kw_ors.append(f"(title ILIKE :{pn} OR summary ILIKE :{pn})")
+                    params[pn] = f"%{kw}%"
+                where.append("(" + " OR ".join(kw_ors) + ")")
+        return " AND ".join(where), params
+
+    def _agency_count() -> int:
+        clause, params = _agency_where_params()
+        try:
+            return db.execute(
+                _sql_text(f"SELECT count(*) FROM economy_items WHERE {clause}"),
+                params,
+            ).scalar() or 0
+        except Exception as exc:
+            logger.warning("agency count failed: %s", exc)
+            db.rollback()
+            return 0
+
+    def _agency_rows(page_offset: int, page_limit: int):
+        clause, params = _agency_where_params()
+        params["limit"] = page_limit
+        params["offset"] = page_offset
+        try:
+            return db.execute(
+                _sql_text(
+                    f"SELECT id, body_code, item_type, title, summary, public_url, "
+                    f"       document_date, creation_date, detected_lang "
+                    f"FROM economy_items WHERE {clause} "
+                    f"ORDER BY document_date ASC NULLS LAST, id DESC "
+                    f"LIMIT :limit OFFSET :offset"
+                ),
+                params,
+            ).fetchall()
+        except Exception as exc:
+            logger.warning("agency rows failed: %s", exc)
+            db.rollback()
+            return []
+
     def _serialise_ted(t):
         return {
             "id": f"ted:{t.id}",
@@ -1245,6 +1524,7 @@ async def get_unified_feed(
             "country": t.buyer_country,
             "programme": None,
             "published_at": t.publication_date.isoformat() if t.publication_date else None,
+            "detected_lang": getattr(t, "detected_lang", None),
         }
 
     def _serialise_proposal(p):
@@ -1263,6 +1543,7 @@ async def get_unified_feed(
             "country": None,
             "programme": p.framework_programme,
             "published_at": p.published_at.isoformat() if p.published_at else None,
+            "detected_lang": getattr(p, "detected_lang", None),
         }
 
     def _serialise_tender_ft(t):
@@ -1281,6 +1562,7 @@ async def get_unified_feed(
             "country": None,
             "programme": None,
             "published_at": t.published_at.isoformat() if t.published_at else None,
+            "detected_lang": getattr(t, "detected_lang", None),
         }
 
     def _serialise_project(p):
@@ -1299,6 +1581,38 @@ async def get_unified_feed(
             "country": p.coordinator_country,
             "programme": p.framework_programme,
             "published_at": p.start_date.isoformat() if p.start_date else None,
+            "detected_lang": getattr(p, "detected_lang", None),
+        }
+
+    def _serialise_agency(r):
+        # economy_items row → unified shape. body_code is the agency slug; we
+        # show its display acronym in the organisation slot and re-purpose the
+        # programme slot for a short ITEM-TYPE hint (Tender / Grant / EOI /
+        # Startup funding) so the user immediately sees what kind of item it
+        # is regardless of which agency runs it.
+        type_label = {
+            "tender": "Tender",
+            "grant": "Grant",
+            "eoi_call": "Call for EOI",
+            "startup_funding": "Startup funding",
+        }.get(r.item_type, r.item_type)
+        organisation = _AGENCY_LABELS.get(r.body_code, r.body_code.upper())
+        return {
+            "id": f"agency:{r.id}",
+            "source": "agency",
+            "external_id": r.body_code,
+            "title": r.title,
+            "description": (r.summary or "")[:600] if r.summary else None,
+            "status": None,
+            "deadline": r.document_date.isoformat() if r.document_date else None,
+            "budget": None,
+            "currency": "EUR",
+            "source_url": r.public_url,
+            "organisation": organisation,
+            "country": None,
+            "programme": type_label,
+            "published_at": r.creation_date.isoformat() if r.creation_date else None,
+            "detected_lang": getattr(r, "detected_lang", None),
         }
 
     try:
@@ -1325,10 +1639,12 @@ async def get_unified_feed(
                 total_ted_matches = 0
                 total_proposal_matches = 0
                 total_tender_matches = 0
+                total_agency_matches = 0
 
                 bucket_ted: List[Dict[str, Any]] = []
                 bucket_proposals: List[Dict[str, Any]] = []
                 bucket_tenders: List[Dict[str, Any]] = []
+                bucket_agency: List[Dict[str, Any]] = []
 
                 # --- TED via persisted tender_matches ---
                 if match_source in ("all", "ted"):
@@ -1450,19 +1766,82 @@ async def get_unified_feed(
                         for (score, t) in scored[take_offset : take_offset + take_limit]
                     ]
 
+                # --- Agency: on-the-fly keyword scoring over economy_items ---
+                # No CPV, country, budget on the row → only keyword + deadline
+                # signal contribute. Same threshold as the other buckets so a
+                # noisy agency feed never floods the "your matches" view.
+                if match_source in ("all", "agency"):
+                    agency_rows = []
+                    if kw_lower:
+                        try:
+                            agency_rows = db.execute(
+                                _sql_text(
+                                    "SELECT id, body_code, item_type, title, summary, "
+                                    "       public_url, document_date, creation_date, detected_lang "
+                                    "FROM economy_items "
+                                    "WHERE item_type = ANY(:types) "
+                                    "  AND (document_date >= :now OR document_date IS NULL) "
+                                    "  AND " + (
+                                        # ILIKE q if provided, no-op otherwise
+                                        "(title ILIKE :q OR summary ILIKE :q) " if q else "TRUE "
+                                    )
+                                ),
+                                {"types": list(_AGENCY_ITEM_TYPES), "now": now,
+                                 **({"q": f"%{q}%"} if q else {})},
+                            ).fetchall()
+                        except Exception as exc:
+                            logger.warning("matches agency-rows fetch failed: %s", exc)
+                            db.rollback()
+                            agency_rows = []
+                    scored: List[Tuple[float, Any]] = []
+                    for ar in agency_rows:
+                        title_l = (ar.title or "").lower()
+                        sum_l = (ar.summary or "").lower()
+                        score = 0.0
+                        for kw in kw_lower:
+                            if kw in title_l:
+                                score += 35
+                            elif kw in sum_l:
+                                score += 18
+                        # Open status is implied (deadline filter already
+                        # excluded passed deadlines), so add a small bonus
+                        # only when the deadline is comfortably in the future.
+                        if ar.document_date:
+                            days_left = (ar.document_date.replace(tzinfo=None) - now).days
+                            if days_left >= 14:
+                                score += 5
+                        if score >= 20:
+                            scored.append((score, ar))
+                    scored.sort(key=lambda x: x[0], reverse=True)
+                    total_agency_matches = len(scored)
+                    take_offset = offset if match_source == "agency" else 0
+                    take_limit = limit if match_source == "agency" else max(1, limit // 4)
+                    bucket_agency = [
+                        {
+                            **_serialise_agency(ar),
+                            "match_score": float(score),
+                            "is_saved": False,
+                            "is_applied": False,
+                        }
+                        for (score, ar) in scored[take_offset : take_offset + take_limit]
+                    ]
+
                 if match_source == "ted":
                     items = bucket_ted
                 elif match_source == "ft_proposals":
                     items = bucket_proposals
                 elif match_source == "ft_tenders":
                     items = bucket_tenders
+                elif match_source == "agency":
+                    items = bucket_agency
                 else:
-                    # "all" inside matches: interleave the three buckets, sort
+                    # "all" inside matches: interleave the four buckets, sort
                     # by match_score desc, take top `limit`.
-                    combined = bucket_ted + bucket_proposals + bucket_tenders
+                    combined = bucket_ted + bucket_proposals + bucket_tenders + bucket_agency
                     combined.sort(key=lambda x: (x.get("match_score") or 0), reverse=True)
                     items = combined[:limit]
 
+                items = _overlay_translations(items)
                 return {
                     "source": source,
                     "match_source": match_source,
@@ -1473,6 +1852,7 @@ async def get_unified_feed(
                         "ft_proposals": total_proposal_matches,
                         "ft_tenders": total_tender_matches,
                         "ft_projects": 0,
+                        "agency": total_agency_matches,
                     },
                     "items": items,
                 }
@@ -1506,20 +1886,27 @@ async def get_unified_feed(
             if source == "ft_projects":
                 rows = qry.order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(limit).all()
                 items.extend(_serialise_project(p) for p in rows)
+        if source == "agency" or source == "all":
+            totals["agency"] = _agency_count()
+            if source == "agency":
+                rows = _agency_rows(offset, limit)
+                items.extend(_serialise_agency(r) for r in rows)
 
         # 'all' mode: interleave the top N from each source so the user sees
-        # the variety. Cap each source to limit/4 + remainder.
+        # the variety. Five sources now; cap each at limit/5 + remainder.
         if source == "all":
-            per_source = max(1, limit // 4)
+            per_source = max(1, limit // 5)
             slot_ted = _ted_query().order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(per_source).all()
             slot_prop = _proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
             slot_tend = _tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
             slot_proj = _projects_query().order_by(FtFundedProject.start_date.desc().nullslast()).offset(offset).limit(per_source).all()
+            slot_agency = _agency_rows(offset, per_source)
             items = []
             items.extend(_serialise_ted(t) for t in slot_ted)
             items.extend(_serialise_proposal(p) for p in slot_prop)
             items.extend(_serialise_tender_ft(t) for t in slot_tend)
             items.extend(_serialise_project(p) for p in slot_proj)
+            items.extend(_serialise_agency(r) for r in slot_agency)
     except Exception as exc:
         logger.error(f"unified-feed query failed: {exc}")
         raise HTTPException(
@@ -1527,6 +1914,7 @@ async def get_unified_feed(
             detail=f"Feed query failed: {str(exc)}",
         )
 
+    items = _overlay_translations(items)
     return {
         "source": source,
         "page": page,
@@ -1536,6 +1924,85 @@ async def get_unified_feed(
         "client_filter_applied": bool(pursuits),
         "client_filter_slug": current_user.private_guide_slug if (client_filter and pursuits) else None,
     }
+
+
+# ============================================================================
+# Step 5: Bodies catalogue (the EU agencies feeding economy_items funding rows)
+# ============================================================================
+
+_BODY_DISPLAY_NAMES = {
+    "efca": "European Fisheries Control Agency",
+    "cedefop": "European Centre for the Development of Vocational Training",
+    "ema": "European Medicines Agency",
+    "efsa": "European Food Safety Authority",
+    "eurojust": "European Union Agency for Criminal Justice Cooperation",
+    "etf": "European Training Foundation",
+    "eige": "European Institute for Gender Equality",
+    "euaa": "European Union Agency for Asylum",
+    "fra": "European Union Agency for Fundamental Rights",
+    "era": "European Union Agency for Railways",
+    "eurofound": "European Foundation for the Improvement of Living and Working Conditions",
+    "eea": "European Environment Agency",
+    "echa": "European Chemicals Agency",
+    "euda": "European Union Drugs Agency",
+    "ecdc": "European Centre for Disease Prevention and Control",
+    "enisa": "European Union Agency for Cybersecurity",
+    "eu_osha": "European Agency for Safety and Health at Work",
+    "commission": "European Commission",
+}
+
+_BODY_DISPLAY_ACRONYMS = {
+    "efca": "EFCA", "cedefop": "Cedefop", "ema": "EMA", "efsa": "EFSA",
+    "eurojust": "Eurojust", "etf": "ETF", "eige": "EIGE", "euaa": "EUAA",
+    "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
+    "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "enisa": "ENISA",
+    "eu_osha": "EU-OSHA", "commission": "EC",
+}
+
+
+@router.get(
+    "/bodies",
+    summary="EU agencies feeding the Tenderator's decentralised-procurement source",
+    description=(
+        "Returns the catalogue of EU agencies / bodies that contribute "
+        "tenders, grants and calls for expression of interest to the "
+        "Tenderator's `source=agency` view, with an open-opportunities "
+        "count per body. Powers the right-rail BodiesPanel. Anyone with "
+        "Blue tier can call it."
+    ),
+)
+async def get_bodies(
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    now = datetime.utcnow()
+    try:
+        rows = db.execute(
+            text(
+                "SELECT body_code, count(*) AS total, "
+                "       count(*) FILTER (WHERE document_date > :now OR document_date IS NULL) AS open_count "
+                "FROM economy_items "
+                "WHERE item_type = ANY(:types) "
+                "GROUP BY body_code "
+                "ORDER BY open_count DESC NULLS LAST, total DESC"
+            ),
+            {"types": ["tender", "grant", "eoi_call", "startup_funding"], "now": now},
+        ).fetchall()
+    except Exception as exc:
+        logger.warning("get_bodies failed: %s", exc)
+        db.rollback()
+        rows = []
+
+    items = []
+    for r in rows:
+        items.append({
+            "body_code": r.body_code,
+            "acronym": _BODY_DISPLAY_ACRONYMS.get(r.body_code, r.body_code.upper()),
+            "name": _BODY_DISPLAY_NAMES.get(r.body_code, r.body_code),
+            "total": int(r.total or 0),
+            "open_count": int(r.open_count or 0),
+        })
+    return {"items": items, "generated_at": now.isoformat()}
 
 
 # ============================================================================
@@ -1609,7 +2076,19 @@ async def get_dashboard_stats(
         FtFundedProject.is_test == False,
     ).count())
 
-    open_opportunities = ted_open + ft_proposals_open + ft_tenders_open
+    # Agency procurement (economy_items) — same store the public
+    # /api/v2/funding/{agency}-* endpoints serve. Open = deadline in the future
+    # or unknown.
+    agency_open = _safe(lambda: db.execute(
+        text(
+            "SELECT count(*) FROM economy_items "
+            "WHERE item_type = ANY(:types) "
+            "  AND (document_date > :now OR document_date IS NULL)"
+        ),
+        {"types": ["tender", "grant", "eoi_call", "startup_funding"], "now": now},
+    ).scalar() or 0)
+
+    open_opportunities = ted_open + ft_proposals_open + ft_tenders_open + agency_open
 
     # --- per-user pipeline counts ---
     total_matches = _safe(lambda: db.query(TenderMatch).filter(
@@ -1712,6 +2191,7 @@ async def get_dashboard_stats(
             "ft_proposals": ft_proposals_open,
             "ft_tenders": ft_tenders_open,
             "ft_projects": ft_projects_total,
+            "agency": agency_open,
         },
         "closing_soon": closing_soon,
         "generated_at": now.isoformat(),

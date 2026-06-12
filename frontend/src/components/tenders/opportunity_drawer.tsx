@@ -257,6 +257,15 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <span className={`mdi ${tag.icon}`} aria-hidden="true" />
             {tag.label}
           </span>
+          {opportunity.translated_from && (
+            <span
+              className="opportunity-drawer__lang-badge"
+              title={`Original language: ${opportunity.translated_from}. Translation by M2M100, may contain inaccuracies.`}
+            >
+              <span className="mdi mdi-translate" aria-hidden="true" />
+              translated from {opportunity.translated_from}
+            </span>
+          )}
           <button
             type="button"
             className="opportunity-drawer__close"
