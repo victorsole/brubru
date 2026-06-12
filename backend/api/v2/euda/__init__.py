@@ -23,5 +23,13 @@ router = make_single_body_folder(
                   "country and technical reports. Each entry carries the title, publication type "
                   "and the publication page. Filter with q (e.g. a topic such as 'cocaine' or a "
                   "report series such as 'European Drug Report')."},
+        {"item_type": "news", "slug": "news", "noun": "news items",
+         "source": "the EUDA news section.",
+         "extra": "News from the European Union Drugs Agency on the drugs situation, new "
+                  "substances, alerts and the agency's work."},
+        {"item_type": "event", "slug": "events", "noun": "events",
+         "source": "the EUDA events section.",
+         "extra": "Conferences, webinars and meetings hosted or co-hosted by the European "
+                  "Union Drugs Agency."},
     ],
 )

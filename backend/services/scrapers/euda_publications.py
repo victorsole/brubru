@@ -14,6 +14,8 @@ import re
 import time
 from datetime import datetime, timezone
 
+import html as _html
+
 import requests
 
 from services.scrapers.economy_common import Item, clean
@@ -28,8 +30,8 @@ _TITLE = re.compile(r"<title>(.*?)</title>", re.S)
 _LOC = re.compile(r"<loc>([^<]+)</loc>")
 
 
-def sitemap_publication_urls(session: requests.Session) -> list[str]:
-    """Every /publications/..._en URL from the EUDA XML sitemap."""
+def sitemap_urls(session: requests.Session, substr: str) -> list[str]:
+    """Every ..._en URL containing `substr` from the EUDA XML sitemap."""
     urls: dict[str, None] = {}
     for page in range(1, _SITEMAP_PAGES + 1):
         try:
@@ -39,14 +41,20 @@ def sitemap_publication_urls(session: requests.Session) -> list[str]:
         if r.status_code != 200:
             continue
         for loc in _LOC.findall(r.text):
-            if "/publications/" in loc and loc.endswith("_en"):
+            if substr in loc and loc.endswith("_en"):
                 urls[loc] = None
     return list(urls)
 
 
+def sitemap_publication_urls(session: requests.Session) -> list[str]:
+    """Every /publications/..._en URL from the EUDA XML sitemap."""
+    return sitemap_urls(session, "/publications/")
+
+
 def _clean_title(raw: str) -> str:
-    # og:title is "<title> | The European Union Drugs Agency (EUDA)"
-    return clean(raw.split(" | ")[0]) or ""
+    # og:title is "<title> | The European Union Drugs Agency (EUDA)"; some titles
+    # arrive double-escaped (e.g. &amp;#039;), so unescape twice.
+    return clean(_html.unescape(_html.unescape(raw)).split(" | ")[0]) or ""
 
 
 def fetch_title(session: requests.Session, url: str) -> str | None:
