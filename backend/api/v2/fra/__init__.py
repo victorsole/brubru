@@ -22,5 +22,11 @@ router = make_single_body_folder(
                   "CJEU, ECtHR and national court rulings, each with the court, case reference and "
                   "decision type, linking to the FRA case-law page. Filter with q (e.g. a court "
                   "such as 'CJEU' or a case number)."},
+        {"item_type": "charter_article", "slug": "charterpedia", "noun": "Charter articles",
+         "source": "FRA Charterpedia.",
+         "extra": "The EU Charter of Fundamental Rights article by article (Charterpedia): each "
+                  "article with its FRA page collecting the explanations, related EU and national "
+                  "case-law and constitutional provisions. Filter with q (e.g. 'data protection' "
+                  "or 'asylum')."},
     ],
 )

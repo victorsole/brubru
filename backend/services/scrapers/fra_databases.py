@@ -13,3 +13,8 @@ _BASE = "https://fra.europa.eu"
 def ingest_fra_case_law(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return ingest_browser(_BASE, "/en/case-law-database", "fra", "case_law",
                           "/en/caselaw-reference/", "fra_caselaw")
+
+
+def ingest_fra_charterpedia(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return ingest_browser(_BASE, "/en/charterpedia", "fra", "charter_article",
+                          "/en/eu-charter/article/", "fra_charterpedia", min_title=6)

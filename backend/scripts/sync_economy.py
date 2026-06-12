@@ -144,6 +144,7 @@ INGESTORS = {
     ("cedefop", "publication"): cedefop_content.ingest_cedefop_publications,
     ("euaa", "news"): euaa_content.ingest_euaa_news,
     ("fra", "case_law"): fra_databases.ingest_fra_case_law,
+    ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,
     ("euda", "publication"): euda_publications.ingest_euda_publications,
