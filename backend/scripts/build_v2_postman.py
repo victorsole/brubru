@@ -637,6 +637,7 @@ _AGENCY_DOMAINS = [
     ("eea", "EEA — Environment"),
     ("echa", "ECHA — Chemicals"),
     ("euda", "EUDA — Drugs"),
+    ("eige", "EIGE — Gender Equality"),
 ]
 
 

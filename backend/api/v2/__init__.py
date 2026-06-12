@@ -51,6 +51,7 @@ from .efsa import router as _efsa_router
 from .eea import router as _eea_router
 from .echa import router as _echa_router
 from .euda import router as _euda_router
+from .eige import router as _eige_router
 from .eu_osha import router as _eu_osha_router
 from . import docs as _docs
 
@@ -88,6 +89,7 @@ router.include_router(_efsa_router)
 router.include_router(_eea_router)
 router.include_router(_echa_router)
 router.include_router(_euda_router)
+router.include_router(_eige_router)
 router.include_router(_eu_osha_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
