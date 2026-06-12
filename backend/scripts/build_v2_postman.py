@@ -636,6 +636,7 @@ _AGENCY_DOMAINS = [
     ("eu-osha", "EU-OSHA — Safety & Health at Work"),
     ("eea", "EEA — Environment"),
     ("echa", "ECHA — Chemicals"),
+    ("euda", "EUDA — Drugs"),
 ]
 
 
