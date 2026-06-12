@@ -24,5 +24,9 @@ router = make_single_body_folder(
                   "carcinogenic, toxic for reproduction, endocrine disrupting) and the ECHA "
                   "substance-information link. Filter with q (e.g. a substance name, a CAS number, "
                   "or an SVHC property)."},
+        {"item_type": "news", "slug": "news", "noun": "news items",
+         "source": "the ECHA news archive.",
+         "extra": "News alerts from the European Chemicals Agency on REACH, CLP, biocides and "
+                  "the agency's regulatory work."},
     ],
 )

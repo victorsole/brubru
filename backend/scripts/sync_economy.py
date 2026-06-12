@@ -54,6 +54,7 @@ from services.scrapers import council_sanctions as council_sanctions  # noqa: E4
 from services.scrapers import eea_indicators as eea_indicators  # noqa: E402
 from services.scrapers import eea_content as eea_content  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
+from services.scrapers import echa_news as echa_news  # noqa: E402
 from services.scrapers import euda_publications as euda_publications  # noqa: E402
 from services.scrapers import economy_berec as berec     # noqa: E402
 from services.scrapers import economy_acer as acer       # noqa: E402
@@ -131,6 +132,7 @@ INGESTORS = {
     ("eea", "news"): eea_content.ingest_eea_news,
     ("eea", "event"): eea_content.ingest_eea_events,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
+    ("echa", "news"): echa_news.ingest_echa_news,
     ("euda", "publication"): euda_publications.ingest_euda_publications,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
