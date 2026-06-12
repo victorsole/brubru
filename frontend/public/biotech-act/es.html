@@ -636,6 +636,8 @@
       .temple__roof { font-size: 1rem; padding: 1rem 1.25rem; }
       .temple__pillar-tooltip { display: none; }
     }
+      /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
+      /* tooltip clamp */ @media (max-width:1024px){ .temple__pillar-tooltip{max-width:80vw;left:50%;right:auto;transform:translateX(-50%);} }
   </style>
 </head>
 <body>

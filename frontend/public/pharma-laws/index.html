@@ -118,6 +118,7 @@
 
     @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 767px) { .hero__title { font-size: 2rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .pipeline { flex-direction: column; } .pipeline__arrow { transform: rotate(90deg); justify-content: center; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } .lang-bar { padding: 0.5rem 1rem; } }
+      /* responsive-tables (deep-dive standard) */ /* no page-level horizontal scroll (clip keeps sticky header working) */ html{overflow-x:clip;} @media (max-width:900px){ table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:calc(100vw - 2.5rem);} }
   </style>
 </head>
 <body>
