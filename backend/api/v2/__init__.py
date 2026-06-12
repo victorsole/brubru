@@ -30,6 +30,7 @@ from .council import router as _council_router
 from .european_council import router as _european_council_router
 from .eurogroup import router as _eurogroup_router
 from .funding import router as _funding_router
+from .consultations import router as _consultations_router
 from .open_data import router as _open_data_router
 from .who_is_who import router as _who_is_who_router
 from .general_publications import router as _general_publications_router
@@ -66,6 +67,7 @@ router.include_router(_council_router)
 router.include_router(_european_council_router)
 router.include_router(_eurogroup_router)
 router.include_router(_funding_router)
+router.include_router(_consultations_router)
 router.include_router(_open_data_router)
 router.include_router(_who_is_who_router)
 router.include_router(_general_publications_router)

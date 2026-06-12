@@ -58,6 +58,7 @@ from services.scrapers import cedefop_content as cedefop_content  # noqa: E402
 from services.scrapers import euaa_content as euaa_content  # noqa: E402
 from services.scrapers import fra_databases as fra_databases  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
+from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
 from services.scrapers import echa_news as echa_news  # noqa: E402
 from services.scrapers import euda_publications as euda_publications  # noqa: E402
@@ -153,6 +154,7 @@ INGESTORS = {
     ("efsa", "tender"): agency_procurement.ingest_efsa_tenders,
     ("eurojust", "tender"): agency_procurement.ingest_eurojust_tenders,
     ("etf", "tender"): agency_procurement.ingest_etf_tenders,
+    ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,

@@ -662,6 +662,7 @@ def build_collection() -> dict:
         _build_european_council_domain(paths),
         _build_eurogroup_domain(paths),
         _build_funding_domain(paths),
+        _build_flat_domain(paths, "consultations", "Public Consultations"),
         _build_open_data_domain(paths),
         _build_who_is_who_domain(paths),
         _build_general_publications_domain(paths),
