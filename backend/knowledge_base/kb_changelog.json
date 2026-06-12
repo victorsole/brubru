@@ -2,6 +2,30 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-12",
+      "action": "updated",
+      "guide": "eurodac_asylum_migration",
+      "title": "Eurodac and the New Pact",
+      "summary": "Recast Eurodac now applying from 12 June 2026: facial images + fingerprints, age threshold lowered to 6, SIS/VIS/ETIAS interoperability",
+      "refs": [
+        "32024R1358",
+        "32026D0533"
+      ]
+    },
+    {
+      "date": "2026-06-12",
+      "action": "updated",
+      "guide": "eu_migration_asylum_pact",
+      "title": "EU Pact on Migration and Asylum",
+      "summary": "Pact enters into application 12 June 2026: mandatory screening (7d/3d), border procedures, needs-based solidarity mechanism, EU-wide reception standards, Eurodac live",
+      "refs": [
+        "32024R1351",
+        "32024R1348",
+        "32024R1356",
+        "32024R1359"
+      ]
+    },
+    {
       "date": "2026-06-11",
       "action": "updated",
       "guide": "digital_omnibus_package",

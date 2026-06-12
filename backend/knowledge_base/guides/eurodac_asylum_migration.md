@@ -1,6 +1,7 @@
 # Eurodac and the New Pact on Migration and Asylum
 
 ## QUICK FACTS
+- **LATEST (Friday 12 June 2026)**: **The recast Eurodac Regulation now applies from today**, as part of the EU Pact on Migration and Asylum entering into application (see `eu_migration_asylum_pact`). The expanded biometric database is operationally live: **facial images alongside fingerprints**, age threshold **lowered from 14 to 6**, new data categories, and interoperability with SIS/VIS/ETIAS/ECRIS-TCN — all under the application rules of Commission Implementing Decision (EU) 2026/533 (32026D0533). Purpose: faster identification of asylum applicants and irregular migrants, and curbing unauthorised secondary movements across the EU. Source: DG HOME news, 12 June 2026.
 - Full name: Eurodac Regulation (recast) -- Regulation (EU) 2024/1358
 - CELEX: 32024R1358
 - Type: Regulation (directly applicable)
