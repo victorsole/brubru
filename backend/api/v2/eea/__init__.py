@@ -23,5 +23,12 @@ router = make_single_body_folder(
                   "state of and trends in one environmental issue, with its topic and indicator-code "
                   "tags, last-update date and the indicator page. Filter with q (e.g. a topic such "
                   "as 'air pollution' or an indicator code such as AIR009)."},
+        {"item_type": "news", "slug": "news", "noun": "news items",
+         "source": "the EEA newsroom (Plone REST API).",
+         "extra": "News and announcements from the European Environment Agency."},
+        {"item_type": "event", "slug": "events", "noun": "events",
+         "source": "the EEA newsroom events (Plone REST API).",
+         "extra": "Conferences, webinars and meetings hosted or co-hosted by the European "
+                  "Environment Agency."},
     ],
 )
