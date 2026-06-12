@@ -157,6 +157,8 @@ INGESTORS = {
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
     ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,
+    ("amla", "consultation"): agency_consultations.ingest_amla_consultations,
+    ("echa", "consultation"): agency_consultations.ingest_echa_consultations,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,

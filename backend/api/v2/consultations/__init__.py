@@ -48,4 +48,25 @@ register_resource(
           "supervision. Filter with q (e.g. 'Solvency II' or 'IORP').",
 )
 
+# --- AMLA — anti-money-laundering consultations --------------------------- #
+register_resource(
+    router, body_code="amla", item_type="consultation", slug="amla",
+    noun="AMLA public consultations", body_name="AMLA", acronym="AMLA", tag="v2-consultations",
+    source="the AMLA public consultations.",
+    extra="The Anti-Money Laundering Authority's public consultations (draft guidelines and RTS). "
+          "Filter with q.",
+)
+
+# --- ECHA — chemicals consultations (by type) ---------------------------- #
+register_resource(
+    router, body_code="echa", item_type="consultation", slug="echa",
+    noun="ECHA public consultations", body_name="the European Chemicals Agency", acronym="ECHA",
+    tag="v2-consultations",
+    source="the ECHA current-consultations overview, grouped by type.",
+    extra="ECHA's open public consultations by type -- applications for authorisation, restriction "
+          "proposals, harmonised classification & labelling (CLH), testing proposals, calls for "
+          "comments & evidence, candidates for substitution -- each with the count of open "
+          "consultations, the closing date and a link to the full sub-list. Filter with q.",
+)
+
 router.include_router(_consultations_all.router)

@@ -107,3 +107,46 @@ def ingest_eiopa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
     from services.scrapers.eu_agency_listing import walk
     return walk("https://www.eiopa.europa.eu", "/browse/consultations-and-surveys_en",
                 "eiopa", "consultation", "/consultation", "eiopa_consultations")
+
+
+# --------------------------------------------------------------------------- #
+# AMLA — clean anchor-title listing (reuse the generic walker).
+# --------------------------------------------------------------------------- #
+def ingest_amla_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    from services.scrapers.eu_agency_listing import walk
+    return walk("https://www.amla.europa.eu", "/policy/public-consultations_en",
+                "amla", "consultation", "/policy/public-consultations/", "amla_consultations")
+
+
+# --------------------------------------------------------------------------- #
+# ECHA — the current-consultations overview groups open consultations by TYPE
+# (Testing proposals, CLH proposals, Restriction, Applications for authorisation,
+# Calls for comments & evidence, ...), each with a count, start + closing date and
+# a link to that type's full sub-list. One row per consultation type.
+# --------------------------------------------------------------------------- #
+_ECHA = "https://echa.europa.eu"
+_ECHA_CAT = __import__("re").compile(
+    r'<dt>\s*(.*?)</dt>\s*<dd>\s*<a href="([^"]+)">([^<]*)</a>(.*?)</dd>', __import__("re").S)
+
+
+def ingest_echa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    import re as _re
+    html = _fetch(_ECHA + "/consultations/current")
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for typ, href, count, rest in _ECHA_CAT.findall(html):
+        title = _txt(typ)
+        if not title:
+            continue
+        url = href if href.startswith("http") else _ECHA + href
+        if url in out:
+            continue
+        n = _txt(count)
+        dates = _re.findall(r"(\d{2}/\d{2}/\d{4})", rest)
+        start = _parse_date(dates[0]) if dates else None
+        deadline = _parse_date(dates[-1]) if len(dates) > 1 else None
+        out[url] = _build(body_code="echa", title=f"{title} consultations", url=url,
+                          status="Open", topic=n, deadline=deadline, start=start, now=now,
+                          source_kind="echa_consultations")
+    return list(out.values())
+
