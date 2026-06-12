@@ -640,6 +640,7 @@ _AGENCY_DOMAINS = [
     ("eige", "EIGE — Gender Equality"),
     ("cedefop", "Cedefop — Vocational Training"),
     ("euaa", "EUAA — Asylum"),
+    ("fra", "FRA — Fundamental Rights"),
 ]
 
 
