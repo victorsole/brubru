@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n386 requests across 29 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n393 requests across 30 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -19034,6 +19034,319 @@
               ]
             },
             "description": "**What it does**\nReturns one European Union Drugs Agency publication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /publications/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EUDA publications library.."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "EIGE \u2014 Gender Equality",
+      "item": [
+        {
+          "name": "European Institute for Gender Equality \u2014 events (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists European Institute for Gender Equality's events, newest first. Conferences, webinars and meetings hosted or co-hosted by EIGE.\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /events?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EIGE newsroom events.."
+          },
+          "response": []
+        },
+        {
+          "name": "European Institute for Gender Equality \u2014 news items (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/news",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "news"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists European Institute for Gender Equality's news items, newest first. News from the European Institute for Gender Equality on gender equality, the Gender Equality Index, gender-based violence and gender mainstreaming.\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /news?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EIGE newsroom.."
+          },
+          "response": []
+        },
+        {
+          "name": "European Institute for Gender Equality \u2014 publications (newest first)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/publications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "publications"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "data protection",
+                  "disabled": true
+                },
+                {
+                  "key": "since",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "until",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "recent",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "**What it does**\nLists European Institute for Gender Equality's publications, newest first. EIGE reports, studies, toolkits and guides on gender equality. Filter with q (e.g. a topic such as 'gender-based violence' or 'gender mainstreaming').\n\n**When to use it**\nTrack what EIGE is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.\n\n**Input**\n`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /publications?order=recent&limit=10\n```\n\n**You get back**\nA paginated envelope of items. Each carries the 5 datapoints (`public_url`, `document_date`, `creation_date` populated; `body_txt` / `body_html` null on the list \u2014 fetch the detail endpoint for those).\n\n**Data freshness**\nRefreshed from the EIGE publications library.."
+          },
+          "response": []
+        },
+        {
+          "name": "EIGE folder directory \u2014 what EIGE carries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige"
+              ]
+            },
+            "description": "**What it does**\nReturns European Institute for Gender Equality (EIGE) with a count of stored items per resource type.\n\n**When to use it**\nA one-call overview before drilling into a specific feed.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\nGET /api/v2/eige\n```\n\n**You get back**\nOne body record with acronym, name, mandate, website and an `item_counts` map.\n\n**Data freshness**\nCounts are live from the database."
+          },
+          "response": []
+        },
+        {
+          "name": "European Institute for Gender Equality \u2014 one event (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/events/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "events",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one European Institute for Gender Equality event in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /events/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EIGE newsroom events.."
+          },
+          "response": []
+        },
+        {
+          "name": "European Institute for Gender Equality \u2014 one news item (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/news/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "news",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one European Institute for Gender Equality news item in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /news/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EIGE newsroom.."
+          },
+          "response": []
+        },
+        {
+          "name": "European Institute for Gender Equality \u2014 one publication (full body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/eige/publications/:item_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "eige",
+                "publications",
+                ":item_id"
+              ],
+              "variable": [
+                {
+                  "key": "item_id",
+                  "value": "",
+                  "description": "(path variable)"
+                }
+              ]
+            },
+            "description": "**What it does**\nReturns one European Institute for Gender Equality publication in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /publications/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from the EIGE publications library.."
           },
           "response": []
         }
