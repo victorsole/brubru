@@ -454,6 +454,33 @@ async def cron_sync_daily(
     results["euagenda"] = _run_script("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
     results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
 
+    # Tenderator translations (MEUB-news pattern, migration 133): detect lang
+    # on freshly-arrived TED + F&T rows and translate any foreign-language
+    # titles into Brubru's 6 (en/es/ca/fr/it/nl). Idempotent — already-detected
+    # rows are skipped. Capped per table per day so a single Railway cron run
+    # stays inside the 30-min ceiling (M2M100 on CPU is ~1-3s per translation;
+    # 6 langs × 2 fields per foreign row). Cheap (~seconds) when nothing new.
+    results["tenderator_translations_ted"] = _run_script(
+        "tenderator_translations_ted",
+        "scripts/backfill_tenderator_translations.py",
+        ["--table", "tenders", "--limit", "100", "--batch", "20"], timeout=900,
+    )
+    results["tenderator_translations_ft_tenders"] = _run_script(
+        "tenderator_translations_ft_tenders",
+        "scripts/backfill_tenderator_translations.py",
+        ["--table", "ft_calls_for_tenders", "--limit", "50", "--batch", "20"], timeout=600,
+    )
+    results["tenderator_translations_ft_proposals"] = _run_script(
+        "tenderator_translations_ft_proposals",
+        "scripts/backfill_tenderator_translations.py",
+        ["--table", "ft_calls_for_proposals", "--limit", "50", "--batch", "20"], timeout=600,
+    )
+    results["tenderator_translations_ft_projects"] = _run_script(
+        "tenderator_translations_ft_projects",
+        "scripts/backfill_tenderator_translations.py",
+        ["--table", "ft_funded_projects", "--limit", "50", "--batch", "20"], timeout=600,
+    )
+
     logger.info(f"[CRON] daily tier sync complete: {results}")
     return {"status": "success", "tier": "daily", "results": results}
 
@@ -501,6 +528,19 @@ async def cron_sync_economy(
             f"economy_{body}", "scripts/sync_economy.py",
             ["--body", body, "--type", "all"], timeout=600,
         )
+
+    # Tenderator translations for economy_items funding rows. Runs AFTER all
+    # bodies in this batch have synced so any freshly-arrived foreign agency
+    # row (DE / PL / SV / etc. — ~8% of the agency-procurement universe) gets
+    # its title + summary cached in Brubru's 6 languages by the next read.
+    # Capped per batch to stay within the per-batch Railway cron budget.
+    results["tenderator_translations_agency"] = _run_script(
+        "tenderator_translations_agency",
+        "scripts/backfill_tenderator_translations.py",
+        ["--table", "economy_items", "--funding-only", "--limit", "100", "--batch", "20"],
+        timeout=900,
+    )
+
     logger.info(f"[CRON] economy batch {batch} sync complete: "
                 f"{ {k: v.get('status') for k, v in results.items()} }")
     return {"status": "success", "tier": f"economy_b{batch}", "results": results}

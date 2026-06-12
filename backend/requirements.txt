@@ -33,6 +33,7 @@ torch==2.1.2  # PyTorch backend
 accelerate==0.25.0  # Efficient model loading
 bitsandbytes==0.41.3  # 8-bit quantization for smaller memory footprint
 sentencepiece==0.1.99  # Required for some models
+langdetect==1.0.9  # Language detection for translation backfills (MEUB news + Tenderator translations)
 
 # LangChain & RAG
 langchain==0.1.0  # RAG orchestration

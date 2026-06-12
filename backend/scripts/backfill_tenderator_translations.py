@@ -189,12 +189,25 @@ def _write_batch(spec: dict, table: str, writes):
 
 def run(table: str, limit: int, batch: int, funding_only: bool):
     """Read -> translate IN MEMORY (no DB held) -> short write. Robust to
-    Supabase closing long-lived connections during slow CPU translation."""
+    Supabase closing long-lived connections during slow CPU translation.
+
+    M2M100 (1.9GB) is loaded LAZILY on the first foreign-language row only.
+    A cron run that finds zero new foreign rows pays only the langdetect
+    cost (negligible) and skips the model load entirely — keeps the
+    /sync/daily and /sync/economy budgets cheap on quiet days.
+    """
     if table not in SOURCES:
         raise SystemExit(f"--table must be one of {list(SOURCES.keys())}")
     spec = SOURCES[table]
     detect_lang = _detector()
-    translate = _translator()
+
+    # Lazy: only load M2M100 when we actually find a foreign row.
+    _translate_cache: list = [None]
+    def get_translate():
+        if _translate_cache[0] is None:
+            _translate_cache[0] = _translator()
+        return _translate_cache[0]
+
     done = foreign = 0
     while done < limit:
         rows = _fetch_undetected(table, spec, min(batch, limit - done), funding_only)
@@ -208,6 +221,7 @@ def run(table: str, limit: int, batch: int, funding_only: bool):
             trans_rows = []
             if lang not in SIX_SET and lang != "und":
                 foreign += 1
+                translate = get_translate()
                 for tgt in SIX:
                     try:
                         t_title = translate(r["title"], lang, tgt)
