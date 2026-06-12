@@ -22,6 +22,7 @@ from . import funding_tenders as _funding_tenders
 from . import ted_tenders as _ted_tenders
 # FTS recipients (economy_items-backed), grouped under "Funded Projects".
 from . import eu_funding_recipients as _eu_funding_recipients
+from . import agency_procurement as _agency_procurement
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -30,3 +31,4 @@ router.include_router(_funding_tenders.tenders_router)
 router.include_router(_funding_tenders.projects_router)
 router.include_router(_ted_tenders.tenders_router)
 router.include_router(_eu_funding_recipients.router)
+router.include_router(_agency_procurement.router)
