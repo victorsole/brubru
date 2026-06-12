@@ -638,6 +638,7 @@ _AGENCY_DOMAINS = [
     ("echa", "ECHA — Chemicals"),
     ("euda", "EUDA — Drugs"),
     ("eige", "EIGE — Gender Equality"),
+    ("cedefop", "Cedefop — Vocational Training"),
 ]
 
 
