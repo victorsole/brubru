@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n425 requests across 33 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n426 requests across 33 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9262,6 +9262,70 @@
                   ]
                 },
                 "description": "**What it does**\nReturns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.\n\n**When to use it**\nSame domain as `/api/v1/calls-for-proposals` but a slightly different surface \u2014 this one is broader (includes some opportunities not in the calls-for-proposals export). For most use cases, `/api/v1/calls-for-proposals` is the recommended endpoint. This one is preserved for backwards compatibility + a different filtering surface.\n\n**Input**\n- `programme` \u2014 substring (e.g. `Horizon`, `CEF`, `Digital Europe`).\n- `status` \u2014 `open` / `forthcoming` / `closed` / `under-evaluation`.\n- `type_of_action` \u2014 substring.\n- `q` \u2014 substring on title + short_summary.\n- `deadline_from`, `deadline_to` \u2014 deadline window.\n- `limit` (default 50, max 100), `page` (1-indexed).\n- `body_threshold` \u2014 minimum body chars for `has_body=true`.\n\n**Try it**\n```\nGET /api/v1/funding?programme=Horizon&status=open\nGET /api/v1/funding?q=AI&deadline_from=2026-06-01\n```\n\n**You get back**\nA `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `programme`, `title`, `short_summary`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `source_url`, `documents_url`, `keywords`, `target_audience`, `published_at`, `last_updated`, body fields + the 5 envelope-level datapoints.\n\n**Data freshness**\nSynced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal. is_test=True fixture rows are filtered out at query time."
+              },
+              "response": []
+            },
+            {
+              "name": "EU startup & SME funding \u2014 EIC Accelerator, Transition, Pathfinder, STEP, prizes",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/startups",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "startups"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "data protection",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_from",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "deadline_to",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "body_threshold",
+                      "value": "500",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": ""
               },
               "response": []
             },
