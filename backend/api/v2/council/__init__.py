@@ -19,6 +19,7 @@ from fastapi import APIRouter
 
 from . import council_documents as _council_documents
 from . import council_register as _council_register
+from . import sanctions_regimes as _sanctions_regimes
 
 router = APIRouter(prefix="/council")
 router.include_router(_council_documents.router)
@@ -31,3 +32,4 @@ router.include_router(_council_register.prep_router)
 router.include_router(_council_register.press_router)
 router.include_router(_council_register.research_router)
 router.include_router(_council_register.treaties_router)
+router.include_router(_sanctions_regimes.router)

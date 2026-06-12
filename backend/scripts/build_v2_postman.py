@@ -167,12 +167,14 @@ _COUNCIL_ROUTING = [
     ("council-press-releases", "Council Press Releases"),
     ("council-research-papers", "Council Research Papers"),
     ("council-treaties-agreements", "Council Treaties & Agreements"),
+    ("sanctions-regimes", "EU Sanctions Regimes"),
 ]
 _COUNCIL_SOURCE_ORDER = [
     "Council Documents", "Council Configurations", "Council Meetings",
     "Council Voting Results", "Council Register", "Council OJ Agendas",
     "Council Preparatory Bodies", "Council Press Releases",
     "Council Research Papers", "Council Treaties & Agreements",
+    "EU Sanctions Regimes",
 ]
 
 # European Council: (path-tail prefix, source folder).
