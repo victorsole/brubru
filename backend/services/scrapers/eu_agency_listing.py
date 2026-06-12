@@ -24,6 +24,8 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 _HEADERS = {"User-Agent": _UA}
 _ISO = re.compile(r'datetime="(\d{4}-\d{2}-\d{2})')
 _DMY = re.compile(r'(\d{1,2}\s+[A-Z][a-z]{2}\s+\d{4})')
+_HEADING = re.compile(r'<h[1-4][^>]*>(.*?)</h[1-4]>', re.S)
+_GENERIC = {"read more", "read", "more", "details", "learn more", "view", "download", "see more"}
 
 
 def _txt(x: str) -> str:
@@ -68,12 +70,20 @@ def walk(base: str, path: str, body_code: str, item_type: str, link_substr: str,
         for i, m in enumerate(matches):
             href, raw = m.group(1), m.group(2)
             title = _txt(raw)
+            url = href if href.startswith("http") else base + href
+            # skip the listing's own self-link and already-seen items
+            if url in out or url.rstrip("/") == f"{base}{path}".rstrip("/"):
+                continue
+            window = text[max(0, m.start() - 600): m.end() + 120]
+            # "Read More"-style cards: the anchor text is generic, so take the
+            # title from the nearest heading in the card window.
+            if title.lower() in _GENERIC or len(title) < min_title:
+                heads = [_txt(h) for h in _HEADING.findall(window)]
+                heads = [h for h in heads if len(h) >= min_title and h.lower() not in _GENERIC]
+                if heads:
+                    title = heads[-1]
             if len(title) < min_title:
                 continue
-            url = href if href.startswith("http") else base + href
-            if url in out:
-                continue
-            window = text[max(0, m.start() - 500): m.end() + 120]
             dt = _date(window)
             lines = [title, f"Date: {dt.date()}" if dt else ""]
             lines = [l for l in lines if l]

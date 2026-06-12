@@ -55,6 +55,7 @@ from services.scrapers import eea_indicators as eea_indicators  # noqa: E402
 from services.scrapers import eea_content as eea_content  # noqa: E402
 from services.scrapers import eige_content as eige_content  # noqa: E402
 from services.scrapers import cedefop_content as cedefop_content  # noqa: E402
+from services.scrapers import euaa_content as euaa_content  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
 from services.scrapers import echa_news as echa_news  # noqa: E402
 from services.scrapers import euda_publications as euda_publications  # noqa: E402
@@ -140,6 +141,7 @@ INGESTORS = {
     ("cedefop", "news"): cedefop_content.ingest_cedefop_news,
     ("cedefop", "event"): cedefop_content.ingest_cedefop_events,
     ("cedefop", "publication"): cedefop_content.ingest_cedefop_publications,
+    ("euaa", "news"): euaa_content.ingest_euaa_news,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,
     ("euda", "publication"): euda_publications.ingest_euda_publications,
@@ -270,7 +272,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
