@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction — API de données Brubru EU</title>
+<meta name="description" content="Documentation de l'API de données Brubru EU (v1 + v2). 200+ points de terminaison REST sur 33 domaines d'institutions de l'UE : 8 710 lois de l'UE, procédures législatives, députés au PE et fonctionnaires, amendements, les bases de données du Parlement/Conseil/Commission, les bases de données des agences de l'UE (médicaments, sécurité alimentaire, environnement, chimie, drogues, droits fondamentaux), financement, données ouvertes et intelligence de l'UE propriétaire à Brubru. Une clé API.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/api/docs/">
+<link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/api/docs/es.html">
+<link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/api/docs/fr.html">
+<link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/api/docs/it.html">
+<link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/api/docs/nl.html">
+<link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/api/docs/ca.html">
+<link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/api/docs/">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>Vous consultez la documentation de référence. Pour exécuter des appels en direct, vous avez besoin d'une clé API Brubru &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Commencez une version d'essai Professionnelle</a>
+  <span> &middot; ou </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contacter les ventes</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <select class="sidebar__lang" onchange="if(this.value)window.location.href=this.value" aria-label="Language" style="width:100%;margin:10px 0 16px;padding:7px 9px;border:1px solid #d9def0;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;color:#1a1a2e;cursor:pointer;">
+    <option value="/api/docs/">English</option>
+    <option value="/api/docs/es.html">Espa&ntilde;ol</option>
+    <option value="/api/docs/fr.html" selected>Fran&ccedil;ais</option>
+    <option value="/api/docs/it.html">Italiano</option>
+    <option value="/api/docs/nl.html">Nederlands</option>
+    <option value="/api/docs/ca.html">Catal&agrave;</option>
+  </select>
+
+  <h3>Commencer ici</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home" class="active">Introduction</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Documentation complète de l'API</strong> &mdash; tous les points de terminaison</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentification</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Enveloppe de réponse</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Erreurs</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Limites de débit</a></li>
+  </ul>
+
+  <h3>Législation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Lois</a></li>
+    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procédures</a></li>
+    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Intelligence de texte législatif</a></li>
+    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Actes délégués</a></li>
+    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Actes d'exécution</a></li>
+    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">Notifications TRIS</a></li>
+    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Registre de la Commission</a></li>
+    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Documents du Conseil</a></li>
+  </ul>
+
+  <h3>Institutions &amp; personnes</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Métadonnées (13 points de terminaison)</a></li>
+    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissaires</a></li>
+    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Fonctionnaires (14 873)</a></li>
+    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">Députés au PE</a></li>
+    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Réunions (Transparence)</a></li>
+    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">Avis de la Chambre de la scrutabilité</a></li>
+  </ul>
+
+  <h3>Détail du PE</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Commissions</a></li>
+    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">Documents du PE (unifiés)</a></li>
+    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendements</a></li>
+    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Textes adoptés</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Textes présentés</a></li>
+    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Résolutions</a></li>
+    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Rapports</a></li>
+    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Avis</a></li>
+    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Questions parlementaires</a></li>
+    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webdiffusions</a></li>
+  </ul>
+
+  <h3>Données en direct</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
+    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Communiqués de presse</a></li>
+    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendrier</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
+    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Recherche (EPRS+STOA+JRC+ART+ECA)</a></li>
+    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Marchés publics (TED)</a></li>
+    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Prévisions</a></li>
+    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Guides de connaissances</a></li>
+    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Vérifier une citation</a></li>
+  </ul>
+
+  <h3>Référence</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">Institutions de l'UE couvertes</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossaire</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Cas d'utilisation par rôle</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Journal des modifications</a></li>
+  </ul>
+
+  <h3>Externe</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">Spécification OpenAPI (JSON)</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">API de données Brubru EU · v1 + v2 · 200+ points de terminaison sur 33 domaines d'institutions de l'UE</div>
+<h1>L'UE, structurée.</h1>
+<p class="main__lede">
+Brubru est un fournisseur de données de l'UE. Notre API REST donne aux développeurs, plates-formes RegTech, équipes d'affaires publiques et agents IA un accès programmatique à <strong>8 710 lois de l'UE adoptées</strong> (28 513 publications au JO), <strong>1 717 procédures législatives</strong> en cours, <strong>14 873 fonctionnaires de l'UE</strong> dans chaque institution, <strong>56 051 amendements</strong>, <strong>1 026 rapports du PE</strong>, <strong>386 marchés publics</strong> (TED), <strong>210 publications de recherche</strong> (EPRS, STOA, JRC, ART, ECA), <strong>528 documents du Registre de la Commission</strong>, <strong>227 guides de politique curatisés</strong>, agendas de commissaires en direct, webdiffusions du PE, la couche d'intelligence de texte législatif qui alimente le chatbot et l'Amendator de Brubru, et un nouveau <strong>dossier de bases de données spécialisées de la CE</strong> couvrant 10 surfaces institutionnelles qu'aucun autre fournisseur n'expose via une seule clé API : <strong>6 002 personnes/entités sanctionnées par la PESC</strong>, <strong>17 247 organisations de lobbying au Registre de la Transparence</strong>, <strong>83 807 documents de comitologie</strong>, <strong>5 917 Indications Géographiques</strong>, <strong>900 accords internationaux</strong>, <strong>675 mesures de défense commerciale</strong>, cas de concurrence live de la DG COMP (~250k en amont), <strong>3 543 ensembles de données du JRC</strong>, <strong>1 451 ensembles de données de cohésion de la DG REGIO</strong>, et recherche de nomenclature combinée en direct. Les mêmes données que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
+</p>
+<p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
+<strong>Nouveau : API v2</strong> réorganise tout autour des institutions de l'UE, un dossier par organisme, et ajoute les bases de données institutionnelles qu'aucun autre fournisseur n'expose &mdash; les registres du Parlement (déclarations des députés au PE, assistants accrédités, analyses de soutien des commissions), les régimes de sanctions du Conseil, les bases de données des agences de l'UE (médicaments, ensembles de données de sécurité alimentaire, indicateurs environnementaux, la liste des candidats SVHC REACH, la bibliothèque des drogues, la jurisprudence des droits fondamentaux et la Charterothèque), et plus. Voir la <a href="/api/docs/reference.html"><strong>documentation complète et toujours à jour de l'API &rarr;</strong></a> &mdash; tous les points de terminaison déployés, rendus en direct à partir de la spécification OpenAPI.
+</p>
+
+<div class="callout callout--ok">
+<p><strong>Nouveau pour les API ?</strong> Une API est un moyen pour votre logiciel de communiquer avec celui de Brubru sur Internet. Vous envoyez une requête HTTP (comme le ferait un navigateur Web), nous renvoyons du JSON (données structurées). Le reste de cette documentation explique comment.
+</p>
+</div>
+
+<h2>Ce que vous obtenez</h2>
+
+<h3 style="margin-top:24px;">Législation (8 dossiers)</h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#laws">
+  <div class="toc-card__title">Lois</div>
+  <div class="toc-card__desc">8 710 lois de l'UE adoptées (28 513 publications au JO) consultables par CELEX, domaine politique, date ou texte intégral. Récupérez le XML intégral ou le corps en texte brut.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#procedures">
+  <div class="toc-card__title">Procédures</div>
+  <div class="toc-card__desc">1 464 dossiers législatifs suivis de la proposition de la Commission à l'adoption. Références OEIL, commissions, rapporteurs, statut.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#legal-text">
+  <div class="toc-card__title">Intelligence de texte législatif</div>
+  <div class="toc-card__desc">Mappage considérants-articles, extraction de termes définis, résolveur de références CELEX, résolveur d'alias de loi (680+ acronymes).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#delegated-acts">
+  <div class="toc-card__title">Actes délégués</div>
+  <div class="toc-card__desc">Actes de l'article 290 TFUE adoptés en vertu de pouvoirs délégués par le Parlement et le Conseil.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#implementing-acts">
+  <div class="toc-card__title">Actes d'exécution</div>
+  <div class="toc-card__desc">Actes de l'article 291 TFUE assurant l'application uniforme de la législation de l'UE dans les États membres.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#tris-notifications">
+  <div class="toc-card__title">Notifications TRIS</div>
+  <div class="toc-card__desc">Projets de réglementations techniques des États membres notifiés en vertu de la Directive 2015/1535.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#commission-register">
+  <div class="toc-card__title">Registre de la Commission</div>
+  <div class="toc-card__desc">528 documents préparatoires de la Commission (COM, SWD, JOIN, C) avec URL PDF dérivées CELEX EUR-Lex.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#council-documents">
+  <div class="toc-card__title">Documents du Conseil</div>
+  <div class="toc-card__desc">Documents du registre public du Conseil de l'UE (notes de présidence, rapports de groupes de travail, conclusions).</div>
+</a>
+</div>
+
+<h3 style="margin-top:24px;">Institutions &amp; personnes (6 dossiers)</h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#metadata">
+  <div class="toc-card__title">Métadonnées (13 points de terminaison)</div>
+  <div class="toc-card__desc">DG (avec site Web et réseaux sociaux), agences, commissions (avec URL de diffusion en continu), domaines politiques, groupes politiques — chaque énumération et recherche.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#commissioners">
+  <div class="toc-card__title">Commissaires</div>
+  <div class="toc-card__desc">Éléments de calendrier en direct pour les 27 membres du Collège, y compris le Président. Surfaces agenda_url + unified_calendar_url.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#officials">
+  <div class="toc-card__title">Fonctionnaires (14 873)</div>
+  <div class="toc-card__desc">Chaque entrée de Qui est Qui de l'UE — Commission, PE, Conseil, Médiateur, agences. Filtrer par institution, DG, rôle.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#meps">
+  <div class="toc-card__title">Députés au PE</div>
+  <div class="toc-card__desc">Profils de députés au PE en direct à partir des données ouvertes du PE. Rechercher par pays, groupe politique ou nom.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#meetings">
+  <div class="toc-card__title">Réunions (Transparence)</div>
+  <div class="toc-card__desc">Registre de la Transparence de la Commission : quels lobbies ont rencontré quel Commissaire, Membre du Cabinet et DG et quand.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#rsb-opinions">
+  <div class="toc-card__title">Avis de la Chambre de la scrutabilité</div>
+  <div class="toc-card__desc">Avis du Conseil de la scrutabilité réglementaire sur les évaluations d'impact de la Commission et les grandes évaluations.</div>
+</a>
+</div>
+
+<h3 style="margin-top:24px;">Détail du PE (11 dossiers)</h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#committees">
+  <div class="toc-card__title">Commissions</div>
+  <div class="toc-card__desc">Éléments de travail des commissions du PE, procès-verbaux des réunions, ordres du jour. Chaque commission expose streaming_url + homepage + documents_url.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#ep-documents">
+  <div class="toc-card__title">Documents du PE (unifiés)</div>
+  <div class="toc-card__desc">Point de terminaison unique qui ramifie sur les rapports, avis, résolutions, textes adoptés/présentés, questions parlementaires.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#amendments">
+  <div class="toc-card__title">Amendements</div>
+  <div class="toc-card__desc">56 051 amendements des députés au PE aux dossiers législatifs. Filtrer par procédure, commission, député au PE ou groupe politique.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#votes">
+  <div class="toc-card__title">Votes</div>
+  <div class="toc-card__desc">Scrutins nominatifs du plénum du PE, avec totaux, ventilation par groupe et positions de chaque député au PE.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#texts-adopted">
+  <div class="toc-card__title">Textes adoptés</div>
+  <div class="toc-card__desc">Positions finales du PE adoptées en plénum (références TA).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#texts-submitted">
+  <div class="toc-card__title">Textes présentés</div>
+  <div class="toc-card__desc">Propositions de résolution, recommandations et autres textes présentés mais non encore adoptés.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#resolutions">
+  <div class="toc-card__title">Résolutions</div>
+  <div class="toc-card__desc">Résolutions du PE sur des questions politiques (propre initiative, réponse aux communications de la Commission).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#reports">
+  <div class="toc-card__title">Rapports</div>
+  <div class="toc-card__desc">1 026 rapports de commissions (références A) — le projet du rapporteur + amendements compilés en un seul document.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#opinions">
+  <div class="toc-card__title">Avis</div>
+  <div class="toc-card__desc">Avis des commissions associées (rapporteur pour avis, références RR).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#parliamentary-questions">
+  <div class="toc-card__title">Questions parlementaires</div>
+  <div class="toc-card__desc">Questions écrites et orales présentées par les députés au PE à la Commission, au Conseil, à la BCE et au SEAE.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#webstreams">
+  <div class="toc-card__title">Webdiffusions</div>
+  <div class="toc-card__desc">URLs vidéo en direct et à la demande des commissions et du plénum du PE à partir de multimedia.europarl.europa.eu.</div>
+</a>
+</div>
+
+<h3 style="margin-top:24px;">Données en direct (9 dossiers)</h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#publications">
+  <div class="toc-card__title">Publications</div>
+  <div class="toc-card__desc">Flux unifié de communiqués de presse, rapports et articles du JO de l'UE sur 44+ institutions et agences de l'UE.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#press-releases">
+  <div class="toc-card__title">Communiqués de presse</div>
+  <div class="toc-card__desc">Communiqués de presse de la CE, du PE, du Conseil, du SEAE, de la BCE et des agences — même enveloppe, filtrée par les comms institutionnelles.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#calendar">
+  <div class="toc-card__title">Calendrier</div>
+  <div class="toc-card__desc">Calendrier institutionnel unifié de l'UE : plénum du PE, réunions du Conseil, collège de la Commission, agences, événements euagenda.eu.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#consultations">
+  <div class="toc-card__title">Consultations</div>
+  <div class="toc-card__desc">Retours directs des parties prenantes à partir de la Plateforme « Participez au débat » de la CE, groupés par pays et type d'utilisateur.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#research-publications">
+  <div class="toc-card__title">Recherche (EPRS+STOA+JRC+ART+ECA)</div>
+  <div class="toc-card__desc">210 publications de recherche unifiées : notes informatives EPRS, prospective STOA, science pour la politique JRC, documents stratégiques ART, audits ECA.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#tenders">
+  <div class="toc-card__title">Marchés publics (TED)</div>
+  <div class="toc-card__desc">386 avis de marchés publics de l'UE du Bulletin des marchés publics électroniques, filtrables par code CPV, autorité contractante, délai.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#predictions">
+  <div class="toc-card__title">Prévisions</div>
+  <div class="toc-card__desc">Prévisions XGBoost + base pour la chronologie des procédures et les probabilités de résultats.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#knowledge-guides">
+  <div class="toc-card__title">Guides de connaissances</div>
+  <div class="toc-card__desc">206 explications politiques curatisées — rédigées à la main, indexées par mots clés, couvrant chaque loi majeure de l'UE.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#citations">
+  <div class="toc-card__title">Vérifier une citation</div>
+  <div class="toc-card__desc">Transmettez n'importe quelle citation légale de l'UE ; récupérez la CELEX canonique, le titre complet et l'URL EUR-Lex faisant autorité.</div>
+</a>
+</div>
+
+<h3 style="margin-top:24px;">Bases de données spécialisées de la CE (10 dossiers, NOUVEAU mai 2026)</h3>
+<p style="margin-top:8px;margin-bottom:16px;color:var(--text-muted,#6b7280);">Dix surfaces institutionnelles qu'aucun autre fournisseur n'expose via une seule clé API. Chaque cluster est également câblé dans le chatbot Brubru — lorsqu'un utilisateur pose des questions sur les lobbies, les sanctions ou les droits antidumping, le chat récupère directement à partir de ces tables.</p>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#sanctions">
+  <div class="toc-card__title">Sanctions (PESC)</div>
+  <div class="toc-card__desc">6 002 personnes + entités sur la liste consolidée PESC de l'UE. Programmes (IRN, RUS, UKR, BLR, SYR, PRK, MMR, TERR), base juridique, nationalités, date_file.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#transparency-register">
+  <div class="toc-card__title">Registre de la Transparence</div>
+  <div class="toc-card__desc">17 247 organisations de lobbying inscrites. Nom d'origine, acronyme, catégorie d'inscription, pays du siège, nombre de cartes PE, FTE, coûts de lobbying déclarés.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#comitology">
+  <div class="toc-card__title">Documents de comitologie</div>
+  <div class="toc-card__desc">83 807 documents du Registre de comitologie : feuilles de vote, résumés, projets d'actes d'exécution, avis. Filtrer par code de comité (p. ex. SCoPAFF C20407, Comité d'appel C39800).</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#gi">
+  <div class="toc-card__title">Indications Géographiques</div>
+  <div class="toc-card__desc">5 917 noms protégés par l'UE — AOP, IGP, STG, vins, boissons spiritueuses, artisanat. Provenant d'eAmbrosia (DG AGRI faisant autorité) + registre d'union GIview EUIPO. Filtrer par type, pays, statut.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#fta">
+  <div class="toc-card__title">Accords internationaux</div>
+  <div class="toc-card__desc">900 accords internationaux de l'UE : ALE, APE, AA, PCA, Pêche, Aviation. CELEX secteur-2 type-A, avec partenaire, type d'accord, drapeau en vigueur.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#trade-defence">
+  <div class="toc-card__title">Défense commerciale</div>
+  <div class="toc-card__desc">675 mesures antidumping, mesures de compensation et mesures de sauvegarde. CELEX secteur-3 type-R, avec type de mesure, statut des droits, pays cible, produit, drapeau en vigueur.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#competition-cases">
+  <div class="toc-card__title">Cas de concurrence DG COMP (en direct)</div>
+  <div class="toc-card__desc">Transfert direct vers <code>api.tech.ec.europa.eu/search-api</code> — ~250k cas de concurrence (aide d'État SA., ententes AT., fusions M.). Cas par État membre, catégorie d'aide, instrument.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#jrc-datasets">
+  <div class="toc-card__title">Catalogue de données JRC</div>
+  <div class="toc-card__desc">3 543 ensembles de données scientifiques du Centre de recherche commun : ESDAC, EFFIS, GHSL, LUISA, JRC AI Watch, JRC EDGAR-FOOD. Titre, description, éditeur, mots clés EuroVoc.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cohesion-datasets">
+  <div class="toc-card__title">Données de cohésion DG REGIO</div>
+  <div class="toc-card__desc">1 451 ensembles de données catalogués par Socrata à partir de cohesiondata.ec.europa.eu — FSE+, FEDER, Fonds de cohésion, Fonds pour une transition juste, Interreg, bénéficiaires du RRF.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#access2markets">
+  <div class="toc-card__title">Codes CN (Access2Markets, en direct)</div>
+  <div class="toc-card__desc">Transfert direct vers <code>webgate.ec.europa.eu/nomen</code> — sections et arbres de produits de la nomenclature combinée pour la classification tarifaire/douanière.</div>
+</a>
+</div>
+
+<h2>Sources de données et cadence d'actualisation</h2>
+<table>
+<thead><tr><th>Source</th><th>Point de terminaison alimenté</th><th>Cadence d'actualisation</th><th>Fraîcheur</th></tr></thead>
+<tbody>
+<tr><td>Cellar EUR-Lex (Office des publications)</td><td><code>/laws</code>, <code>/laws/{celex}/text</code></td><td>Importation quotidienne du delta du JO</td><td>&lt; 24h après la publication au JO</td></tr>
+<tr><td>OEIL (Observatoire législatif du PE)</td><td><code>/procedures</code></td><td>Synchronisation quotidienne</td><td>&lt; 24h</td></tr>
+<tr><td>Flux RSS institutionnels (44 sources)</td><td><code>/publications</code>, <code>/press-releases</code></td><td>Toutes les 6 heures</td><td>&lt; 6h</td></tr>
+<tr><td>Portails EPRS, STOA, JRC, ART, ECA</td><td><code>/research-publications</code></td><td>Quotidien, filtrable par source</td><td>&lt; 24h</td></tr>
+<tr><td>Documents préparatoires EUR-Lex</td><td><code>/commission-register-documents</code></td><td>Delta quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>Registre public du Conseil</td><td><code>/council-documents</code></td><td>Quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>API REST données ouvertes PE v2</td><td><code>/meps</code></td><td>Récupération en direct, cache client 6h</td><td>Temps réel moins 6h</td></tr>
+<tr><td>Organigrammes Qui est Qui EU (75 unités)</td><td><code>/officials</code></td><td>Réingestion en masse hebdomadaire</td><td>14 873 enregistrements aujourd'hui</td></tr>
+<tr><td>commission.europa.eu/calendar</td><td><code>/commissioners/{name}/agenda</code></td><td>Scrape en direct, cache 1h</td><td>Temps réel moins 1h</td></tr>
+<tr><td>Pages des commissions du PE</td><td><code>/committees/*</code></td><td>Quotidien par commission</td><td>&lt; 24h</td></tr>
+<tr><td>multimedia.europarl.europa.eu</td><td><code>/webstreams</code>, <code>/committees/{code}/webstream</code></td><td>En direct</td><td>Temps réel</td></tr>
+<tr><td>API allFeedback de la Plateforme « Participez au débat »</td><td><code>/consultations/.../feedback</code></td><td>Récupération en direct, cache 6h</td><td>Temps réel moins 6h</td></tr>
+<tr><td>8 sources de calendrier (PE, Conseil, CE, agences, euagenda)</td><td><code>/calendar/events</code></td><td>Synchronisation quotidienne</td><td>&lt; 24h</td></tr>
+<tr><td>Registre de la Transparence de la CE</td><td><code>/meetings</code></td><td>Quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>Chambre de la scrutabilité réglementaire de la CE</td><td><code>/rsb-opinions</code></td><td>Hebdomadaire</td><td>&lt; 7j</td></tr>
+<tr><td>Portail TRIS de la CE</td><td><code>/tris-notifications</code></td><td>Quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>TED (Bulletin des marchés publics électroniques)</td><td><code>/tenders</code></td><td>Quotidien</td><td>&lt; 24h, 386 actifs aujourd'hui</td></tr>
+<tr><td>Doceo du PE (rapports, votes, amendements, résolutions, avis)</td><td><code>/reports</code>, <code>/votes</code>, <code>/amendments</code>, <code>/resolutions</code>, <code>/opinions</code></td><td>Quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>Module questions doceo du PE</td><td><code>/parliamentary-questions</code></td><td>Quotidien</td><td>&lt; 24h</td></tr>
+<tr><td>Équipe curatisée Brubru</td><td><code>/knowledge-guides</code></td><td>Ajouts quotidiens</td><td>227 guides aujourd'hui</td></tr>
+<tr><td>Liste consolidée des sanctions PESC de l'UE</td><td><code>/specialised/sanctions</code></td><td>Quotidien</td><td>6 002 entités</td></tr>
+<tr><td>XML du Registre de la Transparence de l'UE Secrétariat commun</td><td><code>/specialised/transparency-register</code></td><td>Quotidien</td><td>17 247 orgs</td></tr>
+<tr><td>Registre de comitologie de la CE (Playwright-cracked <code>/core/api/front/</code>)</td><td><code>/specialised/comitology</code></td><td>Hebdomadaire</td><td>83 807 docs</td></tr>
+<tr><td>eAmbrosia + EUIPO GIview (DG AGRI + EUIPO)</td><td><code>/specialised/gi</code></td><td>Hebdomadaire</td><td>5 917 GI</td></tr>
+<tr><td>Cellar SPARQL secteur-2 type-A</td><td><code>/specialised/fta</code></td><td>Mensuel</td><td>900 accords</td></tr>
+<tr><td>Cellar SPARQL secteur-3 type-R</td><td><code>/specialised/trade-defence</code></td><td>Hebdomadaire</td><td>675 mesures</td></tr>
+<tr><td><code>api.tech.ec.europa.eu/search-api</code> (DG COMP)</td><td><code>/specialised/competition-cases</code></td><td>En direct</td><td>~250k cas</td></tr>
+<tr><td>Fédération data.europa.eu du catalogue JRC</td><td><code>/specialised/jrc-datasets</code></td><td>Hebdomadaire</td><td>3 543 ensembles de données</td></tr>
+<tr><td>Socrata cohesiondata.ec.europa.eu</td><td><code>/specialised/cohesion-datasets</code></td><td>Hebdomadaire</td><td>1 451 ensembles de données</td></tr>
+<tr><td><code>webgate.ec.europa.eu/nomen</code> (Access2Markets)</td><td><code>/specialised/access2markets/products</code></td><td>En direct</td><td>21 sections + arbre de produits</td></tr>
+<tr><td>Dérivé du XML Formex local + DB</td><td><code>/legal-text/*</code></td><td>À la demande ; mise en cache</td><td>Recalculé lorsque la spécification change</td></tr>
+<tr><td>Modèle XGBoost Brubru + OEIL</td><td><code>/predictions/*</code></td><td>Réentraînement hebdomadaire du modèle</td><td>Inférence en temps réel</td></tr>
+</tbody>
+</table>
+
+<h2>Authentification en un coup d'oeil</h2>
+<p>Chaque appel <code>/api/v1/*</code> nécessite une clé API transmise soit comme token Bearer, soit comme en-tête <code>X-API-Key</code> :</p>
+
+<pre><code>curl -H "Authorization: Bearer brubru_live_..." \
+  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=5"</code></pre>
+
+<p>Tous les détails sur <a href="/api/docs/authentication.html">l'Authentification</a>.</p>
+
+<h2>Enveloppe de réponse en un coup d'oeil</h2>
+<p>Chaque point de terminaison paginé renvoie la même forme. Codez une fois contre cette enveloppe et permutez les ensembles de données en modifiant le chemin :</p>
+
+<pre><code>{
+  "total": 139,
+  "returned": 20,
+  "pages": 7,
+  "page": 1,
+  "limit": 50,
+  "has_more": true,
+  "next_page": 2,
+  "remaining_pages": 6,
+  "coverage_complete": true,
+  "published_from": "2026-01-01",
+  "published_to": "2026-01-31",
+  "published_end": "2026-01-31",
+  "detail_level": "Full",
+  "data": [ ... ]
+}</code></pre>
+
+<p>L'information de provenance et les limites de débit vivent sur les en-têtes de réponse, pas dans le corps :</p>
+<pre><code>X-Powered-By: Brubru
+X-Source: brubru.beresol.eu
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 58
+X-RateLimit-Tier: free</code></pre>
+
+<p>Tous les détails sur <a href="/api/docs/envelope.html">l'Enveloppe de réponse</a>.</p>
+
+<h2>Démarrage rapide : votre premier appel</h2>
+
+<p><strong>1. Obtenez une clé API.</strong> Envoyez un e-mail à <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> une fois que vous êtes abonné à la version Professionnelle. Les clés ressemblent à <code>brubru_live_</code> suivi de 48 caractères hexadécimaux.</p>
+
+<p><strong>2. Effectuez un appel.</strong></p>
+
+<pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
+  "https://brubru-production.up.railway.app/api/v1/ping"</code></pre>
+
+<p>Réponse (celui-ci est public, aucune authentification requise) :</p>
+
+<pre><code>{
+  "status": "ok",
+  "service": "brubru-data-provider",
+  "version": "v1",
+  "time": "2026-04-20T15:00:00Z"
+}</code></pre>
+
+<p><strong>3. Essayez une recherche réelle.</strong></p>
+
+<pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
+  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=3"</code></pre>
+
+<p>Vous obtenez une liste paginée des lois de l'UE correspondant à « intelligence artificielle », avec les identifiants CELEX, les titres, les dates et les URLs EUR-Lex. De là, chaque autre point de terminaison suit le même modèle d'enveloppe.</p>
+
+<h2>Limitations (ce que nous ne couvrons pas)</h2>
+<ul>
+<li><strong>Législation non-UE.</strong> Nous ne suivons pas les gazettes nationales directement. Si vous avez besoin du BOE espagnol + UE ensemble, associez-nous avec GovClipping ou similaire.</li>
+<li><strong>Push en temps réel.</strong> Pas encore de webhooks ou SSE. Le scrutation sur notre cadence d'actualisation est le modèle d'intégration. Webhooks au feuille de route de septembre 2026.</li>
+<li><strong>Langues.</strong> Les réponses de l'API sont en anglais aujourd'hui. Certains textes de loi sont disponibles dans les 24 langues de l'UE via le repli Cellar, mais les réponses structurées sont uniquement en anglais. Points de terminaison multilingues en septembre 2026.</li>
+<li><strong>Exports en masse.</strong> Pas encore d'exports CSV/Parquet nocturnes. Feuille de route septembre 2026. Pour l'instant, itérez sur les listes paginées.</li>
+<li><strong>Parlements nationaux.</strong> Nous n'ingérons pas des <em>parlements</em> nationaux. PE uniquement.</li>
+</ul>
+
+<h2>Où aller ensuite</h2>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/authentication.html">
+  <div class="toc-card__title">Authentification</div>
+  <div class="toc-card__desc">Comment envoyer votre clé API, cycle de vie, rotation, sécurité.</div>
+</a>
+<a class="toc-card" href="/api/docs/use-cases.html">
+  <div class="toc-card__title">Cas d'utilisation par rôle</div>
+  <div class="toc-card__desc">Consultants en affaires publiques, associations professionnelles, entreprises, ONG, fonctionnaires de l'UE — ce que vous appelleriez réellement.</div>
+</a>
+<a class="toc-card" href="/api/docs/glossary.html">
+  <div class="toc-card__title">Glossaire</div>
+  <div class="toc-card__desc">CELEX, OEIL, trilogue, rapporteur, types de rôles de commission, directive vs règlement — chaque acronyme expliqué.</div>
+</a>
+<a class="toc-card" href="/api/docs/institutions.html">
+  <div class="toc-card__title">Institutions de l'UE couvertes</div>
+  <div class="toc-card__desc">Matrice de chaque source de l'UE que nous ingérons, avec les cadences d'actualisation.</div>
+</a>
+</div>
+
+<footer>
+&copy; 2026 Beresol BV — API de données Brubru EU v1.
+<a href="/api/">Retour à la page marketing</a> ·
+<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">Spécification OpenAPI</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>

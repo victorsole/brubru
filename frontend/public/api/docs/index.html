@@ -8,6 +8,13 @@
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/api/docs/">
+<link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/api/docs/es.html">
+<link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/api/docs/fr.html">
+<link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/api/docs/it.html">
+<link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/api/docs/nl.html">
+<link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/api/docs/ca.html">
+<link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/api/docs/">
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
@@ -44,6 +51,15 @@ active link by adding class="active" to the matching <a>.
     <img src="/assets/brubru_mainlogo.png" alt="">
     <span class="sidebar__brand-text">Brubru API</span>
   </a>
+
+  <select class="sidebar__lang" onchange="if(this.value)window.location.href=this.value" aria-label="Language" style="width:100%;margin:10px 0 16px;padding:7px 9px;border:1px solid #d9def0;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;color:#1a1a2e;cursor:pointer;">
+    <option value="/api/docs/" selected>English</option>
+    <option value="/api/docs/es.html">Espa&ntilde;ol</option>
+    <option value="/api/docs/fr.html">Fran&ccedil;ais</option>
+    <option value="/api/docs/it.html">Italiano</option>
+    <option value="/api/docs/nl.html">Nederlands</option>
+    <option value="/api/docs/ca.html">Catal&agrave;</option>
+  </select>
 
   <h3>Start here</h3>
   <ul>
