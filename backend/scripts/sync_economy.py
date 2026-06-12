@@ -150,6 +150,7 @@ INGESTORS = {
     ("cedefop", "tender"): agency_procurement.ingest_cedefop_tenders,
     ("cedefop", "eoi_call"): agency_procurement.ingest_cedefop_calls,
     ("ema", "tender"): agency_procurement.ingest_ema_tenders,
+    ("efsa", "tender"): agency_procurement.ingest_efsa_tenders,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,

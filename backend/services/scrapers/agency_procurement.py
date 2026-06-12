@@ -107,8 +107,8 @@ def parse_views_table(html: str, base: str, *, body_code: str, item_type: str,
 
 
 def parse_positional_table(html: str, base: str, *, body_code: str, item_type: str,
-                           source_kind: str, title_col: int, ref_col: int,
-                           deadline_col: int, status: str = "") -> list[Item]:
+                           source_kind: str, title_col: int, deadline_col: int,
+                           ref_col: int | None = None, status: str = "") -> list[Item]:
     """For Views tables with un-named columns (e.g. EMA value-1..value-4):
     parse <td> cells by position (0-indexed)."""
     now = datetime.now(timezone.utc)
@@ -118,14 +118,14 @@ def parse_positional_table(html: str, base: str, *, body_code: str, item_type: s
         return out
     for row in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(1), re.S):
         cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
-        if len(cells) <= max(title_col, ref_col, deadline_col):
+        if len(cells) <= max(title_col, ref_col or 0, deadline_col):
             continue
         title = _txt(cells[title_col])
         if not title:
             continue
         am = re.search(r'href="([^"]+)"', cells[title_col])
         href = am.group(1) if am else ""
-        reference = _txt(cells[ref_col])
+        reference = _txt(cells[ref_col]) if ref_col is not None else ""
         url = _row_url(base, href, reference, title)
         dm = _DATE.search(_txt(cells[deadline_col]))
         dl = _parse_date(dm.group(1)) if dm else None
@@ -215,3 +215,14 @@ def ingest_efca_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
                              body_code="efca", item_type="eoi_call",
                              source_kind="efca_procurement", ref_field="field-number",
                              deadline_field="field-deadline", status="Expression of interest")
+
+
+# --- EFSA — positional table (col0=title+link, col1=published, col2=deadline). - #
+_EFSA = "https://www.efsa.europa.eu"
+
+
+def ingest_efsa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return parse_positional_table(
+        _fetch(_EFSA + "/en/calls/procurement"), _EFSA, body_code="efsa",
+        item_type="tender", source_kind="efsa_procurement",
+        title_col=0, deadline_col=2, status="Open")

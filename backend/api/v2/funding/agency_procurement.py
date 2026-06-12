@@ -62,3 +62,13 @@ register_resource(
     extra="The European Medicines Agency's own open procurement: each call for tender with "
           "reference and deadline. Filter with q (e.g. a reference or topic).",
 )
+
+# --- EFSA — European Food Safety Authority -------------------------------- #
+register_resource(
+    router, body_code="efsa", item_type="tender", slug="efsa-tenders",
+    noun="EFSA calls for tender", body_name="the European Food Safety Authority", acronym="EFSA",
+    tag="v2-funding",
+    source="the EFSA procurement calls listing.",
+    extra="The European Food Safety Authority's own calls for tender, each with its publication "
+          "and closing dates. Filter with q (e.g. a scientific topic).",
+)
