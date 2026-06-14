@@ -354,6 +354,20 @@
       "notes": "Per-fund achievement indicators backing /api/v2/funding/<fund>/outcomes. ~142k rows; full refresh per fund weekly."
     },
     {
+      "path_prefix": "/api/v2/funding/eusf",
+      "source": "DG REGIO Cohesion Open Data Platform — Socrata 7a49-av34 (EU Solidarity Fund cases 2002-2021)",
+      "script": "scripts/backfill_eusf.py --apply",
+      "tier": "weekly",
+      "notes": "EU Solidarity Fund disaster cases. ~203 rows; full refresh weekly."
+    },
+    {
+      "path_prefix": "/api/v2/funding/{eagf,eafrd}",
+      "source": "DG REGIO Cohesion Open Data Platform — Socrata qgpc-e9qr (EAGF) + 7wr2-9vpr (EAFRD)",
+      "script": "scripts/backfill_cap_payments.py --all --apply",
+      "tier": "weekly",
+      "notes": "CAP fund payments by Member State backing /api/v2/funding/eagf + /eafrd. 28 rows each; full refresh weekly."
+    },
+    {
       "path_prefix": "/api/v1/specialised/a2m",
       "source": "Combined Nomenclature (webgate.ec.europa.eu/nomen) — live pass-through",
       "script": "(no script — live pass-through)",
