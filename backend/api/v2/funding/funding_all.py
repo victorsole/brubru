@@ -26,37 +26,63 @@ from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _ORDER_S
 router = APIRouter()
 
 _FUNDING_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
+# Plus the cohesion / structural-fund allocations (eu_cohesion_finances), unioned in.
+_COHESION_TYPE = "cohesion_allocation"
+_ALL_TYPES = _FUNDING_TYPES + (_COHESION_TYPE,)
+
+# UNION of (a) decentralised agency funding items and (b) the per-fund cohesion
+# allocations, mapped to the same EconomyItem shape. Pre-filters the agency side
+# to funding item_types; the cohesion side is mapped on the fly.
+_UNION_CTE = """
+WITH all_funding AS (
+    SELECT id, body_code, item_type, title, summary, public_url,
+           document_date, creation_date, source_kind
+    FROM economy_items
+    WHERE item_type = ANY(:ftypes)
+    UNION ALL
+    SELECT id, lower(fund) AS body_code, 'cohesion_allocation' AS item_type,
+           cci_title AS title,
+           (upper(fund) || ' · ' || coalesce(ms, '') || ' · '
+             || coalesce(financial_allocation_category, '')
+             || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
+           public_url, document_date, created_at AS creation_date,
+           'cohesion' AS source_kind
+    FROM eu_cohesion_finances
+)
+"""
 
 _DESC = """**What it does**
-One feed of every decentralised EU funding item — calls for **tender**, **grants** and calls for **expression of interest** that EU agencies publish on their own sites — across every body, in one call. This is the data that does **not** appear in TED below threshold or in the central Funding & Tenders Portal.
+One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**) AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF) — across every body, in one call.
 
 **When to use it**
-"Show me every open EU funding opportunity that matches my interest", regardless of which agency runs it. Filter by `type` (tender/grant/eoi_call/startup_funding), `body` (agency code), `status` (open/closed, matched in the summary), and `deadline` (`since`/`until` on the closing date).
+"Show me everything across EU funding", whether an agency tender or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation), `body` (agency code or fund code, e.g. `efca`, `erdf`), `status`, `q` (free text), and `since`/`until` on the date.
 
 **Input**
-`type`, `body`, `status`, `q` (free text), `since`/`until` (deadline range), `order`, `page`, `limit`.
+`type`, `body`, `status`, `q` (free text), `since`/`until` (date range), `order`, `page`, `limit`.
 
 **Try it**
 ```
+GET /api/v2/funding/all?type=cohesion_allocation&body=erdf
 GET /api/v2/funding/all?type=tender&order=recent
-GET /api/v2/funding/all?body=efca&q=vessel
+GET /api/v2/funding/all?q=transport
 ```
 
 **You get back**
-A paginated list; each item carries `body_code` (the agency), `item_type`, title, the `reference · status · deadline` summary, `document_date` (the deadline) and the link.
+A paginated list; each item carries `body_code` (the agency or fund), `item_type`, title, a summary, `document_date` and the link. Cohesion allocations carry `item_type=cohesion_allocation` and `public_url` to the fund's Cohesion Open Data page.
 
 **Data freshness**
-Live from the database; refreshed as each agency's procurement pages are re-synced. The central TED tenders are at `/api/v2/funding/tenders`."""
+Live from the database; agency items refresh as their pages are re-synced; cohesion allocations refresh weekly (Sunday 05:00 UTC)."""
 
 
 @router.get("/all", response_model=PaginatedResponse[EconomyItem], tags=["v2-funding"],
-            summary="All decentralised EU funding — tenders, grants & calls across every body")
+            summary="All EU funding — agency tenders/grants/calls + cohesion-fund allocations, every body",
+            description=_DESC)
 async def funding_all(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
-    type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding"),
-    body: Optional[str] = Query(None, description="Agency code, e.g. efca, cedefop, ema."),
+    type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation"),
+    body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
     status: Optional[str] = Query(None, description="Match on status in the summary (e.g. open, closed)."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     since: Optional[date] = Query(None, description="Deadline on/after this date (YYYY-MM-DD)."),
@@ -67,26 +93,28 @@ async def funding_all(
 ):
     if order not in _ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
-    where = ["item_type = ANY(:types)"]
-    params = {"types": list(_FUNDING_TYPES), "limit": limit, "offset": (page - 1) * limit}
+    params = {"ftypes": list(_FUNDING_TYPES), "limit": limit, "offset": (page - 1) * limit}
+    where: list[str] = []
     if type:
-        if type not in _FUNDING_TYPES:
-            raise HTTPException(status_code=400, detail=f"type must be one of {list(_FUNDING_TYPES)}")
-        where = ["item_type = :it"]; params["it"] = type
+        if type not in _ALL_TYPES:
+            raise HTTPException(status_code=400, detail=f"type must be one of {list(_ALL_TYPES)}")
+        where.append("item_type = :it"); params["it"] = type
     if body:
         where.append("body_code = :bc"); params["bc"] = body
     if status:
         where.append("summary ILIKE :st"); params["st"] = f"%{status}%"
     if q:
-        where.append("(title ILIKE :q OR summary ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+        where.append("(title ILIKE :q OR summary ILIKE :q)"); params["q"] = f"%{q}%"
     if since:
         where.append("document_date >= :since"); params["since"] = since
     if until:
         where.append("document_date <= :until"); params["until"] = until
-    clause = " AND ".join(where)
-    total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    clause = (" WHERE " + " AND ".join(where)) if where else ""
+    total = db.execute(
+        text(f"{_UNION_CTE} SELECT count(*) FROM all_funding{clause}"), params
+    ).scalar() or 0
     rows = db.execute(
-        text(f"SELECT {_LIST_COLS} FROM economy_items WHERE {clause} "
+        text(f"{_UNION_CTE} SELECT {_LIST_COLS} FROM all_funding{clause} "
              f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     return build_envelope([_row_to_item(r, with_body=False) for r in rows], total, page, limit)
