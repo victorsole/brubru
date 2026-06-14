@@ -35,7 +35,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 469 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 477 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -95,7 +95,7 @@
 
   <h3>Funding &amp; consultations</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (62)</a></li>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (70)</a></li>
     <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
   </ul>
 
@@ -128,7 +128,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 469 endpoints across 34 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 477 endpoints across 34 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -699,11 +699,11 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </tbody>
 </table>
 
-<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">62 endpoints</span></h2>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">70 endpoints</span></h2>
 <table>
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/all</code></td><td>All decentralised EU funding — tenders, grants &amp; calls across every body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/all</code></td><td>All EU funding — agency tenders/grants/calls + cohesion-fund allocations, every body</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/amif</code></td><td>Asylum, Migration and Integration Fund (AMIF) — 2021-2027 financial plan by programme</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/amif/outcomes</code></td><td>Asylum, Migration and Integration Fund (AMIF) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/amif/outcomes/{row_id}</code></td><td>Look up one AMIF achievement indicator in full</td></tr>
@@ -716,6 +716,10 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cohesion-fund/outcomes</code></td><td>Cohesion Fund (CF) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cohesion-fund/outcomes/{row_id}</code></td><td>Look up one CF achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cohesion-fund/{row_id}</code></td><td>Look up one CF allocation row in full</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eafrd</code></td><td>European Agricultural Fund for Rural Development (EAFRD) — EU payments by Member State (2023-2027)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eafrd/{row_id}</code></td><td>Look up one EAFRD Member State payment row in full</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eagf</code></td><td>European Agricultural Guarantee Fund (EAGF) — EU payments by Member State (2023-2027)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eagf/{row_id}</code></td><td>Look up one EAGF Member State payment row in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls</code></td><td>the European Fisheries Control Agency — EFCA calls for expression of interest (newest first)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls/{item_id}</code></td><td>the European Fisheries Control Agency — one EFCA calls for expression of interest (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders</code></td><td>the European Fisheries Control Agency — EFCA calls for tender (newest first)</td></tr>
@@ -742,6 +746,8 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-funding-recipients/{item_id}</code></td><td>the EU Financial Transparency System — one EU funding recipient (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders</code></td><td>Eurojust — Eurojust calls for tender (newest first)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders/{item_id}</code></td><td>Eurojust — one Eurojust calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eusf</code></td><td>EU Solidarity Fund (EUSF) — disaster cases 2002-2021</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eusf/{row_id}</code></td><td>Look up one EU Solidarity Fund case in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-proposals</code></td><td>EU funding calls for proposals — Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-proposals/{topic_id}</code></td><td>Look up one funding call for proposals by its EU topic_id</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-tenders</code></td><td>EU public-procurement tenders from the F&amp;T Portal — distinct from the /tenders TED view</td></tr>
@@ -762,6 +768,8 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/outcomes</code></td><td>Just Transition Fund (JTF) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/outcomes/{row_id}</code></td><td>Look up one JTF achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/{row_id}</code></td><td>Look up one JTF allocation row in full</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes</code></td><td>EU funding programmes directory — the EC classification + Brubru coverage</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes/{acronym}</code></td><td>Look up one EU funding programme in the classification</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup &amp; SME funding — EIC Accelerator, Transition, Pathfinder, STEP, prizes</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders</code></td><td>EU public procurement tenders (TED — Tenders Electronic Daily)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders/{tender_id}</code></td><td>Look up one TED tender by its internal numeric id</td></tr>
