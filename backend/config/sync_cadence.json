@@ -340,6 +340,20 @@
       "notes": "Cohesion datasets move slowly; weekly is enough."
     },
     {
+      "path_prefix": "/api/v2/funding/<cohesion-fund>",
+      "source": "DG REGIO Cohesion Open Data Platform — Socrata 9qee-iv7c (finances) + njgb-mwca (Interreg)",
+      "script": "scripts/backfill_cohesion_finances.py --all --apply",
+      "tier": "weekly",
+      "notes": "Per-fund finance/allocation rows backing /api/v2/funding/{erdf,esf-plus,cohesion-fund,jtf,interreg,emfaf,amif,isf}. Programme financial plans update on new versions; weekly."
+    },
+    {
+      "path_prefix": "/api/v2/funding/<cohesion-fund>/outcomes",
+      "source": "DG REGIO Cohesion Open Data Platform — Socrata xi3a-zddk (achievement details, latest cycle)",
+      "script": "scripts/backfill_cohesion_outcomes.py --all --apply",
+      "tier": "weekly",
+      "notes": "Per-fund achievement indicators backing /api/v2/funding/<fund>/outcomes. ~142k rows; full refresh per fund weekly."
+    },
+    {
       "path_prefix": "/api/v1/specialised/a2m",
       "source": "Combined Nomenclature (webgate.ec.europa.eu/nomen) — live pass-through",
       "script": "(no script — live pass-through)",

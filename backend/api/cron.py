@@ -562,6 +562,9 @@ async def cron_sync_weekly(
     results["trade_defence"] = _run_script("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
     results["gi"] = _run_script("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
     results["cohesion"] = _run_script("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
+    # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].
+    results["cohesion_finances"] = _run_script("cohesion_finances", "scripts/backfill_cohesion_finances.py", ["--all", "--apply"], timeout=900)
+    results["cohesion_outcomes"] = _run_script("cohesion_outcomes", "scripts/backfill_cohesion_outcomes.py", ["--all", "--apply"], timeout=1800)
     results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
 
     logger.info(f"[CRON] weekly tier sync complete: {results}")

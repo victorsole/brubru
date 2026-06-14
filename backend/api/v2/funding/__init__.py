@@ -25,6 +25,12 @@ from . import eu_funding_recipients as _eu_funding_recipients
 from . import agency_procurement as _agency_procurement
 from . import funding_all as _funding_all
 from . import startups as _startups
+# Per-fund cohesion / structural-fund finance endpoints (DB-backed,
+# eu_cohesion_finances, Socrata 9qee-iv7c). Built one fund at a time — ERDF live.
+from . import cohesion_finances as _cohesion_finances
+# Per-fund achievement / outcome indicators (DB-backed, eu_cohesion_outcomes,
+# Socrata xi3a-zddk). Built one fund at a time — ESF+ live.
+from . import cohesion_outcomes as _cohesion_outcomes
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -36,3 +42,5 @@ router.include_router(_eu_funding_recipients.router)
 router.include_router(_agency_procurement.router)
 router.include_router(_funding_all.router)
 router.include_router(_startups.router)
+router.include_router(_cohesion_finances.router)
+router.include_router(_cohesion_outcomes.router)
