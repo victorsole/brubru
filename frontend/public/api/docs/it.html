@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoint in 34 cartelle di istituzioni dell'UE</div>
 <h1>L'UE, strutturata.</h1>
 <p class="main__lede">
-Brubru &egrave; un fornitore verticale di dati dell'UE. La nostra API REST offre a sviluppatori, piattaforme RegTech, team di affari pubblici e agenti di IA accesso programmatico a <strong>8.710 atti dell'UE adottati</strong> (28.513 pubblicazioni della GU), <strong>1.717 procedure legislative</strong> in corso, <strong>14.873 funzionari dell'UE</strong>, tutti i deputati, <strong>56.051 emendamenti</strong>, i registri di Parlamento / Consiglio / Consiglio europeo / Eurogruppo / Commissione, la Banca centrale europea e le istituzioni finanziarie dell'UE, le agenzie decentrate dell'UE (medicinali, sicurezza alimentare, ambiente, sostanze chimiche, droghe, diritti fondamentali e altro), finanziamenti e gare dell'UE, dati aperti e l'intelligence propria di Brubru sull'UE. Gli stessi dati che usiamo internamente sono quelli che chiami. Brubru &egrave; il primo cliente della propria API.
+Brubru &egrave; un fornitore verticale di dati dell'UE. La nostra API REST offre a sviluppatori, piattaforme RegTech, team di affari pubblici e agenti di IA accesso programmatico a <strong>8.710 atti dell'UE adottati</strong> (28.513 pubblicazioni della GU), <strong>2.080 fascicoli legislativi</strong> monitorati, <strong>16.521 funzionari dell'UE</strong>, tutti i deputati, <strong>58.399 emendamenti del PE</strong>, i registri di Parlamento / Consiglio / Consiglio europeo / Eurogruppo / Commissione, la Banca centrale europea e le istituzioni finanziarie dell'UE, le agenzie decentrate dell'UE (medicinali, sicurezza alimentare, ambiente, sostanze chimiche, droghe, diritti fondamentali e altro), finanziamenti e gare dell'UE, dati aperti e l'intelligence propria di Brubru sull'UE. Gli stessi dati che usiamo internamente sono quelli che chiami. Brubru &egrave; il primo cliente della propria API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Una superficie, una chiave.</strong> L'API &egrave; organizzata come l'UE stessa &mdash; una cartella per istituzione od organo, 34 cartelle in totale, <strong>437 endpoint</strong>. Sfoglia le cartelle qui sotto, oppure apri il <a href="/api/docs/reference.html"><strong>riferimento API completo e sempre aggiornato &rarr;</strong></a> &mdash; ogni endpoint distribuito, generato in tempo reale dalla specifica OpenAPI.
@@ -164,7 +164,7 @@ Brubru &egrave; un fornitore verticale di dati dell'UE. La nostra API REST offre
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">Legislazione e procedure</div>
-  <div class="toc-card__desc">8.710 atti adottati (28.513 pubblicazioni della GU) e 1.717 procedure in corso, pi&ugrave; atti delegati e di esecuzione, testo integrale + XML, mappe considerando-articolo, termini definiti, EuroVoc, il Treno legislativo e i resolver di citazioni e alias.</div>
+  <div class="toc-card__desc">8.710 atti adottati (28.513 pubblicazioni della GU) e 2.080 fascicoli legislativi monitorati, pi&ugrave; atti delegati e di esecuzione, testo integrale + XML, mappe considerando-articolo, termini definiti, EuroVoc, il Treno legislativo e i resolver di citazioni e alias.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru &egrave; un fornitore verticale di dati dell'UE. La nostra API REST offre
 </div>
 
 <h2>Fonti dei dati e frequenza di aggiornamento</h2>
-<p>Ogni cartella &egrave; alimentata dalla fonte ufficiale dell'UE e aggiornata automaticamente. La frequenza indicata &egrave; il caso peggiore; le cartelle a passaggio diretto sono in tempo reale.</p>
+<p>L'intera superficie v2 viene risincronizzata ogni giorno (una scansione alle 10:00 / 15:00 / 21:00 UTC). Le fonti dell'UE dietro ogni cartella si aggiornano con le frequenze seguenti.</p>
 <table>
-<thead><tr><th>Livello</th><th>Cartelle</th><th>Frequenza di aggiornamento</th></tr></thead>
+<thead><tr><th>Frequenza di aggiornamento</th><th>Cosa copre</th></tr></thead>
 <tbody>
-<tr><td>Legislazione adottata (EUR-Lex / Cellar dell'Ufficio delle pubblicazioni)</td><td><code>legislative</code></td><td>Delta giornaliero della GU &mdash; &lt; 24h dalla pubblicazione</td></tr>
-<tr><td>Procedure legislative (OEIL) + Treno legislativo</td><td><code>legislative</code></td><td>Giornaliero &mdash; &lt; 24h</td></tr>
-<tr><td>Parlamento (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Giornaliero; webstream in diretta</td></tr>
-<tr><td>Registri di Consiglio, Consiglio europeo, Eurogruppo</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Giornaliero &mdash; &lt; 24h</td></tr>
-<tr><td>Commissione (Registro, Trasparenza, consultazioni, RASFF, CORDIS, aiuti di Stato, comitatologia...)</td><td><code>commission</code></td><td>Da diretta a settimanale secondo la fonte</td></tr>
-<tr><td>BCE, istituzioni finanziarie dell'UE, MES</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Scansione giornaliera in batch</td></tr>
-<tr><td>Agenzie decentrate dell'UE (18 organi)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Scansione giornaliera in batch</td></tr>
-<tr><td>Finanziamenti e gare (Portale F&amp;T, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Giornaliero &mdash; &lt; 24h</td></tr>
-<tr><td>Dati aperti, pubblicazioni, funzionari</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Reingestione settimanale di massa</td></tr>
-<tr><td>Indicazioni geografiche</td><td><code>geographical-indications</code></td><td>Settimanale</td></tr>
-<tr><td>Proprietario Brubru (lobby, canon, catalano, guide)</td><td><code>proprietary</code></td><td>Continuo / alla pubblicazione</td></tr>
+<tr><td>Ogni 6 ore</td><td>Atti adottati, procedure legislative, testi e votazioni in plenaria, il Registro della Commissione, comunicati istituzionali, il calendario</td></tr>
+<tr><td>Ogni 12 ore</td><td>Lavori in commissione, emendamenti, relazioni, ricerca EPRS, documenti del Consiglio, webstream</td></tr>
+<tr><td>Giornaliero</td><td>Consultazioni, interrogazioni parlamentari, comitatologia, sanzioni, misure di difesa commerciale, notifiche TRIS, gare, infrazioni, inviti a finanziamento; oltre alla BCE, le istituzioni finanziarie dell'UE, il MES, le 18 agenzie decentrate, i dati aperti e le pubblicazioni generali</td></tr>
+<tr><td>Settimanale</td><td>Indicazioni geografiche, agende dei commissari, pareri del RSB, ricerca EPRS / STOA / JRC, progetti finanziati dall'UE</td></tr>
+<tr><td>Mensile</td><td>Funzionari e dipartimenti dell'UE (la reingestione di massa del Who Is Who)</td></tr>
+<tr><td>In tempo reale</td><td>Profili dei deputati, casi di concorrenza della DG COMP, la Nomenclatura combinata, i resolver di testo giuridico e citazioni</td></tr>
+<tr><td>Alla pubblicazione</td><td>Lo strato proprietario di Brubru: guide di conoscenza, approfondimenti del EU Canon, traduzioni in catalano</td></tr>
 </tbody>
 </table>
 

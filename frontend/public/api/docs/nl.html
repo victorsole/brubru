@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints in 34 mappen van EU-instellingen</div>
 <h1>De EU, gestructureerd.</h1>
 <p class="main__lede">
-Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, RegTech-platforms, public-affairsteams en AI-agents programmatische toegang tot <strong>8.710 vastgestelde EU-wetten</strong> (28.513 PB-publicaties), <strong>1.717 lopende wetgevingsprocedures</strong>, <strong>14.873 EU-ambtenaren</strong>, alle Europarlementari&euml;rs, <strong>56.051 amendementen</strong>, de registers van Parlement / Raad / Europese Raad / Eurogroep / Commissie, de Europese Centrale Bank en de financi&euml;le instellingen van de EU, de gedecentraliseerde EU-agentschappen (geneesmiddelen, voedselveiligheid, milieu, chemische stoffen, drugs, grondrechten en meer), EU-financiering en aanbestedingen, open data en Brubru's eigen EU-intelligentie. Dezelfde data die wij intern gebruiken, roept u aan. Brubru is de eerste klant van zijn eigen API.
+Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, RegTech-platforms, public-affairsteams en AI-agents programmatische toegang tot <strong>8.710 vastgestelde EU-wetten</strong> (28.513 PB-publicaties), <strong>2.080 gevolgde wetgevingsdossiers</strong>, <strong>16.521 EU-ambtenaren</strong>, alle Europarlementari&euml;rs, <strong>58.399 EP-amendementen</strong>, de registers van Parlement / Raad / Europese Raad / Eurogroep / Commissie, de Europese Centrale Bank en de financi&euml;le instellingen van de EU, de gedecentraliseerde EU-agentschappen (geneesmiddelen, voedselveiligheid, milieu, chemische stoffen, drugs, grondrechten en meer), EU-financiering en aanbestedingen, open data en Brubru's eigen EU-intelligentie. Dezelfde data die wij intern gebruiken, roept u aan. Brubru is de eerste klant van zijn eigen API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>E&eacute;n oppervlak, &eacute;&eacute;n sleutel.</strong> De API is ingedeeld zoals de EU zelf &mdash; &eacute;&eacute;n map per instelling of orgaan, 34 mappen in totaal, <strong>437 endpoints</strong>. Blader hieronder door de mappen of open de <a href="/api/docs/reference.html"><strong>volledige, altijd actuele API-referentie &rarr;</strong></a> &mdash; elk uitgerold endpoint, live gegenereerd uit de OpenAPI-specificatie.
@@ -164,7 +164,7 @@ Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, R
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">Wetgeving en procedures</div>
-  <div class="toc-card__desc">8.710 vastgestelde wetten (28.513 PB-publicaties) en 1.717 lopende procedures, plus gedelegeerde en uitvoeringshandelingen, volledige tekst + XML, overweging-naar-artikel-kaarten, gedefinieerde termen, EuroVoc, de Wetgevingstrein en de citatie- en alias-resolvers.</div>
+  <div class="toc-card__desc">8.710 vastgestelde wetten (28.513 PB-publicaties) en 2.080 gevolgde wetgevingsdossiers, plus gedelegeerde en uitvoeringshandelingen, volledige tekst + XML, overweging-naar-artikel-kaarten, gedefinieerde termen, EuroVoc, de Wetgevingstrein en de citatie- en alias-resolvers.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, R
 </div>
 
 <h2>Gegevensbronnen en verversingsfrequentie</h2>
-<p>Elke map wordt gevoed door de gezaghebbende EU-bron en automatisch bijgewerkt. De genoemde frequentie is het slechtste geval; live doorgeefmappen zijn realtime.</p>
+<p>De volledige v2-oppervlakte wordt dagelijks opnieuw gesynchroniseerd (een sweep om 10:00 / 15:00 / 21:00 UTC). De EU-bronnen achter elke map verversen met onderstaande frequenties.</p>
 <table>
-<thead><tr><th>Laag</th><th>Mappen</th><th>Verversingsfrequentie</th></tr></thead>
+<thead><tr><th>Verversingsfrequentie</th><th>Wat het dekt</th></tr></thead>
 <tbody>
-<tr><td>Vastgestelde wetgeving (EUR-Lex / Cellar van het Publicatiebureau)</td><td><code>legislative</code></td><td>Dagelijkse PB-delta &mdash; &lt; 24u na publicatie</td></tr>
-<tr><td>Wetgevingsprocedures (OEIL) + Wetgevingstrein</td><td><code>legislative</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
-<tr><td>Parlement (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Dagelijks; webstreams live</td></tr>
-<tr><td>Registers van Raad, Europese Raad, Eurogroep</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
-<tr><td>Commissie (Register, Transparantie, consultaties, RASFF, CORDIS, staatssteun, comitologie...)</td><td><code>commission</code></td><td>Van live tot wekelijks per bron</td></tr>
-<tr><td>ECB, financi&euml;le instellingen van de EU, ESM</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Dagelijkse gebundelde sweep</td></tr>
-<tr><td>Gedecentraliseerde EU-agentschappen (18 organen)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Dagelijkse gebundelde sweep</td></tr>
-<tr><td>Financiering en aanbestedingen (F&amp;T-portaal, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
-<tr><td>Open data, publicaties, ambtenaren</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Wekelijkse bulk-herinname</td></tr>
-<tr><td>Geografische aanduidingen</td><td><code>geographical-indications</code></td><td>Wekelijks</td></tr>
-<tr><td>Brubru-eigen (lobby's, canon, Catalaans, gidsen)</td><td><code>proprietary</code></td><td>Doorlopend / bij publicatie</td></tr>
+<tr><td>Elke 6 uur</td><td>Vastgestelde wetten, wetgevingsprocedures, plenaire teksten en stemmingen, het Commissieregister, institutionele persberichten, de kalender</td></tr>
+<tr><td>Elke 12 uur</td><td>Commissiewerk, amendementen, verslagen, EPRS-onderzoek, Raadsdocumenten, webstreams</td></tr>
+<tr><td>Dagelijks</td><td>Consultaties, parlementaire vragen, comitologie, sancties, handelsbeschermingsmaatregelen, TRIS-kennisgevingen, aanbestedingen, inbreuken, financieringsoproepen; plus de ECB, de financi&euml;le instellingen van de EU, het ESM, de 18 gedecentraliseerde agentschappen, open data en algemene publicaties</td></tr>
+<tr><td>Wekelijks</td><td>Geografische aanduidingen, agenda's van de commissarissen, RSB-adviezen, EPRS- / STOA- / JRC-onderzoek, door de EU gefinancierde projecten</td></tr>
+<tr><td>Maandelijks</td><td>EU-ambtenaren en -afdelingen (de bulk-herinname van Who Is Who)</td></tr>
+<tr><td>Live (realtime)</td><td>Ledenprofielen, DG COMP-mededingingszaken, de Gecombineerde Nomenclatuur, de wetstekst- en citatie-resolvers</td></tr>
+<tr><td>Bij publicatie</td><td>De Brubru-eigen laag: kennisgidsen, EU Canon-analyses, Catalaanse vertalingen</td></tr>
 </tbody>
 </table>
 

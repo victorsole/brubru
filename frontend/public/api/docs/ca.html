@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints en 34 carpetes d'institucions de la UE</div>
 <h1>La UE, estructurada.</h1>
 <p class="main__lede">
-Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API REST dona a desenvolupadors, plataformes RegTech, equips d'afers p&uacute;blics i agents d'IA acc&eacute;s program&agrave;tic a <strong>8.710 lleis de la UE adoptades</strong> (28.513 publicacions del DO), <strong>1.717 procediments legislatius</strong> en curs, <strong>14.873 funcionaris de la UE</strong>, tots els eurodiputats, <strong>56.051 esmenes</strong>, els registres del Parlament / Consell / Consell Europeu / Eurogrup / Comissi&oacute;, el Banc Central Europeu i les institucions financeres de la UE, les ag&egrave;ncies descentralitzades de la UE (medicaments, seguretat aliment&agrave;ria, medi ambient, subst&agrave;ncies qu&iacute;miques, drogues, drets fonamentals i m&eacute;s), finan&ccedil;ament i licitacions de la UE, dades obertes i la intel&middot;lig&egrave;ncia pr&ograve;pia de Brubru sobre la UE. Les mateixes dades que fem servir internament s&oacute;n les que crideu. Brubru &eacute;s el primer client de la seva pr&ograve;pia API.
+Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API REST dona a desenvolupadors, plataformes RegTech, equips d'afers p&uacute;blics i agents d'IA acc&eacute;s program&agrave;tic a <strong>8.710 lleis de la UE adoptades</strong> (28.513 publicacions del DO), <strong>2.080 expedients legislatius</strong> en seguiment, <strong>16.521 funcionaris de la UE</strong>, tots els eurodiputats, <strong>58.399 esmenes del PE</strong>, els registres del Parlament / Consell / Consell Europeu / Eurogrup / Comissi&oacute;, el Banc Central Europeu i les institucions financeres de la UE, les ag&egrave;ncies descentralitzades de la UE (medicaments, seguretat aliment&agrave;ria, medi ambient, subst&agrave;ncies qu&iacute;miques, drogues, drets fonamentals i m&eacute;s), finan&ccedil;ament i licitacions de la UE, dades obertes i la intel&middot;lig&egrave;ncia pr&ograve;pia de Brubru sobre la UE. Les mateixes dades que fem servir internament s&oacute;n les que crideu. Brubru &eacute;s el primer client de la seva pr&ograve;pia API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Una superf&iacute;cie, una clau.</strong> L'API est&agrave; organitzada com la mateixa UE &mdash; una carpeta per instituci&oacute; o organisme, 34 carpetes en total, <strong>437 endpoints</strong>. Exploreu les carpetes a continuaci&oacute;, o obriu la <a href="/api/docs/reference.html"><strong>refer&egrave;ncia completa i sempre actualitzada de l'API &rarr;</strong></a> &mdash; cada endpoint desplegat, generat en directe des de l'especificaci&oacute; OpenAPI.
@@ -164,7 +164,7 @@ Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API RES
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">Legislaci&oacute; i procediments</div>
-  <div class="toc-card__desc">8.710 lleis adoptades (28.513 publicacions del DO) i 1.717 procediments en curs, m&eacute;s actes delegats i d'execuci&oacute;, text complet + XML, mapes de consideracions a articles, termes definits, EuroVoc, el Tren Legislatiu i els resoluts de cites i &agrave;lies.</div>
+  <div class="toc-card__desc">8.710 lleis adoptades (28.513 publicacions del DO) i 2.080 expedients legislatius en seguiment, m&eacute;s actes delegats i d'execuci&oacute;, text complet + XML, mapes de consideracions a articles, termes definits, EuroVoc, el Tren Legislatiu i els resoluts de cites i &agrave;lies.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API RES
 </div>
 
 <h2>Fonts de dades i freq&uuml;&egrave;ncia d'actualitzaci&oacute;</h2>
-<p>Cada carpeta s'alimenta de la font oficial de la UE i s'actualitza autom&agrave;ticament. La freq&uuml;&egrave;ncia indicada &eacute;s el pitjor cas; les carpetes de pas en directe s&oacute;n en temps real.</p>
+<p>Tota la superf&iacute;cie v2 es resincronitza di&agrave;riament (un escombrat a les 10:00 / 15:00 / 21:00 UTC). Les fonts de la UE darrere de cada carpeta s'actualitzen amb les freq&uuml;&egrave;ncies seg&uuml;ents.</p>
 <table>
-<thead><tr><th>Capa</th><th>Carpetes</th><th>Freq&uuml;&egrave;ncia d'actualitzaci&oacute;</th></tr></thead>
+<thead><tr><th>Freq&uuml;&egrave;ncia d'actualitzaci&oacute;</th><th>Qu&egrave; cobreix</th></tr></thead>
 <tbody>
-<tr><td>Legislaci&oacute; adoptada (EUR-Lex / Cellar de l'Oficina de Publicacions)</td><td><code>legislative</code></td><td>Delta diari del DO &mdash; &lt; 24h despr&eacute;s de la publicaci&oacute;</td></tr>
-<tr><td>Procediments legislatius (OEIL) + Tren Legislatiu</td><td><code>legislative</code></td><td>Diari &mdash; &lt; 24h</td></tr>
-<tr><td>Parlament (doceo, EP Open Data, multim&egrave;dia)</td><td><code>parliament</code></td><td>Diari; retransmissions en directe</td></tr>
-<tr><td>Registres del Consell, Consell Europeu, Eurogrup</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Diari &mdash; &lt; 24h</td></tr>
-<tr><td>Comissi&oacute; (Registre, Transpar&egrave;ncia, consultes, RASFF, CORDIS, ajuts estatals, comitologia...)</td><td><code>commission</code></td><td>De directe a setmanal seg&oacute;ns la font</td></tr>
-<tr><td>BCE, institucions financeres de la UE, MEDE</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Escombrat diari per lots</td></tr>
-<tr><td>Ag&egrave;ncies descentralitzades de la UE (18 organismes)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Escombrat diari per lots</td></tr>
-<tr><td>Finan&ccedil;ament i licitacions (Portal F&amp;T, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Diari &mdash; &lt; 24h</td></tr>
-<tr><td>Dades obertes, publicacions, funcionaris</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Reingesti&oacute; setmanal massiva</td></tr>
-<tr><td>Indicacions geogr&agrave;fiques</td><td><code>geographical-indications</code></td><td>Setmanal</td></tr>
-<tr><td>Propi de Brubru (lobbies, canon, catal&agrave;, guies)</td><td><code>proprietary</code></td><td>Continu / en publicar</td></tr>
+<tr><td>Cada 6 hores</td><td>Lleis adoptades, procediments legislatius, textos i votacions del Ple, el Registre de la Comissi&oacute;, notes de premsa institucionals, el calendari</td></tr>
+<tr><td>Cada 12 hores</td><td>Treball en comissi&oacute;, esmenes, informes, recerca EPRS, documents del Consell, retransmissions web</td></tr>
+<tr><td>Diari</td><td>Consultes, preguntes parlament&agrave;ries, comitologia, sancions, mesures de defensa comercial, notificacions TRIS, licitacions, infraccions, convocat&ograve;ries de finan&ccedil;ament; a m&eacute;s del BCE, les institucions financeres de la UE, el MEDE, les 18 ag&egrave;ncies descentralitzades, les dades obertes i les publicacions generals</td></tr>
+<tr><td>Setmanal</td><td>Indicacions geogr&agrave;fiques, agendes dels comissaris, dict&agrave;mens del RSB, recerca EPRS / STOA / JRC, projectes finan&ccedil;ats per la UE</td></tr>
+<tr><td>Mensual</td><td>Funcionaris i departaments de la UE (la reingesti&oacute; massiva del Who Is Who)</td></tr>
+<tr><td>En directe (temps real)</td><td>Perfils d'eurodiputats, casos de compet&egrave;ncia de la DG COMP, la Nomenclatura Combinada, els resoluts de text legal i de cites</td></tr>
+<tr><td>En publicar</td><td>La capa pr&ograve;pia de Brubru: guies de coneixement, an&agrave;lisis de l'EU Canon, traduccions al catal&agrave;</td></tr>
 </tbody>
 </table>
 

@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints en 34 carpetas de instituciones de la UE</div>
 <h1>La UE, estructurada.</h1>
 <p class="main__lede">
-Brubru es un proveedor vertical de datos de la UE. Nuestra API REST da a desarrolladores, plataformas RegTech, equipos de asuntos p&uacute;blicos y agentes de IA acceso program&aacute;tico a <strong>8.710 leyes de la UE adoptadas</strong> (28.513 publicaciones del DO), <strong>1.717 procedimientos legislativos</strong> en curso, <strong>14.873 funcionarios de la UE</strong>, todos los eurodiputados, <strong>56.051 enmiendas</strong>, los registros del Parlamento / Consejo / Consejo Europeo / Eurogrupo / Comisi&oacute;n, el Banco Central Europeo y las instituciones financieras de la UE, las agencias descentralizadas de la UE (medicamentos, seguridad alimentaria, medio ambiente, sustancias qu&iacute;micas, drogas, derechos fundamentales y m&aacute;s), financiaci&oacute;n y licitaciones de la UE, datos abiertos y la propia inteligencia de Brubru sobre la UE. Los mismos datos que usamos internamente son los que usted consulta. Brubru es el primer cliente de su propia API.
+Brubru es un proveedor vertical de datos de la UE. Nuestra API REST da a desarrolladores, plataformas RegTech, equipos de asuntos p&uacute;blicos y agentes de IA acceso program&aacute;tico a <strong>8.710 leyes de la UE adoptadas</strong> (28.513 publicaciones del DO), <strong>2.080 expedientes legislativos</strong> en seguimiento, <strong>16.521 funcionarios de la UE</strong>, todos los eurodiputados, <strong>58.399 enmiendas del PE</strong>, los registros del Parlamento / Consejo / Consejo Europeo / Eurogrupo / Comisi&oacute;n, el Banco Central Europeo y las instituciones financieras de la UE, las agencias descentralizadas de la UE (medicamentos, seguridad alimentaria, medio ambiente, sustancias qu&iacute;micas, drogas, derechos fundamentales y m&aacute;s), financiaci&oacute;n y licitaciones de la UE, datos abiertos y la propia inteligencia de Brubru sobre la UE. Los mismos datos que usamos internamente son los que usted consulta. Brubru es el primer cliente de su propia API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Una superficie, una clave.</strong> La API est&aacute; organizada como la propia UE &mdash; una carpeta por instituci&oacute;n u organismo, 34 carpetas en total, <strong>437 endpoints</strong>. Explore las carpetas a continuaci&oacute;n o abra la <a href="/api/docs/reference.html"><strong>referencia completa y siempre actualizada de la API &rarr;</strong></a> &mdash; cada endpoint desplegado, generado en vivo desde la especificaci&oacute;n OpenAPI.
@@ -164,7 +164,7 @@ Brubru es un proveedor vertical de datos de la UE. Nuestra API REST da a desarro
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">Legislaci&oacute;n y procedimientos</div>
-  <div class="toc-card__desc">8.710 leyes adoptadas (28.513 publicaciones del DO) y 1.717 procedimientos en curso, m&aacute;s actos delegados y de ejecuci&oacute;n, texto completo + XML, mapas de considerandos a art&iacute;culos, t&eacute;rminos definidos, EuroVoc, el Tren Legislativo y los resolvedores de citas y alias.</div>
+  <div class="toc-card__desc">8.710 leyes adoptadas (28.513 publicaciones del DO) y 2.080 expedientes legislativos en seguimiento, m&aacute;s actos delegados y de ejecuci&oacute;n, texto completo + XML, mapas de considerandos a art&iacute;culos, t&eacute;rminos definidos, EuroVoc, el Tren Legislativo y los resolvedores de citas y alias.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru es un proveedor vertical de datos de la UE. Nuestra API REST da a desarro
 </div>
 
 <h2>Fuentes de datos y frecuencia de actualizaci&oacute;n</h2>
-<p>Cada carpeta se alimenta de la fuente autorizada de la UE y se actualiza autom&aacute;ticamente. La frecuencia indicada es el peor caso; las carpetas de paso en vivo son en tiempo real.</p>
+<p>Toda la superficie v2 se resincroniza a diario (un barrido a las 10:00 / 15:00 / 21:00 UTC). Las fuentes de la UE que hay detr&aacute;s de cada carpeta se actualizan con las frecuencias siguientes.</p>
 <table>
-<thead><tr><th>Capa</th><th>Carpetas</th><th>Frecuencia de actualizaci&oacute;n</th></tr></thead>
+<thead><tr><th>Frecuencia de actualizaci&oacute;n</th><th>Qu&eacute; cubre</th></tr></thead>
 <tbody>
-<tr><td>Legislaci&oacute;n adoptada (EUR-Lex / Cellar de la Oficina de Publicaciones)</td><td><code>legislative</code></td><td>Delta diario del DO &mdash; &lt; 24h tras la publicaci&oacute;n</td></tr>
-<tr><td>Procedimientos legislativos (OEIL) + Tren Legislativo</td><td><code>legislative</code></td><td>Diario &mdash; &lt; 24h</td></tr>
-<tr><td>Parlamento (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Diario; retransmisiones en vivo</td></tr>
-<tr><td>Registros del Consejo, Consejo Europeo, Eurogrupo</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Diario &mdash; &lt; 24h</td></tr>
-<tr><td>Comisi&oacute;n (Registro, Transparencia, consultas, RASFF, CORDIS, ayudas estatales, comitolog&iacute;a...)</td><td><code>commission</code></td><td>De en vivo a semanal seg&uacute;n la fuente</td></tr>
-<tr><td>BCE, instituciones financieras de la UE, MEDE</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Barrido diario por lotes</td></tr>
-<tr><td>Agencias descentralizadas de la UE (18 organismos)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Barrido diario por lotes</td></tr>
-<tr><td>Financiaci&oacute;n y licitaciones (Portal F&amp;T, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Diario &mdash; &lt; 24h</td></tr>
-<tr><td>Datos abiertos, publicaciones, funcionarios</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Reingesta semanal masiva</td></tr>
-<tr><td>Indicaciones geogr&aacute;ficas</td><td><code>geographical-indications</code></td><td>Semanal</td></tr>
-<tr><td>Propio de Brubru (lobbies, canon, catal&aacute;n, gu&iacute;as)</td><td><code>proprietary</code></td><td>Continuo / al publicar</td></tr>
+<tr><td>Cada 6 horas</td><td>Leyes adoptadas, procedimientos legislativos, textos y votaciones del Pleno, el Registro de la Comisi&oacute;n, notas de prensa institucionales, el calendario</td></tr>
+<tr><td>Cada 12 horas</td><td>Trabajo en comisi&oacute;n, enmiendas, informes, investigaci&oacute;n EPRS, documentos del Consejo, retransmisiones web</td></tr>
+<tr><td>A diario</td><td>Consultas, preguntas parlamentarias, comitolog&iacute;a, sanciones, medidas de defensa comercial, notificaciones TRIS, licitaciones, infracciones, convocatorias de financiaci&oacute;n; adem&aacute;s del BCE, las instituciones financieras de la UE, el MEDE, las 18 agencias descentralizadas, los datos abiertos y las publicaciones generales</td></tr>
+<tr><td>Semanal</td><td>Indicaciones geogr&aacute;ficas, agendas de los Comisarios, dict&aacute;menes del RSB, investigaci&oacute;n EPRS / STOA / JRC, proyectos financiados por la UE</td></tr>
+<tr><td>Mensual</td><td>Funcionarios y departamentos de la UE (la reingesta masiva del Who Is Who)</td></tr>
+<tr><td>En vivo (tiempo real)</td><td>Perfiles de eurodiputados, casos de competencia de la DG COMP, la Nomenclatura Combinada, los resolvedores de texto legal y de citas</td></tr>
+<tr><td>Al publicar</td><td>La capa propia de Brubru: gu&iacute;as de conocimiento, an&aacute;lisis del EU Canon, traducciones al catal&aacute;n</td></tr>
 </tbody>
 </table>
 

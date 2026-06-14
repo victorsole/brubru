@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints across 34 EU institution folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
-Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>8,710 adopted EU laws</strong> (28,513 OJ publications), <strong>1,717 legislative procedures</strong> in flight, <strong>14,873 EU officials</strong>, every MEP, <strong>56,051 amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
+Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>8,710 adopted EU laws</strong> (28,513 OJ publications), <strong>2,080 legislative files</strong> tracked from proposal to adoption, <strong>16,521 EU officials</strong>, every MEP, <strong>58,399 EP amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>One surface, one key.</strong> The API is organised the way the EU is &mdash; one folder per institution or body, 34 folders in total, <strong>437 endpoints</strong>. Browse the folders below, or open the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a> &mdash; every deployed endpoint, rendered live from the OpenAPI spec.
@@ -164,7 +164,7 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">Legislation &amp; procedures</div>
-  <div class="toc-card__desc">8,710 adopted laws (28,513 OJ publications) and 1,717 procedures in flight, plus delegated &amp; implementing acts, full text + XML, recital-to-article maps, defined terms, EuroVoc, the Legislative Train, and the citation / alias resolvers.</div>
+  <div class="toc-card__desc">8,710 adopted laws (28,513 OJ publications) and 2,080 legislative files tracked from proposal to adoption, plus delegated &amp; implementing acts, full text + XML, recital-to-article maps, defined terms, EuroVoc, the Legislative Train, and the citation / alias resolvers.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 </div>
 
 <h2>Data sources &amp; refresh cadence</h2>
-<p>Each folder is fed from the authoritative EU source and refreshed automatically. The cadence below is the worst case; live pass-through folders are real-time.</p>
+<p>The whole v2 surface is re-synced daily (a 10:00 / 15:00 / 21:00 UTC sweep). The underlying EU sources behind each folder refresh on the cadences below.</p>
 <table>
-<thead><tr><th>Layer</th><th>Folders</th><th>Refresh cadence</th></tr></thead>
+<thead><tr><th>Refresh cadence</th><th>What it covers</th></tr></thead>
 <tbody>
-<tr><td>Adopted legislation (EUR-Lex / Publications Office Cellar)</td><td><code>legislative</code></td><td>Daily OJ delta &mdash; &lt; 24h after publication</td></tr>
-<tr><td>Legislative procedures (OEIL) + Legislative Train</td><td><code>legislative</code></td><td>Daily &mdash; &lt; 24h</td></tr>
-<tr><td>Parliament (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Daily; webstreams live</td></tr>
-<tr><td>Council, European Council, Eurogroup registers</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Daily &mdash; &lt; 24h</td></tr>
-<tr><td>Commission (Register, Transparency, consultations, RASFF, CORDIS, state aid, comitology...)</td><td><code>commission</code></td><td>Live to weekly by source</td></tr>
-<tr><td>ECB, EU financial institutions, ESM</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Daily batched sweep</td></tr>
-<tr><td>Decentralised EU agencies (18 bodies)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Daily batched sweep</td></tr>
-<tr><td>Funding &amp; tenders (F&amp;T Portal, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Daily &mdash; &lt; 24h</td></tr>
-<tr><td>Open data, publications, officials</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Weekly bulk re-ingest</td></tr>
-<tr><td>Geographical indications</td><td><code>geographical-indications</code></td><td>Weekly</td></tr>
-<tr><td>Brubru proprietary (lobbies, canon, Catalan, guides)</td><td><code>proprietary</code></td><td>Continuous / on publish</td></tr>
+<tr><td>Every 6 hours</td><td>Adopted laws, legislative procedures, plenary texts &amp; votes, the Commission Register, institutional press releases, the calendar</td></tr>
+<tr><td>Every 12 hours</td><td>Committee work items, amendments, reports, EPRS research, Council documents, webstreams</td></tr>
+<tr><td>Daily</td><td>Consultations, parliamentary questions, comitology, sanctions, trade-defence measures, TRIS notifications, tenders, infringements, funding calls; plus the ECB, EU financial institutions, ESM, the 18 decentralised agencies, open data and general publications</td></tr>
+<tr><td>Weekly</td><td>Geographical indications, Commissioner agendas, RSB opinions, EPRS / STOA / JRC research, EU-funded projects</td></tr>
+<tr><td>Monthly</td><td>EU officials and departments (the Who Is Who bulk re-ingest)</td></tr>
+<tr><td>Live (real-time)</td><td>MEP profiles, DG COMP competition cases, the Combined Nomenclature, the legal-text and citation resolvers</td></tr>
+<tr><td>On publish</td><td>The Brubru proprietary layer: knowledge guides, EU Canon deep-dives, Catalan translations</td></tr>
 </tbody>
 </table>
 

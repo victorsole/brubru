@@ -147,7 +147,7 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints sur 34 dossiers d'institutions de l'UE</div>
 <h1>L'UE, structur&eacute;e.</h1>
 <p class="main__lede">
-Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST donne aux d&eacute;veloppeurs, plateformes RegTech, &eacute;quipes d'affaires publiques et agents d'IA un acc&egrave;s programmatique &agrave; <strong>8 710 actes de l'UE adopt&eacute;s</strong> (28 513 publications du JO), <strong>1 717 proc&eacute;dures l&eacute;gislatives</strong> en cours, <strong>14 873 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, <strong>56 051 amendements</strong>, les registres du Parlement / Conseil / Conseil europ&eacute;en / Eurogroupe / Commission, la Banque centrale europ&eacute;enne et les institutions financi&egrave;res de l'UE, les agences d&eacute;centralis&eacute;es de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux et plus), financements et appels d'offres de l'UE, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Les m&ecirc;mes donn&eacute;es que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
+Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST donne aux d&eacute;veloppeurs, plateformes RegTech, &eacute;quipes d'affaires publiques et agents d'IA un acc&egrave;s programmatique &agrave; <strong>8 710 actes de l'UE adopt&eacute;s</strong> (28 513 publications du JO), <strong>2 080 dossiers l&eacute;gislatifs</strong> suivis, <strong>16 521 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, <strong>58 399 amendements du PE</strong>, les registres du Parlement / Conseil / Conseil europ&eacute;en / Eurogroupe / Commission, la Banque centrale europ&eacute;enne et les institutions financi&egrave;res de l'UE, les agences d&eacute;centralis&eacute;es de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux et plus), financements et appels d'offres de l'UE, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Les m&ecirc;mes donn&eacute;es que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Une seule surface, une seule cl&eacute;.</strong> L'API est organis&eacute;e comme l'UE elle-m&ecirc;me &mdash; un dossier par institution ou organe, 34 dossiers au total, <strong>437 endpoints</strong>. Parcourez les dossiers ci-dessous ou ouvrez la <a href="/api/docs/reference.html"><strong>r&eacute;f&eacute;rence compl&egrave;te et toujours &agrave; jour de l'API &rarr;</strong></a> &mdash; chaque endpoint d&eacute;ploy&eacute;, g&eacute;n&eacute;r&eacute; en direct depuis la sp&eacute;cification OpenAPI.
@@ -164,7 +164,7 @@ Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST don
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#legislative">
   <div class="toc-card__title">L&eacute;gislation et proc&eacute;dures</div>
-  <div class="toc-card__desc">8 710 actes adopt&eacute;s (28 513 publications du JO) et 1 717 proc&eacute;dures en cours, plus les actes d&eacute;l&eacute;gu&eacute;s et d'ex&eacute;cution, le texte int&eacute;gral + XML, les correspondances consid&eacute;rants-articles, les termes d&eacute;finis, EuroVoc, le Train l&eacute;gislatif et les r&eacute;solveurs de citations et d'alias.</div>
+  <div class="toc-card__desc">8 710 actes adopt&eacute;s (28 513 publications du JO) et 2 080 dossiers l&eacute;gislatifs suivis, plus les actes d&eacute;l&eacute;gu&eacute;s et d'ex&eacute;cution, le texte int&eacute;gral + XML, les correspondances consid&eacute;rants-articles, les termes d&eacute;finis, EuroVoc, le Train l&eacute;gislatif et les r&eacute;solveurs de citations et d'alias.</div>
 </a>
 </div>
 
@@ -333,21 +333,17 @@ Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST don
 </div>
 
 <h2>Sources de donn&eacute;es et fr&eacute;quence de mise &agrave; jour</h2>
-<p>Chaque dossier est aliment&eacute; par la source faisant autorit&eacute; de l'UE et mis &agrave; jour automatiquement. La fr&eacute;quence indiqu&eacute;e est le pire cas&nbsp;; les dossiers en passe-plat direct sont en temps r&eacute;el.</p>
+<p>Toute la surface v2 est resynchronis&eacute;e quotidiennement (un balayage &agrave; 10h00 / 15h00 / 21h00 UTC). Les sources de l'UE derri&egrave;re chaque dossier sont mises &agrave; jour aux fr&eacute;quences ci-dessous.</p>
 <table>
-<thead><tr><th>Couche</th><th>Dossiers</th><th>Fr&eacute;quence de mise &agrave; jour</th></tr></thead>
+<thead><tr><th>Fr&eacute;quence de mise &agrave; jour</th><th>Ce que &ccedil;a couvre</th></tr></thead>
 <tbody>
-<tr><td>L&eacute;gislation adopt&eacute;e (EUR-Lex / Cellar de l'Office des publications)</td><td><code>legislative</code></td><td>Delta quotidien du JO &mdash; &lt; 24h apr&egrave;s publication</td></tr>
-<tr><td>Proc&eacute;dures l&eacute;gislatives (OEIL) + Train l&eacute;gislatif</td><td><code>legislative</code></td><td>Quotidien &mdash; &lt; 24h</td></tr>
-<tr><td>Parlement (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Quotidien ; webstreams en direct</td></tr>
-<tr><td>Registres du Conseil, Conseil europ&eacute;en, Eurogroupe</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Quotidien &mdash; &lt; 24h</td></tr>
-<tr><td>Commission (Registre, Transparence, consultations, RASFF, CORDIS, aides d'&Eacute;tat, comitologie...)</td><td><code>commission</code></td><td>Du direct &agrave; l'hebdomadaire selon la source</td></tr>
-<tr><td>BCE, institutions financi&egrave;res de l'UE, MES</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Balayage quotidien group&eacute;</td></tr>
-<tr><td>Agences d&eacute;centralis&eacute;es de l'UE (18 organes)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Balayage quotidien group&eacute;</td></tr>
-<tr><td>Financements et appels d'offres (portail F&amp;T, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Quotidien &mdash; &lt; 24h</td></tr>
-<tr><td>Donn&eacute;es ouvertes, publications, fonctionnaires</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>R&eacute;-ing&eacute;rement hebdomadaire en masse</td></tr>
-<tr><td>Indications g&eacute;ographiques</td><td><code>geographical-indications</code></td><td>Hebdomadaire</td></tr>
-<tr><td>Propri&eacute;taire Brubru (lobbies, canon, catalan, guides)</td><td><code>proprietary</code></td><td>Continu / &agrave; la publication</td></tr>
+<tr><td>Toutes les 6 heures</td><td>Actes adopt&eacute;s, proc&eacute;dures l&eacute;gislatives, textes et votes en pl&eacute;ni&egrave;re, le Registre de la Commission, communiqu&eacute;s institutionnels, le calendrier</td></tr>
+<tr><td>Toutes les 12 heures</td><td>Travaux en commission, amendements, rapports, recherche EPRS, documents du Conseil, webstreams</td></tr>
+<tr><td>Quotidien</td><td>Consultations, questions parlementaires, comitologie, sanctions, mesures de d&eacute;fense commerciale, notifications TRIS, appels d'offres, infractions, appels &agrave; financement&nbsp;; ainsi que la BCE, les institutions financi&egrave;res de l'UE, le MES, les 18 agences d&eacute;centralis&eacute;es, les donn&eacute;es ouvertes et les publications g&eacute;n&eacute;rales</td></tr>
+<tr><td>Hebdomadaire</td><td>Indications g&eacute;ographiques, agendas des commissaires, avis du CER, recherche EPRS / STOA / JRC, projets financ&eacute;s par l'UE</td></tr>
+<tr><td>Mensuel</td><td>Fonctionnaires et d&eacute;partements de l'UE (la r&eacute;-ing&eacute;rement en masse du Who Is Who)</td></tr>
+<tr><td>En direct (temps r&eacute;el)</td><td>Profils des d&eacute;put&eacute;s, affaires de concurrence de la DG COMP, la Nomenclature combin&eacute;e, les r&eacute;solveurs de texte juridique et de citations</td></tr>
+<tr><td>&Agrave; la publication</td><td>La couche propri&eacute;taire de Brubru&nbsp;: guides de connaissances, analyses du EU Canon, traductions en catalan</td></tr>
 </tbody>
 </table>
 
