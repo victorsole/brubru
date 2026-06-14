@@ -565,6 +565,8 @@ async def cron_sync_weekly(
     # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].
     results["cohesion_finances"] = _run_script("cohesion_finances", "scripts/backfill_cohesion_finances.py", ["--all", "--apply"], timeout=900)
     results["cohesion_outcomes"] = _run_script("cohesion_outcomes", "scripts/backfill_cohesion_outcomes.py", ["--all", "--apply"], timeout=1800)
+    results["eusf"] = _run_script("eusf", "scripts/backfill_eusf.py", ["--apply"], timeout=300)
+    results["cap_payments"] = _run_script("cap_payments", "scripts/backfill_cap_payments.py", ["--all", "--apply"], timeout=300)
     results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
 
     logger.info(f"[CRON] weekly tier sync complete: {results}")

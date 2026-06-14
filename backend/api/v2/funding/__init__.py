@@ -31,6 +31,12 @@ from . import cohesion_finances as _cohesion_finances
 # Per-fund achievement / outcome indicators (DB-backed, eu_cohesion_outcomes,
 # Socrata xi3a-zddk). Built one fund at a time — ESF+ live.
 from . import cohesion_outcomes as _cohesion_outcomes
+# EU Solidarity Fund disaster cases (eu_solidarity_fund, Socrata 7a49-av34).
+from . import cohesion_eusf as _cohesion_eusf
+# EU funding programmes directory — the EC 6-heading classification + coverage.
+from . import funding_programmes as _funding_programmes
+# CAP funds — EAGF + EAFRD payments by Member State (eu_cap_payments).
+from . import cohesion_cap as _cohesion_cap
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -44,3 +50,6 @@ router.include_router(_funding_all.router)
 router.include_router(_startups.router)
 router.include_router(_cohesion_finances.router)
 router.include_router(_cohesion_outcomes.router)
+router.include_router(_cohesion_eusf.router)
+router.include_router(_funding_programmes.router)
+router.include_router(_cohesion_cap.router)

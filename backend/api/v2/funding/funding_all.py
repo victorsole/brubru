@@ -27,12 +27,12 @@ router = APIRouter()
 
 _FUNDING_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
 # Plus the cohesion / structural-fund allocations (eu_cohesion_finances), unioned in.
-_COHESION_TYPE = "cohesion_allocation"
-_ALL_TYPES = _FUNDING_TYPES + (_COHESION_TYPE,)
+_ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_payment")
 
-# UNION of (a) decentralised agency funding items and (b) the per-fund cohesion
-# allocations, mapped to the same EconomyItem shape. Pre-filters the agency side
-# to funding item_types; the cohesion side is mapped on the fly.
+# UNION of (a) decentralised agency funding items, (b) the per-fund cohesion
+# allocations, (c) EU Solidarity Fund disaster cases, and (d) the CAP fund
+# payments (EAGF/EAFRD), all mapped to the same EconomyItem shape. The agency
+# side is pre-filtered to funding item_types; the rest are mapped on the fly.
 _UNION_CTE = """
 WITH all_funding AS (
     SELECT id, body_code, item_type, title, summary, public_url,
@@ -45,9 +45,22 @@ WITH all_funding AS (
            (upper(fund) || ' · ' || coalesce(ms, '') || ' · '
              || coalesce(financial_allocation_category, '')
              || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
-           public_url, document_date, created_at AS creation_date,
-           'cohesion' AS source_kind
+           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
     FROM eu_cohesion_finances
+    UNION ALL
+    SELECT id, 'eusf' AS body_code, 'solidarity_case' AS item_type,
+           name_of_disaster AS title,
+           (coalesce(applicant_country, '') || ' · ' || coalesce(year_of_occurrence::text, '')
+             || ' · ' || coalesce(disaster_type, '')
+             || ' · EUSF paid EUR ' || coalesce(round(eusf_grant_paid_meur)::text, '0') || 'm') AS summary,
+           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
+    FROM eu_solidarity_fund
+    UNION ALL
+    SELECT id, lower(fund) AS body_code, 'cap_payment' AS item_type,
+           (upper(fund) || ' — ' || coalesce(ms, '')) AS title,
+           (coalesce(ms, '') || ' · total EUR ' || coalesce(round(total_eur)::text, '0')) AS summary,
+           public_url, document_date, created_at AS creation_date, 'cohesion' AS source_kind
+    FROM eu_cap_payments
 )
 """
 
@@ -55,7 +68,7 @@ _DESC = """**What it does**
 One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**) AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF) — across every body, in one call.
 
 **When to use it**
-"Show me everything across EU funding", whether an agency tender or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation), `body` (agency code or fund code, e.g. `efca`, `erdf`), `status`, `q` (free text), and `since`/`until` on the date.
+"Show me everything across EU funding", whether an agency tender or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`), `status`, `q` (free text), and `since`/`until` on the date.
 
 **Input**
 `type`, `body`, `status`, `q` (free text), `since`/`until` (date range), `order`, `page`, `limit`.
@@ -81,7 +94,7 @@ async def funding_all(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
-    type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation"),
+    type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation | solidarity_case | cap_payment"),
     body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
     status: Optional[str] = Query(None, description="Match on status in the summary (e.g. open, closed)."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),

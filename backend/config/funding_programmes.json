@@ -1,0 +1,468 @@
+{
+  "$schema_version": "1.0",
+  "$source": "https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding-programmes_en",
+  "$generated": "2026-06-14",
+  "$note": "EC 2021-2027 MFF funding programmes by the Commission's own 6-heading classification, with Brubru coverage. coverage: covered | gap | skipped. via: endpoint (dedicated Brubru endpoint) | ft_calls (reachable via /api/v2/funding/ft-calls-for-proposals).",
+  "programmes": [
+    {
+      "programme": "Horizon Europe",
+      "acronym": "Horizon Europe",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Research & Innovation",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "EU Funding & Tenders Portal calls (HORIZON)"
+    },
+    {
+      "programme": "Euratom Research and Training Programme",
+      "acronym": "Euratom",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Research & Innovation",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (EURATOM)"
+    },
+    {
+      "programme": "ITER",
+      "acronym": "ITER",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Research & Innovation",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Fusion for Energy / ITER organisation — no open funding API"
+    },
+    {
+      "programme": "InvestEU",
+      "acronym": "InvestEU",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "European Strategic Investments",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "EIB-implemented; indicators dashboard only"
+    },
+    {
+      "programme": "Connecting Europe Facility",
+      "acronym": "CEF",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "European Strategic Investments",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (CEF)"
+    },
+    {
+      "programme": "Digital Europe Programme",
+      "acronym": "DIGITAL",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "European Strategic Investments",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (DIGITAL)"
+    },
+    {
+      "programme": "Single Market Programme",
+      "acronym": "SMP",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Single Market",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (SMP)"
+    },
+    {
+      "programme": "EU Anti-Fraud Programme",
+      "acronym": "EUAF",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Single Market",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (EUAF / HERCULE)"
+    },
+    {
+      "programme": "Cooperation in the field of taxation (Fiscalis)",
+      "acronym": "FISCALIS",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Single Market",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG TAXUD; on the F&T Portal, not yet ingested"
+    },
+    {
+      "programme": "Cooperation in the field of customs (Customs)",
+      "acronym": "CUSTOMS",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Single Market",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG TAXUD; on the F&T Portal (CUST), not yet ingested"
+    },
+    {
+      "programme": "European Space Programme",
+      "acronym": "Space",
+      "heading": "Single Market, Innovation and Digital",
+      "cluster": "Space",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (GALILEO) + EUSPA agency folder"
+    },
+    {
+      "programme": "European Regional Development Fund",
+      "acronym": "ERDF",
+      "heading": "Cohesion and Values",
+      "cluster": "Regional Development & Cohesion",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/erdf",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Cohesion Fund",
+      "acronym": "CF",
+      "heading": "Cohesion and Values",
+      "cluster": "Regional Development & Cohesion",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/cohesion-fund",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Interreg (European Territorial Cooperation)",
+      "acronym": "Interreg",
+      "heading": "Cohesion and Values",
+      "cluster": "Regional Development & Cohesion",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/interreg",
+      "source": "cohesiondata Socrata njgb-mwca"
+    },
+    {
+      "programme": "REACT-EU",
+      "acronym": "REACT-EU",
+      "heading": "Cohesion and Values",
+      "cluster": "Regional Development & Cohesion",
+      "coverage": "skipped",
+      "via": null,
+      "endpoint": null,
+      "source": "Skipped by Victor"
+    },
+    {
+      "programme": "Support to the Turkish Cypriot community",
+      "acronym": "TCc",
+      "heading": "Cohesion and Values",
+      "cluster": "Regional Development & Cohesion",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Niche; no open dataset"
+    },
+    {
+      "programme": "Recovery and Resilience Facility",
+      "acronym": "RRF",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG ECFIN RRF Scoreboard (data.europa.eu); not in cohesiondata"
+    },
+    {
+      "programme": "Technical Support Instrument",
+      "acronym": "TSI",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG REFORM; HTML project list only"
+    },
+    {
+      "programme": "Protection of the Euro Against Counterfeiting (Pericles)",
+      "acronym": "Pericles",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Niche; no open API"
+    },
+    {
+      "programme": "Union Civil Protection Mechanism (rescEU)",
+      "acronym": "UCPM",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (UCPM)"
+    },
+    {
+      "programme": "EU4Health",
+      "acronym": "EU4Health",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (EU4H)"
+    },
+    {
+      "programme": "EU Solidarity Fund",
+      "acronym": "EUSF",
+      "heading": "Cohesion and Values",
+      "cluster": "Recovery and Resilience",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/eusf",
+      "source": "cohesiondata Socrata 7a49-av34"
+    },
+    {
+      "programme": "European Social Fund Plus",
+      "acronym": "ESF+",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/esf-plus",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Erasmus+",
+      "acronym": "Erasmus+",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (ERASMUS)"
+    },
+    {
+      "programme": "European Solidarity Corps",
+      "acronym": "ESC",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (ESC)"
+    },
+    {
+      "programme": "Justice Programme",
+      "acronym": "Justice",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG JUST; on the F&T Portal, not yet ingested"
+    },
+    {
+      "programme": "Citizens, Equality, Rights and Values Programme",
+      "acronym": "CERV",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (CERV)"
+    },
+    {
+      "programme": "Creative Europe",
+      "acronym": "Creative Europe",
+      "heading": "Cohesion and Values",
+      "cluster": "Investing in People, Social Cohesion & Values",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (CULT)"
+    },
+    {
+      "programme": "European Agricultural Guarantee Fund",
+      "acronym": "EAGF",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Agriculture & Maritime Policy",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/eagf",
+      "source": "cohesiondata Socrata qgpc-e9qr"
+    },
+    {
+      "programme": "European Agricultural Fund for Rural Development",
+      "acronym": "EAFRD",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Agriculture & Maritime Policy",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/eafrd",
+      "source": "cohesiondata Socrata 7wr2-9vpr"
+    },
+    {
+      "programme": "European Maritime, Fisheries and Aquaculture Fund",
+      "acronym": "EMFAF",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Agriculture & Maritime Policy",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/emfaf",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Programme for the Environment and Climate Action (LIFE)",
+      "acronym": "LIFE",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Environment & Climate Action",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (LIFE)"
+    },
+    {
+      "programme": "Just Transition Fund",
+      "acronym": "JTF",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Environment & Climate Action",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/jtf",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Innovation Fund",
+      "acronym": "Innovation Fund",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Environment & Climate Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "CINEA; F&T (INNOVFUND) not ingested + CINEA project list"
+    },
+    {
+      "programme": "Modernisation Fund",
+      "acronym": "Modernisation Fund",
+      "heading": "Natural Resources and Environment",
+      "cluster": "Environment & Climate Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "ETS Modernisation Fund; no open API"
+    },
+    {
+      "programme": "Asylum, Migration and Integration Fund",
+      "acronym": "AMIF",
+      "heading": "Migration and Border Management",
+      "cluster": "Migration",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/amif",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Integrated Border Management Fund",
+      "acronym": "IBMF",
+      "heading": "Migration and Border Management",
+      "cluster": "Border Management",
+      "coverage": "skipped",
+      "via": null,
+      "endpoint": null,
+      "source": "Skipped by Victor (BMVI)"
+    },
+    {
+      "programme": "Internal Security Fund",
+      "acronym": "ISF",
+      "heading": "Security and Defence",
+      "cluster": "Security",
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/isf",
+      "source": "cohesiondata Socrata 9qee-iv7c"
+    },
+    {
+      "programme": "Nuclear Decommissioning (Lithuania)",
+      "acronym": "Nuclear-LT",
+      "heading": "Security and Defence",
+      "cluster": "Security",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Niche; no open API"
+    },
+    {
+      "programme": "Nuclear Safety and Decommissioning",
+      "acronym": "Nuclear",
+      "heading": "Security and Defence",
+      "cluster": "Security",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Niche; no open API"
+    },
+    {
+      "programme": "European Defence Fund",
+      "acronym": "EDF",
+      "heading": "Security and Defence",
+      "cluster": "Defence",
+      "coverage": "covered",
+      "via": "ft_calls",
+      "endpoint": null,
+      "source": "F&T Portal calls (EDF)"
+    },
+    {
+      "programme": "Global Europe: Neighbourhood, Development and International Cooperation Instrument",
+      "acronym": "NDICI",
+      "heading": "Neighbourhood and the World",
+      "cluster": "External Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG INTPA; Team Europe Explorer + IATI (XM-DAC-918)"
+    },
+    {
+      "programme": "Humanitarian Aid",
+      "acronym": "Humanitarian Aid",
+      "heading": "Neighbourhood and the World",
+      "cluster": "External Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG ECHO; IATI / EDRIS"
+    },
+    {
+      "programme": "Common Foreign and Security Policy",
+      "acronym": "CFSP",
+      "heading": "Neighbourhood and the World",
+      "cluster": "External Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "EEAS; no funding-call open API"
+    },
+    {
+      "programme": "Overseas Countries and Territories",
+      "acronym": "OCT",
+      "heading": "Neighbourhood and the World",
+      "cluster": "External Action",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "Niche"
+    },
+    {
+      "programme": "Pre-Accession Assistance",
+      "acronym": "IPA III",
+      "heading": "Neighbourhood and the World",
+      "cluster": "Pre-Accession Assistance",
+      "coverage": "gap",
+      "via": null,
+      "endpoint": null,
+      "source": "DG NEAR; Team Europe Explorer + IATI"
+    }
+  ]
+}
