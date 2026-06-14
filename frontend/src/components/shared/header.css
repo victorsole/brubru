@@ -517,7 +517,10 @@
 }
 
 /* Responsive Design */
-@media (max-width: 767px) {
+/* Reflow from tablet-portrait down: the desktop header row needs ~836px, so at
+   768-900px the actions overflow the viewport. Wrapping the nav to its own row
+   (the mobile layout below) is correct for the whole 0-900px range. */
+@media (max-width: 900px) {
   .header__container {
     padding: var(--space-3) var(--space-4);
     flex-wrap: wrap;

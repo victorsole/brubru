@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use cases by role — Brubru EU Data API</title>
+<meta name="description" content="Concrete Brubru API call sequences for public-affairs consultants, trade associations, corporates, NGOs, EU officials, and researchers.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
+  </ul>
+
+  <h3>European Parliament</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (38)</a></li>
+  </ul>
+
+  <h3>Council &amp; summits</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
+  </ul>
+
+  <h3>Commission</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (40)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER &mdash; energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC &mdash; electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop &mdash; vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO &mdash; plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC &mdash; disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA &mdash; chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA &mdash; environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA &mdash; food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE &mdash; gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT &mdash; innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA &mdash; medicines (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA &mdash; cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA &mdash; IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA &mdash; safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA &mdash; asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA &mdash; drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO &mdash; intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA &mdash; fundamental rights</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who &mdash; officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases" class="active">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru.beresol.eu/api/openapi.json" target="_blank" rel="noopener">OpenAPI spec (JSON)</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Use cases</div>
+<h1>Use cases by role</h1>
+<p class="main__lede">
+What you'd actually call, in what order, to do your job. Each section maps a professional role to a concrete call sequence with examples.
+</p>
+
+<h2>Public-affairs consultant</h2>
+<p>You run a small consultancy or work in a larger one. Clients pay for briefings and advice on EU regulation affecting their sector. Your morning routine: scan what moved in the last 24 hours across the files your clients care about, write the memo before the client calls.</p>
+
+<h3>Morning monitoring</h3>
+<pre><code># Recently published EU acts in the digital policy area
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?policy_area=digital&limit=50"</code></pre>
+
+<p>Then per hit, pull context:</p>
+<pre><code># Is there a procedure behind this announcement?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=&lt;topic&gt;&limit=5"
+
+# What does EPRS say about it?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/eprs?q=&lt;topic&gt;&limit=5"</code></pre>
+
+<h3>Briefing prep</h3>
+<pre><code># Procedure state, rapporteur, committee
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"
+
+# EPRS briefings on it
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/eprs?procedure_ref=2022/0277(COD)"
+
+# Latest committee activity
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committees/LIBE/minutes?limit=5"
+
+# Procedure timeline with all stages
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"</code></pre>
+
+<h3>Draft support</h3>
+<pre><code># Extract the law's defined terms to paste into your memo
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws/32024R1689/defined-terms"</code></pre>
+
+<h2>Corporate compliance / in-house counsel</h2>
+<p>You work inside a large company. You need to catch new regulation that affects your sector before your competitors brief their clients on it. Your main headache: a Spanish or German decree lands; is it transposing an EU directive, and if so, which one?</p>
+
+<h3>Regulation detection</h3>
+<pre><code># Recently adopted EU acts matching a keyword
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?q=Artificial+Intelligence&limit=20"</code></pre>
+
+<h3>National-to-EU linking (the killer use case)</h3>
+<p>You have text from a Spanish BOE decree. Find the parent EU regulation automatically:</p>
+<pre><code>curl -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"text": "Real Decreto 123/2026, por el que se transpone la Directiva (UE) 2024/1234 sobre ciberseguridad"}' \
+  https://brubru.beresol.eu/api/v2/legislative/eur-lex/resolve-references</code></pre>
+
+<p>Response tells you which CELEX the Spanish decree transposes. Then fetch the EU procedure:</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=cybersecurity&limit=3"</code></pre>
+
+<h3>Stakeholder watch</h3>
+<pre><code># Who in your country commented on the relevant consultation?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/commission/consultations/by-initiative/14094/feedback?country=ESP&limit=20"</code></pre>
+
+<h2>Trade association policy lead</h2>
+<p>You run policy for a sector federation (think DIGITALEUROPE, CEFIC, EFPIA, ACEA). You track files that affect your members, coordinate amendments, and engage with MEPs.</p>
+
+<h3>Committee scheduling</h3>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committee-agendas?committee=ENVI&limit=20"</code></pre>
+
+<h3>Amendment intelligence</h3>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committees/ENVI/work-items?q=packaging&limit=10"</code></pre>
+
+<h3>MEP targeting</h3>
+<pre><code># Which EPP MEPs from your major-market countries are on the relevant committee?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/meps?country=DE&group=EPP&limit=50"</code></pre>
+
+<h2>EU official (Commission, EP, Council, agency)</h2>
+<p>You work inside the institutions. You need to see what sibling institutions are doing and what member states are saying, without logging into 5 different intranets.</p>
+
+<h3>Cross-institution snapshot</h3>
+<pre><code># Recently published EU acts on your topic
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?q=packaging&limit=50"</code></pre>
+
+<h3>Historical lookup</h3>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=packaging&published_from=2020-01-01&limit=20"</code></pre>
+
+<h2>Parliamentary assistant (MEP staff)</h2>
+<p>You work for an MEP. Your day revolves around your MEP's committees, files, and speaking slots.</p>
+
+<h3>Files where your MEP is rapporteur</h3>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?rapporteur_mep_id=197668"</code></pre>
+
+<h3>Committee prep</h3>
+<pre><code># What's on ENVI's agenda next week?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committee-agendas?committee=ENVI&date_from=2026-04-20&date_to=2026-04-27"
+
+# What did they discuss last time?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committees/ENVI/minutes?limit=3"</code></pre>
+
+<h3>Draft a question</h3>
+<pre><code># Find the relevant EPRS background
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/eprs?q=microplastics&limit=5"</code></pre>
+
+<h2>NGO / civil society advocate</h2>
+<p>You work for Transparency International EU, BEUC, EPHA, EDRi, BirdLife, WWF, CAN Europe or similar. You defend public interest in EU legislation &mdash; draft amendments, respond to consultations, brief coalitions.</p>
+
+<h3>Campaign monitoring</h3>
+<pre><code># Open Commission consultations in your policy area
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/commission/consultations?q=environment"</code></pre>
+
+<h3>Amendment drafting</h3>
+<pre><code># Get the law's full text to cite
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws/32024R1689/text?format=plain"</code></pre>
+
+<h3>Stakeholder mapping</h3>
+<pre><code># Who's pushed back on the consultation? Which businesses?
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/commission/consultations/by-initiative/13174/feedback?user_type=BUSINESS_ASSOCIATION"</code></pre>
+
+<h2>Academic researcher</h2>
+<p>You're building a dataset for a paper on EU legislative productivity, or teaching an EU politics class.</p>
+
+<h3>Build a dataset</h3>
+<pre><code># All regulations in the Digital policy area adopted since 2020
+PAGE=1
+while : ; do
+  curl -s -H "Authorization: Bearer $KEY" \
+    "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?policy_area=Digital&doc_type=Regulation&published_from=2020-01-01&limit=100&page=$PAGE" \
+    >> dataset.jsonl
+  HAS_MORE=$(tail -1 dataset.jsonl | jq .has_more)
+  [ "$HAS_MORE" = "true" ] || break
+  PAGE=$((PAGE+1))
+done</code></pre>
+
+<h3>Trace a law's legislative history</h3>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=GDPR&limit=1"
+
+# Then committee work
+curl -H "Authorization: Bearer $KEY" \
+  "https://brubru.beresol.eu/api/v2/parliament/committees/LIBE/work-items?q=data+protection"</code></pre>
+
+<h2>Competitor integration patterns</h2>
+
+<h3>GovClipping-style (Spanish gazette triggers EU context)</h3>
+<p>Spanish BOE / BOA detected &rarr; <code>resolve-aliases</code> or <code>resolve-references</code> extracts the CELEX &rarr; fetch parent law + OEIL procedure &rarr; render "EU context" sidebar inside the existing Spanish UI.</p>
+
+<h3>RegTech platform augmentation</h3>
+<p>You have domain-specific sector expertise (pharma, fintech, energy). You use Brubru as the EU regulatory layer: we tell you what exists, what's in flight, and what's transposing; you overlay your sector's compliance guidance.</p>
+
+<h3>Consultancy firm internal</h3>
+<p>Daily internal newsletter pulls <code>/api/v2/legislative/eur-lex/recent</code> with the firm's top-20 policy areas as filters; routes hits to the responsible partner. Procedure timeline data from <code>/api/v2/legislative/oeil/procedures/{reference}</code> feeds quarterly forecasting decks.</p>
+
+<h3>Academic / research</h3>
+<p>Build longitudinal datasets via paginated <code>/api/v2/legislative/eur-lex/laws</code> and <code>/api/v2/legislative/oeil/procedures</code>. Combine with <code>/api/v2/parliament/eprs</code> for expert commentary. Our CSV bulk export (roadmap September 2026) will make this faster; for now iterate pages.</p>
+
+<h2>Next</h2>
+<p>Ready to call the API? Jump to <a href="/api/docs/endpoints.html">Endpoints</a> for the full reference.</p>
+
+<footer>
+&copy; 2026 Beresol BV &mdash; Brubru EU Data API v2.
+<a href="/api/">Back to marketing page</a> ·
+<a href="https://brubru.beresol.eu/api/openapi.json">OpenAPI spec</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>

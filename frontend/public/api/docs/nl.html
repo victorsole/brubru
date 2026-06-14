@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Inleiding — Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API-documentatie (v1 + v2). 200+ REST-eindpunten verspreid over 33 EU-instellingsdomeinen: 8.710 EU-wetten, wetgevingsprocedures, MEP's en ambtenaren, amendementen, Parliament/Raad/Commissie-databases, EU-agentschapsdatabases (geneesmiddelen, voedselveiligheid, milieu, chemicaliën, drugs, grondrechten), financiering, open data en Brubru's propriëtaire EU-intelligentie. Één API-sleutel.">
+<title>Inleiding &mdash; Brubru EU Data API</title>
+<meta name="description" content="Brubru EU Data API v2: 437 REST-endpoints in 34 mappen van EU-instellingen. 8.710 EU-wetten, wetgevingsprocedures, Europarlementari&euml;rs en ambtenaren, amendementen, de databanken van Parlement / Raad / Commissie, de databanken van de EU-agentschappen (geneesmiddelen, voedselveiligheid, milieu, chemische stoffen, drugs, grondrechten), financiering, open data en Brubru's eigen EU-intelligentie. E&eacute;n API-sleutel.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -18,34 +18,21 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>Je bekijkt de referentie. Om live oproepen uit te voeren heb je een Brubru API-sleutel nodig &mdash; </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start een Professional proefperiode</a>
+  <span>U bekijkt de referentie. Om echte calls uit te voeren hebt u een Brubru API-sleutel nodig &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start een Professional-proef</a>
   <span> &middot; of </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">neem contact op met verkoop</a>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">neem contact op met sales</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
 (function(){
-  // Hide for authenticated Professional users (detected via cookie set after login)
   var m = document.cookie.match(/brubru_tier=([^;]+)/);
-  if (m && m[1] === 'blue') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
-  // Hide for users who dismissed in this session
-  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
+  if (m && m[1] === 'blue') { var b = document.getElementById('brubru-paywall-banner'); if (b) b.style.display = 'none'; }
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') { var b = document.getElementById('brubru-paywall-banner'); if (b) b.style.display = 'none'; }
 })();
 </script>
 
 <div class="shell">
-<!--
-Shared nav HTML fragment for Brubru API docs.
-Each page inlines this by find-and-replace at build time. Pages mark the
-active link by adding class="active" to the matching <a>.
--->
 <aside class="sidebar">
   <a href="/api/" class="sidebar__brand">
     <img src="/assets/brubru_mainlogo.png" alt="">
@@ -63,341 +50,317 @@ active link by adding class="active" to the matching <a>.
 
   <h3>Begin hier</h3>
   <ul>
-    <li><a href="/api/docs/" data-nav="home" class="active">Inleiding</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Volledige API-referentie</strong> &mdash; alle eindpunten</a></li>
-    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authenticatie</a></li>
-    <li><a href="/api/docs/envelope.html" data-nav="envelope">Antwoord-envelop</a></li>
-    <li><a href="/api/docs/errors.html" data-nav="errors">Fouten</a></li>
-    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Snelheidsbeperkingen</a></li>
+    <li><a href="/api/docs/" class="active">Inleiding</a></li>
+    <li><a href="/api/docs/reference.html"><strong>Volledige API-referentie</strong> &mdash; alle 437 endpoints</a></li>
+    <li><a href="/api/docs/authentication.html">Authenticatie</a></li>
+    <li><a href="/api/docs/envelope.html">Response-envelop</a></li>
+    <li><a href="/api/docs/errors.html">Fouten</a></li>
+    <li><a href="/api/docs/rate-limits.html">Rate-limieten</a></li>
   </ul>
 
   <h3>Wetgeving</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Wetten</a></li>
-    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
-    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Juridische-tekstintelligentie</a></li>
-    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Gedelegeerde besluiten</a></li>
-    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Uitvoeringsbesluiten</a></li>
-    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS-mededelingen</a></li>
-    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commissieregister</a></li>
-    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Raasdocumenten</a></li>
+    <li><a href="/api/docs/endpoints.html#legislative">Wetgeving en procedures (37)</a></li>
   </ul>
 
-  <h3>Instellingen &amp; personen</h3>
+  <h3>Europees Parlement</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 eindpunten)</a></li>
-    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissarissen</a></li>
-    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Ambtenaren (14.873)</a></li>
-    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEP's</a></li>
-    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Bijeenkomsten (Transparantie)</a></li>
-    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB-adviezen</a></li>
+    <li><a href="/api/docs/endpoints.html#parliament">Europees Parlement (38)</a></li>
   </ul>
 
-  <h3>EP-detail</h3>
+  <h3>Raad en toppen</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Commissies</a></li>
-    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP-documenten (geïntegreerd)</a></li>
-    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendementen</a></li>
-    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Stemmingen</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Aangenomen teksten</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Ingediende teksten</a></li>
-    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resoluties</a></li>
-    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Verslagen</a></li>
-    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Adviezen</a></li>
-    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parlementaire vragen</a></li>
-    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+    <li><a href="/api/docs/endpoints.html#council">Raad van de EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council">Europese Raad (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup">Eurogroep (10)</a></li>
   </ul>
 
-  <h3>Live-gegevens</h3>
+  <h3>Europese Commissie</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publicaties</a></li>
-    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Persmededelingen</a></li>
-    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Agenda</a></li>
-    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Raadplegingen</a></li>
-    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Onderzoek (EPRS+STOA+JRC+ART+ECA)</a></li>
-    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Aanbestedingen (TED)</a></li>
-    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Voorspellingen</a></li>
-    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Kennishandleidingen</a></li>
-    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Citaat verifiëren</a></li>
+    <li><a href="/api/docs/endpoints.html#commission">Europese Commissie (40)</a></li>
+  </ul>
+
+  <h3>Economie en financi&euml;n</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb">Europese Centrale Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions">Financi&euml;le instellingen van de EU (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm">Europees Stabiliteitsmechanisme (9)</a></li>
+  </ul>
+
+  <h3>EU-agentschappen</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer">ACER</a></li>
+    <li><a href="/api/docs/endpoints.html#berec">BEREC</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop">Cedefop</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo">CPVO</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc">ECDC</a></li>
+    <li><a href="/api/docs/endpoints.html#echa">ECHA</a></li>
+    <li><a href="/api/docs/endpoints.html#eea">EEA</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa">EFSA</a></li>
+    <li><a href="/api/docs/endpoints.html#eige">EIGE</a></li>
+    <li><a href="/api/docs/endpoints.html#eit">EIT</a></li>
+    <li><a href="/api/docs/endpoints.html#ema">EMA (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa">ENISA</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa">eu-LISA</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha">EU-OSHA</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa">EUAA</a></li>
+    <li><a href="/api/docs/endpoints.html#euda">EUDA</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo">EUIPO</a></li>
+    <li><a href="/api/docs/endpoints.html#fra">FRA</a></li>
+  </ul>
+
+  <h3>Financiering en consultaties</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding">Financiering, subsidies en aanbestedingen (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations">Consultaties van agentschappen (11)</a></li>
+  </ul>
+
+  <h3>Open data en personen</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications">Algemene publicaties (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who">Wie is wie (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications">Geografische aanduidingen (6)</a></li>
+  </ul>
+
+  <h3>Eigen intelligentie</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary">Brubru EU-intelligentie (10)</a></li>
   </ul>
 
   <h3>Referentie</h3>
   <ul>
-    <li><a href="/api/docs/institutions.html" data-nav="institutions">Behandelde EU-instellingen</a></li>
-    <li><a href="/api/docs/glossary.html" data-nav="glossary">Woordenlijst</a></li>
-    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Gebruiksscenario's per rol</a></li>
-    <li><a href="/api/docs/changelog.html" data-nav="changelog">Wijzigingslogboek</a></li>
+    <li><a href="/api/docs/institutions.html">Gedekte EU-instellingen</a></li>
+    <li><a href="/api/docs/glossary.html">Woordenlijst</a></li>
+    <li><a href="/api/docs/use-cases.html">Use cases per rol</a></li>
+    <li><a href="/api/docs/changelog.html">Wijzigingslogboek</a></li>
   </ul>
 
   <h3>Extern</h3>
   <ul>
-    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">OpenAPI-spec (JSON)</a></li>
+    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">OpenAPI-specificatie (JSON)</a></li>
   </ul>
 </aside>
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API · v1 + v2 · 200+ eindpunten verspreid over 33 EU-instellingsdomeinen</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints in 34 mappen van EU-instellingen</div>
 <h1>De EU, gestructureerd.</h1>
 <p class="main__lede">
-Brubru is een verticale EU-dataprovider. Onze REST API geeft ontwikkelaars, RegTech-platforms, public-affairs-teams en AI-agenten programmatische toegang tot <strong>8.710 aangenomen EU-wetten</strong> (28.513 OJ-publicaties), <strong>1.717 lopende wetgevingsprocedures</strong>, <strong>14.873 EU-ambtenaren</strong> in elke instelling, <strong>56.051 amendementen</strong>, <strong>1.026 EP-verslagen</strong>, <strong>386 aanbestedingen</strong> (TED), <strong>210 onderzoekspublicaties</strong> (EPRS, STOA, JRC, ART, ECA), <strong>528 Commissie-registerdocumenten</strong>, <strong>227 samengestelde beleidshandleidingen</strong>, live commissaris-agenda's, EP-webstreams, de juridische-tekstintelligentie-laag die Brubru's eigen chatbot en Amendator aandrijft, en een nieuwe <strong>gespecialiseerde EC-databasesmap</strong> die 10 institutionele oppervlakken bedekt die geen andere leverancier blootstelt via één API-sleutel: <strong>6.002 GBVB-gesanctioneerde personen/entiteiten</strong>, <strong>17.247 Transparantieregister-lobbyistenorganisaties</strong>, <strong>83.807 comitologie-documenten</strong>, <strong>5.917 geografische aanduidingen</strong>, <strong>900 internationale overeenkomsten</strong>, <strong>675 handelsverdedigingsmaatregelen</strong>, live DG COMP-mededingingszaken (~250k upstream), <strong>3.543 JRC-gegevenssets</strong>, <strong>1.451 DG REGIO-cohesigegevenssets</strong>, en live Combined Nomenclature-opzoeken. De gegevens die we intern gebruiken, zijn wat jij aanroept. Brubru is de eerste klant van zijn eigen API.
+Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, RegTech-platforms, public-affairsteams en AI-agents programmatische toegang tot <strong>8.710 vastgestelde EU-wetten</strong> (28.513 PB-publicaties), <strong>1.717 lopende wetgevingsprocedures</strong>, <strong>14.873 EU-ambtenaren</strong>, alle Europarlementari&euml;rs, <strong>56.051 amendementen</strong>, de registers van Parlement / Raad / Europese Raad / Eurogroep / Commissie, de Europese Centrale Bank en de financi&euml;le instellingen van de EU, de gedecentraliseerde EU-agentschappen (geneesmiddelen, voedselveiligheid, milieu, chemische stoffen, drugs, grondrechten en meer), EU-financiering en aanbestedingen, open data en Brubru's eigen EU-intelligentie. Dezelfde data die wij intern gebruiken, roept u aan. Brubru is de eerste klant van zijn eigen API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
-<strong>Nieuw: API v2</strong> reorganiseert alles rond de EU-instellingen, één map per orgaan, en voegt de institutionele databases toe die geen andere leverancier blootstelt &mdash; de Parlementsregisters (MEP-verklaringen, geaccrediteerde assistenten, commissie-ondersteunende analyses), de Raadssanctieregelingen, de EU-agentschapsdatabases (geneesmiddelen, voedselveiligheidsgegevenssets, milieu-indicatoren, de REACH SVHC-kandidatenlijst, de medicijnenbibliotheek, grondrechten-jurisprudentie en Charterpedia), en meer. Zie de <a href="/api/docs/reference.html"><strong>volledige, altijd-actuele API-referentie &rarr;</strong></a> &mdash; elk uitgerolde eindpunt, weergegeven live uit de OpenAPI-specificatie.
+<strong>E&eacute;n oppervlak, &eacute;&eacute;n sleutel.</strong> De API is ingedeeld zoals de EU zelf &mdash; &eacute;&eacute;n map per instelling of orgaan, 34 mappen in totaal, <strong>437 endpoints</strong>. Blader hieronder door de mappen of open de <a href="/api/docs/reference.html"><strong>volledige, altijd actuele API-referentie &rarr;</strong></a> &mdash; elk uitgerold endpoint, live gegenereerd uit de OpenAPI-specificatie.
 </p>
 
 <div class="callout callout--ok">
-<p><strong>Nieuw voor API's?</strong> Een API is een manier waarop uw software met Brubru's software via internet kan communiceren. U stuurt een HTTP-verzoek (zoals een webbrowser doet), wij sturen JSON terug (gestructureerde gegevens). De rest van deze documenten legt uit hoe het werkt.</p>
+<p><strong>Nieuw met API's?</strong> Een API is een manier voor uw software om via internet met de software van Brubru te praten. U stuurt een HTTP-verzoek (zoals een browser doet) en wij sturen JSON terug (gestructureerde data). De rest van deze documentatie legt uit hoe.</p>
 </div>
 
-<h2>Wat je krijgt</h2>
+<h2>Wat u krijgt</h2>
+<p>Elke map komt overeen met &eacute;&eacute;n EU-instelling of -orgaan. De aantallen zijn exact en worden bijgewerkt naarmate de API groeit.</p>
 
-<h3 style="margin-top:24px;">Wetgeving (8 mappen)</h3>
+<h3 style="margin-top:28px;">Wetgeving <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 map)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#laws">
-  <div class="toc-card__title">Wetten</div>
-  <div class="toc-card__desc">8.710 aangenomen EU-wetten (28.513 OJ-publicaties) doorzoekbaar op CELEX, beleidsgebied, datum of volledige tekst. Haal volledige XML of gewone-tekst-body op.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#procedures">
-  <div class="toc-card__title">Procedures</div>
-  <div class="toc-card__desc">1.464 wetgevingsbestanden gevolgd van Commissievoorstel tot aanneming. OEIL-referenties, commissies, rapporteurs, status.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#legal-text">
-  <div class="toc-card__title">Juridische-tekstintelligentie</div>
-  <div class="toc-card__desc">Overwegings-artikel-mapping, gedefinieerde-term-extractie, CELEX-referentie-resolver, wetaliasoplosser (680+ acroniemen).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#delegated-acts">
-  <div class="toc-card__title">Gedelegeerde besluiten</div>
-  <div class="toc-card__desc">Artikel 290 VWEU-besluiten aangenomen onder bevoegdheden gedelegeerd door Parlement en Raad.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#implementing-acts">
-  <div class="toc-card__title">Uitvoeringsbesluiten</div>
-  <div class="toc-card__desc">Artikel 291 VWEU-besluiten die eenvormige uitvoering van EU-recht in lidstaten waarborgen.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#tris-notifications">
-  <div class="toc-card__title">TRIS-mededelingen</div>
-  <div class="toc-card__desc">Concepttechnische regelgeving van lidstaten gemeld onder Richtlijn 2015/1535.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#commission-register">
-  <div class="toc-card__title">Commissieregister</div>
-  <div class="toc-card__desc">528 voorbereide Commissiedocumenten (COM, SWD, JOIN, C) met EUR-Lex CELEX-afgeleide PDF-URL's.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#council-documents">
-  <div class="toc-card__title">Raasdocumenten</div>
-  <div class="toc-card__desc">Raad van de EU openbare registerdocumenten (voorzittersnota's, werkgroepverslagen, conclusies).</div>
+<a class="toc-card" href="/api/docs/endpoints.html#legislative">
+  <div class="toc-card__title">Wetgeving en procedures</div>
+  <div class="toc-card__desc">8.710 vastgestelde wetten (28.513 PB-publicaties) en 1.717 lopende procedures, plus gedelegeerde en uitvoeringshandelingen, volledige tekst + XML, overweging-naar-artikel-kaarten, gedefinieerde termen, EuroVoc, de Wetgevingstrein en de citatie- en alias-resolvers.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Instellingen &amp; personen (6 mappen)</h3>
+<h3 style="margin-top:28px;">Europees Parlement <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 map)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#metadata">
-  <div class="toc-card__title">Metadata (13 eindpunten)</div>
-  <div class="toc-card__desc">DG's (met website + social), agentschappen, commissies (met streamingURL), beleidsgebieden, fractiegroepen &mdash; elke enum en opzoeken.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#commissioners">
-  <div class="toc-card__title">Commissarissen</div>
-  <div class="toc-card__desc">Live agenda-items voor alle 27 College-leden, inclusief de President. Toont agenda_url + unified_calendar_url.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#officials">
-  <div class="toc-card__title">Ambtenaren (14.873)</div>
-  <div class="toc-card__desc">Elk EU Who Is Who-item &mdash; Commissie, EP, Raad, Ombudsman, agentschappen. Filter op instelling, DG, rol.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#meps">
-  <div class="toc-card__title">MEP's</div>
-  <div class="toc-card__desc">Live MEP-profielen van EP Open Data. Zoeken op land, politieke groep of naam.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#meetings">
-  <div class="toc-card__title">Bijeenkomsten (Transparantie)</div>
-  <div class="toc-card__desc">Commissie Transparantieregister: welke lobbyisten ontmoetten welke Commissaris, Kabinetsondersteun en DG wanneer.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#rsb-opinions">
-  <div class="toc-card__title">RSB-adviezen</div>
-  <div class="toc-card__desc">Adviezen van de Regelgevingstoetsingsraad over Commissie-effectbeoordelingen en grote evaluaties.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#parliament">
+  <div class="toc-card__title">Europees Parlement</div>
+  <div class="toc-card__desc">Europarlementari&euml;rs, commissiewerk, amendementen, verslagen, adviezen, resoluties, aangenomen en ingediende teksten, hoofdelijke stemmingen, parlementaire vragen, eMeeting-documenten, webstreams + AI-transcripties, EPRS-onderzoek, en verklaringen en medewerkers van leden.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">EP-detail (11 mappen)</h3>
+<h3 style="margin-top:28px;">Raad en toppen <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(3 mappen)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#committees">
-  <div class="toc-card__title">Commissies</div>
-  <div class="toc-card__desc">EP-commissiewerkitems, vergaderingsverslagen, agenda's. Elke commissie toont streaming_url + homepage + documents_url.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#council">
+  <div class="toc-card__title">Raad van de EU</div>
+  <div class="toc-card__desc">Documenten, vergaderingen, persberichten, conclusies, stemresultaten, voorbereidende organen, het openbaar register, de sanctieregimes en de 10 ministeri&euml;le formaties.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#ep-documents">
-  <div class="toc-card__title">EP-documenten (geïntegreerd)</div>
-  <div class="toc-card__desc">Enkel eindpunt dat takken naar verslagen, adviezen, resoluties, aangenomen/ingediende teksten, parlementaire vragen.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#european-council">
+  <div class="toc-card__title">Europese Raad</div>
+  <div class="toc-card__desc">Conclusies van de toppen (sinds 2004), vergaderingen, leden, de Strategische Agenda 2024-2029 en de Eurotop.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#amendments">
-  <div class="toc-card__title">Amendementen</div>
-  <div class="toc-card__desc">56.051 MEP-amendementen op wetgevingsbestanden. Filter op procedure, commissie, MEP of politieke groep.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#votes">
-  <div class="toc-card__title">Stemmingen</div>
-  <div class="toc-card__desc">Roloproepstemmingen van EP-plenum, met totalen, groepsindeling en per-MEP-posities.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#texts-adopted">
-  <div class="toc-card__title">Aangenomen teksten</div>
-  <div class="toc-card__desc">Definitieve EP-posities aangenomen in plenum (TA-referenties).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#texts-submitted">
-  <div class="toc-card__title">Ingediende teksten</div>
-  <div class="toc-card__desc">Moties tot resolutie, aanbevelingen en andere ingediende maar nog niet aangenomen teksten.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#resolutions">
-  <div class="toc-card__title">Resoluties</div>
-  <div class="toc-card__desc">EP-resoluties over beleidsonderwerpen (eigen initiatief, reactie op Commissie-mededelingen).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#reports">
-  <div class="toc-card__title">Verslagen</div>
-  <div class="toc-card__desc">1.026 commissieverslagen (A-referenties) &mdash; het voorstel van de rapporteur + amendementen samengesteld in één document.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#opinions">
-  <div class="toc-card__title">Adviezen</div>
-  <div class="toc-card__desc">Adviezen van betrokken commissies (rapporteur voor advies, RR-referenties).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#parliamentary-questions">
-  <div class="toc-card__title">Parlementaire vragen</div>
-  <div class="toc-card__desc">Schriftelijke en mondelinge vragen ingediend door MEP's aan Commissie, Raad, ECB en EEAS.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#webstreams">
-  <div class="toc-card__title">Webstreams</div>
-  <div class="toc-card__desc">EP-commissie + plenum live- en on-demand video-URL's van multimedia.europarl.europa.eu.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#eurogroup">
+  <div class="toc-card__title">Eurogroep</div>
+  <div class="toc-card__desc">Vergaderingen van de ministers van Financi&euml;n van de eurozone, documenten, leden en het werkprogramma.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Live-gegevens (9 mappen)</h3>
+<h3 style="margin-top:28px;">Europese Commissie <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 map)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#publications">
-  <div class="toc-card__title">Publicaties</div>
-  <div class="toc-card__desc">Geïntegreerde feed van persmededelingen, verslagen en EU OJ-artikelen van 44+ EU-instellingen en agentschappen.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#commission">
+  <div class="toc-card__title">Europese Commissie</div>
+  <div class="toc-card__desc">College van commissarissen + live agenda's, registerdocumenten, vergaderingen van het Transparantie-initiatief, RSB-adviezen, inbreuken, TRIS-kennisgevingen, consultaties, comitologie, RASFF-waarschuwingen, CORDIS-projecten, staatssteun, DMA-zaken, handelsbescherming, tarieven en de financi&euml;le sanctielijst.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#press-releases">
-  <div class="toc-card__title">Persmededelingen</div>
-  <div class="toc-card__desc">EC, EP, Raad, EEAS, ECB en agentschap-persmededelingen &mdash; dezelfde envelop, gefilterd op institutionele communicatie.</div>
+</div>
+
+<h3 style="margin-top:28px;">Economie en financi&euml;n <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(3 mappen)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#ecb">
+  <div class="toc-card__title">Europese Centrale Bank</div>
+  <div class="toc-card__desc">De ECB en het ECB-bankentoezicht: nieuws, evenementen, publicaties, rechtshandelingen en statistische datasets.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#calendar">
-  <div class="toc-card__title">Agenda</div>
-  <div class="toc-card__desc">Geïntegreerde EU-institutionele agenda: EP-plenum, Raadsvergaderingen, Commissie-college, agentschappen, euagenda.eu-events.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-financial-institutions">
+  <div class="toc-card__title">Financi&euml;le instellingen van de EU</div>
+  <div class="toc-card__desc">AMLA, EBA, EIB, EIOPA, EPPO, ESMA, ESRB en de Gemeenschappelijke Afwikkelingsraad, met de kredietinstellingen van de EBA, de financi&euml;le instrumenten van ESMA en de EIB-projecten.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#esm">
+  <div class="toc-card__title">Europees Stabiliteitsmechanisme</div>
+  <div class="toc-card__desc">Programma's, nieuws, evenementen en publicaties.</div>
+</a>
+</div>
+
+<h3 style="margin-top:28px;">EU-agentschappen <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(18 mappen)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#acer">
+  <div class="toc-card__title">ACER</div>
+  <div class="toc-card__desc">Agentschap voor de samenwerking tussen energieregulators: nieuws en publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#berec">
+  <div class="toc-card__title">BEREC</div>
+  <div class="toc-card__desc">Regulators voor elektronische communicatie: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cedefop">
+  <div class="toc-card__title">Cedefop</div>
+  <div class="toc-card__desc">Agentschap voor beroepsopleiding: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cpvo">
+  <div class="toc-card__title">CPVO</div>
+  <div class="toc-card__desc">Communautair Bureau voor plantenrassen: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#ecdc">
+  <div class="toc-card__title">ECDC</div>
+  <div class="toc-card__desc">Ziektepreventie en -bestrijding: nieuws, publicaties en surveillancethema's.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#echa">
+  <div class="toc-card__title">ECHA</div>
+  <div class="toc-card__desc">Europees Agentschap voor chemische stoffen: nieuws en de REACH-kandidatenlijst van SVHC's.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eea">
+  <div class="toc-card__title">EEA</div>
+  <div class="toc-card__desc">Europees Milieuagentschap: nieuws, evenementen en milieu-indicatoren.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#efsa">
+  <div class="toc-card__title">EFSA</div>
+  <div class="toc-card__desc">Voedselveiligheid: nieuws, publicaties, OpenFoodTox-stoffen en Xylella-waardplanten.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eige">
+  <div class="toc-card__title">EIGE</div>
+  <div class="toc-card__desc">Gendergelijkheid: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eit">
+  <div class="toc-card__title">EIT</div>
+  <div class="toc-card__desc">Innovatie en technologie: nieuws en evenementen.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#ema">
+  <div class="toc-card__title">EMA</div>
+  <div class="toc-card__desc">Europees Geneesmiddelenbureau: geneesmiddelen, wees- en pediatrische aanwijzingen, MRL's, tekorten, verwijzingen, PSUSA, kruidengeneesmiddelen, DHPC's en post-autorisatie.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#enisa">
+  <div class="toc-card__title">ENISA</div>
+  <div class="toc-card__desc">Agentschap voor cyberbeveiliging: nieuws en publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-lisa">
+  <div class="toc-card__title">eu-LISA</div>
+  <div class="toc-card__desc">Grootschalige IT-systemen: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-osha">
+  <div class="toc-card__title">EU-OSHA</div>
+  <div class="toc-card__desc">Veiligheid en gezondheid op het werk: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euaa">
+  <div class="toc-card__title">EUAA</div>
+  <div class="toc-card__desc">EU-Asielagentschap: nieuws.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euda">
+  <div class="toc-card__title">EUDA</div>
+  <div class="toc-card__desc">EU-Drugsagentschap: nieuws, evenementen, publicaties.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euipo">
+  <div class="toc-card__title">EUIPO</div>
+  <div class="toc-card__desc">Intellectuele eigendom: nieuws, evenementen en EU-merken.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#fra">
+  <div class="toc-card__title">FRA</div>
+  <div class="toc-card__desc">Grondrechten: jurisprudentie en Charterpedia.</div>
+</a>
+</div>
+
+<h3 style="margin-top:28px;">Financiering en consultaties <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(2 mappen)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#funding">
+  <div class="toc-card__title">Financiering, subsidies en aanbestedingen</div>
+  <div class="toc-card__desc">Oproepen tot voorstellen (Horizon Europe, Digital Europe, LIFE, EU4Health, Erasmus+...), gefinancierde projecten, EIC-financiering voor start-ups en mkb, TED- + F&amp;T-portaal-aanbestedingen, fondsbegunstigden en oproepen van gedecentraliseerde agentschappen.</div>
 </a>
 <a class="toc-card" href="/api/docs/endpoints.html#consultations">
-  <div class="toc-card__title">Raadplegingen</div>
-  <div class="toc-card__desc">Live belanghebbenden-feedback van EC Have Your Say, gegroepeerd op land en gebruikerstype.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#research-publications">
-  <div class="toc-card__title">Onderzoek (EPRS+STOA+JRC+ART+ECA)</div>
-  <div class="toc-card__desc">210 geïntegreerde onderzoekspublicaties: EPRS-brieven, STOA-toekomstverkenning, JRC-wetenschap-voor-beleid, ART-strategische papers, ECA-audits.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#tenders">
-  <div class="toc-card__title">Aanbestedingen (TED)</div>
-  <div class="toc-card__desc">386 EU-aanbestedingsmededelingen van Tenders Electronic Daily, filterbaar op CPV-code, contractant, deadline.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#predictions">
-  <div class="toc-card__title">Voorspellingen</div>
-  <div class="toc-card__desc">XGBoost + baseline-voorspellingen voor proceduretijdlijn en uitkomstpercentages.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#knowledge-guides">
-  <div class="toc-card__title">Kennishandleidingen</div>
-  <div class="toc-card__desc">206 samengestelde beleidsverklaringen &mdash; handgeschreven, zoekwoord-geïndexeerd, alle grote EU-wetten bedekkend.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#citations">
-  <div class="toc-card__title">Citaat verifiëren</div>
-  <div class="toc-card__desc">Geef een EU-juridiische citaat door; ontvang terug canonieke CELEX, volledige titel en gezaghebbende EUR-Lex-URL.</div>
+  <div class="toc-card__title">Consultaties van agentschappen</div>
+  <div class="toc-card__desc">Openbare consultaties van gedecentraliseerde agentschappen: AMLA, BEREC, ECHA, EIOPA en EMA.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Gespecialiseerde EC-databases (10 mappen, NIEUW mei 2026)</h3>
-<p style="margin-top:8px;margin-bottom:16px;color:var(--text-muted,#6b7280);">Tien institutionele oppervlakken die geen andere leverancier via één API-sleutel blootstelt. Elke cluster is ook ingebouwd in de Brubru-chatbot &mdash; wanneer een gebruiker vragen stelt over lobbyisten, sancties of anti-dumpingrechten, haalt de chat rechtstreeks uit deze tabellen.</p>
+<h3 style="margin-top:28px;">Open data en personen <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(4 mappen)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#sanctions">
-  <div class="toc-card__title">Sancties (GBVB)</div>
-  <div class="toc-card__desc">6.002 personen + entiteiten op de EU-geconsolideerde GBVB-lijst. Programma's (IRN, RUS, UKR, BLR, SYR, PRK, MMR, TERR), juridische basis, nationaliteiten, date_file.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#open-data">
+  <div class="toc-card__title">Open data</div>
+  <div class="toc-card__desc">Catalogi van data.europa.eu, datasets met directe downloadlinks en de Datasets met hoge waarde.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#transparency-register">
-  <div class="toc-card__title">Transparantieregister</div>
-  <div class="toc-card__desc">17.247 geregistreerde lobbyorganisaties. Originele naam, acroniem, registratiecategorie, kantoor-land, EP-pass-aantal, VTE's, opgegeven lobbycosts.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#general-publications">
+  <div class="toc-card__title">Algemene publicaties</div>
+  <div class="toc-card__desc">Brochures, rapporten en studies van de EU van het Publicatiebureau.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#comitology">
-  <div class="toc-card__title">Comitologie-documenten</div>
-  <div class="toc-card__desc">83.807 documenten uit het Comitologie-register: stemmingslijsten, samenvattingsverslagen, concept-uitvoeringsbesluiten, adviezen. Filter op commissiecode (bijv. SCoPAFF C20407, Appelcommissie C39800).</div>
+<a class="toc-card" href="/api/docs/endpoints.html#who-is-who">
+  <div class="toc-card__title">Wie is wie</div>
+  <div class="toc-card__desc">EU-ambtenaren en de organisatorische afdelingen van alle instellingen (EU Who Is Who).</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#gi">
+<a class="toc-card" href="/api/docs/endpoints.html#geographical-indications">
   <div class="toc-card__title">Geografische aanduidingen</div>
-  <div class="toc-card__desc">5.917 EU-beschermde namen &mdash; PDO, PGI, TSG, wijn, spiritu, ambachtelijk. Afkomstig van eAmbrosia (DG AGRI gezaghebbend) + EUIPO GIview-unionregister. Filter op type, land, status.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#fta">
-  <div class="toc-card__title">Internationale overeenkomsten</div>
-  <div class="toc-card__desc">900 EU-internationale overeenkomsten: VHU, EVP, AA, PAV, Visserij, Luchtvaart. CELEX-sector-2 type-A, met partner, overeenkomsttype, in-werking-vlag.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#trade-defence">
-  <div class="toc-card__title">Handelsverdediging</div>
-  <div class="toc-card__desc">675 anti-dumpings-, compensatie- en veiligheidsmaatregelen. CELEX-sector-3 type-R, met maatregel-type, plichtenstatus, doelland, product, in-werking-vlag.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#competition-cases">
-  <div class="toc-card__title">DG COMP-zaken (live)</div>
-  <div class="toc-card__desc">Live pass-through naar <code>api.tech.ec.europa.eu/search-api</code> &mdash; ~250k mededingingszaken (staatssteun SA., kartels AT., fusies M.). Zaken per lidstaat, steuncategorie, instrument.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#jrc-datasets">
-  <div class="toc-card__title">JRC-gegevenscatalogus</div>
-  <div class="toc-card__desc">3.543 wetenschappelijke gegevenssets van het Gemeenschappelijk Onderzoekscentrum: ESDAC, EFFIS, GHSL, LUISA, JRC AI Watch, JRC EDGAR-FOOD. Titel, beschrijving, uitgever, EuroVoc-trefwoorden.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#cohesion-datasets">
-  <div class="toc-card__title">DG REGIO-cohesiegegevens</div>
-  <div class="toc-card__desc">1.451 Socrata-gecatalogeerde cohesiegegevenssets van cohesiondata.ec.europa.eu &mdash; ESF+, ERDF, Cohesiefonds, Just Transition Fund, Interreg, RRF-begunstigden.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#access2markets">
-  <div class="toc-card__title">CN-codes (Access2Markets, live)</div>
-  <div class="toc-card__desc">Live pass-through naar <code>webgate.ec.europa.eu/nomen</code> &mdash; Combined Nomenclature-secties en productenstructuren voor tarief-/douaneclassificatie.</div>
+  <div class="toc-card__desc">Beschermde namen: het EU-register eAmbrosia, EUIPO GIview en de GI's van derde landen.</div>
 </a>
 </div>
 
-<h2>Gegevensbronnen &amp; vernieuwingscadence</h2>
+<h3 style="margin-top:28px;">Eigen intelligentie <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 map)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#proprietary">
+  <div class="toc-card__title">Brubru EU-intelligentie</div>
+  <div class="toc-card__desc">De gerangschikte directory van Brusselse lobby's, de EU Canon-analyses, het corpus van naar het Catalaans vertaalde wetgeving en de kennisgidsen die de chatbot voeden.</div>
+</a>
+</div>
+
+<h2>Gegevensbronnen en verversingsfrequentie</h2>
+<p>Elke map wordt gevoed door de gezaghebbende EU-bron en automatisch bijgewerkt. De genoemde frequentie is het slechtste geval; live doorgeefmappen zijn realtime.</p>
 <table>
-<thead><tr><th>Bron</th><th>Gevoede eindpunt</th><th>Vernieuwingscadence</th><th>Versheid</th></tr></thead>
+<thead><tr><th>Laag</th><th>Mappen</th><th>Verversingsfrequentie</th></tr></thead>
 <tbody>
-<tr><td>EUR-Lex Cellar (Publicatiebureau)</td><td><code>/laws</code>, <code>/laws/{celex}/text</code></td><td>Dagelijkse OJ delta-import</td><td>&lt; 24h na OJ-publicatie</td></tr>
-<tr><td>OEIL (EP Wetgevingsobservatorium)</td><td><code>/procedures</code></td><td>Dagelijkse synchronisatie</td><td>&lt; 24h</td></tr>
-<tr><td>Institutionele RSS-feeds (44 bronnen)</td><td><code>/publications</code>, <code>/press-releases</code></td><td>Elke 6 uur</td><td>&lt; 6h</td></tr>
-<tr><td>EPRS, STOA, JRC, ART, ECA-portals</td><td><code>/research-publications</code></td><td>Dagelijks, filterbaar op bron</td><td>&lt; 24h</td></tr>
-<tr><td>EUR-Lex voorbereide documenten</td><td><code>/commission-register-documents</code></td><td>Dagelijkse delta</td><td>&lt; 24h</td></tr>
-<tr><td>Raadr openbare register</td><td><code>/council-documents</code></td><td>Dagelijks</td><td>&lt; 24h</td></tr>
-<tr><td>EP Open Data REST v2</td><td><code>/meps</code></td><td>Live-fetch, 6h client-cache</td><td>Realtime minus 6h</td></tr>
-<tr><td>EU Who Is Who organigrammen (75 units)</td><td><code>/officials</code></td><td>Wekelijkse bulkheropname</td><td>14.873 records vandaag</td></tr>
-<tr><td>commission.europa.eu/calendar</td><td><code>/commissioners/{name}/agenda</code></td><td>Live scrape, 1h cache</td><td>Realtime minus 1h</td></tr>
-<tr><td>EP commissiepagina's</td><td><code>/committees/*</code></td><td>Dagelijks per commissie</td><td>&lt; 24h</td></tr>
-<tr><td>multimedia.europarl.europa.eu</td><td><code>/webstreams</code>, <code>/committees/{code}/webstream</code></td><td>Live</td><td>Realtime</td></tr>
-<tr><td>EC Have Your Say allFeedback API</td><td><code>/consultations/.../feedback</code></td><td>Live-fetch, 6h cache</td><td>Realtime minus 6h</td></tr>
-<tr><td>8 agendabronnen (EP, Raad, EC, agentschappen, euagenda)</td><td><code>/calendar/events</code></td><td>Dagelijkse synchronisatie</td><td>&lt; 24h</td></tr>
-<tr><td>EC Transparantieregister</td><td><code>/meetings</code></td><td>Dagelijks</td><td>&lt; 24h</td></tr>
-<tr><td>EC Regelgevingstoetsingsraad</td><td><code>/rsb-opinions</code></td><td>Wekelijks</td><td>&lt; 7d</td></tr>
-<tr><td>EC TRIS-portal</td><td><code>/tris-notifications</code></td><td>Dagelijks</td><td>&lt; 24h</td></tr>
-<tr><td>TED (Tenders Electronic Daily)</td><td><code>/tenders</code></td><td>Dagelijks</td><td>&lt; 24h, 386 actief vandaag</td></tr>
-<tr><td>EP doceo (verslagen, stemmingen, amendementen, resoluties, adviezen)</td><td><code>/reports</code>, <code>/votes</code>, <code>/amendments</code>, <code>/resolutions</code>, <code>/opinions</code></td><td>Dagelijks</td><td>&lt; 24h</td></tr>
-<tr><td>EP doceo vragenmodule</td><td><code>/parliamentary-questions</code></td><td>Dagelijks</td><td>&lt; 24h</td></tr>
-<tr><td>Samengestelde Brubru-team</td><td><code>/knowledge-guides</code></td><td>Dagelijkse toevoegingen</td><td>227 gidsen vandaag</td></tr>
-<tr><td>EU-geconsolideerde GBVB-sanctielijst</td><td><code>/specialised/sanctions</code></td><td>Dagelijks</td><td>6.002 entiteiten</td></tr>
-<tr><td>EU Transparantieregister Gezamenlijke Secretariaat XML</td><td><code>/specialised/transparency-register</code></td><td>Dagelijks</td><td>17.247 orgs</td></tr>
-<tr><td>EC Comitologie-register (Playwright-gebroken <code>/core/api/front/</code>)</td><td><code>/specialised/comitology</code></td><td>Wekelijks</td><td>83.807 docs</td></tr>
-<tr><td>eAmbrosia + EUIPO GIview (DG AGRI + EUIPO)</td><td><code>/specialised/gi</code></td><td>Wekelijks</td><td>5.917 GA's</td></tr>
-<tr><td>Cellar SPARQL sector-2 type-A</td><td><code>/specialised/fta</code></td><td>Maandelijks</td><td>900 overeenkomsten</td></tr>
-<tr><td>Cellar SPARQL sector-3 type-R</td><td><code>/specialised/trade-defence</code></td><td>Wekelijks</td><td>675 maatregelen</td></tr>
-<tr><td><code>api.tech.ec.europa.eu/search-api</code> (DG COMP)</td><td><code>/specialised/competition-cases</code></td><td>Live</td><td>~250k zaken</td></tr>
-<tr><td>data.europa.eu-federatie van JRC-catalogus</td><td><code>/specialised/jrc-datasets</code></td><td>Wekelijks</td><td>3.543 gegevenssets</td></tr>
-<tr><td>cohesiondata.ec.europa.eu Socrata</td><td><code>/specialised/cohesion-datasets</code></td><td>Wekelijks</td><td>1.451 gegevenssets</td></tr>
-<tr><td><code>webgate.ec.europa.eu/nomen</code> (Access2Markets)</td><td><code>/specialised/access2markets/products</code></td><td>Live</td><td>21 secties + productenstructuur</td></tr>
-<tr><td>Afgeleid van lokale Formex XML + DB</td><td><code>/legal-text/*</code></td><td>Op aanvraag; gecached</td><td>Herberekend wanneer spec verandert</td></tr>
-<tr><td>Brubru XGBoost-model + OEIL</td><td><code>/predictions/*</code></td><td>Model wekelijks opnieuw getraind</td><td>Inferentie in realtime</td></tr>
+<tr><td>Vastgestelde wetgeving (EUR-Lex / Cellar van het Publicatiebureau)</td><td><code>legislative</code></td><td>Dagelijkse PB-delta &mdash; &lt; 24u na publicatie</td></tr>
+<tr><td>Wetgevingsprocedures (OEIL) + Wetgevingstrein</td><td><code>legislative</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
+<tr><td>Parlement (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Dagelijks; webstreams live</td></tr>
+<tr><td>Registers van Raad, Europese Raad, Eurogroep</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
+<tr><td>Commissie (Register, Transparantie, consultaties, RASFF, CORDIS, staatssteun, comitologie...)</td><td><code>commission</code></td><td>Van live tot wekelijks per bron</td></tr>
+<tr><td>ECB, financi&euml;le instellingen van de EU, ESM</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Dagelijkse gebundelde sweep</td></tr>
+<tr><td>Gedecentraliseerde EU-agentschappen (18 organen)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Dagelijkse gebundelde sweep</td></tr>
+<tr><td>Financiering en aanbestedingen (F&amp;T-portaal, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Dagelijks &mdash; &lt; 24u</td></tr>
+<tr><td>Open data, publicaties, ambtenaren</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Wekelijkse bulk-herinname</td></tr>
+<tr><td>Geografische aanduidingen</td><td><code>geographical-indications</code></td><td>Wekelijks</td></tr>
+<tr><td>Brubru-eigen (lobby's, canon, Catalaans, gidsen)</td><td><code>proprietary</code></td><td>Doorlopend / bij publicatie</td></tr>
 </tbody>
 </table>
 
 <h2>Authenticatie in een oogopslag</h2>
-<p>Elke <code>/api/v1/*</code>-oproep vereist een API-sleutel die wordt doorgegeven als Bearer-token of <code>X-API-Key</code>-header:</p>
+<p>Elke call naar <code>/api/v2/*</code> vereist een API-sleutel, verstuurd als Bearer-token of als <code>X-API-Key</code>-header:</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=5"</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>Volledige details op <a href="/api/docs/authentication.html">Authenticatie</a>.</p>
 
-<h2>Antwoord-envelop in een oogopslag</h2>
-<p>Elk gepagineerd eindpunt retourneert dezelfde vorm. Codeer eenmaal tegen deze envelop en wissel gegevenssets uit door het pad te veranderen:</p>
+<h2>De response-envelop in een oogopslag</h2>
+<p>Elk gepagineerd endpoint geeft dezelfde vorm terug. Programmeer &eacute;&eacute;n keer tegen deze envelop en wissel van dataset door het pad te wijzigen:</p>
 
 <pre><code>{
   "total": 139,
@@ -416,73 +379,71 @@ Brubru is een verticale EU-dataprovider. Onze REST API geeft ontwikkelaars, RegT
   "data": [ ... ]
 }</code></pre>
 
-<p>Herkomst- en snelheidsbeperking-informatie bevinden zich in antwoordheaders, niet in de body:</p>
+<p>Herkomst en rate-limit-informatie staan in de response-headers, niet in de body:</p>
 <pre><code>X-Powered-By: Brubru
 X-Source: brubru.beresol.eu
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 58
 X-RateLimit-Tier: free</code></pre>
 
-<p>Volledige details op <a href="/api/docs/envelope.html">Antwoord-envelop</a>.</p>
+<p>Volledige details op <a href="/api/docs/envelope.html">Response-envelop</a>.</p>
 
-<h2>Snelstart: je eerste oproep</h2>
+<h2>Snelstart: uw eerste call</h2>
 
-<p><strong>1. Haal een API-sleutel.</strong> Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> nadat je bent aangemeld voor het Professional-abonnement. Sleutels zien eruit als <code>brubru_live_</code> gevolgd door 48 hexadecimale tekens.</p>
+<p><strong>1. Vraag een API-sleutel aan.</strong> Mail <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> zodra u het Professional-abonnement hebt. Sleutels zien eruit als <code>brubru_live_</code> gevolgd door 48 hexadecimale tekens.</p>
 
-<p><strong>2. Maak een oproep.</strong></p>
+<p><strong>2. Controleer of de service draait.</strong> De health-check is openbaar &mdash; geen sleutel nodig:</p>
 
-<pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru-production.up.railway.app/api/v1/ping"</code></pre>
+<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
 
-<p>Antwoord (deze is openbaar, geen auth vereist):</p>
+<p>Antwoord:</p>
 
 <pre><code>{
   "status": "ok",
   "service": "brubru-data-provider",
-  "version": "v1",
   "time": "2026-04-20T15:00:00Z"
 }</code></pre>
 
 <p><strong>3. Probeer een echte zoekopdracht.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=3"</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
-<p>Je krijgt een gepagineerde lijst van EU-wetten die overeenkomen met "artificial intelligence", met CELEX-identificators, titels, datums en EUR-Lex-URL's. Vanaf daar volgen alle andere eindpunten dezelfde envelop-patroon.</p>
+<p>U krijgt een gepagineerde lijst van EU-wetten die overeenkomen met "artificial intelligence", met CELEX-identificatoren, titels, datums en EUR-Lex-URL's. Vanaf daar volgt elk endpoint hetzelfde envelop-patroon &mdash; wijzig alleen het pad.</p>
 
-<h2>Beperkingen (wat we niet behandelen)</h2>
+<h2>Beperkingen (wat we niet dekken)</h2>
 <ul>
-<li><strong>Niet-EU-wetgeving.</strong> We volgen nationale gazetten niet direct. Als je Spaanse BOE + EU samen nodig hebt, combineer ons met GovClipping of soortgelijk.</li>
-<li><strong>Real-time push.</strong> Nog geen webhooks of SSE. Polling op onze vernieuwingscadence is het integratiepatroon. Webhooks op de septemberroutekaart 2026.</li>
-<li><strong>Talen.</strong> API-antwoorden zijn vandaag Engels. Sommige wetteksten zijn beschikbaar in alle 24 EU-talen via de Cellar-fallback, maar de gestructureerde antwoorden zijn alleen in het Engels. Meertalige eindpunten in september 2026.</li>
-<li><strong>Bulkexport.</strong> Nog geen nachtelijke CSV/Parquet-dumps. Routekaart september 2026. Herhaal voorlopig gepagineerde lijsten.</li>
-<li><strong>Nationale parlementen.</strong> We nemen niet in van <em>nationale</em> parlementen. Alleen EP.</li>
+<li><strong>Niet-EU-wetgeving.</strong> We volgen nationale staatsbladen niet rechtstreeks. Hebt u het Spaanse BOE samen met de EU nodig, combineer ons dan met GovClipping of vergelijkbaar.</li>
+<li><strong>Realtime push.</strong> Nog geen webhooks of SSE. Het integratiepatroon is polling volgens onze frequentie. Webhooks op de roadmap voor september 2026.</li>
+<li><strong>Talen.</strong> API-antwoorden zijn vandaag in het Engels. Sommige wetteksten zijn beschikbaar in alle 24 EU-talen via Cellar, maar de gestructureerde antwoorden zijn alleen in het Engels. Meertalige endpoints in september 2026.</li>
+<li><strong>Bulkexports.</strong> Nog geen nachtelijke CSV/Parquet-dumps. Roadmap september 2026. Doorloop voorlopig de gepagineerde lijsten.</li>
+<li><strong>Nationale parlementen.</strong> We nemen geen data op van <em>nationale</em> parlementen. Alleen het EP.</li>
 </ul>
 
-<h2>Waar ga je vervolgens naar toe</h2>
+<h2>Waar nu naartoe</h2>
 <div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html">
+  <div class="toc-card__title">Alle endpoints</div>
+  <div class="toc-card__desc">De volledige, gegroepeerde lijst van alle 437 v2-endpoints, &eacute;&eacute;n sectie per instellingsmap.</div>
+</a>
 <a class="toc-card" href="/api/docs/authentication.html">
   <div class="toc-card__title">Authenticatie</div>
-  <div class="toc-card__desc">Hoe je je API-sleutel verstuurt, levenscyclus, rotatie, beveiliging.</div>
+  <div class="toc-card__desc">Hoe u uw API-sleutel verstuurt, levenscyclus, rotatie, beveiliging.</div>
 </a>
 <a class="toc-card" href="/api/docs/use-cases.html">
-  <div class="toc-card__title">Gebruiksscenario's per rol</div>
-  <div class="toc-card__desc">Public-affairs-consultants, handelsverenigingen, bedrijven, NGO's, EU-ambtenaren &mdash; wat je eigenlijk zou aanroepen.</div>
+  <div class="toc-card__title">Use cases per rol</div>
+  <div class="toc-card__desc">Public-affairsconsultants, verenigingen, bedrijven, ngo's, EU-ambtenaren &mdash; wat u echt zou aanroepen.</div>
 </a>
 <a class="toc-card" href="/api/docs/glossary.html">
   <div class="toc-card__title">Woordenlijst</div>
-  <div class="toc-card__desc">CELEX, OEIL, triloog, rapporteur, commissieroletypes, richtlijn vs verordening &mdash; elk acroniem uitgelegd.</div>
-</a>
-<a class="toc-card" href="/api/docs/institutions.html">
-  <div class="toc-card__title">Behandelde EU-instellingen</div>
-  <div class="toc-card__desc">Matrix van elke EU-bron die we consumeren, met vernieuwingscadences.</div>
+  <div class="toc-card__desc">CELEX, OEIL, triloog, rapporteur, soorten commissies, richtlijn versus verordening &mdash; elke afkorting uitgelegd.</div>
 </a>
 </div>
 
 <footer>
-&copy; 2026 Beresol BV — Brubru EU Data API v1.
-<a href="/api/">Terug naar marketingpagina</a> ·
-<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI-spec</a> ·
+&copy; 2026 Beresol BV &mdash; Brubru EU Data API v2.
+<a href="/api/">Terug naar de marketingpagina</a> &middot;
+<a href="/api/openapi.json">OpenAPI</a> &middot;
 <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
 </footer>
 </main>

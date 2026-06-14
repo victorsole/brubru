@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rate limits — Brubru EU Data API</title>
-<meta name="description" content="Brubru API rate limits, retry strategy, headers, monthly quotas.">
+<title>Errors — Brubru EU Data API</title>
+<meta name="description" content="Brubru API error envelope, reason codes, X-Request-Id, recovery patterns.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -51,8 +51,8 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
-    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
-    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits" class="active">Rate limits</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors" class="active">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
   </ul>
 
   <h3>Legislation</h3>
@@ -141,81 +141,127 @@ active link by adding class="active" to the matching <a>.
 
 <main class="main">
 
-<div class="main__eyebrow">Rate limits</div>
-<h1>Rate limits</h1>
+<div class="main__eyebrow">Errors</div>
+<h1>Error responses</h1>
 <p class="main__lede">
-Three per-key tiers: <strong>free 60</strong>, <strong>pro 300</strong>, <strong>enterprise 6000 requests / minute</strong>. Sliding-window enforcement. Your tier is on the <code>X-RateLimit-Tier</code> header of every response and on <code>/whoami</code>.
+Every non-2xx response on <code>/api/v2/*</code> uses the same canonical envelope. Machine-readable <code>reason_code</code>s let you switch on error types without parsing free-text messages.
 </p>
 
-<h2>Tier table</h2>
+<h2>Error envelope</h2>
+<pre><code>{
+  "error": "Unauthorized: Missing API key",
+  "reason_code": "auth_missing_key",
+  "request_id": "f9e3a1b2-4c5d-6e7f-8a9b-0c1d2e3f4a5b"
+}</code></pre>
+
 <table>
-<thead><tr><th>Tier</th><th>Per-minute limit</th><th>Monthly quota</th><th>Who gets it</th></tr></thead>
+<thead><tr><th>Field</th><th>Meaning</th></tr></thead>
 <tbody>
-<tr><td><code>free</code></td><td>60 req/min</td><td>Unlimited</td><td>Trial keys + Professional default</td></tr>
-<tr><td><code>pro</code></td><td>300 req/min</td><td>Unlimited</td><td>Production integrations on request &mdash; email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a></td></tr>
-<tr><td><code>enterprise</code></td><td>6,000 req/min</td><td>Unlimited</td><td>Partner integrations (e.g. GovClipping). Custom contract.</td></tr>
+<tr><td><code>error</code></td><td>Human-readable message. Never parse this; use <code>reason_code</code>.</td></tr>
+<tr><td><code>reason_code</code></td><td>Stable machine-readable code. Safe to switch on.</td></tr>
+<tr><td><code>request_id</code></td><td>UUID4. Echoed in the <code>X-Request-Id</code> response header. Include this when emailing support.</td></tr>
 </tbody>
 </table>
 
-<div class="callout">
-<p>The limit uses a sliding window over the last 60 seconds, not fixed calendar minutes. Bursting is allowed as long as you stay under your tier's ceiling in any rolling 60-second window.</p>
-</div>
+<h2>HTTP status codes</h2>
+<table>
+<thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>200</code></td><td>Success.</td></tr>
+<tr><td><code>401</code></td><td>Missing, malformed, or revoked API key.</td></tr>
+<tr><td><code>403</code></td><td>Key valid but owner is not on Professional, or account inactive.</td></tr>
+<tr><td><code>404</code></td><td>Resource not found.</td></tr>
+<tr><td><code>422</code></td><td>Invalid query parameter or conflicting params.</td></tr>
+<tr><td><code>429</code></td><td>Rate limit exceeded (60/min per key). See <code>Retry-After</code> header.</td></tr>
+<tr><td><code>500</code></td><td>Unhandled server error. Include <code>request_id</code> when reporting.</td></tr>
+<tr><td><code>502</code></td><td>Upstream EU portal temporarily unavailable.</td></tr>
+<tr><td><code>503</code></td><td>Derived computation unavailable (e.g. recital-article map failed to compute).</td></tr>
+</tbody>
+</table>
 
-<h2>Response headers</h2>
-<p>Every response carries:</p>
-<ul>
-<li><code>X-RateLimit-Limit</code> &mdash; your tier's per-minute ceiling (60 / 300 / 6000).</li>
-<li><code>X-RateLimit-Remaining</code> &mdash; calls left in the current 60-second window.</li>
-<li><code>X-RateLimit-Tier</code> &mdash; <code>free</code>, <code>pro</code>, or <code>enterprise</code>.</li>
-</ul>
-<p>On 429 responses, additionally:</p>
-<ul>
-<li><code>Retry-After</code> &mdash; seconds to wait before retrying.</li>
-</ul>
+<h2>Reason codes</h2>
+<table>
+<thead><tr><th><code>reason_code</code></th><th>Status</th><th>Trigger</th></tr></thead>
+<tbody>
+<tr><td><code>auth_missing_key</code></td><td>401</td><td>No <code>Authorization</code> or <code>X-API-Key</code> header sent.</td></tr>
+<tr><td><code>auth_invalid_format</code></td><td>401</td><td>Key doesn't start with <code>brubru_live_</code>.</td></tr>
+<tr><td><code>auth_key_not_found</code></td><td>401</td><td>Key not in our DB or revoked.</td></tr>
+<tr><td><code>tier_insufficient</code></td><td>403</td><td>Owner isn't on Professional.</td></tr>
+<tr><td><code>org_inactive</code></td><td>403</td><td>Owner's account is disabled.</td></tr>
+<tr><td><code>rate_limited</code></td><td>429</td><td>Over 60 requests per minute for this key.</td></tr>
+<tr><td><code>not_found</code></td><td>404</td><td>Generic not-found (CELEX, procedure ref, MEP id, etc.).</td></tr>
+<tr><td><code>text_unavailable</code></td><td>404</td><td>No text cached for the requested law and Cellar fallback also failed.</td></tr>
+<tr><td><code>invalid_query</code></td><td>422</td><td>A query param failed validation.</td></tr>
+<tr><td><code>conflicting_params</code></td><td>422</td><td>Two params that alias the same bound were sent with different values.</td></tr>
+<tr><td><code>invalid_date_range</code></td><td>422</td><td><code>from</code> is after <code>to</code>.</td></tr>
+<tr><td><code>upstream_error</code></td><td>502</td><td>An EU source (HYS, Commission calendar, EP Open Data) returned an error.</td></tr>
+<tr><td><code>computation_unavailable</code></td><td>503</td><td>Derived computation (recital-article map) failed for this CELEX.</td></tr>
+<tr><td><code>internal_error</code></td><td>500</td><td>Unhandled exception on our side.</td></tr>
+</tbody>
+</table>
 
-<h2>Check your limit any time</h2>
-<p>Your current limit and remaining quota ride on the response headers of every authenticated call. Use <code>-i</code> (or <code>-D -</code>) on any cheap endpoint and read the <code>X-RateLimit-*</code> headers:</p>
-<pre><code>curl -i -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/proprietary/guides?limit=1"
+<h2><code>X-Request-Id</code> header</h2>
+<p>Every response, successful or not, carries an <code>X-Request-Id</code> header. This equals the <code>request_id</code> in error bodies. When you report an issue, include it — we can find the exact request in our logs.</p>
 
-# HTTP/1.1 200 OK
-# X-RateLimit-Tier: enterprise
-# X-RateLimit-Limit: 6000
-# X-RateLimit-Remaining: 5998</code></pre>
+<p>You can also supply your own <code>X-Request-Id</code> on the request; we honour it as long as it's ≤ 64 characters. Helpful for distributed tracing.</p>
 
-<h2>When you hit the limit</h2>
-<p>You get a <code>429 rate_limited</code> response. The right behaviour is:</p>
-<ol>
-<li>Read <code>Retry-After</code>.</li>
-<li>Sleep that many seconds.</li>
-<li>Retry the same request.</li>
-</ol>
+<h2>Recovery patterns</h2>
 
-<pre><code>import time, httpx
+<h3>Rate limit (429)</h3>
+<pre><code>Retry-After: 7
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0</code></pre>
+<p>Back off for <code>Retry-After</code> seconds. In Python:</p>
+<pre><code>if r.status_code == 429:
+    time.sleep(int(r.headers.get("Retry-After", 60)))
+    continue  # retry</code></pre>
 
-def call_with_backoff(url, headers):
-    for attempt in range(5):
-        r = httpx.get(url, headers=headers)
-        if r.status_code != 429:
-            return r
-        wait = int(r.headers.get("Retry-After", 60))
-        time.sleep(wait)
-    r.raise_for_status()
-</code></pre>
+<h3>Upstream error (502)</h3>
+<p>Something outside Brubru is broken (Have Your Say portal is down, Commission calendar is slow). Retry with exponential backoff up to 3 times. If it persists &gt; 30 minutes, email us.</p>
 
-<h2>Good citizenship</h2>
-<ul>
-<li><strong>Cache aggressively.</strong> Our data refreshes daily for most endpoints. Don't poll faster than you need.</li>
-<li><strong>Batch filters.</strong> Ask for <code>limit=100</code> once instead of 10 calls with <code>limit=10</code>.</li>
-<li><strong>Use <code>If-None-Match</code> when we expose ETags</strong> (June 2026 roadmap).</li>
-<li><strong>Monitor Newman runs.</strong> In CI, set <code>newman run --delay-request 1000</code> to pace calls.</li>
-</ul>
+<h3>Conflicting params (422 <code>conflicting_params</code>)</h3>
+<p>You sent <code>published_to</code> AND <code>published_end</code> with different values. Pick one (prefer <code>published_to</code>) and retry.</p>
 
-<h2>Need higher limits?</h2>
-<p>Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> with your use case. <code>pro</code> upgrades are usually approved within 24h for production integrations. <code>enterprise</code> is a custom contract for partner integrations &mdash; bundling resale rights, SLA, and the 6,000 req/min ceiling.</p>
+<h3>Computation unavailable (503)</h3>
+<p>Specific to <code>/legal-text/{celex}/recital-article-map</code>. The TF-IDF parser can fail on edge-case XML. Fall back to <code>/legal-text/{celex}/defined-terms</code> which exercises a different parser. Email us the CELEX so we can debug.</p>
+
+<h2>Example error responses</h2>
+
+<p><strong>Missing key:</strong></p>
+<pre><code>HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer realm="Brubru API"
+X-Request-Id: 7f9e3c2b-1a4d-5b6c-7d8e-9f0a1b2c3d4e
+Content-Type: application/json
+
+{
+  "error": "Unauthorized: Missing API key",
+  "reason_code": "auth_missing_key",
+  "request_id": "7f9e3c2b-1a4d-5b6c-7d8e-9f0a1b2c3d4e"
+}</code></pre>
+
+<p><strong>Conflicting params:</strong></p>
+<pre><code>HTTP/1.1 422 Unprocessable Entity
+
+{
+  "error": "Conflicting upper-bound parameters: published_to=2026-01-01 and published_end=2026-03-31. They are aliases of the same bound; pass only one, or pass matching values.",
+  "reason_code": "conflicting_params",
+  "request_id": "..."
+}</code></pre>
+
+<p><strong>Rate limit:</strong></p>
+<pre><code>HTTP/1.1 429 Too Many Requests
+Retry-After: 12
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0
+
+{
+  "error": "Rate limit exceeded: 60 requests per minute",
+  "reason_code": "rate_limited",
+  "request_id": "..."
+}</code></pre>
 
 <h2>Next</h2>
-<p>Head to <a href="/api/docs/endpoints.html">Endpoints</a> for the full reference of all 82 routes across 36 folders.</p>
+<p>See <a href="/api/docs/rate-limits.html">Rate limits</a> for a full explanation of quotas and how to back off.</p>
 
 <footer>
 &copy; 2026 Beresol BV — Brubru EU Data API v2.

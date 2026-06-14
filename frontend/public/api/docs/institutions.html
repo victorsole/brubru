@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EU institutions covered — Brubru EU Data API</title>
+<meta name="description" content="Matrix of every EU institution Brubru API ingests from, with refresh cadences and data sources.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
+  </ul>
+
+  <h3>European Parliament</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (38)</a></li>
+  </ul>
+
+  <h3>Council &amp; summits</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
+  </ul>
+
+  <h3>Commission</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (40)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER &mdash; energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC &mdash; electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop &mdash; vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO &mdash; plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC &mdash; disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA &mdash; chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA &mdash; environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA &mdash; food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE &mdash; gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT &mdash; innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA &mdash; medicines (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA &mdash; cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA &mdash; IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA &mdash; safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA &mdash; asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA &mdash; drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO &mdash; intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA &mdash; fundamental rights</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who &mdash; officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions" class="active">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">OpenAPI spec (JSON)</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Coverage</div>
+<h1>EU institutions covered</h1>
+<p class="main__lede">
+What we ingest, where we ingest it from, and how fresh it is. Explicit about what we don't yet have.
+</p>
+
+<h2>Core institutions</h2>
+<table>
+<thead><tr><th>Institution</th><th>Endpoint(s)</th><th>Source</th><th>Refresh</th></tr></thead>
+<tbody>
+<tr><td>European Parliament (EP)</td><td><code>/procedures</code>, <code>/meps</code>, <code>/committees</code>, <code>/research-publications</code>, <code>/calendar</code>, <code>/publications</code>, <code>/amendments</code>, <code>/votes</code>, <code>/reports</code>, <code>/resolutions</code>, <code>/opinions</code>, <code>/texts-adopted</code>, <code>/texts-submitted</code>, <code>/parliamentary-questions</code>, <code>/webstreams</code>, <code>/officials</code>, <code>/ep-documents</code></td><td>OEIL, EP Open Data REST v2, EPRS+STOA portals, doceo (reports / votes / amendments / questions), committee pages, multimedia.europarl.europa.eu, EU Who Is Who</td><td>Daily; <code>/meps</code> live with 6h cache</td></tr>
+<tr><td>European Commission (EC)</td><td><code>/publications</code>, <code>/press-releases</code>, <code>/commissioners</code>, <code>/officials</code>, <code>/consultations</code>, <code>/calendar</code>, <code>/meetings</code>, <code>/rsb-opinions</code>, <code>/tris-notifications</code>, <code>/delegated-acts</code>, <code>/implementing-acts</code>, <code>/commission-register-documents</code>, <code>/research-publications</code></td><td>feeds.ec.europa.eu, commission.europa.eu calendar (College + per-Commissioner), Have Your Say, Transparency Register, RSB, TRIS portal, Documents Register, JRC, EU Who Is Who organigrammes</td><td>6h; <code>/commissioners</code> live with 1h cache</td></tr>
+<tr><td>Council of the European Union</td><td><code>/calendar</code>, <code>/council-documents</code>, <code>/officials</code>, <code>/research-publications</code></td><td>consilium.europa.eu calendar + public register, ART (Council strategic papers), Council Secretariat organigrammes</td><td>Daily</td></tr>
+<tr><td>European Central Bank (ECB)</td><td><code>/publications</code>, <code>/press-releases</code></td><td>ecb.europa.eu/rss/press.html</td><td>6h</td></tr>
+<tr><td>European Court of Auditors (ECA)</td><td><code>/publications</code>, <code>/research-publications</code></td><td>eca.europa.eu/rss/news.xml + ECA audit reports portal</td><td>6h</td></tr>
+<tr><td>European External Action Service (EEAS)</td><td><code>/publications</code>, <code>/officials</code></td><td>eeas.europa.eu/rss.xml + organigramme</td><td>6h</td></tr>
+<tr><td>European Economic and Social Committee (EESC)</td><td><code>/publications</code>, <code>/officials</code></td><td>eesc.europa.eu RSS + organigramme</td><td>6h</td></tr>
+<tr><td>Committee of the Regions (CoR)</td><td><code>/publications</code>, <code>/officials</code></td><td>cor.europa.eu RSS + organigramme</td><td>6h</td></tr>
+<tr><td>European Ombudsman</td><td><code>/officials</code>, <code>/publications</code></td><td>ombudsman.europa.eu organigramme + decisions feed</td><td>Daily / 6h</td></tr>
+<tr><td>Publications Office (EUR-Lex)</td><td><code>/laws</code>, <code>/laws/{celex}/text</code>, <code>/legal-text/*</code>, <code>/citations/verify</code></td><td>Cellar daily OJ import + on-demand text via publications.europa.eu/resource/celex/{CELEX}</td><td>&lt;24h after OJ</td></tr>
+<tr><td>TED (Tenders Electronic Daily)</td><td><code>/tenders</code></td><td>ted.europa.eu</td><td>Daily — 386 active today</td></tr>
+</tbody>
+</table>
+
+<h2>Coverage at a glance</h2>
+<ul>
+<li><strong>28,505 adopted laws</strong> indexed and full-text searchable.</li>
+<li><strong>1,464 legislative procedures</strong> tracked from Commission proposal to adoption.</li>
+<li><strong>14,873 EU officials</strong> from 75 organigrammes (Commission DGs, EP services, Council Secretariat, Ombudsman, agencies).</li>
+<li><strong>56,051 amendments</strong>, <strong>1,026 reports</strong>, plus resolutions, opinions, votes and parliamentary questions.</li>
+<li><strong>528 Commission Register documents</strong> (COM/SWD/JOIN/C-series) with EUR-Lex CELEX-derived PDF URLs.</li>
+<li><strong>210 research publications</strong> across EPRS, STOA, JRC, ART and ECA.</li>
+<li><strong>386 tenders</strong> from TED.</li>
+<li><strong>206 curated knowledge guides</strong> covering every major EU law in plain English.</li>
+<li><strong>8 calendar sources</strong> aggregated into <code>/calendar/events</code> (EP, Council, EC College, agencies, euagenda, plus 3 more).</li>
+</ul>
+
+<h2>Decentralised agencies</h2>
+<p>Press-release feeds are ingested from these agencies (and appear in <code>/publications</code> filterable by <code>institution_slug</code>):</p>
+
+<table>
+<thead><tr><th>Agency</th><th>Code</th><th>Policy focus</th></tr></thead>
+<tbody>
+<tr><td>European Medicines Agency</td><td><code>ema</code></td><td>Health, pharmaceuticals</td></tr>
+<tr><td>European Food Safety Authority</td><td><code>efsa</code></td><td>Food safety</td></tr>
+<tr><td>European Chemicals Agency</td><td><code>echa</code></td><td>Chemicals, environment</td></tr>
+<tr><td>European Environment Agency</td><td><code>eea</code></td><td>Environment, climate</td></tr>
+<tr><td>European Centre for Disease Prevention and Control</td><td><code>ecdc</code></td><td>Public health</td></tr>
+<tr><td>EU Agency for Cybersecurity</td><td><code>enisa</code></td><td>Cybersecurity, digital</td></tr>
+<tr><td>European Banking Authority</td><td><code>eba</code></td><td>Finance, banking</td></tr>
+<tr><td>European Securities and Markets Authority</td><td><code>esma</code></td><td>Finance, markets</td></tr>
+<tr><td>European Insurance and Occupational Pensions Authority</td><td><code>eiopa</code></td><td>Insurance</td></tr>
+<tr><td>Europol</td><td><code>europol</code></td><td>Justice, security</td></tr>
+<tr><td>Eurojust</td><td><code>eurojust</code></td><td>Judicial cooperation</td></tr>
+<tr><td>Frontex</td><td><code>frontex</code></td><td>Migration, borders</td></tr>
+<tr><td>EU Agency for Fundamental Rights</td><td><code>fra</code></td><td>Fundamental rights</td></tr>
+<tr><td>EU Agency for Asylum</td><td><code>euaa</code></td><td>Asylum</td></tr>
+<tr><td>EU Drugs Agency</td><td><code>euda</code></td><td>Drugs policy</td></tr>
+<tr><td>Cedefop</td><td><code>cedefop</code></td><td>Vocational training, skills</td></tr>
+<tr><td>European Training Foundation</td><td><code>etf</code></td><td>Training</td></tr>
+<tr><td>Eurofound</td><td><code>eurofound</code></td><td>Employment, social affairs</td></tr>
+<tr><td>EU-OSHA</td><td><code>osha</code></td><td>Workplace safety</td></tr>
+<tr><td>EUIPO</td><td><code>euipo</code></td><td>Intellectual property</td></tr>
+<tr><td>European Data Protection Supervisor</td><td><code>edps</code></td><td>Data protection</td></tr>
+<tr><td>European Data Protection Board</td><td><code>edpb</code></td><td>Data protection</td></tr>
+<tr><td>European Investment Bank</td><td><code>eib</code></td><td>Finance, investment</td></tr>
+<tr><td>EIGE</td><td><code>eige</code></td><td>Gender equality</td></tr>
+<tr><td>European Labour Authority</td><td><code>ela</code></td><td>Labour</td></tr>
+<tr><td>CEPOL</td><td><code>cepol</code></td><td>Law enforcement training</td></tr>
+<tr><td>ACER</td><td><code>acer</code></td><td>Energy regulation</td></tr>
+<tr><td>BEREC</td><td><code>berec</code></td><td>Electronic communications</td></tr>
+<tr><td>EASA</td><td><code>easa</code></td><td>Aviation safety</td></tr>
+<tr><td>EMSA</td><td><code>emsa</code></td><td>Maritime safety</td></tr>
+<tr><td>ERA</td><td><code>era</code></td><td>Railways</td></tr>
+<tr><td>EUSPA</td><td><code>euspa</code></td><td>Space programme</td></tr>
+<tr><td>EPPO</td><td><code>eppo</code></td><td>Public prosecutor</td></tr>
+<tr><td>EU Institute for Security Studies</td><td><code>iss</code></td><td>Security studies</td></tr>
+<tr><td>EPSO</td><td><code>epso</code></td><td>Personnel selection</td></tr>
+</tbody>
+</table>
+
+<p>The full deployed surface (every endpoint, with counts) is rendered live from the OpenAPI spec on the <a href="/api/docs/reference.html">full API reference</a>; each institution folder is listed on the <a href="/api/docs/endpoints.html">All endpoints</a> page.</p>
+
+<h2>JRC sub-domains</h2>
+<p>Joint Research Centre specialist portals: Eurocodes, ECIS (cancer), ESDAC (soil), GMO-CRL, GHSLsys (human settlement), KnowSDGs, Wad (desertification). All appear in <code>/publications</code> under <code>institution_slug=european_commission</code> with source slugs like <code>ec_jrc_eurocodes</code>.</p>
+
+<h2>Joint Undertakings</h2>
+<p>Europe's Rail JU, SNS JU, Fusion for Energy, Chips JU, Clean Hydrogen JU, IHI JU, EuroHPC JU. Via <code>/publications</code>.</p>
+
+<h2>Executive agencies</h2>
+<p>CINEA, EACEA, ERCEA, HaDEA, REA, EISMEA. In <code>/publications</code>.</p>
+
+<h2>What we don't yet have</h2>
+<ul>
+<li><strong>EU Official Journal full-text feed.</strong> We have OJ references per law but not the OJ as a daily-bulletin stream. On roadmap.</li>
+<li><strong>National parliaments.</strong> We don't track Member State legislatures. Pair us with GovClipping (Spain), NordLex (Nordics), etc.</li>
+<li><strong>Multilingual structured responses.</strong> Some law texts are available in all 24 EU languages via the Cellar fallback but the JSON envelopes are English-only. September 2026 roadmap.</li>
+<li><strong>Webhooks / push notifications.</strong> Polling on our refresh cadence is the integration pattern today. Webhooks September 2026.</li>
+</ul>
+
+<h2>Ingestion pipeline</h2>
+<p>Behind the scenes, three tiers:</p>
+<ol>
+<li><strong>Structured APIs</strong> (15 sources) — EUR-Lex SPARQL, OEIL XML, EP Open Data v2, data.europa.eu CKAN, ECB SDMX, etc. Hand-crafted clients.</li>
+<li><strong>RSS / Atom feeds</strong> (60+ sources) — generic YAML-configured ingester. Adding a new source is a config file, not code.</li>
+<li><strong>HTML scraping</strong> (select sources) — Scrapling + BeautifulSoup with auto-selector relocation. For sites without APIs or feeds.</li>
+</ol>
+
+<p>Full discovery process is documented in <code>data/europa_eu/europa.eu_all_sources.md</code> (519 validated europa.eu domains inventoried). Our roadmap takes this from ~55 actively-ingested to ~200 by end of 2026.</p>
+
+<h2>Next</h2>
+<p>If you're new to EU policy jargon, the <a href="/api/docs/glossary.html">Glossary</a> explains CELEX, OEIL, rapporteur, and every other acronym these docs use.</p>
+
+<footer>
+&copy; 2026 Beresol BV — Brubru EU Data API v2.
+<a href="/api/">Back to marketing page</a> ·
+<a href="https://brubru.beresol.eu/api/openapi.json">OpenAPI spec</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>

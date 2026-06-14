@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Introduction — Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API documentation (v1 + v2). 200+ REST endpoints across 33 EU institution domains: 8,710 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament/Council/Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data and Brubru’s proprietary EU intelligence. One API key.">
+<title>Introduction &mdash; Brubru EU Data API</title>
+<meta name="description" content="Brubru EU Data API v2: 437 REST endpoints across 34 EU institution folders. 8,710 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament / Council / Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data and Brubru's proprietary EU intelligence. One API key.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -26,26 +26,13 @@
 </div>
 <script>
 (function(){
-  // Hide for authenticated Professional users (detected via cookie set after login)
   var m = document.cookie.match(/brubru_tier=([^;]+)/);
-  if (m && m[1] === 'blue') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
-  // Hide for users who dismissed in this session
-  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
+  if (m && m[1] === 'blue') { var b = document.getElementById('brubru-paywall-banner'); if (b) b.style.display = 'none'; }
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') { var b = document.getElementById('brubru-paywall-banner'); if (b) b.style.display = 'none'; }
 })();
 </script>
 
 <div class="shell">
-<!--
-Shared nav HTML fragment for Brubru API docs.
-Each page inlines this by find-and-replace at build time. Pages mark the
-active link by adding class="active" to the matching <a>.
--->
 <aside class="sidebar">
   <a href="/api/" class="sidebar__brand">
     <img src="/assets/brubru_mainlogo.png" alt="">
@@ -64,7 +51,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home" class="active">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -73,52 +60,72 @@ active link by adding class="active" to the matching <a>.
 
   <h3>Legislation</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Laws</a></li>
-    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
-    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Legal-text intelligence</a></li>
-    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Delegated acts</a></li>
-    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Implementing acts</a></li>
-    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS notifications</a></li>
-    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commission Register</a></li>
-    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Council Documents</a></li>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
   </ul>
 
-  <h3>Institutions &amp; people</h3>
+  <h3>European Parliament</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 enum endpoints)</a></li>
-    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissioners</a></li>
-    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Officials (14,873)</a></li>
-    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEPs</a></li>
-    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Meetings (Transparency)</a></li>
-    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB Opinions</a></li>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (38)</a></li>
   </ul>
 
-  <h3>EP detail</h3>
+  <h3>Council &amp; summits</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Committees</a></li>
-    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP documents (unified)</a></li>
-    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendments</a></li>
-    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Texts adopted</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Texts submitted</a></li>
-    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resolutions</a></li>
-    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Reports</a></li>
-    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Opinions</a></li>
-    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parliamentary questions</a></li>
-    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
   </ul>
 
-  <h3>Live data</h3>
+  <h3>Commission</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
-    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Press releases</a></li>
-    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendar</a></li>
-    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
-    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Research (EPRS+STOA+JRC+ART+ECA)</a></li>
-    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Tenders (TED)</a></li>
-    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
-    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
-    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (40)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER &mdash; energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC &mdash; electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop &mdash; vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO &mdash; plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC &mdash; disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA &mdash; chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA &mdash; environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA &mdash; food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE &mdash; gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT &mdash; innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA &mdash; medicines (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA &mdash; cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA &mdash; IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA &mdash; safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA &mdash; asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA &mdash; drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO &mdash; intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA &mdash; fundamental rights</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who &mdash; officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
   </ul>
 
   <h3>Reference</h3>
@@ -137,13 +144,13 @@ active link by adding class="active" to the matching <a>.
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API · v1 + v2 · 200+ endpoints across 33 EU institution domains</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints across 34 EU institution folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
-Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>8,710 adopted EU laws</strong> (28,513 OJ publications), <strong>1,717 legislative procedures</strong> in flight, <strong>14,873 EU officials</strong> across every institution, <strong>56,051 amendments</strong>, <strong>1,026 EP reports</strong>, <strong>386 tenders</strong> (TED), <strong>210 research publications</strong> (EPRS, STOA, JRC, ART, ECA), <strong>528 Commission Register documents</strong>, <strong>227 curated policy guides</strong>, live commissioner agendas, EP webstreams, the legal-text intelligence layer that powers Brubru's own chatbot and Amendator, and a new <strong>specialised EC databases</strong> folder covering 10 institutional surfaces no other vendor exposes through a single API key: <strong>6,002 CFSP-sanctioned persons/entities</strong>, <strong>17,247 Transparency Register lobbyist orgs</strong>, <strong>83,807 comitology documents</strong>, <strong>5,917 Geographical Indications</strong>, <strong>900 international agreements</strong>, <strong>675 trade-defence measures</strong>, live DG COMP competition cases (~250k upstream), <strong>3,543 JRC datasets</strong>, <strong>1,451 DG REGIO cohesion datasets</strong>, and live Combined Nomenclature lookup. The same data we use internally is what you call. Brubru is the first customer of its own API.
+Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>8,710 adopted EU laws</strong> (28,513 OJ publications), <strong>1,717 legislative procedures</strong> in flight, <strong>14,873 EU officials</strong>, every MEP, <strong>56,051 amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
-<strong>New: API v2</strong> reorganises everything around the EU institutions, one folder per body, and adds the institutional databases no other vendor exposes &mdash; the Parliament registers (MEP declarations, accredited assistants, committee supporting analyses), the Council sanctions regimes, the EU-agency databases (medicines, food-safety datasets, environmental indicators, the REACH SVHC candidate list, the drugs library, fundamental-rights case-law and Charterpedia), and more. See the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a> &mdash; every deployed endpoint, rendered live from the OpenAPI spec.
+<strong>One surface, one key.</strong> The API is organised the way the EU is &mdash; one folder per institution or body, 34 folders in total, <strong>437 endpoints</strong>. Browse the folders below, or open the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a> &mdash; every deployed endpoint, rendered live from the OpenAPI spec.
 </p>
 
 <div class="callout callout--ok">
@@ -151,248 +158,204 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 </div>
 
 <h2>What you get</h2>
+<p>Every folder maps to one EU institution or body. The counts are exact and update as the API grows.</p>
 
-<h3 style="margin-top:24px;">Legislation (8 folders)</h3>
+<h3 style="margin-top:28px;">Legislation <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 folder)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#laws">
-  <div class="toc-card__title">Laws</div>
-  <div class="toc-card__desc">8,710 adopted EU laws (28,513 OJ publications) searchable by CELEX, policy area, date, or full text. Fetch full XML or plain-text body.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#procedures">
-  <div class="toc-card__title">Procedures</div>
-  <div class="toc-card__desc">1,464 legislative files tracked from Commission proposal to adoption. OEIL references, committees, rapporteurs, status.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#legal-text">
-  <div class="toc-card__title">Legal-text intelligence</div>
-  <div class="toc-card__desc">Recital-article mapping, defined-term extraction, CELEX reference resolver, law alias resolver (680+ acronyms).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#delegated-acts">
-  <div class="toc-card__title">Delegated acts</div>
-  <div class="toc-card__desc">Article 290 TFEU acts adopted under powers delegated by Parliament and Council.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#implementing-acts">
-  <div class="toc-card__title">Implementing acts</div>
-  <div class="toc-card__desc">Article 291 TFEU acts ensuring uniform implementation of EU law across Member States.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#tris-notifications">
-  <div class="toc-card__title">TRIS notifications</div>
-  <div class="toc-card__desc">Member State draft technical regulations notified under Directive 2015/1535.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#commission-register">
-  <div class="toc-card__title">Commission Register</div>
-  <div class="toc-card__desc">528 Commission preparatory documents (COM, SWD, JOIN, C) with EUR-Lex CELEX-derived PDF URLs.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#council-documents">
-  <div class="toc-card__title">Council Documents</div>
-  <div class="toc-card__desc">Council of the EU public register documents (presidency notes, working party reports, conclusions).</div>
+<a class="toc-card" href="/api/docs/endpoints.html#legislative">
+  <div class="toc-card__title">Legislation &amp; procedures</div>
+  <div class="toc-card__desc">8,710 adopted laws (28,513 OJ publications) and 1,717 procedures in flight, plus delegated &amp; implementing acts, full text + XML, recital-to-article maps, defined terms, EuroVoc, the Legislative Train, and the citation / alias resolvers.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Institutions &amp; people (6 folders)</h3>
+<h3 style="margin-top:28px;">European Parliament <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 folder)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#metadata">
-  <div class="toc-card__title">Metadata (13 endpoints)</div>
-  <div class="toc-card__desc">DGs (with website + social), agencies, committees (with streaming URL), policy areas, party groups — every enum and lookup.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#commissioners">
-  <div class="toc-card__title">Commissioners</div>
-  <div class="toc-card__desc">Live calendar items for all 27 College members, including the President. Surfaces agenda_url + unified_calendar_url.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#officials">
-  <div class="toc-card__title">Officials (14,873)</div>
-  <div class="toc-card__desc">Every EU Who Is Who entry — Commission, EP, Council, Ombudsman, agencies. Filter by institution, DG, role.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#meps">
-  <div class="toc-card__title">MEPs</div>
-  <div class="toc-card__desc">Live MEP profiles from EP Open Data. Search by country, political group, or name.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#meetings">
-  <div class="toc-card__title">Meetings (Transparency)</div>
-  <div class="toc-card__desc">Commission Transparency Register: which lobbyists met which Commissioner, Cabinet Member, and DG when.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#rsb-opinions">
-  <div class="toc-card__title">RSB Opinions</div>
-  <div class="toc-card__desc">Regulatory Scrutiny Board opinions on Commission impact assessments and major evaluations.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#parliament">
+  <div class="toc-card__title">European Parliament</div>
+  <div class="toc-card__desc">MEPs, committee work items, amendments, reports, opinions, resolutions, adopted &amp; submitted texts, roll-call votes, parliamentary questions, eMeeting documents, webstreams + AI transcripts, EPRS research, and MEP declarations &amp; assistants.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">EP detail (11 folders)</h3>
+<h3 style="margin-top:28px;">Council &amp; summits <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(3 folders)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#committees">
-  <div class="toc-card__title">Committees</div>
-  <div class="toc-card__desc">EP committee work items, meeting minutes, agendas. Each committee surfaces streaming_url + homepage + documents_url.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#council">
+  <div class="toc-card__title">Council of the EU</div>
+  <div class="toc-card__desc">Documents, meetings, press releases, conclusions, voting results, preparatory bodies, the public register, sanctions regimes and the 10 ministerial configurations.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#ep-documents">
-  <div class="toc-card__title">EP documents (unified)</div>
-  <div class="toc-card__desc">Single endpoint that branches across reports, opinions, resolutions, texts adopted/submitted, parliamentary questions.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#european-council">
+  <div class="toc-card__title">European Council</div>
+  <div class="toc-card__desc">Summit conclusions (2004-present), meetings, members, the Strategic Agenda 2024-2029 and the Euro Summit.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#amendments">
-  <div class="toc-card__title">Amendments</div>
-  <div class="toc-card__desc">56,051 MEP amendments to legislative files. Filter by procedure, committee, MEP, or political group.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#votes">
-  <div class="toc-card__title">Votes</div>
-  <div class="toc-card__desc">Roll-call votes from EP plenary, with totals, group breakdown, and per-MEP positions.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#texts-adopted">
-  <div class="toc-card__title">Texts adopted</div>
-  <div class="toc-card__desc">Final EP positions adopted in plenary (TA references).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#texts-submitted">
-  <div class="toc-card__title">Texts submitted</div>
-  <div class="toc-card__desc">Motions for resolution, recommendations, and other texts tabled but not yet adopted.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#resolutions">
-  <div class="toc-card__title">Resolutions</div>
-  <div class="toc-card__desc">EP resolutions on policy matters (own-initiative, response to Commission communications).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#reports">
-  <div class="toc-card__title">Reports</div>
-  <div class="toc-card__desc">1,026 committee reports (A-references) — the rapporteur's draft + amendments compiled into one document.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#opinions">
-  <div class="toc-card__title">Opinions</div>
-  <div class="toc-card__desc">Opinions of associated committees (rapporteur for opinion, RR-references).</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#parliamentary-questions">
-  <div class="toc-card__title">Parliamentary questions</div>
-  <div class="toc-card__desc">Written and oral questions tabled by MEPs to the Commission, Council, ECB, and EEAS.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#webstreams">
-  <div class="toc-card__title">Webstreams</div>
-  <div class="toc-card__desc">EP committee + plenary live and on-demand video URLs from multimedia.europarl.europa.eu.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#eurogroup">
+  <div class="toc-card__title">Eurogroup</div>
+  <div class="toc-card__desc">Meetings of euro-area finance ministers, documents, members and the work programme.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Live data (9 folders)</h3>
+<h3 style="margin-top:28px;">European Commission <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 folder)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#publications">
-  <div class="toc-card__title">Publications</div>
-  <div class="toc-card__desc">Unified feed of press releases, reports, and EU OJ articles across 44+ EU institutions and agencies.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#commission">
+  <div class="toc-card__title">European Commission</div>
+  <div class="toc-card__desc">College of Commissioners + live agendas, Register documents, Transparency Initiative meetings, RSB opinions, infringements, TRIS notifications, consultations, comitology, RASFF alerts, CORDIS projects, state aid, DMA cases, trade defence, tariffs and the financial-sanctions list.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#press-releases">
-  <div class="toc-card__title">Press releases</div>
-  <div class="toc-card__desc">EC, EP, Council, EEAS, ECB and agency press releases — same envelope, filtered to institutional comms.</div>
+</div>
+
+<h3 style="margin-top:28px;">Economic &amp; financial <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(3 folders)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#ecb">
+  <div class="toc-card__title">European Central Bank</div>
+  <div class="toc-card__desc">The ECB and ECB Banking Supervision: news, events, publications, legal acts and statistical datasets.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#calendar">
-  <div class="toc-card__title">Calendar</div>
-  <div class="toc-card__desc">Unified EU institutional calendar: EP plenary, Council meetings, Commission college, agencies, euagenda.eu events.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-financial-institutions">
+  <div class="toc-card__title">EU financial institutions</div>
+  <div class="toc-card__desc">AMLA, EBA, EIB, EIOPA, EPPO, ESMA, ESRB and the Single Resolution Board, with EBA credit institutions, ESMA financial instruments and EIB projects.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#esm">
+  <div class="toc-card__title">European Stability Mechanism</div>
+  <div class="toc-card__desc">Programmes, news, events and publications.</div>
+</a>
+</div>
+
+<h3 style="margin-top:28px;">EU agencies <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(18 folders)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#acer">
+  <div class="toc-card__title">ACER</div>
+  <div class="toc-card__desc">Agency for the Cooperation of Energy Regulators: news and publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#berec">
+  <div class="toc-card__title">BEREC</div>
+  <div class="toc-card__desc">Electronic-communications regulators: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cedefop">
+  <div class="toc-card__title">Cedefop</div>
+  <div class="toc-card__desc">Vocational-training agency: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#cpvo">
+  <div class="toc-card__title">CPVO</div>
+  <div class="toc-card__desc">Community Plant Variety Office: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#ecdc">
+  <div class="toc-card__title">ECDC</div>
+  <div class="toc-card__desc">Disease prevention &amp; control: news, publications and surveillance topics.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#echa">
+  <div class="toc-card__title">ECHA</div>
+  <div class="toc-card__desc">European Chemicals Agency: news and the REACH Candidate List of SVHCs.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eea">
+  <div class="toc-card__title">EEA</div>
+  <div class="toc-card__desc">European Environment Agency: news, events and environmental indicators.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#efsa">
+  <div class="toc-card__title">EFSA</div>
+  <div class="toc-card__desc">Food safety: news, publications, OpenFoodTox substances and Xylella host plants.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eige">
+  <div class="toc-card__title">EIGE</div>
+  <div class="toc-card__desc">Gender equality: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eit">
+  <div class="toc-card__title">EIT</div>
+  <div class="toc-card__desc">Innovation &amp; technology: news and events.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#ema">
+  <div class="toc-card__title">EMA</div>
+  <div class="toc-card__desc">European Medicines Agency: medicines, orphan &amp; paediatric, MRLs, shortages, referrals, PSUSA, herbal, DHPCs and post-authorisation.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#enisa">
+  <div class="toc-card__title">ENISA</div>
+  <div class="toc-card__desc">Cybersecurity agency: news and publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-lisa">
+  <div class="toc-card__title">eu-LISA</div>
+  <div class="toc-card__desc">Large-scale IT systems: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#eu-osha">
+  <div class="toc-card__title">EU-OSHA</div>
+  <div class="toc-card__desc">Safety &amp; health at work: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euaa">
+  <div class="toc-card__title">EUAA</div>
+  <div class="toc-card__desc">European Union Agency for Asylum: news.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euda">
+  <div class="toc-card__title">EUDA</div>
+  <div class="toc-card__desc">European Union Drugs Agency: news, events, publications.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#euipo">
+  <div class="toc-card__title">EUIPO</div>
+  <div class="toc-card__desc">Intellectual property: news, events and EU trade marks.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#fra">
+  <div class="toc-card__title">FRA</div>
+  <div class="toc-card__desc">Fundamental rights: case-law and Charterpedia.</div>
+</a>
+</div>
+
+<h3 style="margin-top:28px;">Funding &amp; consultations <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(2 folders)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#funding">
+  <div class="toc-card__title">Funding, grants &amp; tenders</div>
+  <div class="toc-card__desc">Calls for proposals (Horizon Europe, Digital Europe, LIFE, EU4Health, Erasmus+...), grant-funded projects, EIC startup &amp; SME funding, TED + F&amp;T Portal tenders, funding recipients and decentralised-agency calls.</div>
 </a>
 <a class="toc-card" href="/api/docs/endpoints.html#consultations">
-  <div class="toc-card__title">Consultations</div>
-  <div class="toc-card__desc">Live stakeholder feedback from EC Have Your Say, grouped by country and user type.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#research-publications">
-  <div class="toc-card__title">Research (EPRS+STOA+JRC+ART+ECA)</div>
-  <div class="toc-card__desc">210 unified research publications: EPRS briefings, STOA foresight, JRC science-for-policy, ART strategic papers, ECA audits.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#tenders">
-  <div class="toc-card__title">Tenders (TED)</div>
-  <div class="toc-card__desc">386 EU tender notices from Tenders Electronic Daily, filterable by CPV code, contracting authority, deadline.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#predictions">
-  <div class="toc-card__title">Predictions</div>
-  <div class="toc-card__desc">XGBoost + baseline forecasts for procedure timeline and outcome probabilities.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#knowledge-guides">
-  <div class="toc-card__title">Knowledge guides</div>
-  <div class="toc-card__desc">206 curated policy explainers — hand-written, keyword-indexed, covering every major EU law.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#citations">
-  <div class="toc-card__title">Verify citation</div>
-  <div class="toc-card__desc">Pass any EU legal citation; get back canonical CELEX, full title, and authoritative EUR-Lex URL.</div>
+  <div class="toc-card__title">Agency consultations</div>
+  <div class="toc-card__desc">Public consultations from decentralised agencies: AMLA, BEREC, ECHA, EIOPA and EMA.</div>
 </a>
 </div>
 
-<h3 style="margin-top:24px;">Specialised EC databases (10 folders, NEW May 2026)</h3>
-<p style="margin-top:8px;margin-bottom:16px;color:var(--text-muted,#6b7280);">Ten institutional surfaces no other vendor exposes through a single API key. Each cluster is also wired into the Brubru chatbot &mdash; when a user asks about lobbyists, sanctions, or anti-dumping duties, the chat retrieves directly from these tables.</p>
+<h3 style="margin-top:28px;">Open data &amp; people <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(4 folders)</span></h3>
 <div class="toc-grid">
-<a class="toc-card" href="/api/docs/endpoints.html#sanctions">
-  <div class="toc-card__title">Sanctions (CFSP)</div>
-  <div class="toc-card__desc">6,002 persons + entities on the EU consolidated CFSP list. Programmes (IRN, RUS, UKR, BLR, SYR, PRK, MMR, TERR), legal basis, citizenships, date_file.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#open-data">
+  <div class="toc-card__title">Open data</div>
+  <div class="toc-card__desc">data.europa.eu catalogues, datasets with direct download links and the High-Value Datasets.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#transparency-register">
-  <div class="toc-card__title">Transparency Register</div>
-  <div class="toc-card__desc">17,247 registered lobbyist organisations. Original name, acronym, registration category, head office country, EP-pass count, FTEs, declared lobbying costs.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#general-publications">
+  <div class="toc-card__title">General publications</div>
+  <div class="toc-card__desc">EU brochures, reports and studies from the Publications Office.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#comitology">
-  <div class="toc-card__title">Comitology documents</div>
-  <div class="toc-card__desc">83,807 documents from the Comitology Register: voting sheets, summary records, draft implementing acts, opinions. Filter by committee code (e.g. SCoPAFF C20407, Appeal Committee C39800).</div>
+<a class="toc-card" href="/api/docs/endpoints.html#who-is-who">
+  <div class="toc-card__title">Who's Who</div>
+  <div class="toc-card__desc">EU officials and the organisational departments across every institution (EU Who Is Who).</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#gi">
-  <div class="toc-card__title">Geographical Indications</div>
-  <div class="toc-card__desc">5,917 EU-protected names &mdash; PDO, PGI, TSG, wine, spirit drinks, craft. Sourced from eAmbrosia (DG AGRI authoritative) + EUIPO GIview union register. Filter by type, country, status.</div>
+<a class="toc-card" href="/api/docs/endpoints.html#geographical-indications">
+  <div class="toc-card__title">Geographical indications</div>
+  <div class="toc-card__desc">Protected names: the eAmbrosia EU register, EUIPO GIview and third-country GIs.</div>
 </a>
-<a class="toc-card" href="/api/docs/endpoints.html#fta">
-  <div class="toc-card__title">International agreements</div>
-  <div class="toc-card__desc">900 EU international agreements: FTA, EPA, AA, PCA, Fisheries, Aviation. CELEX sector-2 type-A, with partner, agreement type, in-force flag.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#trade-defence">
-  <div class="toc-card__title">Trade defence</div>
-  <div class="toc-card__desc">675 anti-dumping, countervailing, and safeguard measures. CELEX sector-3 type-R, with measure type, duty status, target country, product, in-force flag.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#competition-cases">
-  <div class="toc-card__title">DG COMP cases (live)</div>
-  <div class="toc-card__desc">Live pass-through to <code>api.tech.ec.europa.eu/search-api</code> &mdash; ~250k competition cases (state aid SA., antitrust AT., mergers M.). Cases by member state, aid category, instrument.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#jrc-datasets">
-  <div class="toc-card__title">JRC Data Catalogue</div>
-  <div class="toc-card__desc">3,543 scientific datasets from the Joint Research Centre: ESDAC, EFFIS, GHSL, LUISA, JRC AI Watch, JRC EDGAR-FOOD. Title, description, publisher, EuroVoc keywords.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#cohesion-datasets">
-  <div class="toc-card__title">DG REGIO cohesion data</div>
-  <div class="toc-card__desc">1,451 Socrata-catalogued cohesion datasets from cohesiondata.ec.europa.eu &mdash; ESF+, ERDF, Cohesion Fund, Just Transition Fund, Interreg, RRF beneficiaries.</div>
-</a>
-<a class="toc-card" href="/api/docs/endpoints.html#access2markets">
-  <div class="toc-card__title">CN codes (Access2Markets, live)</div>
-  <div class="toc-card__desc">Live pass-through to <code>webgate.ec.europa.eu/nomen</code> &mdash; Combined Nomenclature sections and product trees for tariff/customs classification.</div>
+</div>
+
+<h3 style="margin-top:28px;">Proprietary intelligence <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 folder)</span></h3>
+<div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html#proprietary">
+  <div class="toc-card__title">Brubru EU intelligence</div>
+  <div class="toc-card__desc">The Brussels-lobbies ranked directory, the EU Canon deep-dives, the Catalan-translated legislation corpus and the curated knowledge guides that ground the chatbot.</div>
 </a>
 </div>
 
 <h2>Data sources &amp; refresh cadence</h2>
+<p>Each folder is fed from the authoritative EU source and refreshed automatically. The cadence below is the worst case; live pass-through folders are real-time.</p>
 <table>
-<thead><tr><th>Source</th><th>Endpoint fed</th><th>Refresh cadence</th><th>Freshness</th></tr></thead>
+<thead><tr><th>Layer</th><th>Folders</th><th>Refresh cadence</th></tr></thead>
 <tbody>
-<tr><td>EUR-Lex Cellar (Publications Office)</td><td><code>/laws</code>, <code>/laws/{celex}/text</code></td><td>Daily OJ delta import</td><td>&lt; 24h after OJ publication</td></tr>
-<tr><td>OEIL (EP Legislative Observatory)</td><td><code>/procedures</code></td><td>Daily sync</td><td>&lt; 24h</td></tr>
-<tr><td>Institutional RSS feeds (44 sources)</td><td><code>/publications</code>, <code>/press-releases</code></td><td>Every 6 hours</td><td>&lt; 6h</td></tr>
-<tr><td>EPRS, STOA, JRC, ART, ECA portals</td><td><code>/research-publications</code></td><td>Daily, filterable by source</td><td>&lt; 24h</td></tr>
-<tr><td>EUR-Lex preparatory documents</td><td><code>/commission-register-documents</code></td><td>Daily delta</td><td>&lt; 24h</td></tr>
-<tr><td>Council public register</td><td><code>/council-documents</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>EP Open Data REST v2</td><td><code>/meps</code></td><td>Live fetch, 6h client cache</td><td>Real-time minus 6h</td></tr>
-<tr><td>EU Who Is Who organigrammes (75 units)</td><td><code>/officials</code></td><td>Weekly bulk re-ingest</td><td>14,873 records today</td></tr>
-<tr><td>commission.europa.eu/calendar</td><td><code>/commissioners/{name}/agenda</code></td><td>Live scrape, 1h cache</td><td>Real-time minus 1h</td></tr>
-<tr><td>EP committee pages</td><td><code>/committees/*</code></td><td>Daily per committee</td><td>&lt; 24h</td></tr>
-<tr><td>multimedia.europarl.europa.eu</td><td><code>/webstreams</code>, <code>/committees/{code}/webstream</code></td><td>Live</td><td>Real-time</td></tr>
-<tr><td>EC Have Your Say allFeedback API</td><td><code>/consultations/.../feedback</code></td><td>Live fetch, 6h cache</td><td>Real-time minus 6h</td></tr>
-<tr><td>8 calendar sources (EP, Council, EC, agencies, euagenda)</td><td><code>/calendar/events</code></td><td>Daily sync</td><td>&lt; 24h</td></tr>
-<tr><td>EC Transparency Register</td><td><code>/meetings</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>EC Regulatory Scrutiny Board</td><td><code>/rsb-opinions</code></td><td>Weekly</td><td>&lt; 7d</td></tr>
-<tr><td>EC TRIS portal</td><td><code>/tris-notifications</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>TED (Tenders Electronic Daily)</td><td><code>/tenders</code></td><td>Daily</td><td>&lt; 24h, 386 active today</td></tr>
-<tr><td>EP doceo (reports, votes, amendments, resolutions, opinions)</td><td><code>/reports</code>, <code>/votes</code>, <code>/amendments</code>, <code>/resolutions</code>, <code>/opinions</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>EP doceo questions module</td><td><code>/parliamentary-questions</code></td><td>Daily</td><td>&lt; 24h</td></tr>
-<tr><td>Curated Brubru team</td><td><code>/knowledge-guides</code></td><td>Daily additions</td><td>227 guides today</td></tr>
-<tr><td>EU consolidated CFSP sanctions list</td><td><code>/specialised/sanctions</code></td><td>Daily</td><td>6,002 entities</td></tr>
-<tr><td>EU Transparency Register Joint Secretariat XML</td><td><code>/specialised/transparency-register</code></td><td>Daily</td><td>17,247 orgs</td></tr>
-<tr><td>EC Comitology Register (Playwright-cracked <code>/core/api/front/</code>)</td><td><code>/specialised/comitology</code></td><td>Weekly</td><td>83,807 docs</td></tr>
-<tr><td>eAmbrosia + EUIPO GIview (DG AGRI + EUIPO)</td><td><code>/specialised/gi</code></td><td>Weekly</td><td>5,917 GIs</td></tr>
-<tr><td>Cellar SPARQL sector-2 type-A</td><td><code>/specialised/fta</code></td><td>Monthly</td><td>900 agreements</td></tr>
-<tr><td>Cellar SPARQL sector-3 type-R</td><td><code>/specialised/trade-defence</code></td><td>Weekly</td><td>675 measures</td></tr>
-<tr><td><code>api.tech.ec.europa.eu/search-api</code> (DG COMP)</td><td><code>/specialised/competition-cases</code></td><td>Live</td><td>~250k cases</td></tr>
-<tr><td>data.europa.eu federation of JRC catalogue</td><td><code>/specialised/jrc-datasets</code></td><td>Weekly</td><td>3,543 datasets</td></tr>
-<tr><td>cohesiondata.ec.europa.eu Socrata</td><td><code>/specialised/cohesion-datasets</code></td><td>Weekly</td><td>1,451 datasets</td></tr>
-<tr><td><code>webgate.ec.europa.eu/nomen</code> (Access2Markets)</td><td><code>/specialised/access2markets/products</code></td><td>Live</td><td>21 sections + product tree</td></tr>
-<tr><td>Derived from local Formex XML + DB</td><td><code>/legal-text/*</code></td><td>On-demand; cached</td><td>Recomputed when spec changes</td></tr>
-<tr><td>Brubru XGBoost model + OEIL</td><td><code>/predictions/*</code></td><td>Model retrained weekly</td><td>Inference in real-time</td></tr>
+<tr><td>Adopted legislation (EUR-Lex / Publications Office Cellar)</td><td><code>legislative</code></td><td>Daily OJ delta &mdash; &lt; 24h after publication</td></tr>
+<tr><td>Legislative procedures (OEIL) + Legislative Train</td><td><code>legislative</code></td><td>Daily &mdash; &lt; 24h</td></tr>
+<tr><td>Parliament (doceo, EP Open Data, multimedia)</td><td><code>parliament</code></td><td>Daily; webstreams live</td></tr>
+<tr><td>Council, European Council, Eurogroup registers</td><td><code>council</code>, <code>european-council</code>, <code>eurogroup</code></td><td>Daily &mdash; &lt; 24h</td></tr>
+<tr><td>Commission (Register, Transparency, consultations, RASFF, CORDIS, state aid, comitology...)</td><td><code>commission</code></td><td>Live to weekly by source</td></tr>
+<tr><td>ECB, EU financial institutions, ESM</td><td><code>ecb</code>, <code>eu-financial-institutions</code>, <code>esm</code></td><td>Daily batched sweep</td></tr>
+<tr><td>Decentralised EU agencies (18 bodies)</td><td><code>acer</code> &hellip; <code>fra</code></td><td>Daily batched sweep</td></tr>
+<tr><td>Funding &amp; tenders (F&amp;T Portal, TED)</td><td><code>funding</code>, <code>consultations</code></td><td>Daily &mdash; &lt; 24h</td></tr>
+<tr><td>Open data, publications, officials</td><td><code>open-data</code>, <code>general-publications</code>, <code>who-is-who</code></td><td>Weekly bulk re-ingest</td></tr>
+<tr><td>Geographical indications</td><td><code>geographical-indications</code></td><td>Weekly</td></tr>
+<tr><td>Brubru proprietary (lobbies, canon, Catalan, guides)</td><td><code>proprietary</code></td><td>Continuous / on publish</td></tr>
 </tbody>
 </table>
 
 <h2>Authentication at a glance</h2>
-<p>Every <code>/api/v1/*</code> call requires an API key passed either as a Bearer token or an <code>X-API-Key</code> header:</p>
+<p>Every <code>/api/v2/*</code> call requires an API key passed either as a Bearer token or an <code>X-API-Key</code> header:</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=5"</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>Full details on <a href="/api/docs/authentication.html">Authentication</a>.</p>
 
@@ -429,26 +392,24 @@ X-RateLimit-Tier: free</code></pre>
 
 <p><strong>1. Get an API key.</strong> Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> once you're on the Professional subscription. Keys look like <code>brubru_live_</code> followed by 48 hex characters.</p>
 
-<p><strong>2. Make a call.</strong></p>
+<p><strong>2. Check the service is up.</strong> The health check is public &mdash; no key required:</p>
 
-<pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru-production.up.railway.app/api/v1/ping"</code></pre>
+<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
 
-<p>Response (this one's public, no auth required):</p>
+<p>Response:</p>
 
 <pre><code>{
   "status": "ok",
   "service": "brubru-data-provider",
-  "version": "v1",
   "time": "2026-04-20T15:00:00Z"
 }</code></pre>
 
 <p><strong>3. Try a real search.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=3"</code></pre>
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
-<p>You get a paginated list of EU laws matching "artificial intelligence", with CELEX identifiers, titles, dates, and EUR-Lex URLs. From there every other endpoint follows the same envelope pattern.</p>
+<p>You get a paginated list of EU laws matching "artificial intelligence", with CELEX identifiers, titles, dates, and EUR-Lex URLs. From there every other endpoint follows the same envelope pattern &mdash; just change the path.</p>
 
 <h2>Limitations (what we don't cover)</h2>
 <ul>
@@ -461,28 +422,28 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Where to go next</h2>
 <div class="toc-grid">
+<a class="toc-card" href="/api/docs/endpoints.html">
+  <div class="toc-card__title">All endpoints</div>
+  <div class="toc-card__desc">The full hand-grouped list of all 437 v2 endpoints, one section per institution folder.</div>
+</a>
 <a class="toc-card" href="/api/docs/authentication.html">
   <div class="toc-card__title">Authentication</div>
   <div class="toc-card__desc">How to send your API key, lifecycle, rotation, security.</div>
 </a>
 <a class="toc-card" href="/api/docs/use-cases.html">
   <div class="toc-card__title">Use cases by role</div>
-  <div class="toc-card__desc">Public-affairs consultants, trade associations, corporates, NGOs, EU officials — what you'd actually call.</div>
+  <div class="toc-card__desc">Public-affairs consultants, trade associations, corporates, NGOs, EU officials &mdash; what you'd actually call.</div>
 </a>
 <a class="toc-card" href="/api/docs/glossary.html">
   <div class="toc-card__title">Glossary</div>
-  <div class="toc-card__desc">CELEX, OEIL, trilogue, rapporteur, committee role types, directive vs regulation — every acronym explained.</div>
-</a>
-<a class="toc-card" href="/api/docs/institutions.html">
-  <div class="toc-card__title">EU institutions covered</div>
-  <div class="toc-card__desc">Matrix of every EU source we ingest, with refresh cadences.</div>
+  <div class="toc-card__desc">CELEX, OEIL, trilogue, rapporteur, committee role types, directive vs regulation &mdash; every acronym explained.</div>
 </a>
 </div>
 
 <footer>
-&copy; 2026 Beresol BV — Brubru EU Data API v1.
-<a href="/api/">Back to marketing page</a> ·
-<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI spec</a> ·
+&copy; 2026 Beresol BV &mdash; Brubru EU Data API v2.
+<a href="/api/">Back to marketing page</a> &middot;
+<a href="/api/openapi.json">OpenAPI spec</a> &middot;
 <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
 </footer>
 </main>

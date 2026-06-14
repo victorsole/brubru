@@ -314,7 +314,7 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
               <a className="api-page__cta api-page__cta--primary" href="/api/docs">
                 <span className="mdi mdi-book-open-variant" /> {t('api.cta.openRef')}
               </a>
-              <a className="api-page__cta api-page__cta--secondary" href="/api/v1/ping">
+              <a className="api-page__cta api-page__cta--secondary" href="/health">
                 <span className="mdi mdi-heart-pulse" /> {t('api.cta.ping')}
               </a>
             </div>

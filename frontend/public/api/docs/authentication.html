@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rate limits — Brubru EU Data API</title>
-<meta name="description" content="Brubru API rate limits, retry strategy, headers, monthly quotas.">
+<title>Authentication — Brubru EU Data API</title>
+<meta name="description" content="How Brubru API authentication works. Bearer tokens, X-API-Key header, key lifecycle, rotation, security.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -49,10 +49,10 @@ active link by adding class="active" to the matching <a>.
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
     <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
-    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication" class="active">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
-    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits" class="active">Rate limits</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
   </ul>
 
   <h3>Legislation</h3>
@@ -141,81 +141,125 @@ active link by adding class="active" to the matching <a>.
 
 <main class="main">
 
-<div class="main__eyebrow">Rate limits</div>
-<h1>Rate limits</h1>
+<div class="main__eyebrow">Authentication</div>
+<h1>API keys</h1>
 <p class="main__lede">
-Three per-key tiers: <strong>free 60</strong>, <strong>pro 300</strong>, <strong>enterprise 6000 requests / minute</strong>. Sliding-window enforcement. Your tier is on the <code>X-RateLimit-Tier</code> header of every response and on <code>/whoami</code>.
+Every call to <code>/api/v2/*</code> is authenticated with an API key. Keys are tied to your Professional subscription. This page covers how to send them, how to rotate them, and what to do if one leaks.
 </p>
 
-<h2>Tier table</h2>
-<table>
-<thead><tr><th>Tier</th><th>Per-minute limit</th><th>Monthly quota</th><th>Who gets it</th></tr></thead>
-<tbody>
-<tr><td><code>free</code></td><td>60 req/min</td><td>Unlimited</td><td>Trial keys + Professional default</td></tr>
-<tr><td><code>pro</code></td><td>300 req/min</td><td>Unlimited</td><td>Production integrations on request &mdash; email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a></td></tr>
-<tr><td><code>enterprise</code></td><td>6,000 req/min</td><td>Unlimited</td><td>Partner integrations (e.g. GovClipping). Custom contract.</td></tr>
-</tbody>
-</table>
+<h2>How to authenticate</h2>
+
+<p>Two header formats are accepted. Use whichever suits your tooling:</p>
+
+<h3>Option A — Authorization: Bearer (recommended)</h3>
+<p>This is the standard for most API tooling (Postman, curl, Python <code>requests</code>, fetch, axios, language SDKs). If you're not sure which to pick, use Bearer.</p>
+
+<pre><code>curl -H "Authorization: Bearer brubru_live_abc123..." \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?limit=5"</code></pre>
+
+<h3>Option B — X-API-Key header</h3>
+<p>A bit easier to type by hand in curl one-liners. Interchangeable with Bearer.</p>
+
+<pre><code>curl -H "X-API-Key: brubru_live_abc123..." \
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?limit=5"</code></pre>
 
 <div class="callout">
-<p>The limit uses a sliding window over the last 60 seconds, not fixed calendar minutes. Bursting is allowed as long as you stay under your tier's ceiling in any rolling 60-second window.</p>
+<p>If you send both, <strong>Bearer wins.</strong> The <code>X-API-Key</code> header is ignored in that case. So it's safe to leave one configured at the SDK level and occasionally override with the other.</p>
 </div>
 
-<h2>Response headers</h2>
-<p>Every response carries:</p>
-<ul>
-<li><code>X-RateLimit-Limit</code> &mdash; your tier's per-minute ceiling (60 / 300 / 6000).</li>
-<li><code>X-RateLimit-Remaining</code> &mdash; calls left in the current 60-second window.</li>
-<li><code>X-RateLimit-Tier</code> &mdash; <code>free</code>, <code>pro</code>, or <code>enterprise</code>.</li>
-</ul>
-<p>On 429 responses, additionally:</p>
-<ul>
-<li><code>Retry-After</code> &mdash; seconds to wait before retrying.</li>
-</ul>
+<h2>Key format</h2>
+<p>Brubru API keys look like:</p>
+<pre><code>brubru_live_228d3f3d67ef983b1fe5a72654d138cb687bac4b725e4af6</code></pre>
+<p>That's the literal prefix <code>brubru_live_</code> followed by 48 hexadecimal characters (192 bits of entropy). The prefix helps us and GitHub's secret-scanner find leaked keys automatically.</p>
 
-<h2>Check your limit any time</h2>
-<p>Your current limit and remaining quota ride on the response headers of every authenticated call. Use <code>-i</code> (or <code>-D -</code>) on any cheap endpoint and read the <code>X-RateLimit-*</code> headers:</p>
-<pre><code>curl -i -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/proprietary/guides?limit=1"
-
-# HTTP/1.1 200 OK
-# X-RateLimit-Tier: enterprise
-# X-RateLimit-Limit: 6000
-# X-RateLimit-Remaining: 5998</code></pre>
-
-<h2>When you hit the limit</h2>
-<p>You get a <code>429 rate_limited</code> response. The right behaviour is:</p>
+<h2>Getting a key</h2>
 <ol>
-<li>Read <code>Retry-After</code>.</li>
-<li>Sleep that many seconds.</li>
-<li>Retry the same request.</li>
+<li>Subscribe to the <strong>Professional plan</strong> at <a href="https://brubru.beresol.eu/subscription">brubru.beresol.eu/subscription</a>. API access is included.</li>
+<li>Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> with your Professional account email. We'll mint the key and deliver it over a secure channel (Signal, encrypted email).</li>
+<li>Self-serve key generation (mint/rotate/revoke from your account page) ships with multi-tenant organisations in May 2026. For now it's manual.</li>
 </ol>
 
-<pre><code>import time, httpx
+<h2>Rotation &amp; revocation</h2>
+<p>To rotate a key (recommended at least once every 90 days, immediately after an incident):</p>
+<ol>
+<li>Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> requesting a new key. We mint a new one and keep the old one active for 24 hours so you can roll forward without downtime.</li>
+<li>Update your secrets store (Railway variables, GitHub Actions secrets, AWS Secrets Manager, etc.) with the new key.</li>
+<li>Deploy. Validate with a ping.</li>
+<li>Reply to confirm — we then revoke the old key.</li>
+</ol>
+<p>If you believe a key has leaked, email us immediately. We revoke within an hour. Keys are stored as SHA-256 hashes on our side; we never see your plaintext after issuing.</p>
 
-def call_with_backoff(url, headers):
-    for attempt in range(5):
-        r = httpx.get(url, headers=headers)
-        if r.status_code != 429:
-            return r
-        wait = int(r.headers.get("Retry-After", 60))
-        time.sleep(wait)
-    r.raise_for_status()
+<h2>Tier &amp; access checks</h2>
+<p>At each request we verify:</p>
+<ul>
+<li>The key exists and is not revoked.</li>
+<li>The owner's <code>subscription_tier</code> equals <code>blue</code> (Professional). A downgrade stops the key working immediately.</li>
+<li>The owner's account is active.</li>
+<li>The per-key rate limit has not been exceeded in the current 60-second window.</li>
+</ul>
+<p>Any failure returns a structured 401/403/429 — see <a href="/api/docs/errors.html">Errors</a>.</p>
+
+<h2>Storing the key safely</h2>
+<div class="callout callout--warn">
+<p><strong>Never commit API keys to git.</strong> Use environment variables, secret managers, or platform-provided secret stores.</p>
+</div>
+
+<p>Good patterns:</p>
+<pre><code># In .env (add .env to .gitignore)
+BRUBRU_API_KEY=brubru_live_...
+
+# In your code
+import os
+import httpx
+r = httpx.get(
+    "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws",
+    headers={"Authorization": f"Bearer {os.environ['BRUBRU_API_KEY']}"},
+)
 </code></pre>
 
-<h2>Good citizenship</h2>
-<ul>
-<li><strong>Cache aggressively.</strong> Our data refreshes daily for most endpoints. Don't poll faster than you need.</li>
-<li><strong>Batch filters.</strong> Ask for <code>limit=100</code> once instead of 10 calls with <code>limit=10</code>.</li>
-<li><strong>Use <code>If-None-Match</code> when we expose ETags</strong> (June 2026 roadmap).</li>
-<li><strong>Monitor Newman runs.</strong> In CI, set <code>newman run --delay-request 1000</code> to pace calls.</li>
-</ul>
+<p>If you absolutely must inline the key in client-side JavaScript (don't — proxy through your backend), scope it to read-only and rotate aggressively.</p>
 
-<h2>Need higher limits?</h2>
-<p>Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> with your use case. <code>pro</code> upgrades are usually approved within 24h for production integrations. <code>enterprise</code> is a custom contract for partner integrations &mdash; bundling resale rights, SLA, and the 6,000 req/min ceiling.</p>
+<h2>WWW-Authenticate challenge</h2>
+<p>401 responses include the <code>WWW-Authenticate</code> header:</p>
+<pre><code>WWW-Authenticate: Bearer realm="Brubru API"</code></pre>
+<p>This lets HTTP client libraries surface a friendly auth prompt (curl with <code>--anyauth</code>, browser fetch with credential prompts, etc.).</p>
+
+<h2>Examples</h2>
+
+<h3>Python</h3>
+<pre><code>import os
+import httpx
+
+BASE = "https://brubru.beresol.eu"
+headers = {"Authorization": f"Bearer {os.environ['BRUBRU_API_KEY']}"}
+
+r = httpx.get(f"{BASE}/api/v2/legislative/eur-lex/laws", params={"q": "GDPR", "limit": 3}, headers=headers)
+r.raise_for_status()
+print(r.json()["data"])
+</code></pre>
+
+<h3>Node.js</h3>
+<pre><code>const response = await fetch(
+  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=GDPR&limit=3",
+  { headers: { Authorization: `Bearer ${process.env.BRUBRU_API_KEY}` } }
+);
+const body = await response.json();
+console.log(body.data);
+</code></pre>
+
+<h3>TypeScript (axios)</h3>
+<pre><code>import axios from "axios";
+
+const api = axios.create({
+  baseURL: "https://brubru.beresol.eu",
+  headers: { Authorization: `Bearer ${process.env.BRUBRU_API_KEY}` },
+});
+
+const { data } = await api.get("/api/v2/legislative/eur-lex/laws", { params: { q: "GDPR", limit: 3 } });
+</code></pre>
 
 <h2>Next</h2>
-<p>Head to <a href="/api/docs/endpoints.html">Endpoints</a> for the full reference of all 82 routes across 36 folders.</p>
+<p>Once you can make a 200 call, head to <a href="/api/docs/envelope.html">Response envelope</a> to understand the shape every endpoint returns.</p>
 
 <footer>
 &copy; 2026 Beresol BV — Brubru EU Data API v2.

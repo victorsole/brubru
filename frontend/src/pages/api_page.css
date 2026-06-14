@@ -273,8 +273,11 @@ div:has(> .policy-page.api-page) {
   .api-page__lede { font-size: 1.1rem; }
 }
 
-/* ---- Mobile: stack, hide sidebar ---- */
-@media (max-width: 767px) {
+/* ---- Tablet-portrait + mobile: stack, hide sidebar ----
+   Stack from 900px down: at 768px the 1fr+180px two-column grid overflows the
+   viewport by ~68px (sidebar + gap leave the main column wider than the space),
+   so the iPad-portrait breakpoint must be single-column. */
+@media (max-width: 900px) {
   .api-page__layout {
     display: block;
   }

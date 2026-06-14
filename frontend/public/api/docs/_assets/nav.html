@@ -1,0 +1,108 @@
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time (sync_api_docs_nav.py).
+Pages mark the active link by adding class="active" to the matching <a>.
+
+Updated 14 June 2026: API v2 only. 34 institution folders / 437 endpoints,
+grouped into 9 sections. v1 retired from the public reference. Anchors match
+the per-folder sections in endpoints.html.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
+  </ul>
+
+  <h3>European Parliament</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (38)</a></li>
+  </ul>
+
+  <h3>Council &amp; summits</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
+  </ul>
+
+  <h3>Commission</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (40)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER &mdash; energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC &mdash; electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop &mdash; vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO &mdash; plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC &mdash; disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA &mdash; chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA &mdash; environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA &mdash; food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE &mdash; gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT &mdash; innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA &mdash; medicines (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA &mdash; cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA &mdash; IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA &mdash; safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA &mdash; asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA &mdash; drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO &mdash; intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA &mdash; fundamental rights</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who &mdash; officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">OpenAPI spec (JSON)</a></li>
+  </ul>
+</aside>

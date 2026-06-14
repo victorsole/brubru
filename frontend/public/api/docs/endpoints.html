@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Endpoints — Brubru EU Data API</title>
-<meta name="description" content="Full reference of all 24 Brubru EU Data API endpoints with parameters, curl examples, and sample responses.">
+<title>All endpoints &mdash; Brubru EU Data API</title>
+<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 437 REST endpoints across 34 EU institution folders. One API key, one response envelope.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
@@ -18,26 +19,13 @@
 </div>
 <script>
 (function(){
-  // Hide for authenticated Professional users (detected via cookie set after login)
-  var m = document.cookie.match(/brubru_tier=([^;]+)/);
-  if (m && m[1] === 'blue') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
-  // Hide for users who dismissed in this session
-  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
-    var b = document.getElementById('brubru-paywall-banner');
-    if (b) b.style.display = 'none';
-  }
+  var m=document.cookie.match(/brubru_tier=([^;]+)/);
+  if(m&&m[1]==='blue'){var b=document.getElementById('brubru-paywall-banner');if(b)b.style.display='none';}
+  if(sessionStorage.getItem('brubru_paywall_dismissed')==='1'){var b=document.getElementById('brubru-paywall-banner');if(b)b.style.display='none';}
 })();
 </script>
 
 <div class="shell">
-<!--
-Shared nav HTML fragment for Brubru API docs.
-Each page inlines this by find-and-replace at build time. Pages mark the
-active link by adding class="active" to the matching <a>.
--->
 <aside class="sidebar">
   <a href="/api/" class="sidebar__brand">
     <img src="/assets/brubru_mainlogo.png" alt="">
@@ -47,7 +35,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 437 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -56,52 +44,72 @@ active link by adding class="active" to the matching <a>.
 
   <h3>Legislation</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Laws</a></li>
-    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
-    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Legal-text intelligence</a></li>
-    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Delegated acts</a></li>
-    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Implementing acts</a></li>
-    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS notifications</a></li>
-    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commission Register</a></li>
-    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Council Documents</a></li>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
   </ul>
 
-  <h3>Institutions &amp; people</h3>
+  <h3>European Parliament</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 enum endpoints)</a></li>
-    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissioners</a></li>
-    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Officials (14,873)</a></li>
-    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEPs</a></li>
-    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Meetings (Transparency)</a></li>
-    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB Opinions</a></li>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (38)</a></li>
   </ul>
 
-  <h3>EP detail</h3>
+  <h3>Council &amp; summits</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Committees</a></li>
-    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP documents (unified)</a></li>
-    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendments</a></li>
-    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Texts adopted</a></li>
-    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Texts submitted</a></li>
-    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resolutions</a></li>
-    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Reports</a></li>
-    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Opinions</a></li>
-    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parliamentary questions</a></li>
-    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
   </ul>
 
-  <h3>Live data</h3>
+  <h3>Commission</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
-    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Press releases</a></li>
-    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendar</a></li>
-    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
-    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Research (EPRS+STOA+JRC+ART+ECA)</a></li>
-    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Tenders (TED)</a></li>
-    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
-    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
-    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (40)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER &mdash; energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC &mdash; electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop &mdash; vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO &mdash; plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC &mdash; disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA &mdash; chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA &mdash; environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA &mdash; food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE &mdash; gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT &mdash; innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA &mdash; medicines (27)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA &mdash; cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA &mdash; IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA &mdash; safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA &mdash; asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA &mdash; drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO &mdash; intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA &mdash; fundamental rights</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (30)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (5)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who &mdash; officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
   </ul>
 
   <h3>Reference</h3>
@@ -120,1048 +128,698 @@ active link by adding class="active" to the matching <a>.
 
 <main class="main">
 
-<div class="main__eyebrow">Endpoints</div>
-<h1>Full endpoint reference</h1>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 437 endpoints across 34 EU institution folders</div>
+<h1>All endpoints</h1>
 <p class="main__lede">
-All <strong>82 v1 endpoints across 36 folders</strong> grouped by dataset. Each entry shows the HTTP method,
-path, parameters, a curl example, and a sample response. For live try-it,
-open the <a href="https://brubru-production.up.railway.app/api/docs" target="_blank">Scalar reference</a> or the <a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/" target="_blank">Postman workspace</a>.
+The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
 </p>
 
-<div class="callout">
-<p><strong>Base URL:</strong> <code>https://brubru-production.up.railway.app</code><br>
-<strong>Auth:</strong> <code>Authorization: Bearer brubru_live_...</code> (all endpoints except <code>/ping</code>)<br>
-<strong>Content type:</strong> <code>application/json</code></p>
-</div>
-
-<h2 id="meta">Meta endpoints</h2>
-<p id="metadata"></p>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/ping</span>
-  <span class="badge badge--public">Public</span>
-</div>
-<p class="endpoint__desc">Health check. Unauthenticated. Use this to verify your connectivity and the service is up before debugging auth.</p>
-<pre><code>curl https://brubru-production.up.railway.app/api/v1/ping</code></pre>
-<pre><code>{
-  "status": "ok",
-  "service": "brubru-data-provider",
-  "version": "v1",
-  "time": "2026-04-20T15:00:00Z"
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/whoami</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Identify the key holder + current rate-limit state. Useful for SDK bring-up.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/whoami</code></pre>
-<pre><code>{
-  "user_id": "d5daeab9-1f70-43b4-a66a-2282a4ff85b0",
-  "tier": "blue",
-  "rate_limit_limit": 60,
-  "rate_limit_remaining": 59
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/meta/enums</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">All valid enum values for every filter param. Call once at startup, cache.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/meta/enums</code></pre>
-<pre><code>{
-  "datasets": ["laws", "procedures", "commissioners", "consultations", ...],
-  "doc_types": ["Regulation", "Directive", "Decision", ...],
-  "policy_areas": ["Agriculture", "Digital", "Environment", ...],
-  "ep_committees": ["AFCO", "AFET", "AGRI", "BUDG", ...],
-  "eprs_publication_types": ["briefing", "study", "at_a_glance", ...],
-  "calendar_institutions": ["EP", "COUNCIL", "COMMISSION", ...],
-  "detail_levels": ["Minimal", "Summary", "Full"],
-  ...
-}</code></pre>
-</div>
-
-<h2 id="laws">Laws</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/laws</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Search adopted EU legislation. 28,500+ laws indexed with TSVECTOR full-text search.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td>q</td><td>string</td><td>Full-text search over title + subject matter.</td></tr>
-<tr><td>celex</td><td>string</td><td>Exact CELEX match (e.g. <code>32016R0679</code>).</td></tr>
-<tr><td>doc_type</td><td>string</td><td>Regulation, Directive, Decision...</td></tr>
-<tr><td>policy_area</td><td>string</td><td>Digital, Environment, Finance...</td></tr>
-<tr><td>published_from</td><td>date YYYY-MM-DD</td><td>Lower bound — adoption date &ge; value.</td></tr>
-<tr><td>published_to</td><td>date YYYY-MM-DD</td><td>Upper bound — adoption date &le; value. Preferred.</td></tr>
-<tr><td>published_end</td><td>date YYYY-MM-DD</td><td>Alias of <code>published_to</code>. 422 if conflicting.</td></tr>
-<tr><td>limit</td><td>int 1-100</td><td>Default 50.</td></tr>
-<tr><td>page</td><td>int &ge; 1</td><td>Default 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=3"</code></pre>
-
-<pre><code>{
-  "total": 87, "returned": 3, "page": 1, "limit": 3, "has_more": true,
-  "data": [
-    {
-      "celex": "32024R1689",
-      "title": "Regulation (EU) 2024/1689 ... on artificial intelligence",
-      "doc_type": "Regulation",
-      "adopted_on": "2024-06-13",
-      "oj_reference": "L, 2024/1689",
-      "policy_area": "Digital",
-      "legal_basis": ["Article 114 TFEU"],
-      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
-    },
-    ...
-  ]
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/laws/{celex}/text</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Full text of a specific EU law. Tries local Formex XML cache first; falls back to EUR-Lex Cellar (<code>publications.europa.eu/resource/celex/{celex}</code>) if not cached.</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>celex</td><td>string</td><td>CELEX identifier.</td></tr></tbody>
-</table>
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody><tr><td>format</td><td>plain | xml</td><td>Default <code>plain</code> — whitespace-normalised text. <code>xml</code> returns raw Formex.</td></tr></tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/laws/32016R0679/text?format=plain"</code></pre>
-
-<pre><code>{
-  "celex": "32016R0679",
-  "title": "Regulation (EU) 2016/679 ... General Data Protection Regulation",
-  "doc_type": "Regulation",
-  "adopted_on": "2016-04-27",
-  "format": "plain",
-  "content": "REGULATION (EU) 2016/679 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL ...",
-  "content_length": 351521,
-  "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
-}</code></pre>
-
-<div class="callout">
-<p>Content can be hundreds of KB for regulations. Use <code>format=plain</code> for LLM input; <code>format=xml</code> if you need structure preserved.</p>
-</div>
-</div>
-
-<h2 id="catalan-translations">Catalan translations</h2>
-
-<div class="callout">
-<p><strong>Open dataset (MIT licence) — no API key required.</strong> The full binding-law EU corpus translated into Catalan by Brubru. Published 7 May 2026 for the Dia d'Europa, this is the first complete Catalan translation of EU legislation. Subject to the global rate limit.</p>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/catalan-translations</span>
-  <span class="badge badge--public">Public</span>
-</div>
-<p class="endpoint__desc">List the binding-law EU corpus translated into Catalan. Filters: <code>q</code>, <code>celex</code>, <code>doc_type</code>, <code>category</code>, <code>category_en</code>, <code>engine</code>, <code>updated_from</code>, <code>updated_to</code>. Excludes OJ C/L-series notice fragments by SQL filter (<code>celex ~ '^3[0-9]{4}[RLD][0-9]{4}$'</code>).</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td>q</td><td>string</td><td>Substring search across <code>title_ca</code>, <code>title_en</code>, <code>short_name</code>, <code>celex</code>.</td></tr>
-<tr><td>celex</td><td>string</td><td>Exact CELEX (e.g. <code>32016R0679</code>).</td></tr>
-<tr><td>doc_type</td><td>string</td><td><code>regulation</code>, <code>directive</code>, <code>decision</code>, <code>delegated</code>, <code>implementing</code>, <code>treaty</code>.</td></tr>
-<tr><td>category</td><td>string</td><td>Brubru category (Catalan name) — see <code>/stats</code> for the full list.</td></tr>
-<tr><td>category_en</td><td>string</td><td>Brubru category (English name).</td></tr>
-<tr><td>engine</td><td>string</td><td><code>softcatala</code> (NMT) or <code>sonnet</code> (Claude).</td></tr>
-<tr><td>updated_from</td><td>datetime ISO-8601</td><td>Incremental sync — rows with <code>updated_at &ge; value</code>.</td></tr>
-<tr><td>updated_to</td><td>datetime ISO-8601</td><td>Incremental sync upper bound.</td></tr>
-<tr><td>limit</td><td>int 1-200</td><td>Default 50.</td></tr>
-<tr><td>page</td><td>int &ge; 1</td><td>Default 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations?q=GDPR&limit=3"</code></pre>
-
-<pre><code>{
-  "total": 1, "returned": 1, "page": 1, "limit": 3, "has_more": false,
-  "data": [
-    {
-      "celex": "32016R0679",
-      "doc_type": "regulation",
-      "short_name": "GDPR",
-      "title_ca": "REGLAMENT (UE) 2016/679 DEL PARLAMENT EUROPEU I DEL CONSELL ...",
-      "title_en": "Regulation (EU) 2016/679 of the European Parliament and of the Council ...",
-      "category": "Transformació digital",
-      "category_en": "Digital Transformation",
-      "articles_count": 99,
-      "recitals_count": 173,
-      "engine": "softcatala",
-      "ca_url": "https://brubru.beresol.eu/legislacio-ue-catala/32016R0679/",
-      "source_eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
-    }
-  ]
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/catalan-translations/stats</span>
-  <span class="badge badge--public">Public</span>
-</div>
-<p class="endpoint__desc">Aggregate counts grouped by <code>doc_type</code>, <code>category</code>, and <code>engine</code>. Use this to render a status dashboard or to verify ingestion before pulling pages.</p>
-
-<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations/stats"</code></pre>
-
-<pre><code>{
-  "total": 8258,
-  "target": 8710,
-  "coverage_pct": 94.81,
-  "by_doc_type": [
-    { "doc_type": "regulation", "count": 6911 },
-    { "doc_type": "delegated",  "count": 773 },
-    { "doc_type": "directive",  "count": 530 },
-    { "doc_type": "decision",   "count": 39  }
-  ],
-  "by_category": [...],
-  "by_engine": [
-    { "engine": "softcatala", "count": 8255 },
-    { "engine": "sonnet",     "count": 3    }
-  ],
-  "last_translated_at": "2026-05-06T14:50:04",
-  "licence": "MIT"
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/catalan-translations/{celex}</span>
-  <span class="badge badge--public">Public</span>
-</div>
-<p class="endpoint__desc">Single record by CELEX. Pass <code>?body=html</code> to inline the rendered Catalan HTML body (typically 50-500 KB). Returns <code>404</code> for any CELEX outside the binding-law subset.</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>celex</td><td>string</td><td>CELEX identifier matching <code>^3[0-9]{4}[RLD][0-9]{4}$</code>.</td></tr></tbody>
-</table>
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody><tr><td>body</td><td>string</td><td>Set to <code>html</code> to inline the rendered HTML in <code>body_html</code>. Omitted by default — consumers can fetch <code>ca_url</code> directly.</td></tr></tbody>
-</table>
-
-<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations/32016R0679?body=html"</code></pre>
-</div>
-
-<h2 id="procedures">Procedures</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/procedures</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">EU legislative procedures in flight. 1,464 files tracked from Commission proposal to adoption.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td>q</td><td>string</td><td>Substring match on title.</td></tr>
-<tr><td>reference</td><td>string</td><td>OEIL reference e.g. <code>2025/0726(COD)</code>.</td></tr>
-<tr><td>committee</td><td>string</td><td>Lead committee code (LIBE, ENVI, ...).</td></tr>
-<tr><td>rapporteur_mep_id</td><td>string</td><td>Filter by rapporteur.</td></tr>
-<tr><td>status</td><td>string</td><td>Carriage status (announced, tabled, adopted, ...).</td></tr>
-<tr><td>updated_from / updated_to / updated_end</td><td>datetime</td><td>Last-updated bounds. <code>updated_end</code> is alias of <code>updated_to</code>.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/procedures?committee=LIBE&limit=3"</code></pre>
-
-<h4>Cross-references shipped with every row</h4>
-<ul>
-<li><code>url</code> &mdash; canonical OEIL page on <code>oeil.secure.europarl.europa.eu</code>.</li>
-<li><code>legal_text_url</code> &mdash; EUR-Lex link to the adopted text (when available).</li>
-<li><code>law_tracker_url</code> &mdash; the EU's aggregated procedure tracker on <code>law-tracker.europa.eu</code>. Mapping: OEIL <code>2025/0420(COD)</code> &rarr; <code>https://law-tracker.europa.eu/procedure/2025_420?lang=en</code>. Combines OEIL + EUR-Lex + Commission events on a single page. Returns <code>null</code> when the reference isn't an OEIL procedure (e.g. COM-numbered drafts).</li>
-</ul>
-</div>
-
-<h2 id="publications">Publications</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/publications</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Unified feed of press releases and reports from 44+ EU institutions. Populated by our RSS ingester.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody>
-<tr><td>q</td><td>string</td><td>Full-text on title + summary.</td></tr>
-<tr><td>institution_slug</td><td>string</td><td>european_commission, ecb, ema, frontex, ...</td></tr>
-<tr><td>source_slug</td><td>string</td><td>Per-feed filter (ec_press, ecb_press, ema_news, ...).</td></tr>
-<tr><td>category</td><td>string</td><td>press_release, report, consultation, agenda, ...</td></tr>
-<tr><td>policy_area</td><td>string</td><td>Single policy area tag.</td></tr>
-<tr><td>published_from / to / end</td><td>date</td><td>Publication-date bounds.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/publications?institution_slug=ecb&limit=5"</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/publications/sources</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Catalog of ingested sources with per-source item count and latest publication date. Useful for monitoring ingestion health.</p>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/publications/sources</code></pre>
-</div>
-
-<h2 id="eprs">EPRS</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/eprs</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">European Parliamentary Research Service publications — briefings, studies, in-depth analyses.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody>
-<tr><td>q</td><td>string</td><td>Substring on title + summary.</td></tr>
-<tr><td>publication_type</td><td>string</td><td>briefing | study | in_depth_analysis | at_a_glance | eu_legislation_in_progress (lowercase).</td></tr>
-<tr><td>committee</td><td>string</td><td>LIBE, ENVI, ECON, ...</td></tr>
-<tr><td>procedure_ref</td><td>string</td><td>OEIL reference.</td></tr>
-<tr><td>celex</td><td>string</td><td>CELEX linked to this publication.</td></tr>
-<tr><td>published_from / to / end</td><td>date</td><td>Publication bounds.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/eprs?publication_type=briefing&committee=LIBE"</code></pre>
-</div>
-
-<h2 id="meps">MEPs</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/meps</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Live from EP Open Data REST v2. 6-hour cache. <code>total</code> is a best-effort hint; <code>coverage_complete</code> is false.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody>
-<tr><td>country</td><td>ISO-2 e.g. ES</td><td>Country of representation.</td></tr>
-<tr><td>group</td><td>string</td><td>Political group (EPP, S-D, RENEW, ...).</td></tr>
-<tr><td>name</td><td>string</td><td>Name substring.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
-</tbody>
-</table>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/meps?country=ES&limit=5"</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/meps/{mep_id}</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">MEP profile by identifier. Returns <code>MEPItem</code> shape; <code>profile_url</code> is <code>https://www.europarl.europa.eu/meps/en/{id}</code>.</p>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/meps/197668</code></pre>
-</div>
-
-<h2 id="commissioners">Commissioners</h2>
-
 <div class="callout callout--ok">
-<p><strong>Profile vs. agenda are now separate endpoints.</strong> Updated 30 April 2026 after partner feedback &mdash; agendas are not metadata. Use <code>/commissioners/{slug}</code> for the profile, <code>/commissioners/{slug}/agenda</code> for the events.</p>
+<p><strong>One key, one envelope.</strong> Every call takes the same <code>Authorization: Bearer brubru_live_...</code> header and every list endpoint returns the same paginated <a href="/api/docs/envelope.html">response envelope</a>. Detail endpoints (paths ending in an id, CELEX, reference or slug) return a single object. Base URL: <code>https://brubru.beresol.eu/api/v2</code>.</p>
 </div>
 
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/commissioners</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">All 27 College members. Profile rows only &mdash; <code>slug</code>, <code>name</code>, <code>portfolio</code>, <code>country</code>, <code>bio_url</code>, <code>agenda_url</code>, <code>unified_calendar_url</code>.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/commissioners</code></pre>
-</div>
+<p style="font-size:14.5px;color:var(--text-sec);margin:18px 0 8px;"><strong>Jump to a folder:</strong></p>
+<p style="font-size:14px;line-height:2;"><a href="#legislative">Legislation &amp; procedures</a> &middot; <a href="#parliament">European Parliament</a> &middot; <a href="#council">Council of the EU</a> &middot; <a href="#european-council">European Council</a> &middot; <a href="#eurogroup">Eurogroup</a> &middot; <a href="#commission">European Commission</a> &middot; <a href="#ecb">European Central Bank</a> &middot; <a href="#eu-financial-institutions">EU financial institutions</a> &middot; <a href="#esm">European Stability Mechanism</a> &middot; <a href="#acer">ACER</a> &middot; <a href="#berec">BEREC</a> &middot; <a href="#cedefop">Cedefop</a> &middot; <a href="#cpvo">CPVO</a> &middot; <a href="#ecdc">ECDC</a> &middot; <a href="#echa">ECHA</a> &middot; <a href="#eea">EEA</a> &middot; <a href="#efsa">EFSA</a> &middot; <a href="#eige">EIGE</a> &middot; <a href="#eit">EIT</a> &middot; <a href="#ema">EMA</a> &middot; <a href="#enisa">ENISA</a> &middot; <a href="#eu-lisa">eu-LISA</a> &middot; <a href="#eu-osha">EU-OSHA</a> &middot; <a href="#euaa">EUAA</a> &middot; <a href="#euda">EUDA</a> &middot; <a href="#euipo">EUIPO</a> &middot; <a href="#fra">FRA</a> &middot; <a href="#funding">Funding, grants &amp; tenders</a> &middot; <a href="#consultations">Agency public consultations</a> &middot; <a href="#open-data">Open data</a> &middot; <a href="#general-publications">General publications</a> &middot; <a href="#who-is-who">Who's Who</a> &middot; <a href="#geographical-indications">Geographical indications</a> &middot; <a href="#proprietary">Brubru proprietary EU intelligence</a></p>
 
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/commissioners/{slug}</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Profile of a single Commissioner. Same shape as one row of <code>/commissioners</code>. No events &mdash; for the agenda call <code>/{slug}/agenda</code>.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/commissioners/raffaele-fitto
-
-# {
-#   "slug": "raffaele-fitto",
-#   "name": "Raffaele Fitto",
-#   "portfolio": "Cohesion and Reforms",
-#   "country": "Italy",
-#   "bio_url": "https://commission.europa.eu/about/organisation/college-commissioners/raffaele-fitto_en",
-#   "agenda_url": null,
-#   "unified_calendar_url": "https://commission.europa.eu/about/organisation/college-commissioners/calendar-items-president-and-commissioners_en",
-#   "type": "commissioner"
-# }</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/commissioners/{name}/agenda</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Live calendar items for a Commission college member. Name resolution is accent-insensitive and accepts full name, slug, or nickname. Returns ONLY the agenda envelope &mdash; no profile fields injected.</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>name</td><td>string</td><td>Slug, surname, or full name (Fitto, raffaele-fitto, Sefcovic, Virkkunen, McGrath, ...).</td></tr></tbody>
-</table>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="legislative">Legislation &amp; procedures <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">37 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>date_from / date_to</td><td>date</td><td>Event-date bounds.</td></tr>
-<tr><td>limit / page</td><td>int 1-200 / 1</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/delegated-acts</code></td><td>Commission delegated acts — secondary legislation under Article 290 TFEU</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/delegated-acts/{reference}</code></td><td>Look up one delegated act by its Commission reference (e.g. C(2026)1234)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/identify</code></td><td>Recognise any single EU identifier — legal IDs, case-law IDs, DOIs, ISBNs, OJ refs</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/identify/scan</code></td><td>Scan free text and extract every embedded EU identifier — list of recognised matches</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws</code></td><td>Search adopted EU legislation — 8,710 distinct laws across 28,513 OJ publications</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/resolve</code></td><td>Resolve any identifier to the canonical CELEX + ELI</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/summaries</code></td><td>Browse / search the LEGISSUM plain-language summaries of EU legislation</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/summaries/{summary_id}</code></td><td>One LEGISSUM summary by its identifier</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}</code></td><td>Look up one adopted EU law by its legal identifier — metadata only (no body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/cellar</code></td><td>Live Publications Office metadata for one act — title, ELI, in-force, languages, EuroVoc</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/consolidated</code></td><td>Consolidated versions of one act — every dated consolidation, newest first</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/defined-terms</code></td><td>Legal definitions from one EU act — terms the law itself defines authoritatively</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/languages</code></td><td>Every language version + download format of an EU act — direct download URLs</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/lifecycle</code></td><td>In-force status + entry-into-force / end-of-validity dates for one act</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map</code></td><td>Recital-to-article semantic mapping — which recitals explain each article</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/relationships</code></td><td>Acts that amend, repeal, or are amended by an act — the legal-relationship graph</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/text</code></td><td>Full text of one adopted EU law — plain text or raw XML</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/views</code></td><td>Deterministic permanent-link set for one act — TXT / ALL / HIS / NIM / LSU + XML notice</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/laws/{celex}/xref</code></td><td>All the other names and links for one EU law</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/oj/daily</code></td><td>Acts published in the Official Journal on a given date</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/oj/{series}/{year}/{number}</code></td><td>Look up acts by an Official Journal reference (series / year / number)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/recent</code></td><td>Recently published EU acts (live from the Publications Office Cellar)</td></tr>
+<tr><td><span class="badge badge--post">POST</span></td><td><code>/api/v2/legislative/eur-lex/resolve-aliases</code></td><td>Resolve human names of EU laws (GDPR, DSA, AI Act, CBAM, ...) to their legal identifiers</td></tr>
+<tr><td><span class="badge badge--post">POST</span></td><td><code>/api/v2/legislative/eur-lex/resolve-references</code></td><td>Resolve inline EU legal citations in free text — extract every embedded reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/verify-citation/{ref}</code></td><td>Verify any EU legal reference — confirm it exists + return its full body and dates</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eur-lex/xref</code></td><td>Browse the whole cross-reference index — every law whose links have been computed</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eurovoc/authority/{table}</code></td><td>EU authority tables (NALs) — corporate bodies, procedure types, directories, modification types</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eurovoc/concepts/search</code></td><td>Search the EU subject thesaurus (EuroVoc) — find concept IDs to enumerate acts by topic</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eurovoc/concepts/{concept_id}/acts</code></td><td>EU acts tagged with one EuroVoc concept (e.g. AI, data protection, climate)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/eurovoc/directories/legal-acts</code></td><td>Directory of EU legal acts — the 20-chapter subject classification tree</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/implementing-acts</code></td><td>Commission implementing acts — uniform implementation of EU law (Article 291 TFEU)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/implementing-acts/{reference}</code></td><td>Look up one implementing act by its Commission reference (e.g. C(2026)0234)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/legislative-train/carriages</code></td><td>Legislative Train carriages — files by von der Leyen II priority / committee / status</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/legislative-train/carriages/{carriage_id}</code></td><td>One Legislative Train carriage + its monthly status timeline</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/oeil/procedures</code></td><td>Search EU legislative procedures in negotiation — proposed but not yet adopted</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/oeil/procedures/latest</code></td><td>Most recently updated legislative procedures</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/legislative/oeil/procedures/{reference}</code></td><td>Look up one legislative procedure by its reference — full timeline + rapporteurs + briefings</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/commissioners/Fitto/agenda?limit=10"
-
-# {
-#   "total": 23, "returned": 10, "has_more": true,
-#   "data": [
-#     { "date": "2026-04-15", "title": "Meeting with Giovanni Liverani, ANIA",
-#       "location": "Brussels", "detail_url": "https://commission.europa.eu/..." },
-#     ...
-#   ]
-# }</code></pre>
-</div>
-
-<h2 id="committees">Committees</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/committees/{code}/work-items</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Legislative files tracked by an EP committee. Procedure reference, rapporteur, status, vote date, CELEX links.</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>code</td><td>string</td><td>Committee code (LIBE, ENVI, AGRI, ...). See <a href="/api/docs/glossary.html">Glossary</a>.</td></tr></tbody>
-</table>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="parliament">European Parliament <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">38 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>q</td><td>string</td><td>Substring on title.</td></tr>
-<tr><td>status</td><td>string</td><td>Carriage status.</td></tr>
-<tr><td>stage</td><td>string</td><td>Stage name.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/amendments</code></td><td>EP committee amendments — what MEPs propose to change in a draft regulation</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/amendments/{amendment_id}</code></td><td>Look up one EP committee amendment by its internal UUID</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committee-agendas</code></td><td>EP committee draft agendas — the order of the day for committee meetings, with full text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committee-agendas/{event_id}</code></td><td>One committee draft agenda by id — full agenda text + HTML</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committee-transcripts</code></td><td>EP committee meeting transcripts — full AI transcript of committee webstreams</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committee-transcripts/{transcript_id}</code></td><td>One committee meeting transcript by id — full transcript text + HTML</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committees/{code}/minutes</code></td><td>EP committee meeting minutes — votes, decisions, attendance, decisions taken</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/committees/{code}/work-items</code></td><td>Legislative files an EP committee is currently working on — with stage + status</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/emeeting</code></td><td>EP eMeeting — committee meeting agendas and their documents</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/emeeting-documents</code></td><td>EP eMeeting documents — every committee document with all-language PDF URLs</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/emeeting-documents/{item_id}</code></td><td>One EP eMeeting document by id — all-language PDF URLs</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/emeeting/{item_id}</code></td><td>One EP eMeeting agenda by id — full item/document tree</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/ep-documents</code></td><td>Unified view of all EP committee output — work items + amendments + adopted texts</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/eprs</code></td><td>EPRS think-tank publications — Parliament's research service (briefings, studies, in-depth)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/eprs/{publication_id}</code></td><td>Look up one EPRS publication by its publication_id — full metadata + links</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/mep-assistants</code></td><td>the European Parliament — MEP assistant registers (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/mep-assistants/{item_id}</code></td><td>the European Parliament — one MEP assistant register (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/mep-declarations</code></td><td>the European Parliament — MEP declarations of financial interests (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/mep-declarations/{item_id}</code></td><td>the European Parliament — one MEP declarations of financial interest (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/meps</code></td><td>Members of the European Parliament — list / search by country, group, name, term</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/meps/{mep_id}</code></td><td>Look up one MEP by their EP-internal id — full profile + body composition</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/opinions</code></td><td>EP associated-committee opinions — what other committees say about a lead committee's file</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/parliamentary-questions</code></td><td>European Parliament questions to Commission, Council or ECB — with answers</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/parliamentary-questions/{question_reference}</code></td><td>Look up one parliamentary question by its reference (e.g. E-001234/2026)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/reports</code></td><td>EP committee reports — draft reports + draft recommendations</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/resolutions</code></td><td>EP non-legislative resolutions — own-initiative reports, legislative initiatives, topical resolutions</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/resolutions/{procedure_ref}</code></td><td>Look up one EP resolution by its procedure reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/supporting-analyses</code></td><td>the European Parliament — committee supporting analyses (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/supporting-analyses/{item_id}</code></td><td>the European Parliament — one committee supporting analyse (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/texts-adopted</code></td><td>EP plenary texts that have been adopted — resolutions, legislative resolutions, decisions</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/texts-adopted/{ta_reference}</code></td><td>Look up one EP plenary-adopted text by its TA reference (e.g. P10_TA(2025)0042)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/texts-submitted</code></td><td>EP plenary texts tabled but NOT YET adopted — the upcoming-vote pipeline</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/votes</code></td><td>EP roll-call votes — plenary results with tallies (HowTheyVote)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/votes/{vote_id}</code></td><td>Look up one EP roll-call vote by its internal ID — full tallies + HowTheyVote link</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/votes/{vote_id}/records</code></td><td>Per-MEP voting records for a single roll-call vote</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/webstreams</code></td><td>EP committee webstreams — meeting URLs + transcripts (multimedia.europarl.europa.eu)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/webstreams/by-procedure/{procedure_ref}/transcript</code></td><td>Webstreams linked to a specific legislative procedure — every committee debate end-to-end</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/parliament/webstreams/{stream_id}</code></td><td>Look up one EP committee webstream by its internal id — metadata + transcript status</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/committees/LIBE/work-items?limit=5"</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/committees/{code}/minutes</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Meeting minutes for a committee. Includes agenda items, votes, decisions.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="council">Council of the EU <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">21 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>date_from / date_to</td><td>date</td><td>Meeting date bounds.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-configurations</code></td><td>Council of the EU configurations — the 10 ministerial formations (+ Eurogroup)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-documents</code></td><td>Council of the EU documents — press releases, conclusions, meeting agendas, summits</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-documents/{doc_id}</code></td><td>One Council document or meeting by id — full body (text + HTML)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-meetings</code></td><td>Council of the EU meetings — ministerial meetings with agenda and outcomes</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-meetings/{item_id}</code></td><td>One Council meeting by id — full body (agenda + outcomes)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-oj-agendas</code></td><td>Council of the EU OJ agendas — meeting agendas from the OJ of the Council</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-oj-agendas/{item_id}</code></td><td>One Council OJ agenda by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-preparatory-bodies</code></td><td>Council of the EU preparatory bodies — COREPER and working-party meetings</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-preparatory-bodies/{item_id}</code></td><td>One Council preparatory-body meeting by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-press-releases</code></td><td>Council of the EU press releases — press releases and statements</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-press-releases/{item_id}</code></td><td>One Council press release by id — full text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-register</code></td><td>Council of the EU public register — latest documents</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-register/{item_id}</code></td><td>One Council register document by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-research-papers</code></td><td>Council of the EU research papers — ART (Analysis and Research Team) papers</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-research-papers/{item_id}</code></td><td>One Council research paper by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-treaties-agreements</code></td><td>Council of the EU treaties &amp; agreements — the Council's treaties database</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-treaties-agreements/{item_id}</code></td><td>One Council treaties/agreements entry by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-voting-results</code></td><td>Council of the EU voting results — results of public Council votes</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/council-voting-results/{item_id}</code></td><td>One Council voting result by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/sanctions-regimes</code></td><td>the Council of the EU — EU sanctions regimes (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/council/sanctions-regimes/{item_id}</code></td><td>the Council of the EU — one EU sanctions regime (full body)</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/committees/LIBE/minutes?limit=3"</code></pre>
-</div>
-
-<h2 id="consultations">Consultations</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/consultations/by-initiative/{initiative_id}/feedback</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Live stakeholder feedback on an EC Have Your Say initiative. Returns paginated items + summary aggregates (by_country, by_user_type).</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>initiative_id</td><td>int</td><td>HYS initiative ID (e.g. 13174 for "Sustainable EU food system").</td></tr></tbody>
-</table>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="european-council">European Council <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">12 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>country</td><td>ISO-3 e.g. BEL</td><td>Filter by country of respondent.</td></tr>
-<tr><td>user_type</td><td>string</td><td>BUSINESS_ASSOCIATION, COMPANY, NGO, CITIZEN, ...</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-about</code></td><td>About the European Council — how it works, president, role, history</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-about/{item_id}</code></td><td>One European Council reference page by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-conclusions</code></td><td>European Council conclusions — the conclusions register (2004-present)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-conclusions/{item_id}</code></td><td>One European Council conclusions document by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-euro-summit</code></td><td>Euro Summit — heads of state or government of the euro area</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-euro-summit/{item_id}</code></td><td>One Euro Summit entry by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-meetings</code></td><td>European Council meetings — summit meetings of EU leaders</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-meetings/{item_id}</code></td><td>One European Council meeting by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-members</code></td><td>Members of the European Council</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-members/{item_id}</code></td><td>One European Council members entry by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-strategic-agenda</code></td><td>European Council Strategic Agenda 2024-2029</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/european-council/euco-strategic-agenda/{item_id}</code></td><td>One Strategic Agenda entry by id — full body</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/consultations/by-initiative/13174/feedback?user_type=BUSINESS_ASSOCIATION&limit=5"</code></pre>
-
-<pre><code>{
-  "total": 86, "returned": 5, "has_more": true,
-  "aggregates": {
-    "consultation_id": "uuid",
-    "initiative_id": "13174",
-    "publication_id": 13174,
-    "title": "Sustainable EU food system",
-    "portal_url": "https://ec.europa.eu/info/law/better-regulation/...",
-    "summary_total": 86,
-    "by_user_type": { "COMPANY": 38, "BUSINESS_ASSOCIATION": 28, "NGO": 12, ... },
-    "by_country": { "BEL": 15, "GBR": 12, ... }
-  },
-  "data": [
-    {
-      "feedback_id": "621474",
-      "date": "2020-10-09T22:02:54Z",
-      "user_type": "BUSINESS_ASSOCIATION",
-      "organisation": "Freshfields Bruckhaus Deringer",
-      "country": "GBR",
-      "transparency_register_number": "443913019286-78",
-      "text": "...",
-      "public_url": "https://ec.europa.eu/..."
-    },
-    ...
-  ]
-}</code></pre>
-</div>
-
-<h2 id="calendar">Calendar</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/calendar/events</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Unified EU institutional calendar. EP plenary, Council meetings, Commission college, decentralised agencies.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="eurogroup">Eurogroup <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">10 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>institution</td><td>EP | COUNCIL | EUROPEAN_COUNCIL | COMMISSION | ECJ | ECB | ESMA | EMA | EBA | EIOPA | COR | EESC</td><td>Upper-case codes.</td></tr>
-<tr><td>event_type</td><td>string</td><td>PLENARY, COMMITTEE_MEETING, COUNCIL_MEETING, COLLEGE_MEETING, ...</td></tr>
-<tr><td>committee</td><td>string</td><td>EP committee code.</td></tr>
-<tr><td>commission_dg</td><td>string</td><td>AGRI, CNECT, ENV, ...</td></tr>
-<tr><td>date_from / date_to</td><td>date</td><td>Event-date bounds.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-about</code></td><td>About the Eurogroup — how it works, the working group, transparency, history</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-about/{item_id}</code></td><td>One Eurogroup reference page by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-documents</code></td><td>Eurogroup documents — the Eurogroup document register</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-documents/{item_id}</code></td><td>One Eurogroup document by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-meetings</code></td><td>Eurogroup meetings — meetings of euro-area finance ministers</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-meetings/{item_id}</code></td><td>One Eurogroup meeting by id — full body (agenda + outcomes)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-members</code></td><td>Members of the Eurogroup</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-members/{item_id}</code></td><td>One Eurogroup members entry by id — full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-work-programme</code></td><td>Eurogroup work programme</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eurogroup/eurogroup-work-programme/{item_id}</code></td><td>One Eurogroup work-programme entry by id — full body</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/calendar/events?institution=EP&limit=10"</code></pre>
-</div>
-
-<h2 id="knowledge-guides">Knowledge guides</h2>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/knowledge-guides</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">147 curated Brubru policy explainers. Keyword-indexed; each has a QUICK FACTS block and triggers.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
+<h2 id="commission">European Commission <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">40 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
-<tr><td>q</td><td>string</td><td>Keyword query. Omit for full listing.</td></tr>
-<tr><td>detail_level</td><td>Summary | Full</td><td>Summary = first 500 chars; Full = 20k chars.</td></tr>
-<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/agridata</code></td><td>the DG AGRI Agri-food data portal — agri-food data series (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/agridata/{item_id}</code></td><td>the DG AGRI Agri-food data portal — one agri-food data serie (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/cap-beneficiaries</code></td><td>the CAP beneficiaries directory (DG AGRI) — CAP beneficiary portals (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/cap-beneficiaries/{item_id}</code></td><td>the CAP beneficiaries directory (DG AGRI) — one CAP beneficiary portal (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/comitology</code></td><td>the Comitology register — comitology committees (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/comitology/{item_id}</code></td><td>the Comitology register — one comitology committee (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/commission-register-documents</code></td><td>Commission Transparency Register — College agendas, minutes, COM proposals, SWD, impact assessments</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/commission-register-documents/{reference}</code></td><td>Look up one Commission Register document by its reference (e.g. COM(2025) 87)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/commissioners</code></td><td>College of Commissioners with portfolios + meeting-agenda URLs (live)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/commissioners/{name}/agenda</code></td><td>Calendar events for one Commissioner — meetings, speeches, College sessions</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/commissioners/{slug}</code></td><td>Look up one Commissioner profile by slug — bio + portfolio + agenda URLs</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/consultations</code></td><td>EC HaveYourSay consultations + calls for evidence — open, upcoming, closed, outcome-published</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/consultations/by-initiative/{initiative_id}/feedback</code></td><td>Stakeholder feedback on a HaveYourSay consultation — live, paginated, with aggregates</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/consultations/{initiative_id}</code></td><td>Look up one HaveYourSay consultation by its initiative_id — full description + dates</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/dma-cases</code></td><td>the Digital Markets Act case register (DG COMP) — Digital Markets Act cases (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/dma-cases/{item_id}</code></td><td>the Digital Markets Act case register (DG COMP) — one Digital Markets Act case (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/expert-groups</code></td><td>the Register of Commission Expert Groups — expert groups (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/expert-groups/{item_id}</code></td><td>the Register of Commission Expert Groups — one expert group (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/financial-sanctions</code></td><td>the EU Consolidated Financial Sanctions List — financial sanctions (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/financial-sanctions/{item_id}</code></td><td>the EU Consolidated Financial Sanctions List — one financial sanction (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/infringements</code></td><td>Commission infringement decisions — Member State legal proceedings (LFN, reasoned opinion, CJEU referral, closure)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/infringements/{inf_reference}</code></td><td>Look up one infringement decision by its INF reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/meetings</code></td><td>Commission officials' meetings with interest representatives (Transparency Initiative)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/meetings/{meeting_id}</code></td><td>Look up one Transparency Initiative meeting by its internal UUID</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/rasff</code></td><td>RASFF (Rapid Alert System for Food and Feed) — RASFF food and feed safety notifications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/rasff/{item_id}</code></td><td>RASFF (Rapid Alert System for Food and Feed) — one RASFF food and feed safety notification (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/research-projects</code></td><td>CORDIS (the EU research-projects service) — research projects (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/research-projects/{item_id}</code></td><td>CORDIS (the EU research-projects service) — one research project (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/rsb-opinions</code></td><td>Regulatory Scrutiny Board opinions on Commission impact assessments + evaluations</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/rsb-opinions/{opinion_reference}</code></td><td>Look up one Regulatory Scrutiny Board opinion by its reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/state-aid</code></td><td>the State aid case register (DG COMP) — State aid cases (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/state-aid/{item_id}</code></td><td>the State aid case register (DG COMP) — one State aid case (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/taric-tariffs</code></td><td>the Combined Nomenclature (CN), the EU customs tariff — customs goods-classification codes (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/taric-tariffs/{item_id}</code></td><td>the Combined Nomenclature (CN), the EU customs tariff — one customs goods-classification code (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/tariff-rulings</code></td><td>EBTI (European Binding Tariff Information) — binding tariff rulings (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/tariff-rulings/{item_id}</code></td><td>EBTI (European Binding Tariff Information) — one binding tariff ruling (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/trade-defence</code></td><td>the EU trade-defence case database (DG TRADE / TRON) — trade-defence cases (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/trade-defence/{item_id}</code></td><td>the EU trade-defence case database (DG TRADE / TRON) — one trade-defence case (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/tris-notifications</code></td><td>Member State notifications of national technical regulations (TRIS, Directive 2015/1535)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/commission/tris-notifications/{notification_number}</code></td><td>Look up one TRIS notification by its number (e.g. 2026/0123/FR)</td></tr>
 </tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/knowledge-guides?q=AI+Act"</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/knowledge-guides/{guide_id}</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Full markdown content of a specific guide.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/knowledge-guides/gdpr_data_protection</code></pre>
-</div>
-
-<h2 id="legal-text">Legal-text intelligence</h2>
-
-<div class="callout">
-<p>These endpoints expose Brubru's derived analyses of EU legal texts. The two POST endpoints are <strong>READ-ONLY idempotent</strong> — they're POST only because the request body may contain long user text.</p>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/legal-text/{celex}/recital-article-map</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Top-3 recitals motivating each article of a law. TF-IDF cosine similarity. Cached per CELEX.</p>
-
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody><tr><td>force_recompute</td><td>bool</td><td>Bypass cache, rebuild the map. Default false.</td></tr></tbody>
+<h2 id="ecb">European Central Bank <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">17 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb</code></td><td>ECB folder directory — the two bodies and what each one carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/events</code></td><td>ECB Banking Supervision — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/events/{item_id}</code></td><td>ECB Banking Supervision — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/news</code></td><td>ECB Banking Supervision — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/news/{item_id}</code></td><td>ECB Banking Supervision — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/publications</code></td><td>ECB Banking Supervision — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/banking-supervision/publications/{item_id}</code></td><td>ECB Banking Supervision — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/datasets</code></td><td>European Central Bank — statistical datasets (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/datasets/{item_id}</code></td><td>European Central Bank — one statistical dataset (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/events</code></td><td>European Central Bank — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/events/{item_id}</code></td><td>European Central Bank — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/legal-acts</code></td><td>European Central Bank — legal acts (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/legal-acts/{item_id}</code></td><td>European Central Bank — one legal act (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/news</code></td><td>European Central Bank — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/news/{item_id}</code></td><td>European Central Bank — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/publications</code></td><td>European Central Bank — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecb/publications/{item_id}</code></td><td>European Central Bank — one publication (full body)</td></tr>
+</tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/legal-text/32016R0679/recital-article-map</code></pre>
-
-<pre><code>{
-  "celex": "32016R0679",
-  "map": {
-    "Article 3": [
-      {"recital_number": "27", "score": 0.41, "snippet": "..."},
-      {"recital_number": "14", "score": 0.35, "snippet": "..."},
-      {"recital_number": "23", "score": 0.30, "snippet": "..."}
-    ],
-    "Article 6": [...],
-    ...
-  }
-}</code></pre>
-
-<div class="callout callout--warn">
-<p>If computation fails (edge-case XML, empty TF-IDF vocabulary), you get <code>503 computation_unavailable</code>. Fall back to <code>/defined-terms</code> for a different parser's output.</p>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/legal-text/{celex}/defined-terms</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Extracted Article 3/4-style definitions (<em>"X means..."</em>) as a term → definition dictionary.</p>
-
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  https://brubru-production.up.railway.app/api/v1/legal-text/32022R2065/defined-terms</code></pre>
-
-<pre><code>{
-  "celex": "32022R2065",
-  "terms": {
-    "information society service": {
-      "term": "information society service",
-      "definition": "a service as defined in Article 1(1)(b) of Directive (EU) 2015/1535",
-      "article": "Article 3",
-      "point": "a"
-    },
-    ...
-  }
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--post">POST</span>
-  <span class="endpoint__path">/api/v1/legal-text/resolve-references</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc"><strong>READ-ONLY.</strong> Parse free text for inline EU legal citations; return structured CELEX identifiers with EUR-Lex URLs.</p>
-
-<h4>Request body</h4>
-<pre><code>{
-  "text": "See Article 7 of Regulation (EU) 2024/1234 and Directive 2011/93/EU.",
-  "annotate_html": false
-}</code></pre>
-
-<h4>Response (annotate_html=false)</h4>
-<pre><code>{
-  "refs": [
-    {"raw": "Regulation (EU) 2024/1234", "celex": "32024R1234", "url": "https://eur-lex.europa.eu/...", "article": "7"},
-    {"raw": "Directive 2011/93/EU", "celex": "32011L0093", "url": "https://eur-lex.europa.eu/..."}
-  ]
-}</code></pre>
-
-<h4>Response (annotate_html=true)</h4>
-<pre><code>{
-  "html": "See &lt;a href='...' data-celex='32024R1234'&gt;Article 7 of Regulation (EU) 2024/1234&lt;/a&gt; and ..."
-}</code></pre>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--post">POST</span>
-  <span class="endpoint__path">/api/v1/legal-text/resolve-aliases</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc"><strong>READ-ONLY.</strong> Scan free text for 680+ human nicknames of EU laws (GDPR, DSA, AI Act, CBAM, Solvency II, CRR, ...); return matches with CELEX identifiers.</p>
-
-<h4>Request body</h4>
-<pre><code>{
-  "text": "Under the GDPR and the Digital Services Act, platforms must..."
-}</code></pre>
-
-<h4>Response</h4>
-<pre><code>{
-  "aliases": [
-    {
-      "raw": "GDPR",
-      "alias": "GDPR",
-      "celex": "32016R0679",
-      "full_title": "Regulation (EU) 2016/679 ... General Data Protection Regulation",
-      "start": 10,
-      "end": 14
-    },
-    {
-      "raw": "Digital Services Act",
-      "alias": "DSA",
-      "celex": "32022R2065",
-      "full_title": "Regulation (EU) 2022/2065 ... Digital Services Act",
-      "start": 23,
-      "end": 43
-    }
-  ]
-}</code></pre>
-</div>
-
-<h2 id="predictions">Predictions</h2>
-
-<div class="callout">
-<p>Brubru uses XGBoost ML + baseline heuristics trained on historical OEIL data to forecast legislative outcomes. These are directional, not prophetic — combine with your own judgement.</p>
-</div>
-
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/predictions/{procedure_ref:path}/timeline</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Predicted days remaining until the procedure closes. Includes confidence score and 25/75 bounds.</p>
-
-<h4>Path parameters</h4>
-<table class="param-table">
-<tbody><tr><td>procedure_ref</td><td>string</td><td>OEIL reference. URL-encode slashes: <code>2025%2F0232(COD)</code>.</td></tr></tbody>
+<h2 id="eu-financial-institutions">EU financial institutions <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">51 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions</code></td><td>Economic &amp; Financial Institutions of the EU — directory</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/events</code></td><td>Anti-Money Laundering Authority — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/events/{item_id}</code></td><td>Anti-Money Laundering Authority — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/news</code></td><td>Anti-Money Laundering Authority — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/news/{item_id}</code></td><td>Anti-Money Laundering Authority — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/publications</code></td><td>Anti-Money Laundering Authority — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/amla/publications/{item_id}</code></td><td>Anti-Money Laundering Authority — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/credit-institutions</code></td><td>European Banking Authority — credit institutions (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/credit-institutions/{item_id}</code></td><td>European Banking Authority — one credit institution (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/events</code></td><td>European Banking Authority — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/events/{item_id}</code></td><td>European Banking Authority — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/news</code></td><td>European Banking Authority — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/news/{item_id}</code></td><td>European Banking Authority — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/publications</code></td><td>European Banking Authority — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eba/publications/{item_id}</code></td><td>European Banking Authority — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/events</code></td><td>European Investment Bank — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/events/{item_id}</code></td><td>European Investment Bank — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/news</code></td><td>European Investment Bank — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/news/{item_id}</code></td><td>European Investment Bank — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/projects</code></td><td>European Investment Bank — projects (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/projects/{item_id}</code></td><td>European Investment Bank — one project (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/publications</code></td><td>European Investment Bank — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eib/publications/{item_id}</code></td><td>European Investment Bank — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/events</code></td><td>European Insurance and Occupational Pensions Authority — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/events/{item_id}</code></td><td>European Insurance and Occupational Pensions Authority — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/news</code></td><td>European Insurance and Occupational Pensions Authority — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/news/{item_id}</code></td><td>European Insurance and Occupational Pensions Authority — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/publications</code></td><td>European Insurance and Occupational Pensions Authority — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eiopa/publications/{item_id}</code></td><td>European Insurance and Occupational Pensions Authority — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eppo/news</code></td><td>European Public Prosecutor's Office — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eppo/news/{item_id}</code></td><td>European Public Prosecutor's Office — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eppo/publications</code></td><td>European Public Prosecutor's Office — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/eppo/publications/{item_id}</code></td><td>European Public Prosecutor's Office — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/financial-instruments</code></td><td>European Securities and Markets Authority — financial instruments (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/financial-instruments/{item_id}</code></td><td>European Securities and Markets Authority — one financial instrument (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/news</code></td><td>European Securities and Markets Authority — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/news/{item_id}</code></td><td>European Securities and Markets Authority — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/publications</code></td><td>European Securities and Markets Authority — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esma/publications/{item_id}</code></td><td>European Securities and Markets Authority — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/events</code></td><td>European Systemic Risk Board — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/events/{item_id}</code></td><td>European Systemic Risk Board — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/news</code></td><td>European Systemic Risk Board — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/news/{item_id}</code></td><td>European Systemic Risk Board — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/publications</code></td><td>European Systemic Risk Board — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/esrb/publications/{item_id}</code></td><td>European Systemic Risk Board — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/events</code></td><td>Single Resolution Board — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/events/{item_id}</code></td><td>Single Resolution Board — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/news</code></td><td>Single Resolution Board — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/news/{item_id}</code></td><td>Single Resolution Board — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/publications</code></td><td>Single Resolution Board — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-financial-institutions/srb/publications/{item_id}</code></td><td>Single Resolution Board — one publication (full body)</td></tr>
+</tbody>
 </table>
 
-<h4>Query parameters</h4>
-<table class="param-table">
-<tbody><tr><td>use_ml</td><td>bool</td><td>Default true. Falls back to baseline heuristic on ML error.</td></tr></tbody>
+<h2 id="esm">European Stability Mechanism <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">9 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm</code></td><td>ESM folder directory — what the European Stability Mechanism carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/events</code></td><td>European Stability Mechanism — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/events/{item_id}</code></td><td>European Stability Mechanism — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/news</code></td><td>European Stability Mechanism — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/news/{item_id}</code></td><td>European Stability Mechanism — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/programmes</code></td><td>European Stability Mechanism — programmes (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/programmes/{item_id}</code></td><td>European Stability Mechanism — one programme (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/publications</code></td><td>European Stability Mechanism — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/esm/publications/{item_id}</code></td><td>European Stability Mechanism — one publication (full body)</td></tr>
+</tbody>
 </table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/predictions/2025%2F0232(COD)/timeline?use_ml=true"</code></pre>
+<h2 id="acer">ACER &mdash; Agency for the Cooperation of Energy Regulators <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/acer</code></td><td>ACER folder directory — what ACER carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/acer/news</code></td><td>Agency for the Cooperation of Energy Regulators — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/acer/news/{item_id}</code></td><td>Agency for the Cooperation of Energy Regulators — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/acer/publications</code></td><td>Agency for the Cooperation of Energy Regulators — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/acer/publications/{item_id}</code></td><td>Agency for the Cooperation of Energy Regulators — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<pre><code>{
-  "procedure_ref": "2025/0232(COD)",
-  "current_status": "TABLED",
-  "days_in_status": 45,
-  "predicted_days_remaining": 218,
-  "confidence": 0.62,
-  "lower_bound_25": 140,
-  "upper_bound_75": 310,
-  "model_version": "xgboost-2026-w15",
-  "prediction_method": "ml_xgboost"
-}</code></pre>
-</div>
+<h2 id="berec">BEREC &mdash; Body of European Regulators for Electronic Communications <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec</code></td><td>BEREC folder directory — what BEREC carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/events</code></td><td>Body of European Regulators for Electronic Communications — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/events/{item_id}</code></td><td>Body of European Regulators for Electronic Communications — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/news</code></td><td>Body of European Regulators for Electronic Communications — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/news/{item_id}</code></td><td>Body of European Regulators for Electronic Communications — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/publications</code></td><td>Body of European Regulators for Electronic Communications — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/berec/publications/{item_id}</code></td><td>Body of European Regulators for Electronic Communications — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<div class="endpoint">
-<div class="endpoint__head">
-  <span class="badge badge--get">GET</span>
-  <span class="endpoint__path">/api/v1/predictions/{procedure_ref:path}/outcome</span>
-  <span class="badge badge--auth">Auth</span>
-</div>
-<p class="endpoint__desc">Probability distribution over outcomes (adopted, rejected, withdrawn, pending) for a procedure.</p>
+<h2 id="cedefop">Cedefop &mdash; vocational training <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop</code></td><td>Cedefop folder directory — what Cedefop carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/events</code></td><td>European Centre for the Development of Vocational Training — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/events/{item_id}</code></td><td>European Centre for the Development of Vocational Training — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/news</code></td><td>European Centre for the Development of Vocational Training — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/news/{item_id}</code></td><td>European Centre for the Development of Vocational Training — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/publications</code></td><td>European Centre for the Development of Vocational Training — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cedefop/publications/{item_id}</code></td><td>European Centre for the Development of Vocational Training — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru-production.up.railway.app/api/v1/predictions/2025%2F0232(COD)/outcome"</code></pre>
+<h2 id="cpvo">CPVO &mdash; Community Plant Variety Office <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo</code></td><td>CPVO folder directory — what CPVO carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/events</code></td><td>Community Plant Variety Office — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/events/{item_id}</code></td><td>Community Plant Variety Office — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/news</code></td><td>Community Plant Variety Office — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/news/{item_id}</code></td><td>Community Plant Variety Office — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/publications</code></td><td>Community Plant Variety Office — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/cpvo/publications/{item_id}</code></td><td>Community Plant Variety Office — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<pre><code>{
-  "procedure_ref": "2025/0232(COD)",
-  "current_status": "TABLED",
-  "outcomes": [
-    {"outcome": "adopted", "probability": 0.71},
-    {"outcome": "withdrawn", "probability": 0.18},
-    {"outcome": "rejected", "probability": 0.07},
-    {"outcome": "pending", "probability": 0.04}
-  ],
-  "most_likely_outcome": "adopted",
-  "confidence": 0.71,
-  "model_version": "xgboost-2026-w15"
-}</code></pre>
-</div>
+<h2 id="ecdc">ECDC &mdash; disease prevention &amp; control <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc</code></td><td>ECDC folder directory — what ECDC carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/news</code></td><td>European Centre for Disease Prevention and Control — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/news/{item_id}</code></td><td>European Centre for Disease Prevention and Control — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/publications</code></td><td>European Centre for Disease Prevention and Control — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/publications/{item_id}</code></td><td>European Centre for Disease Prevention and Control — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/surveillance</code></td><td>European Centre for Disease Prevention and Control — surveillance topics (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ecdc/surveillance/{item_id}</code></td><td>European Centre for Disease Prevention and Control — one surveillance topic (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="delegated-acts">Delegated acts</h2>
-<p>Article 290 TFEU acts adopted by the Commission under powers delegated by the co-legislators. Filter by basic-act CELEX, status, policy area, date range.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/delegated-acts</span><span class="badge badge--auth">Auth</span></div>
-<p class="endpoint__desc">List delegated acts. Each item carries CELEX (when published), basic-act CELEX, OJ reference, source URL.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/delegated-acts?policy_area=Digital&amp;limit=10"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/delegated-acts/{reference:path}</span><span class="badge badge--auth">Auth</span></div>
-<p class="endpoint__desc">Detail by delegated-act reference (e.g. <code>C(2026) 1234</code>) — URL-encode slashes and parentheses.</p>
-</div>
+<h2 id="echa">ECHA &mdash; European Chemicals Agency <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/echa</code></td><td>ECHA folder directory — what ECHA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/echa/candidate-list</code></td><td>European Chemicals Agency — Candidate List substances (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/echa/candidate-list/{item_id}</code></td><td>European Chemicals Agency — one Candidate List substance (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/echa/news</code></td><td>European Chemicals Agency — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/echa/news/{item_id}</code></td><td>European Chemicals Agency — one news item (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="implementing-acts">Implementing acts</h2>
-<p>Article 291 TFEU acts ensuring uniform implementation. Same shape as delegated-acts.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/implementing-acts</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/implementing-acts?status=adopted&amp;limit=10"</code></pre>
-</div>
-<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/implementing-acts/{reference:path}</span><span class="badge badge--auth">Auth</span></div></div>
+<h2 id="eea">EEA &mdash; European Environment Agency <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea</code></td><td>EEA folder directory — what EEA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/events</code></td><td>European Environment Agency — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/events/{item_id}</code></td><td>European Environment Agency — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/indicators</code></td><td>European Environment Agency — environmental indicators (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/indicators/{item_id}</code></td><td>European Environment Agency — one environmental indicator (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/news</code></td><td>European Environment Agency — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eea/news/{item_id}</code></td><td>European Environment Agency — one news item (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="tris-notifications">TRIS notifications</h2>
-<p>Member-State draft technical regulations notified under Directive 2015/1535. Filter by notifying country, status, date.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tris-notifications</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/tris-notifications?country=DE&amp;limit=10"</code></pre>
-</div>
-<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tris-notifications/{notification_number}</span><span class="badge badge--auth">Auth</span></div></div>
+<h2 id="efsa">EFSA &mdash; European Food Safety Authority <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">9 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa</code></td><td>EFSA folder directory — what EFSA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/news</code></td><td>European Food Safety Authority — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/news/{item_id}</code></td><td>European Food Safety Authority — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/openfoodtox</code></td><td>European Food Safety Authority — OpenFoodTox substances (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/openfoodtox/{item_id}</code></td><td>European Food Safety Authority — one OpenFoodTox substance (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/publications</code></td><td>European Food Safety Authority — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/publications/{item_id}</code></td><td>European Food Safety Authority — one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/xylella-host-plants</code></td><td>European Food Safety Authority — Xylella host-plant records (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/efsa/xylella-host-plants/{item_id}</code></td><td>European Food Safety Authority — one Xylella host-plant record (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="commission-register">Commission Register</h2>
-<p>Commission preparatory and policy documents (COM, SWD, JOIN, C-series) from the Documents Register, enriched with EUR-Lex CELEX-derived PDF URLs (<code>https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}</code>) where the document is on Cellar.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/commission-register-documents</span><span class="badge badge--auth">Auth</span></div>
-<p class="endpoint__desc">List all 528 documents. Filter by category (COM/SWD/JOIN/C), DG, year.</p>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/commission-register-documents?category=SWD&amp;year=2026&amp;limit=20"</code></pre>
-</div>
+<h2 id="eige">EIGE &mdash; European Institute for Gender Equality <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige</code></td><td>EIGE folder directory — what EIGE carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/events</code></td><td>European Institute for Gender Equality — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/events/{item_id}</code></td><td>European Institute for Gender Equality — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/news</code></td><td>European Institute for Gender Equality — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/news/{item_id}</code></td><td>European Institute for Gender Equality — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/publications</code></td><td>European Institute for Gender Equality — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eige/publications/{item_id}</code></td><td>European Institute for Gender Equality — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="council-documents">Council Documents</h2>
-<p>Council of the EU public-register documents (presidency notes, working-party reports, conclusions, ST-references).</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/council-documents</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/council-documents?q=migration&amp;limit=10"</code></pre>
-</div>
+<h2 id="eit">EIT &mdash; innovation &amp; technology <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eit</code></td><td>EIT folder directory — what EIT carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eit/events</code></td><td>European Institute of Innovation and Technology — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eit/events/{item_id}</code></td><td>European Institute of Innovation and Technology — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eit/news</code></td><td>European Institute of Innovation and Technology — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eit/news/{item_id}</code></td><td>European Institute of Innovation and Technology — one news item (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="officials">Officials</h2>
-<p>Every entry from the EU Who Is Who directories — 14,873 records sourced from 75 organigrammes covering Commission DGs, EP services, Council Secretariat, Ombudsman, and decentralised agencies. Filter by institution, DG/unit, role.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/officials</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/officials?institution=COMMISSION&amp;dg=DG_CNECT&amp;limit=50"</code></pre>
-</div>
+<h2 id="ema">EMA &mdash; European Medicines Agency <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">27 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema</code></td><td>EMA folder directory — what EMA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/dhpc</code></td><td>European Medicines Agency — direct healthcare professional communications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/dhpc/{item_id}</code></td><td>European Medicines Agency — one direct healthcare professional communication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/events</code></td><td>European Medicines Agency — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/events/{item_id}</code></td><td>European Medicines Agency — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/herbal-medicines</code></td><td>European Medicines Agency — herbal medicines (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/herbal-medicines/{item_id}</code></td><td>European Medicines Agency — one herbal medicine (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/maximum-residue-limits</code></td><td>European Medicines Agency — maximum residue limits (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/maximum-residue-limits/{item_id}</code></td><td>European Medicines Agency — one maximum residue limit (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/medicines</code></td><td>European Medicines Agency — medicines (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/medicines/{item_id}</code></td><td>European Medicines Agency — one medicine (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/news</code></td><td>European Medicines Agency — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/news/{item_id}</code></td><td>European Medicines Agency — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/opinions-outside-eu</code></td><td>European Medicines Agency — opinions for use outside the EU (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/opinions-outside-eu/{item_id}</code></td><td>European Medicines Agency — one opinions for use outside the EU (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/orphan-designations</code></td><td>European Medicines Agency — orphan designations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/orphan-designations/{item_id}</code></td><td>European Medicines Agency — one orphan designation (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/paediatric-investigation-plans</code></td><td>European Medicines Agency — paediatric investigation plans (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/paediatric-investigation-plans/{item_id}</code></td><td>European Medicines Agency — one paediatric investigation plan (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/post-authorisation</code></td><td>European Medicines Agency — post-authorisation procedures (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/post-authorisation/{item_id}</code></td><td>European Medicines Agency — one post-authorisation procedure (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/psusa</code></td><td>European Medicines Agency — PSUSA assessments (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/psusa/{item_id}</code></td><td>European Medicines Agency — one PSUSA assessment (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/referrals</code></td><td>European Medicines Agency — referral procedures (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/referrals/{item_id}</code></td><td>European Medicines Agency — one referral procedure (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/shortages</code></td><td>European Medicines Agency — shortages (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/ema/shortages/{item_id}</code></td><td>European Medicines Agency — one shortage (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="meetings">Meetings (Transparency)</h2>
-<p>Commission Transparency Register meetings: which Commissioner / Cabinet member / DG met which interest representative when.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/meetings</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/meetings?commissioner=virkkunen&amp;limit=20"</code></pre>
-</div>
+<h2 id="enisa">ENISA &mdash; cybersecurity <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/enisa</code></td><td>ENISA folder directory — what ENISA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/enisa/news</code></td><td>European Union Agency for Cybersecurity — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/enisa/news/{item_id}</code></td><td>European Union Agency for Cybersecurity — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/enisa/publications</code></td><td>European Union Agency for Cybersecurity — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/enisa/publications/{item_id}</code></td><td>European Union Agency for Cybersecurity — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="rsb-opinions">RSB Opinions</h2>
-<p>Regulatory Scrutiny Board opinions on Commission impact assessments and major evaluations.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/rsb-opinions</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/rsb-opinions?limit=10"</code></pre>
-</div>
+<h2 id="eu-lisa">eu-LISA &mdash; large-scale IT systems <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa</code></td><td>eu-LISA folder directory — what eu-LISA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/events</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/events/{item_id}</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/news</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/news/{item_id}</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/publications</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-lisa/publications/{item_id}</code></td><td>European Union Agency for the Operational Management of Large-Scale IT Systems — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="ep-documents">EP documents (unified)</h2>
-<p>Single endpoint that branches across reports, opinions, resolutions, texts adopted, texts submitted, and parliamentary questions. Use the <code>doc_type</code> filter to narrow.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/ep-documents</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/ep-documents?doc_type=report&amp;committee=LIBE&amp;limit=10"</code></pre>
-</div>
+<h2 id="eu-osha">EU-OSHA &mdash; safety &amp; health at work <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha</code></td><td>EU-OSHA folder directory — what EU-OSHA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/events</code></td><td>European Agency for Safety and Health at Work — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/events/{item_id}</code></td><td>European Agency for Safety and Health at Work — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/news</code></td><td>European Agency for Safety and Health at Work — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/news/{item_id}</code></td><td>European Agency for Safety and Health at Work — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/publications</code></td><td>European Agency for Safety and Health at Work — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eu-osha/publications/{item_id}</code></td><td>European Agency for Safety and Health at Work — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="amendments">Amendments</h2>
-<p>56,051 MEP amendments to legislative files. Filter by procedure, committee, MEP, or political group.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/amendments</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/amendments?procedure_ref=2024%2F0001(COD)&amp;limit=20"</code></pre>
-</div>
+<h2 id="euaa">EUAA &mdash; asylum <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">3 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euaa</code></td><td>EUAA folder directory — what EUAA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euaa/news</code></td><td>European Union Agency for Asylum — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euaa/news/{item_id}</code></td><td>European Union Agency for Asylum — one news item (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="votes">Votes</h2>
-<p>EP roll-call votes. Each vote ships totals + group breakdown + per-MEP positions.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/votes</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/votes?procedure_ref=2024%2F0001(COD)&amp;limit=10"</code></pre>
-</div>
+<h2 id="euda">EUDA &mdash; European Union Drugs Agency <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda</code></td><td>EUDA folder directory — what EUDA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/events</code></td><td>European Union Drugs Agency — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/events/{item_id}</code></td><td>European Union Drugs Agency — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/news</code></td><td>European Union Drugs Agency — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/news/{item_id}</code></td><td>European Union Drugs Agency — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/publications</code></td><td>European Union Drugs Agency — publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euda/publications/{item_id}</code></td><td>European Union Drugs Agency — one publication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="texts-adopted">Texts adopted</h2>
-<p>Final EP positions adopted in plenary (TA-references). Filter by date, procedure, committee.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/texts-adopted</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/texts-adopted?published_from=2026-01-01&amp;limit=10"</code></pre>
-</div>
+<h2 id="euipo">EUIPO &mdash; intellectual property <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo</code></td><td>EUIPO folder directory — what EUIPO carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/events</code></td><td>European Union Intellectual Property Office — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/events/{item_id}</code></td><td>European Union Intellectual Property Office — one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/news</code></td><td>European Union Intellectual Property Office — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/news/{item_id}</code></td><td>European Union Intellectual Property Office — one news item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/trademarks</code></td><td>European Union Intellectual Property Office — trade marks (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/euipo/trademarks/{item_id}</code></td><td>European Union Intellectual Property Office — one trade mark (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="texts-submitted">Texts submitted</h2>
-<p>Motions for resolution, recommendations and other texts tabled but not yet adopted.</p>
-<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/texts-submitted</span><span class="badge badge--auth">Auth</span></div></div>
+<h2 id="fra">FRA &mdash; fundamental rights <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra</code></td><td>FRA folder directory — what FRA carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra/case-law</code></td><td>European Union Agency for Fundamental Rights — case-law entries (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra/case-law/{item_id}</code></td><td>European Union Agency for Fundamental Rights — one case-law entrie (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra/charterpedia</code></td><td>European Union Agency for Fundamental Rights — Charter articles (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra/charterpedia/{item_id}</code></td><td>European Union Agency for Fundamental Rights — one Charter article (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="resolutions">Resolutions</h2>
-<p>EP resolutions (own-initiative + responses to Commission communications).</p>
-<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/resolutions</span><span class="badge badge--auth">Auth</span></div></div>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">30 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/all</code></td><td>All decentralised EU funding — tenders, grants &amp; calls across every body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls</code></td><td>Cedefop — Cedefop calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls/{item_id}</code></td><td>Cedefop — one Cedefop calls for expression of interest (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders</code></td><td>Cedefop — Cedefop calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders/{item_id}</code></td><td>Cedefop — one Cedefop calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls</code></td><td>the European Fisheries Control Agency — EFCA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls/{item_id}</code></td><td>the European Fisheries Control Agency — one EFCA calls for expression of interest (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders</code></td><td>the European Fisheries Control Agency — EFCA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders/{item_id}</code></td><td>the European Fisheries Control Agency — one EFCA calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders</code></td><td>the European Food Safety Authority — EFSA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}</code></td><td>the European Food Safety Authority — one EFSA calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders</code></td><td>the European Medicines Agency — EMA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}</code></td><td>the European Medicines Agency — one EMA calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders</code></td><td>the European Training Foundation — ETF calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders/{item_id}</code></td><td>the European Training Foundation — one ETF calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-funding-recipients</code></td><td>the EU Financial Transparency System — EU funding recipients (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-funding-recipients/{item_id}</code></td><td>the EU Financial Transparency System — one EU funding recipient (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders</code></td><td>Eurojust — Eurojust calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders/{item_id}</code></td><td>Eurojust — one Eurojust calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-proposals</code></td><td>EU funding calls for proposals — Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-proposals/{topic_id}</code></td><td>Look up one funding call for proposals by its EU topic_id</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-tenders</code></td><td>EU public-procurement tenders from the F&amp;T Portal — distinct from the /tenders TED view</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-tenders/{tender_reference}</code></td><td>Look up one F&amp;T Portal tender by its tender_reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-funded-projects</code></td><td>EU grant-funded projects — active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-funded-projects/{project_id}</code></td><td>Look up one EU-funded project by its grant project_id (numeric)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities</code></td><td>EU funding opportunities — open + forthcoming calls across programmes (alternate view)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities/{topic_id}</code></td><td>Look up one EU funding opportunity by its topic_id</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup &amp; SME funding — EIC Accelerator, Transition, Pathfinder, STEP, prizes</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders</code></td><td>EU public procurement tenders (TED — Tenders Electronic Daily)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders/{tender_id}</code></td><td>Look up one TED tender by its internal numeric id</td></tr>
+</tbody>
+</table>
 
-<h2 id="reports">Reports</h2>
-<p>1,026 EP committee reports (A-references). The rapporteur's draft compiled with adopted amendments.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/reports</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/reports?committee=ITRE&amp;limit=10"</code></pre>
-</div>
+<h2 id="consultations">Agency public consultations <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">11 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/all</code></td><td>All decentralised EU agency public consultations (every body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/amla</code></td><td>AMLA — AMLA public consultations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/amla/{item_id}</code></td><td>AMLA — one AMLA public consultation (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/berec</code></td><td>BEREC — BEREC public consultations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/berec/{item_id}</code></td><td>BEREC — one BEREC public consultation (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/echa</code></td><td>the European Chemicals Agency — ECHA public consultations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/echa/{item_id}</code></td><td>the European Chemicals Agency — one ECHA public consultation (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/eiopa</code></td><td>EIOPA — EIOPA public consultations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/eiopa/{item_id}</code></td><td>EIOPA — one EIOPA public consultation (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/ema</code></td><td>the European Medicines Agency — EMA public consultations (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/consultations/ema/{item_id}</code></td><td>the European Medicines Agency — one EMA public consultation (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="opinions">Opinions</h2>
-<p>Opinions of associated committees (RR-references) — non-lead committee input on a file.</p>
-<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/opinions</span><span class="badge badge--auth">Auth</span></div></div>
+<h2 id="open-data">Open data <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">5 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/catalogues</code></td><td>EU open-data catalogues — the data.europa.eu catalogue directory</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/catalogues/{item_id}</code></td><td>One EU open-data catalogue by id</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/datasets</code></td><td>EU open datasets — search data.europa.eu (with direct download links)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/datasets/{item_id}</code></td><td>One EU open dataset by id — full metadata + download links</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/high-value-datasets</code></td><td>EU High-Value Datasets (Open Data Directive)</td></tr>
+</tbody>
+</table>
 
-<h2 id="parliamentary-questions">Parliamentary questions</h2>
-<p>Written and oral questions tabled by MEPs to the Commission, Council, ECB, and EEAS.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/parliamentary-questions</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/parliamentary-questions?addressee=Commission&amp;limit=10"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/parliamentary-questions/{reference:path}</span><span class="badge badge--auth">Auth</span></div>
-<p class="endpoint__desc">Detail by question reference (e.g. <code>E-001234/2026</code>). Slashes are URL-encoded.</p>
-</div>
+<h2 id="general-publications">General publications <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">2 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/general-publications</code></td><td>EU general publications — brochures, reports and studies</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/general-publications/{item_id}</code></td><td>One EU general publication by id</td></tr>
+</tbody>
+</table>
 
-<h2 id="webstreams">Webstreams</h2>
-<p>Live and on-demand video URLs from <code>multimedia.europarl.europa.eu</code>. Each event surfaces a stream URL plus committee + day metadata.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/webstreams</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/webstreams?committee=LIBE&amp;date=2026-04-30"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/webstreams/by-procedure/{procedure_ref:path}</span><span class="badge badge--auth">Auth</span></div>
-<p class="endpoint__desc">Find webstreams for a specific OEIL file (committee meetings or plenary debate covering that procedure).</p>
-</div>
+<h2 id="who-is-who">Who's Who &mdash; EU officials <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">4 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/who-is-who/departments</code></td><td>EU departments — organisational units across all EU institutions</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/who-is-who/departments/{item_id}</code></td><td>One EU department by id</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/who-is-who/officials</code></td><td>EU officials — named officials with position and department</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/who-is-who/officials/{item_id}</code></td><td>One EU official by id</td></tr>
+</tbody>
+</table>
 
-<h2 id="press-releases">Press releases</h2>
-<p>Same envelope as <code>/publications</code>, filtered to institutional press desks across the EC, EP, Council, EEAS, ECB, and agencies.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/press-releases</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/press-releases?institution=EC&amp;limit=20"</code></pre>
-</div>
+<h2 id="geographical-indications">Geographical indications <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">6 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/eu-register</code></td><td>the EU geographical-indications register (eAmbrosia) — EU geographical indications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/eu-register/{item_id}</code></td><td>the EU geographical-indications register (eAmbrosia) — one EU geographical indication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/giview</code></td><td>GIView (EUIPO) — geographical indications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/giview/{item_id}</code></td><td>GIView (EUIPO) — one geographical indication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/third-country</code></td><td>eAmbrosia (third-country GIs) — third-country geographical indications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/geographical-indications/third-country/{item_id}</code></td><td>eAmbrosia (third-country GIs) — one third-country geographical indication (full body)</td></tr>
+</tbody>
+</table>
 
-<h2 id="research-publications">Research publications (EPRS + STOA + JRC + ART + ECA)</h2>
-<p>Unified research feed across the EU's five major research producers — 210 publications and growing. Filter by <code>source</code> to narrow.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/research-publications</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/research-publications?source=JRC&amp;limit=10"</code></pre>
-<p class="endpoint__desc">Each item ships <code>source</code> (EPRS / STOA / JRC / ART / ECA), <code>doi</code> when available, and <code>eur_number</code> (EU publications office identifier) for citation.</p>
-</div>
-
-<h2 id="tenders">Tenders (TED)</h2>
-<p>EU tender notices from Tenders Electronic Daily — 386 active. Filter by CPV code, contracting authority, deadline.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tenders</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/tenders?cpv=72000000&amp;limit=20"</code></pre>
-</div>
-
-<h2 id="citations">Verify citation</h2>
-<p>Pass any EU legal citation; get back the canonical CELEX, full title, and authoritative EUR-Lex URL. Use this before quoting a regulation in user-facing output to avoid fabrication.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/citations/verify</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/citations/verify?q=Regulation+(EU)+2016%2F679"</code></pre>
-</div>
-
-<h2 id="vocabularies">EU Vocabularies</h2>
-<p>Search the EU's official Authority Tables &mdash; corporate bodies (DGs, agencies, EU institutions), legislative procedures (COD, CNS, APP, etc.), document directories, modification types. Returns multilingual labels in the six languages Brubru supports.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/corporate-bodies</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/vocabularies/corporate-bodies?q=CNECT&amp;lang=en"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/procedures</span><span class="badge badge--auth">Auth</span></div>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/directories</span><span class="badge badge--auth">Auth</span></div>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/modification-types</span><span class="badge badge--auth">Auth</span></div>
-</div>
-
-<h2 id="identify">Identifier resolver</h2>
-<p>Recognise EU identifiers (CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number) anchored or embedded in free text. Use <code>/identify/{ref}</code> for a single ref, <code>/identify/scan</code> to extract every embedded identifier from a paragraph.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/identify/{ref}</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/identify/32016R0679"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--post">POST</span><span class="endpoint__path">/api/v1/identify/scan</span><span class="badge badge--auth">Auth</span></div>
-</div>
-
-<h2 id="ecli">ECLI search</h2>
-<p>Resolve a European Case Law Identifier to a canonical deep-link. CJEU-aware (Court of Justice of the EU rulings) with fallback to e-Justice for national courts.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/discover/ecli/{ecli}</span><span class="badge badge--auth">Auth</span></div>
-<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/discover/ecli/ECLI:EU:C:2014:317"</code></pre>
-</div>
-
-<h2 id="datasets">DCAT-AP self-description</h2>
-<p>Brubru describes its own datasets in the same DCAT-AP profile that data.europa.eu harvesters expect. Useful if your platform consumes EU data catalogues and wants to register Brubru as a source.</p>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.ttl</span></div>
-<pre><code>curl "https://brubru-production.up.railway.app/api/datasets.ttl"</code></pre>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.rdf</span></div>
-</div>
-<div class="endpoint">
-<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.json</span></div>
-</div>
-
-<h2>Next</h2>
-<p>Now you've seen everything. Head to <a href="/api/docs/use-cases.html">Use cases by role</a> to see how to chain these for your specific job, or <a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/">fork the Postman workspace</a> to try each endpoint live with a few clicks.</p>
-
+<h2 id="proprietary">Brubru proprietary EU intelligence <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">10 endpoints</span></h2>
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/brussels-lobbies</code></td><td>Brussels lobbies — ranked directory of who is publishing what</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/brussels-lobbies/types</code></td><td>Brussels lobbies — organisation-type breakdown</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/brussels-lobbies/{code}/news</code></td><td>Brussels lobby — news / update items for one organisation</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/canon</code></td><td>List every Brubru deep-dive report — the EU Canon + law deep-dives</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/canon/{slug}</code></td><td>One Brubru deep-dive report by slug — optional inlined body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/catalan</code></td><td>List EU binding laws translated into Catalan — the whole corpus, filterable</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/catalan/stats</code></td><td>Catalan translations — aggregate counts (coverage, by doc_type / category / engine)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/catalan/{celex}</code></td><td>One Catalan translation by CELEX — optional inlined body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/guides</code></td><td>List Brubru's curated EU-policy knowledge guides — the chatbot's grounding layer</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/guides/{guide_id}</code></td><td>Look up one knowledge guide by its slug — full markdown body</td></tr>
+</tbody>
+</table>
 <footer>
-&copy; 2026 Beresol BV — Brubru EU Data API v1.
-<a href="/api/">Back to marketing page</a> ·
-<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI spec</a> ·
+&copy; 2026 Beresol BV &mdash; Brubru EU Data API v2.
+<a href="/api/">Back to marketing page</a> &middot;
+<a href="/api/docs/">Introduction</a> &middot;
+<a href="/api/openapi.json">OpenAPI spec</a> &middot;
 <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
 </footer>
 </main>
