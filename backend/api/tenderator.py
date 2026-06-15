@@ -2533,6 +2533,229 @@ _BODY_DISPLAY_ACRONYMS = {
 }
 
 
+# ============================================================================
+# Move 4 (15 Jun 2026): Pipeline CRM — generic over every Tenderator source
+# ============================================================================
+
+_PIPELINE_STATUSES = (
+    "lead", "drafting", "submitted", "awarded",
+    "executing", "paid", "lost", "cancelled",
+)
+
+
+class _PipelineCreate(_PydanticBaseModel):
+    """Body for POST /api/tenders/pipeline — add an opportunity to the
+    pipeline. opportunity_id MUST be source-qualified ('ted:123',
+    'ft_proposals:uuid', 'intl_coop:456', etc.)."""
+    opportunity_id: str
+    source: str
+    title: str
+    organisation: Optional[str] = None
+    country: Optional[str] = None
+    programme: Optional[str] = None
+    deadline: Optional[datetime] = None
+    budget: Optional[float] = None
+    currency: Optional[str] = "EUR"
+    source_url: Optional[str] = None
+    status: Optional[str] = "lead"
+    next_step: Optional[str] = None
+    next_step_due: Optional[str] = None  # YYYY-MM-DD
+    pm_assignee: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class _PipelineUpdate(_PydanticBaseModel):
+    """Body for PUT /api/tenders/pipeline/{id} — partial update."""
+    status: Optional[str] = None
+    next_step: Optional[str] = None
+    next_step_due: Optional[str] = None
+    pm_assignee: Optional[str] = None
+    notes: Optional[str] = None
+
+
+@router.get(
+    "/pipeline",
+    summary="List my pipeline opportunities",
+    description=(
+        "Returns all opportunities the current user has added to their "
+        "pipeline, across every Tenderator source (TED, F&T proposals, "
+        "F&T tenders, F&T projects, agency, intl_coop). Sorted by "
+        "next_step_due ASC then deadline ASC. Filter by `status` to get "
+        "a single pipeline column. Blue tier only."
+    ),
+)
+async def list_pipeline(
+    status_filter: Optional[str] = Query(None, alias="status", description="lead | drafting | submitted | awarded | executing | paid | lost | cancelled"),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.tender import TenderPipeline
+    qry = db.query(TenderPipeline).filter(TenderPipeline.user_id == current_user.id)
+    if status_filter:
+        if status_filter not in _PIPELINE_STATUSES:
+            raise HTTPException(status_code=400,
+                detail=f"status must be one of {list(_PIPELINE_STATUSES)}")
+        qry = qry.filter(TenderPipeline.status == status_filter)
+    rows = qry.order_by(
+        TenderPipeline.next_step_due.asc().nullslast(),
+        TenderPipeline.deadline.asc().nullslast(),
+        TenderPipeline.updated_at.desc(),
+    ).all()
+    # Aggregate counts per status across the user's full pipeline (always).
+    from sqlalchemy import func as _sql_func
+    counts = dict(
+        db.query(TenderPipeline.status, _sql_func.count(TenderPipeline.id))
+          .filter(TenderPipeline.user_id == current_user.id)
+          .group_by(TenderPipeline.status).all()
+    )
+    return {
+        "items": [r.to_dict() for r in rows],
+        "counts": {s: int(counts.get(s, 0)) for s in _PIPELINE_STATUSES},
+        "statuses": list(_PIPELINE_STATUSES),
+    }
+
+
+@router.post(
+    "/pipeline",
+    status_code=status.HTTP_201_CREATED,
+    summary="Add an opportunity to my pipeline",
+    description=(
+        "Snapshots an opportunity at add-time and starts tracking it. The "
+        "default status is 'lead'. Idempotent — re-posting the same "
+        "opportunity_id updates the snapshot fields instead of erroring."
+    ),
+)
+async def add_to_pipeline(
+    body: _PipelineCreate,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.tender import TenderPipeline
+    if body.status and body.status not in _PIPELINE_STATUSES:
+        raise HTTPException(status_code=400,
+            detail=f"status must be one of {list(_PIPELINE_STATUSES)}")
+    # Parse next_step_due
+    due = None
+    if body.next_step_due:
+        try:
+            due = datetime.fromisoformat(body.next_step_due).date()
+        except (ValueError, AttributeError):
+            raise HTTPException(status_code=400, detail="next_step_due must be YYYY-MM-DD")
+    existing = db.query(TenderPipeline).filter(
+        TenderPipeline.user_id == current_user.id,
+        TenderPipeline.opportunity_id == body.opportunity_id,
+    ).first()
+    if existing:
+        # Idempotent: refresh snapshot + status if provided
+        existing.title = body.title or existing.title
+        existing.organisation = body.organisation or existing.organisation
+        existing.country = body.country or existing.country
+        existing.programme = body.programme or existing.programme
+        existing.deadline = body.deadline or existing.deadline
+        existing.budget = body.budget if body.budget is not None else existing.budget
+        existing.currency = body.currency or existing.currency
+        existing.source_url = body.source_url or existing.source_url
+        if body.status:
+            existing.status = body.status
+        if body.next_step is not None:
+            existing.next_step = body.next_step
+        if due is not None:
+            existing.next_step_due = due
+        if body.pm_assignee is not None:
+            existing.pm_assignee = body.pm_assignee
+        if body.notes is not None:
+            existing.notes = body.notes
+        db.commit()
+        db.refresh(existing)
+        return existing.to_dict()
+    row = TenderPipeline(
+        user_id=current_user.id,
+        opportunity_id=body.opportunity_id,
+        source=body.source,
+        title=body.title,
+        organisation=body.organisation,
+        country=body.country,
+        programme=body.programme,
+        deadline=body.deadline,
+        budget=body.budget,
+        currency=body.currency or "EUR",
+        source_url=body.source_url,
+        status=body.status or "lead",
+        next_step=body.next_step,
+        next_step_due=due,
+        pm_assignee=body.pm_assignee,
+        notes=body.notes,
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row.to_dict()
+
+
+@router.put(
+    "/pipeline/{pipeline_id}",
+    summary="Update a pipeline row",
+    description="Partial update of status / next step / assignee / notes.",
+)
+async def update_pipeline(
+    pipeline_id: int,
+    body: _PipelineUpdate,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.tender import TenderPipeline
+    row = db.query(TenderPipeline).filter(
+        TenderPipeline.id == pipeline_id,
+        TenderPipeline.user_id == current_user.id,
+    ).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Pipeline row not found")
+    if body.status is not None:
+        if body.status not in _PIPELINE_STATUSES:
+            raise HTTPException(status_code=400,
+                detail=f"status must be one of {list(_PIPELINE_STATUSES)}")
+        row.status = body.status
+    if body.next_step is not None:
+        row.next_step = body.next_step
+    if body.next_step_due is not None:
+        if body.next_step_due == "":
+            row.next_step_due = None
+        else:
+            try:
+                row.next_step_due = datetime.fromisoformat(body.next_step_due).date()
+            except (ValueError, AttributeError):
+                raise HTTPException(status_code=400, detail="next_step_due must be YYYY-MM-DD")
+    if body.pm_assignee is not None:
+        row.pm_assignee = body.pm_assignee
+    if body.notes is not None:
+        row.notes = body.notes
+    db.commit()
+    db.refresh(row)
+    return row.to_dict()
+
+
+@router.delete(
+    "/pipeline/{pipeline_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Remove a pipeline row",
+)
+async def delete_pipeline(
+    pipeline_id: int,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    from models.tender import TenderPipeline
+    row = db.query(TenderPipeline).filter(
+        TenderPipeline.id == pipeline_id,
+        TenderPipeline.user_id == current_user.id,
+    ).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Pipeline row not found")
+    db.delete(row)
+    db.commit()
+    return None
+
+
 @router.get(
     "/bodies",
     summary="EU agencies feeding the Tenderator's decentralised-procurement source",

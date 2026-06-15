@@ -5,7 +5,7 @@ SQLAlchemy models for EU public procurement tenders from TED (Tenders Electronic
 Part of the Tenderator feature for Blue-tier users.
 """
 
-from sqlalchemy import Column, Integer, String, Text, DateTime, Float, Boolean, Index, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, Float, Boolean, Index, ForeignKey, BigInteger, Date, Numeric, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -447,3 +447,74 @@ Index("idx_tender_matches_tender", TenderMatch.tender_id)
 Index("idx_tender_matches_profile", TenderMatch.profile_id)
 Index("idx_tender_matches_score", TenderMatch.match_score.desc())
 Index("idx_tender_matches_saved", TenderMatch.is_saved)
+
+
+# ---------------------------------------------------------------------------
+# Move 4 (15 Jun 2026): generic Tenderator pipeline. Any opportunity source
+# (TED, F&T proposals/tenders/projects, agency, intl_coop) can be tracked
+# through a configurable status pipeline. Replaces the TAS-style Excel
+# tracker — and works for any organisation that needs CRM-lite over EU
+# opportunities. Schema in migrations/143_tender_pipeline.sql.
+# ---------------------------------------------------------------------------
+class TenderPipeline(Base):
+    """User's pipeline tracker for any unified-feed opportunity."""
+
+    __tablename__ = "tender_pipeline"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+
+    # Opportunity reference (source-qualified id from the unified feed).
+    opportunity_id = Column(Text, nullable=False)
+    source = Column(String(20), nullable=False)
+
+    # Snapshot fields cached at add-time.
+    title = Column(Text, nullable=False)
+    organisation = Column(Text)
+    country = Column(String(120))
+    programme = Column(Text)
+    deadline = Column(DateTime(timezone=True))
+    budget = Column(Numeric)
+    currency = Column(String(8), default="EUR")
+    source_url = Column(Text)
+
+    # Pipeline state. Allowed values enforced by DB CHECK constraint:
+    # lead | drafting | submitted | awarded | executing | paid | lost | cancelled
+    status = Column(String(20), nullable=False, default="lead")
+    next_step = Column(Text)
+    next_step_due = Column(Date)
+    pm_assignee = Column(Text)
+    notes = Column(Text)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "opportunity_id", name="tender_pipeline_user_opp_uk"),
+    )
+
+    def __repr__(self):
+        return f"<TenderPipeline(id={self.id}, status={self.status}, opp={self.opportunity_id})>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": str(self.user_id),
+            "opportunity_id": self.opportunity_id,
+            "source": self.source,
+            "title": self.title,
+            "organisation": self.organisation,
+            "country": self.country,
+            "programme": self.programme,
+            "deadline": self.deadline.isoformat() if self.deadline else None,
+            "budget": float(self.budget) if self.budget is not None else None,
+            "currency": self.currency or "EUR",
+            "source_url": self.source_url,
+            "status": self.status,
+            "next_step": self.next_step,
+            "next_step_due": self.next_step_due.isoformat() if self.next_step_due else None,
+            "pm_assignee": self.pm_assignee,
+            "notes": self.notes,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }

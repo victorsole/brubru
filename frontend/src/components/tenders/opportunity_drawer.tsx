@@ -151,6 +151,11 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   const [recipientsLoading, setRecipientsLoading] = useState(false);
   const [intlSummary, setIntlSummary] = useState<IntlCoopSummary | null>(null);
   const [intlSummaryLoading, setIntlSummaryLoading] = useState(false);
+  // Move 4: pipeline add state. Tracks whether THIS opportunity is already
+  // in the user's pipeline (we don't fetch the entire pipeline; the POST is
+  // idempotent so re-adding is a no-op refresh of the snapshot).
+  const [addingToPipeline, setAddingToPipeline] = useState(false);
+  const [pipelineAdded, setPipelineAdded] = useState(false);
 
   // Reset state when opportunity changes
   useEffect(() => {
@@ -301,6 +306,35 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
         source: 'tenderator',
       },
     });
+  };
+
+  const handleAddToPipeline = async () => {
+    if (!token || !opportunity) return;
+    setAddingToPipeline(true);
+    try {
+      const res = await fetch(`${API_URL}/api/tenders/pipeline`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          opportunity_id: opportunity.id,
+          source: opportunity.source,
+          title: opportunity.title,
+          organisation: opportunity.organisation,
+          country: opportunity.country,
+          programme: opportunity.programme,
+          deadline: opportunity.deadline,
+          budget: opportunity.budget,
+          currency: opportunity.currency,
+          source_url: opportunity.source_url,
+          status: 'lead',
+        }),
+      });
+      if (res.ok) setPipelineAdded(true);
+    } catch (e) {
+      console.error('add-to-pipeline failed:', e);
+    } finally {
+      setAddingToPipeline(false);
+    }
   };
 
   const tag = SOURCE_LABEL[opportunity.source];
@@ -671,6 +705,16 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
           >
             <span className="mdi mdi-chat-processing-outline" aria-hidden="true" />
             Discuss with Brubru
+          </button>
+          <button
+            type="button"
+            className={`opportunity-drawer__action opportunity-drawer__action--pipeline ${pipelineAdded ? 'opportunity-drawer__action--added' : ''}`}
+            onClick={handleAddToPipeline}
+            disabled={addingToPipeline || pipelineAdded}
+            title={pipelineAdded ? 'Already in your pipeline' : 'Track this opportunity in your pipeline'}
+          >
+            <span className={`mdi ${pipelineAdded ? 'mdi-check' : addingToPipeline ? 'mdi-loading mdi-spin' : 'mdi-clipboard-plus-outline'}`} aria-hidden="true" />
+            {pipelineAdded ? 'Added to pipeline' : addingToPipeline ? 'Adding...' : 'Add to pipeline'}
           </button>
           {opportunity.source_url && (
             <a

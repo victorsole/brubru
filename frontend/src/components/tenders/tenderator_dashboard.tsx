@@ -20,12 +20,13 @@ import { OpportunityDrawer } from './opportunity_drawer';
 import { ProgrammesPanel } from './programmes_panel';
 import { BodiesPanel } from './bodies_panel';
 import { PortalActivityPanel } from './portal_activity_panel';
+import { PipelineView } from './pipeline_view';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import './tenderator_dashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop' | 'programmes';
+export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop' | 'programmes' | 'pipeline';
 
 interface ClosingSoonItem {
   tender_id: number;
@@ -358,6 +359,18 @@ export const TenderatorDashboard = ({
           <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
           Startups &amp; SMEs (EIC)
         </button>
+        {/* Pipeline (Move 4, 15 Jun 2026): switch the main area from the
+            opportunity feed to the user's pipeline kanban — generic across
+            every source, modelled on a Project Manager's tracker. */}
+        <button
+          type="button"
+          className={`tenderator-dashboard__chip ${source === 'pipeline' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--pipeline`}
+          onClick={() => setSource('pipeline')}
+          title="Track your bids through lead → drafting → submitted → awarded → executing → paid."
+        >
+          <span className="mdi mdi-view-column-outline" aria-hidden="true" />
+          My pipeline
+        </button>
         {/* External-action lens (Move 1, 15 Jun 2026): narrows every source to
             EU development-cooperation contracts (DG INTPA/NEAR/ECHO/FPI/EEAS +
             NDICI/IPA III/HUMA programmes) and unlocks the FTS-awards source. */}
@@ -520,25 +533,29 @@ export const TenderatorDashboard = ({
               </button>
             </div>
           )}
-          <UnifiedOpportunityFeed
-            source={source}
-            matchSubSource={matchSubSource}
-            programme={source === 'ft_proposals' ? programmeCode : ''}
-            body={source === 'agency' ? agencyBody : ''}
-            externalAction={externalAction}
-            beneficiaryCountry={beneficiaryCountry}
-            initialQuery={incomingQuery}
-            onSelectOpportunity={(opp) => {
-              // For TED tenders with a real tenders.id, keep the existing
-              // full-page TenderDetail route so saved/dismissed flows work.
-              // For F&T sources (no tenders.id), open the drawer.
-              if (opp.source === 'ted' && /^ted:\d+$/.test(opp.id)) {
-                onSelectTender(unifiedToTender(opp));
-              } else {
-                setDrawerOpp(opp);
-              }
-            }}
-          />
+          {source === 'pipeline' ? (
+            <PipelineView />
+          ) : (
+            <UnifiedOpportunityFeed
+              source={source}
+              matchSubSource={matchSubSource}
+              programme={source === 'ft_proposals' ? programmeCode : ''}
+              body={source === 'agency' ? agencyBody : ''}
+              externalAction={externalAction}
+              beneficiaryCountry={beneficiaryCountry}
+              initialQuery={incomingQuery}
+              onSelectOpportunity={(opp) => {
+                // For TED tenders with a real tenders.id, keep the existing
+                // full-page TenderDetail route so saved/dismissed flows work.
+                // For F&T sources (no tenders.id), open the drawer.
+                if (opp.source === 'ted' && /^ted:\d+$/.test(opp.id)) {
+                  onSelectTender(unifiedToTender(opp));
+                } else {
+                  setDrawerOpp(opp);
+                }
+              }}
+            />
+          )}
         </main>
 
         <aside className="tenderator-dashboard__rail">
