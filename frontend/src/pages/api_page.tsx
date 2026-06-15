@@ -24,6 +24,7 @@ export const ApiPage = () => {
     { m: 'GET',  p: '/api/v2/proprietary/catalan',                                   k: 'catalanTranslations' },
     { m: 'GET',  p: '/api/v2/commission/consultations/by-initiative/{id}/feedback',  k: 'consultations' },
     { m: 'GET',  p: '/api/v2/commission/commissioners/{name}/agenda',                k: 'commissioners' },
+    { m: 'GET',  p: '/api/v2/predictions/{procedure_ref}/outcome',                   k: 'predictions' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map',  k: 'recitalMap' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/defined-terms',        k: 'definedTerms' },
   ];

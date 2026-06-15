@@ -127,7 +127,7 @@
     "amendments": "Emendamenti",
     "analytics": "Analitiche",
     "tabs": {
-      "consultations": "Consultazioni Pubbliche della CE",
+      "consultations": "Consultazioni Pubbliche dell'UE",
       "predictions": "Previsioni",
       "myFiles": "I miei fascicoli",
       "comparator": "Comparatore",
@@ -196,8 +196,8 @@
       "hideSummary": "Nascondi il riassunto IA"
     },
     "consultations": {
-      "title": "Consultazioni Pubbliche della CE",
-      "subtitle": "Partecipa all'elaborazione delle politiche UE attraverso il portale \"Have Your Say\"",
+      "title": "Consultazioni Pubbliche dell'UE",
+      "subtitle": "Tutte le consultazioni aperte dell'UE in un unico posto: il portale Have Your Say della Commissione e tutte le agenzie dell'UE",
       "status": "Stato",
       "dg": "DG",
       "policyArea": "Area Politica",
@@ -253,7 +253,9 @@
       "targetStakeholders": "Stakeholder target",
       "tone": "Tono",
       "myInterests": "I miei interessi",
-      "all": "Tutte"
+      "all": "Tutte",
+      "body": "Organismo",
+      "allBodies": "Tutti gli organismi"
     },
     "feedbackTitle": "La mia Bolla UE",
     "feedbackDescription": "Aiutaci a migliorare La mia Bolla UE condividendo le tue opinioni, suggerimenti o segnalando problemi. Il tuo feedback ci aiuta a creare strumenti migliori per la comunità delle politiche UE.",
@@ -1024,6 +1026,7 @@
       "procedures": "Oltre 1.200 dossier legislativi, da proposta ad adozione. Filtri per riferimento OEIL, commissione, relatore, ultimo aggiornamento.",
       "consultations": "Contributi degli stakeholder in diretta dal portale Have Your Say. Paginato con aggregati per paese e tipo.",
       "commissioners": "Agende in diretta di tutti i 27 membri del Collegio. Risoluzione nome insensibile agli accenti.",
+      "predictions": "Probabilità di esito e tempistiche previste dall'IA per qualsiasi procedura legislativa dell'UE in corso (adottata, respinta, ritirata o in sospeso), con punteggio di confidenza e intervallo di incertezza.",
       "recitalMap": "Mappatura TF-IDF tra considerando e articoli per qualsiasi legge. Top-3 considerando per articolo.",
       "definedTerms": "Dizionario delle definizioni (articoli 3/4). Pronto per tooltip sui testi giuridici.",
       "resolveRefs": "Testo semplice in ingresso, citazioni CELEX strutturate in uscita. Annotazione HTML opzionale.",

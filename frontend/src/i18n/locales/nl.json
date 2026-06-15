@@ -127,7 +127,7 @@
     "amendments": "Amendementen",
     "analytics": "Analyses",
     "tabs": {
-      "consultations": "EC Openbare Raadplegingen",
+      "consultations": "EU Openbare Raadplegingen",
       "predictions": "Voorspellingen",
       "myFiles": "Mijn dossiers",
       "comparator": "Vergelijker",
@@ -196,8 +196,8 @@
       "hideSummary": "AI-samenvatting verbergen"
     },
     "consultations": {
-      "title": "EC Openbare Raadplegingen",
-      "subtitle": "Neem deel aan EU-beleidsvorming via het \"Have Your Say\" portaal",
+      "title": "EU Openbare Raadplegingen",
+      "subtitle": "Alle open EU-raadplegingen op één plek: het Have Your Say-portaal van de Commissie en alle EU-agentschappen",
       "status": "Status",
       "dg": "DG",
       "policyArea": "Beleidsgebied",
@@ -253,7 +253,9 @@
       "targetStakeholders": "Doelgroepen",
       "tone": "Toon",
       "myInterests": "Mijn interesses",
-      "all": "Alle"
+      "all": "Alle",
+      "body": "Orgaan",
+      "allBodies": "Alle organen"
     },
     "feedbackTitle": "Mijn EU Bubble",
     "feedbackDescription": "Help ons Mijn EU Bubble te verbeteren door uw gedachten, suggesties of problemen te delen. Uw feedback helpt ons betere tools te bouwen voor de EU-beleidsgemeenschap.",
@@ -1024,6 +1026,7 @@
       "procedures": "Ruim 1.200 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
       "consultations": "Live bijdragen van belanghebbenden via het Have Your Say-portaal. Gepagineerd met aggregaten per land en type.",
       "commissioners": "Live agenda's van alle 27 leden van het College. Naamresolutie ongevoelig voor accenten.",
+      "predictions": "Door AI voorspelde uitkomstkansen en tijdlijn voor elke lopende EU-wetgevingsprocedure (aangenomen, verworpen, ingetrokken of in behandeling), met een betrouwbaarheidsscore en een onzekerheidsmarge.",
       "recitalMap": "TF-IDF cosinus-mapping van overwegingen naar artikelen voor elke wet. Top-3 overwegingen per artikel.",
       "definedTerms": "Definities-woordenboek (artikel 3/4). Klaar voor tooltips op juridische teksten.",
       "resolveRefs": "Platte tekst erin, gestructureerde CELEX-citaties eruit. Optionele HTML-annotatie.",

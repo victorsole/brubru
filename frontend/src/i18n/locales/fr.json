@@ -127,7 +127,7 @@
     "amendments": "Amendements",
     "analytics": "Analyses",
     "tabs": {
-      "consultations": "Consultations Publiques de la CE",
+      "consultations": "Consultations Publiques de l'UE",
       "predictions": "Prédictions",
       "myFiles": "Mes dossiers",
       "comparator": "Comparateur",
@@ -196,8 +196,8 @@
       "hideSummary": "Masquer le résumé IA"
     },
     "consultations": {
-      "title": "Consultations Publiques de la CE",
-      "subtitle": "Participez à l'élaboration des politiques de l'UE via le portail \"Have Your Say\"",
+      "title": "Consultations Publiques de l'UE",
+      "subtitle": "Toutes les consultations ouvertes de l'UE au même endroit : le portail Have Your Say de la Commission et toutes les agences de l'UE",
       "status": "Statut",
       "dg": "DG",
       "policyArea": "Domaine Politique",
@@ -253,7 +253,9 @@
       "targetStakeholders": "Parties prenantes cibles",
       "tone": "Ton",
       "myInterests": "Mes intérêts",
-      "all": "Toutes"
+      "all": "Toutes",
+      "body": "Organe",
+      "allBodies": "Tous les organes"
     },
     "feedbackTitle": "Ma Bulle UE",
     "feedbackDescription": "Aidez-nous à améliorer Ma Bulle UE en partageant vos commentaires, suggestions ou en signalant des problèmes. Vos retours nous aident à créer de meilleurs outils pour la communauté des politiques UE.",
@@ -1024,6 +1026,7 @@
       "procedures": "Plus de 1 200 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
       "consultations": "Contributions d'acteurs en direct depuis le portail Have Your Say. Paginé avec agrégats par pays et type.",
       "commissioners": "Agendas en direct des 27 membres du Collège. Résolution du nom insensible aux accents.",
+      "predictions": "Probabilités de résultat et calendrier prédits par IA pour toute procédure législative de l'UE en cours (adoptée, rejetée, retirée ou en attente), avec un score de confiance et une marge d'incertitude.",
       "recitalMap": "Correspondance TF-IDF considérants/articles pour n'importe quelle loi. Top-3 considérants par article.",
       "definedTerms": "Dictionnaire des définitions (articles 3/4). Prêt pour tooltip sur les textes juridiques.",
       "resolveRefs": "Texte brut en entrée, citations CELEX structurées en sortie. Annotation HTML facultative.",

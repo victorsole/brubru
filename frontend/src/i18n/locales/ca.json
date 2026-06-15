@@ -127,7 +127,7 @@
     "amendments": "Esmenes",
     "analytics": "Analítiques",
     "tabs": {
-      "consultations": "Consultes Públiques de la CE",
+      "consultations": "Consultes Públiques de la UE",
       "predictions": "Prediccions",
       "myFiles": "Els meus expedients",
       "comparator": "Comparador",
@@ -196,8 +196,8 @@
       "hideSummary": "Amaga el resum IA"
     },
     "consultations": {
-      "title": "Consultes Públiques de la CE",
-      "subtitle": "Participa en l'elaboració de polítiques de la UE a través del portal \"Have Your Say\"",
+      "title": "Consultes Públiques de la UE",
+      "subtitle": "Totes les consultes obertes de la UE en un sol lloc: el portal Have Your Say de la Comissió i totes les agències de la UE",
       "status": "Estat",
       "dg": "DG",
       "policyArea": "Àrea Política",
@@ -253,7 +253,9 @@
       "targetStakeholders": "Grups d'interès objectiu",
       "tone": "To",
       "myInterests": "Els meus interessos",
-      "all": "Totes"
+      "all": "Totes",
+      "body": "Organisme",
+      "allBodies": "Tots els organismes"
     },
     "feedbackTitle": "La meva Bombolla UE",
     "feedbackDescription": "Ajuda'ns a millorar La meva Bombolla UE compartint les teves opinions, suggeriments o reportant qualsevol problema. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE.",
@@ -1024,6 +1026,7 @@
       "procedures": "Més de 1.200 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
       "consultations": "Aportacions d'actors interessats en directe del portal Have Your Say. Paginat amb agregats per país i tipus.",
       "commissioners": "Agendes en directe dels 27 membres del Col·legi. Resolució de nom insensible a accents.",
+      "predictions": "Probabilitats de resultat i terminis previstos per IA per a qualsevol procediment legislatiu de la UE en curs (adoptat, rebutjat, retirat o pendent), amb puntuació de confiança i marge d'incertesa.",
       "recitalMap": "Mapeig TF-IDF de considerants a articles per a qualsevol llei. Top-3 considerants per article.",
       "definedTerms": "Diccionari de definicions (articles 3/4). Llest per anotar textos legals amb tooltips.",
       "resolveRefs": "Text pla d'entrada, cites CELEX estructurades de sortida. Anotació HTML opcional.",
