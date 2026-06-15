@@ -51,6 +51,9 @@ interface UnifiedFeedProps {
   matchSubSource?: MatchSubSource;
   initialQuery?: string;
   programme?: string;
+  // EIC sub-bucket slug (Move 2 of #5): accelerator | pathfinder | transition
+  // | step-scale | prize | … Empty string = no narrowing (all EIC).
+  eicProgramme?: string;
   // When source=='agency': scope the feed to one body_code (e.g. 'efsa').
   body?: string;
   // External-action lens (Move 1, 15 Jun 2026): narrow every source to EU
@@ -60,6 +63,12 @@ interface UnifiedFeedProps {
   beneficiaryCountry?: string;
   // Move 5: narrows source=agency to item_type='framework' (EU-institution FWCs).
   frameworkOnly?: boolean;
+  // Controlled lens override. When provided, the feed uses this lens mode
+  // instead of its own localStorage state. The dashboard sets this to 'all'
+  // when a user clicks an explicit-intent chip (e.g. "Startups & SMEs (EIC)")
+  // so an empty Policy-Interest intersection doesn't hide the requested rows.
+  lensModeOverride?: LensMode | null;
+  onLensModeChange?: (m: LensMode) => void;
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
@@ -114,7 +123,7 @@ const formatDeadline = (iso: string | null): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, onSelectOpportunity }: UnifiedFeedProps) => {
+export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', eicProgramme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, lensModeOverride = null, onLensModeChange, onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
   const { i18n } = useTranslation();
   // Brubru's 6 — falls back to 'en' for any other UI locale.
@@ -138,16 +147,22 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
   // lens via tracked carriages) is not wired on Tenderator yet, so hasFiles
   // is false and the segment hides. Backend default is personalised=true, so
   // we only send the param when mode='all'.
-  const [mode, setMode] = useState<LensMode>(() => {
+  const [internalMode, setInternalMode] = useState<LensMode>(() => {
     try {
       const v = localStorage.getItem('tenderator_lens_mode');
       return v === 'all' ? 'all' : 'pi';
     } catch { return 'pi'; }
   });
+  // When the dashboard supplies lensModeOverride (e.g. user clicked an
+  // explicit-intent chip like "Startups & SMEs (EIC)"), that value wins over
+  // the feed's own state — so a stale personalised lens can't hide the rows
+  // the user just asked for.
+  const mode: LensMode = lensModeOverride ?? internalMode;
   const personalised = mode === 'pi';
   const setLensMode = (m: LensMode) => {
-    setMode(m);
+    setInternalMode(m);
     try { localStorage.setItem('tenderator_lens_mode', m); } catch (_) { /* ignore */ }
+    onLensModeChange?.(m);
   };
   const [personalisedApplied, setPersonalisedApplied] = useState<boolean>(false);
   const [interests, setInterests] = useState<string[]>([]);
@@ -176,6 +191,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       }
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
       if (programme) params.set('programme', programme);
+      if (eicProgramme) params.set('eic_programme', eicProgramme);
       if (body && source === 'agency') params.set('body', body);
       params.set('lang', feedLang);
       if (clientFilter) params.set('client_filter', 'true');
@@ -206,7 +222,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry, frameworkOnly]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, eicProgramme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry, frameworkOnly]);
 
   useEffect(() => {
     setPage(1);

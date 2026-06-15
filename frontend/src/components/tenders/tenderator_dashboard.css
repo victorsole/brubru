@@ -305,6 +305,65 @@
   color: #115e59;
 }
 
+/* EIC 2026 at-a-glance tile (Move 4 of #5). Static budget breakdown shown
+   above the sub-chip row when the EIC lens is active. */
+.tenderator-dashboard__eic-glance {
+  padding: 0.6rem 0.85rem;
+  margin: -0.5rem 0 0.45rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.10), rgba(99, 102, 241, 0.06));
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: 10px;
+}
+.tenderator-dashboard__eic-glance-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5b21b6;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+.tenderator-dashboard__eic-glance-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  color: #374151;
+}
+.tenderator-dashboard__eic-glance-list strong {
+  color: #5b21b6;
+  margin-right: 0.25rem;
+}
+
+/* EIC sub-bucket chip row (Move 2 of #5). Appears under the chip groups when
+   the "Startups & SMEs (EIC)" lens is active, narrowing the feed to one
+   HORIZON-EIC topic family. Purple accent to read as an EIC-scoped refinement
+   (different from the teal external-action sub-controls). */
+.tenderator-dashboard__eic-subchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  margin: -0.5rem 0 0.7rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(99, 102, 241, 0.04));
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 10px;
+}
+.tenderator-dashboard__chip--eic {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.05);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+}
+.tenderator-dashboard__chip--eic.tenderator-dashboard__chip--active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(99, 102, 241, 0.10));
+  border-color: rgba(139, 92, 246, 0.65);
+  color: #5b21b6;
+}
+
 /* External-action sub-control row: country picker + Ask Brubru link.
    Sits between the chip strip and the feed. Wraps cleanly on mobile. */
 .tenderator-dashboard__external-controls {

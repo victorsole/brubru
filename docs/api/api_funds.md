@@ -429,3 +429,51 @@ EUIPO SME Fund (Ideas Powered for Business) — https://www.euipo.europa.eu/en/s
 - SKIPPED (Victor): REACT-EU, Integrated Border Management Fund, YEI.
 - GAP, BUILDABLE NOW via cohesiondata Socrata (same pattern): EAGF, EAFRD.
 - GAP, needs other source: ITER, InvestEU, FISCALIS, CUSTOMS, RRF, TSI, Pericles, Justice, Innovation Fund, Modernisation Fund, Turkish Cypriot, Nuclear (x2), NDICI/Global Europe, Humanitarian Aid, CFSP, OCT, IPA III.
+
+---
+
+# EIC
+https://eic.ec.europa.eu/index_en
+https://eic.ec.europa.eu/eic-funding-opportunities_en
+https://eic.ec.europa.eu/eic-funding-opportunities/eic-pathfinder_en
+https://eic.ec.europa.eu/eic-funding-opportunities/eic-transition_en
+https://eic.ec.europa.eu/eic-funding-opportunities/advanced-innovation-challenges-pilot_en
+https://eic.ec.europa.eu/eic-funding-opportunities/eic-pre-accelerator_en
+https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en
+https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en
+https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-accelerator-2026_en
+https://eic.ec.europa.eu/eic-funding-opportunities/calls-proposals/eic-step-scale_en
+https://eic.ec.europa.eu/eic-2026-work-programme_en
+https://eic.ec.europa.eu/events/online-info-day-eic-work-programme-2026-2025-11-13_en
+https://eic.ec.europa.eu/eic-frequently-asked-questions_en
+https://eic.ec.europa.eu/eic-fund_en
+https://eic.ec.europa.eu/eic-fund/about-eic-fund_en
+https://eic.ec.europa.eu/eic-fund/eic-fund-invested-companies_en
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A95
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A101
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A99
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A98
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A102
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A41
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A97
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A96
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A103
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A100
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A104
+https://eic.ec.europa.eu/eic-fund/eic-fund-companies-portfolio_en?f%5B0%5D=theme_theme%3A48
+https://invest-eic-companies.dealroom.co/lists/40216/list?showGrid=false&showTransactions=false&sort=-startup_ranking_rating
+https://eic.ec.europa.eu/eic-prizes_en
+https://eic.ec.europa.eu/eic-prizes/european-capital-innovation-awards_en
+https://eic.ec.europa.eu/eic-prizes/european-prize-women-innovators-powered-eic-eit_en
+https://eic.ec.europa.eu/impact_en
+https://eic.ec.europa.eu/document/download/f1c0f4e1-7350-4f13-b82c-5bd71187acad_en?filename=EIC%20Impact%20Report%202026.pdf
+https://eic.ec.europa.eu/eic-impact-0/eic-impacts-stories_en
+https://eic.ec.europa.eu/eic-board_en
+https://eic.ec.europa.eu/impact/eic-programme-managers_en
+https://eic.ec.europa.eu/eic-board/eic-pilot-advisory-board_en
+https://eic.ec.europa.eu/eic-board/eic-board-statements_en
+https://eic.ec.europa.eu/michiel-scheffer_en
+https://eic.ec.europa.eu/eic-board/eic-board-members_en
+https://ec.europa.eu/transparency/expert-groups-register/screen/expert-groups/consult?lang=en&groupID=3823
+https://eic.ec.europa.eu/news_en?f%5B0%5D=communities_communities%3A12
+https://eic.ec.europa.eu/eic-summit-2026_en

@@ -31,6 +31,7 @@ export interface Tender {
   cpv_main: string;
   cpv_codes: string[];
   procedure_type: string;
+  notice_subtype?: string | null;
   submission_deadline: string | null;
   publication_date: string;
   status: string;
@@ -206,7 +207,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
     ${tender.description ? `Description: ${tender.description.substring(0, 500)}...` : ''}
     ${question || 'What should I know about this tender and how can I prepare a competitive bid?'}`;
 
-    navigate('/main', {
+    navigate('/chat', {
       state: {
         initialQuestion: defaultQuestion,
         source: 'tenderator',

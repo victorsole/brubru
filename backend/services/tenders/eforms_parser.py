@@ -356,19 +356,22 @@ class EFormsParser:
             except ValueError:
                 pass
 
-        # Contract duration
+        # Contract duration — tolerant of fractional values (e.g. "1.5" years).
         duration = root.find(".//cac:ProcurementProject/cac:PlannedPeriod/cbc:DurationMeasure", EFORMS_NS)
         if duration is not None and duration.text:
-            result["contract_duration_value"] = int(duration.text)
-            result["contract_duration_unit"] = duration.get("unitCode", "MON")
-
-            # Convert to months
-            if result["contract_duration_unit"] == "MON":
-                result["contract_duration_months"] = result["contract_duration_value"]
-            elif result["contract_duration_unit"] == "DAY":
-                result["contract_duration_months"] = result["contract_duration_value"] // 30
-            elif result["contract_duration_unit"] == "YEAR":
-                result["contract_duration_months"] = result["contract_duration_value"] * 12
+            try:
+                dur_val = float(duration.text)
+            except (TypeError, ValueError):
+                dur_val = None
+            if dur_val is not None:
+                result["contract_duration_value"] = dur_val
+                result["contract_duration_unit"] = duration.get("unitCode", "MON")
+                if result["contract_duration_unit"] == "MON":
+                    result["contract_duration_months"] = int(dur_val)
+                elif result["contract_duration_unit"] == "DAY":
+                    result["contract_duration_months"] = int(dur_val // 30)
+                elif result["contract_duration_unit"] == "YEAR":
+                    result["contract_duration_months"] = int(dur_val * 12)
 
         # Start date
         start_date = root.find(".//cac:ProcurementProject/cac:PlannedPeriod/cbc:StartDate", EFORMS_NS)

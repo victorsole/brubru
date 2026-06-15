@@ -52,6 +52,43 @@ const CPV_SECTORS: Record<string, string> = {
   '98': 'Other Services',
 };
 
+const PROCEDURE_LABELS: Record<string, string> = {
+  'open': 'Open',
+  'restricted': 'Restricted',
+  'comp-dial': 'Competitive dialogue',
+  'comp-tend': 'Competitive with negotiation',
+  'innovation': 'Innovation partnership',
+  'neg-w-call': 'Negotiated (with prior call)',
+  'neg-wo-call': 'Negotiated (without prior call)',
+  'exp-int': 'Expression of interest',
+  'des-cont': 'Design contest',
+  'oth-mult': 'Other multistage',
+  'oth-single': 'Other single-stage',
+  'open-1step': 'Open (single stage)',
+  'open-2step': 'Open (two stage)',
+};
+
+// Notice subtypes where procedure_type is legitimately absent.
+const NO_PROCEDURE_SUBTYPES = new Set([
+  'pin-only', 'pin-buyer', 'pin-rtl', 'pin-cf',
+  'can-modif', 'can-soc', 'can-tran',
+]);
+
+const formatProcedureType = (
+  procedureType: string | null | undefined,
+  noticeSubtype?: string | null,
+): string => {
+  if (procedureType) {
+    return PROCEDURE_LABELS[procedureType] || procedureType;
+  }
+  if (noticeSubtype && NO_PROCEDURE_SUBTYPES.has(noticeSubtype)) {
+    return noticeSubtype.startsWith('pin')
+      ? 'Not yet declared (prior information)'
+      : 'Inherits from original notice';
+  }
+  return 'Not declared in this notice';
+};
+
 interface TenderSummary {
   en_title?: string | null;
   one_liner: string;
@@ -415,7 +452,9 @@ export const TenderDetail = ({
           <span className="mdi mdi-file-document"></span>
           <div>
             <span className="tender-detail__info-label">Procedure Type</span>
-            <span className="tender-detail__info-value">{tender.procedure_type || 'Not specified'}</span>
+            <span className="tender-detail__info-value">
+              {formatProcedureType(tender.procedure_type, tender.notice_subtype)}
+            </span>
           </div>
         </div>
       </div>
@@ -744,7 +783,34 @@ export const TenderDetail = ({
                   : null;
 
               if (!criteriaArray || criteriaArray.length === 0) {
-                return <p className="tender-detail__no-data">Award criteria not available</p>;
+                // Subtype-aware fallback. The buyer's XML can omit criteria for
+                // many legitimate reasons (PIN, contract modification, social
+                // services, simplified concession notices). We surface the
+                // primary criterion type when known, and a TED deep link.
+                const subtype = tender.notice_subtype || '';
+                let intro = 'The buyer did not publish detailed award criteria in this notice.';
+                if (subtype.startsWith('pin')) {
+                  intro = 'Prior information notices typically do not declare award criteria. They will be published with the contract notice.';
+                } else if (subtype === 'can-modif') {
+                  intro = 'This is a contract modification. The original award criteria are in the parent notice.';
+                } else if (subtype === 'cn-social') {
+                  intro = 'Social and special-services notices may use simplified criteria that are not formally declared in eForms.';
+                }
+                const typeHint = tender.award_criteria_type && tender.award_criteria_type !== 'best-value'
+                  ? ` Primary criterion type: ${tender.award_criteria_type}.`
+                  : '';
+                return (
+                  <div className="tender-detail__no-data">
+                    <p>{intro}{typeHint}</p>
+                    {tender.ted_url && (
+                      <p>
+                        <a href={tender.ted_url} target="_blank" rel="noreferrer">
+                          View the full notice on TED <span className="mdi mdi-open-in-new" aria-hidden="true" />
+                        </a>
+                      </p>
+                    )}
+                  </div>
+                );
               }
 
               // Calculate aggregate weights by type

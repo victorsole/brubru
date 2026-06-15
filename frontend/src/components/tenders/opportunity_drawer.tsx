@@ -104,6 +104,15 @@ interface FtsRecipientsResponse {
   items: FtsRecipient[];
 }
 
+interface EicGrantee {
+  name: string;
+  country: string | null;
+  country_name: string | null;
+  theme_name: string | null;
+  description: string | null;
+  source_url: string;
+}
+
 const SOURCE_LABEL: Record<UnifiedOpportunity['source'], { label: string; icon: string }> = {
   ted: { label: 'TED tender', icon: 'mdi-gavel' },
   ft_proposals: { label: 'F&T call for proposals', icon: 'mdi-flask-outline' },
@@ -151,6 +160,11 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   const [recipientsLoading, setRecipientsLoading] = useState(false);
   const [intlSummary, setIntlSummary] = useState<IntlCoopSummary | null>(null);
   const [intlSummaryLoading, setIntlSummaryLoading] = useState(false);
+  // EIC Fund investees (Move 4 of #5, 15 Jun 2026). Surfaces 5 EIC Fund
+  // portfolio companies when the opportunity is an EIC call — concrete
+  // social proof on calls that otherwise have 0 ft_funded_projects.
+  const [eicGrantees, setEicGrantees] = useState<EicGrantee[] | null>(null);
+  const [eicGranteesLoading, setEicGranteesLoading] = useState(false);
   // Move 4: pipeline add state. Tracks whether THIS opportunity is already
   // in the user's pipeline (we don't fetch the entire pipeline; the POST is
   // idempotent so re-adding is a no-op refresh of the snapshot).
@@ -163,7 +177,59 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
     setBriefError(null);
     setSimilar(null);
     setRecipients(null);
+    setEicGrantees(null);
   }, [opportunity?.id]);
+
+  // Detect EIC opportunities by topic_id prefix. The opportunity's id is
+  // formatted "<source>:<pk>" so we check the external_id (the raw topic_id).
+  const isEicOpportunity = (() => {
+    const t = (opportunity?.external_id || '').toUpperCase();
+    const title = (opportunity?.title || '').toUpperCase();
+    if (t.startsWith('HORIZON-EIC')) return true;
+    if (t.startsWith('HORIZON-WIDERA') && t.includes('ACCESS') && title.includes('EIC')) return true;
+    return false;
+  })();
+
+  // Classify the EIC opportunity into its sub-bucket so the grantees endpoint
+  // can theme-narrow (only STEP-scale gets narrowed today — see backend
+  // _EIC_BUCKET_TO_THEMES). Everything else returns any-sector samples.
+  const eicBucket = (() => {
+    const t = (opportunity?.external_id || '').toUpperCase();
+    if (t.includes('-ACCELERATOR')) return 'accelerator';
+    if (t.includes('-PATHFINDER'))  return 'pathfinder';
+    if (t.includes('-TRANSITION')) return 'transition';
+    if (t.includes('-STEP') || t.includes('-SCALEUP')) return 'step-scale';
+    if (t.includes('-AIC-'))       return 'advanced-challenges';
+    if (t.includes('-PRIZE-'))     return 'prize';
+    if (t.includes('-BAS-') || t.includes('-TALENTS') || t.includes('-WOMENTECH')) return 'business-services';
+    if (t.startsWith('HORIZON-WIDERA')) return 'pre-accelerator';
+    return '';
+  })();
+
+  // Auto-fetch EIC Fund grantees for EIC opportunities
+  const fetchEicGrantees = useCallback(async () => {
+    if (!opportunity || !token || !isEicOpportunity) return;
+    setEicGranteesLoading(true);
+    try {
+      const params = new URLSearchParams({ limit: '5' });
+      if (eicBucket) params.set('bucket', eicBucket);
+      const res = await fetch(`${API_URL}/api/tenders/eic-fund-grantees?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEicGrantees(data.items || []);
+      }
+    } catch (e) {
+      console.error('eic-fund-grantees fetch failed:', e);
+    } finally {
+      setEicGranteesLoading(false);
+    }
+  }, [opportunity, token, isEicOpportunity, eicBucket]);
+
+  useEffect(() => {
+    fetchEicGrantees();
+  }, [fetchEicGrantees]);
 
   // Auto-fetch similar projects for F&T proposals + projects
   const fetchSimilar = useCallback(async () => {
@@ -554,6 +620,54 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                     </li>
                   ))}
                 </ul>
+              )}
+            </section>
+          )}
+
+          {/* Move 4 of #5 (15 Jun 2026): EIC Fund invested companies. Shown
+              only for EIC opportunities (HORIZON-EIC-* and EIC-pre-accelerator
+              under HORIZON-WIDERA). Pulls 5 randomly-sampled companies from
+              the 255-row scraped portfolio. STEP-Scale narrows to
+              strategic-tech themes; other buckets are any-sector. */}
+          {isEicOpportunity && (eicGranteesLoading || (eicGrantees && eicGrantees.length > 0)) && (
+            <section className="opportunity-drawer__section opportunity-drawer__section--eic-fund">
+              <h3>
+                <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
+                EIC Fund portfolio &mdash; concrete examples
+              </h3>
+              {eicGranteesLoading && (
+                <div className="opportunity-drawer__similar-loading">
+                  <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
+                  Sampling the EIC Fund&apos;s public portfolio...
+                </div>
+              )}
+              {!eicGranteesLoading && eicGrantees && eicGrantees.length > 0 && (
+                <>
+                  <p className="opportunity-drawer__eic-fund-intro">
+                    Companies the EIC Fund has actually invested in. Use these as benchmarks for your own positioning.
+                  </p>
+                  <ul className="opportunity-drawer__eic-fund-list">
+                    {eicGrantees.map((g, i) => (
+                      <li key={`${g.name}-${i}`} className="opportunity-drawer__eic-fund-item">
+                        <a
+                          href={g.source_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="opportunity-drawer__eic-fund-name"
+                        >
+                          {g.name}
+                        </a>
+                        <div className="opportunity-drawer__eic-fund-meta">
+                          {g.country_name && <span>{g.country_name}</span>}
+                          {g.theme_name && <span>{g.theme_name}</span>}
+                        </div>
+                        {g.description && (
+                          <p className="opportunity-drawer__eic-fund-desc">{g.description}</p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
             </section>
           )}

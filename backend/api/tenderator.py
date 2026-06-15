@@ -880,6 +880,78 @@ async def generate_opportunity_brief(
             if row.indicative_budget:
                 body_parts.append(f"Indicative budget: {row.indicative_budget} {row.budget_currency or 'EUR'}")
             deadline = row.deadline.isoformat() if row.deadline else None
+            # Move 6 / #1.3 (15 Jun 2026): the DB description can be sparse
+            # or in a foreign language (when the F&T scraper ingested a
+            # locale-specific copy). Fetch the topic-details JSON from the
+            # F&T Portal, which always has the English title + a 4-17 KB
+            # body of conditions, budget, deadlines, eligibility. When a
+            # rich English topic-details payload is present we REPLACE the
+            # DB description (foreign-language) with the English topic-page
+            # text — otherwise the AI sees Maltese / Greek / etc. first and
+            # the prompt budget runs out before reaching the budget+
+            # eligibility conditions block.
+            if row.topic_id:
+                try:
+                    import urllib.request as _ur, json as _j, re as _re_tag
+                    topic_url = (
+                        "https://ec.europa.eu/info/funding-tenders/opportunities/"
+                        f"data/topicDetails/{row.topic_id.lower()}.json"
+                    )
+                    req = _ur.Request(topic_url, headers={
+                        "User-Agent": "Brubru/1.0 (https://brubru.beresol.eu)",
+                        "Accept": "application/json",
+                    })
+                    raw = _ur.urlopen(req, timeout=8).read()
+                    td = _j.loads(raw).get("TopicDetails", {})
+                    en_title = td.get("title")
+                    desc_html = td.get("description") or ""
+                    desc_text = ""
+                    if desc_html:
+                        desc_text = _re_tag.sub(r"<[^>]+>", " ", desc_html)
+                        desc_text = _re_tag.sub(r"\s+", " ", desc_text).strip()
+                    conditions_html = td.get("conditions") or ""
+                    cond_text = ""
+                    if conditions_html:
+                        cond_text = _re_tag.sub(r"<[^>]+>", " ", conditions_html)
+                        cond_text = _re_tag.sub(r"\s+", " ", cond_text).strip()
+                    # Budget structured block
+                    bdg = td.get("budgetOverviewJSONItem") or {}
+                    bdg_lines = []
+                    if bdg:
+                        actions = bdg.get("budgetTopicActionMap") or {}
+                        for _action_id, items in actions.items():
+                            for it in (items or [])[:3]:
+                                if it.get("action", "").startswith(row.topic_id):
+                                    bdg_lines.append(
+                                        f"Budget overview for {it.get('action')}: "
+                                        f"min contribution EUR {it.get('minContribution','?')}, "
+                                        f"max contribution EUR {it.get('maxContribution','?')}, "
+                                        f"expected grants {it.get('expectedGrants','?')}, "
+                                        f"deadline model {it.get('deadlineModel','?')}."
+                                    )
+
+                    if en_title and en_title != title:
+                        title = en_title  # used for the response title
+                    # When we have a rich English body, REPLACE the body_parts
+                    # so the AI gets ONLY English content. (The Maltese DB
+                    # description was confusing the AI and eating the budget.)
+                    if desc_text and len(desc_text) > 200:
+                        body_parts = [
+                            f"Title: {en_title or title}",
+                            f"Framework programme: {row.framework_programme}" if row.framework_programme else "",
+                            f"Type of action: {row.type_of_action}" if row.type_of_action else "",
+                            f"Topic description: {desc_text[:3500]}",
+                        ]
+                        body_parts = [p for p in body_parts if p]
+                        for bl in bdg_lines:
+                            body_parts.append(bl)
+                        if cond_text:
+                            body_parts.append(
+                                f"Conditions, admissibility, eligibility, evaluation criteria, "
+                                f"submission steps (verbatim from the topic page): {cond_text[:5500]}"
+                            )
+                except Exception as _exc:
+                    logger.info(f"brief: topic-details fetch skipped ({row.topic_id}): {_exc}")
         elif kind == "ft_tenders":
             row = db.query(FtCallForTenders).filter(FtCallForTenders.id == raw_id).first()
             if not row:
@@ -923,7 +995,10 @@ async def generate_opportunity_brief(
     if not body_parts:
         raise HTTPException(status_code=422, detail="Opportunity has no body to summarise")
 
-    body_text = "\n\n".join(body_parts)[:8000]
+    # Cap at 14k chars. With use_context=False the AI has plenty of headroom
+    # (Cerebras gpt-oss-120b primary, 60K TPM budget). 8k was too tight for
+    # F&T conditions blocks which routinely exceed 12k chars.
+    body_text = "\n\n".join(body_parts)[:14000]
 
     # Ask the AI service for a structured 7-field brief
     try:
@@ -963,18 +1038,59 @@ async def generate_opportunity_brief(
             detail=f"AI brief generation failed: {str(exc)}",
         )
 
-    # Parse the JSON envelope. Fall back to a single-field summary if the
-    # model returned unstructured text (the system prompt asks for JSON).
+    # Parse the JSON envelope. Robust extraction: the AI service can wrap the
+    # output in a ```json fence AND append a "Read Brubru's full deep-dive
+    # here: ..." footer; previous regex-only strip left enough garbage that
+    # json.loads failed and the WHOLE response leaked into `scope`. Now we
+    # scan for the first balanced `{...}` block in the response and parse
+    # only that.
     import json as _json
     import re as _re
     parsed: dict = {}
-    try:
-        # The model sometimes wraps JSON in a code fence. Strip it.
-        cleaned = _re.sub(r"^```(?:json)?\s*|\s*```$", "", ai_text.strip(), flags=_re.MULTILINE)
-        parsed = _json.loads(cleaned)
-    except Exception:
+
+    def _extract_first_json_object(text: str) -> Optional[dict]:
+        if not text: return None
+        # Drop any markdown fences first
+        cleaned = _re.sub(r"```(?:json)?\s*", "", text)
+        cleaned = cleaned.replace("```", "")
+        # Find the first '{', then balance braces
+        start = cleaned.find('{')
+        if start < 0: return None
+        depth = 0
+        in_str = False
+        escape = False
+        for i in range(start, len(cleaned)):
+            ch = cleaned[i]
+            if escape:
+                escape = False
+                continue
+            if ch == '\\':
+                escape = True
+                continue
+            if ch == '"' and not escape:
+                in_str = not in_str
+                continue
+            if in_str:
+                continue
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    candidate = cleaned[start:i+1]
+                    try:
+                        return _json.loads(candidate)
+                    except (ValueError, TypeError):
+                        return None
+        return None
+
+    extracted = _extract_first_json_object(ai_text)
+    if extracted:
+        parsed = extracted
+    else:
+        logger.warning("brief: AI response did not contain a parseable JSON object; using fallback")
         parsed = {
-            "scope": ai_text.strip()[:300],
+            "scope": "Brubru could not parse a structured brief from the AI response. Open the source URL for the full call text.",
             "eligible_applicants": "Not stated in the call.",
             "budget_per_project": "Not stated in the call.",
             "trl_range": "Not stated in the call.",
@@ -1069,7 +1185,25 @@ async def get_similar_projects(
             "opportunity_id": opportunity_id,
             "anchor": {"programme": None, "type_of_action": None, "title": title_anchor},
             "items": [],
-            "note": "Anchor opportunity has no programme or type_of_action; cannot match.",
+            "note": "This call carries no framework programme or action type, so Brubru cannot match it to past funded projects.",
+        }
+
+    # Prizes (HORIZON Recognition Prize, HORIZON-RPr, EIC Prize, iCapital,
+    # etc.) are never recorded as 'funded projects' — they are one-off
+    # awards. Return a useful explanation instead of a silent empty list.
+    if type_of_action and ("prize" in type_of_action.lower()
+                           or "recognition" in type_of_action.lower()):
+        return {
+            "opportunity_id": opportunity_id,
+            "anchor": {"programme": programme, "type_of_action": type_of_action, "title": title_anchor},
+            "items": [],
+            "note": (
+                "EU recognition prizes are awards rather than typical grants, "
+                "so no 'past grantees' exist in Brubru's funded-project data. "
+                "Past winners of EIC prizes are listed on "
+                "https://eic.ec.europa.eu/eic-funding-opportunities/eic-prizes_en — "
+                "ask Brubru Chat to walk you through previous laureates."
+            ),
         }
 
     # The two tables store programme + type_of_action under different
@@ -1112,6 +1246,42 @@ async def get_similar_projects(
         logger.error(f"similar-projects query failed: {exc}")
         raise HTTPException(status_code=500, detail=f"Query failed: {exc}")
 
+    # Fallback: when the strict (programme + type_of_action) match returns
+    # nothing, broaden by title-keyword overlap. Pull the top 2 distinctive
+    # tokens from the anchor title (>=4 chars, alphabetic, lowercased) and
+    # search ft_funded_projects.title for any of them.
+    fallback_note = None
+    if not rows and title_anchor:
+        import re as _re_tok
+        stopwords = {"the","and","for","with","horizon","eic","prize","call","project","european","european's","european-",
+                     "innovation","research","support","action","funding","grant","programme","initiative","platform"}
+        tokens = [t.lower() for t in _re_tok.findall(r"[A-Za-z]{4,}", title_anchor)
+                  if t.lower() not in stopwords]
+        # de-dup keeping order
+        seen = set(); ordered = []
+        for t in tokens:
+            if t not in seen:
+                seen.add(t); ordered.append(t)
+        keywords = ordered[:3]
+        if keywords:
+            from sqlalchemy import or_ as _or_
+            q2 = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+            if programme_codes:
+                q2 = q2.filter(FtFundedProject.framework_programme.in_(programme_codes))
+            q2 = q2.filter(_or_(*[FtFundedProject.title.ilike(f"%{k}%") for k in keywords]))
+            if kind == "ft_projects":
+                q2 = q2.filter(FtFundedProject.id != raw_id)
+            try:
+                rows = q2.order_by(FtFundedProject.start_date.desc().nullslast()).limit(limit).all()
+                if rows:
+                    fallback_note = (
+                        f"No exact match on action type '{type_of_action}'. "
+                        f"Showing past projects whose title shares keywords with this call "
+                        f"({', '.join(keywords)})."
+                    )
+            except Exception as exc:
+                logger.warning(f"similar-projects fallback failed: {exc}")
+
     items = [
         {
             "id": str(r.id),
@@ -1132,7 +1302,7 @@ async def get_similar_projects(
         for r in rows
     ]
 
-    return {
+    response: Dict[str, Any] = {
         "opportunity_id": opportunity_id,
         "anchor": {
             "programme": programme,
@@ -1140,6 +1310,93 @@ async def get_similar_projects(
             "title": title_anchor,
         },
         "items": items,
+    }
+    if fallback_note:
+        response["note"] = fallback_note
+    elif not items:
+        response["note"] = (
+            f"No funded projects on record under programme '{programme}' and action "
+            f"type '{type_of_action}'. This is either a brand-new action that has "
+            f"not awarded its first grants yet, or our funded-project ingest does "
+            f"not cover this segment."
+        )
+    return response
+
+
+# ============================================================================
+# EIC Fund portfolio companies (Move 3 + 4 of #5, 15 Jun 2026). Surfaces
+# 5 invested-by-the-EIC-Fund companies inside the Tenderator drawer for any
+# EIC opportunity. Reads eic_fund_portfolio_companies (255 rows scraped from
+# eic.ec.europa.eu/eic-fund/eic-fund-invested-companies_en).
+# ============================================================================
+
+# Each EIC sub-bucket maps to one or more Drupal-theme codes so the drawer
+# surfaces sector-relevant investees. step-scale narrows to strategic-tech
+# themes (Quantum, Med Tech, Adv Manufacturing, AI/Data, Health Bio). The
+# others span the whole investee population (any sector applies).
+_EIC_BUCKET_TO_THEMES: Dict[str, Optional[List[int]]] = {
+    "step-scale":         [100, 96, 95, 99, 97],
+    "accelerator":        None,
+    "pathfinder":         None,
+    "transition":         None,
+    "advanced-challenges": None,
+    "pre-accelerator":    None,
+    "prize":              None,
+    "business-services":  None,
+}
+
+
+@router.get(
+    "/eic-fund-grantees",
+    summary="EIC Fund invested companies — social proof for EIC opportunities",
+    description=(
+        "Returns up to N companies the EIC Fund has invested in, scraped from "
+        "the public portfolio at eic.ec.europa.eu. Used in the drawer for any "
+        "EIC call (Pathfinder / Transition / Accelerator / STEP / etc.) as "
+        "concrete social proof: who got the equity, what they do, where they "
+        "are. When bucket=step-scale, narrows to strategic-tech themes; "
+        "other buckets return any-sector samples."
+    ),
+)
+async def get_eic_fund_grantees(
+    bucket: Optional[str] = Query(None, description="EIC sub-bucket slug: accelerator | pathfinder | transition | step-scale | ..."),
+    limit: int = Query(5, ge=1, le=20),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_blue_tier),
+):
+    theme_codes = _EIC_BUCKET_TO_THEMES.get((bucket or "").lower())
+    sql = text(
+        """
+        SELECT name, country, country_name, theme_code, theme_name,
+               description, source_url
+        FROM eic_fund_portfolio_companies
+        WHERE :no_theme_filter OR theme_code = ANY(:codes)
+        ORDER BY random()
+        LIMIT :limit
+        """
+    )
+    rows = db.execute(
+        sql,
+        {
+            "no_theme_filter": theme_codes is None,
+            "codes": theme_codes or [0],
+            "limit": limit,
+        },
+    ).fetchall()
+    return {
+        "bucket": bucket,
+        "theme_codes_filter": theme_codes,
+        "items": [
+            {
+                "name": r.name,
+                "country": r.country,
+                "country_name": r.country_name,
+                "theme_name": r.theme_name,
+                "description": r.description,
+                "source_url": r.source_url,
+            }
+            for r in rows
+        ],
     }
 
 
@@ -1396,6 +1653,7 @@ async def get_unified_feed(
     match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders | agency. Backed by tender_matches (TED) + on-the-fly scoring (F&T + agency) against the user's TenderProfile keywords + CPV + countries, blended with their MEUB Policy Interests when personalised is on."),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     programme: Optional[str] = Query(None, description="EU funding programme code (e.g. EU4H, HE, CEF) — filters F&T calls/projects by topic_id prefix"),
+    eic_programme: Optional[str] = Query(None, description="EIC sub-bucket: accelerator | pathfinder | transition | step-scale | advanced-challenges | pre-accelerator | prize | business-services. Only meaningful when programme=EIC. Narrows the EIC feed by HORIZON-EIC-* topic family (and includes HORIZON-WIDERA-* pre-accelerator rows when bucket=pre-accelerator)."),
     body: Optional[str] = Query(None, description="When source=agency: economy_items.body_code (e.g. efsa, ema, efca) — filters to one decentralised agency."),
     framework_only: bool = Query(False, description="When true (Move 5 lens), narrow source=agency to item_type='framework' — only EU-institution Framework Contracts (Commission/EIB/EP/EEAS/Council/ECB FWCs). No effect on other sources."),
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
@@ -1414,7 +1672,7 @@ async def get_unified_feed(
         FtCallForTenders,
         FtFundedProject,
     )
-    from sqlalchemy import or_, text as _sql_text
+    from sqlalchemy import or_, and_, text as _sql_text
 
     # === Layer 2: per-client pursuits pre-filter ===
     # When client_filter=true and the user has a private_guide_slug with
@@ -1784,6 +2042,33 @@ async def get_unified_feed(
             clauses.append(FtCallForProposals.call_id.ilike(f"{pref}%"))
         return or_(*clauses)
 
+    # EIC sub-bucket clause (Move 2 of #5, 15 Jun 2026). Maps a slug like
+    # "accelerator" / "pathfinder" / "pre-accelerator" to topic_id LIKE patterns
+    # against the HORIZON-EIC-* family naming convention. Pre-accelerator is
+    # the only outlier (lives under HORIZON-WIDERA-*-ACCESS-01) — we widen the
+    # base programme clause to include those rows when this bucket is selected.
+    _EIC_BUCKET_PATTERNS = {
+        "accelerator":          ["HORIZON-EIC-%-ACCELERATOR%"],
+        "pathfinder":           ["HORIZON-EIC-%-PATHFINDER%"],
+        "transition":           ["HORIZON-EIC-%-TRANSITION%"],
+        "step-scale":           ["HORIZON-EIC-%-STEP%", "HORIZON-EIC-%-SCALEUP%"],
+        "advanced-challenges":  ["HORIZON-EIC-%-AIC-%"],
+        "prize":                ["HORIZON-EIC-%-PRIZE-%"],
+        "business-services":    ["HORIZON-EIC-%-BAS-%", "HORIZON-EIC-%-TALENTS-%", "HORIZON-EIC-%-WOMENTECH%"],
+        "pre-accelerator":      ["HORIZON-WIDERA-%-ACCESS-%"],
+    }
+
+    def _eic_bucket_clause(slug: str):
+        patterns = _EIC_BUCKET_PATTERNS.get((slug or "").lower(), [])
+        if not patterns:
+            return None
+        ored = [FtCallForProposals.topic_id.ilike(p) for p in patterns]
+        # Pre-accelerator's HORIZON-WIDERA prefix overlaps with non-EIC widening
+        # calls — narrow by title to keep only EIC-branded pre-accelerator rows.
+        if (slug or "").lower() == "pre-accelerator":
+            return and_(or_(*ored), FtCallForProposals.title.ilike("%EIC%"))
+        return or_(*ored)
+
     def _ted_query():
         qry = db.query(Tender)
         if status_filter == "open":
@@ -1811,7 +2096,13 @@ async def get_unified_feed(
         else:
             # Default: hide calls whose deadline has passed.
             qry = qry.filter((FtCallForProposals.deadline >= now) | (FtCallForProposals.deadline.is_(None)))
-        if prog_prefixes:
+        # EIC sub-bucket narrows BEFORE the base programme clause so the
+        # pre-accelerator bucket (HORIZON-WIDERA prefix) can include rows that
+        # the base 'EIC' prefix would otherwise miss.
+        eic_clause = _eic_bucket_clause(eic_programme) if eic_programme else None
+        if eic_clause is not None:
+            qry = qry.filter(eic_clause)
+        elif prog_prefixes:
             qry = qry.filter(_proposal_programme_clause())
         if q:
             qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))

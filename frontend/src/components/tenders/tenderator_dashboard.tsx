@@ -16,6 +16,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/use_auth';
 import { UnifiedOpportunityFeed, type UnifiedOpportunity, type MatchSubSource } from './unified_opportunity_feed';
+import type { LensMode } from '../bubble/lens_toggle';
 import { OpportunityDrawer } from './opportunity_drawer';
 import { ProgrammesPanel } from './programmes_panel';
 import { BodiesPanel } from './bodies_panel';
@@ -138,6 +139,26 @@ export const TenderatorDashboard = ({
   // Selected EU funding programme code (e.g. EU4H). Filters the proposals feed
   // by topic_id prefix. Only applied while the proposals source is active.
   const [programmeCode, setProgrammeCode] = useState<string>('');
+  // Lens override (Move 1 of #5, 15 Jun 2026). When the user clicks an
+  // explicit-intent chip ("Startups & SMEs (EIC)") we set this to 'all' so a
+  // stale Policy-Interest lens can't intersect EIC topics down to zero. The
+  // LensToggle inside the feed can still flip the user back to 'pi' — its
+  // onLensModeChange callback writes through this state.
+  const [lensOverride, setLensOverride] = useState<LensMode | null>(null);
+  // EIC sub-bucket (Move 2 of #5, 15 Jun 2026). One of: '' (All EIC) |
+  // 'accelerator' | 'pathfinder' | 'transition' | 'step-scale' | 'prize'.
+  // Sent to the unified-feed endpoint as the eic_programme query param. Only
+  // meaningful when programmeCode === 'EIC'; cleared when navigating away.
+  const [eicBucket, setEicBucket] = useState<string>('');
+  // Clear the lens override the moment the user navigates off the EIC chip
+  // (different programme code or different source). Without this, the
+  // override would leak across chips.
+  useEffect(() => {
+    if (programmeCode !== 'EIC' || source !== 'ft_proposals') {
+      setLensOverride(null);
+      setEicBucket('');
+    }
+  }, [programmeCode, source]);
   // Selected agency body slug (e.g. 'efsa'). Only applied while the agency
   // source is active. Carried via URL on Chat → Tenderator deep links.
   const [agencyBody, setAgencyBody] = useState<string>(incomingBody);
@@ -394,7 +415,7 @@ export const TenderatorDashboard = ({
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode === 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
-                onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); }}
+                onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); setLensOverride('all'); }}
                 title="European Innovation Council. Direct EU funding for high-risk innovation by startups and SMEs: the EIC Accelerator (€2.5M grant + up to €15M equity), Pathfinder (€3-4M for early-stage research), Transition (€2.5M for scale-up), STEP (strategic technologies), and prizes."
               >
                 <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
@@ -431,6 +452,51 @@ export const TenderatorDashboard = ({
           </section>
         )}
       </div>
+
+      {/* EIC 2026 at-a-glance tile — visible only when the EIC lens is active.
+          Static budget data from eic.ec.europa.eu/eic-2026-work-programme_en.
+          Total 2026 budget: €1.4B across 5 funding strands + prizes. */}
+      {source === 'ft_proposals' && programmeCode === 'EIC' && (
+        <section className="tenderator-dashboard__eic-glance" aria-label="EIC 2026 at a glance">
+          <div className="tenderator-dashboard__eic-glance-title">
+            <span className="mdi mdi-information-outline" aria-hidden="true" />
+            EIC 2026: €1.4 billion across these strands
+          </div>
+          <ul className="tenderator-dashboard__eic-glance-list">
+            <li><strong>€634M</strong> Accelerator</li>
+            <li><strong>€300M</strong> STEP Scale</li>
+            <li><strong>€262M</strong> Pathfinder</li>
+            <li><strong>€100M</strong> Transition</li>
+            <li><strong>€6M</strong> Advanced Innovation Challenges</li>
+            <li>+ prizes (iCapital, Women Innovators)</li>
+          </ul>
+        </section>
+      )}
+
+      {/* EIC sub-bucket chips — visible only when the EIC lens is active.
+          Each chip narrows the feed to one HORIZON-EIC topic family. */}
+      {source === 'ft_proposals' && programmeCode === 'EIC' && (
+        <section className="tenderator-dashboard__eic-subchips" aria-label="EIC programme">
+          {[
+            { slug: '',                    label: 'All EIC',     title: 'All open EIC funding opportunities across every strand.' },
+            { slug: 'accelerator',         label: 'Accelerator', title: 'Single startups / SMEs scaling deep-tech (TRL 6-8). Blended €2.5M grant + €1-10M equity. 6 cutoffs in 2026.' },
+            { slug: 'pathfinder',          label: 'Pathfinder',  title: 'Breakthrough research at TRL 1-4 by consortia. Grants up to €4M. 2026 budget: €262M.' },
+            { slug: 'transition',          label: 'Transition',  title: 'Single SMEs / small consortia bringing EIC Pathfinder / ERC PoC / Horizon results from TRL 3 to TRL 5-6. Grants up to €2.5M.' },
+            { slug: 'step-scale',          label: 'STEP Scale',  title: 'Equity-only investment €10-30M for scale-ups in strategic technologies (quantum, semis, biotech). 4 cutoffs in 2026.' },
+            { slug: 'prize',               label: 'Prizes',      title: 'EIC-administered prizes: iCapital (cities), Women Innovators, and other lump-sum recognition awards.' },
+          ].map((b) => (
+            <button
+              key={b.slug || 'all'}
+              type="button"
+              className={`tenderator-dashboard__chip tenderator-dashboard__chip--eic ${eicBucket === b.slug ? 'tenderator-dashboard__chip--active' : ''}`}
+              onClick={() => setEicBucket(b.slug)}
+              title={b.title}
+            >
+              {b.label}
+            </button>
+          ))}
+        </section>
+      )}
 
       {/* External-action sub-control: beneficiary-country narrowing. Visible
           only when the lens is on. Works in combination with chips + search. */}
@@ -583,10 +649,13 @@ export const TenderatorDashboard = ({
               source={source}
               matchSubSource={matchSubSource}
               programme={source === 'ft_proposals' ? programmeCode : ''}
+              eicProgramme={source === 'ft_proposals' && programmeCode === 'EIC' ? eicBucket : ''}
               body={source === 'agency' ? agencyBody : ''}
               externalAction={externalAction}
               beneficiaryCountry={beneficiaryCountry}
               frameworkOnly={frameworkOnly}
+              lensModeOverride={lensOverride}
+              onLensModeChange={(m) => setLensOverride(m)}
               initialQuery={incomingQuery}
               onSelectOpportunity={(opp) => {
                 // For TED tenders with a real tenders.id, keep the existing

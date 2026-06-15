@@ -146,12 +146,12 @@
 }
 
 .opportunity-drawer__section h3 {
-  margin: 0 0 0.7rem;
+  margin: 0 0 0.95rem;
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--color-text-secondary, #6b7280);
-  display: inline-flex;
+  display: flex;            /* block-level flex so the next sibling starts on a new line */
   align-items: center;
   gap: 0.4rem;
 }
@@ -168,6 +168,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.85rem;      /* space below "Brubru brief" heading */
   padding: 0.7rem 1.1rem;
   border-radius: 999px;
   border: none;
@@ -555,6 +556,63 @@
   .opportunity-drawer__intl-stat-value {
     font-size: 1.05rem;
   }
+}
+
+/* EIC Fund portfolio panel (Move 4 of #5) — same purple accent as the
+   dashboard sub-chip row so the EIC story reads as a continuous thread. */
+.opportunity-drawer__section--eic-fund {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(99, 102, 241, 0.03));
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+.opportunity-drawer__eic-fund-intro {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0 0 0.6rem 0;
+}
+.opportunity-drawer__eic-fund-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.opportunity-drawer__eic-fund-item {
+  padding: 0.55rem 0.7rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-radius: 8px;
+}
+.opportunity-drawer__eic-fund-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5b21b6;
+  text-decoration: none;
+  margin-bottom: 0.2rem;
+}
+.opportunity-drawer__eic-fund-name:hover {
+  text-decoration: underline;
+}
+.opportunity-drawer__eic-fund-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin-bottom: 0.3rem;
+}
+.opportunity-drawer__eic-fund-meta span:not(:last-child)::after {
+  content: '·';
+  margin-left: 0.4rem;
+  color: #d1d5db;
+}
+.opportunity-drawer__eic-fund-desc {
+  font-size: 0.82rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.45;
 }
 
 @media (max-width: 400px) {

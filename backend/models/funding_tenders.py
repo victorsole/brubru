@@ -46,6 +46,7 @@ class FtCallForProposals(Base):
     published_at = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
+    detected_lang = Column(String(8))  # ISO-639-1; feeds the translation overlay
 
 
 class FtCallForTenders(Base):
@@ -67,6 +68,7 @@ class FtCallForTenders(Base):
     is_test = Column(Boolean, nullable=False, default=False)
     published_at = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
+    detected_lang = Column(String(8))
     scraped_at = Column(DateTime, server_default=func.now())
 
 
@@ -93,3 +95,4 @@ class FtFundedProject(Base):
     published_at = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
+    detected_lang = Column(String(8))
