@@ -103,6 +103,9 @@ const styles = {
     fontWeight: 600,
     margin: '0 2.5rem 0.5rem 0',
     lineHeight: 1.4,
+    // Explicit white: the global `h1..h6 { color: var(--color-text) }` rule in
+    // styles/globals.css otherwise beats the white inherited from the header.
+    color: 'white',
   },
   badges: {
     display: 'flex',
@@ -880,7 +883,11 @@ export const ConsultationDetail: React.FC<ConsultationDetailProps> = ({
                 style={{ ...styles.btn, ...styles.btnPrimary, textDecoration: 'none' }}
               >
                 <Icon path={mdiOpenInNew} size={0.8} />
-                {t('bubble.consultations.openInPortal', 'Open in Have Your Say')}
+                {consultation.source === 'agency'
+                  ? (consultation.body_name
+                      ? t('bubble.consultations.openOnAgencyNamed', 'Open on {{agency}}', { agency: consultation.body_name })
+                      : t('bubble.consultations.openOnAgency', 'Open on its agency website'))
+                  : t('bubble.consultations.openInPortal', 'Open in Have Your Say')}
               </a>
             )}
           </div>

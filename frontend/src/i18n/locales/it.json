@@ -3378,5 +3378,18 @@
     "grpUploaded": "Caricati e redatti",
     "grpAi": "Generati dall'IA",
     "amendatorDraft": "Bozza Amendator"
+  },
+  "archive": {
+    "viewLabel": "Vista archivio",
+    "active": "Attivi",
+    "archived": "Archiviati",
+    "dismiss": "Archivia",
+    "restore": "Ripristina",
+    "archivedToast": "Archiviato",
+    "restored": "Ripristinato",
+    "failed": "Azione non riuscita. Riprova.",
+    "archivedFiles": "File archiviati",
+    "archivedItems": "Elementi archiviati",
+    "noArchived": "Nessun elemento archiviato"
   }
 }

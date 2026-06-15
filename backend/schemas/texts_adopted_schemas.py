@@ -108,6 +108,8 @@ class TrackTextRequest(BaseModel):
 
 class TrackedTextAdoptedResponse(BaseModel):
     """Response for a tracked adopted text."""
+    track_id: Optional[str] = None
+    archived_at: Optional[datetime] = None
     text: TextAdoptedSummary
     tracked_since: datetime
     notes: Optional[str] = None

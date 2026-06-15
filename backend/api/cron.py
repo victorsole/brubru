@@ -402,6 +402,9 @@ async def cron_sync_warm_12h(
     results["committee_minutes"] = _run_script("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
     results["committee_agendas"] = _run_script("committee_agendas", "scripts/sync_committee_agendas.py", [], timeout=600)
     results["committee_transcripts"] = _run_script("committee_transcripts", "scripts/sync_committee_transcripts.py", ["--days", "30", "--max", "50"], timeout=900)
+    # Auto-archive items past their lifespan (adopted carriages 90d+, closed
+    # consultations 30d+, stale Commission docs 180d+). Idempotent; applies.
+    results["auto_archive"] = _run_script("auto_archive", "scripts/auto_archive_old_items.py", [], timeout=300)
 
     logger.info(f"[CRON] warm-12h tier sync complete: {results}")
     return {"status": "success", "tier": "warm_12h", "results": results}

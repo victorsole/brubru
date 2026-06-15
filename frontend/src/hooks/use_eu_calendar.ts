@@ -42,6 +42,7 @@ interface EUCalendarState {
   selectedEventType: string;     // '' = all (plenary / committee / council / summit / …)
   bodies: Record<string, { code: string; name: string; kind?: string }[]>;
   myInterests: boolean;
+  showArchived: boolean;
   searchQuery: string;
   // Legacy chip state (kept for compatibility; the UI now uses the dropdowns above)
   activeInstitutions: Set<InstitutionType>;
@@ -63,6 +64,7 @@ interface EUCalendarState {
   togglePolicyArea: (code: string) => void;
   toggleCommittee: (code: string) => void;
   setMyInterests: (on: boolean) => void;
+  setShowArchived: (on: boolean) => void;
   fetchBodies: () => Promise<void>;
   setInstitution: (code: string) => void;
   setDepartment: (code: string) => void;
@@ -150,6 +152,7 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
   activePolicyAreas: new Set<string>(),
   activeCommittees: new Set<string>(),
   myInterests: false,
+  showArchived: false,
   searchQuery: '',
   isLoading: false,
   isLoadingDigest: false,
@@ -185,7 +188,8 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
       }
 
       const response = await euCalendarService.getEventsInRange(
-        dateFrom, dateTo, instFilter, paFilter, cmFilter, myInterests, dgFilter, cfgFilter, etFilter, orgFilter
+        dateFrom, dateTo, instFilter, paFilter, cmFilter, myInterests, dgFilter, cfgFilter, etFilter, orgFilter,
+        get().showArchived,
       );
 
       set({
@@ -335,6 +339,12 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
     get().fetchEvents();
   },
 
+  // Archive lens: show events the user archived (dismissed) instead of active ones.
+  setShowArchived: (on: boolean) => {
+    set({ showArchived: on });
+    get().fetchEvents();
+  },
+
   // Cascading dropdowns (Phase B): institution -> dependent department.
   fetchBodies: async () => {
     try {
@@ -436,6 +446,8 @@ export const PHASE1_INSTITUTIONS: InstitutionType[] = [
   'EP', 'COUNCIL', 'EUROPEAN_COUNCIL', 'COMMISSION', 'ECB', 'EMA',
   // All-EU bodies with calendar events (1 Jun 2026)
   'COR', 'FRA', 'EU_OSHA', 'CEPOL', 'EIT', 'EUROFOUND', 'EEAS',
+  // EU Funding & Tenders Portal events (15 Jun 2026)
+  'FUNDING',
   'THIRD_PARTY',
 ];
 

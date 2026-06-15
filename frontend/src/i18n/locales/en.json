@@ -3399,5 +3399,18 @@
     "grpUploaded": "Uploaded & authored",
     "grpAi": "AI-generated",
     "amendatorDraft": "Amendator draft"
+  },
+  "archive": {
+    "viewLabel": "Archive view",
+    "active": "Active",
+    "archived": "Archived",
+    "dismiss": "Archive",
+    "restore": "Restore",
+    "archivedToast": "Archived",
+    "restored": "Restored",
+    "failed": "Action failed. Please try again.",
+    "archivedFiles": "Archived files",
+    "archivedItems": "Archived items",
+    "noArchived": "Nothing archived yet"
   }
 }

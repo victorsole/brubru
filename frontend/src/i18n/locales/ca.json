@@ -3378,5 +3378,18 @@
     "grpUploaded": "Pujats i propis",
     "grpAi": "Generats per IA",
     "amendatorDraft": "Esborrany d'Amendator"
+  },
+  "archive": {
+    "viewLabel": "Vista d'arxiu",
+    "active": "Actius",
+    "archived": "Arxivats",
+    "dismiss": "Arxivar",
+    "restore": "Restaurar",
+    "archivedToast": "Arxivat",
+    "restored": "Restaurat",
+    "failed": "L'acció ha fallat. Torna-ho a provar.",
+    "archivedFiles": "Fitxers arxivats",
+    "archivedItems": "Elements arxivats",
+    "noArchived": "Encara no hi ha res arxivat"
   }
 }

@@ -101,7 +101,7 @@ const TAB_META: Record<TabType, { labelKey: string; fallback: string; icon: stri
   legislative:       { labelKey: 'bubble.tabs.legislativeTrain',  fallback: 'Legislative Train',        icon: mdiTrain },
   votes:             { labelKey: 'bubble.tabs.votes',             fallback: 'Votes',                    icon: mdiGavel },
   eu_calendar:       { labelKey: 'bubble.tabs.euCalendar',        fallback: 'My EU Calendar',           icon: mdiCalendarMonth },
-  consultations:     { labelKey: 'bubble.tabs.consultations',     fallback: 'EC Public Consultations',  icon: mdiCalendarCollapseHorizontal },
+  consultations:     { labelKey: 'bubble.tabs.consultations',     fallback: 'EU Public Consultations',  icon: mdiCalendarCollapseHorizontal },
   news:              { labelKey: 'bubble.tabs.news',              fallback: 'News',                     icon: mdiNewspaperVariantMultipleOutline },
   transcripts:       { labelKey: 'bubble.tabs.transcripts',       fallback: 'Transcripts',              icon: mdiMicrophoneMessage },
   parliamentary_questions: { labelKey: 'bubble.tabs.parliamentaryQuestions', fallback: 'Parliamentary Questions', icon: mdiCommentQuestionOutline },

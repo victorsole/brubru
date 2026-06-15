@@ -41,6 +41,7 @@ export interface TrackedFile {
   last_updated?: string;
   is_blocked?: boolean;
   days_in_current_status?: number;
+  archived_at?: string | null;
 }
 
 export interface LegislativeChange {
@@ -152,7 +153,7 @@ interface LegislativeTrainState {
   closeFileDetail: () => void;
 
   // Tracked files actions
-  fetchTrackedFiles: () => Promise<void>;
+  fetchTrackedFiles: (archived?: boolean) => Promise<void>;
   fetchRecentChanges: (hours?: number) => Promise<void>;
   trackFile: (identifier: string, byCarriageId?: boolean) => Promise<void>;
   untrackFile: (identifier: string, byCarriageId?: boolean) => Promise<void>;
@@ -284,13 +285,13 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
     set({ selectedFile: null });
   },
 
-  // Fetch user's tracked files
-  fetchTrackedFiles: async () => {
+  // Fetch user's tracked files (active by default; archived=true for the archived view)
+  fetchTrackedFiles: async (archived = false) => {
     set({ isLoadingTrackedFiles: true });
 
     try {
       const response = await axios.get<{ tracked_files: TrackedFile[] }>(
-        `${API_BASE}/legislative-train/tracked`
+        `${API_BASE}/legislative-train/tracked${archived ? '?archived=true' : ''}`
       );
 
       set({

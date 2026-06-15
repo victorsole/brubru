@@ -52,6 +52,9 @@ class InstitutionType(str, Enum):
     CPVO = "CPVO"
     EMSA = "EMSA"
     EEAS = "EEAS"
+    # EU Funding & Tenders Portal events (migration 141, 15 June 2026). Mirror
+    # the model enum — a missing value 500s the whole calendar response.
+    FUNDING = "FUNDING"
     # Added 22 April 2026 to mirror the model enum after euagenda.eu
     # integration (think tanks, conferences, webinars). Missing this value
     # made every response containing a THIRD_PARTY row fail Pydantic

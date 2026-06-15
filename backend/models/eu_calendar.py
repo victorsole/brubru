@@ -60,6 +60,9 @@ class InstitutionEnum(str, enum.Enum):
     CPVO = "CPVO"
     EMSA = "EMSA"
     EEAS = "EEAS"
+    # EU Funding & Tenders Portal events (info days, webinars, conferences).
+    # Added 15 June 2026 (migration 141). See ft_news_events API + sync_ft_events.
+    FUNDING = "FUNDING"
     # Non-EU-institutional events (think tanks, conference organisers,
     # associations, universities, public bodies). Added 22 April 2026 for
     # euagenda.eu integration. See `euagenda_brussels_events.md` guide.

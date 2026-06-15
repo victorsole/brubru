@@ -76,6 +76,10 @@ export interface ConsultationListItem {
   relevance_score: number;
   is_tracked: boolean;
   portal_url?: string;
+  // All-EU hub: 'commission' (Have Your Say) | 'agency' (EU agency consultation).
+  source?: string;
+  source_body?: string;
+  body_name?: string;
 }
 
 export interface ConsultationDetail extends ConsultationListItem {

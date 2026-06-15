@@ -264,14 +264,18 @@ async def get_item(
     description="Get all Commission documents the current user is tracking"
 )
 async def get_tracked_documents(
+    archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> TrackedCommissionDocsListResponse:
-    """Get user's tracked Commission documents."""
+    """Get user's tracked Commission documents. Active by default; pass archived=true for the archived view."""
     try:
-        tracks = db.query(UserCommissionDocTrack).filter(
+        q = db.query(UserCommissionDocTrack).filter(
             UserCommissionDocTrack.user_id == current_user.id
-        ).all()
+        )
+        q = q.filter(UserCommissionDocTrack.archived_at.isnot(None)) if archived \
+            else q.filter(UserCommissionDocTrack.archived_at.is_(None))
+        tracks = q.all()
 
         items = []
         for track in tracks:
@@ -281,6 +285,8 @@ async def get_tracked_documents(
 
             if doc:
                 items.append(TrackedCommissionDocResponse(
+                    track_id=str(track.id),
+                    archived_at=track.archived_at,
                     document=CommissionDocumentSummary.model_validate(doc),
                     tracked_since=track.tracked_since,
                     notes=track.notes,

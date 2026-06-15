@@ -262,14 +262,18 @@ async def get_committees() -> CommitteesListResponse:
     description="Get all work items the current user is tracking"
 )
 async def get_tracked_items(
+    archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> TrackedWorkItemsListResponse:
-    """Get user's tracked work items."""
+    """Get user's tracked work items. Active by default; pass archived=true for the archived view."""
     try:
-        tracks = db.query(UserCommitteeWorkTrack).filter(
+        q = db.query(UserCommitteeWorkTrack).filter(
             UserCommitteeWorkTrack.user_id == current_user.id
-        ).all()
+        )
+        q = q.filter(UserCommitteeWorkTrack.archived_at.isnot(None)) if archived \
+            else q.filter(UserCommitteeWorkTrack.archived_at.is_(None))
+        tracks = q.all()
 
         items = []
         for track in tracks:
@@ -279,6 +283,8 @@ async def get_tracked_items(
 
             if work_item:
                 items.append(TrackedWorkItemResponse(
+                    track_id=str(track.id),
+                    archived_at=track.archived_at,
                     work_item=CommitteeWorkItemSummary.model_validate(work_item),
                     tracked_since=track.tracked_since,
                     notify_on_status_change=track.notify_on_status_change,

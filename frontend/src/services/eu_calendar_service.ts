@@ -54,6 +54,7 @@ export type InstitutionType =
   | 'CPVO'
   | 'EMSA'
   | 'EEAS'
+  | 'FUNDING'
   | 'THIRD_PARTY';
 
 export type EventType =
@@ -210,6 +211,7 @@ export const INSTITUTION_CONFIG: Record<InstitutionType, InstitutionConfig> = {
   CPVO: { label: 'Plant Variety Office', shortLabel: 'CPVO', mdiIcon: 'mdi-sprout', colour: '#65a30d' },
   EMSA: { label: 'Maritime Safety Agency', shortLabel: 'EMSA', mdiIcon: 'mdi-ferry', colour: '#0369a1' },
   EEAS: { label: 'External Action Service', shortLabel: 'EEAS', mdiIcon: 'mdi-earth', colour: '#1e3a8a' },
+  FUNDING: { label: 'EU Funding & Tenders', shortLabel: 'Funding & Tenders', mdiIcon: 'mdi-cash-multiple', colour: '#0d9488' },
   THIRD_PARTY: { label: 'Think Tanks & External', shortLabel: 'External', mdiIcon: 'mdi-earth', colour: '#64748b' },
 };
 
@@ -269,6 +271,7 @@ export const euCalendarService = {
     councilConfig?: string,
     eventType?: string,
     organiser?: string,
+    archived?: boolean,
   ): Promise<{ date_from: string; date_to: string; total: number; events: CalendarEvent[] }> => {
     const params = new URLSearchParams();
     params.append('date_from', dateFrom);
@@ -281,6 +284,7 @@ export const euCalendarService = {
     if (eventType) params.append('event_type', eventType);
     if (organiser) params.append('organiser', organiser);
     if (myInterests) params.append('my_interests', 'true');
+    if (archived) params.append('archived', 'true');
 
     const response = await axios.get(`${API_BASE}/events/range?${params.toString()}`, { headers: authHeaders() });
     return response.data;

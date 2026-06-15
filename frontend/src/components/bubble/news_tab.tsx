@@ -85,6 +85,7 @@ const INST_LABELS: Record<string, string> = {
   CPVO: 'Plant Variety (CPVO)', CDT: 'Translation Centre (CdT)',
   CJEU: 'Court of Justice (CJEU)', EDPS: 'Data Protection Supervisor (EDPS)',
   EEAS: 'External Action Service (EEAS)',
+  FUNDING: 'Funding & Tenders Portal',
 };
 const instLabel = (code: string) => INST_LABELS[code] || code;
 interface NewsResponse { items: NewsItem[]; featured: NewsItem[]; total: number; pi_active: boolean; files_active?: boolean; has_tracked_files?: boolean; facets: Facets; org_type_labels?: Record<string, string>; }

@@ -186,6 +186,9 @@ EU_INSTITUTIONS: List[EUInstitution] = [
     EUInstitution(code="EEAS", name="European External Action Service", short_name="EEAS",
         mdi_icon="mdi-earth", colour="#1e3a8a",
         calendar_url="https://www.eeas.europa.eu/filter-page/events_en"),
+    EUInstitution(code="FUNDING", name="EU Funding & Tenders Portal", short_name="Funding & Tenders",
+        mdi_icon="mdi-cash-multiple", colour="#0d9488",
+        calendar_url="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/support/events"),
 ]
 
 # Quick lookups

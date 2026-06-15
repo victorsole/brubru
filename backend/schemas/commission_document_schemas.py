@@ -104,6 +104,8 @@ class TrackCommissionDocRequest(BaseModel):
 
 class TrackedCommissionDocResponse(BaseModel):
     """Response for a tracked Commission document."""
+    track_id: Optional[str] = None
+    archived_at: Optional[datetime] = None
     document: CommissionDocumentSummary
     tracked_since: datetime
     notes: Optional[str] = None

@@ -121,6 +121,13 @@ class PublicConsultation(Base):
     dg_responsible = Column(String(20), nullable=True, index=True)
     policy_areas = Column(ARRAY(String), default=[], nullable=False)
 
+    # Source discriminator (migration 142, 15 June 2026): 'commission' = the
+    # Have Your Say portal; 'agency' = a decentralised EU agency consultation
+    # mirrored from economy_items. source_body holds the agency code (EIOPA,
+    # BEREC, ...) for agency rows; NULL for Commission rows (they use dg_responsible).
+    source = Column(String(20), nullable=False, default="commission", index=True)
+    source_body = Column(String(20), nullable=True, index=True)
+
     # Timeline
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True, index=True)
@@ -305,6 +312,10 @@ class UserConsultationTrack(Base):
     # Timestamps
     tracked_since = Column(DateTime, default=datetime.now, nullable=False)
     last_notified_at = Column(DateTime, nullable=True)
+
+    # Archive (migration 041): NULL = active, non-null = archived at that moment.
+    archived_at = Column(DateTime(timezone=True), nullable=True)
+    archived_reason = Column(Text, nullable=True)
 
     # Relationships
     user = relationship("User")

@@ -241,24 +241,30 @@ async def get_by_reference(
     description="Get all texts the current user is tracking"
 )
 async def get_tracked_texts(
+    archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> TrackedTextsListResponse:
-    """Get user's tracked texts."""
+    """Get user's tracked texts. Active by default; pass archived=true for the archived view."""
     try:
-        tracks = db.query(UserTextAdoptedTrack).filter(
+        q = db.query(UserTextAdoptedTrack).filter(
             UserTextAdoptedTrack.user_id == current_user.id
-        ).all()
+        )
+        q = q.filter(UserTextAdoptedTrack.archived_at.isnot(None)) if archived \
+            else q.filter(UserTextAdoptedTrack.archived_at.is_(None))
+        tracks = q.all()
 
         items = []
         for track in tracks:
-            text = db.query(TextAdopted).filter(
+            text_item = db.query(TextAdopted).filter(
                 TextAdopted.id == track.text_adopted_id
             ).first()
 
-            if text:
+            if text_item:
                 items.append(TrackedTextAdoptedResponse(
-                    text=TextAdoptedSummary.model_validate(text),
+                    track_id=str(track.id),
+                    archived_at=track.archived_at,
+                    text=TextAdoptedSummary.model_validate(text_item),
                     tracked_since=track.tracked_since,
                     notes=track.notes,
                 ))

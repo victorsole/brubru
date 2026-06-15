@@ -3378,5 +3378,18 @@
     "grpUploaded": "Importés et rédigés",
     "grpAi": "Générés par IA",
     "amendatorDraft": "Brouillon Amendator"
+  },
+  "archive": {
+    "viewLabel": "Vue archives",
+    "active": "Actifs",
+    "archived": "Archivés",
+    "dismiss": "Archiver",
+    "restore": "Restaurer",
+    "archivedToast": "Archivé",
+    "restored": "Restauré",
+    "failed": "L'action a échoué. Veuillez réessayer.",
+    "archivedFiles": "Fichiers archivés",
+    "archivedItems": "Éléments archivés",
+    "noArchived": "Rien d'archivé pour l'instant"
   }
 }

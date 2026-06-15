@@ -159,6 +159,19 @@
 }
 
 /* Files Section */
+/* Header row: section title + archive Active|Archived toggle. Wraps on mobile. */
+.my-tracked-files-tab__files-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.my-tracked-files-tab__files-head .my-tracked-files-tab__section-title {
+  margin: 0;
+}
+
 .my-tracked-files-tab__files {
   background: #ffffff;
   border: 1px solid #e0e0e0;

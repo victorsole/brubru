@@ -36,6 +36,9 @@ import {
   googleCalendarUrl, outlookCalendarUrl, downloadIcs,
 } from '../../utils/calendar_export';
 import { MeubHeader } from './meub_header';
+import { ArchiveToggle, ArchiveButton } from './archive_controls';
+import { archiveService } from '../../services/archive_service';
+import { toast } from '../shared/feedback_host';
 import {
   useEUCalendar,
   groupEventsByDate,
@@ -275,6 +278,7 @@ function CalendarFilters() {
     selectedEventType, setEventType,
     bodies, fetchBodies,
     myInterests, setMyInterests,
+    showArchived, setShowArchived,
     clearFilters,
   } = useEUCalendar();
 
@@ -314,6 +318,11 @@ function CalendarFilters() {
             {t('calendar.myInterests', 'My interests')}
           </button>
         </div>
+        {/* Archive lens: active calendar vs the events the user dismissed. */}
+        <ArchiveToggle
+          value={showArchived ? 'archived' : 'active'}
+          onChange={(v) => setShowArchived(v === 'archived')}
+        />
       </div>
 
       {/* Cascading dropdowns: Institution -> Department + Policy area. */}
@@ -716,12 +725,33 @@ function MobileEventList({ events }: { events: CalendarEvent[] }) {
 
 function EventDetailModal() {
   const { t } = useTranslation();
-  const { selectedEvent, selectEvent } = useEUCalendar();
+  const { selectedEvent, selectEvent, showArchived, fetchEvents } = useEUCalendar();
   const navigate = useNavigate();
+  const [archiveBusy, setArchiveBusy] = useState(false);
 
   const handleClose = useCallback(() => {
     selectEvent(null);
   }, [selectEvent]);
+
+  const handleArchiveEvent = useCallback(async () => {
+    if (!selectedEvent) return;
+    setArchiveBusy(true);
+    try {
+      if (showArchived) {
+        await archiveService.restoreCalendar(selectedEvent.id);
+        toast(t('archive.restored', 'Restored'), 'success');
+      } else {
+        await archiveService.archiveCalendar(selectedEvent.id);
+        toast(t('archive.archivedToast', 'Archived'), 'success');
+      }
+      selectEvent(null);
+      await fetchEvents();
+    } catch {
+      toast(t('archive.failed', 'Action failed. Please try again.'), 'error');
+    } finally {
+      setArchiveBusy(false);
+    }
+  }, [selectedEvent, showArchived, selectEvent, fetchEvents, t]);
 
   // Close on Escape
   useEffect(() => {
@@ -845,6 +875,13 @@ function EventDetailModal() {
 
         <div className="eu-calendar-tab__modal-footer">
           <AddToCalendar event={event} />
+          <ArchiveButton
+            archived={showArchived}
+            onClick={handleArchiveEvent}
+            busy={archiveBusy}
+            variant="full"
+            className="eu-calendar-tab__modal-link-btn"
+          />
           {event.agenda_url && (
             <a
               href={event.agenda_url}

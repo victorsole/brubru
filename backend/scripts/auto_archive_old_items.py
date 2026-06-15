@@ -76,12 +76,14 @@ def archive_carriages(db, dry_run: bool) -> int:
 
 def archive_consultations(db, dry_run: bool) -> int:
     """Auto-archive tracked consultations whose deadline passed 30+ days ago."""
+    # public_consultations stores the closing date in `end_date` (no deadline_date column).
     sql = """
-        SELECT uct.id, uct.user_id, c.deadline_date
+        SELECT uct.id, uct.user_id, c.end_date
         FROM user_consultation_tracks uct
         JOIN public_consultations c ON c.id = uct.consultation_id
         WHERE uct.archived_at IS NULL
-          AND c.deadline_date < NOW() - INTERVAL '30 days'
+          AND c.end_date IS NOT NULL
+          AND c.end_date < (NOW() - INTERVAL '30 days')::date
         LIMIT 1000
     """
     try:
@@ -107,10 +109,11 @@ def archive_consultations(db, dry_run: bool) -> int:
 
 def archive_stale_docs(db, dry_run: bool) -> int:
     """Auto-archive tracked Commission docs whose last_updated > 180 days ago."""
+    # FK column is commission_document_id (not document_id).
     sql = """
         SELECT uct.id
         FROM user_commission_doc_tracks uct
-        JOIN commission_documents cd ON cd.id = uct.document_id
+        JOIN commission_documents cd ON cd.id = uct.commission_document_id
         WHERE uct.archived_at IS NULL
           AND cd.last_updated < NOW() - INTERVAL '180 days'
         LIMIT 1000

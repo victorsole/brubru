@@ -3378,5 +3378,18 @@
     "grpUploaded": "Geüpload en geschreven",
     "grpAi": "AI-gegenereerd",
     "amendatorDraft": "Amendator-concept"
+  },
+  "archive": {
+    "viewLabel": "Archiefweergave",
+    "active": "Actief",
+    "archived": "Gearchiveerd",
+    "dismiss": "Archiveren",
+    "restore": "Herstellen",
+    "archivedToast": "Gearchiveerd",
+    "restored": "Hersteld",
+    "failed": "Actie mislukt. Probeer het opnieuw.",
+    "archivedFiles": "Gearchiveerde bestanden",
+    "archivedItems": "Gearchiveerde items",
+    "noArchived": "Nog niets gearchiveerd"
   }
 }

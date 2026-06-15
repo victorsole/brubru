@@ -1,0 +1,84 @@
+/* Shared archive UI — responsive across 375px → 2560px. */
+
+.archive-toggle {
+  display: inline-flex;
+  gap: 0.25rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 0.2rem;
+  max-width: 100%;
+}
+
+.archive-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  min-height: 36px; /* comfortable touch target on mobile */
+}
+
+.archive-toggle button.is-active {
+  background: #1e3a8a;
+  color: #fff;
+}
+
+.archive-toggle__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 0.72rem;
+  line-height: 1;
+}
+.archive-toggle button:not(.is-active) .archive-toggle__count {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* Per-item archive / restore button */
+.archive-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  min-height: 34px;
+  min-width: 34px;
+  justify-content: center;
+}
+.archive-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  color: #1e3a8a;
+  border-color: #cbd5e1;
+}
+.archive-btn--restore:hover:not(:disabled) {
+  color: #059669;
+  border-color: #a7f3d0;
+}
+.archive-btn:disabled { opacity: 0.5; cursor: default; }
+.archive-btn__label { font-size: 0.8rem; font-weight: 600; }
+
+/* On narrow screens, hide the optional label to keep rows tidy. */
+@media (max-width: 767px) {
+  .archive-btn__label { display: none; }
+  .archive-toggle button { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
+}

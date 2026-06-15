@@ -180,6 +180,32 @@ def _apply_pi(query, user: User):
     return query.filter(or_(*clauses)), True
 
 
+# Decentralised EU agency consultation bodies (mirrored from economy_items via
+# scripts/sync_agency_consultations.py). Code -> display name for the hub's body
+# filter + card label. Keep in sync with economy_bodies.
+AGENCY_BODY_NAME = {
+    "EIOPA": "European Insurance and Occupational Pensions Authority",
+    "BEREC": "Body of European Regulators for Electronic Communications",
+    "ACER": "Agency for the Cooperation of Energy Regulators",
+    "EASA": "European Union Aviation Safety Agency",
+    "EMA": "European Medicines Agency",
+    "AMLA": "Anti-Money Laundering Authority",
+    "ECHA": "European Chemicals Agency",
+    "SRB": "Single Resolution Board",
+    "ERA": "European Union Agency for Railways",
+    "ECB_SSM": "ECB Banking Supervision",
+}
+
+
+def _body_name(consultation: PublicConsultation) -> Optional[str]:
+    """Display name for the responsible body: agency name or Commission DG name."""
+    if consultation.source == "agency" and consultation.source_body:
+        return AGENCY_BODY_NAME.get(consultation.source_body, consultation.source_body)
+    if consultation.dg_responsible:
+        return get_dg_full_name(consultation.dg_responsible)
+    return None
+
+
 def consultation_to_list_item(
     consultation: PublicConsultation,
     is_tracked: bool = False
@@ -193,6 +219,7 @@ def consultation_to_list_item(
         days_remaining = max(0, delta.days)
         is_closing_soon = 0 < days_remaining <= 7
 
+    body_name = _body_name(consultation)
     return ConsultationListItem(
         id=consultation.id,
         initiative_id=consultation.initiative_id,
@@ -201,7 +228,9 @@ def consultation_to_list_item(
         consultation_type=ConsultationType(consultation.consultation_type.value),
         status=ConsultationStatus(consultation.status.value),
         dg_responsible=consultation.dg_responsible,
-        dg_name=get_dg_full_name(consultation.dg_responsible) if consultation.dg_responsible else None,
+        # dg_name carries the body label the card already renders, so agency rows
+        # show their agency name without any frontend card change.
+        dg_name=body_name,
         policy_areas=consultation.policy_areas or [],
         start_date=consultation.start_date,
         end_date=consultation.end_date,
@@ -211,6 +240,9 @@ def consultation_to_list_item(
         relevance_score=consultation.relevance_score,
         is_tracked=is_tracked,
         portal_url=consultation.portal_url,
+        source=consultation.source or "commission",
+        source_body=consultation.source_body,
+        body_name=body_name,
     )
 
 
@@ -227,7 +259,8 @@ def consultation_to_list_item(
 async def get_consultations(
     status: Optional[ConsultationStatus] = Query(None, description="Filter by status"),
     consultation_type: Optional[ConsultationType] = Query(None, description="Filter by type"),
-    dg: Optional[str] = Query(None, description="Filter by DG code"),
+    dg: Optional[str] = Query(None, description="Filter by responsible body code (Commission DG or EU agency)"),
+    source: Optional[str] = Query(None, description="Filter by source: 'commission' or 'agency'"),
     policy_area: Optional[str] = Query(None, description="Filter by policy area"),
     search: Optional[str] = Query(None, description="Search in title/description"),
     closing_soon: Optional[bool] = Query(None, description="Filter closing within 7 days"),
@@ -268,8 +301,19 @@ async def get_consultations(
             filters_applied['consultation_type'] = consultation_type.value
 
         if dg:
-            query = query.filter(PublicConsultation.dg_responsible == dg.upper())
-            filters_applied['dg'] = dg.upper()
+            code = dg.upper()
+            # The hub's body filter matches either a Commission DG or an agency.
+            query = query.filter(
+                or_(
+                    PublicConsultation.dg_responsible == code,
+                    PublicConsultation.source_body == code,
+                )
+            )
+            filters_applied['dg'] = code
+
+        if source:
+            query = query.filter(PublicConsultation.source == source.lower())
+            filters_applied['source'] = source.lower()
 
         if policy_area:
             query = query.filter(PublicConsultation.policy_areas.contains([policy_area]))
@@ -372,6 +416,17 @@ async def get_dgs(db: Session = Depends(get_db)) -> DGListResponse:
     for code in sorted({c for c in codes if c}):
         name = COMMISSION_DG_NAME.get(code) or get_dg_full_name(code) or code
         dgs.append(DGInfo(code=code, name=name, full_name=name))
+
+    # All-EU hub: append the decentralised agency bodies present in the data, so
+    # the single "Body" filter spans the Commission and every agency.
+    agency_codes = [
+        r[0] for r in db.query(PublicConsultation.source_body)
+        .filter(PublicConsultation.source_body.isnot(None)).distinct().all()
+    ]
+    for code in sorted({c for c in agency_codes if c}):
+        name = AGENCY_BODY_NAME.get(code, code)
+        dgs.append(DGInfo(code=code, name=name, full_name=name))
+
     return DGListResponse(dgs=dgs, total=len(dgs))
 
 
@@ -399,16 +454,20 @@ async def get_policy_areas() -> PolicyAreasListResponse:
     summary="Get tracked consultations"
 )
 async def get_tracked_consultations(
+    archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> TrackedConsultationsListResponse:
-    """Get user's tracked consultations."""
+    """Get user's tracked consultations. Active by default; pass archived=true for the archived view."""
     check_yellow_tier(current_user)
 
     try:
-        tracks = db.query(UserConsultationTrack).filter(
+        q = db.query(UserConsultationTrack).filter(
             UserConsultationTrack.user_id == current_user.id
-        ).all()
+        )
+        q = q.filter(UserConsultationTrack.archived_at.isnot(None)) if archived \
+            else q.filter(UserConsultationTrack.archived_at.is_(None))
+        tracks = q.all()
 
         items = []
         for track in tracks:
@@ -418,6 +477,8 @@ async def get_tracked_consultations(
 
             if consultation:
                 items.append(TrackedConsultationResponse(
+                    track_id=str(track.id),
+                    archived_at=track.archived_at,
                     consultation=consultation_to_list_item(consultation, is_tracked=True),
                     tracked_since=track.tracked_since,
                     notify_on_deadline=track.notify_on_deadline,
@@ -611,7 +672,7 @@ async def get_consultation(
             consultation_type=ConsultationType(consultation.consultation_type.value),
             status=ConsultationStatus(consultation.status.value),
             dg_responsible=consultation.dg_responsible,
-            dg_name=get_dg_full_name(consultation.dg_responsible) if consultation.dg_responsible else None,
+            dg_name=_body_name(consultation),
             policy_areas=consultation.policy_areas or [],
             start_date=consultation.start_date,
             end_date=consultation.end_date,
@@ -619,6 +680,9 @@ async def get_consultation(
             is_closing_soon=is_closing_soon,
             feedback_count=consultation.feedback_count,
             views_count=consultation.views_count,
+            source=consultation.source or "commission",
+            source_body=consultation.source_body,
+            body_name=_body_name(consultation),
             portal_url=consultation.portal_url,
             feedback_url=consultation.feedback_url,
             com_references=consultation.com_references or [],

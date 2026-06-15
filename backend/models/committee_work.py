@@ -211,6 +211,10 @@ class UserCommitteeWorkTrack(Base):
     # User notes
     notes = Column(Text)
 
+    # Archive (migration 041): NULL = active, non-null = archived.
+    archived_at = Column(DateTime(timezone=True), nullable=True)
+    archived_reason = Column(Text, nullable=True)
+
     # Relationships
     user = relationship("User")
     work_item = relationship("CommitteeWorkItem", back_populates="user_tracks")

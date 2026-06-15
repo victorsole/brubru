@@ -136,6 +136,10 @@ class UserTextAdoptedTrack(Base):
     tracked_since = Column(DateTime, default=datetime.now, nullable=False)
     notes = Column(Text)
 
+    # Archive (migration 041): NULL = active, non-null = archived.
+    archived_at = Column(DateTime(timezone=True), nullable=True)
+    archived_reason = Column(Text, nullable=True)
+
     # Relationships
     user = relationship("User")
     text_adopted = relationship("TextAdopted", back_populates="user_tracks")

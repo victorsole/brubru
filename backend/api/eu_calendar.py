@@ -23,7 +23,7 @@ Created: February 2026
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, text as sqltext
 from uuid import UUID
 from datetime import date, timedelta
 
@@ -79,6 +79,17 @@ def _require_yellow_tier(user: User):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="EU Calendar requires Yellow or Blue tier subscription.",
         )
+
+
+def _archived_event_ids(db: Session, user: User) -> list:
+    """Event ids the user has archived (user_calendar_event_archives join table)."""
+    if not user:
+        return []
+    rows = db.execute(
+        sqltext("SELECT event_id FROM user_calendar_event_archives WHERE user_id = :uid"),
+        {"uid": str(user.id)},
+    ).fetchall()
+    return [r[0] for r in rows]
 
 
 def _is_blue_tier(user: User) -> bool:
@@ -149,6 +160,7 @@ async def list_events(
     policy_area: Optional[str] = Query(None),
     organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
     my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
+    archived: bool = Query(False, description="False = hide events the user archived (default); True = only archived"),
     search: Optional[str] = Query(None),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
@@ -159,6 +171,14 @@ async def list_events(
     _require_yellow_tier(user)
 
     query = db.query(EUCalendarEvent)
+
+    # User-specific archive lens (shared calendar rows; archive is a join table).
+    arch_ids = _archived_event_ids(db, user)
+    if archived:
+        query = query.filter(EUCalendarEvent.id.in_(arch_ids)) if arch_ids \
+            else query.filter(sqltext("false"))
+    elif arch_ids:
+        query = query.filter(EUCalendarEvent.id.notin_(arch_ids))
 
     if my_interests:
         clause = _pi_clause(user)
@@ -226,6 +246,7 @@ async def get_events_in_range(
     event_type: Optional[str] = Query(None, description="Event type(s), comma-separated"),
     organiser: Optional[str] = Query(None, description="Organiser substring (e.g. political group / EPRS)"),
     my_interests: bool = Query(False, description="Restrict to events touching the user's Policy Interests"),
+    archived: bool = Query(False, description="False = hide events the user archived (default); True = only archived"),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -243,6 +264,14 @@ async def get_events_in_range(
         EUCalendarEvent.start_date >= date_from,
         EUCalendarEvent.start_date <= date_to,
     )
+
+    # User-specific archive lens.
+    arch_ids = _archived_event_ids(db, user)
+    if archived:
+        query = query.filter(EUCalendarEvent.id.in_(arch_ids)) if arch_ids \
+            else query.filter(sqltext("false"))
+    elif arch_ids:
+        query = query.filter(EUCalendarEvent.id.notin_(arch_ids))
 
     if my_interests:
         clause = _pi_clause(user)

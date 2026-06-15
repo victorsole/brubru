@@ -162,10 +162,10 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
       <MeubHeader
         icon={mdiCalendarCollapseHorizontal}
         accent="#f97316"
-        title={t('bubble.consultations.title', 'EC Public Consultations')}
+        title={t('bubble.consultations.title', 'EU Public Consultations')}
         subtitle={t(
           'bubble.consultations.subtitle',
-          'Participate in EU policy-making through the "Have Your Say" portal'
+          'Every open EU consultation in one place: the Commission’s Have Your Say and every EU agency'
         )}
       />
 
@@ -214,14 +214,14 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
         {/* DG dropdown */}
         <div className="ec-consultations-tab__filter-group">
           <span className="ec-consultations-tab__filter-label">
-            {t('bubble.consultations.dg', 'DG')}:
+            {t('bubble.consultations.body', 'Body')}:
           </span>
           <select
             className="ec-consultations-tab__dropdown"
             value={filters.dg || ''}
             onChange={(e) => handleDGFilter(e.target.value)}
           >
-            <option value="">{t('bubble.consultations.allDGs', 'All DGs')}</option>
+            <option value="">{t('bubble.consultations.allBodies', 'All bodies')}</option>
             {dgs.map((dg) => (
               <option key={dg.code} value={dg.code}>
                 {dg.code} - {dg.name}

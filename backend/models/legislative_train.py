@@ -295,6 +295,10 @@ class UserCarriageTrack(Base):
     # Shape: {stance, notes, evidence_urls[], priority_articles[], last_updated}
     user_position = Column(JSONB, nullable=True)
 
+    # Archive (migration 041): NULL = active, non-null = archived.
+    archived_at = Column(DateTime(timezone=True), nullable=True)
+    archived_reason = Column(Text, nullable=True)
+
     # Relationships
     user = relationship("User")
     carriage = relationship("LegislativeCarriage", back_populates="user_tracks")

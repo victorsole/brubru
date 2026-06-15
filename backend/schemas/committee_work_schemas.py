@@ -190,6 +190,8 @@ class UpdateTrackingRequest(BaseModel):
 
 class TrackedWorkItemResponse(BaseModel):
     """Response for a tracked work item."""
+    track_id: Optional[str] = None
+    archived_at: Optional[datetime] = None
     work_item: CommitteeWorkItemSummary
     tracked_since: datetime
     notify_on_status_change: bool

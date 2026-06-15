@@ -100,6 +100,11 @@ class ConsultationListItem(BaseModel):
     relevance_score: int = 50
     is_tracked: bool = False
     portal_url: Optional[str] = None
+    # All-EU hub (migration 142): 'commission' | 'agency'; body_name is the
+    # responsible body's display name (DG name or agency name).
+    source: str = "commission"
+    source_body: Optional[str] = None
+    body_name: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -123,6 +128,11 @@ class ConsultationDetailResponse(BaseModel):
     dg_responsible: Optional[str] = None
     dg_name: Optional[str] = None
     policy_areas: List[str] = []
+
+    # All-EU hub: 'commission' | 'agency'; body_name is the responsible body name.
+    source: str = "commission"
+    source_body: Optional[str] = None
+    body_name: Optional[str] = None
 
     start_date: Optional[date] = None
     end_date: Optional[date] = None
@@ -173,6 +183,8 @@ class ConsultationListResponse(BaseModel):
 
 class TrackedConsultationResponse(BaseModel):
     """Response for a tracked consultation."""
+    track_id: Optional[str] = None        # UserConsultationTrack.id — for archive/restore
+    archived_at: Optional[datetime] = None
     consultation: ConsultationListItem
     tracked_since: datetime
     notify_on_deadline: bool = True

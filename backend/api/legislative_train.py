@@ -598,17 +598,21 @@ async def sync_from_interests(
     description="Get all legislative files tracked by current user"
 )
 async def get_tracked_carriages(
+    archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Get user's tracked legislative files with tracking metadata"""
+    """Get user's tracked legislative files with tracking metadata. Active by default."""
     try:
         from datetime import datetime, timezone
 
-        # Get tracks with carriage data
-        tracks = db.query(UserCarriageTrack).filter(
+        # Get tracks with carriage data (archive lens: active by default).
+        q = db.query(UserCarriageTrack).filter(
             UserCarriageTrack.user_id == current_user.id
-        ).all()
+        )
+        q = q.filter(UserCarriageTrack.archived_at.isnot(None)) if archived \
+            else q.filter(UserCarriageTrack.archived_at.is_(None))
+        tracks = q.all()
 
         tracked_files = []
         for track in tracks:
@@ -635,7 +639,8 @@ async def get_tracked_carriages(
                     "tracked_since": track.tracked_since.isoformat() if track.tracked_since else None,
                     "last_updated": carriage.last_updated.isoformat() if carriage.last_updated else None,
                     "is_blocked": carriage.is_blocked,
-                    "days_in_current_status": days_in_status
+                    "days_in_current_status": days_in_status,
+                    "archived_at": track.archived_at.isoformat() if track.archived_at else None,
                 })
 
         return {"tracked_files": tracked_files}

@@ -48,6 +48,8 @@ import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { MeubHeader } from './meub_header';
+import { ArchiveToggle, ArchiveButton, type ArchiveView } from './archive_controls';
+import { archiveService } from '../../services/archive_service';
 import { toast, confirmDialog } from '../shared/feedback_host';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
@@ -168,6 +170,9 @@ export const MyTrackedFilesTab = () => {
 
   const hasLoadedRef = useRef(false);
   const [activeTab, setActiveTab] = useState<'legislative' | 'committee' | 'texts_adopted' | 'commission_docs'>('legislative');
+  // Archive lens (per sub-tab): 'active' (default) | 'archived'.
+  const [archiveView, setArchiveView] = useState<ArchiveView>('active');
+  const [archiveBusyId, setArchiveBusyId] = useState<string | null>(null);
   const [amendmentCounts, setAmendmentCounts] = useState<Record<string, number>>({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -361,6 +366,31 @@ export const MyTrackedFilesTab = () => {
       } catch {
         toast(t('myFilesTab.untrackFailed', 'Could not stop tracking. Please try again.'), 'error');
       }
+    }
+  };
+
+  // Switch the legislative list between active and archived tracks.
+  const handleLegislativeArchiveView = (v: ArchiveView) => {
+    setArchiveView(v);
+    fetchTrackedFiles(v === 'archived');
+  };
+
+  // Archive (Dismiss) or restore a tracked legislative file.
+  const handleArchiveFile = async (file: TrackedFile) => {
+    setArchiveBusyId(file.id);
+    try {
+      if (archiveView === 'archived') {
+        await archiveService.restore('carriage', file.id);
+        toast(t('archive.restored', 'Restored'), 'success');
+      } else {
+        await archiveService.archive('carriage', file.id);
+        toast(t('archive.archivedToast', 'Archived'), 'success');
+      }
+      await fetchTrackedFiles(archiveView === 'archived');
+    } catch {
+      toast(t('archive.failed', 'Action failed. Please try again.'), 'error');
+    } finally {
+      setArchiveBusyId(null);
     }
   };
 
@@ -990,10 +1020,13 @@ export const MyTrackedFilesTab = () => {
 
           {/* Tracked Files List */}
           <div className="my-tracked-files-tab__files">
-            <h3 className="my-tracked-files-tab__section-title">
-              <Icon path={mdiFileDocumentOutline} size={0.9} />
-              {t('myFilesTab.trackedFiles')}
-            </h3>
+            <div className="my-tracked-files-tab__files-head">
+              <h3 className="my-tracked-files-tab__section-title">
+                <Icon path={mdiFileDocumentOutline} size={0.9} />
+                {archiveView === 'archived' ? t('archive.archivedFiles', 'Archived files') : t('myFilesTab.trackedFiles')}
+              </h3>
+              <ArchiveToggle value={archiveView} onChange={handleLegislativeArchiveView} />
+            </div>
 
             {isLoadingTrackedFiles ? (
           <div className="my-tracked-files-tab__loading">
@@ -1055,6 +1088,9 @@ export const MyTrackedFilesTab = () => {
                       onMepAmendments={() => openMepAmendments(file.oeil_procedure_ref)}
                       getStatusColor={getStatusColor}
                       amendmentCount={amendmentCounts[file.carriage_id]}
+                      archived={archiveView === 'archived'}
+                      onArchive={() => handleArchiveFile(file)}
+                      archiveBusy={archiveBusyId === file.id}
                     />
                   ))}
                 </div>
@@ -1713,9 +1749,12 @@ interface TrackedFileCardProps {
   onMepAmendments?: () => void;
   getStatusColor: (status: string) => string;
   amendmentCount?: number;
+  archived?: boolean;
+  onArchive?: () => void;
+  archiveBusy?: boolean;
 }
 
-const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, onMepAmendments, getStatusColor, amendmentCount }: TrackedFileCardProps) => {
+const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, onMepAmendments, getStatusColor, amendmentCount, archived, onArchive, archiveBusy }: TrackedFileCardProps) => {
   const { t } = useTranslation();
   const oeilUrl = file.oeil_procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(file.oeil_procedure_ref)}`
@@ -1843,6 +1882,15 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, onMe
             <Icon path={mdiOpenInNew} size={0.7} />
             {t('myFilesTab.regDel')}
           </a>
+        )}
+        {onArchive && (
+          <ArchiveButton
+            archived={!!archived}
+            onClick={onArchive}
+            busy={archiveBusy}
+            variant="full"
+            className="tracked-file-card__action-btn"
+          />
         )}
         <button
           className="tracked-file-card__action-btn tracked-file-card__action-btn--danger"

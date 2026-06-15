@@ -3378,5 +3378,18 @@
     "grpUploaded": "Subidos y propios",
     "grpAi": "Generados por IA",
     "amendatorDraft": "Borrador de Amendator"
+  },
+  "archive": {
+    "viewLabel": "Vista de archivo",
+    "active": "Activos",
+    "archived": "Archivados",
+    "dismiss": "Archivar",
+    "restore": "Restaurar",
+    "archivedToast": "Archivado",
+    "restored": "Restaurado",
+    "failed": "La acción ha fallado. Inténtalo de nuevo.",
+    "archivedFiles": "Archivos archivados",
+    "archivedItems": "Elementos archivados",
+    "noArchived": "Aún no hay nada archivado"
   }
 }
