@@ -3649,14 +3649,24 @@ Respond ONLY with the JSON, no additional text."""
             import re
 
             ai_service = get_ai_service()
+            # use_context=False — the tender summary doesn't need the 19k-char
+            # Brubru EU KB; including it blew the Cerebras 60K TPM budget and
+            # made the endpoint hang >180s on prod. The brief endpoint already
+            # uses this flag. The tender_context above carries all the data
+            # the AI needs.
             response = await ai_service.chat(
                 user_message=prompt,
-                conversation_history=None,
-                user_id=str(current_user.id)
+                conversation_history=[],
+                user_id=str(current_user.id),
+                use_context=False,
+                stream=False,
+                is_pre_user=False,
             )
 
             # Extract JSON from response with robust parsing
-            response_text = response.get("response", "")
+            response_text = response.message if hasattr(response, "message") else (
+                response.get("response", "") if isinstance(response, dict) else str(response)
+            )
             summary = _extract_and_validate_summary_json(response_text)
 
             if summary:
