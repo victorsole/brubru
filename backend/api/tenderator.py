@@ -604,6 +604,39 @@ async def get_calendar_deadlines(
         logger.warning(f"calendar F&T tenders query failed: {exc}")
         db.rollback()
 
+    # --- F&T Portal events (info days, webinars, programme events) -----
+    # economy_items(body_code='ftportal', item_type='event'); document_date is
+    # the event start date so a "deadline >= now" filter == "upcoming events".
+    try:
+        rows = db.execute(
+            text(
+                "SELECT id, title, document_date, public_url "
+                "FROM economy_items "
+                "WHERE body_code = 'ftportal' AND item_type = 'event' "
+                "  AND document_date IS NOT NULL "
+                "  AND document_date <= :horizon "
+                + ("AND document_date >= :now " if only_open else "")
+                + "ORDER BY document_date ASC LIMIT 200"
+            ),
+            {"horizon": horizon, "now": now} if only_open else {"horizon": horizon},
+        ).fetchall()
+        for r in rows:
+            items.append({
+                "id": f"ft_events:{r.id}",
+                "source": "ft_events",
+                "ref": None,
+                "title": r.title,
+                "deadline": r.document_date.isoformat() if r.document_date else None,
+                "budget": None,
+                "currency": "EUR",
+                "country": None,
+                "programme": "Info day / event",
+                "source_url": r.public_url,
+            })
+    except Exception as exc:
+        logger.warning(f"calendar F&T events query failed: {exc}")
+        db.rollback()
+
     # Sort by deadline ascending for the frontend
     items.sort(key=lambda x: x.get("deadline") or "9999-12-31")
 
@@ -615,8 +648,93 @@ async def get_calendar_deadlines(
             "ted": sum(1 for i in items if i["source"] == "ted"),
             "ft_proposals": sum(1 for i in items if i["source"] == "ft_proposals"),
             "ft_tenders": sum(1 for i in items if i["source"] == "ft_tenders"),
+            "ft_events": sum(1 for i in items if i["source"] == "ft_events"),
         },
         "items": items,
+        "generated_at": now.isoformat(),
+    }
+
+
+# ============================================================================
+# F&T Portal activity sidebar (news + upcoming events)
+# ============================================================================
+
+@router.get(
+    "/portal-activity",
+    summary="EU Funding & Tenders Portal news + upcoming events",
+    description=(
+        "Returns the latest news items and the next upcoming events from the "
+        "EU Funding & Tenders Portal feeds (economy_items body_code='ftportal'). "
+        "Feeds the right-rail PortalActivityPanel on the Tenderator dashboard. "
+        "News is sorted by document_date desc; events are sorted by document_date "
+        "asc and restricted to upcoming when only_upcoming=true (default). "
+        "Blue tier only."
+    ),
+)
+async def get_portal_activity(
+    news_limit: int = Query(5, ge=1, le=25, description="Latest news items to return"),
+    events_limit: int = Query(5, ge=1, le=25, description="Upcoming events to return"),
+    only_upcoming: bool = Query(True, description="When true, exclude past events"),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    now = datetime.utcnow()
+    news_items: List[Dict[str, Any]] = []
+    event_items: List[Dict[str, Any]] = []
+
+    try:
+        rows = db.execute(
+            text(
+                "SELECT id, title, summary, document_date, public_url "
+                "FROM economy_items "
+                "WHERE body_code = 'ftportal' AND item_type = 'news' "
+                "ORDER BY document_date DESC NULLS LAST, id DESC LIMIT :lim"
+            ),
+            {"lim": news_limit},
+        ).fetchall()
+        for r in rows:
+            news_items.append({
+                "id": r.id,
+                "title": r.title,
+                "summary": (r.summary or "")[:200] if r.summary else None,
+                "document_date": r.document_date.isoformat() if r.document_date else None,
+                "source_url": r.public_url,
+            })
+    except Exception as exc:
+        logger.warning(f"portal-activity news query failed: {exc}")
+        db.rollback()
+
+    try:
+        params: Dict[str, Any] = {"lim": events_limit}
+        where = "body_code = 'ftportal' AND item_type = 'event'"
+        if only_upcoming:
+            where += " AND (document_date >= :now OR document_date IS NULL)"
+            params["now"] = now
+        rows = db.execute(
+            text(
+                f"SELECT id, title, summary, document_date, public_url "
+                f"FROM economy_items "
+                f"WHERE {where} "
+                f"ORDER BY document_date ASC NULLS LAST LIMIT :lim"
+            ),
+            params,
+        ).fetchall()
+        for r in rows:
+            event_items.append({
+                "id": r.id,
+                "title": r.title,
+                "summary": (r.summary or "")[:200] if r.summary else None,
+                "document_date": r.document_date.isoformat() if r.document_date else None,
+                "source_url": r.public_url,
+            })
+    except Exception as exc:
+        logger.warning(f"portal-activity events query failed: {exc}")
+        db.rollback()
+
+    return {
+        "news": news_items,
+        "events": event_items,
+        "only_upcoming": only_upcoming,
         "generated_at": now.isoformat(),
     }
 

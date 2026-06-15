@@ -19,6 +19,7 @@ import { UnifiedOpportunityFeed, type UnifiedOpportunity, type MatchSubSource } 
 import { OpportunityDrawer } from './opportunity_drawer';
 import { ProgrammesPanel } from './programmes_panel';
 import { BodiesPanel } from './bodies_panel';
+import { PortalActivityPanel } from './portal_activity_panel';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import './tenderator_dashboard.css';
 
@@ -552,6 +553,9 @@ export const TenderatorDashboard = ({
               setSource('ft_proposals');
             }}
           />
+
+          {/* F&T Portal activity: latest news + upcoming events (15 Jun 2026) */}
+          <PortalActivityPanel />
 
           {/* Step 5 (All EU): EU agencies running their own procurement */}
           <BodiesPanel

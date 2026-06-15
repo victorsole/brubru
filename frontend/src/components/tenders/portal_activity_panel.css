@@ -1,0 +1,103 @@
+/* portal_activity_panel.css */
+
+.portal-activity-panel {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.portal-activity-panel__header {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.portal-activity-panel__loading {
+  text-align: center;
+  padding: 0.5rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.portal-activity-panel__section + .portal-activity-panel__section {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.portal-activity-panel__subheader {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.portal-activity-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.portal-activity-panel__item {
+  margin: 0;
+}
+
+.portal-activity-panel__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 9px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+}
+
+.portal-activity-panel__link:hover {
+  background: rgba(6, 147, 227, 0.04);
+  border-color: rgba(6, 147, 227, 0.35);
+  transform: translateY(-1px);
+}
+
+.portal-activity-panel__date {
+  font-family: 'SF Mono', Menlo, Monaco, monospace;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary, #6b7280);
+  letter-spacing: 0.01em;
+}
+
+.portal-activity-panel__title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #111827;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 767px) {
+  .portal-activity-panel {
+    padding: 0.85rem;
+  }
+  .portal-activity-panel__title {
+    font-size: 0.8rem;
+  }
+}
