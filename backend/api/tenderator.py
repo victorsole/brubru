@@ -2059,6 +2059,35 @@ async def get_unified_feed(
             "detected_lang": getattr(t, "detected_lang", None),
         }
 
+    def _clean_coordinator(raw: Optional[str]) -> Optional[str]:
+        """ft_funded_projects.coordinator_name sometimes carries the raw
+        F&T Portal JSON ([{role,pic,legalName,postalAddress,...}, ...]) — about
+        26% of rows on 15 Jun 2026. Extract `legalName` of the coordinator
+        if present; otherwise return the value as-is unless it starts with
+        '[{' / '{' (in which case strip braces to avoid dumping JSON in cards)."""
+        if not raw:
+            return None
+        s = raw.strip()
+        if not (s.startswith("[{") or s.startswith("{")):
+            return raw
+        try:
+            import json as _json
+            obj = _json.loads(s)
+            if isinstance(obj, list):
+                coords = [x for x in obj if isinstance(x, dict) and x.get("role") == "coordinator"]
+                pool = coords if coords else [x for x in obj if isinstance(x, dict)]
+                if pool:
+                    name = pool[0].get("legalName") or pool[0].get("shortName")
+                    if name:
+                        return name
+            elif isinstance(obj, dict):
+                name = obj.get("legalName") or obj.get("shortName")
+                if name:
+                    return name
+        except (ValueError, TypeError):
+            pass
+        return None  # fall back to nothing rather than raw JSON
+
     def _serialise_project(p):
         return {
             "id": f"ft_projects:{p.id}",
@@ -2071,7 +2100,7 @@ async def get_unified_feed(
             "budget": float(p.eu_contribution) if p.eu_contribution else (float(p.total_cost) if p.total_cost else None),
             "currency": p.cost_currency or "EUR",
             "source_url": p.source_url,
-            "organisation": p.coordinator_name,
+            "organisation": _clean_coordinator(p.coordinator_name),
             "country": p.coordinator_country,
             "programme": p.framework_programme,
             "published_at": p.start_date.isoformat() if p.start_date else None,
@@ -3602,12 +3631,13 @@ Tender Information:
 
 Provide your response in this exact JSON format:
 {{
+    "en_title": "The TENDER TITLE translated to clear British English, exactly preserving meaning. If the title was already English, repeat it verbatim.",
     "one_liner": "A single sentence describing the opportunity, in English",
     "what": "What is being procured (2-3 sentences max), in English. Translate from the source language if needed.",
     "who": "Brief description of the contracting authority, in English",
     "value": "Contract value or budget information",
     "deadline": "Submission deadline with any important time notes",
-    "key_requirements": ["requirement 1", "requirement 2", "requirement 3"],
+    "key_requirements": ["First concrete requirement", "Second concrete requirement", "Third concrete requirement"],
     "award_focus": "What the evaluation criteria prioritise, in English"
 }}
 
@@ -3768,8 +3798,13 @@ def _build_fallback_summary(tender) -> dict:
         what_str = "See tender notice for details."
 
     one_liner = _fallback_translate(tender.title, src_lang) if tender.title else "EU public procurement opportunity"
+    # en_title: in the fallback we don't have a translation, so we either
+    # echo the original (when it's already in Brubru-6) or flag the source
+    # language for the UI to render a 'translated from X' badge.
+    en_title = tender.title if (not src_lang or src_lang in _BRUBRU_LANGS) else None
 
     return {
+        "en_title": en_title,
         "one_liner": one_liner,
         "what": what_str,
         "who": tender.official_name or "EU contracting authority",

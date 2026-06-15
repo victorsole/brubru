@@ -282,133 +282,155 @@ export const TenderatorDashboard = ({
         </div>
       </section>
 
-      {/* Source filter chips */}
-      <section className="tenderator-dashboard__chips" aria-label="Source filter">
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'matches' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--matches`}
-          onClick={() => setSource('matches')}
-          title="Tenders ranked for your profile"
-        >
-          <span className="mdi mdi-star-outline" aria-hidden="true" />
-          Your matches
-          {kpis && <span className="tenderator-dashboard__chip-count">{formatNumber(kpis.your_matches)}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'all' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => setSource('all')}
-        >
-          <span className="mdi mdi-view-grid-outline" aria-hidden="true" />
-          All sources
-          {bySource && (
-            <span className="tenderator-dashboard__chip-count">
-              {formatNumber((bySource.ted || 0) + (bySource.ft_proposals || 0) + (bySource.ft_tenders || 0) + (bySource.agency || 0))}
-            </span>
-          )}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'ted' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => setSource('ted')}
-        >
-          <span className="mdi mdi-gavel" aria-hidden="true" />
-          TED tenders
-          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ted)}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'ft_proposals' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => { setProgrammeCode(''); setSource('ft_proposals'); }}
-        >
-          <span className="mdi mdi-flask-outline" aria-hidden="true" />
-          Calls for proposals
-          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_proposals)}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'ft_tenders' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => setSource('ft_tenders')}
-        >
-          <span className="mdi mdi-file-document-outline" aria-hidden="true" />
-          Calls for tenders
-          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_tenders)}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'ft_projects' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => setSource('ft_projects')}
-        >
-          <span className="mdi mdi-trophy-outline" aria-hidden="true" />
-          Funded projects
-          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_projects)}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'agency' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => { setProgrammeCode(''); setAgencyBody(''); setSource('agency'); }}
-          title="Tenders, grants and calls for expression of interest published by EU agencies on their own sites — below TED threshold, not on the central F&T Portal."
-        >
-          <span className="mdi mdi-office-building-outline" aria-hidden="true" />
-          Agency procurement
-          {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.agency)}</span>}
-        </button>
-        {/* Step 6: dedicated startup/SME chip — pre-filters proposals to the EIC programme
-            (EIC Accelerator, Pathfinder, Transition, STEP, prizes). */}
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode === 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
-          onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); }}
-          title="EIC funding for startups + SMEs — Accelerator, Pathfinder, Transition, STEP, prizes."
-        >
-          <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
-          Startups &amp; SMEs (EIC)
-        </button>
-        {/* Framework contracts (Move 5, 15 Jun 2026): narrows source=agency
-            to item_type='framework' (EU-institution FWCs pulled from TED). */}
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${(frameworkOnly && source === 'agency') ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--framework`}
-          onClick={() => {
-            const next = !frameworkOnly;
-            setFrameworkOnly(next);
-            if (next) setSource('agency'); // FWCs only live in the agency feed
-            try { localStorage.setItem('tenderator_framework_only', next ? '1' : '0'); } catch (_) { /* ignore */ }
-          }}
-          title="EU-institution Framework Contracts (Lot 1 OCA / Lot 5 / Lot 8 etc.) from Commission, EEAS, EIB, EP, Council, ECB. Re-openings appear under each FWC's parent buyer."
-        >
-          <span className="mdi mdi-file-tree-outline" aria-hidden="true" />
-          Framework contracts
-        </button>
-        {/* Pipeline (Move 4, 15 Jun 2026): switch the main area from the
-            opportunity feed to the user's pipeline kanban — generic across
-            every source, modelled on a Project Manager's tracker. */}
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${source === 'pipeline' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--pipeline`}
-          onClick={() => setSource('pipeline')}
-          title="Track your bids through lead → drafting → submitted → awarded → executing → paid."
-        >
-          <span className="mdi mdi-view-column-outline" aria-hidden="true" />
-          My pipeline
-        </button>
-        {/* External-action lens (Move 1, 15 Jun 2026): narrows every source to
-            EU development-cooperation contracts (DG INTPA/NEAR/ECHO/FPI/EEAS +
-            NDICI/IPA III/HUMA programmes) and unlocks the FTS-awards source. */}
-        <button
-          type="button"
-          className={`tenderator-dashboard__chip ${(externalAction && source !== 'pipeline') ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--external`}
-          onClick={() => {
-            const next = !externalAction;
-            setExternalAction(next);
-            try { localStorage.setItem('tenderator_external_action', next ? '1' : '0'); } catch (_) { /* ignore */ }
-          }}
-          title="Narrow to EU external-action contracts (DG INTPA/NEAR/ECHO + NDICI/IPA III/Humanitarian Aid) + surface past FTS awards."
-        >
-          <span className="mdi mdi-handshake-outline" aria-hidden="true" />
-          Development cooperation
-        </button>
-      </section>
+      {/* Chip strip — three labelled groups (View / Sources / Lenses) so the
+          11 chips are no longer one undifferentiated row. Lenses + sources
+          collapse to the pipeline-only minimum when source='pipeline'. */}
+      <div className="tenderator-dashboard__chip-groups">
+
+        {/* GROUP A — Views (what you are looking at) */}
+        <section className="tenderator-dashboard__chip-group" aria-label="View">
+          <span className="tenderator-dashboard__chip-group-label">View</span>
+          <div className="tenderator-dashboard__chip-group-row">
+            <button
+              type="button"
+              className={`tenderator-dashboard__chip ${source === 'all' ? 'tenderator-dashboard__chip--active' : ''}`}
+              onClick={() => setSource('all')}
+              title="A mixed feed showing the most recent opportunity from every source."
+            >
+              <span className="mdi mdi-view-grid-outline" aria-hidden="true" />
+              All sources
+              {bySource && (
+                <span className="tenderator-dashboard__chip-count">
+                  {formatNumber((bySource.ted || 0) + (bySource.ft_proposals || 0) + (bySource.ft_tenders || 0) + (bySource.agency || 0))}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              className={`tenderator-dashboard__chip ${source === 'matches' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--matches`}
+              onClick={() => setSource('matches')}
+              title="Opportunities ranked for you, by your saved Tenderator profile (CPV codes, keywords, countries) blended with your MEUB Policy Interests."
+            >
+              <span className="mdi mdi-star-outline" aria-hidden="true" />
+              Your matches
+              {kpis && <span className="tenderator-dashboard__chip-count">{formatNumber(kpis.your_matches)}</span>}
+            </button>
+            <button
+              type="button"
+              className={`tenderator-dashboard__chip ${source === 'pipeline' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--pipeline`}
+              onClick={() => setSource('pipeline')}
+              title="Track your bids stage by stage: lead, drafting, submitted, awarded, executing, paid. Replaces the spreadsheet a Project Manager keeps; data stays linked to live Brubru opportunities."
+            >
+              <span className="mdi mdi-view-column-outline" aria-hidden="true" />
+              My pipeline
+            </button>
+          </div>
+        </section>
+
+        {/* GROUP B — Sources (which feed, when not in pipeline view) */}
+        {source !== 'pipeline' && (
+          <section className="tenderator-dashboard__chip-group" aria-label="Source">
+            <span className="tenderator-dashboard__chip-group-label">Source</span>
+            <div className="tenderator-dashboard__chip-group-row">
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'ted' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => setSource('ted')}
+                title="Tenders Electronic Daily: the EU's official journal of public-procurement notices above legal thresholds, covering every Member State."
+              >
+                <span className="mdi mdi-gavel" aria-hidden="true" />
+                TED tenders
+                {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ted)}</span>}
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode !== 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => { setProgrammeCode(''); setSource('ft_proposals'); }}
+                title="Funding & Tenders Portal: open competitive calls for grant proposals, across all EU programmes (Horizon Europe, Digital Europe, Erasmus+, CEF, LIFE, EU4Health, etc.)."
+              >
+                <span className="mdi mdi-flask-outline" aria-hidden="true" />
+                Calls for proposals
+                {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_proposals)}</span>}
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'ft_tenders' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => setSource('ft_tenders')}
+                title="Funding & Tenders Portal: open calls for service or supply contracts (procurement, not grants), published directly by the Commission and its executive agencies."
+              >
+                <span className="mdi mdi-file-document-outline" aria-hidden="true" />
+                Calls for tenders
+                {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_tenders)}</span>}
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'ft_projects' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => setSource('ft_projects')}
+                title="Funded projects: organisations that have already received EU grant money. Useful for finding consortium partners or analysing past winners."
+              >
+                <span className="mdi mdi-trophy-outline" aria-hidden="true" />
+                Funded projects
+                {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_projects)}</span>}
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'agency' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => { setProgrammeCode(''); setAgencyBody(''); setSource('agency'); }}
+                title="Tenders, grants and calls for expression of interest published by decentralised EU agencies (EFSA, EMA, ECHA, ENISA, etc.) on their own sites. Often below the TED publication threshold."
+              >
+                <span className="mdi mdi-office-building-outline" aria-hidden="true" />
+                Agency procurement
+                {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.agency)}</span>}
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* GROUP C — Lenses (refinements that compose with whichever source is active) */}
+        {source !== 'pipeline' && (
+          <section className="tenderator-dashboard__chip-group" aria-label="Lens">
+            <span className="tenderator-dashboard__chip-group-label">Lens</span>
+            <div className="tenderator-dashboard__chip-group-row">
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode === 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
+                onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); }}
+                title="European Innovation Council. Direct EU funding for high-risk innovation by startups and SMEs: the EIC Accelerator (€2.5M grant + up to €15M equity), Pathfinder (€3-4M for early-stage research), Transition (€2.5M for scale-up), STEP (strategic technologies), and prizes."
+              >
+                <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
+                Startups &amp; SMEs (EIC)
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${(frameworkOnly && source === 'agency') ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--framework`}
+                onClick={() => {
+                  const next = !frameworkOnly;
+                  setFrameworkOnly(next);
+                  if (next) setSource('agency');
+                  try { localStorage.setItem('tenderator_framework_only', next ? '1' : '0'); } catch (_) { /* ignore */ }
+                }}
+                title="Framework Contracts: parent contracts that the Commission, EIB, Parliament, Council, ECB and EEAS sign for repeated services (typically multi-year). Specific contract re-openings under each parent FWC then go through to the winners of the original lot, e.g. Lot 1 OCA, Lot 5, Lot 8."
+              >
+                <span className="mdi mdi-file-tree-outline" aria-hidden="true" />
+                Framework contracts
+              </button>
+              <button
+                type="button"
+                className={`tenderator-dashboard__chip ${externalAction ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--external`}
+                onClick={() => {
+                  const next = !externalAction;
+                  setExternalAction(next);
+                  try { localStorage.setItem('tenderator_external_action', next ? '1' : '0'); } catch (_) { /* ignore */ }
+                }}
+                title="EU external-action contracts: NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-accession), Humanitarian Aid. Buyers include DG INTPA, DG NEAR, DG ECHO, DG FPI, EEAS. Also surfaces past FTS aid awards as competitive intelligence."
+              >
+                <span className="mdi mdi-handshake-outline" aria-hidden="true" />
+                Development cooperation
+              </button>
+            </div>
+          </section>
+        )}
+      </div>
 
       {/* External-action sub-control: beneficiary-country narrowing. Visible
           only when the lens is on. Works in combination with chips + search. */}

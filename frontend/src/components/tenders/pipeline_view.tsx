@@ -41,15 +41,23 @@ interface PipelineResponse {
   statuses: PipelineStatus[];
 }
 
-const STATUS_META: Record<PipelineStatus, { label: string; color: string; icon: string }> = {
-  lead:       { label: 'Lead',       color: '#6b7280', icon: 'mdi-eye-outline' },
-  drafting:   { label: 'Drafting',   color: '#0693e3', icon: 'mdi-pencil-outline' },
-  submitted:  { label: 'Submitted',  color: '#d97706', icon: 'mdi-send-outline' },
-  awarded:    { label: 'Awarded',    color: '#059669', icon: 'mdi-trophy-outline' },
-  executing:  { label: 'Executing',  color: '#9b51e0', icon: 'mdi-rocket-launch-outline' },
-  paid:       { label: 'Paid',       color: '#15803d', icon: 'mdi-currency-eur' },
-  lost:       { label: 'Lost',       color: '#dc2626', icon: 'mdi-close-circle-outline' },
-  cancelled:  { label: 'Cancelled',  color: '#9ca3af', icon: 'mdi-cancel' },
+const STATUS_META: Record<PipelineStatus, { label: string; color: string; icon: string; hint: string }> = {
+  lead:       { label: 'Lead',       color: '#6b7280', icon: 'mdi-eye-outline',
+                hint: 'Newly discovered opportunity that you are monitoring. No commitment yet.' },
+  drafting:   { label: 'Drafting',   color: '#0693e3', icon: 'mdi-pencil-outline',
+                hint: 'You have decided to bid and are actively writing the proposal or assembling the consortium.' },
+  submitted:  { label: 'Submitted',  color: '#d97706', icon: 'mdi-send-outline',
+                hint: 'Bid is in. Waiting for the evaluation outcome.' },
+  awarded:    { label: 'Awarded',    color: '#059669', icon: 'mdi-trophy-outline',
+                hint: 'The contracting authority has notified you of a positive evaluation. Contract not yet signed.' },
+  executing:  { label: 'Executing',  color: '#9b51e0', icon: 'mdi-rocket-launch-outline',
+                hint: 'Contract signed. Implementation in progress.' },
+  paid:       { label: 'Paid',       color: '#15803d', icon: 'mdi-currency-eur',
+                hint: 'Contract completed and final invoice paid. Archive-ready.' },
+  lost:       { label: 'Lost',       color: '#dc2626', icon: 'mdi-close-circle-outline',
+                hint: 'Bid was not selected. Keep the row for win/lose analysis.' },
+  cancelled:  { label: 'Cancelled',  color: '#9ca3af', icon: 'mdi-cancel',
+                hint: 'Bid pulled before submission, or the call itself was cancelled by the buyer.' },
 };
 
 const formatBudget = (v: number | null): string => {
@@ -159,7 +167,7 @@ export const PipelineView = () => {
       <div className="pipeline-view pipeline-view--empty">
         <span className="mdi mdi-clipboard-text-outline" aria-hidden="true" />
         <h3>Your pipeline is empty</h3>
-        <p>Open any opportunity (TED, F&amp;T, agency, EU aid award) and click "Add to pipeline" in the drawer. Track each bid from lead to paid — the way a Project Manager does in their spreadsheet, but linked to live Brubru data.</p>
+        <p>Open any opportunity (TED, F&amp;T, agency, EU aid award) and click "Add to pipeline" in the drawer. Track each bid from lead to paid, the way a Project Manager does in their spreadsheet, but linked to live Brubru data.</p>
         <a className="pipeline-view__chat-link" href="/main?q=How%20do%20I%20use%20Brubru%20pipeline%20to%20track%20EU%20bids%3F" title="Ask Brubru">
           <span className="mdi mdi-message-outline" aria-hidden="true" />
           Ask Brubru how this works
@@ -198,10 +206,11 @@ export const PipelineView = () => {
               className={`pipeline-view__column pipeline-view__column--${s}`}
               style={{ borderTopColor: meta.color }}
             >
-              <header className="pipeline-view__column-head">
+              <header className="pipeline-view__column-head" title={meta.hint}>
                 <span className={`mdi ${meta.icon}`} aria-hidden="true" />
                 <span className="pipeline-view__column-label">{meta.label}</span>
                 <span className="pipeline-view__column-count">{items.length}</span>
+                <span className="mdi mdi-help-circle-outline pipeline-view__column-help" aria-hidden="true" />
               </header>
               <div className="pipeline-view__column-body">
                 {items.map((it) => {

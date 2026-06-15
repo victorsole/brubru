@@ -167,6 +167,73 @@
   border-radius: 14px;
 }
 
+/* Chip groups (View / Source / Lens) — three labelled rows, one per
+   purpose, instead of one undifferentiated wall of chips. Each group
+   has a small left-rail label so users see at a glance what each chip
+   does. On phones the label sits above the chips (stack). */
+.tenderator-dashboard__chip-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 0.7rem 0.85rem;
+}
+.tenderator-dashboard__chip-group {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0.7rem;
+  align-items: center;
+}
+.tenderator-dashboard__chip-group + .tenderator-dashboard__chip-group {
+  border-top: 1px dashed rgba(0, 0, 0, 0.07);
+  padding-top: 0.55rem;
+}
+.tenderator-dashboard__chip-group-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #6b7280);
+  text-align: right;
+  padding-right: 0.3rem;
+}
+.tenderator-dashboard__chip-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Tablet: tighten the label column */
+@media (max-width: 1024px) {
+  .tenderator-dashboard__chip-group {
+    grid-template-columns: 64px 1fr;
+    gap: 0.55rem;
+  }
+}
+
+/* Phone: label sits ABOVE its chip row, not beside it */
+@media (max-width: 767px) {
+  .tenderator-dashboard__chip-groups {
+    padding: 0.6rem 0.7rem;
+    gap: 0.45rem;
+  }
+  .tenderator-dashboard__chip-group {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    align-items: flex-start;
+  }
+  .tenderator-dashboard__chip-group-label {
+    text-align: left;
+    padding-right: 0;
+    padding-left: 0.1rem;
+  }
+  .tenderator-dashboard__chip-group + .tenderator-dashboard__chip-group {
+    padding-top: 0.45rem;
+  }
+}
+
 .tenderator-dashboard__chip {
   display: inline-flex;
   align-items: center;

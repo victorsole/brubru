@@ -63,13 +63,31 @@ interface UnifiedFeedProps {
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
-const SOURCE_LABELS: Record<UnifiedOpportunity['source'], { label: string; icon: string; colour: string }> = {
-  ted: { label: 'TED', icon: 'mdi-gavel', colour: 'tenderator-feed__source--ted' },
-  ft_proposals: { label: 'Call for proposals', icon: 'mdi-flask-outline', colour: 'tenderator-feed__source--proposals' },
-  ft_tenders: { label: 'Call for tenders', icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders' },
-  ft_projects: { label: 'Funded project', icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects' },
-  agency: { label: 'Agency', icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency' },
-  intl_coop: { label: 'EU aid award', icon: 'mdi-handshake-outline', colour: 'tenderator-feed__source--intl' },
+const SOURCE_LABELS: Record<UnifiedOpportunity['source'], { label: string; icon: string; colour: string; hint: string }> = {
+  ted: {
+    label: 'TED', icon: 'mdi-gavel', colour: 'tenderator-feed__source--ted',
+    hint: "Tenders Electronic Daily: the EU's official public-procurement journal. Member-state notices above legal thresholds (works ≥€5.5M, supplies/services ≥€143-215k, depending on the buyer)."
+  },
+  ft_proposals: {
+    label: 'Call for proposals', icon: 'mdi-flask-outline', colour: 'tenderator-feed__source--proposals',
+    hint: "Competitive grant call on the EU Funding & Tenders Portal. You submit a project proposal; the Commission scores it on excellence + impact + implementation. Used by Horizon Europe, Digital Europe, Erasmus+, etc."
+  },
+  ft_tenders: {
+    label: 'Call for tenders', icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders',
+    hint: "Procurement call on the EU Funding & Tenders Portal. The buyer is the Commission or an executive agency; the bid sells a defined service or supply at a stated price. Compliance-graded, not narrative-scored."
+  },
+  ft_projects: {
+    label: 'Funded project', icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects',
+    hint: "A consortium or organisation that has already received an EU grant. Use these rows to find consortium partners, study past winners' track record, and benchmark budgets."
+  },
+  agency: {
+    label: 'Agency', icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency',
+    hint: "Tenders, grants and calls for expression of interest published by decentralised EU agencies (EFSA, EMA, ECHA, ENISA, EUDA, EFCA, EU-OSHA, etc.) on their own websites. Typically below the TED publication threshold."
+  },
+  intl_coop: {
+    label: 'EU aid award', icon: 'mdi-handshake-outline', colour: 'tenderator-feed__source--intl',
+    hint: "Past EU external-action commitment from the Financial Transparency System. NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-accession), or Humanitarian Aid. Shows who has already won EU aid money where, useful as competitive intelligence."
+  },
 };
 
 const formatValue = (value: number | null, currency: string = 'EUR'): string | null => {
@@ -255,7 +273,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         personalised && (
           <div className="tenderator-feed__lens tenderator-feed__lens--empty">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
-            No policy interests set — <a href="/my-eu-bubble?tab=policy-interests">add some in My EU Bubble</a>
+            No policy interests set. <a href="/my-eu-bubble?tab=policy-interests">Add some in My EU Bubble</a>.
           </div>
         )
       )}
@@ -284,7 +302,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         {clientFilter && !clientFilterApplied && (
           <span className="tenderator-feed__client-filter-badge tenderator-feed__client-filter-badge--inactive">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
-            No pursuits filter configured — showing all
+            No pursuits filter configured. Showing all.
           </span>
         )}
       </div>
@@ -332,7 +350,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                   onClick={() => onSelectOpportunity?.(item)}
                 >
                   <div className="tenderator-feed__item-head">
-                    <span className={`tenderator-feed__source ${tag.colour}`}>
+                    <span className={`tenderator-feed__source ${tag.colour}`} title={tag.hint}>
                       <span className={`mdi ${tag.icon}`} aria-hidden="true" />
                       {tag.label}
                     </span>

@@ -53,6 +53,18 @@
 .pipeline-view__column-label {
   flex: 1;
 }
+.pipeline-view__column-help {
+  color: rgba(0, 0, 0, 0.25);
+  font-size: 0.85rem;
+  cursor: help;
+  transition: color 0.15s;
+}
+.pipeline-view__column-head:hover .pipeline-view__column-help {
+  color: rgba(6, 147, 227, 0.7);
+}
+.pipeline-view__column-head {
+  cursor: help;
+}
 .pipeline-view__column-count {
   background: rgba(0, 0, 0, 0.08);
   padding: 0.1rem 0.45rem;
