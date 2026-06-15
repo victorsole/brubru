@@ -3654,14 +3654,28 @@ Respond ONLY with the JSON, no additional text."""
             # made the endpoint hang >180s on prod. The brief endpoint already
             # uses this flag. The tender_context above carries all the data
             # the AI needs.
-            response = await ai_service.chat(
-                user_message=prompt,
-                conversation_history=[],
-                user_id=str(current_user.id),
-                use_context=False,
-                stream=False,
-                is_pre_user=False,
-            )
+            #
+            # Hard 25s budget. Railway's edge proxy 502s around 50-60s; the
+            # open-model chain can fall through Cerebras -> Gemini -> NVIDIA
+            # and breach that. On timeout we drop to the structured fallback,
+            # which is honest (carries the [Original in HR (open the source
+            # notice for the full text)] prefix for non-Brubru-6 sources).
+            import asyncio as _asyncio
+            try:
+                response = await _asyncio.wait_for(
+                    ai_service.chat(
+                        user_message=prompt,
+                        conversation_history=[],
+                        user_id=str(current_user.id),
+                        use_context=False,
+                        stream=False,
+                        is_pre_user=False,
+                    ),
+                    timeout=25.0,
+                )
+            except _asyncio.TimeoutError:
+                logger.warning("AI summary timed out after 25s, using fallback")
+                return _build_fallback_summary(tender)
 
             # Extract JSON from response with robust parsing
             response_text = response.message if hasattr(response, "message") else (
