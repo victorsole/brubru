@@ -60,6 +60,10 @@ PROGRAMMES: Dict[str, Dict[str, Any]] = {
         "prefixes": ("INNOVFUND", "INNOVFUND-", "InnovFund"),
         "queries": ["INNOVFUND-", "INNOVFUND-2023", "INNOVFUND-2024",
                     "INNOVFUND-2025", "INNOVFUND-2026", "InnovFund-2021", "InnovFund-2022"],
+        # Innovation Fund calls are also F&T-Portal calls — mirror them into
+        # ft_calls_for_proposals so the startup-funding feed (/api/v2/funding/
+        # startups, which reads that single table) can bundle them in.
+        "ft_calls": True,
     },
 }
 
@@ -134,11 +138,59 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 """
 
 
+# Mirror into ft_calls_for_proposals (the table /api/v2/funding/startups reads),
+# with framework_programme set to the real programme NAME so the feed can label
+# it. Keyed on topic_id (the table's unique key).
+UPSERT_FT_SQL = """
+INSERT INTO ft_calls_for_proposals
+    (topic_id, call_id, framework_programme, title, description, status,
+     type_of_action, deadline, deadline_secondary, indicative_budget,
+     budget_currency, source_url, documents_url, keywords, target_audience,
+     published_at, scraped_at, last_updated)
+VALUES
+    (%(topic_id)s, %(call_id)s, %(framework_programme)s, %(title)s, %(description)s,
+     %(status)s, %(type_of_action)s, %(deadline)s, %(deadline_secondary)s,
+     %(indicative_budget)s, %(budget_currency)s, %(source_url)s, %(documents_url)s,
+     %(keywords)s, %(target_audience)s, %(published_at)s, NOW(), NOW())
+ON CONFLICT (topic_id) DO UPDATE SET
+    framework_programme = EXCLUDED.framework_programme,
+    title = EXCLUDED.title,
+    description = EXCLUDED.description,
+    status = EXCLUDED.status,
+    type_of_action = EXCLUDED.type_of_action,
+    deadline = EXCLUDED.deadline,
+    keywords = EXCLUDED.keywords,
+    last_updated = NOW()
+"""
+
+
+def _ft_payload(name: str, row: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "topic_id": row["topic_id"],
+        "call_id": row.get("call_id"),
+        "framework_programme": name,
+        "title": row.get("title") or row["topic_id"],
+        "description": row.get("description"),
+        "status": row.get("status"),
+        "type_of_action": row.get("type_of_action"),
+        "deadline": row.get("deadline"),
+        "deadline_secondary": row.get("deadline_secondary"),
+        "indicative_budget": row.get("indicative_budget"),
+        "budget_currency": row.get("budget_currency") or "EUR",
+        "source_url": row.get("source_url") or f"{PORTAL_BASE}/{row['topic_id']}",
+        "documents_url": row.get("documents_url"),
+        "keywords": row.get("keywords") or [],
+        "target_audience": row.get("target_audience"),
+        "published_at": row.get("published_at"),
+    }
+
+
 def ingest_programme(cur, slug: str, *, apply: bool) -> int:
     cfg = PROGRAMMES[slug]
     name = cfg["name"]
     body_code = cfg["body_code"]
     prefixes = cfg["prefixes"]
+    also_ft = bool(cfg.get("ft_calls"))
 
     seen: Dict[str, Dict[str, Any]] = {}
     for qtext in cfg["queries"]:
@@ -178,7 +230,11 @@ def ingest_programme(cur, slug: str, *, apply: bool) -> int:
         print(f"  [{row.get('status'):11s}] {topic_id:34s} {(row.get('title') or '')[:48]}")
         if apply:
             cur.execute(UPSERT_SQL, payload)
+            if also_ft:
+                cur.execute(UPSERT_FT_SQL, _ft_payload(name, row))
             written += 1
+    if also_ft:
+        print(f"  [{slug}] also mirrored into ft_calls_for_proposals (framework_programme='{name}')")
     return written
 
 

@@ -372,7 +372,7 @@
       "source": "EU Funding & Tenders Portal — SEDIA search API, filtered by topic-id prefix (JUST-*, INNOVFUND-*)",
       "script": "scripts/ingest_ft_programme_calls.py --all --apply",
       "tier": "daily",
-      "notes": "Per-programme grant calls ingested to economy_items (item_type='grant'); back /api/v2/funding/justice + /innovation-fund and appear in /all. Wired into cron_sync_daily; idempotent upsert."
+      "notes": "Per-programme grant calls ingested to economy_items (item_type='grant'); back /api/v2/funding/justice + /innovation-fund and appear in /all. Innovation Fund calls are ALSO mirrored into ft_calls_for_proposals (framework_programme='Innovation Fund') so the startup-funding bundle /api/v2/funding/startups picks them up. Wired into cron_sync_daily; idempotent upsert."
     },
     {
       "path_prefix": "/api/v1/specialised/a2m",
