@@ -382,6 +382,13 @@
       "notes": "Portal news (~715) + events (~198) ingested to economy_items (body_code='ftportal', item_type='news'/'event'). Wired into cron_sync_daily; idempotent upsert on (body_code,item_type,public_url). GOTCHA: each SEDIA multipart part needs filename=\"blob\" or the API 500s."
     },
     {
+      "path_prefix": "/api/v2/funding/ft-funded-projects (non-research subset)",
+      "source": "EU F&T Portal projects-results (SEDIA_NONH2020_PROD index) — browser-driven, year-sliced (API caps pagination at offset 10k)",
+      "script": "scripts/ingest_ft_projects_nonh2020.py --apply --year-from 2014 --year-to 2027",
+      "tier": "manual",
+      "notes": "~28k NON-research funded projects (CEF/LIFE/Erasmus/Creative Europe/JUST/AMIF/ISF/external action) into ft_funded_projects, framework_programme=programme abbrev. LOCAL ONLY — needs Playwright/Chromium (not on Railway). The index soft-blocks raw HTTP (500 'Send timeout'); only an in-browser fetch() works. External-action subset is just 36 (F&T projects DB barely holds aid). Re-run periodically to top up the current year."
+    },
+    {
       "path_prefix": "/api/v2/funding/international-cooperation",
       "source": "EU Financial Transparency System (FTS) — economy_items body_code='commission' item_type='funding_recipient' (already synced)",
       "script": "(no dedicated script — reads the existing FTS dataset; filtered to NDICI/IPA III/Humanitarian programmes)",
