@@ -3764,7 +3764,7 @@ def _fallback_translate(text: str, src_lang: Optional[str]) -> str:
         return ""
     if not src_lang or src_lang in _BRUBRU_LANGS:
         return text
-    return f"[Original in {src_lang.upper()} — open the source notice for the full text.] {text[:240]}..."
+    return f"[Original in {src_lang.upper()} (open the source notice for the full text).] {text[:240]}..."
 
 
 def _build_fallback_summary(tender) -> dict:

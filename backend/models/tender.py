@@ -89,6 +89,9 @@ class Tender(Base):
     xml_content = Column(Text)  # Full eForms XML
     raw_json = Column(JSONB)  # Parsed JSON from XML
 
+    # Translation pipeline (M2M100 / langdetect — see backfill_tenderator_translations.py)
+    detected_lang = Column(String(8))  # ISO-639-1 source language for translation overlay
+
     # AI enrichment
     sme_suitability_score = Column(Float)  # 0-100 score
     sme_analysis = Column(JSONB)  # AI analysis for SMEs
