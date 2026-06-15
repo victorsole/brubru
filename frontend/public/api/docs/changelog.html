@@ -156,6 +156,16 @@ Every change to <code>/api/v2/*</code> &mdash; endpoint additions, response shap
 
 <h2>2026</h2>
 
+<h3>15 June 2026 &mdash; Funding &amp; Tenders folder expanded to 81 endpoints (488 total)</h3>
+<p>A large build-out of the funding domain &mdash; new programmes, the EU external-action award layer, the portal's news/events feeds, and a 28k-project expansion of funded-projects coverage.</p>
+<ul>
+<li><strong>Per-programme grant endpoints:</strong> <code>/api/v2/funding/justice</code> (Justice Programme) and <code>/api/v2/funding/innovation-fund</code> (Innovation Fund) &mdash; F&amp;T Portal grant calls, each list + detail.</li>
+<li><strong>Startup &amp; SME bundle, enriched:</strong> <code>/api/v2/funding/startups</code> now bundles EIC + COSME/EISMEA + Innovation Fund + startup-titled calls (128 items), each tagged with a derived <code>stage</code> (idea / seed / growth / scale-up / sme) and <code>instrument</code> (grant / blended / equity / prize), plus a detail endpoint.</li>
+<li><strong>EU international cooperation (awards):</strong> <code>/api/v2/funding/international-cooperation</code> &mdash; 15,512 external-action commitments from the Financial Transparency System (NDICI-Global Europe, IPA III, Humanitarian Aid), parsed into <code>beneficiary</code>, <code>country</code>, <code>amount_eur</code>, <code>funding_type</code>, <code>programme</code>, <code>dg</code>, <code>contract_ref</code> and <code>year</code>. Filter by <code>programme</code> (ndici / ipa3 / humanitarian), <code>funding_type</code>, <code>country</code>, <code>year</code>.</li>
+<li><strong>F&amp;T Portal feeds:</strong> <code>/api/v2/funding/ft-news</code> (715 portal announcements) and <code>/api/v2/funding/ft-events</code> (198 info days / webinars; order=recent surfaces upcoming first).</li>
+<li><strong>Funded projects, all programmes:</strong> <code>/api/v2/funding/ft-funded-projects</code> now spans the non-research programmes too &mdash; +28,186 projects (Erasmus+, Creative Europe, CERV, Single Market, CEF, LIFE, COSME, Digital Europe, EU4Health, Justice, AMIF, ISF, EMFF) for <strong>109k projects</strong> total. Filter by <code>framework_programme</code>.</li>
+</ul>
+
 <h3>14 June 2026 &mdash; API v2 is the only public surface</h3>
 <p>The API has been reorganised into <strong>34 institution folders across 437 endpoints</strong> &mdash; one folder per EU institution or body. The earlier flat surface has been retired from the published OpenAPI spec; all documented paths now live under <code>/api/v2/</code>. The full live reference is at <a href="/api/docs/reference.html">/api/docs/reference.html</a>.</p>
 <ul>
