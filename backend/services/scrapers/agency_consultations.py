@@ -150,3 +150,119 @@ def ingest_echa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
                           source_kind="echa_consultations")
     return list(out.values())
 
+
+# --------------------------------------------------------------------------- #
+# ACER — the public-consultations *calendar* lists every consultation (current +
+# archive) as a document-link card: <a href="/public-consultation/...">title</a>
+# followed by an "Opening/Closing: N days" relative-timing line.
+# --------------------------------------------------------------------------- #
+_ACER = "https://www.acer.europa.eu"
+_ACER_ROW = re.compile(
+    r'<div class="document-link">\s*<a[^>]*href="(/public-consultation/[^"#?]+)"[^>]*>(.*?)</a>', re.S)
+
+
+def ingest_acer_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    html = _fetch(_ACER + "/documents/public-consultations/calendar")
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for m in _ACER_ROW.finditer(html):
+        href, raw = m.group(1), m.group(2)
+        title = _txt(raw)
+        url = href if href.startswith("http") else _ACER + href
+        if url in out or len(title) < 8:
+            continue
+        sm = re.search(r'(Opening|Closing|Closed)[^<]{0,30}', html[m.end():m.end() + 220])
+        status = _txt(sm.group(0)) if sm else "Open"
+        out[url] = _build(body_code="acer", title=title, url=url, status=status,
+                          deadline=None, start=None, now=now, source_kind="acer_consultations")
+    return list(out.values())
+
+
+# --------------------------------------------------------------------------- #
+# SRB — the "consultations and requests to industry" page mixes navigation with
+# real consultation entries (anchor title contains "consultation"). Keep the
+# substantive ones, drop the section-nav repeats.
+# --------------------------------------------------------------------------- #
+_SRB = "https://www.srb.europa.eu"
+_SRB_NAV = {"engagement and consultations", "public consultations",
+            "upcoming consultations and requests to industry",
+            "consultations and requests to industry"}
+
+
+def ingest_srb_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    html = _fetch(_SRB + "/en/content/consultations-and-requests-industry")
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for href, raw in re.findall(r'<a[^>]*href="([^"#?]+)"[^>]*>(.*?)</a>', html, re.S):
+        title = _txt(raw)
+        low = title.lower()
+        if "consultation" not in low or len(title) < 18 or low in _SRB_NAV:
+            continue
+        url = href if href.startswith("http") else _SRB + href
+        if url in out:
+            continue
+        out[url] = _build(body_code="srb", title=title, url=url, status="",
+                          deadline=None, start=None, now=now, source_kind="srb_consultations")
+    return list(out.values())
+
+
+# --------------------------------------------------------------------------- #
+# ECB Banking Supervision — the index page shows the ongoing consultation(s),
+# each a section heading followed by a "Consultation period: X to Y" info box.
+# --------------------------------------------------------------------------- #
+_ECB_SSM = "https://www.bankingsupervision.europa.eu"
+
+
+def ingest_ecb_ssm_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    url_idx = _ECB_SSM + "/framework/legal-framework/public-consultations/html/index.en.html"
+    html = _fetch(url_idx)
+    now = datetime.now(timezone.utc)
+    out: dict[str, Item] = {}
+    for pm in re.finditer(r"Consultation period:\s*([^<]+)", html):
+        before = html[max(0, pm.start() - 1800):pm.start()]
+        heads = re.findall(r"<h[23][^>]*>(.*?)</h[23]>", before, re.S)
+        heads = [_txt(h) for h in heads if len(_txt(h)) > 12]
+        title = heads[-1] if heads else "ECB Banking Supervision consultation"
+        period = _txt(pm.group(1))
+        key = title + period
+        if key in out:
+            continue
+        out[key] = _build(body_code="ecb_ssm", title=title, url=url_idx, status=f"Open · {period}",
+                          deadline=None, start=None, now=now, source_kind="ecbssm_consult")
+    return list(out.values())
+
+
+# --------------------------------------------------------------------------- #
+# EASA + ERA — JS-rendered document-library / listing SPAs. The consultation
+# items only appear after the page hydrates, so reuse the Playwright walker
+# (eu_agency_listing.ingest_browser). One thin wrapper each.
+# --------------------------------------------------------------------------- #
+_EASA_NAV = {"product certification consultations and publications",
+             "design organisation consultations", "public consultations",
+             "market consultations", "focused consultations"}
+
+
+def ingest_easa_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    from services.scrapers.eu_agency_listing import ingest_browser
+    base = "https://www.easa.europa.eu"
+    items: dict[str, Item] = {}
+    for path in ("/en/document-library/product-certification-consultations",
+                 "/en/document-library/design-organisation-consultations"):
+        for it in ingest_browser(base, path, "easa", "consultation", path + "/",
+                                 "easa_consults", min_title=20, max_pages=8):
+            if it.title.lower().strip() in _EASA_NAV:
+                continue
+            items[it.public_url] = it
+    return list(items.values())
+
+
+def ingest_era_consultations(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    from services.scrapers.eu_agency_listing import ingest_browser
+    items: dict[str, Item] = {}
+    for it in ingest_browser("https://www.era.europa.eu",
+                             "/library/documents-regulations/consultations_en",
+                             "era", "consultation", "/consultation",
+                             "era_consults", min_title=20, max_pages=10):
+        items[it.public_url] = it
+    return list(items.values())
+

@@ -516,10 +516,10 @@
     },
     {
       "path_prefix": "/api/v2/consultations",
-      "source": "Decentralised EU agency consultation pages (EMA, BEREC, EIOPA, AMLA, ECHA)",
+      "source": "Decentralised EU agency consultation pages (EIOPA, BEREC, ACER, EMA, AMLA, ECHA, SRB, ECB-SSM via requests; EASA + ERA via Playwright)",
       "script": "scripts/sync_economy.py --body <body> --type all (via POST /api/cron/sync/economy)",
       "tier": "economy_daily",
-      "notes": "Central EC Have Your Say consultations stay at /api/v1/consultations (daily tier)."
+      "notes": "10 bodies / ~666 consultations. ACER/SRB/ECB-SSM refresh automatically in the daily economy batches (already-listed bodies). EASA + ERA are JS-rendered (Playwright) so they are LOCAL/manual only (Railway has no Chromium): run `python3.12 scripts/sync_economy.py --body easa --type consultation --no-bodies` (and era). Central EC Have Your Say consultations stay at /api/v1/consultations. EP-SANT skipped — its page hosts commissioned studies, not feedback consultations."
     },
     {
       "path_prefix": "/api/v2",

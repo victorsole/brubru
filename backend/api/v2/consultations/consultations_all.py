@@ -24,7 +24,7 @@ from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _ORDER_S
 router = APIRouter()
 
 _DESC = """**What it does**
-One feed of every decentralised EU agency public consultation — the consultations that EU agencies (ECHA, EMA, BEREC, EIOPA, EASA, ERA, ...) run on their own sites and that do **not** appear on the Commission's "Have Your Say" platform.
+One feed of every decentralised EU agency public consultation — the consultations that EU agencies (EIOPA, BEREC, ACER, EASA, EMA, AMLA, ECHA, SRB, ERA, ECB Banking Supervision) run on their own sites and that do **not** appear on the Commission's "Have Your Say" platform.
 
 **When to use it**
 "Show me every open EU consultation that matches my interest", regardless of which agency runs it. Filter by `body` (agency code), `status` (open/closed, matched in the summary), and closing date (`since`/`until`).
