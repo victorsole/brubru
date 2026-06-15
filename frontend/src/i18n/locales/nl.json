@@ -982,7 +982,7 @@
     "eyebrow": "Voor ontwikkelaars, RegTech en AI-agenten",
     "titlePre": "De EU,",
     "titleAccent": "gestructureerd",
-    "lede": "Brubru is een verticale EU-dataleverancier. Onze REST API biedt realtime toegang tot ruim 28.500 aangenomen wetten, ruim 1.200 wetgevingsprocedures, live feedback van publieke consultaties, agenda's van commissarissen en de juridische-tekst-intelligentie die de Brubru chatbot en Amendator aandrijft. Brubru is de eerste gebruiker van haar eigen API.",
+    "lede": "Brubru is een verticale EU-dataprovider. Onze REST API geeft je real-time toegang tot meer dan 28.500 aangenomen wetten, meer dan 1.200 wetgevingsprocedures, live consultatiefeedback, agenda's van commissarissen, AI-voorspellingen voor wetgevingsresultaten, de uniforme institutionele EU-kalender, het Transparantieregister en de juridische-tekstintelligentielaag die de chatbot en Amendator van Brubru aanstuurt. Brubru zelf is de eerste gebruiker van zijn eigen API.",
     "cta": {
       "reference": "API-referentie",
       "trial": "Start een Professional proef",
