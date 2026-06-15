@@ -1269,6 +1269,8 @@ async def get_unified_feed(
     lang: Optional[str] = Query(None, description="Render titles + descriptions in this Brubru language (en/es/ca/fr/it/nl). Items whose detected_lang is outside the 6 get served from <table>_translations when available; English-source items pass through."),
     client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
     personalised: bool = Query(True, description="When true (default), narrow every source by the user's MEUB Policy Interests (keywords from policy_taxonomy + CPV prefixes for TED). Set false to see the unfiltered feed. No-op when the user has no interests set."),
+    external_action: bool = Query(False, description="When true, narrow every source to EU external-action contracts: TED notices from DG INTPA / NEAR / ECHO / FPI / EEAS or CPV 71/73/79/80; F&T calls/projects under NDICI / IPA / Humanitarian / Global Europe programmes. Combines with personalised + pursuits via AND. Off by default."),
+    beneficiary_country: Optional[str] = Query(None, description="External-action only: substring match on title + description / objective to narrow to opportunities implementing in a given country (e.g. 'Ukraine', 'Morocco', 'Türkiye'). Independent of external_action; can be used alone."),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
     current_user: User = Depends(require_blue_tier),
@@ -1400,7 +1402,105 @@ async def get_unified_feed(
         ored += [FtFundedProject.objective.ilike(f"%{kw}%") for kw in pi_keywords]
         return qry.filter(or_(*ored))
 
-    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects", "agency"}
+    # === External-action lens (Move 1, 15 Jun 2026) ===
+    # Narrows TED + F&T to EU external-action contracts: notices from DG INTPA /
+    # NEAR / ECHO / FPI / EEAS or CPV 71/73/79/80 (architectural-engineering /
+    # research / business-management consultancy / education-training divisions
+    # that dominate development-cooperation services); F&T programmes containing
+    # NDICI / IPA / HUMA / Global Europe / Erasmus Mundus. The beneficiary_country
+    # facet is a free-text substring over title + description / objective.
+    _EXT_DG_PATTERNS = (
+        "INTPA", "NEAR", "ECHO", "FPI", "EEAS",
+        "International Partnerships", "Neighbourhood",
+        "Humanitarian", "DEVCO", "External Action",
+        "Commission européenne", "European Commission",
+    )
+    # Exact framework_programme matches (no substring — 'IPA' / 'HUMA' / 'ECHO'
+    # as substrings catch unrelated titles like "OCCUPATIONAL" or "HUMAN-CENTRED
+    # AI". Today only NDICI is populated in ft_funded_projects; the other codes
+    # are listed so the filter widens automatically when those programmes ingest.)
+    _EXT_FT_PROGRAMMES = (
+        "NDICI", "IPA III", "IPA II", "IPA",
+        "HUMA", "Humanitarian Aid",
+        "Global Europe", "NDICI - Global Europe",
+        "Erasmus Mundus", "ERASMUS-MUNDUS",
+    )
+
+    def _apply_external_filter_ted(qry):
+        """TED narrowing for the external-action lens: ONLY buyer-name match
+        on DG INTPA / NEAR / ECHO / FPI / EEAS or the umbrella 'European
+        Commission' / 'Commission européenne'. CPV alone proved too noisy
+        (catches Dutch municipalities under CPV 80 training). Today our TED
+        ingest holds member-state notices only, so the strict filter returns
+        zero rows; the moment EU-institution TED notices are ingested it
+        will start populating without code changes."""
+        if not external_action:
+            return qry
+        ored = [Tender.official_name.ilike(f"%{pat}%") for pat in _EXT_DG_PATTERNS]
+        return qry.filter(or_(*ored)) if ored else qry
+
+    def _apply_external_filter_proposals(qry):
+        if not external_action:
+            return qry
+        # framework_programme is structured; exact match avoids substring false-pos.
+        return qry.filter(FtCallForProposals.framework_programme.in_(_EXT_FT_PROGRAMMES))
+
+    def _apply_external_filter_tenders(qry):
+        if not external_action:
+            return qry
+        # ft_calls_for_tenders has no framework_programme column; we fall back
+        # to title-substring on the full programme names (no abbreviations).
+        full_names = ("NDICI", "Global Europe", "Pre-Accession Assistance",
+                      "Humanitarian Aid", "Erasmus Mundus")
+        ored = [FtCallForTenders.title.ilike(f"%{n}%") for n in full_names]
+        ored += [FtCallForTenders.description.ilike(f"%{n}%") for n in full_names]
+        return qry.filter(or_(*ored))
+
+    def _apply_external_filter_projects(qry):
+        if not external_action:
+            return qry
+        return qry.filter(FtFundedProject.framework_programme.in_(_EXT_FT_PROGRAMMES))
+
+    # Beneficiary country: free-text substring over title + description/objective.
+    def _apply_country_filter_ted(qry):
+        if not beneficiary_country:
+            return qry
+        c = f"%{beneficiary_country}%"
+        return qry.filter(or_(
+            Tender.title.ilike(c),
+            Tender.description.ilike(c),
+            Tender.buyer_country.ilike(beneficiary_country),
+        ))
+
+    def _apply_country_filter_proposals(qry):
+        if not beneficiary_country:
+            return qry
+        c = f"%{beneficiary_country}%"
+        return qry.filter(or_(
+            FtCallForProposals.title.ilike(c),
+            FtCallForProposals.description.ilike(c),
+        ))
+
+    def _apply_country_filter_tenders(qry):
+        if not beneficiary_country:
+            return qry
+        c = f"%{beneficiary_country}%"
+        return qry.filter(or_(
+            FtCallForTenders.title.ilike(c),
+            FtCallForTenders.description.ilike(c),
+        ))
+
+    def _apply_country_filter_projects(qry):
+        if not beneficiary_country:
+            return qry
+        c = f"%{beneficiary_country}%"
+        return qry.filter(or_(
+            FtFundedProject.title.ilike(c),
+            FtFundedProject.objective.ilike(c),
+            FtFundedProject.coordinator_country.ilike(beneficiary_country),
+        ))
+
+    valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects", "agency", "intl_coop"}
     if source not in valid_sources:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -1409,7 +1509,7 @@ async def get_unified_feed(
 
     offset = (page - 1) * limit
     items: List[dict] = []
-    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0, "agency": 0}
+    totals = {"ted": 0, "ft_proposals": 0, "ft_tenders": 0, "ft_projects": 0, "agency": 0, "intl_coop": 0}
     now = datetime.utcnow()
 
     # Translation overlay (MEUB-news pattern, migration 133).
@@ -1561,6 +1661,8 @@ async def get_unified_feed(
             qry = qry.filter(Tender.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_ted(qry)
         qry = _apply_pi_filter_ted(qry)
+        qry = _apply_external_filter_ted(qry)
+        qry = _apply_country_filter_ted(qry)
         return qry
 
     def _proposals_query():
@@ -1579,6 +1681,8 @@ async def get_unified_feed(
             qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_proposals(qry)
         qry = _apply_pi_filter_proposals(qry)
+        qry = _apply_external_filter_proposals(qry)
+        qry = _apply_country_filter_proposals(qry)
         return qry
 
     def _tenders_query():
@@ -1595,6 +1699,8 @@ async def get_unified_feed(
             qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_tenders(qry)
         qry = _apply_pi_filter_tenders(qry)
+        qry = _apply_external_filter_tenders(qry)
+        qry = _apply_country_filter_tenders(qry)
         return qry
 
     def _projects_query():
@@ -1603,6 +1709,8 @@ async def get_unified_feed(
             qry = qry.filter(FtFundedProject.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_projects(qry)
         qry = _apply_pi_filter_projects(qry)
+        qry = _apply_external_filter_projects(qry)
+        qry = _apply_country_filter_projects(qry)
         return qry
 
     # --- Agency (decentralised EU bodies' own procurement) -------------------
@@ -1647,6 +1755,9 @@ async def get_unified_feed(
                 kw_ors.append(f"(title ILIKE :{pn} OR summary ILIKE :{pn})")
                 params[pn] = f"%{kw}%"
             where.append("(" + " OR ".join(kw_ors) + ")")
+        if beneficiary_country:
+            where.append("(title ILIKE :bcountry OR summary ILIKE :bcountry)")
+            params["bcountry"] = f"%{beneficiary_country}%"
         return " AND ".join(where), params
 
     def _agency_count() -> int:
@@ -1678,6 +1789,75 @@ async def get_unified_feed(
             ).fetchall()
         except Exception as exc:
             logger.warning("agency rows failed: %s", exc)
+            db.rollback()
+            return []
+
+    # --- intl_coop (EU external-action FTS awards) ---------------------------
+    # Reads economy_items(body_code='commission', item_type='funding_recipient')
+    # — same store the public /api/v2/funding/international-cooperation
+    # endpoint serves. Surfaces the AWARDS side of NDICI / IPA III / Humanitarian
+    # Aid so a Tenderator user can see WHO won EU aid money WHERE under WHICH
+    # instrument, alongside the bids feed.
+    def _intl_coop_where_params() -> Tuple[str, Dict[str, Any]]:
+        where = [
+            "body_code = 'commission'",
+            "item_type = 'funding_recipient'",
+        ]
+        params: Dict[str, Any] = {}
+        # Only one of the three external-action programmes per row; we always
+        # include rows whose body_txt mentions any of them.
+        prog_clauses = []
+        for i, frag in enumerate((
+            "Neighbourhood, Development and International",
+            "Pre-Accession Assistance (IPA III)",
+            "Humanitarian Aid (HUMA)",
+        )):
+            prog_clauses.append(f"body_txt ILIKE :prog{i}")
+            params[f"prog{i}"] = f"%{frag}%"
+        where.append("(" + " OR ".join(prog_clauses) + ")")
+        if q:
+            where.append("(title ILIKE :q OR body_txt ILIKE :q)")
+            params["q"] = f"%{q}%"
+        if beneficiary_country:
+            where.append("body_txt ILIKE :bcountry_ic")
+            params["bcountry_ic"] = f"%Beneficiary country: %{beneficiary_country}%"
+        if personalised_applied and pi_keywords:
+            kw_ors = []
+            for i, kw in enumerate(pi_keywords):
+                pn = f"pikw_ic_{i}"
+                kw_ors.append(f"(title ILIKE :{pn} OR body_txt ILIKE :{pn})")
+                params[pn] = f"%{kw}%"
+            where.append("(" + " OR ".join(kw_ors) + ")")
+        return " AND ".join(where), params
+
+    def _intl_coop_count() -> int:
+        clause, params = _intl_coop_where_params()
+        try:
+            return db.execute(
+                _sql_text(f"SELECT count(*) FROM economy_items WHERE {clause}"),
+                params,
+            ).scalar() or 0
+        except Exception as exc:
+            logger.warning("intl_coop count failed: %s", exc)
+            db.rollback()
+            return 0
+
+    def _intl_coop_rows(page_offset: int, page_limit: int):
+        clause, params = _intl_coop_where_params()
+        params["limit"] = page_limit
+        params["offset"] = page_offset
+        try:
+            return db.execute(
+                _sql_text(
+                    f"SELECT id, title, body_txt, public_url, document_date, creation_date "
+                    f"FROM economy_items WHERE {clause} "
+                    f"ORDER BY document_date DESC NULLS LAST, id DESC "
+                    f"LIMIT :limit OFFSET :offset"
+                ),
+                params,
+            ).fetchall()
+        except Exception as exc:
+            logger.warning("intl_coop rows failed: %s", exc)
             db.rollback()
             return []
 
@@ -1755,6 +1935,68 @@ async def get_unified_feed(
             "programme": p.framework_programme,
             "published_at": p.start_date.isoformat() if p.start_date else None,
             "detected_lang": getattr(p, "detected_lang", None),
+        }
+
+    def _parse_fts_field(body: str, label: str) -> Optional[str]:
+        """Extract a 'Label: value' line from the FTS body_txt."""
+        if not body: return None
+        import re as _re
+        m = _re.search(rf"{_re.escape(label)}:\s*(.+)", body)
+        return m.group(1).strip() if m else None
+
+    def _serialise_intl_coop(r):
+        """FTS award row → unified shape. The body_txt holds structured
+        'Label: value' lines (Beneficiary, EU commitment (total), Funding type,
+        Programme, Responsible department, Beneficiary country, Subject, Year).
+        We parse them inline so the card has all the fields the user needs to
+        spot competitive intel at a glance."""
+        body = r.body_txt or ""
+        beneficiary = _parse_fts_field(body, "Beneficiary") or r.title
+        country = _parse_fts_field(body, "Beneficiary country")
+        programme = _parse_fts_field(body, "Programme")
+        funding_type = _parse_fts_field(body, "Funding type")
+        dg = _parse_fts_field(body, "Responsible department")
+        subject = _parse_fts_field(body, "Subject")
+        amount_raw = _parse_fts_field(body, "EU commitment (total)") or ""
+        budget = None
+        if amount_raw:
+            import re as _re
+            m = _re.search(r"([\d.,]+)", amount_raw.replace("EUR", ""))
+            if m:
+                try:
+                    budget = float(m.group(1).replace(",", ""))
+                except ValueError:
+                    budget = None
+        # Short FT-programme tag for the chip slot.
+        prog_short = ""
+        if programme:
+            pl = programme.lower()
+            if "neighbourhood, development" in pl: prog_short = "NDICI"
+            elif "pre-accession" in pl: prog_short = "IPA III"
+            elif "humanitarian" in pl: prog_short = "Humanitarian Aid"
+        # The subject often carries the contract slug; pick the best title.
+        title = subject or beneficiary or r.title or "EU award"
+        return {
+            "id": f"intl_coop:{r.id}",
+            "source": "intl_coop",
+            "external_id": _parse_fts_field(body, "Legal commitment ref"),
+            "title": title[:200],
+            "description": (
+                f"Beneficiary: {beneficiary} | Funding type: {funding_type or 'Unknown'}"
+                if beneficiary else None
+            ),
+            "status": None,
+            "deadline": None,
+            "budget": budget,
+            "currency": "EUR",
+            "source_url": r.public_url,
+            "organisation": beneficiary,
+            "country": country,
+            "programme": prog_short or (programme[:40] if programme else None),
+            "published_at": r.document_date.isoformat() if r.document_date else None,
+            "detected_lang": None,
+            "funding_type": funding_type,
+            "dg": dg,
         }
 
     def _serialise_agency(r):
@@ -2073,11 +2315,22 @@ async def get_unified_feed(
             if source == "agency":
                 rows = _agency_rows(offset, limit)
                 items.extend(_serialise_agency(r) for r in rows)
+        # External-action awards source (FTS) — only counted/loaded when
+        # the lens is on or the user explicitly picks source=intl_coop.
+        # In the default 'all' view we skip it (too noisy alongside live
+        # opportunities); the lens elevates it.
+        load_intl = (source == "intl_coop") or (source == "all" and external_action)
+        if load_intl:
+            totals["intl_coop"] = _intl_coop_count()
+            if source == "intl_coop":
+                rows = _intl_coop_rows(offset, limit)
+                items.extend(_serialise_intl_coop(r) for r in rows)
 
         # 'all' mode: interleave the top N from each source so the user sees
-        # the variety. Five sources now; cap each at limit/5 + remainder.
+        # the variety. Five live sources + intl_coop when the lens is on.
         if source == "all":
-            per_source = max(1, limit // 5)
+            slot_count = 6 if external_action else 5
+            per_source = max(1, limit // slot_count)
             slot_ted = _ted_query().order_by(Tender.submission_deadline.asc().nullslast()).offset(offset).limit(per_source).all()
             slot_prop = _proposals_query().order_by(FtCallForProposals.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
             slot_tend = _tenders_query().order_by(FtCallForTenders.deadline.asc().nullslast()).offset(offset).limit(per_source).all()
@@ -2089,6 +2342,9 @@ async def get_unified_feed(
             items.extend(_serialise_tender_ft(t) for t in slot_tend)
             items.extend(_serialise_project(p) for p in slot_proj)
             items.extend(_serialise_agency(r) for r in slot_agency)
+            if external_action:
+                slot_intl = _intl_coop_rows(offset, per_source)
+                items.extend(_serialise_intl_coop(r) for r in slot_intl)
     except Exception as exc:
         logger.error(f"unified-feed query failed: {exc}")
         raise HTTPException(
@@ -2109,6 +2365,8 @@ async def get_unified_feed(
         "personalised_requested": personalised,
         "interests": interests if personalised_applied else [],
         "interest_count": len(interests) if personalised_applied else 0,
+        "external_action_applied": external_action,
+        "beneficiary_country": beneficiary_country,
     }
 
 

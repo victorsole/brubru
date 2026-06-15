@@ -83,6 +83,7 @@ const SOURCE_LABEL: Record<UnifiedOpportunity['source'], { label: string; icon: 
   ft_tenders: { label: 'F&T call for tenders', icon: 'mdi-file-document-outline' },
   ft_projects: { label: 'F&T funded project', icon: 'mdi-trophy-outline' },
   agency: { label: 'Agency procurement', icon: 'mdi-office-building-outline' },
+  intl_coop: { label: 'EU aid award (FTS)', icon: 'mdi-handshake-outline' },
 };
 
 const BRIEF_FIELDS: Array<{ key: keyof BriefFields; label: string; icon: string }> = [

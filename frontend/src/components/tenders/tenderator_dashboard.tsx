@@ -25,7 +25,7 @@ import './tenderator_dashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'programmes';
+export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop' | 'programmes';
 
 interface ClosingSoonItem {
   tender_id: number;
@@ -128,7 +128,7 @@ export const TenderatorDashboard = ({
   const incomingSourceParam = searchParams.get('source') as SourceFilter | null;
   const incomingBody = searchParams.get('body') || '';
   const validInitialSource: SourceFilter | null = incomingSourceParam &&
-    (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency'] as SourceFilter[])
+    (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency','intl_coop'] as SourceFilter[])
       .includes(incomingSourceParam) ? incomingSourceParam : null;
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [source, setSource] = useState<SourceFilter>(validInitialSource || 'all');
@@ -141,6 +141,17 @@ export const TenderatorDashboard = ({
   // source is active. Carried via URL on Chat → Tenderator deep links.
   const [agencyBody, setAgencyBody] = useState<string>(incomingBody);
   const [matchSubSource, setMatchSubSource] = useState<MatchSubSource>('all');
+  // External-action lens (Move 1, 15 Jun 2026): narrow every source to EU
+  // development-cooperation contracts (DG INTPA/NEAR/ECHO/FPI/EEAS + NDICI/
+  // IPA III/HUMA programmes) and unlock the FTS-awards source. Persisted +
+  // restored from localStorage. When ON, a beneficiary-country dropdown
+  // appears below the chip row.
+  const [externalAction, setExternalAction] = useState<boolean>(() => {
+    try { return localStorage.getItem('tenderator_external_action') === '1'; } catch { return false; }
+  });
+  const [beneficiaryCountry, setBeneficiaryCountry] = useState<string>(() => {
+    try { return localStorage.getItem('tenderator_benef_country') || ''; } catch { return ''; }
+  });
 
   const fetchStats = useCallback(async () => {
     if (!token) return;
@@ -347,7 +358,107 @@ export const TenderatorDashboard = ({
           <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
           Startups &amp; SMEs (EIC)
         </button>
+        {/* External-action lens (Move 1, 15 Jun 2026): narrows every source to
+            EU development-cooperation contracts (DG INTPA/NEAR/ECHO/FPI/EEAS +
+            NDICI/IPA III/HUMA programmes) and unlocks the FTS-awards source. */}
+        <button
+          type="button"
+          className={`tenderator-dashboard__chip ${externalAction ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--external`}
+          onClick={() => {
+            const next = !externalAction;
+            setExternalAction(next);
+            try { localStorage.setItem('tenderator_external_action', next ? '1' : '0'); } catch (_) { /* ignore */ }
+          }}
+          title="Narrow to EU external-action contracts (DG INTPA/NEAR/ECHO + NDICI/IPA III/Humanitarian Aid) + surface past FTS awards."
+        >
+          <span className="mdi mdi-handshake-outline" aria-hidden="true" />
+          Development cooperation
+        </button>
       </section>
+
+      {/* External-action sub-control: beneficiary-country narrowing. Visible
+          only when the lens is on. Works in combination with chips + search. */}
+      {externalAction && (
+        <section className="tenderator-dashboard__external-controls">
+          <label className="tenderator-dashboard__country-label" htmlFor="beneficiary-country">
+            <span className="mdi mdi-map-marker-outline" aria-hidden="true" />
+            Implementing country
+          </label>
+          <input
+            id="beneficiary-country"
+            list="tenderator-dashboard__country-options"
+            type="text"
+            className="tenderator-dashboard__country-input"
+            value={beneficiaryCountry}
+            onChange={(e) => {
+              const v = e.target.value;
+              setBeneficiaryCountry(v);
+              try { localStorage.setItem('tenderator_benef_country', v); } catch (_) { /* ignore */ }
+            }}
+            placeholder="Ukraine, Morocco, Türkiye, Egypt..."
+          />
+          <datalist id="tenderator-dashboard__country-options">
+            <option value="Ukraine" />
+            <option value="Morocco" />
+            <option value="Türkiye" />
+            <option value="Egypt" />
+            <option value="Moldova" />
+            <option value="Serbia" />
+            <option value="North Macedonia" />
+            <option value="Albania" />
+            <option value="Bosnia and Herzegovina" />
+            <option value="Montenegro" />
+            <option value="Kosovo" />
+            <option value="Georgia" />
+            <option value="Armenia" />
+            <option value="Tunisia" />
+            <option value="Lebanon" />
+            <option value="Jordan" />
+            <option value="Pakistan" />
+            <option value="Bangladesh" />
+            <option value="Cambodia" />
+            <option value="Vietnam" />
+            <option value="Nigeria" />
+            <option value="Senegal" />
+            <option value="Ethiopia" />
+            <option value="Kenya" />
+            <option value="Tanzania" />
+            <option value="Uganda" />
+            <option value="Cameroon" />
+            <option value="Colombia" />
+            <option value="Peru" />
+            <option value="Ecuador" />
+            <option value="Brazil" />
+            <option value="Mexico" />
+          </datalist>
+          {beneficiaryCountry && (
+            <button
+              type="button"
+              className="tenderator-dashboard__country-clear"
+              onClick={() => {
+                setBeneficiaryCountry('');
+                try { localStorage.setItem('tenderator_benef_country', ''); } catch (_) { /* ignore */ }
+              }}
+              aria-label="Clear country"
+            >
+              <span className="mdi mdi-close" aria-hidden="true" />
+            </button>
+          )}
+          {/* Chat narrator deep-link: ask Brubru about external-action market */}
+          <a
+            className="tenderator-dashboard__ask-brubru"
+            href={`/main?q=${encodeURIComponent(
+              beneficiaryCountry
+                ? `Latest EU external-action opportunities in ${beneficiaryCountry}`
+                : 'Latest EU external-action opportunities under NDICI, IPA III and Humanitarian Aid'
+            )}`}
+            title="Ask Brubru about this market"
+          >
+            <span className="mdi mdi-message-outline" aria-hidden="true" />
+            Ask Brubru
+          </a>
+        </section>
+      )}
 
       {/* Error banner */}
       {error && (
@@ -414,6 +525,8 @@ export const TenderatorDashboard = ({
             matchSubSource={matchSubSource}
             programme={source === 'ft_proposals' ? programmeCode : ''}
             body={source === 'agency' ? agencyBody : ''}
+            externalAction={externalAction}
+            beneficiaryCountry={beneficiaryCountry}
             initialQuery={incomingQuery}
             onSelectOpportunity={(opp) => {
               // For TED tenders with a real tenders.id, keep the existing

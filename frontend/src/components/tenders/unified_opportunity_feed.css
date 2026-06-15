@@ -181,6 +181,12 @@
   color: #3730a3;
 }
 
+/* EU aid award (FTS) — teal accent, paired with the dev-cooperation lens chip. */
+.tenderator-feed__source--intl {
+  background: rgba(20, 184, 166, 0.12);
+  color: #115e59;
+}
+
 .tenderator-feed__lang-badge {
   display: inline-flex;
   align-items: center;

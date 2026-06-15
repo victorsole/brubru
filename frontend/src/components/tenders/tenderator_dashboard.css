@@ -204,6 +204,100 @@
   color: #7c2d12;
 }
 
+/* Development-cooperation chip (external-action lens) — teal accent so it reads
+   as a "lens" rather than just another source. */
+.tenderator-dashboard__chip--external {
+  border-color: rgba(20, 184, 166, 0.4);
+  background: rgba(20, 184, 166, 0.05);
+}
+.tenderator-dashboard__chip--external.tenderator-dashboard__chip--active {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.22), rgba(6, 147, 227, 0.10));
+  border-color: rgba(20, 184, 166, 0.65);
+  color: #115e59;
+}
+
+/* External-action sub-control row: country picker + Ask Brubru link.
+   Sits between the chip strip and the feed. Wraps cleanly on mobile. */
+.tenderator-dashboard__external-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.55rem 0.75rem;
+  margin: -0.5rem 0 0.7rem;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.06), rgba(6, 147, 227, 0.04));
+  border: 1px solid rgba(20, 184, 166, 0.22);
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+.tenderator-dashboard__country-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  color: #115e59;
+}
+.tenderator-dashboard__country-input {
+  flex: 1;
+  min-width: 160px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.tenderator-dashboard__country-input:focus {
+  outline: none;
+  border-color: rgba(20, 184, 166, 0.6);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+}
+.tenderator-dashboard__country-clear {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  padding: 0.3rem 0.45rem;
+  cursor: pointer;
+  color: #6b7280;
+}
+.tenderator-dashboard__country-clear:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #111827;
+}
+.tenderator-dashboard__ask-brubru {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  background: linear-gradient(135deg, #0693e3, #9b51e0);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tenderator-dashboard__ask-brubru:hover {
+  filter: brightness(1.07);
+}
+
+/* Responsive: on phones the control row stacks; the country input takes the
+   full width below the label. */
+@media (max-width: 767px) {
+  .tenderator-dashboard__external-controls {
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+  }
+  .tenderator-dashboard__country-input {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+  .tenderator-dashboard__ask-brubru {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+}
+
 .tenderator-dashboard__chip--disabled {
   opacity: 0.55;
   cursor: not-allowed;

@@ -16,7 +16,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export interface UnifiedOpportunity {
   id: string;
-  source: 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency';
+  source: 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop';
   external_id: string;
   title: string;
   description: string | null;
@@ -39,6 +39,9 @@ export interface UnifiedOpportunity {
   match_id?: number;
   is_saved?: boolean;
   is_applied?: boolean;
+  // Only present when source=='intl_coop' (FTS award):
+  funding_type?: string | null;
+  dg?: string | null;
 }
 
 export type MatchSubSource = 'all' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'agency';
@@ -50,6 +53,11 @@ interface UnifiedFeedProps {
   programme?: string;
   // When source=='agency': scope the feed to one body_code (e.g. 'efsa').
   body?: string;
+  // External-action lens (Move 1, 15 Jun 2026): narrow every source to EU
+  // dev-cooperation contracts; unlocks the FTS-awards 'intl_coop' source.
+  externalAction?: boolean;
+  // Free-text country narrowing — works with or without the lens.
+  beneficiaryCountry?: string;
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
@@ -59,6 +67,7 @@ const SOURCE_LABELS: Record<UnifiedOpportunity['source'], { label: string; icon:
   ft_tenders: { label: 'Call for tenders', icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders' },
   ft_projects: { label: 'Funded project', icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects' },
   agency: { label: 'Agency', icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency' },
+  intl_coop: { label: 'EU aid award', icon: 'mdi-handshake-outline', colour: 'tenderator-feed__source--intl' },
 };
 
 const formatValue = (value: number | null, currency: string = 'EUR'): string | null => {
@@ -85,7 +94,7 @@ const formatDeadline = (iso: string | null): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', onSelectOpportunity }: UnifiedFeedProps) => {
+export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', externalAction = false, beneficiaryCountry = '', onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
   const { i18n } = useTranslation();
   // Brubru's 6 — falls back to 'en' for any other UI locale.
@@ -152,6 +161,8 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       if (clientFilter) params.set('client_filter', 'true');
       // Only send when OFF — backend default is true.
       if (!personalised) params.set('personalised', 'false');
+      if (externalAction) params.set('external_action', 'true');
+      if (beneficiaryCountry) params.set('beneficiary_country', beneficiaryCountry);
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -174,7 +185,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry]);
 
   useEffect(() => {
     setPage(1);
