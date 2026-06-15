@@ -102,6 +102,13 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
   });
   const [clientFilterApplied, setClientFilterApplied] = useState<boolean>(false);
   const [clientFilterSlug, setClientFilterSlug] = useState<string | null>(null);
+  // Layer 1: MEUB Policy-Interest personalisation. Default ON, persisted; the
+  // backend treats it as a no-op when the user has no interests set.
+  const [personalised, setPersonalised] = useState<boolean>(() => {
+    try { return localStorage.getItem('tenderator_personalised') !== '0'; } catch { return true; }
+  });
+  const [personalisedApplied, setPersonalisedApplied] = useState<boolean>(false);
+  const [interests, setInterests] = useState<string[]>([]);
 
   // If the URL ?q= changes (deep-link from Chat), pick it up.
   useEffect(() => {
@@ -130,6 +137,8 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       if (body && source === 'agency') params.set('body', body);
       params.set('lang', feedLang);
       if (clientFilter) params.set('client_filter', 'true');
+      // Only send when OFF — backend default is true.
+      if (!personalised) params.set('personalised', 'false');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -143,6 +152,8 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       setItems(data.items || []);
       setClientFilterApplied(Boolean(data.client_filter_applied));
       setClientFilterSlug(data.client_filter_slug || null);
+      setPersonalisedApplied(Boolean(data.personalised_applied));
+      setInterests(Array.isArray(data.interests) ? data.interests : []);
     } catch (e) {
       console.error('unified-feed fetch failed:', e);
       setError('Could not load opportunities.');
@@ -150,7 +161,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised]);
 
   useEffect(() => {
     setPage(1);
@@ -189,6 +200,39 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
           >
             <span className="mdi mdi-close" aria-hidden="true" />
           </button>
+        )}
+      </div>
+
+      {/* Personalisation pill (Layer 1) — derived from your MEUB Policy
+          Interests. Default ON; turning OFF widens the feed back to the
+          full catalogue. No-op when the user has no interests set. */}
+      <div className="tenderator-feed__personalised">
+        <label className="tenderator-feed__personalised-toggle">
+          <input
+            type="checkbox"
+            checked={personalised}
+            onChange={(e) => {
+              const v = e.target.checked;
+              setPersonalised(v);
+              try { localStorage.setItem('tenderator_personalised', v ? '1' : '0'); } catch (_) { /* ignore */ }
+            }}
+          />
+          <span>Personalise by my policy interests</span>
+        </label>
+        {personalised && personalisedApplied && (
+          <span
+            className="tenderator-feed__personalised-badge"
+            title={interests.length ? `Interests: ${interests.join(', ')}` : undefined}
+          >
+            <span className="mdi mdi-tune-variant" aria-hidden="true" />
+            Personalised — {interests.length} interest{interests.length === 1 ? '' : 's'}
+          </span>
+        )}
+        {personalised && !personalisedApplied && (
+          <span className="tenderator-feed__personalised-badge tenderator-feed__personalised-badge--inactive">
+            <span className="mdi mdi-information-outline" aria-hidden="true" />
+            No policy interests set — <a href="/my-eu-bubble?tab=policy-interests">add some in My EU Bubble</a>
+          </span>
         )}
       </div>
 

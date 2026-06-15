@@ -1150,6 +1150,7 @@ async def get_unified_feed(
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
     lang: Optional[str] = Query(None, description="Render titles + descriptions in this Brubru language (en/es/ca/fr/it/nl). Items whose detected_lang is outside the 6 get served from <table>_translations when available; English-source items pass through."),
     client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
+    personalised: bool = Query(True, description="When true (default), narrow every source by the user's MEUB Policy Interests (keywords from policy_taxonomy + CPV prefixes for TED). Set false to see the unfiltered feed. No-op when the user has no interests set."),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
     current_user: User = Depends(require_blue_tier),
@@ -1238,6 +1239,48 @@ async def get_unified_feed(
         for c in cs:
             ored.append(FtFundedProject.coordinator_country == c)
         return qry.filter(or_(*ored)) if ored else qry
+
+    # === Layer 1: MEUB Policy-Interest pre-filter ===
+    # When personalised=true (default) and the user has policy_interests set, narrow
+    # every source by the user's interest keywords + CPV prefixes (TED only).
+    # If interests is empty, the filter is a no-op and personalised_applied=false
+    # in the response — frontend can then prompt the user to set interests.
+    interests = _interest_list(current_user) if personalised else []
+    pi_keywords = sorted(keywords_for_interests(interests)) if interests else []
+    pi_cpv_prefixes = sorted(cpv_for_interests(interests)) if interests else []
+    personalised_applied = bool(pi_keywords or pi_cpv_prefixes)
+
+    def _apply_pi_filter_ted(qry):
+        if not personalised_applied:
+            return qry
+        ored = []
+        for kw in pi_keywords:
+            ored.append(Tender.title.ilike(f"%{kw}%"))
+            ored.append(Tender.description.ilike(f"%{kw}%"))
+        for pref in pi_cpv_prefixes:
+            ored.append(Tender.cpv_main.ilike(f"{pref}%"))
+        return qry.filter(or_(*ored)) if ored else qry
+
+    def _apply_pi_filter_proposals(qry):
+        if not personalised_applied or not pi_keywords:
+            return qry
+        ored = [FtCallForProposals.title.ilike(f"%{kw}%") for kw in pi_keywords]
+        ored += [FtCallForProposals.description.ilike(f"%{kw}%") for kw in pi_keywords]
+        return qry.filter(or_(*ored))
+
+    def _apply_pi_filter_tenders(qry):
+        if not personalised_applied or not pi_keywords:
+            return qry
+        ored = [FtCallForTenders.title.ilike(f"%{kw}%") for kw in pi_keywords]
+        ored += [FtCallForTenders.description.ilike(f"%{kw}%") for kw in pi_keywords]
+        return qry.filter(or_(*ored))
+
+    def _apply_pi_filter_projects(qry):
+        if not personalised_applied or not pi_keywords:
+            return qry
+        ored = [FtFundedProject.title.ilike(f"%{kw}%") for kw in pi_keywords]
+        ored += [FtFundedProject.objective.ilike(f"%{kw}%") for kw in pi_keywords]
+        return qry.filter(or_(*ored))
 
     valid_sources = {"all", "matches", "ted", "ft_proposals", "ft_tenders", "ft_projects", "agency"}
     if source not in valid_sources:
@@ -1398,6 +1441,7 @@ async def get_unified_feed(
         if q:
             qry = qry.filter(Tender.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_ted(qry)
+        qry = _apply_pi_filter_ted(qry)
         return qry
 
     def _proposals_query():
@@ -1415,6 +1459,7 @@ async def get_unified_feed(
         if q:
             qry = qry.filter(FtCallForProposals.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_proposals(qry)
+        qry = _apply_pi_filter_proposals(qry)
         return qry
 
     def _tenders_query():
@@ -1430,6 +1475,7 @@ async def get_unified_feed(
         if q:
             qry = qry.filter(FtCallForTenders.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_tenders(qry)
+        qry = _apply_pi_filter_tenders(qry)
         return qry
 
     def _projects_query():
@@ -1437,6 +1483,7 @@ async def get_unified_feed(
         if q:
             qry = qry.filter(FtFundedProject.title.ilike(f"%{q}%"))
         qry = _apply_pursuits_filter_projects(qry)
+        qry = _apply_pi_filter_projects(qry)
         return qry
 
     # --- Agency (decentralised EU bodies' own procurement) -------------------
@@ -1474,6 +1521,13 @@ async def get_unified_feed(
                     kw_ors.append(f"(title ILIKE :{pn} OR summary ILIKE :{pn})")
                     params[pn] = f"%{kw}%"
                 where.append("(" + " OR ".join(kw_ors) + ")")
+        if personalised_applied and pi_keywords:
+            kw_ors = []
+            for i, kw in enumerate(pi_keywords):
+                pn = f"pikw_{i}"
+                kw_ors.append(f"(title ILIKE :{pn} OR summary ILIKE :{pn})")
+                params[pn] = f"%{kw}%"
+            where.append("(" + " OR ".join(kw_ors) + ")")
         return " AND ".join(where), params
 
     def _agency_count() -> int:
@@ -1635,6 +1689,11 @@ async def get_unified_feed(
                 kw_lower = [k.lower() for k in (profile.keywords or [])] if profile else []
                 cpv_two = set((c[:2] for c in (profile.cpv_categories or []) if c)) if profile else set()
                 countries = set(profile.countries_of_interest or []) if profile else set()
+                # Blend in the user's MEUB Policy Interests so matches work even
+                # without a saved TenderProfile (or to enrich a thin one).
+                if personalised_applied:
+                    kw_lower = sorted(set(kw_lower) | set(pi_keywords))
+                    cpv_two = cpv_two | set(pi_cpv_prefixes)
 
                 total_ted_matches = 0
                 total_proposal_matches = 0
@@ -1855,6 +1914,10 @@ async def get_unified_feed(
                         "agency": total_agency_matches,
                     },
                     "items": items,
+                    "personalised_applied": personalised_applied,
+                    "personalised_requested": personalised,
+                    "interests": interests if personalised_applied else [],
+                    "interest_count": len(interests) if personalised_applied else 0,
                 }
             except Exception as exc:
                 logger.error(f"matches feed failed: {exc}")
@@ -1923,6 +1986,10 @@ async def get_unified_feed(
         "items": items,
         "client_filter_applied": bool(pursuits),
         "client_filter_slug": current_user.private_guide_slug if (client_filter and pursuits) else None,
+        "personalised_applied": personalised_applied,
+        "personalised_requested": personalised,
+        "interests": interests if personalised_applied else [],
+        "interest_count": len(interests) if personalised_applied else 0,
     }
 
 
