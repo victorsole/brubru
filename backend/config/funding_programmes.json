@@ -1,7 +1,7 @@
 {
   "$schema_version": "1.0",
   "$source": "https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding-programmes_en",
-  "$generated": "2026-06-14",
+  "$generated": "2026-06-15",
   "$note": "EC 2021-2027 MFF funding programmes by the Commission's own 6-heading classification, with Brubru coverage. coverage: covered | gap | skipped. via: endpoint (dedicated Brubru endpoint) | ft_calls (reachable via /api/v2/funding/ft-calls-for-proposals).",
   "programmes": [
     {
@@ -92,7 +92,7 @@
       "coverage": "gap",
       "via": null,
       "endpoint": null,
-      "source": "DG TAXUD; on the F&T Portal, not yet ingested"
+      "source": "DG TAXUD direct-management/procurement programme — 0 FISCALIS-* grant topics on the F&T Portal (SEDIA verified 15 Jun 2026); funding flows via procurement + grants to national tax administrations, no open competitive grant calls to index"
     },
     {
       "programme": "Cooperation in the field of customs (Customs)",
@@ -102,7 +102,7 @@
       "coverage": "gap",
       "via": null,
       "endpoint": null,
-      "source": "DG TAXUD; on the F&T Portal (CUST), not yet ingested"
+      "source": "DG TAXUD direct-management/procurement programme — 0 CUST-* grant topics on the F&T Portal (SEDIA verified 15 Jun 2026); funds customs IT systems + national administrations, no open competitive grant calls to index"
     },
     {
       "programme": "European Space Programme",
@@ -259,10 +259,10 @@
       "acronym": "Justice",
       "heading": "Cohesion and Values",
       "cluster": "Investing in People, Social Cohesion & Values",
-      "coverage": "gap",
-      "via": null,
-      "endpoint": null,
-      "source": "DG JUST; on the F&T Portal, not yet ingested"
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/justice",
+      "source": "F&T Portal grant calls (JUST-* topics, SEDIA), ingested to economy_items"
     },
     {
       "programme": "Citizens, Equality, Rights and Values Programme",
@@ -339,10 +339,10 @@
       "acronym": "Innovation Fund",
       "heading": "Natural Resources and Environment",
       "cluster": "Environment & Climate Action",
-      "coverage": "gap",
-      "via": null,
-      "endpoint": null,
-      "source": "CINEA; F&T (INNOVFUND) not ingested + CINEA project list"
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/innovation-fund",
+      "source": "F&T Portal grant calls (INNOVFUND-* topics, SEDIA), ingested to economy_items"
     },
     {
       "programme": "Modernisation Fund",
@@ -422,7 +422,7 @@
       "coverage": "gap",
       "via": null,
       "endpoint": null,
-      "source": "DG INTPA; Team Europe Explorer + IATI (XM-DAC-918)"
+      "source": "DG INTPA; IATI/d-portal source UNVERIFIED (15 Jun 2026: XM-DAC-918 org-ref returns 0 on d-portal, official datastore needs an API key, per-instrument NDICI/IPA/Humanitarian attribution unproven) — needs a dedicated verified IATI connector before an endpoint can be built"
     },
     {
       "programme": "Humanitarian Aid",
@@ -432,7 +432,7 @@
       "coverage": "gap",
       "via": null,
       "endpoint": null,
-      "source": "DG ECHO; IATI / EDRIS"
+      "source": "DG ECHO; IATI/EDRIS source UNVERIFIED (15 Jun 2026: same IATI access blocker as NDICI) — needs a dedicated verified connector before an endpoint can be built"
     },
     {
       "programme": "Common Foreign and Security Policy",
@@ -462,7 +462,7 @@
       "coverage": "gap",
       "via": null,
       "endpoint": null,
-      "source": "DG NEAR; Team Europe Explorer + IATI"
+      "source": "DG NEAR; Team Europe Explorer + IATI source UNVERIFIED (15 Jun 2026: same IATI access blocker as NDICI) — needs a dedicated verified connector before an endpoint can be built"
     }
   ]
 }

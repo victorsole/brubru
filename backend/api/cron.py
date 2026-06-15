@@ -453,6 +453,10 @@ async def cron_sync_daily(
     results["cor"] = _run_script("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
     results["euagenda"] = _run_script("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
     results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
+    # Per-programme F&T grant calls (economy_items, item_type='grant') backing
+    # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id
+    # prefix; idempotent upsert on (body_code, item_type, public_url).
+    results["ft_programme_calls"] = _run_script("ft_programme_calls", "scripts/ingest_ft_programme_calls.py", ["--all", "--apply"], timeout=900)
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang
     # on freshly-arrived TED + F&T rows and translate any foreign-language

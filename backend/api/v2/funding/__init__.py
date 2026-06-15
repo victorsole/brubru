@@ -37,6 +37,9 @@ from . import cohesion_eusf as _cohesion_eusf
 from . import funding_programmes as _funding_programmes
 # CAP funds — EAGF + EAFRD payments by Member State (eu_cap_payments).
 from . import cohesion_cap as _cohesion_cap
+# Per-programme F&T grant-call endpoints (economy_items, item_type='grant').
+# Built one programme at a time — Justice + Innovation Fund live.
+from . import ft_programmes as _ft_programmes
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -53,3 +56,4 @@ router.include_router(_cohesion_outcomes.router)
 router.include_router(_cohesion_eusf.router)
 router.include_router(_funding_programmes.router)
 router.include_router(_cohesion_cap.router)
+router.include_router(_ft_programmes.router)

@@ -368,6 +368,13 @@
       "notes": "CAP fund payments by Member State backing /api/v2/funding/eagf + /eafrd. 28 rows each; full refresh weekly."
     },
     {
+      "path_prefix": "/api/v2/funding/{justice,innovation-fund}",
+      "source": "EU Funding & Tenders Portal — SEDIA search API, filtered by topic-id prefix (JUST-*, INNOVFUND-*)",
+      "script": "scripts/ingest_ft_programme_calls.py --all --apply",
+      "tier": "daily",
+      "notes": "Per-programme grant calls ingested to economy_items (item_type='grant'); back /api/v2/funding/justice + /innovation-fund and appear in /all. Wired into cron_sync_daily; idempotent upsert."
+    },
+    {
       "path_prefix": "/api/v1/specialised/a2m",
       "source": "Combined Nomenclature (webgate.ec.europa.eu/nomen) — live pass-through",
       "script": "(no script — live pass-through)",
