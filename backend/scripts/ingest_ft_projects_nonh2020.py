@@ -53,7 +53,7 @@ FETCH_JS = """
 async ({pageNum, size, query}) => {
   const blob = (o) => new Blob([JSON.stringify(o)], {type:'application/json'});
   const fd = new FormData();
-  fd.append('sort', blob({order:'DESC', field:'es_SortDate'}), 'blob');
+  fd.append('sort', blob({order:'DESC', field:'startDate'}), 'blob');
   fd.append('query', blob(query), 'blob');
   fd.append('languages', blob(['en']), 'blob');
   fd.append('displayFields', blob(['title','projectId','acronym','participants',
@@ -69,12 +69,17 @@ async ({pageNum, size, query}) => {
 
 
 def _year_query(year: Optional[int]):
-    """Non-research projects, optionally bounded to one es_SortDate year (< 10k)."""
+    """Non-research projects, optionally bounded to one startDate year.
+
+    startDate (the real project start) partitions the corpus evenly — every year
+    is well under the API's 10k pagination cap (es_SortDate clusters everything
+    in 2024-26 and overflows the cap, so it is NOT used for slicing).
+    """
     must = [{"terms": {"language": ["en"]}}]
     if year is not None:
         gte = int(dt.datetime(year, 1, 1).timestamp() * 1000)
         lte = int(dt.datetime(year, 12, 31, 23, 59, 59).timestamp() * 1000)
-        must.append({"range": {"es_SortDate": {"gte": gte, "lte": lte}}})
+        must.append({"range": {"startDate": {"gte": gte, "lte": lte}}})
     return {"bool": {"must": must, "must_not": [{"terms": {"programAbbreviation": RESEARCH}}]}}
 
 
