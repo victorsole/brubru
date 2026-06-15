@@ -505,9 +505,9 @@ _ECONOMY_BATCHES: list[list[str]] = [
     # batch 0 (10:00 UTC) — financial-sector + early-alphabet bodies
     ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa"],
     # batch 1 (15:00 UTC)
-    ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "esm", "esma"],
+    ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma"],
     # batch 2 (21:00 UTC)
-    ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "euipo", "eurojust", "fra", "parliament", "srb"],
+    ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb"],
 ]
 
 

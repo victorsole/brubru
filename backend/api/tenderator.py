@@ -1405,6 +1405,7 @@ async def get_unified_feed(
         "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
         "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "eu_osha": "EU-OSHA",
         "enisa": "ENISA", "commission": "European Commission",
+        "innovfund": "Innovation Fund", "just": "Justice Programme",
     }
 
     # Map an EU funding programme code to the topic_id / call_id prefixes used on
@@ -2016,6 +2017,8 @@ _BODY_DISPLAY_NAMES = {
     "enisa": "European Union Agency for Cybersecurity",
     "eu_osha": "European Agency for Safety and Health at Work",
     "commission": "European Commission",
+    "innovfund": "EU Innovation Fund",
+    "just": "Justice Programme (DG JUST)",
 }
 
 _BODY_DISPLAY_ACRONYMS = {
@@ -2024,6 +2027,7 @@ _BODY_DISPLAY_ACRONYMS = {
     "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
     "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "enisa": "ENISA",
     "eu_osha": "EU-OSHA", "commission": "EC",
+    "innovfund": "Innovation Fund", "just": "DG JUST",
 }
 
 

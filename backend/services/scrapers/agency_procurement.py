@@ -289,3 +289,417 @@ def ingest_etf_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
         _fetch(_ETF + "/en/about/procurement"), _ETF, body_code="etf", item_type="tender",
         source_kind="etf_procurement", title_substr="/en/about/procurement/",
         ref_field="deadline", deadline_field="deadline", status="Open")
+
+
+# --- EUAA — Drupal Views positional table -------------------------------- #
+_EUAA = "https://euaa.europa.eu"
+
+
+def ingest_euaa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return parse_positional_table(
+        _fetch(_EUAA + "/about-us/procurement"), _EUAA,
+        body_code="euaa", item_type="eoi_call",
+        source_kind="euaa_procurement",
+        title_col=1, ref_col=0, deadline_col=2, status="Open",
+    )
+
+
+# --- EUDA — plain HTML table (no Drupal markers) -------------------------- #
+_EUDA = "https://www.euda.europa.eu"
+
+
+def ingest_euda_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return parse_positional_table(
+        _fetch(_EUDA + "/about/procurement_en"), _EUDA,
+        body_code="euda", item_type="tender", source_kind="euda_procurement",
+        title_col=1, ref_col=0, deadline_col=3, status="Open",
+    )
+
+
+# --- ENISA — Drupal Views with positional headers + <time datetime> ------- #
+_ENISA = "https://www.enisa.europa.eu"
+
+
+def _parse_enisa_table(html: str, base: str) -> list[Item]:
+    """ENISA tbody rows: 5 cells per row. Title cell 0 (with anchor),
+    reference cell 1, call-type cell 2, deadline cell 3 (<time datetime>),
+    status cell 4."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    body = re.search(r"<tbody.*?</tbody>", html, re.S)
+    if not body:
+        return out
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(0), re.S):
+        cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+        if len(cells) < 5:
+            continue
+        title_html, ref_html, type_html, deadline_html, status_html = cells[:5]
+        am = re.search(r'href="([^"]+)"', title_html)
+        if not am:
+            continue
+        title = _txt(title_html)
+        if not title:
+            continue
+        url = am.group(1) if am.group(1).startswith("http") else base + am.group(1)
+        reference = _txt(ref_html)
+        call_type = _txt(type_html)
+        dl = None
+        dt_m = re.search(r'datetime="([^"]+)"', deadline_html)
+        if dt_m:
+            try:
+                dl = datetime.fromisoformat(dt_m.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                dl = None
+        if dl is None:
+            dm = _DATE.search(_txt(deadline_html))
+            dl = _parse_date(dm.group(1)) if dm else None
+        status_text = _txt(status_html).upper() or "OPEN"
+        is_eoi = ("EXPRESSIONS OF INTEREST" in call_type.upper()
+                  or "CEI" in (reference or "").upper())
+        out.append(_build(
+            body_code="enisa", item_type=("eoi_call" if is_eoi else "tender"),
+            title=title, url=url, reference=reference, status=status_text,
+            deadline=dl, now=now, source_kind="enisa_procurement",
+        ))
+    return out
+
+
+def ingest_enisa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    items = _parse_enisa_table(_fetch(_ENISA + "/working-with-us/procurement"), _ENISA)
+    return [i for i in items if i.item_type == "tender"]
+
+
+def ingest_enisa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    items = _parse_enisa_table(_fetch(_ENISA + "/working-with-us/procurement"), _ENISA)
+    return [i for i in items if i.item_type == "eoi_call"]
+
+
+# --- ERA — bespoke listing-item cards ------------------------------------- #
+_ERA = "https://www.era.europa.eu"
+
+
+def _parse_era_articles(html: str, base: str) -> list[Item]:
+    """ERA <article class="listing-item ..."> cards. Title in a
+    <span class="title"> inside <a class="standalone">. Opening/closing date
+    is the first <time datetime>. Status badge text-bg-success ("Open").
+    The card does not expose a procurement reference, so the URL slug becomes
+    the guid (same pattern as the existing ETF parser for low-value cards)."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    article_re = re.compile(
+        r'<article[^>]*class="[^"]*listing-item[^"]*"[^>]*>(.*?)</article>', re.S)
+    for body in article_re.findall(html):
+        am = re.search(
+            r'<a[^>]+href="(/procurement/[^"]+)"[^>]*>\s*<span class="title">(.*?)</span>',
+            body, re.S)
+        if not am:
+            am = re.search(r'<a[^>]+href="(/procurement/[^"]+)"[^>]*>(.*?)</a>',
+                           body, re.S)
+        if not am:
+            continue
+        title = _txt(am.group(2))
+        if not title:
+            continue
+        url = base + am.group(1)
+        st_m = re.search(r'badge[^"]*text-bg-success[^"]*"[^>]*>\s*(\w[\w\s-]+?)\s*<',
+                         body)
+        status = _txt(st_m.group(1)) if st_m else "Open"
+        dt_m = re.search(r'<time[^>]+datetime="([^"]+)"', body)
+        dl = None
+        if dt_m:
+            try:
+                dl = datetime.fromisoformat(dt_m.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                dl = None
+        reference = am.group(1).rsplit("/", 1)[-1]
+        out.append(_build(
+            body_code="era", item_type="tender", title=title, url=url,
+            reference=reference, status=status, deadline=dl, now=now,
+            source_kind="era_procurement",
+        ))
+    return out
+
+
+def ingest_era_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return _parse_era_articles(
+        _fetch(_ERA + "/agency/procurement_en?f%5B0%5D=era_procurement_status%3Aopen"),
+        _ERA,
+    )
+
+
+# --- ECDC — ct-procurement article cards, paginated ?page=N --------------- #
+_ECDC = "https://www.ecdc.europa.eu"
+
+
+def _parse_ecdc_articles(html: str, base: str) -> list[Item]:
+    """ECDC <article class="ct-procurement"> cards. Reference in a
+    <span class="fw-semibold">Ref.:</span> meta-item. Deadline inside a
+    <time datetime="..."> inside its own meta-item div (NOT plain text)."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    article_re = re.compile(
+        r'<article[^>]*class="[^"]*ct-procurement[^"]*"[^>]*>(.*?)</article>', re.S)
+    for body in article_re.findall(html):
+        am = re.search(r'<a[^>]+href="([^"]+)"[^>]*hreflang="en"[^>]*>(.*?)</a>',
+                       body, re.S)
+        if not am:
+            continue
+        title = _txt(am.group(2))
+        if not title:
+            continue
+        href = am.group(1)
+        url = href if href.startswith("http") else base + href
+        ref_m = re.search(r'>Ref\.\s*:?\s*</span>\s*([^<]+)', body)
+        reference = _txt(ref_m.group(1)) if ref_m else ""
+        deadline_block = re.search(r'>Deadline[^<]*</span>.*?</div>', body, re.S)
+        dl = None
+        status = ""
+        if deadline_block:
+            block = deadline_block.group(0)
+            dt_m = re.search(r'datetime="([^"]+)"', block)
+            if dt_m:
+                try:
+                    dl = datetime.fromisoformat(dt_m.group(1).replace("Z", "+00:00"))
+                except ValueError:
+                    pass
+            st_m = re.search(r'\b(Open|Closed|Awarded)\b', _txt(block))
+            status = st_m.group(1) if st_m else ""
+        out.append(_build(
+            body_code="ecdc", item_type="tender", title=title, url=url,
+            reference=reference, status=status, deadline=dl, now=now,
+            source_kind="ecdc_procurement",
+        ))
+    return out
+
+
+def ingest_ecdc_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_) -> list[Item]:
+    """ECDC paginates via ?page=N (0-indexed). Crawl up to max_pages."""
+    items: list[Item] = []
+    seen = set()
+    for page in range(max_pages):
+        url = _ECDC + "/en/about-ecdc/procurement-and-grants"
+        if page:
+            url += f"?page={page}"
+        for it in _parse_ecdc_articles(_fetch(url), _ECDC):
+            if it.guid in seen:
+                continue
+            seen.add(it.guid)
+            items.append(it)
+    return items
+
+
+# --- ECHA — Playwright text snapshot -------------------------------------- #
+_ECHA = "https://echa.europa.eu"
+_ECHA_PROCUREMENT_URL = _ECHA + "/about-us/business-opportunities"
+
+
+def _parse_echa_text(text: str) -> list[Item]:
+    """ECHA WAF-blocks scripted access; Playwright (text mode) flattens the
+    listing table to per-row blocks: <title>\\n(<REF>)\\t<TYPE>\\t<DEADLINE>."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    lines = text.splitlines()
+    i = 0
+    while i < len(lines) - 1:
+        ln = lines[i].strip()
+        nxt = lines[i + 1].strip()
+        if ln and nxt.startswith("(") and ")" in nxt:
+            ref_end = nxt.find(")")
+            reference = nxt[1:ref_end]
+            rest = nxt[ref_end + 1:].lstrip("\t").strip()
+            parts = [p.strip() for p in rest.split("\t") if p.strip()]
+            if len(parts) >= 2:
+                ttype, deadline_text = parts[0], parts[1]
+                title = ln
+                dm = _DATE.search(deadline_text)
+                dl = _parse_date(dm.group(1)) if dm else None
+                url = f"{_ECHA_PROCUREMENT_URL}#{reference}"
+                is_eoi = "interest" in ttype.lower() or "CEI" in reference.upper()
+                out.append(_build(
+                    body_code="echa",
+                    item_type=("eoi_call" if is_eoi else "tender"),
+                    title=title, url=url, reference=reference, status="Open",
+                    deadline=dl, now=now, source_kind="echa_procurement",
+                ))
+                i += 2
+                continue
+        i += 1
+    return out
+
+
+def _fetch_echa_playwright() -> str:
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    with WafBrowserFetcher() as f:
+        return f.fetch(_ECHA_PROCUREMENT_URL, strip_chrome=True).text
+
+
+def ingest_echa_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    items = _parse_echa_text(_fetch_echa_playwright())
+    return [i for i in items if i.item_type == "tender"]
+
+
+def ingest_echa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    items = _parse_echa_text(_fetch_echa_playwright())
+    return [i for i in items if i.item_type == "eoi_call"]
+
+
+# --- EIGE — defensive empty-listing handler ------------------------------- #
+_EIGE = "https://eige.europa.eu"
+
+
+def ingest_eige_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """EIGE shows 'There are currently no ongoing procedures' when empty.
+    When EIGE publishes calls they appear as a Drupal Views table on this
+    page; parse_views_table returns [] cleanly when no <tbody> is present."""
+    html = _fetch(_EIGE + "/about/procurement")
+    return parse_views_table(
+        html, _EIGE, body_code="eige", item_type="tender",
+        source_kind="eige_procurement",
+        ref_field="reference", deadline_field="deadline", status="Open",
+    )
+
+
+# --- FRA — Playwright (Anubis WAF) + defensive empty handling ------------- #
+_FRA = "https://fra.europa.eu"
+
+
+def _fetch_fra_playwright(path: str) -> str:
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    with WafBrowserFetcher() as f:
+        return f.fetch(_FRA + path, strip_chrome=False).html
+
+
+def ingest_fra_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """FRA is behind Anubis bot-challenge; Playwright clears it. The Ongoing
+    Procedures page returns 'There are no open procedures at the present
+    time.' when empty; we return []. When listings are present, parse via
+    parse_views_table with FRA's Drupal field names."""
+    html = _fetch_fra_playwright("/en/about-fra/procurement/ongoing-procedures")
+    if "no open procedures" in html.lower():
+        return []
+    return parse_views_table(
+        html, _FRA, body_code="fra", item_type="tender",
+        source_kind="fra_procurement",
+        ref_field="reference", deadline_field="closing-date", status="Open",
+    )
+
+
+# --- EEA — F&T-only for open calls; stub returning [] --------------------- #
+_EEA = "https://www.eea.europa.eu"
+
+
+def ingest_eea_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """EEA publishes its open calls on the EU F&T Portal, not on its own
+    site. The on-agency page is informational + past-contracts PDFs only.
+    Stub returns [] so cron does not error; EEA opportunities flow through
+    the F&T ingest (FtCallForTenders / FtCallForProposals)."""
+    return []
+
+
+# --- EU-OSHA — Drupal Views views-row + per-year archive ------------------ #
+_EU_OSHA = "https://osha.europa.eu"
+
+
+def _parse_eu_osha_views(html: str, base: str, body_code: str, item_type: str,
+                        source_kind: str) -> list[Item]:
+    """EU-OSHA views-row blocks. Title in views-field-title > h2 > a;
+    reference in views-field-field-reference (Drupal-typical) or in the
+    title's span; deadline in views-field-field-closing-date / -deadline."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    for row in re.findall(r'<div[^>]*class="[^"]*views-row[^"]*"[^>]*>(.*?)</div>\s*</div>',
+                          html, re.S):
+        am = re.search(
+            r'views-field-title.*?<h2[^>]*>\s*<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>',
+            row, re.S)
+        if not am:
+            continue
+        title = _txt(am.group(2))
+        if not title:
+            continue
+        href = am.group(1)
+        url = href if href.startswith("http") else base + href
+        ref_m = re.search(
+            r'views-field-field-(?:reference|tender-reference)[^>]*>.*?<.*?>([^<]+)<',
+            row, re.S)
+        reference = _txt(ref_m.group(1)) if ref_m else ""
+        dl = None
+        dm = _DATE.search(_txt(row))
+        if dm:
+            dl = _parse_date(dm.group(1))
+        out.append(_build(
+            body_code=body_code, item_type=item_type, title=title, url=url,
+            reference=reference, status="Open", deadline=dl, now=now,
+            source_kind=source_kind,
+        ))
+    return out
+
+
+def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_) -> list[Item]:
+    """EU-OSHA collapses /calls-tender to a year tree; rows live on
+    /calls_archive/<year>. Crawl current + previous year."""
+    items: list[Item] = []
+    seen = set()
+    now_year = datetime.now(timezone.utc).year
+    for year in (now_year, now_year - 1):
+        url = f"{_EU_OSHA}/en/about-eu-osha/procurement/calls_archive/{year}"
+        for it in _parse_eu_osha_views(_fetch(url), _EU_OSHA,
+                                       body_code="eu_osha", item_type="tender",
+                                       source_kind="eu_osha_procurement"):
+            if it.guid in seen:
+                continue
+            seen.add(it.guid)
+            items.append(it)
+    return items
+
+
+def ingest_eu_osha_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """Calls for expression of interest live at /calls-expression-interest;
+    layout matches _parse_eu_osha_views."""
+    return _parse_eu_osha_views(
+        _fetch(_EU_OSHA + "/en/about-eu-osha/procurement/calls-expression-interest"),
+        _EU_OSHA,
+        body_code="eu_osha", item_type="eoi_call",
+        source_kind="eu_osha_procurement",
+    )
+
+
+# --- Eurofound — Playwright sub-page crawl -------------------------------- #
+_EUROFOUND = "https://www.eurofound.europa.eu"
+
+
+def _fetch_eurofound_playwright(path: str) -> str:
+    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+    with WafBrowserFetcher() as f:
+        return f.fetch(_EUROFOUND + path, strip_chrome=False).html
+
+
+def ingest_eurofound_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """Eurofound rate-limits raw HTTP (429); Playwright gets through. The
+    parser mirrors the EU-OSHA views-row pattern; if Eurofound's per-tab
+    listing markup diverges, this returns [] cleanly and a follow-up pass
+    can refine the regex once row examples are captured."""
+    items: list[Item] = []
+    for path in ("/en/about/procurement/calls-tenders-140k",
+                 "/en/about/procurement/calls-tenders-below-140k"):
+        try:
+            html = _fetch_eurofound_playwright(path)
+        except Exception:
+            continue
+        items += _parse_eu_osha_views(
+            html, _EUROFOUND, body_code="eurofound", item_type="tender",
+            source_kind="eurofound_procurement",
+        )
+    return items
+
+
+def ingest_eurofound_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    try:
+        html = _fetch_eurofound_playwright(
+            "/en/about/procurement/calls-expression-interest")
+    except Exception:
+        return []
+    return _parse_eu_osha_views(
+        html, _EUROFOUND, body_code="eurofound", item_type="eoi_call",
+        source_kind="eurofound_procurement",
+    )

@@ -154,6 +154,24 @@ INGESTORS = {
     ("efsa", "tender"): agency_procurement.ingest_efsa_tenders,
     ("eurojust", "tender"): agency_procurement.ingest_eurojust_tenders,
     ("etf", "tender"): agency_procurement.ingest_etf_tenders,
+    # Coverage-gap closers (15 Jun 2026): bring the labelled agencies in
+    # line with the ingested ones so the Tenderator agency feed shows all
+    # decentralised EU bodies, not just the original 6.
+    ("euaa", "eoi_call"): agency_procurement.ingest_euaa_calls,
+    ("euda", "tender"): agency_procurement.ingest_euda_tenders,
+    ("enisa", "tender"): agency_procurement.ingest_enisa_tenders,
+    ("enisa", "eoi_call"): agency_procurement.ingest_enisa_calls,
+    ("era", "tender"): agency_procurement.ingest_era_tenders,
+    ("ecdc", "tender"): agency_procurement.ingest_ecdc_tenders,
+    ("echa", "tender"): agency_procurement.ingest_echa_tenders,
+    ("echa", "eoi_call"): agency_procurement.ingest_echa_calls,
+    ("eige", "tender"): agency_procurement.ingest_eige_tenders,
+    ("fra", "tender"): agency_procurement.ingest_fra_tenders,
+    ("eea", "tender"): agency_procurement.ingest_eea_tenders,
+    ("eu_osha", "tender"): agency_procurement.ingest_eu_osha_tenders,
+    ("eu_osha", "eoi_call"): agency_procurement.ingest_eu_osha_calls,
+    ("eurofound", "tender"): agency_procurement.ingest_eurofound_tenders,
+    ("eurofound", "eoi_call"): agency_procurement.ingest_eurofound_calls,
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
     ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,
@@ -297,7 +315,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa", "fra", "efca", "eurojust", "etf", "easa", "era"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa", "fra", "efca", "eurojust", "etf", "easa", "era", "eurofound"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
