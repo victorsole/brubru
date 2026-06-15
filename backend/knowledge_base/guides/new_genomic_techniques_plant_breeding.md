@@ -11,6 +11,7 @@
 - Responsible Commissioner: Christophe Hansen (Agriculture and Food) and Olivér Várhelyi (Health and Animal Welfare)
 - Legal basis: Article 43(2) TFEU (Common Agricultural Policy) and Article 114 TFEU (internal market)
 - Source: https://www.consilium.europa.eu/en/policies/new-genomic-techniques-for-plant-breeding/
+- **LATEST (Monday 15 June 2026 — plenary week)**: The **NGT Regulation (2023/0226(COD))** is **scheduled for the EP final plenary vote on Wednesday 17 June 2026** (Strasbourg) — the last EP step before signature and OJ publication, following the Council's 21 April 2026 adoption. The text confirms the two-tier classification (NGT Category 1 plants treated like conventionally-bred; NGT Category 2 keep GMO-style requirements). **Vote not yet held — scheduled, outcome pending.** Source: EP plenary newsletter 15-18 June 2026.
 
 ## **LATEST (21 April 2026)**: Council adopted the new NGT rules
 

@@ -1,6 +1,7 @@
 # Tobacco Taxation Directive Revision (Recast)
 
 ## QUICK FACTS
+- **LATEST (Monday 15 June 2026 — plenary week)**: The EP is **scheduled to vote on Wednesday 17 June 2026** to adopt its **opinion (recommendations)** on the Tobacco Taxation Directive revision (2025/0580(CNS)). Because this is a **consultation (CNS) procedure**, the EP opinion is **non-binding** — Council decides by unanimity (Article 113 TFEU). The recommendations are expected to back updated minimum excise rates and first-time EU-level rates for heated tobacco products, e-cigarettes and nicotine pouches. **Vote not yet held — scheduled.** Source: EP plenary newsletter 15-18 June 2026.
 - Full name: Revision of the Tobacco Taxation Directive (recast)
 - Original directive: Council Directive 2011/64/EU (CELEX 32011L0064)
 - Type: Council directive (consultation procedure -- unanimity required)

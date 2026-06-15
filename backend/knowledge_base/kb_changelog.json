@@ -2,6 +2,68 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-15",
+      "action": "updated",
+      "guide": "cbam_downstream_goods_extension",
+      "title": "CBAM",
+      "summary": "QUICK FACTS precision: CBAM is not a tax; six covered sectors locked; EUR 45-50bn = import value not revenue",
+      "refs": [
+        "32023R0956"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "LATEST: Libya regime update — Council Reg 2026/1332 + CFSP Dec 2026/1334 (12 June, OJ L)",
+      "refs": [
+        "32026R1332",
+        "32026D1334"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "action": "updated",
+      "guide": "tobacco_excise_directive",
+      "title": "Tobacco Taxation Directive Revision",
+      "summary": "LATEST: EP opinion (CNS, non-binding) vote scheduled Wed 17 June 2026",
+      "refs": [
+        "2025/0580(CNS)"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "action": "updated",
+      "guide": "new_genomic_techniques_plant_breeding",
+      "title": "New Genomic Techniques (NGT)",
+      "summary": "LATEST: EP final plenary vote scheduled Wed 17 June 2026",
+      "refs": [
+        "2023/0226(COD)"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Simplification Omnibus",
+      "summary": "LATEST: EP plenary first-reading vote scheduled Tue 16 June 2026 (high-risk delay + AI-nudifier ban)",
+      "refs": [
+        "2025/0359(COD)"
+      ]
+    },
+    {
+      "date": "2026-06-15",
+      "action": "added",
+      "guide": "end_of_life_vehicles_regulation",
+      "title": "End-of-Life Vehicles (ELV) Regulation",
+      "summary": "New guide: circularity requirements for vehicle design + ELV management (2023/0284(COD)); EP final plenary vote scheduled Thu 18 June 2026",
+      "refs": [
+        "COM(2023)451",
+        "2023/0284(COD)"
+      ]
+    },
+    {
       "date": "2026-06-12",
       "action": "updated",
       "guide": "digital_networks_act",
