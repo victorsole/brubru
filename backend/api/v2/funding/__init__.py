@@ -40,6 +40,10 @@ from . import cohesion_cap as _cohesion_cap
 # Per-programme F&T grant-call endpoints (economy_items, item_type='grant').
 # Built one programme at a time — Justice + Innovation Fund live.
 from . import ft_programmes as _ft_programmes
+# EU external-action awards (FTS): NDICI + IPA III + Humanitarian.
+from . import international_cooperation as _international_cooperation
+# EU F&T Portal news + events (economy_items body 'ftportal', SEDIA news/events indexes).
+from . import ft_news_events as _ft_news_events
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -57,3 +61,5 @@ router.include_router(_cohesion_eusf.router)
 router.include_router(_funding_programmes.router)
 router.include_router(_cohesion_cap.router)
 router.include_router(_ft_programmes.router)
+router.include_router(_international_cooperation.router)
+router.include_router(_ft_news_events.router)

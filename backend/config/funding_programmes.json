@@ -1,7 +1,7 @@
 {
   "$schema_version": "1.0",
   "$source": "https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding-programmes_en",
-  "$generated": "2026-06-15",
+  "$generated": "2026-06-15b",
   "$note": "EC 2021-2027 MFF funding programmes by the Commission's own 6-heading classification, with Brubru coverage. coverage: covered | gap | skipped. via: endpoint (dedicated Brubru endpoint) | ft_calls (reachable via /api/v2/funding/ft-calls-for-proposals).",
   "programmes": [
     {
@@ -419,20 +419,20 @@
       "acronym": "NDICI",
       "heading": "Neighbourhood and the World",
       "cluster": "External Action",
-      "coverage": "gap",
-      "via": null,
-      "endpoint": null,
-      "source": "DG INTPA; IATI/d-portal source UNVERIFIED (15 Jun 2026: XM-DAC-918 org-ref returns 0 on d-portal, official datastore needs an API key, per-instrument NDICI/IPA/Humanitarian attribution unproven) — needs a dedicated verified IATI connector before an endpoint can be built"
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/international-cooperation?programme=ndici",
+      "source": "EU Financial Transparency System (FTS) awards — 11,882 NDICI-Global Europe commitments (beneficiary, country, amount, grant vs procurement). Awards side; open calls run via OPSYS/TED (not held)."
     },
     {
       "programme": "Humanitarian Aid",
       "acronym": "Humanitarian Aid",
       "heading": "Neighbourhood and the World",
       "cluster": "External Action",
-      "coverage": "gap",
-      "via": null,
-      "endpoint": null,
-      "source": "DG ECHO; IATI/EDRIS source UNVERIFIED (15 Jun 2026: same IATI access blocker as NDICI) — needs a dedicated verified connector before an endpoint can be built"
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/international-cooperation?programme=humanitarian",
+      "source": "EU Financial Transparency System (FTS) awards — 1,335 Humanitarian Aid (HUMA) commitments. Awards side; open calls via OPSYS/TED (not held)."
     },
     {
       "programme": "Common Foreign and Security Policy",
@@ -459,10 +459,10 @@
       "acronym": "IPA III",
       "heading": "Neighbourhood and the World",
       "cluster": "Pre-Accession Assistance",
-      "coverage": "gap",
-      "via": null,
-      "endpoint": null,
-      "source": "DG NEAR; Team Europe Explorer + IATI source UNVERIFIED (15 Jun 2026: same IATI access blocker as NDICI) — needs a dedicated verified connector before an endpoint can be built"
+      "coverage": "covered",
+      "via": "endpoint",
+      "endpoint": "/api/v2/funding/international-cooperation?programme=ipa3",
+      "source": "EU Financial Transparency System (FTS) awards — 2,295 IPA III pre-accession commitments. Awards side; open calls via OPSYS/TED (not held)."
     }
   ]
 }

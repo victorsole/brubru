@@ -457,6 +457,9 @@ async def cron_sync_daily(
     # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id
     # prefix; idempotent upsert on (body_code, item_type, public_url).
     results["ft_programme_calls"] = _run_script("ft_programme_calls", "scripts/ingest_ft_programme_calls.py", ["--all", "--apply"], timeout=900)
+    # F&T Portal news + events (economy_items body 'ftportal') backing
+    # /api/v2/funding/ft-news + /ft-events. SEDIA news/events indexes.
+    results["ft_news_events"] = _run_script("ft_news_events", "scripts/ingest_ft_news_events.py", ["--all", "--apply"], timeout=600)
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang
     # on freshly-arrived TED + F&T rows and translate any foreign-language

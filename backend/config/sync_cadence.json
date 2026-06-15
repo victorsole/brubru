@@ -375,6 +375,20 @@
       "notes": "Per-programme grant calls ingested to economy_items (item_type='grant'); back /api/v2/funding/justice + /innovation-fund and appear in /all. Innovation Fund calls are ALSO mirrored into ft_calls_for_proposals (framework_programme='Innovation Fund') so the startup-funding bundle /api/v2/funding/startups picks them up. Wired into cron_sync_daily; idempotent upsert."
     },
     {
+      "path_prefix": "/api/v2/funding/{ft-news,ft-events}",
+      "source": "EU Funding & Tenders Portal — SEDIA news/events indexes (apiKey=SEDIA-NEWS-PROD / SEDIA-EVENTS-PROD)",
+      "script": "scripts/ingest_ft_news_events.py --all --apply",
+      "tier": "daily",
+      "notes": "Portal news (~715) + events (~198) ingested to economy_items (body_code='ftportal', item_type='news'/'event'). Wired into cron_sync_daily; idempotent upsert on (body_code,item_type,public_url). GOTCHA: each SEDIA multipart part needs filename=\"blob\" or the API 500s."
+    },
+    {
+      "path_prefix": "/api/v2/funding/international-cooperation",
+      "source": "EU Financial Transparency System (FTS) — economy_items body_code='commission' item_type='funding_recipient' (already synced)",
+      "script": "(no dedicated script — reads the existing FTS dataset; filtered to NDICI/IPA III/Humanitarian programmes)",
+      "tier": "annual",
+      "notes": "EU external-action awards (NDICI 11.9k + IPA III 2.3k + Humanitarian 1.3k). FTS is an annual dataset; refreshed with the FTS backfill, no separate sync."
+    },
+    {
       "path_prefix": "/api/v1/specialised/a2m",
       "source": "Combined Nomenclature (webgate.ec.europa.eu/nomen) — live pass-through",
       "script": "(no script — live pass-through)",
