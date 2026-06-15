@@ -8,6 +8,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
+import { LensToggle, type LensMode } from '../bubble/lens_toggle';
 import './unified_opportunity_feed.css';
 import type { SourceFilter } from './tenderator_dashboard';
 
@@ -102,11 +103,23 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
   });
   const [clientFilterApplied, setClientFilterApplied] = useState<boolean>(false);
   const [clientFilterSlug, setClientFilterSlug] = useState<string | null>(null);
-  // Layer 1: MEUB Policy-Interest personalisation. Default ON, persisted; the
-  // backend treats it as a no-op when the user has no interests set.
-  const [personalised, setPersonalised] = useState<boolean>(() => {
-    try { return localStorage.getItem('tenderator_personalised') !== '0'; } catch { return true; }
+  // Layer 1: MEUB Policy-Interest personalisation lens. Mirrors the shared
+  // bubble <LensToggle> pattern (News/Votes/OJ/PQ). 'all' = unfiltered feed,
+  // 'pi' = narrow by user.policy_interests via the crosswalk. 'files' (hard
+  // lens via tracked carriages) is not wired on Tenderator yet, so hasFiles
+  // is false and the segment hides. Backend default is personalised=true, so
+  // we only send the param when mode='all'.
+  const [mode, setMode] = useState<LensMode>(() => {
+    try {
+      const v = localStorage.getItem('tenderator_lens_mode');
+      return v === 'all' ? 'all' : 'pi';
+    } catch { return 'pi'; }
   });
+  const personalised = mode === 'pi';
+  const setLensMode = (m: LensMode) => {
+    setMode(m);
+    try { localStorage.setItem('tenderator_lens_mode', m); } catch (_) { /* ignore */ }
+  };
   const [personalisedApplied, setPersonalisedApplied] = useState<boolean>(false);
   const [interests, setInterests] = useState<string[]>([]);
 
@@ -203,38 +216,35 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         )}
       </div>
 
-      {/* Personalisation pill (Layer 1) — derived from your MEUB Policy
-          Interests. Default ON; turning OFF widens the feed back to the
-          full catalogue. No-op when the user has no interests set. */}
-      <div className="tenderator-feed__personalised">
-        <label className="tenderator-feed__personalised-toggle">
-          <input
-            type="checkbox"
-            checked={personalised}
-            onChange={(e) => {
-              const v = e.target.checked;
-              setPersonalised(v);
-              try { localStorage.setItem('tenderator_personalised', v ? '1' : '0'); } catch (_) { /* ignore */ }
-            }}
+      {/* Personalisation lens (Layer 1) — shared <LensToggle> mirroring the
+          News/Votes/OJ/PQ pattern. "My files" hidden (no tracked-files hard
+          lens on Tenderator yet). When the user has no interests, the
+          component renders null and we surface a hint instead. */}
+      {personalisedApplied ? (
+        <div className="tenderator-feed__lens">
+          <LensToggle
+            mode={mode}
+            onChange={setLensMode}
+            hasPi={true}
+            hasFiles={false}
           />
-          <span>Personalise by my policy interests</span>
-        </label>
-        {personalised && personalisedApplied && (
-          <span
-            className="tenderator-feed__personalised-badge"
-            title={interests.length ? `Interests: ${interests.join(', ')}` : undefined}
-          >
-            <span className="mdi mdi-tune-variant" aria-hidden="true" />
-            Personalised — {interests.length} interest{interests.length === 1 ? '' : 's'}
-          </span>
-        )}
-        {personalised && !personalisedApplied && (
-          <span className="tenderator-feed__personalised-badge tenderator-feed__personalised-badge--inactive">
+          {mode === 'pi' && interests.length > 0 && (
+            <span
+              className="tenderator-feed__lens-meta"
+              title={`Interests: ${interests.join(', ')}`}
+            >
+              {interests.length} interest{interests.length === 1 ? '' : 's'}
+            </span>
+          )}
+        </div>
+      ) : (
+        personalised && (
+          <div className="tenderator-feed__lens tenderator-feed__lens--empty">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
             No policy interests set — <a href="/my-eu-bubble?tab=policy-interests">add some in My EU Bubble</a>
-          </span>
-        )}
-      </div>
+          </div>
+        )
+      )}
 
       {/* Client-pursuits filter toggle (Layer 2) — only useful for users
           with a configured private guide; harmless if no filter is set. */}
