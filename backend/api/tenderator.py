@@ -1376,16 +1376,24 @@ async def get_intl_coop_summary(
     "/unified-feed",
     summary="Mixed-source opportunity feed for the dashboard",
     description=(
-        "Returns a paginated list of opportunities from one of: ted, "
-        "ft_proposals, ft_tenders, ft_projects, or all. Normalises each "
-        "source to a common shape: {id, source, external_id, title, "
-        "description, status, deadline, budget, currency, source_url, "
-        "organisation, country, programme, published_at}. Blue tier only."
+        "Returns a paginated list of opportunities from one of 8 sources: "
+        "**ted** (member-state TED notices), **ft_proposals** (F&T calls "
+        "for proposals), **ft_tenders** (F&T calls for tenders), "
+        "**ft_projects** (F&T funded projects), **agency** (decentralised "
+        "EU agency procurement in economy_items), **intl_coop** (EU FTS "
+        "awards — NDICI / IPA III / Humanitarian Aid), **matches** (the "
+        "user's scored matches across all sources), or **all** "
+        "(interleaved). Lenses: `personalised` (default true), "
+        "`external_action`, `framework_only`, `client_filter`. "
+        "Normalises every source to a common shape: {id, source, "
+        "external_id, title, description, status, deadline, budget, "
+        "currency, source_url, organisation, country, programme, "
+        "published_at, detected_lang, translated_from?}. Blue tier only."
     ),
 )
 async def get_unified_feed(
     source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | agency | matches | all"),
-    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders | agency"),
+    match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders | agency. Backed by tender_matches (TED) + on-the-fly scoring (F&T + agency) against the user's TenderProfile keywords + CPV + countries, blended with their MEUB Policy Interests when personalised is on."),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     programme: Optional[str] = Query(None, description="EU funding programme code (e.g. EU4H, HE, CEF) — filters F&T calls/projects by topic_id prefix"),
     body: Optional[str] = Query(None, description="When source=agency: economy_items.body_code (e.g. efsa, ema, efca) — filters to one decentralised agency."),
@@ -3583,18 +3591,24 @@ Award Criteria: {tender.award_criteria or 'Not specified'}
         prompt = f"""Analyse this EU public procurement tender and provide a structured summary.
 Be concise and focus on what a potential bidder needs to know.
 
+**Language**: Always respond in clear British English, regardless of the
+source language. The tender text below may be in any EU language (e.g.
+Croatian, Polish, Hungarian, Greek, German, Spanish, Italian). If you
+see non-English text, translate the key facts before summarising — do
+NOT echo the original language.
+
 Tender Information:
 {tender_context}
 
 Provide your response in this exact JSON format:
 {{
-    "one_liner": "A single sentence describing the opportunity",
-    "what": "What is being procured (2-3 sentences max)",
-    "who": "Brief description of the contracting authority",
+    "one_liner": "A single sentence describing the opportunity, in English",
+    "what": "What is being procured (2-3 sentences max), in English. Translate from the source language if needed.",
+    "who": "Brief description of the contracting authority, in English",
     "value": "Contract value or budget information",
     "deadline": "Submission deadline with any important time notes",
     "key_requirements": ["requirement 1", "requirement 2", "requirement 3"],
-    "award_focus": "What the evaluation criteria prioritise"
+    "award_focus": "What the evaluation criteria prioritise, in English"
 }}
 
 Respond ONLY with the JSON, no additional text."""
@@ -3708,6 +3722,21 @@ def _extract_and_validate_summary_json(response_text: str) -> Optional[dict]:
     return None
 
 
+_BRUBRU_LANGS = {"en", "es", "ca", "fr", "it", "nl"}
+
+
+def _fallback_translate(text: str, src_lang: Optional[str]) -> str:
+    """Best-effort English translation for the fallback summary when the AI
+    summary path failed. Avoids dumping raw Croatian / Polish / Greek
+    description into the WHAT field. Tries the cached sidecar first; if
+    nothing is cached, returns the source text with a clear hint."""
+    if not text:
+        return ""
+    if not src_lang or src_lang in _BRUBRU_LANGS:
+        return text
+    return f"[Original in {src_lang.upper()} — open the source notice for the full text.] {text[:240]}..."
+
+
 def _build_fallback_summary(tender) -> dict:
     """Build a basic summary from tender data when AI fails."""
     # Safely format value
@@ -3726,16 +3755,22 @@ def _build_fallback_summary(tender) -> dict:
     else:
         deadline_str = "Check tender notice"
 
-    # Safely truncate description
+    # Source language detection — Croatian / Polish / Hungarian etc.
+    # often produce a fallback summary; we don't want raw non-English to
+    # leak as the "WHAT" field.
+    src_lang = getattr(tender, "detected_lang", None)
+
     if tender.description and len(tender.description) > 300:
-        what_str = tender.description[:300] + "..."
+        what_str = _fallback_translate(tender.description[:300] + "...", src_lang)
     elif tender.description:
-        what_str = tender.description
+        what_str = _fallback_translate(tender.description, src_lang)
     else:
         what_str = "See tender notice for details."
 
+    one_liner = _fallback_translate(tender.title, src_lang) if tender.title else "EU public procurement opportunity"
+
     return {
-        "one_liner": tender.title or "EU public procurement opportunity",
+        "one_liner": one_liner,
         "what": what_str,
         "who": tender.official_name or "EU contracting authority",
         "value": value_str,

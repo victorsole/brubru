@@ -26,7 +26,7 @@ import './tenderator_dashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop' | 'programmes' | 'pipeline';
+export type SourceFilter = 'all' | 'matches' | 'ted' | 'ft_proposals' | 'ft_tenders' | 'ft_projects' | 'agency' | 'intl_coop' | 'pipeline';
 
 interface ClosingSoonItem {
   tender_id: number;
@@ -129,7 +129,7 @@ export const TenderatorDashboard = ({
   const incomingSourceParam = searchParams.get('source') as SourceFilter | null;
   const incomingBody = searchParams.get('body') || '';
   const validInitialSource: SourceFilter | null = incomingSourceParam &&
-    (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency','intl_coop'] as SourceFilter[])
+    (['all','matches','ted','ft_proposals','ft_tenders','ft_projects','agency','intl_coop','pipeline'] as SourceFilter[])
       .includes(incomingSourceParam) ? incomingSourceParam : null;
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [source, setSource] = useState<SourceFilter>(validInitialSource || 'all');
@@ -368,7 +368,7 @@ export const TenderatorDashboard = ({
             to item_type='framework' (EU-institution FWCs pulled from TED). */}
         <button
           type="button"
-          className={`tenderator-dashboard__chip ${frameworkOnly ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--framework`}
+          className={`tenderator-dashboard__chip ${(frameworkOnly && source === 'agency') ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--framework`}
           onClick={() => {
             const next = !frameworkOnly;
             setFrameworkOnly(next);
@@ -397,7 +397,7 @@ export const TenderatorDashboard = ({
             NDICI/IPA III/HUMA programmes) and unlocks the FTS-awards source. */}
         <button
           type="button"
-          className={`tenderator-dashboard__chip ${externalAction ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--external`}
+          className={`tenderator-dashboard__chip ${(externalAction && source !== 'pipeline') ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--external`}
           onClick={() => {
             const next = !externalAction;
             setExternalAction(next);
@@ -412,7 +412,7 @@ export const TenderatorDashboard = ({
 
       {/* External-action sub-control: beneficiary-country narrowing. Visible
           only when the lens is on. Works in combination with chips + search. */}
-      {externalAction && (
+      {externalAction && source !== 'pipeline' && (
         <section className="tenderator-dashboard__external-controls">
           <label className="tenderator-dashboard__country-label" htmlFor="beneficiary-country">
             <span className="mdi mdi-map-marker-outline" aria-hidden="true" />

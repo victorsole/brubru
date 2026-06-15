@@ -496,16 +496,21 @@ export const TenderDetail = ({
                       <span className="tender-detail__summary-value">{summary.deadline}</span>
                     </div>
                   </div>
-                  {summary.key_requirements && summary.key_requirements.length > 0 && (
-                    <div className="tender-detail__requirements">
-                      <span className="tender-detail__summary-label">Key Requirements</span>
-                      <ul>
-                        {summary.key_requirements.map((req, idx) => (
-                          <li key={idx}>{req}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  {(() => {
+                    const reqs = (summary.key_requirements || [])
+                      .map((r) => (typeof r === 'string' ? r.trim() : ''))
+                      .filter((r) => r && r !== 'requirement 1' && r !== 'requirement 2' && r !== 'requirement 3');
+                    return reqs.length > 0 ? (
+                      <div className="tender-detail__requirements">
+                        <span className="tender-detail__summary-label">Key Requirements</span>
+                        <ul>
+                          {reqs.map((req, idx) => (
+                            <li key={idx}>{req}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null;
+                  })()}
                   {summary.award_focus && (
                     <div className="tender-detail__award-focus">
                       <span className="mdi mdi-lightbulb"></span>
@@ -526,22 +531,28 @@ export const TenderDetail = ({
               </div>
             )}
 
-            {/* CPV Codes */}
-            <div className="tender-detail__section">
-              <h3><span className="mdi mdi-tag-multiple"></span> CPV Codes</h3>
-              <div className="tender-detail__cpv-list">
-                <div className="tender-detail__cpv-item tender-detail__cpv-item--main">
-                  <span className="tender-detail__cpv-code">{tender.cpv_main}</span>
-                  <span className="tender-detail__cpv-name">{getSectorName(tender.cpv_main)} (Main)</span>
+            {/* CPV Codes — hide entirely when neither main nor secondary
+                codes are present (TED parser sometimes returns notices
+                without CPV; an empty section reads as broken). */}
+            {(tender.cpv_main || (tender.cpv_codes && tender.cpv_codes.length > 0)) && (
+              <div className="tender-detail__section">
+                <h3><span className="mdi mdi-tag-multiple"></span> CPV Codes</h3>
+                <div className="tender-detail__cpv-list">
+                  {tender.cpv_main && (
+                    <div className="tender-detail__cpv-item tender-detail__cpv-item--main">
+                      <span className="tender-detail__cpv-code">{tender.cpv_main}</span>
+                      <span className="tender-detail__cpv-name">{getSectorName(tender.cpv_main)} (Main)</span>
+                    </div>
+                  )}
+                  {tender.cpv_codes && tender.cpv_codes.filter(c => c !== tender.cpv_main).map((code, idx) => (
+                    <div key={idx} className="tender-detail__cpv-item">
+                      <span className="tender-detail__cpv-code">{code}</span>
+                      <span className="tender-detail__cpv-name">{getSectorName(code)}</span>
+                    </div>
+                  ))}
                 </div>
-                {tender.cpv_codes && tender.cpv_codes.filter(c => c !== tender.cpv_main).map((code, idx) => (
-                  <div key={idx} className="tender-detail__cpv-item">
-                    <span className="tender-detail__cpv-code">{code}</span>
-                    <span className="tender-detail__cpv-name">{getSectorName(code)}</span>
-                  </div>
-                ))}
               </div>
-            </div>
+            )}
 
             {/* DG GROW Regulatory Alerts */}
             {regulatoryRisk && (regulatoryRisk.technical_regulations.length > 0 || regulatoryRisk.trade_barriers.length > 0) && (

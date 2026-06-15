@@ -177,8 +177,10 @@ INGESTORS = {
     # Move 5 (15 Jun 2026): EU-institution framework contracts via TED API v3.
     # One scraper call writes rows under multiple body_codes (commission/eib/
     # parliament/council/ecb/eeas) with item_type='framework'. Registered
-    # against the Commission slot; the cron sweep fires it once per day.
-    ("commission", "framework"): agency_procurement.ingest_eu_institution_frameworks,
+    # against EIB (batch 1 in cron's _ECONOMY_BATCHES) so the daily sweep
+    # fires it — commission is explicitly excluded from _ECONOMY_BATCHES so
+    # keying off it would leave Move 5 invisible to cron.
+    ("eib", "framework"): agency_procurement.ingest_eu_institution_frameworks,
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
     ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,

@@ -455,7 +455,11 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             }}
           />
 
-          {/* AI Brief */}
+          {/* AI Brief — only for sources the /brief endpoint can resolve.
+              agency + intl_coop are not in the brief resolver; clicking the
+              CTA would 400. Hide the whole section instead of showing a
+              broken CTA. Fix for audit finding #2 (15 Jun 2026). */}
+          {(['ted','ft_proposals','ft_tenders','ft_projects'] as const).includes(opportunity.source as any) && (
           <section className="opportunity-drawer__section">
             <h3>
               <span className="mdi mdi-robot-outline" aria-hidden="true" />
@@ -497,8 +501,13 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
               </dl>
             )}
           </section>
+          )}
 
-          {/* Similar projects */}
+          {/* Similar projects — only for F&T sources. For intl_coop the
+              equivalent intel (past grantees in this country) lives in
+              the Move-2 "Past EU aid in this country" panel above, so
+              we don't double-render. Agency + TED don't have a
+              ft_funded_projects link. */}
           {(opportunity.source === 'ft_proposals' || opportunity.source === 'ft_projects') && (
             <section className="opportunity-drawer__section">
               <h3>
