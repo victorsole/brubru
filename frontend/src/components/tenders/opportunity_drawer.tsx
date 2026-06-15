@@ -63,6 +63,33 @@ interface SimilarResponse {
   note?: string;
 }
 
+// Move 2: country-anchored FTS summary (drawer "Past EU aid in this country").
+interface IntlCoopWinner {
+  name: string;
+  count: number;
+  amount_eur: number;
+}
+interface IntlCoopRecent {
+  id: number;
+  beneficiary: string;
+  amount_eur: number | null;
+  funding_type: string;
+  dg: string;
+  subject: string | null;
+  document_date: string | null;
+  source_url: string;
+}
+interface IntlCoopSummary {
+  country: string;
+  programme: string | null;
+  years_back: number;
+  count: number;
+  total_amount_eur: number | null;
+  avg_amount_eur: number | null;
+  top_winners: IntlCoopWinner[];
+  recent: IntlCoopRecent[];
+}
+
 interface FtsRecipient {
   id: number;
   title: string;
@@ -122,6 +149,8 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   const [similarLoading, setSimilarLoading] = useState(false);
   const [recipients, setRecipients] = useState<FtsRecipientsResponse | null>(null);
   const [recipientsLoading, setRecipientsLoading] = useState(false);
+  const [intlSummary, setIntlSummary] = useState<IntlCoopSummary | null>(null);
+  const [intlSummaryLoading, setIntlSummaryLoading] = useState(false);
 
   // Reset state when opportunity changes
   useEffect(() => {
@@ -187,6 +216,40 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
   useEffect(() => {
     void fetchRecipients();
   }, [fetchRecipients]);
+
+  // Move 2: "Won this before" — country-anchored FTS summary. Fires when the
+  // opportunity carries a country (intl_coop rows always do; ft_projects do;
+  // others rarely). Detects programme from intl_coop's programme tag.
+  const fetchIntlSummary = useCallback(async () => {
+    setIntlSummary(null);
+    if (!opportunity || !token) return;
+    const country = opportunity.country;
+    if (!country || country.length < 2) return;
+    setIntlSummaryLoading(true);
+    try {
+      const params = new URLSearchParams({ country, years_back: '5' });
+      // Map short programme tags from intl_coop serialiser to summary keys.
+      const prog = (opportunity.programme || '').toLowerCase();
+      if (prog.includes('ndici')) params.set('programme', 'ndici');
+      else if (prog.includes('ipa')) params.set('programme', 'ipa3');
+      else if (prog.includes('humanitarian')) params.set('programme', 'humanitarian');
+      const res = await fetch(`${API_URL}/api/tenders/intl-coop-summary?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIntlSummary(data);
+      }
+    } catch (e) {
+      console.error('intl-coop-summary fetch failed:', e);
+    } finally {
+      setIntlSummaryLoading(false);
+    }
+  }, [opportunity, token]);
+
+  useEffect(() => {
+    void fetchIntlSummary();
+  }, [fetchIntlSummary]);
 
   // Close on Escape
   useEffect(() => {
@@ -448,6 +511,121 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                     </li>
                   ))}
                 </ul>
+              )}
+            </section>
+          )}
+
+          {/* Move 2 (15 Jun 2026): "Past EU aid in this country" — anchored
+              on the opportunity.country, aggregated across NDICI/IPA III/HUMA
+              (or just one when the opportunity is itself an intl_coop row).
+              Surfaces the top 5 winners + the 5 most recent awards + total
+              and average commitment so the user has competitive context at
+              a glance. Hides cleanly when no country / no matches. */}
+          {(intlSummaryLoading || (intlSummary && intlSummary.count > 0)) && (
+            <section className="opportunity-drawer__section">
+              <h3>
+                <span className="mdi mdi-earth" aria-hidden="true" />
+                Past EU aid in {intlSummary?.country || opportunity.country}
+                {intlSummary?.programme && (
+                  <span className="opportunity-drawer__intl-prog-tag">
+                    {intlSummary.programme === 'ndici' ? 'NDICI'
+                      : intlSummary.programme === 'ipa3' ? 'IPA III'
+                      : intlSummary.programme === 'humanitarian' ? 'Humanitarian Aid'
+                      : intlSummary.programme}
+                  </span>
+                )}
+              </h3>
+              {intlSummaryLoading && (
+                <div className="opportunity-drawer__similar-loading">
+                  <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
+                  Checking EU Financial Transparency System...
+                </div>
+              )}
+              {!intlSummaryLoading && intlSummary && intlSummary.count > 0 && (
+                <>
+                  <div className="opportunity-drawer__intl-stats">
+                    <div className="opportunity-drawer__intl-stat">
+                      <span className="opportunity-drawer__intl-stat-value">{intlSummary.count}</span>
+                      <span className="opportunity-drawer__intl-stat-label">past awards (last {intlSummary.years_back}y)</span>
+                    </div>
+                    {intlSummary.total_amount_eur ? (
+                      <div className="opportunity-drawer__intl-stat">
+                        <span className="opportunity-drawer__intl-stat-value">
+                          €{(intlSummary.total_amount_eur / 1e6).toFixed(1)}M
+                        </span>
+                        <span className="opportunity-drawer__intl-stat-label">total EU commitment</span>
+                      </div>
+                    ) : null}
+                    {intlSummary.avg_amount_eur ? (
+                      <div className="opportunity-drawer__intl-stat">
+                        <span className="opportunity-drawer__intl-stat-value">
+                          €{intlSummary.avg_amount_eur >= 1e6
+                            ? `${(intlSummary.avg_amount_eur / 1e6).toFixed(1)}M`
+                            : `${Math.round(intlSummary.avg_amount_eur / 1e3)}k`}
+                        </span>
+                        <span className="opportunity-drawer__intl-stat-label">average</span>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {intlSummary.top_winners.length > 0 && (
+                    <div className="opportunity-drawer__intl-winners">
+                      <h4 className="opportunity-drawer__intl-subheading">Top winners</h4>
+                      <ul className="opportunity-drawer__intl-winner-list">
+                        {intlSummary.top_winners.map((w) => (
+                          <li key={w.name} className="opportunity-drawer__intl-winner">
+                            <a
+                              className="opportunity-drawer__intl-winner-name"
+                              href={`/main?q=${encodeURIComponent(
+                                `What does Brubru know about ${w.name}?`
+                              )}`}
+                              title="Ask Brubru about this organisation"
+                            >
+                              {w.name}
+                            </a>
+                            <span className="opportunity-drawer__intl-winner-meta">
+                              {w.count}× · €{w.amount_eur >= 1e6
+                                ? `${(w.amount_eur / 1e6).toFixed(1)}M`
+                                : `${Math.round(w.amount_eur / 1e3)}k`}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {intlSummary.recent.length > 0 && (
+                    <div className="opportunity-drawer__intl-recent">
+                      <h4 className="opportunity-drawer__intl-subheading">Recent awards</h4>
+                      <ul className="opportunity-drawer__intl-recent-list">
+                        {intlSummary.recent.map((r) => (
+                          <li key={r.id} className="opportunity-drawer__intl-recent-item">
+                            <a
+                              href={r.source_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="opportunity-drawer__intl-recent-title"
+                            >
+                              {r.subject || r.beneficiary}
+                            </a>
+                            <div className="opportunity-drawer__intl-recent-meta">
+                              {r.beneficiary && <span>{r.beneficiary}</span>}
+                              {r.amount_eur ? (
+                                <span>· €{r.amount_eur >= 1e6
+                                  ? `${(r.amount_eur / 1e6).toFixed(1)}M`
+                                  : `${Math.round(r.amount_eur / 1e3)}k`}</span>
+                              ) : null}
+                              {r.funding_type && <span>· {r.funding_type}</span>}
+                              {r.document_date && (
+                                <span>· {new Date(r.document_date).getFullYear()}</span>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               )}
             </section>
           )}

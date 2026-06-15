@@ -1239,6 +1239,130 @@ async def get_fts_recipients(
 
 
 # ============================================================================
+# Move 2: "Won this before" drawer panel — country-anchored FTS summary
+# ============================================================================
+
+@router.get(
+    "/intl-coop-summary",
+    summary="EU aid history summary for a country (FTS awards)",
+    description=(
+        "Returns aggregated stats over the EU Financial Transparency System "
+        "(FTS) awards for a given country and optional programme: total "
+        "count, total amount, average amount, top 5 winners by total amount, "
+        "and the 5 most recent awards. Powers the 'Past EU aid in this "
+        "country' drawer panel on the Tenderator. Blue tier only."
+    ),
+)
+async def get_intl_coop_summary(
+    country: str = Query(..., min_length=2, description="Beneficiary country substring."),
+    programme: Optional[str] = Query(None, description="ndici | ipa3 | humanitarian (optional)."),
+    years_back: int = Query(5, ge=1, le=20, description="Look back N years from today."),
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db),
+):
+    """Country-anchored summary of past EU aid awards. Reads the same FTS
+    rows as /api/v2/funding/international-cooperation but aggregates."""
+    where = [
+        "body_code = 'commission'",
+        "item_type = 'funding_recipient'",
+        "body_txt ILIKE :bc",
+    ]
+    params: Dict[str, Any] = {"bc": f"%Beneficiary country: %{country}%"}
+    _PROG_FRAG = {
+        "ndici": "Neighbourhood, Development and International",
+        "ipa3": "Pre-Accession Assistance (IPA III)",
+        "humanitarian": "Humanitarian Aid (HUMA)",
+    }
+    if programme:
+        frag = _PROG_FRAG.get(programme.lower())
+        if frag:
+            where.append("body_txt ILIKE :prog")
+            params["prog"] = f"%{frag}%"
+    # All three external-action programmes when none specified.
+    else:
+        where.append(
+            "(body_txt ILIKE :p0 OR body_txt ILIKE :p1 OR body_txt ILIKE :p2)"
+        )
+        params["p0"] = f"%{_PROG_FRAG['ndici']}%"
+        params["p1"] = f"%{_PROG_FRAG['ipa3']}%"
+        params["p2"] = f"%{_PROG_FRAG['humanitarian']}%"
+    # Year cutoff
+    cutoff = datetime.utcnow().year - years_back
+    where.append("body_txt ~* :yr")
+    params["yr"] = rf"Year: ({cutoff}|{'|'.join(str(y) for y in range(cutoff+1, datetime.utcnow().year + 1))})"
+    clause = " AND ".join(where)
+
+    rows = db.execute(
+        text(
+            f"SELECT id, title, body_txt, public_url, document_date "
+            f"FROM economy_items WHERE {clause} "
+            f"ORDER BY document_date DESC NULLS LAST, id DESC LIMIT 500"
+        ),
+        params,
+    ).fetchall()
+
+    import re as _re
+
+    def _parse(body: str, label: str) -> Optional[str]:
+        if not body: return None
+        m = _re.search(rf"{_re.escape(label)}:\s*(.+)", body)
+        return m.group(1).strip() if m else None
+
+    # Aggregate
+    total_amount = 0.0
+    winners: Dict[str, Dict[str, Any]] = {}
+    recent: List[Dict[str, Any]] = []
+    for r in rows:
+        b = r.body_txt or ""
+        beneficiary = _parse(b, "Beneficiary") or ""
+        amount_raw = _parse(b, "EU commitment (total)") or ""
+        funding_type = _parse(b, "Funding type") or ""
+        dg = _parse(b, "Responsible department") or ""
+        subject = _parse(b, "Subject") or ""
+        amt = 0.0
+        if amount_raw:
+            m = _re.search(r"([\d.,]+)", amount_raw.replace("EUR", ""))
+            if m:
+                try:
+                    amt = float(m.group(1).replace(",", ""))
+                except ValueError:
+                    amt = 0.0
+        total_amount += amt
+        if beneficiary:
+            slot = winners.setdefault(beneficiary, {"count": 0, "amount": 0.0})
+            slot["count"] += 1
+            slot["amount"] += amt
+        if len(recent) < 5:
+            recent.append({
+                "id": r.id,
+                "beneficiary": beneficiary,
+                "amount_eur": amt or None,
+                "funding_type": funding_type,
+                "dg": dg,
+                "subject": subject[:160] if subject else None,
+                "document_date": r.document_date.isoformat() if r.document_date else None,
+                "source_url": r.public_url,
+            })
+
+    top_winners = sorted(
+        ({"name": k, "count": v["count"], "amount_eur": v["amount"]} for k, v in winners.items()),
+        key=lambda x: -x["amount_eur"],
+    )[:5]
+
+    count = len(rows)
+    return {
+        "country": country,
+        "programme": programme,
+        "years_back": years_back,
+        "count": count,
+        "total_amount_eur": total_amount or None,
+        "avg_amount_eur": (total_amount / count) if count else None,
+        "top_winners": top_winners,
+        "recent": recent,
+    }
+
+
+# ============================================================================
 # Unified F&T feed for the dashboard cockpit
 #
 # The Tenderator dashboard exposes 4 sources behind a single list view:

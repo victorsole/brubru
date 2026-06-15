@@ -413,3 +413,133 @@
     justify-content: center;
   }
 }
+
+/* Move 2: "Past EU aid in this country" — stats strip + top winners + recent. */
+.opportunity-drawer__intl-prog-tag {
+  margin-left: 0.55rem;
+  padding: 0.12rem 0.5rem;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.18), rgba(6, 147, 227, 0.12));
+  color: #115e59;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.opportunity-drawer__intl-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.9rem;
+}
+.opportunity-drawer__intl-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.55rem 0.7rem;
+  background: rgba(20, 184, 166, 0.06);
+  border: 1px solid rgba(20, 184, 166, 0.18);
+  border-radius: 8px;
+}
+.opportunity-drawer__intl-stat-value {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #115e59;
+  line-height: 1.1;
+}
+.opportunity-drawer__intl-stat-label {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin-top: 0.2rem;
+  letter-spacing: 0.02em;
+}
+
+.opportunity-drawer__intl-subheading {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.6rem 0 0.4rem;
+}
+
+.opportunity-drawer__intl-winner-list,
+.opportunity-drawer__intl-recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.opportunity-drawer__intl-winner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 7px;
+}
+.opportunity-drawer__intl-winner-name {
+  font-size: 0.85rem;
+  color: #111827;
+  text-decoration: none;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.opportunity-drawer__intl-winner-name:hover {
+  color: #0693e3;
+  text-decoration: underline;
+}
+.opportunity-drawer__intl-winner-meta {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.opportunity-drawer__intl-recent-item {
+  padding: 0.5rem 0.6rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 7px;
+}
+.opportunity-drawer__intl-recent-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111827;
+  text-decoration: none;
+  margin-bottom: 0.2rem;
+}
+.opportunity-drawer__intl-recent-title:hover {
+  color: #0693e3;
+  text-decoration: underline;
+}
+.opportunity-drawer__intl-recent-meta {
+  font-size: 0.72rem;
+  color: #6b7280;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+@media (max-width: 767px) {
+  .opportunity-drawer__intl-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .opportunity-drawer__intl-stat-value {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .opportunity-drawer__intl-stats {
+    grid-template-columns: 1fr;
+  }
+}
