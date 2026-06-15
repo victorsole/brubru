@@ -226,6 +226,20 @@ register_resource(
     extra="EU-OSHA calls for expression of interest (occupational-safety expert pools). Filter with q.",
 )
 
+# --- EIB — European Investment Bank --------------------------------------- #
+register_resource(
+    router, body_code="eib", item_type="tender", slug="eib-tenders",
+    noun="EIB calls for tender",
+    body_name="the European Investment Bank", acronym="EIB", tag="v2-funding",
+    source="the TED public API v3 (buyer-name=European Investment Bank).",
+    extra="EIB corporate procurement — financial advisory, IT, premises, "
+          "consultancy — pulled from TED rather than EIB's own site (EIB "
+          "publishes nothing on its site; everything is in TED). Open "
+          "calls by default; each notice carries reference, procedure type "
+          "and submission deadline. The first multilateral development bank "
+          "wired into the Tenderator. Filter with q.",
+)
+
 # --- Eurofound — Foundation for Living and Working Conditions ------------- #
 register_resource(
     router, body_code="eurofound", item_type="tender", slug="eurofound-tenders",

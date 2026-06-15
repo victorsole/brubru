@@ -172,6 +172,8 @@ INGESTORS = {
     ("eu_osha", "eoi_call"): agency_procurement.ingest_eu_osha_calls,
     ("eurofound", "tender"): agency_procurement.ingest_eurofound_tenders,
     ("eurofound", "eoi_call"): agency_procurement.ingest_eurofound_calls,
+    # Move 3 (15 Jun 2026): EIB procurement via TED API v3
+    ("eib", "tender"): agency_procurement.ingest_eib_procurement,
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
     ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,

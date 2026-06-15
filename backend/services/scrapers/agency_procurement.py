@@ -703,3 +703,112 @@ def ingest_eurofound_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
         html, _EUROFOUND, body_code="eurofound", item_type="eoi_call",
         source_kind="eurofound_procurement",
     )
+
+
+# --- EIB — procurement via TED API v3 ------------------------------------ #
+# EIB does not publish its corporate procurement on its own site; everything
+# goes through TED. Brubru's TED scraper currently ingests only member-state
+# notices, so this scraper hits TED's public POST API directly and pulls EIB
+# notices into economy_items(body_code='eib', item_type='tender').
+_TED_API = "https://api.ted.europa.eu/v3/notices/search"
+
+
+def _ted_text(field_value):
+    """Multilingual TED field → English (or first available) string."""
+    if not field_value:
+        return ""
+    if isinstance(field_value, str):
+        return field_value
+    if isinstance(field_value, dict):
+        for lang in ("eng", "fre", "deu", "spa"):
+            v = field_value.get(lang)
+            if v:
+                return v[0] if isinstance(v, list) else v
+        for v in field_value.values():
+            if v:
+                return v[0] if isinstance(v, list) else v
+    if isinstance(field_value, list) and field_value:
+        return _ted_text(field_value[0])
+    return ""
+
+
+def _ted_search_eib(limit: int = 200, only_open: bool = True) -> list[dict]:
+    """Hit the TED public API v3 for EIB-buyer notices. Open-only by default
+    (deadline-receipt-request >= today). Returns the raw JSON notices list."""
+    import json as _json
+    import urllib.request as _urllib_request
+    from urllib.error import HTTPError
+    today = datetime.now(timezone.utc).strftime("%Y%m%d")
+    q_parts = ['buyer-name="European Investment Bank"']
+    if only_open:
+        q_parts.append(f"deadline-receipt-request>={today}")
+    payload = _json.dumps({
+        "query": " AND ".join(q_parts),
+        "fields": [
+            "publication-number", "buyer-name", "notice-title",
+            "publication-date", "deadline-receipt-request",
+            "procedure-type", "links",
+        ],
+        "limit": limit,
+        "page": 1,
+    }).encode("utf-8")
+    req = _urllib_request.Request(
+        _TED_API, data=payload, method="POST",
+        headers={"User-Agent": _UA, "Content-Type": "application/json",
+                 "Accept": "application/json"},
+    )
+    try:
+        body = _urllib_request.urlopen(req, timeout=30).read()
+        return _json.loads(body).get("notices", [])
+    except HTTPError as e:
+        return []
+    except Exception:
+        return []
+
+
+def ingest_eib_procurement(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """EIB procurement opportunities pulled from TED. body_code='eib',
+    item_type='tender'. We try open-only first; if TED returns 0 (rare),
+    fall back to a recent-publications window so the feed is not empty."""
+    now = datetime.now(timezone.utc)
+    out: list[Item] = []
+    notices = _ted_search_eib(limit=200, only_open=True)
+    if not notices:
+        notices = _ted_search_eib(limit=50, only_open=False)
+    for n in notices:
+        pub_num = n.get("publication-number") or ""
+        title = _ted_text(n.get("notice-title"))
+        if not pub_num or not title:
+            continue
+        buyer = _ted_text(n.get("buyer-name")) or "European Investment Bank"
+        procedure = _ted_text(n.get("procedure-type"))
+        # Deadline can come back as ISO date or epoch-ish string; try ISO first.
+        dl_raw = n.get("deadline-receipt-request")
+        dl_str = ""
+        if isinstance(dl_raw, str):
+            dl_str = dl_raw
+        elif isinstance(dl_raw, dict):
+            for v in dl_raw.values():
+                if v: dl_str = v[0] if isinstance(v, list) else v; break
+        elif isinstance(dl_raw, list) and dl_raw:
+            dl_str = dl_raw[0]
+        deadline = None
+        if dl_str:
+            try:
+                deadline = datetime.fromisoformat(dl_str.replace("Z", "+00:00"))
+            except (ValueError, TypeError):
+                deadline = None
+        pub_str = ""
+        pub_raw = n.get("publication-date")
+        if isinstance(pub_raw, str):
+            pub_str = pub_raw
+        # TED's canonical notice URL
+        ted_url = f"https://ted.europa.eu/en/notice/-/detail/{pub_num}"
+        reference = pub_num
+        out.append(_build(
+            body_code="eib", item_type="tender", title=title, url=ted_url,
+            reference=reference,
+            status=procedure or "Open",
+            deadline=deadline, now=now, source_kind="eib_procurement",
+        ))
+    return out

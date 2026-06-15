@@ -1748,6 +1748,7 @@ async def get_unified_feed(
         "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "eu_osha": "EU-OSHA",
         "enisa": "ENISA", "commission": "European Commission",
         "innovfund": "Innovation Fund", "just": "Justice Programme",
+        "eib": "EIB",
     }
 
     # Map an EU funding programme code to the topic_id / call_id prefixes used on
@@ -2519,6 +2520,7 @@ _BODY_DISPLAY_NAMES = {
     "commission": "European Commission",
     "innovfund": "EU Innovation Fund",
     "just": "Justice Programme (DG JUST)",
+    "eib": "European Investment Bank",
 }
 
 _BODY_DISPLAY_ACRONYMS = {
@@ -2527,7 +2529,7 @@ _BODY_DISPLAY_ACRONYMS = {
     "fra": "FRA", "era": "ERA", "eurofound": "Eurofound", "eea": "EEA",
     "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "enisa": "ENISA",
     "eu_osha": "EU-OSHA", "commission": "EC",
-    "innovfund": "Innovation Fund", "just": "DG JUST",
+    "innovfund": "Innovation Fund", "just": "DG JUST", "eib": "EIB",
 }
 
 
