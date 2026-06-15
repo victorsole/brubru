@@ -15,8 +15,12 @@ descriptions). LIVE endpoints delegate to the v1 handlers. Scope: read:publicati
 from fastapi import APIRouter
 
 from . import open_data as _open_data
+from . import jrc_datasets as _jrc_datasets
+from . import cohesion_datasets as _cohesion_datasets
 
 router = APIRouter(prefix="/open-data")
 router.include_router(_open_data.datasets_router)
 router.include_router(_open_data.hvd_router)
 router.include_router(_open_data.catalogues_router)
+router.include_router(_jrc_datasets.router)
+router.include_router(_cohesion_datasets.router)

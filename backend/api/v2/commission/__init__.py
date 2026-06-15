@@ -30,6 +30,8 @@ from . import meetings as _meetings
 from . import rsb_opinions as _rsb_opinions
 from . import infringements as _infringements
 from . import consultations as _consultations
+from . import competition_cases as _competition_cases
+from . import access2markets as _access2markets
 from . import tris_notifications as _tris_notifications
 # EC database folders (economy_items-backed; one per database).
 from . import financial_sanctions as _financial_sanctions
@@ -52,6 +54,8 @@ router.include_router(_meetings.router)
 router.include_router(_rsb_opinions.router)
 router.include_router(_infringements.router)
 router.include_router(_consultations.router)
+router.include_router(_competition_cases.router)
+router.include_router(_access2markets.router)
 router.include_router(_tris_notifications.router)
 router.include_router(_financial_sanctions.router)
 router.include_router(_research_projects.router)

@@ -31,6 +31,9 @@ from .european_council import router as _european_council_router
 from .eurogroup import router as _eurogroup_router
 from .funding import router as _funding_router
 from .consultations import router as _consultations_router
+from .predictions import router as _predictions_router
+from .calendar import router as _calendar_router
+from .transparency_register import router as _transparency_register_router
 from .open_data import router as _open_data_router
 from .who_is_who import router as _who_is_who_router
 from .general_publications import router as _general_publications_router
@@ -68,6 +71,9 @@ router.include_router(_european_council_router)
 router.include_router(_eurogroup_router)
 router.include_router(_funding_router)
 router.include_router(_consultations_router)
+router.include_router(_predictions_router)
+router.include_router(_calendar_router)
+router.include_router(_transparency_register_router)
 router.include_router(_open_data_router)
 router.include_router(_who_is_who_router)
 router.include_router(_general_publications_router)
