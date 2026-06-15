@@ -35,7 +35,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 482 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 488 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -95,7 +95,7 @@
 
   <h3>Funding &amp; consultations</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (75)</a></li>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (81)</a></li>
     <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
   </ul>
 
@@ -128,7 +128,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 482 endpoints across 34 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 488 endpoints across 34 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -699,7 +699,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </tbody>
 </table>
 
-<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">75 endpoints</span></h2>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">81 endpoints</span></h2>
 <table>
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -752,12 +752,18 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-proposals/{topic_id}</code></td><td>Look up one funding call for proposals by its EU topic_id</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-tenders</code></td><td>EU public-procurement tenders from the F&amp;T Portal — distinct from the /tenders TED view</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-calls-for-tenders/{tender_reference}</code></td><td>Look up one F&amp;T Portal tender by its tender_reference</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events</code></td><td>the EU Funding &amp; Tenders Portal — events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events/{item_id}</code></td><td>the EU Funding &amp; Tenders Portal — one event (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-funded-projects</code></td><td>EU grant-funded projects — active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-funded-projects/{project_id}</code></td><td>Look up one EU-funded project by its grant project_id (numeric)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news</code></td><td>the EU Funding &amp; Tenders Portal — news items (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news/{item_id}</code></td><td>the EU Funding &amp; Tenders Portal — one news item (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities</code></td><td>EU funding opportunities — open + forthcoming calls across programmes (alternate view)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities/{topic_id}</code></td><td>Look up one EU funding opportunity by its topic_id</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/innovation-fund</code></td><td>Innovation Fund — funding calls (newest first)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/innovation-fund/{item_id}</code></td><td>Innovation Fund — one funding call (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/international-cooperation</code></td><td>EU international cooperation awards — NDICI, IPA III, Humanitarian (who won what, where)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/international-cooperation/{item_id}</code></td><td>One EU international-cooperation award (full FTS record)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/interreg</code></td><td>Interreg (European Territorial Cooperation) (INTERREG) — 2021-2027 financial plan by programme</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/interreg/outcomes</code></td><td>Interreg (European Territorial Cooperation) (Interreg Funds) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/interreg/outcomes/{row_id}</code></td><td>Look up one Interreg Funds achievement indicator in full</td></tr>
