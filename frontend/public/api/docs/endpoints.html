@@ -35,7 +35,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 481 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong> &mdash; all 482 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -95,7 +95,7 @@
 
   <h3>Funding &amp; consultations</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (74)</a></li>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (75)</a></li>
     <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
   </ul>
 
@@ -128,7 +128,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 481 endpoints across 34 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 482 endpoints across 34 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -699,7 +699,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </tbody>
 </table>
 
-<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">74 endpoints</span></h2>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">75 endpoints</span></h2>
 <table>
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -774,7 +774,8 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice/{item_id}</code></td><td>Justice Programme — one funding call (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes</code></td><td>EU funding programmes directory — the EC classification + Brubru coverage</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes/{acronym}</code></td><td>Look up one EU funding programme in the classification</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup &amp; SME funding — EIC Accelerator, Transition, Pathfinder, STEP, prizes</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup, scale-up &amp; SME funding — EIC, COSME/EISMEA, Innovation Fund (stage-tagged)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups/{topic_id}</code></td><td>EU startup funding — one call (full body), by its F&amp;T topic_id</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders</code></td><td>EU public procurement tenders (TED — Tenders Electronic Daily)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders/{tender_id}</code></td><td>Look up one TED tender by its internal numeric id</td></tr>
 </tbody>

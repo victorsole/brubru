@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full API reference &mdash; Brubru EU Data API</title>
+  <meta name="description" content="Complete, always-current reference for the Brubru EU Data API: 200+ endpoints across 33 EU institution domains (Parliament, Commission, Council, the EU agencies, funding, open data and Brubru's proprietary EU intelligence). Rendered live from the OpenAPI specification." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <style>
+    :root { --brand:#1a2b6b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#fff; }
+    .ref-bar {
+      display:flex; align-items:center; gap:1rem; padding:.7rem 1.25rem;
+      background:var(--brand); color:#fff; font-size:.9rem; position:sticky; top:0; z-index:50;
+    }
+    .ref-bar a { color:#fff; text-decoration:none; opacity:.92; }
+    .ref-bar a:hover { opacity:1; text-decoration:underline; }
+    .ref-bar strong { font-weight:600; }
+    .ref-bar .sep { opacity:.45; }
+    .ref-loading { padding:3rem 1.5rem; color:#5a6478; font-size:.95rem; }
+  </style>
+</head>
+<body>
+  <div class="ref-bar">
+    <a href="/api/docs/">&larr; Brubru EU Data API docs</a>
+    <span class="sep">|</span>
+    <strong>Full API reference</strong>
+    <span class="sep">·</span>
+    <span>live from the OpenAPI spec</span>
+  </div>
+  <div id="ref-fallback" class="ref-loading">Loading the live API reference&hellip; (200+ endpoints across 33 EU institution domains)</div>
+  <!-- Scalar renders the live v2 OpenAPI spec served by the API host (CORS-enabled
+       for brubru.beresol.eu), so this page always reflects every deployed endpoint
+       with zero hand-maintenance. -->
+  <script id="api-reference" data-url="https://brubru-production.up.railway.app/api/openapi.json"></script>
+  <script>
+    window.configuration = { theme: "default", layout: "modern", hideDownloadButton: false };
+    // Hide the loading note once Scalar has mounted.
+    setTimeout(function(){ var f=document.getElementById('ref-fallback'); if(f) f.style.display='none'; }, 2500);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+</body>
+</html>
