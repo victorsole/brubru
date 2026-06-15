@@ -58,6 +58,8 @@ interface UnifiedFeedProps {
   externalAction?: boolean;
   // Free-text country narrowing — works with or without the lens.
   beneficiaryCountry?: string;
+  // Move 5: narrows source=agency to item_type='framework' (EU-institution FWCs).
+  frameworkOnly?: boolean;
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
@@ -94,7 +96,7 @@ const formatDeadline = (iso: string | null): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', externalAction = false, beneficiaryCountry = '', onSelectOpportunity }: UnifiedFeedProps) => {
+export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
   const { i18n } = useTranslation();
   // Brubru's 6 — falls back to 'en' for any other UI locale.
@@ -163,6 +165,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       if (!personalised) params.set('personalised', 'false');
       if (externalAction) params.set('external_action', 'true');
       if (beneficiaryCountry) params.set('beneficiary_country', beneficiaryCountry);
+      if (frameworkOnly) params.set('framework_only', 'true');
       const res = await fetch(`${API_URL}/api/tenders/unified-feed?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -185,7 +188,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
     } finally {
       setLoading(false);
     }
-  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry]);
+  }, [token, source, matchSubSource, page, searchQuery, programme, body, feedLang, clientFilter, personalised, externalAction, beneficiaryCountry, frameworkOnly]);
 
   useEffect(() => {
     setPage(1);

@@ -174,6 +174,11 @@ INGESTORS = {
     ("eurofound", "eoi_call"): agency_procurement.ingest_eurofound_calls,
     # Move 3 (15 Jun 2026): EIB procurement via TED API v3
     ("eib", "tender"): agency_procurement.ingest_eib_procurement,
+    # Move 5 (15 Jun 2026): EU-institution framework contracts via TED API v3.
+    # One scraper call writes rows under multiple body_codes (commission/eib/
+    # parliament/council/ecb/eeas) with item_type='framework'. Registered
+    # against the Commission slot; the cron sweep fires it once per day.
+    ("commission", "framework"): agency_procurement.ingest_eu_institution_frameworks,
     ("ema", "consultation"): agency_consultations.ingest_ema_consultations,
     ("berec", "consultation"): agency_consultations.ingest_berec_consultations,
     ("eiopa", "consultation"): agency_consultations.ingest_eiopa_consultations,

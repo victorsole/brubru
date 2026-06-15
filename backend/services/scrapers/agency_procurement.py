@@ -766,6 +766,69 @@ def _ted_search_eib(limit: int = 200, only_open: bool = True) -> list[dict]:
         return []
 
 
+def _ted_search(query: str, limit: int = 200) -> list[dict]:
+    """Generic TED API v3 search. Public POST endpoint, no auth."""
+    import json as _json
+    import urllib.request as _urllib_request
+    from urllib.error import HTTPError
+    payload = _json.dumps({
+        "query": query,
+        "fields": [
+            "publication-number", "buyer-name", "notice-title",
+            "publication-date", "deadline-receipt-request",
+            "procedure-type", "links",
+        ],
+        "limit": limit,
+        "page": 1,
+    }).encode("utf-8")
+    req = _urllib_request.Request(
+        _TED_API, data=payload, method="POST",
+        headers={"User-Agent": _UA, "Content-Type": "application/json",
+                 "Accept": "application/json"},
+    )
+    try:
+        body = _urllib_request.urlopen(req, timeout=30).read()
+        return _json.loads(body).get("notices", [])
+    except HTTPError:
+        return []
+    except Exception:
+        return []
+
+
+def _ted_to_item(n: dict, *, body_code: str, item_type: str, source_kind: str) -> Item | None:
+    """Common TED notice → Item conversion. Returns None when essential
+    fields are missing."""
+    now = datetime.now(timezone.utc)
+    pub_num = n.get("publication-number") or ""
+    title = _ted_text(n.get("notice-title"))
+    if not pub_num or not title:
+        return None
+    procedure = _ted_text(n.get("procedure-type"))
+    dl_raw = n.get("deadline-receipt-request")
+    dl_str = ""
+    if isinstance(dl_raw, str):
+        dl_str = dl_raw
+    elif isinstance(dl_raw, dict):
+        for v in dl_raw.values():
+            if v:
+                dl_str = v[0] if isinstance(v, list) else v
+                break
+    elif isinstance(dl_raw, list) and dl_raw:
+        dl_str = dl_raw[0]
+    deadline = None
+    if dl_str:
+        try:
+            deadline = datetime.fromisoformat(dl_str.replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            deadline = None
+    ted_url = f"https://ted.europa.eu/en/notice/-/detail/{pub_num}"
+    return _build(
+        body_code=body_code, item_type=item_type, title=title, url=ted_url,
+        reference=pub_num, status=procedure or "Open",
+        deadline=deadline, now=now, source_kind=source_kind,
+    )
+
+
 def ingest_eib_procurement(*, fetch_bodies: bool = True, **_) -> list[Item]:
     """EIB procurement opportunities pulled from TED. body_code='eib',
     item_type='tender'. We try open-only first; if TED returns 0 (rare),
@@ -811,4 +874,45 @@ def ingest_eib_procurement(*, fetch_bodies: bool = True, **_) -> list[Item]:
             status=procedure or "Open",
             deadline=deadline, now=now, source_kind="eib_procurement",
         ))
+    return out
+
+
+# --- Move 5 (15 Jun 2026): EU-institution framework contracts via TED ----- #
+# Pulls open Framework Contract (FWC) notices from TED API v3 for the major
+# EU institutions. FWCs are the parent contracts under which specific re-
+# openings are later published (TAS's Lot 1 OCA / Lot 5 / Lot 8 lives here).
+# Each notice → economy_items(body_code='<inst>', item_type='framework').
+
+_EU_INSTITUTION_BUYERS = (
+    ("commission", "European Commission"),
+    ("eib", "European Investment Bank"),
+    ("eeas", "European External Action Service"),
+    ("parliament", "European Parliament"),
+    ("council", "Council of the European Union"),
+    ("ecb", "European Central Bank"),
+)
+
+
+def ingest_eu_institution_frameworks(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """One pass per institution. The TED API does not expose an
+    is-framework-agreement filter we can rely on, so we use the practical
+    heuristic 'notice-title contains framework' + open deadline. This
+    matches the Commission's Lot N OCA / EISMEA / DG-INTPA FWCs that
+    actually carry 'framework' in the published title."""
+    today = datetime.now(timezone.utc).strftime("%Y%m%d")
+    out: list[Item] = []
+    for body_code, buyer in _EU_INSTITUTION_BUYERS:
+        q = (
+            f'buyer-name="{buyer}" '
+            f'AND notice-title="framework" '
+            f'AND deadline-receipt-request>={today}'
+        )
+        notices = _ted_search(q, limit=200)
+        for n in notices:
+            item = _ted_to_item(
+                n, body_code=body_code, item_type="framework",
+                source_kind="eu_inst_framework",
+            )
+            if item:
+                out.append(item)
     return out

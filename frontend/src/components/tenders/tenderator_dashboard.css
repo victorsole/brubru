@@ -204,6 +204,17 @@
   color: #7c2d12;
 }
 
+/* Framework-contracts chip — amber accent (FWCs as parent contracts). */
+.tenderator-dashboard__chip--framework {
+  border-color: rgba(217, 119, 6, 0.4);
+  background: rgba(217, 119, 6, 0.05);
+}
+.tenderator-dashboard__chip--framework.tenderator-dashboard__chip--active {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.22), rgba(180, 83, 9, 0.08));
+  border-color: rgba(217, 119, 6, 0.65);
+  color: #7c2d12;
+}
+
 /* Pipeline chip — purple accent, separate from sources (it's a view-switch). */
 .tenderator-dashboard__chip--pipeline {
   border-color: rgba(155, 81, 224, 0.4);

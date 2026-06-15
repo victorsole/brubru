@@ -153,6 +153,11 @@ export const TenderatorDashboard = ({
   const [beneficiaryCountry, setBeneficiaryCountry] = useState<string>(() => {
     try { return localStorage.getItem('tenderator_benef_country') || ''; } catch { return ''; }
   });
+  // Move 5 (15 Jun 2026): framework_only lens — narrows source=agency to
+  // item_type='framework' (EU-institution Framework Contracts).
+  const [frameworkOnly, setFrameworkOnly] = useState<boolean>(() => {
+    try { return localStorage.getItem('tenderator_framework_only') === '1'; } catch { return false; }
+  });
 
   const fetchStats = useCallback(async () => {
     if (!token) return;
@@ -359,6 +364,22 @@ export const TenderatorDashboard = ({
           <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
           Startups &amp; SMEs (EIC)
         </button>
+        {/* Framework contracts (Move 5, 15 Jun 2026): narrows source=agency
+            to item_type='framework' (EU-institution FWCs pulled from TED). */}
+        <button
+          type="button"
+          className={`tenderator-dashboard__chip ${frameworkOnly ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--framework`}
+          onClick={() => {
+            const next = !frameworkOnly;
+            setFrameworkOnly(next);
+            if (next) setSource('agency'); // FWCs only live in the agency feed
+            try { localStorage.setItem('tenderator_framework_only', next ? '1' : '0'); } catch (_) { /* ignore */ }
+          }}
+          title="EU-institution Framework Contracts (Lot 1 OCA / Lot 5 / Lot 8 etc.) from Commission, EEAS, EIB, EP, Council, ECB. Re-openings appear under each FWC's parent buyer."
+        >
+          <span className="mdi mdi-file-tree-outline" aria-hidden="true" />
+          Framework contracts
+        </button>
         {/* Pipeline (Move 4, 15 Jun 2026): switch the main area from the
             opportunity feed to the user's pipeline kanban — generic across
             every source, modelled on a Project Manager's tracker. */}
@@ -543,6 +564,7 @@ export const TenderatorDashboard = ({
               body={source === 'agency' ? agencyBody : ''}
               externalAction={externalAction}
               beneficiaryCountry={beneficiaryCountry}
+              frameworkOnly={frameworkOnly}
               initialQuery={incomingQuery}
               onSelectOpportunity={(opp) => {
                 // For TED tenders with a real tenders.id, keep the existing

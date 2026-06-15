@@ -1389,6 +1389,7 @@ async def get_unified_feed(
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     programme: Optional[str] = Query(None, description="EU funding programme code (e.g. EU4H, HE, CEF) — filters F&T calls/projects by topic_id prefix"),
     body: Optional[str] = Query(None, description="When source=agency: economy_items.body_code (e.g. efsa, ema, efca) — filters to one decentralised agency."),
+    framework_only: bool = Query(False, description="When true (Move 5 lens), narrow source=agency to item_type='framework' — only EU-institution Framework Contracts (Commission/EIB/EP/EEAS/Council/ECB FWCs). No effect on other sources."),
     status_filter: Optional[str] = Query(None, alias="status", description="open | forthcoming | closed"),
     lang: Optional[str] = Query(None, description="Render titles + descriptions in this Brubru language (en/es/ca/fr/it/nl). Items whose detected_lang is outside the 6 get served from <table>_translations when available; English-source items pass through."),
     client_filter: bool = Query(False, description="Apply the user's private_guide pursuits filter (CA / programme / country / keywords). Requires private_guide_slug + meta_json on the user."),
@@ -1737,7 +1738,7 @@ async def get_unified_feed(
 
     # economy_items funding item_types — populated by services/scrapers/agency_procurement.py
     # via the register_resource pattern in api/v2/funding/agency_procurement.py.
-    _AGENCY_ITEM_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
+    _AGENCY_ITEM_TYPES = ("tender", "grant", "eoi_call", "startup_funding", "framework")
     # Map body_code → display acronym for the organisation slot. Anything not
     # listed falls back to body_code.upper(); add new entries when new agency
     # folders are registered.
@@ -1749,6 +1750,8 @@ async def get_unified_feed(
         "enisa": "ENISA", "commission": "European Commission",
         "innovfund": "Innovation Fund", "just": "Justice Programme",
         "eib": "EIB",
+        "eeas": "EEAS", "parliament": "European Parliament",
+        "council": "Council of the EU", "ecb": "ECB",
     }
 
     # Map an EU funding programme code to the topic_id / call_id prefixes used on
@@ -1844,8 +1847,13 @@ async def get_unified_feed(
     # eoi_call|startup_funding. document_date is the deadline. New agencies
     # appear here automatically as soon as a scraper backfills their rows.
     def _agency_where_params(extra_body: Optional[str] = None) -> Tuple[str, Dict[str, Any]]:
-        where = ["item_type = ANY(:agency_types)"]
-        params: Dict[str, Any] = {"agency_types": list(_AGENCY_ITEM_TYPES)}
+        # Move 5 (15 Jun 2026): framework_only narrows agency view to FWCs.
+        if framework_only:
+            where = ["item_type = 'framework'"]
+            params: Dict[str, Any] = {}
+        else:
+            where = ["item_type = ANY(:agency_types)"]
+            params: Dict[str, Any] = {"agency_types": list(_AGENCY_ITEM_TYPES)}
         if status_filter == "closed":
             where.append("document_date < :now")
             params["now"] = now
@@ -2135,6 +2143,7 @@ async def get_unified_feed(
             "grant": "Grant",
             "eoi_call": "Call for EOI",
             "startup_funding": "Startup funding",
+            "framework": "Framework contract",
         }.get(r.item_type, r.item_type)
         organisation = _AGENCY_LABELS.get(r.body_code, r.body_code.upper())
         return {
@@ -2521,6 +2530,10 @@ _BODY_DISPLAY_NAMES = {
     "innovfund": "EU Innovation Fund",
     "just": "Justice Programme (DG JUST)",
     "eib": "European Investment Bank",
+    "eeas": "European External Action Service",
+    "parliament": "European Parliament",
+    "council": "Council of the European Union",
+    "ecb": "European Central Bank",
 }
 
 _BODY_DISPLAY_ACRONYMS = {
@@ -2530,6 +2543,7 @@ _BODY_DISPLAY_ACRONYMS = {
     "echa": "ECHA", "euda": "EUDA", "ecdc": "ECDC", "enisa": "ENISA",
     "eu_osha": "EU-OSHA", "commission": "EC",
     "innovfund": "Innovation Fund", "just": "DG JUST", "eib": "EIB",
+    "eeas": "EEAS", "parliament": "EP", "council": "Council", "ecb": "ECB",
 }
 
 
@@ -2782,7 +2796,7 @@ async def get_bodies(
                 "GROUP BY body_code "
                 "ORDER BY open_count DESC NULLS LAST, total DESC"
             ),
-            {"types": ["tender", "grant", "eoi_call", "startup_funding"], "now": now},
+            {"types": ["tender", "grant", "eoi_call", "startup_funding", "framework"], "now": now},
         ).fetchall()
     except Exception as exc:
         logger.warning("get_bodies failed: %s", exc)
