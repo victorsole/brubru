@@ -247,29 +247,36 @@ async def list_calendar_events(
     for r in rows:
         inst_value = r.institution.value if hasattr(r.institution, "value") else (str(r.institution) if r.institution else "")
         et_value = r.event_type.value if hasattr(r.event_type, "value") else (str(r.event_type) if r.event_type else "")
-        data.append(CalendarEventItem(
-            id=str(r.id),
-            institution=inst_value,
-            event_type=et_value,
-            title=r.title,
-            description=r.description,
-            start_date=r.start_date,
-            end_date=r.end_date,
-            all_day=bool(r.all_day),
-            council_configuration=r.council_configuration,
-            ep_activity_type=r.ep_activity_type,
-            ep_committee_code=r.ep_committee_code,
-            commission_dg=r.commission_dg,
-            policy_areas=list(r.policy_areas or []),
-            procedure_refs=list(r.procedure_refs or []),
-            status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
-            source_url=_resolve_source_url(
-                r.source_url, inst_value, et_value, r.ep_committee_code,
-                r.council_configuration, r.start_date,
-            ),
-            agenda_url=r.agenda_url,
-            webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
-        ))
+        try:
+            data.append(CalendarEventItem(
+                id=str(r.id),
+                institution=inst_value,
+                event_type=et_value,
+                title=r.title,
+                description=r.description,
+                start_date=r.start_date,
+                end_date=r.end_date,
+                all_day=bool(r.all_day),
+                council_configuration=r.council_configuration,
+                ep_activity_type=r.ep_activity_type,
+                ep_committee_code=r.ep_committee_code,
+                commission_dg=r.commission_dg,
+                policy_areas=list(r.policy_areas or []),
+                procedure_refs=list(r.procedure_refs or []),
+                status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
+                source_url=_resolve_source_url(
+                    r.source_url, inst_value, et_value, r.ep_committee_code,
+                    r.council_configuration, r.start_date,
+                ),
+                agenda_url=r.agenda_url,
+                webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
+            ))
+        except Exception as exc:  # noqa: BLE001
+            # One malformed row must never 500 the whole page (a field value that
+            # serialises on one pydantic build but not another). Skip + log it.
+            logging.getLogger(__name__).warning(
+                "[calendar] skipping un-serialisable event %s: %s", getattr(r, "id", "?"), exc)
+            continue
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=date_from, published_to=date_to,
