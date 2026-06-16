@@ -14,6 +14,7 @@ decision and origin countries. ~31,000 notifications. Row IS the content.
 """
 from __future__ import annotations
 
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -101,4 +102,5 @@ def ingest_rasff(*, fetch_bodies: bool = True, **_) -> list[Item]:
         if not notifs or page >= total_pages:
             break
         page += 1
+        time.sleep(0.4)  # the RASFF host rate-limits rapid sequential paging
     return items

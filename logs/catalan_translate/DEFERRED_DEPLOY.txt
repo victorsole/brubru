@@ -1,0 +1,23 @@
+DEFERRED SITEGROUND DEPLOY -- Catalan translations
+==================================================
+Reason: SiteGround FTP severely degraded 06 Jun 2026 ~early AM (per-act
+deploy hung 30+ min, repeated [Errno 54] reset + [Errno 32] broken pipe).
+User decision: translate with --no-deploy now, bulk-deploy when FTP recovers.
+
+FTP RECOVERED ~mid-morning 06 Jun (connect+list+STOR all <1s). Backlog
+deployer created and run: see below.
+
+LOCAL SOURCE (correct path): data/legislacio-ue-catala/<celex>/index.html
+  (= TRANSLATIONS_DIR in batch_catalan_translate.py; NOT frontend/public)
+REMOTE: brubru.beresol.eu/public_html/legislacio-ue-catala/<celex>/index.html
+
+HOW TO CLEAR THE BACKLOG (deployed_at IS NULL acts), DB-consistent:
+  cd backend
+  export DATABASE_URL="$(grep '^DATABASE_URL=' ../.env | cut -d= -f2-)"
+  python3.12 -u scripts/deploy_catalan_backlog.py
+  -> uploads each undeployed act, verifies remote size == local, stamps
+     deployed_at=now(). Per-act reconnect+retry, continues on failure.
+  Re-run any time new --no-deploy batches accumulate undeployed acts.
+
+Verify after: a few CELEX URLs return 200 at
+  https://brubru.beresol.eu/legislacio-ue-catala/<celex>/

@@ -54,6 +54,75 @@ PRIORITY_COMMITTEES = [
 ]
 
 
+def _reset_stuck(session, hours: int = 2) -> int:
+    """Self-heal: reset rows stuck in TRANSCRIBING longer than `hours` back to
+    PENDING (a deploy or crash killed the worker mid-run). Idempotent."""
+    from sqlalchemy import text as _t
+    n = session.execute(_t(
+        "UPDATE committee_meeting_transcripts SET status='PENDING' "
+        "WHERE status='TRANSCRIBING' "
+        "AND COALESCE(last_updated, first_seen, meeting_date) < NOW() - (:h || ' hours')::interval"
+    ), {"h": hours}).rowcount
+    session.commit()
+    if n:
+        logger.info("[reset] %d stuck TRANSCRIBING row(s) reset to PENDING", n)
+    return n or 0
+
+
+def _priority_committees(session) -> list:
+    """Committees users actually care about, highest priority first:
+    (1) committees on files users actively track, then
+    (2) committees mapped from all users' Policy Interests.
+    Falls back to the static PRIORITY_COMMITTEES tail."""
+    from sqlalchemy import text as _t
+    from services.tracking.pi_committee_crosswalk import committees_for_interests
+    ordered: list = []
+    seen: set = set()
+
+    def _add(code):
+        c = (code or "").upper().strip()
+        if c and c not in seen:
+            seen.add(c); ordered.append(c)
+
+    # (1) committees on actively-tracked carriages (strongest signal)
+    try:
+        rows = session.execute(_t(
+            "SELECT DISTINCT unnest(lc.committees) AS c "
+            "FROM legislative_carriages lc "
+            "JOIN user_carriage_tracks uct ON uct.carriage_id = lc.id "
+            "WHERE uct.archived_at IS NULL AND lc.committees IS NOT NULL"
+        )).fetchall()
+        for r in rows:
+            _add(r[0])
+    except Exception as e:
+        logger.warning("[priority] tracked-committee lookup failed: %s", e)
+
+    # (2) committees mapped from every user's Policy Interests.
+    # users.policy_interests is a JSON-array string in a text column, so parse it
+    # in Python rather than unnesting in SQL.
+    try:
+        import json as _json
+        interests: set = set()
+        for (raw,) in session.execute(_t(
+            "SELECT policy_interests FROM users WHERE policy_interests IS NOT NULL"
+        )).fetchall():
+            try:
+                vals = _json.loads(raw) if isinstance(raw, str) else raw
+                if isinstance(vals, list):
+                    interests.update(str(v) for v in vals if v)
+            except Exception:
+                continue
+        for code in committees_for_interests(interests):
+            _add(code)
+    except Exception as e:
+        logger.warning("[priority] PI-committee lookup failed: %s", e)
+
+    # (3) static fallback tail
+    for c in PRIORITY_COMMITTEES:
+        _add(c)
+    return ordered
+
+
 def _fetch_pending(session, committees=None, limit_per_committee=None):
     """Return PENDING rows with video_url, ordered newest-first per committee."""
     from sqlalchemy import not_, or_
@@ -85,6 +154,16 @@ def _fetch_pending(session, committees=None, limit_per_committee=None):
 
     rows = base.all()
 
+    # Tracked/PI-first ordering: rank by the user-priority committee list, then
+    # newest meeting first. Unranked committees sort after ranked ones.
+    priority = _priority_committees(session)
+    rank = {c: i for i, c in enumerate(priority)}
+    rows.sort(key=lambda r: (
+        rank.get((r.committee_code or "")[:4].upper(), len(rank) + 1),
+        rank.get((r.committee_code or "").upper(), len(rank) + 1),
+        -(r.meeting_date.timestamp() if r.meeting_date else 0),
+    ))
+
     if limit_per_committee:
         seen: dict = {}
         filtered = []
@@ -106,12 +185,18 @@ async def transcribe_batch(
     engine=None,
     language="en",
     dry_run=False,
+    max_total=None,
+    reset_stuck=False,
 ):
     from services.committee_transcription_service import get_committee_transcription_service
 
     session = SessionLocal()
     try:
+        if reset_stuck:
+            _reset_stuck(session)
         rows = _fetch_pending(session, committees=committees, limit_per_committee=limit_per_committee)
+        if max_total:
+            rows = rows[:max_total]
         if not rows:
             logger.info("[batch] No PENDING rows with video_url found for the given filters.")
             return
@@ -218,8 +303,19 @@ def main():
         help="Transcribe all PENDING rows (ignores --committee filter).",
     )
     parser.add_argument(
-        "--engine", type=str, default=None, choices=("faster-whisper", "voxtral", "whisper"),
-        help="Pin ASR engine. faster-whisper = local/free (default when available); voxtral/whisper = paid API.",
+        "--engine", type=str, default=None, choices=("faster-whisper", "voxtral", "whisper", "groq"),
+        help="Pin ASR engine. groq = whisper-large-v3 on Groq free tier (cron default); "
+             "faster-whisper = local/free but slow; voxtral/whisper = paid API.",
+    )
+    parser.add_argument(
+        "--max", type=int, default=None, dest="max_total",
+        help="Hard cap on total meetings transcribed this run (across all committees). "
+             "Use for the proactive cron so each run is bounded.",
+    )
+    parser.add_argument(
+        "--reset-stuck", action="store_true",
+        help="Reset rows stuck in TRANSCRIBING > 2h back to PENDING before running "
+             "(self-heal from a deploy-killed or crashed run).",
     )
     parser.add_argument(
         "--language", type=str, default="en",
@@ -239,6 +335,8 @@ def main():
         engine=args.engine,
         language=args.language,
         dry_run=args.dry_run,
+        max_total=args.max_total,
+        reset_stuck=args.reset_stuck,
     ))
 
 

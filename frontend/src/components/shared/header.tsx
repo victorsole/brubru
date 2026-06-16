@@ -60,7 +60,7 @@ export const Header = () => {
     setShowDropdown(false);
     // Determine which tour to show based on current page
     const path = location.pathname;
-    if (path === '/main') {
+    if (path === '/chat') {
       triggerTour('welcome', true);
     } else if (path === '/amendator') {
       triggerTour('amendator', true);
@@ -106,7 +106,7 @@ export const Header = () => {
           {[
             { path: '/my-eu-bubble', icon: mdiGlassMugVariant, labelKey: 'header.myEuBubble', color: 'purple' },
             { path: '/amendator', icon: mdiFileEditOutline, labelKey: 'header.amendator', color: 'green' },
-            { path: '/main', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
+            { path: '/chat', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
             { path: '/eulawcomply', icon: mdiScaleBalance, labelKey: 'header.euLawComply', color: 'silver' },
             { path: '/tenderator', icon: mdiPiggyBankOutline, labelKey: 'header.tenderator', color: 'gold', requiresBlue: true },
             { path: '/api', icon: mdiApi, labelKey: 'header.api', color: 'blue', external: true },
@@ -116,7 +116,7 @@ export const Header = () => {
             const active = isActive(item.path);
 
             // Pre-user: disable all nav buttons except Main (chat)
-            if (!user && item.path !== '/main') {
+            if (!user && item.path !== '/chat') {
               return (
                 <span
                   key={item.path}

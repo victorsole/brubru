@@ -7,6 +7,9 @@ import { BidChecklist } from '../components/tenders/bid_checklist';
 import { TenderCalendar } from '../components/tenders/tender_calendar';
 import { TenderProfileSetup } from '../components/tenders/tender_profile_setup';
 import { TenderatorDashboard } from '../components/tenders/tenderator_dashboard';
+import { TenderDocsTab } from '../components/tenders/tender_docs_tab';
+import { TenderDocWizard } from '../components/tenders/tender_doc_wizard';
+import { TenderDocEditor } from '../components/tenders/tender_doc_editor';
 import { useAuth } from '../hooks/use_auth';
 import './tenderator_page.css';
 
@@ -89,7 +92,7 @@ export interface UserTenderStats {
   matches_this_week: number;
 }
 
-type ViewState = 'dashboard' | 'detail' | 'checklist' | 'calendar' | 'profile';
+type ViewState = 'dashboard' | 'detail' | 'checklist' | 'calendar' | 'profile' | 'tender-docs' | 'tender-doc-editor';
 
 interface TenderatorPageProps {
   isSidebarOpen?: boolean;
@@ -107,6 +110,11 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasBlueAccess, setHasBlueAccess] = useState(true);
+
+  // Tender Docs surface state (16 Jun 2026)
+  const [activeTenderFileId, setActiveTenderFileId] = useState<string | null>(null);
+  const [showTenderWizard, setShowTenderWizard] = useState(false);
+  const [wizardPreselectId, setWizardPreselectId] = useState<string | undefined>(undefined);
 
   // Fetch user profile and stats on mount
   useEffect(() => {
@@ -317,6 +325,47 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
               onViewChecklist={handleViewChecklist}
               onOpenProfile={() => setViewState('profile')}
               onOpenCalendar={() => setViewState('calendar')}
+              onOpenTenderDocs={() => setViewState('tender-docs')}
+            />
+          )}
+
+          {/* Tender Docs list view */}
+          {viewState === 'tender-docs' && (
+            <TenderDocsTab
+              onBack={() => setViewState('dashboard')}
+              onOpenFile={(file) => {
+                setActiveTenderFileId(file.id);
+                setViewState('tender-doc-editor');
+              }}
+              onOpenStartWizard={(templateId) => {
+                setWizardPreselectId(templateId);
+                setShowTenderWizard(true);
+              }}
+            />
+          )}
+
+          {/* Tender Doc editor */}
+          {viewState === 'tender-doc-editor' && activeTenderFileId && (
+            <TenderDocEditor
+              fileId={activeTenderFileId}
+              onBack={() => {
+                setActiveTenderFileId(null);
+                setViewState('tender-docs');
+              }}
+            />
+          )}
+
+          {/* Wizard modal (opens from list view OR Tenderator drawer in v1.5) */}
+          {showTenderWizard && (
+            <TenderDocWizard
+              initialTemplateId={wizardPreselectId}
+              onClose={() => { setShowTenderWizard(false); setWizardPreselectId(undefined); }}
+              onCreated={(fileId) => {
+                setShowTenderWizard(false);
+                setWizardPreselectId(undefined);
+                setActiveTenderFileId(fileId);
+                setViewState('tender-doc-editor');
+              }}
             />
           )}
 

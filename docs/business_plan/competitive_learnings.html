@@ -429,7 +429,7 @@
 <header class="page-header">
   <h1>Competitive learnings</h1>
   <div class="subtitle">What Brubru can learn and emulate</div>
-  <div class="meta">Last updated: 30 March 2026 | Source: competitive_benchmarking.md | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid currentColor;"><strong>Beresol BV</strong></a>, Brussels</div>
+  <div class="meta">Last updated: 19 May 2026 | Source: competitive_benchmarking.md | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid currentColor;"><strong>Beresol BV</strong></a> (Apeldoorn, NL)</div>
 </header>
 
 <nav class="bp-nav">
@@ -461,6 +461,7 @@
     <a href="#prismos">15. Prismos (Brussels)</a>
     <a href="#eumatrix">16. EU Matrix (Brussels)</a>
     <a href="#lobium">17. Lobium</a>
+    <a href="#govguard">18. GovGuard (YC, US)</a>
     <a href="#priority-matrix">Priority Matrix</a>
     <a href="#strategic-insight">Strategic insight</a>
     <a href="#implementation">Implementation Strategy</a>
@@ -750,12 +751,30 @@
       <tr><td>Clients</td><td>Bernstein Group, Pharma Deutschland, Article 19, European Kratom Alliance, EU DisinfoLab.</td></tr>
       <tr><td>Pricing</td><td>Not disclosed. Demo-based sales model with onboarding and team training.</td></tr>
       <tr><td>Strengths vs Brubru</td><td><strong>Amendment analysis:</strong> filter, visualise, export amendment insights at speed. <strong>Consultation navigation:</strong> reveal coalitions, shape advocacy from public consultation data. EU Datathon win gives credibility. Client list includes established Brussels actors.</td></tr>
-      <tr><td>Weaknesses vs Brubru</td><td><strong>Analyses amendments but doesn't draft them.</strong> No Akoma Ntoso editor (Brubru's Amendator). No compliance checker. No predictions with QMV calculator. No document generator. No calendar. No deep dives. No multilingual support. No curated knowledge base (102 guides).</td></tr>
+      <tr><td>Weaknesses vs Brubru</td><td><strong>Analyses amendments but doesn't draft them.</strong> No Akoma Ntoso editor (Brubru's Amendator). No compliance checker. No predictions with QMV calculator. No document generator. No calendar. No EU Canon multilingual deep-dive library. No multilingual support. No curated knowledge base (244 guides). No EU Vocabularies layer with citation verification.</td></tr>
       <tr><td>Threat level</td><td><strong>Medium.</strong> Closest direct competitor in AI-powered amendment analysis. But Lobium reads amendments; Brubru writes them. The distinction: observation platform vs. action platform.</td></tr>
       <tr><td>What Brubru can learn</td><td>Their amendment visualisation (filter + export) is a UX pattern worth emulating in Amendator. Stakeholder-Issue Matrix from public consultations is a feature Brubru should build (Phase B). Their "Insight Engine" for impact assessments could enhance Brubru's EPRS integration.</td></tr>
       <tr><td><span class="badge badge-short">Short</span></td><td><strong>Amendator:</strong> Add amendment filtering and visualisation views (by article, by political group, by topic) to complement the existing drafting editor.</td></tr>
       <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Build a consultation navigator using Have Your Say portal data (already integrated). Map stakeholder positions from consultation responses to reveal coalitions.</td></tr>
       <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Brubru Chat:</strong> Enhance EPRS/impact assessment integration. Lobium's Policy Reports Insight Engine suggests demand for AI-powered analysis of Commission impact assessments.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 18: GOVGUARD -->
+<section class="section" id="govguard">
+  <h2>18. GovGuard (YC Spring 2026): adjacent govtech AI</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>Founded</td><td>Y Combinator Spring 2026 batch. Founders: Aditya Sabharwal (CEO, ex-BoardWatch) and Gleb Hulting (President/CTO).</td></tr>
+      <tr><td>Product</td><td>AI agents that automate Freedom of Information Act (FOIA) request processing for US local governments: document discovery, redaction of sensitive information, draft response letters with state exemption code citations.</td></tr>
+      <tr><td>Target</td><td>Municipal clerk offices in the United States. Pitch frames FOIA request volume as "growing 2x year over year while staffing stagnates" and missing response deadlines as litigation exposure.</td></tr>
+      <tr><td>Pricing</td><td>Not disclosed. SaaS, sold per city / per agency.</td></tr>
+      <tr><td>Strengths vs Brubru</td><td>YC brand + capital + network. Clear, narrow regulatory wedge (FOIA timelines) with measurable ROI (clerk hours saved). Pure AI-agent positioning ahead of Brubru's "workflow platform" framing.</td></tr>
+      <tr><td>Weaknesses vs Brubru</td><td>Different continent, different regulatory corpus. GovGuard is US-local-gov bounded by state FOIA codes; Brubru is EU-institutional bounded by OEIL, EUR-Lex, EPRS, Commission documents register, Akoma Ntoso amendment workflows. Non-overlapping geographies, non-overlapping data. No legislative drafting, no compliance gap analysis, no predictions, no multilingual public-policy library.</td></tr>
+      <tr><td>Threat level</td><td><strong>Low (direct).</strong> No overlap on customer or corpus. <strong>High (signal).</strong> Validates the "AI govtech" category for 2026 investors and confirms YC will fund govtech AI again.</td></tr>
+      <tr><td>What Brubru can learn</td><td>(1) Lead with one measurable regulatory pain (FOIA deadlines for them, trilogue deadlines and compliance dates for us). (2) Frame as "AI agent that does X" rather than "platform that helps with X" -- the agent framing converts better in 2026. (3) Use GovGuard as a comparable YC-funded govtech AI player in Brubru's own YC reapplication and EU accelerator pitches (BSC, a16z Speedrun, Innoviris).</td></tr>
+      <tr><td>Partnership angle</td><td>Weak (different continent, different product). Better used as investor reference and category-validation comparable than as an outreach target.</td></tr>
     </tbody>
   </table>
 </section>
@@ -801,7 +820,7 @@
       <li><strong>The Stakeholder CRM gap is universal.</strong> Dixit, DeHavilland, POLITICO Pro, Quorum, SAVOIRR, nearly every competitor has a contact/stakeholder database. Brubru is the only serious platform without one. This should be the #1 new feature priority.</li>
       <li><strong>Retention comes from daily habits.</strong> POLITICO Pro's 91% renewal comes from the morning briefing. Policy-Insider.AI's PQ Insights newsletter drives engagement. Brubru needs a "daily touch": an AI-generated morning email summarising overnight changes to tracked files.</li>
       <li><strong>The advocacy workflow has a missing step.</strong> Brubru covers monitor > analyse > draft > comply > predict > bid. But it misses <strong>engage</strong>: actually contacting officials, tracking interactions, measuring impact. Adding it closes the full loop.</li>
-      <li><strong>The real competitive threat is foundation models, not SaaS competitors.</strong> No SaaS competitor will replicate 35 scrapers and 10 workflow verticals quickly. The existential risk is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or Gems. Defence is threefold: (1) depth of structured pipelines that general plugins cannot match, (2) domain engineering (Akoma Ntoso XML, QMV calculation, compliance gap analysis) beyond data access, and (3) the system-of-record layer: user-accumulated dossiers, contacts, and documents that live inside Brubru and nowhere else.</li>
+      <li><strong>The real competitive threat is foundation models, not SaaS competitors.</strong> No SaaS competitor will replicate 52 scrapers and 10 workflow verticals quickly. The existential risk is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or Gems. Defence is fourfold: (1) depth of structured pipelines that general plugins cannot match, (2) domain engineering (Akoma Ntoso XML, QMV calculation, compliance gap analysis) beyond data access, (3) the system-of-record layer: user-accumulated dossiers, contacts, and documents that live inside Brubru and nowhere else, and (4) Brubru's own public MCP server already integrating into Claude, ChatGPT, Mistral, and any MCP-capable assistant -- we ship the plugin ourselves.</li>
       <li><strong>Nobody has a dossier management system.</strong> The system of record for EU affairs today is fragmented across Outlook, Excel, shared drives, and mental models. No competitor (not Dixit, not POLITICO Pro, not FiscalNote) offers a <strong>user-owned dossier workspace</strong> where tracking, amendments, contacts, predictions, and documents accumulate into an irreplaceable asset. Brubru's path from workflow platform (Layer 3) to system of record (Layer 4) requires one architectural shift: tie all features together around the dossier concept. A lobbyist with 50 annotated dossiers, 200 MEP contacts, and 18 months of prediction history inside Brubru will never leave.</li>
     </ol>
   </div>
@@ -810,10 +829,10 @@
 <!-- IMPLEMENTATION STRATEGY -->
 <section class="section" id="implementation">
   <h2 class="green">Implementation strategy: 10 emulation priorities</h2>
-  <p style="background: #fef3c7; border: 1px solid #fde68a; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.9rem;"><strong>v2.3</strong>: updated 30 March 2026. Now includes EU Matrix and Lobium competitor profiles, updated infrastructure counts (35+ scrapers, 30+ models, 102 knowledge guides, 2,798 triggers, 7 deep dives, 10 feature modules, 9 My EU Bubble tabs).</p>
+  <p style="background: #fef3c7; border: 1px solid #fde68a; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.9rem;"><strong>v2.4</strong>: updated 19 May 2026. Adds GovGuard (YC Spring 2026, US local-gov FOIA AI) as comparable. Refreshed infrastructure counts (52 scrapers, 30+ models, 244 knowledge guides, 4,600+ triggers, EU Canon multilingual deep-dive library, 10 feature modules, 11 My EU Bubble tabs incl. Comparator from 6 May, EU Vocabularies layer shipped 2 May, Brubru Brief format launched 11 May). Three paying clients live: GovClipping, Ferrmed, Bo.</p>
 
   <h3>Existing infrastructure summary</h3>
-  <p>Brubru has significantly more infrastructure than a first glance suggests. 35+ scrapers, 30+ database models, 102 knowledge guides with 2,798 triggers, 7 deep-dive HTML explainers in 6 languages, 10 feature modules, 9 My EU Bubble tabs. Several priorities are <strong>faster than expected</strong> because core models and UI components already exist.</p>
+  <p>Brubru has significantly more infrastructure than a first glance suggests. 52 scrapers, 30+ database models, 244 knowledge guides with 4,600+ triggers, EU Canon multilingual deep-dive library (CRR shipped 15 May 2026, two more in pipeline), 2,600+ Catalan EU acts translated and published, EU Vocabularies layer (9-identifier resolver + citation verification on every model output), 10 feature modules, 11 My EU Bubble tabs. Several priorities are <strong>faster than expected</strong> because core models and UI components already exist.</p>
   <table>
     <thead><tr><th>Component</th><th>Status</th><th>Reuse Potential</th></tr></thead>
     <tbody>
@@ -824,9 +843,9 @@
       <tr><td><strong>AdminActivityLog</strong></td><td>Audit trail pattern</td><td><span class="reuse-tag">P4 reuses pattern</span></td></tr>
       <tr><td><strong>EP Voting models</strong></td><td>3 models for parliamentary votes</td><td><span class="reuse-tag">P3 reuses vote data</span></td></tr>
       <tr><td><strong>Document Generator</strong></td><td>3 doc types, multi-provider AI</td><td><span class="reuse-tag">P8 adds grant type</span></td></tr>
-      <tr><td><strong>My EU Bubble</strong></td><td>9 tabs fully built (incl. My EU Calendar, MEP Amendments)</td><td>P2, P7, P9 add tabs</td></tr>
+      <tr><td><strong>My EU Bubble</strong></td><td>11 tabs fully built (incl. Comparator since 6 May 2026, My EU Calendar, MEP Amendments)</td><td>P2, P7, P9 add tabs</td></tr>
       <tr><td><strong>Amendator</strong></td><td>10 components, 2-tab sidebar + MEP comparison</td><td>P3 adds 3rd tab; P6 adds sharing</td></tr>
-      <tr><td><strong>Scraper infrastructure</strong></td><td>35 scrapers, BaseScraper class</td><td>P3, P7, P9 inherit</td></tr>
+      <tr><td><strong>Scraper infrastructure</strong></td><td>52 scrapers, BaseScraper class</td><td>P3, P7, P9 inherit</td></tr>
       <tr><td><strong>WebSocket</strong></td><td style="color: var(--color-accent-red);">None</td><td>P6 stretch goal from scratch</td></tr>
     </tbody>
   </table>
@@ -1092,8 +1111,8 @@
 
 <!-- FOOTER -->
 <footer class="page-footer">
-  Competitive Learnings v2.3 | 30 March 2026<br>
-  <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.2);"><strong>Beresol BV</strong></a> | Brussels, Belgium
+  Competitive Learnings v2.4 | 19 May 2026<br>
+  <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.2);"><strong>Beresol BV</strong></a> | Apeldoorn, NL (Brussels working office)
 </footer>
 
 </body>

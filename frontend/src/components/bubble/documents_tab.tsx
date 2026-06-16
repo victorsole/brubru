@@ -94,6 +94,21 @@ function getFileTypeIcon(contentType?: string): string {
 /** Resolve the visible kind (filter category) for a document. */
 function resolveKind(doc: UserDocument): string {
   if (doc.document_type === 'amendment_carriage') return 'amendment';
+  // Tender Docs kinds (added 16 Jun 2026 with Tender Docs v1)
+  if (doc.tags?.includes('tender_application_short')) return 'tender_application_short';
+  if (doc.tags?.includes('tender_application_full')) return 'tender_application_full';
+  if (doc.tags?.includes('tender_pitch_deck')) return 'tender_pitch_deck';
+  if (doc.tags?.includes('tender_video_script')) return 'tender_video_script';
+  if (doc.tags?.includes('tender_implementation_plan')) return 'tender_implementation_plan';
+  if (doc.tags?.includes('tender_financial_plan')) return 'tender_financial_plan';
+  if (doc.tags?.includes('tender_lump_sum_budget')) return 'tender_lump_sum_budget';
+  if (doc.tags?.includes('tender_fto_analysis')) return 'tender_fto_analysis';
+  if (doc.tags?.includes('tender_letters_of_intent')) return 'tender_letters_of_intent';
+  if (doc.tags?.includes('tender_consortium_agreement')) return 'tender_consortium_agreement';
+  if (doc.tags?.includes('tender_ownership_control')) return 'tender_ownership_control';
+  if (doc.tags?.includes('tender_clinical_studies_annex')) return 'tender_clinical_studies_annex';
+  if (doc.tags?.includes('tender_ethics_self_assessment')) return 'tender_ethics_self_assessment';
+  if (doc.tags?.includes('tender_org_profile_consent')) return 'tender_org_profile_consent';
   if (doc.tags?.includes('position_paper')) return 'position_paper';
   if (doc.tags?.includes('mep_briefing')) return 'mep_briefing';
   if (doc.tags?.includes('talking_points')) return 'talking_points';
@@ -110,6 +125,24 @@ function resolveKind(doc: UserDocument): string {
   if (doc.tags?.includes('consultation_response')) return 'consultation_response';
   return doc.document_type;
 }
+
+/** Funding-doc kinds (drives the "Funding & Tenders" filter group). */
+const FUNDING_DOC_KINDS = new Set([
+  'tender_application_short',
+  'tender_application_full',
+  'tender_pitch_deck',
+  'tender_video_script',
+  'tender_implementation_plan',
+  'tender_financial_plan',
+  'tender_lump_sum_budget',
+  'tender_fto_analysis',
+  'tender_letters_of_intent',
+  'tender_consortium_agreement',
+  'tender_ownership_control',
+  'tender_clinical_studies_annex',
+  'tender_ethics_self_assessment',
+  'tender_org_profile_consent',
+]);
 
 const KIND_LABELS: Record<string, string> = {
   uploaded: 'Uploaded',
@@ -131,6 +164,21 @@ const KIND_LABELS: Record<string, string> = {
   presentation: 'Presentation',
   event_poster: 'Event poster',
   consultation_response: 'Consultation response',
+  // Tender Docs (16 Jun 2026)
+  tender_application_short: 'Tender — Part B (short)',
+  tender_application_full: 'Tender — Part B (full)',
+  tender_pitch_deck: 'Tender — pitch deck',
+  tender_video_script: 'Tender — video script',
+  tender_implementation_plan: 'Tender — implementation plan',
+  tender_financial_plan: 'Tender — financial plan',
+  tender_lump_sum_budget: 'Tender — lump-sum budget',
+  tender_fto_analysis: 'Tender — FTO analysis',
+  tender_letters_of_intent: 'Tender — letters of intent',
+  tender_consortium_agreement: 'Tender — consortium agreement',
+  tender_ownership_control: 'Tender — ownership control',
+  tender_clinical_studies_annex: 'Tender — clinical studies annex',
+  tender_ethics_self_assessment: 'Tender — ethics self-assessment',
+  tender_org_profile_consent: 'Tender — NCP consent',
 };
 
 export const DocumentsTab = () => {
@@ -531,7 +579,7 @@ export const DocumentsTab = () => {
     if (doc.document_type !== 'amendment_carriage' && doc.document_type !== 'uploaded' && !doc.include_in_ai_context) {
       updateDocument(doc.id, { include_in_ai_context: true });
     }
-    navigate('/main', {
+    navigate('/chat', {
       state: {
         initialQuestion: `Use my document "${doc.title}" to answer the next question.`,
         source: 'documents_tab',
@@ -624,6 +672,9 @@ export const DocumentsTab = () => {
           ) {
             return false;
           }
+        } else if (filterType === 'funding') {
+          // "Funding & Tenders" umbrella — surfaces every Tender Docs kind
+          if (!FUNDING_DOC_KINDS.has(kind)) return false;
         } else if (kind !== filterType) {
           return false;
         }
@@ -717,6 +768,23 @@ export const DocumentsTab = () => {
               <option value="presentation">{t('docType.presentation')}</option>
               <option value="event_poster">{t('docType.event_poster')}</option>
               <option value="consultation_response">{t('docType.consultation_response')}</option>
+            </optgroup>
+            <optgroup label="Funding & Tenders">
+              <option value="funding">All Tender Docs</option>
+              <option value="tender_application_short">Part B (short proposal)</option>
+              <option value="tender_application_full">Part B (full proposal)</option>
+              <option value="tender_pitch_deck">Pitch deck</option>
+              <option value="tender_video_script">Video script</option>
+              <option value="tender_implementation_plan">Implementation plan</option>
+              <option value="tender_financial_plan">Financial plan</option>
+              <option value="tender_lump_sum_budget">Lump-sum budget</option>
+              <option value="tender_fto_analysis">FTO analysis</option>
+              <option value="tender_letters_of_intent">Letters of intent</option>
+              <option value="tender_consortium_agreement">Consortium agreement</option>
+              <option value="tender_ownership_control">Ownership control</option>
+              <option value="tender_clinical_studies_annex">Clinical studies annex</option>
+              <option value="tender_ethics_self_assessment">Ethics self-assessment</option>
+              <option value="tender_org_profile_consent">NCP consent</option>
             </optgroup>
           </select>
         </div>

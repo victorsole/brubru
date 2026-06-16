@@ -17,9 +17,9 @@ export const Footer = ({ isSidebarOpen }: FooterProps) => {
   // sidebar (Main + Amendator). My EU Bubble's NewsSidebar is on the right,
   // so the footer must not shift — otherwise the footer renders 300px off-axis
   // versus the rest of the page chrome.
-  const pagesWithSidebar = ['/main', '/amendator'];
+  const pagesWithSidebar = ['/chat', '/amendator'];
   const hasSidebar = pagesWithSidebar.includes(location.pathname);
-  const isChatApp = location.pathname === '/main';
+  const isChatApp = location.pathname === '/chat';
 
   return (
     <footer className={`footer ${isSidebarOpen && hasSidebar ? 'footer--sidebar-open' : ''} ${isChatApp ? 'footer--chat-app' : ''}`}>

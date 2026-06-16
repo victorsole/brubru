@@ -432,6 +432,29 @@ async def cron_precompute_journeys(
     return {"status": "success", "results": result}
 
 
+@router.post("/transcribe-pending")
+async def cron_transcribe_pending(
+    authorization: str = Header(...),
+    limit: int = Query(3, ge=1, le=10, description="Max committee meetings to transcribe this run"),
+):
+    """
+    Proactively transcribe PENDING committee-meeting recordings that have a ready
+    HLS URL, newest-first within users' tracked / Policy-Interest committees.
+    Uses Groq-hosted whisper-large-v3 (FREE tier) so the backlog drains at no cost.
+    Self-heals rows stuck in TRANSCRIBING from a deploy-killed run. Throttled
+    (default 3/run) and fired on otherwise-quiet hours so a run stays bounded.
+    """
+    _verify_cron_secret(authorization)
+    result = _run_script(
+        "transcribe_pending",
+        "scripts/transcribe_pending_committees.py",
+        ["--all", "--max", str(limit), "--engine", "groq", "--reset-stuck"],
+        timeout=1500,
+    )
+    logger.info(f"[CRON] transcribe-pending complete: {result}")
+    return {"status": "success", "results": result}
+
+
 @router.post("/sync/daily")
 async def cron_sync_daily(
     authorization: str = Header(...),

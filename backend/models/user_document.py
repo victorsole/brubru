@@ -85,6 +85,11 @@ class UserDocument(Base):
     version = Column(Integer, default=1)
     parent_document_id = Column(UUID(as_uuid=True), ForeignKey("user_documents.id", ondelete="SET NULL"), nullable=True)
 
+    # Tender Docs (migration 146, 16 Jun 2026): when this doc belongs to a
+    # funding-application tender file, this column points back to it. NULL
+    # for all non-funding docs.
+    tender_file_id = Column(UUID(as_uuid=True), ForeignKey("tender_files.id", ondelete="SET NULL"), nullable=True, index=True)
+
     # Search and discovery
     is_featured = Column(Boolean, default=False)
     view_count = Column(Integer, default=0)

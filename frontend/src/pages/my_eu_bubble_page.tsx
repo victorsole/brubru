@@ -129,7 +129,7 @@ const SECTIONS: { id: string; titleKey: string; titleFallback: string; withName?
 // Section 5: links OUT to the other Brubru products (navigate, not internal tabs).
 const OTHER_FEATURES: { key: string; labelKey: string; fallback: string; icon: string; route: string }[] = [
   { key: 'amendator',   labelKey: 'bubble.feat.amendator',   fallback: 'Amendator',     icon: mdiFileEdit,               route: '/amendator' },
-  { key: 'chat',        labelKey: 'bubble.feat.chat',        fallback: 'Chat',          icon: mdiRobotOutline,           route: '/main' },
+  { key: 'chat',        labelKey: 'bubble.feat.chat',        fallback: 'Chat',          icon: mdiRobotOutline,           route: '/chat' },
   { key: 'eulawcomply', labelKey: 'bubble.feat.eulawcomply', fallback: 'EU Law Comply', icon: mdiScaleBalance,           route: '/eulawcomply' },
   { key: 'tenderator',  labelKey: 'bubble.feat.tenderator',  fallback: 'Tenderator',    icon: mdiBriefcaseSearchOutline, route: '/tenderator' },
   { key: 'api',         labelKey: 'bubble.feat.api',         fallback: 'API',           icon: mdiApi,                    route: '/api' },

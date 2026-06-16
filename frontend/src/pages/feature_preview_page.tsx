@@ -41,7 +41,7 @@ interface FeatureConfig {
 }
 
 const FEATURE_CONFIGS: Record<string, FeatureConfig> = {
-  '/main': {
+  '/chat': {
     id: 'main',
     icon: mdiChatProcessingOutline,
     color: 'blue',

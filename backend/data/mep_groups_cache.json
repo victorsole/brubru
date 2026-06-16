@@ -1,4 +1,8 @@
 {
+  "112748": {
+    "country": null,
+    "political_group": "S&D"
+  },
   "124808": {
     "country": null,
     "political_group": "EPP"
@@ -11,13 +15,49 @@
     "country": null,
     "political_group": "ECR"
   },
+  "125325": {
+    "country": null,
+    "political_group": "ECR"
+  },
+  "185619": {
+    "country": null,
+    "political_group": "S&D"
+  },
   "190464": {
     "country": null,
     "political_group": "Greens/EFA"
   },
+  "190713": {
+    "country": null,
+    "political_group": "EPP"
+  },
   "193292": {
     "country": null,
     "political_group": "Greens/EFA"
+  },
+  "197404": {
+    "country": null,
+    "political_group": "EPP"
+  },
+  "197417": {
+    "country": null,
+    "political_group": "EPP"
+  },
+  "197463": {
+    "country": null,
+    "political_group": "Renew"
+  },
+  "197528": {
+    "country": null,
+    "political_group": "PfE"
+  },
+  "197647": {
+    "country": null,
+    "political_group": "EPP"
+  },
+  "197648": {
+    "country": null,
+    "political_group": "EPP"
   },
   "197670": {
     "country": null,
@@ -27,6 +67,26 @@
     "country": null,
     "political_group": "S&D"
   },
+  "204333": {
+    "country": null,
+    "political_group": "EPP"
+  },
+  "214839": {
+    "country": null,
+    "political_group": "Renew"
+  },
+  "23816": {
+    "country": null,
+    "political_group": "PfE"
+  },
+  "244571": {
+    "country": null,
+    "political_group": "S&D"
+  },
+  "256811": {
+    "country": null,
+    "political_group": "ECR"
+  },
   "256831": {
     "country": null,
     "political_group": "EPP"
@@ -35,19 +95,43 @@
     "country": null,
     "political_group": "ECR"
   },
+  "256891": {
+    "country": null,
+    "political_group": "Renew"
+  },
   "256906": {
     "country": null,
     "political_group": "S&D"
+  },
+  "256910": {
+    "country": null,
+    "political_group": "The Left"
   },
   "256911": {
     "country": null,
     "political_group": "The Left"
   },
+  "256921": {
+    "country": null,
+    "political_group": "PfE"
+  },
   "256934": {
     "country": null,
     "political_group": "S&D"
   },
+  "256936": {
+    "country": null,
+    "political_group": "S&D"
+  },
+  "256968": {
+    "country": null,
+    "political_group": "EPP"
+  },
   "256973": {
+    "country": null,
+    "political_group": "EPP"
+  },
+  "256985": {
     "country": null,
     "political_group": "EPP"
   },
@@ -67,16 +151,48 @@
     "country": null,
     "political_group": "EPP"
   },
+  "257039": {
+    "country": null,
+    "political_group": "EPP"
+  },
   "257061": {
     "country": null,
     "political_group": "Renew"
   },
+  "257080": {
+    "country": null,
+    "political_group": "ECR"
+  },
+  "257088": {
+    "country": null,
+    "political_group": "S&D"
+  },
+  "257100": {
+    "country": null,
+    "political_group": "S&D"
+  },
   "257103": {
+    "country": null,
+    "political_group": "S&D"
+  },
+  "257150": {
+    "country": null,
+    "political_group": "ECR"
+  },
+  "260035": {
+    "country": null,
+    "political_group": "S&D"
+  },
+  "34232": {
     "country": null,
     "political_group": "S&D"
   },
   "38542": {
     "country": null,
     "political_group": "S&D"
+  },
+  "96675": {
+    "country": null,
+    "political_group": "Greens/EFA"
   }
 }

@@ -6,7 +6,7 @@ Handles compliance checking, gap analysis, and requirement extraction for EU law
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, func
+from sqlalchemy import and_, or_, func
 from typing import List, Optional
 from datetime import datetime
 import logging
@@ -1236,3 +1236,174 @@ async def get_compliance_maturity(
 ):
     assessment = compose_maturity_assessment(db, current_user)
     return assessment.to_dict()
+
+
+# ---------------------------------------------------------------------------
+# Tender Docs cross-fetch (16 Jun 2026)
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/by-topic-clusters",
+    summary="Compliance clusters relevant to a Tender Docs template + funding context",
+    description=(
+        "**What it does**\n"
+        "Given a funding template id + optional funding_mode + ethics flags, "
+        "returns the EU Law Comply clusters whose `policy_area` is listed in "
+        "the template's `comply_targets`, plus any extras driven by the ethics "
+        "table answers (e.g. ethics_personal_data=true → GDPR clusters).\n\n"
+        "**When to use it**\n"
+        "Populating the right-rail Comply panel in the Tender Docs editor — "
+        "live cross-fetch into the existing 53-cluster catalogue.\n\n"
+        "**Input**\n"
+        "Query: `template_id` (required), `funding_mode`, `ethics_personal_data`, "
+        "`ethics_clinical_studies`, `ethics_dual_use`, `ethics_animals` (booleans).\n\n"
+        "**You get back**\n"
+        "Clusters with `law_count` + `requirement_count` + a `match_reason` "
+        "showing why each one surfaced (template / ethics_flag)."
+    ),
+)
+async def clusters_by_topic(
+    template_id: str,
+    funding_mode: Optional[str] = None,
+    ethics_personal_data: bool = False,
+    ethics_clinical_studies: bool = False,
+    ethics_dual_use: bool = False,
+    ethics_animals: bool = False,
+    ethics_special_categories: bool = False,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.subscription_tier not in ['yellow', 'blue']:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="EU Law Comply is available for Yellow and Blue tier users only",
+        )
+
+    # Local imports to avoid a top-of-file circular import with Tender Docs.
+    import json as _json
+    from pathlib import Path as _Path
+    _tpl_dir = _Path(__file__).resolve().parent.parent / "knowledge_base" / "funding_templates"
+    _tpl_path = _tpl_dir / f"{template_id}.json"
+    if not _tpl_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Funding template '{template_id}' not found",
+        )
+    with _tpl_path.open() as fh:
+        template = _json.load(fh)
+
+    targets: List[str] = list(template.get("comply_targets") or [])
+    reasons: Dict[str, List[str]] = {t: ["template"] for t in targets}
+
+    # Ethics-flag-driven additions
+    flag_extras: List[tuple] = [
+        (ethics_personal_data,       ["GDPR", "Data Protection"]),
+        (ethics_special_categories,  ["GDPR Special Categories", "Health Data"]),
+        (ethics_clinical_studies,    ["Clinical Trials", "Medical Devices", "IVDR"]),
+        (ethics_dual_use,            ["Dual-Use", "Export Controls"]),
+        (ethics_animals,             ["Animal Research"]),
+    ]
+    for flag_on, areas in flag_extras:
+        if not flag_on:
+            continue
+        for a in areas:
+            if a not in targets:
+                targets.append(a)
+            reasons.setdefault(a, []).append("ethics")
+
+    if funding_mode in ("equity-only", "blended"):
+        for a in ("Sustainable Finance (SFDR)", "AIFMD", "Anti-Money Laundering"):
+            if a not in targets:
+                targets.append(a)
+            reasons.setdefault(a, []).append("funding-mode")
+
+    if not targets:
+        return {"clusters": [], "match_reasons": {}, "template_id": template_id}
+
+    # Curated translation: template-side comply_target labels (short, applicant-
+    # friendly) → actual policy_area values present in law_clusters (full, EU-
+    # taxonomy). Substring-only match produced false positives (e.g. "AI" matched
+    # "AffAIrs"); this map fixes that.
+    target_to_policy_areas: Dict[str, List[str]] = {
+        "AI": ["Digital Policy and Digital Economy", "Digital Policy and Platform Regulation"],
+        "Artificial Intelligence": ["Digital Policy and Digital Economy"],
+        "AI Act": ["Digital Policy and Digital Economy"],
+        "GDPR": ["Data Protection and Privacy"],
+        "Data Protection": ["Data Protection and Privacy"],
+        "GDPR Special Categories": ["Data Protection and Privacy"],
+        "Health Data": ["Data Protection and Privacy", "Public Health and Pharmaceuticals"],
+        "Cybersecurity": ["Cybersecurity and Digital Infrastructure"],
+        "Product Safety": ["Trade and Economic Security", "Health"],
+        "Medical Devices": ["Public Health and Pharmaceuticals", "Health"],
+        "IVDR": ["Public Health and Pharmaceuticals"],
+        "Clinical Trials": ["Public Health and Pharmaceuticals"],
+        "Bioethics": ["Public Health and Pharmaceuticals", "Health"],
+        "Dual-Use": ["Trade and Economic Security"],
+        "Export Controls": ["Trade and Economic Security"],
+        "Foreign Subsidies": ["Competition and State Aid", "Trade and Economic Security"],
+        "Sustainable Finance (SFDR)": ["Financial Services and Markets", "Financial Services and Insurance"],
+        "AIFMD": ["Financial Services and Markets"],
+        "Anti-Money Laundering": ["Financial Services and Insurance"],
+        "Environment": ["Environment"],
+        "Energy": ["Climate Action", "Environment"],
+        "CSRD": ["Climate Action", "Financial Services and Markets"],
+        "Climate": ["Climate Action"],
+        "Education": [],
+        "Fundamental Rights": ["Migration and Home Affairs"],
+        "Research Integrity": [],
+        "Animal Research": [],
+        "Data Act": ["Digital Policy and Digital Economy"],
+        "Defence": ["Trade and Economic Security"],
+    }
+    resolved_policy_areas: set[str] = set()
+    target_to_actual: Dict[str, List[str]] = {}
+    for t in targets:
+        mapped = target_to_policy_areas.get(t, [])
+        # Fallback: case-insensitive equality to the DB value
+        if not mapped:
+            mapped = [t]
+        for pa in mapped:
+            resolved_policy_areas.add(pa)
+        target_to_actual[t] = mapped
+
+    if not resolved_policy_areas:
+        return {"clusters": [], "match_reasons": reasons, "template_id": template_id, "targets_resolved": targets, "funding_mode": funding_mode}
+
+    # Exact-match policy_area (case-insensitive). This avoids "AI" matching
+    # "AffAIrs" and similar false positives.
+    or_clauses = [func.lower(LawCluster.policy_area) == pa.lower() for pa in resolved_policy_areas]
+    clusters = (
+        db.query(LawCluster)
+        .filter(or_(*or_clauses))
+        .order_by(LawCluster.id)
+        .all()
+    )
+
+    out = []
+    for c in clusters:
+        law_count = db.query(func.count(ClusterLaw.law_id)).filter(ClusterLaw.cluster_id == c.id).scalar()
+        req_count = db.query(func.count(LawRequirement.id)).filter(LawRequirement.cluster_id == c.id).scalar()
+        # Which template targets resolved to this cluster's policy_area
+        matched_targets = [t for t, pas in target_to_actual.items() if (c.policy_area or "") in pas]
+        match_reason = sorted({r for t in matched_targets for r in reasons.get(t, [])})
+        out.append({
+            "id": c.id,
+            "name": c.name,
+            "description": c.description,
+            "applicability": c.applicability,
+            "policy_area": c.policy_area,
+            "priority_level": c.priority_level,
+            "law_count": law_count or 0,
+            "requirement_count": req_count or 0,
+            "matched_targets": matched_targets,
+            "match_reason": match_reason or ["template"],
+        })
+
+    return {
+        "clusters": out,
+        "match_reasons": reasons,
+        "template_id": template_id,
+        "targets_resolved": targets,
+        "funding_mode": funding_mode,
+    }
+

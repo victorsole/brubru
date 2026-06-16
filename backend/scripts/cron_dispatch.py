@@ -111,6 +111,12 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour in (1, 9, 17):
         fires.append(("journey_precompute", "/api/cron/precompute-journeys?limit=8"))
 
+    # Committee-transcript precompute: 2x/day (16, 22 UTC — otherwise-quiet
+    # hours), free via Groq whisper-large-v3, tracked/PI committees first,
+    # throttled (limit=3/run) so each run stays bounded.
+    if hour in (16, 22):
+        fires.append(("transcribe_precompute", "/api/cron/transcribe-pending?limit=3"))
+
     # Authority labels: 03:00 UTC daily
     if hour == 3:
         fires.append(("authority_labels", "/api/cron/sync/authority-labels"))

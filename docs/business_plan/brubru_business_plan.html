@@ -1616,8 +1616,8 @@
 
     .product-cards {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.85rem;
       margin-bottom: 1.5rem;
     }
 
@@ -2870,7 +2870,7 @@
       </a>
       <div class="header__badge">
         <span class="mdi mdi-calendar"></span>
-        April 2026
+        May 2026
       </div>
     </div>
   </header>
@@ -2941,17 +2941,17 @@
         <div class="metric-card metric-card--blue">
           <div class="metric-card__icon"><span class="mdi mdi-cube-outline"></span></div>
           <div class="metric-card__label">Product Status</div>
-          <div class="metric-card__value">Built</div>
+          <div class="metric-card__value">Live</div>
           <div class="metric-card__badge metric-card__badge--green">
-            <span class="mdi mdi-check-circle"></span> 9 core features live
+            <span class="mdi mdi-check-circle"></span> 6 core products + 3 paying clients
           </div>
         </div>
         <div class="metric-card metric-card--green">
           <div class="metric-card__icon"><span class="mdi mdi-database-outline"></span></div>
           <div class="metric-card__label">Data sources</div>
-          <div class="metric-card__value">15+</div>
+          <div class="metric-card__value">50+</div>
           <div class="metric-card__badge metric-card__badge--blue">
-            <span class="mdi mdi-spider-web"></span> 35+ scrapers
+            <span class="mdi mdi-spider-web"></span> 52 scrapers, 244 knowledge guides
           </div>
         </div>
         <div class="metric-card metric-card--purple">
@@ -2973,9 +2973,9 @@
           <div class="metric-card__label">North Star: WAPU</div>
           <div class="metric-card__value">10</div>
           <div class="metric-card__badge metric-card__badge--gold">
-            <span class="mdi mdi-calendar-clock"></span> Month 3 target
+            <span class="mdi mdi-calendar-clock"></span> Phase A target
           </div>
-          <div class="metric-card__detail">Weekly Active Paid Users: paid + 1 core action in 7 days</div>
+          <div class="metric-card__detail">Weekly Active Paid Users: paid + 1 core action in 7 days. 3 paying clients live (GovClipping, Ferrmed, Bo).</div>
         </div>
       </div>
 
@@ -3050,7 +3050,7 @@
             <div class="timeline-content">
               <div class="timeline-label">Layer 3</div>
               <div class="timeline-value">Workflow Platform</div>
-              <div class="timeline-target">10 verticals, 35 scrapers, 30+ models</div>
+              <div class="timeline-target">10 verticals, 52 scrapers, 30+ models, 244 guides</div>
             </div>
           </div>
           <div class="timeline-milestone">
@@ -3199,7 +3199,7 @@
             <div class="product-detail__stat-label">EP committees tracked</div>
           </div>
           <div class="product-detail__stat">
-            <div class="product-detail__stat-value">10</div>
+            <div class="product-detail__stat-value">11</div>
             <div class="product-detail__stat-label">Dashboard sub-tabs</div>
           </div>
         </div>
@@ -3210,7 +3210,8 @@
               <li><span class="mdi mdi-view-dashboard-outline"></span> <strong>Dashboard</strong>: personalised home screen. Tracked files status, upcoming EU events, predictions ready to read, the week's most important signals at a glance.</li>
               <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong>: tracked legislation and bookmarked collections. Status changes, amendments, committee activity and deadlines aggregated per file.</li>
               <li><span class="mdi mdi-compass-outline"></span> <strong>Position Analysis</strong>: stakeholder and institutional positions on every tracked file -- rapporteur stance, shadow positions, Council member state leanings, industry vs NGO alignment.</li>
-              <li><span class="mdi mdi-calendar-month"></span> <strong>My EU Calendar</strong>: aggregated institutional calendar from 6 data sources with 274+ events. EP plenary, committee weeks, Council configurations, Commission College, ECB Governing Council. Google Calendar sync.</li>
+              <li><span class="mdi mdi-compare-horizontal"></span> <strong>Comparator</strong>: spreadsheet-style legislative-file comparison. Pick N files (search by alias, CELEX or OEIL ref), pick the columns (rapporteur, status, lead committee, amendments deadline, recital + article counts, last key event), and Brubru fills each cell with a verifiable citation. Multi-source resolution: legislative_carriages -> Brubru knowledge guides -> live EUR-Lex / Cellar parser (XHTML for adopted acts, PDF for proposals).</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>My EU Calendar</strong>: aggregated institutional calendar from 7 data sources (since 22 April 2026 includes euagenda.eu Brussels events) with 419+ events. EP plenary, committee weeks, Council configurations, Commission College, ECB Governing Council. Google Calendar sync.</li>
               <li><span class="mdi mdi-chart-bell-curve"></span> <strong>Predictions</strong>: AI outcome and timeline forecasts per file. EP group voting patterns, Council QMV with blocking minority detection.</li>
               <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Public Consultations</strong>: open, closed, and outcome-published consultations from the Have Your Say portal. AI-drafted response suggestions on Professional.</li>
               <li><span class="mdi mdi-file-document-edit-outline"></span> <strong>Documents</strong>: AI-drafted position papers, MEP briefings, talking points, consultation responses -- sourced with CELEX references, ready to edit.</li>
@@ -3529,8 +3530,8 @@
             <div class="product-detail__stat-label">europa.eu sources inventoried</div>
           </div>
           <div class="product-detail__stat">
-            <div class="product-detail__stat-value">28,505</div>
-            <div class="product-detail__stat-label">EU laws indexed (CELEX + TSVECTOR)</div>
+            <div class="product-detail__stat-value">8,710</div>
+            <div class="product-detail__stat-label">distinct EU laws (28,513 OJ entries, 61,219 XML files)</div>
           </div>
           <div class="product-detail__stat">
             <div class="product-detail__stat-value">v1</div>
@@ -3541,7 +3542,7 @@
           <div>
             <div class="product-detail__section-title">Why a Brubru API</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-lightbulb-outline"></span> Brubru's real moat is not the chat surface. It is the <strong>vertical ingestion + intelligence layer</strong> on top of europa.eu: 519 sources, law aliases, recital linker, cross-reference resolver, definition extractor, predictions engine.</li>
+              <li><span class="mdi mdi-lightbulb-outline"></span> Brubru's real moat is not the chat surface. It is the <strong>vertical ingestion + intelligence layer</strong> on top of europa.eu: 519 sources, law aliases, recital linker, cross-reference resolver, definition extractor, predictions engine, and (since 2 May 2026) a full <strong>EU Vocabularies layer</strong> &mdash; multilingual authority-label resolution against the official EU Authority Tables, a unified resolver across nine EU identifier families (CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ ref, ISBN/ISSN/DOI, catalogue number), DCAT-AP self-description that data.europa.eu can harvest, and citation verification on every model output. We don't just read EU pages; we speak the same vocabulary the Publications Office uses.</li>
               <li><span class="mdi mdi-share-variant-outline"></span> Partners (RegTech tools, consultancies, media outlets, public sector platforms, national registers) need the data, not necessarily our UI.</li>
               <li><span class="mdi mdi-rocket-launch-outline"></span> Selling the data surface lets others build on Brubru while we keep improving the core. Brubru app is the first user of its own API.</li>
             </ul>
@@ -3549,7 +3550,7 @@
             <p style="font-size: 0.9rem; color: var(--color-gray-600); margin-bottom: 0.5rem;">Every v1 endpoint returns the same envelope: <code>{ success, data, meta, aggregates, links }</code>. Dataset-specific aggregates (e.g. <code>by_country</code>, <code>by_user_type</code>) sit alongside <code>data</code> so partners get analytics and detail in one call.</p>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Core endpoints</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-database-search-outline"></span> <code>GET /api/v1/legislation</code>: full-text and CELEX search across 28,505 EU laws.</li>
+              <li><span class="mdi mdi-database-search-outline"></span> <code>GET /api/v1/legislation</code>: full-text and CELEX search across 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files).</li>
               <li><span class="mdi mdi-file-tree-outline"></span> <code>GET /api/v1/procedures</code>: OEIL procedure status, rapporteurs, committees, timeline.</li>
               <li><span class="mdi mdi-book-open-variant"></span> <code>GET /api/v1/publications</code>: EPRS, JRC, Eurostat, DG publications with filters.</li>
               <li><span class="mdi mdi-comment-question-outline"></span> <code>GET /api/v1/consultations/by-initiative/{id}/feedback</code>: live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
@@ -3799,9 +3800,36 @@
          ======================================== -->
     <section id="clients" class="section">
       <div class="section-header reveal">
-        <div class="section-header__title">Ideal customer profiles</div>
-        <div class="section-header__subtitle">Six personas across the EU public affairs value chain, mapped to every Brubru product and pricing tier.</div>
+        <div class="section-header__title">Clients and ideal customer profiles</div>
+        <div class="section-header__subtitle">Three paying clients live (May 2026), six target personas across the EU public affairs value chain.</div>
       </div>
+
+      <div class="card reveal" style="margin-bottom: 1.5rem; border-left: 4px solid var(--color-accent-green);">
+        <div class="card__title"><span class="mdi mdi-check-decagram"></span> First paying clients (May 2026)</div>
+        <div class="grid-3 reveal-scale" style="margin-top: 1rem; margin-bottom: 0;">
+          <div style="padding: 1.25rem; background: rgba(6,147,227,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">GovClipping</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.35rem;">Spanish RegTech, Brubru API</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">First API customer (April 2026). Integrates Brubru's EU legislation + procedures into its Spanish regulatory clipping product. Validates Brubru API as an embeddable EU data layer for adjacent RegTech tools.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(155,81,224,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-purple);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-purple); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Ferrmed</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.35rem;">Trade association, rail freight corridor</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Mediterranean rail freight advocacy association. Uses Brubru to monitor TEN-T, CEF Transport, and corridor-related EU legislation, plus AI-drafted briefings for member companies and EU institutions.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(5,150,105,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-green);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-green); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Bo</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.35rem;">Yellow / Advocate tier</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Individual policy professional on the Advocate plan: daily Chat use, tracked dossiers across My EU Bubble, document generation. Lead reference customer for the single-seat ICPs (PA consultant, NGO advocate, EP assistant).</div>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: var(--color-gray-50); border-radius: var(--radius-md); font-size: 0.85rem; color: var(--color-text-secondary);">
+          <strong style="color: var(--color-text);">Why this matters:</strong> three distinct buyer archetypes are paying today: a B2B API customer (GovClipping), an institutional trade association (Ferrmed), and a single-seat advocate (Bo). Brubru is monetising across the full pricing stack, not just one segment.
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-top: 0; margin-bottom: 0.25rem;" class="reveal">Ideal customer profiles</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1.25rem;" class="reveal">Six personas across the EU public affairs value chain, mapped to every Brubru product and pricing tier.</p>
 
       <div class="grid-2 reveal">
         <div class="card">
@@ -3860,7 +3888,7 @@
       </div>
 
       <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" class="reveal">Use-case matrix: persona x product</h3>
-      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">Every one of Brubru's five products has a concrete, role-specific use case for every persona.</p>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">Every one of Brubru's six products (Chat, My EU Bubble, Amendator, EU Law Comply, Tenderator, API) has a concrete, role-specific use case for every persona.</p>
 
       <table class="data-table reveal" style="margin-top: 1rem;">
         <thead>
@@ -3924,6 +3952,86 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- ========================================
+           Client carousel — right-to-left auto-scroll, flip on hover
+           ======================================== -->
+      <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" class="reveal">Clients already using Brubru</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">Hover any logo to read what the client says. Click to open their website.</p>
+      <style>
+        .bb-clients-carousel { position: relative; max-width: 1100px; margin: 1rem auto 0; overflow: hidden; padding: 1.25rem 0; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%); }
+        .bb-clients-carousel__track { display: flex; gap: 1.25rem; width: max-content; animation: bb-clients-scroll 32s linear infinite; will-change: transform; }
+        .bb-clients-carousel:hover .bb-clients-carousel__track { animation-play-state: paused; }
+        .bb-clients-carousel__card { flex: 0 0 220px; height: 140px; perspective: 1000px; text-decoration: none; cursor: pointer; display: block; }
+        .bb-clients-carousel__card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .bb-clients-carousel__card:hover .bb-clients-carousel__card-inner, .bb-clients-carousel__card:focus-visible .bb-clients-carousel__card-inner { transform: rotateY(180deg); }
+        .bb-clients-carousel__face { position: absolute; inset: 0; border-radius: 12px; -webkit-backface-visibility: hidden; backface-visibility: hidden; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08); border: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; padding: 1rem; box-sizing: border-box; }
+        .bb-clients-carousel__face--back { transform: rotateY(180deg); background: linear-gradient(135deg, rgba(6, 147, 227, 0.96), rgba(155, 81, 224, 0.96)); border: none; color: #ffffff; flex-direction: column; text-align: center; padding: 14px 16px; }
+        .bb-clients-carousel__logo { max-width: 150px; max-height: 70px; width: auto; height: auto; object-fit: contain; }
+        .bb-clients-carousel__quote { font-family: 'Adobe Caslon Pro', Georgia, serif; font-size: 0.78rem; line-height: 1.4; margin: 0; font-style: italic; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; color: #ffffff; }
+        .bb-clients-carousel__attr { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; margin: 8px 0 0; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; opacity: 0.95; color: #ffffff; }
+        @keyframes bb-clients-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @media (prefers-reduced-motion: reduce) { .bb-clients-carousel__track { animation: none; } }
+        @media (max-width: 767px) {
+          .bb-clients-carousel__card { flex-basis: 180px; height: 120px; }
+          .bb-clients-carousel__logo { max-width: 130px; max-height: 60px; }
+          .bb-clients-carousel__quote { font-size: 0.74rem; -webkit-line-clamp: 4; }
+        }
+      </style>
+      <div class="bb-clients-carousel reveal" aria-label="Brubru clients carousel">
+        <div class="bb-clients-carousel__track">
+          <!-- First set -->
+          <a href="https://hellobo.eu" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-label="Bo: open client website">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="bo.png" alt="Bo" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Thanks to Brubru, we could power our platform with all the European laws related to agri-food and geographical indications. Truly a game-changer!</p><p class="bb-clients-carousel__attr">Bo</p></div>
+            </div>
+          </a>
+          <a href="https://www.ferrmed.com/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-label="Ferrmed: open client website">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="ferrmed.jpeg" alt="Ferrmed" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru helps us advocate for the efficient development of the Mediterranean Corridor by assisting our work with document-generation of many types, following up on EU laws on transport and infrastructure, or contact the right EU stakeholder.</p><p class="bb-clients-carousel__attr">Ferrmed</p></div>
+            </div>
+          </a>
+          <a href="https://movimentgaudi.cat/en/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-label="Moviment Gaudi: open client website">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="movimentgaudi.png" alt="Moviment Gaud&iacute;" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru is very helpful to know how we can access cultural and educational EU funds and grants. We could not work without it!</p><p class="bb-clients-carousel__attr">Moviment Gaud&iacute;</p></div>
+            </div>
+          </a>
+          <a href="https://www.taseuro.com/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-label="TAS Europrojects: open client website">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="tas.png" alt="TAS Europrojects" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru's Tenderator helps us follow up on EU funds and tenders of any type. Brubru's Chat is a daily staple for us.</p><p class="bb-clients-carousel__attr">TAS Europrojects</p></div>
+            </div>
+          </a>
+          <!-- Second set (duplicated for seamless loop) -->
+          <a href="https://hellobo.eu" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-hidden="true" tabindex="-1">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="bo.png" alt="" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Thanks to Brubru, we could power our platform with all the European laws related to agri-food and geographical indications. Truly a game-changer!</p><p class="bb-clients-carousel__attr">Bo</p></div>
+            </div>
+          </a>
+          <a href="https://www.ferrmed.com/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-hidden="true" tabindex="-1">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="ferrmed.jpeg" alt="" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru helps us advocate for the efficient development of the Mediterranean Corridor by assisting our work with document-generation of many types, following up on EU laws on transport and infrastructure, or contact the right EU stakeholder.</p><p class="bb-clients-carousel__attr">Ferrmed</p></div>
+            </div>
+          </a>
+          <a href="https://movimentgaudi.cat/en/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-hidden="true" tabindex="-1">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="movimentgaudi.png" alt="" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru is very helpful to know how we can access cultural and educational EU funds and grants. We could not work without it!</p><p class="bb-clients-carousel__attr">Moviment Gaud&iacute;</p></div>
+            </div>
+          </a>
+          <a href="https://www.taseuro.com/" target="_blank" rel="noopener noreferrer" class="bb-clients-carousel__card" aria-hidden="true" tabindex="-1">
+            <div class="bb-clients-carousel__card-inner">
+              <div class="bb-clients-carousel__face"><img src="tas.png" alt="" class="bb-clients-carousel__logo" loading="lazy" /></div>
+              <div class="bb-clients-carousel__face bb-clients-carousel__face--back"><p class="bb-clients-carousel__quote">Brubru's Tenderator helps us follow up on EU funds and tenders of any type. Brubru's Chat is a daily staple for us.</p><p class="bb-clients-carousel__attr">TAS Europrojects</p></div>
+            </div>
+          </a>
+        </div>
+      </div>
 
       <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" class="reveal">Client pitch deck</h3>
       <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">The condensed, client-facing version of this business plan is at <a href="brubru_client_pitch.html" style="color: var(--color-primary); font-weight: 600;">brubru_client_pitch.html</a>. Use it in prospect meetings, consultancy pitches, and institutional demos. Multilingual (EN, FR, NL, ES, CA, IT).</p>
@@ -4228,7 +4336,7 @@
             <div class="timeline-content">
               <div class="timeline-label">Year 1</div>
               <div class="timeline-value">First mover</div>
-              <div class="timeline-target">Domain expertise + 35 scrapers</div>
+              <div class="timeline-target">Domain expertise + 52 scrapers</div>
             </div>
           </div>
           <div class="timeline-milestone">
@@ -4269,12 +4377,12 @@
       <div class="card reveal">
         <div class="card__title"><span class="mdi mdi-shield-alert-outline"></span> The foundation model threat, and why Brubru is defended</div>
         <p style="margin: 0.75rem 0 1rem 0; color: var(--color-text-secondary); font-size: 0.9rem;">
-          The risk is not another SaaS competitor replicating 35 scrapers and 10 workflow verticals. It is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or similar extension mechanisms.
+          The risk is not another SaaS competitor replicating 52 scrapers and 10 workflow verticals. It is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or similar extension mechanisms.
         </p>
         <div class="grid-3 reveal-scale" style="margin-bottom: 0;">
           <div style="padding: 1.25rem; background: rgba(6,147,227,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-primary);">
             <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Pipeline Depth</div>
-            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">35 scrapers, structured legislative timelines, amendment classification, institutional behaviour analytics. General plugins cannot match this depth.</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">52 scrapers, 244 daily-maintained knowledge guides, structured legislative timelines, amendment classification, institutional behaviour analytics, EU Vocabularies citation verification. General plugins cannot match this depth.</div>
           </div>
           <div style="padding: 1.25rem; background: rgba(5,150,105,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-green);">
             <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-green); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Domain Engineering</div>
@@ -4511,7 +4619,7 @@
                 <td>EU legislative knowledge</td>
                 <td><span class="mdi mdi-minus comp-partial"></span> Generic</td>
                 <td><span class="mdi mdi-minus comp-partial"></span> Better</td>
-                <td><span class="mdi mdi-check-bold comp-check"></span> 17 reports + 35 scrapers</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 244 guides + 52 scrapers + EU Canon</td>
               </tr>
               <tr>
                 <td>Real-time procedure tracking</td>
@@ -4547,7 +4655,7 @@
                 <td>Institutional calendar</td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-check-bold comp-check"></span> 6 sources, 274+ events</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 7 sources, 419+ events</td>
               </tr>
               <tr>
                 <td>Legislative predictions</td>
@@ -4747,7 +4855,7 @@
     <section id="technology" class="section">
       <div class="section-header reveal">
         <div class="section-header__title">Technology & data infrastructure</div>
-        <div class="section-header__subtitle">35 scrapers, 20 AI services, 4-provider fallback chain, 30+ database models</div>
+        <div class="section-header__subtitle">52 scrapers, 244 knowledge guides, 20 AI services, 4-provider fallback chain, 30+ database models, EU Vocabularies layer</div>
       </div>
 
       <div class="metric-grid reveal">
@@ -4863,7 +4971,7 @@
               <div class="arch-node arch-node--db"><span class="mdi mdi-database"></span><span class="arch-node__text">PostgreSQL</span><span class="arch-node__sub">27+ models, 16 migrations</span></div>
               <div class="arch-node arch-node--vector"><span class="mdi mdi-vector-combine"></span><span class="arch-node__text">ChromaDB</span><span class="arch-node__sub">Vector search + embeddings</span></div>
               <div class="arch-node arch-node--knowledge"><span class="mdi mdi-bookshelf"></span><span class="arch-node__text">Knowledge Base</span><span class="arch-node__sub">17 reports, 7 monitors</span></div>
-              <div class="arch-node arch-node--external"><span class="mdi mdi-earth"></span><span class="arch-node__text">EU Sources</span><span class="arch-node__sub">15+ institutional APIs</span></div>
+              <div class="arch-node arch-node--external"><span class="mdi mdi-earth"></span><span class="arch-node__text">EU Sources</span><span class="arch-node__sub">50+ institutional APIs (52 scrapers)</span></div>
             </div>
           </div>
         </div>
@@ -5003,7 +5111,7 @@
           <div style="border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent-blue); border-radius: var(--radius-lg); padding: 1rem;">
             <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-blue); margin-bottom: 0.35rem;">Tier 1 &middot; DB + smart filters</div>
             <div style="font-weight: 600; margin-bottom: 0.5rem;">Fast, curated, no external dependency</div>
-            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Direct PostgreSQL queries across 28,505 EU laws, 419 institutional calendar events, 157 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes.</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Direct PostgreSQL queries across 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files), 419 institutional calendar events, 168 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes.</div>
           </div>
           <div style="border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent-purple); border-radius: var(--radius-lg); padding: 1rem;">
             <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-purple); margin-bottom: 0.35rem;">Tier 2 &middot; On-demand live fetchers</div>
@@ -5029,24 +5137,24 @@
       </div>
 
       <p class="reveal" style="color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
-        Since 9 February 2026, we have been actively disseminating Brubru across the Brussels policy community: onboarding users, sending daily EU intelligence briefings, recruiting volunteer Trainers, and iterating the product every single day based on real user feedback.
+        Since 9 February 2026 we have been actively disseminating Brubru across the Brussels policy community: onboarding users, sending daily EU intelligence briefings, recruiting volunteer Trainers, and iterating the product every single day based on real user feedback. Three months in, the dogfooding loop has produced 244 curated knowledge guides, the EU Vocabularies layer (phases 0-13 shipped 2 May 2026), the Comparator sub-tab (6 May), the Brubru Brief format (11 May), and the EU Canon library (first deep-dive shipped 15 May on the CRR).
       </p>
 
       <div class="metric-grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
         <div class="metric-card metric-card--blue">
           <div class="metric-card__icon"><span class="mdi mdi-account-group-outline"></span></div>
           <div class="metric-card__label">Registered users</div>
-          <div class="metric-card__value">57</div>
+          <div class="metric-card__value">100+</div>
           <div class="metric-card__badge metric-card__badge--blue">
-            <span class="mdi mdi-trending-up"></span> Growing weekly
+            <span class="mdi mdi-trending-up"></span> 3 paying clients
           </div>
         </div>
         <div class="metric-card metric-card--green">
           <div class="metric-card__icon"><span class="mdi mdi-email-fast-outline"></span></div>
-          <div class="metric-card__label">Daily brief subscribers</div>
-          <div class="metric-card__value">82</div>
+          <div class="metric-card__label">Brief subscribers</div>
+          <div class="metric-card__value">100+</div>
           <div class="metric-card__badge metric-card__badge--green">
-            <span class="mdi mdi-email-check-outline"></span> Opted-in recipients
+            <span class="mdi mdi-email-check-outline"></span> Brubru Brief format since 11 May
           </div>
         </div>
         <div class="metric-card metric-card--gold">
@@ -5058,22 +5166,22 @@
         <div class="metric-card metric-card--purple">
           <div class="metric-card__icon"><span class="mdi mdi-book-open-page-variant-outline"></span></div>
           <div class="metric-card__label">Knowledge guides</div>
-          <div class="metric-card__value">67</div>
+          <div class="metric-card__value">244</div>
           <div class="metric-card__badge metric-card__badge--gold">
-            <span class="mdi mdi-key-chain-variant"></span> 1,679 keyword triggers
+            <span class="mdi mdi-key-chain-variant"></span> 4,600+ keyword triggers
           </div>
         </div>
         <div class="metric-card metric-card--red">
           <div class="metric-card__icon"><span class="mdi mdi-database-outline"></span></div>
-          <div class="metric-card__label">EU policy data points</div>
-          <div class="metric-card__value">3,400+</div>
-          <div class="metric-card__detail">Legislation, institutions, procedures, and policy areas</div>
+          <div class="metric-card__label">EU laws indexed</div>
+          <div class="metric-card__value">8,710</div>
+          <div class="metric-card__detail">28,513 OJ publications, 61,219 Formex XML files (LEG_2025-11). 2,600+ acts translated to Catalan.</div>
         </div>
         <div class="metric-card metric-card--blue">
           <div class="metric-card__icon"><span class="mdi mdi-spider-web"></span></div>
           <div class="metric-card__label">EU data sources</div>
-          <div class="metric-card__value">30+</div>
-          <div class="metric-card__detail">Institutional databases, registries, and feeds</div>
+          <div class="metric-card__value">50+</div>
+          <div class="metric-card__detail">52 scrapers across institutional databases, registries, and feeds</div>
         </div>
         <div class="metric-card metric-card--green">
           <div class="metric-card__icon"><span class="mdi mdi-newspaper-variant-outline"></span></div>
@@ -5153,9 +5261,9 @@
             <div style="flex: 1;">
               <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                 <span class="badge badge--blue" style="font-size: 0.7rem;">Phase 5</span>
-                <strong>Daily Brief Email</strong>
+                <strong>Brubru Brief</strong>
               </div>
-              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Compose 10 curated EU policy headlines in Brubru style. Send to all subscribers and the Brussels network. Product news items highlight what improved today.</div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Since 11 May 2026 the daily brief became the <strong>Brubru Brief</strong>: variable cadence (1-3 sends per week, 3-10 headlines), tagline <em>"What nobody else tells you about the EU Bubble"</em>. No overlap with Politico, Euractiv, FT, Bloomberg, Reuters. Each headline pre-verified against the chatbot via <code>/api/chat/message</code>. EUTR-targeted distribution by policy_cluster matching, BCC delivery, hardened unsubscribe across 3 pools.</div>
             </div>
           </div>
 
@@ -5477,7 +5585,7 @@
           <div class="team-card__name">Victor Sol&eacute;</div>
           <div class="team-card__role">Founder & CEO</div>
           <div class="team-card__bio">
-            8 years in EU policy: parliamentary assistant at the European Parliament, trade advisor, regulatory consultant across 6 EU languages (EN, ES, CA, FR, IT, NL). Built the entire Brubru platform because the product comes from doing the work, not from studying it. Based in Brussels.
+            8 years in EU policy: parliamentary assistant at the European Parliament, trade advisor, regulatory consultant across 6 EU languages (EN, ES, CA, FR, IT, NL). Built the entire Brubru platform because the product comes from doing the work, not from studying it. Working in Brussels; Beresol BV is registered in Apeldoorn (NL).
           </div>
         </div>
         <div class="card">
@@ -5521,28 +5629,19 @@
           <div class="timeline-milestone">
             <div class="timeline-dot timeline-dot--complete"></div>
             <div class="timeline-content">
-              <div class="timeline-label">Now</div>
-              <div class="timeline-value">Product Built</div>
-              <div class="timeline-target">Product built, 9 features live, 15+ EU data sources connected</div>
-              <div class="timeline-feature">EUR 10K cash, ready to launch</div>
+              <div class="timeline-label">Feb-Apr 2026</div>
+              <div class="timeline-value">Product live, first revenue</div>
+              <div class="timeline-target">6 core products, 244 knowledge guides, 52 scrapers, 8,710 EU laws indexed, 3 paying clients (GovClipping, Ferrmed, Bo)</div>
+              <div class="timeline-feature">Daily routine running 9 Feb onwards; Catalan landing page (23 Apr); EU Vocabularies arc shipped (2 May)</div>
             </div>
           </div>
           <div class="timeline-milestone">
             <div class="timeline-dot timeline-dot--active"></div>
             <div class="timeline-content">
-              <div class="timeline-label">Q1 2026</div>
-              <div class="timeline-value">Phase A: Activation</div>
-              <div class="timeline-target">10 WAPU</div>
-              <div class="timeline-feature">A1 Chatbot fixes (done), A2 AI briefing emails, A3 Notification engine, A4 Thematic dashboards, A5 Demo flow</div>
-            </div>
-          </div>
-          <div class="timeline-milestone">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-label">Q2 2026</div>
-              <div class="timeline-value">Phase B: Depth</div>
-              <div class="timeline-target">25 WAPU, EUR 3K+ MRR</div>
-              <div class="timeline-feature">B1 Dossier workspaces, B2 Amendment analysis view, B3 Document Generator improvements</div>
+              <div class="timeline-label">May-Jun 2026</div>
+              <div class="timeline-value">Phase A/B: Activation -> Depth</div>
+              <div class="timeline-target">10 WAPU -> 25 WAPU, EUR 3K+ MRR</div>
+              <div class="timeline-feature">Comparator (6 May), Brubru Brief format (11 May), EU Canon library (CRR shipped 15 May); next: dossier workspaces, amendment analysis view, Document Generator improvements</div>
             </div>
           </div>
           <div class="timeline-milestone">
@@ -5579,7 +5678,7 @@
       <div class="card reveal">
         <div class="card__title"><span class="mdi mdi-sword-cross"></span> Competitive implementation strategy</div>
         <p class="impl-intro">
-          Analysis of <strong>15 direct competitors</strong> (Dixit, POLITICO Pro, SAVOIRR, FiscalNote EUIT, Moonlit.ai, LEOS, Cogrant, DeHavilland, Policy-Insider.AI, Polpo, Quorum, Euractiv Pro, Spaak, EU Matrix, Lobium) identified <strong>12 emulation priorities</strong> ranked by competitive impact. Deep codebase audit reveals <strong>25 backend models, 35+ scrapers, and 8 feature modules</strong> already built, significantly accelerating delivery. EU Matrix brings political foresight (MEP voting patterns, 62,000+ stakeholder meetings, influence indices). Lobium brings amendment analysis and consultation navigation (EU Datathon 2022 winner). Neither has Brubru's breadth: Akoma Ntoso editor, compliance, predictions, document generation, 7 deep dives, 6 languages, 102 knowledge guides.
+          Analysis of <strong>15 direct competitors</strong> (Dixit, POLITICO Pro, SAVOIRR, FiscalNote EUIT, Moonlit.ai, LEOS, Cogrant, DeHavilland, Policy-Insider.AI, Polpo, Quorum, Euractiv Pro, Spaak, EU Matrix, Lobium) plus the new YC-funded <strong>GovGuard</strong> (Spring 2026, US local-government FOIA AI) identified <strong>12 emulation priorities</strong> ranked by competitive impact. Deep codebase audit reveals <strong>25 backend models, 52 scrapers, and 9 feature modules</strong> already built, significantly accelerating delivery. EU Matrix brings political foresight (MEP voting patterns, 62,000+ stakeholder meetings, influence indices). Lobium brings amendment analysis and consultation navigation (EU Datathon 2022 winner). Neither has Brubru's breadth: Akoma Ntoso editor, compliance, predictions, document generation, the EU Canon multilingual deep-dive library, 6 languages, 244 knowledge guides, EU Vocabularies layer.
         </p>
         <div style="background: rgba(6,147,227,0.06); border: 1px solid rgba(6,147,227,0.2); padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem;">
           <strong style="color: var(--color-primary);"><span class="mdi mdi-bullseye-arrow"></span> WAPU Filter (Feb 2026):</strong> Priorities have been re-evaluated through the WAPU (Weekly Active Paid Users) lens. The phased roadmap below now maps to <strong>Phase A</strong> (Activation, 10 WAPU), <strong>Phase B</strong> (Depth, 25 WAPU), and <strong>Phase C</strong> (Lock-in, 50 WAPU). Items that don't directly drive WAPU for the first 50 users are deferred. See <a href="strategy.html" style="color: var(--color-primary);">full WAPU strategy</a> for cross-reference table.
@@ -5882,7 +5981,7 @@
   <footer class="footer">
     <strong>Brubru Business Plan</strong> | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.2);"><strong>Beresol BV</strong></a>
     <br>
-    <small>April 2026 | Brussels, Belgium | hello@beresol.eu</small>
+    <small>May 2026 | Beresol BV, Apeldoorn (NL) | hello@beresol.eu</small>
   </footer>
 
   <script>

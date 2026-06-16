@@ -179,6 +179,15 @@ class CommitteeTranscriptionService:
         self._mistral_key = _key("MISTRAL_API_KEY")
         self._voxtral_model = _key("VOXTRAL_MODEL") or VOXTRAL_DEFAULT_MODEL
         self._fw_model_name = _key("FASTER_WHISPER_MODEL") or FASTER_WHISPER_DEFAULT_MODEL
+        # Groq hosts whisper-large-v3 (open model) on a generous FREE tier — the
+        # cost-free engine for the proactive batch/cron path. OpenAI-compatible
+        # API, so a base_url-pinned AsyncOpenAI client works as-is.
+        groq_key = _key("GROQ_API_KEY")
+        self._groq = (
+            AsyncOpenAI(api_key=groq_key, base_url="https://api.groq.com/openai/v1")
+            if groq_key else None
+        )
+        self._groq_model = _key("GROQ_WHISPER_MODEL") or "whisper-large-v3"
 
     def _get_faster_whisper_model(self):
         """Load (or return cached) faster-whisper model."""
@@ -198,6 +207,11 @@ class CommitteeTranscriptionService:
 
     def _engine_order(self, prefer: Optional[str] = None) -> List[str]:
         """Return ordered list of engines to try given env + preference."""
+        if prefer == "groq":
+            # Free + fast (whisper-large-v3 on Groq). Used by the proactive cron.
+            # No paid fallback — keep the batch path cost-free; a failed row
+            # stays PENDING and retries next run.
+            return ["groq"] if self._groq else []
         if prefer == "faster-whisper":
             return ["faster-whisper"]
         if prefer == "whisper":
@@ -342,6 +356,9 @@ class CommitteeTranscriptionService:
             if used_engine == "faster-whisper":
                 result["transcription_model"] = f"faster-whisper-{self._fw_model_name}"
                 result["transcription_cost"] = 0.0  # local, free
+            elif used_engine == "groq":
+                result["transcription_model"] = f"groq-{self._groq_model}"
+                result["transcription_cost"] = 0.0  # Groq free tier
             elif used_engine == "voxtral":
                 result["transcription_model"] = self._voxtral_model
                 result["transcription_cost"] = round((duration or 0) / 60 * 0.006, 4)
@@ -492,7 +509,44 @@ class CommitteeTranscriptionService:
             return await self._transcribe_single_faster_whisper(audio_path, language=language)
         if engine == "voxtral":
             return await self._transcribe_single_voxtral(audio_path, language=language)
+        if engine == "groq":
+            return await self._transcribe_single_groq(audio_path, language=language)
         return await self._transcribe_single_whisper(audio_path, language=language)
+
+    async def _transcribe_single_groq(
+        self, audio_path: str, language: str = "en",
+    ) -> Tuple[List[Dict[str, Any]], str, float]:
+        """Transcribe via Groq-hosted whisper-large-v3 (free tier, OpenAI-compatible)."""
+        if not self._groq:
+            raise RuntimeError("GROQ_API_KEY not configured")
+        groq_lang = None if language in ("floor", "auto") else language
+        with open(audio_path, "rb") as f:
+            kwargs = dict(
+                model=self._groq_model,
+                file=f,
+                response_format="verbose_json",
+                timestamp_granularities=["segment"],
+            )
+            if groq_lang:
+                kwargs["language"] = groq_lang
+            response = await self._groq.audio.transcriptions.create(**kwargs)
+
+        segments = []
+        full_text_parts = []
+        duration = float(getattr(response, "duration", 0) or 0)
+        for seg in getattr(response, "segments", []) or []:
+            start = getattr(seg, "start", None)
+            end = getattr(seg, "end", None)
+            text = (getattr(seg, "text", "") or "").strip()
+            if start is None and isinstance(seg, dict):
+                start = seg.get("start", 0); end = seg.get("end", 0)
+                text = (seg.get("text") or "").strip()
+            segment = {"start": float(start or 0), "end": float(end or 0), "text": text}
+            segments.append(segment)
+            if segment["text"]:
+                full_text_parts.append(segment["text"])
+        full_text = (getattr(response, "text", None) or " ".join(full_text_parts) or "").strip()
+        return segments, full_text, duration
 
     async def _transcribe_single_faster_whisper(
         self, audio_path: str, language: str = "en",

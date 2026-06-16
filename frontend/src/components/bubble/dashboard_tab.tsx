@@ -100,7 +100,7 @@ export const DashboardTab = () => {
 
   const openHook = (hook: PolicyHook) => {
     const q = hook.suggested_query || hook.label;
-    navigate(`/main?q=${encodeURIComponent(q)}`);
+    navigate(`/chat?q=${encodeURIComponent(q)}`);
   };
 
   return (

@@ -61,7 +61,7 @@ export const MeubAskLauncher = ({ tabLabel }: MeubAskLauncherProps) => {
     const text = (query || '').trim();
     if (!text) return;
     setOpen(false);
-    navigate(`/main?q=${encodeURIComponent(text)}&autofire=1`);
+    navigate(`/chat?q=${encodeURIComponent(text)}&autofire=1`);
   };
 
   const suggestions = [

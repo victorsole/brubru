@@ -1,0 +1,52 @@
+{
+  "id": "eic-pre-accelerator-2027",
+  "name": "EIC Pre-Accelerator (Widening Hop-On Facility)  2027 call",
+  "programme": "EIC",
+  "sub_instrument": "pre-accelerator",
+  "stage": "single-stage",
+  "scaffold_version": "2027-WP (placeholder)",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/eic-pre-accelerator_en",
+  "kb_guide": "eic_pre_accelerator_widening",
+  "deadline_2027_cet": "2027-11-18T17:00:00+01:00",
+  "note": "NO 2026 call. Next call opens 5 May 2027, deadline 18 November 2027. Template here is a placeholder based on 2025 WIDERA Hop-On template; refresh when 2027 call is published.",
+  "eligibility": "Widening MS + AC: BG, HR, CY, CZ, EE, EL, HU, LV, LT, MT, PL, PT, RO, SK, SI + AC with Widening status + EU outermost regions.",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B  Pre-Accelerator Hop-On proposal",
+      "page_limit": 30,
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "0-widening-eligibility", "label": "0. Widening eligibility check", "page_budget": 1, "criterion": null,
+          "sub": [{"id": "0.1", "label": "0.1 Establishment in a Widening country", "prompts": ["Confirm establishment in a Widening MS/AC/outermost region; cite registered address."]}]},
+        {"id": "1-excellence", "label": "1. Excellence  readiness profile", "page_budget": 10, "criterion": "Excellence",
+          "sub": [
+            {"id": "1.1", "label": "1.1 Business readiness", "prompts": ["GTM strategy; commercial validation; customer discovery."]},
+            {"id": "1.2", "label": "1.2 Investor readiness", "prompts": ["Pitch quality + financial model + DD preparation."]},
+            {"id": "1.3", "label": "1.3 Technology readiness", "prompts": ["Last-mile TRL maturation before Accelerator submission."]}
+          ]
+        },
+        {"id": "2-impact", "label": "2. Impact  pathway to Accelerator", "page_budget": 8, "criterion": "Impact",
+          "sub": [
+            {"id": "2.1", "label": "2.1 Accelerator readiness plan", "prompts": ["What enables you to succeed in the EIC Accelerator after the Hop-On?"]},
+            {"id": "2.2", "label": "2.2 Widening impact", "prompts": ["How the Hop-On reduces the Widening participation gap."]}
+          ]
+        },
+        {"id": "3-implementation", "label": "3. Implementation (max 2 years, 70% funding rate)", "page_budget": 11, "criterion": "Implementation",
+          "sub": [
+            {"id": "3.1", "label": "3.1 Work plan", "prompts": ["WPs + deliverables + milestones."]},
+            {"id": "3.2", "label": "3.2 Team + governance", "prompts": ["Single SME  team capability."]},
+            {"id": "3.3", "label": "3.3 Budget", "prompts": ["EUR 500K-1M, 70% reimbursement; cost-based not lump-sum."]}
+          ]
+        }
+      ]
+    }
+  ],
+  "comply_targets": ["AI", "GDPR", "Research Integrity"],
+  "hand_offs": {
+    "next_stage": "eic-accelerator-stage-1",
+    "chat_cta": "Am I in a Widening country? Should I wait for Pre-Accelerator or go straight to Accelerator?",
+    "comply_cta": "Standard pre-application compliance check"
+  }
+}

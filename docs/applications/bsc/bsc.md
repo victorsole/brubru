@@ -72,9 +72,10 @@ Beresol brings to the BSC AI Factory a production-ready, revenue-stage AI produc
 
 | Date | Event |
 |------|-------|
-| 12 Mar 2026 | Applied to Call 2 as Beresol |
+| 12 Mar 2026 | Applied to Call 2 (Incubation Programme) as Beresol |
 | 24 Mar 2026 | Waitlisted for Call 2. Victor emailed Arnau Cuatrecasas asking about Call 3 (September), citing Catalan EU acquis translation project needing BSC compute for AINA/Salamandra 7B fine-tuning. Also noted family constraint (small child, can't be 3 days/week in Barcelona). |
 | 25 Mar 2026 | Arnau confirmed Call 3 application is possible (September 2026). Connected Victor with Santi Trujillo (Key Account Manager, Startups) to discuss AI Factory services in the meantime. |
+| 28 Apr 2026 | **Acceleration Programme Call 1 application drafted** (deadline 6 May 2026). Different track from Incubation: targets MVP/PMF startups, programme dates 22 May-23 July 2026, funnel 15 → 10 → 3 Champions, Demo Day with 15 investors at the end, Pier07 Barcelona post-incubation slot Oct 2026-March 2027 for the 3 Champions. Draft at `docs/applications/bsc/acceleration_programme_application.md`. Outstanding deliverables before submission: 1-min selfie video, company deck PDF, Typeform submission via https://form.typeform.com/to/KHkPBY2s. |
 
 ## Contacts
 

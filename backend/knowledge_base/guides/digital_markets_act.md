@@ -1,242 +1,182 @@
-# Digital Markets Act (DMA)
+# Digital Markets Act (DMA): Regulation (EU) 2022/1925
 
 ## QUICK FACTS
-- **LATEST (Tuesday 9 June 2026, IP/26/1276)**: **Commission IMPOSED interim measures on Meta** ordering it to restore **free** access to WhatsApp for rival general-purpose AI assistants. This is the formal escalation of the 15 April 2026 charge sheet (the case has now moved from "preparing interim measures" to "imposed"). Key terms: Meta must restore free access **within 5 working days**; the measures stay in force **until June 2029 or until the investigation closes** (the underlying probe, opened December 2025, has no fixed deadline). Meta's earlier proposed access fee was rejected as "not economically sustainable for competitors" (pay-to-play remedy refused). Non-compliance exposes Meta to fines up to **10% of annual worldwide turnover**. Legal hook: DMA Article 7 (interoperability of messaging services) + Article 24 (interim-measures power for urgency / risk of serious and irreparable harm to competition). EVP Teresa Ribera (DG COMP) led the announcement (press remarks 9 June). This is the FIRST use of DMA Article 24 interim measures against a gatekeeper. Cross-link to `ai_act` (general-purpose AI assistants) and `competition_law_enforcement`.
-- Full name: Digital Markets Act
-- Reference: Regulation (EU) 2022/1925
-- CELEX: 32022R1925
-- EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925
-- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0003(COD)
-- Procedure: 2022/0003(COD) -- Ordinary legislative procedure
-- Legal basis: Articles 114 TFEU (internal market)
-- Entered into force: 1 November 2022
-- Applicable from: 2 May 2023
-- Full application (gatekeeper obligations): 7 March 2024
-- Enforced by: European Commission (DG COMP + DG CONNECT joint team)
-- Led by: EVP Teresa Ribera (DG COMP) and EVP Henna Virkkunen (DG CONNECT)
-- 6 designated gatekeepers: Alphabet, Amazon, Apple, ByteDance, Meta, Microsoft
-- 24 designated core platform services across 10 CPS categories
-- Penalties: up to 10% global turnover (first offence), 20% (repeated), structural remedies for systematic non-compliance
-- Review: scheduled for 2026 Digital Fitness Check
-- Related: DSA (32022R2065), AI Act (32024R1689), Data Act (32023R2854), P2B Regulation (32019R1150)
+
+- **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2022-1925_dma/
+- **Instrument:** Regulation (EU) 2022/1925 (CELEX 32022R1925), directly applicable in all Member States; amends Directives (EU) 2019/1937 and (EU) 2020/1828
+- **Full title:** Regulation on contestable and fair markets in the digital sector (Digital Markets Act)
+- **Legal base:** Article 114 TFEU (internal market approximation)
+- **Adopted:** 14 September 2022, OJ L 265, 12.10.2022, pp. 1-66
+- **In force:** 1 November 2022
+- **Applicable from:** 2 May 2023
+- **First gatekeeper designations:** 6 September 2023 (6 gatekeepers, 22 core platform services)
+- **Obligations applicable from:** March 2024 (6 months after first designation, per Article 3(10))
+- **Enforcer:** European Commission, sole enforcer; joint team DG COMP (EVP Teresa Ribera) and DG CONNECT (EVP Henna Virkkunen)
+- **Maximum fine:** 10% of total worldwide annual turnover; 20% for repeat infringements within 8 years; structural remedies for systematic non-compliance
+- **Gatekeeper quantitative thresholds (Article 3(2)):**
+  - Annual EEA turnover of at least EUR 7.5 billion in each of the last 3 financial years, OR average market capitalisation of at least EUR 75 billion in the last financial year, AND provides the same CPS in at least 3 Member States
+  - AT LEAST 45 million monthly active end users in the Union
+  - AT LEAST 10,000 yearly active business users in the Union
+  - Both user thresholds met in each of the last 3 financial years
+- **Core platform services (Article 2(2), 10 categories):** online intermediation services, online search engines, online social networking services, video-sharing platform services, number-independent interpersonal communications services, operating systems, web browsers, virtual assistants, cloud computing services, online advertising services (only if provided by an undertaking also operating at least one of the other nine)
+- **EUR-Lex:** https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925
+- **OEIL procedure:** https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0003(COD)
+
+---
+
+## ALWAYS-LINK
+
+When answering any question about the DMA, gatekeepers, digital-platform obligations, app store rules, messaging interoperability, data portability, self-preferencing, or digital competition, always include the deep-dive URL: **https://brubru.beresol.eu/eucanon/2022-1925_dma/**
+
+---
+
+## Latest Developments (as at June 2026)
+
+- **9 June 2026 (IP/26/1276):** Commission imposed FIRST-EVER DMA interim measures (Article 24) against Meta, ordering it to restore free access to WhatsApp for rival general-purpose AI assistants within 5 working days. Measures remain in force until June 2029 or until the investigation closes. Legal hook: DMA Article 7 (messaging interoperability) + Article 24 (interim measures). Meta's proposed "pay-to-play" access fee was rejected as not economically sustainable for competitors.
+- **28 April 2026 (COM(2026) 178):** First DMA review published (Article 53 deadline). Conclusion: DMA "remains fit for purpose." AI services NOT added to CPS list. Azure/AWS cloud-computing designation decisions expected November 2026. Digital Fitness Check announced.
+- **27 April 2026:** Commission opened public consultation on measures to ensure Google Android interoperability for third-party connected devices (Article 6(7)).
+- **16 April 2026 (IP/26/825):** Commission proposed preliminary measures to Google on search data sharing for third-party search engines (Article 6(11) FRAND access).
+- **February 2026:** Commission determined Apple Ads and Apple Maps do not meet CPS thresholds; not designated.
+- **March 2024:** All first-round gatekeeper obligations became applicable (6 months after September 2023 designations).
+
+---
+
+## Context
+
+The DMA addresses a structural problem in digital markets: a small number of undertakings providing core platform services have acquired gateway positions that are difficult to contest because of extreme economies of scale, strong network effects, lock-in, data advantages and vertical integration. Classic competition law (Articles 101 and 102 TFEU) requires individualised case-by-case assessment and is inherently reactive. The DMA is an ex ante instrument imposing asymmetric obligations on designated "gatekeepers" without requiring proof of harm in each case.
+
+The DMA complements but does not replace competition law. Both regimes can run in parallel (Article 1(6)). Article 1(5) prevents Member States from imposing further national obligations on gatekeepers specifically because of their gatekeeper status, but does not prevent national rules pursuing other legitimate objectives.
+
+---
+
+## Gatekeeper Designation
+
+The Commission designates an undertaking as a gatekeeper when it meets three qualitative criteria (Article 3(1)): significant impact on the internal market; providing a CPS that is an important gateway; and enjoying an entrenched and durable position or one foreseeably imminent.
+
+Article 3(2) creates a rebuttable quantitative presumption. Undertakings meeting all thresholds must self-notify the Commission within 2 months of satisfying them (Article 3(3)); the Commission designates within 45 working days of receiving complete information (Article 3(4)).
+
+An undertaking may rebut the presumption with substantiated arguments (Article 3(5)). Sufficiently substantiated arguments trigger a market investigation under Article 17. Undertakings that do not meet the quantitative thresholds can still be designated through a market investigation (Article 3(8)) based on qualitative factors.
+
+Gatekeeper status is reviewed at least every 3 years (Article 4(2)). The Commission maintains a public list of gatekeepers and designated CPS (Article 4(3)).
+
+**Designated gatekeepers (September 2023):** Alphabet, Amazon, Apple, ByteDance, Meta, Microsoft. Key designated CPS include: Google Search, Google Play, Google Maps, Chrome, Android, YouTube; Amazon Marketplace, Amazon Advertising; Apple App Store, iOS, Safari, iPadOS; TikTok; Facebook, Instagram, WhatsApp, Messenger, Facebook Marketplace, Meta Advertising; LinkedIn, Windows PC OS, Microsoft Advertising.
+
+---
+
+## Article 5 Obligations (self-executing prohibitions)
+
+Article 5 obligations apply directly as drafted, without further Commission specification.
+
+**Art 5(2) -- No cross-service data combination without consent:** Do not process, combine or cross-use end users' personal data across core platform services or with third-party service data for advertising or other purposes without freely given, specific, informed and unambiguous GDPR-standard consent. Re-asking for consent for the same purpose is limited to once per year after a refusal.
+
+**Art 5(3) -- No parity obligations:** Do not prevent business users of online intermediation services from offering the same products at different prices or conditions through third-party platforms or their own direct channels. This ends "most-favoured-nation" clauses on marketplaces, hotel platforms and app stores.
+
+**Art 5(4) -- Allow off-platform promotion:** Business users must be free, at no cost, to communicate offers to end users they have acquired through the gatekeeper's CPS and to conclude contracts with them outside the platform.
+
+**Art 5(5) -- Sideloaded content access:** End users must be able to access on the gatekeeper's platform content, subscriptions or features they purchased from a business user outside that platform.
+
+**Art 5(6) -- No blocking complaints:** Gatekeepers may not restrict business users or end users from raising non-compliance concerns with public authorities or courts.
+
+**Art 5(7) -- No forced bundled services:** Business users may not be required to use the gatekeeper's payment service, in-app payment system, identification service or browser engine. Third-party payment solutions must be permitted.
+
+**Art 5(8) -- No cross-platform registration bundling:** Registering with one CPS may not be conditional on registering with another.
+
+**Art 5(9)-(10) -- Advertising transparency:** Provide advertisers and publishers with free, daily transparency data on prices paid and received, fees, deductions and calculation metrics for each advertisement placed.
+
+---
+
+## Article 6 Obligations (susceptible of further specification)
+
+Article 6 obligations can be further specified by Commission implementing act following a dialogue with the gatekeeper.
+
+**Art 6(2) -- No use of business-user data against them:** Non-public data generated by business users (click, search, view, voice data, customer data) on the gatekeeper's CPS must not be used by the gatekeeper to compete against those same business users.
+
+**Art 6(3) -- Un-installation and choice screens:** Allow end users to easily uninstall pre-installed apps (except those essential to the OS) and to change defaults for search engines, virtual assistants and browsers via a choice screen at first use.
+
+**Art 6(4) -- Third-party app stores and sideloading:** Third-party app stores and individually downloaded apps must be installable and functional on the gatekeeper's operating system.
+
+**Art 6(5) -- No self-preferencing:** In ranking, indexing and crawling, the gatekeeper's own products may not receive better treatment than similar third-party products. Conditions must be transparent, fair and non-discriminatory.
+
+**Art 6(6) -- Freedom to switch:** Technical or other barriers to switching between apps or services accessed through the gatekeeper's CPS are prohibited.
+
+**Art 6(7) -- Interoperability of OS and hardware features:** Provide third parties with free, effective interoperability with the same OS, hardware and software features available to the gatekeeper's own complementary services (including near-field communication chips, secure elements, authentication mechanisms).
+
+**Art 6(8) -- Advertising measurement access:** Free access to performance measurement tools and inventory data for independent verification of ads.
+
+**Art 6(9) -- End-user data portability:** Provide end users and authorised third parties with free, continuous, real-time portability of data generated through their use of the CPS, including tools to facilitate portability.
+
+**Art 6(10) -- Business-user data access:** Provide business users and their authorised processors with free, continuous, real-time access to data generated in the context of their use of the gatekeeper's CPS. Personal-data access requires end-user opt-in.
+
+**Art 6(11) -- Search data access on FRAND terms:** Third-party search engine providers must receive FRAND access to ranking, query, click and view data generated on the gatekeeper's search engine. Personal data must be anonymised.
+
+**Art 6(12) -- FRAND access conditions:** For app stores, online search engines and social networks, apply fair, reasonable and non-discriminatory general conditions, with published terms and an alternative dispute resolution mechanism.
+
+**Art 6(13) -- Proportionate termination conditions:** Termination of CPS provision must be no more difficult than initiation; conditions must be proportionate.
+
+---
+
+## Article 7 -- Messaging Interoperability
+
+Gatekeepers operating designated number-independent interpersonal communications services must open interoperability to requesting third-party messaging providers. The obligation phases in:
+
+- **From designation:** individual text messaging and file sharing (images, voice, video, other files) between two individual users.
+- **Within 2 years from designation:** group text messaging; group file sharing.
+- **Within 4 years from designation:** individual and group voice calls; individual and group video calls.
+
+The gatekeeper must publish a reference offer within 6 months of designation (Article 7(4)) and comply with a reasonable interoperability request within 3 months of receipt (Article 7(5)). End-to-end encryption must be maintained across interoperable communications (Article 7(3)). End users remain free to choose whether to use the interoperable features.
+
+---
+
+## Anti-circumvention, Compliance Function and Notification Duties
+
+**Anti-circumvention (Article 13):** Gatekeepers may not structure, divide, fragment or split their CPS to circumvent thresholds, and may not use behavioural techniques, dark patterns or interface design to undermine the effectiveness of any obligation.
+
+**Compliance function (Article 28):** Gatekeepers must establish an independent compliance function with a dedicated compliance officer reporting directly to the management body and who cannot be removed without board approval.
+
+**Compliance report (Article 11):** Within 6 months of designation, file a detailed compliance report describing implementation measures; update at least annually.
+
+**Merger notification (Article 14):** Inform the Commission in advance of any acquisition of an undertaking providing a CPS or any digital-sector service, regardless of whether the transaction meets EU or national merger-notification thresholds.
+
+**Profiling audit (Article 15):** Within 6 months of designation, submit an independently audited description of consumer-profiling techniques applied to or across designated CPS; transmitted to the European Data Protection Board.
+
+---
+
+## Enforcement
+
+The Commission is the sole DMA enforcer. National competition authorities may investigate and refer findings but may not themselves adopt DMA decisions. Key enforcement tools:
+
+- Market investigations (Articles 16-19) for new designations, systematic non-compliance, and new practices.
+- Interim measures (Article 24): available where there is urgency and risk of serious and irreparable harm (first used: Meta/WhatsApp, 9 June 2026).
+- Binding commitments (Article 25).
+- Non-compliance decisions with fines (Article 29-30).
+- Periodic penalty payments up to 5% of average daily worldwide turnover (Article 31).
+- Structural remedies after at least 3 non-compliance decisions in 8 years (Article 18).
+
+**Fines:** Up to 10% of total worldwide annual turnover for non-compliance; up to 20% for repeated infringement; up to 1% for procedural violations.
+
+---
+
+## What Business Users and Consumers Gain
+
+Business users gain: freedom to price differently on competing platforms; freedom to use third-party payment solutions; access to their own data generated on the gatekeeper's platform; access to advertising performance data; protection from self-preferencing in search; ability to raise complaints freely.
+
+Consumers gain: choice screens for default apps and search engines; right to uninstall pre-installed apps; real-time data portability; ability to message across platforms through interoperability; protection from dark-pattern interface designs.
+
+---
+
+## Related EU Instruments
+
+- **Regulation (EU) 2022/2065 (DSA):** sister regulation on illegal content and platform accountability; complementary to DMA's competition focus.
+- **Regulation (EU) 2016/679 (GDPR):** DMA data combination rules operate alongside GDPR; DMA consent rules cross-reference GDPR Article 4(11) and Article 7.
+- **Regulation (EU) 2019/1150 (P2B):** business-to-platform fairness framework; cross-referenced in DMA definitions.
+- **Regulation (EU) 2024/1689 (AI Act):** AI-specific rules; some gatekeeper AI services may also face AI Act obligations.
+- **Article 102 TFEU:** applies in parallel; the Commission may open competition proceedings simultaneously.
+
+---
+
+## Academic and Policy Sources
+
 - YEL (18 March 2026): "The EU as an exporter of digital rules and standards? The case of the DSA and the DMA" by Vassilis George Hatzopoulos. DOI: 10.1093/yel/yeag003
 - YEL (8 April 2026): "The Enforcement of European Digital Regulation: Overlaps and Pathways" by De Gregorio, Vicinanza. DOI: 10.1093/yel/yeag002
 - EPRS: EPRS_ATA(2025)772826 "Digital Markets Act enforcement -- state of play" by Polona Car (April 2025)
-- Meta/WhatsApp AI assistant case (15 April 2026): Commission sent Meta fresh charge sheet on possible interim measures to reverse exclusion of third-party AI assistants from WhatsApp. Commission rejects Meta's proposed "pay-to-play" remedy; preparing rare interim measures to force reinstatement of access under same conditions. Aims to prevent "irreparable harm" to competition before Meta can leverage user base to establish AI assistant dominance. DMA Article 7 (interoperability of messaging services) is the legal hook.
-- DMA interim measures power: Article 24 DMA -- Commission can impose interim measures on gatekeepers when there is urgency and risk of serious and irreparable harm to competition
-- Google search data sharing measures (16 April 2026, IP/26/825): Commission proposes preliminary measures to Google under DMA Article 6(11) regarding **sharing of search engine data with third-party search engines**. Article 6(11) requires gatekeepers providing online search engines to provide to any third-party provider, upon request, access on fair, reasonable and non-discriminatory (FRAND) terms to ranking, query, click and view data in relation to free and paid searches generated by end users on its online search engines (subject to data protection safeguards). Commission findings: Google's current offering insufficient; proposed measures specify data types, refresh rates, anonymisation methodology, FRAND pricing. Proceedings under Article 29 DMA compliance framework. Parallel to Meta WhatsApp AI assistant interim-measures case (15 April 2026).
-- DMA overlap with competition policy: On same day (16 April 2026), Commission also revised TTBER (see `tech_transfer_block_exemption`) and opened Cernavoda 1 nuclear state aid investigation -- broad "big day" for DG COMP + DG CNECT joint competition enforcement.
-- **LATEST (27 April 2026, DG CNECT)**: Commission opens **public consultation on measures to ensure interoperability with Google's Android under the DMA** (Article 6(7) DMA). Consultation seeks stakeholder feedback on draft preliminary findings about Android effective interoperability for third-party services (smartwatches, headphones, smart home devices). Source: digital-strategy.ec.europa.eu/en/news/commission-seeks-feedback-measures-ensure-interoperability-googles-android-under-digital-markets. Parallel to Meta WhatsApp AI assistant interim measures (15 April 2026) + Google search data sharing measures (16 April 2026) -- forms a three-front Article 6/7 DMA enforcement push in Q2 2026.
-- **LATEST (27 April 2026)**: **IMCO motion B10-0190/2026** "Digital Markets Act Enforcement" tabled by **Andreas Schwab (EPP, DE, DMA co-negotiator) + Anna Cavazzini (Greens/EFA, DE, IMCO chair)** for Tuesday 28 April plenary debate. Item 119 OJQ-10-2026-04-28_EN, 15:00-22:00 debate block. Likely calls for: faster Article 24 interim-measures use, transparency on remedies negotiations, gatekeeper compliance reports, designation review for next round.
-- **LATEST (28 April 2026)**: Plenary debate Item 119 (Cavazzini + Schwab oral question on DMA enforcement) paired with Item 109 Better Regulation Communication and Item 88 EU law application monitoring -- forms "regulatory quality + digital enforcement" mini-cluster in Strasbourg afternoon session.
-- **LATEST (28 April 2026, DG CNECT)**: **Commission DMA Review** published -- conclusion: DMA "remains fit for purpose and has positive impact" after first two years of application. Documented user benefits: data portability when switching services; ability to choose alternative search engines and browsers; control over combination of personal data across services. Documented market openings: connected device manufacturers gaining interoperability access; alternative app stores launched; new messaging apps enabled through interoperability obligations. The review references a fuller report and working document. No new gatekeeper designation announced. Source: digital-strategy.ec.europa.eu/en/news/review-highlights-digital-markets-act-remains-fit-purpose-and-has-positive-impact.
-- **DMA Review Report — full reference (28 April 2026)**: **COM(2026) 178 final** + Staff Working Document **SWD(2026) 123 final**. Press release IP/26/914. Legal hook: **Article 53 DMA** (mandatory first review by 3 May 2026, met with 4 days to spare). The Article 53 mandate covered: (1) whether DMA aims of contestable + fair markets have been achieved, (2) impact on business users (especially SMEs) and end users, (3) whether DMA needs modification to Article 2(2) CPS list / Articles 5-7 obligations / enforcement, (4) whether Article 7 interoperability of messengers should be **extended to online social networks**. Conclusion on (4): NOT extended. Overall conclusion: DMA "remains fit for purpose and does not need to be revised." Forward-focus areas: AI services + cloud computing services. **Digital Fitness Check** announced (broader stress-test of EU digital acquis). SME awareness-raising emphasised.
-- **DMA Review forward enforcement milestones (per COM(2026) 178)**: **Microsoft Azure designation decision by November 2026**; **AWS designation decision by November 2026**; **third cloud-computing market investigation final report due May 2027** (examines whether DMA can effectively address cloud practices including interoperability obstacles, data access limitations, service bundling). Cloud market investigations were opened in November 2025.
-- **DMA AI scope decision (COM(2026) 178)**: AI services were considered for inclusion as core platform services and **NOT added**. Commission's reasoning: "the DMA will not be able to tackle every competition issue in the AI value chain"; case-by-case competition enforcement preferred. Virtual assistants assessed separately. The Article 6(7) Google Android consultation (27 April 2026) and the Meta WhatsApp Article 7 interim measures (15 April 2026) remain the main AI-adjacent enforcement vectors via the existing CPS list.
-- **DMA Review external reactions**: **CCIA (Computer & Communications Industry Association)**: "unbalanced picture, overlooking negative impacts on consumers and innovation". Civil society + SMEs (Future of Technology Institute, BEUC): urged bolder action including extending Article 7 interoperability to social media (Commission rejected this in the review). Industry observer Aline Blankertz: review "silent on US pressure to weaken enforcement", flagged as credibility concern. 450+ stakeholder submissions to consultation.
-- **DMA enforcement front (29 April -- 5 May 2026, Politico AI & Tech Week stage)**: COM(2026) 178 frames the week's debate. Open enforcement actions referenced in the report: Meta WhatsApp third-party AI assistants (Article 7 interim measures, 15 April 2026); Google search data sharing FRAND (Article 6(11), IP/26/825, 16 April 2026); Google Android interoperability consultation (Article 6(7), 27 April 2026). All three remain ongoing in May 2026.
-
-## Overview
-
-The **Digital Markets Act (DMA)**, Regulation (EU) 2022/1925, is the EU's ex ante regulatory framework for large digital platforms acting as gatekeepers. Unlike competition law, which intervenes after harm, the DMA imposes upfront obligations on designated gatekeepers to ensure contestability and fairness in digital markets.
-
-- **Reference:** Regulation (EU) 2022/1925
-- **CELEX:** 32022R1925
-- **OJ:** OJ L 265, 12.10.2022
-- **Procedure:** 2022/0003(COD)
-- **Legal basis:** Article 114 TFEU (internal market)
-- **Enforced by:** European Commission (centralised enforcement -- no national competition authorities)
-- **Joint team:** DG COMP (competition policy) and DG CONNECT (digital policy)
-- **Political leads:** EVP Teresa Ribera (DG COMP) and EVP Henna Virkkunen (DG CONNECT)
-
-## Timeline
-
-| Date | Milestone |
-|------|-----------|
-| 15 December 2020 | Commission proposal (COM(2020)842) |
-| 24 March 2022 | Political agreement (trilogue) |
-| 5 July 2022 | EP plenary adoption |
-| 12 October 2022 | Published in OJ L 265 |
-| 1 November 2022 | Entered into force |
-| 2 May 2023 | Applicable (gatekeepers could notify) |
-| 6 September 2023 | First gatekeeper designations |
-| 7 March 2024 | Full application -- gatekeepers must comply with all obligations |
-
-## Core Platform Services (Article 2)
-
-The DMA applies to the following 10 categories of core platform services (CPS):
-
-1. Online intermediation services (e.g. app stores, marketplaces)
-2. Online search engines
-3. Online social networking services
-4. Video-sharing platform services
-5. Number-independent interpersonal communication services (messaging)
-6. Operating systems
-7. Web browsers
-8. Virtual assistants
-9. Cloud computing services
-10. Online advertising services
-
-## Gatekeeper Criteria (Article 3)
-
-A company is presumed to be a gatekeeper if it meets all three cumulative criteria:
-
-| Criterion | Quantitative Threshold |
-|-----------|----------------------|
-| **Significant impact on internal market** | Annual EU/EEA turnover >= EUR 7.5 billion in each of the last 3 financial years, OR market capitalisation/fair market value >= EUR 75 billion; AND provides a CPS in at least 3 Member States |
-| **Important gateway** | >= 45 million monthly active end users (MAEUs) in the EU AND >= 10,000 yearly active business users (MABUs) in the EU |
-| **Entrenched, durable position** | Gateway thresholds met in each of the last 3 financial years |
-
-Companies may rebut the presumption with substantiated arguments (Article 3(5)).
-
-## Designated Gatekeepers (as of March 2026)
-
-| Gatekeeper | Designated CPS |
-|------------|---------------|
-| **Alphabet (Google)** | Google Search, Google Maps, Google Play, Google Shopping, Google Ads, YouTube, Chrome, Android |
-| **Amazon** | Amazon Marketplace, Amazon Ads |
-| **Apple** | iOS, App Store, Safari, iMessage |
-| **ByteDance** | TikTok |
-| **Meta** | Facebook, Instagram, WhatsApp, Messenger, Meta Marketplace, Meta Ads |
-| **Microsoft** | Windows, LinkedIn, Microsoft Ads |
-
-**Note:** In February 2026, the Commission determined that Apple Ads and Apple Maps do NOT meet the thresholds for designation as core platform services.
-
-## Key Obligations
-
-### Article 5 -- Self-Executing Obligations
-
-These apply automatically without further specification by the Commission:
-
-- **No anti-steering:** Gatekeepers must allow business users to direct consumers to offers outside the gatekeeper's platform, including for concluding contracts
-- **Third-party app stores:** Gatekeepers must allow the installation of third-party app stores on their operating systems
-- **Sideloading:** End users must be able to install apps from sources outside the gatekeeper's app store
-- **No bundling:** Gatekeepers cannot require business users to use or bundle the gatekeeper's identification, payment, or other ancillary services
-- **Data portability:** End users must be able to port their data in real time, including continuous access via tools (APIs)
-- **Advertising transparency:** Gatekeepers providing advertising services must give advertisers and publishers information on prices and remuneration
-
-### Article 6 -- Obligations Susceptible to Further Specification
-
-These may be further specified through a regulatory dialogue with the Commission:
-
-- **No self-preferencing:** Gatekeepers must not treat their own products/services more favourably in ranking than those of third parties
-- **Uninstalling pre-installed apps:** End users must be able to uninstall any pre-installed software application
-- **No cross-service data combination:** Gatekeepers cannot combine personal data from the CPS with data from other services without explicit GDPR consent
-- **FRAND access to app stores:** Fair, reasonable, and non-discriminatory (FRAND) conditions for third-party access to app stores and software features
-- **Default settings:** End users must be able to change default settings for operating systems, virtual assistants, and web browsers
-- **Interoperability:** Business users and providers of ancillary services must have access to the same operating system, hardware, or software features as the gatekeeper's own services
-
-### Article 7 -- Messaging Interoperability
-
-Gatekeepers operating number-independent interpersonal communication services (e.g. iMessage, WhatsApp, Messenger) must make basic functionalities interoperable with third-party messaging services upon request:
-
-- **Phase 1 (from March 2024):** One-to-one text messaging and image/voice/video file sharing
-- **Phase 2 (from 2027):** Group messaging and group audio/video calls
-- Interoperability must maintain end-to-end encryption where provided
-
-## Penalties and Remedies
-
-| Violation | Maximum Fine |
-|-----------|-------------|
-| Non-compliance with obligations (Articles 5-7) | Up to 10% of worldwide annual turnover |
-| Repeated non-compliance | Up to 20% of worldwide annual turnover |
-| Failure to notify a concentration (Article 14) | Up to 1% of worldwide annual turnover |
-| Supplying incorrect/misleading information | Up to 1% of worldwide annual turnover |
-| **Systematic non-compliance** | Structural remedies (divestiture, prohibition of acquisitions) |
-
-Periodic penalty payments of up to 5% of average daily turnover may also be imposed.
-
-## DMA Compliance Templates
-
-Gatekeepers use standardised templates for regulatory submissions, all available at https://digital-markets-act.ec.europa.eu/legislation_en:
-
-| Template | Purpose |
-|----------|---------|
-| Power of Attorney | Authorise representatives |
-| Article 8(3) | Specification dialogue request |
-| Article 9 | Suspension request for specific obligation |
-| Article 10 | Exemption request on public health/security grounds |
-| Article 11 | Annual compliance report |
-| Article 14 | Transaction/acquisition notification |
-| Article 15 | Consumer profiling report (annual audit) |
-
-## Enforcement Actions (2024-2026)
-
-The Commission has moved swiftly from designation to enforcement:
-
-- **March 2024:** Formal proceedings launched against three major gatekeepers for potential non-compliance
-- **April 2025:** Two non-compliance decisions confirmed with fines (first DMA enforcement fines)
-- **January 2026:** Proceedings opened to assist Google with interoperability obligations and online search data sharing
-- **February 2026:** Commission determined Apple Ads and Apple Maps not designated as CPS
-- **March 2026:** Gatekeepers published updated DMA compliance reports (source: DG CNECT, 9 March 2026)
-
-The DMA is enforced exclusively by the Commission (no national authority delegation), distinguishing it from the DSA which has a shared enforcement model with Digital Services Coordinators.
-
-## Annual Compliance Reporting (Article 11)
-
-Gatekeepers must submit annual compliance reports describing the measures implemented to comply with Articles 5, 6, and 7. These reports are published and subject to Commission review. The March 2026 round of updated compliance reports covers all six designated gatekeepers.
-
-## Market Investigations
-
-The Commission may conduct market investigations to:
-
-1. **Designate gatekeepers** below quantitative thresholds but with gatekeeper characteristics (Article 17)
-2. **Assess systematic non-compliance** and impose structural remedies (Article 18)
-3. **Update obligations** to address new practices undermining contestability (Article 19)
-
-## Upcoming Reviews
-
-- **2026 Digital Fitness Check:** The DMA is included in the Commission's broader review of digital legislation fitness
-- **Article 35 annual reports:** The Commission must report annually to the European Parliament and Council on DMA implementation
-- **Digital Omnibus Package** (COM(2025)836 and COM(2025)837): References the DMA but does not directly amend it; focuses on DSA and consumer protection
-
-## Related EU Digital Legislation
-
-| Legislation | CELEX | Relationship to DMA |
-|-------------|-------|-------------------|
-| Digital Services Act (DSA) | 32022R2065 | Content moderation and platform accountability (complementary to DMA's competition focus) |
-| AI Act | 32024R1689 | AI-specific rules; gatekeepers' AI services may also be subject to AI Act obligations |
-| Data Act | 32023R2854 | Data sharing and access rules; complements DMA data portability provisions |
-| Platform-to-Business Regulation | 32019R1150 | Transparency for business users; being repealed and folded into Data Act by Digital Omnibus |
-| GDPR | 32016R0679 | DMA cross-references GDPR for consent requirements (Article 6, data combination) |
-
-## Key Concepts for Practitioners
-
-### Self-Preferencing
-The prohibition on self-preferencing (Article 6(5)) means gatekeepers cannot rank their own products or services more favourably than third-party offerings. This is particularly relevant for:
-- Google Shopping results in Google Search
-- Amazon own-brand products in Amazon Marketplace
-- Apple pre-installed apps on iOS
-
-### Data Silos
-Article 6(2) prohibits gatekeepers from combining personal data collected across different CPS (e.g. combining WhatsApp data with Facebook data) without explicit, informed, GDPR-compliant consent. Users must be offered a less personalised but equivalent alternative.
-
-### FRAND Access
-Article 6(12) requires gatekeepers to apply fair, reasonable, and non-discriminatory (FRAND) general conditions of access to their app stores, search engines, and social networking services. The Commission may determine FRAND terms if gatekeepers and business users cannot agree.
-
-## DMA-GDPR Interplay Guidelines (March 2026)
-
-On 12 March 2026, the European Commission and the European Data Protection Board (EDPB) published their contributions to the consultation on draft joint guidelines on the interplay between the DMA and GDPR. This is a significant development because:
-
-- **Consent bundling**: How gatekeepers can comply with DMA Article 5(2) (prohibition on combining personal data across services without consent) while also meeting GDPR consent requirements
-- **Legitimate interest**: Whether gatekeepers can rely on GDPR Article 6(1)(f) (legitimate interests) for data processing that the DMA restricts
-- **Data portability**: Interaction between DMA data portability obligations and GDPR Article 20 (right to data portability)
-- **Enforcement coordination**: How the Commission (DMA enforcer) and national data protection authorities (GDPR enforcers) will coordinate on overlapping cases
-
-The consultation is open to stakeholders and will shape the final guidelines expected later in 2026.
-
-## Sources
-
-- Regulation (EU) 2022/1925 (DMA): https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925
-- DMA official portal: https://digital-markets-act.ec.europa.eu/
-- DMA designated gatekeepers: https://digital-markets-act.ec.europa.eu/gatekeepers_en
-- DMA compliance templates: https://digital-markets-act.ec.europa.eu/legislation_en
-- OEIL procedure 2022/0003(COD): https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0003(COD)
-- EPRS_ATA(2025)772826: "Digital Markets Act enforcement -- state of play" by Polona Car (April 2025)
-- DG CNECT news (9 March 2026): Updated gatekeeper compliance reports published
-
-## Related Brubru Guides
-
-- `dsa_enforcement` -- Digital Services Act enforcement (companion platform regulation)
-- `digital_omnibus_package` -- Omnibus simplification of digital rules
-- `copyright_generative_ai` -- AI and intellectual property in digital markets
+- COM(2026) 178 final + SWD(2026) 123 final: First DMA review report (28 April 2026)

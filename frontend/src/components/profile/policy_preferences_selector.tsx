@@ -121,7 +121,7 @@ export const PolicyPreferencesSelector = ({
       params.set('q', q);
       params.set('autofire', '1');
     }
-    navigate(`/main?${params.toString()}`);
+    navigate(`/chat?${params.toString()}`);
   };
 
   return (

@@ -332,6 +332,98 @@
 
 <p><strong>Open from this sprint:</strong> Jordi's enterprise API key (manual, awaiting Victor's OK), CC-2(b) body backfill (multi-day background job), <code>/predictions/{ref}/timeline</code> 502 (upstream model loading on Railway, not a routing issue).</p>
 
+<h2>2 May 2026 &mdash; EU Vocabularies arc shipped (relevant for Jordi)</h2>
+
+<p>One full sprint (Phases 0&ndash;13 of the EU Vocabularies plan) shipped on 2 May 2026. The pieces that matter for a GovClipping integration are:</p>
+
+<table>
+  <thead><tr><th>Surface</th><th>What it adds</th><th>Why Jordi cares</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>GET /api/v1/vocabularies/corporate-bodies</code><br/><code>&hellip;/procedures</code><br/><code>&hellip;/directories</code><br/><code>&hellip;/modification-types</code></td>
+      <td>4 new endpoints. Search EU authority codes by keyword or URI; returns <code>prefLabel</code> + <code>altLabels</code> in EN/FR/ES/CA/IT/NL.</td>
+      <td>Resolves cryptic codes like <code>DG-CNECT</code> or <code>COD</code> to the human label your readers expect, in their language. No more "what does that mean?" lookups.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/v1/identify/{ref}</code><br/><code>POST /api/v1/identify/scan</code></td>
+      <td>Single unified resolver across 9 EU identifier types: CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ ref, ISBN, ISSN, DOI, catalogue number. <code>scan</code> finds every embedded identifier in a paragraph.</td>
+      <td>Drop in any free text from a press release or DG comm and get back the structured identifiers for downstream linking. Saves you parser work.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/v1/discover/ecli/{ecli}</code></td>
+      <td>European Case Law Identifier resolver, CJEU-aware, with deep-links to e-Justice.</td>
+      <td>Court rulings have been a coverage gap on most EU APIs. Now any ECLI mention in your stream resolves to a canonical URL.</td>
+    </tr>
+    <tr>
+      <td><code>/api/datasets.{ttl,rdf,json}</code></td>
+      <td>Brubru's own DCAT-AP self-description &mdash; the same shape data.europa.eu uses.</td>
+      <td>If GovClipping wants to publish a "Brubru is one of our sources" pointer in machine-readable form, this is the URL. Standards-compliant, no custom shape.</td>
+    </tr>
+    <tr>
+      <td>Citation verification (Sprint 1b)</td>
+      <td>Every CELEX, COM, OEIL, <em>and now authority URI</em> the chatbot emits is verified against the local cache or Cellar before delivery.</td>
+      <td>Reduces the class of "AI cited a thing that doesn't exist" failures &mdash; a known weakness of generic GenAI tools applied to EU policy.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>None of this changes the existing endpoints Jordi already integrated. It's additive surface, on top of the 24 v1 paths from Phase 1 (April 2026). Updated count: <strong>27 v1 paths</strong>.</p>
+
+<h2>2 May 2026 &mdash; Response to Jordi's CSV review</h2>
+
+<p>Jordi's review (<code>Review BruBru api.csv</code>) covered every endpoint, with comments per row. Below: what was already correct, what shipped today, and what's next on the punch list. Re-audit script <code>backend/scripts/audit_jordi_csv.py</code> reads the CSV and runs a targeted check per row; baseline 38 OK / 22 FAIL on 2 May AM &rarr; 48 OK / 20 FAIL on 2 May PM after the changes below.</p>
+
+<table>
+  <thead><tr><th>Theme</th><th>Endpoints affected</th><th>What we shipped</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>LIST/DETAIL parity (procedures)</strong></td>
+      <td><code>GET /api/v1/procedures</code></td>
+      <td>LIST envelope now exposes the same 36 fields as <code>/procedures/{ref}</code> DETAIL: <code>description</code>, <code>oeil_key_events</code>, <code>ai_summary</code>, <code>expected_completion</code>, <code>days_in_current_status</code>, etc. No more round-trip-to-DETAIL just to read the headline fields. Closes &laquo;no retorna tots els camps&raquo;.</td>
+    </tr>
+    <tr>
+      <td><strong>Commissioner agenda detail URLs</strong></td>
+      <td><code>GET /api/v1/commissioners/{slug}/agenda</code></td>
+      <td>The Commission's spring-2026 redesign stripped per-event links from the calendar HTML. Brubru now merges the HTML roster with the bare RSS feed (<code>commission.europa.eu/node/33084/rss_en</code>) which still emits per-event URLs for the latest 30 events globally. Coverage observed live: 3&ndash;6 URLs per active commissioner (vs 0 before). Older events are URL-less because the Commission no longer publishes them &mdash; Brubru is honest about it rather than fabricating links.</td>
+    </tr>
+    <tr>
+      <td><strong>Endpoint discoverability</strong></td>
+      <td><code>/citations/verify</code>, <code>/verify-citation/{ref}</code>, <code>/legal-text/resolve-aliases</code>, <code>/resolve-references</code>, <code>/legal-text/{celex}/defined-terms</code>, <code>/recital-article-map</code>, <code>/predictions/{procedure_ref}/timeline</code>, <code>/outcome</code>, <code>/consultations/{initiative_id}</code>, <code>/by-initiative/{id}/feedback</code>, <code>/publications/sources</code></td>
+      <td>OpenAPI descriptions on the 10 endpoints Jordi flagged &laquo;per a qu&egrave; serveix?&raquo; or &laquo;com puc obtindre un X?&raquo; now carry: a one-line "What it does", a "When to use it", a working <code>curl</code> example with a real ID, and (where relevant) an honest note on production cache state. Visible in the public Swagger UI at <code>/api/docs</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Identifier discovery</strong></td>
+      <td>n/a (table on the docs page)</td>
+      <td>Added a "How to obtain an ID" cheat-sheet to the public docs: which LIST endpoint produces each <code>{x_id}</code> placeholder Jordi sees in Postman. CELEX from <code>/laws</code>, OEIL from <code>/procedures</code>, initiative_id from <code>/consultations</code>, etc. Plus a pointer to <code>/api/v1/identify</code> as the universal resolver.</td>
+    </tr>
+    <tr>
+      <td><strong>Meta duplicate aliases</strong></td>
+      <td><code>/meta/commissioners</code>, <code>/meta/committees</code>, <code>/meta/dgs</code>, <code>/meta/countries</code>, <code>/meta/languages</code>, etc. (14 paths)</td>
+      <td>Marked <code>deprecated=True</code> in OpenAPI so the duplication with the top-level paths is explicit. Top-level remains canonical; the <code>/meta/*</code> form stays callable for back-compat and shows up with a deprecation strikethrough in Swagger UI.</td>
+    </tr>
+    <tr>
+      <td><strong>Honest-state for known infra issues</strong></td>
+      <td><code>/predictions/{ref}/timeline</code> &amp; <code>/outcome</code> (502)<br/><code>/legal-text/.../defined-terms</code> &amp; <code>/recital-article-map</code> (cache backfill)</td>
+      <td>Each endpoint description now states the production status honestly: predictions ML model load issue on Railway &rarr; workaround via <code>/procedures/{ref}</code>; defined-terms cache currently DSA-only (<code>32022R2065</code>), recital-article-map cache covers 5 implementing acts. Backfill is part of CC-2(b).</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Still on the punch list (CC-2(b) and Cat B/C work)</h3>
+
+<table>
+  <thead><tr><th>Endpoint</th><th>Issue</th><th>Plan</th></tr></thead>
+  <tbody>
+    <tr><td><code>/parliamentary-questions</code></td><td><code>text_question</code> / <code>text_answer</code> exposed but NULL on all 5,674 rows.</td><td>Cat B scraper backfill from doceo HTML. ~2 hours of throttled scrape.</td></tr>
+    <tr><td><code>/commission-register-documents</code>, <code>/implementing-acts</code>, <code>/delegated-acts</code></td><td>Description / body fields are sparse or absent.</td><td>Cat C PDF extraction (commission-register: 528 docs; secondary acts: 14 rows).</td></tr>
+    <tr><td><code>/meps</code></td><td><code>country</code>, <code>group</code>, <code>role</code> empty &mdash; visible on EP website.</td><td>Backfill via EP Open Data API (parliamentary_term=10), then hydrate at response time.</td></tr>
+    <tr><td><code>/funding-opportunities</code>, <code>/ft-calls-for-*</code>, <code>/meetings</code>, <code>/opinions</code>, <code>/texts-submitted</code>, <code>/tris-notifications</code></td><td>Empty list responses (no upstream scraper yet).</td><td>Most of these portals are SPA / OIDC-locked / anti-bot &mdash; require Playwright. Sprint scoped separately.</td></tr>
+    <tr><td><code>/officials</code></td><td><code>source_url</code> empty.</td><td>Scraper enhancement to capture the canonical W5 official profile URL.</td></tr>
+    <tr><td><code>/ep-documents</code></td><td><code>document_url</code> .docx is slow / occasionally times out.</td><td>Add a parallel <code>html_url</code> field where available; document the .docx route as a download URL with throttle expectations.</td></tr>
+    <tr><td><code>/resolutions</code></td><td>Schema lacks <code>key_events</code> / vote-event timeline.</td><td>Schema extension: derive timeline from the linked procedure's <code>oeil_key_events</code> via <code>procedure_ref</code>.</td></tr>
+  </tbody>
+</table>
+
 <h2>Integration options</h2>
 
 <div class="recommended">

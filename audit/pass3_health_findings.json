@@ -1,0 +1,274 @@
+{
+  "analysis_date": "2026-04-09",
+  "findings": [
+    {
+      "id": "F001",
+      "category": "security",
+      "severity": "critical",
+      "title": "WordPress wp-config.php with database credentials committed to git",
+      "details": "brubru.world/public_html/wp-config.php contains plaintext database credentials (DB name: db2zxcy74znirq, DB user: ue0e8gucsgbba, DB password: 27eg6aut0fzg) plus 8 WordPress auth/salt keys (AUTH_KEY, SECURE_AUTH_KEY, LOGGED_IN_KEY, NONCE_KEY, AUTH_SALT, SECURE_AUTH_SALT). These are committed to the git repository and visible to anyone with repo access.",
+      "files_affected": ["brubru.world/public_html/wp-config.php"],
+      "recommendation": "Immediately rotate the WordPress database password and all auth/salt keys. Remove wp-config.php from git history using BFG Repo-Cleaner. Better yet, remove the entire brubru.world/ directory from the repo (see F002)."
+    },
+    {
+      "id": "F002",
+      "category": "bloat",
+      "severity": "critical",
+      "title": "19,756-file WordPress installation tracked in git repository",
+      "details": "The brubru.world/ directory contains a complete WordPress installation (core, plugins including Elementor Pro, WPML, Yoast SEO, SiteGround Security/Cache, 40+ language packs) totalling 19,756 files. This is a separate marketing website from the main Brubru SPA and has no code dependencies on the rest of the repository. It inflates the repo size enormously and makes cloning slow.",
+      "files_affected": ["brubru.world/"],
+      "recommendation": "Move brubru.world/ to its own git repository or manage it entirely through SiteGround's WordPress tools. Add 'brubru.world/' to .gitignore. Use BFG Repo-Cleaner to purge it from git history."
+    },
+    {
+      "id": "F003",
+      "category": "security",
+      "severity": "high",
+      "title": "Frontend .env files with Stripe key and OAuth client IDs may be tracked in git",
+      "details": "frontend/.env, frontend/.env.production, and frontend/.env.local exist on disk with VITE_STRIPE_PUBLISHABLE_KEY (pk_test_...), VITE_GOOGLE_CLIENT_ID, and VITE_LINKEDIN_CLIENT_ID. The root .gitignore has '.env' and '.env.*' patterns, but these may not match files in subdirectories depending on git path matching. The Stripe key is publishable (not secret), but OAuth client IDs could aid phishing.",
+      "files_affected": ["frontend/.env", "frontend/.env.production", "frontend/.env.local"],
+      "recommendation": "Verify these files are NOT tracked in git ('git ls-files frontend/.env'). Add explicit 'frontend/.env*' to .gitignore if needed."
+    },
+    {
+      "id": "F004",
+      "category": "api_mismatch",
+      "severity": "high",
+      "title": "Frontend prediction_service.ts calls 3 non-existent backend endpoints",
+      "details": "frontend/src/services/prediction_service.ts calls: (1) POST /api/predictions/full - does not exist in backend, (2) GET /api/predictions/ep-vote/{ref} - does not exist (backend has POST /api/predictions/outcome/{procedure_ref}), (3) GET /api/predictions/stagnation - does not exist (backend has GET /api/predictions/stagnation-alerts). These mismatches mean the prediction frontend feature will error on these calls.",
+      "files_affected": ["frontend/src/services/prediction_service.ts", "backend/api/predictions.py"],
+      "recommendation": "Align endpoint paths. Either update the frontend service to match backend routes (/stagnation-alerts, /outcome/{ref}) or add the missing routes as aliases in the backend."
+    },
+    {
+      "id": "F005",
+      "category": "api_mismatch",
+      "severity": "high",
+      "title": "Frontend eu_calendar_service.ts calls non-existent backend endpoints",
+      "details": "frontend/src/services/eu_calendar_service.ts calls: (1) GET /api/eu-calendar/today - backend has /api/eu-calendar/events/today, (2) GET /api/eu-calendar/event/{id} - backend has /api/eu-calendar/events/{event_id}, (3) POST /api/eu-calendar/subscribe and DELETE /api/eu-calendar/subscribe/{id} - no subscribe endpoints exist in backend at all.",
+      "files_affected": ["frontend/src/services/eu_calendar_service.ts", "backend/api/eu_calendar.py"],
+      "recommendation": "Update eu_calendar_service.ts to use the correct backend paths: /events/today, /events/{id}. Remove or implement the subscribe endpoints."
+    },
+    {
+      "id": "F006",
+      "category": "duplicate",
+      "severity": "high",
+      "title": "10 duplicate files with ' 2' suffix across the codebase",
+      "details": "macOS Finder copy artifacts with ' 2' suffix exist in source directories: (1) backend/api/tenderator 2.py (50KB), (2) backend/api/rss_feeds 2.py (19KB), (3) backend/services/amendator/amendment_export_service 2.py, (4) .claude/skills/morning/skill 2.md, (5) frontend/src/pages/main_page 2.tsx, (6) frontend/src/pages/main_page 2.css, (7) frontend/src/components/admin/notifications_center 2.tsx, (8) frontend/src/styles/fonts 2.css, (9) frontend/src/styles/globals 2.css, (10) frontend/tsconfig.app 2.tsbuildinfo. These are dead copies that add confusion and 140KB+ of bloat.",
+      "files_affected": [
+        "backend/api/tenderator 2.py",
+        "backend/api/rss_feeds 2.py",
+        "backend/services/amendator/amendment_export_service 2.py",
+        ".claude/skills/morning/skill 2.md",
+        "frontend/src/pages/main_page 2.tsx",
+        "frontend/src/pages/main_page 2.css",
+        "frontend/src/components/admin/notifications_center 2.tsx",
+        "frontend/src/styles/fonts 2.css",
+        "frontend/src/styles/globals 2.css",
+        "frontend/tsconfig.app 2.tsbuildinfo"
+      ],
+      "recommendation": "Delete all ' 2' suffix files. They are accidental macOS Finder duplicates with no imports pointing to them."
+    },
+    {
+      "id": "F007",
+      "category": "dead_code",
+      "severity": "high",
+      "title": "backend/api/eu_data.py defines 9 endpoints but is NOT registered in main.py",
+      "details": "eu_data.py (20KB) defines a FastAPI router with 9 endpoints (6 GET, 3 POST) but is never imported in main.py and never included via app.include_router(). These endpoints are completely unreachable in the running application.",
+      "files_affected": ["backend/api/eu_data.py", "backend/main.py"],
+      "recommendation": "Either register eu_data.router in main.py if the endpoints are needed, or delete the file if the functionality has been superseded by other routers (legislative_train, committee_work, etc.)."
+    },
+    {
+      "id": "F008",
+      "category": "dead_code",
+      "severity": "medium",
+      "title": "AI SDK packages (@anthropic-ai/sdk, openai) in frontend dependencies never imported",
+      "details": "@anthropic-ai/sdk (^0.68.0) and openai (^6.8.0) are listed in frontend/package.json dependencies but are never imported anywhere in frontend/src/. These are heavyweight server-side SDK packages that inflate node_modules. All AI calls correctly go through the backend API.",
+      "files_affected": ["frontend/package.json"],
+      "recommendation": "Remove @anthropic-ai/sdk and openai from frontend/package.json dependencies."
+    },
+    {
+      "id": "F009",
+      "category": "config_drift",
+      "severity": "medium",
+      "title": "Stale deployment configs for abandoned hosting providers (IONOS, Vercel, Nixpacks, GCloud)",
+      "details": "Four deployment configuration files reference hosting providers no longer used: (1) .ionos.yaml - IONOS Deploy Now, (2) .vercelignore - Vercel, (3) backend/nixpacks.toml - Nixpacks (Railway uses Dockerfile per railway.json), (4) backend/.gcloudignore - Google Cloud Run. Current architecture: SiteGround (frontend) + Railway (backend). Backend/Procfile may also be unused since Railway uses Dockerfile.",
+      "files_affected": [".ionos.yaml", ".vercelignore", "backend/nixpacks.toml", "backend/.gcloudignore", "backend/Procfile"],
+      "recommendation": "Delete .ionos.yaml, .vercelignore, backend/nixpacks.toml, and backend/.gcloudignore. Verify whether backend/Procfile is still used by Railway."
+    },
+    {
+      "id": "F010",
+      "category": "stale",
+      "severity": "medium",
+      "title": "Subprocessors page lists IONOS and Vercel as active data processors (GDPR issue)",
+      "details": "frontend/src/pages/subprocessors_page.tsx lists IONOS SE and Vercel Inc. as data subprocessors, but the project migrated to SiteGround (frontend) and Railway.app (backend). Under GDPR, the subprocessors page must accurately reflect current data processing relationships. This is a compliance risk.",
+      "files_affected": ["frontend/src/pages/subprocessors_page.tsx"],
+      "recommendation": "Replace IONOS with SiteGround and Vercel with Railway.app in the subprocessors page. Add correct company details and DPA references."
+    },
+    {
+      "id": "F011",
+      "category": "stale",
+      "severity": "medium",
+      "title": "Cached export documents committed to git (2.7MB of user data)",
+      "details": "backend/cache/exports/ contains 3 .docx files from November 2025 (amendment exports, 37KB + 1.3MB + 1.3MB). These are runtime-generated user exports that should never be in version control. They contain user-specific data identified by UUID.",
+      "files_affected": [
+        "backend/cache/exports/7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff/19f7e5f3-88b8-497c-bff9-e7f5aa0fdb33_amendments_7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff_20251112_180559.docx",
+        "backend/cache/exports/7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff/232f4e1b-c19b-4954-a129-48e95a1e2d65_amendments_7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff_20251112_182538.docx",
+        "backend/cache/exports/7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff/74610a3a-711f-4d78-9f76-f5e1d1165a10_amendments_7ffecbd7-2f38-4a6a-88b9-a5068b7f3eff_20251112_181929.docx"
+      ],
+      "recommendation": "Delete backend/cache/ directory and add 'backend/cache/' to .gitignore."
+    },
+    {
+      "id": "F012",
+      "category": "stale",
+      "severity": "medium",
+      "title": "Root-level cluster validation JSON artifacts from December 2025",
+      "details": "Two cluster validation result files (cluster_validation_20251231_221643.json, 77KB total) sit in the project root. These are one-off output from backend/scripts/validate_clusters_ai.py, already executed months ago.",
+      "files_affected": ["cluster_validation_20251231_221643.json", "cluster_validation_20251231_222556.json"],
+      "recommendation": "Delete both files."
+    },
+    {
+      "id": "F013",
+      "category": "test_gap",
+      "severity": "medium",
+      "title": "Zero test coverage for the 3 largest and most critical backend files (12,736 lines)",
+      "details": "No tests exist for: (1) knowledge_loader.py (5,583 lines - core knowledge engine), (2) context_builder.py (5,302 lines - AI context injection), (3) ai_service.py (1,851 lines - AI orchestrator). These three files represent the core intelligence of the application. Additionally, no tests for: auth flow, chat API, daily brief email, RSS processor, predictions, compliance checker.",
+      "files_affected": [
+        "backend/knowledge_base/knowledge_loader.py",
+        "backend/services/ai/context_builder.py",
+        "backend/services/ai_service.py"
+      ],
+      "recommendation": "Prioritize unit tests for knowledge_loader.py (search_guides, trigger matching) and context_builder.py (context assembly). These are the highest-risk files where bugs directly affect chatbot quality for all users."
+    },
+    {
+      "id": "F014",
+      "category": "test_gap",
+      "severity": "medium",
+      "title": "Zero frontend tests and 11 misplaced backend test files",
+      "details": "No frontend test files exist anywhere in frontend/src/. On the backend, 3 test files sit in backend/ root instead of backend/tests/ (test_committee_scraper.py, test_mep_extraction.py, test_mep_linking.py) and 8 integration tests are in backend/scripts/ (test_*.py). These are not discovered by standard pytest configuration.",
+      "files_affected": [
+        "backend/test_committee_scraper.py",
+        "backend/test_mep_extraction.py",
+        "backend/test_mep_linking.py"
+      ],
+      "recommendation": "Move all test_*.py files to backend/tests/. For frontend, add at minimum smoke tests for auth, chat, and subscription flows."
+    },
+    {
+      "id": "F015",
+      "category": "config_drift",
+      "severity": "medium",
+      "title": "CLAUDE.md says 'No global axios interceptor exists' but use_auth.ts has one",
+      "details": "CLAUDE.md's 'Frontend Services Must Include Auth Headers' rule states 'No global axios interceptor exists' and prescribes manual authHeaders() on every call. However, frontend/src/hooks/use_auth.ts defines both request interceptors (adding Authorization header) and response interceptors (handling 401 with token refresh). This documented rule contradicts the actual code.",
+      "files_affected": ["CLAUDE.md", "frontend/src/hooks/use_auth.ts"],
+      "recommendation": "Update CLAUDE.md to reflect that a global axios interceptor DOES exist in use_auth.ts. Audit whether manual authHeaders() in service files is still needed or causes double-header issues."
+    },
+    {
+      "id": "F016",
+      "category": "bloat",
+      "severity": "medium",
+      "title": "frontend/dist/ build output tracked in git (88 files)",
+      "details": "frontend/dist/ is listed in .gitignore ('dist/' and 'frontend/dist/') but is still tracked in git (visible in git status as modified). Build artifacts should not be in version control.",
+      "files_affected": ["frontend/dist/"],
+      "recommendation": "Remove from git tracking: 'git rm -r --cached frontend/dist/'. The .gitignore entry exists but files were committed before it was added."
+    },
+    {
+      "id": "F017",
+      "category": "stale",
+      "severity": "low",
+      "title": "8 one-off batch import scripts already executed",
+      "details": "Multiple one-off scripts have been executed and serve no further purpose: add_oeil_batch_2.py, add_oeil_batch_2026_01_23.py, add_oeil_batch_com.py, add_digital_networks_act.py, add_industrial_accelerator_act.py, insert_calendar_events_20260313.py, insert_calendar_events_20260323.py, deactivate_eu_observer.py.",
+      "files_affected": [
+        "backend/scripts/add_oeil_batch_2.py",
+        "backend/scripts/add_oeil_batch_2026_01_23.py",
+        "backend/scripts/add_oeil_batch_com.py",
+        "backend/scripts/add_digital_networks_act.py",
+        "backend/scripts/add_industrial_accelerator_act.py",
+        "backend/scripts/insert_calendar_events_20260313.py",
+        "backend/scripts/insert_calendar_events_20260323.py",
+        "backend/scripts/deactivate_eu_observer.py"
+      ],
+      "recommendation": "Move to backend/scripts/archive/ or delete."
+    },
+    {
+      "id": "F018",
+      "category": "naming",
+      "severity": "low",
+      "title": "App.tsx and App.css violate snake_case file naming convention",
+      "details": "Project enforces snake_case for all filenames (CLAUDE.md rule), but frontend/src/App.tsx and frontend/src/App.css use PascalCase. Standard React/Vite convention for root component, but technically violates the project's own rule.",
+      "files_affected": ["frontend/src/App.tsx", "frontend/src/App.css"],
+      "recommendation": "Document as an explicit exception in the naming convention rule, or rename to app.tsx/app.css."
+    },
+    {
+      "id": "F019",
+      "category": "stale",
+      "severity": "low",
+      "title": "5 stale documentation files superseded by memory system",
+      "details": "docs/predictions.md (now memory/predictions.md), docs/myeucalendar.md (now memory/eu_calendar.md), docs/mistralcli.md (Mistral now fallback), docs/brubru_cloud_run_guide.md (deployment on Railway), docs/systemofrecord.md (unknown relevance).",
+      "files_affected": ["docs/predictions.md", "docs/myeucalendar.md", "docs/mistralcli.md", "docs/brubru_cloud_run_guide.md", "docs/systemofrecord.md"],
+      "recommendation": "Delete or archive stale docs."
+    },
+    {
+      "id": "F020",
+      "category": "config_drift",
+      "severity": "low",
+      "title": "docker-compose.yml references old Stripe env var naming convention",
+      "details": "docker-compose.yml still references STRIPE_YELLOW/BLUE price variables. Current config uses 18 individual STRIPE_PRICE_* IDs mapped to plan names (Starter/Advocate/Professional).",
+      "files_affected": ["docker-compose.yml"],
+      "recommendation": "Update docker-compose.yml environment variables to match current .env template."
+    },
+    {
+      "id": "F021",
+      "category": "config_drift",
+      "severity": "info",
+      "title": ".gitignore lists docs/ and CLAUDE.md as ignored but both are committed",
+      "details": ".gitignore line 1 says 'docs/' and line 40 says 'CLAUDE.md', but both are tracked in git (visible in git status). The gitignore was likely added after initial commits. This creates ambiguity about version control intent.",
+      "files_affected": [".gitignore", "docs/", "CLAUDE.md"],
+      "recommendation": "Either stop tracking them ('git rm -r --cached docs/' and 'git rm --cached CLAUDE.md') or remove the entries from .gitignore."
+    },
+    {
+      "id": "F022",
+      "category": "config_drift",
+      "severity": "info",
+      "title": "frontend/package.json includes @supabase/supabase-js despite 'no Supabase SDK dependency' claim",
+      "details": "CLAUDE.md states 'Custom JWT with Google/LinkedIn OAuth (no Supabase SDK dependency)' but @supabase/supabase-js is in frontend dependencies. Backend also has core/supabase.py with client initialization. Suggests incomplete migration away from Supabase SDK.",
+      "files_affected": ["frontend/package.json", "backend/core/supabase.py"],
+      "recommendation": "Clarify which features still depend on Supabase JS SDK. If auth is fully custom JWT, the frontend SDK may be removable."
+    },
+    {
+      "id": "F023",
+      "category": "dead_code",
+      "severity": "info",
+      "title": "Duplicate __pycache__ .pyc files with ' 2' suffix in multiple directories",
+      "details": "6 __pycache__ directories contain .pyc files with ' 2' suffix (rss_entry, subscription_schemas, auth_optional, notifications, document_storage, eurlex_scraper, base_scraper, data_europa_scraper, context_builder). Symptom of the macOS Finder duplication issue in F006.",
+      "files_affected": [
+        "backend/models/__pycache__/rss_entry.cpython-312 2.pyc",
+        "backend/api/__pycache__/auth_optional.cpython-312 2.pyc",
+        "backend/services/ai/__pycache__/context_builder.cpython-312 2.pyc"
+      ],
+      "recommendation": "Clean all __pycache__ directories. These are symptoms of F006."
+    },
+    {
+      "id": "F024",
+      "category": "api_mismatch",
+      "severity": "info",
+      "title": "Frontend tenderator calls may use different path prefix than backend",
+      "details": "Frontend calls /api/tenders/profile/me etc. Backend tenderator.py docstring comments reference /api/tenders/ paths. The router is registered in main.py without explicit prefix (tenderator.router). The actual prefix depends on the APIRouter() definition in tenderator.py. Needs verification that paths align.",
+      "files_affected": ["frontend/src/pages/tenderator_page.tsx", "backend/api/tenderator.py"],
+      "recommendation": "Verify router prefix in tenderator.py APIRouter() definition matches frontend expectations."
+    },
+    {
+      "id": "F025",
+      "category": "stale",
+      "severity": "info",
+      "title": "EP calendar 2025 JSON still in knowledge base",
+      "details": "backend/knowledge_base/calendars/ep_calendar_2025.json contains 2025 EP calendar data. Current date is April 2026. This file may still be useful for historical reference but is past its primary utility period.",
+      "files_affected": ["backend/knowledge_base/calendars/ep_calendar_2025.json"],
+      "recommendation": "Low priority. Keep for historical queries but consider archiving after EP calendar 2027 is added."
+    }
+  ],
+  "summary": {
+    "critical": 2,
+    "high": 5,
+    "medium": 9,
+    "low": 5,
+    "info": 5,
+    "total": 26
+  }
+}

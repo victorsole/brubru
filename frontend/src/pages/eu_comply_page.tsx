@@ -204,7 +204,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
     }${finding.recommendation ? `Current recommendation: ${finding.recommendation}. ` : ''}How can I address this compliance requirement?`;
 
     // Navigate to main chatbot with pre-filled question
-    navigate('/main', {
+    navigate('/chat', {
       state: {
         initialQuestion: question,
         source: 'eu_comply',

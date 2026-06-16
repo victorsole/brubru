@@ -1,0 +1,79 @@
+{
+  "id": "eic-transition",
+  "name": "EIC Transition  TRL 4 → 5/6 maturation",
+  "programme": "EIC",
+  "sub_instrument": "transition",
+  "stage": "single-stage",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/eic-transition_en",
+  "kb_guide": "eic_transition_process",
+  "topic_id_default": "HORIZON-EIC-2026-TRANSITION-01",
+  "deadline_2026_cet": "2026-09-16T17:00:00+02:00",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B  Transition (22 pages max, Sections 1-3 + cover)",
+      "page_limit": 22,
+      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "cover", "label": "Cover + upstream-project pedigree", "page_budget": 2, "criterion": null,
+          "sub": [
+            {"id": "cover.pedigree", "label": "Upstream EU project", "prompts": [
+              "MANDATORY: which eligible upstream project does this Transition build on?",
+              "Options: EIC Pathfinder (incl. H2020 EIC pilot, FET-Open, FET-Proactive); ERC Proof of Concept; Horizon RIA; EDF research (civil applications only); Research Infrastructure project.",
+              "Cite the upstream project ID."
+            ]}
+          ]
+        },
+        {"id": "1-excellence", "label": "1. Excellence (TRL 4 → 5/6 maturation)", "page_budget": 7, "criterion": "Excellence",
+          "sub": [
+            {"id": "1.1", "label": "1.1 Innovation + breakthrough", "prompts": ["Description of the technology + breakthrough vs upstream project results."]},
+            {"id": "1.2", "label": "1.2 Maturation pathway (TRL 4 → 5/6)", "prompts": ["Concrete technology maturation plan; validation in relevant environment."]},
+            {"id": "1.3", "label": "1.3 IP + FTO + exploitation", "prompts": ["IP strategy; FTO; ownership; access rights."]}
+          ]
+        },
+        {"id": "2-impact", "label": "2. Impact", "page_budget": 7, "criterion": "Impact",
+          "sub": [
+            {"id": "2.1", "label": "2.1 Market opportunity", "prompts": ["Target market + size + competitive positioning."]},
+            {"id": "2.2", "label": "2.2 Commercialisation + scale-up plan (Transition Plan)", "prompts": ["Customer engagement + regulatory pathway + investor strategy.", "Optional but encouraged: upload the Transition Plan template separately."]},
+            {"id": "2.3", "label": "2.3 Broader impact", "prompts": ["EU competitiveness + societal/environmental impact."]}
+          ]
+        },
+        {"id": "3-implementation", "label": "3. Quality + efficiency of implementation", "page_budget": 6, "criterion": "Implementation",
+          "sub": [
+            {"id": "3.1", "label": "3.1 Work plan + WPs + milestones", "prompts": ["WP-by-WP plan + risks + mitigation."]},
+            {"id": "3.2", "label": "3.2 Team + consortium capacity", "prompts": ["Mono-beneficiary OR 2-5 entities from 2+ MS/AC  describe the team capability."]},
+            {"id": "3.3", "label": "3.3 Resources (lump-sum)", "prompts": ["Lump-sum budget tied to WP completion."]}
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_implementation_plan",
+      "title": "Transition Plan template (optional but encouraged)",
+      "render": "ai-narrative",
+      "page_limit": 5
+    },
+    {
+      "kind": "tender_ethics_self_assessment",
+      "title": "Ethics Self-Assessment annex",
+      "render": "ai-narrative",
+      "conditional": {"ethics_any_yes": true}
+    },
+    {
+      "kind": "tender_pitch_deck",
+      "title": "Pitch deck for Jury Interview (11-13 weeks after deadline)",
+      "render": "scaffold-only",
+      "constraints": {"format": "pdf", "oral_minutes": 10},
+      "scaffold_slides": ["Cover", "Upstream project + result", "Maturation breakthrough", "TRL 5/6 validation plan", "Market opportunity", "Commercialisation pathway", "Team + consortium", "Workplan + WPs", "Resources + budget", "Risks + mitigation", "Investor pipeline", "Why EIC Transition"]
+    }
+  ],
+  "comply_targets": ["Medical Devices", "Clinical Trials", "GDPR", "Dual-Use", "Research Integrity"],
+  "hand_offs": {
+    "next_stage": "eic-accelerator-stage-1",
+    "chat_cta": "Does my ERC PoC project qualify me for Transition?",
+    "comply_cta": "Check FTO + IP + ethics for maturation pathway"
+  }
+}

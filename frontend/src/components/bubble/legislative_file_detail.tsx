@@ -206,7 +206,7 @@ export const LegislativeFileDetail = () => {
                   title: selectedFile.title, ref,
                   defaultValue: `Tell me about ${selectedFile.title}${ref}: where it stands, who is driving it, and what I should do.`,
                 });
-                navigate(`/main?q=${encodeURIComponent(q)}&autofire=1`);
+                navigate(`/chat?q=${encodeURIComponent(q)}&autofire=1`);
               }}
               title={t('fileDetail.askTitle', 'Ask Brubru about this file')}
             >

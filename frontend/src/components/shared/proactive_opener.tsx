@@ -72,7 +72,7 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
 
   const onAct = (b: ProactiveBriefing) => {
     navigate(
-      `/main?q=${encodeURIComponent(b.suggested_query)}&autofire=1`,
+      `/chat?q=${encodeURIComponent(b.suggested_query)}&autofire=1`,
     );
   };
 

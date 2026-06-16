@@ -1,9 +1,13 @@
 ---
 name: daily-brief
-description: Compose and send the daily EU brief email. Drafts 5 headlines in Brubru style (more only if justified on a given day), verifies Brubru can answer each topic, sends a test to hello@beresol.eu for review, then sends to all subscribers ONLY after explicit user approval.
-argument-hint: "optional: brubru news items to include"
+description: "[DEPRECATED 22 May 2026 — use /brief instead] Original daily brief skill, kept for archival reference. The Brubru Brief format (memory feedback_brubru_brief_new_format) replaces it. New sessions should invoke /brief."
+argument-hint: "deprecated — use /brief"
 allowed-tools: ["Read", "Edit", "Write", "Bash", "Glob", "Grep"]
 ---
+
+# Daily Brief Email [DEPRECATED — use /brief]
+
+> **This skill is deprecated since 22 May 2026.** Invoke `/brief` instead — it implements the Brubru Brief format (institutional-depth, variable cadence, no codes in lead, BCC distribution + EUTR matching). The instructions below are retained as an archival reference for the pre-11-May daily-cadence workflow.
 
 # Daily Brief Email
 

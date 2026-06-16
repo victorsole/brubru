@@ -2,6 +2,47 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-16",
+      "action": "updated",
+      "guide": "eu_funding_ipa_enlargement",
+      "title": "EU Funding for Enlargement Countries",
+      "summary": "Ukraine opens first accession cluster; Montenegro closes freedom-of-movement + consumer/health chapters (15 June)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-16",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "15 June OJ-L package: Russia/Ukraine/Moldova/Crimea listing updates across four regimes",
+      "refs": [
+        "32026R1336",
+        "32026R1361",
+        "32026R1356"
+      ]
+    },
+    {
+      "date": "2026-06-16",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act simplification omnibus",
+      "summary": "EP first-reading plenary vote held 16 June 2026 confirming nudifier ban + high-risk delay (Dec 2027 / Aug 2028); proceeds to Council",
+      "refs": [
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-06-16",
+      "action": "added",
+      "guide": "air_passenger_rights_regulation",
+      "title": "Air Passenger Rights Regulation (2026 revision)",
+      "summary": "New guide on the June 2026 provisional agreement revising Reg 261/2004 (3-hour trigger retained, cabin bag in base fare, family seating, auto claims)",
+      "refs": [
+        "32004R0261",
+        "31997R2027"
+      ]
+    },
+    {
       "date": "2026-06-15",
       "action": "updated",
       "guide": "cbam_downstream_goods_extension",

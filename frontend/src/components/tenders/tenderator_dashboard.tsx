@@ -72,6 +72,7 @@ interface TenderatorDashboardProps {
   onViewChecklist?: (tender: Tender) => void;
   onOpenProfile: () => void;
   onOpenCalendar: () => void;
+  onOpenTenderDocs?: () => void;
 }
 
 // Map a UnifiedOpportunity onto the existing Tender shape so we can re-use
@@ -119,6 +120,7 @@ export const TenderatorDashboard = ({
   onViewChecklist: _onViewChecklist,
   onOpenProfile,
   onOpenCalendar,
+  onOpenTenderDocs,
 }: TenderatorDashboardProps) => {
   const profileUpdatedAt = userProfile?.updated_at || '';
   const { token } = useAuth();
@@ -302,6 +304,33 @@ export const TenderatorDashboard = ({
           <span className="tenderator-dashboard__kpi-meta">in {new Date().getFullYear()}</span>
         </div>
       </section>
+
+      {/* Tender Docs entry banner — placed under the KPIs so it has its own
+          breathing room rather than competing with the icon-only header
+          buttons. This is the primary entry into the Tender Docs surface. */}
+      {onOpenTenderDocs && (
+        <button
+          type="button"
+          className="tenderator-dashboard__tender-docs-banner"
+          onClick={onOpenTenderDocs}
+        >
+          <span className="tenderator-dashboard__tender-docs-banner-icon" aria-hidden="true">
+            <span className="mdi mdi-file-document-edit-outline" />
+          </span>
+          <span className="tenderator-dashboard__tender-docs-banner-body">
+            <span className="tenderator-dashboard__tender-docs-banner-title">
+              Tender Docs
+            </span>
+            <span className="tenderator-dashboard__tender-docs-banner-sub">
+              Draft an EU funding application with AI-guided section structure (EIC ready, more programmes coming).
+            </span>
+          </span>
+          <span className="tenderator-dashboard__tender-docs-banner-cta">
+            Open
+            <span className="mdi mdi-arrow-right" aria-hidden="true" />
+          </span>
+        </button>
+      )}
 
       {/* Chip strip — three labelled groups (View / Sources / Lenses) so the
           11 chips are no longer one undifferentiated row. Lenses + sources

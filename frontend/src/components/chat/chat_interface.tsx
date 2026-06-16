@@ -284,7 +284,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     }
   }, [initialQuestion]);
 
-  // Auto-fire the chat when /main?q=...&autofire=1 (used by the Dashboard
+  // Auto-fire the chat when /chat?q=...&autofire=1 (used by the Dashboard
   // tile + ProactiveOpener "Tell me more" CTA). We call the send function
   // directly with the explicit text so we don't depend on the state-closure
   // having flushed. The ref + sessionStorage key together dedupe across
@@ -749,7 +749,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         break;
       }
       case 'generate_document':
-        navigate('/main', {
+        navigate('/chat', {
           state: {
             openDocGenerator: true,
             docType: action.params.document_type,

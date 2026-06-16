@@ -43,7 +43,7 @@ export const TalkToBrubruButton = ({
   const onClick = () => {
     const params = new URLSearchParams({ q: prompt });
     if (autoFire) params.set('autofire', '1');
-    navigate(`/main?${params.toString()}`);
+    navigate(`/chat?${params.toString()}`);
   };
 
   return (

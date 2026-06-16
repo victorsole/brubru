@@ -1,0 +1,61 @@
+{
+  "id": "eic-pathfinder-challenges",
+  "name": "EIC Pathfinder Challenges  thematic deep-tech moonshots",
+  "programme": "EIC",
+  "sub_instrument": "pathfinder-challenges",
+  "stage": "single-stage",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/eic-pathfinder_en",
+  "kb_guide": "eic_pathfinder_process",
+  "topic_id_default": "HORIZON-EIC-2026-PATHFINDERCHALLENGES-01",
+  "deadline_2026_cet": "2026-10-28T17:00:00+01:00",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B  Pathfinder Challenges Technical Proposal",
+      "page_limit": 45,
+      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "0-challenge-fit", "label": "0. Challenge fit", "page_budget": 2, "criterion": null,
+          "sub": [
+            {"id": "0.1", "label": "0.1 Selected Challenge + scope alignment", "prompts": ["Which 2026 Pathfinder Challenge are you applying to? How does the proposal align with the Challenge scope and expected outcomes?"]}
+          ]
+        },
+        {"id": "1-excellence", "label": "1. Excellence", "page_budget": 15, "criterion": "Excellence",
+          "sub": [
+            {"id": "1.1", "label": "1.1 Long-term vision", "prompts": ["Radically new technology vision linked to the Challenge."]},
+            {"id": "1.2", "label": "1.2 Science-towards-technology breakthrough", "prompts": ["Concrete novel + ambitious breakthrough."]},
+            {"id": "1.3", "label": "1.3 Methodology + risk profile", "prompts": ["High-risk/high-gain approach with plausible objectives."]}
+          ]
+        },
+        {"id": "2-impact", "label": "2. Impact", "page_budget": 12, "criterion": "Impact",
+          "sub": [
+            {"id": "2.1", "label": "2.1 Contribution to Challenge expected outcomes", "prompts": ["Map your innovation to each expected outcome of the Challenge."]},
+            {"id": "2.2", "label": "2.2 Dissemination, exploitation, communication", "prompts": ["Strategy for open science + exploitation."]}
+          ]
+        },
+        {"id": "3-implementation", "label": "3. Implementation", "page_budget": 13, "criterion": "Implementation",
+          "sub": [
+            {"id": "3.1", "label": "3.1 Work plan + WPs + milestones", "prompts": ["Define WPs, deliverables, milestones, risk register."]},
+            {"id": "3.2", "label": "3.2 Consortium capacity (single applicants + 2-partner consortia allowed)", "prompts": ["Capacity of the applicant(s)  challenges allow mono-beneficiary + 2-partner consortia, distinct from Pathfinder Open."]},
+            {"id": "3.3", "label": "3.3 Resources", "prompts": ["Budget allocation + indirect-cost flat rate 25%."]}
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_ethics_self_assessment",
+      "title": "Ethics Self-Assessment annex",
+      "render": "ai-narrative",
+      "conditional": {"ethics_any_yes": true}
+    }
+  ],
+  "comply_targets": ["AI", "GDPR", "Research Integrity", "Dual-Use"],
+  "hand_offs": {
+    "next_stage": "eic-transition",
+    "chat_cta": "Which 2026 Pathfinder Challenge matches my project?",
+    "comply_cta": "Check applicable ethics + dual-use obligations"
+  }
+}

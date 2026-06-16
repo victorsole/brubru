@@ -1,0 +1,59 @@
+{
+  "id": "eic-aic-stage-1",
+  "name": "EIC Advanced Innovation Challenges (AIC)  Stage 1 PoC (EUR 300K)",
+  "programme": "EIC",
+  "sub_instrument": "aic",
+  "stage": "stage-1",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/advanced-innovation-challenges-pilot_en",
+  "kb_guide": "eic_advanced_innovation_challenges_process",
+  "deadline_2026_cet": "2026-02-26T17:00:00+01:00",
+  "documents": [
+    {
+      "kind": "tender_application_short",
+      "title": "Part B  AIC Stage 1 proposal",
+      "page_limit": 15,
+      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "0-challenge", "label": "0. Selected AIC Challenge", "page_budget": 1, "criterion": null,
+          "sub": [
+            {"id": "0.1", "label": "0.1 Which 2026 AIC Challenge", "prompts": ["Pick ONE: (1) Accelerating Physical AI: Embodied Intelligence for the Next Frontier of AI-Powered Robotics; (2) Translating Disruptive New Approach Methodologies (NAMs) into Practice."]}
+          ]
+        },
+        {"id": "1-excellence", "label": "1. Excellence  demand-driven innovation", "page_budget": 5, "criterion": "Excellence",
+          "sub": [
+            {"id": "1.1", "label": "1.1 Mapping to the Challenge", "prompts": ["How does the proposal map to the specific demand challenge identified by the Programme Manager?"]},
+            {"id": "1.2", "label": "1.2 Transformative potential", "prompts": ["Why is this not incremental  what new category of capability does it enable?"]}
+          ]
+        },
+        {"id": "2-impact", "label": "2. Impact + commercialisation pathway", "page_budget": 4, "criterion": "Impact",
+          "sub": [
+            {"id": "2.1", "label": "2.1 Commercialisation pathway", "prompts": ["Even at Stage 1, describe how Stage 2 will mature toward market."]},
+            {"id": "2.2", "label": "2.2 Strategic + societal impact", "prompts": ["EU strategic autonomy + societal/environmental impact."]}
+          ]
+        },
+        {"id": "3-implementation", "label": "3. Implementation  9-month PoC plan", "page_budget": 5, "criterion": "Implementation",
+          "sub": [
+            {"id": "3.1", "label": "3.1 9-month PoC work plan", "prompts": ["What is the demonstration concept and its 9-month proof-of-concept plan? Deliverable expected at month 9 (prototype, dataset, validation report)."]},
+            {"id": "3.2", "label": "3.2 Team", "prompts": ["Single applicant: start-up / SME / RPO. Describe the team."]},
+            {"id": "3.3", "label": "3.3 Budget", "prompts": ["EUR 300K lump sum  broken down by WP."]}
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_ethics_self_assessment",
+      "title": "Ethics Self-Assessment annex (incl. AI ethics + bioethics for NAMs)",
+      "render": "ai-narrative",
+      "conditional": {"ethics_any_yes": true}
+    }
+  ],
+  "comply_targets": ["AI", "GDPR", "Research Integrity", "Bioethics"],
+  "hand_offs": {
+    "next_stage": "eic-aic-stage-2",
+    "chat_cta": "How does my project map to AIC Challenge 1 (Physical AI) or Challenge 2 (NAMs)?",
+    "comply_cta": "AI Act Annex III screening for Physical AI applications"
+  }
+}

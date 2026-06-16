@@ -1,0 +1,88 @@
+{
+  "id": "eic-step-scale-up",
+  "name": "EIC STEP Scale Up  equity-only EUR 10-30M for deeptech scale-ups",
+  "programme": "EIC",
+  "sub_instrument": "step",
+  "stage": "single-stage",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en",
+  "kb_guide": "eic_step_scaleup_process",
+  "topic_id_default": "HORIZON-EIC-2026-STEP-01",
+  "cut_offs_2026_cet": ["2026-02-11T17:00:00+01:00", "2026-05-06T17:00:00+02:00", "2026-09-09T17:00:00+02:00", "2026-11-25T17:00:00+01:00"],
+  "funding_mode_default": "equity-only",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Business plan (max 50 pages, PDF)",
+      "page_limit": 50,
+      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4"},
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "1-step-fit", "label": "1. STEP technology fit", "page_budget": 5, "criterion": null,
+          "sub": [
+            {"id": "1.1", "label": "1.1 Alignment with STEP priority sectors", "prompts": ["Which STEP priority sector does your innovation address: Digital + Deep Tech / Clean Technologies / Biotechnologies?"]},
+            {"id": "1.2", "label": "1.2 Strategic dependency or market opportunity", "prompts": ["Bring to the EU internal market an innovative + cutting-edge innovation with significant economic potential, OR reduce/prevent strategic dependencies of the Union."]}
+          ]
+        },
+        {"id": "2-company", "label": "2. Company + technology", "page_budget": 15, "criterion": "Excellence",
+          "sub": [
+            {"id": "2.1", "label": "2.1 Company overview + history", "prompts": ["Founding date; mission; key milestones; current size; HQ location."]},
+            {"id": "2.2", "label": "2.2 Technology + IP + FTO", "prompts": ["Technology description; TRL 8/9 evidence; IP portfolio; FTO analysis."]},
+            {"id": "2.3", "label": "2.3 Competitive positioning", "prompts": ["Direct + indirect competitors; differentiators; moat."]}
+          ]
+        },
+        {"id": "3-market-business", "label": "3. Market + business model + traction", "page_budget": 15, "criterion": "Impact",
+          "sub": [
+            {"id": "3.1", "label": "3.1 Market opportunity", "prompts": ["TAM/SAM/SOM; segmentation; growth drivers."]},
+            {"id": "3.2", "label": "3.2 Business model + revenue + unit economics", "prompts": ["Revenue model; pricing; unit economics; LTV/CAC."]},
+            {"id": "3.3", "label": "3.3 Traction + commercial milestones", "prompts": ["Customer pipeline; revenue history; key contracts."]}
+          ]
+        },
+        {"id": "4-financials", "label": "4. Financial plan + use of funds", "page_budget": 10, "criterion": "Implementation",
+          "sub": [
+            {"id": "4.1", "label": "4.1 Historical financials", "prompts": ["Last 3 years audited financials."]},
+            {"id": "4.2", "label": "4.2 Financial projections + use of EIC funding", "prompts": ["5-year P&L + cash-flow projections; how EIC EUR 10-30M is deployed; expected milestones."]},
+            {"id": "4.3", "label": "4.3 Target funding round + pre-commitment", "prompts": ["Total round size (EUR 50-150M+); pre-commitment letter from a qualified investor for ≥20%; other co-investors in conversation."]}
+          ]
+        },
+        {"id": "5-team", "label": "5. Team + governance", "page_budget": 5, "criterion": "Implementation",
+          "sub": [
+            {"id": "5.1", "label": "5.1 Founders + key personnel", "prompts": ["Founders; CXOs; senior advisors; CVs."]},
+            {"id": "5.2", "label": "5.2 Cap table + governance", "prompts": ["Current cap table + governance structure."]}
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_pitch_deck",
+      "title": "Pitch deck (max 15 pages, PDF)",
+      "render": "scaffold-only",
+      "constraints": {"format": "pdf", "max_slides": 15},
+      "scaffold_slides": ["Cover + STEP tag", "Problem + market", "Solution + tech", "Traction + customers", "Competitive moat", "STEP sector fit", "Strategic dependency story", "Business model + unit economics", "Financial projections", "Use of funds (EUR 10-30M)", "Target round structure (EUR 50-150M+)", "Co-investor pipeline", "Team + governance", "Risks + mitigation", "Ask + close"]
+    },
+    {
+      "kind": "tender_letters_of_intent",
+      "title": "Pre-commitment letter from qualified investor (≥20% of target round)",
+      "render": "external-upload-or-link",
+      "note": "Mandatory eligibility check. The qualified investor must commit ≥20% of the EUR 50-150M+ target round."
+    },
+    {
+      "kind": "tender_financial_plan",
+      "title": "Financial plan + agreement document",
+      "render": "table-driven"
+    },
+    {
+      "kind": "tender_fto_analysis",
+      "title": "Freedom-to-Operate (FTO) analysis",
+      "render": "ai-narrative",
+      "page_limit": 10
+    }
+  ],
+  "comply_targets": ["AI", "GDPR", "Cybersecurity", "Sustainable Finance (SFDR)", "Foreign Subsidies", "Dual-Use"],
+  "hand_offs": {
+    "next_stage": null,
+    "chat_cta": "Does my technology qualify for STEP priorities? Run a quick mapping.",
+    "comply_cta": "Run SFDR Article 8 + foreign-subsidies + dual-use check"
+  }
+}

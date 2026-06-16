@@ -1,0 +1,44 @@
+{
+  "id": "eic-aic-stage-2",
+  "name": "EIC Advanced Innovation Challenges (AIC)  Stage 2 Scale-up demonstration (up to EUR 2.5M)",
+  "programme": "EIC",
+  "sub_instrument": "aic",
+  "stage": "stage-2",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://eic.ec.europa.eu/eic-funding-opportunities/advanced-innovation-challenges-pilot_en",
+  "kb_guide": "eic_advanced_innovation_challenges_process",
+  "deadline_2027_indicative_cet": "2027-06-18T17:00:00+02:00",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B  AIC Stage 2 Scale-up demonstration",
+      "page_limit": 30,
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {"id": "0-stage-1-results", "label": "0. Stage 1 PoC results", "page_budget": 4, "criterion": null,
+          "sub": [
+            {"id": "0.1", "label": "0.1 Stage 1 deliverable + milestone", "prompts": ["Demonstrate completion of the Stage 1 deliverable on time + to spec; show the technical milestone defined in Stage 1 GA."]}
+          ]
+        },
+        {"id": "1-excellence", "label": "1. Excellence  extended demonstration", "page_budget": 8, "criterion": "Excellence",
+          "sub": [{"id": "1.1", "label": "1.1 Extension of the Stage 1 deliverable", "prompts": ["How does Stage 2 extend the PoC into a near-market demonstration?"]}]},
+        {"id": "2-impact", "label": "2. Impact + commercialisation roadmap (30 months)", "page_budget": 8, "criterion": "Impact",
+          "sub": [{"id": "2.1", "label": "2.1 30-month commercialisation roadmap", "prompts": ["Updated commercialisation plan with regulatory/IP/customer milestones."]}]},
+        {"id": "3-implementation", "label": "3. Implementation  Stage 2 work plan (max 30 months, EUR 2.5M)", "page_budget": 10, "criterion": "Implementation",
+          "sub": [
+            {"id": "3.1", "label": "3.1 Stage 2 WPs + milestones + deliverables", "prompts": ["WP-by-WP plan tied to lump-sum payments + risk register."]},
+            {"id": "3.2", "label": "3.2 Updated team + governance", "prompts": ["Stage 2 team configuration + governance changes since Stage 1."]},
+            {"id": "3.3", "label": "3.3 Budget (lump sum up to EUR 2.5M)", "prompts": ["Lump-sum allocation tied to WP completion."]}
+          ]
+        }
+      ]
+    }
+  ],
+  "comply_targets": ["AI", "GDPR", "Research Integrity", "Product Safety", "Bioethics"],
+  "hand_offs": {
+    "next_stage": null,
+    "chat_cta": "How to translate Stage 1 PoC results into Stage 2 narrative?",
+    "comply_cta": "Re-run Comply now that we're moving toward market"
+  }
+}

@@ -29,7 +29,7 @@ from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
     feedback, admin_panel, admin_api_keys, me_api_keys, billing, mcp_http, mcp_openapi, committees, amendments, legislative_train,
-    eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
+    eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders, tender_files, tender_templates,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
@@ -225,6 +225,10 @@ app.include_router(council_watch.router, tags=["Council Watch"])
 app.include_router(mep_watch.router, tags=["MEP Watch"])
 app.include_router(plenary_agenda.router, tags=["EP Plenary Order of Business"])
 app.include_router(tenderator.router, tags=["Tenderator"])
+app.include_router(tender_files.router, tags=["Tender Docs"])
+app.include_router(tender_templates.router, tags=["Tender Docs"])
+from api import generate_tender_section as _gen_tender_section
+app.include_router(_gen_tender_section.router, tags=["Tender Docs"])
 app.include_router(archive.router, tags=["Archive"])
 app.include_router(admin_tenders.router, tags=["Admin Tenders"])
 app.include_router(user_preferences.router, tags=["User Preferences"])

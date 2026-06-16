@@ -217,7 +217,7 @@ export const LandingPage = () => {
               <option key={lang} value={lang}>{LANGUAGE_NAMES[lang]}</option>
             ))}
           </select>
-          <Link to="/main" className="nav-cta">{t('landing.nav.startFree')}</Link>
+          <Link to="/chat" className="nav-cta">{t('landing.nav.startFree')}</Link>
         </div>
       </nav>
 
@@ -234,7 +234,7 @@ export const LandingPage = () => {
               <h1 className="hero__title">{t('landing.hero.title')}</h1>
               <p className="hero__subtitle">{t('landing.hero.subtitle')}</p>
               <div className="hero__cta">
-                <Link to="/main" className="btn btn--white btn--large">{t('landing.hero.startTrial')}</Link>
+                <Link to="/chat" className="btn btn--white btn--large">{t('landing.hero.startTrial')}</Link>
                 <Link to="/login" className="btn btn--outline-white btn--large">{t('landing.hero.logIn')}</Link>
               </div>
             </div>
@@ -633,7 +633,7 @@ export const LandingPage = () => {
               )).reduce<React.ReactNode[]>((acc, el, i) => (i === 0 ? [el] : [...acc, ' ', el]), [])}
             </h2>
             <p className="cta__text">{t('landing.cta.text')}</p>
-            <Link to="/main" className="btn--rainbow btn--rainbow-outline">{t('landing.cta.button')}</Link>
+            <Link to="/chat" className="btn--rainbow btn--rainbow-outline">{t('landing.cta.button')}</Link>
           </div>
         </section>
       </main>

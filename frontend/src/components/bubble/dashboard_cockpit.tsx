@@ -198,7 +198,7 @@ const TileShell = ({
   const onDrill = () => navigate(drillPath);
   const onChat = () => {
     if (!chatPrompt) return;
-    navigate(`/main?q=${encodeURIComponent(chatPrompt)}&autofire=1`);
+    navigate(`/chat?q=${encodeURIComponent(chatPrompt)}&autofire=1`);
   };
   const onCta = () => {
     if (emptyState) navigate(emptyState.cta_path);

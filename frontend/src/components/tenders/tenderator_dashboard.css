@@ -103,6 +103,78 @@
   gap: 0.85rem;
 }
 
+/* Tender Docs entry banner — primary CTA below the KPI strip. */
+.tenderator-dashboard__tender-docs-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin: 1rem 0 0.5rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%);
+  color: white;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(13,148,136,0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tenderator-dashboard__tender-docs-banner:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(13,148,136,0.28);
+}
+.tenderator-dashboard__tender-docs-banner-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+.tenderator-dashboard__tender-docs-banner-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.tenderator-dashboard__tender-docs-banner-title {
+  font-family: 'Adobe Caslon Pro', 'Times New Roman', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.tenderator-dashboard__tender-docs-banner-sub {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  line-height: 1.35;
+}
+.tenderator-dashboard__tender-docs-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.18);
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+.tenderator-dashboard__tender-docs-banner-cta .mdi { font-size: 1.1rem; }
+
+@media (max-width: 767px) {
+  .tenderator-dashboard__tender-docs-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+  }
+  .tenderator-dashboard__tender-docs-banner-icon { width: 36px; height: 36px; }
+  .tenderator-dashboard__tender-docs-banner-cta { align-self: stretch; justify-content: center; }
+}
+
 .tenderator-dashboard__kpi {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.05);

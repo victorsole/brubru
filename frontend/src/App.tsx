@@ -163,7 +163,7 @@ export const App = () => {
 
           {/* Protected routes */}
           <Route
-            path="/main"
+            path="/chat"
             element={
               <>
                 <Header />
@@ -174,6 +174,9 @@ export const App = () => {
               </>
             }
           />
+          {/* Legacy alias: Chat moved from /main to /chat (renamed 16 June 2026).
+              Keep a permanent redirect so old bookmarks / marketing / OAuth links work. */}
+          <Route path="/main" element={<Navigate to="/chat" replace />} />
           <Route
             path="/amendator"
             element={
