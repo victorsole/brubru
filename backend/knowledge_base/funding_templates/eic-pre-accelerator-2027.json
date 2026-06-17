@@ -18,35 +18,181 @@
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
-        {"id": "0-widening-eligibility", "label": "0. Widening eligibility check", "page_budget": 1, "criterion": null,
-          "sub": [{"id": "0.1", "label": "0.1 Establishment in a Widening country", "prompts": ["Confirm establishment in a Widening MS/AC/outermost region; cite registered address."]}]},
-        {"id": "1-excellence", "label": "1. Excellence  readiness profile", "page_budget": 10, "criterion": "Excellence",
+        {
+          "id": "0-widening-eligibility",
+          "label": "0. Widening eligibility check",
+          "page_budget": 1,
+          "criterion": null,
           "sub": [
-            {"id": "1.1", "label": "1.1 Business readiness", "prompts": ["GTM strategy; commercial validation; customer discovery."]},
-            {"id": "1.2", "label": "1.2 Investor readiness", "prompts": ["Pitch quality + financial model + DD preparation."]},
-            {"id": "1.3", "label": "1.3 Technology readiness", "prompts": ["Last-mile TRL maturation before Accelerator submission."]}
+            {
+              "id": "0.1",
+              "label": "0.1 Establishment in a Widening country",
+              "prompts": [
+                "Confirm establishment in a Widening MS/AC/outermost region; cite registered address."
+              ]
+            }
           ]
         },
-        {"id": "2-impact", "label": "2. Impact  pathway to Accelerator", "page_budget": 8, "criterion": "Impact",
+        {
+          "id": "1-excellence",
+          "label": "1. Excellence  readiness profile",
+          "page_budget": 10,
+          "criterion": "Excellence",
           "sub": [
-            {"id": "2.1", "label": "2.1 Accelerator readiness plan", "prompts": ["What enables you to succeed in the EIC Accelerator after the Hop-On?"]},
-            {"id": "2.2", "label": "2.2 Widening impact", "prompts": ["How the Hop-On reduces the Widening participation gap."]}
+            {
+              "id": "1.1",
+              "label": "1.1 Business readiness",
+              "prompts": [
+                "GTM strategy; commercial validation; customer discovery."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Investor readiness",
+              "prompts": [
+                "Pitch quality + financial model + DD preparation."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Technology readiness",
+              "prompts": [
+                "Last-mile TRL maturation before Accelerator submission."
+              ]
+            }
           ]
         },
-        {"id": "3-implementation", "label": "3. Implementation (max 2 years, 70% funding rate)", "page_budget": 11, "criterion": "Implementation",
+        {
+          "id": "2-impact",
+          "label": "2. Impact  pathway to Accelerator",
+          "page_budget": 8,
+          "criterion": "Impact",
           "sub": [
-            {"id": "3.1", "label": "3.1 Work plan", "prompts": ["WPs + deliverables + milestones."]},
-            {"id": "3.2", "label": "3.2 Team + governance", "prompts": ["Single SME  team capability."]},
-            {"id": "3.3", "label": "3.3 Budget", "prompts": ["EUR 500K-1M, 70% reimbursement; cost-based not lump-sum."]}
+            {
+              "id": "2.1",
+              "label": "2.1 Accelerator readiness plan",
+              "prompts": [
+                "What enables you to succeed in the EIC Accelerator after the Hop-On?"
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Widening impact",
+              "prompts": [
+                "How the Hop-On reduces the Widening participation gap."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-implementation",
+          "label": "3. Implementation (max 2 years, 70% funding rate)",
+          "page_budget": 11,
+          "criterion": "Implementation",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Work plan",
+              "prompts": [
+                "WPs + deliverables + milestones."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Team + governance",
+              "prompts": [
+                "Single SME  team capability."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Budget",
+              "prompts": [
+                "EUR 500K-1M, 70% reimbursement; cost-based not lump-sum."
+              ]
+            }
           ]
         }
       ]
     }
   ],
-  "comply_targets": ["AI", "GDPR", "Research Integrity"],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Research Integrity"
+  ],
   "hand_offs": {
     "next_stage": "eic-accelerator-stage-1",
     "chat_cta": "Am I in a Widening country? Should I wait for Pre-Accelerator or go straight to Accelerator?",
     "comply_cta": "Standard pre-application compliance check"
-  }
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_horizon-euratom_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_horizon-euratom_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Unit-cost decision — Personnel costs",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-personnel-costs_horizon-euratom_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — Average personnel costs + internally-invoiced goods/services",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-average-personnel-costs-and-internally-invoiced-goods-and-services_horizon-euratom_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — Travel",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-travel_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — SME owners + natural persons (Brubru users land here)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-sme-owners-natural-persons_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) — the 'how to read the MGA' walkthrough",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide — how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules — who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe Programme Guide",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/programme-guide_horizon_en.pdf",
+      "category": "Programme"
+    },
+    {
+      "label": "List of third countries that can participate",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
 }

@@ -1354,6 +1354,19 @@ async def clusters_by_topic(
         "Animal Research": [],
         "Data Act": ["Digital Policy and Digital Economy"],
         "Defence": ["Trade and Economic Security"],
+        # v2 templates (Move 3, Jun 2026) — CEF, CREA, CERV, DIGITAL, ERASMUS+, LIFE
+        "Audiovisual": ["Digital Policy and Platform Regulation"],
+        "Climate Action": ["Climate Action"],
+        "Connectivity (5G, 6G)": ["Digital Policy and Telecommunications", "Cybersecurity and Digital Infrastructure"],
+        "Copyright": ["Digital Policy and Platform Regulation"],
+        "Digital Infrastructure": ["Cybersecurity and Digital Infrastructure", "Digital Policy and Telecommunications"],
+        "Trans-European Networks": ["Transport"],
+        "Transport": ["Transport"],
+        # Move 4 (Jun 2026) — ESF+ agency procurement
+        "Public Procurement": ["Trade and Economic Security", "Competition and State Aid"],
+        # No current LawCluster for these — leave to the fallback (silent zero match).
+        # "Gender Equality": [],
+        # "Non-Discrimination": [],
     }
     resolved_policy_areas: set[str] = set()
     target_to_actual: Dict[str, List[str]] = {}

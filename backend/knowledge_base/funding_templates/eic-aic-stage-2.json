@@ -16,29 +16,152 @@
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
-        {"id": "0-stage-1-results", "label": "0. Stage 1 PoC results", "page_budget": 4, "criterion": null,
+        {
+          "id": "0-stage-1-results",
+          "label": "0. Stage 1 PoC results",
+          "page_budget": 4,
+          "criterion": null,
           "sub": [
-            {"id": "0.1", "label": "0.1 Stage 1 deliverable + milestone", "prompts": ["Demonstrate completion of the Stage 1 deliverable on time + to spec; show the technical milestone defined in Stage 1 GA."]}
+            {
+              "id": "0.1",
+              "label": "0.1 Stage 1 deliverable + milestone",
+              "prompts": [
+                "Demonstrate completion of the Stage 1 deliverable on time + to spec; show the technical milestone defined in Stage 1 GA."
+              ]
+            }
           ]
         },
-        {"id": "1-excellence", "label": "1. Excellence  extended demonstration", "page_budget": 8, "criterion": "Excellence",
-          "sub": [{"id": "1.1", "label": "1.1 Extension of the Stage 1 deliverable", "prompts": ["How does Stage 2 extend the PoC into a near-market demonstration?"]}]},
-        {"id": "2-impact", "label": "2. Impact + commercialisation roadmap (30 months)", "page_budget": 8, "criterion": "Impact",
-          "sub": [{"id": "2.1", "label": "2.1 30-month commercialisation roadmap", "prompts": ["Updated commercialisation plan with regulatory/IP/customer milestones."]}]},
-        {"id": "3-implementation", "label": "3. Implementation  Stage 2 work plan (max 30 months, EUR 2.5M)", "page_budget": 10, "criterion": "Implementation",
+        {
+          "id": "1-excellence",
+          "label": "1. Excellence  extended demonstration",
+          "page_budget": 8,
+          "criterion": "Excellence",
           "sub": [
-            {"id": "3.1", "label": "3.1 Stage 2 WPs + milestones + deliverables", "prompts": ["WP-by-WP plan tied to lump-sum payments + risk register."]},
-            {"id": "3.2", "label": "3.2 Updated team + governance", "prompts": ["Stage 2 team configuration + governance changes since Stage 1."]},
-            {"id": "3.3", "label": "3.3 Budget (lump sum up to EUR 2.5M)", "prompts": ["Lump-sum allocation tied to WP completion."]}
+            {
+              "id": "1.1",
+              "label": "1.1 Extension of the Stage 1 deliverable",
+              "prompts": [
+                "How does Stage 2 extend the PoC into a near-market demonstration?"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-impact",
+          "label": "2. Impact + commercialisation roadmap (30 months)",
+          "page_budget": 8,
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 30-month commercialisation roadmap",
+              "prompts": [
+                "Updated commercialisation plan with regulatory/IP/customer milestones."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-implementation",
+          "label": "3. Implementation  Stage 2 work plan (max 30 months, EUR 2.5M)",
+          "page_budget": 10,
+          "criterion": "Implementation",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Stage 2 WPs + milestones + deliverables",
+              "prompts": [
+                "WP-by-WP plan tied to lump-sum payments + risk register."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Updated team + governance",
+              "prompts": [
+                "Stage 2 team configuration + governance changes since Stage 1."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Budget (lump sum up to EUR 2.5M)",
+              "prompts": [
+                "Lump-sum allocation tied to WP completion."
+              ]
+            }
           ]
         }
       ]
     }
   ],
-  "comply_targets": ["AI", "GDPR", "Research Integrity", "Product Safety", "Bioethics"],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Research Integrity",
+    "Product Safety",
+    "Bioethics"
+  ],
   "hand_offs": {
     "next_stage": null,
     "chat_cta": "How to translate Stage 1 PoC results into Stage 2 narrative?",
     "comply_cta": "Re-run Comply now that we're moving toward market"
-  }
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "Lump-Sum Model Grant Agreement (LS-MGA)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "How to Manage Your Lump-Sum Grants",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/how-to-manage-your-lump-sum-grants_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe lump-sum Decision (LS-Decision)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/ls-decision_he_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) — the 'how to read the MGA' walkthrough",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide — how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules — who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe Programme Guide",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/programme-guide_horizon_en.pdf",
+      "category": "Programme"
+    },
+    {
+      "label": "List of third countries that can participate",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
 }

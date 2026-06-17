@@ -109,6 +109,9 @@ function resolveKind(doc: UserDocument): string {
   if (doc.tags?.includes('tender_clinical_studies_annex')) return 'tender_clinical_studies_annex';
   if (doc.tags?.includes('tender_ethics_self_assessment')) return 'tender_ethics_self_assessment';
   if (doc.tags?.includes('tender_org_profile_consent')) return 'tender_org_profile_consent';
+  if (doc.tags?.includes('tender_budget_table')) return 'tender_budget_table';
+  if (doc.tags?.includes('tender_budget_narrative')) return 'tender_budget_narrative';
+  if (doc.tags?.includes('tender_eligibility_dossier')) return 'tender_eligibility_dossier';
   if (doc.tags?.includes('position_paper')) return 'position_paper';
   if (doc.tags?.includes('mep_briefing')) return 'mep_briefing';
   if (doc.tags?.includes('talking_points')) return 'talking_points';
@@ -142,6 +145,9 @@ const FUNDING_DOC_KINDS = new Set([
   'tender_clinical_studies_annex',
   'tender_ethics_self_assessment',
   'tender_org_profile_consent',
+  'tender_budget_table',
+  'tender_budget_narrative',
+  'tender_eligibility_dossier',
 ]);
 
 const KIND_LABELS: Record<string, string> = {
@@ -179,6 +185,9 @@ const KIND_LABELS: Record<string, string> = {
   tender_clinical_studies_annex: 'Tender — clinical studies annex',
   tender_ethics_self_assessment: 'Tender — ethics self-assessment',
   tender_org_profile_consent: 'Tender — NCP consent',
+  tender_budget_table: 'Tender — budget table',
+  tender_budget_narrative: 'Tender — budget narrative',
+  tender_eligibility_dossier: 'Tender — eligibility dossier (ESPD)',
 };
 
 export const DocumentsTab = () => {
@@ -785,6 +794,9 @@ export const DocumentsTab = () => {
               <option value="tender_clinical_studies_annex">Clinical studies annex</option>
               <option value="tender_ethics_self_assessment">Ethics self-assessment</option>
               <option value="tender_org_profile_consent">NCP consent</option>
+              <option value="tender_budget_table">Budget table</option>
+              <option value="tender_budget_narrative">Budget narrative</option>
+              <option value="tender_eligibility_dossier">Eligibility dossier (ESPD)</option>
             </optgroup>
           </select>
         </div>

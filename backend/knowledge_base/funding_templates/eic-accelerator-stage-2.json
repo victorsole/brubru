@@ -8,88 +8,186 @@
   "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/af/af_he-eic-accelerator_en.pdf",
   "kb_guide": "eic_accelerator_process",
   "topic_id_default": "HORIZON-EIC-2026-ACCELERATOR-01",
-  "cut_offs_2026_cet": ["2026-03-04T17:00:00+01:00", "2026-05-06T17:00:00+02:00", "2026-07-08T17:00:00+02:00", "2026-09-02T17:00:00+02:00", "2026-11-04T17:00:00+01:00"],
+  "cut_offs_2026_cet": [
+    "2026-03-04T17:00:00+01:00",
+    "2026-05-06T17:00:00+02:00",
+    "2026-07-08T17:00:00+02:00",
+    "2026-09-02T17:00:00+02:00",
+    "2026-11-04T17:00:00+01:00"
+  ],
   "documents": [
     {
       "kind": "tender_application_full",
       "title": "Part B  Full Proposal",
       "page_limit": null,
-      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "formatting": {
+        "font": "Times New Roman 11pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
-        {"id": "cover", "label": "Title + Participants + Topic selection", "page_budget": 1, "criterion": null,
+        {
+          "id": "cover",
+          "label": "Title + Participants + Topic selection",
+          "page_budget": 1,
+          "criterion": null,
           "sub": [
-            {"id": "cover.title", "label": "Title", "prompts": ["State the proposal title (max 200 chars)."]},
-            {"id": "cover.participants", "label": "Participants", "prompts": ["Coordinator + affiliated entities with explained link + role."]},
-            {"id": "cover.topic", "label": "EIC topic selection", "prompts": [
-              "Choose ONE: (1) EIC Accelerator Open OR (2) one of the 5 Challenges 2026:",
-              "2.1 Advanced Materials for Renewable Energy and Energy Storage System",
-              "2.2 Alternative Concepts and Key Enabling Technologies for Fusion Power Plants",
-              "2.3 Biotech for Regenerating Agricultural Soils",
-              "2.4 Boosting the European Critical Raw Materials value chain",
-              "2.5 Deep Tech for Climate Adaptation",
-              "If you opt for a Challenge: describe how your application fits within the scope and how it will meet the expected outcomes + impacts."
-            ]}
+            {
+              "id": "cover.title",
+              "label": "Title",
+              "prompts": [
+                "State the proposal title (max 200 chars)."
+              ]
+            },
+            {
+              "id": "cover.participants",
+              "label": "Participants",
+              "prompts": [
+                "Coordinator + affiliated entities with explained link + role."
+              ]
+            },
+            {
+              "id": "cover.topic",
+              "label": "EIC topic selection",
+              "prompts": [
+                "Choose ONE: (1) EIC Accelerator Open OR (2) one of the 5 Challenges 2026:",
+                "2.1 Advanced Materials for Renewable Energy and Energy Storage System",
+                "2.2 Alternative Concepts and Key Enabling Technologies for Fusion Power Plants",
+                "2.3 Biotech for Regenerating Agricultural Soils",
+                "2.4 Boosting the European Critical Raw Materials value chain",
+                "2.5 Deep Tech for Climate Adaptation",
+                "If you opt for a Challenge: describe how your application fits within the scope and how it will meet the expected outcomes + impacts."
+              ]
+            }
           ]
         },
-        {"id": "exec-summary", "label": "Executive Summary (max ½ page)", "page_budget": 0.5, "criterion": null,
+        {
+          "id": "exec-summary",
+          "label": "Executive Summary (max ½ page)",
+          "page_budget": 0.5,
+          "criterion": null,
           "sub": [
-            {"id": "exec-summary.body", "label": "Executive summary", "prompts": ["Half-page summary: technology + market + team + ask. Written to hook the evaluators."]}
+            {
+              "id": "exec-summary.body",
+              "label": "Executive summary",
+              "prompts": [
+                "Half-page summary: technology + market + team + ask. Written to hook the evaluators."
+              ]
+            }
           ]
         },
-        {"id": "1-technology", "label": "1. Technology", "page_budget": 6, "criterion": "Excellence",
+        {
+          "id": "1-technology",
+          "label": "1. Technology",
+          "page_budget": 6,
+          "criterion": "Excellence",
           "sub": [
-            {"id": "1.1", "label": "1.1 Novelty + breakthrough nature", "prompts": [
-              "Describe how your innovation is deep-tech.",
-              "Describe the novelty and disruptive potential vs existing solutions.",
-              "Provide empirical data that demonstrate the novelty + potential to disrupt current markets."
-            ]},
-            {"id": "1.2", "label": "1.2 Technology maturity (TRL)", "prompts": [
-              "Has the innovation completed all aspects of TRL 5 (validation in a relevant environment)?",
-              "Provide evidence of TRL 5 (or higher) validation."
-            ]},
-            {"id": "1.3", "label": "1.3 IP strategy", "prompts": [
-              "IP strategy in terms of patents (granted/pending), trade secrets, other IP elements, FTO status.",
-              "Upload the FTO analysis as an annex OR a 2-page max note explaining why it is not relevant (e.g. software)."
-            ]}
+            {
+              "id": "1.1",
+              "label": "1.1 Novelty + breakthrough nature",
+              "prompts": [
+                "Describe how your innovation is deep-tech.",
+                "Describe the novelty and disruptive potential vs existing solutions.",
+                "Provide empirical data that demonstrate the novelty + potential to disrupt current markets."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Technology maturity (TRL)",
+              "prompts": [
+                "Has the innovation completed all aspects of TRL 5 (validation in a relevant environment)?",
+                "Provide evidence of TRL 5 (or higher) validation."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 IP strategy",
+              "prompts": [
+                "IP strategy in terms of patents (granted/pending), trade secrets, other IP elements, FTO status.",
+                "Upload the FTO analysis as an annex OR a 2-page max note explaining why it is not relevant (e.g. software)."
+              ]
+            }
           ]
         },
-        {"id": "2-market", "label": "2. Market", "page_budget": 6, "criterion": "Impact",
+        {
+          "id": "2-market",
+          "label": "2. Market",
+          "page_budget": 6,
+          "criterion": "Impact",
           "sub": [
-            {"id": "2.1", "label": "2.1 Market opportunity", "prompts": ["TAM/SAM/SOM; share target; GTM strategy; customer value proposition; partnerships."]},
-            {"id": "2.2", "label": "2.2 Business + revenue model + growth strategy", "prompts": [
-              "Detailed business model and revenue strategy.",
-              "Financial projections  assumptions, drivers, sensitivity.",
-              "How will you achieve your planned revenues?"
-            ]},
-            {"id": "2.3", "label": "2.3 Broader impact (EU leadership + dependency reduction)", "prompts": [
-              "Will your innovation contribute to European technological leadership and/or reduce dependencies on other regions?",
-              "Broader environmental or social impacts?",
-              "Clarify how it reduces dependency on non-EU sources for critical technologies or raw materials."
-            ]},
-            {"id": "2.4", "label": "2.4 Challenge alignment (Challenges only)", "conditional": {"challenge": true},
-              "prompts": ["How does your innovation contribute to the Challenge objectives? Which metrics will you use to measure such contribution?"]},
-            {"id": "2.5", "label": "2.5 STEP Impact (only for Challenges within STEP scope)", "conditional": {"step_scope": true},
+            {
+              "id": "2.1",
+              "label": "2.1 Market opportunity",
+              "prompts": [
+                "TAM/SAM/SOM; share target; GTM strategy; customer value proposition; partnerships."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Business + revenue model + growth strategy",
+              "prompts": [
+                "Detailed business model and revenue strategy.",
+                "Financial projections  assumptions, drivers, sensitivity.",
+                "How will you achieve your planned revenues?"
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Broader impact (EU leadership + dependency reduction)",
+              "prompts": [
+                "Will your innovation contribute to European technological leadership and/or reduce dependencies on other regions?",
+                "Broader environmental or social impacts?",
+                "Clarify how it reduces dependency on non-EU sources for critical technologies or raw materials."
+              ]
+            },
+            {
+              "id": "2.4",
+              "label": "2.4 Challenge alignment (Challenges only)",
+              "conditional": {
+                "challenge": true
+              },
+              "prompts": [
+                "How does your innovation contribute to the Challenge objectives? Which metrics will you use to measure such contribution?"
+              ]
+            },
+            {
+              "id": "2.5",
+              "label": "2.5 STEP Impact (only for Challenges within STEP scope)",
+              "conditional": {
+                "step_scope": true
+              },
               "prompts": [
                 "Will your innovation have a clear and measurable impact on STEP technology areas? Choose:",
                 "- Bringing to the Union's internal market an innovative, emerging and cutting-edge innovation with significant economic potential; OR",
                 "- Reducing or preventing strategic dependencies of the Union.",
                 "Applicants from Associated Countries: demonstrate contributions to the EU internal market or strategic dependencies.",
                 "Which metrics will you use to measure such impact?"
-              ]}
+              ]
+            }
           ]
         },
-        {"id": "3-team-finance-impl", "label": "3. Team, Financial Needs, Implementation", "page_budget": 6, "criterion": "Implementation",
+        {
+          "id": "3-team-finance-impl",
+          "label": "3. Team, Financial Needs, Implementation",
+          "page_budget": 6,
+          "criterion": "Implementation",
           "sub": [
-            {"id": "3.1", "label": "3.1 Team Capability (with team + governance tables)", "prompts": [
-              "Necessary team in terms of skills + competences to develop + scale the innovation.",
-              "Governance + decision-making + incentivisation (e.g. ESOP plan).",
-              "Current skills/competence gaps incl. gender balance + plan to fill them.",
-              "Team table: Name | Gender | Founder Y/N | Position | Key competences | % commitment.",
-              "Governance table: Name | Type (founder/investor/other) | % fully diluted."
-            ]},
-            {"id": "3.2", "label": "3.2 Risk level + leverage effect (conditional on funding mode)",
+            {
+              "id": "3.1",
+              "label": "3.1 Team Capability (with team + governance tables)",
+              "prompts": [
+                "Necessary team in terms of skills + competences to develop + scale the innovation.",
+                "Governance + decision-making + incentivisation (e.g. ESOP plan).",
+                "Current skills/competence gaps incl. gender balance + plan to fill them.",
+                "Team table: Name | Gender | Founder Y/N | Position | Key competences | % commitment.",
+                "Governance table: Name | Type (founder/investor/other) | % fully diluted."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Risk level + leverage effect (conditional on funding mode)",
               "prompts": [
                 "Have you demonstrated early traction with investors? Is the financing requirement to be internationally competitive significantly higher than what market actors alone can finance?",
                 "Describe your traction with investors + the timing + size of your future financing round.",
@@ -101,15 +199,29 @@
                 "blended": "FOR BLENDED FINANCE: catalyse public + private investment within 6–24 months PLUS justify the lump-sum grant component."
               }
             },
-            {"id": "3.3", "label": "3.3 Risk management", "prompts": [
-              "Technological, market, financial, regulatory risks + mitigation.",
-              "How your innovation is compliant with industry standards + how you account for future regulations."
-            ]}
+            {
+              "id": "3.3",
+              "label": "3.3 Risk management",
+              "prompts": [
+                "Technological, market, financial, regulatory risks + mitigation.",
+                "How your innovation is compliant with industry standards + how you account for future regulations."
+              ]
+            }
           ]
         },
-        {"id": "cvs", "label": "CVs (links to LinkedIn / company)", "page_budget": 0.5, "criterion": null,
+        {
+          "id": "cvs",
+          "label": "CVs (links to LinkedIn / company)",
+          "page_budget": 0.5,
+          "criterion": null,
           "sub": [
-            {"id": "cvs.links", "label": "Online CV links", "prompts": ["Link to online CVs for key team members (LinkedIn, company website, etc.)."]}
+            {
+              "id": "cvs.links",
+              "label": "Online CV links",
+              "prompts": [
+                "Link to online CVs for key team members (LinkedIn, company website, etc.)."
+              ]
+            }
           ]
         }
       ]
@@ -118,7 +230,10 @@
       "kind": "tender_pitch_deck",
       "title": "Pitch deck (PDF, 10-min oral cap at face-to-face interview)",
       "render": "scaffold-only",
-      "constraints": {"format": "pdf", "oral_minutes": 10},
+      "constraints": {
+        "format": "pdf",
+        "oral_minutes": 10
+      },
       "scaffold_slides": [
         "Cover + tagline",
         "Problem",
@@ -138,25 +253,66 @@
       "kind": "tender_video_script",
       "title": "Video pitch script (3 min  can reuse Stage 1)",
       "render": "ai-narrative",
-      "constraints": {"duration_seconds": 180, "max_speakers": 3}
+      "constraints": {
+        "duration_seconds": 180,
+        "max_speakers": 3
+      }
     },
     {
       "kind": "tender_lump_sum_budget",
       "title": "Lump Sum detailed budget breakdown (mandatory for grant-only + blended)",
       "render": "table-driven",
-      "conditional": {"funding_mode": ["grant-only", "blended"]}
+      "conditional": {
+        "funding_mode": [
+          "grant-only",
+          "blended"
+        ]
+      }
     },
     {
       "kind": "tender_implementation_plan",
       "title": "Implementation plan (10 pages max  mandatory for grant + blended)",
       "render": "ai-narrative",
       "page_limit": 10,
-      "conditional": {"funding_mode": ["grant-only", "blended"]},
+      "conditional": {
+        "funding_mode": [
+          "grant-only",
+          "blended"
+        ]
+      },
       "sections": [
-        {"id": "wp", "label": "Work Packages", "page_budget": 4, "prompts": ["Define each WP: objectives, lead beneficiary, person-months, deliverables, dependencies."]},
-        {"id": "milestones", "label": "Milestones + timing", "page_budget": 2, "prompts": ["Critical milestones; quarter-by-quarter timeline; go/no-go gates."]},
-        {"id": "deliverables", "label": "Deliverables", "page_budget": 2, "prompts": ["Each deliverable: ID, title, lead, delivery month, dissemination level."]},
-        {"id": "resources", "label": "Resources + costs", "page_budget": 2, "prompts": ["Personnel, subcontracting, equipment, travel, indirect costs (25% flat)."]}
+        {
+          "id": "wp",
+          "label": "Work Packages",
+          "page_budget": 4,
+          "prompts": [
+            "Define each WP: objectives, lead beneficiary, person-months, deliverables, dependencies."
+          ]
+        },
+        {
+          "id": "milestones",
+          "label": "Milestones + timing",
+          "page_budget": 2,
+          "prompts": [
+            "Critical milestones; quarter-by-quarter timeline; go/no-go gates."
+          ]
+        },
+        {
+          "id": "deliverables",
+          "label": "Deliverables",
+          "page_budget": 2,
+          "prompts": [
+            "Each deliverable: ID, title, lead, delivery month, dissemination level."
+          ]
+        },
+        {
+          "id": "resources",
+          "label": "Resources + costs",
+          "page_budget": 2,
+          "prompts": [
+            "Personnel, subcontracting, equipment, travel, indirect costs (25% flat)."
+          ]
+        }
       ]
     },
     {
@@ -179,21 +335,105 @@
       "kind": "tender_ownership_control",
       "title": "Ownership control declaration",
       "render": "scaffold-only",
-      "conditional": {"challenge": "2.4", "funding_mode": ["grant-only"]},
+      "conditional": {
+        "challenge": "2.4",
+        "funding_mode": [
+          "grant-only"
+        ]
+      },
       "note": "Required ONLY for Challenge 2.4 Critical Raw Materials value chain + Open proposals in the same scope requesting GRANT ONLY."
     },
     {
       "kind": "tender_clinical_studies_annex",
       "title": "Essential information for clinical studies / trials / investigations",
       "render": "ai-narrative",
-      "conditional": {"ethics_clinical_studies": true},
+      "conditional": {
+        "ethics_clinical_studies": true
+      },
       "note": "Modular extension  only if the project includes clinical studies/trials/investigations under CTR 536/2014 or MDR 2017/745 or IVDR 2017/746."
     }
   ],
-  "comply_targets": ["AI", "GDPR", "Cybersecurity", "Product Safety", "Medical Devices", "Clinical Trials", "Foreign Subsidies"],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Cybersecurity",
+    "Product Safety",
+    "Medical Devices",
+    "Clinical Trials",
+    "Foreign Subsidies"
+  ],
   "hand_offs": {
     "next_stage": null,
     "chat_cta": "Ask Brubru for help with the conditional Section 3.2 paragraph for your funding mode",
     "comply_cta": "Run EU Law Comply for your topic + ethics flags"
-  }
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "Lump-Sum Model Grant Agreement (LS-MGA)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "How to Manage Your Lump-Sum Grants",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/how-to-manage-your-lump-sum-grants_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe lump-sum Decision (LS-Decision)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/ls-decision_he_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) — the 'how to read the MGA' walkthrough",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide — how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules — who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe Programme Guide",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/programme-guide_horizon_en.pdf",
+      "category": "Programme"
+    },
+    {
+      "label": "List of third countries that can participate",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    },
+    {
+      "label": "Guidance on EU calls with Ownership + Control restrictions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-participation-in-eu-calls-with-ownership-and-control-restrictions_en.pdf",
+      "category": "Eligibility"
+    },
+    {
+      "label": "Guidance on participation in restricted calls (DEP / HE / EDF / CEF / DIG)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-participation-in-dep-he-edf-cef-dig-restricted-calls_dep-he-edf-cef-dig_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
 }

@@ -14,33 +14,107 @@
       "kind": "tender_application_full",
       "title": "Part B  Pathfinder Challenges Technical Proposal",
       "page_limit": 45,
-      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "formatting": {
+        "font": "Times New Roman 11pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
-        {"id": "0-challenge-fit", "label": "0. Challenge fit", "page_budget": 2, "criterion": null,
+        {
+          "id": "0-challenge-fit",
+          "label": "0. Challenge fit",
+          "page_budget": 2,
+          "criterion": null,
           "sub": [
-            {"id": "0.1", "label": "0.1 Selected Challenge + scope alignment", "prompts": ["Which 2026 Pathfinder Challenge are you applying to? How does the proposal align with the Challenge scope and expected outcomes?"]}
+            {
+              "id": "0.1",
+              "label": "0.1 Selected Challenge + scope alignment",
+              "prompts": [
+                "Which 2026 Pathfinder Challenge are you applying to? How does the proposal align with the Challenge scope and expected outcomes?"
+              ]
+            }
           ]
         },
-        {"id": "1-excellence", "label": "1. Excellence", "page_budget": 15, "criterion": "Excellence",
+        {
+          "id": "1-excellence",
+          "label": "1. Excellence",
+          "page_budget": 15,
+          "criterion": "Excellence",
           "sub": [
-            {"id": "1.1", "label": "1.1 Long-term vision", "prompts": ["Radically new technology vision linked to the Challenge."]},
-            {"id": "1.2", "label": "1.2 Science-towards-technology breakthrough", "prompts": ["Concrete novel + ambitious breakthrough."]},
-            {"id": "1.3", "label": "1.3 Methodology + risk profile", "prompts": ["High-risk/high-gain approach with plausible objectives."]}
+            {
+              "id": "1.1",
+              "label": "1.1 Long-term vision",
+              "prompts": [
+                "Radically new technology vision linked to the Challenge."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Science-towards-technology breakthrough",
+              "prompts": [
+                "Concrete novel + ambitious breakthrough."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Methodology + risk profile",
+              "prompts": [
+                "High-risk/high-gain approach with plausible objectives."
+              ]
+            }
           ]
         },
-        {"id": "2-impact", "label": "2. Impact", "page_budget": 12, "criterion": "Impact",
+        {
+          "id": "2-impact",
+          "label": "2. Impact",
+          "page_budget": 12,
+          "criterion": "Impact",
           "sub": [
-            {"id": "2.1", "label": "2.1 Contribution to Challenge expected outcomes", "prompts": ["Map your innovation to each expected outcome of the Challenge."]},
-            {"id": "2.2", "label": "2.2 Dissemination, exploitation, communication", "prompts": ["Strategy for open science + exploitation."]}
+            {
+              "id": "2.1",
+              "label": "2.1 Contribution to Challenge expected outcomes",
+              "prompts": [
+                "Map your innovation to each expected outcome of the Challenge."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Dissemination, exploitation, communication",
+              "prompts": [
+                "Strategy for open science + exploitation."
+              ]
+            }
           ]
         },
-        {"id": "3-implementation", "label": "3. Implementation", "page_budget": 13, "criterion": "Implementation",
+        {
+          "id": "3-implementation",
+          "label": "3. Implementation",
+          "page_budget": 13,
+          "criterion": "Implementation",
           "sub": [
-            {"id": "3.1", "label": "3.1 Work plan + WPs + milestones", "prompts": ["Define WPs, deliverables, milestones, risk register."]},
-            {"id": "3.2", "label": "3.2 Consortium capacity (single applicants + 2-partner consortia allowed)", "prompts": ["Capacity of the applicant(s)  challenges allow mono-beneficiary + 2-partner consortia, distinct from Pathfinder Open."]},
-            {"id": "3.3", "label": "3.3 Resources", "prompts": ["Budget allocation + indirect-cost flat rate 25%."]}
+            {
+              "id": "3.1",
+              "label": "3.1 Work plan + WPs + milestones",
+              "prompts": [
+                "Define WPs, deliverables, milestones, risk register."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Consortium capacity (single applicants + 2-partner consortia allowed)",
+              "prompts": [
+                "Capacity of the applicant(s)  challenges allow mono-beneficiary + 2-partner consortia, distinct from Pathfinder Open."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Resources",
+              "prompts": [
+                "Budget allocation + indirect-cost flat rate 25%."
+              ]
+            }
           ]
         }
       ]
@@ -49,13 +123,89 @@
       "kind": "tender_ethics_self_assessment",
       "title": "Ethics Self-Assessment annex",
       "render": "ai-narrative",
-      "conditional": {"ethics_any_yes": true}
+      "conditional": {
+        "ethics_any_yes": true
+      }
     }
   ],
-  "comply_targets": ["AI", "GDPR", "Research Integrity", "Dual-Use"],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Research Integrity",
+    "Dual-Use"
+  ],
   "hand_offs": {
     "next_stage": "eic-transition",
     "chat_cta": "Which 2026 Pathfinder Challenge matches my project?",
     "comply_cta": "Check applicable ethics + dual-use obligations"
-  }
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_horizon-euratom_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_horizon-euratom_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Unit-cost decision — Personnel costs",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-personnel-costs_horizon-euratom_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — Average personnel costs + internally-invoiced goods/services",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-average-personnel-costs-and-internally-invoiced-goods-and-services_horizon-euratom_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — Travel",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-travel_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Unit-cost decision — SME owners + natural persons (Brubru users land here)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-sme-owners-natural-persons_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) — the 'how to read the MGA' walkthrough",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide — how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules — who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe Programme Guide",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/programme-guide_horizon_en.pdf",
+      "category": "Programme"
+    },
+    {
+      "label": "List of third countries that can participate",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
 }

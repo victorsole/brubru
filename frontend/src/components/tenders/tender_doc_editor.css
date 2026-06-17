@@ -376,6 +376,75 @@
  list-style: none; padding: 0; margin: 0;
 }
 .td-edit__org-list li { padding: 0.2rem 0; font-size: 0.85rem; }
+
+/* Reference docs section in the Topic tab (EuropeanAcademy-sourced doc map). */
+.td-edit__refs {
+ margin-top: 1rem;
+ padding-top: 0.85rem;
+ border-top: 1px solid #e2e8f0;
+}
+.td-edit__refs h5 {
+ font-family: 'Adobe Caslon Pro', 'Times New Roman', serif;
+ font-size: 0.95rem;
+ color: #0f172a;
+ margin: 0 0 0.55rem;
+}
+.td-edit__refs-primary {
+ display: flex;
+ align-items: center;
+ gap: 0.4rem;
+ background: rgba(13, 148, 136, 0.08);
+ border: 1px solid rgba(13, 148, 136, 0.25);
+ border-radius: 8px;
+ padding: 0.45rem 0.55rem;
+ font-size: 0.83rem;
+ color: #0d9488;
+ text-decoration: none;
+ margin-bottom: 0.35rem;
+ font-weight: 600;
+ line-height: 1.3;
+}
+.td-edit__refs-primary:hover { background: rgba(13, 148, 136, 0.14); }
+.td-edit__refs-primary .mdi:first-child { font-size: 1rem; flex: 0 0 auto; }
+.td-edit__refs-ext { margin-left: auto; font-size: 0.85rem; opacity: 0.7; }
+
+.td-edit__refs-grouped { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.55rem; }
+.td-edit__refs-cat-label {
+ font-size: 0.7rem;
+ font-weight: 700;
+ color: #94a3b8;
+ text-transform: uppercase;
+ letter-spacing: 0.05em;
+ margin-bottom: 0.2rem;
+}
+.td-edit__refs-list {
+ list-style: none; padding: 0; margin: 0;
+ display: flex;
+ flex-direction: column;
+ gap: 0.15rem;
+}
+.td-edit__refs-list a {
+ display: flex;
+ align-items: flex-start;
+ gap: 0.35rem;
+ padding: 0.35rem 0.45rem;
+ background: white;
+ border: 1px solid #e2e8f0;
+ border-radius: 6px;
+ font-size: 0.8rem;
+ color: #334155;
+ text-decoration: none;
+ line-height: 1.35;
+}
+.td-edit__refs-list a:hover { background: #f1f5f9; border-color: #cbd5e1; }
+.td-edit__refs-list .mdi:first-child { color: #b91c1c; flex: 0 0 auto; font-size: 0.95rem; margin-top: 0.05rem; }
+.td-edit__refs-source {
+ margin-top: 0.55rem;
+ font-size: 0.72rem;
+ color: #94a3b8;
+ font-style: italic;
+}
+.td-edit__refs-source code { background: #f1f5f9; padding: 0.05rem 0.3rem; border-radius: 4px; }
 .td-edit__comply-list, .td-edit__winners-list {
  list-style: none; padding: 0; margin: 0;
  max-height: 380px; overflow-y: auto;

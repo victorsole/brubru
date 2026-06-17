@@ -13,32 +13,100 @@
       "kind": "tender_application_short",
       "title": "Part B  AIC Stage 1 proposal",
       "page_limit": 15,
-      "formatting": {"font": "Times New Roman 11pt min", "page_size": "A4", "margins_mm": 15},
+      "formatting": {
+        "font": "Times New Roman 11pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
       "render": "ai-narrative",
       "ai_disclosure_required": true,
       "sections": [
-        {"id": "0-challenge", "label": "0. Selected AIC Challenge", "page_budget": 1, "criterion": null,
+        {
+          "id": "0-challenge",
+          "label": "0. Selected AIC Challenge",
+          "page_budget": 1,
+          "criterion": null,
           "sub": [
-            {"id": "0.1", "label": "0.1 Which 2026 AIC Challenge", "prompts": ["Pick ONE: (1) Accelerating Physical AI: Embodied Intelligence for the Next Frontier of AI-Powered Robotics; (2) Translating Disruptive New Approach Methodologies (NAMs) into Practice."]}
+            {
+              "id": "0.1",
+              "label": "0.1 Which 2026 AIC Challenge",
+              "prompts": [
+                "Pick ONE: (1) Accelerating Physical AI: Embodied Intelligence for the Next Frontier of AI-Powered Robotics; (2) Translating Disruptive New Approach Methodologies (NAMs) into Practice."
+              ]
+            }
           ]
         },
-        {"id": "1-excellence", "label": "1. Excellence  demand-driven innovation", "page_budget": 5, "criterion": "Excellence",
+        {
+          "id": "1-excellence",
+          "label": "1. Excellence  demand-driven innovation",
+          "page_budget": 5,
+          "criterion": "Excellence",
           "sub": [
-            {"id": "1.1", "label": "1.1 Mapping to the Challenge", "prompts": ["How does the proposal map to the specific demand challenge identified by the Programme Manager?"]},
-            {"id": "1.2", "label": "1.2 Transformative potential", "prompts": ["Why is this not incremental  what new category of capability does it enable?"]}
+            {
+              "id": "1.1",
+              "label": "1.1 Mapping to the Challenge",
+              "prompts": [
+                "How does the proposal map to the specific demand challenge identified by the Programme Manager?"
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Transformative potential",
+              "prompts": [
+                "Why is this not incremental  what new category of capability does it enable?"
+              ]
+            }
           ]
         },
-        {"id": "2-impact", "label": "2. Impact + commercialisation pathway", "page_budget": 4, "criterion": "Impact",
+        {
+          "id": "2-impact",
+          "label": "2. Impact + commercialisation pathway",
+          "page_budget": 4,
+          "criterion": "Impact",
           "sub": [
-            {"id": "2.1", "label": "2.1 Commercialisation pathway", "prompts": ["Even at Stage 1, describe how Stage 2 will mature toward market."]},
-            {"id": "2.2", "label": "2.2 Strategic + societal impact", "prompts": ["EU strategic autonomy + societal/environmental impact."]}
+            {
+              "id": "2.1",
+              "label": "2.1 Commercialisation pathway",
+              "prompts": [
+                "Even at Stage 1, describe how Stage 2 will mature toward market."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Strategic + societal impact",
+              "prompts": [
+                "EU strategic autonomy + societal/environmental impact."
+              ]
+            }
           ]
         },
-        {"id": "3-implementation", "label": "3. Implementation  9-month PoC plan", "page_budget": 5, "criterion": "Implementation",
+        {
+          "id": "3-implementation",
+          "label": "3. Implementation  9-month PoC plan",
+          "page_budget": 5,
+          "criterion": "Implementation",
           "sub": [
-            {"id": "3.1", "label": "3.1 9-month PoC work plan", "prompts": ["What is the demonstration concept and its 9-month proof-of-concept plan? Deliverable expected at month 9 (prototype, dataset, validation report)."]},
-            {"id": "3.2", "label": "3.2 Team", "prompts": ["Single applicant: start-up / SME / RPO. Describe the team."]},
-            {"id": "3.3", "label": "3.3 Budget", "prompts": ["EUR 300K lump sum  broken down by WP."]}
+            {
+              "id": "3.1",
+              "label": "3.1 9-month PoC work plan",
+              "prompts": [
+                "What is the demonstration concept and its 9-month proof-of-concept plan? Deliverable expected at month 9 (prototype, dataset, validation report)."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Team",
+              "prompts": [
+                "Single applicant: start-up / SME / RPO. Describe the team."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Budget",
+              "prompts": [
+                "EUR 300K lump sum  broken down by WP."
+              ]
+            }
           ]
         }
       ]
@@ -47,13 +115,79 @@
       "kind": "tender_ethics_self_assessment",
       "title": "Ethics Self-Assessment annex (incl. AI ethics + bioethics for NAMs)",
       "render": "ai-narrative",
-      "conditional": {"ethics_any_yes": true}
+      "conditional": {
+        "ethics_any_yes": true
+      }
     }
   ],
-  "comply_targets": ["AI", "GDPR", "Research Integrity", "Bioethics"],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Research Integrity",
+    "Bioethics"
+  ],
   "hand_offs": {
     "next_stage": "eic-aic-stage-2",
     "chat_cta": "How does my project map to AIC Challenge 1 (Physical AI) or Challenge 2 (NAMs)?",
     "comply_cta": "AI Act Annex III screening for Physical AI applications"
-  }
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "Lump-Sum Model Grant Agreement (LS-MGA)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/ls-mga_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "How to Manage Your Lump-Sum Grants",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/how-to-manage-your-lump-sum-grants_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe lump-sum Decision (LS-Decision)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/ls-decision_he_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) — the 'how to read the MGA' walkthrough",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide — how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules — who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Horizon Europe Programme Guide",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/guidance/programme-guide_horizon_en.pdf",
+      "category": "Programme"
+    },
+    {
+      "label": "List of third countries that can participate",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
 }

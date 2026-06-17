@@ -54,6 +54,12 @@ interface TemplateDoc {
  note?: string;
 }
 
+interface ReferenceDoc {
+ label: string;
+ url: string;
+ category?: string;
+}
+
 interface Template {
  id: string;
  name: string;
@@ -66,6 +72,11 @@ interface Template {
  documents: TemplateDoc[];
  comply_targets?: string[];
  hand_offs?: { next_stage?: string; chat_cta?: string; comply_cta?: string };
+ // Enrichment from EuropeanAcademy index (17 Jun 2026): the official EU
+ // post-award reference set per programme. Surfaced in the Topic tab.
+ model_grant_agreement_url?: string | null;
+ annotated_grant_agreement_url?: string | null;
+ reference_docs?: ReferenceDoc[];
 }
 
 interface TenderFileResponse {
@@ -630,6 +641,58 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  </a>
  )}
  </div>
+
+ {/* Reference docs — official EU post-award reference set per programme.
+     Enrichment via EuropeanAcademy index, 17 Jun 2026. */}
+ {(data.template.model_grant_agreement_url || data.template.annotated_grant_agreement_url ||
+   (data.template.reference_docs && data.template.reference_docs.length > 0)) && (
+ <section className="td-edit__refs">
+ <h5>Reference documents</h5>
+ {data.template.model_grant_agreement_url && (
+ <a className="td-edit__refs-primary" href={data.template.model_grant_agreement_url} target="_blank" rel="noreferrer">
+ <span className="mdi mdi-file-sign" /> Model Grant Agreement (you'll sign this if you win)
+ <span className="mdi mdi-open-in-new td-edit__refs-ext" />
+ </a>
+ )}
+ {data.template.annotated_grant_agreement_url && (
+ <a className="td-edit__refs-primary" href={data.template.annotated_grant_agreement_url} target="_blank" rel="noreferrer">
+ <span className="mdi mdi-book-open-variant" /> Annotated Grant Agreement (AGA — how to read the MGA)
+ <span className="mdi mdi-open-in-new td-edit__refs-ext" />
+ </a>
+ )}
+ {data.template.reference_docs && data.template.reference_docs.length > 0 && (() => {
+ // Group reference_docs by category so the list stays scannable.
+ const byCat: Record<string, ReferenceDoc[]> = {};
+ (data.template.reference_docs || []).forEach((r) => {
+ const c = r.category || 'Other';
+ if (!byCat[c]) byCat[c] = [];
+ byCat[c].push(r);
+ });
+ const orderedCats = ['Grant agreement', 'Post-award', 'Cost rules', 'Eligibility', 'Org profile', 'Submission', 'Programme', 'Other']
+ .filter((c) => byCat[c]);
+ return (
+ <div className="td-edit__refs-grouped">
+ {orderedCats.map((cat) => (
+ <div key={cat} className="td-edit__refs-cat">
+ <div className="td-edit__refs-cat-label">{cat}</div>
+ <ul className="td-edit__refs-list">
+ {byCat[cat].map((r, i) => (
+ <li key={i}>
+ <a href={r.url} target="_blank" rel="noreferrer" title={r.url}>
+ <span className="mdi mdi-file-pdf-box" /> {r.label}
+ <span className="mdi mdi-open-in-new td-edit__refs-ext" />
+ </a>
+ </li>
+ ))}
+ </ul>
+ </div>
+ ))}
+ </div>
+ );
+ })()}
+ <p className="td-edit__refs-source">Sourced from the EU F&amp;T Portal — links open at <code>ec.europa.eu</code>.</p>
+ </section>
+ )}
  </div>
  )}
  {rightTab === 'org' && (

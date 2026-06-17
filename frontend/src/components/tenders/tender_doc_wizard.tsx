@@ -53,6 +53,7 @@ const PROGRAMME_LABELS: Record<string, string> = {
  LIFE: 'LIFE (Environment + Climate Action)',
  CREA: 'Creative Europe',
  CEF: 'Connecting Europe Facility',
+ 'ESF+': 'European Social Fund Plus',
  EDF: 'European Defence Fund',
 };
 
@@ -78,6 +79,8 @@ const SUB_INSTRUMENT_LABELS: Record<string, string> = {
  transport: 'Transport (CEF-T)',
  energy: 'Energy (CEF-E)',
  digital: 'Digital (CEF-DIG)',
+ // ESF+ delivery route
+ 'agency-procurement': 'Agency procurement (national MA)',
 };
 
 const FUNDING_MODE_LABELS: Record<string, string> = {

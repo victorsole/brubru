@@ -1,0 +1,532 @@
+{
+  "id": "esf-plus-agency-procurement",
+  "name": "ESF+ Agency Procurement (national Managing Authority tender)",
+  "programme": "ESF+",
+  "sub_instrument": "agency-procurement",
+  "stage": "single-stage",
+  "scaffold_version": "2026-WP",
+  "official_template_url": "https://ec.europa.eu/european-social-fund-plus/en",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "model_grant_agreement_url": null,
+  "annotated_grant_agreement_url": null,
+  "note": "ESF+ is delivered ~89% via shared management. Most calls run by national/regional Managing Authorities as public procurement under Directive 2014/24/EU (the EU rules transposed in each MS). This template models the standard three-envelope tender file. The direct-managed EaSI strand on the F&T Portal uses the General MGA template instead.",
+  "reference_docs": [
+    {
+      "label": "ESF+ Regulation (EU) 2021/1057",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1057",
+      "category": "Programme"
+    },
+    {
+      "label": "Common Provisions Regulation (EU) 2021/1060 (shared management)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1060",
+      "category": "Programme"
+    },
+    {
+      "label": "Directive 2014/24/EU on public procurement",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0024",
+      "category": "Programme"
+    },
+    {
+      "label": "ESPD Implementing Regulation (EU) 2016/7 (European Single Procurement Document)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0007",
+      "category": "Eligibility"
+    },
+    {
+      "label": "ESF+ landing page (legacy subsite, still live)",
+      "url": "https://ec.europa.eu/european-social-fund-plus/en",
+      "category": "Programme"
+    },
+    {
+      "label": "DG EMPL ESF information hub (social policy)",
+      "url": "https://ec.europa.eu/social/main.jsp?catId=325&langId=en",
+      "category": "Programme"
+    },
+    {
+      "label": "DG EMPL (Employment, Social Affairs and Inclusion)",
+      "url": "https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/employment-social-affairs-and-inclusion_en",
+      "category": "Programme"
+    },
+    {
+      "label": "Kohesio: per-Member-State programmes, projects and Managing Authorities",
+      "url": "https://kohesio.ec.europa.eu/en/",
+      "category": "Submission"
+    },
+    {
+      "label": "Cohesion Open Data Platform (ESF+ allocations and spending)",
+      "url": "https://cohesiondata.ec.europa.eu/",
+      "category": "Programme"
+    },
+    {
+      "label": "ESPD service (Commission digital procurement portal)",
+      "url": "https://ec.europa.eu/growth/single-market/public-procurement/digital/espd_en",
+      "category": "Eligibility"
+    },
+    {
+      "label": "TED (Tenders Electronic Daily): EU public procurement notices",
+      "url": "https://ted.europa.eu",
+      "category": "Submission"
+    },
+    {
+      "label": "EU public procurement portal (Single Market and Standards DG)",
+      "url": "https://single-market-economy.ec.europa.eu/single-market/public-procurement_en",
+      "category": "Submission"
+    }
+  ],
+  "comply_targets": [
+    "Public Procurement",
+    "GDPR",
+    "Gender Equality",
+    "Non-Discrimination",
+    "Fundamental Rights"
+  ],
+  "hand_offs": {
+    "next_stage": "esf-plus-tender-award",
+    "chat_cta": "Ask Brubru about the ESF+ specific objective and target groups for your call",
+    "comply_cta": "Run public procurement and equality assessment for the tender"
+  },
+  "documents": [
+    {
+      "kind": "tender_eligibility_dossier",
+      "title": "Envelope A: Administrative documentation (ESPD + capacity proofs)",
+      "page_limit": null,
+      "formatting": {
+        "font": "Arial 10pt",
+        "page_size": "A4",
+        "margins_mm": 20
+      },
+      "render": "scaffold-only",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "a1-identification",
+          "label": "A.1 Tenderer identification",
+          "page_budget": 1,
+          "criterion": "Eligibility",
+          "sub": [
+            {
+              "id": "a1.1",
+              "label": "A.1.1 Legal entity declaration",
+              "prompts": [
+                "Provide the full legal name, registered address, VAT number, and legal form of the tenderer.",
+                "If submitting as a consortium or joint venture, list every participant and identify the lead tenderer.",
+                "Attach the LEV (Legal Entity Validation) form signed by the legal representative."
+              ]
+            },
+            {
+              "id": "a1.2",
+              "label": "A.1.2 Power of attorney",
+              "prompts": [
+                "Attach the power of attorney delegating authority to the person signing the offer, if the signatory is not the statutory representative.",
+                "Specify the scope of the delegation (this tender procedure, this lot, framework duration)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a2-espd",
+          "label": "A.2 European Single Procurement Document (ESPD)",
+          "page_budget": null,
+          "criterion": "Eligibility",
+          "sub": [
+            {
+              "id": "a2.1",
+              "label": "A.2.1 Exclusion grounds (Article 57 Directive 2014/24)",
+              "prompts": [
+                "Declare absence of convictions for participation in a criminal organisation, corruption, fraud, terrorist offences, money laundering or human trafficking, child labour.",
+                "Declare absence of unpaid taxes or social security contributions in any MS.",
+                "Declare absence of insolvency, bankruptcy or winding-up procedures.",
+                "Declare absence of grave professional misconduct in the last three years.",
+                "Note: where exclusion grounds apply, you may provide self-cleaning evidence under Article 57(6)."
+              ]
+            },
+            {
+              "id": "a2.2",
+              "label": "A.2.2 Selection criteria: economic and financial standing",
+              "prompts": [
+                "Report turnover for the last three financial years (consolidated where applicable).",
+                "Demonstrate the minimum turnover threshold set in the call, typically twice the estimated annual contract value.",
+                "Attach audited financial statements or equivalent for the last three years.",
+                "If relying on the capacity of other entities, attach their commitment (Article 63 Directive 2014/24)."
+              ]
+            },
+            {
+              "id": "a2.3",
+              "label": "A.2.3 Selection criteria: technical and professional ability",
+              "prompts": [
+                "List principal services delivered in the last three years comparable in scope to this tender.",
+                "Provide reference letters or certificates of satisfactory completion for at least three projects.",
+                "Demonstrate the educational and professional qualifications of the key personnel.",
+                "Describe quality assurance certifications held (ISO 9001, EN ISO 17100 for language services, social-services certifications where applicable)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a3-conflict-of-interest",
+          "label": "A.3 Conflict of interest declaration",
+          "page_budget": 1,
+          "criterion": "Eligibility",
+          "sub": [
+            {
+              "id": "a3.1",
+              "label": "A.3.1 Declaration of absence of conflict",
+              "prompts": [
+                "Declare that the tenderer, its directors, partners, and key personnel have no personal, financial or family interest in the contracting authority that could compromise their independence.",
+                "Disclose any subcontractor relationships with the contracting authority over the past two years.",
+                "Where a potential conflict exists, describe the mitigation measures proposed."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_application_full",
+      "title": "Envelope B: Technical Offer (methodology + ESF+ alignment)",
+      "page_limit": 60,
+      "formatting": {
+        "font": "Arial 10pt minimum",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "ai_disclosure_required": true,
+      "sections": [
+        {
+          "id": "b1-executive-summary",
+          "label": "B.1 Executive summary",
+          "page_budget": 2,
+          "criterion": "Overview",
+          "sub": [
+            {
+              "id": "b1.1",
+              "label": "B.1.1 Offer at a glance",
+              "prompts": [
+                "Summarise the proposed service: scope, target group, geography, duration.",
+                "State the ESF+ specific objective and OP priority the action contributes to.",
+                "Highlight the three strongest differentiators of your offer."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2-methodology",
+          "label": "B.2 Methodology and approach",
+          "page_budget": 12,
+          "criterion": "Quality of methodology",
+          "sub": [
+            {
+              "id": "b2.1",
+              "label": "B.2.1 Intervention logic",
+              "prompts": [
+                "Describe the intervention logic linking the specific objective, target group needs, the chosen activities, the expected outputs, and the result indicators.",
+                "Justify the methodological choices against the evidence base for the target group.",
+                "Reference relevant ESF+ Annex I common indicators that the action will report against."
+              ]
+            },
+            {
+              "id": "b2.2",
+              "label": "B.2.2 Activity design",
+              "prompts": [
+                "Break down the service into work packages with clear deliverables, frequency, and unit volumes.",
+                "For each activity, identify the delivery channel (face-to-face, hybrid, online) and the rationale.",
+                "Address accessibility from the design stage: physical, digital, linguistic, cognitive."
+              ]
+            },
+            {
+              "id": "b2.3",
+              "label": "B.2.3 Innovation and continuous improvement",
+              "prompts": [
+                "Describe innovative elements beyond standard market practice (peer-led design, digital tools, behavioural-insight techniques, integrated case management).",
+                "Explain the continuous improvement loop: data collection, periodic review, course-correction triggers."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b3-work-plan",
+          "label": "B.3 Work plan and timetable",
+          "page_budget": 8,
+          "criterion": "Implementation feasibility",
+          "sub": [
+            {
+              "id": "b3.1",
+              "label": "B.3.1 Phasing and milestones",
+              "prompts": [
+                "Provide a phased plan covering mobilisation, pilot, scale-up, steady-state, and close-out.",
+                "Identify the milestones with quantitative thresholds (e.g. number of participants enrolled, number of outputs delivered).",
+                "Attach a Gantt chart covering the full contract duration."
+              ]
+            },
+            {
+              "id": "b3.2",
+              "label": "B.3.2 Risk register",
+              "prompts": [
+                "List the top ten risks with likelihood, impact, mitigation, and owner.",
+                "Include data-protection, equality, financial, partnership, and external-dependency risks.",
+                "Specify the escalation path to the contracting authority for material risks."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b4-team",
+          "label": "B.4 Team and key personnel",
+          "page_budget": 8,
+          "criterion": "Technical capacity",
+          "sub": [
+            {
+              "id": "b4.1",
+              "label": "B.4.1 Organisational structure",
+              "prompts": [
+                "Provide an organogram showing roles, reporting lines, and decision rights for the contract.",
+                "Identify the contract manager and the designated single point of contact for the contracting authority.",
+                "Describe the governance forums (steering committee, operational committee) and their cadence."
+              ]
+            },
+            {
+              "id": "b4.2",
+              "label": "B.4.2 Key personnel CVs",
+              "prompts": [
+                "Provide a one-page CV for each key role identified in the tender specifications.",
+                "For each CV, demonstrate the minimum qualification, language, and relevant experience required.",
+                "Confirm availability for the contract duration and the minimum FTE commitment."
+              ]
+            },
+            {
+              "id": "b4.3",
+              "label": "B.4.3 Subcontracting and capacity-sharing",
+              "prompts": [
+                "Identify subcontractors providing more than 10% of the contract value and attach their commitment letters.",
+                "Where relying on the capacity of other entities under Article 63 Directive 2014/24, attach the binding commitment.",
+                "Describe the supervision arrangements for subcontracted work."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b5-esf-alignment",
+          "label": "B.5 ESF+ programme alignment",
+          "page_budget": 10,
+          "criterion": "Programme relevance",
+          "sub": [
+            {
+              "id": "b5.1",
+              "label": "B.5.1 Specific objective and Operational Programme priority",
+              "prompts": [
+                "State the ESF+ specific objective (h, i, j, k, l, m, n) that the action contributes to under Article 4 of Regulation 2021/1057.",
+                "Map the action to the relevant priority axis of the national or regional Operational Programme.",
+                "Cite the relevant call objectives and demonstrate fit."
+              ]
+            },
+            {
+              "id": "b5.2",
+              "label": "B.5.2 Target group definition and outreach",
+              "prompts": [
+                "Define the target group with the operational eligibility criteria (age, employment status, disability, migration status, etc.).",
+                "Estimate the volume of participants and the gender breakdown.",
+                "Describe the outreach and referral channels: PES, social services, NGOs, schools, employers."
+              ]
+            },
+            {
+              "id": "b5.3",
+              "label": "B.5.3 Common indicators (Annex I Regulation 2021/1057)",
+              "prompts": [
+                "List the common output indicators the action will report (e.g. unemployed including long-term unemployed, persons with disabilities, third-country nationals).",
+                "List the common result indicators with the measurement timing (immediately on leaving, four weeks after, six months after).",
+                "Describe the data collection instrument and the participant-level data system."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b6-horizontal",
+          "label": "B.6 Equality, non-discrimination, accessibility and DNSH",
+          "page_budget": 8,
+          "criterion": "Horizontal principles",
+          "sub": [
+            {
+              "id": "b6.1",
+              "label": "B.6.1 Gender equality and non-discrimination (Article 6 ESF+)",
+              "prompts": [
+                "Describe how gender equality is mainstreamed in design, delivery, monitoring, and evaluation.",
+                "Address intersecting grounds of discrimination explicitly (sex, racial or ethnic origin, religion, disability, age, sexual orientation).",
+                "Where the action targets a specific group, justify the proportionality and necessity under Article 7 of Directive 2000/78."
+              ]
+            },
+            {
+              "id": "b6.2",
+              "label": "B.6.2 Accessibility for persons with disabilities",
+              "prompts": [
+                "Apply the European Accessibility Act standard (Directive 2019/882) to digital deliverables.",
+                "Describe physical accessibility of venues, reasonable accommodation procedures, and individual support arrangements.",
+                "Identify a designated accessibility focal point in the team."
+              ]
+            },
+            {
+              "id": "b6.3",
+              "label": "B.6.3 Do-No-Significant-Harm assessment",
+              "prompts": [
+                "Apply the DNSH assessment against the six environmental objectives of Regulation 2020/852 (Taxonomy).",
+                "Identify any material impacts and the mitigation measures.",
+                "Where a service has negligible environmental impact, justify the simplified assessment."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b7-data-protection",
+          "label": "B.7 Data protection and confidentiality",
+          "page_budget": 4,
+          "criterion": "Compliance",
+          "sub": [
+            {
+              "id": "b7.1",
+              "label": "B.7.1 GDPR compliance",
+              "prompts": [
+                "Identify the controller, joint controller, and processor relationships under Articles 4, 26, 28 of Regulation 2016/679.",
+                "List the categories of personal data processed and the lawful basis under Article 6 and (where relevant) Article 9.",
+                "Describe the retention schedule, data subject rights procedure, and the data-protection officer's contact point."
+              ]
+            },
+            {
+              "id": "b7.2",
+              "label": "B.7.2 Information security",
+              "prompts": [
+                "Describe the technical and organisational measures under Article 32 (encryption, access control, audit logging, backup).",
+                "State the breach-notification procedure (within 72 hours to the controller).",
+                "Confirm any ISO 27001, SecNumCloud, or equivalent certifications held."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b8-monitoring-evaluation",
+          "label": "B.8 Monitoring, evaluation and reporting",
+          "page_budget": 6,
+          "criterion": "Quality of monitoring",
+          "sub": [
+            {
+              "id": "b8.1",
+              "label": "B.8.1 Performance reporting",
+              "prompts": [
+                "Describe the periodic reporting cycle (monthly operational, quarterly performance, annual programme).",
+                "Identify the indicators reported, the data sources, and the verification means.",
+                "Confirm alignment with the contracting authority's monitoring tools (often a national SFC2021 portal feeder)."
+              ]
+            },
+            {
+              "id": "b8.2",
+              "label": "B.8.2 Evaluation arrangements",
+              "prompts": [
+                "Describe the formative and summative evaluation plan, including data collection windows.",
+                "If the call requires a counterfactual or theory-based evaluation, outline the design.",
+                "Confirm willingness to participate in the OP's mid-term and ex-post evaluation."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b9-sustainability",
+          "label": "B.9 Sustainability and exit strategy",
+          "page_budget": 2,
+          "criterion": "Long-term value",
+          "sub": [
+            {
+              "id": "b9.1",
+              "label": "B.9.1 Continuation beyond contract end",
+              "prompts": [
+                "Describe the strategy to embed the action's outputs in the contracting authority's permanent service offer.",
+                "Identify the transfer arrangements for participant case files, intellectual outputs, and tools.",
+                "Quantify the expected social return per public euro spent, citing comparable studies."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_financial_plan",
+      "title": "Envelope C: Financial Offer (price breakdown + cost-per-unit)",
+      "page_limit": null,
+      "formatting": {
+        "font": "Arial 10pt",
+        "page_size": "A4",
+        "margins_mm": 20
+      },
+      "render": "table-driven",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "c1-summary-price",
+          "label": "C.1 Summary price",
+          "page_budget": 1,
+          "criterion": "Price competitiveness",
+          "sub": [
+            {
+              "id": "c1.1",
+              "label": "C.1.1 Total offer price",
+              "prompts": [
+                "State the total contract price (excluding VAT) in EUR.",
+                "State the equivalent total including the applicable VAT rate.",
+                "Confirm that the price is fixed for the contract duration or specify the indexation formula."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c2-cost-breakdown",
+          "label": "C.2 Cost breakdown",
+          "page_budget": null,
+          "criterion": "Cost transparency",
+          "sub": [
+            {
+              "id": "c2.1",
+              "label": "C.2.1 Personnel costs",
+              "prompts": [
+                "Itemise personnel costs by role: hourly rate, number of hours, total cost.",
+                "Apply the 1720 productive-hours convention where the EU unit-cost decision is used.",
+                "Confirm compliance with national minimum wage and collective-agreement requirements."
+              ]
+            },
+            {
+              "id": "c2.2",
+              "label": "C.2.2 Other direct costs",
+              "prompts": [
+                "Itemise travel, subsistence, equipment, subcontracting, and other direct costs.",
+                "For each line, state the unit, unit price, and quantity.",
+                "Where lump-sum or unit-cost financing applies, cite the relevant Commission decision."
+              ]
+            },
+            {
+              "id": "c2.3",
+              "label": "C.2.3 Indirect costs",
+              "prompts": [
+                "Calculate indirect costs as a percentage of eligible direct costs (typically 7% or 15% under simplified cost options).",
+                "Confirm that no double-funded indirect costs are claimed.",
+                "Where actual indirect costs are claimed, describe the allocation methodology."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c3-cost-per-participant",
+          "label": "C.3 Cost per participant",
+          "page_budget": 1,
+          "criterion": "Value for money",
+          "sub": [
+            {
+              "id": "c3.1",
+              "label": "C.3.1 Unit cost per output",
+              "prompts": [
+                "Calculate the average cost per enrolled participant.",
+                "Calculate the cost per successful outcome (placement, qualification, sustained employment).",
+                "Benchmark against published comparator values where available."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
