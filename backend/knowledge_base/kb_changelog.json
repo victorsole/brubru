@@ -2,6 +2,58 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "eu_funding_ipa_enlargement",
+      "title": "EU Funding for Enlargement Countries",
+      "summary": "Montenegro President Milatovic addresses plenary (17 Jun), eve of European Council",
+      "refs": []
+    },
+    {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "fertilisers_action_plan_2026",
+      "title": "Fertilisers Action Plan",
+      "summary": "EP fast-tracks farmer support on fertiliser prices + UTP food-supply-chain final approval (17 Jun)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "eu_us_trade_deal_2026",
+      "title": "EU-US Trade Deal 2026",
+      "summary": "EP green-lights the two tariff implementing regulations (17 Jun)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "tobacco_excise_directive",
+      "title": "Tobacco Taxation Directive Revision",
+      "summary": "EP crunch vote on non-binding opinion (17 Jun); PfE/EPP politics, AI-assisted consultation surge",
+      "refs": [
+        "32011L0064"
+      ]
+    },
+    {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "new_genomic_techniques_plant_breeding",
+      "title": "New Genomic Techniques (NGT)",
+      "summary": "NGT final plenary stage 15-18 Jun + companion seeds/PRM political agreement (16 Jun)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-17",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Simplification Omnibus",
+      "summary": "EP approved simplification + nudifier ban at first reading (16 Jun); proceeds to Council",
+      "refs": [
+        "32024R1689"
+      ]
+    },
+    {
       "date": "2026-06-16",
       "action": "updated",
       "guide": "eu_funding_ipa_enlargement",

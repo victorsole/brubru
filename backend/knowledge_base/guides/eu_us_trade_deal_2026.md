@@ -1,6 +1,7 @@
 # EU-US Trade Deal 2026
 
 ## QUICK FACTS
+- **LATEST (Wednesday 17 June 2026 — EP green-lights tariff legislation)**: The EP **gave its final approval to the EU-US tariff legislation** in the Strasbourg plenary (EP press release "EU-US trade: Parliament gives its green light to tariff legislation", 17 June 2026) — clearing the two implementing regulations (COM(2025)471 adjusting customs duties + tariff quotas, 2025/0261(COD); COM(2025)472 non-application of customs duties, 2025/0260(COD), both Lange reports A10-0069/2026 + A10-0070/2026) for entry into force after trilogue. The package retains the suspension clause (immediate tariff suspension if the US imposes new tariffs) and the sunrise clause. **Confirm the final tally + Council sign-off against the EP texts-adopted + Council records before asserting the regulations are in force.** Sources: EP plenary newsletter 15-18 June 2026; EP press release (17 June 2026).
 Framework Agreement: Joint Statement on EU-US Framework on Reciprocal, Fair and Balanced Trade (21 August 2025)
 Implementing Regulation 1: COM(2025)471 -- Adjustment of customs duties on imports of certain goods originating in the US + tariff quotas, procedure 2025/0261(COD)
 Implementing Regulation 2: COM(2025)472 -- Non-application of customs duties on imports of certain goods, procedure 2025/0260(COD)
