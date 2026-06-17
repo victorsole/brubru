@@ -1,0 +1,41 @@
+/* Cross-link strip rendered below the Tender Docs list inside MEUB. */
+.tender-docs-meub__cross-links {
+  margin: 1.5rem 0 0;
+  padding: 0.75rem 1rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #0c4a6e;
+}
+
+.tender-docs-meub__link-btn {
+  background: transparent;
+  border: 1px solid #0284c7;
+  color: #0284c7;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tender-docs-meub__link-btn:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+@media (max-width: 767px) {
+  .tender-docs-meub__cross-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tender-docs-meub__link-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

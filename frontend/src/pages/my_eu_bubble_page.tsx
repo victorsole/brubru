@@ -32,6 +32,7 @@ import { DatabasesTab } from '../components/bubble/databases_tab';
 import { ResearchEvidenceTab } from '../components/bubble/research_evidence_tab';
 import { StakeholderMapTab } from '../components/bubble/stakeholder_map_tab';
 import { StrategyDocsTab } from '../components/bubble/strategy_docs_tab';
+import { TenderDocsMeubTab } from '../components/bubble/tender_docs_meub_tab';
 import { ComparatorTab } from '../components/bubble/comparator_tab';
 import { VotesTab } from '../components/bubble/votes_tab';
 import { OJTab } from '../components/bubble/oj_tab';
@@ -51,14 +52,14 @@ type TabType =
   | 'my_files' | 'oj' | 'amendments' | 'comparator' | 'legislative' | 'votes'
   | 'eu_calendar' | 'consultations' | 'news' | 'transcripts' | 'parliamentary_questions' | 'lobby_meetings'
   | 'council_watch' | 'mep_watch' | 'plenary_agenda'
-  | 'position_analysis' | 'predictions' | 'databases' | 'research_evidence' | 'stakeholder_mapping' | 'strategy_docs';
+  | 'position_analysis' | 'predictions' | 'databases' | 'research_evidence' | 'stakeholder_mapping' | 'strategy_docs' | 'tender_docs';
 
 const VALID_TABS: TabType[] = [
   'dashboard', 'policy_interests', 'documents',
   'my_files', 'oj', 'amendments', 'comparator', 'legislative', 'votes',
   'eu_calendar', 'news', 'transcripts', 'council_watch', 'mep_watch', 'plenary_agenda',
   'parliamentary_questions', 'consultations', 'lobby_meetings',
-  'position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs',
+  'position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs', 'tender_docs',
 ];
 
 // Defensive aliases: the canonical tab id, the component filename, and the name
@@ -115,6 +116,7 @@ const TAB_META: Record<TabType, { labelKey: string; fallback: string; icon: stri
   research_evidence: { labelKey: 'bubble.research_evidence',      fallback: 'Research & Evidence',      icon: mdiFlaskOutline },
   stakeholder_mapping: { labelKey: 'bubble.stakeholder_mapping',  fallback: 'Stakeholder Mapping',      icon: mdiGraphOutline },
   strategy_docs:     { labelKey: 'bubble.strategy_docs',          fallback: 'Strategy Docs',            icon: mdiBullseyeArrow },
+  tender_docs:       { labelKey: 'bubble.tender_docs',            fallback: 'Tender Docs',              icon: mdiBriefcaseSearchOutline },
 };
 
 // The 4-section information architecture (doc 03). Section titles render as
@@ -123,7 +125,7 @@ const SECTIONS: { id: string; titleKey: string; titleFallback: string; withName?
   { id: 'corner',        titleKey: 'bubble.sections.corner',        titleFallback: 'Start here',                             items: ['dashboard', 'policy_interests', 'documents', 'news'] },
   { id: 'legislative',   titleKey: 'bubble.sections.legislative',   titleFallback: 'Legislative Monitoring',                 items: ['my_files', 'oj', 'amendments', 'comparator', 'legislative', 'votes'] },
   { id: 'institutional', titleKey: 'bubble.sections.institutional', titleFallback: 'Institutional Monitoring',               items: ['eu_calendar', 'transcripts', 'council_watch', 'mep_watch', 'plenary_agenda', 'parliamentary_questions', 'consultations', 'lobby_meetings'] },
-  { id: 'strategy',      titleKey: 'bubble.sections.strategy',      titleFallback: 'Analysis & Strategy',                    items: ['position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs'] },
+  { id: 'strategy',      titleKey: 'bubble.sections.strategy',      titleFallback: 'Analysis & Strategy',                    items: ['position_analysis', 'predictions', 'databases', 'research_evidence', 'stakeholder_mapping', 'strategy_docs', 'tender_docs'] },
 ];
 
 // Section 5: links OUT to the other Brubru products (navigate, not internal tabs).
@@ -279,6 +281,8 @@ export const MyEUBubblePage = () => {
         return <StakeholderMapTab />;
       case 'strategy_docs':
         return <StrategyDocsTab />;
+      case 'tender_docs':
+        return <TenderDocsMeubTab />;
       default:
         return <DashboardTab />;
     }

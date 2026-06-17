@@ -127,10 +127,16 @@ function formatDeadlineCountdown(iso?: string | null): string {
 export interface TenderDocsTabProps {
  onOpenFile: (file: TenderFile) => void;
  onOpenStartWizard: (templateId?: string) => void;
- onBack: () => void;
+ /**
+  * Optional back-arrow handler. When omitted, no back button renders the MEUB
+  * embedding uses its own sidebar instead of an in-tab back arrow.
+  */
+ onBack?: () => void;
+ /** Optional subtitle override (default targets the Tenderator embedding). */
+ subtitle?: string;
 }
 
-export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderDocsTabProps) => {
+export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack, subtitle }: TenderDocsTabProps) => {
  const { token } = useAuth();
  const navigate = useNavigate();
  const { t } = useTranslation();
@@ -201,16 +207,18 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  {/* Header */}
  <header className="tender-docs-tab__header">
  <div className="tender-docs-tab__header-left">
+ {onBack && (
  <button className="tender-docs-tab__back" onClick={onBack} aria-label={t('tenderator.docsTab.backAriaLabel')}>
  <span className="mdi mdi-arrow-left" />
  </button>
+ )}
  <div>
  <h1 className="tender-docs-tab__title">
  <span className="mdi mdi-file-document-edit-outline" aria-hidden="true" />
  {t('tenderator.docsTab.title')}
  </h1>
  <p className="tender-docs-tab__subtitle">
- {t('tenderator.docsTab.subtitle')}
+ {subtitle || t('tenderator.docsTab.subtitle')}
  </p>
  </div>
  </div>

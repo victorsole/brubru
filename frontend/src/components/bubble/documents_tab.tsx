@@ -236,6 +236,19 @@ export const DocumentsTab = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Deep-link to a specific filter: /my-eu-bubble?tab=documents&type=funding
+  // Used by the MEUB Tender Docs cross-link strip.
+  useEffect(() => {
+    const typeParam = searchParams.get('type');
+    if (typeParam) {
+      setFilterType(typeParam);
+      const next = new URLSearchParams(searchParams);
+      next.delete('type');
+      setSearchParams(next, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Open the wizard if the URL says so (chat -> /my-eu-bubble?tab=documents&openWizard=1&docType=...)
   useEffect(() => {
     if (searchParams.get('openWizard') === '1') {

@@ -492,6 +492,7 @@
     "research_evidence": "Research & Evidence",
     "stakeholder_mapping": "Stakeholder Mapping",
     "strategy_docs": "Strategy Docs",
+    "tender_docs": "Tender Docs",
     "feat": {
       "amendator": "Amendator",
       "chat": "Chat",
@@ -2108,7 +2109,7 @@
     },
     "docsTab": {
       "title": "Tender Docs",
-      "subtitle": "Everything you write to apply for EU funding. Drafts, annexes, version history. In sync with MEUB Documents.",
+      "subtitle": "Everything you write to apply for EU funding. Drafts, annexes, version history. In sync with My EU Bubble  Tender Docs and My EU Bubble  Documents.",
       "backAriaLabel": "Back to dashboard",
       "startCtaButton": "Start a Tender Doc",
       "filtersAriaLabel": "Tender Docs filters",
