@@ -14,6 +14,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import { UnifiedOpportunityFeed, type UnifiedOpportunity, type MatchSubSource } from './unified_opportunity_feed';
 import type { LensMode } from '../bubble/lens_toggle';
@@ -108,10 +109,10 @@ const formatValue = (value: number | null, currency: string = 'EUR'): string => 
 
 const formatNumber = (n: number): string => n.toLocaleString('en-GB');
 
-const renderDelta = (wow: number): { label: string; cls: string } => {
-  if (wow > 0) return { label: `+${wow} this week`, cls: 'tenderator-dashboard__delta--up' };
-  if (wow < 0) return { label: `${wow} this week`, cls: 'tenderator-dashboard__delta--down' };
-  return { label: 'no change this week', cls: 'tenderator-dashboard__delta--flat' };
+const renderDelta = (wow: number, t: any): { label: string; cls: string } => {
+  if (wow > 0) return { label: `+${wow} ${t('tenderator.dashboard.thisWeek')}`, cls: 'tenderator-dashboard__delta--up' };
+  if (wow < 0) return { label: `${wow} ${t('tenderator.dashboard.thisWeek')}`, cls: 'tenderator-dashboard__delta--down' };
+  return { label: t('tenderator.dashboard.noChangeThisWeek'), cls: 'tenderator-dashboard__delta--flat' };
 };
 
 export const TenderatorDashboard = ({
@@ -122,6 +123,7 @@ export const TenderatorDashboard = ({
   onOpenCalendar,
   onOpenTenderDocs,
 }: TenderatorDashboardProps) => {
+  const { t } = useTranslation();
   const profileUpdatedAt = userProfile?.updated_at || '';
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -193,11 +195,11 @@ export const TenderatorDashboard = ({
         setStats(d);
         setError(null);
       } else {
-        setError('Could not load dashboard metrics.');
+        setError(t('tenderator.dashboard.errorLoadingMetrics'));
       }
     } catch (e) {
       console.error('dashboard-stats fetch failed:', e);
-      setError('Could not load dashboard metrics.');
+      setError(t('tenderator.dashboard.errorLoadingMetrics'));
     }
   }, [token]);
 
@@ -224,9 +226,9 @@ export const TenderatorDashboard = ({
         <div className="tenderator-dashboard__header-left">
           <span className="mdi mdi-piggy-bank-outline tenderator-dashboard__header-icon" aria-hidden="true" />
           <div>
-            <h1 className="tenderator-dashboard__title">Tenderator</h1>
+            <h1 className="tenderator-dashboard__title">{t('tenderator.dashboard.title')}</h1>
             <p className="tenderator-dashboard__subtitle">
-              EU funding and procurement, all in one place.
+              {t('tenderator.dashboard.subtitle')}
             </p>
           </div>
         </div>
@@ -235,8 +237,8 @@ export const TenderatorDashboard = ({
             type="button"
             className="tenderator-dashboard__icon-button"
             onClick={onOpenCalendar}
-            title="Calendar"
-            aria-label="Open calendar"
+            title={t('tenderator.dashboard.calendarButton')}
+            aria-label={t('tenderator.dashboard.openCalendar')}
           >
             <span className="mdi mdi-calendar-month" aria-hidden="true" />
           </button>
@@ -244,64 +246,64 @@ export const TenderatorDashboard = ({
             type="button"
             className="tenderator-dashboard__icon-button"
             onClick={onOpenProfile}
-            title="Profile"
-            aria-label="Open profile"
+            title={t('tenderator.dashboard.profileButton')}
+            aria-label={t('tenderator.dashboard.openProfile')}
           >
             <span className="mdi mdi-account-cog-outline" aria-hidden="true" />
           </button>
           <span className="tenderator-dashboard__tier-badge">
             <span className="mdi mdi-star-circle" aria-hidden="true" />
-            Professional
+            {t('tenderator.dashboard.tierProfessional')}
           </span>
         </div>
       </header>
 
       {/* KPI strip */}
-      <section className="tenderator-dashboard__kpis" aria-label="Tenderator key metrics">
+      <section className="tenderator-dashboard__kpis" aria-label={t('tenderator.dashboard.kpisLabel')}>
         <div className="tenderator-dashboard__kpi tenderator-dashboard__kpi--primary">
-          <span className="tenderator-dashboard__kpi-label">Open opportunities</span>
+          <span className="tenderator-dashboard__kpi-label">{t('tenderator.dashboard.kpi.openOpportunities')}</span>
           <span className="tenderator-dashboard__kpi-value">
             {kpis ? formatNumber(kpis.open_opportunities) : '...'}
           </span>
-          <span className="tenderator-dashboard__kpi-meta">across all sources</span>
+          <span className="tenderator-dashboard__kpi-meta">{t('tenderator.dashboard.kpi.acrossAllSources')}</span>
         </div>
         <div className="tenderator-dashboard__kpi tenderator-dashboard__kpi--urgent">
-          <span className="tenderator-dashboard__kpi-label">Closing in 7 days</span>
+          <span className="tenderator-dashboard__kpi-label">{t('tenderator.dashboard.kpi.closingIn7Days')}</span>
           <span className="tenderator-dashboard__kpi-value">
             {kpis ? formatNumber(kpis.closing_7d) : '...'}
           </span>
-          <span className="tenderator-dashboard__kpi-meta">in your portfolio</span>
+          <span className="tenderator-dashboard__kpi-meta">{t('tenderator.dashboard.kpi.inYourPortfolio')}</span>
         </div>
         <div className="tenderator-dashboard__kpi">
-          <span className="tenderator-dashboard__kpi-label">Your matches</span>
+          <span className="tenderator-dashboard__kpi-label">{t('tenderator.dashboard.kpi.yourMatches')}</span>
           <span className="tenderator-dashboard__kpi-value">
             {kpis ? formatNumber(kpis.your_matches) : '...'}
           </span>
           {deltas && (
-            <span className={`tenderator-dashboard__delta ${renderDelta(deltas.matches_wow).cls}`}>
+            <span className={`tenderator-dashboard__delta ${renderDelta(deltas.matches_wow, t).cls}`}>
               <span className="mdi mdi-trending-up" aria-hidden="true" />
-              {renderDelta(deltas.matches_wow).label}
+              {renderDelta(deltas.matches_wow, t).label}
             </span>
           )}
         </div>
         <div className="tenderator-dashboard__kpi">
-          <span className="tenderator-dashboard__kpi-label">Saved</span>
+          <span className="tenderator-dashboard__kpi-label">{t('tenderator.dashboard.kpi.saved')}</span>
           <span className="tenderator-dashboard__kpi-value">
             {kpis ? formatNumber(kpis.your_saved) : '...'}
           </span>
           {deltas && (
-            <span className={`tenderator-dashboard__delta ${renderDelta(deltas.saved_wow).cls}`}>
+            <span className={`tenderator-dashboard__delta ${renderDelta(deltas.saved_wow, t).cls}`}>
               <span className="mdi mdi-bookmark-outline" aria-hidden="true" />
-              {renderDelta(deltas.saved_wow).label}
+              {renderDelta(deltas.saved_wow, t).label}
             </span>
           )}
         </div>
         <div className="tenderator-dashboard__kpi">
-          <span className="tenderator-dashboard__kpi-label">Applied YTD</span>
+          <span className="tenderator-dashboard__kpi-label">{t('tenderator.dashboard.kpi.appliedYTD')}</span>
           <span className="tenderator-dashboard__kpi-value">
             {kpis ? formatNumber(kpis.applied_ytd) : '...'}
           </span>
-          <span className="tenderator-dashboard__kpi-meta">in {new Date().getFullYear()}</span>
+          <span className="tenderator-dashboard__kpi-meta">{t('tenderator.dashboard.kpi.inYear', { year: new Date().getFullYear() })}</span>
         </div>
       </section>
 
@@ -319,14 +321,14 @@ export const TenderatorDashboard = ({
           </span>
           <span className="tenderator-dashboard__tender-docs-banner-body">
             <span className="tenderator-dashboard__tender-docs-banner-title">
-              Tender Docs
+              {t('tenderator.dashboard.tenderDocs')}
             </span>
             <span className="tenderator-dashboard__tender-docs-banner-sub">
-              Draft an EU funding application with AI-guided section structure (EIC ready, more programmes coming).
+              {t('tenderator.dashboard.tenderDocsDescription')}
             </span>
           </span>
           <span className="tenderator-dashboard__tender-docs-banner-cta">
-            Open
+            {t('tenderator.dashboard.open')}
             <span className="mdi mdi-arrow-right" aria-hidden="true" />
           </span>
         </button>
@@ -338,17 +340,17 @@ export const TenderatorDashboard = ({
       <div className="tenderator-dashboard__chip-groups">
 
         {/* GROUP A — Views (what you are looking at) */}
-        <section className="tenderator-dashboard__chip-group" aria-label="View">
-          <span className="tenderator-dashboard__chip-group-label">View</span>
+        <section className="tenderator-dashboard__chip-group" aria-label={t('tenderator.dashboard.viewLabel')}>
+          <span className="tenderator-dashboard__chip-group-label">{t('tenderator.dashboard.view')}</span>
           <div className="tenderator-dashboard__chip-group-row">
             <button
               type="button"
               className={`tenderator-dashboard__chip ${source === 'all' ? 'tenderator-dashboard__chip--active' : ''}`}
               onClick={() => setSource('all')}
-              title="A mixed feed showing the most recent opportunity from every source."
+              title={t('tenderator.dashboard.chips.allSources.tooltip')}
             >
               <span className="mdi mdi-view-grid-outline" aria-hidden="true" />
-              All sources
+              {t('tenderator.dashboard.chips.allSources.label')}
               {bySource && (
                 <span className="tenderator-dashboard__chip-count">
                   {formatNumber((bySource.ted || 0) + (bySource.ft_proposals || 0) + (bySource.ft_tenders || 0) + (bySource.agency || 0))}
@@ -359,77 +361,77 @@ export const TenderatorDashboard = ({
               type="button"
               className={`tenderator-dashboard__chip ${source === 'matches' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--matches`}
               onClick={() => setSource('matches')}
-              title="Opportunities ranked for you, by your saved Tenderator profile (CPV codes, keywords, countries) blended with your MEUB Policy Interests."
+              title={t('tenderator.dashboard.chips.yourMatches.tooltip')}
             >
               <span className="mdi mdi-star-outline" aria-hidden="true" />
-              Your matches
+              {t('tenderator.dashboard.chips.yourMatches.label')}
               {kpis && <span className="tenderator-dashboard__chip-count">{formatNumber(kpis.your_matches)}</span>}
             </button>
             <button
               type="button"
               className={`tenderator-dashboard__chip ${source === 'pipeline' ? 'tenderator-dashboard__chip--active' : ''} tenderator-dashboard__chip--pipeline`}
               onClick={() => setSource('pipeline')}
-              title="Track your bids stage by stage: lead, drafting, submitted, awarded, executing, paid. Replaces the spreadsheet a Project Manager keeps; data stays linked to live Brubru opportunities."
+              title={t('tenderator.dashboard.chips.myPipeline.tooltip')}
             >
               <span className="mdi mdi-view-column-outline" aria-hidden="true" />
-              My pipeline
+              {t('tenderator.dashboard.chips.myPipeline.label')}
             </button>
           </div>
         </section>
 
         {/* GROUP B — Sources (which feed, when not in pipeline view) */}
         {source !== 'pipeline' && (
-          <section className="tenderator-dashboard__chip-group" aria-label="Source">
-            <span className="tenderator-dashboard__chip-group-label">Source</span>
+          <section className="tenderator-dashboard__chip-group" aria-label={t('tenderator.dashboard.sourceLabel')}>
+            <span className="tenderator-dashboard__chip-group-label">{t('tenderator.dashboard.source')}</span>
             <div className="tenderator-dashboard__chip-group-row">
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ted' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => setSource('ted')}
-                title="Tenders Electronic Daily: the EU's official journal of public-procurement notices above legal thresholds, covering every Member State."
+                title={t('tenderator.dashboard.chips.tedTenders.tooltip')}
               >
                 <span className="mdi mdi-gavel" aria-hidden="true" />
-                TED tenders
+                {t('tenderator.dashboard.chips.tedTenders.label')}
                 {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ted)}</span>}
               </button>
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode !== 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => { setProgrammeCode(''); setSource('ft_proposals'); }}
-                title="Funding & Tenders Portal: open competitive calls for grant proposals, across all EU programmes (Horizon Europe, Digital Europe, Erasmus+, CEF, LIFE, EU4Health, etc.)."
+                title={t('tenderator.dashboard.chips.callsForProposals.tooltip')}
               >
                 <span className="mdi mdi-flask-outline" aria-hidden="true" />
-                Calls for proposals
+                {t('tenderator.dashboard.chips.callsForProposals.label')}
                 {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_proposals)}</span>}
               </button>
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ft_tenders' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => setSource('ft_tenders')}
-                title="Funding & Tenders Portal: open calls for service or supply contracts (procurement, not grants), published directly by the Commission and its executive agencies."
+                title={t('tenderator.dashboard.chips.callsForTenders.tooltip')}
               >
                 <span className="mdi mdi-file-document-outline" aria-hidden="true" />
-                Calls for tenders
+                {t('tenderator.dashboard.chips.callsForTenders.label')}
                 {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_tenders)}</span>}
               </button>
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ft_projects' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => setSource('ft_projects')}
-                title="Funded projects: organisations that have already received EU grant money. Useful for finding consortium partners or analysing past winners."
+                title={t('tenderator.dashboard.chips.fundedProjects.tooltip')}
               >
                 <span className="mdi mdi-trophy-outline" aria-hidden="true" />
-                Funded projects
+                {t('tenderator.dashboard.chips.fundedProjects.label')}
                 {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.ft_projects)}</span>}
               </button>
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'agency' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => { setProgrammeCode(''); setAgencyBody(''); setSource('agency'); }}
-                title="Tenders, grants and calls for expression of interest published by decentralised EU agencies (EFSA, EMA, ECHA, ENISA, etc.) on their own sites. Often below the TED publication threshold."
+                title={t('tenderator.dashboard.chips.agencyProcurement.tooltip')}
               >
                 <span className="mdi mdi-office-building-outline" aria-hidden="true" />
-                Agency procurement
+                {t('tenderator.dashboard.chips.agencyProcurement.label')}
                 {bySource && <span className="tenderator-dashboard__chip-count">{formatNumber(bySource.agency)}</span>}
               </button>
             </div>
@@ -438,17 +440,17 @@ export const TenderatorDashboard = ({
 
         {/* GROUP C — Lenses (refinements that compose with whichever source is active) */}
         {source !== 'pipeline' && (
-          <section className="tenderator-dashboard__chip-group" aria-label="Lens">
-            <span className="tenderator-dashboard__chip-group-label">Lens</span>
+          <section className="tenderator-dashboard__chip-group" aria-label={t('tenderator.dashboard.lensLabel')}>
+            <span className="tenderator-dashboard__chip-group-label">{t('tenderator.dashboard.lens')}</span>
             <div className="tenderator-dashboard__chip-group-row">
               <button
                 type="button"
                 className={`tenderator-dashboard__chip ${source === 'ft_proposals' && programmeCode === 'EIC' ? 'tenderator-dashboard__chip--active' : ''}`}
                 onClick={() => { setAgencyBody(''); setProgrammeCode('EIC'); setSource('ft_proposals'); setLensOverride('all'); }}
-                title="European Innovation Council. Direct EU funding for high-risk innovation by startups and SMEs: the EIC Accelerator (€2.5M grant + up to €15M equity), Pathfinder (€3-4M for early-stage research), Transition (€2.5M for scale-up), STEP (strategic technologies), and prizes."
+                title={t('tenderator.dashboard.chips.eicStartups.tooltip')}
               >
                 <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
-                Startups &amp; SMEs (EIC)
+                {t('tenderator.dashboard.chips.eicStartups.label')}
               </button>
               <button
                 type="button"
@@ -459,10 +461,10 @@ export const TenderatorDashboard = ({
                   if (next) setSource('agency');
                   try { localStorage.setItem('tenderator_framework_only', next ? '1' : '0'); } catch (_) { /* ignore */ }
                 }}
-                title="Framework Contracts: parent contracts that the Commission, EIB, Parliament, Council, ECB and EEAS sign for repeated services (typically multi-year). Specific contract re-openings under each parent FWC then go through to the winners of the original lot, e.g. Lot 1 OCA, Lot 5, Lot 8."
+                title={t('tenderator.dashboard.chips.frameworkContracts.tooltip')}
               >
                 <span className="mdi mdi-file-tree-outline" aria-hidden="true" />
-                Framework contracts
+                {t('tenderator.dashboard.chips.frameworkContracts.label')}
               </button>
               <button
                 type="button"
@@ -472,10 +474,10 @@ export const TenderatorDashboard = ({
                   setExternalAction(next);
                   try { localStorage.setItem('tenderator_external_action', next ? '1' : '0'); } catch (_) { /* ignore */ }
                 }}
-                title="EU external-action contracts: NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-accession), Humanitarian Aid. Buyers include DG INTPA, DG NEAR, DG ECHO, DG FPI, EEAS. Also surfaces past FTS aid awards as competitive intelligence."
+                title={t('tenderator.dashboard.chips.developmentCooperation.tooltip')}
               >
                 <span className="mdi mdi-handshake-outline" aria-hidden="true" />
-                Development cooperation
+                {t('tenderator.dashboard.chips.developmentCooperation.label')}
               </button>
             </div>
           </section>
@@ -486,18 +488,18 @@ export const TenderatorDashboard = ({
           Static budget data from eic.ec.europa.eu/eic-2026-work-programme_en.
           Total 2026 budget: €1.4B across 5 funding strands + prizes. */}
       {source === 'ft_proposals' && programmeCode === 'EIC' && (
-        <section className="tenderator-dashboard__eic-glance" aria-label="EIC 2026 at a glance">
+        <section className="tenderator-dashboard__eic-glance" aria-label={t('tenderator.dashboard.eicGlanceLabel')}>
           <div className="tenderator-dashboard__eic-glance-title">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
-            EIC 2026: €1.4 billion across these strands
+            {t('tenderator.dashboard.eicGlanceTitle')}
           </div>
           <ul className="tenderator-dashboard__eic-glance-list">
-            <li><strong>€634M</strong> Accelerator</li>
-            <li><strong>€300M</strong> STEP Scale</li>
-            <li><strong>€262M</strong> Pathfinder</li>
-            <li><strong>€100M</strong> Transition</li>
-            <li><strong>€6M</strong> Advanced Innovation Challenges</li>
-            <li>+ prizes (iCapital, Women Innovators)</li>
+            <li><strong>€634M</strong> {t('tenderator.dashboard.eicAccelerator')}</li>
+            <li><strong>€300M</strong> {t('tenderator.dashboard.eicStep')}</li>
+            <li><strong>€262M</strong> {t('tenderator.dashboard.eicPathfinder')}</li>
+            <li><strong>€100M</strong> {t('tenderator.dashboard.eicTransition')}</li>
+            <li><strong>€6M</strong> {t('tenderator.dashboard.eicAdvancedInnovation')}</li>
+            <li>+ {t('tenderator.dashboard.eicPrizes')}</li>
           </ul>
         </section>
       )}
@@ -505,23 +507,23 @@ export const TenderatorDashboard = ({
       {/* EIC sub-bucket chips — visible only when the EIC lens is active.
           Each chip narrows the feed to one HORIZON-EIC topic family. */}
       {source === 'ft_proposals' && programmeCode === 'EIC' && (
-        <section className="tenderator-dashboard__eic-subchips" aria-label="EIC programme">
+        <section className="tenderator-dashboard__eic-subchips" aria-label={t('tenderator.dashboard.eicSubchipsLabel')}>
           {[
-            { slug: '',                    label: 'All EIC',     title: 'All open EIC funding opportunities across every strand.' },
-            { slug: 'accelerator',         label: 'Accelerator', title: 'Single startups / SMEs scaling deep-tech (TRL 6-8). Blended €2.5M grant + €1-10M equity. 6 cutoffs in 2026.' },
-            { slug: 'pathfinder',          label: 'Pathfinder',  title: 'Breakthrough research at TRL 1-4 by consortia. Grants up to €4M. 2026 budget: €262M.' },
-            { slug: 'transition',          label: 'Transition',  title: 'Single SMEs / small consortia bringing EIC Pathfinder / ERC PoC / Horizon results from TRL 3 to TRL 5-6. Grants up to €2.5M.' },
-            { slug: 'step-scale',          label: 'STEP Scale',  title: 'Equity-only investment €10-30M for scale-ups in strategic technologies (quantum, semis, biotech). 4 cutoffs in 2026.' },
-            { slug: 'prize',               label: 'Prizes',      title: 'EIC-administered prizes: iCapital (cities), Women Innovators, and other lump-sum recognition awards.' },
+            { slug: '',                    labelKey: 'tenderator.dashboard.eicAllLabel',        titleKey: 'tenderator.dashboard.eicAllTitle' },
+            { slug: 'accelerator',         labelKey: 'tenderator.dashboard.eicAcceleratorLabel', titleKey: 'tenderator.dashboard.eicAcceleratorTitle' },
+            { slug: 'pathfinder',          labelKey: 'tenderator.dashboard.eicPathfinderLabel',  titleKey: 'tenderator.dashboard.eicPathfinderTitle' },
+            { slug: 'transition',          labelKey: 'tenderator.dashboard.eicTransitionLabel',  titleKey: 'tenderator.dashboard.eicTransitionTitle' },
+            { slug: 'step-scale',          labelKey: 'tenderator.dashboard.eicStepLabel',        titleKey: 'tenderator.dashboard.eicStepTitle' },
+            { slug: 'prize',               labelKey: 'tenderator.dashboard.eicPrizesLabel',      titleKey: 'tenderator.dashboard.eicPrizesTitle' },
           ].map((b) => (
             <button
               key={b.slug || 'all'}
               type="button"
               className={`tenderator-dashboard__chip tenderator-dashboard__chip--eic ${eicBucket === b.slug ? 'tenderator-dashboard__chip--active' : ''}`}
               onClick={() => setEicBucket(b.slug)}
-              title={b.title}
+              title={t(b.titleKey)}
             >
-              {b.label}
+              {t(b.labelKey)}
             </button>
           ))}
         </section>
@@ -533,7 +535,7 @@ export const TenderatorDashboard = ({
         <section className="tenderator-dashboard__external-controls">
           <label className="tenderator-dashboard__country-label" htmlFor="beneficiary-country">
             <span className="mdi mdi-map-marker-outline" aria-hidden="true" />
-            Implementing country
+            {t('tenderator.dashboard.implementingCountry')}
           </label>
           <input
             id="beneficiary-country"
@@ -546,7 +548,7 @@ export const TenderatorDashboard = ({
               setBeneficiaryCountry(v);
               try { localStorage.setItem('tenderator_benef_country', v); } catch (_) { /* ignore */ }
             }}
-            placeholder="Ukraine, Morocco, Türkiye, Egypt..."
+            placeholder={t('tenderator.dashboard.countryPlaceholder')}
           />
           <datalist id="tenderator-dashboard__country-options">
             <option value="Ukraine" />
@@ -590,7 +592,7 @@ export const TenderatorDashboard = ({
                 setBeneficiaryCountry('');
                 try { localStorage.setItem('tenderator_benef_country', ''); } catch (_) { /* ignore */ }
               }}
-              aria-label="Clear country"
+              aria-label={t('tenderator.dashboard.clearCountry')}
             >
               <span className="mdi mdi-close" aria-hidden="true" />
             </button>
@@ -600,13 +602,13 @@ export const TenderatorDashboard = ({
             className="tenderator-dashboard__ask-brubru"
             href={`/main?q=${encodeURIComponent(
               beneficiaryCountry
-                ? `Latest EU external-action opportunities in ${beneficiaryCountry}`
-                : 'Latest EU external-action opportunities under NDICI, IPA III and Humanitarian Aid'
+                ? t('tenderator.dashboard.askBrubru.specific', { country: beneficiaryCountry })
+                : t('tenderator.dashboard.askBrubru.general')
             )}`}
-            title="Ask Brubru about this market"
+            title={t('tenderator.dashboard.askBrubruAboutMarket')}
           >
             <span className="mdi mdi-message-outline" aria-hidden="true" />
-            Ask Brubru
+            {t('tenderator.dashboard.askBrubru')}
           </a>
         </section>
       )}
@@ -616,7 +618,7 @@ export const TenderatorDashboard = ({
         <div className="tenderator-dashboard__error">
           <span className="mdi mdi-alert-circle-outline" aria-hidden="true" />
           {error}
-          <button type="button" onClick={() => void fetchStats()}>Retry</button>
+          <button type="button" onClick={() => void fetchStats()}>{t('tenderator.dashboard.retry')}</button>
         </div>
       )}
 
@@ -624,17 +626,17 @@ export const TenderatorDashboard = ({
       <div className="tenderator-dashboard__grid">
         <main className="tenderator-dashboard__main">
           {source === 'matches' && (
-            <div className="tenderator-dashboard__sub-chips" role="group" aria-label="Filter matches by source">
+            <div className="tenderator-dashboard__sub-chips" role="group" aria-label={t('tenderator.dashboard.filterMatchesBySourceLabel')}>
               <span className="tenderator-dashboard__sub-chips-label">
                 <span className="mdi mdi-filter-variant" aria-hidden="true" />
-                Match in
+                {t('tenderator.dashboard.matchIn')}
               </span>
               <button
                 type="button"
                 className={`tenderator-dashboard__sub-chip ${matchSubSource === 'all' ? 'tenderator-dashboard__sub-chip--active' : ''}`}
                 onClick={() => setMatchSubSource('all')}
               >
-                All
+                {t('tenderator.dashboard.all')}
               </button>
               <button
                 type="button"
@@ -642,7 +644,7 @@ export const TenderatorDashboard = ({
                 onClick={() => setMatchSubSource('ted')}
               >
                 <span className="mdi mdi-gavel" aria-hidden="true" />
-                TED
+                {t('tenderator.dashboard.ted')}
               </button>
               <button
                 type="button"
@@ -650,7 +652,7 @@ export const TenderatorDashboard = ({
                 onClick={() => setMatchSubSource('ft_proposals')}
               >
                 <span className="mdi mdi-flask-outline" aria-hidden="true" />
-                Calls for proposals
+                {t('tenderator.dashboard.callsForProposalsShort')}
               </button>
               <button
                 type="button"
@@ -658,16 +660,16 @@ export const TenderatorDashboard = ({
                 onClick={() => setMatchSubSource('ft_tenders')}
               >
                 <span className="mdi mdi-file-document-outline" aria-hidden="true" />
-                Calls for tenders
+                {t('tenderator.dashboard.callsForTendersShort')}
               </button>
               <button
                 type="button"
                 className={`tenderator-dashboard__sub-chip ${matchSubSource === 'agency' ? 'tenderator-dashboard__sub-chip--active' : ''}`}
                 onClick={() => setMatchSubSource('agency')}
-                title="Decentralised EU agency procurement (EFCA, EMA, EFSA, Eurojust, ETF, Cedefop, …)"
+                title={t('tenderator.dashboard.agenciesTitle')}
               >
                 <span className="mdi mdi-office-building-outline" aria-hidden="true" />
-                Agencies
+                {t('tenderator.dashboard.agencies')}
               </button>
             </div>
           )}
@@ -705,7 +707,7 @@ export const TenderatorDashboard = ({
           <div className="tenderator-dashboard__brief">
             <div className="tenderator-dashboard__brief-lede">
               <span className="mdi mdi-bell-ring-outline" aria-hidden="true" />
-              Brubru noticed
+              {t('tenderator.dashboard.brubruNoticed')}
             </div>
             {kpis && kpis.closing_7d > 0 ? (
               <button
@@ -713,24 +715,23 @@ export const TenderatorDashboard = ({
                 className="tenderator-dashboard__brief-card"
                 onClick={() =>
                   handleAskBrubru(
-                    `Walk me through the ${kpis.closing_7d} tenders closing in the next 7 days. ` +
-                    'Tell me which one I should look at first.'
+                    t('tenderator.dashboard.briefQuery', { count: kpis.closing_7d })
                   )
                 }
               >
                 <span className="tenderator-dashboard__brief-spoken">
                   {kpis.closing_7d === 1
-                    ? '1 of your matched tenders closes in the next 7 days.'
-                    : `${kpis.closing_7d} of your matched tenders close in the next 7 days.`}
+                    ? t('tenderator.dashboard.briefSingle')
+                    : t('tenderator.dashboard.briefMultiple', { count: kpis.closing_7d })}
                 </span>
                 <span className="tenderator-dashboard__brief-cta">
-                  Tell me more
+                  {t('tenderator.dashboard.tellMeMore')}
                   <span className="mdi mdi-arrow-right" aria-hidden="true" />
                 </span>
               </button>
             ) : (
               <p className="tenderator-dashboard__brief-quiet">
-                Nothing urgent on your watch this week. I will tell you when a deadline is coming.
+                {t('tenderator.dashboard.nothingUrgent')}
               </p>
             )}
           </div>
@@ -739,11 +740,11 @@ export const TenderatorDashboard = ({
           <div className="tenderator-dashboard__urgency">
             <div className="tenderator-dashboard__urgency-header">
               <span className="mdi mdi-clock-alert-outline" aria-hidden="true" />
-              Closing soon
+              {t('tenderator.dashboard.closingSoon')}
             </div>
             {closingSoon.length === 0 ? (
               <p className="tenderator-dashboard__urgency-empty">
-                No saved or matched items with a deadline in the next 14 days.
+                {t('tenderator.dashboard.noUrgentItems')}
               </p>
             ) : (
               <ul className="tenderator-dashboard__urgency-list">
@@ -782,10 +783,10 @@ export const TenderatorDashboard = ({
                       >
                         <span className="tenderator-dashboard__urgency-days">
                           {item.days_left === 0
-                            ? 'today'
+                            ? t('tenderator.dashboard.today')
                             : item.days_left === 1
-                            ? '1 day'
-                            : `${item.days_left} days`}
+                            ? t('tenderator.dashboard.oneDay')
+                            : t('tenderator.dashboard.daysLeft', { count: item.days_left })}
                         </span>
                         <span className="tenderator-dashboard__urgency-title">{item.title}</span>
                         {item.estimated_value && (
@@ -806,14 +807,14 @@ export const TenderatorDashboard = ({
             <div className="tenderator-dashboard__sources">
               <div className="tenderator-dashboard__sources-header">
                 <span className="mdi mdi-database-outline" aria-hidden="true" />
-                Sources Brubru watches
+                {t('tenderator.dashboard.sourcesBrubruWatches')}
               </div>
               <ul className="tenderator-dashboard__sources-list">
-                <li><span>TED tenders</span><span>{formatNumber(bySource.ted)}</span></li>
-                <li><span>F&amp;T calls for proposals</span><span>{formatNumber(bySource.ft_proposals)}</span></li>
-                <li><span>F&amp;T calls for tenders</span><span>{formatNumber(bySource.ft_tenders)}</span></li>
-                <li><span>F&amp;T funded projects</span><span>{formatNumber(bySource.ft_projects)}</span></li>
-                <li><span>Agency procurement</span><span>{formatNumber(bySource.agency)}</span></li>
+                <li><span>{t('tenderator.dashboard.sources.tedTenders')}</span><span>{formatNumber(bySource.ted)}</span></li>
+                <li><span>{t('tenderator.dashboard.sources.ftProposals')}</span><span>{formatNumber(bySource.ft_proposals)}</span></li>
+                <li><span>{t('tenderator.dashboard.sources.ftTenders')}</span><span>{formatNumber(bySource.ft_tenders)}</span></li>
+                <li><span>{t('tenderator.dashboard.sources.ftProjects')}</span><span>{formatNumber(bySource.ft_projects)}</span></li>
+                <li><span>{t('tenderator.dashboard.sources.agencyProcurement')}</span><span>{formatNumber(bySource.agency)}</span></li>
               </ul>
             </div>
           )}

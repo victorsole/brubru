@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/tender_feed.tsx
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_feed.css';
@@ -61,6 +62,7 @@ interface TenderFeedProps {
 type FeedView = 'matches' | 'search' | 'saved';
 
 export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _userProfile }: TenderFeedProps) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const [feedView, setFeedView] = useState<FeedView>('matches');
   const [matches, setMatches] = useState<TenderMatch[]>([]);
@@ -194,13 +196,13 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
   };
 
   const getSectorName = (cpvCode: string): string => {
-    if (!cpvCode) return 'Unknown';
+    if (!cpvCode) return t('tenderator.feed.sectorUnknown');
     const prefix = cpvCode.substring(0, 2);
-    return CPV_SECTORS[prefix] || 'Other';
+    return CPV_SECTORS[prefix] || t('tenderator.feed.sectorOther');
   };
 
   const formatValue = (value: number | null, currency: string): string => {
-    if (!value) return 'Not specified';
+    if (!value) return t('tenderator.feed.notSpecified');
     return new Intl.NumberFormat('en-EU', {
       style: 'currency',
       currency: currency || 'EUR',
@@ -210,7 +212,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
   };
 
   const formatDate = (dateStr: string | null): string => {
-    if (!dateStr) return 'Not specified';
+    if (!dateStr) return t('tenderator.feed.notSpecified');
     return new Date(dateStr).toLocaleDateString('en-EU', {
       day: 'numeric',
       month: 'short',
@@ -248,21 +250,21 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
           onClick={() => setFeedView('matches')}
         >
           <span className="mdi mdi-target"></span>
-          My Matches
+          {t('tenderator.feed.viewMyMatches')}
         </button>
         <button
           className={`tender-feed__view-btn ${feedView === 'saved' ? 'tender-feed__view-btn--active' : ''}`}
           onClick={() => setFeedView('saved')}
         >
           <span className="mdi mdi-bookmark"></span>
-          Saved
+          {t('tenderator.feed.viewSaved')}
         </button>
         <button
           className={`tender-feed__view-btn ${feedView === 'search' ? 'tender-feed__view-btn--active' : ''}`}
           onClick={() => setFeedView('search')}
         >
           <span className="mdi mdi-magnify"></span>
-          Search All
+          {t('tenderator.feed.viewSearchAll')}
         </button>
       </div>
 
@@ -272,7 +274,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
           <input
             type="text"
             className="tender-feed__search-input"
-            placeholder="Search tenders..."
+            placeholder={t('tenderator.feed.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -281,7 +283,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
             value={countryFilter}
             onChange={(e) => setCountryFilter(e.target.value)}
           >
-            <option value="">All Countries</option>
+            <option value="">{t('tenderator.feed.allCountries')}</option>
             {EU_COUNTRIES.map((c) => (
               <option key={c.code} value={c.code}>{c.name}</option>
             ))}
@@ -291,7 +293,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
             value={sectorFilter}
             onChange={(e) => setSectorFilter(e.target.value)}
           >
-            <option value="">All Sectors</option>
+            <option value="">{t('tenderator.feed.allSectors')}</option>
             {Object.entries(CPV_SECTORS).map(([code, name]) => (
               <option key={code} value={code}>{name}</option>
             ))}
@@ -299,7 +301,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
           <input
             type="number"
             className="tender-feed__value-input"
-            placeholder="Max value (€)"
+            placeholder={t('tenderator.feed.maxValuePlaceholder')}
             value={maxValue}
             onChange={(e) => setMaxValue(e.target.value)}
           />
@@ -308,13 +310,13 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
-            <option value="awarded">Awarded</option>
+            <option value="open">{t('tenderator.feed.status.open')}</option>
+            <option value="closed">{t('tenderator.feed.status.closed')}</option>
+            <option value="awarded">{t('tenderator.feed.status.awarded')}</option>
           </select>
           <button type="submit" className="tender-feed__search-btn">
             <span className="mdi mdi-magnify"></span>
-            Search
+            {t('tenderator.feed.searchButton')}
           </button>
         </form>
       )}
@@ -323,7 +325,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
       {isLoading && (
         <div className="tender-feed__loading">
           <span className="mdi mdi-loading mdi-spin"></span>
-          Loading tenders...
+          {t('tenderator.feed.loading')}
         </div>
       )}
 
@@ -344,7 +346,7 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
               {searchResults.length === 0 ? (
                 <div className="tender-feed__empty">
                   <span className="mdi mdi-file-search-outline"></span>
-                  <p>No tenders found. Try adjusting your search criteria.</p>
+                  <p>{t('tenderator.feed.noSearchResults')}</p>
                 </div>
               ) : (
                 searchResults.map((tender) => (
@@ -370,8 +372,8 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
                   <span className="mdi mdi-target"></span>
                   <p>
                     {feedView === 'saved'
-                      ? 'No saved tenders yet. Save tenders from your matches to see them here.'
-                      : 'No matches found. Update your profile to get better matches.'}
+                      ? t('tenderator.feed.noSavedTenders')
+                      : t('tenderator.feed.noMatches')}
                   </p>
                 </div>
               ) : (
@@ -402,14 +404,14 @@ export const TenderFeed = ({ onSelectTender, onViewChecklist, userProfile: _user
                 onClick={() => setPage(page - 1)}
               >
                 <span className="mdi mdi-chevron-left"></span>
-                Previous
+                {t('tenderator.feed.previous')}
               </button>
-              <span>Page {page} of {totalPages}</span>
+              <span>{t('tenderator.feed.pageCounter', { current: page, total: totalPages })}</span>
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage(page + 1)}
               >
-                Next
+                {t('tenderator.feed.next')}
                 <span className="mdi mdi-chevron-right"></span>
               </button>
             </div>
@@ -446,6 +448,7 @@ const TenderCard = ({
   getDeadlineClass,
   getScoreClass,
 }: TenderCardProps) => {
+  const { t } = useTranslation();
   const daysLeft = getDaysUntilDeadline(tender.submission_deadline);
 
   return (
@@ -455,7 +458,7 @@ const TenderCard = ({
           <span className="tender-card__country">{tender.buyer_country}</span>
           <span className="tender-card__sector">{getSectorName(tender.cpv_main)}</span>
           {tender.status === 'open' && (
-            <span className="tender-card__status tender-card__status--open">Open</span>
+            <span className="tender-card__status tender-card__status--open">{t('tenderator.feed.status.open')}</span>
           )}
         </div>
         {match && getScoreClass && (
@@ -483,17 +486,17 @@ const TenderCard = ({
           <span>
             {daysLeft !== null
               ? daysLeft > 0
-                ? `${daysLeft} days left`
+                ? t('tenderator.feed.daysLeft', { days: daysLeft })
                 : daysLeft === 0
-                  ? 'Due today!'
-                  : 'Expired'
+                  ? t('tenderator.feed.dueToday')
+                  : t('tenderator.feed.expired')
               : formatDate(tender.submission_deadline)}
           </span>
         </div>
         {tender.sme_suitability_score !== null && (
           <div className="tender-card__detail tender-card__sme-score">
             <span className="mdi mdi-account-check"></span>
-            <span>SME Score: {Math.round(tender.sme_suitability_score)}</span>
+            <span>{t('tenderator.feed.smeScore', { score: Math.round(tender.sme_suitability_score) })}</span>
           </div>
         )}
       </div>
@@ -512,11 +515,11 @@ const TenderCard = ({
       <div className="tender-card__actions">
         <button className="tender-card__action-btn tender-card__action-btn--primary" onClick={onSelect}>
           <span className="mdi mdi-eye"></span>
-          View Details
+          {t('tenderator.feed.viewDetails')}
         </button>
         <button className="tender-card__action-btn" onClick={onViewChecklist}>
           <span className="mdi mdi-clipboard-check"></span>
-          Checklist
+          {t('tenderator.feed.checklist')}
         </button>
         {tender.ted_url && (
           <a
@@ -526,7 +529,7 @@ const TenderCard = ({
             className="tender-card__action-btn"
           >
             <span className="mdi mdi-open-in-new"></span>
-            TED
+            {t('tenderator.feed.tedLink')}
           </a>
         )}
       </div>

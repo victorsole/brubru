@@ -14,6 +14,7 @@
  */
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_docs_tab.css';
 
@@ -50,26 +51,26 @@ interface TemplateSummary {
 }
 
 const PROGRAMME_LABELS: Record<string, string> = {
- EIC: 'European Innovation Council',
- HE: 'Horizon Europe',
- 'ERASMUS+': 'Erasmus+',
- DIGITAL: 'Digital Europe Programme',
- CERV: 'Citizens, Equality, Rights and Values',
- LIFE: 'LIFE (Environment + Climate Action)',
- CREA: 'Creative Europe',
- CEF: 'Connecting Europe Facility',
- 'ESF+': 'European Social Fund Plus',
- EDF: 'European Defence Fund',
- TED: 'TED Procurement',
+ EIC: 'tenderator.docsTab.programmes.eic',
+ HE: 'tenderator.docsTab.programmes.he',
+ 'ERASMUS+': 'tenderator.docsTab.programmes.erasmusPlus',
+ DIGITAL: 'tenderator.docsTab.programmes.digital',
+ CERV: 'tenderator.docsTab.programmes.cerv',
+ LIFE: 'tenderator.docsTab.programmes.life',
+ CREA: 'tenderator.docsTab.programmes.crea',
+ CEF: 'tenderator.docsTab.programmes.cef',
+ 'ESF+': 'tenderator.docsTab.programmes.esfPlus',
+ EDF: 'tenderator.docsTab.programmes.edf',
+ TED: 'tenderator.docsTab.programmes.ted',
 };
 
 const STATUS_LABELS: Record<string, string> = {
- drafting: 'Drafting',
- 'ready-to-submit': 'Ready to submit',
- submitted: 'Submitted',
- won: 'Won',
- lost: 'Lost',
- 'seal-of-excellence': 'Seal of Excellence',
+ drafting: 'tenderator.docsTab.status.drafting',
+ 'ready-to-submit': 'tenderator.docsTab.status.readyToSubmit',
+ submitted: 'tenderator.docsTab.status.submitted',
+ won: 'tenderator.docsTab.status.won',
+ lost: 'tenderator.docsTab.status.lost',
+ 'seal-of-excellence': 'tenderator.docsTab.status.sealOfExcellence',
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -83,29 +84,29 @@ const STATUS_COLORS: Record<string, string> = {
 
 const SUB_INSTRUMENT_LABELS: Record<string, string> = {
  // EIC
- accelerator: 'Accelerator',
- 'pathfinder-open': 'Pathfinder Open',
- 'pathfinder-challenges': 'Pathfinder Challenges',
- transition: 'Transition',
- step: 'STEP Scale Up',
- aic: 'Advanced Innovation Challenges',
- 'pre-accelerator': 'Pre-Accelerator',
- prize: 'Prizes',
+ accelerator: 'tenderator.docsTab.subInstruments.accelerator',
+ 'pathfinder-open': 'tenderator.docsTab.subInstruments.pathfinderOpen',
+ 'pathfinder-challenges': 'tenderator.docsTab.subInstruments.pathfinderChallenges',
+ transition: 'tenderator.docsTab.subInstruments.transition',
+ step: 'tenderator.docsTab.subInstruments.step',
+ aic: 'tenderator.docsTab.subInstruments.aic',
+ 'pre-accelerator': 'tenderator.docsTab.subInstruments.preAccelerator',
+ prize: 'tenderator.docsTab.subInstruments.prize',
  // Erasmus+ / DIGITAL / CERV
- lsi: 'Lump-Sum Standard Implementation',
- dep: 'Digital Europe (generic action)',
- general: 'General action',
+ lsi: 'tenderator.docsTab.subInstruments.lsi',
+ dep: 'tenderator.docsTab.subInstruments.dep',
+ general: 'tenderator.docsTab.subInstruments.general',
  // CREA strands
- culture: 'Culture',
- media: 'MEDIA',
+ culture: 'tenderator.docsTab.subInstruments.culture',
+ media: 'tenderator.docsTab.subInstruments.media',
  // LIFE strands
- sap: 'Standard Action Project (SAP)',
+ sap: 'tenderator.docsTab.subInstruments.sap',
  // CEF strands
- transport: 'Transport (CEF-T)',
- energy: 'Energy (CEF-E)',
- digital: 'Digital (CEF-DIG)',
+ transport: 'tenderator.docsTab.subInstruments.transport',
+ energy: 'tenderator.docsTab.subInstruments.energy',
+ digital: 'tenderator.docsTab.subInstruments.digital',
  // ESF+ delivery route
- 'agency-procurement': 'Agency procurement (national MA)',
+ 'agency-procurement': 'tenderator.docsTab.subInstruments.agencyProcurement',
 };
 
 function formatDeadlineCountdown(iso?: string | null): string {
@@ -132,6 +133,7 @@ export interface TenderDocsTabProps {
 export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderDocsTabProps) => {
  const { token } = useAuth();
  const navigate = useNavigate();
+ const { t } = useTranslation();
 
  const [files, setFiles] = useState<TenderFile[]>([]);
  const [templates, setTemplates] = useState<TemplateSummary[]>([]);
@@ -199,17 +201,16 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  {/* Header */}
  <header className="tender-docs-tab__header">
  <div className="tender-docs-tab__header-left">
- <button className="tender-docs-tab__back" onClick={onBack} aria-label="Back to dashboard">
+ <button className="tender-docs-tab__back" onClick={onBack} aria-label={t('tenderator.docsTab.backAriaLabel')}>
  <span className="mdi mdi-arrow-left" />
  </button>
  <div>
  <h1 className="tender-docs-tab__title">
  <span className="mdi mdi-file-document-edit-outline" aria-hidden="true" />
- Tender Docs
+ {t('tenderator.docsTab.title')}
  </h1>
  <p className="tender-docs-tab__subtitle">
- Everything you write to apply for EU funding. Drafts, annexes, version history.
- {' '}In sync with MEUB Documents.
+ {t('tenderator.docsTab.subtitle')}
  </p>
  </div>
  </div>
@@ -220,48 +221,48 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  onClick={() => onOpenStartWizard()}
  >
  <span className="mdi mdi-plus" aria-hidden="true" />
- Start a Tender Doc
+ {t('tenderator.docsTab.startCtaButton')}
  </button>
  </div>
  </header>
 
  {/* Filters */}
- <section className="tender-docs-tab__filters" aria-label="Tender Docs filters">
+ <section className="tender-docs-tab__filters" aria-label={t('tenderator.docsTab.filtersAriaLabel')}>
  <div className="tender-docs-tab__filter-group">
- <label>Programme</label>
+ <label>{t('tenderator.docsTab.programmeLabel')}</label>
  <select value={programmeFilter} onChange={(e) => { setProgrammeFilter(e.target.value); setSubFilter('all'); }}>
- <option value="all">All</option>
+ <option value="all">{t('tenderator.docsTab.filterAllOption')}</option>
  {programmesPresent.map((p) => (
- <option key={p} value={p}>{PROGRAMME_LABELS[p] || p}</option>
+ <option key={p} value={p}>{t(PROGRAMME_LABELS[p] || p)}</option>
  ))}
  </select>
  </div>
  {programmeFilter !== 'all' && subsForProgramme.length > 0 && (
  <div className="tender-docs-tab__filter-group">
- <label>Sub-instrument</label>
+ <label>{t('tenderator.docsTab.subInstrumentLabel')}</label>
  <select value={subFilter} onChange={(e) => setSubFilter(e.target.value)}>
- <option value="all">All</option>
+ <option value="all">{t('tenderator.docsTab.filterAllOption')}</option>
  {subsForProgramme.map((s) => (
- <option key={s} value={s}>{SUB_INSTRUMENT_LABELS[s] || s}</option>
+ <option key={s} value={s}>{t(SUB_INSTRUMENT_LABELS[s] || s)}</option>
  ))}
  </select>
  </div>
  )}
  <div className="tender-docs-tab__filter-group">
- <label>Status</label>
+ <label>{t('tenderator.docsTab.statusLabel')}</label>
  <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
- <option value="all">All</option>
- {Object.entries(STATUS_LABELS).map(([k, v]) => (
- <option key={k} value={k}>{v}</option>
+ <option value="all">{t('tenderator.docsTab.filterAllOption')}</option>
+ {Object.entries(STATUS_LABELS).map(([k]) => (
+ <option key={k} value={k}>{t(STATUS_LABELS[k])}</option>
  ))}
  </select>
  </div>
  <div className="tender-docs-tab__filter-group tender-docs-tab__filter-group--search">
- <label htmlFor="td-search">Search</label>
+ <label htmlFor="td-search">{t('tenderator.docsTab.searchLabel')}</label>
  <input
  id="td-search"
  type="text"
- placeholder="Search by title, topic, template..."
+ placeholder={t('tenderator.docsTab.searchPlaceholder')}
  value={searchQ}
  onChange={(e) => setSearchQ(e.target.value)}
  />
@@ -273,17 +274,14 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  {loading ? (
  <div className="tender-docs-tab__loading">
  <span className="mdi mdi-loading mdi-spin" />
- {' '}Loading your Tender Docs...
+ {' '}{t('tenderator.docsTab.loadingText')}
  </div>
  ) : files.length === 0 ? (
  // Empty state programme picker
  <div className="tender-docs-tab__empty">
- <h2>You have no Tender Docs yet.</h2>
+ <h2>{t('tenderator.docsTab.empty.heading')}</h2>
  <p>
- A Tender Doc bundles everything one EU funding application needs Part&nbsp;B
- narrative, pitch deck, video script, annexes. We start you with the official
- template for your chosen programme, ask you a couple of orienting questions,
- then guide you section by section.
+ {t('tenderator.docsTab.empty.description')}
  </p>
  <div className="tender-docs-tab__empty-grid">
  {templates.map((tpl) => (
@@ -298,7 +296,7 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  {tpl.deadline && (
  <div className="tender-docs-tab__empty-card-meta">
  <span className="mdi mdi-calendar-clock" /> {' '}
- Next deadline: {new Date(tpl.deadline).toLocaleDateString()}
+ {t('tenderator.docsTab.empty.nextDeadlinePrefix')}: {new Date(tpl.deadline).toLocaleDateString()}
  </div>
  )}
  {tpl.note && (
@@ -310,9 +308,9 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  </div>
  ) : filteredFiles.length === 0 ? (
  <div className="tender-docs-tab__empty">
- <p>No tender docs match your filters.</p>
+ <p>{t('tenderator.docsTab.empty.noMatches')}</p>
  <button onClick={() => { setProgrammeFilter('all'); setSubFilter('all'); setStatusFilter('all'); setSearchQ(''); }}>
- Clear filters
+ {t('tenderator.docsTab.empty.clearFiltersButton')}
  </button>
  </div>
  ) : (
@@ -322,15 +320,15 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  return (
  <article key={f.id} className="tender-docs-tab__card" data-status={f.status}>
  <div className="tender-docs-tab__card-top">
- <span className="tender-docs-tab__card-prog">{PROGRAMME_LABELS[f.programme] || f.programme}</span>
+ <span className="tender-docs-tab__card-prog">{t(PROGRAMME_LABELS[f.programme] || f.programme)}</span>
  {f.sub_instrument && (
- <span className="tender-docs-tab__card-sub">{SUB_INSTRUMENT_LABELS[f.sub_instrument] || f.sub_instrument}</span>
+ <span className="tender-docs-tab__card-sub">{t(SUB_INSTRUMENT_LABELS[f.sub_instrument] || f.sub_instrument)}</span>
  )}
  <span
  className="tender-docs-tab__card-status"
  style={{ background: `${STATUS_COLORS[f.status]}22`, color: STATUS_COLORS[f.status] }}
  >
- {STATUS_LABELS[f.status] || f.status}
+ {t(STATUS_LABELS[f.status] || f.status)}
  </span>
  </div>
  <h3 className="tender-docs-tab__card-title">{f.title}</h3>
@@ -349,16 +347,16 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  {new Date(f.deadline_iso).toLocaleDateString()}
  </span>
  )}
- <span className="tender-docs-tab__card-pill">{docCount} doc{docCount !== 1 ? 's' : ''}</span>
+ <span className="tender-docs-tab__card-pill">{docCount} {t('tenderator.docsTab.card.docLabel', { count: docCount })}</span>
  </div>
  <div className="tender-docs-tab__card-actions">
  <button type="button" className="tender-docs-tab__card-open" onClick={() => onOpenFile(f)}>
- Open
+ {t('tenderator.docsTab.card.openButton')}
  </button>
  <button
  type="button"
  className="tender-docs-tab__card-icon"
- title="Run EU Law Comply"
+ title={t('tenderator.docsTab.card.complyButtonTitle')}
  onClick={() => {
  const params = new URLSearchParams();
  params.set('template_id', f.template_id);
@@ -371,11 +369,11 @@ export const TenderDocsTab = ({ onOpenFile, onOpenStartWizard, onBack }: TenderD
  <button
  type="button"
  className="tender-docs-tab__card-icon"
- title="Use in Chat"
+ title={t('tenderator.docsTab.card.chatButtonTitle')}
  onClick={() => {
  navigate('/chat', {
  state: {
- initialQuestion: `Help me with my "${f.title}" application for ${PROGRAMME_LABELS[f.programme] || f.programme} ${SUB_INSTRUMENT_LABELS[f.sub_instrument || ''] || f.sub_instrument || ''}.`,
+ initialQuestion: t('tenderator.docsTab.card.chatInitialQuestion', { title: f.title, programme: t(PROGRAMME_LABELS[f.programme] || f.programme), subInstrument: f.sub_instrument ? t(SUB_INSTRUMENT_LABELS[f.sub_instrument] || f.sub_instrument) : '' }),
  source: 'tender_docs_tab',
  },
  });

@@ -7,6 +7,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../hooks/use_auth';
+import { useTranslation } from 'react-i18next';
 import './pipeline_view.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -41,23 +42,15 @@ interface PipelineResponse {
   statuses: PipelineStatus[];
 }
 
-const STATUS_META: Record<PipelineStatus, { label: string; color: string; icon: string; hint: string }> = {
-  lead:       { label: 'Lead',       color: '#6b7280', icon: 'mdi-eye-outline',
-                hint: 'Newly discovered opportunity that you are monitoring. No commitment yet.' },
-  drafting:   { label: 'Drafting',   color: '#0693e3', icon: 'mdi-pencil-outline',
-                hint: 'You have decided to bid and are actively writing the proposal or assembling the consortium.' },
-  submitted:  { label: 'Submitted',  color: '#d97706', icon: 'mdi-send-outline',
-                hint: 'Bid is in. Waiting for the evaluation outcome.' },
-  awarded:    { label: 'Awarded',    color: '#059669', icon: 'mdi-trophy-outline',
-                hint: 'The contracting authority has notified you of a positive evaluation. Contract not yet signed.' },
-  executing:  { label: 'Executing',  color: '#9b51e0', icon: 'mdi-rocket-launch-outline',
-                hint: 'Contract signed. Implementation in progress.' },
-  paid:       { label: 'Paid',       color: '#15803d', icon: 'mdi-currency-eur',
-                hint: 'Contract completed and final invoice paid. Archive-ready.' },
-  lost:       { label: 'Lost',       color: '#dc2626', icon: 'mdi-close-circle-outline',
-                hint: 'Bid was not selected. Keep the row for win/lose analysis.' },
-  cancelled:  { label: 'Cancelled',  color: '#9ca3af', icon: 'mdi-cancel',
-                hint: 'Bid pulled before submission, or the call itself was cancelled by the buyer.' },
+const STATUS_META_BASE: Record<PipelineStatus, { color: string; icon: string }> = {
+  lead:       { color: '#6b7280', icon: 'mdi-eye-outline' },
+  drafting:   { color: '#0693e3', icon: 'mdi-pencil-outline' },
+  submitted:  { color: '#d97706', icon: 'mdi-send-outline' },
+  awarded:    { color: '#059669', icon: 'mdi-trophy-outline' },
+  executing:  { color: '#9b51e0', icon: 'mdi-rocket-launch-outline' },
+  paid:       { color: '#15803d', icon: 'mdi-currency-eur' },
+  lost:       { color: '#dc2626', icon: 'mdi-close-circle-outline' },
+  cancelled:  { color: '#9ca3af', icon: 'mdi-cancel' },
 };
 
 const formatBudget = (v: number | null): string => {
@@ -81,6 +74,7 @@ const daysUntil = (iso: string | null): number | null => {
 
 export const PipelineView = () => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [data, setData] = useState<PipelineResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,13 +89,13 @@ export const PipelineView = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        setError(`Failed to load pipeline (${res.status})`);
+        setError(t('tenderator.pipelineView.errorFailedToLoad', { status: res.status }));
         return;
       }
       setData(await res.json());
     } catch (e) {
       console.error('pipeline fetch failed:', e);
-      setError('Could not load your pipeline.');
+      setError(t('tenderator.pipelineView.errorCouldNotLoad'));
     } finally {
       setLoading(false);
     }
@@ -123,7 +117,7 @@ export const PipelineView = () => {
 
   const remove = async (id: number) => {
     if (!token) return;
-    if (!window.confirm('Remove this opportunity from your pipeline?')) return;
+    if (!window.confirm(t('tenderator.pipelineView.confirmRemove'))) return;
     try {
       await fetch(`${API_URL}/api/tenders/pipeline/${id}`, {
         method: 'DELETE',
@@ -149,7 +143,7 @@ export const PipelineView = () => {
     return (
       <div className="pipeline-view pipeline-view--loading">
         <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-        Loading your pipeline...
+        {t('tenderator.pipelineView.loading')}
       </div>
     );
   }
@@ -158,7 +152,7 @@ export const PipelineView = () => {
       <div className="pipeline-view pipeline-view--error">
         <span className="mdi mdi-alert-circle-outline" aria-hidden="true" />
         {error}
-        <button type="button" onClick={() => void fetchPipeline()}>Retry</button>
+        <button type="button" onClick={() => void fetchPipeline()}>{t('tenderator.pipelineView.buttonRetry')}</button>
       </div>
     );
   }
@@ -166,11 +160,11 @@ export const PipelineView = () => {
     return (
       <div className="pipeline-view pipeline-view--empty">
         <span className="mdi mdi-clipboard-text-outline" aria-hidden="true" />
-        <h3>Your pipeline is empty</h3>
-        <p>Open any opportunity (TED, F&amp;T, agency, EU aid award) and click "Add to pipeline" in the drawer. Track each bid from lead to paid, the way a Project Manager does in their spreadsheet, but linked to live Brubru data.</p>
-        <a className="pipeline-view__chat-link" href="/main?q=How%20do%20I%20use%20Brubru%20pipeline%20to%20track%20EU%20bids%3F" title="Ask Brubru">
+        <h3>{t('tenderator.pipelineView.emptyTitle')}</h3>
+        <p>{t('tenderator.pipelineView.emptyDescription')}</p>
+        <a className="pipeline-view__chat-link" href="/main?q=How%20do%20I%20use%20Brubru%20pipeline%20to%20track%20EU%20bids%3F" title={t('tenderator.pipelineView.askBrubru')}>
           <span className="mdi mdi-message-outline" aria-hidden="true" />
-          Ask Brubru how this works
+          {t('tenderator.pipelineView.askBrubruHow')}
         </a>
       </div>
     );
@@ -188,27 +182,31 @@ export const PipelineView = () => {
       <header className="pipeline-view__header">
         <h2>
           <span className="mdi mdi-view-column-outline" aria-hidden="true" />
-          Pipeline
+          {t('tenderator.pipelineView.headerTitle')}
         </h2>
         <p>
-          {data.items.length} opportunit{data.items.length === 1 ? 'y' : 'ies'} tracked.
-          Move cards through the stages as your bid progresses.
+          {t('tenderator.pipelineView.headerCount', { count: data.items.length })}
+          {' '}
+          {t('tenderator.pipelineView.headerDescription')}
         </p>
       </header>
 
       <div className="pipeline-view__board">
         {data.statuses.map((s) => {
-          const meta = STATUS_META[s];
+          const meta = STATUS_META_BASE[s];
           const items = byStatus[s];
+          const statusKey = `tenderator.pipelineView.status.${s}`;
+          const statusLabel = t(statusKey);
+          const statusHint = t(`${statusKey}Hint`);
           return (
             <section
               key={s}
               className={`pipeline-view__column pipeline-view__column--${s}`}
               style={{ borderTopColor: meta.color }}
             >
-              <header className="pipeline-view__column-head" title={meta.hint}>
+              <header className="pipeline-view__column-head" title={statusHint}>
                 <span className={`mdi ${meta.icon}`} aria-hidden="true" />
-                <span className="pipeline-view__column-label">{meta.label}</span>
+                <span className="pipeline-view__column-label">{statusLabel}</span>
                 <span className="pipeline-view__column-count">{items.length}</span>
                 <span className="mdi mdi-help-circle-outline pipeline-view__column-help" aria-hidden="true" />
               </header>
@@ -246,16 +244,16 @@ export const PipelineView = () => {
                       )}
                       <div className="pipeline-view__meta">
                         {it.budget && (
-                          <span title="Budget"><span className="mdi mdi-currency-eur" />{formatBudget(it.budget)}</span>
+                          <span title={t('tenderator.pipelineView.metaBudget')}><span className="mdi mdi-currency-eur" />{formatBudget(it.budget)}</span>
                         )}
                         {it.deadline && (
-                          <span title="Bid deadline">
+                          <span title={t('tenderator.pipelineView.metaBidDeadline')}>
                             <span className="mdi mdi-clock-outline" />
                             {formatDate(it.deadline)}
                           </span>
                         )}
                         {it.pm_assignee && (
-                          <span title="Project manager">
+                          <span title={t('tenderator.pipelineView.metaPM')}>
                             <span className="mdi mdi-account-outline" />
                             {it.pm_assignee}
                           </span>
@@ -267,7 +265,7 @@ export const PipelineView = () => {
                           {it.next_step}
                           {it.next_step_due && (
                             <span className="pipeline-view__next-step-due">
-                              by {formatDate(it.next_step_due)}
+                              {t('tenderator.pipelineView.nextStepBy')} {formatDate(it.next_step_due)}
                             </span>
                           )}
                         </div>
@@ -275,7 +273,7 @@ export const PipelineView = () => {
                       {isEditing && (
                         <div className="pipeline-view__editor">
                           <label>
-                            Next step
+                            {t('tenderator.pipelineView.editorNextStep')}
                             <input
                               type="text"
                               defaultValue={it.next_step || ''}
@@ -283,7 +281,7 @@ export const PipelineView = () => {
                             />
                           </label>
                           <label>
-                            Due
+                            {t('tenderator.pipelineView.editorDue')}
                             <input
                               type="date"
                               defaultValue={it.next_step_due || ''}
@@ -291,16 +289,16 @@ export const PipelineView = () => {
                             />
                           </label>
                           <label>
-                            Assigned to
+                            {t('tenderator.pipelineView.editorAssignedTo')}
                             <input
                               type="text"
                               defaultValue={it.pm_assignee || ''}
-                              placeholder="e.g. AN"
+                              placeholder={t('tenderator.pipelineView.editorAssignedToPlaceholder')}
                               onBlur={(e) => updateField(it.id, { pm_assignee: e.target.value })}
                             />
                           </label>
                           <label>
-                            Notes
+                            {t('tenderator.pipelineView.editorNotes')}
                             <textarea
                               rows={2}
                               defaultValue={it.notes || ''}
@@ -313,25 +311,25 @@ export const PipelineView = () => {
                         <select
                           value={it.status}
                           onChange={(e) => moveTo(it.id, e.target.value as PipelineStatus)}
-                          aria-label="Move to stage"
+                          aria-label={t('tenderator.pipelineView.ariaLabelMoveToStage')}
                         >
                           {data.statuses.map((opt) => (
-                            <option key={opt} value={opt}>{STATUS_META[opt].label}</option>
+                            <option key={opt} value={opt}>{t(`tenderator.pipelineView.status.${opt}`)}</option>
                           ))}
                         </select>
                         <button
                           type="button"
                           className="pipeline-view__icon-btn"
                           onClick={() => setEditing(isEditing ? null : it.id)}
-                          aria-label={isEditing ? 'Close edit' : 'Edit details'}
+                          aria-label={isEditing ? t('tenderator.pipelineView.ariaLabelCloseEdit') : t('tenderator.pipelineView.ariaLabelEditDetails')}
                         >
                           <span className={`mdi ${isEditing ? 'mdi-chevron-up' : 'mdi-pencil-outline'}`} />
                         </button>
                         <a
                           href={`/main?q=${encodeURIComponent(`Tell me what you know about ${it.title}`)}`}
                           className="pipeline-view__icon-btn"
-                          title="Ask Brubru about this dossier"
-                          aria-label="Ask Brubru"
+                          title={t('tenderator.pipelineView.titleAskBrubruAboutDossier')}
+                          aria-label={t('tenderator.pipelineView.ariaLabelAskBrubru')}
                         >
                           <span className="mdi mdi-message-outline" />
                         </a>
@@ -339,7 +337,7 @@ export const PipelineView = () => {
                           type="button"
                           className="pipeline-view__icon-btn pipeline-view__icon-btn--danger"
                           onClick={() => remove(it.id)}
-                          aria-label="Remove"
+                          aria-label={t('tenderator.pipelineView.ariaLabelRemove')}
                         >
                           <span className="mdi mdi-trash-can-outline" />
                         </button>

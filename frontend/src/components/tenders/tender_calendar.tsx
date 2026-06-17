@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/tender_calendar.tsx
 import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_calendar.css';
@@ -13,6 +14,7 @@ interface TenderCalendarProps {
 
 export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: TenderCalendarProps) => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [matches, setMatches] = useState<TenderMatch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +32,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) {
-          console.error('Failed to fetch calendar deadlines:', res.status);
+          console.error('[tender-calendar] Failed to fetch deadlines:', res.status);
           setIsLoading(false);
           return;
         }
@@ -78,7 +80,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
         });
         setMatches(mapped);
       } catch (err) {
-        console.error('Failed to fetch tender calendar deadlines:', err);
+        console.error('[tender-calendar] Failed to fetch deadlines:', err);
       } finally {
         setIsLoading(false);
       }
@@ -213,7 +215,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
               ))}
               {dayMatches.length > 3 && (
                 <span className="tender-calendar__more-deadlines">
-                  +{dayMatches.length - 3} more
+                  +{dayMatches.length - 3} {t('tenderator.calendar.more')}
                 </span>
               )}
             </div>
@@ -244,22 +246,24 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
       <div className="tender-calendar__header">
         <h2>
           <span className="mdi mdi-calendar-clock"></span>
-          Tender Deadlines
+          {t('tenderator.calendar.title')}
         </h2>
         <div className="tender-calendar__view-toggle">
           <button
             className={`tender-calendar__view-btn ${viewMode === 'month' ? 'tender-calendar__view-btn--active' : ''}`}
             onClick={() => setViewMode('month')}
+            title={t('tenderator.calendar.monthView')}
           >
             <span className="mdi mdi-calendar-month"></span>
-            Month
+            {t('tenderator.calendar.monthView')}
           </button>
           <button
             className={`tender-calendar__view-btn ${viewMode === 'list' ? 'tender-calendar__view-btn--active' : ''}`}
             onClick={() => setViewMode('list')}
+            title={t('tenderator.calendar.listView')}
           >
             <span className="mdi mdi-format-list-bulleted"></span>
-            List
+            {t('tenderator.calendar.listView')}
           </button>
         </div>
       </div>
@@ -267,7 +271,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
       {isLoading ? (
         <div className="tender-calendar__loading">
           <span className="mdi mdi-loading mdi-spin"></span>
-          Loading calendar...
+          {t('tenderator.calendar.loading')}
         </div>
       ) : viewMode === 'month' ? (
         /* Month View */
@@ -284,14 +288,22 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
               <span className="mdi mdi-chevron-right"></span>
             </button>
             <button className="tender-calendar__today-btn" onClick={goToToday}>
-              Today
+              {t('tenderator.calendar.today')}
             </button>
           </div>
 
           {/* Weekday Headers */}
           <div className="tender-calendar__weekdays">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-              <div key={day} className="tender-calendar__weekday">{day}</div>
+            {[
+              t('common.dayOfWeek.sun'),
+              t('common.dayOfWeek.mon'),
+              t('common.dayOfWeek.tue'),
+              t('common.dayOfWeek.wed'),
+              t('common.dayOfWeek.thu'),
+              t('common.dayOfWeek.fri'),
+              t('common.dayOfWeek.sat'),
+            ].map((day, idx) => (
+              <div key={idx} className="tender-calendar__weekday">{day}</div>
             ))}
           </div>
 
@@ -304,11 +316,11 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
           <div className="tender-calendar__legend">
             <div className="tender-calendar__legend-item">
               <span className="tender-calendar__legend-dot tender-calendar__legend-dot--deadline"></span>
-              <span>Submission deadline</span>
+              <span>{t('tenderator.calendar.submissionDeadline')}</span>
             </div>
             <div className="tender-calendar__legend-item">
               <span className="tender-calendar__legend-dot tender-calendar__legend-dot--today"></span>
-              <span>Today</span>
+              <span>{t('tenderator.calendar.today')}</span>
             </div>
           </div>
         </div>
@@ -318,9 +330,9 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
           {upcomingDeadlines.length === 0 ? (
             <div className="tender-calendar__empty">
               <span className="mdi mdi-calendar-blank"></span>
-              <p>No upcoming deadlines found.</p>
+              <p>{t('tenderator.calendar.noUpcomingDeadlines')}</p>
               <p className="tender-calendar__empty-hint">
-                Tenders matched to your profile will appear here.
+                {t('tenderator.calendar.emptyHint')}
               </p>
             </div>
           ) : (
@@ -356,22 +368,22 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
                         {match.match_score && (
                           <span className="tender-calendar__list-score">
                             <span className="mdi mdi-target"></span>
-                            {Math.round(match.match_score)}% match
+                            {Math.round(match.match_score)}% {t('tenderator.calendar.match')}
                           </span>
                         )}
                       </div>
                     </div>
                     <div className="tender-calendar__list-countdown">
                       {daysUntil === 0 ? (
-                        <span className="tender-calendar__countdown-urgent">Due today!</span>
+                        <span className="tender-calendar__countdown-urgent">{t('tenderator.calendar.dueToday')}</span>
                       ) : daysUntil === 1 ? (
-                        <span className="tender-calendar__countdown-urgent">Tomorrow</span>
+                        <span className="tender-calendar__countdown-urgent">{t('tenderator.calendar.tomorrow')}</span>
                       ) : daysUntil < 0 ? (
-                        <span className="tender-calendar__countdown-expired">Expired</span>
+                        <span className="tender-calendar__countdown-expired">{t('tenderator.calendar.expired')}</span>
                       ) : (
                         <>
                           <span className="tender-calendar__countdown-number">{daysUntil}</span>
-                          <span className="tender-calendar__countdown-label">days left</span>
+                          <span className="tender-calendar__countdown-label">{t('tenderator.calendar.daysLeft')}</span>
                         </>
                       )}
                     </div>
@@ -388,8 +400,8 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
         <div className="tender-calendar__day-popup-overlay" onClick={closeDayPopup}>
           <div className="tender-calendar__day-popup" onClick={(e) => e.stopPropagation()}>
             <div className="tender-calendar__day-popup-header">
-              <h3>Deadlines for {selectedDayDate}</h3>
-              <button className="tender-calendar__day-popup-close" onClick={closeDayPopup}>
+              <h3>{t('tenderator.calendar.deadlinesFor')} {selectedDayDate}</h3>
+              <button className="tender-calendar__day-popup-close" onClick={closeDayPopup} aria-label={t('common.close')}>
                 <span className="mdi mdi-close"></span>
               </button>
             </div>

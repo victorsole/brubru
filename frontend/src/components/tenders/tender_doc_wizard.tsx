@@ -10,6 +10,7 @@
  */
 import { useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_doc_wizard.css';
 
@@ -100,6 +101,7 @@ export interface TenderDocWizardProps {
 
 export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: TenderDocWizardProps) => {
  const { token } = useAuth();
+ const { t } = useTranslation();
 
  const [step, setStep] = useState<number>(initialTemplateId ? 2 : 1);
  const [templates, setTemplates] = useState<TemplateSummary[]>([]);
@@ -171,7 +173,7 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
 
  const submit = async () => {
  if (!selectedTemplateId || !title.trim()) {
- setError('Please choose a template and give your tender doc a title.');
+ setError(t('tenderator.docWizard.errorMissingTemplateAndTitle'));
  return;
  }
  setSubmitting(true);
@@ -210,24 +212,23 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  return createPortal(
  <div className="td-wiz__scrim" onClick={onClose}>
  <div className="td-wiz" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
- <button className="td-wiz__close" onClick={onClose} aria-label="Close wizard">
+ <button className="td-wiz__close" onClick={onClose} aria-label={t('tenderator.docWizard.closeWizard')}>
  <span className="mdi mdi-close" />
  </button>
 
  {/* Step indicator */}
  <div className="td-wiz__steps">
- <div className={`td-wiz__step ${step >= 1 ? 'is-active' : ''}`}>1. Programme</div>
- <div className={`td-wiz__step ${step >= 2 ? 'is-active' : ''}`}>2. Topic + funding</div>
- <div className={`td-wiz__step ${step >= 3 ? 'is-active' : ''}`}>3. Name + start</div>
+ <div className={`td-wiz__step ${step >= 1 ? 'is-active' : ''}`}>{t('tenderator.docWizard.step1Programme')}</div>
+ <div className={`td-wiz__step ${step >= 2 ? 'is-active' : ''}`}>{t('tenderator.docWizard.step2TopicFunding')}</div>
+ <div className={`td-wiz__step ${step >= 3 ? 'is-active' : ''}`}>{t('tenderator.docWizard.step3NameStart')}</div>
  </div>
 
  {/* Step 1: Programme picker */}
  {step === 1 && (
  <div className="td-wiz__body">
- <h2>Which programme?</h2>
+ <h2>{t('tenderator.docWizard.whichProgramme')}</h2>
  <p className="td-wiz__hint">
- Brubru ships a template per (programme × sub-instrument × stage). We start
- you with the official EU section structure for your chosen track.
+ {t('tenderator.docWizard.step1Hint')}
  </p>
  <div className="td-wiz__programmes">
  {Object.entries(programmes).map(([p, tpls]) => (
@@ -248,7 +249,7 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  {tpl.deadline && (
  <div className="td-wiz__tpl-deadline">
  <span className="mdi mdi-calendar-clock" />{' '}
- Next cut-off: {new Date(tpl.deadline).toLocaleDateString()}
+ {t('tenderator.docWizard.nextCutOff')}: {new Date(tpl.deadline).toLocaleDateString()}
  </div>
  )}
  {tpl.note && <div className="td-wiz__tpl-note">{tpl.note}</div>}
@@ -259,13 +260,13 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  ))}
  </div>
  <div className="td-wiz__actions">
- <button className="td-wiz__btn td-wiz__btn--ghost" onClick={onClose}>Cancel</button>
+ <button className="td-wiz__btn td-wiz__btn--ghost" onClick={onClose}>{t('tenderator.docWizard.cancel')}</button>
  <button
  className="td-wiz__btn td-wiz__btn--primary"
  disabled={!selectedTemplateId}
  onClick={() => setStep(2)}
  >
- Next
+ {t('tenderator.docWizard.next')}
  </button>
  </div>
  </div>
@@ -275,51 +276,49 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  {step === 2 && templateDetail && (
  <div className="td-wiz__body">
  <div className="td-wiz__green-disclaimer">
- <span className="mdi mdi-check-decagram" /> You are using the{' '}
- <strong>{templateDetail.scaffold_version || 'current'}</strong> version of the official EU template
- ({templateDetail.name}).
+ <span className="mdi mdi-check-decagram" /> {t('tenderator.docWizard.usingTemplateVersion', { version: templateDetail.scaffold_version || 'current', template: templateDetail.name })}
  </div>
  <h2>{templateDetail.name}</h2>
- <p className="td-wiz__hint">{loadingDetail ? 'Loading template detail...' : 'Adjust topic + funding mode if relevant. You can change these later.'}</p>
+ <p className="td-wiz__hint">{loadingDetail ? t('tenderator.docWizard.loadingTemplateDetail') : t('tenderator.docWizard.step2Hint')}</p>
 
  <label className="td-wiz__field">
- <span>Topic ID (F&T Portal)</span>
+ <span>{t('tenderator.docWizard.topicIdLabel')}</span>
  <input
  type="text"
  value={topicId}
  onChange={(e) => setTopicId(e.target.value)}
- placeholder={templateDetail.topic_id_default || 'HORIZON-EIC-2026-...'}
+ placeholder={templateDetail.topic_id_default || t('tenderator.docWizard.topicIdPlaceholder')}
  />
  </label>
 
  {templateDetail.sub_instrument === 'accelerator' && (
  <label className="td-wiz__field">
- <span>Challenge variant (Stage 2 only leave blank for Open)</span>
+ <span>{t('tenderator.docWizard.challengeVariantLabel')}</span>
  <select value={topicVariant} onChange={(e) => setTopicVariant(e.target.value)}>
- <option value=""> Open call</option>
- <option value="challenge-2.1">2.1 Advanced Materials for Renewable Energy</option>
- <option value="challenge-2.2">2.2 Fusion Power Plants</option>
- <option value="challenge-2.3">2.3 Biotech for Regenerating Agricultural Soils</option>
- <option value="challenge-2.4">2.4 Critical Raw Materials value chain</option>
- <option value="challenge-2.5">2.5 Deep Tech for Climate Adaptation</option>
+ <option value="">{t('tenderator.docWizard.challengeOpenCall')}</option>
+ <option value="challenge-2.1">{t('tenderator.docWizard.challenge21')}</option>
+ <option value="challenge-2.2">{t('tenderator.docWizard.challenge22')}</option>
+ <option value="challenge-2.3">{t('tenderator.docWizard.challenge23')}</option>
+ <option value="challenge-2.4">{t('tenderator.docWizard.challenge24')}</option>
+ <option value="challenge-2.5">{t('tenderator.docWizard.challenge25')}</option>
  </select>
  </label>
  )}
 
  {showFundingMode && (
  <label className="td-wiz__field">
- <span>Funding mode</span>
+ <span>{t('tenderator.docWizard.fundingModeLabel')}</span>
  <select value={fundingMode} onChange={(e) => setFundingMode(e.target.value)}>
- <option value=""> Pick one</option>
- {Object.entries(FUNDING_MODE_LABELS).map(([k, v]) => (
- <option key={k} value={k}>{v}</option>
+ <option value="">{t('tenderator.docWizard.fundingModePickOne')}</option>
+ {Object.keys(FUNDING_MODE_LABELS).map((k) => (
+ <option key={k} value={k}>{t(`tenderator.docWizard.fundingMode${k.charAt(0).toUpperCase() + k.slice(1).replace(/-/g, '')}`)}</option>
  ))}
  </select>
  </label>
  )}
 
  <label className="td-wiz__field">
- <span>Deadline (cut-off) pre-filled with next applicable cut-off</span>
+ <span>{t('tenderator.docWizard.deadlineLabel')}</span>
  <input
  type="datetime-local"
  value={deadlineIso ? deadlineIso.slice(0, 16) : ''}
@@ -328,12 +327,12 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  </label>
 
  <div className="td-wiz__actions">
- <button className="td-wiz__btn td-wiz__btn--ghost" onClick={() => setStep(1)}>Back</button>
+ <button className="td-wiz__btn td-wiz__btn--ghost" onClick={() => setStep(1)}>{t('tenderator.docWizard.back')}</button>
  <button
  className="td-wiz__btn td-wiz__btn--primary"
  onClick={() => setStep(3)}
  >
- Next
+ {t('tenderator.docWizard.next')}
  </button>
  </div>
  </div>
@@ -342,45 +341,43 @@ export const TenderDocWizard = ({ initialTemplateId, onClose, onCreated }: Tende
  {/* Step 3: Title + create */}
  {step === 3 && templateDetail && (
  <div className="td-wiz__body">
- <h2>Name your Tender File</h2>
+ <h2>{t('tenderator.docWizard.nameTenderFile')}</h2>
  <p className="td-wiz__hint">
- A Tender File groups all the documents you write for ONE application 
- the Part B narrative, pitch deck, video script, annexes. We'll seed the first
- doc from the official template's section structure so you don't start from a blank page.
+ {t('tenderator.docWizard.step3Hint')}
  </p>
  <label className="td-wiz__field">
- <span>File title</span>
+ <span>{t('tenderator.docWizard.fileTitleLabel')}</span>
  <input
  type="text"
  value={title}
  onChange={(e) => setTitle(e.target.value)}
- placeholder="e.g. ACME EIC Accelerator 2026 Cut-off 4"
+ placeholder={t('tenderator.docWizard.fileTitlePlaceholder')}
  autoFocus
  />
  </label>
  <div className="td-wiz__summary">
- <div><strong>Template:</strong> {templateDetail.name}</div>
- <div><strong>Scaffold version:</strong> {templateDetail.scaffold_version}</div>
- {fundingMode && <div><strong>Funding mode:</strong> {FUNDING_MODE_LABELS[fundingMode] || fundingMode}</div>}
- {topicId && <div><strong>Topic ID:</strong> <code>{topicId}</code></div>}
- {topicVariant && <div><strong>Challenge:</strong> {topicVariant}</div>}
- {deadlineIso && <div><strong>Deadline:</strong> {new Date(deadlineIso).toLocaleString()}</div>}
+ <div><strong>{t('tenderator.docWizard.summaryTemplate')}:</strong> {templateDetail.name}</div>
+ <div><strong>{t('tenderator.docWizard.summaryScaffoldVersion')}:</strong> {templateDetail.scaffold_version}</div>
+ {fundingMode && <div><strong>{t('tenderator.docWizard.summaryFundingMode')}:</strong> {t(`tenderator.docWizard.fundingMode${fundingMode.charAt(0).toUpperCase() + fundingMode.slice(1).replace(/-/g, '')}`) || fundingMode}</div>}
+ {topicId && <div><strong>{t('tenderator.docWizard.summaryTopicId')}:</strong> <code>{topicId}</code></div>}
+ {topicVariant && <div><strong>{t('tenderator.docWizard.summaryChallenge')}:</strong> {topicVariant}</div>}
+ {deadlineIso && <div><strong>{t('tenderator.docWizard.summaryDeadline')}:</strong> {new Date(deadlineIso).toLocaleString()}</div>}
  {(templateDetail.documents || []).length > 0 && (
  <div>
- <strong>We'll seed:</strong> the first document
- {' '}({(templateDetail.documents || [])[0]?.title}). You can add more from the editor.
+ <strong>{t('tenderator.docWizard.summaryWeSeed')}:</strong> {t('tenderator.docWizard.summaryFirstDocument')}
+ {' '}({(templateDetail.documents || [])[0]?.title}). {t('tenderator.docWizard.summaryAddMore')}
  </div>
  )}
  </div>
  {error && <div className="td-wiz__error">{error}</div>}
  <div className="td-wiz__actions">
- <button className="td-wiz__btn td-wiz__btn--ghost" onClick={() => setStep(2)} disabled={submitting}>Back</button>
+ <button className="td-wiz__btn td-wiz__btn--ghost" onClick={() => setStep(2)} disabled={submitting}>{t('tenderator.docWizard.back')}</button>
  <button
  className="td-wiz__btn td-wiz__btn--primary"
  onClick={submit}
  disabled={submitting || !title.trim()}
  >
- {submitting ? 'Creating…' : 'Create & open editor'}
+ {submitting ? t('tenderator.docWizard.creating') : t('tenderator.docWizard.createAndOpenEditor')}
  </button>
  </div>
  </div>

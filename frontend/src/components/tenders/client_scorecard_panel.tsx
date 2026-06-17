@@ -12,6 +12,7 @@
 // Fail-soft: if scorecard_available=false, render nothing.
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './client_scorecard_panel.css';
 
@@ -70,12 +71,13 @@ interface Props {
   };
 }
 
-const OUTCOME_LABEL: Record<string, string> = {
-  awarded: 'Won',
-  not_awarded: 'Lost',
-  pending: 'Pending',
-  cancelled: 'Cancelled',
-  withdrawn: 'Withdrawn',
+// i18n keys are mapped dynamically via t() in the render logic
+const OUTCOME_I18N_KEY: Record<string, string> = {
+  awarded: 'tenderator.clientScorecard.outcomeWon',
+  not_awarded: 'tenderator.clientScorecard.outcomeLost',
+  pending: 'tenderator.clientScorecard.outcomePending',
+  cancelled: 'tenderator.clientScorecard.outcomeCancelled',
+  withdrawn: 'tenderator.clientScorecard.outcomeWithdrawn',
 };
 
 const OUTCOME_CLS: Record<string, string> = {
@@ -87,6 +89,7 @@ const OUTCOME_CLS: Record<string, string> = {
 };
 
 export const ClientScorecardPanel = ({ opportunity }: Props) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const [data, setData] = useState<ScorecardResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -134,29 +137,29 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
     <div className="scorecard-panel">
       <div className="scorecard-panel__header">
         <span className="mdi mdi-chart-arc" aria-hidden="true" />
-        <span className="scorecard-panel__title">Your win-rate intel</span>
-        <span className="scorecard-panel__subtitle">from your internal tracker</span>
+        <span className="scorecard-panel__title">{t('tenderator.clientScorecard.title')}</span>
+        <span className="scorecard-panel__subtitle">{t('tenderator.clientScorecard.subtitle')}</span>
       </div>
 
       {/* Overall band */}
       <div className="scorecard-panel__overall">
         <div className="scorecard-panel__stat">
           <span className="scorecard-panel__stat-value">
-            {wr !== null ? `${wr}%` : 'n/a'}
+            {wr !== null ? `${wr}%` : t('tenderator.clientScorecard.notAvailable')}
           </span>
-          <span className="scorecard-panel__stat-label">Win rate on decided</span>
+          <span className="scorecard-panel__stat-label">{t('tenderator.clientScorecard.winRateLabel')}</span>
         </div>
         <div className="scorecard-panel__stat">
           <span className="scorecard-panel__stat-value">{data.overall.awarded}</span>
-          <span className="scorecard-panel__stat-label">Awarded</span>
+          <span className="scorecard-panel__stat-label">{t('tenderator.clientScorecard.awardedLabel')}</span>
         </div>
         <div className="scorecard-panel__stat">
           <span className="scorecard-panel__stat-value">{data.overall.not_awarded}</span>
-          <span className="scorecard-panel__stat-label">Lost</span>
+          <span className="scorecard-panel__stat-label">{t('tenderator.clientScorecard.lostLabel')}</span>
         </div>
         <div className="scorecard-panel__stat">
           <span className="scorecard-panel__stat-value">{data.overall.pending}</span>
-          <span className="scorecard-panel__stat-label">Pending</span>
+          <span className="scorecard-panel__stat-label">{t('tenderator.clientScorecard.pendingLabel')}</span>
         </div>
       </div>
 
@@ -165,7 +168,7 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
         <div className="scorecard-panel__breakdowns">
           {topLead.length > 0 && (
             <div className="scorecard-panel__breakdown">
-              <div className="scorecard-panel__breakdown-title">By leading partner</div>
+              <div className="scorecard-panel__breakdown-title">{t('tenderator.clientScorecard.byLeadingPartner')}</div>
               <ul className="scorecard-panel__breakdown-list">
                 {topLead.map((r) => (
                   <li key={r.leading_partner}>
@@ -181,7 +184,7 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
           )}
           {topCA.length > 0 && (
             <div className="scorecard-panel__breakdown">
-              <div className="scorecard-panel__breakdown-title">By contracting authority</div>
+              <div className="scorecard-panel__breakdown-title">{t('tenderator.clientScorecard.byContractingAuthority')}</div>
               <ul className="scorecard-panel__breakdown-list">
                 {topCA.map((r) => (
                   <li key={r.contracting_authority}>
@@ -201,7 +204,7 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
       {/* Lookalikes */}
       {lookalikes.length > 0 && (
         <div className="scorecard-panel__lookalikes">
-          <div className="scorecard-panel__lookalikes-title">Lookalike past bids</div>
+          <div className="scorecard-panel__lookalikes-title">{t('tenderator.clientScorecard.lookalikePastBids')}</div>
           <ul className="scorecard-panel__lookalikes-list">
             {lookalikes.map((r) => (
               <li key={r.id} className="scorecard-panel__lookalike">
@@ -209,7 +212,7 @@ export const ClientScorecardPanel = ({ opportunity }: Props) => {
                   <span
                     className={`scorecard-panel__lookalike-outcome ${OUTCOME_CLS[r.outcome] || ''}`}
                   >
-                    {OUTCOME_LABEL[r.outcome] || r.outcome}
+                    {t(OUTCOME_I18N_KEY[r.outcome] || 'tenderator.clientScorecard.outcomeUnknown', r.outcome)}
                   </span>
                   <span className="scorecard-panel__lookalike-title">{r.project_title}</span>
                 </div>

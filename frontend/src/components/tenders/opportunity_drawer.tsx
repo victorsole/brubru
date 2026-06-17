@@ -8,6 +8,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import type { UnifiedOpportunity } from './unified_opportunity_feed';
 import { ClientScorecardPanel } from './client_scorecard_panel';
@@ -113,23 +114,25 @@ interface EicGrantee {
   source_url: string;
 }
 
-const SOURCE_LABEL: Record<UnifiedOpportunity['source'], { label: string; icon: string }> = {
-  ted: { label: 'TED tender', icon: 'mdi-gavel' },
-  ft_proposals: { label: 'F&T call for proposals', icon: 'mdi-flask-outline' },
-  ft_tenders: { label: 'F&T call for tenders', icon: 'mdi-file-document-outline' },
-  ft_projects: { label: 'F&T funded project', icon: 'mdi-trophy-outline' },
-  agency: { label: 'Agency procurement', icon: 'mdi-office-building-outline' },
-  intl_coop: { label: 'EU aid award (FTS)', icon: 'mdi-handshake-outline' },
+// Note: SOURCE_LABEL and BRIEF_FIELDS labels are now i18n keys.
+// The component reads them using useTranslation() below.
+const SOURCE_LABEL_KEYS: Record<UnifiedOpportunity['source'], { labelKey: string; icon: string }> = {
+  ted: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.ted', icon: 'mdi-gavel' },
+  ft_proposals: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.ftProposals', icon: 'mdi-flask-outline' },
+  ft_tenders: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.ftTenders', icon: 'mdi-file-document-outline' },
+  ft_projects: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.ftProjects', icon: 'mdi-trophy-outline' },
+  agency: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.agency', icon: 'mdi-office-building-outline' },
+  intl_coop: { labelKey: 'tenderator.opportunityDrawer.sourceLabels.intlCoop', icon: 'mdi-handshake-outline' },
 };
 
-const BRIEF_FIELDS: Array<{ key: keyof BriefFields; label: string; icon: string }> = [
-  { key: 'scope', label: 'Scope', icon: 'mdi-target' },
-  { key: 'eligible_applicants', label: 'Eligible applicants', icon: 'mdi-account-group-outline' },
-  { key: 'budget_per_project', label: 'Budget per project', icon: 'mdi-currency-eur' },
-  { key: 'trl_range', label: 'TRL range', icon: 'mdi-chart-bell-curve' },
-  { key: 'key_dates', label: 'Key dates', icon: 'mdi-calendar-clock' },
-  { key: 'evaluation_criteria', label: 'Evaluation criteria', icon: 'mdi-scale-balance' },
-  { key: 'first_steps', label: 'First steps', icon: 'mdi-rocket-launch-outline' },
+const BRIEF_FIELDS_KEYS: Array<{ key: keyof BriefFields; labelKey: string; icon: string }> = [
+  { key: 'scope', labelKey: 'tenderator.opportunityDrawer.briefFields.scope', icon: 'mdi-target' },
+  { key: 'eligible_applicants', labelKey: 'tenderator.opportunityDrawer.briefFields.eligibleApplicants', icon: 'mdi-account-group-outline' },
+  { key: 'budget_per_project', labelKey: 'tenderator.opportunityDrawer.briefFields.budgetPerProject', icon: 'mdi-currency-eur' },
+  { key: 'trl_range', labelKey: 'tenderator.opportunityDrawer.briefFields.trlRange', icon: 'mdi-chart-bell-curve' },
+  { key: 'key_dates', labelKey: 'tenderator.opportunityDrawer.briefFields.keyDates', icon: 'mdi-calendar-clock' },
+  { key: 'evaluation_criteria', labelKey: 'tenderator.opportunityDrawer.briefFields.evaluationCriteria', icon: 'mdi-scale-balance' },
+  { key: 'first_steps', labelKey: 'tenderator.opportunityDrawer.briefFields.firstSteps', icon: 'mdi-rocket-launch-outline' },
 ];
 
 const formatValue = (value: number | null, currency: string = 'EUR'): string | null => {
@@ -149,6 +152,7 @@ const formatDate = (iso: string | null): string | null => {
 };
 
 export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerProps) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const navigate = useNavigate();
   const [brief, setBrief] = useState<BriefResponse | null>(null);
@@ -348,15 +352,15 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
         body: JSON.stringify({ opportunity_id: opportunity.id }),
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ detail: 'Brief generation failed.' }));
-        setBriefError(err.detail || 'Brief generation failed.');
+        const err = await res.json().catch(() => ({ detail: t('tenderator.opportunityDrawer.errors.briefGenerationFailed') }));
+        setBriefError(err.detail || t('tenderator.opportunityDrawer.errors.briefGenerationFailed'));
         return;
       }
       const data = await res.json();
       setBrief(data);
     } catch (e) {
       console.error('brief fetch failed:', e);
-      setBriefError('Brief generation failed.');
+      setBriefError(t('tenderator.opportunityDrawer.errors.briefGenerationFailed'));
     } finally {
       setBriefLoading(false);
     }
@@ -403,14 +407,15 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
     }
   };
 
-  const tag = SOURCE_LABEL[opportunity.source];
+  const tagKey = SOURCE_LABEL_KEYS[opportunity.source];
+  const tag = { label: t(tagKey.labelKey), icon: tagKey.icon };
 
   return createPortal(
     <div
       className="opportunity-drawer__overlay"
       role="dialog"
       aria-modal="true"
-      aria-label={`Opportunity details: ${opportunity.title}`}
+      aria-label={t('tenderator.opportunityDrawer.ariaLabel.opportunityDetails', { title: opportunity.title })}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -424,17 +429,17 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
           {opportunity.translated_from && (
             <span
               className="opportunity-drawer__lang-badge"
-              title={`Original language: ${opportunity.translated_from}. Translation by M2M100, may contain inaccuracies.`}
+              title={t('tenderator.opportunityDrawer.translationNotice', { language: opportunity.translated_from })}
             >
               <span className="mdi mdi-translate" aria-hidden="true" />
-              translated from {opportunity.translated_from}
+              {t('tenderator.opportunityDrawer.translatedFrom', { language: opportunity.translated_from })}
             </span>
           )}
           <button
             type="button"
             className="opportunity-drawer__close"
             onClick={onClose}
-            aria-label="Close drawer"
+            aria-label={t('tenderator.opportunityDrawer.closeDrawer')}
           >
             <span className="mdi mdi-close" aria-hidden="true" />
           </button>
@@ -446,13 +451,13 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
           <dl className="opportunity-drawer__meta">
             {opportunity.external_id && (
               <div>
-                <dt>Reference</dt>
+                <dt>{t('tenderator.opportunityDrawer.metaLabels.reference')}</dt>
                 <dd className="opportunity-drawer__meta-mono">{opportunity.external_id}</dd>
               </div>
             )}
             {opportunity.programme && (
               <div>
-                <dt>Programme</dt>
+                <dt>{t('tenderator.opportunityDrawer.metaLabels.programme')}</dt>
                 <dd>{opportunity.programme}</dd>
               </div>
             )}
@@ -460,41 +465,41 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
               <div>
                 <dt>
                   {opportunity.source === 'ft_projects'
-                    ? 'Coordinator'
+                    ? t('tenderator.opportunityDrawer.metaLabels.coordinator')
                     : opportunity.source === 'agency'
-                    ? 'Agency'
-                    : 'Organisation'}
+                    ? t('tenderator.opportunityDrawer.metaLabels.agency')
+                    : t('tenderator.opportunityDrawer.metaLabels.organisation')}
                 </dt>
                 <dd>{opportunity.organisation}</dd>
               </div>
             )}
             {opportunity.country && (
               <div>
-                <dt>Country</dt>
+                <dt>{t('tenderator.opportunityDrawer.metaLabels.country')}</dt>
                 <dd>{opportunity.country}</dd>
               </div>
             )}
             {opportunity.budget && (
               <div>
-                <dt>{opportunity.source === 'ft_projects' ? 'EU contribution' : 'Budget'}</dt>
+                <dt>{opportunity.source === 'ft_projects' ? t('tenderator.opportunityDrawer.metaLabels.euContribution') : t('tenderator.opportunityDrawer.metaLabels.budget')}</dt>
                 <dd>{formatValue(opportunity.budget, opportunity.currency)}</dd>
               </div>
             )}
             {opportunity.deadline && (
               <div>
-                <dt>{opportunity.source === 'ft_projects' ? 'End date' : 'Deadline'}</dt>
+                <dt>{opportunity.source === 'ft_projects' ? t('tenderator.opportunityDrawer.metaLabels.endDate') : t('tenderator.opportunityDrawer.metaLabels.deadline')}</dt>
                 <dd>{formatDate(opportunity.deadline)}</dd>
               </div>
             )}
             {opportunity.published_at && (
               <div>
-                <dt>{opportunity.source === 'ft_projects' ? 'Start date' : 'Published'}</dt>
+                <dt>{opportunity.source === 'ft_projects' ? t('tenderator.opportunityDrawer.metaLabels.startDate') : t('tenderator.opportunityDrawer.metaLabels.published')}</dt>
                 <dd>{formatDate(opportunity.published_at)}</dd>
               </div>
             )}
             {opportunity.status && (
               <div>
-                <dt>Status</dt>
+                <dt>{t('tenderator.opportunityDrawer.metaLabels.status')}</dt>
                 <dd>{opportunity.status}</dd>
               </div>
             )}
@@ -504,7 +509,7 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <section className="opportunity-drawer__section">
               <h3>
                 <span className="mdi mdi-text-box-outline" aria-hidden="true" />
-                Description
+                {t('tenderator.opportunityDrawer.sections.description')}
               </h3>
               <p className="opportunity-drawer__description">{opportunity.description}</p>
             </section>
@@ -529,7 +534,7 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
           <section className="opportunity-drawer__section">
             <h3>
               <span className="mdi mdi-robot-outline" aria-hidden="true" />
-              Brubru brief
+              {t('tenderator.opportunityDrawer.sections.brubruBrief')}
             </h3>
             {!brief && !briefLoading && (
               <button
@@ -538,13 +543,13 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                 onClick={handleGenerateBrief}
               >
                 <span className="mdi mdi-flash-outline" aria-hidden="true" />
-                Generate a one-page brief
+                {t('tenderator.opportunityDrawer.actions.generateBrief')}
               </button>
             )}
             {briefLoading && (
               <div className="opportunity-drawer__brief-loading">
                 <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-                Reading the call and extracting the seven key fields...
+                {t('tenderator.opportunityDrawer.states.readingCall')}
               </div>
             )}
             {briefError && (
@@ -555,11 +560,11 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             )}
             {brief && (
               <dl className="opportunity-drawer__brief-fields">
-                {BRIEF_FIELDS.map((f) => (
+                {BRIEF_FIELDS_KEYS.map((f) => (
                   <div key={f.key} className="opportunity-drawer__brief-field">
                     <dt>
                       <span className={`mdi ${f.icon}`} aria-hidden="true" />
-                      {f.label}
+                      {t(f.labelKey)}
                     </dt>
                     <dd>{brief.brief[f.key]}</dd>
                   </div>
@@ -578,17 +583,17 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <section className="opportunity-drawer__section">
               <h3>
                 <span className="mdi mdi-account-network-outline" aria-hidden="true" />
-                Past grantees on similar calls
+                {t('tenderator.opportunityDrawer.sections.pastGrantees')}
               </h3>
               {similarLoading && (
                 <div className="opportunity-drawer__similar-loading">
                   <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-                  Searching CORDIS for projects that won under the same programme and action type...
+                  {t('tenderator.opportunityDrawer.states.searchingCordis')}
                 </div>
               )}
               {!similarLoading && similar && similar.items.length === 0 && (
                 <p className="opportunity-drawer__similar-empty">
-                  {similar.note || 'No matching projects found.'}
+                  {similar.note || t('tenderator.opportunityDrawer.states.noMatchingProjects')}
                 </p>
               )}
               {!similarLoading && similar && similar.items.length > 0 && (
@@ -633,18 +638,18 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <section className="opportunity-drawer__section opportunity-drawer__section--eic-fund">
               <h3>
                 <span className="mdi mdi-rocket-launch-outline" aria-hidden="true" />
-                EIC Fund portfolio &mdash; concrete examples
+                {t('tenderator.opportunityDrawer.sections.eicFundPortfolio')}
               </h3>
               {eicGranteesLoading && (
                 <div className="opportunity-drawer__similar-loading">
                   <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-                  Sampling the EIC Fund&apos;s public portfolio...
+                  {t('tenderator.opportunityDrawer.states.samplingEicFund')}
                 </div>
               )}
               {!eicGranteesLoading && eicGrantees && eicGrantees.length > 0 && (
                 <>
                   <p className="opportunity-drawer__eic-fund-intro">
-                    Companies the EIC Fund has actually invested in. Use these as benchmarks for your own positioning.
+                    {t('tenderator.opportunityDrawer.text.eicFundIntro')}
                   </p>
                   <ul className="opportunity-drawer__eic-fund-list">
                     {eicGrantees.map((g, i) => (
@@ -682,12 +687,12 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <section className="opportunity-drawer__section">
               <h3>
                 <span className="mdi mdi-earth" aria-hidden="true" />
-                Past EU aid in {intlSummary?.country || opportunity.country}
+                {t('tenderator.opportunityDrawer.sections.pastEuAid', { country: intlSummary?.country || opportunity.country })}
                 {intlSummary?.programme && (
                   <span className="opportunity-drawer__intl-prog-tag">
                     {intlSummary.programme === 'ndici' ? 'NDICI'
                       : intlSummary.programme === 'ipa3' ? 'IPA III'
-                      : intlSummary.programme === 'humanitarian' ? 'Humanitarian Aid'
+                      : intlSummary.programme === 'humanitarian' ? t('tenderator.opportunityDrawer.programmeLabels.humanitarian')
                       : intlSummary.programme}
                   </span>
                 )}
@@ -695,7 +700,7 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
               {intlSummaryLoading && (
                 <div className="opportunity-drawer__similar-loading">
                   <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-                  Checking EU Financial Transparency System...
+                  {t('tenderator.opportunityDrawer.states.checkingFinancialTransparency')}
                 </div>
               )}
               {!intlSummaryLoading && intlSummary && intlSummary.count > 0 && (
@@ -703,14 +708,14 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                   <div className="opportunity-drawer__intl-stats">
                     <div className="opportunity-drawer__intl-stat">
                       <span className="opportunity-drawer__intl-stat-value">{intlSummary.count}</span>
-                      <span className="opportunity-drawer__intl-stat-label">past awards (last {intlSummary.years_back}y)</span>
+                      <span className="opportunity-drawer__intl-stat-label">{t('tenderator.opportunityDrawer.stats.pastAwards', { years: intlSummary.years_back })}</span>
                     </div>
                     {intlSummary.total_amount_eur ? (
                       <div className="opportunity-drawer__intl-stat">
                         <span className="opportunity-drawer__intl-stat-value">
                           €{(intlSummary.total_amount_eur / 1e6).toFixed(1)}M
                         </span>
-                        <span className="opportunity-drawer__intl-stat-label">total EU commitment</span>
+                        <span className="opportunity-drawer__intl-stat-label">{t('tenderator.opportunityDrawer.stats.totalEuCommitment')}</span>
                       </div>
                     ) : null}
                     {intlSummary.avg_amount_eur ? (
@@ -720,23 +725,23 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
                             ? `${(intlSummary.avg_amount_eur / 1e6).toFixed(1)}M`
                             : `${Math.round(intlSummary.avg_amount_eur / 1e3)}k`}
                         </span>
-                        <span className="opportunity-drawer__intl-stat-label">average</span>
+                        <span className="opportunity-drawer__intl-stat-label">{t('tenderator.opportunityDrawer.stats.average')}</span>
                       </div>
                     ) : null}
                   </div>
 
                   {intlSummary.top_winners.length > 0 && (
                     <div className="opportunity-drawer__intl-winners">
-                      <h4 className="opportunity-drawer__intl-subheading">Top winners</h4>
+                      <h4 className="opportunity-drawer__intl-subheading">{t('tenderator.opportunityDrawer.sections.topWinners')}</h4>
                       <ul className="opportunity-drawer__intl-winner-list">
                         {intlSummary.top_winners.map((w) => (
                           <li key={w.name} className="opportunity-drawer__intl-winner">
                             <a
                               className="opportunity-drawer__intl-winner-name"
                               href={`/main?q=${encodeURIComponent(
-                                `What does Brubru know about ${w.name}?`
+                                t('tenderator.opportunityDrawer.queries.askAboutOrganisation', { name: w.name })
                               )}`}
-                              title="Ask Brubru about this organisation"
+                              title={t('tenderator.opportunityDrawer.titles.askAboutOrganisation')}
                             >
                               {w.name}
                             </a>
@@ -753,7 +758,7 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
 
                   {intlSummary.recent.length > 0 && (
                     <div className="opportunity-drawer__intl-recent">
-                      <h4 className="opportunity-drawer__intl-subheading">Recent awards</h4>
+                      <h4 className="opportunity-drawer__intl-subheading">{t('tenderator.opportunityDrawer.sections.recentAwards')}</h4>
                       <ul className="opportunity-drawer__intl-recent-list">
                         {intlSummary.recent.map((r) => (
                           <li key={r.id} className="opportunity-drawer__intl-recent-item">
@@ -794,12 +799,12 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             <section className="opportunity-drawer__section">
               <h3>
                 <span className="mdi mdi-trophy-award" aria-hidden="true" />
-                Who has won this kind of EU money before
+                {t('tenderator.opportunityDrawer.sections.winnersPastEuMoney')}
               </h3>
               {recipientsLoading && (
                 <div className="opportunity-drawer__similar-loading">
                   <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-                  Checking the EU Financial Transparency System for past direct-management recipients...
+                  {t('tenderator.opportunityDrawer.states.checkingFinancialTransparencyRecipients')}
                 </div>
               )}
               {!recipientsLoading && recipients && recipients.items.length > 0 && (
@@ -827,17 +832,17 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
             onClick={handleAskBrubru}
           >
             <span className="mdi mdi-chat-processing-outline" aria-hidden="true" />
-            Discuss with Brubru
+            {t('tenderator.opportunityDrawer.actions.discussWithBrubru')}
           </button>
           <button
             type="button"
             className={`opportunity-drawer__action opportunity-drawer__action--pipeline ${pipelineAdded ? 'opportunity-drawer__action--added' : ''}`}
             onClick={handleAddToPipeline}
             disabled={addingToPipeline || pipelineAdded}
-            title={pipelineAdded ? 'Already in your pipeline' : 'Track this opportunity in your pipeline'}
+            title={pipelineAdded ? t('tenderator.opportunityDrawer.titles.alreadyInPipeline') : t('tenderator.opportunityDrawer.titles.trackOpportunity')}
           >
             <span className={`mdi ${pipelineAdded ? 'mdi-check' : addingToPipeline ? 'mdi-loading mdi-spin' : 'mdi-clipboard-plus-outline'}`} aria-hidden="true" />
-            {pipelineAdded ? 'Added to pipeline' : addingToPipeline ? 'Adding...' : 'Add to pipeline'}
+            {pipelineAdded ? t('tenderator.opportunityDrawer.actions.addedToPipeline') : addingToPipeline ? t('tenderator.opportunityDrawer.states.adding') : t('tenderator.opportunityDrawer.actions.addToPipeline')}
           </button>
           {opportunity.source_url && (
             <a
@@ -847,7 +852,7 @@ export const OpportunityDrawer = ({ opportunity, onClose }: OpportunityDrawerPro
               className="opportunity-drawer__action opportunity-drawer__action--primary"
             >
               <span className="mdi mdi-open-in-new" aria-hidden="true" />
-              Open original
+              {t('tenderator.opportunityDrawer.actions.openOriginal')}
             </a>
           )}
         </footer>

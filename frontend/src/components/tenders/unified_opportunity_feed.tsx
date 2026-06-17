@@ -72,32 +72,32 @@ interface UnifiedFeedProps {
   onSelectOpportunity?: (opp: UnifiedOpportunity) => void;
 }
 
-const SOURCE_LABELS: Record<UnifiedOpportunity['source'], { label: string; icon: string; colour: string; hint: string }> = {
+const getSourceLabels = (t: any): Record<UnifiedOpportunity['source'], { label: string; icon: string; colour: string; hint: string }> => ({
   ted: {
-    label: 'TED', icon: 'mdi-gavel', colour: 'tenderator-feed__source--ted',
-    hint: "Tenders Electronic Daily: the EU's official public-procurement journal. Member-state notices above legal thresholds (works ≥€5.5M, supplies/services ≥€143-215k, depending on the buyer)."
+    label: t('tenderator.unifiedFeed.sourceLabels.ted.label'), icon: 'mdi-gavel', colour: 'tenderator-feed__source--ted',
+    hint: t('tenderator.unifiedFeed.sourceLabels.ted.hint')
   },
   ft_proposals: {
-    label: 'Call for proposals', icon: 'mdi-flask-outline', colour: 'tenderator-feed__source--proposals',
-    hint: "Competitive grant call on the EU Funding & Tenders Portal. You submit a project proposal; the Commission scores it on excellence + impact + implementation. Used by Horizon Europe, Digital Europe, Erasmus+, etc."
+    label: t('tenderator.unifiedFeed.sourceLabels.ftProposals.label'), icon: 'mdi-flask-outline', colour: 'tenderator-feed__source--proposals',
+    hint: t('tenderator.unifiedFeed.sourceLabels.ftProposals.hint')
   },
   ft_tenders: {
-    label: 'Call for tenders', icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders',
-    hint: "Procurement call on the EU Funding & Tenders Portal. The buyer is the Commission or an executive agency; the bid sells a defined service or supply at a stated price. Compliance-graded, not narrative-scored."
+    label: t('tenderator.unifiedFeed.sourceLabels.ftTenders.label'), icon: 'mdi-file-document-outline', colour: 'tenderator-feed__source--tenders',
+    hint: t('tenderator.unifiedFeed.sourceLabels.ftTenders.hint')
   },
   ft_projects: {
-    label: 'Funded project', icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects',
-    hint: "A consortium or organisation that has already received an EU grant. Use these rows to find consortium partners, study past winners' track record, and benchmark budgets."
+    label: t('tenderator.unifiedFeed.sourceLabels.ftProjects.label'), icon: 'mdi-trophy-outline', colour: 'tenderator-feed__source--projects',
+    hint: t('tenderator.unifiedFeed.sourceLabels.ftProjects.hint')
   },
   agency: {
-    label: 'Agency', icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency',
-    hint: "Tenders, grants and calls for expression of interest published by decentralised EU agencies (EFSA, EMA, ECHA, ENISA, EUDA, EFCA, EU-OSHA, etc.) on their own websites. Typically below the TED publication threshold."
+    label: t('tenderator.unifiedFeed.sourceLabels.agency.label'), icon: 'mdi-office-building-outline', colour: 'tenderator-feed__source--agency',
+    hint: t('tenderator.unifiedFeed.sourceLabels.agency.hint')
   },
   intl_coop: {
-    label: 'EU aid award', icon: 'mdi-handshake-outline', colour: 'tenderator-feed__source--intl',
-    hint: "Past EU external-action commitment from the Financial Transparency System. NDICI (Neighbourhood, Development and International Cooperation), IPA III (pre-accession), or Humanitarian Aid. Shows who has already won EU aid money where, useful as competitive intelligence."
+    label: t('tenderator.unifiedFeed.sourceLabels.intlCoop.label'), icon: 'mdi-handshake-outline', colour: 'tenderator-feed__source--intl',
+    hint: t('tenderator.unifiedFeed.sourceLabels.intlCoop.hint')
   },
-};
+});
 
 const formatValue = (value: number | null, currency: string = 'EUR'): string | null => {
   if (!value) return null;
@@ -112,20 +112,20 @@ const daysUntil = (iso: string | null): number | null => {
   return Math.round(ms / (24 * 60 * 60 * 1000));
 };
 
-const formatDeadline = (iso: string | null): string => {
-  if (!iso) return 'no deadline';
+const formatDeadline = (iso: string | null, t: any): string => {
+  if (!iso) return t('tenderator.unifiedFeed.deadlineNoDeadline');
   const days = daysUntil(iso);
-  if (days === null) return 'no deadline';
-  if (days < 0) return 'closed';
-  if (days === 0) return 'closes today';
-  if (days === 1) return 'closes in 1 day';
-  if (days <= 30) return `closes in ${days} days`;
+  if (days === null) return t('tenderator.unifiedFeed.deadlineNoDeadline');
+  if (days < 0) return t('tenderator.unifiedFeed.deadlineClosed');
+  if (days === 0) return t('tenderator.unifiedFeed.deadlineToday');
+  if (days === 1) return t('tenderator.unifiedFeed.deadlineOneDay');
+  if (days <= 30) return t('tenderator.unifiedFeed.deadlineDays', { days });
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
 export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', eicProgramme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, lensModeOverride = null, onLensModeChange, onSelectOpportunity }: UnifiedFeedProps) => {
   const { token } = useAuth();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Brubru's 6 — falls back to 'en' for any other UI locale.
   const _BRUBRU_LANGS = ['en', 'es', 'ca', 'fr', 'it', 'nl'];
   const uiLang = (i18n.language || 'en').slice(0, 2).toLowerCase();
@@ -166,6 +166,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
   };
   const [personalisedApplied, setPersonalisedApplied] = useState<boolean>(false);
   const [interests, setInterests] = useState<string[]>([]);
+  const sourceLabels = getSourceLabels(t);
 
   // If the URL ?q= changes (deep-link from Chat), pick it up.
   useEffect(() => {
@@ -204,8 +205,8 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        const detail = await res.json().catch(() => ({ detail: 'Feed query failed.' }));
-        setError(detail.detail || 'Feed query failed.');
+        const detail = await res.json().catch(() => ({ detail: t('tenderator.unifiedFeed.errorFeedQuery') }));
+        setError(detail.detail || t('tenderator.unifiedFeed.errorFeedQuery'));
         setItems([]);
         return;
       }
@@ -217,7 +218,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       setInterests(Array.isArray(data.interests) ? data.interests : []);
     } catch (e) {
       console.error('unified-feed fetch failed:', e);
-      setError('Could not load opportunities.');
+      setError(t('tenderator.unifiedFeed.errorLoadFailed'));
       setItems([]);
     } finally {
       setLoading(false);
@@ -240,7 +241,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         <input
           type="text"
           className="tenderator-feed__search-input"
-          placeholder="Search by title, organisation, programme..."
+          placeholder={t('tenderator.unifiedFeed.searchPlaceholder')}
           value={pendingQuery}
           onChange={(e) => setPendingQuery(e.target.value)}
           onKeyDown={(e) => {
@@ -257,7 +258,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
               setPendingQuery('');
               setSearchQuery('');
             }}
-            aria-label="Clear search"
+            aria-label={t('tenderator.unifiedFeed.searchClear')}
           >
             <span className="mdi mdi-close" aria-hidden="true" />
           </button>
@@ -279,9 +280,9 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
           {mode === 'pi' && interests.length > 0 && (
             <span
               className="tenderator-feed__lens-meta"
-              title={`Interests: ${interests.join(', ')}`}
+              title={`${t('tenderator.unifiedFeed.interests')}: ${interests.join(', ')}`}
             >
-              {interests.length} interest{interests.length === 1 ? '' : 's'}
+              {t('tenderator.unifiedFeed.interestCount', { count: interests.length })}
             </span>
           )}
         </div>
@@ -289,7 +290,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         personalised && (
           <div className="tenderator-feed__lens tenderator-feed__lens--empty">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
-            No policy interests set. <a href="/my-eu-bubble?tab=policy-interests">Add some in My EU Bubble</a>.
+            {t('tenderator.unifiedFeed.noInterestsSet')} <a href="/my-eu-bubble?tab=policy-interests">{t('tenderator.unifiedFeed.addInterestsCTA')}</a>.
           </div>
         )
       )}
@@ -307,18 +308,18 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
               try { localStorage.setItem('tenderator_client_filter', v ? '1' : '0'); } catch (_) { /* ignore */ }
             }}
           />
-          <span>Filter to my pursuits</span>
+          <span>{t('tenderator.unifiedFeed.filterToPursuits')}</span>
         </label>
         {clientFilter && clientFilterApplied && clientFilterSlug && (
           <span className="tenderator-feed__client-filter-badge">
             <span className="mdi mdi-filter-check-outline" aria-hidden="true" />
-            Filtered to {clientFilterSlug}
+            {t('tenderator.unifiedFeed.filteredTo', { slug: clientFilterSlug })}
           </span>
         )}
         {clientFilter && !clientFilterApplied && (
           <span className="tenderator-feed__client-filter-badge tenderator-feed__client-filter-badge--inactive">
             <span className="mdi mdi-information-outline" aria-hidden="true" />
-            No pursuits filter configured. Showing all.
+            {t('tenderator.unifiedFeed.noPursuitFilter')}
           </span>
         )}
       </div>
@@ -327,7 +328,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       {loading && (
         <div className="tenderator-feed__loading">
           <span className="mdi mdi-loading mdi-spin" aria-hidden="true" />
-          Loading opportunities...
+          {t('tenderator.unifiedFeed.loadingOpportunities')}
         </div>
       )}
 
@@ -335,14 +336,14 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
         <div className="tenderator-feed__error">
           <span className="mdi mdi-alert-circle-outline" aria-hidden="true" />
           {error}
-          <button type="button" onClick={() => void fetchFeed()}>Retry</button>
+          <button type="button" onClick={() => void fetchFeed()}>{t('tenderator.unifiedFeed.retry')}</button>
         </div>
       )}
 
       {!loading && !error && items.length === 0 && (
         <div className="tenderator-feed__empty">
           <span className="mdi mdi-magnify-close" aria-hidden="true" />
-          <p>No opportunities found for this source and search.</p>
+          <p>{t('tenderator.unifiedFeed.noOpportunitiesFound')}</p>
         </div>
       )}
 
@@ -350,7 +351,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
       {!loading && !error && items.length > 0 && (
         <ul className="tenderator-feed__list">
           {items.map((item) => {
-            const tag = SOURCE_LABELS[item.source];
+            const tag = sourceLabels[item.source];
             const days = daysUntil(item.deadline);
             const urgencyCls =
               days !== null && days >= 0 && days <= 7
@@ -371,7 +372,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                       {tag.label}
                     </span>
                     {typeof item.match_score === 'number' && (
-                      <span className="tenderator-feed__score" title="Match score">
+                      <span className="tenderator-feed__score" title={t('tenderator.unifiedFeed.matchScore')}>
                         <span className="mdi mdi-star" aria-hidden="true" />
                         {Math.round(item.match_score)}
                       </span>
@@ -383,9 +384,9 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                       <span className="tenderator-feed__ref">{item.external_id}</span>
                     )}
                     {item.translated_from && (
-                      <span className="tenderator-feed__lang-badge" title={`Original language: ${item.translated_from}`}>
+                      <span className="tenderator-feed__lang-badge" title={t('tenderator.unifiedFeed.translatedFromLang', { lang: item.translated_from })}>
                         <span className="mdi mdi-translate" aria-hidden="true" />
-                        translated from {item.translated_from}
+                        {t('tenderator.unifiedFeed.translatedFromShort', { lang: item.translated_from })}
                       </span>
                     )}
                   </div>
@@ -415,7 +416,7 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
                     {item.deadline && (
                       <span className={`tenderator-feed__meta-item tenderator-feed__deadline ${urgencyCls}`}>
                         <span className="mdi mdi-clock-outline" aria-hidden="true" />
-                        {formatDeadline(item.deadline)}
+                        {formatDeadline(item.deadline, t)}
                       </span>
                     )}
                   </div>
@@ -436,16 +437,16 @@ export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initial
             disabled={page <= 1}
           >
             <span className="mdi mdi-chevron-left" aria-hidden="true" />
-            Previous
+            {t('tenderator.unifiedFeed.previous')}
           </button>
-          <span className="tenderator-feed__page-meta">Page {page}</span>
+          <span className="tenderator-feed__page-meta">{t('tenderator.unifiedFeed.pageNumber', { page })}</span>
           <button
             type="button"
             className="tenderator-feed__page-button"
             onClick={() => setPage((p) => p + 1)}
             disabled={items.length < 20}
           >
-            Next
+            {t('tenderator.unifiedFeed.next')}
             <span className="mdi mdi-chevron-right" aria-hidden="true" />
           </button>
         </div>

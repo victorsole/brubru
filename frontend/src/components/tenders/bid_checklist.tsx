@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/bid_checklist.tsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tender } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './bid_checklist.css';
@@ -47,6 +48,7 @@ interface NotifiedBodiesData {
 
 export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps) => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [requirements, setRequirements] = useState<ESPDRequirement[]>([]);
   const [checklist, setChecklist] = useState<ChecklistState>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -165,12 +167,12 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
       <div className="bid-checklist__header">
         <button className="bid-checklist__back" onClick={onBack}>
           <span className="mdi mdi-arrow-left"></span>
-          Back
+          {t('tenderator.bidChecklist.back')}
         </button>
         <div className="bid-checklist__title-section">
-          <h2>ESPD Document Checklist</h2>
+          <h2>{t('tenderator.bidChecklist.espdDocumentChecklist')}</h2>
           <p className="bid-checklist__tender-ref">
-            For: {tender.title} ({tender.publication_number})
+            {t('tenderator.bidChecklist.for')}: {tender.title} ({tender.publication_number})
           </p>
         </div>
       </div>
@@ -197,12 +199,12 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
             <span className="bid-checklist__progress-value">{progressPercent}%</span>
           </div>
           <div className="bid-checklist__progress-info">
-            <h3>Your Progress</h3>
+            <h3>{t('tenderator.bidChecklist.yourProgress')}</h3>
             <p>
-              <strong>{completedRequired}</strong> of <strong>{totalRequired}</strong> mandatory items completed
+              <strong>{completedRequired}</strong> of <strong>{totalRequired}</strong> {t('tenderator.bidChecklist.mandatoryItemsCompleted')}
             </p>
             <p className="bid-checklist__progress-optional">
-              {completedOptional} of {totalOptional} optional items completed
+              {completedOptional} of {totalOptional} {t('tenderator.bidChecklist.optionalItemsCompleted')}
             </p>
           </div>
         </div>
@@ -212,7 +214,7 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
             onClick={() => onAskChatbot(`Help me understand the ESPD requirements for tender ${tender.publication_number}. What documents do I need to prepare and what are the exclusion grounds?`)}
           >
             <span className="mdi mdi-chat-question"></span>
-            Get Help
+            {t('tenderator.bidChecklist.getHelp')}
           </button>
         </div>
       </div>
@@ -223,19 +225,19 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
           className={`bid-checklist__filter ${filter === 'all' ? 'bid-checklist__filter--active' : ''}`}
           onClick={() => setFilter('all')}
         >
-          All ({requirements.length})
+          {t('tenderator.bidChecklist.all')} ({requirements.length})
         </button>
         <button
           className={`bid-checklist__filter ${filter === 'pending' ? 'bid-checklist__filter--active' : ''}`}
           onClick={() => setFilter('pending')}
         >
-          Pending ({requirements.filter(r => !checklist[r.id]).length})
+          {t('tenderator.bidChecklist.pending')} ({requirements.filter(r => !checklist[r.id]).length})
         </button>
         <button
           className={`bid-checklist__filter ${filter === 'completed' ? 'bid-checklist__filter--active' : ''}`}
           onClick={() => setFilter('completed')}
         >
-          Completed ({requirements.filter(r => checklist[r.id]).length})
+          {t('tenderator.bidChecklist.completed')} ({requirements.filter(r => checklist[r.id]).length})
         </button>
       </div>
 
@@ -243,7 +245,7 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
       {isLoading && (
         <div className="bid-checklist__loading">
           <span className="mdi mdi-loading mdi-spin"></span>
-          Loading checklist...
+          {t('tenderator.bidChecklist.loadingChecklist')}
         </div>
       )}
 
@@ -254,10 +256,10 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
           <div className="bid-checklist__section">
             <h3 className="bid-checklist__section-title">
               <span className="mdi mdi-shield-alert"></span>
-              Part III: Exclusion Grounds
+              {t('tenderator.bidChecklist.partIiiExclusionGrounds')}
             </h3>
             <p className="bid-checklist__section-desc">
-              Documents proving you are not subject to exclusion from public procurement.
+              {t('tenderator.bidChecklist.partIiiDescription')}
             </p>
 
             {Object.entries(groupedRequirements)
@@ -307,10 +309,10 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
           <div className="bid-checklist__section">
             <h3 className="bid-checklist__section-title">
               <span className="mdi mdi-clipboard-check"></span>
-              Part IV: Selection Criteria
+              {t('tenderator.bidChecklist.partIvSelectionCriteria')}
             </h3>
             <p className="bid-checklist__section-desc">
-              Documents demonstrating your suitability and qualifications for the contract.
+              {t('tenderator.bidChecklist.partIvDescription')}
             </p>
 
             {Object.entries(groupedRequirements)
@@ -363,12 +365,15 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
         <div className="bid-checklist__section bid-checklist__notified-bodies">
             <h3 className="bid-checklist__section-title">
               <span className="mdi mdi-certificate"></span>
-              Conformity Assessment Bodies (NANDO)
+              {t('tenderator.bidChecklist.conformityAssessmentBodies')}
             </h3>
             <p className="bid-checklist__section-desc">
-              This tender's sector (CPV {tender.cpv_main?.substring(0, 2)}xx) may require CE marking
-              via a notified body. {notifiedBodies.count} active notified {notifiedBodies.count === 1 ? 'body' : 'bodies'} found
-              {tender.buyer_country ? ` in ${tender.buyer_country}` : ' across the EU'}.
+              {t('tenderator.bidChecklist.notifiedBodiesDescription', {
+                cpv: tender.cpv_main?.substring(0, 2) || '',
+                count: notifiedBodies.count,
+                bodies: notifiedBodies.count === 1 ? t('tenderator.bidChecklist.body') : t('tenderator.bidChecklist.bodies'),
+                location: tender.buyer_country ? ` in ${tender.buyer_country}` : ` ${t('tenderator.bidChecklist.acrossTheEu')}`
+              })}
             </p>
 
             <button
@@ -378,7 +383,7 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
               <div className="bid-checklist__category-left">
                 <span className="mdi mdi-shield-check"></span>
                 <span className="bid-checklist__category-name">
-                  Notified Bodies ({notifiedBodies.count})
+                  {t('tenderator.bidChecklist.notifiedBodies')} ({notifiedBodies.count})
                 </span>
               </div>
               <span className={`mdi ${showNotifiedBodies ? 'mdi-chevron-up' : 'mdi-chevron-down'}`}></span>
@@ -449,14 +454,14 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
           }}
         >
           <span className="mdi mdi-download"></span>
-          Export Checklist
+          {t('tenderator.bidChecklist.exportChecklist')}
         </button>
         <button
           className="bid-checklist__submit-btn"
           onClick={() => onAskChatbot(`I've completed ${progressPercent}% of the ESPD requirements for tender ${tender.publication_number}. What are the next steps to submit my bid?`)}
         >
           <span className="mdi mdi-send"></span>
-          Get Submission Help
+          {t('tenderator.bidChecklist.getSubmissionHelp')}
         </button>
       </div>
     </div>
@@ -472,6 +477,7 @@ interface ChecklistItemProps {
 }
 
 const ChecklistItem = ({ requirement, isChecked, onToggle, onAskHelp }: ChecklistItemProps) => {
+  const { t } = useTranslation();
   return (
     <div className={`bid-checklist__item ${isChecked ? 'bid-checklist__item--checked' : ''}`}>
       <label className="bid-checklist__item-checkbox">
@@ -488,9 +494,9 @@ const ChecklistItem = ({ requirement, isChecked, onToggle, onAskHelp }: Checklis
         <div className="bid-checklist__item-header">
           <span className="bid-checklist__item-requirement">{requirement.requirement}</span>
           {requirement.mandatory ? (
-            <span className="bid-checklist__item-badge bid-checklist__item-badge--mandatory">Required</span>
+            <span className="bid-checklist__item-badge bid-checklist__item-badge--mandatory">{t('tenderator.bidChecklist.required')}</span>
           ) : (
-            <span className="bid-checklist__item-badge bid-checklist__item-badge--optional">Optional</span>
+            <span className="bid-checklist__item-badge bid-checklist__item-badge--optional">{t('tenderator.bidChecklist.optional')}</span>
           )}
         </div>
         <p className="bid-checklist__item-document">
@@ -500,7 +506,7 @@ const ChecklistItem = ({ requirement, isChecked, onToggle, onAskHelp }: Checklis
         {requirement.issuing_authority && (
           <p className="bid-checklist__item-authority">
             <span className="mdi mdi-domain"></span>
-            Issuing authority: {requirement.issuing_authority}
+            {t('tenderator.bidChecklist.issuingAuthority')}: {requirement.issuing_authority}
             {requirement.website && (
               <a href={requirement.website} target="_blank" rel="noopener noreferrer">
                 <span className="mdi mdi-open-in-new"></span>
@@ -509,7 +515,7 @@ const ChecklistItem = ({ requirement, isChecked, onToggle, onAskHelp }: Checklis
           </p>
         )}
       </div>
-      <button className="bid-checklist__item-help" onClick={onAskHelp} title="Get help with this requirement">
+      <button className="bid-checklist__item-help" onClick={onAskHelp} title={t('tenderator.bidChecklist.getHelpWithRequirement')}>
         <span className="mdi mdi-help-circle"></span>
       </button>
     </div>

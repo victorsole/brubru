@@ -1,71 +1,72 @@
 // frontend/src/components/tenders/tender_detail.tsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_detail.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// CPV sector mapping
-const CPV_SECTORS: Record<string, string> = {
-  '03': 'Agriculture & Food',
-  '09': 'Petroleum & Fuel',
-  '14': 'Mining & Minerals',
-  '15': 'Food Products',
-  '18': 'Clothing & Textiles',
-  '22': 'Printed Matter',
-  '24': 'Chemical Products',
-  '30': 'Office Equipment',
-  '31': 'Electrical Equipment',
-  '32': 'Radio & TV Equipment',
-  '33': 'Medical Equipment',
-  '34': 'Transport Equipment',
-  '35': 'Security Equipment',
-  '37': 'Musical Instruments',
-  '38': 'Laboratory Equipment',
-  '39': 'Furniture',
-  '42': 'Industrial Machinery',
-  '43': 'Forestry Machinery',
-  '44': 'Construction Materials',
-  '45': 'Construction Works',
-  '48': 'Software Products',
-  '50': 'Repair Services',
-  '51': 'Installation Services',
-  '55': 'Hotel Services',
-  '60': 'Transport Services',
-  '63': 'Supporting Services',
-  '64': 'Postal Services',
-  '65': 'Utilities',
-  '66': 'Financial Services',
-  '70': 'Real Estate',
-  '71': 'Architecture & Engineering',
-  '72': 'IT Services',
-  '73': 'R&D Services',
-  '75': 'Public Admin',
-  '76': 'Oil & Gas Services',
-  '77': 'Agriculture Services',
-  '79': 'Business Services',
-  '80': 'Education Services',
-  '85': 'Health Services',
-  '90': 'Environmental Services',
-  '92': 'Recreation Services',
-  '98': 'Other Services',
+// CPV sector mapping (keys reference i18n lookups)
+const CPV_SECTORS_I18N_KEYS: Record<string, string> = {
+  '03': 'tenderator.detail.cpvSectors.agricultureFood',
+  '09': 'tenderator.detail.cpvSectors.petroleumFuel',
+  '14': 'tenderator.detail.cpvSectors.miningMinerals',
+  '15': 'tenderator.detail.cpvSectors.foodProducts',
+  '18': 'tenderator.detail.cpvSectors.clothingTextiles',
+  '22': 'tenderator.detail.cpvSectors.printedMatter',
+  '24': 'tenderator.detail.cpvSectors.chemicalProducts',
+  '30': 'tenderator.detail.cpvSectors.officeEquipment',
+  '31': 'tenderator.detail.cpvSectors.electricalEquipment',
+  '32': 'tenderator.detail.cpvSectors.radioTvEquipment',
+  '33': 'tenderator.detail.cpvSectors.medicalEquipment',
+  '34': 'tenderator.detail.cpvSectors.transportEquipment',
+  '35': 'tenderator.detail.cpvSectors.securityEquipment',
+  '37': 'tenderator.detail.cpvSectors.musicalInstruments',
+  '38': 'tenderator.detail.cpvSectors.laboratoryEquipment',
+  '39': 'tenderator.detail.cpvSectors.furniture',
+  '42': 'tenderator.detail.cpvSectors.industrialMachinery',
+  '43': 'tenderator.detail.cpvSectors.forestryMachinery',
+  '44': 'tenderator.detail.cpvSectors.constructionMaterials',
+  '45': 'tenderator.detail.cpvSectors.constructionWorks',
+  '48': 'tenderator.detail.cpvSectors.softwareProducts',
+  '50': 'tenderator.detail.cpvSectors.repairServices',
+  '51': 'tenderator.detail.cpvSectors.installationServices',
+  '55': 'tenderator.detail.cpvSectors.hotelServices',
+  '60': 'tenderator.detail.cpvSectors.transportServices',
+  '63': 'tenderator.detail.cpvSectors.supportingServices',
+  '64': 'tenderator.detail.cpvSectors.postalServices',
+  '65': 'tenderator.detail.cpvSectors.utilities',
+  '66': 'tenderator.detail.cpvSectors.financialServices',
+  '70': 'tenderator.detail.cpvSectors.realEstate',
+  '71': 'tenderator.detail.cpvSectors.architectureEngineering',
+  '72': 'tenderator.detail.cpvSectors.itServices',
+  '73': 'tenderator.detail.cpvSectors.rdServices',
+  '75': 'tenderator.detail.cpvSectors.publicAdmin',
+  '76': 'tenderator.detail.cpvSectors.oilGasServices',
+  '77': 'tenderator.detail.cpvSectors.agricultureServices',
+  '79': 'tenderator.detail.cpvSectors.businessServices',
+  '80': 'tenderator.detail.cpvSectors.educationServices',
+  '85': 'tenderator.detail.cpvSectors.healthServices',
+  '90': 'tenderator.detail.cpvSectors.environmentalServices',
+  '92': 'tenderator.detail.cpvSectors.recreationServices',
+  '98': 'tenderator.detail.cpvSectors.otherServices',
 };
 
-const PROCEDURE_LABELS: Record<string, string> = {
-  'open': 'Open',
-  'restricted': 'Restricted',
-  'comp-dial': 'Competitive dialogue',
-  'comp-tend': 'Competitive with negotiation',
-  'innovation': 'Innovation partnership',
-  'neg-w-call': 'Negotiated (with prior call)',
-  'neg-wo-call': 'Negotiated (without prior call)',
-  'exp-int': 'Expression of interest',
-  'des-cont': 'Design contest',
-  'oth-mult': 'Other multistage',
-  'oth-single': 'Other single-stage',
-  'open-1step': 'Open (single stage)',
-  'open-2step': 'Open (two stage)',
+const PROCEDURE_LABELS_I18N_KEYS: Record<string, string> = {
+  'open': 'tenderator.detail.procedureTypes.open',
+  'restricted': 'tenderator.detail.procedureTypes.restricted',
+  'comp-dial': 'tenderator.detail.procedureTypes.competitiveDialogue',
+  'comp-tend': 'tenderator.detail.procedureTypes.competitiveWithNegotiation',
+  'innovation': 'tenderator.detail.procedureTypes.innovationPartnership',
+  'neg-w-call': 'tenderator.detail.procedureTypes.negotiatedWithPriorCall',
+  'neg-wo-call': 'tenderator.detail.procedureTypes.negotiatedWithoutPriorCall',
+  'exp-int': 'tenderator.detail.procedureTypes.expressionOfInterest',
+  'des-cont': 'tenderator.detail.procedureTypes.designContest',
+  'oth-mult': 'tenderator.detail.procedureTypes.otherMultistage',
+  'oth-single': 'tenderator.detail.procedureTypes.otherSingleStage',
+  'open-1step': 'tenderator.detail.procedureTypes.openSingleStage',
+  'open-2step': 'tenderator.detail.procedureTypes.openTwoStage',
 };
 
 // Notice subtypes where procedure_type is legitimately absent.
@@ -74,19 +75,21 @@ const NO_PROCEDURE_SUBTYPES = new Set([
   'can-modif', 'can-soc', 'can-tran',
 ]);
 
-const formatProcedureType = (
+// Helper to get translated procedure type label
+// Note: actual translation happens in JSX via t() hook
+const getProcedureTypeI18nKey = (
   procedureType: string | null | undefined,
   noticeSubtype?: string | null,
 ): string => {
-  if (procedureType) {
-    return PROCEDURE_LABELS[procedureType] || procedureType;
+  if (procedureType && PROCEDURE_LABELS_I18N_KEYS[procedureType]) {
+    return PROCEDURE_LABELS_I18N_KEYS[procedureType];
   }
   if (noticeSubtype && NO_PROCEDURE_SUBTYPES.has(noticeSubtype)) {
     return noticeSubtype.startsWith('pin')
-      ? 'Not yet declared (prior information)'
-      : 'Inherits from original notice';
+      ? 'tenderator.detail.procedureTypes.notYetDeclaredPriorInfo'
+      : 'tenderator.detail.procedureTypes.inheritsFromOriginal';
   }
-  return 'Not declared in this notice';
+  return 'tenderator.detail.procedureTypes.notDeclaredInNotice';
 };
 
 interface TenderSummary {
@@ -193,6 +196,7 @@ export const TenderDetail = ({
   onAskChatbot,
 }: TenderDetailProps) => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [summary, setSummary] = useState<TenderSummary | null>(null);
   const [smeAnalysis, setSmeAnalysis] = useState<SMEAnalysis | null>(null);
   const [regulatoryRisk, setRegulatoryRisk] = useState<RegulatoryRisk | null>(null);
@@ -276,13 +280,14 @@ export const TenderDetail = ({
   };
 
   const getSectorName = (cpvCode: string): string => {
-    if (!cpvCode) return 'Unknown';
+    if (!cpvCode) return t('tenderator.detail.unknown');
     const prefix = cpvCode.substring(0, 2);
-    return CPV_SECTORS[prefix] || 'Other';
+    const key = CPV_SECTORS_I18N_KEYS[prefix] || 'tenderator.detail.cpvSectors.otherServices';
+    return t(key);
   };
 
   const formatValue = (value: number | null, currency: string): string => {
-    if (!value) return 'Not specified';
+    if (!value) return t('tenderator.detail.notSpecified');
     return new Intl.NumberFormat('en-EU', {
       style: 'currency',
       currency: currency || 'EUR',
@@ -292,7 +297,7 @@ export const TenderDetail = ({
   };
 
   const formatDate = (dateStr: string | null): string => {
-    if (!dateStr) return 'Not specified';
+    if (!dateStr) return t('tenderator.detail.notSpecified');
     return new Date(dateStr).toLocaleDateString('en-EU', {
       day: 'numeric',
       month: 'long',
@@ -355,7 +360,7 @@ export const TenderDetail = ({
       {/* Back Button */}
       <button className="tender-detail__back" onClick={onBack}>
         <span className="mdi mdi-arrow-left"></span>
-        Back to list
+        {t('tenderator.detail.backToList')}
       </button>
 
       {/* Header */}
@@ -374,7 +379,7 @@ export const TenderDetail = ({
             {regulatoryRisk && regulatoryRisk.risk_level !== 'low' && (
               <span className={`tender-detail__badge ${getRiskBadgeClass(regulatoryRisk.risk_level)}`}>
                 <span className="mdi mdi-shield-alert-outline"></span>
-                {regulatoryRisk.risk_level === 'high' ? 'High' : 'Medium'} Regulatory Risk
+                {t(regulatoryRisk.risk_level === 'high' ? 'tenderator.detail.riskLevelHigh' : 'tenderator.detail.riskLevelMedium')} {t('tenderator.detail.regulatoryRisk')}
               </span>
             )}
           </div>
@@ -387,7 +392,7 @@ export const TenderDetail = ({
               <h1 className="tender-detail__title">{summary.en_title}</h1>
               <p className="tender-detail__title-original">
                 <span className="mdi mdi-translate" aria-hidden="true"></span>
-                Original title: {tender.title}
+                {t('tenderator.detail.originalTitle')}: {tender.title}
               </p>
             </>
           ) : (
@@ -405,14 +410,14 @@ export const TenderDetail = ({
             <div className={`tender-detail__stat tender-detail__match-score ${getScoreClass(match.match_score)}`}>
               <span className="mdi mdi-target"></span>
               <span className="tender-detail__stat-value">{Math.round(match.match_score) || 0}%</span>
-              <span className="tender-detail__stat-label">Match</span>
+              <span className="tender-detail__stat-label">{t('tenderator.detail.match')}</span>
             </div>
           )}
           {tender.sme_suitability_score != null && !isNaN(tender.sme_suitability_score) && (
             <div className="tender-detail__stat tender-detail__sme-score">
               <span className="mdi mdi-account-check"></span>
               <span className="tender-detail__stat-value">{Math.round(tender.sme_suitability_score) || 0}</span>
-              <span className="tender-detail__stat-label">SME Score</span>
+              <span className="tender-detail__stat-label">{t('tenderator.detail.smeScore')}</span>
             </div>
           )}
         </div>
@@ -423,26 +428,26 @@ export const TenderDetail = ({
         <div className="tender-detail__info-card">
           <span className="mdi mdi-domain"></span>
           <div>
-            <span className="tender-detail__info-label">Contracting Authority</span>
+            <span className="tender-detail__info-label">{t('tenderator.detail.contractingAuthority')}</span>
             <span className="tender-detail__info-value">{tender.buyer_name}</span>
           </div>
         </div>
         <div className="tender-detail__info-card">
           <span className="mdi mdi-currency-eur"></span>
           <div>
-            <span className="tender-detail__info-label">Estimated Value</span>
+            <span className="tender-detail__info-label">{t('tenderator.detail.estimatedValue')}</span>
             <span className="tender-detail__info-value">{formatValue(tender.estimated_value, tender.currency)}</span>
           </div>
         </div>
         <div className={`tender-detail__info-card ${daysLeft !== null && daysLeft <= 14 ? 'tender-detail__info-card--urgent' : ''}`}>
           <span className="mdi mdi-calendar-clock"></span>
           <div>
-            <span className="tender-detail__info-label">Submission Deadline</span>
+            <span className="tender-detail__info-label">{t('tenderator.detail.submissionDeadline')}</span>
             <span className="tender-detail__info-value">
               {formatDate(tender.submission_deadline)}
               {daysLeft !== null && (
                 <span className="tender-detail__days-left">
-                  ({daysLeft > 0 ? `${daysLeft} days left` : daysLeft === 0 ? 'Due today!' : 'Expired'})
+                  ({daysLeft > 0 ? t('tenderator.detail.daysLeft', { count: daysLeft }) : daysLeft === 0 ? t('tenderator.detail.dueToday') : t('tenderator.detail.expired')})
                 </span>
               )}
             </span>
@@ -451,9 +456,9 @@ export const TenderDetail = ({
         <div className="tender-detail__info-card">
           <span className="mdi mdi-file-document"></span>
           <div>
-            <span className="tender-detail__info-label">Procedure Type</span>
+            <span className="tender-detail__info-label">{t('tenderator.detail.procedureType')}</span>
             <span className="tender-detail__info-value">
-              {formatProcedureType(tender.procedure_type, tender.notice_subtype)}
+              {t(getProcedureTypeI18nKey(tender.procedure_type, tender.notice_subtype))}
             </span>
           </div>
         </div>
@@ -467,16 +472,16 @@ export const TenderDetail = ({
             onClick={onSave}
           >
             <span className={`mdi ${match?.is_saved ? 'mdi-bookmark' : 'mdi-bookmark-outline'}`}></span>
-            {match?.is_saved ? 'Saved' : 'Save'}
+            {t(match?.is_saved ? 'tenderator.detail.saved' : 'tenderator.detail.save')}
           </button>
         )}
         <button className="tender-detail__action-btn tender-detail__action-btn--primary" onClick={onViewChecklist}>
           <span className="mdi mdi-clipboard-check"></span>
-          View Checklist
+          {t('tenderator.detail.viewChecklist')}
         </button>
         <button className="tender-detail__action-btn" onClick={() => onAskChatbot()}>
           <span className="mdi mdi-chat-question"></span>
-          Ask AI
+          {t('tenderator.detail.askAI')}
         </button>
         <a
           href={getTedUrl(tender.publication_number, tender.ted_url ?? null)}
@@ -485,12 +490,12 @@ export const TenderDetail = ({
           className="tender-detail__action-btn"
         >
           <span className="mdi mdi-open-in-new"></span>
-          View on TED
+          {t('tenderator.detail.viewOnTED')}
         </a>
         {onDismiss && (
           <button className="tender-detail__action-btn tender-detail__action-btn--dismiss" onClick={onDismiss}>
             <span className="mdi mdi-eye-off"></span>
-            Dismiss
+            {t('tenderator.detail.dismiss')}
           </button>
         )}
       </div>
@@ -501,19 +506,19 @@ export const TenderDetail = ({
           className={`tender-detail__tab ${activeTab === 'overview' ? 'tender-detail__tab--active' : ''}`}
           onClick={() => setActiveTab('overview')}
         >
-          Overview
+          {t('tenderator.detail.tabs.overview')}
         </button>
         <button
           className={`tender-detail__tab ${activeTab === 'analysis' ? 'tender-detail__tab--active' : ''}`}
           onClick={() => setActiveTab('analysis')}
         >
-          SME Analysis
+          {t('tenderator.detail.tabs.smeAnalysis')}
         </button>
         <button
           className={`tender-detail__tab ${activeTab === 'criteria' ? 'tender-detail__tab--active' : ''}`}
           onClick={() => setActiveTab('criteria')}
         >
-          Award Criteria
+          {t('tenderator.detail.tabs.awardCriteria')}
         </button>
       </div>
 
@@ -523,30 +528,30 @@ export const TenderDetail = ({
           <div className="tender-detail__overview">
             {/* AI Summary */}
             <div className="tender-detail__section">
-              <h3><span className="mdi mdi-robot"></span> AI Summary</h3>
+              <h3><span className="mdi mdi-robot"></span> {t('tenderator.detail.aiSummary')}</h3>
               {isLoadingSummary ? (
                 <div className="tender-detail__loading">
                   <span className="mdi mdi-loading mdi-spin"></span>
-                  Generating summary...
+                  {t('tenderator.detail.generatingSummary')}
                 </div>
               ) : summary ? (
                 <div className="tender-detail__summary">
                   <p className="tender-detail__one-liner">{summary.one_liner}</p>
                   <div className="tender-detail__summary-grid">
                     <div className="tender-detail__summary-item">
-                      <span className="tender-detail__summary-label" title="A short English summary of what is being procured: the goods, services or works the buyer wants to purchase. Generated by Brubru's AI from the tender notice, translated from the source language if needed.">What</span>
+                      <span className="tender-detail__summary-label" title={t('tenderator.detail.tooltip.what')}>{t('tenderator.detail.what')}</span>
                       <span className="tender-detail__summary-value">{summary.what}</span>
                     </div>
                     <div className="tender-detail__summary-item">
-                      <span className="tender-detail__summary-label" title="The contracting authority: the public-sector body that will sign the contract and pay you. National ministry, municipality, EU institution, hospital, university, etc.">Who</span>
+                      <span className="tender-detail__summary-label" title={t('tenderator.detail.tooltip.who')}>{t('tenderator.detail.who')}</span>
                       <span className="tender-detail__summary-value">{summary.who}</span>
                     </div>
                     <div className="tender-detail__summary-item">
-                      <span className="tender-detail__summary-label" title="Estimated contract value as published by the buyer. Often a ceiling rather than a firm budget; the awarded value may be lower after evaluation.">Value</span>
+                      <span className="tender-detail__summary-label" title={t('tenderator.detail.tooltip.value')}>{t('tenderator.detail.value')}</span>
                       <span className="tender-detail__summary-value">{summary.value}</span>
                     </div>
                     <div className="tender-detail__summary-item">
-                      <span className="tender-detail__summary-label" title="Last moment to submit your bid. Almost always before midday Brussels time on the stated day. Late bids are excluded automatically.">Deadline</span>
+                      <span className="tender-detail__summary-label" title={t('tenderator.detail.tooltip.deadline')}>{t('tenderator.detail.deadline')}</span>
                       <span className="tender-detail__summary-value">{summary.deadline}</span>
                     </div>
                   </div>
@@ -556,7 +561,7 @@ export const TenderDetail = ({
                       .filter((r) => r && r !== 'requirement 1' && r !== 'requirement 2' && r !== 'requirement 3');
                     return reqs.length > 0 ? (
                       <div className="tender-detail__requirements">
-                        <span className="tender-detail__summary-label" title="The mandatory selection criteria you must meet to be eligible: minimum turnover, references for similar contracts, professional qualifications, technical capacity. If you cannot demonstrate these, the bid is rejected before evaluation.">Key Requirements</span>
+                        <span className="tender-detail__summary-label" title={t('tenderator.detail.tooltip.keyRequirements')}>{t('tenderator.detail.keyRequirements')}</span>
                         <ul>
                           {reqs.map((req, idx) => (
                             <li key={idx}>{req}</li>
@@ -573,14 +578,14 @@ export const TenderDetail = ({
                   )}
                 </div>
               ) : (
-                <p className="tender-detail__no-data">Summary not available</p>
+                <p className="tender-detail__no-data">{t('tenderator.detail.summaryNotAvailable')}</p>
               )}
             </div>
 
             {/* Description */}
             {tender.description && (
               <div className="tender-detail__section">
-                <h3><span className="mdi mdi-text"></span> Description</h3>
+                <h3><span className="mdi mdi-text"></span> {t('tenderator.detail.description')}</h3>
                 <p className="tender-detail__description">{tender.description}</p>
               </div>
             )}
@@ -590,12 +595,12 @@ export const TenderDetail = ({
                 without CPV; an empty section reads as broken). */}
             {(tender.cpv_main || (tender.cpv_codes && tender.cpv_codes.length > 0)) && (
               <div className="tender-detail__section">
-                <h3 title="Common Procurement Vocabulary: an 8-digit EU classification code that every TED tender carries. Divisions (first 2 digits) cover 45 sectors from agriculture (03) to IT services (72) to architectural and engineering (71). Buyers use CPV to indicate what they are buying; bidders use it to find relevant calls."><span className="mdi mdi-tag-multiple"></span> CPV Codes <span className="mdi mdi-help-circle-outline" style={{opacity:0.4, fontSize:'0.85em', marginLeft:'0.3rem', verticalAlign:'middle'}} aria-hidden="true"></span></h3>
+                <h3 title={t('tenderator.detail.tooltip.cpvCodes')}><span className="mdi mdi-tag-multiple"></span> {t('tenderator.detail.cpvCodes')} <span className="mdi mdi-help-circle-outline" style={{opacity:0.4, fontSize:'0.85em', marginLeft:'0.3rem', verticalAlign:'middle'}} aria-hidden="true"></span></h3>
                 <div className="tender-detail__cpv-list">
                   {tender.cpv_main && (
                     <div className="tender-detail__cpv-item tender-detail__cpv-item--main">
                       <span className="tender-detail__cpv-code">{tender.cpv_main}</span>
-                      <span className="tender-detail__cpv-name">{getSectorName(tender.cpv_main)} (Main)</span>
+                      <span className="tender-detail__cpv-name">{getSectorName(tender.cpv_main)} ({t('tenderator.detail.main')})</span>
                     </div>
                   )}
                   {tender.cpv_codes && tender.cpv_codes.filter(c => c !== tender.cpv_main).map((code, idx) => (
@@ -613,9 +618,9 @@ export const TenderDetail = ({
               <div className="tender-detail__section">
                 <h3>
                   <span className="mdi mdi-shield-alert"></span>
-                  Regulatory Alerts
+                  {t('tenderator.detail.regulatoryAlerts')}
                   <span className={`tender-detail__risk-badge tender-detail__risk-badge--${regulatoryRisk.risk_level}`}>
-                    {regulatoryRisk.risk_level.toUpperCase()}
+                    {t(`tenderator.detail.riskLevel${regulatoryRisk.risk_level.charAt(0).toUpperCase() + regulatoryRisk.risk_level.slice(1)}`)}
                   </span>
                 </h3>
 
@@ -623,7 +628,7 @@ export const TenderDetail = ({
                   <div className="tender-detail__reg-group">
                     <h4 className="tender-detail__reg-group-title">
                       <span className="mdi mdi-file-document-alert"></span>
-                      TRIS Technical Regulations ({regulatoryRisk.technical_regulations.length})
+                      {t('tenderator.detail.trisRegulations', { count: regulatoryRisk.technical_regulations.length })}
                     </h4>
                     <div className="tender-detail__reg-list">
                       {regulatoryRisk.technical_regulations.map((reg, idx) => (
@@ -635,10 +640,10 @@ export const TenderDetail = ({
                             </span>
                             <span className="tender-detail__reg-country">{reg.country}</span>
                           </div>
-                          <p className="tender-detail__reg-title">{reg.title || 'Untitled regulation'}</p>
+                          <p className="tender-detail__reg-title">{reg.title || t('tenderator.detail.untiledRegulation')}</p>
                           {reg.source_url && (
                             <a href={reg.source_url} target="_blank" rel="noopener noreferrer" className="tender-detail__reg-link">
-                              View on TRIS <span className="mdi mdi-open-in-new"></span>
+                              {t('tenderator.detail.viewOnTRIS')} <span className="mdi mdi-open-in-new"></span>
                             </a>
                           )}
                         </div>
@@ -651,7 +656,7 @@ export const TenderDetail = ({
                   <div className="tender-detail__reg-group">
                     <h4 className="tender-detail__reg-group-title">
                       <span className="mdi mdi-earth-off"></span>
-                      TBT Trade Barriers ({regulatoryRisk.trade_barriers.length})
+                      {t('tenderator.detail.tbtBarriers', { count: regulatoryRisk.trade_barriers.length })}
                     </h4>
                     <div className="tender-detail__reg-list">
                       {regulatoryRisk.trade_barriers.map((tbt, idx) => (
@@ -663,10 +668,10 @@ export const TenderDetail = ({
                               <span className="tender-detail__reg-sector">{tbt.product_area}</span>
                             )}
                           </div>
-                          <p className="tender-detail__reg-title">{tbt.title || 'Trade barrier notification'}</p>
+                          <p className="tender-detail__reg-title">{tbt.title || t('tenderator.detail.tradeBarrierNotification')}</p>
                           {tbt.source_url && (
                             <a href={tbt.source_url} target="_blank" rel="noopener noreferrer" className="tender-detail__reg-link">
-                              View details <span className="mdi mdi-open-in-new"></span>
+                              {t('tenderator.detail.viewDetails')} <span className="mdi mdi-open-in-new"></span>
                             </a>
                           )}
                         </div>
@@ -677,10 +682,10 @@ export const TenderDetail = ({
 
                 <button
                   className="tender-detail__ask-btn"
-                  onClick={() => onAskChatbot(`Analyse the regulatory risks for this tender. There are ${regulatoryRisk.technical_regulations.length} TRIS technical regulations and ${regulatoryRisk.trade_barriers.length} TBT trade barriers in this sector. What should I be aware of?`)}
+                  onClick={() => onAskChatbot(t('tenderator.detail.askAboutRegulatoryRisks', { techRegs: regulatoryRisk.technical_regulations.length, tbtBarriers: regulatoryRisk.trade_barriers.length }))}
                 >
                   <span className="mdi mdi-chat-question"></span>
-                  Ask AI about regulatory risks
+                  {t('tenderator.detail.askAboutRegRisks')}
                 </button>
               </div>
             )}
@@ -692,7 +697,7 @@ export const TenderDetail = ({
             {isLoadingSme ? (
               <div className="tender-detail__loading">
                 <span className="mdi mdi-loading mdi-spin"></span>
-                Analyzing SME suitability...
+                {t('tenderator.detail.analyzingSME')}
               </div>
             ) : smeAnalysis ? (
               <>
@@ -700,13 +705,13 @@ export const TenderDetail = ({
                 <div className="tender-detail__sme-card">
                   <div className={`tender-detail__sme-score-circle ${getScoreClass(smeAnalysis.sme_friendly_score ?? 0)}`}>
                     <span className="tender-detail__sme-score-value">{Math.round(smeAnalysis.sme_friendly_score ?? 0) || 0}</span>
-                    <span className="tender-detail__sme-score-label">SME Score</span>
+                    <span className="tender-detail__sme-score-label">{t('tenderator.detail.smeScore')}</span>
                   </div>
                   <p className="tender-detail__sme-recommendation">{smeAnalysis.recommendation}</p>
                   {smeAnalysis.consortium_suggestion && (
                     <div className="tender-detail__consortium-tip">
                       <span className="mdi mdi-account-group"></span>
-                      Consider forming a consortium for this tender
+                      {t('tenderator.detail.considerConsortium')}
                     </div>
                   )}
                 </div>
@@ -714,7 +719,7 @@ export const TenderDetail = ({
                 {/* Score Breakdown */}
                 {smeAnalysis.score_breakdown && Object.keys(smeAnalysis.score_breakdown).length > 0 && (
                   <div className="tender-detail__section">
-                    <h3><span className="mdi mdi-chart-bar"></span> Score Breakdown</h3>
+                    <h3><span className="mdi mdi-chart-bar"></span> {t('tenderator.detail.scoreBreakdown')}</h3>
                     <div className="tender-detail__score-breakdown">
                       {Object.entries(smeAnalysis.score_breakdown).map(([category, score]) => (
                         <div key={category} className="tender-detail__breakdown-item">
@@ -737,7 +742,7 @@ export const TenderDetail = ({
                 {/* Barriers */}
                 {smeAnalysis.barriers && smeAnalysis.barriers.length > 0 && (
                   <div className="tender-detail__section">
-                    <h3><span className="mdi mdi-alert-circle-outline"></span> Potential Barriers</h3>
+                    <h3><span className="mdi mdi-alert-circle-outline"></span> {t('tenderator.detail.potentialBarriers')}</h3>
                     <ul className="tender-detail__barrier-list">
                       {smeAnalysis.barriers.map((barrier, idx) => (
                         <li key={idx}>{barrier}</li>
@@ -749,7 +754,7 @@ export const TenderDetail = ({
                 {/* Opportunities */}
                 {smeAnalysis.opportunities && smeAnalysis.opportunities.length > 0 && (
                   <div className="tender-detail__section">
-                    <h3><span className="mdi mdi-check-circle-outline"></span> Opportunities</h3>
+                    <h3><span className="mdi mdi-check-circle-outline"></span> {t('tenderator.detail.opportunities')}</h3>
                     <ul className="tender-detail__opportunity-list">
                       {smeAnalysis.opportunities.map((opp, idx) => (
                         <li key={idx}>{opp}</li>
@@ -760,14 +765,14 @@ export const TenderDetail = ({
 
                 <button
                   className="tender-detail__ask-btn"
-                  onClick={() => onAskChatbot('Analyze the SME suitability of this tender in more detail. What are the specific challenges and how can I overcome them?')}
+                  onClick={() => onAskChatbot(t('tenderator.detail.askAboutSMESuitability'))}
                 >
                   <span className="mdi mdi-chat-question"></span>
-                  Ask AI for more details
+                  {t('tenderator.detail.askMoreDetails')}
                 </button>
               </>
             ) : (
-              <p className="tender-detail__no-data">SME analysis not available</p>
+              <p className="tender-detail__no-data">{t('tenderator.detail.smeAnalysisNotAvailable')}</p>
             )}
           </div>
         )}
@@ -788,24 +793,24 @@ export const TenderDetail = ({
                 // services, simplified concession notices). We surface the
                 // primary criterion type when known, and a TED deep link.
                 const subtype = tender.notice_subtype || '';
-                let intro = 'The buyer did not publish detailed award criteria in this notice.';
+                let introKey = 'tenderator.detail.noCriteriaPublished';
                 if (subtype.startsWith('pin')) {
-                  intro = 'Prior information notices typically do not declare award criteria. They will be published with the contract notice.';
+                  introKey = 'tenderator.detail.pinNoCriteria';
                 } else if (subtype === 'can-modif') {
-                  intro = 'This is a contract modification. The original award criteria are in the parent notice.';
+                  introKey = 'tenderator.detail.contractModificationCriteria';
                 } else if (subtype === 'cn-social') {
-                  intro = 'Social and special-services notices may use simplified criteria that are not formally declared in eForms.';
+                  introKey = 'tenderator.detail.socialServicesCriteria';
                 }
                 const typeHint = tender.award_criteria_type && tender.award_criteria_type !== 'best-value'
-                  ? ` Primary criterion type: ${tender.award_criteria_type}.`
+                  ? ` ${t('tenderator.detail.primaryCriterionType')}: ${tender.award_criteria_type}.`
                   : '';
                 return (
                   <div className="tender-detail__no-data">
-                    <p>{intro}{typeHint}</p>
+                    <p>{t(introKey)}{typeHint}</p>
                     {tender.ted_url && (
                       <p>
                         <a href={tender.ted_url} target="_blank" rel="noreferrer">
-                          View the full notice on TED <span className="mdi mdi-open-in-new" aria-hidden="true" />
+                          {t('tenderator.detail.viewFullNoticeTED')} <span className="mdi mdi-open-in-new" aria-hidden="true" />
                         </a>
                       </p>
                     )}
@@ -854,26 +859,22 @@ export const TenderDetail = ({
                   </div>
 
                   <div className="tender-detail__criteria-advice">
-                    <h4><span className="mdi mdi-lightbulb-on"></span> Bidding Strategy</h4>
+                    <h4><span className="mdi mdi-lightbulb-on"></span> {t('tenderator.detail.biddingStrategy')}</h4>
                     {qualityWeight > 0 && priceWeight > 0 ? (
                       qualityWeight > priceWeight ? (
                         <p>
-                          This tender prioritizes <strong>quality</strong> ({qualityWeight}%)
-                          over price ({priceWeight}%). Focus your bid on technical
-                          excellence, methodology, and team expertise.
+                          {t('tenderator.detail.prioritizesQuality', { quality: qualityWeight, price: priceWeight })}
                         </p>
                       ) : (
                         <p>
-                          This tender prioritizes <strong>price</strong> ({priceWeight}%)
-                          over quality ({qualityWeight}%). Ensure competitive pricing
-                          while meeting minimum quality thresholds.
+                          {t('tenderator.detail.prioritizesPrice', { price: priceWeight, quality: qualityWeight })}
                         </p>
                       )
                     ) : (
                       <p>
-                        Review the award criteria above to determine your bidding strategy.
+                        {t('tenderator.detail.reviewCriteriaStrategy')}
                         {tender.award_criteria_type && (
-                          <> Primary criterion type: <strong>{tender.award_criteria_type}</strong>.</>
+                          <> {t('tenderator.detail.primaryCriterionType')}: <strong>{tender.award_criteria_type}</strong>.</>
                         )}
                       </p>
                     )}
@@ -881,10 +882,10 @@ export const TenderDetail = ({
 
                   <button
                     className="tender-detail__ask-btn"
-                    onClick={() => onAskChatbot(`Explain the award criteria for this tender and provide detailed advice on how to structure a competitive bid. The criteria are: ${criteriaArray.map((c: { type?: string; name?: string; weight?: number }) => `${c.type || 'other'}: ${c.name || 'unnamed'} (${c.weight || 0}%)`).join(', ')}.`)}
+                    onClick={() => onAskChatbot(t('tenderator.detail.askBiddingAdvice', { criteria: criteriaArray.map((c: { type?: string; name?: string; weight?: number }) => `${c.type || 'other'}: ${c.name || 'unnamed'} (${c.weight || 0}%)`).join(', ') }))}
                   >
                     <span className="mdi mdi-chat-question"></span>
-                    Get detailed bidding advice
+                    {t('tenderator.detail.getBiddingAdvice')}
                   </button>
                 </>
               );
@@ -896,7 +897,7 @@ export const TenderDetail = ({
       {/* Match Reasons */}
       {match?.match_reasons && match.match_reasons.length > 0 && (
         <div className="tender-detail__match-reasons">
-          <h3><span className="mdi mdi-target"></span> Why This Matched Your Profile</h3>
+          <h3><span className="mdi mdi-target"></span> {t('tenderator.detail.whyMatched')}</h3>
           <div className="tender-detail__reason-list">
             {match.match_reasons.map((reason, idx) => (
               <div key={idx} className="tender-detail__reason-item">

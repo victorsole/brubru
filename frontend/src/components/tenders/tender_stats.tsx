@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/tender_stats.tsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import type { UserTenderStats } from '../../pages/tenderator_page';
 import './tender_stats.css';
@@ -19,6 +20,7 @@ interface TenderStatsProps {
 
 export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [ecosystems, setEcosystems] = useState<EcosystemInfo[]>([]);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
     <div className="tender-stats">
       <h3 className="tender-stats__title">
         <span className="mdi mdi-chart-arc"></span>
-        Your Statistics
+        {t('tenderator.stats.yourStatistics')}
       </h3>
 
       <div className="tender-stats__cards">
@@ -56,7 +58,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
           </div>
           <div className="tender-stats__card-content">
             <span className="tender-stats__card-value">{stats.total_matches}</span>
-            <span className="tender-stats__card-label">Total Matches</span>
+            <span className="tender-stats__card-label">{t('tenderator.stats.totalMatches')}</span>
           </div>
         </div>
 
@@ -67,7 +69,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
           </div>
           <div className="tender-stats__card-content">
             <span className="tender-stats__card-value">{stats.matches_this_week}</span>
-            <span className="tender-stats__card-label">This Week</span>
+            <span className="tender-stats__card-label">{t('tenderator.stats.thisWeek')}</span>
           </div>
         </div>
 
@@ -78,7 +80,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
           </div>
           <div className="tender-stats__card-content">
             <span className="tender-stats__card-value">{stats.saved_tenders}</span>
-            <span className="tender-stats__card-label">Saved</span>
+            <span className="tender-stats__card-label">{t('tenderator.stats.saved')}</span>
           </div>
         </div>
 
@@ -89,14 +91,14 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
           </div>
           <div className="tender-stats__card-content">
             <span className="tender-stats__card-value">{stats.applied_tenders}</span>
-            <span className="tender-stats__card-label">Applied</span>
+            <span className="tender-stats__card-label">{t('tenderator.stats.applied')}</span>
           </div>
         </div>
       </div>
 
       {/* Average Match Score */}
       <div className="tender-stats__score-section">
-        <h4>Average Match Score</h4>
+        <h4>{t('tenderator.stats.averageMatchScore')}</h4>
         {stats.average_match_score !== null ? (
           <>
             <div className="tender-stats__score-bar">
@@ -110,7 +112,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
             </span>
           </>
         ) : (
-          <p className="tender-stats__no-data">No matches yet</p>
+          <p className="tender-stats__no-data">{t('tenderator.stats.noMatchesYet')}</p>
         )}
       </div>
 
@@ -119,7 +121,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
         <div className="tender-stats__ecosystems">
           <h4>
             <span className="mdi mdi-factory"></span>
-            EU Industrial Ecosystems
+            {t('tenderator.stats.euIndustrialEcosystems')}
           </h4>
           <div className="tender-stats__eco-list">
             {ecosystems.map((eco, idx) => (
@@ -136,7 +138,7 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
             ))}
           </div>
           <p className="tender-stats__eco-note">
-            Source: European Monitor of Industrial Ecosystems (EMI)
+            {t('tenderator.stats.sourceEmi')}
           </p>
         </div>
       )}
@@ -145,24 +147,24 @@ export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
       <div className="tender-stats__tips">
         <h4>
           <span className="mdi mdi-lightbulb-on-outline"></span>
-          Quick Tips
+          {t('tenderator.stats.quickTips')}
         </h4>
         <ul>
           <li>
             <span className="mdi mdi-check-circle"></span>
-            Review new matches weekly
+            {t('tenderator.stats.tipReviewWeekly')}
           </li>
           <li>
             <span className="mdi mdi-check-circle"></span>
-            Save interesting tenders for later
+            {t('tenderator.stats.tipSaveInteresting')}
           </li>
           <li>
             <span className="mdi mdi-check-circle"></span>
-            Start bid prep at least 30 days before deadline
+            {t('tenderator.stats.tipBidPrep')}
           </li>
           <li>
             <span className="mdi mdi-check-circle"></span>
-            Use the AI assistant for guidance
+            {t('tenderator.stats.tipUseAiAssistant')}
           </li>
         </ul>
       </div>

@@ -1,5 +1,6 @@
 // frontend/src/components/tenders/tender_profile_setup.tsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_profile_setup.css';
@@ -88,6 +89,7 @@ interface TenderProfileSetupProps {
 }
 
 export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: TenderProfileSetupProps) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -228,15 +230,15 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         {onBack && (
           <button className="tender-profile-setup__back" onClick={onBack}>
             <span className="mdi mdi-arrow-left"></span>
-            Back
+            {t('tenderator.profileSetup.backButton')}
           </button>
         )}
         <h2>
           <span className="mdi mdi-account-cog"></span>
-          {existingProfile ? 'Edit Tender Profile' : 'Create Tender Profile'}
+          {existingProfile ? t('tenderator.profileSetup.editTitle') : t('tenderator.profileSetup.createTitle')}
         </h2>
         <p className="tender-profile-setup__subtitle">
-          Set up your company profile to receive personalized tender matches
+          {t('tenderator.profileSetup.subtitle')}
         </p>
       </div>
 
@@ -251,10 +253,10 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
               {s < step ? <span className="mdi mdi-check"></span> : s}
             </div>
             <span className="tender-profile-setup__progress-label">
-              {s === 1 && 'Company'}
-              {s === 2 && 'Sectors'}
-              {s === 3 && 'Countries'}
-              {s === 4 && 'Preferences'}
+              {s === 1 && t('tenderator.profileSetup.stepLabels.company')}
+              {s === 2 && t('tenderator.profileSetup.stepLabels.sectors')}
+              {s === 3 && t('tenderator.profileSetup.stepLabels.countries')}
+              {s === 4 && t('tenderator.profileSetup.stepLabels.preferences')}
             </span>
           </div>
         ))}
@@ -264,7 +266,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
       {error && (
         <div className="tender-profile-setup__error">
           <span className="mdi mdi-alert-circle"></span>
-          {error}
+          <span>{error}</span>
         </div>
       )}
 
@@ -272,7 +274,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
       {savedAt && !error && (
         <div className="tender-profile-setup__success" role="status">
           <span className="mdi mdi-check-circle" aria-hidden="true"></span>
-          Profile saved. Brubru is matching opportunities against your new criteria.
+          {t('tenderator.profileSetup.successMessage')}
         </div>
       )}
 
@@ -281,27 +283,27 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         {/* Step 1: Company Information */}
         {step === 1 && (
           <div className="tender-profile-setup__step">
-            <h3>Company Information</h3>
-            <p>Tell us about your company to help us find suitable tenders.</p>
+            <h3>{t('tenderator.profileSetup.step1.title')}</h3>
+            <p>{t('tenderator.profileSetup.step1.description')}</p>
 
             <div className="tender-profile-setup__form">
               <div className="tender-profile-setup__field">
-                <label>Company Name *</label>
+                <label>{t('tenderator.profileSetup.step1.companyNameLabel')}</label>
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="Enter your company name"
+                  placeholder={t('tenderator.profileSetup.step1.companyNamePlaceholder')}
                 />
               </div>
 
               <div className="tender-profile-setup__field">
-                <label>Company Size *</label>
+                <label>{t('tenderator.profileSetup.step1.companySizeLabel')}</label>
                 <div className="tender-profile-setup__radio-group">
                   {[
-                    { value: 'micro', label: 'Micro', desc: '< 10 employees, < €2M turnover' },
-                    { value: 'small', label: 'Small', desc: '< 50 employees, < €10M turnover' },
-                    { value: 'medium', label: 'Medium', desc: '< 250 employees, < €50M turnover' },
+                    { value: 'micro', label: t('tenderator.profileSetup.step1.sizeLabels.micro'), desc: t('tenderator.profileSetup.step1.sizeDesc.micro') },
+                    { value: 'small', label: t('tenderator.profileSetup.step1.sizeLabels.small'), desc: t('tenderator.profileSetup.step1.sizeDesc.small') },
+                    { value: 'medium', label: t('tenderator.profileSetup.step1.sizeLabels.medium'), desc: t('tenderator.profileSetup.step1.sizeDesc.medium') },
                   ].map((size) => (
                     <label
                       key={size.value}
@@ -325,21 +327,21 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
 
               <div className="tender-profile-setup__row">
                 <div className="tender-profile-setup__field">
-                  <label>Annual Turnover (€)</label>
+                  <label>{t('tenderator.profileSetup.step1.annualTurnoverLabel')}</label>
                   <input
                     type="number"
                     value={annualTurnover}
                     onChange={(e) => setAnnualTurnover(e.target.value)}
-                    placeholder="e.g., 500000"
+                    placeholder={t('tenderator.profileSetup.step1.annualTurnoverPlaceholder')}
                   />
                 </div>
                 <div className="tender-profile-setup__field">
-                  <label>Number of Employees</label>
+                  <label>{t('tenderator.profileSetup.step1.employeeCountLabel')}</label>
                   <input
                     type="number"
                     value={employeeCount}
                     onChange={(e) => setEmployeeCount(e.target.value)}
-                    placeholder="e.g., 25"
+                    placeholder={t('tenderator.profileSetup.step1.employeeCountPlaceholder')}
                   />
                 </div>
               </div>
@@ -350,16 +352,16 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         {/* Step 2: Sectors */}
         {step === 2 && (
           <div className="tender-profile-setup__step">
-            <h3>Business Sectors</h3>
-            <p>Select the sectors that match your business activities. You can select multiple.</p>
+            <h3>{t('tenderator.profileSetup.step2.title')}</h3>
+            <p>{t('tenderator.profileSetup.step2.description')}</p>
 
             <button
               type="button"
               className="tender-profile-setup__use-interests"
               onClick={applyMyInterests}
-              title="Pre-fill from your My EU Bubble Policy Interests"
+              title={t('tenderator.profileSetup.step2.useInterestsTooltip')}
             >
-              <span className="mdi mdi-creation"></span> Use my policy interests
+              <span className="mdi mdi-creation"></span> {t('tenderator.profileSetup.step2.useInterestsButton')}
             </button>
 
             <div className="tender-profile-setup__chips">
@@ -376,7 +378,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
             </div>
 
             <p className="tender-profile-setup__selection-count">
-              {selectedSectors.length} sector{selectedSectors.length !== 1 ? 's' : ''} selected
+              {t('tenderator.profileSetup.step2.selectionCount', { count: selectedSectors.length })}
             </p>
           </div>
         )}
@@ -384,8 +386,8 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         {/* Step 3: Countries */}
         {step === 3 && (
           <div className="tender-profile-setup__step">
-            <h3>Countries of Interest</h3>
-            <p>Select the EU countries where you would like to participate in tenders.</p>
+            <h3>{t('tenderator.profileSetup.step3.title')}</h3>
+            <p>{t('tenderator.profileSetup.step3.description')}</p>
 
             <div className="tender-profile-setup__country-grid">
               {EU_COUNTRIES.map((country) => (
@@ -404,7 +406,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
             </div>
 
             <p className="tender-profile-setup__selection-count">
-              {selectedCountries.length} countr{selectedCountries.length !== 1 ? 'ies' : 'y'} selected
+              {t('tenderator.profileSetup.step3.selectionCount', { count: selectedCountries.length })}
             </p>
           </div>
         )}
@@ -412,61 +414,61 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         {/* Step 4: Preferences */}
         {step === 4 && (
           <div className="tender-profile-setup__step">
-            <h3>Matching Preferences</h3>
-            <p>Fine-tune how we match tenders to your profile.</p>
+            <h3>{t('tenderator.profileSetup.step4.title')}</h3>
+            <p>{t('tenderator.profileSetup.step4.description')}</p>
 
             <div className="tender-profile-setup__form">
               <div className="tender-profile-setup__field">
-                <label>Keywords (optional)</label>
+                <label>{t('tenderator.profileSetup.step4.keywordsLabel')}</label>
                 <input
                   type="text"
                   value={keywords}
                   onChange={(e) => setKeywords(e.target.value)}
-                  placeholder="e.g., cloud, cybersecurity, AI (comma-separated)"
+                  placeholder={t('tenderator.profileSetup.step4.keywordsPlaceholder')}
                 />
                 <span className="tender-profile-setup__hint">
-                  Keywords to match against tender titles and descriptions
+                  {t('tenderator.profileSetup.step4.keywordsHint')}
                 </span>
               </div>
 
               <div className="tender-profile-setup__row">
                 <div className="tender-profile-setup__field">
-                  <label>Min Tender Value (€)</label>
+                  <label>{t('tenderator.profileSetup.step4.minTenderValueLabel')}</label>
                   <input
                     type="number"
                     value={minTenderValue}
                     onChange={(e) => setMinTenderValue(e.target.value)}
-                    placeholder="e.g., 50000"
+                    placeholder={t('tenderator.profileSetup.step4.minTenderValuePlaceholder')}
                   />
                 </div>
                 <div className="tender-profile-setup__field">
-                  <label>Max Tender Value (€)</label>
+                  <label>{t('tenderator.profileSetup.step4.maxTenderValueLabel')}</label>
                   <input
                     type="number"
                     value={maxTenderValue}
                     onChange={(e) => setMaxTenderValue(e.target.value)}
-                    placeholder="e.g., 2000000"
+                    placeholder={t('tenderator.profileSetup.step4.maxTenderValuePlaceholder')}
                   />
                 </div>
               </div>
 
               <div className="tender-profile-setup__field">
-                <label>Minimum Days Until Deadline</label>
+                <label>{t('tenderator.profileSetup.step4.minDeadlineDaysLabel')}</label>
                 <input
                   type="number"
                   value={minDeadlineDays}
                   onChange={(e) => setMinDeadlineDays(e.target.value)}
-                  placeholder="30"
+                  placeholder={t('tenderator.profileSetup.step4.minDeadlineDaysPlaceholder')}
                   min="7"
                   max="180"
                 />
                 <span className="tender-profile-setup__hint">
-                  Only show tenders with at least this many days until deadline
+                  {t('tenderator.profileSetup.step4.minDeadlineDaysHint')}
                 </span>
               </div>
 
               <div className="tender-profile-setup__field">
-                <label>Preferred Procedure Types</label>
+                <label>{t('tenderator.profileSetup.step4.procedureTypesLabel')}</label>
                 <div className="tender-profile-setup__procedure-list">
                   {PROCEDURE_TYPES.map((proc) => (
                     <label
@@ -479,8 +481,8 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
                         onChange={() => toggleProcedure(proc.value)}
                       />
                       <span className="tender-profile-setup__procedure-content">
-                        <span className="tender-profile-setup__procedure-label">{proc.label}</span>
-                        <span className="tender-profile-setup__procedure-desc">{proc.description}</span>
+                        <span className="tender-profile-setup__procedure-label">{t(`tenderator.profileSetup.procedureTypes.${proc.value}.label`)}</span>
+                        <span className="tender-profile-setup__procedure-desc">{t(`tenderator.profileSetup.procedureTypes.${proc.value}.description`)}</span>
                       </span>
                     </label>
                   ))}
@@ -488,15 +490,15 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
               </div>
 
               <div className="tender-profile-setup__field">
-                <label>Notification Frequency</label>
+                <label>{t('tenderator.profileSetup.step4.frequencyLabel')}</label>
                 <select
                   value={notificationFrequency}
                   onChange={(e) => setNotificationFrequency(e.target.value)}
                 >
-                  <option value="daily">Daily digest</option>
-                  <option value="weekly">Weekly digest</option>
-                  <option value="biweekly">Bi-weekly digest</option>
-                  <option value="instant">Instant notifications</option>
+                  <option value="daily">{t('tenderator.profileSetup.frequencies.daily')}</option>
+                  <option value="weekly">{t('tenderator.profileSetup.frequencies.weekly')}</option>
+                  <option value="biweekly">{t('tenderator.profileSetup.frequencies.biweekly')}</option>
+                  <option value="instant">{t('tenderator.profileSetup.frequencies.instant')}</option>
                 </select>
               </div>
             </div>
@@ -512,7 +514,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
             onClick={() => setStep(step - 1)}
           >
             <span className="mdi mdi-chevron-left"></span>
-            Previous
+            {t('tenderator.profileSetup.previousButton')}
           </button>
         )}
 
@@ -522,7 +524,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
             onClick={() => setStep(step + 1)}
             disabled={!canProceed()}
           >
-            Next
+            {t('tenderator.profileSetup.nextButton')}
             <span className="mdi mdi-chevron-right"></span>
           </button>
         ) : (
@@ -534,12 +536,12 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
             {isLoading ? (
               <>
                 <span className="mdi mdi-loading mdi-spin"></span>
-                Saving...
+                {t('tenderator.profileSetup.savingButton')}
               </>
             ) : (
               <>
                 <span className="mdi mdi-check"></span>
-                {existingProfile ? 'Save Changes' : 'Create Profile'}
+                {existingProfile ? t('tenderator.profileSetup.saveChangesButton') : t('tenderator.profileSetup.createProfileButton')}
               </>
             )}
           </button>

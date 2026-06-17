@@ -13,6 +13,7 @@
  * Green disclaimer at the top conveys the current scaffold version.
  */
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import { marked } from 'marked';
 import './tender_doc_editor.css';
@@ -122,6 +123,7 @@ interface TenderDocEditorProps {
 }
 
 export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
+ const { t } = useTranslation();
  const { token } = useAuth();
 
  const [data, setData] = useState<TenderFileResponse | null>(null);
@@ -387,15 +389,15 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  if (loading) {
  return (
  <div className="td-edit__loading">
- <span className="mdi mdi-loading mdi-spin" /> Loading...
+ <span className="mdi mdi-loading mdi-spin" /> {t('tenderator.docEditor.loading')}
  </div>
  );
  }
  if (error || !data) {
  return (
  <div className="td-edit__error">
- <span className="mdi mdi-alert-circle" /> {error || 'Could not load tender file'}
- <button onClick={onBack}>Back</button>
+ <span className="mdi mdi-alert-circle" /> {error || t('tenderator.docEditor.couldNotLoadTenderFile')}
+ <button onClick={onBack}>{t('tenderator.docEditor.back')}</button>
  </div>
  );
  }
@@ -408,7 +410,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  <div className="td-edit">
  {/* Top bar */}
  <div className="td-edit__topbar">
- <button className="td-edit__back" onClick={onBack} aria-label="Back to Tender Docs">
+ <button className="td-edit__back" onClick={onBack} aria-label={t('tenderator.docEditor.backToTenderDocs')}>
  <span className="mdi mdi-arrow-left" />
  </button>
  <div className="td-edit__topbar-info">
@@ -421,24 +423,23 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  </div>
  <div className="td-edit__topbar-actions">
  <select value={data.status} onChange={(e) => updateStatus(e.target.value)}>
- <option value="drafting">Drafting</option>
- <option value="ready-to-submit">Ready to submit</option>
- <option value="submitted">Submitted</option>
- <option value="won">Won</option>
- <option value="lost">Lost</option>
- <option value="seal-of-excellence">Seal of Excellence</option>
+ <option value="drafting">{t('tenderator.docEditor.statusDrafting')}</option>
+ <option value="ready-to-submit">{t('tenderator.docEditor.statusReadyToSubmit')}</option>
+ <option value="submitted">{t('tenderator.docEditor.statusSubmitted')}</option>
+ <option value="won">{t('tenderator.docEditor.statusWon')}</option>
+ <option value="lost">{t('tenderator.docEditor.statusLost')}</option>
+ <option value="seal-of-excellence">{t('tenderator.docEditor.statusSealOfExcellence')}</option>
  </select>
  </div>
  </div>
 
  {/* Green disclaimer */}
- <div className="td-edit__disclaimer" title={`Official EU template version, frozen at file creation. The 'Switch to latest' control will appear when a newer version ships.`}>
+ <div className="td-edit__disclaimer" title={t('tenderator.docEditor.disclaimerTooltip')}>
  <span className="mdi mdi-check-decagram" />
- You are working from the <strong>{data.scaffold_version}</strong> version of the official EU template
- ({data.template.name}).
+ {t('tenderator.docEditor.disclaimerText', { version: data.scaffold_version, name: data.template.name })}
  {data.template.official_template_url && (
  <a href={data.template.official_template_url} target="_blank" rel="noreferrer">
- View source <span className="mdi mdi-open-in-new" />
+ {t('tenderator.docEditor.viewSource')} <span className="mdi mdi-open-in-new" />
  </a>
  )}
  </div>
@@ -447,7 +448,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  <div className="td-edit__cols">
  {/* LEFT RAIL: doc checklist */}
  <aside className="td-edit__left">
- <h4>Documents in this file</h4>
+ <h4>{t('tenderator.docEditor.documentsInThisFile')}</h4>
  <ul className="td-edit__doc-list">
  {data.documents.map((d) => {
  const kind = (d.doc_metadata as { doc_kind?: string }).doc_kind || d.tags?.[0];
@@ -463,9 +464,9 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  >
  <div className="td-edit__doc-item-title">{spec?.title || d.title}</div>
  <div className="td-edit__doc-item-meta">
- {wordsApprox} words
- {pageLimit && <> · max {pageLimit} pp</>}
- {!onTrack && <span className="td-edit__warning"> · over budget</span>}
+ {t('tenderator.docEditor.wordCount', { count: wordsApprox })}
+ {pageLimit && <> · {t('tenderator.docEditor.maxPages', { limit: pageLimit })}</>}
+ {!onTrack && <span className="td-edit__warning"> · {t('tenderator.docEditor.overBudget')}</span>}
  </div>
  </li>
  );
@@ -473,7 +474,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  </ul>
  {availableKinds.length > 0 && (
  <>
- <h4 style={{ marginTop: '1rem' }}>+ Add another doc</h4>
+ <h4 style={{ marginTop: '1rem' }}>+ {t('tenderator.docEditor.addAnotherDoc')}</h4>
  <ul className="td-edit__add-list">
  {availableKinds.map((spec) => (
  <li key={spec.kind}>
@@ -494,7 +495,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  <div className="td-edit__center-head">
  <h3>{activeDocSpec.title}</h3>
  <div className="td-edit__center-meta">
- {activeDocSpec.page_limit && <span>Page limit: {activeDocSpec.page_limit} pp</span>}
+ {activeDocSpec.page_limit && <span>{t('tenderator.docEditor.pageLimit', { limit: activeDocSpec.page_limit })}</span>}
  {activeDocSpec.formatting?.font && <span> · {activeDocSpec.formatting.font}</span>}
  {activeDocSpec.formatting?.page_size && <span> · {activeDocSpec.formatting.page_size}</span>}
  </div>
@@ -504,7 +505,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  {(activeDocSpec.sections || []).length > 0 && (
  <details className="td-edit__outline" open>
  <summary>
- Section outline ({(activeDocSpec.sections || []).length} sections click "Draft with AI" on any to start)
+ {t('tenderator.docEditor.sectionOutline', { count: (activeDocSpec.sections || []).length })}
  </summary>
  <div className="td-edit__outline-list">
  {(activeDocSpec.sections || []).map((section) => (
@@ -518,7 +519,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  disabled={aiBusy && activeSectionId === section.id}
  onClick={() => draftSectionWithAI(section.id)}
  >
- {aiBusy && activeSectionId === section.id ? 'Drafting…' : 'Draft with AI'}
+ {aiBusy && activeSectionId === section.id ? t('tenderator.docEditor.drafting') : t('tenderator.docEditor.draftWithAI')}
  </button>
  </div>
  {(section.sub || []).map((sub) => (
@@ -529,7 +530,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  disabled={aiBusy && activeSectionId === sub.id}
  onClick={() => draftSectionWithAI(sub.id)}
  >
- {aiBusy && activeSectionId === sub.id ? 'Drafting…' : 'Draft'}
+ {aiBusy && activeSectionId === sub.id ? t('tenderator.docEditor.drafting') : t('tenderator.docEditor.draftSubsection')}
  </button>
  </div>
  ))}
@@ -542,7 +543,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  {/* Pitch deck scaffold preview */}
  {activeDocSpec.scaffold_slides && (
  <div className="td-edit__slides">
- <h4>Suggested 12-slide pattern</h4>
+ <h4>{t('tenderator.docEditor.suggestedSlidePattern')}</h4>
  <ol>
  {activeDocSpec.scaffold_slides.map((s, i) => <li key={i}>{s}</li>)}
  </ol>
@@ -550,7 +551,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  )}
 
  {/* View / Edit toggle — mirrors MEUB Documents' view + edit pattern */}
- <div className="td-edit__mode-toggle" role="tablist" aria-label="Document mode">
+ <div className="td-edit__mode-toggle" role="tablist" aria-label={t('tenderator.docEditor.documentMode')}>
  <button
  type="button"
  role="tab"
@@ -558,7 +559,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  className={editMode === 'view' ? 'is-active' : ''}
  onClick={() => setEditMode('view')}
  >
- <span className="mdi mdi-eye-outline" /> Preview
+ <span className="mdi mdi-eye-outline" /> {t('tenderator.docEditor.preview')}
  </button>
  <button
  type="button"
@@ -567,7 +568,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  className={editMode === 'edit' ? 'is-active' : ''}
  onClick={() => setEditMode('edit')}
  >
- <span className="mdi mdi-pencil-outline" /> Edit
+ <span className="mdi mdi-pencil-outline" /> {t('tenderator.docEditor.edit')}
  </button>
  </div>
 
@@ -576,8 +577,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  <div className="td-edit__preview">
  {docContent.trim().length === 0 ? (
  <p className="td-edit__preview-empty">
- The seeded section structure is here. Switch to Edit mode to write directly,
- or click "Draft with AI" on any section above.
+ {t('tenderator.docEditor.emptyPreviewText')}
  </p>
  ) : (
  <div
@@ -596,16 +596,16 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  value={docContent}
  onChange={(e) => { setDocContent(e.target.value); setDocDirty(true); }}
  rows={28}
- placeholder="The seeded section structure is here. Click 'Draft with AI' on any section above to add content, or write directly."
+ placeholder={t('tenderator.docEditor.textareaPlaceholder')}
  />
  )}
 
  <div className="td-edit__center-foot">
  <span className="td-edit__center-status">
- {docDirty ? 'Unsaved changes' : 'Saved'} · {docContent.split(/\s+/).filter(Boolean).length} words
+ {docDirty ? t('tenderator.docEditor.unsavedChanges') : t('tenderator.docEditor.saved')} · {t('tenderator.docEditor.wordCount', { count: docContent.split(/\s+/).filter(Boolean).length })}
  </span>
  <button className="td-edit__save" onClick={saveDoc} disabled={!docDirty || saving}>
- {saving ? 'Saving...' : 'Save'}
+ {saving ? t('tenderator.docEditor.saving') : t('tenderator.docEditor.save')}
  </button>
  </div>
  </>
@@ -615,29 +615,29 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  {/* RIGHT RAIL: tabbed context */}
  <aside className="td-edit__right">
  <div className="td-edit__right-tabs">
- <button className={rightTab === 'topic' ? 'is-active' : ''} onClick={() => setRightTab('topic')}>Topic</button>
- <button className={rightTab === 'org' ? 'is-active' : ''} onClick={() => setRightTab('org')}>Org</button>
- <button className={rightTab === 'ai' ? 'is-active' : ''} onClick={() => setRightTab('ai')}>AI</button>
- <button className={rightTab === 'comply' ? 'is-active' : ''} onClick={() => setRightTab('comply')}>Comply</button>
- <button className={rightTab === 'winners' ? 'is-active' : ''} onClick={() => setRightTab('winners')}>Past winners</button>
+ <button className={rightTab === 'topic' ? 'is-active' : ''} onClick={() => setRightTab('topic')}>{t('tenderator.docEditor.tabTopic')}</button>
+ <button className={rightTab === 'org' ? 'is-active' : ''} onClick={() => setRightTab('org')}>{t('tenderator.docEditor.tabOrg')}</button>
+ <button className={rightTab === 'ai' ? 'is-active' : ''} onClick={() => setRightTab('ai')}>{t('tenderator.docEditor.tabAI')}</button>
+ <button className={rightTab === 'comply' ? 'is-active' : ''} onClick={() => setRightTab('comply')}>{t('tenderator.docEditor.tabComply')}</button>
+ <button className={rightTab === 'winners' ? 'is-active' : ''} onClick={() => setRightTab('winners')}>{t('tenderator.docEditor.tabPastWinners')}</button>
  </div>
  <div className="td-edit__right-body">
  {rightTab === 'topic' && (
  <div>
  <h4>{data.template.name}</h4>
- <p>Programme: {data.programme} {data.sub_instrument && `· ${data.sub_instrument}`}</p>
- {data.stage && <p>Stage: {data.stage}</p>}
- {data.funding_mode && <p>Funding mode: {data.funding_mode}</p>}
- {data.topic_id && <p>Topic ID: <code>{data.topic_id}</code></p>}
- {data.deadline_iso && <p>Deadline: {new Date(data.deadline_iso).toLocaleString()}</p>}
- <p>Scaffold: {data.scaffold_version}</p>
+ <p>{t('tenderator.docEditor.programme')}: {data.programme} {data.sub_instrument && `· ${data.sub_instrument}`}</p>
+ {data.stage && <p>{t('tenderator.docEditor.stage')}: {data.stage}</p>}
+ {data.funding_mode && <p>{t('tenderator.docEditor.fundingMode')}: {data.funding_mode}</p>}
+ {data.topic_id && <p>{t('tenderator.docEditor.topicID')}: <code>{data.topic_id}</code></p>}
+ {data.deadline_iso && <p>{t('tenderator.docEditor.deadline')}: {new Date(data.deadline_iso).toLocaleString()}</p>}
+ <p>{t('tenderator.docEditor.scaffold')}: {data.scaffold_version}</p>
  <div className="td-edit__cta-row">
  {data.topic_id && (
- <button onClick={openSourceTender}><span className="mdi mdi-open-in-new" /> F&T Portal</button>
+ <button onClick={openSourceTender}><span className="mdi mdi-open-in-new" /> {t('tenderator.docEditor.ftPortal')}</button>
  )}
  {data.template.official_template_url && (
  <a href={data.template.official_template_url} target="_blank" rel="noreferrer">
- <button type="button"><span className="mdi mdi-file-pdf-box" /> Official template</button>
+ <button type="button"><span className="mdi mdi-file-pdf-box" /> {t('tenderator.docEditor.officialTemplate')}</button>
  </a>
  )}
  </div>
@@ -647,16 +647,16 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  {(data.template.model_grant_agreement_url || data.template.annotated_grant_agreement_url ||
    (data.template.reference_docs && data.template.reference_docs.length > 0)) && (
  <section className="td-edit__refs">
- <h5>Reference documents</h5>
+ <h5>{t('tenderator.docEditor.referenceDocuments')}</h5>
  {data.template.model_grant_agreement_url && (
  <a className="td-edit__refs-primary" href={data.template.model_grant_agreement_url} target="_blank" rel="noreferrer">
- <span className="mdi mdi-file-sign" /> Model Grant Agreement (you'll sign this if you win)
+ <span className="mdi mdi-file-sign" /> {t('tenderator.docEditor.modelGrantAgreement')}
  <span className="mdi mdi-open-in-new td-edit__refs-ext" />
  </a>
  )}
  {data.template.annotated_grant_agreement_url && (
  <a className="td-edit__refs-primary" href={data.template.annotated_grant_agreement_url} target="_blank" rel="noreferrer">
- <span className="mdi mdi-book-open-variant" /> Annotated Grant Agreement (AGA — how to read the MGA)
+ <span className="mdi mdi-book-open-variant" /> {t('tenderator.docEditor.annotatedGrantAgreement')}
  <span className="mdi mdi-open-in-new td-edit__refs-ext" />
  </a>
  )}
@@ -664,11 +664,20 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  // Group reference_docs by category so the list stays scannable.
  const byCat: Record<string, ReferenceDoc[]> = {};
  (data.template.reference_docs || []).forEach((r) => {
- const c = r.category || 'Other';
+ const c = r.category || t('tenderator.docEditor.refCategoryOther');
  if (!byCat[c]) byCat[c] = [];
  byCat[c].push(r);
  });
- const orderedCats = ['Grant agreement', 'Post-award', 'Cost rules', 'Eligibility', 'Org profile', 'Submission', 'Programme', 'Other']
+ const orderedCats = [
+ t('tenderator.docEditor.refCategoryGrantAgreement'),
+ t('tenderator.docEditor.refCategoryPostAward'),
+ t('tenderator.docEditor.refCategoryCostRules'),
+ t('tenderator.docEditor.refCategoryEligibility'),
+ t('tenderator.docEditor.refCategoryOrgProfile'),
+ t('tenderator.docEditor.refCategorySubmission'),
+ t('tenderator.docEditor.refCategoryProgramme'),
+ t('tenderator.docEditor.refCategoryOther')
+ ]
  .filter((c) => byCat[c]);
  return (
  <div className="td-edit__refs-grouped">
@@ -690,75 +699,72 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
  </div>
  );
  })()}
- <p className="td-edit__refs-source">Sourced from the EU F&amp;T Portal — links open at <code>ec.europa.eu</code>.</p>
+ <p className="td-edit__refs-source">{t('tenderator.docEditor.refsSource')}</p>
  </section>
  )}
  </div>
  )}
  {rightTab === 'org' && (
  <div>
- <h4>Org Profile</h4>
+ <h4>{t('tenderator.docEditor.orgProfile')}</h4>
  {orgProfile ? (
  <ul className="td-edit__org-list">
- <li><strong>Company:</strong> {orgProfile.company_name || ''}</li>
- <li><strong>Size:</strong> {orgProfile.company_size || ''}</li>
- <li><strong>Sectors:</strong> {orgProfile.sectors_description || ''}</li>
+ <li><strong>{t('tenderator.docEditor.company')}:</strong> {orgProfile.company_name || ''}</li>
+ <li><strong>{t('tenderator.docEditor.size')}:</strong> {orgProfile.company_size || ''}</li>
+ <li><strong>{t('tenderator.docEditor.sectors')}:</strong> {orgProfile.sectors_description || ''}</li>
  {orgProfile.keywords && orgProfile.keywords.length > 0 && (
- <li><strong>Keywords:</strong> {orgProfile.keywords.slice(0, 10).join(', ')}</li>
+ <li><strong>{t('tenderator.docEditor.keywords')}:</strong> {orgProfile.keywords.slice(0, 10).join(', ')}</li>
  )}
  {orgProfile.certifications && orgProfile.certifications.length > 0 && (
- <li><strong>Certifications:</strong> {orgProfile.certifications.join(', ')}</li>
+ <li><strong>{t('tenderator.docEditor.certifications')}:</strong> {orgProfile.certifications.join(', ')}</li>
  )}
  </ul>
  ) : (
- <p>No Tender profile yet. Set one up in Tenderator → Profile.</p>
+ <p>{t('tenderator.docEditor.noTenderProfile')}</p>
  )}
  </div>
  )}
  {rightTab === 'ai' && (
  <div>
- <h4>AI co-writer</h4>
+ <h4>{t('tenderator.docEditor.aiCoWriter')}</h4>
  <p>
- Click <strong>Draft with AI</strong> on any section in the outline above.
- The AI inserts the draft right after that section's heading, not at the end.
+ {t('tenderator.docEditor.aiInstructions')}
  </p>
  <p className="td-edit__hint">
- The AI never fabricates TRL data, partner names, financials, IP or patents.
- It leaves <code>[INSERT ...]</code> placeholders for you to fill.
+ {t('tenderator.docEditor.aiNoFabrication')}
  </p>
  <p className="td-edit__hint">
- Mandatory AI-use disclosure is auto-appended at export time when the
- template requires it.
+ {t('tenderator.docEditor.aiDisclosure')}
  </p>
  </div>
  )}
  {rightTab === 'comply' && (
  <div>
- <h4>Applicable obligations (EU Law Comply)</h4>
+ <h4>{t('tenderator.docEditor.applicableObligations')}</h4>
  {complyLoading ? (
- <p>Loading clusters...</p>
+ <p>{t('tenderator.docEditor.loadingClusters')}</p>
  ) : !comply || comply.length === 0 ? (
- <p>No applicable clusters resolved for this template + funding mode. (Comply is Yellow/Blue tier.)</p>
+ <p>{t('tenderator.docEditor.noApplicableClusters')}</p>
  ) : (
  <ul className="td-edit__comply-list">
  {comply.slice(0, 12).map((c) => (
  <li key={c.id}>
  <strong>{c.name}</strong>
- <div className="td-edit__comply-meta">{c.policy_area} · {c.law_count} laws · {c.requirement_count} reqs</div>
+ <div className="td-edit__comply-meta">{t('tenderator.docEditor.complyMeta', { policyArea: c.policy_area, lawCount: c.law_count, reqCount: c.requirement_count })}</div>
  </li>
  ))}
  </ul>
  )}
- <button className="td-edit__cta" onClick={openComply}>Open EU Law Comply →</button>
+ <button className="td-edit__cta" onClick={openComply}>{t('tenderator.docEditor.openComply')}</button>
  </div>
  )}
  {rightTab === 'winners' && (
  <div>
- <h4>Past winners</h4>
+ <h4>{t('tenderator.docEditor.pastWinners')}</h4>
  {data.programme === 'EIC' && (data.sub_instrument === 'accelerator' || data.sub_instrument === 'step') ? (
  <PastWinners subInstrument={data.sub_instrument} token={token} />
  ) : (
- <p>Past-winners panel is live for EIC Accelerator + STEP today (255 EIC Fund portfolio companies).</p>
+ <p>{t('tenderator.docEditor.pastWinnersNote')}</p>
  )}
  </div>
  )}
@@ -766,8 +772,8 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
 
  {/* Cross-feature hand-offs (always visible) */}
  <div className="td-edit__handoffs">
- <button onClick={useInChat}><span className="mdi mdi-chat-outline" /> Use in Chat</button>
- <button onClick={openComply}><span className="mdi mdi-clipboard-check-outline" /> Comply</button>
+ <button onClick={useInChat}><span className="mdi mdi-chat-outline" /> {t('tenderator.docEditor.useInChat')}</button>
+ <button onClick={openComply}><span className="mdi mdi-clipboard-check-outline" /> {t('tenderator.docEditor.comply')}</button>
  </div>
  </aside>
  </div>
@@ -776,6 +782,7 @@ export const TenderDocEditor = ({ fileId, onBack }: TenderDocEditorProps) => {
 };
 
 const PastWinners = ({ subInstrument, token }: { subInstrument?: string; token: string | null }) => {
+ const { t } = useTranslation();
  const [grantees, setGrantees] = useState<Array<{ name: string; country?: string; theme_name?: string; description?: string }>>([]);
  const [loading, setLoading] = useState(true);
 
@@ -800,8 +807,8 @@ const PastWinners = ({ subInstrument, token }: { subInstrument?: string; token: 
  return () => { cancelled = true; };
  }, [subInstrument, token]);
 
- if (loading) return <p>Loading...</p>;
- if (grantees.length === 0) return <p>No grantees data.</p>;
+ if (loading) return <p>{t('tenderator.docEditor.loading')}</p>;
+ if (grantees.length === 0) return <p>{t('tenderator.docEditor.noGranteesData')}</p>;
  return (
  <ul className="td-edit__winners-list">
  {grantees.map((g, i) => (
