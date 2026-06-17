@@ -1,0 +1,315 @@
+{
+  "id": "digital-europe",
+  "name": "Digital Europe Programme Application (DEP)",
+  "programme": "DIGITAL",
+  "sub_instrument": "dep",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/digital/temp-form/af/af_dep_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B Technical Description of the Project",
+      "page_limit": 70,
+      "formatting": {
+        "font": "Arial 9pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "project-summary",
+          "label": "Project Summary",
+          "page_budget": 5,
+          "criterion": "Project Overview",
+          "sub": [
+            {
+              "id": "abstract",
+              "label": "Project Summary",
+              "prompts": [
+                "Provide a concise summary of the project. See Abstract from Application Form Part A."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "1-relevance",
+          "label": "1. Relevance",
+          "page_budget": 12,
+          "criterion": "Relevance",
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 Objectives and activities",
+              "prompts": [
+                "Describe how the project is aligned with the objectives and activities as described in the Call document.",
+                "How does the project address the general objectives and themes and priorities of the call?",
+                "What is the project's contribution to the overall Digital Europe Programme objectives?"
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Contribution to long-term policy objectives, policies and strategies - Synergies",
+              "prompts": [
+                "Describe how the project contributes to long-term policy objectives of the call's domain/area and to the relevant policies and strategies.",
+                "How is it based on a sound needs analysis in line with the activities at European and national level?",
+                "What challenge does the project aim to address?",
+                "The objectives should be specific, measurable, achievable, relevant and time-bound within the duration of the project."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Digital technology supply chain",
+              "prompts": [
+                "Explain to what extent the project would reinforce and secure the digital technology supply chain in the EU.",
+                "Note: This criterion might not be applicable to all topics. For details refer to the Call document."
+              ]
+            },
+            {
+              "id": "1.4",
+              "label": "1.4 Financial obstacles",
+              "prompts": [
+                "Describe to what extent the project can overcome financial obstacles such as the lack of market finance.",
+                "Note: This criterion might not be applicable to all topics. For details refer to the Call document."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-implementation",
+          "label": "2. Implementation",
+          "page_budget": 18,
+          "criterion": "Implementation",
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Maturity",
+              "prompts": [
+                "Explain the maturity of the project, i.e. the state of preparation and the readiness to start the implementation of the proposed activities."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Implementation plan and efficient use of resources",
+              "prompts": [
+                "Show that the implementation work plan is sound by explaining the rationale behind the proposed work packages and how they contribute to achieve the objectives of the project.",
+                "Explain the coherence between the objectives, activities, planned resources and project management processes.",
+                "Show how the project integrates, builds on and follows up on any pre-existing work or EU funded projects. Provide details (including architecture and deliverables) about pre-existing technical solutions.",
+                "Describe the measures planned to ensure that the project implementation is of high quality and completed in time.",
+                "Describe the methods to ensure good quality of monitoring, planning and control activities.",
+                "Describe the evaluation methods and indicators (quantitative and qualitative) to monitor and verify the outreach and coverage of the activities and results. The indicators proposed to measure progress should be specific, measurable, achievable, relevant and time-bound.",
+                "Describe the measures adopted to ensure that the proposed results and objectives will be achieved in the most cost-effective way.",
+                "Indicate the arrangements adopted for the financial management of the project and, in particular, how the financial resources will be allocated and managed within the consortium.",
+                "Do NOT compare and justify the costs of each work package, but summarise briefly why your budget is cost effective.",
+                "Describe critical risks, uncertainties or difficulties related to the implementation of your project, and your measures/strategy for addressing them.",
+                "Indicate for each risk (in the description) the impact and the likelihood that the risk will materialise (high, medium, low), even after taking into account the mitigating measures."
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Capacity to carry out the proposed work",
+              "prompts": [
+                "Describe the participants (Beneficiaries, Affiliated Entities and Associated Partners, if any) and explain how they will work together to implement the project.",
+                "How will they bring together the necessary expertise? How will they complement each other?",
+                "In what way does each of the participants contribute to the project? Show that each has a valid role and adequate resources to fulfil that role.",
+                "Describe the project teams and how they will work together to implement the project.",
+                "List the staff included in the project budget by function/profile (e.g. project manager, senior expert/advisor/researcher, junior expert/advisor/researcher, trainers/teachers, technical personnel, administrative personnel etc.) and describe briefly their tasks.",
+                "If you do not have all skills/resources in-house, describe how you intend to get them (contributions of members, partner organisations, subcontracting, etc.) and for which role/tasks/professional profile/expertise.",
+                "If there is subcontracting, please also complete the table in section 4.",
+                "Explain the management structures and decision-making mechanisms within the consortium. Describe how decisions will be taken and how regular and effective communication will be ensured. Describe methods to ensure planning and control."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-impact",
+          "label": "3. Impact",
+          "page_budget": 15,
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Expected outcomes and deliverables - Dissemination and communication",
+              "prompts": [
+                "Define and explain the extent to which the project will achieve the expected impacts listed in Call document.",
+                "Describe the communication and dissemination activities (target groups, main messages, tools, and channels) which are planned in order to promote the activities/results and maximise the impact.",
+                "The aim is to inform and reach out to society and show the activities performed, and the use and the benefits the project will have for citizens.",
+                "Clarify how you will reach the target groups, relevant stakeholders, policymakers and the general public and explain the choice of the dissemination channels.",
+                "Describe how the visibility of EU funding will be ensured.",
+                "Note: In case your proposal is selected for funding, you will have to provide a more detailed plan for these activities (dissemination and communication plan), within 6 months after grant signature. This plan will have to be periodically updated in line with the project progress."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Competitiveness and benefits for society",
+              "prompts": [
+                "Describe the extent to which the project will strengthen competitiveness and bring important benefits for society."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Environmental sustainability and contribution to European Green Deal goals",
+              "prompts": [
+                "Describe the extent to which the project will contribute to environmental sustainability and in particular to European Green Deal goals.",
+                "Note: This might not be applicable to all topics. For details refer to the Call document."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-work-plan",
+          "label": "4. Work Plan, Work Packages, Activities, Resources and Timing",
+          "page_budget": 20,
+          "criterion": "Work Plan",
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Work plan",
+              "prompts": [
+                "Provide a brief description of the overall structure of the work plan (list of work packages or graphical presentation (Pert chart or similar))."
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "4.2 Work packages, activities, resources and timing",
+              "prompts": [
+                "Group your activities into work packages. A work package means a major sub-division of the project.",
+                "For each work package, enter an objective (expected outcome) and list the activities, milestones and deliverables that belong to it.",
+                "The grouping should be logical and guided by identifiable outputs.",
+                "Projects should normally have a minimum of 2 work packages. WP1 should cover the management and coordination activities (meetings, coordination, project monitoring and evaluation, financial management, progress reports, etc) and all the activities which are cross-cutting and therefore difficult to assign to another specific work package (do not try splitting these activities across different work packages).",
+                "WP2 and further WPs should be used for the other project activities.",
+                "For very simple projects, it is possible to use a single work package for the entire project (WP1 with the project acronym as WP name).",
+                "Enter each activity/milestone/output/outcome/deliverable only once (under one work package).",
+                "Ensure consistency with the detailed budget table/calculator (if applicable)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-other",
+          "label": "5. Other",
+          "page_budget": 5,
+          "criterion": "Other Sections",
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Ethics",
+              "prompts": [
+                "If the Call document contains a section on ethics, the ethics issues and measures you intend to take to solve/avoid them must be described in Part A.",
+                "See Application Form Part A."
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Security",
+              "prompts": [
+                "The security issues and the measures you intend to take to solve/avoid them must be described in Part A.",
+                "Beneficiaries must ensure that their projects are not subject to national/third country security requirements that could affect the implementation or put into question the award of the grant (e.g. technology restrictions, national security classification, etc).",
+                "See Application Form Part A."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-declarations",
+          "label": "6. Declarations",
+          "page_budget": 2,
+          "criterion": "Declarations",
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "Double funding",
+              "prompts": [
+                "Please note that there is a strict prohibition of double funding from the EU budget.",
+                "Confirm that none of the projects under the action plan as a whole or in parts have benefitted from any other EU grant (including EU funding managed by authorities in EU Member States or other funding bodies, e.g. EU Regional Funds, EU Agricultural Funds, etc). If NO, explain and provide details.",
+                "Confirm that none of the projects under the action plan as a whole or in parts are (nor will be) submitted for any other EU grant (including EU funding managed by authorities in EU Member States or other funding bodies, e.g. EU Regional Funds, EU Agricultural Funds, etc). If NO, explain and provide details."
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "Financial support to third parties",
+              "prompts": [
+                "If in your project the maximum amount per third party will be more than the threshold amount set in the Call document, justify and explain why the higher amount is necessary in order to fulfil your project's objectives."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_consortium_agreement",
+      "title": "List of participating organisations",
+      "render": "table-driven",
+      "constraints": {
+        "min_partners": 1
+      }
+    },
+    {
+      "kind": "tender_ethics_self_assessment",
+      "title": "Ethics Self-Assessment (if applicable)",
+      "render": "ai-narrative",
+      "conditional": {
+        "ethics_any_yes": true
+      }
+    }
+  ],
+  "comply_targets": [
+    "AI",
+    "GDPR",
+    "Cybersecurity",
+    "Data Protection",
+    "Data Act"
+  ],
+  "hand_offs": {
+    "next_stage": "dep-negotiation",
+    "chat_cta": "Ask Brubru about Digital Europe Programme grant management rules",
+    "comply_cta": "Run data protection and cybersecurity checks"
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (Digital Europe)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) - How to read the Model Grant Agreement",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - How to change your Grant Agreement mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - Who signs what, who represents your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (Funding and Tenders Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "EU Calls with Ownership + Control Restrictions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-participation-in-eu-calls-with-ownership-and-control-restrictions_en.pdf",
+      "category": "Eligibility"
+    },
+    {
+      "label": "List of third countries that can participate (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
+}

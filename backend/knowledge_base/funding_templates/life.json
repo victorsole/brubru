@@ -1,0 +1,291 @@
+{
+  "id": "life",
+  "name": "LIFE Standard Action Project (SAP)",
+  "programme": "LIFE",
+  "sub_instrument": "sap",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/life/temp-form/af/af_life-sap-oag_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B: Technical Description (Standard Action Project and Other Action Grants)",
+      "page_limit": 20,
+      "formatting": {
+        "font": "Arial 10pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "sections": [
+        {
+          "id": "1-relevance",
+          "label": "1. RELEVANCE",
+          "page_budget": 5,
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 Background and general project objectives",
+              "prompts": [
+                "Explain the problem and needs addressed. Describe the background, starting point and quantified baseline. Justify the project location and sector."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Specific project objectives",
+              "prompts": [
+                "Describe specific, measurable, realistic and achievable objectives within the project duration."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Compliance with LIFE programme objectives and call topic",
+              "prompts": [
+                "Explain contribution to LIFE Programme sub-programme (Nature and Biodiversity, Circular Economy and Quality of Life, Climate Change Mitigation and Adaptation or Clean Energy Transition) and call topic."
+              ]
+            },
+            {
+              "id": "1.4",
+              "label": "1.4 Concept and methodology",
+              "prompts": [
+                "Describe overall intervention logic, main idea and assumptions. Explain methodology including tools, techniques, methods and procedures. Justify why proposed methodology is most suitable."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-impact",
+          "label": "2. IMPACT",
+          "page_budget": 5,
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Ambition of the impacts",
+              "prompts": [
+                "Identify and quantify effects of project during implementation and up to 5 years after project end. Use quantified indicators and targets."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Credibility of the impacts",
+              "prompts": [
+                "Show calculation steps. Justify and substantiate baselines, benchmarks and assumptions using relevant publications, studies or statistics."
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Sustainability of project results",
+              "prompts": [
+                "Describe strategy to sustain project results after EU funding ends. Detail how project impact will be ensured and which resources are necessary."
+              ]
+            },
+            {
+              "id": "2.4",
+              "label": "2.4 Exploitation of project results",
+              "prompts": [
+                "Describe ways of exploiting project results and identify targeted users."
+              ]
+            },
+            {
+              "id": "2.5",
+              "label": "2.5 Catalytic potential: Replication and upscaling",
+              "prompts": [
+                "Describe potential for replication in same or other sectors. Identify factors favouring or limiting replication. Describe strategy to multiply project impact."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-implementation",
+          "label": "3. IMPLEMENTATION",
+          "page_budget": 8,
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Work plan",
+              "prompts": [
+                "Provide brief description of overall work plan structure including list of work packages or graphical presentation (Pert chart or similar)."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Work packages and activities",
+              "prompts": [
+                "Provide detailed description of project activities grouped into work packages. Include objectives, activities, milestones and deliverables for each package. Include mandatory work packages for project management and sustainability/replication/exploitation."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Stakeholder engagement",
+              "prompts": [
+                "Identify key stakeholders outside consortium. Describe how you will mobilise them and secure their commitment via letters of support."
+              ]
+            },
+            {
+              "id": "3.4",
+              "label": "3.4 Impact monitoring and reporting",
+              "prompts": [
+                "Describe overall approach to monitor and evaluate impact indicators. Include specific tasks in work plan to monitor, evaluate and report impacts."
+              ]
+            },
+            {
+              "id": "3.5",
+              "label": "3.5 Communication, dissemination and visibility",
+              "prompts": [
+                "Define target audiences. Describe planned communication and dissemination activities to promote action and results. Describe methods and indicators to monitor outreach."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-resources",
+          "label": "4. RESOURCES",
+          "page_budget": 2,
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Consortium set-up",
+              "prompts": [
+                "Describe consortium composition and how partners bring necessary expertise. Show valid role and adequate resources for each participant."
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "4.2 Project management",
+              "prompts": [
+                "Describe management structures, decision-making mechanisms and communication procedures. Describe measures to ensure quality, monitoring, planning and control."
+              ]
+            },
+            {
+              "id": "4.3",
+              "label": "4.3 Green management",
+              "prompts": [
+                "Describe measures to reduce environmental impact of project, for example through green procurement or environmental management systems."
+              ]
+            },
+            {
+              "id": "4.4",
+              "label": "4.4 Budget",
+              "prompts": [
+                "See detailed budget table/calculator (annex 1 to Part B)."
+              ]
+            },
+            {
+              "id": "4.5",
+              "label": "4.5 Risk management",
+              "prompts": [
+                "Describe critical risks, uncertainties or difficulties. Indicate impact and likelihood for each risk. Describe mitigation measures."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-other",
+          "label": "5. OTHER",
+          "page_budget": 0,
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Ethics",
+              "prompts": [
+                "Not applicable for most LIFE projects."
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Security",
+              "prompts": [
+                "Not applicable for most LIFE projects."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-declarations",
+          "label": "6. DECLARATIONS",
+          "page_budget": 0,
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "6.1 Higher funding rate",
+              "prompts": [
+                "Confirm if proposal fulfils conditions for higher funding rate (75% or 67%) for Nature and Biodiversity actions."
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "6.2 Double funding",
+              "prompts": [
+                "Confirm no EU grants for this project (except EU Synergies actions). Confirm project not submitted for other EU funding."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_consortium_agreement",
+      "title": "Part A: Participant Information and Budget",
+      "render": "table-driven",
+      "constraints": {
+        "min_partners": 1,
+        "min_member_states": 1
+      }
+    }
+  ],
+  "comply_targets": [
+    "Environment",
+    "Climate Action",
+    "Energy"
+  ],
+  "hand_offs": {
+    "next_stage": "life-grant-agreement",
+    "chat_cta": "Ask Brubru about LIFE eligibility and matching funding requirements",
+    "comply_cta": "Run environmental impact and sustainability compliance check"
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (LIFE)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) - how to read the MGA",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - who signs what, who represents your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (Funding and Tenders Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Unit-cost decision - Travel",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-travel_en.pdf",
+      "category": "Cost rules"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    }
+  ]
+}

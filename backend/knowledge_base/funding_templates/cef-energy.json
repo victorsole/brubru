@@ -1,0 +1,406 @@
+{
+  "id": "cef-energy",
+  "name": "CEF Energy Application (CEF-E)",
+  "programme": "CEF",
+  "sub_instrument": "energy",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/cef/temp-form/af/af_cef-e_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "Annotated Grant Agreement (AGA)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "TEN-E Regulation (EU) 2022/869",
+      "url": "https://eur-lex.europa.eu/eli/reg/2022/869/oj",
+      "category": "Legislation"
+    },
+    {
+      "label": "CEF Energy Call Conditions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/cef-e-2025-energy",
+      "category": "Call conditions"
+    },
+    {
+      "label": "Projects of Common Interest (PCI) and Projects of Mutual Interest (PMI) List",
+      "url": "https://ec.europa.eu/energy/topics/infrastructure/projects-common-interest_en",
+      "category": "Eligibility"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Commission Technical Guidance on Climate Proofing of Infrastructure",
+      "url": "https://ec.europa.eu/info/sites/default/files/climate-proofing-guidance_en.pdf",
+      "category": "Guidance"
+    },
+    {
+      "label": "List of third countries that can participate (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ],
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B - Technical Description (CEF Energy Standard)",
+      "page_limit": 120,
+      "formatting": {
+        "font": "Arial 9pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "0-project-description",
+          "label": "0. Project Description",
+          "page_budget": 10,
+          "criterion": "Relevance",
+          "sub": [
+            {
+              "id": "0.1",
+              "label": "Overall objective",
+              "prompts": [
+                "Describe the project scope, main goals and objectives, as well as the technical data."
+              ]
+            },
+            {
+              "id": "0.2",
+              "label": "General description and context",
+              "prompts": [
+                "Describe the context, including political priorities and the bigger project (Project of Common Interest (PCI) or Project of Mutual Interest (PMI)). Provide the link to the website with relevant information about the PCI/PMI."
+              ]
+            },
+            {
+              "id": "0.3",
+              "label": "Location",
+              "prompts": [
+                "Mention where on the network/corridors the project will be implemented."
+              ]
+            },
+            {
+              "id": "0.4",
+              "label": "Justification",
+              "prompts": [
+                "Describe the current situation and needs analysis."
+              ]
+            },
+            {
+              "id": "0.5",
+              "label": "Specific objectives",
+              "prompts": [
+                "List and link specific objectives to the work packages used in section 6."
+              ]
+            },
+            {
+              "id": "0.6",
+              "label": "Expected outcomes and results",
+              "prompts": [
+                "Include facts and statistics (for instance, quantitative information expressed in km, MVA, Bcm/y, kV, bar, etc.)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "1-priority-and-urgency",
+          "label": "1. Priority and Urgency",
+          "page_budget": 12,
+          "criterion": "Relevance",
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 EU added value",
+              "prompts": [
+                "Describe the EU added-value of the project. For PMIs, demonstrate that the inclusion of a third country entity is indispensable to achieve the objectives of the PMI. For PCIs falling under Article 24 of the TEN-E Regulation, demonstrate that the PCI is designed to ensure access to new energy markets, including hydrogen, does not lead to a prolongation of the lifetime of natural gas assets, and ensures the interoperability of neighbouring networks across borders."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Climate and energy targets",
+              "prompts": [
+                "Where applicable, explain how the project contributes to achieving the 2030 Climate and energy targets and climate neutrality as stipulated under the Green Deal (e.g. through the integration of renewable energy into the grid)."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Market integration",
+              "prompts": [
+                "Where applicable, explain how the project contributes to market integration (e.g. by removing bottlenecks, ending energy isolation, or the implementation of the internal energy market)."
+              ]
+            },
+            {
+              "id": "1.4",
+              "label": "1.4 Synergies",
+              "prompts": [
+                "Describe possible synergies with other CEF sectors (Transport and Digital) or other EU programmes (Recovery and Resilience Facility, Digital Europe, Horizon Europe, Structural Funds, etc.). Indicate if the project includes synergetic elements eligible under another CEF sector. Indicate if the project will benefit from funding from another programme."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-maturity",
+          "label": "2. Maturity",
+          "page_budget": 16,
+          "criterion": "Maturity",
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Readiness and technical maturity",
+              "prompts": [
+                "Provide information about the readiness and technical maturity of the project. Explain which preparatory/preceding steps have already been completed for the project and their main findings/conclusions. Explain why the proposed Work Packages are mature enough to be financed from this year's call. For works proposals for PCIs falling under Article 24 of the TEN-E Regulation, demonstrate and provide evidence regarding the proposed conversion into a dedicated hydrogen asset by 2036 if market conditions allow, as well as the roadmap with the precise timeline. Annex the PCI annual report if required in the Call document."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Status of contracting procedures and authorisations, approvals and permits",
+              "prompts": [
+                "Indicate the general project maturity in terms of authorisations, approvals and permits needed. For each work package/task, list the authorisations or approvals needed (at governmental, regional, local level, including environmental approvals, right-of-way, state aid notification/decision, etc.) and their status and expected timeline. For each work package/task, provide information on the building permits which must be obtained. Indicate the project maturity in terms of procurements needed. For each work package/task, explain the contracts already awarded and planned, their typology and status."
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Financial maturity",
+              "prompts": [
+                "Describe the financial viability/sustainability of the project over its lifecycle (budget in balance; use of funds vs sources of funds). For works proposals, indicate the financing model envisaged for the project. Explain the efforts and results to secure other than EU funding. Provide details on your sources of funding (in addition to the EU grant) and the degree of confidence in the financial commitments. Indicate the financial net present value (FNPV) and the financial internal rate of the return (FIRR) if no EU financial assistance is granted, in line with what is provided in the business plan."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-quality",
+          "label": "3. Quality",
+          "page_budget": 14,
+          "criterion": "Quality",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Cost effectiveness and financial management",
+              "prompts": [
+                "Describe and justify the level of resources needed for implementing the project."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Consortium set-up, governance and organisational structure",
+              "prompts": [
+                "Describe the organisational structure set up to implement the project. Explain the distribution of roles and responsibilities between the different partners. Describe the main contractual arrangements, the governance structure, the lines of communication and decision-making processes. Describe if the governance bodies have already been established; if members have already been nominated and the status of approval of the governance rules. If a special purpose company/vehicle (SPC/SPV) is envisaged, indicate whether a shareholder agreement has already been prepared."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Project management, quality assurance and control procedures",
+              "prompts": [
+                "Describe the methods to ensure good quality, monitoring, planning and control for the implementation of the project. Explain the main features of the control procedures and quality management system that will be used."
+              ]
+            },
+            {
+              "id": "3.4",
+              "label": "3.4 Risk management",
+              "prompts": [
+                "Explain how risk management is part of your project management approach and how you address risk management in general. Mention only methods and major elements. Indicate whether a risk management plan is in place and explain its main features. Describe critical risks, uncertainties or difficulties related to the implementation of your project, and your measures/strategy for addressing them. Indicate for each risk the impact and the likelihood that the risk will materialise (high, medium, low), even after taking into account the mitigating measures."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-impact",
+          "label": "4. Impact",
+          "page_budget": 18,
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Social, environmental and other impacts",
+              "prompts": [
+                "Describe the positive externalities that the project provides (macro-regional security of supply, system flexibility, solidarity or technological innovation, etc), where possible quantifying them, and the method used to evaluate them (e.g. Cost-Benefit Analysis). Describe the expected positive and/or negative impacts of the project on the climate change targets (such as the Paris Agreement and the 2030 Climate and energy framework) and the method used to evaluate them. Specify if the project helps to reduce greenhouse gas emissions (GHG) and limit global warming. Explain how it impacts upstream and downstream emissions. Include the total monetary value of such impact (NPV) and the main assumptions in terms of quantities (avoided tonnes of GHG) and unit values (e.g. EUR/tCO2 equivalent) from the Cost-Benefit Analysis. Describe how climate proofing has been taken into consideration when designing the project and its components. Describe the climate proofing exercise and how vulnerabilities were embedded in the decision-making process so that they can be addressed and mitigated. Describe the cross-border dimension of the project. Indicate how the Member States and project promoters cooperate. If applicable, describe which outermost regions are impacted by the project."
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "4.2 Revenues and revenue potential",
+              "prompts": [
+                "Indicate the estimated revenues to be generated by the project. Describe the method used in calculating the tariffs in the Member States involved and provide details on the expected revenues."
+              ]
+            },
+            {
+              "id": "4.3",
+              "label": "4.3 Need to overcome financial obstacles",
+              "prompts": [
+                "Describe the financial obstacles and how public funding would help to overcome them. Specify and justify the amount."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-catalytic-effect",
+          "label": "5. Catalytic Effect",
+          "page_budget": 8,
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Financial gap",
+              "prompts": [
+                "Explain how the EU grant will facilitate or accelerate the implementation of the project. Indicate whether you expect any EU support under the Recovery and Resilience Facility (RRF) (with an approximate amount)."
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Public and private investment and financial leverage",
+              "prompts": [
+                "Provide information on the capacity of the grant to trigger a bigger investment or to allow other investments. Will the EU grant help mobilising additional public and private funding? Will different sources of funding or higher amounts become available? Has the financial leverage been optimised in terms of amounts and duration?"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-work-plan",
+          "label": "6. Work Plan, Work Packages, Activities, Resources and Timing",
+          "page_budget": 40,
+          "criterion": "Implementation",
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "6.1 Work plan",
+              "prompts": [
+                "Provide a brief description of the overall structure of the work plan (list of work packages or graphical presentation such as Pert chart or similar)."
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "6.2 Work packages, activities, resources and timing",
+              "prompts": [
+                "Group your activities into work packages. A work package means a major sub-division of the project. For each work package, enter an objective (expected outcome) and list the activities, milestones and deliverables that belong to it. The grouping should be logical and guided by identifiable outputs. WP1 should cover the management and coordination activities. WP2 and further WPs should be used for the other project activities. For works proposals, ensure that you use separate work packages for activities linked to specific budget categories (D.2 Studies, D.3 Synergetic elements, D.4 Works in outermost regions and D.5 Land purchase, if applicable). Provide a concise overview of the work (planned tasks). Be specific and give a short name and number for each task. Provide quantitative information. Mention for each task links with tasks planned under other work packages. Flag tasks which are on the critical path. Show who is participating in each task. Milestones must be SMART: specific, measurable, achievable, relevant and time-related. Deliverables are project outputs which are submitted to show project progress and achievement of the technical work. Provide information on the timetable for the project (using either the template available on Portal Reference Documents or a Gantt chart)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "7-other",
+          "label": "7. Other",
+          "page_budget": 2,
+          "criterion": "Other",
+          "sub": [
+            {
+              "id": "7.1",
+              "label": "7.1 Ethics",
+              "prompts": [
+                "Not applicable for CEF Energy projects."
+              ]
+            },
+            {
+              "id": "7.2",
+              "label": "7.2 Security",
+              "prompts": [
+                "Not applicable for CEF Energy projects."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8-declarations",
+          "label": "8. Declarations",
+          "page_budget": 2,
+          "criterion": "Other",
+          "sub": [
+            {
+              "id": "8.1",
+              "label": "Higher funding rate (if applicable)",
+              "prompts": [
+                "Do you fulfil the conditions set out in the Call document for a higher funding rate? If YES, explain and provide details."
+              ]
+            },
+            {
+              "id": "8.2",
+              "label": "Twinned projects (if applicable)",
+              "prompts": [
+                "Is the project twinned to another project which is funded under another CEF call and part of the same global project? If YES, give details on the twin-project."
+              ]
+            },
+            {
+              "id": "8.3",
+              "label": "Double funding",
+              "prompts": [
+                "Confirm that to your best knowledge neither the project as a whole nor any parts of it have benefitted from any other EU grant or will be submitted for any other EU grant."
+              ]
+            },
+            {
+              "id": "8.4",
+              "label": "Financial support to third parties (if applicable)",
+              "prompts": [
+                "If your project requires a higher maximum amount per third party than the threshold amount set in the Call document, justify and explain why this is necessary."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_consortium_agreement",
+      "title": "Participants (Part A - Administrative Forms)",
+      "render": "table-driven",
+      "constraints": {
+        "min_partners": 1
+      }
+    },
+    {
+      "kind": "tender_budget_table",
+      "title": "Budget (Part A - Administrative Forms)",
+      "render": "table-driven",
+      "constraints": {
+        "budget_categories": [
+          "Personnel costs",
+          "Subcontracting costs",
+          "Travel and subsistence",
+          "Equipment",
+          "Other goods, works and services",
+          "Financial support to third parties",
+          "Studies/reports",
+          "Synergetic elements",
+          "Works in outermost regions",
+          "Land purchase",
+          "Indirect costs"
+        ]
+      }
+    }
+  ],
+  "comply_targets": [
+    "Energy",
+    "Environment",
+    "Climate Action",
+    "Trans-European Networks"
+  ],
+  "hand_offs": {
+    "next_stage": "cef-energy-award",
+    "chat_cta": "Ask Brubru about PCI/PMI eligibility and climate targets alignment",
+    "comply_cta": "Run environmental impact and greenhouse gas emissions check"
+  }
+}

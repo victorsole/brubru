@@ -1,0 +1,647 @@
+{
+  "id": "cef-transport",
+  "name": "CEF Transport Application (CEF-T)",
+  "programme": "CEF",
+  "sub_instrument": "transport",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/cef/temp-form/af/af_cef-t_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B Technical Description (CEF Transport Standard)",
+      "page_limit": 120,
+      "formatting": {
+        "font": "Arial 9pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "0-project-description",
+          "label": "0. PROJECT DESCRIPTION",
+          "page_budget": 10,
+          "sub": [
+            {
+              "id": "0.1",
+              "label": "Project description, scope and objectives",
+              "prompts": [
+                "Overall objective",
+                "General description and context (including political priorities and if part of a global project)",
+                "Location on network/corridors",
+                "Justification (current situation and needs analysis)",
+                "Specific objectives linked to work packages",
+                "Expected outcomes and results (quantitative information: km, MVA, Bcm/y, kV, bar, etc.)"
+              ]
+            },
+            {
+              "id": "0.2",
+              "label": "Global projects",
+              "prompts": [
+                "Objectives of the global project",
+                "General description and context (specify how project fits into global project)",
+                "Justification (problems, needs and issues)",
+                "State of play, results and objectives achieved so far",
+                "Parallel projects and links to project",
+                "Timetable and interdependencies"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "1-priority-urgency",
+          "label": "1. PRIORITY AND URGENCY",
+          "page_budget": 8,
+          "criterion": "Relevance",
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 TEN-T network - Project of common interest (PCI)",
+              "prompts": [
+                "Why project is considered PCI within Article 7 of TEN-T Regulation",
+                "How it contributes or links to core and/or comprehensive network",
+                "Does it contribute to corridor work plans and implementing acts per Article 47",
+                "Does it produce network effect by linking with or complementing other TEN-T/CEF actions"
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Call objectives and priorities",
+              "prompts": [
+                "How project contributes to objectives, priorities and expected results of the topic"
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 EU added value",
+              "prompts": [
+                "Effects of project from EU interest perspective",
+                "How it contributes to European-level objectives"
+              ]
+            },
+            {
+              "id": "1.4",
+              "label": "1.4 Cross-border link",
+              "prompts": [
+                "Is project related to cross-border links in Part III of CEF Regulation Annex",
+                "Continuity of PCI or core network corridor (YES/NO)",
+                "High degree of integration in planning and implementation (YES/NO)",
+                "Other joint commitments by Member States/neighbouring countries (YES/NO)"
+              ]
+            },
+            {
+              "id": "1.5",
+              "label": "1.5 Integrated management",
+              "prompts": [
+                "Is project a cross-border link with integrated management structure including joint ventures (YES/NO)",
+                "Main elements of integration agreement"
+              ]
+            },
+            {
+              "id": "1.6",
+              "label": "1.6 Synergies",
+              "prompts": [
+                "Synergies with other CEF sectors (Energy and Digital)",
+                "Synergies with other EU programmes (RRF, Digital Europe, Horizon Europe, Structural Funds, etc.)",
+                "Does project include synergetic elements eligible under another CEF sector",
+                "Will project benefit from funding from another programme"
+              ]
+            },
+            {
+              "id": "1.7",
+              "label": "1.7 Dual-use potential (civilian-defence)",
+              "prompts": [
+                "Potential of dual-use (civilian-defence) for Military mobility topics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-maturity",
+          "label": "2. MATURITY",
+          "page_budget": 14,
+          "criterion": "Maturity",
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Readiness and technical maturity",
+              "prompts": [
+                "Readiness and technical maturity of project",
+                "State of preparation for every work package (terms of reference, tendered, contract signed, started, etc.)",
+                "How implementation depends on results of past or ongoing feasibility/technical studies",
+                "For high-technology projects (infrastructure, ITS, cooperative ITS, airspace): technology type, communication, materials",
+                "Critical dependencies: connection to grid/utilities, access to land, authorisations status"
+              ]
+            },
+            {
+              "id": "2.1a",
+              "label": "2.1a Ex ante evaluations and feasibility studies",
+              "prompts": [
+                "Information on ex-ante evaluations and feasibility studies and main results",
+                "Objectives, activities and policy options considered",
+                "Main indicators used in ex-ante evaluation",
+                "Strategic and technical alternative options in option analysis",
+                "Multi-criteria analysis or other shortlisting method",
+                "Arguments for excluding cheaper but still relevant solutions"
+              ]
+            },
+            {
+              "id": "2.1b",
+              "label": "2.1b Political commitment",
+              "prompts": [
+                "Information on political commitments regarding implementation",
+                "Cross-border commitments where relevant",
+                "Formal and informal documents demonstrating commitments (decisions, MoU, agreements, national strategies)"
+              ]
+            },
+            {
+              "id": "2.1c",
+              "label": "2.1c Public consultations",
+              "prompts": [
+                "Public consultations carried out and feedback received",
+                "Consultations foreseen and their timing",
+                "Plans to involve stakeholders during implementation"
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Status of contracting procedures and authorisations, approvals and permits",
+              "prompts": [
+                "General project maturity in terms of authorisations, approvals and permits needed"
+              ]
+            },
+            {
+              "id": "2.2a",
+              "label": "2.2a Authorisations, approvals and permits (including environmental)",
+              "prompts": [
+                "For each work package/task: authorisations needed (governmental, regional, local, environmental, right-of-way, state aid)",
+                "Status and expected timeline",
+                "Risk factors and mitigating measures (alternative solutions) if not obtained in time"
+              ]
+            },
+            {
+              "id": "2.2b",
+              "label": "2.2b Building permits",
+              "prompts": [
+                "For each work package/task: building permits description, authority, size (land surface), kind of works",
+                "Status and timeline",
+                "Risk factors and mitigating measures if not obtained in time"
+              ]
+            },
+            {
+              "id": "2.2c",
+              "label": "2.2c Contracting procedures",
+              "prompts": [
+                "Procurement maturity in general",
+                "Contracts awarded before proposal submission: typology, status, procurement method (EU-wide/national, open/restricted/negotiated)",
+                "Contracts planned during implementation: typologies, procurement method selection, best value for money approach",
+                "Starting dates of awarded contracts"
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Financial maturity",
+              "prompts": [
+                "Availability of funds for project over its lifecycle",
+                "Budget in balance; use of funds vs sources of funds",
+                "Distinction between own resources, third party resources, grants and other funding",
+                "Fund providers, recipients and use of funds for each source",
+                "Financing structure diagram",
+                "Revenues and other financing sources to complement CEF support",
+                "Degree of confidence in financial commitments",
+                "Own resources: internal approval status, conditions to reach approval, degree of confidence",
+                "Planning/timing for final investment decision",
+                "Third party resources: amounts expected, nature (equity, debt, other grants), expected approval timing",
+                "Due-diligence process scope if applicable",
+                "Debt structure (layers and seniority) if applicable",
+                "Alternatives if specific financing source not available"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-quality",
+          "label": "3. QUALITY",
+          "page_budget": 16,
+          "criterion": "Quality",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Cost effectiveness and financial management",
+              "prompts": [
+                "For each work package: explanation and justification of resource levels needed",
+                "Human resources, financial resources, equipment purchases, etc.",
+                "Appropriateness of estimated costs (type and level)"
+              ]
+            },
+            {
+              "id": "3.1a",
+              "label": "3.1a Financial management",
+              "prompts": [
+                "Detailed arrangements for financial management of project",
+                "Monitoring, internal and external audit and evaluation processes",
+                "Processes to ensure eligibility of expenditure"
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Consortium set-up, governance and organisational structure",
+              "prompts": [
+                "Organisational structure to implement project",
+                "Distribution of roles and responsibilities between partners (Beneficiaries, Affiliated Entities, Associated Partners)",
+                "Main contractual arrangements, governance structure, lines of communication, decision-making processes",
+                "Status of governance body establishment, member nomination, governance rules approval",
+                "Pending decisions on organisational structure",
+                "Special purpose company/vehicle (SPC/SPV) shareholder agreement status"
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Project management, quality assurance and control procedures",
+              "prompts": [
+                "Methods to ensure good quality, monitoring, planning and control",
+                "Main features of quality assurance plan",
+                "Quality control system to be used"
+              ]
+            },
+            {
+              "id": "3.4",
+              "label": "3.4 Risk management",
+              "prompts": [
+                "How risk management is part of project management approach",
+                "Risk management methods and procedures in general",
+                "Risk management plan status and main features"
+              ]
+            },
+            {
+              "id": "3.4a",
+              "label": "3.4a Risk assessment grid",
+              "prompts": [
+                "Critical risks, uncertainties or difficulties related to implementation",
+                "Measures/strategy for addressing them",
+                "Significant risks, factors of uncertainty, major complexity elements",
+                "Political, institutional, financial, organisational, social and/or technical risks",
+                "Impact and likelihood (high, medium, low) for each risk",
+                "Proposed risk mitigation measures"
+              ]
+            },
+            {
+              "id": "3.5",
+              "label": "3.5 Communication and visibility",
+              "prompts": [
+                "Communication plan and strategy for EU funding visibility",
+                "Billboards, reports, websites, brochures, leaflets, newsletters, press articles, presentations",
+                "Websites and Social Media accounts being used",
+                "Communications contact person",
+                "Note: Separate project websites are not eligible; costs must be on participants' websites"
+              ]
+            },
+            {
+              "id": "3.6",
+              "label": "3.6 Sustainability and maintenance strategy",
+              "prompts": [
+                "Follow-up of project after EU funding ends",
+                "How proper maintenance and continued operation will be guaranteed",
+                "Detailed strategy (periodicity, components, financing, actors) and practical measures"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-impact-cba",
+          "label": "4. IMPACT - COST-BENEFIT ANALYSIS",
+          "page_budget": 18,
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Demand analysis",
+              "prompts": [
+                "Results of demand/traffic forecast study (if any)",
+                "Overall context (date of completion) and scope of study",
+                "Methodology chosen",
+                "Assumptions regarding demand growth rate and utilisation rate on completion",
+                "List of indicators and sources of verification",
+                "If study goes beyond project scope: overview of global project demand analysis",
+                "Whether TEN-T/CEF or other EU programmes provided financial support"
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "4.2 Economic and financial analysis",
+              "prompts": [
+                "General socio-economic impact of project",
+                "Potential to generate cash revenues",
+                "Limitations (legal, regulatory, commercial) constraining revenue generation",
+                "Expected revenues and timeline (number and diversity of users)",
+                "User price sensitivity and captive user status",
+                "Degree of certainty of assumptions and estimations",
+                "Autonomous operation or dependence on additional investments",
+                "For full CBA works proposals: main results of economic analysis (ERR and ENPV)",
+                "CBA scope vs project scope differences",
+                "Use of unitary values from Handbook on External Costs of Transport"
+              ]
+            },
+            {
+              "id": "4.2a",
+              "label": "4.2a Financial analysis",
+              "prompts": [
+                "Financial viability/sustainability of project over its lifecycle",
+                "Budget in balance; use of funds vs sources of funds",
+                "For CBA works proposals: Financial indicators after CEF funding (FRR and FNPV)",
+                "Comparison with national and international sector benchmarks",
+                "For negative FNPV projects: explanation of why proceeding despite insufficient financial viability",
+                "Demonstration of financial sustainability (positive cumulative cash flows)",
+                "Other sources of support (grants, subsidies) or revenue compensation",
+                "Financial risks associated with implementation"
+              ]
+            },
+            {
+              "id": "4.3",
+              "label": "4.3 Social, environmental and other impacts",
+              "prompts": [
+                "Expected impacts on congestion, modal split, safety and security, service quality, noise and air pollutants",
+                "Expected positive/negative impacts on time savings, capacity optimisation, service quality",
+                "Monetary value of impacts (EUR NPV) if quantified in CBA",
+                "Main assumptions (quantities and unit values)",
+                "Expected impacts on modal split",
+                "Expected impacts on safety and security (accidents, injuries, fatalities if quantified)",
+                "Expected impacts on noise emissions (quantified if in CBA)",
+                "Expected impacts on climate change targets (Paris Agreement, 2030 Climate and energy framework)",
+                "Expected impacts on air pollutants (PM2.5, NOX, SO2, etc.)"
+              ]
+            },
+            {
+              "id": "4.3a",
+              "label": "4.3a Environmental and climate impact",
+              "prompts": [
+                "Positive/negative impacts on greenhouse gas emissions and global warming",
+                "Upstream and downstream emissions impact (full life cycle)",
+                "For works CBA proposals: monetary value of GHG impacts (EUR NPV) and unit values (EUR/tCO2 equivalent)",
+                "Climate change considerations in project design and components",
+                "Consistency with climate proofing infrastructure mitigation pillar",
+                "Cost of greenhouse gas emissions integration in economic evaluation",
+                "Consistency with energy efficiency first principle",
+                "Consistency with 2050 emission targets",
+                "Measures foreseen to monitor, prevent and mitigate negative environmental impact",
+                "Estimation of associated costs"
+              ]
+            },
+            {
+              "id": "4.3b",
+              "label": "4.3b Climate resilience (for Works topics)",
+              "prompts": [
+                "Climate proofing exercise undertaken per Commission Technical guidance",
+                "Vulnerability assessment findings identifying climate hazards",
+                "Significant risks identified and mitigation approach",
+                "Vulnerabilities embedded in decision-making process",
+                "Relevant measures taken for project resilience to climate change"
+              ]
+            },
+            {
+              "id": "4.3c",
+              "label": "4.3c Decision-making tool, input for policy making or development of best practices (for Studies topics)",
+              "prompts": [
+                "How project will have impact as decision-making tool or policy input",
+                "Development of best practices",
+                "Who will use project output and for how long",
+                "Extent to which output will be relied on for decision-making",
+                "Relation to other studies and future projects",
+                "Level of impact (CEF Transport action, national project, global project, etc.)",
+                "Relevance and economic value of future projects in costs and benefits",
+                "Extent to which project elements could develop best practices"
+              ]
+            },
+            {
+              "id": "4.3d",
+              "label": "4.3d Interoperability and accessibility",
+              "prompts": [
+                "How project contributes to increased interoperability of transport systems and/or modes in TEN-T network",
+                "How proposal enhances accessibility for passengers and/or goods to TEN-T network",
+                "Cross-border dimension impact",
+                "Effect/contribution to territorial accessibility (including outermost regions and islands)"
+              ]
+            },
+            {
+              "id": "4.3e",
+              "label": "4.3e Innovation and digitalisation",
+              "prompts": [
+                "How innovative technologies are being used to reach project objectives",
+                "How digitalisation forms part of project or its use",
+                "Reference of EU-supported research projects if applicable"
+              ]
+            },
+            {
+              "id": "4.3f",
+              "label": "4.3f Competition",
+              "prompts": [
+                "Expected positive and/or negative impacts of project on regional and national competition"
+              ]
+            },
+            {
+              "id": "4.3g",
+              "label": "4.3g Regional and local development and land use",
+              "prompts": [
+                "Expected positive and/or negative impacts on regional and/or local development",
+                "Land use impacts and assessment of neighbouring regions",
+                "Link to urban development plans",
+                "Contribution to land value increase"
+              ]
+            },
+            {
+              "id": "4.3h",
+              "label": "4.3h Outermost regions (if applicable)",
+              "prompts": [
+                "Which outermost regions are impacted by the project",
+                "How regions and project promoters cooperate",
+                "Which countries are impacted",
+                "How cooperation with them is ensured"
+              ]
+            },
+            {
+              "id": "4.3i",
+              "label": "4.3i Other considerations",
+              "prompts": [
+                "Any other relevant considerations"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-catalytic-effect",
+          "label": "5. CATALYTIC EFFECT",
+          "page_budget": 6,
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Financial gap",
+              "prompts": [
+                "How EU grant will facilitate or accelerate project",
+                "Comparison to situation without EU funding",
+                "Financial gap description and justification",
+                "Amount specification and justification",
+                "Financial obstacles and how public funding helps overcome them",
+                "Expected EU support under Recovery and Resilience Facility (RRF) (approximate amount)"
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Public and private investment and financial leverage",
+              "prompts": [
+                "Capacity of grant to trigger bigger investment",
+                "Allow other investments",
+                "Will EU grant help mobilising additional public and private funding",
+                "Different sources of funding or higher amounts availability",
+                "Financial leverage optimisation in terms of amounts and duration"
+              ]
+            },
+            {
+              "id": "5.3",
+              "label": "5.3 Stakeholder commitment",
+              "prompts": [
+                "How EU funding would reinforce commitment of different partners and stakeholders (public and private)",
+                "Effects on stakeholder commitment if project would not receive grant"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-work-plan",
+          "label": "6. WORK PLAN, WORK PACKAGES, ACTIVITIES, RESOURCES AND TIMING",
+          "page_budget": 20,
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "6.1 Work plan",
+              "prompts": [
+                "Brief description of overall work plan structure",
+                "List of work packages or graphical presentation (Pert chart or similar)"
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "6.2 Work packages, activities, resources and timing",
+              "prompts": [
+                "Detailed description of project activities grouped into work packages",
+                "Objective for each work package (expected outcome)",
+                "Activities, milestones and deliverables for each work package",
+                "Logical grouping guided by identifiable outputs",
+                "Minimum 2 work packages (WP1 for management/coordination/cross-cutting)",
+                "WP2 and further for other project activities",
+                "Separate work packages for activities linked to specific budget categories (D.2 Studies, D.3 Synergetic elements, D.4 Works in outermost regions, D.5 Land purchase)",
+                "For activities linked to financial support to third parties: conditions, max amounts, criteria, eligible activity types, person/category criteria, support procedures",
+                "For Works proposals: ensure consistency with detailed budget table per work package"
+              ]
+            },
+            {
+              "id": "6.2a",
+              "label": "6.2a Timetable",
+              "prompts": [
+                "Project timetable",
+                "Interdependencies between work packages",
+                "Critical path identification"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "7-other",
+          "label": "7. OTHER",
+          "page_budget": 4,
+          "sub": [
+            {
+              "id": "7.1",
+              "label": "7.1 Ethics",
+              "prompts": [
+                "Any ethical considerations relevant to the project"
+              ]
+            },
+            {
+              "id": "7.2",
+              "label": "7.2 Security",
+              "prompts": [
+                "Any security considerations relevant to the project"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8-declarations",
+          "label": "8. DECLARATIONS",
+          "page_budget": 1,
+          "sub": [
+            {
+              "id": "8.1",
+              "label": "8.1 Declarations",
+              "prompts": [
+                "Declarations as required by grant agreement"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (CEF)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) - how to read the MGA",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - who signs what, organisation representation",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Organisation profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Handbook on External Costs of Transport",
+      "url": "https://ec.europa.eu/transport/sites/transport/files/2019-handbook-external-costs-transport_en.pdf",
+      "category": "Cost-benefit analysis"
+    },
+    {
+      "label": "Commission Technical guidance on the climate proofing of infrastructure",
+      "url": "https://ec.europa.eu/info/sites/default/files/climate-proofing-guide-2021_en.pdf",
+      "category": "Climate resilience"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "List of third countries that can participate (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ],
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "comply_targets": [
+    "Transport",
+    "Environment",
+    "Trans-European Networks"
+  ],
+  "hand_offs": {
+    "next_stage": "cef-transport-award",
+    "chat_cta": "Ask Brubru about CEF-T eligibility for my transport project",
+    "comply_cta": "Run environmental and cross-border integration check"
+  }
+}

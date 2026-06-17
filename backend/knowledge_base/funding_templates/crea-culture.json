@@ -1,0 +1,313 @@
+{
+  "id": "crea-culture",
+  "name": "Creative Europe CULTURE Application",
+  "programme": "CREA",
+  "sub_instrument": "culture",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/crea/temp-form/af/af_crea-culture_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B Technical Description",
+      "page_limit": 70,
+      "formatting": {
+        "font": "Arial 9pt min",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "sections": [
+        {
+          "id": "project-summary",
+          "label": "Project summary",
+          "prompts": [
+            "Provide a concise summary of your project objectives and activities."
+          ]
+        },
+        {
+          "id": "1-relevance",
+          "label": "1. Relevance",
+          "page_budget": 12,
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 Background and objectives",
+              "prompts": [
+                "Describe the background and rationale of the project.",
+                "How is the project relevant to the scope of the call?",
+                "How does the project address the objectives of the call?",
+                "What is the project's contribution to the priorities of the call?"
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 Needs analysis",
+              "prompts": [
+                "Describe how the project is based on a sound needs analysis, in line with the objectives of the call.",
+                "What issue, challenge or gap does the project aim to address?",
+                "Ensure the objectives of the project are clear, measurable, realistic and achievable within the duration of the project."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Complementarity with other actions and innovation - European added value",
+              "prompts": [
+                "Explain how the project builds on the results of past activities carried out in the field.",
+                "Describe its innovative aspects.",
+                "Explain how the activities are complementary to those carried out by other organisations.",
+                "Illustrate the European dimension of the activities: impact for a number of EU countries; possibility to use the results in other countries; potential to develop mutual trust and cross-border cooperation.",
+                "Which countries will benefit from the project (directly and indirectly)?",
+                "Where will the activities take place?"
+              ]
+            },
+            {
+              "id": "1.4",
+              "label": "1.4 EU overarching priorities",
+              "prompts": [
+                "Describe the overall approaches to tackle the following EU overarching priorities: Digital transition, Creative Europe contribution to the EU greening efforts, Inclusion and gender equality, International relations.",
+                "Explain what in the project design and its implementation will specifically contribute to them."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-quality",
+          "label": "2. Quality of content and activities",
+          "page_budget": 14,
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Concept, methodology and project design",
+              "prompts": [
+                "Outline the concept and methodology behind the project.",
+                "Explain why they are the most suitable for achieving the project's objectives.",
+                "Identify and describe the strategies and main activities to be undertaken to produce results.",
+                "Justify the choice of activities.",
+                "Specify the role of each organisation involved in the activities.",
+                "Describe financial support to third parties if applicable: objectives, results to be obtained, eligible activities, types of entities which may receive support, criteria for selection, criteria for determining the amount per third party, and maximum amount."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "2.2 Partnership and consortium",
+              "prompts": [
+                "Describe the participating organisations (coordinating and partner organisations, affiliated entities, associated partners, as applicable).",
+                "Explain how these organisations will work together to implement the project.",
+                "Explain how the consortium has been established, from initial contacts and collaborations to this application.",
+                "Describe the way that each participating organisation contributes to the project.",
+                "What expertise does each participating organisation bring?",
+                "How do they complement one another?",
+                "Show that each has a valid role and adequate resources to fulfil that role."
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "2.3 Target groups and audiences",
+              "prompts": [
+                "Define the target groups and audiences.",
+                "Describe how will they be reached and how they will benefit concretely from the project.",
+                "What would change for them?"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-management",
+          "label": "3. Project management",
+          "page_budget": 12,
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Consortium management and decision-making",
+              "prompts": [
+                "Explain the management structures and decision-making mechanisms within the consortium.",
+                "Describe how decisions will be taken and how regular and effective communication will be ensured.",
+                "Describe methods to ensure planning and control.",
+                "Note: The concept (including organisational structure and decision-making mechanisms) must be adapted to the complexity and scale of the project."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Project teams, staff and outside resources",
+              "prompts": [
+                "Describe the project teams.",
+                "List the staff included in the project budget by function and profile.",
+                "Briefly describe their tasks.",
+                "For Creative Europe Desks: Indicate the percentage time allocated to the project for each staff member listed.",
+                "If you do not have all skills or resources in-house, describe how you intend to get them (contributions of members, partner organisations, subcontracting, etc)."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Cost effectiveness and financial management",
+              "prompts": [
+                "Describe the measures adopted to ensure that the proposed results and objectives will be achieved in the most cost-effective way.",
+                "Explain how the project will ensure the fair remuneration and working conditions of the artists and cultural professionals involved.",
+                "Indicate the arrangements adopted for the financial management of the project.",
+                "In particular and where relevant, how the financial resources will be allocated and managed within the consortium.",
+                "Summarise briefly why your budget is cost effective."
+              ]
+            },
+            {
+              "id": "3.4",
+              "label": "3.4 Project management, quality assurance, risk management and monitoring and evaluation strategy",
+              "prompts": [
+                "Describe the measures planned to ensure that the project implementation is of high quality and completed in time.",
+                "Describe the methods to ensure good quality, monitoring, planning and control.",
+                "Describe the evaluation methods and indicators (quantitative and qualitative) to monitor and verify the outreach and coverage of the activities and results.",
+                "The indicators proposed to measure progress should be relevant, realistic and measurable.",
+                "Describe critical risks, uncertainties or difficulties related to the implementation of your project.",
+                "Describe your measures or strategy for addressing them.",
+                "Indicate for each risk the impact and the likelihood that the risk will materialise (high, medium, low), even after taking into account the mitigating measures."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-dissemination",
+          "label": "4. Dissemination",
+          "page_budget": 10,
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Impact and ambition",
+              "prompts": [
+                "Define the short, medium and long-term effects of the project.",
+                "Does the project aim to trigger change?",
+                "If so, describe the changes envisaged and the degree of ambition (progress beyond the status quo or state-of-the-art).",
+                "What will happen after the EU funding ends?",
+                "How could the project impact be sustained?",
+                "How will the results be used?"
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "4.2 Communication, dissemination and visibility",
+              "prompts": [
+                "Describe the communication and dissemination activities which are planned in order to promote the project activities and results and to maximise the impact.",
+                "To whom, which format, how many?",
+                "Clarify how you will reach the target groups, relevant stakeholders, policymakers and the general public.",
+                "Explain the choice of dissemination channels.",
+                "If required by the Call document, describe how the project integrates a common editorial and branding strategy into its communication activities.",
+                "Describe how the visibility of EU funding will be ensured.",
+                "For Creative Europe Desks: Describe your plans to communicate and disseminate the selection results, results of finalised projects and the impact of the Creative Europe Programme in your country."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-work-plan",
+          "label": "5. Work plan, work packages, activities, resources and timing",
+          "page_budget": 18,
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Work plan",
+              "prompts": [
+                "Provide a brief description of the overall structure of the work plan (list of work packages or graphical presentation such as a Pert chart or similar)."
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Work packages, activities, resources and timing",
+              "prompts": [
+                "Group your activities into work packages.",
+                "A work package means a major sub-division of the project.",
+                "For each work package, enter an objective (expected outcome) and list the activities, milestones and deliverables that belong to it.",
+                "The grouping should be logical and guided by identifiable outputs.",
+                "Projects should normally have a minimum of two work packages.",
+                "Work Package 1 should cover the management and coordination activities and all cross-cutting activities.",
+                "Work packages 2 and further should be used for the other project activities."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-other",
+          "label": "6. Other",
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "6.1 Ethics",
+              "prompts": [
+                "Describe any ethics issues related to your project activities."
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "6.2 Security",
+              "prompts": [
+                "Describe any security issues related to your project activities."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "7-declarations",
+          "label": "7. Declarations",
+          "prompts": [
+            "Confirm that there is no double funding from the EU budget.",
+            "Confirm eligibility and compliance with exclusion grounds.",
+            "If applicable, justify financial support to third parties exceeding the threshold set in the Call document."
+          ]
+        }
+      ]
+    }
+  ],
+  "comply_targets": [
+    "Fundamental Rights",
+    "GDPR",
+    "Copyright"
+  ],
+  "hand_offs": {
+    "next_stage": "grant-agreement",
+    "chat_cta": "Ask Brubru about Creative Europe eligibility and consortium requirements",
+    "comply_cta": "Run fundamental-rights and copyright-compliance check"
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "Annotated Grant Agreement (AGA)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - how to change your grant agreement mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - who signs what, who represents your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (Funding and Tenders Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "General Model Grant Agreement (Creative Europe)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Unit-cost decision - Travel",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/unit-cost-decision-travel_en.pdf",
+      "category": "Cost rules"
+    }
+  ]
+}

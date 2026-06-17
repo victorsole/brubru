@@ -47,12 +47,17 @@ interface TemplateSummary {
 const PROGRAMME_LABELS: Record<string, string> = {
  EIC: 'European Innovation Council',
  HE: 'Horizon Europe',
+ 'ERASMUS+': 'Erasmus+',
+ DIGITAL: 'Digital Europe Programme',
+ CERV: 'Citizens, Equality, Rights and Values',
+ LIFE: 'LIFE (Environment + Climate Action)',
+ CREA: 'Creative Europe',
  CEF: 'Connecting Europe Facility',
- LIFE: 'LIFE',
  EDF: 'European Defence Fund',
 };
 
 const SUB_INSTRUMENT_LABELS: Record<string, string> = {
+ // EIC
  accelerator: 'Accelerator',
  'pathfinder-open': 'Pathfinder Open',
  'pathfinder-challenges': 'Pathfinder Challenges',
@@ -60,6 +65,19 @@ const SUB_INSTRUMENT_LABELS: Record<string, string> = {
  step: 'STEP Scale Up',
  aic: 'Advanced Innovation Challenges',
  'pre-accelerator': 'Pre-Accelerator',
+ // Erasmus+ + DIGITAL + CERV (generic strands)
+ lsi: 'Lump-Sum Standard Implementation',
+ dep: 'Digital Europe (generic action)',
+ general: 'General action',
+ // CREA strands
+ culture: 'Culture',
+ media: 'MEDIA',
+ // LIFE strands
+ sap: 'Standard Action Project (SAP)',
+ // CEF strands
+ transport: 'Transport (CEF-T)',
+ energy: 'Energy (CEF-E)',
+ digital: 'Digital (CEF-DIG)',
 };
 
 const FUNDING_MODE_LABELS: Record<string, string> = {

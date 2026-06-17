@@ -1,0 +1,583 @@
+{
+  "id": "cef-digital",
+  "name": "CEF Digital Application (CEF-DIG)",
+  "programme": "CEF",
+  "sub_instrument": "digital",
+  "stage": "single-stage",
+  "scaffold_version": "2025-WP",
+  "official_template_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/cef/temp-form/af/af_cef-dig_en.pdf",
+  "kb_guide": "eu_funding_lump_sum_grants_management",
+  "documents": [
+    {
+      "kind": "tender_application_full",
+      "title": "Part B Technical Description of the Project",
+      "page_limit": 120,
+      "formatting": {
+        "font": "Arial 9pt minimum",
+        "page_size": "A4",
+        "margins_mm": 15
+      },
+      "render": "ai-narrative",
+      "ai_disclosure_required": false,
+      "sections": [
+        {
+          "id": "0-project-description",
+          "label": "0. Project Description",
+          "criterion": "Scope and objectives",
+          "sub": [
+            {
+              "id": "0.1",
+              "label": "Overall objective",
+              "prompts": [
+                "Describe the overall objective of the project."
+              ]
+            },
+            {
+              "id": "0.2",
+              "label": "General description and context",
+              "prompts": [
+                "Describe the context, including political priorities and whether the project is part of a bigger project (global project) or projects of common interest (PCI)."
+              ]
+            },
+            {
+              "id": "0.3",
+              "label": "Location",
+              "prompts": [
+                "Mention where on the network or corridors the project will be implemented."
+              ]
+            },
+            {
+              "id": "0.4",
+              "label": "Justification",
+              "prompts": [
+                "Describe the current situation and needs analysis."
+              ]
+            },
+            {
+              "id": "0.5",
+              "label": "Specific objectives",
+              "prompts": [
+                "List and link specific objectives to the work packages used in section 6."
+              ]
+            },
+            {
+              "id": "0.6",
+              "label": "Expected outcomes and results",
+              "prompts": [
+                "Include facts and statistics (for instance, quantitative information expressed in km, MVA, Bcm/y, kV, bar, etc.)."
+              ]
+            },
+            {
+              "id": "0.7",
+              "label": "Post-project ownership of the infrastructure",
+              "prompts": [
+                "Describe post-project ownership arrangements."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "1-priority-urgency",
+          "label": "1. Priority and Urgency",
+          "criterion": "Relevance",
+          "sub": [
+            {
+              "id": "1.1",
+              "label": "1.1 Call objectives and priorities",
+              "prompts": [
+                "Explain how the project contributes to the objectives, priorities and expected results of the topic under which it is submitted."
+              ]
+            },
+            {
+              "id": "1.2",
+              "label": "1.2 EU added value",
+              "prompts": [
+                "Explain the effects of the project from the perspective of EU interest and how it contributes to the objectives set at European level.",
+                "For submarine cables, specify whether the project contributes to the resilience and security of submarine cables connectivity in CPEI Areas 1-13 from the CPEI list in the EU Cable Toolbox."
+              ]
+            },
+            {
+              "id": "1.3",
+              "label": "1.3 Synergies",
+              "prompts": [
+                "Describe possible synergies with other CEF sectors (Transport and Energy), other CEF Digital topics or other EU programmes (Resilience and Recovery Facility (RRF), Digital Europe, Horizon Europe, Structural Funds, etc.).",
+                "Indicate if the project includes synergetic elements eligible under another CEF sector within the meaning of Article 10(2) of the CEF Regulation.",
+                "Indicate if the project has synergies with other CEF Digital topics.",
+                "Indicate if the project will benefit from funding from another programme."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2-maturity",
+          "label": "2. Maturity",
+          "criterion": "Feasibility",
+          "sub": [
+            {
+              "id": "2.1",
+              "label": "2.1 Readiness and technical maturity",
+              "prompts": [
+                "Provide information about the readiness and technical maturity of the project.",
+                "For every work package, describe the state of preparation (e.g. early days, preparatory steps made, implementation started, etc.).",
+                "If any activities of the project have already started, indicate more precisely their current status of implementation.",
+                "Describe whether the implementation of the project depends on pending decisions by consortium partners.",
+                "Explain any further dependencies critical to the start and completion of the project, such as completion of other works, access to sites or services, access to spectrum, connection to grids or other utilities, risks of litigation, etc."
+              ]
+            },
+            {
+              "id": "2.2",
+              "label": "Political commitment",
+              "prompts": [
+                "Provide information on the political commitments regarding the implementation of the project, including cross-border commitments.",
+                "List and briefly describe the formal and informal documents demonstrating these commitments (decisions of national and regional authorities, memoranda of understanding, written agreements, broadband plans or sectorial strategies, etc.)."
+              ]
+            },
+            {
+              "id": "2.3",
+              "label": "Public consultations",
+              "prompts": [
+                "Describe the public consultations carried out and the feedback received (or consultations foreseen and their respective timing).",
+                "Provide information on the plans to involve stakeholders during the implementation."
+              ]
+            },
+            {
+              "id": "2.4",
+              "label": "2.2 Status of contracting procedures and authorisations, approvals and permits",
+              "prompts": [
+                "Indicate the project maturity in terms of authorisations, approvals and permits needed.",
+                "For each work package or task, list the authorisations or approvals needed (e.g. right-of-way, building permits, spectrum allocation, state aid notification or decision, etc.) and their status and expected timeline.",
+                "Describe risk factors and mitigating measures (alternative solutions) if the authorisations are not obtained in time."
+              ]
+            },
+            {
+              "id": "2.5",
+              "label": "Procurement in general",
+              "prompts": [
+                "Indicate the project maturity in terms of procurements needed."
+              ]
+            },
+            {
+              "id": "2.6",
+              "label": "Contracts awarded before submission of the proposal",
+              "prompts": [
+                "For each work package or task, explain the contracts already awarded, their typology and status.",
+                "For public procurers, specify which procurement method has been selected (e.g. EU-wide or national; open, restricted or negotiated, etc.).",
+                "For private companies, specify best value for money."
+              ]
+            },
+            {
+              "id": "2.7",
+              "label": "Contracts planned during implementation",
+              "prompts": [
+                "For each work package or task, explain the contracts planned, their typologies and status.",
+                "For public procurers, specify which procurement method will be selected (open, restricted, negotiated, EU wide or national).",
+                "For private companies, specify how you will ensure best value for money."
+              ]
+            },
+            {
+              "id": "2.8",
+              "label": "2.3 Financial maturity",
+              "prompts": [
+                "Describe the availability of funds for the project over its lifecycle (budget in balance; use of funds vs sources of funds).",
+                "Demonstrate that the sources of funds cover the project costs.",
+                "Distinguish between the applicant's own resources, third party resources, grants and other forms of funding of the project.",
+                "List for each source the fund providers, recipients and use of funds.",
+                "Provide a diagram of entities participating in the financing structure, either as a receiving party or as provider of funding or financing, or of other support (e.g. guarantee).",
+                "Provide details on revenues and other sources of financing needed to complement the CEF support and the degree of confidence in those financial commitments."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-quality",
+          "label": "3. Quality",
+          "criterion": "Quality",
+          "sub": [
+            {
+              "id": "3.1",
+              "label": "3.1 Cost effectiveness and financial management",
+              "prompts": [
+                "For each work package of the project, describe and justify the level of resources needed for implementing the proposed tasks.",
+                "These should relate to human resources (FTEs), buying equipment or services, etc. and their financial costs.",
+                "Demonstrate the appropriateness of the estimated costs (in terms of both type and level of costs) needed for the implementation of the proposed tasks.",
+                "Describe in detail the arrangements for the financial management of the project and the monitoring, internal and external audit and evaluation processes put in place to ensure the eligibility of the expenditure."
+              ]
+            },
+            {
+              "id": "3.2",
+              "label": "3.2 Consortium set-up, governance and organisational structure",
+              "prompts": [
+                "Describe the organisational structure set up to implement the project.",
+                "Explain the distribution of roles and responsibilities between the different partners (Beneficiaries, Affiliated Entities and Associated Partners, if any).",
+                "Describe the main contractual arrangements, the governance structure, the lines of communication and decision-making processes.",
+                "Describe if the governance bodies have already been established; if members have been nominated and the status of approval of the governance rules.",
+                "List any pending decisions on the organisational structure.",
+                "If a special purpose company or vehicle (SPC or SPV) is envisaged, indicate whether a shareholder agreement has already been finalised."
+              ]
+            },
+            {
+              "id": "3.3",
+              "label": "3.3 Project management, quality assurance and control procedures",
+              "prompts": [
+                "Describe the methods to ensure good quality, monitoring, planning and control for the implementation of the project.",
+                "Explain the main features of the quality assurance plan and quality control system that will be used."
+              ]
+            },
+            {
+              "id": "3.4",
+              "label": "3.4 Risk management",
+              "prompts": [
+                "Explain how risk management is part of your project management approach and how you address risk management in general.",
+                "Mention only methods and major elements (details are to be provided in the risk assessment grid below).",
+                "Indicate whether a risk management plan is in place and explain its main features.",
+                "Describe critical risks, uncertainties or difficulties related to the implementation of your project, and your measures or strategy for addressing them.",
+                "For each risk, indicate the impact and the likelihood that the risk will materialise (high, medium, low), even after taking into account the mitigating measures."
+              ]
+            },
+            {
+              "id": "3.5",
+              "label": "3.5 Communication and visibility",
+              "prompts": [
+                "Describe the communication plan and measures to provide visibility to the EU funding (e.g. billboards, websites, brochures, information leaflets, newsletters, press articles, social media, presentations) and their respective target audiences.",
+                "Note: separate project websites are no longer eligible costs; only participants' website hosting is acceptable."
+              ]
+            },
+            {
+              "id": "3.6",
+              "label": "3.6 Sustainability and maintenance strategy",
+              "prompts": [
+                "Describe the follow-up of the project after the EU funding ends.",
+                "Describe how you will guarantee the proper maintenance and continued operation of the investments made.",
+                "Describe in detail the strategy (duration, periodicity, components, financing, actors) and practical measures that will be put in place.",
+                "Describe expected post-investment changes of infrastructure ownership (if any) and describe the mechanisms for long-term cooperation and sustainability."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-impact",
+          "label": "4. Impact",
+          "criterion": "Impact",
+          "sub": [
+            {
+              "id": "4.1",
+              "label": "4.1 Demand analysis",
+              "prompts": [
+                "Indicate how the project is based on a sound needs and demand analysis in line with the specific objectives of the call.",
+                "Provide the results of the demand study (if any), which should ideally include at least two scenarios, one with the project being implemented and one status quo scenario.",
+                "Explain the methodology used to carry out the analysis."
+              ]
+            },
+            {
+              "id": "4.2",
+              "label": "Alternative options and feasibility",
+              "prompts": [
+                "Provide information on ex-ante evaluations and feasibility studies (if any) and summarise the main results (and attach them as annexes).",
+                "Describe the objectives, activities and policy options considered.",
+                "Outline the alternative options considered in the option analysis (if relevant).",
+                "Summarise the multi-criteria analysis or any other method used to shortlist the alternatives and the arguments used to exclude cheaper but still relevant solutions."
+              ]
+            },
+            {
+              "id": "4.3",
+              "label": "4.2 Economic analysis",
+              "prompts": [
+                "Describe the general socio-economic impact of the project and the method used to evaluate it."
+              ]
+            },
+            {
+              "id": "4.4",
+              "label": "4.3 Social, environmental and other impacts",
+              "prompts": [
+                "Describe the positive externalities that the project provides (safety and security of services, service quality, contribution to digital connectivity, fostering uptake of innovation, etc.), where possible quantifying them, and the method used to evaluate them."
+              ]
+            },
+            {
+              "id": "4.5",
+              "label": "Environmental and climate impact",
+              "prompts": [
+                "Describe the expected positive or negative impacts of the project on the climate change targets and the method used to analyse them.",
+                "Specify if the project helps to reduce greenhouse gas emissions (GHG) and limit global warming.",
+                "Explain how it impacts upstream and downstream emissions.",
+                "Describe how climate change will be taken into consideration when designing the project and its components.",
+                "Describe in detail the measures that are foreseen to monitor, prevent and mitigate a negative impact on the environment, and provide an estimation of the associated costs."
+              ]
+            },
+            {
+              "id": "4.6",
+              "label": "Digital security (if applicable)",
+              "prompts": [
+                "Describe how you will address digital security requirements, notably:",
+                "- measures adopted to exclude or restrict the involvement of high risk suppliers (as addressed in the Commission Communication on the implementation of the EU Cybersecurity Toolbox), insofar as they may affect critical and sensitive key assets, including measures to avoid dependency on such high risk suppliers;",
+                "- measures to promote supply chain resilience and strategic autonomy (in line with the EU Cybersecurity Toolbox);",
+                "- security requirements for your network operators (e.g. strict access controls, rules on secure operation and monitoring, limitations on outsourcing of specific functions, etc.);",
+                "- measures adopted to prevent unsolicited transfer to, or access by, third parties of the data (personal or non-personal) stored or transported in the context of the project;",
+                "- for submarine cables: the relevant risk scenarios and mitigating measures, in accordance with the EU Cables Risk Assessment and the EU Cable Toolbox."
+              ]
+            },
+            {
+              "id": "4.7",
+              "label": "Decision-making tool, input for policy-making or development of best practices",
+              "prompts": [
+                "Show how the project will have an impact as decision-making tool or input for policy making or development of best practices.",
+                "Who will use the output of the project and for how long?",
+                "Describe the extent to which the output will be relied on for decision making, possibly in relation to other studies, and at what level.",
+                "Explain the degree to which elements of the project could be used to develop best practices."
+              ]
+            },
+            {
+              "id": "4.8",
+              "label": "Competition",
+              "prompts": [
+                "Describe the expected positive or negative impacts of the project on local, regional and national competition."
+              ]
+            },
+            {
+              "id": "4.9",
+              "label": "Interoperability, integration and accessibility",
+              "prompts": [
+                "Describe if and how the project contributes to interoperability of digital connectivity infrastructures (e.g. allowing an open ecosystem) and their efficient integration with other strategic infrastructures.",
+                "Explain how it enhances the accessibility to gigabit networks to all citizens, businesses and socio-economic drivers.",
+                "Describe how the project contributes to the integration of long-range and short-range communication technologies."
+              ]
+            },
+            {
+              "id": "4.10",
+              "label": "Cross-border dimension",
+              "prompts": [
+                "Describe the cross-border dimension of the project, i.e. the area of impact and which Member States are involved (if relevant)."
+              ]
+            },
+            {
+              "id": "4.11",
+              "label": "Outermost regions (if applicable)",
+              "prompts": [
+                "Describe which outermost regions are impacted by the project and which activities will be implemented in these outermost regions.",
+                "Indicate how the regions and project promoters cooperate.",
+                "If relevant, specify which countries are impacted and explain how the cooperation with them is ensured."
+              ]
+            },
+            {
+              "id": "4.12",
+              "label": "Impact on non-EU countries",
+              "prompts": [
+                "Specify which country(ies) benefit from the project (if any).",
+                "How does the involvement of these countries contribute to the project objectives?"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-catalytic-effect",
+          "label": "5. Catalytic Effect",
+          "criterion": "Catalytic impact",
+          "sub": [
+            {
+              "id": "5.1",
+              "label": "5.1 Financial gap",
+              "prompts": [
+                "Explain how the EU grant will facilitate or accelerate the project, in comparison to a situation without the EU funding.",
+                "Explain if the proposed investment is made in challenging areas where there is an indication of market failure and how this has been assessed.",
+                "For works proposals, describe the financial gap which the EU funding is supposed to cover.",
+                "Specify and justify the amount.",
+                "Describe the financial obstacles and how public funding would help to overcome them.",
+                "Indicate whether you expect any EU support under the Recovery and Resilience Facility (RRF) (with an approximate amount)."
+              ]
+            },
+            {
+              "id": "5.2",
+              "label": "5.2 Public and private investment and financial leverage",
+              "prompts": [
+                "Provide information on the capacity of the grant to trigger a bigger investment or to allow other investments.",
+                "Will the EU grant help mobilising additional public and private funding?",
+                "Will different sources of funding or higher amounts become available?",
+                "Has the financial leverage been optimised in terms of amounts and duration?"
+              ]
+            },
+            {
+              "id": "5.3",
+              "label": "5.3 Stakeholder commitment",
+              "prompts": [
+                "Explain how the EU funding would reinforce the commitment of different partners and stakeholders (public and private).",
+                "What would be the effects, in terms of commitment of stakeholders, if the project would not receive the grant?"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6-work-plan",
+          "label": "6. Work plan, work packages, activities, resources and timing",
+          "criterion": "Implementation",
+          "sub": [
+            {
+              "id": "6.1",
+              "label": "6.1 Work plan",
+              "prompts": [
+                "Provide a brief description of the overall structure of the work plan (list of work packages or graphical presentation (Pert chart or similar))."
+              ]
+            },
+            {
+              "id": "6.2",
+              "label": "6.2 Work packages, activities, resources and timing",
+              "prompts": [
+                "Provide a detailed description of the project activities, grouped into work packages.",
+                "Each work package should have an objective (expected outcome) and list the activities, milestones and deliverables that belong to it.",
+                "WP1 should cover the management and coordination activities; WP2 and further WPs should be used for other project activities.",
+                "For works proposals, use separate work packages for activities linked to specific budget categories (D.2 Studies, D.3 Synergetic elements, D.4 Works in outermost regions and D.5 Land purchase, if applicable).",
+                "For very simple projects, it is possible to use a single work package for the entire project.",
+                "Work packages covering financial support to third parties must describe the conditions for implementing the support.",
+                "Include a timetable (using either the template available on Portal Reference Documents or a Gantt chart) and attach it to your Application Form."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "7-ethics-security",
+          "label": "7. Other",
+          "criterion": "Compliance",
+          "sub": [
+            {
+              "id": "7.1",
+              "label": "7.1 Ethics",
+              "prompts": [
+                "Not applicable for CEF Digital projects."
+              ]
+            },
+            {
+              "id": "7.2",
+              "label": "7.2 Security",
+              "prompts": [
+                "If the Call document contains a section on security, the security issues and the measures you intend to take to solve or avoid them must be described in Part A.",
+                "Beneficiaries must ensure that their projects are not subject to national or third country security requirements that could affect the implementation or put into question the award of the grant (e.g. technology restrictions, national security classification, etc.)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8-declarations",
+          "label": "8. Declarations",
+          "criterion": "Declarations",
+          "sub": [
+            {
+              "id": "8.1",
+              "label": "Higher funding rate (if applicable)",
+              "prompts": [
+                "Do you fulfil the conditions set out in the Call document for a higher funding rate? If YES, explain and provide details."
+              ]
+            },
+            {
+              "id": "8.2",
+              "label": "Twinned projects (if applicable)",
+              "prompts": [
+                "Is the project twinned to another project which is funded under another CEF call and part of the same global project? If YES, give details on the twin-project (name, number, etc.)."
+              ]
+            },
+            {
+              "id": "8.3",
+              "label": "Double funding",
+              "prompts": [
+                "Confirm that to your best knowledge neither the project as a whole nor any parts of it have benefitted from any other EU grant (including EU funding managed by authorities in EU Member States or other funding bodies, e.g. EU Regional Funds, EU Agricultural Funds, etc.).",
+                "Confirm that to your best knowledge neither the project as a whole nor any parts of it are (nor will be) submitted for any other EU grant."
+              ]
+            },
+            {
+              "id": "8.4",
+              "label": "Financial support to third parties (if applicable)",
+              "prompts": [
+                "If your project requires a higher maximum amount per third party than the threshold amount set in the Call document, justify and explain why this is necessary in order to fulfil your project's objectives."
+              ]
+            },
+            {
+              "id": "8.5",
+              "label": "Seal of Excellence (if applicable)",
+              "prompts": [
+                "Do you agree that your proposal (including proposal data and documentation) is shared with other EU and national funding bodies to find funding under other schemes?"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "tender_budget_narrative",
+      "title": "Part A Section 3 Budget (generated by portal system)",
+      "render": "table-driven",
+      "note": "Part A is filled directly in the Portal Submission System. Budget must be filled for each beneficiary with eligible costs clearly justified."
+    }
+  ],
+  "comply_targets": [
+    "Connectivity (5G, 6G)",
+    "Cybersecurity",
+    "Digital Infrastructure",
+    "Trans-European Networks"
+  ],
+  "hand_offs": {
+    "next_stage": "project-implementation",
+    "chat_cta": "Ask Brubru about CEF Digital eligibility criteria or funding rates",
+    "comply_cta": "Run cybersecurity and digital infrastructure resilience check"
+  },
+  "model_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+  "annotated_grant_agreement_url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+  "reference_docs": [
+    {
+      "label": "General Model Grant Agreement (CEF)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/agr-contr/general-mga_v1.0_en.pdf",
+      "category": "Grant agreement"
+    },
+    {
+      "label": "Annotated Grant Agreement (AGA) - how to read the MGA",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/aga_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Amendment Guide - how to change your GA mid-project",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/amendment-guide_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "LEV / LEAR / FCA Rules - who signs what, who reps your entity",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/rules-lev-lear-fca_en.pdf",
+      "category": "Org profile"
+    },
+    {
+      "label": "Online Manual (F&T Portal Submission Service)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/om_en.pdf",
+      "category": "Submission"
+    },
+    {
+      "label": "Indicative Audit Programme",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/indicative-audit-programme_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "Guidance on Grant Reductions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-grant-reductions_en.pdf",
+      "category": "Post-award"
+    },
+    {
+      "label": "CEF Regulation 2021/1153 and Implementing Regulation",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1153",
+      "category": "Legislation"
+    },
+    {
+      "label": "EU Cybersecurity Toolbox",
+      "url": "https://digital-strategy.ec.europa.eu/en/library/cybersecurity-toolbox",
+      "category": "Security"
+    },
+    {
+      "label": "EU Cable Toolbox (submarine cables risk assessment)",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/eu-cable-toolbox",
+      "category": "Security"
+    },
+    {
+      "label": "EU Calls with Ownership + Control Restrictions",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/guidance-on-participation-in-eu-calls-with-ownership-and-control-restrictions_en.pdf",
+      "category": "Eligibility"
+    },
+    {
+      "label": "List of third countries that can participate (Horizon / Euratom)",
+      "url": "https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/common/guidance/list-3rd-country-participation_horizon-euratom_en.pdf",
+      "category": "Eligibility"
+    }
+  ]
+}
