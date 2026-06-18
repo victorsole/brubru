@@ -2,6 +2,54 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "EU Recovery and Resilience Facility",
+      "summary": "JRC report 17 June: RRF digital investments estimated to generate EUR 219.2bn",
+      "refs": []
+    },
+    {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "Single energy union / electrification debate (political signal)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "eu_waste_shipment_regulation_diwass",
+      "title": "EU Waste Shipment Regulation and DIWASS",
+      "summary": "Reported: EU poised to permit residual-waste exports to Switzerland (verify vs OJ)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "end_of_life_vehicles_regulation",
+      "title": "End-of-Life Vehicles Regulation",
+      "summary": "Plenary first-reading vote taking place 18 June; outcome pending confirmation",
+      "refs": []
+    },
+    {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "eu_funding_ipa_enlargement",
+      "title": "EU Funding for Enlargement Countries",
+      "summary": "European Council 18-19 June: opening first accession chapter cluster with Ukraine and Moldova",
+      "refs": []
+    },
+    {
+      "date": "2026-06-18",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "Multiannual Financial Framework 2028-2034",
+      "summary": "European Council 18-19 June policy debate on revised MFF negotiating box",
+      "refs": []
+    },
+    {
       "date": "2026-06-17",
       "action": "updated",
       "guide": "eu_funding_ipa_enlargement",

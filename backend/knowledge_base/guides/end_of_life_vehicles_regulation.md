@@ -1,7 +1,7 @@
 # End-of-Life Vehicles (ELV) Regulation — Circularity Requirements for Vehicles
 
 ## QUICK FACTS
-- **LATEST (Monday 15 June 2026 — plenary week)**: The **End-of-Life Vehicles Regulation (2023/0284(COD))** is **scheduled for the EP plenary final vote on Thursday 18 June 2026** (Strasbourg) — Parliament's first-reading adoption of the trilogue-agreed text. A favourable vote sends the file to the Council for final adoption and OJ publication. **Vote not yet held — scheduled, outcome pending.** Source: EP plenary newsletter 15-18 June 2026.
+- **LATEST (Thursday 18 June 2026 — PLENARY FINAL VOTE TAKING PLACE TODAY)**: Parliament is holding its first-reading plenary vote on the **End-of-Life Vehicles Regulation (2023/0284(COD))** on the morning of **Thursday 18 June 2026** (Strasbourg) to formally adopt the trilogue-agreed text. As of this writing the **vote tally has not yet been published** (no EP press release confirming adoption) — **outcome pending confirmation; do not assert a result or a tally until verified**. A favourable vote sends the file to the Council for final adoption and OJ publication; entry into force 20 days after publication. Source: EP plenary agenda 15-18 June 2026; EP Legislative Train.
 - Full title: Proposal for a Regulation on **circularity requirements for vehicle design and on management of end-of-life vehicles**, amending Regulations (EU) 2018/858 and (EU) 2019/1020 and **repealing Directives 2000/53/EC (ELV Directive) and 2005/64/EC (3R type-approval Directive)**
 - Commission proposal: **COM(2023) 451 final**, 13 July 2023
 - Procedure: **2023/0284(COD)** — ordinary legislative procedure
