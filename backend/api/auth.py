@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 import httpx
@@ -20,11 +20,81 @@ from core.config import settings
 from models.user import User
 from schemas.auth_schemas import (
     UserCreate, UserLogin, UserResponse, Token, UserUpdate,
-    GoogleAuthRequest, LinkedInAuthRequest, LinkedInCallbackRequest
+    GoogleAuthRequest, LinkedInAuthRequest, LinkedInCallbackRequest,
+    ClaimPasswordRequest, ClaimInfoResponse,
 )
 from services.outreach import auto_link_user_if_match
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
+
+
+# ---------------------------------------------------------------------------
+# Dormant pre-provisioned profile claim flow (migration 148, 18 Jun 2026).
+# A claim_token in the magic link lets the OAuth callback (or password setup)
+# merge the new identity onto a pre-populated dormant row instead of creating
+# a fresh user. See backend/migrations/148_dormant_profiles_claim_flow.sql.
+# ---------------------------------------------------------------------------
+
+
+def _lookup_claimable_row(db: Session, claim_token: str) -> tuple[User | None, str | None]:
+    """Return (user, error_reason). user is None if not claimable.
+    error_reason values: not_found | expired | already_claimed.
+    """
+    if not claim_token:
+        return None, "not_found"
+    user = db.query(User).filter(User.claim_token == claim_token).first()
+    if not user:
+        return None, "not_found"
+    if user.claimed_at is not None:
+        return None, "already_claimed"
+    if user.claim_token_expires_at and user.claim_token_expires_at < datetime.now(timezone.utc):
+        return None, "expired"
+    return user, None
+
+
+def _attach_oauth_to_dormant(
+    db: Session,
+    dormant: User,
+    *,
+    oauth_provider: str,
+    email: str,
+    full_name: str | None,
+    avatar_url: str | None,
+) -> User:
+    """Merge the new OAuth identity onto a dormant row. Caller commits."""
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="OAuth provider did not return an email",
+        )
+
+    existing = (
+        db.query(User)
+        .filter(User.email == email, User.id != dormant.id)
+        .first()
+    )
+    if existing is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "A Brubru account already exists for that email. Sign in "
+                "there instead, or contact hello@beresol.eu to merge."
+            ),
+        )
+
+    dormant.email = email
+    if full_name and not dormant.full_name:
+        dormant.full_name = full_name
+    if avatar_url:
+        dormant.avatar_url = avatar_url
+    dormant.oauth_provider = oauth_provider
+    dormant.is_active = True
+    dormant.is_verified = True
+    dormant.claimed_at = datetime.utcnow()
+    dormant.claim_token = None  # single-use
+    dormant.claim_token_expires_at = None
+    dormant.last_login = datetime.utcnow()
+    return dormant
 
 # Password hashing - using SHA256 to avoid bcrypt 72-byte limitation
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
@@ -199,30 +269,43 @@ async def google_auth(
     name = google_user.get("name")
     avatar_url = google_user.get("picture")
 
-    # Find or create user
-    user = db.query(User).filter(User.email == email).first()
-
     previous_last_login = None
+    is_new_user = False
 
-    is_new_user = user is None
-    if not user:
-        # Create new user
-        user = User(
-            email=email,
-            full_name=name,
-            avatar_url=avatar_url,
-            subscription_tier="white",
-            is_active=True,
-            is_verified=True,  # Google email already verified
-            oauth_provider="google"
+    # Pre-provisioned dormant profile claim path (migration 148).
+    if auth_request.claim_token:
+        dormant, reason = _lookup_claimable_row(db, auth_request.claim_token)
+        if dormant is None:
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE if reason == "expired" else status.HTTP_404_NOT_FOUND,
+                detail=f"Claim link is no longer valid ({reason}).",
+            )
+        user = _attach_oauth_to_dormant(
+            db, dormant,
+            oauth_provider="google", email=email,
+            full_name=name, avatar_url=avatar_url,
         )
-        db.add(user)
+        is_new_user = True  # treat as new for downstream hooks
     else:
-        # Capture previous login before updating
-        previous_last_login = user.last_login
-        user.last_login = datetime.utcnow()
-        if avatar_url:
-            user.avatar_url = avatar_url
+        # Standard email-keyed merge / create.
+        user = db.query(User).filter(User.email == email).first()
+        is_new_user = user is None
+        if not user:
+            user = User(
+                email=email,
+                full_name=name,
+                avatar_url=avatar_url,
+                subscription_tier="white",
+                is_active=True,
+                is_verified=True,
+                oauth_provider="google"
+            )
+            db.add(user)
+        else:
+            previous_last_login = user.last_login
+            user.last_login = datetime.utcnow()
+            if avatar_url:
+                user.avatar_url = avatar_url
 
     db.commit()
     db.refresh(user)
@@ -292,29 +375,42 @@ async def linkedin_callback(
     name = linkedin_user.get("name")
     avatar_url = linkedin_user.get("picture")
 
-    # Find or create user
-    user = db.query(User).filter(User.email == email).first()
-
     previous_last_login = None
+    is_new_user = False
 
-    is_new_user = user is None
-    if not user:
-        user = User(
-            email=email,
-            full_name=name,
-            avatar_url=avatar_url,
-            subscription_tier="white",
-            is_active=True,
-            is_verified=True,
-            oauth_provider="linkedin"
+    # Pre-provisioned dormant profile claim path (migration 148).
+    if callback_request.claim_token:
+        dormant, reason = _lookup_claimable_row(db, callback_request.claim_token)
+        if dormant is None:
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE if reason == "expired" else status.HTTP_404_NOT_FOUND,
+                detail=f"Claim link is no longer valid ({reason}).",
+            )
+        user = _attach_oauth_to_dormant(
+            db, dormant,
+            oauth_provider="linkedin", email=email,
+            full_name=name, avatar_url=avatar_url,
         )
-        db.add(user)
+        is_new_user = True
     else:
-        # Capture previous login before updating
-        previous_last_login = user.last_login
-        user.last_login = datetime.utcnow()
-        if avatar_url:
-            user.avatar_url = avatar_url
+        user = db.query(User).filter(User.email == email).first()
+        is_new_user = user is None
+        if not user:
+            user = User(
+                email=email,
+                full_name=name,
+                avatar_url=avatar_url,
+                subscription_tier="white",
+                is_active=True,
+                is_verified=True,
+                oauth_provider="linkedin"
+            )
+            db.add(user)
+        else:
+            previous_last_login = user.last_login
+            user.last_login = datetime.utcnow()
+            if avatar_url:
+                user.avatar_url = avatar_url
 
     db.commit()
     db.refresh(user)
@@ -333,6 +429,95 @@ async def linkedin_callback(
         "token_type": "bearer",
         "user": user,
         "previous_last_login": previous_last_login
+    }
+
+
+# ---------------------------------------------------------------------------
+# Claim endpoints (migration 148).
+# GET /auth/claim/{token}             - public-safe profile preview
+# POST /auth/claim/{token}/password   - password fallback for non-OAuth users
+# OAuth callers pass `claim_token` directly into POST /auth/google or
+# POST /auth/linkedin/callback.
+# ---------------------------------------------------------------------------
+
+@router.get("/claim/{token}", response_model=ClaimInfoResponse)
+async def claim_info(token: str, db: Session = Depends(get_db)):
+    """Look up the dormant pre-provisioned profile behind a claim link.
+
+    Returns a public-safe preview so the frontend can render
+    "Welcome, Antoine - Brubru is preconfigured for you". Does NOT issue
+    a session; the actual claim happens on OAuth callback or password POST.
+    """
+    user, reason = _lookup_claimable_row(db, token)
+    if user is None:
+        return ClaimInfoResponse(valid=False, reason=reason)
+    return ClaimInfoResponse(
+        valid=True,
+        first_name=user.first_name,
+        full_name=user.full_name,
+        organization=user.organization,
+        role_title=user.role_title,
+        pre_provisioned_at=user.pre_provisioned_at,
+        subscription_tier=user.subscription_tier,
+        private_guide_status=user.private_guide_status,
+    )
+
+
+@router.post("/claim/{token}/password", response_model=Token)
+async def claim_with_password(
+    token: str,
+    body: ClaimPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    """Fallback claim path for prospects who prefer email + password to OAuth.
+
+    Sets the dormant row's email + password_hash, marks claimed_at, returns
+    a session token. Mirrors the OAuth claim path (_attach_oauth_to_dormant)
+    but does not set oauth_provider.
+    """
+    dormant, reason = _lookup_claimable_row(db, token)
+    if dormant is None:
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE if reason == "expired" else status.HTTP_404_NOT_FOUND,
+            detail=f"Claim link is no longer valid ({reason}).",
+        )
+
+    existing = (
+        db.query(User)
+        .filter(User.email == body.email, User.id != dormant.id)
+        .first()
+    )
+    if existing is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "A Brubru account already exists for that email. Sign in "
+                "there instead, or contact hello@beresol.eu to merge."
+            ),
+        )
+
+    dormant.email = body.email
+    dormant.password_hash = get_password_hash(body.password)
+    dormant.is_active = True
+    dormant.is_verified = True
+    dormant.claimed_at = datetime.utcnow()
+    dormant.claim_token = None
+    dormant.claim_token_expires_at = None
+    dormant.last_login = datetime.utcnow()
+    db.commit()
+    db.refresh(dormant)
+
+    auto_link_user_if_match(db, dormant.id, dormant.email)
+    db.refresh(dormant)
+
+    access_token = create_access_token(
+        data={"sub": str(dormant.id), "email": dormant.email}
+    )
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": dormant,
+        "previous_last_login": None,
     }
 
 

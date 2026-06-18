@@ -76,6 +76,15 @@ class User(Base):
     private_guide_status = Column(String(20), nullable=True)  # draft | ready | locked
     private_guide_updated_at = Column(DateTime(timezone=True), nullable=True)
 
+    # Dormant pre-provisioned profiles + magic claim flow (migration 148,
+    # 18 Jun 2026). Lets us populate a full Brubru profile before we know
+    # the prospect's email, then hand them a single-use claim link.
+    linkedin_url = Column(Text, nullable=True)
+    claim_token = Column(Text, nullable=True, unique=True)
+    claim_token_expires_at = Column(DateTime(timezone=True), nullable=True)
+    claimed_at = Column(DateTime(timezone=True), nullable=True)
+    pre_provisioned_at = Column(DateTime(timezone=True), nullable=True)
+
     # Metadata
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)

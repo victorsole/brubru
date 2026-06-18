@@ -34,8 +34,8 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   signup: (data: any) => Promise<void>;
   logout: () => void;
-  loginWithGoogle: (credentialResponse: any) => Promise<void>;
-  loginWithLinkedIn: () => void;
+  loginWithGoogle: (credentialResponse: any, claimToken?: string) => Promise<void>;
+  loginWithLinkedIn: (claimToken?: string) => void;
   updateProfile: (data: any) => Promise<void>;
   refreshToken: () => Promise<void>;
 }
@@ -89,11 +89,13 @@ export const useAuth = create<AuthState>()(
         set({ user: null, token: null, isAuthenticated: false });
       },
 
-      loginWithGoogle: async (credentialResponse: any) => {
+      loginWithGoogle: async (credentialResponse: any, claimToken?: string) => {
         try {
-          const response = await axios.post(`${API_URL}/api/auth/google`, {
-            access_token: credentialResponse.credential
-          });
+          const payload: Record<string, string> = {
+            access_token: credentialResponse.credential,
+          };
+          if (claimToken) payload.claim_token = claimToken;
+          const response = await axios.post(`${API_URL}/api/auth/google`, payload);
           const { access_token, user, previous_last_login } = response.data;
 
           // Store previous login for welcome-back greeting
@@ -105,13 +107,19 @@ export const useAuth = create<AuthState>()(
         }
       },
 
-      loginWithLinkedIn: async () => {
+      loginWithLinkedIn: async (claimToken?: string) => {
         const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID;
         const redirectUri = `${window.location.origin}/auth/linkedin/callback`;
         const state = Math.random().toString(36).substring(7);
 
         // Store state for verification
         sessionStorage.setItem('linkedin_oauth_state', state);
+        // Stash the claim token so the popup callback can forward it.
+        if (claimToken) {
+          sessionStorage.setItem('brubru_claim_token', claimToken);
+        } else {
+          sessionStorage.removeItem('brubru_claim_token');
+        }
 
         // Build authorization URL
         const authUrl = `https://www.linkedin.com/oauth/v2/authorization?` +

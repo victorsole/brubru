@@ -16,6 +16,7 @@ import { LandingPage } from './pages/landing_page';
 import { LoginPage } from './pages/login_page';
 import { SignupPage } from './pages/signup_page';
 import { LinkedInCallback } from './pages/linkedin_callback';
+import { ClaimPage } from './pages/claim_page';
 import { MainPage } from './pages/main_page';
 import { AmendatorPage } from './pages/amendator_page';
 import { ProfilePage } from './pages/profile_page';
@@ -75,6 +76,12 @@ export const App = () => {
           <Route path="/auth/linkedin/callback" element={(
             <AnimatedPage>
               <LinkedInCallback />
+            </AnimatedPage>
+          )} />
+          {/* Pre-provisioned profile claim flow (dormant rows, migration 148) */}
+          <Route path="/claim/:token" element={(
+            <AnimatedPage>
+              <ClaimPage />
             </AnimatedPage>
           )} />
 

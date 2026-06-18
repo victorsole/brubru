@@ -28,11 +28,19 @@ export const LinkedInCallback = () => {
       }
 
       try {
-        // Send code to backend for token exchange
-        const response = await axios.post(`${API_URL}/api/auth/linkedin/callback`, {
+        // Forward the claim token if this OAuth was started from /claim/:token
+        const claimToken = sessionStorage.getItem('brubru_claim_token');
+        const payload: Record<string, string> = {
           code,
-          redirect_uri: `${window.location.origin}/auth/linkedin/callback`
-        });
+          redirect_uri: `${window.location.origin}/auth/linkedin/callback`,
+        };
+        if (claimToken) {
+          payload.claim_token = claimToken;
+          sessionStorage.removeItem('brubru_claim_token');
+        }
+
+        // Send code to backend for token exchange
+        const response = await axios.post(`${API_URL}/api/auth/linkedin/callback`, payload);
 
         const { access_token, user, previous_last_login } = response.data;
 

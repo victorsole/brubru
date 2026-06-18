@@ -39,6 +39,10 @@ class UserLogin(BaseModel):
 class GoogleAuthRequest(BaseModel):
     """Google OAuth authentication request"""
     access_token: str
+    # If set, the new OAuth identity merges into the dormant row identified
+    # by this claim_token instead of creating a fresh user. Powers the
+    # pre-provisioned profile flow (migration 148, 18 Jun 2026).
+    claim_token: Optional[str] = None
 
 
 class LinkedInAuthRequest(BaseModel):
@@ -50,6 +54,38 @@ class LinkedInCallbackRequest(BaseModel):
     """LinkedIn OAuth callback request"""
     code: str
     redirect_uri: str
+    # See GoogleAuthRequest.claim_token.
+    claim_token: Optional[str] = None
+
+
+class ClaimPasswordRequest(BaseModel):
+    """Set email + password for a dormant pre-provisioned profile."""
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=100)
+
+    @field_validator('password')
+    @classmethod
+    def password_strength(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Password must contain at least one digit')
+        if not any(char.isupper() for char in v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        return v
+
+
+class ClaimInfoResponse(BaseModel):
+    """Public-safe info shown on the /claim/<token> landing page."""
+    valid: bool
+    first_name: Optional[str] = None
+    full_name: Optional[str] = None
+    organization: Optional[str] = None
+    role_title: Optional[str] = None
+    pre_provisioned_at: Optional[datetime] = None
+    subscription_tier: Optional[str] = None
+    private_guide_status: Optional[str] = None
+    reason: Optional[str] = None  # populated when valid=false: expired | already_claimed | not_found
 
 
 class UserUpdate(BaseModel):
