@@ -37,6 +37,7 @@ export interface CellAmendment {
   proposedText: string;
   position: string;
   insertAfter?: number;
+  justification?: string;
 }
 
 export interface PendingAIAmendment {
@@ -202,6 +203,7 @@ export const TwoColumnLayout = ({
           originalText: element.text,
           proposedText: pending.proposedText,
           position: getElementPosition(element),
+          justification: pending.justification,
         };
         newAmendments.set(targetIndex, amendment);
         applied = true;
@@ -410,6 +412,9 @@ export const TwoColumnLayout = ({
         proposedText: value,
         position: isAddition ? `After ${getElementPosition(element)}` : getElementPosition(element),
         insertAfter: isAddition ? Math.floor(index) : undefined,
+        // Preserve any AI justification already attached to this cell when the
+        // user tweaks the proposed text inline.
+        justification: amendments.get(index)?.justification,
       };
 
       newAmendments.set(index, amendment);
@@ -491,7 +496,7 @@ export const TwoColumnLayout = ({
           original_text: amendment.originalText,
           proposed_text: amendment.proposedText,
           insert_after: amendment.insertAfter,
-          justification: '',
+          justification: amendment.justification || '',
           group_label: '',
           author: '',
           amendment_number: '',
@@ -525,6 +530,8 @@ export const TwoColumnLayout = ({
       proposedText: value,
       position: isAddition ? `After ${getElementPosition(element)}` : getElementPosition(element),
       insertAfter: isAddition ? Math.floor(index) : undefined,
+      // Keep the AI justification attached while the user edits / improves text.
+      justification: amendments.get(index)?.justification,
     };
 
     newAmendments.set(index, amendment);

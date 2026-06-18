@@ -564,7 +564,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
             original_text: amendment.originalText,
             proposed_text: amendment.proposedText,
             insert_after: amendment.insertAfter,
-            justification: '',
+            justification: amendment.justification || '',
             group_label: '',
             author: '',
             amendment_number: '',
