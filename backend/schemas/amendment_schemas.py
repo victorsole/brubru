@@ -92,6 +92,7 @@ class ElementSummary(BaseModel):
     position: str = Field(..., description="Human-readable position, e.g. 'Article 5', 'Recital 3'")
     element_type: str = Field(..., description="Type: recital, article, point, paragraph, etc.")
     text: str = Field(..., description="Legislative text content (may be truncated)")
+    element_index: Optional[int] = Field(None, description="Index of this element in the full loaded document (for reliable placement)")
 
 
 class BatchSuggestionRequest(BaseModel):
@@ -100,6 +101,16 @@ class BatchSuggestionRequest(BaseModel):
     supporting_context: Optional[str] = Field(None, description="Extracted text from uploaded supporting documents")
     elements: List[ElementSummary] = Field(..., description="Key legislative elements to analyse")
     max_suggestions: Optional[int] = Field(default=None, ge=1, description="Maximum suggestions (determined by subscription tier if not set)")
+    celex: Optional[str] = Field(None, description="CELEX of the loaded law, used to inject drafting context")
+    known_article_numbers: Optional[List[str]] = Field(None, description="All article numbers in the loaded document, for phantom-reference detection")
+
+
+class SuggestionValidation(BaseModel):
+    """Deterministic fidelity check results for one suggestion"""
+    original_verified: bool = Field(True, description="Did the model faithfully echo the source element text?")
+    scope_ratio: float = Field(0.0, description="Word-change fraction, 0.0 (minimal) to 1.0 (rewritten)")
+    phantom_references: List[str] = Field(default_factory=list, description="Internal article references not present in the loaded document")
+    flags: List[str] = Field(default_factory=list, description="Human-readable warning labels")
 
 
 class BatchSuggestionItem(BaseModel):
@@ -109,6 +120,8 @@ class BatchSuggestionItem(BaseModel):
     original_text: str = Field(..., description="Original text of the element")
     proposed_text: str = Field(..., description="AI-proposed amended text")
     justification: str = Field(..., description="Why this amendment serves the policy goal")
+    element_index: Optional[int] = Field(None, description="Index of the target element in the full loaded document")
+    validation: Optional[SuggestionValidation] = Field(None, description="Deterministic fidelity check results")
 
 
 class BatchSuggestionResponse(BaseModel):
@@ -132,5 +145,35 @@ class ImproveTextResponse(BaseModel):
     """Response containing AI-improved amendment text"""
     improved_text: str
     changes_summary: str
+    ai_provider: str
+    ai_model: str
+
+
+class JustifyRequest(BaseModel):
+    """Request to generate a justification for an amendment"""
+    original_text: str = Field("", description="Original legislative text")
+    proposed_text: str = Field("", description="Proposed amended text")
+    amendment_type: str = Field("modification", description="modification, suppression, or addition")
+    policy_rationale: Optional[str] = Field(None, description="The user's policy reason for the amendment")
+    element_position: Optional[str] = Field(None, description="Position reference, e.g. 'Article 5'")
+
+
+class JustifyResponse(BaseModel):
+    """Response containing an AI-drafted justification"""
+    justification: str
+    ai_provider: str
+    ai_model: str
+
+
+class AnalyseArticleRequest(BaseModel):
+    """Request to analyse an article for amendment opportunities"""
+    article_text: str = Field(..., min_length=1, description="Text of the article to analyse")
+    article_position: str = Field(..., description="Position reference, e.g. 'Article 5'")
+    celex: Optional[str] = Field(None, description="CELEX of the loaded law, for drafting context")
+
+
+class AnalyseArticleResponse(BaseModel):
+    """Response containing an AI analysis of an article"""
+    analysis: str
     ai_provider: str
     ai_model: str

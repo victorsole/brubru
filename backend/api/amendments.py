@@ -38,6 +38,10 @@ from schemas.amendment_schemas import (
     BatchSuggestionItem,
     ImproveTextRequest,
     ImproveTextResponse,
+    JustifyRequest,
+    JustifyResponse,
+    AnalyseArticleRequest,
+    AnalyseArticleResponse,
 )
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
@@ -713,7 +717,20 @@ async def resolve_citations(
 @router.post(
     "/suggest",
     summary="AI-powered amendment suggestion",
-    description="Generate an amendment suggestion based on policy position and selected legislative text"
+    description=(
+        "**What it does**\n\n"
+        "Suggests an amendment to one selected legislative element that advances your policy position.\n\n"
+        "**When to use it**\n\n"
+        "When you have picked a recital, article, or paragraph and want a drafted change plus a justification.\n\n"
+        "**Input**\n\n"
+        "Your policy position, the element's original text, its type and position, and optionally the CELEX, "
+        "element index, article number, supporting-document context, and the document's article numbers "
+        "(for reference checking).\n\n"
+        "**Try it**\n\n"
+        "Select an article, enter a one-line policy aim, and read back the proposed text with fidelity badges.\n\n"
+        "**You get back**\n\n"
+        "The amendment type, proposed text, justification, a deterministic validation block, and the AI provider and model."
+    ),
 )
 async def suggest_amendment(
     policy_position: str = Query(..., description="User's policy position or goals"),
@@ -721,6 +738,10 @@ async def suggest_amendment(
     element_type: str = Query(..., description="Type of element: recital, article, point, etc."),
     element_position: str = Query(..., description="Position reference, e.g., 'Recital 1', 'Article 3'"),
     supporting_context: Optional[str] = Query(None, description="Extracted text from supporting documents"),
+    celex: Optional[str] = Query(None, description="CELEX of the loaded law, used to inject drafting context"),
+    element_index: Optional[int] = Query(None, description="Index of the element in the full loaded document, for reliable placement"),
+    article_number: Optional[str] = Query(None, description="Article number of the element, for recital linkage"),
+    known_article_numbers: Optional[List[str]] = Query(None, description="All article numbers in the loaded document, for phantom-reference detection"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -733,8 +754,12 @@ async def suggest_amendment(
     3. Suggest modifications that align with the policy goals
     4. Provide a justification for the amendment
     """
+    import json
+    import re
     from services.ai.multi_provider_service import MultiProviderService
     from knowledge_base.knowledge_loader import get_knowledge_loader
+    from services.amendator.drafting_context import build_element_context
+    from services.amendator.amendment_validation import validate_suggestion
 
     try:
         ai_service = MultiProviderService()
@@ -793,8 +818,30 @@ Respond in this EXACT JSON format:
             ctx = supporting_context[:3000]
             supporting_section = f"\n\nSupporting Document Context:\n{ctx}\n"
 
+        # Inject drafting context (definitions, cross-references, linked
+        # recitals) so the model drafts against the law's actual legal
+        # scaffolding rather than the element in isolation. Safe no-op when
+        # the law is not available locally or no celex was supplied.
+        derived_article = article_number
+        if not derived_article:
+            _art_m = re.search(r"article\s+(\d+[a-z]?)", element_position, re.IGNORECASE)
+            if _art_m:
+                derived_article = _art_m.group(1)
+        drafting_section = ""
+        try:
+            block = build_element_context(
+                db,
+                celex,
+                article_number=derived_article,
+                element_text=original_text,
+            )
+            if block:
+                drafting_section = f"\n\n{block}\n"
+        except Exception as _e:  # never block drafting on enrichment
+            logger.warning("drafting context failed: %s", _e)
+
         user_message = f"""Policy Position: {policy_position}
-{supporting_section}
+{supporting_section}{drafting_section}
 Legislative Element: {element_position} ({element_type})
 
 Original Text:
@@ -810,9 +857,6 @@ Please suggest an amendment that aligns this legislative text with the policy po
         )
 
         # Parse the JSON response
-        import json
-        import re
-
         response_text = response.message.strip()
 
         # Extract JSON from response (handle markdown code blocks)
@@ -831,11 +875,29 @@ Please suggest an amendment that aligns this legislative text with the policy po
                 "justification": "AI-generated amendment based on your policy position."
             }
 
+        amendment_type = suggestion.get("amendment_type", "modification")
+        proposed_text = suggestion.get("proposed_text", response_text)
+
+        # Deterministic fidelity check. original_text here is the real element
+        # text passed by the client, so original_verified compares the model's
+        # echoed original (if any) against it; phantom-reference detection runs
+        # only when the client supplied the document's article set.
+        validation = validate_suggestion(
+            returned_original=suggestion.get("original_text", original_text),
+            actual_text=original_text,
+            proposed_text=proposed_text,
+            amendment_type=amendment_type,
+            known_article_numbers=set(known_article_numbers or []),
+        )
+
         return {
-            "amendment_type": suggestion.get("amendment_type", "modification"),
+            "amendment_type": amendment_type,
             "original_text": original_text,
-            "proposed_text": suggestion.get("proposed_text", response_text),
+            "proposed_text": proposed_text,
             "justification": suggestion.get("justification", ""),
+            "element_index": element_index,
+            "element_position": element_position,
+            "validation": validation,
             "ai_provider": response.provider,
             "ai_model": response.model
         }
@@ -868,6 +930,8 @@ async def suggest_batch_amendments(
     3. Merge results into a single response
     """
     from services.ai.multi_provider_service import MultiProviderService
+    from services.amendator.drafting_context import build_document_definitions_block
+    from services.amendator.amendment_validation import validate_suggestion
     import asyncio
     import json
     import re
@@ -930,6 +994,17 @@ async def suggest_batch_amendments(
         ctx = request.supporting_context[:4000]
         supporting_section = f"\n\nSupporting Document Context (user's policy document):\n{ctx}\n"
 
+    # Document-level defined-terms glossary, injected once into every chunk so
+    # batch suggestions stay consistent with the law's own definitions. Safe
+    # no-op when the law is unavailable locally or has no extractable terms.
+    definitions_section = ""
+    try:
+        defs_block = build_document_definitions_block(db, request.celex)
+        if defs_block:
+            definitions_section = f"\n\n{defs_block}\n"
+    except Exception as _e:
+        logger.warning("batch drafting context failed: %s", _e)
+
     async def _generate_for_chunk(chunk_elements, target_count):
         """Generate amendment suggestions for a single chunk of elements."""
         elements_text = ""
@@ -962,7 +1037,7 @@ Respond in this EXACT JSON format (an array of objects):
 Return ONLY the JSON array, no additional text."""
 
         user_message = f"""Policy Position: {request.policy_position}
-{supporting_section}
+{supporting_section}{definitions_section}
 Legislative Elements to Analyse:
 {elements_text}
 
@@ -1019,6 +1094,12 @@ You MUST return exactly {target_count} amendments as a JSON array."""
 
         # --- Merge results ---
         element_lookup = {elem.position: elem.text for elem in request.elements}
+        position_to_index = {
+            elem.position: elem.element_index
+            for elem in request.elements
+            if elem.element_index is not None
+        }
+        known_articles = set(request.known_article_numbers or [])
         all_suggestions = []
         provider = "unknown"
         model = "unknown"
@@ -1034,12 +1115,29 @@ You MUST return exactly {target_count} amendments as a JSON array."""
 
             for item in suggestions_raw:
                 pos = item.get("element_position", "")
+                # Force the real element text when we know it, so the diff the
+                # user reviews is always against the genuine baseline, never a
+                # model paraphrase.
+                actual_text = element_lookup.get(pos)
+                if actual_text is None:
+                    actual_text = item.get("original_text", "")
+                amendment_type = item.get("amendment_type", "modification")
+                proposed_text = item.get("proposed_text", "")
+                validation = validate_suggestion(
+                    returned_original=item.get("original_text", actual_text),
+                    actual_text=actual_text,
+                    proposed_text=proposed_text,
+                    amendment_type=amendment_type,
+                    known_article_numbers=known_articles,
+                )
                 all_suggestions.append(BatchSuggestionItem(
                     element_position=pos,
-                    amendment_type=item.get("amendment_type", "modification"),
-                    original_text=item.get("original_text", element_lookup.get(pos, "")),
-                    proposed_text=item.get("proposed_text", ""),
-                    justification=item.get("justification", "")
+                    amendment_type=amendment_type,
+                    original_text=actual_text,
+                    proposed_text=proposed_text,
+                    justification=item.get("justification", ""),
+                    element_index=position_to_index.get(pos),
+                    validation=validation,
                 ))
 
         # Cap at max_suggestions
@@ -1214,4 +1312,160 @@ Respond in this EXACT JSON format:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to improve text: {str(e)}"
+        )
+
+
+# ============================================================================
+# AI JUSTIFICATION + ARTICLE ANALYSIS
+# (ported from the former Anthropic-only AIAmendmentGenerator onto the shared
+#  free open-model chain; that dead class was removed.)
+# ============================================================================
+
+@router.post(
+    "/justify",
+    response_model=JustifyResponse,
+    summary="AI-drafted amendment justification",
+    description=(
+        "**What it does**\n\n"
+        "Drafts a short, EP-style justification explaining why a proposed amendment is needed.\n\n"
+        "**When to use it**\n\n"
+        "After you have an original and a proposed text and want a persuasive rationale to table with the amendment.\n\n"
+        "**Input**\n\n"
+        "The original text, the proposed text, the amendment type, and optionally your policy rationale.\n\n"
+        "**Try it**\n\n"
+        "Send a modification with a one-line policy rationale and read back the drafted justification.\n\n"
+        "**You get back**\n\n"
+        "A 2 to 3 paragraph justification plus the AI provider and model used."
+    ),
+)
+async def justify_amendment(
+    request: JustifyRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Generate a justification for an amendment on the free open-model chain."""
+    from services.ai.multi_provider_service import MultiProviderService
+
+    system_prompt = (
+        "You are an expert in EU legislative affairs. Write a clear, persuasive "
+        "justification for a legislative amendment in formal EU drafting language. "
+        "Use British English. Do not use em-dashes. Do not use emojis. Return only "
+        "the justification prose, no headings, no preamble."
+    )
+    user_message = (
+        f"Amendment type: {request.amendment_type}\n"
+        f"Element: {request.element_position or '(unspecified)'}\n\n"
+        f"Original text:\n{request.original_text or '(none)'}\n\n"
+        f"Proposed text:\n{request.proposed_text or '(none)'}\n\n"
+        f"Policy rationale: {request.policy_rationale or '(infer from the change)'}\n\n"
+        "Write a justification (2 to 3 paragraphs) covering why the amendment is "
+        "necessary, what it improves, and how it aligns with EU policy objectives."
+    )
+
+    try:
+        ai_service = MultiProviderService()
+        response = await ai_service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=1000,
+            temperature=0.5,
+        )
+        text = (response.message or "").strip().replace("—", "-").replace("–", "-")
+        if not text:
+            raise HTTPException(status_code=502, detail="The model returned no text. Please try again.")
+        return JustifyResponse(
+            justification=text,
+            ai_provider=response.provider,
+            ai_model=response.model,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating justification: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate justification: {str(e)}",
+        )
+
+
+@router.post(
+    "/analyse-article",
+    response_model=AnalyseArticleResponse,
+    summary="AI analysis of an article for amendment opportunities",
+    description=(
+        "**What it does**\n\n"
+        "Reads one article and points out its key provisions, ambiguities, and where amendments could improve it.\n\n"
+        "**When to use it**\n\n"
+        "Before drafting, to scope where an article is worth amending.\n\n"
+        "**Input**\n\n"
+        "The article text, its position reference, and optionally the CELEX of the loaded law for added context.\n\n"
+        "**Try it**\n\n"
+        "Send an article body and read back the structured analysis.\n\n"
+        "**You get back**\n\n"
+        "A plain-language analysis plus the AI provider and model used."
+    ),
+)
+async def analyse_article(
+    request: AnalyseArticleRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Analyse an article for amendment opportunities on the free open-model chain."""
+    import re as _re
+    from services.ai.multi_provider_service import MultiProviderService
+    from services.amendator.drafting_context import build_element_context
+
+    derived_article = None
+    _m = _re.search(r"article\s+(\d+[a-z]?)", request.article_position, _re.IGNORECASE)
+    if _m:
+        derived_article = _m.group(1)
+
+    drafting_section = ""
+    try:
+        block = build_element_context(
+            db,
+            request.celex,
+            article_number=derived_article,
+            element_text=request.article_text,
+        )
+        if block:
+            drafting_section = f"\n\n{block}\n"
+    except Exception as _e:
+        logger.warning("analyse-article drafting context failed: %s", _e)
+
+    system_prompt = (
+        "You are an expert in EU legislative drafting and analysis. Analyse the "
+        "article and identify, as concise bullet points under clear headings: key "
+        "provisions; potential issues or ambiguities; amendment opportunities; and "
+        "related articles or acts to consider. Use British English. Do not use "
+        "em-dashes. Do not use emojis."
+    )
+    user_message = (
+        f"Article: {request.article_position}{drafting_section}\n\n"
+        f"Text:\n{request.article_text}"
+    )
+
+    try:
+        ai_service = MultiProviderService()
+        response = await ai_service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=1500,
+            temperature=0.4,
+        )
+        text = (response.message or "").strip().replace("—", "-").replace("–", "-")
+        if not text:
+            raise HTTPException(status_code=502, detail="The model returned no text. Please try again.")
+        return AnalyseArticleResponse(
+            analysis=text,
+            ai_provider=response.provider,
+            ai_model=response.model,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error analysing article: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to analyse article: {str(e)}",
         )
