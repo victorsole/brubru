@@ -85,6 +85,9 @@ export const TwoColumnLayout = ({
   const [improveError, setImproveError] = useState<string | null>(null);
   const [savingCell, setSavingCell] = useState<number | null>(null);
   const [savedCells, setSavedCells] = useState<Set<number>>(new Set());
+  // AI suggestions the placement matcher could not locate. Surfaced to the
+  // user instead of being discarded silently (their text is preserved here).
+  const [unplacedSuggestions, setUnplacedSuggestions] = useState<PendingAIAmendment[]>([]);
 
   // Extract legislative elements from loaded document
   useEffect(() => {
@@ -110,12 +113,20 @@ export const TwoColumnLayout = ({
 
     const newAmendments = new Map(amendments);
     let applied = false;
+    const unmatched: PendingAIAmendment[] = [];
 
     for (const pending of pendingAmendments) {
       let targetIndex: number | null = null;
 
-      // Find the target element by index or position string
-      if (pending.elementIndex !== undefined && pending.elementIndex !== null) {
+      // Find the target element by index or position string. The index is the
+      // reliable path (sent by the backend); the string passes below are a
+      // fallback for legacy suggestions that carry only a position label.
+      if (
+        pending.elementIndex !== undefined &&
+        pending.elementIndex !== null &&
+        pending.elementIndex >= 0 &&
+        pending.elementIndex < elements.length
+      ) {
         targetIndex = pending.elementIndex;
       } else if (pending.elementPosition) {
         const normPos = normalizePosition(pending.elementPosition);
@@ -194,11 +205,24 @@ export const TwoColumnLayout = ({
         };
         newAmendments.set(targetIndex, amendment);
         applied = true;
+      } else {
+        // Could not locate a target. Keep it visible rather than dropping it.
+        unmatched.push(pending);
       }
     }
 
     if (applied) {
       setAmendments(newAmendments);
+    }
+
+    if (unmatched.length > 0) {
+      setUnplacedSuggestions(prev => {
+        // De-dupe by position + text so an element re-parse cannot re-append the
+        // same unplaced suggestion twice.
+        const seen = new Set(prev.map(p => `${p.elementPosition || ''}::${p.proposedText}`));
+        const fresh = unmatched.filter(u => !seen.has(`${u.elementPosition || ''}::${u.proposedText}`));
+        return fresh.length > 0 ? [...prev, ...fresh] : prev;
+      });
     }
 
     if (onPendingAmendmentsProcessed) {
@@ -551,6 +575,38 @@ export const TwoColumnLayout = ({
               </button>
             </div>
           </div>
+
+          {/* Unplaced AI suggestions: surfaced rather than dropped silently */}
+          {unplacedSuggestions.length > 0 && (
+            <div className="two-column-layout__unplaced" role="alert">
+              <div className="two-column-layout__unplaced-header">
+                <span className="mdi mdi-map-marker-question"></span>
+                <strong>
+                  {t('amendator.unplacedCount', {
+                    count: unplacedSuggestions.length,
+                    defaultValue: '{{count}} AI suggestion(s) could not be placed automatically',
+                  })}
+                </strong>
+                <button
+                  className="button button-sm button-secondary"
+                  onClick={() => setUnplacedSuggestions([])}
+                >
+                  {t('common.dismiss', 'Dismiss')}
+                </button>
+              </div>
+              <p className="two-column-layout__unplaced-hint">
+                {t('amendator.unplacedHint', 'Select the target element in the table and use Modify to apply the proposed text below.')}
+              </p>
+              <ul className="two-column-layout__unplaced-list">
+                {unplacedSuggestions.map((s, i) => (
+                  <li key={`${s.elementPosition || 'pos'}-${i}`} className="two-column-layout__unplaced-item">
+                    <span className="two-column-layout__unplaced-pos">{s.elementPosition || t('amendator.unknownPosition', 'Unknown position')}</span>
+                    <span className="two-column-layout__unplaced-text">{s.proposedText}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Table */}
           {elements.length === 0 ? (

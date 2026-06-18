@@ -592,7 +592,10 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
 
   const handleAISuggestionAccepted = (suggestion: AISuggestion) => {
     const pending: PendingAIAmendment = {
-      elementIndex: elementIndex ?? undefined,
+      // Prefer the index the suggestion was generated against; fall back to the
+      // current selection only if the suggestion carries none. This avoids
+      // mis-placing when the user reselects a different row before accepting.
+      elementIndex: suggestion.element_index ?? (elementIndex ?? undefined),
       elementPosition: suggestion.element_position,
       amendmentType: suggestion.amendment_type,
       proposedText: suggestion.proposed_text,
@@ -605,6 +608,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
 
   const handleBatchSuggestionsAccepted = (suggestions: AISuggestion[]) => {
     const pending: PendingAIAmendment[] = suggestions.map(s => ({
+      elementIndex: s.element_index ?? undefined,
       elementPosition: s.element_position,
       amendmentType: s.amendment_type,
       proposedText: s.proposed_text,
@@ -694,6 +698,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
             <div style={{ display: activeTab === 'ai' ? 'contents' : 'none' }}>
               <AIAssistantPanel
                 selectedElement={selectedElement}
+                selectedElementIndex={elementIndex}
                 loadedDocument={loadedDocument}
                 onSuggestionAccepted={handleAISuggestionAccepted}
                 onBatchSuggestionsAccepted={handleBatchSuggestionsAccepted}

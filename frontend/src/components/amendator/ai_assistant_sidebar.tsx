@@ -11,9 +11,17 @@ const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api
 
 interface AIAssistantPanelProps {
   selectedElement: LegislativeElement | null;
+  selectedElementIndex?: number | null;
   loadedDocument: LoadedDocument | null;
   onSuggestionAccepted: (suggestion: AISuggestion) => void;
   onBatchSuggestionsAccepted?: (suggestions: AISuggestion[]) => void;
+}
+
+export interface SuggestionValidation {
+  original_verified: boolean;
+  scope_ratio: number;
+  phantom_references: string[];
+  flags: string[];
 }
 
 export interface AISuggestion {
@@ -22,6 +30,8 @@ export interface AISuggestion {
   proposed_text: string;
   justification: string;
   element_position?: string;
+  element_index?: number | null;
+  validation?: SuggestionValidation;
 }
 
 interface UploadedDoc {
@@ -33,6 +43,7 @@ interface UploadedDoc {
 
 export const AIAssistantPanel = ({
   selectedElement,
+  selectedElementIndex,
   loadedDocument,
   onSuggestionAccepted,
   onBatchSuggestionsAccepted,
@@ -55,22 +66,41 @@ export const AIAssistantPanel = ({
     return texts.length > 0 ? texts.join('\n\n---\n\n') : null;
   };
 
-  // Extract key elements from loaded document for batch mode
-  const getDocumentElements = (): Array<{ position: string; element_type: string; text: string }> => {
+  // CELEX of the loaded law (drives backend drafting-context injection)
+  const getCelex = (): string | undefined => loadedDocument?.metadata?.celex || undefined;
+
+  // Every article number in the loaded document, lowercased, for the backend's
+  // phantom-reference detection (an "Article 99" in proposed text that does not
+  // exist in this law gets flagged).
+  const getKnownArticleNumbers = (): string[] => {
+    const elements = loadedDocument?.structure?.legislative_structure?.elements || [];
+    const nums = new Set<string>();
+    for (const elem of elements) {
+      if (elem.type === 'article' && elem.number) {
+        nums.add(String(elem.number).toLowerCase());
+      }
+    }
+    return Array.from(nums);
+  };
+
+  // Extract key elements from loaded document for batch mode. element_index is
+  // the position in the FULL element list, so the editor can place each
+  // accepted suggestion by index instead of fuzzy-matching a position string.
+  const getDocumentElements = (): Array<{ position: string; element_type: string; text: string; element_index: number }> => {
     if (!loadedDocument?.structure?.legislative_structure?.elements) return [];
 
     const elements = loadedDocument.structure.legislative_structure.elements;
-    const keyElements: Array<{ position: string; element_type: string; text: string }> = [];
+    const keyElements: Array<{ position: string; element_type: string; text: string; element_index: number }> = [];
     let currentArticleNumber = '';
 
-    for (const elem of elements) {
+    elements.forEach((elem, idx) => {
       // Track current article number for sub-element context
       if (elem.type === 'article') {
         currentArticleNumber = elem.number || '';
       }
 
       // Only include articles, recitals, points, and paragraphs
-      if (!['article', 'recital', 'point', 'paragraph'].includes(elem.type)) continue;
+      if (!['article', 'recital', 'point', 'paragraph'].includes(elem.type)) return;
 
       let position = '';
       if (elem.type === 'recital') {
@@ -90,14 +120,15 @@ export const AIAssistantPanel = ({
 
       // Skip articles with no body text (just the heading "Article X")
       const elemText = elem.text || '';
-      if (elem.type === 'article' && elemText.length < 20) continue;
+      if (elem.type === 'article' && elemText.length < 20) return;
 
       keyElements.push({
         position: position.trim(),
         element_type: elem.type,
         text: elemText.substring(0, 300),
+        element_index: idx,
       });
-    }
+    });
 
     return keyElements;
   };
@@ -215,13 +246,21 @@ export const AIAssistantPanel = ({
           elementPosition = `Chapter ${selectedElement!.number}`;
         }
 
+        const celex = getCelex();
         const params = new URLSearchParams({
           policy_position: policyText.trim() || 'Analyse this element and suggest improvements',
           original_text: selectedElement!.text,
           element_type: selectedElement!.type,
           element_position: elementPosition,
           ...(supportingContext && { supporting_context: supportingContext }),
+          ...(celex && { celex }),
+          ...(selectedElementIndex != null && { element_index: String(selectedElementIndex) }),
+          ...((selectedElement as any).article_number && { article_number: String((selectedElement as any).article_number) }),
         });
+        // Repeatable query param: one entry per known article number
+        for (const num of getKnownArticleNumbers()) {
+          params.append('known_article_numbers', num);
+        }
 
         const response = await fetch(`${API_BASE}/amendments/suggest?${params.toString()}`, {
           method: 'POST',
@@ -243,6 +282,8 @@ export const AIAssistantPanel = ({
           proposed_text: suggestion.proposed_text,
           justification: suggestion.justification,
           element_position: elementPosition,
+          element_index: suggestion.element_index ?? selectedElementIndex ?? null,
+          validation: suggestion.validation,
         });
       } else {
         // --- DOCUMENT-WIDE MODE: Analyse key elements ---
@@ -262,6 +303,8 @@ export const AIAssistantPanel = ({
             policy_position: policyText.trim() || 'Analyse this legislation and suggest the most impactful amendments',
             supporting_context: supportingContext,
             elements,
+            celex: getCelex(),
+            known_article_numbers: getKnownArticleNumbers(),
           }),
         });
 
@@ -277,6 +320,8 @@ export const AIAssistantPanel = ({
           proposed_text: s.proposed_text,
           justification: s.justification,
           element_position: s.element_position,
+          element_index: s.element_index ?? null,
+          validation: s.validation,
         }));
 
         setBatchSuggestions(suggestions);
@@ -337,6 +382,41 @@ export const AIAssistantPanel = ({
 
   const isDocumentLoaded = !!loadedDocument;
   const canSuggest = isDocumentLoaded || !!selectedElement;
+
+  // Deterministic fidelity badges from the backend check. Warnings prompt the
+  // user to look closer; they never block accepting a suggestion.
+  const renderValidationBadges = (v?: SuggestionValidation) => {
+    if (!v) return null;
+    const badges: Array<{ key: string; label: string; warn: boolean; icon: string }> = [];
+    if (v.flags?.includes('original_mismatch')) {
+      badges.push({ key: 'orig', label: t('amendator.badgeOriginalMismatch', 'Quoted original may not match the source text'), warn: true, icon: 'mdi-alert-outline' });
+    }
+    if (v.flags?.includes('scope_creep')) {
+      badges.push({
+        key: 'scope',
+        label: t('amendator.badgeScopeCreep', { pct: Math.round((v.scope_ratio || 0) * 100), defaultValue: 'Large rewrite ({{pct}}% changed)' }),
+        warn: true,
+        icon: 'mdi-format-letter-matches',
+      });
+    }
+    if (v.flags?.includes('phantom_reference') && v.phantom_references?.length) {
+      const refs = v.phantom_references.map((n) => `Article ${n}`).join(', ');
+      badges.push({ key: 'phantom', label: t('amendator.badgePhantom', { refs, defaultValue: 'Unrecognised reference: {{refs}}' }), warn: true, icon: 'mdi-link-variant-off' });
+    }
+    if (badges.length === 0 && v.original_verified) {
+      badges.push({ key: 'ok', label: t('amendator.badgeVerified', 'Original verified against the source'), warn: false, icon: 'mdi-check-decagram' });
+    }
+    if (badges.length === 0) return null;
+    return (
+      <div className="ai-panel__badges">
+        {badges.map((b) => (
+          <span key={b.key} className={`ai-panel__badge ${b.warn ? 'ai-panel__badge--warn' : 'ai-panel__badge--ok'}`}>
+            <span className={`mdi ${b.icon}`}></span> {b.label}
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="ai-panel">
@@ -448,6 +528,7 @@ export const AIAssistantPanel = ({
           {aiSuggestion.element_position && (
             <div className="ai-panel__suggestion-position">{aiSuggestion.element_position}</div>
           )}
+          {renderValidationBadges(aiSuggestion.validation)}
 
           <div className="ai-panel__suggestion-content">
             <div className="ai-panel__suggestion-field">
@@ -518,6 +599,8 @@ export const AIAssistantPanel = ({
                     {suggestion.amendment_type}
                   </span>
                 </div>
+
+                {renderValidationBadges(suggestion.validation)}
 
                 <div className="ai-panel__batch-item-text">
                   {suggestion.proposed_text.substring(0, 150)}

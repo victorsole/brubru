@@ -372,3 +372,43 @@
     transform: translateY(0);
   }
 }
+
+/* Fidelity validation badges (deterministic checks on AI output) */
+.ai-panel__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.ai-panel__badge {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  padding: 0.22rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  white-space: normal;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.ai-panel__badge .mdi {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.ai-panel__badge--warn {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.ai-panel__badge--ok {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
