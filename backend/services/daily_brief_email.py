@@ -417,13 +417,24 @@ def _get_all_recipient_emails(db_session) -> tuple:
     # Seed/test fixtures (e.g. v2_parl_*@example.com) leak into the users table and waste
     # sends + risk Gmail throttling; never email them. Set 8 June 2026 after a Brubru Brief
     # send produced 6 @example.com DSN bounces.
+    # brubru.beresol.eu added 19 June 2026: dormant pre-provisioned prospect profiles
+    # (dormant-claim flow, migration 148) create users rows with synthetic
+    # `prospect+<slug>@brubru.beresol.eu` placeholder emails that have NO mailbox and
+    # always bounce "No Such User" -- they must never be emailed. (5 DSN bounces on the
+    # 19 June Brubru Brief: zeno-nl, wordsmith-uk, saga-nl, + 2 Sifted journalists.)
     _RESERVED_DOMAINS = ("example.com", "example.org", "example.net",
-                         "test", "invalid", "localhost", "example")
+                         "test", "invalid", "localhost", "example",
+                         "brubru.beresol.eu")
 
     def _is_sendable(addr: str) -> bool:
         if not addr or "@" not in addr:
             return False
-        return addr.rsplit("@", 1)[-1].strip().lower() not in _RESERVED_DOMAINS
+        local, _, domain = addr.rpartition("@")
+        # Synthetic dormant-prospect placeholder local-parts (`prospect+...`) never have a
+        # real mailbox even if a future profile uses a different domain -- exclude them too.
+        if local.strip().lower().startswith("prospect+"):
+            return False
+        return domain.strip().lower() not in _RESERVED_DOMAINS
 
     # 0. Unsubscribe events apply to BOTH registered users and pre-users (the
     #    pre_user_events unsubscribe table is the single opt-out ledger). Previously
