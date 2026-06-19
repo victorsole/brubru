@@ -1031,7 +1031,8 @@
       "recitalMap": "TF-IDF cosinus-mapping van overwegingen naar artikelen voor elke wet. Top-3 overwegingen per artikel.",
       "definedTerms": "Definities-woordenboek (artikel 3/4). Klaar voor tooltips op juridische teksten.",
       "resolveRefs": "Platte tekst erin, gestructureerde CELEX-citaties eruit. Optionele HTML-annotatie.",
-      "resolveAliases": "Menselijke namen (AVG, DSA, AI Act, CBAM, ...) oplossen naar CELEX. Meer dan 680 aliassen."
+      "resolveAliases": "Menselijke namen (AVG, DSA, AI Act, CBAM, ...) oplossen naar CELEX. Meer dan 680 aliassen.",
+      "tenderDocs": "Eén volledig aanvraagmodel voor Europese fondsen per id: elke sectie, prompt-zaadjes voor de AI-co-schrijver, conformiteitsdoelen, een bundel referentiedocumenten en de URL's van de Subsidieovereenkomst. 19 modellen verspreid over 8 programma's (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
     },
     "auth": {
       "description": "Elk /api/v1/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",

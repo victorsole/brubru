@@ -1,16 +1,18 @@
 """
-"Brubru Proprietary Databases" domain — /api/v2/proprietary/*.
+"Brubru Proprietary Databases" domain: /api/v2/proprietary/*.
 
 Brubru's own data products (not mirrored EU institutional sources). One
 sub-router per source:
-    /guides    Curated EU-policy knowledge guides (the chatbot's grounding)
-    /catalan   The EU acquis translated into Catalan (Softcatalà NMT / Sonnet)
-    /canon     Brubru deep-dive HTML reports: EU Canon + law deep-dives
+    /guides             Curated EU-policy knowledge guides (the chatbot's grounding)
+    /catalan            The EU acquis translated into Catalan (Softcatalà NMT / Sonnet)
+    /canon              Brubru deep-dive HTML reports: EU Canon + law deep-dives
+    /brussels-lobbies   Curated Brussels lobby register snapshot
+    /tender-docs        Funding-application template library + Comply cross-fetch
 
 Same 1:1 mapping the "Legislative data" domain follows (Postman collection
 "Brubru Proprietary Databases" -> sub-folders -> URL segments).
 
-Structure contract — IDENTICAL to v1 (what Jordi reviewed): shared
+Structure contract: IDENTICAL to v1 (what Jordi reviewed): shared
 api_user_with_rate_limit dependency (auth + scope + 60 req/min + per-call euro
 debit), the canonical PaginatedResponse envelope, the canonical error shapes,
 and the 5-section Markdown description contract.
@@ -27,9 +29,11 @@ from . import guides as _guides
 from . import catalan as _catalan
 from . import canon as _canon
 from . import brussels_lobbies as _brussels_lobbies
+from . import tender_docs as _tender_docs
 
 router = APIRouter(prefix="/proprietary")
 router.include_router(_guides.router)
 router.include_router(_catalan.router)
 router.include_router(_canon.router)
 router.include_router(_brussels_lobbies.router)
+router.include_router(_tender_docs.router)

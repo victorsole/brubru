@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Introduction &mdash; Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API v2 : 505 endpoints REST r&eacute;partis sur 34 dossiers d'institutions de l'UE. 8 710 actes de l'UE, proc&eacute;dures l&eacute;gislatives, d&eacute;put&eacute;s et fonctionnaires, amendements, les bases de donn&eacute;es du Parlement / Conseil / Commission, les bases des agences de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux), financements, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Une seule cl&eacute; d'API.">
+<title>Introduction: Brubru EU Data API</title>
+<meta name="description" content="Brubru EU Data API v2 : 509 endpoints REST r&eacute;partis sur 34 dossiers d'institutions de l'UE. 8 710 actes de l'UE, proc&eacute;dures l&eacute;gislatives, d&eacute;put&eacute;s et fonctionnaires, amendements, les bases de donn&eacute;es du Parlement / Conseil / Commission, les bases des agences de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux), financements, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Une seule cl&eacute; d'API.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -18,7 +18,7 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>Vous consultez la r&eacute;f&eacute;rence. Pour ex&eacute;cuter des appels r&eacute;els, il vous faut une cl&eacute; d'API Brubru &mdash; </span>
+  <span>Vous consultez la r&eacute;f&eacute;rence. Pour ex&eacute;cuter des appels r&eacute;els, il vous faut une cl&eacute; d'API Brubru: </span>
   <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">D&eacute;marrer un essai Professional</a>
   <span> &middot; ou </span>
   <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contacter les ventes</a>
@@ -51,7 +51,7 @@
   <h3>Commencez ici</h3>
   <ul>
     <li><a href="/api/docs/" class="active">Introduction</a></li>
-    <li><a href="/api/docs/reference.html"><strong>R&eacute;f&eacute;rence compl&egrave;te de l'API</strong> &mdash; les 505 endpoints</a></li>
+    <li><a href="/api/docs/reference.html"><strong>R&eacute;f&eacute;rence compl&egrave;te de l'API</strong>: les 509 endpoints</a></li>
     <li><a href="/api/docs/authentication.html">Authentification</a></li>
     <li><a href="/api/docs/envelope.html">Enveloppe de r&eacute;ponse</a></li>
     <li><a href="/api/docs/errors.html">Erreurs</a></li>
@@ -126,6 +126,7 @@
   <h3>Intelligence propri&eacute;taire</h3>
   <ul>
     <li><a href="/api/docs/endpoints.html#proprietary">Intelligence propri&eacute;taire Brubru (10)</a></li>
+    <li><a href="/api/docs/endpoints.html#tender-docs">Tender Docs (4)</a></li>
   </ul>
 
   <h3>R&eacute;f&eacute;rence</h3>
@@ -144,13 +145,13 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 505 endpoints sur 34 dossiers d'institutions de l'UE</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 509 endpoints sur 34 dossiers d'institutions de l'UE</div>
 <h1>L'UE, structur&eacute;e.</h1>
 <p class="main__lede">
-Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST donne aux d&eacute;veloppeurs, plateformes RegTech, &eacute;quipes d'affaires publiques et agents d'IA un acc&egrave;s programmatique &agrave; <strong>8 710 actes de l'UE adopt&eacute;s</strong> (28 513 publications du JO), <strong>2 080 dossiers l&eacute;gislatifs</strong> suivis, <strong>16 521 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, <strong>58 399 amendements du PE</strong>, les registres du Parlement / Conseil / Conseil europ&eacute;en / Eurogroupe / Commission, la Banque centrale europ&eacute;enne et les institutions financi&egrave;res de l'UE, les agences d&eacute;centralis&eacute;es de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux et plus), financements et appels d'offres de l'UE, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Les m&ecirc;mes donn&eacute;es que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
+Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST donne aux d&eacute;veloppeurs, plateformes RegTech, &eacute;quipes d'affaires publiques et agents d'IA un acc&egrave;s programmatique &agrave; <strong>8 710 actes de l'UE adopt&eacute;s</strong> (28 513 publications du JO), <strong>2 080 dossiers l&eacute;gislatifs</strong> suivis, <strong>16 521 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, <strong>58 399 amendements du PE</strong>, les registres du Parlement / Conseil / Conseil europ&eacute;en / Eurogroupe / Commission, la Banque centrale europ&eacute;enne et les institutions financi&egrave;res de l'UE, les agences d&eacute;centralis&eacute;es de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux et plus), financements et appels d'offres de l'UE, les 19 mod&egrave;les d'application aux fonds europ&eacute;ens de Tender Docs de Brubru, donn&eacute;es ouvertes et l'intelligence propre de Brubru sur l'UE. Les m&ecirc;mes donn&eacute;es que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
-<strong>Une seule surface, une seule cl&eacute;.</strong> L'API est organis&eacute;e comme l'UE elle-m&ecirc;me &mdash; un dossier par institution ou organe, 34 dossiers au total, <strong>505 endpoints</strong>. Parcourez les dossiers ci-dessous ou ouvrez la <a href="/api/docs/reference.html"><strong>r&eacute;f&eacute;rence compl&egrave;te et toujours &agrave; jour de l'API &rarr;</strong></a> &mdash; chaque endpoint d&eacute;ploy&eacute;, g&eacute;n&eacute;r&eacute; en direct depuis la sp&eacute;cification OpenAPI.
+<strong>Une seule surface, une seule cl&eacute;.</strong> L'API est organis&eacute;e comme l'UE elle-m&ecirc;me: un dossier par institution ou organe, 34 dossiers au total, <strong>509 endpoints</strong>. Parcourez les dossiers ci-dessous ou ouvrez la <a href="/api/docs/reference.html"><strong>r&eacute;f&eacute;rence compl&egrave;te et toujours &agrave; jour de l'API &rarr;</strong></a>: chaque endpoint d&eacute;ploy&eacute;, g&eacute;n&eacute;r&eacute; en direct depuis la sp&eacute;cification OpenAPI.
 </p>
 
 <div class="callout callout--ok">
@@ -341,11 +342,15 @@ Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST don
 </a>
 </div>
 
-<h3 style="margin-top:28px;">Intelligence propri&eacute;taire <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 dossier)</span></h3>
+<h3 style="margin-top:28px;">Intelligence propri&eacute;taire <span style="font-weight:400;color:var(--text-mut);font-size:0.7em;">(1 dossier, 2 sous-routeurs)</span></h3>
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html#proprietary">
   <div class="toc-card__title">Intelligence propri&eacute;taire Brubru</div>
   <div class="toc-card__desc">L'annuaire class&eacute; des lobbies de Bruxelles, les analyses du EU Canon, le corpus de l&eacute;gislation traduite en catalan et les guides de connaissances qui alimentent le chatbot.</div>
+</a>
+<a class="toc-card" href="/api/docs/endpoints.html#tender-docs">
+  <div class="toc-card__title">Tender Docs</div>
+  <div class="toc-card__desc">19 mod&egrave;les d'application aux fonds europ&eacute;ens dans 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+), chacun avec sa structure de sections, ses objectifs de conformit&eacute;, son paquet de documents de r&eacute;f&eacute;rence et les URL de la Convention de Subvention, plus une consultation crois&eacute;e en temps r&eacute;el des 53 clusters d'EU Law Comply.</div>
 </a>
 </div>
 
@@ -360,7 +365,7 @@ Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST don
 <tr><td>Hebdomadaire</td><td>Indications g&eacute;ographiques, agendas des commissaires, avis du CER, recherche EPRS / STOA / JRC, projets financ&eacute;s par l'UE</td></tr>
 <tr><td>Mensuel</td><td>Fonctionnaires et d&eacute;partements de l'UE (la r&eacute;-ing&eacute;rement en masse du Who Is Who)</td></tr>
 <tr><td>En direct (temps r&eacute;el)</td><td>Profils des d&eacute;put&eacute;s, affaires de concurrence de la DG COMP, la Nomenclature combin&eacute;e, les r&eacute;solveurs de texte juridique et de citations</td></tr>
-<tr><td>&Agrave; la publication</td><td>La couche propri&eacute;taire de Brubru&nbsp;: guides de connaissances, analyses du EU Canon, traductions en catalan</td></tr>
+<tr><td>&Agrave; la publication</td><td>La couche propri&eacute;taire de Brubru&nbsp;: guides de connaissances, analyses du EU Canon, traductions en catalan, mod&egrave;les d'application aux fonds europ&eacute;ens de Tender Docs</td></tr>
 </tbody>
 </table>
 
@@ -405,7 +410,7 @@ X-RateLimit-Tier: free</code></pre>
 
 <p><strong>1. Obtenez une cl&eacute; d'API.</strong> &Eacute;crivez &agrave; <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> une fois l'abonnement Professional souscrit. Les cl&eacute;s ont la forme <code>brubru_live_</code> suivi de 48 caract&egrave;res hexad&eacute;cimaux.</p>
 
-<p><strong>2. V&eacute;rifiez que le service r&eacute;pond.</strong> Le contr&ocirc;le de sant&eacute; est public &mdash; aucune cl&eacute; requise :</p>
+<p><strong>2. V&eacute;rifiez que le service r&eacute;pond.</strong> Le contr&ocirc;le de sant&eacute; est public: aucune cl&eacute; requise :</p>
 
 <pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
 
@@ -422,7 +427,7 @@ X-RateLimit-Tier: free</code></pre>
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
   "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
-<p>Vous obtenez une liste pagin&eacute;e d'actes de l'UE correspondant &agrave; "artificial intelligence", avec identifiants CELEX, titres, dates et URL EUR-Lex. &Agrave; partir de l&agrave;, chaque endpoint suit le m&ecirc;me mod&egrave;le d'enveloppe &mdash; changez simplement le chemin.</p>
+<p>Vous obtenez une liste pagin&eacute;e d'actes de l'UE correspondant &agrave; "artificial intelligence", avec identifiants CELEX, titres, dates et URL EUR-Lex. &Agrave; partir de l&agrave;, chaque endpoint suit le m&ecirc;me mod&egrave;le d'enveloppe: changez simplement le chemin.</p>
 
 <h2>Limites (ce que nous ne couvrons pas)</h2>
 <ul>
@@ -437,7 +442,7 @@ X-RateLimit-Tier: free</code></pre>
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html">
   <div class="toc-card__title">Tous les endpoints</div>
-  <div class="toc-card__desc">La liste compl&egrave;te et regroup&eacute;e des 505 endpoints v2, une section par dossier d'institution.</div>
+  <div class="toc-card__desc">La liste compl&egrave;te et regroup&eacute;e des 509 endpoints v2, une section par dossier d'institution.</div>
 </a>
 <a class="toc-card" href="/api/docs/authentication.html">
   <div class="toc-card__title">Authentification</div>
@@ -445,16 +450,16 @@ X-RateLimit-Tier: free</code></pre>
 </a>
 <a class="toc-card" href="/api/docs/use-cases.html">
   <div class="toc-card__title">Cas d'usage par profil</div>
-  <div class="toc-card__desc">Consultants en affaires publiques, associations, entreprises, ONG, fonctionnaires de l'UE &mdash; ce que vous appelleriez vraiment.</div>
+  <div class="toc-card__desc">Consultants en affaires publiques, associations, entreprises, ONG, fonctionnaires de l'UE: ce que vous appelleriez vraiment.</div>
 </a>
 <a class="toc-card" href="/api/docs/glossary.html">
   <div class="toc-card__title">Glossaire</div>
-  <div class="toc-card__desc">CELEX, OEIL, trilogue, rapporteur, types de commission, directive contre r&egrave;glement &mdash; chaque sigle expliqu&eacute;.</div>
+  <div class="toc-card__desc">CELEX, OEIL, trilogue, rapporteur, types de commission, directive contre r&egrave;glement: chaque sigle expliqu&eacute;.</div>
 </a>
 </div>
 
 <footer>
-&copy; 2026 Beresol BV &mdash; Brubru EU Data API v2.
+&copy; 2026 Beresol BV: Brubru EU Data API v2.
 <a href="/api/">Retour &agrave; la page marketing</a> &middot;
 <a href="/api/openapi.json">OpenAPI</a> &middot;
 <a href="mailto:hello@beresol.eu">hello@beresol.eu</a>

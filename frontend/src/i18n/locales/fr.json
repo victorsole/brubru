@@ -1031,7 +1031,8 @@
       "recitalMap": "Correspondance TF-IDF considérants/articles pour n'importe quelle loi. Top-3 considérants par article.",
       "definedTerms": "Dictionnaire des définitions (articles 3/4). Prêt pour tooltip sur les textes juridiques.",
       "resolveRefs": "Texte brut en entrée, citations CELEX structurées en sortie. Annotation HTML facultative.",
-      "resolveAliases": "Résolution de noms humains (RGPD, DSA, IA Act, CBAM, ...) en CELEX. Plus de 680 alias."
+      "resolveAliases": "Résolution de noms humains (RGPD, DSA, IA Act, CBAM, ...) en CELEX. Plus de 680 alias.",
+      "tenderDocs": "Un modèle complet d'application aux fonds européens par id : chaque section, les amorces de prompts du co-rédacteur IA, les objectifs de conformité, le paquet de documents de référence et les URLs de la Convention de Subvention. 19 modèles dans 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
     },
     "auth": {
       "description": "Chaque endpoint /api/v1/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",

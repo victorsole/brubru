@@ -166,12 +166,15 @@ table {
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 15px;
+  table-layout: fixed;
 }
 th, td {
   text-align: left;
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 th {
   background: var(--bg-alt);
@@ -180,6 +183,44 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-sec);
+}
+
+/* Endpoints page: 3-column tables with Method / Endpoint / What it returns.
+   Default layout was giving long endpoint paths too much room and shrinking
+   the description column. Fix the first two columns and let "What it returns"
+   take the rest (which is most of the table). Inline <code> in the path
+   column wraps thanks to overflow-wrap above. */
+table.endpoint-table { table-layout: fixed; }
+table.endpoint-table th:nth-child(1),
+table.endpoint-table td:nth-child(1) { width: 70px; }
+table.endpoint-table th:nth-child(2),
+table.endpoint-table td:nth-child(2) {
+  width: 32%;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+}
+table.endpoint-table th:nth-child(3),
+table.endpoint-table td:nth-child(3) {
+  width: auto;
+  font-size: 15px;
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  table.endpoint-table th:nth-child(2),
+  table.endpoint-table td:nth-child(2) { width: 40%; }
+  table.endpoint-table th:nth-child(3),
+  table.endpoint-table td:nth-child(3) { font-size: 14px; }
+}
+@media (max-width: 600px) {
+  table.endpoint-table th:nth-child(1),
+  table.endpoint-table td:nth-child(1) { width: 50px; }
+  table.endpoint-table th:nth-child(2),
+  table.endpoint-table td:nth-child(2) {
+    width: 38%;
+    font-size: 11.5px;
+  }
+  table.endpoint-table th:nth-child(3),
+  table.endpoint-table td:nth-child(3) { font-size: 13px; }
 }
 
 .callout {

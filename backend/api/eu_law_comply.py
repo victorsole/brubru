@@ -7,7 +7,7 @@ Handles compliance checking, gap analysis, and requirement extraction for EU law
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 import logging
 import tempfile
@@ -1077,7 +1077,7 @@ async def get_user_analysis_history(
 
 
 # ============================================================================
-# Future-Comply preview (P6 — May 2026)
+# Future-Comply preview (P6: May 2026)
 # ============================================================================
 
 from models.legislative_train import LegislativeCarriage  # noqa: E402
@@ -1102,7 +1102,7 @@ from services.compliance.proposal_preview import (  # noqa: E402
         "in-flight file. Pair with the Personalised Impact endpoint for a "
         "fuller picture.\n\n"
         "**Input**\n\n"
-        "URL path parameter `procedure_ref` — OEIL procedure reference. "
+        "URL path parameter `procedure_ref`: OEIL procedure reference. "
         "Authentication via Bearer JWT.\n\n"
         "**Try it**\n\n"
         "`GET /api/eu-law-comply/future-preview/2024%2F0176%28COD%29` with "
@@ -1111,7 +1111,7 @@ from services.compliance.proposal_preview import (  # noqa: E402
         "`stage` (proposal | adopted | other), `headline`, `summary`, "
         "`likely_obligation_areas`, `recommended_next_steps`, plus a "
         "`deferred_to_adopted_flow` flag when the file is already adopted. "
-        "Never fabricates obligations — every label is grounded in the file's "
+        "Never fabricates obligations: every label is grounded in the file's "
         "real classification."
     ),
 )
@@ -1138,7 +1138,7 @@ async def get_future_comply_preview(
 
 
 # ============================================================================
-# Regulatory Cascade (P3 — May 2026)
+# Regulatory Cascade (P3: May 2026)
 # ============================================================================
 
 from services.compliance.regulatory_cascade import (  # noqa: E402
@@ -1168,7 +1168,7 @@ from services.compliance.regulatory_cascade import (  # noqa: E402
         "Per-branch counts, the implementing + delegated act lists (with "
         "status, dates, source URLs), the related in-flight files, and "
         "honest absence flags for transposition + CEN data we don't yet "
-        "ingest. Never fabricates — empty branches stay empty."
+        "ingest. Never fabricates: empty branches stay empty."
     ),
 )
 async def get_regulatory_cascade(
@@ -1194,7 +1194,7 @@ async def get_regulatory_cascade(
 
 
 # ============================================================================
-# Compliance Maturity Assessment (P6 — May 2026)
+# Compliance Maturity Assessment (P6: May 2026)
 # ============================================================================
 
 from services.compliance.maturity_assessment import (  # noqa: E402
@@ -1252,7 +1252,7 @@ async def get_compliance_maturity(
         "the template's `comply_targets`, plus any extras driven by the ethics "
         "table answers (e.g. ethics_personal_data=true → GDPR clusters).\n\n"
         "**When to use it**\n"
-        "Populating the right-rail Comply panel in the Tender Docs editor — "
+        "Populating the right-rail Comply panel in the Tender Docs editor: "
         "live cross-fetch into the existing 53-cluster catalogue.\n\n"
         "**Input**\n"
         "Query: `template_id` (required), `funding_mode`, `ethics_personal_data`, "
@@ -1279,7 +1279,36 @@ async def clusters_by_topic(
             detail="EU Law Comply is available for Yellow and Blue tier users only",
         )
 
-    # Local imports to avoid a top-of-file circular import with Tender Docs.
+    return resolve_clusters_by_topic(
+        template_id=template_id,
+        funding_mode=funding_mode,
+        ethics_personal_data=ethics_personal_data,
+        ethics_special_categories=ethics_special_categories,
+        ethics_clinical_studies=ethics_clinical_studies,
+        ethics_dual_use=ethics_dual_use,
+        ethics_animals=ethics_animals,
+        db=db,
+    )
+
+
+def resolve_clusters_by_topic(
+    *,
+    template_id: str,
+    funding_mode: Optional[str],
+    ethics_personal_data: bool,
+    ethics_special_categories: bool,
+    ethics_clinical_studies: bool,
+    ethics_dual_use: bool,
+    ethics_animals: bool,
+    db: Session,
+) -> Dict[str, Any]:
+    """Auth-agnostic helper.
+
+    Single source of truth for the "tender template -> comply clusters" mapping.
+    Used by the v1 endpoint above (Bearer JWT + tier gate) and by the v2
+    proprietary endpoint at /api/v2/proprietary/tender-docs/comply-clusters
+    (API-key auth). Raises HTTPException(404) if the template id is unknown.
+    """
     import json as _json
     from pathlib import Path as _Path
     _tpl_dir = _Path(__file__).resolve().parent.parent / "knowledge_base" / "funding_templates"
@@ -1354,7 +1383,7 @@ async def clusters_by_topic(
         "Animal Research": [],
         "Data Act": ["Digital Policy and Digital Economy"],
         "Defence": ["Trade and Economic Security"],
-        # v2 templates (Move 3, Jun 2026) — CEF, CREA, CERV, DIGITAL, ERASMUS+, LIFE
+        # v2 templates (Move 3, Jun 2026): CEF, CREA, CERV, DIGITAL, ERASMUS+, LIFE
         "Audiovisual": ["Digital Policy and Platform Regulation"],
         "Climate Action": ["Climate Action"],
         "Connectivity (5G, 6G)": ["Digital Policy and Telecommunications", "Cybersecurity and Digital Infrastructure"],
@@ -1362,9 +1391,9 @@ async def clusters_by_topic(
         "Digital Infrastructure": ["Cybersecurity and Digital Infrastructure", "Digital Policy and Telecommunications"],
         "Trans-European Networks": ["Transport"],
         "Transport": ["Transport"],
-        # Move 4 (Jun 2026) — ESF+ agency procurement
+        # Move 4 (Jun 2026): ESF+ agency procurement
         "Public Procurement": ["Trade and Economic Security", "Competition and State Aid"],
-        # No current LawCluster for these — leave to the fallback (silent zero match).
+        # No current LawCluster for these: leave to the fallback (silent zero match).
         # "Gender Equality": [],
         # "Non-Discrimination": [],
     }

@@ -1031,7 +1031,8 @@
       "recitalMap": "Mapeo TF-IDF de considerandos a artículos para cualquier ley. Top-3 considerandos por artículo.",
       "definedTerms": "Diccionario de definiciones (artículos 3/4). Listo para anotar textos legales con tooltips.",
       "resolveRefs": "Texto plano de entrada, citas CELEX estructuradas de salida. Anotación HTML opcional.",
-      "resolveAliases": "Resuelve nombres humanos (RGPD, DSA, Ley de IA, CBAM, ...) a CELEX. Más de 680 alias."
+      "resolveAliases": "Resuelve nombres humanos (RGPD, DSA, Ley de IA, CBAM, ...) a CELEX. Más de 680 alias.",
+      "tenderDocs": "Una plantilla completa de aplicación a fondos europeos por id: cada sección, semillas de prompts del co-redactor con IA, objetivos de cumplimiento, paquete de documentos de referencia y URLs del Convenio de Subvención. 19 plantillas en 8 programas (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
     },
     "auth": {
       "description": "Cada endpoint /api/v1/* requiere una clave de API. Envíala como Authorization: Bearer <clave> (recomendado) o X-API-Key: <clave>. Las claves son emitidas por el equipo Brubru para suscriptores Professional. Límite: 60 peticiones por minuto por clave.",
