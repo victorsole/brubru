@@ -2478,45 +2478,120 @@ class ContextBuilder:
         details = []
 
         for proc_ref in procedure_references:
+            proc_detail: Optional[Dict[str, Any]] = None
             try:
                 procedure = await self.oeil_client.get_procedure(proc_ref)
 
-                proc_detail = {
-                    'reference': proc_ref,
-                    'title': procedure.get('title', ''),
-                    'type': procedure.get('type', ''),
-                    'status': procedure.get('current_stage', ''),
-                    'timeline': procedure.get('events', [])[:5],  # Last 5 events
-                    'committees': procedure.get('committees', []),
-                    'meps': {
-                        'rapporteur': procedure.get('rapporteur', ''),
-                        'shadows': procedure.get('shadow_rapporteurs', [])
-                    },
-                    'url': f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}"
-                }
+                # Only accept the live result if it actually resolved to a real
+                # procedure (a title). An empty/minimal dict means the OEIL page
+                # 404'd or timed out -- in that case we must fall back to the DB,
+                # otherwise the chat tells the user the procedure "is not in the
+                # database" when legislative_carriages in fact holds it
+                # (audit defect, 18 Jun 2026: 2023/0271(COD) reported missing).
+                if procedure and procedure.get('title'):
+                    proc_detail = {
+                        'reference': proc_ref,
+                        'title': procedure.get('title', ''),
+                        'type': procedure.get('type', ''),
+                        'status': procedure.get('current_stage', ''),
+                        'timeline': procedure.get('events', [])[:5],  # Last 5 events
+                        'committees': procedure.get('committees', []),
+                        'meps': {
+                            'rapporteur': procedure.get('rapporteur', ''),
+                            'shadows': procedure.get('shadow_rapporteurs', [])
+                        },
+                        'url': f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}",
+                        'source': 'oeil_live',
+                    }
+                    logger.debug(f"Fetched procedure (live OEIL): {proc_ref}")
 
-                # Phase 3: Auto-include EPRS explainers (prioritize "At a Glance")
-                if self.auto_include_explainers:
+            except Exception as e:
+                logger.error(f"Failed to fetch procedure {proc_ref} (live OEIL): {str(e)}")
+
+            # DB fallback: live OEIL fetch missing/empty -> read legislative_carriages
+            # (same source get_procedure_status / the v1 API reads, so chat and API agree).
+            if proc_detail is None:
+                proc_detail = self._fetch_procedure_from_carriage(proc_ref)
+                if proc_detail:
+                    logger.info(f"Fetched procedure (DB carriage fallback): {proc_ref}")
+
+            if proc_detail is None:
+                continue
+
+            # Phase 3: Auto-include EPRS explainers (prioritize "At a Glance")
+            # -- attach regardless of whether the detail came from OEIL or the DB.
+            if self.auto_include_explainers:
+                try:
                     explainers = await self.eprs_matcher.find_explainers_for_procedure(
                         procedure_ref=proc_ref,
                         max_results=2,
                         prefer_at_a_glance=True
                     )
-
                     if explainers:
                         proc_detail['eprs_explainers'] = explainers
                         logger.debug(
                             f"Auto-included {len(explainers)} EPRS explainers for {proc_ref}"
                         )
+                except Exception as e:
+                    logger.debug(f"EPRS explainer lookup failed for {proc_ref}: {str(e)}")
 
-                details.append(proc_detail)
-
-                logger.debug(f"Fetched procedure: {proc_ref}")
-
-            except Exception as e:
-                logger.error(f"Failed to fetch procedure {proc_ref}: {str(e)}")
+            details.append(proc_detail)
 
         return details
+
+    def _fetch_procedure_from_carriage(self, proc_ref: str) -> Optional[Dict[str, Any]]:
+        """
+        DB fallback for a procedure reference when the live OEIL fetch fails.
+
+        Reads the same legislative_carriages row that get_procedure_status (the
+        MCP/v1 API) reads, so the chat and the API never disagree about whether a
+        procedure exists. Returns a dict in the same shape as the live OEIL path
+        (so the downstream formatter is unchanged), or None if genuinely absent.
+        """
+        db = SessionLocal()
+        try:
+            row = db.query(LegislativeCarriage).filter(
+                LegislativeCarriage.oeil_procedure_ref == proc_ref
+            ).first()
+            if row is None:
+                # Tolerate trailing/format noise (e.g. "2023/0271 (COD)")
+                row = db.query(LegislativeCarriage).filter(
+                    LegislativeCarriage.oeil_procedure_ref.ilike(f"%{proc_ref}%")
+                ).first()
+            if row is None:
+                return None
+
+            # current_status is a CarriageStatusEnum -> emit the clean name
+            # ("ADOPTED"), matching the live OEIL path which returns a plain string.
+            status = getattr(row.current_status, 'name', None) or (str(row.current_status) if row.current_status else '')
+
+            events = row.oeil_key_events or []
+            if not isinstance(events, list):
+                events = []
+
+            committees: List[str] = []
+            if row.lead_committee:
+                committees.append(row.lead_committee)
+            if isinstance(row.opinion_committees, list):
+                committees.extend([c for c in row.opinion_committees if c])
+
+            return {
+                'reference': proc_ref,
+                'title': row.title or '',
+                'type': row.text_type or '',
+                'status': status,
+                'timeline': events[:5],
+                'committees': committees,
+                'meps': {'rapporteur': '', 'shadows': []},
+                'url': f"https://oeil.secure.europarl.europa.eu/oeil/en/procedure-file?reference={proc_ref}",
+                'celex_numbers': row.celex_numbers or [],
+                'source': 'db_carriage',
+            }
+        except Exception as e:
+            logger.error(f"DB carriage fallback failed for {proc_ref}: {str(e)}")
+            return None
+        finally:
+            db.close()
 
     async def _fetch_mep_profiles(
         self,

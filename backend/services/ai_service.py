@@ -2053,6 +2053,22 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             # Remove standalone markers (with optional surrounding whitespace)
             cleaned = re.sub(rf'\s*{re.escape(marker)}\s*', ' ', cleaned)
 
+        # Strip bracketed INTERNAL source tags that leak from retrieval, e.g.
+        # [DG_MOVE_ORGANIGRAMME], [LEGISLATIVE_FILES], [COM_2025_847.pdf]
+        # (audit defect, 18 Jun 2026). These are internal identifiers, not real
+        # citations. Designed NOT to touch real references:
+        #   - [CELEX: 32026R1184] / [OEIL: 2025/0847(COD)] -> colon+space, kept
+        #   - [1], [2] -> numeric, handled by _strip_orphan_citations, kept
+        #   - [COM(2025)847] -> parentheses, readable ref, kept
+        # 1) ALL-CAPS tags joined by underscores (DG_MOVE_ORGANIGRAMME, LEGISLATIVE_FILES)
+        cleaned = re.sub(r'\s*\[[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\]', ' ', cleaned)
+        # 2) bare bracketed filenames ([COM_2025_847.pdf], [report.docx])
+        cleaned = re.sub(r'\s*\[[A-Za-z0-9_\-]+\.(?:pdf|docx?|xml|html?|txt|json)\]', ' ', cleaned, flags=re.IGNORECASE)
+        # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
+        cleaned = re.sub(r',\s*\.', '.', cleaned)
+        cleaned = re.sub(r'\s+([.,;:])', r'\1', cleaned)
+        cleaned = re.sub(r'  +', ' ', cleaned)
+
         # Clean up trailing whitespace
         cleaned = cleaned.strip()
         if cleaned != text.strip():

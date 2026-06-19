@@ -2,6 +2,64 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "Multiannual Financial Framework 2028-2034",
+      "summary": "Council agreed 3 partial general approaches 16 Jun (partnership plans, Competitiveness Fund, Global Europe); EUCO policy debate 18-19 Jun",
+      "refs": []
+    },
+    {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "eu_funding_ipa_enlargement",
+      "title": "EU Funding for Enlargement Countries",
+      "summary": "EP adopted Montenegro & Albania progress reports 17 Jun 2026; first fundamentals cluster opened with UA+MD",
+      "refs": []
+    },
+    {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "ai_act_regulation",
+      "title": "EU Artificial Intelligence Act",
+      "summary": "Simplification omnibus adopted 16 Jun 2026 amends Reg 2024/1689; fixed high-risk application dates",
+      "refs": [
+        "32024R1689",
+        "2025/0359(COD)"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Amendments 2026 (Simplification Omnibus)",
+      "summary": "Plenary ADOPTED 16 Jun 2026, 423/57/174; high-risk dates now binding (2 Dec 2027 / 2 Aug 2028)",
+      "refs": [
+        "2025/0359(COD)",
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "end_of_life_vehicles_regulation",
+      "title": "End-of-Life Vehicles Regulation",
+      "summary": "Plenary ADOPTED 18 Jun 2026, 437/112/20 (2023/0284(COD)) -- to Council for final adoption",
+      "refs": [
+        "2023/0284(COD)"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "action": "updated",
+      "guide": "military_mobility_dual_use_logistics",
+      "title": "Military Mobility and Dual-Use Logistics",
+      "summary": "Corrected responsible committee for 2025/0847(COD): IMCO (rapporteur Michal Szczerba, EPP), not SEDE+TRAN -- per OEIL",
+      "refs": [
+        "2025/0847(COD)"
+      ]
+    },
+    {
       "date": "2026-06-18",
       "action": "updated",
       "guide": "eu_recovery_resilience_facility",
