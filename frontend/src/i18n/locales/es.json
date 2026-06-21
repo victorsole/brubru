@@ -1032,7 +1032,8 @@
       "definedTerms": "Diccionario de definiciones (artículos 3/4). Listo para anotar textos legales con tooltips.",
       "resolveRefs": "Texto plano de entrada, citas CELEX estructuradas de salida. Anotación HTML opcional.",
       "resolveAliases": "Resuelve nombres humanos (RGPD, DSA, Ley de IA, CBAM, ...) a CELEX. Más de 680 alias.",
-      "tenderDocs": "Una plantilla completa de aplicación a fondos europeos por id: cada sección, semillas de prompts del co-redactor con IA, objetivos de cumplimiento, paquete de documentos de referencia y URLs del Convenio de Subvención. 19 plantillas en 8 programas (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
+      "tenderDocs": "Una plantilla completa de aplicación a fondos europeos por id: cada sección, semillas de prompts del co-redactor con IA, objetivos de cumplimiento, paquete de documentos de referencia y URLs del Convenio de Subvención. 19 plantillas en 8 programas (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
+      "eurostatSeries": "Un conjunto de datos de Eurostat obtenido en directo: payload JSON-stat 2.0, dimensiones analizadas, observaciones de muestra y fecha de última actualización de Eurostat. 12 series curadas de deporte y salud relevante para el fitness (actividad física, IMC, gasto de los hogares en deporte, empleo cultural) más cualquier código de Eurostat en el endpoint de detalle."
     },
     "auth": {
       "description": "Cada endpoint /api/v1/* requiere una clave de API. Envíala como Authorization: Bearer <clave> (recomendado) o X-API-Key: <clave>. Las claves son emitidas por el equipo Brubru para suscriptores Professional. Límite: 60 peticiones por minuto por clave.",

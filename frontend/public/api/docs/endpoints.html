@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>All endpoints: Brubru EU Data API</title>
-<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 509 REST endpoints across 34 EU institution folders. One API key, one response envelope.">
+<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 512 REST endpoints across 34 EU institution folders. One API key, one response envelope.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -35,7 +35,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 509 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 512 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -108,7 +108,7 @@
 
   <h3>Open data &amp; people</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (10)</a></li>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (13)</a></li>
     <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
     <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who: officials (4)</a></li>
     <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (6)</a></li>
@@ -136,7 +136,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 509 endpoints across 34 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 512 endpoints across 34 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -846,7 +846,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </tbody>
 </table>
 
-<h2 id="open-data">Open data <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">10 endpoints</span></h2>
+<h2 id="open-data">Open data <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">13 endpoints</span></h2>
 <table class="endpoint-table">
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -860,6 +860,9 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/cohesion-datasets</code></td><td>DG REGIO Cohesion Open Data datasets (the dataset catalogue)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/cohesion-datasets/categories</code></td><td>Cohesion Open Data dataset counts by category: browseable index</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/cohesion-datasets/{socrata_id}</code></td><td>Look up one Cohesion Open Data dataset by its Socrata id (full schema + body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/eurostat-series</code></td><td>Brubru-curated Eurostat sport + fitness-relevant health datasets (12 series: physical activity, BMI, household sport spend, cultural employment)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/eurostat-series/themes</code></td><td>Distinct themes in the curated Eurostat list with dataset counts (faceted-search picker)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/open-data/eurostat-series/{dataset_code}</code></td><td>Fetch one Eurostat dataset live (JSON-stat 2.0 payload + dimensions + sample observations + composed summary)</td></tr>
 </tbody>
 </table>
 

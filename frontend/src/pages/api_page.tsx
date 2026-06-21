@@ -26,6 +26,7 @@ export const ApiPage = () => {
     { m: 'GET',  p: '/api/v2/commission/commissioners/{name}/agenda',                k: 'commissioners' },
     { m: 'GET',  p: '/api/v2/predictions/{procedure_ref}/outcome',                   k: 'predictions' },
     { m: 'GET',  p: '/api/v2/proprietary/tender-docs/templates/{template_id}',       k: 'tenderDocs' },
+    { m: 'GET',  p: '/api/v2/open-data/eurostat-series/{dataset_code}',              k: 'eurostatSeries' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map',  k: 'recitalMap' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/defined-terms',        k: 'definedTerms' },
   ];

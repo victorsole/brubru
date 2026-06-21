@@ -1041,7 +1041,8 @@
       "definedTerms": "Article 3/4-style definitions dictionary. Hover-ready for annotating legal text.",
       "resolveRefs": "Plain text in, structured CELEX citations out. Optional HTML annotation.",
       "resolveAliases": "Resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases.",
-      "tenderDocs": "One full EU funding-application template by id: every section, AI co-writer prompt seeds, comply targets, reference-doc bundle and Grant Agreement URLs. 19 templates across 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
+      "tenderDocs": "One full EU funding-application template by id: every section, AI co-writer prompt seeds, comply targets, reference-doc bundle and Grant Agreement URLs. 19 templates across 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
+      "eurostatSeries": "One Eurostat dataset fetched live: JSON-stat 2.0 payload, parsed dimensions, sample observations and Eurostat's last-update date. 12 curated sport + fitness-relevant health series (physical activity, BMI, household sport spend, cultural employment) plus any Eurostat code on the detail endpoint."
     },
     "auth": {
       "description": "Every /api/v1/* endpoint requires an API key. Pass it as Authorization: Bearer <key> (recommended) or X-API-Key: <key>. Keys are minted by Brubru's admin team for Professional subscribers. Rate limit is 60 requests per minute per key.",

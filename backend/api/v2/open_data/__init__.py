@@ -17,6 +17,7 @@ from fastapi import APIRouter
 from . import open_data as _open_data
 from . import jrc_datasets as _jrc_datasets
 from . import cohesion_datasets as _cohesion_datasets
+from . import eurostat_series as _eurostat_series
 
 router = APIRouter(prefix="/open-data")
 router.include_router(_open_data.datasets_router)
@@ -24,3 +25,4 @@ router.include_router(_open_data.hvd_router)
 router.include_router(_open_data.catalogues_router)
 router.include_router(_jrc_datasets.router)
 router.include_router(_cohesion_datasets.router)
+router.include_router(_eurostat_series.router)

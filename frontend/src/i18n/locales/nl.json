@@ -1032,7 +1032,8 @@
       "definedTerms": "Definities-woordenboek (artikel 3/4). Klaar voor tooltips op juridische teksten.",
       "resolveRefs": "Platte tekst erin, gestructureerde CELEX-citaties eruit. Optionele HTML-annotatie.",
       "resolveAliases": "Menselijke namen (AVG, DSA, AI Act, CBAM, ...) oplossen naar CELEX. Meer dan 680 aliassen.",
-      "tenderDocs": "Eén volledig aanvraagmodel voor Europese fondsen per id: elke sectie, prompt-zaadjes voor de AI-co-schrijver, conformiteitsdoelen, een bundel referentiedocumenten en de URL's van de Subsidieovereenkomst. 19 modellen verspreid over 8 programma's (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+)."
+      "tenderDocs": "Eén volledig aanvraagmodel voor Europese fondsen per id: elke sectie, prompt-zaadjes voor de AI-co-schrijver, conformiteitsdoelen, een bundel referentiedocumenten en de URL's van de Subsidieovereenkomst. 19 modellen verspreid over 8 programma's (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
+      "eurostatSeries": "Één Eurostat-dataset live opgehaald: JSON-stat 2.0-payload, geparste dimensies, voorbeeldobservaties en Eurostat's laatste-bijwerkingsdatum. 12 samengestelde gezondheidsreeksen relevant voor sport en fitness (fysieke activiteit, BMI, huishoudelijke sportuitgaven, culturele werkgelegenheid) plus elke Eurostat-code op het detailendpoint."
     },
     "auth": {
       "description": "Elk /api/v1/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",
