@@ -90,6 +90,15 @@ async def api_user_with_rate_limit(
         request.state.billing_skipped = True
         return user
 
+    # Admin users (role='admin') call their own API for free. Rate limit still
+    # applies, but no euro debit and no usage event — Brubru's operators must
+    # not pay to query infrastructure they own. Hardcoded list-of-one today
+    # (hello@beresol.eu); extend via the users.role column if more admins land.
+    if getattr(user, "role", None) == "admin":
+        request.state.billing_skipped = True
+        request.state.billing_admin_exempt = True
+        return user
+
     cost_micro, _label = resolve_cost_micro(path)
     is_sandbox = bool(getattr(request.state, "api_key_is_sandbox", False))
 

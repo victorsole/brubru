@@ -228,9 +228,14 @@ def _dispatch_tools_call(
 
     is_sandbox = bool(getattr(api_key, "is_sandbox", False))
     cost = int(tool.cost_micro)
+    is_admin = getattr(user, "role", None) == "admin"
 
     # Billing
-    if is_sandbox:
+    if is_admin:
+        # Admin users (Brubru operators) call their own MCP for free. No debit,
+        # no usage event. Same policy as the REST surface in api/v1/_deps.py.
+        pass
+    elif is_sandbox:
         ok, reason = sandbox_consume(db, client_ip or "0.0.0.0")
         if not ok:
             return _err(
@@ -254,25 +259,28 @@ def _dispatch_tools_call(
             )
 
     # Record usage (even before handler runs, so the row exists if we need to
-    # mark it refunded after a handler crash).
-    usage_evt = record_usage(
-        db,
-        user_id=api_key.user_id,
-        api_key_id=api_key.id,
-        endpoint=f"mcp:{tool.name}",
-        method="MCP",
-        cost_micro=cost,
-        request_id=request_id,
-        status_code=None,
-        is_sandbox=is_sandbox,
-    )
+    # mark it refunded after a handler crash). Skipped for admin: no debit
+    # happened, so no audit row either.
+    usage_evt = None
+    if not is_admin:
+        usage_evt = record_usage(
+            db,
+            user_id=api_key.user_id,
+            api_key_id=api_key.id,
+            endpoint=f"mcp:{tool.name}",
+            method="MCP",
+            cost_micro=cost,
+            request_id=request_id,
+            status_code=None,
+            is_sandbox=is_sandbox,
+        )
 
     # Invoke the handler
     try:
         payload = invoke_tool(tool, arguments or {})
     except TypeError as exc:
         # Bad arguments — refund (caller-side error, but the work didn't ship).
-        if not is_sandbox:
+        if not is_sandbox and not is_admin and usage_evt is not None:
             refund(db, api_key.user_id, cost)
             mark_event_refunded(db, usage_evt.id)
         return _err(
@@ -283,7 +291,7 @@ def _dispatch_tools_call(
         )
     except Exception as exc:  # noqa: BLE001
         logger.exception(f"[mcp] tool {tool.name} crashed: {exc}")
-        if not is_sandbox:
+        if not is_sandbox and not is_admin and usage_evt is not None:
             refund(db, api_key.user_id, cost)
             mark_event_refunded(db, usage_evt.id)
         return _err(
