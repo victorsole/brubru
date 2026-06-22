@@ -218,36 +218,38 @@ const BrandingPanel = ({
   transparencyId, setTransparencyId,
   logoStorageId, setLogoStorageId, logoFilename, setLogoFilename,
   logoUploading, logoError, onLogoUpload,
-}: BrandingPanelProps) => (
+}: BrandingPanelProps) => {
+  const { t } = useTranslation();
+  return (
   <>
     <div className="doc-generator__form-section-divider">Branding</div>
     <div className="doc-generator__form-row">
       <div className="doc-generator__form-group">
-        <label>Organisation</label>
+        <label>{t('docGen.wizard.organisation')}</label>
         <input type="text" value={org} onChange={(e) => setOrg(e.target.value)} />
       </div>
       <div className="doc-generator__form-group">
-        <label>Organisation URL</label>
+        <label>{t('docGen.wizard.organisationUrl')}</label>
         <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
       </div>
     </div>
     <div className="doc-generator__form-row">
       <div className="doc-generator__form-group">
-        <label>Contact email</label>
+        <label>{t('docGen.wizard.contactEmail')}</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
       <div className="doc-generator__form-group">
-        <label>Contact phone</label>
+        <label>{t('docGen.wizard.contactPhone')}</label>
         <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
       </div>
       <div className="doc-generator__form-group">
-        <label>EU Transparency Register ID</label>
+        <label>{t('docGen.wizard.euTransparencyId')}</label>
         <input type="text" value={transparencyId} onChange={(e) => setTransparencyId(e.target.value)} />
       </div>
     </div>
     <div className="doc-generator__form-group">
-      <label>Organisation logo</label>
-      <p className="doc-generator__form-hint">PNG / JPG / SVG, ≤ 5 MB. Embedded in the export.</p>
+      <label>{t('docGen.wizard.organisationLogo')}</label>
+      <p className="doc-generator__form-hint">{t('docGen.wizard.logoHint')}</p>
       {logoStorageId ? (
         <div className="doc-generator__logo-chip">
           <Icon path={mdiImagePlusOutline} size={0.7} />
@@ -270,7 +272,8 @@ const BrandingPanel = ({
       {logoError && <div className="doc-generator__form-error">{logoError}</div>}
     </div>
   </>
-);
+  );
+};
 
 interface StyleRefPanelProps {
   storageId: string | null; setStorageId: (v: string | null) => void;
@@ -284,9 +287,11 @@ interface StyleRefPanelProps {
 const StyleRefPanel = ({
   storageId, setStorageId, filename, setFilename,
   uploading, error, onUpload, hint,
-}: StyleRefPanelProps) => (
+}: StyleRefPanelProps) => {
+  const { t } = useTranslation();
+  return (
   <>
-    <div className="doc-generator__form-section-divider">Style reference (optional)</div>
+    <div className="doc-generator__form-section-divider">{t('docGen.wizard.styleRefSection')}</div>
     <div className="doc-generator__form-group">
       <p className="doc-generator__form-hint">{hint}</p>
       {storageId ? (
@@ -311,7 +316,8 @@ const StyleRefPanel = ({
       {error && <div className="doc-generator__form-error">{error}</div>}
     </div>
   </>
-);
+  );
+};
 
 export const DocumentGeneratorWizard = ({
   isOpen,
@@ -1842,7 +1848,7 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'eu_email' && (
             <div className="doc-generator__step">
-              <h3>Email or letter to an EU contact</h3>
+              <h3>{t('docGen.wizard.emailLetterTitle')}</h3>
               <p className="doc-generator__form-hint">
                 Brussels-style email in 6 blocks: subject, greeting, hook, core message,
                 sign-off, signature with GDPR + Transparency Register footer. No em-dashes.
@@ -1852,7 +1858,7 @@ export const DocumentGeneratorWizard = ({
                 {/* Recipient */}
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Recipient name *</label>
+                    <label>{t('docGen.wizard.recipientName')}</label>
                     <input
                       type="text"
                       value={emRecipientName}
@@ -1861,7 +1867,7 @@ export const DocumentGeneratorWizard = ({
                     />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Their title</label>
+                    <label>{t('docGen.wizard.theirTitle')}</label>
                     <input
                       type="text"
                       value={emRecipientTitle}
@@ -1873,46 +1879,46 @@ export const DocumentGeneratorWizard = ({
 
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Role category</label>
+                    <label>{t('docGen.wizard.roleCategory')}</label>
                     <select
                       value={emRecipientRole}
                       onChange={(e) => setEmRecipientRole(e.target.value as typeof emRecipientRole)}
                     >
-                      <option value="commissioner">Commissioner</option>
-                      <option value="cabinet_member">Cabinet member</option>
-                      <option value="director_general">Director-General</option>
-                      <option value="director">Director</option>
-                      <option value="head_of_unit">Head of Unit</option>
-                      <option value="policy_officer">Policy officer / desk officer</option>
-                      <option value="mep">MEP</option>
-                      <option value="apa">APA (parliamentary assistant)</option>
-                      <option value="ep_group_advisor">EP group advisor</option>
-                      <option value="ep_committee_staff">EP committee staff</option>
-                      <option value="council_attache">Council attaché</option>
-                      <option value="permrep_counsellor">PermRep counsellor</option>
-                      <option value="ambassador">Ambassador</option>
-                      <option value="other">Other</option>
+                      <option value="commissioner">{t('docGen.wizard.roleCommissioner')}</option>
+                      <option value="cabinet_member">{t('docGen.wizard.roleCabinetMember')}</option>
+                      <option value="director_general">{t('docGen.wizard.roleDirectorGeneral')}</option>
+                      <option value="director">{t('docGen.wizard.roleDirector')}</option>
+                      <option value="head_of_unit">{t('docGen.wizard.roleHeadOfUnit')}</option>
+                      <option value="policy_officer">{t('docGen.wizard.rolePolicyOfficer')}</option>
+                      <option value="mep">{t('docGen.wizard.roleMep')}</option>
+                      <option value="apa">{t('docGen.wizard.roleApa')}</option>
+                      <option value="ep_group_advisor">{t('docGen.wizard.roleEpGroupAdvisor')}</option>
+                      <option value="ep_committee_staff">{t('docGen.wizard.audienceEpStaff')}</option>
+                      <option value="council_attache">{t('docGen.wizard.audienceCouncilAttache')}</option>
+                      <option value="permrep_counsellor">{t('docGen.wizard.rolePermrepCounsellor')}</option>
+                      <option value="ambassador">{t('docGen.wizard.roleAmbassador')}</option>
+                      <option value="other">{t('docGen.wizard.typeOther')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Institution</label>
+                    <label>{t('docGen.wizard.institution')}</label>
                     <select
                       value={emRecipientInstitution}
                       onChange={(e) => setEmRecipientInstitution(e.target.value as typeof emRecipientInstitution)}
                     >
-                      <option value="european_commission">European Commission</option>
-                      <option value="european_parliament">European Parliament</option>
-                      <option value="council_eu">Council of the EU</option>
-                      <option value="permanent_representation">Permanent Representation</option>
-                      <option value="eeas">EEAS</option>
-                      <option value="agency">EU Agency</option>
-                      <option value="other">Other</option>
+                      <option value="european_commission">{t('docGen.wizard.instEuropeanCommission')}</option>
+                      <option value="european_parliament">{t('docGen.wizard.instEuropeanParliament')}</option>
+                      <option value="council_eu">{t('docGen.wizard.instCouncilOfEu')}</option>
+                      <option value="permanent_representation">{t('docGen.wizard.instPermrep')}</option>
+                      <option value="eeas">{t('docGen.wizard.instEeas')}</option>
+                      <option value="agency">{t('docGen.wizard.agencyStyle')}</option>
+                      <option value="other">{t('docGen.wizard.typeOther')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>DG / Committee / Unit</label>
+                  <label>{t('docGen.wizard.recipientUnit')}</label>
                   <input
                     type="text"
                     value={emRecipientUnit}
@@ -1924,55 +1930,55 @@ export const DocumentGeneratorWizard = ({
                 {/* Intent */}
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Purpose</label>
+                    <label>{t('docGen.wizard.purpose')}</label>
                     <select
                       value={emPurpose}
                       onChange={(e) => setEmPurpose(e.target.value as typeof emPurpose)}
                     >
-                      <option value="meeting_request">Meeting request</option>
-                      <option value="follow_up">Follow-up</option>
-                      <option value="position_input">Position input</option>
-                      <option value="amendment_input">Amendment input</option>
-                      <option value="information_request">Information request</option>
-                      <option value="invitation">Invitation</option>
-                      <option value="thanks">Thanks</option>
-                      <option value="other">Other</option>
+                      <option value="meeting_request">{t('docGen.wizard.purposeMeetingRequest')}</option>
+                      <option value="follow_up">{t('docGen.wizard.purposeFollowUp')}</option>
+                      <option value="position_input">{t('docGen.wizard.purposePositionInput')}</option>
+                      <option value="amendment_input">{t('docGen.wizard.purposeAmendmentInput')}</option>
+                      <option value="information_request">{t('docGen.wizard.purposeInfoRequest')}</option>
+                      <option value="invitation">{t('docGen.wizard.purposeInvitation')}</option>
+                      <option value="thanks">{t('docGen.wizard.purposeThanks')}</option>
+                      <option value="other">{t('docGen.wizard.typeOther')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Relationship</label>
+                    <label>{t('docGen.wizard.relationship')}</label>
                     <select
                       value={emRelationship}
                       onChange={(e) => setEmRelationship(e.target.value as typeof emRelationship)}
                     >
-                      <option value="cold">Cold (no prior contact)</option>
-                      <option value="warm">Warm (met once or twice)</option>
-                      <option value="established">Established (first-name basis)</option>
+                      <option value="cold">{t('docGen.wizard.relCold')}</option>
+                      <option value="warm">{t('docGen.wizard.relWarm')}</option>
+                      <option value="established">{t('docGen.wizard.relEstablished')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Tone</label>
+                    <label>{t('docGen.wizard.tone')}</label>
                     <select value={emTone} onChange={(e) => setEmTone(e.target.value as typeof emTone)}>
-                      <option value="standard">Standard</option>
-                      <option value="warm">Warm</option>
-                      <option value="urgent">Urgent</option>
-                      <option value="formal">Formal</option>
+                      <option value="standard">{t('docGen.wizard.toneStandard')}</option>
+                      <option value="warm">{t('docGen.wizard.toneWarm')}</option>
+                      <option value="urgent">{t('docGen.wizard.toneUrgent')}</option>
+                      <option value="formal">{t('docGen.wizard.toneFormal')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={emLanguage} onChange={(e) => setEmLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>Policy file / procedure reference</label>
+                  <label>{t('docGen.wizard.policyFileRef')}</label>
                   <input
                     type="text"
                     value={emPolicyFileRef}
@@ -1982,7 +1988,7 @@ export const DocumentGeneratorWizard = ({
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>Subject-line hint (optional)</label>
+                  <label>{t('docGen.wizard.subjectHint')}</label>
                   <input
                     type="text"
                     value={emSubjectHint}
@@ -1992,7 +1998,7 @@ export const DocumentGeneratorWizard = ({
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>The ask *</label>
+                  <label>{t('docGen.wizard.theAsk')}</label>
                   <textarea
                     rows={3}
                     value={emTheAsk}
@@ -2002,7 +2008,7 @@ export const DocumentGeneratorWizard = ({
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>Context / background notes</label>
+                  <label>{t('docGen.wizard.contextNotes')}</label>
                   <textarea
                     rows={4}
                     value={emContextNotes}
@@ -2012,7 +2018,7 @@ export const DocumentGeneratorWizard = ({
                 </div>
 
                 <div className="doc-generator__form-group">
-                  <label>Time anchor (deadline, vote, meeting window)</label>
+                  <label>{t('docGen.wizard.timeAnchor')}</label>
                   <input
                     type="text"
                     value={emDeadlineOrDate}
@@ -2025,7 +2031,7 @@ export const DocumentGeneratorWizard = ({
 
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Your name *</label>
+                    <label>{t('docGen.wizard.yourName')}</label>
                     <input
                       type="text"
                       value={emSenderName}
@@ -2033,7 +2039,7 @@ export const DocumentGeneratorWizard = ({
                     />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Your title</label>
+                    <label>{t('docGen.wizard.yourTitle')}</label>
                     <input
                       type="text"
                       value={emSenderTitle}
@@ -2045,7 +2051,7 @@ export const DocumentGeneratorWizard = ({
 
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Organisation *</label>
+                    <label>{t('docGen.wizard.yourOrganisation')}</label>
                     <input
                       type="text"
                       value={emSenderOrg}
@@ -2053,7 +2059,7 @@ export const DocumentGeneratorWizard = ({
                     />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>EU Transparency Register ID</label>
+                    <label>{t('docGen.wizard.euTransparencyId')}</label>
                     <input
                       type="text"
                       value={emTransparencyRegisterId}
@@ -2065,7 +2071,7 @@ export const DocumentGeneratorWizard = ({
 
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Your email</label>
+                    <label>{t('docGen.wizard.yourEmail')}</label>
                     <input
                       type="email"
                       value={emSenderEmail}
@@ -2073,7 +2079,7 @@ export const DocumentGeneratorWizard = ({
                     />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Your phone</label>
+                    <label>{t('docGen.wizard.yourPhone')}</label>
                     <input
                       type="text"
                       value={emSenderPhone}
@@ -2085,10 +2091,8 @@ export const DocumentGeneratorWizard = ({
 
                 {/* Logo upload */}
                 <div className="doc-generator__form-group">
-                  <label>Organisation logo (optional)</label>
-                  <p className="doc-generator__form-hint">
-                    PNG, JPG, or SVG, up to 5 MB. Embedded in the DOCX/PDF export.
-                  </p>
+                  <label>{t('docGen.wizard.organisationLogoOptional')}</label>
+                  <p className="doc-generator__form-hint">{t('docGen.wizard.logoEmailHint')}</p>
                   {emLogoStorageId ? (
                     <div className="doc-generator__logo-chip">
                       <Icon path={mdiImagePlusOutline} size={0.7} />
@@ -2134,7 +2138,7 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'one_pager' && (
             <div className="doc-generator__step">
-              <h3>Position paper one-pager</h3>
+              <h3>{t('docGen.wizard.onePagerSectionTitle')}</h3>
               <p className="doc-generator__form-hint">
                 Strict single-page summary with a headline ask, 2 to 5 short bullets,
                 and supporting evidence. Renders to DOCX and PDF.
@@ -2142,50 +2146,50 @@ export const DocumentGeneratorWizard = ({
               <div className="doc-generator__form">
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Topic *</label>
+                    <label>{t('docGen.wizard.topicLabel')}</label>
                     <input type="text" value={opTopic} onChange={(e) => setOpTopic(e.target.value)}
                       placeholder="e.g. AI Act -- general-purpose AI rules" />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Procedure reference</label>
+                    <label>{t('docGen.wizard.procedureRef')}</label>
                     <input type="text" value={opProcedureRef} onChange={(e) => setOpProcedureRef(e.target.value)}
                       placeholder="e.g. 2021/0106(COD)" />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Headline ask *</label>
+                  <label>{t('docGen.wizard.headlineAskAddCounter')}</label>
                   <input type="text" value={opHeadlineAsk} onChange={(e) => setOpHeadlineAsk(e.target.value)}
                     placeholder="The single most important request, rendered as the H1" />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Position</label>
+                    <label>{t('docGen.wizard.position')}</label>
                     <select value={opPosition} onChange={(e) => setOpPosition(e.target.value as PositionStance)}>
-                      <option value="support">Support</option>
-                      <option value="support_with_amendments">Support with amendments</option>
-                      <option value="oppose">Oppose</option>
-                      <option value="neutral">Neutral</option>
+                      <option value="support">{t('docGen.wizard.positionSupport')}</option>
+                      <option value="support_with_amendments">{t('docGen.wizard.positionSupportWithAmendments')}</option>
+                      <option value="oppose">{t('docGen.wizard.positionOppose')}</option>
+                      <option value="neutral">{t('docGen.wizard.positionNeutral')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Tone</label>
+                    <label>{t('docGen.wizard.tone')}</label>
                     <select value={opTone} onChange={(e) => setOpTone(e.target.value as DocumentTone)}>
-                      <option value="constructive">Constructive</option>
-                      <option value="critical">Critical</option>
-                      <option value="technical">Technical</option>
-                      <option value="diplomatic">Diplomatic</option>
+                      <option value="constructive">{t('docGen.wizard.posToneConstructive')}</option>
+                      <option value="critical">{t('docGen.wizard.posToneCritical')}</option>
+                      <option value="technical">{t('docGen.wizard.posToneTechnical')}</option>
+                      <option value="diplomatic">{t('docGen.wizard.posToneDiplomatic')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={opLanguage} onChange={(e) => setOpLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Key asks (2-5)</label>
+                  <label>{t('docGen.wizard.keyAsksMinimal')}</label>
                   {opKeyAsks.map((a, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={a}
@@ -2203,13 +2207,13 @@ export const DocumentGeneratorWizard = ({
                   )}
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Supporting evidence</label>
+                  <label>{t('docGen.wizard.supportingEvidence')}</label>
                   <textarea rows={3} value={opSupportingEvidence}
                     onChange={(e) => setOpSupportingEvidence(e.target.value)}
                     placeholder="Numbers, citations, sector impact data." />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Organisation pitch</label>
+                  <label>{t('docGen.wizard.organisationPitch')}</label>
                   <input type="text" value={opOrgPitch} onChange={(e) => setOpOrgPitch(e.target.value)}
                     placeholder="One- or two-sentence elevator pitch" />
                 </div>
@@ -2237,58 +2241,56 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'press_release' && (
             <div className="doc-generator__step">
-              <h3>EU press release</h3>
-              <p className="doc-generator__form-hint">
-                House style of European Commission, EP, Council or an EU agency.
-              </p>
+              <h3>{t('docGen.wizard.pressReleaseSectionTitle')}</h3>
+              <p className="doc-generator__form-hint">{t('docGen.wizard.pressReleaseHint')}</p>
               <div className="doc-generator__form">
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>House style</label>
+                    <label>{t('docGen.wizard.houseStyle')}</label>
                     <select value={prInstitutionStyle}
                       onChange={(e) => setPrInstitutionStyle(e.target.value as typeof prInstitutionStyle)}>
-                      <option value="commission">European Commission (IP/XX/XXXX)</option>
-                      <option value="parliament">European Parliament</option>
-                      <option value="council">Council of the EU</option>
-                      <option value="agency">EU Agency</option>
+                      <option value="commission">{t('docGen.wizard.commissionStyle')}</option>
+                      <option value="parliament">{t('docGen.wizard.instEuropeanParliament')}</option>
+                      <option value="council">{t('docGen.wizard.instCouncilOfEu')}</option>
+                      <option value="agency">{t('docGen.wizard.agencyStyle')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={prLanguage} onChange={(e) => setPrLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Headline *</label>
+                  <label>{t('docGen.wizard.headline')}</label>
                   <input type="text" value={prHeadline} onChange={(e) => setPrHeadline(e.target.value)}
                     placeholder="e.g. Commission strengthens enforcement of the Digital Services Act" />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Sub-headline</label>
+                  <label>{t('docGen.wizard.subheadline')}</label>
                   <input type="text" value={prSubHeadline} onChange={(e) => setPrSubHeadline(e.target.value)}
                     placeholder="One-line strap" />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Dateline city</label>
+                    <label>{t('docGen.wizard.datelineCity')}</label>
                     <input type="text" value={prDatelineCity} onChange={(e) => setPrDatelineCity(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Date (blank = today)</label>
+                    <label>{t('docGen.wizard.datelineDate')}</label>
                     <input type="text" value={prDatelineDate} onChange={(e) => setPrDatelineDate(e.target.value)}
                       placeholder="e.g. 20 May 2026" />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Lead paragraph *</label>
+                  <label>{t('docGen.wizard.leadParagraph')}</label>
                   <textarea rows={3} value={prLeadParagraph} onChange={(e) => setPrLeadParagraph(e.target.value)}
                     placeholder="The opening paragraph (who/what/where/when/why)." />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Key points (3 to 8)</label>
+                  <label>{t('docGen.wizard.keyPointsPr')}</label>
                   {prKeyPoints.map((p, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={p}
@@ -2307,27 +2309,27 @@ export const DocumentGeneratorWizard = ({
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Quote</label>
+                    <label>{t('docGen.wizard.quote')}</label>
                     <textarea rows={2} value={prQuoteText} onChange={(e) => setPrQuoteText(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Attributed to</label>
+                    <label>{t('docGen.wizard.attributedTo')}</label>
                     <input type="text" value={prQuoteAttribution}
                       onChange={(e) => setPrQuoteAttribution(e.target.value)}
                       placeholder="e.g. Margrethe Vestager, EVP" />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Background</label>
+                  <label>{t('docGen.wizard.background')}</label>
                   <textarea rows={3} value={prBackground} onChange={(e) => setPrBackground(e.target.value)} />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Next steps</label>
+                    <label>{t('docGen.wizard.nextSteps')}</label>
                     <textarea rows={2} value={prNextSteps} onChange={(e) => setPrNextSteps(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Press contacts</label>
+                    <label>{t('docGen.wizard.pressContacts')}</label>
                     <textarea rows={2} value={prContacts} onChange={(e) => setPrContacts(e.target.value)}
                       placeholder="One contact per line" />
                   </div>
@@ -2349,52 +2351,52 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'stakeholder_map' && (
             <div className="doc-generator__step">
-              <h3>Stakeholder mapping &amp; analysis</h3>
+              <h3>{t('docGen.wizard.stakeholderTitle')}</h3>
               <div className="doc-generator__form">
                 <div className="doc-generator__form-group">
-                  <label>Policy topic *</label>
+                  <label>{t('docGen.wizard.policyTopic')}</label>
                   <input type="text" value={smPolicyTopic} onChange={(e) => setSmPolicyTopic(e.target.value)}
                     placeholder="e.g. AI Act enforcement, EU Inc., Net Zero Industry Act" />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Procedure reference</label>
+                    <label>{t('docGen.wizard.policyFileRef')}</label>
                     <input type="text" value={smProcedureRef} onChange={(e) => setSmProcedureRef(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Scope</label>
+                    <label>{t('docGen.wizard.scope')}</label>
                     <select value={smScope} onChange={(e) => setSmScope(e.target.value as typeof smScope)}>
-                      <option value="eu">EU institutions only</option>
-                      <option value="national">National only</option>
-                      <option value="both">EU + national</option>
+                      <option value="eu">{t('docGen.wizard.scopeEu')}</option>
+                      <option value="national">{t('docGen.wizard.scopeNational')}</option>
+                      <option value="both">{t('docGen.wizard.scopeBoth')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Sector</label>
+                    <label>{t('docGen.wizard.sector')}</label>
                     <input type="text" value={smSector} onChange={(e) => setSmSector(e.target.value)} />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Your objectives *</label>
+                  <label>{t('docGen.wizard.yourObjectives')}</label>
                   <textarea rows={3} value={smObjectives} onChange={(e) => setSmObjectives(e.target.value)}
                     placeholder="What you want to achieve on this file." />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Target stakeholder count</label>
+                    <label>{t('docGen.wizard.targetStakeholderCount')}</label>
                     <input type="number" min={4} max={40} value={smTargetCount}
                       onChange={(e) => setSmTargetCount(Number(e.target.value) || 12)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={smLanguage} onChange={(e) => setSmLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Known stakeholders (optional)</label>
+                  <label>{t('docGen.wizard.knownStakeholders')}</label>
                   {smKnown.map((s, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={s}
@@ -2407,7 +2409,7 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(smKnown, setSmKnown, 30)}>Add stakeholder</button>
+                    onClick={() => addListItem(smKnown, setSmKnown, 30)}>{t('docGen.wizard.addStakeholder')}</button>
                 </div>
                 <BrandingPanel
                   org={brOrgName} setOrg={setBrOrgName}
@@ -2426,7 +2428,7 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'impact_assessment' && (
             <div className="doc-generator__step">
-              <h3>Impact assessment</h3>
+              <h3>{t('docGen.wizard.impactAssessmentTitle')}</h3>
               <p className="doc-generator__form-hint">
                 Commission Better Regulation IA template (8 sections: problem, EU action,
                 objectives, options, impacts, comparison, preferred option, monitoring).
@@ -2434,23 +2436,23 @@ export const DocumentGeneratorWizard = ({
               <div className="doc-generator__form">
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Initiative title *</label>
+                    <label>{t('docGen.wizard.initiativeTitle')}</label>
                     <input type="text" value={iaTitle} onChange={(e) => setIaTitle(e.target.value)}
                       placeholder="e.g. Revision of the Combined Transport Directive" />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Policy area / DG</label>
+                    <label>{t('docGen.wizard.policyArea')}</label>
                     <input type="text" value={iaPolicyArea} onChange={(e) => setIaPolicyArea(e.target.value)}
                       placeholder="e.g. DG MOVE -- intermodal transport" />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Problem definition *</label>
+                  <label>{t('docGen.wizard.problemDefinition')}</label>
                   <textarea rows={4} value={iaProblem} onChange={(e) => setIaProblem(e.target.value)}
                     placeholder="What is the problem, who is affected, and how does it persist under the baseline." />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Drivers of the problem</label>
+                  <label>{t('docGen.wizard.drivers')}</label>
                   {iaDrivers.map((d, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={d}
@@ -2463,15 +2465,15 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(iaDrivers, setIaDrivers, 10)}>Add driver</button>
+                    onClick={() => addListItem(iaDrivers, setIaDrivers, 10)}>{t('docGen.wizard.addDriver')}</button>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>General objective</label>
+                  <label>{t('docGen.wizard.generalObjective')}</label>
                   <textarea rows={2} value={iaObjectivesGeneral}
                     onChange={(e) => setIaObjectivesGeneral(e.target.value)} />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Specific objectives</label>
+                  <label>{t('docGen.wizard.specificObjectives')}</label>
                   {iaObjectivesSpecific.map((o, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={o}
@@ -2484,14 +2486,14 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(iaObjectivesSpecific, setIaObjectivesSpecific, 10)}>Add objective</button>
+                    onClick={() => addListItem(iaObjectivesSpecific, setIaObjectivesSpecific, 10)}>{t('docGen.wizard.addObjective')}</button>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Baseline scenario</label>
+                  <label>{t('docGen.wizard.baselineScenario')}</label>
                   <textarea rows={2} value={iaBaseline} onChange={(e) => setIaBaseline(e.target.value)} />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Policy options (at least 2) *</label>
+                  <label>{t('docGen.wizard.policyOptions')}</label>
                   {iaOptions.map((o, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={o}
@@ -2504,20 +2506,20 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(iaOptions, setIaOptions, 8)}>Add option</button>
+                    onClick={() => addListItem(iaOptions, setIaOptions, 8)}>{t('docGen.wizard.addOption')}</button>
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Preferred option hint</label>
+                    <label>{t('docGen.wizard.preferredOptionHint')}</label>
                     <input type="text" value={iaPreferredHint}
                       onChange={(e) => setIaPreferredHint(e.target.value)}
                       placeholder="Leave blank for the AI to pick" />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={iaLanguage} onChange={(e) => setIaLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
@@ -2534,56 +2536,56 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'presentation' && (
             <div className="doc-generator__step">
-              <h3>EU presentation</h3>
+              <h3>{t('docGen.wizard.presentationTitle')}</h3>
               <p className="doc-generator__form-hint">
-                Slide-by-slide deck. Exports to DOCX, PDF, and real PPTX (open in PowerPoint, Keynote or Canva).
+                {t('docGen.wizard.presentationHint')}
               </p>
               <div className="doc-generator__form">
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Title *</label>
+                    <label>{t('docGen.wizard.presTitle')}</label>
                     <input type="text" value={presTitle} onChange={(e) => setPresTitle(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Subtitle</label>
+                    <label>{t('docGen.wizard.presSubtitle')}</label>
                     <input type="text" value={presSubtitle} onChange={(e) => setPresSubtitle(e.target.value)} />
                   </div>
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Audience</label>
+                    <label>{t('docGen.wizard.presAudience')}</label>
                     <select value={presAudience} onChange={(e) => setPresAudience(e.target.value as typeof presAudience)}>
-                      <option value="commission_official">Commission policy officials</option>
-                      <option value="commission_cabinet">Commissioner cabinet</option>
-                      <option value="mep_office">MEP office</option>
-                      <option value="ep_committee_staff">EP committee staff</option>
-                      <option value="council_attache">Council attaché</option>
-                      <option value="permrep">PermRep</option>
-                      <option value="academic">Academic</option>
-                      <option value="industry">Industry</option>
-                      <option value="press">Press / journalists</option>
-                      <option value="general">General audience</option>
+                      <option value="commission_official">{t('docGen.wizard.audienceCommOfficials')}</option>
+                      <option value="commission_cabinet">{t('docGen.wizard.audienceCommCabinet')}</option>
+                      <option value="mep_office">{t('docGen.wizard.audienceMepOffice')}</option>
+                      <option value="ep_committee_staff">{t('docGen.wizard.audienceEpStaff')}</option>
+                      <option value="council_attache">{t('docGen.wizard.audienceCouncilAttache')}</option>
+                      <option value="permrep">{t('docGen.wizard.audiencePermRep')}</option>
+                      <option value="academic">{t('docGen.wizard.audienceAcademic')}</option>
+                      <option value="industry">{t('docGen.wizard.audienceIndustry')}</option>
+                      <option value="press">{t('docGen.wizard.audiencePress')}</option>
+                      <option value="general">{t('docGen.wizard.audienceGeneral')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Audience refinement</label>
+                    <label>{t('docGen.wizard.audienceRefinement')}</label>
                     <input type="text" value={presAudienceLabel}
                       onChange={(e) => setPresAudienceLabel(e.target.value)}
                       placeholder="e.g. DG ENVI Unit B3" />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Slides</label>
+                    <label>{t('docGen.wizard.presSlides')}</label>
                     <input type="number" min={4} max={30} value={presNumSlides}
                       onChange={(e) => setPresNumSlides(Number(e.target.value) || 10)} />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Purpose *</label>
+                  <label>{t('docGen.wizard.presPurpose')}</label>
                   <textarea rows={2} value={presPurpose} onChange={(e) => setPresPurpose(e.target.value)}
                     placeholder="What this presentation should achieve." />
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Key messages</label>
+                  <label>{t('docGen.wizard.presKeyMessages')}</label>
                   {presKeyMessages.map((m, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={m}
@@ -2596,10 +2598,10 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(presKeyMessages, setPresKeyMessages, 8)}>Add message</button>
+                    onClick={() => addListItem(presKeyMessages, setPresKeyMessages, 8)}>{t('docGen.wizard.addMessage')}</button>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Sections (headings to follow)</label>
+                  <label>{t('docGen.wizard.presSections')}</label>
                   {presSections.map((s, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={s}
@@ -2612,14 +2614,14 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(presSections, setPresSections, 10)}>Add section</button>
+                    onClick={() => addListItem(presSections, setPresSections, 10)}>{t('docGen.wizard.addSection')}</button>
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={presLanguage} onChange={(e) => setPresLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>
@@ -2647,47 +2649,47 @@ export const DocumentGeneratorWizard = ({
 
           {step === 2 && selectedType === 'event_poster' && (
             <div className="doc-generator__step">
-              <h3>Event poster</h3>
+              <h3>{t('docGen.wizard.eventPosterTitle')}</h3>
               <p className="doc-generator__form-hint">
-                Single-page poster copy for an EU-policy event. Exportable to DOCX and PDF.
+                {t('docGen.wizard.eventPosterHint')}
               </p>
               <div className="doc-generator__form">
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Event title *</label>
+                    <label>{t('docGen.wizard.eventTitle')}</label>
                     <input type="text" value={evpTitle} onChange={(e) => setEvpTitle(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Event type</label>
+                    <label>{t('docGen.wizard.eventType')}</label>
                     <select value={evpEventType} onChange={(e) => setEvpEventType(e.target.value as typeof evpEventType)}>
-                      <option value="conference">Conference</option>
-                      <option value="panel">Panel</option>
-                      <option value="webinar">Webinar</option>
-                      <option value="roundtable">Roundtable</option>
-                      <option value="workshop">Workshop</option>
-                      <option value="launch">Launch</option>
-                      <option value="other">Other</option>
+                      <option value="conference">{t('docGen.wizard.typeConference')}</option>
+                      <option value="panel">{t('docGen.wizard.typePanel')}</option>
+                      <option value="webinar">{t('docGen.wizard.typeWebinar')}</option>
+                      <option value="roundtable">{t('docGen.wizard.typeRoundtable')}</option>
+                      <option value="workshop">{t('docGen.wizard.typeWorkshop')}</option>
+                      <option value="launch">{t('docGen.wizard.typeLaunch')}</option>
+                      <option value="other">{t('docGen.wizard.typeOther')}</option>
                     </select>
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Tagline</label>
+                  <label>{t('docGen.wizard.tagline')}</label>
                   <input type="text" value={evpTagline} onChange={(e) => setEvpTagline(e.target.value)} />
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Date *</label>
+                    <label>{t('docGen.wizard.eventDate')}</label>
                     <input type="text" value={evpDate} onChange={(e) => setEvpDate(e.target.value)}
                       placeholder="e.g. 12 June 2026, 14:00 CET" />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Location *</label>
+                    <label>{t('docGen.wizard.eventLocation')}</label>
                     <input type="text" value={evpLocation} onChange={(e) => setEvpLocation(e.target.value)}
                       placeholder="e.g. Résidence Palace, Brussels" />
                   </div>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Hosts</label>
+                  <label>{t('docGen.wizard.hosts')}</label>
                   {evpHosts.map((h, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={h}
@@ -2702,7 +2704,7 @@ export const DocumentGeneratorWizard = ({
                     onClick={() => addListItem(evpHosts, setEvpHosts, 8)}>Add host</button>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Speakers</label>
+                  <label>{t('docGen.wizard.speakers')}</label>
                   {evpSpeakers.map((s, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={s}
@@ -2715,10 +2717,10 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(evpSpeakers, setEvpSpeakers, 20)}>Add speaker</button>
+                    onClick={() => addListItem(evpSpeakers, setEvpSpeakers, 20)}>{t('docGen.wizard.addSpeaker')}</button>
                 </div>
                 <div className="doc-generator__form-group">
-                  <label>Agenda points</label>
+                  <label>{t('docGen.wizard.agendaPoints')}</label>
                   {evpAgenda.map((a, i) => (
                     <div key={i} className="doc-generator__list-item">
                       <input type="text" value={a}
@@ -2730,38 +2732,38 @@ export const DocumentGeneratorWizard = ({
                     </div>
                   ))}
                   <button type="button" className="doc-generator__add-btn"
-                    onClick={() => addListItem(evpAgenda, setEvpAgenda, 12)}>Add agenda point</button>
+                    onClick={() => addListItem(evpAgenda, setEvpAgenda, 12)}>{t('docGen.wizard.addAgendaPoint')}</button>
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Registration URL</label>
+                    <label>{t('docGen.wizard.registrationUrl')}</label>
                     <input type="text" value={evpRegistrationUrl} onChange={(e) => setEvpRegistrationUrl(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Contact info</label>
+                    <label>{t('docGen.wizard.contactInfo')}</label>
                     <input type="text" value={evpContactInfo} onChange={(e) => setEvpContactInfo(e.target.value)} />
                   </div>
                 </div>
                 <div className="doc-generator__form-row">
                   <div className="doc-generator__form-group">
-                    <label>Format</label>
+                    <label>{t('docGen.wizard.format')}</label>
                     <select value={evpFormat} onChange={(e) => setEvpFormat(e.target.value as typeof evpFormat)}>
-                      <option value="a4_portrait">A4 portrait</option>
-                      <option value="a4_landscape">A4 landscape</option>
-                      <option value="a3_portrait">A3 portrait</option>
-                      <option value="instagram_square">Instagram square</option>
-                      <option value="linkedin_landscape">LinkedIn landscape</option>
+                      <option value="a4_portrait">{t('docGen.wizard.formatA4Portrait')}</option>
+                      <option value="a4_landscape">{t('docGen.wizard.formatA4Landscape')}</option>
+                      <option value="a3_portrait">{t('docGen.wizard.formatA3Portrait')}</option>
+                      <option value="instagram_square">{t('docGen.wizard.formatInstagramSquare')}</option>
+                      <option value="linkedin_landscape">{t('docGen.wizard.formatLinkedinLandscape')}</option>
                     </select>
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Accent colour</label>
+                    <label>{t('docGen.wizard.accentColour')}</label>
                     <input type="color" value={evpAccentColor} onChange={(e) => setEvpAccentColor(e.target.value)} />
                   </div>
                   <div className="doc-generator__form-group">
-                    <label>Language</label>
+                    <label>{t('docGen.wizard.language')}</label>
                     <select value={evpLanguage} onChange={(e) => setEvpLanguage(e.target.value as 'en' | 'fr')}>
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
+                      <option value="en">{t('docGen.wizard.langEnglish')}</option>
+                      <option value="fr">{t('docGen.wizard.langFrancais')}</option>
                     </select>
                   </div>
                 </div>

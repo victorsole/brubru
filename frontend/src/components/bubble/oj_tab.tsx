@@ -85,8 +85,10 @@ export const OJTab = () => {
   const [theme, setTheme] = useState('');
   const [search, setSearch] = useState('');
   const [legendOpen, setLegendOpen] = useState(false);
-  // On-demand "Explain with AI" state, per entry id.
-  const [explained, setExplained] = useState<Record<string, { loading?: boolean; text?: string; none?: boolean }>>({});
+  // On-demand "Explain with AI" state, per entry id. `failed` keeps the button
+  // visible so the user can retry — a single transient miss should not look
+  // permanent.
+  const [explained, setExplained] = useState<Record<string, { loading?: boolean; text?: string; failed?: boolean }>>({});
 
   const explain = async (id: string) => {
     setExplained((s) => ({ ...s, [id]: { loading: true } }));
@@ -94,9 +96,9 @@ export const OJTab = () => {
       const r = await axios.post<{ explanation: string | null; available: boolean }>(
         `${API_BASE}/oj/explain/${id}`, {}, authCfg());
       setExplained((s) => ({ ...s, [id]: r.data.available && r.data.explanation
-        ? { text: r.data.explanation } : { none: true } }));
+        ? { text: r.data.explanation } : { failed: true } }));
     } catch {
-      setExplained((s) => ({ ...s, [id]: { none: true } }));
+      setExplained((s) => ({ ...s, [id]: { failed: true } }));
     }
   };
   const [data, setData] = useState<EntriesResponse | null>(null);
@@ -292,8 +294,10 @@ export const OJTab = () => {
                         <div className="oj-card__ai">
                           {explained[e.id]?.loading ? (
                             <span className="oj-ai-loading"><Icon path={mdiCreation} size={0.6} /> {t('oj.explaining', 'Explaining…')}</span>
-                          ) : explained[e.id]?.none ? (
-                            <span className="oj-muted">{t('oj.aiUnavailable', 'AI explanation unavailable right now')}</span>
+                          ) : explained[e.id]?.failed ? (
+                            <button className="oj-ai-btn is-retry" onClick={() => explain(e.id)}>
+                              <Icon path={mdiCreation} size={0.6} /> {t('oj.explainRetry', 'Explanation failed, try again')}
+                            </button>
                           ) : (
                             <button className="oj-ai-btn" onClick={() => explain(e.id)}>
                               <Icon path={mdiCreation} size={0.6} /> {t('oj.explainAi', 'Explain with AI')}
