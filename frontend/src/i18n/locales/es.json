@@ -3151,7 +3151,7 @@
     "trainFilesCount": "{{count}} expedientes",
     "noFilesForTrain": "No se encontraron expedientes legislativos para este tren",
     "loading": "Cargando trenes legislativos...",
-    "title": "Trenes legislativos de la Comisión UE",
+    "title": "Trenes legislativos de la UE",
     "aiEnriched": "Enriquecido con IA",
     "aiSummary": "Resumen IA:",
     "noTrains": "No se encontraron trenes legislativos",

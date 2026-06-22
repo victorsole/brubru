@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.75rem;
   background: #fff3cd;
   border-bottom: 1px solid #ffc107;
 }
@@ -127,7 +127,7 @@
 .legislative-trains__list {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 1.5rem 1.75rem;
 }
 
 .legislative-trains__train {
@@ -429,7 +429,7 @@
     justify-content: flex-end;
   }
   .legislative-trains__list {
-    padding: 0.6rem;
+    padding: 1rem 1.1rem;
   }
   .legislative-trains__train-header {
     padding: 0.85rem 1rem;

@@ -3151,7 +3151,7 @@
     "trainFilesCount": "{{count}} files",
     "noFilesForTrain": "No legislative files found for this train",
     "loading": "Loading legislative trains...",
-    "title": "EU Commission Legislative Trains",
+    "title": "EU Legislative Trains",
     "aiEnriched": "AI Enriched",
     "aiSummary": "AI Summary:",
     "noTrains": "No legislative trains found",
