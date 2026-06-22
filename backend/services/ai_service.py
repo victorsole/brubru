@@ -542,6 +542,10 @@ class AIService:
         # Strip leaked internal context markers from response
         assistant_message = self._strip_context_markers(assistant_message)
 
+        # Strip a self-introduction greeting the model sometimes bolts onto a
+        # real answer ("Hello! I'm Brubru ... I can help you with ...\n\n<answer>")
+        assistant_message = self._strip_leading_greeting(assistant_message)
+
         # Ensure a guide-flagged Brubru deep-dive/explainer URL is surfaced
         assistant_message = self._append_deep_dive_link(assistant_message, context_str)
 
@@ -1194,7 +1198,57 @@ class AIService:
         to_add = [u for u in candidates if not (u in seen or seen.add(u)) and u not in message]
         if not to_add:
             return message
-        return message.rstrip() + f"\n\nRead Brubru's full deep-dive here: {to_add[0]}"
+
+        # TOPIC-MATCH GUARD (audit defect D1, 22 Jun 2026). When the context
+        # carries deep-dive markers for several retrieved guides, blindly
+        # appending the FIRST candidate mislinks the answer: an end-of-life
+        # vehicles answer got /eu-inc/ and an RRF answer got the AI-Act canon.
+        # Appending a wrong deep-dive is worse than appending none, so only
+        # surface a candidate whose slug is actually relevant to the answer
+        # text; omit entirely if nothing matches.
+        # Generic path/structural tokens that must never count as a topic match.
+        # Generic tokens that must never count as a topic match on their own.
+        # "ai" is here because nearly every AI-policy answer says "AI" -- without
+        # it the generic word pulled the CADA /cloud-ai-act/ deep-dive onto an
+        # unrelated Frontier-AI answer (live test, 22 Jun 2026). Distinctive
+        # compound slugs like "aiact" (len>=5) still match via substring.
+        _noise = {
+            "index", "html", "htm", "eucanon", "eu", "www", "brubru", "beresol",
+            "the", "of", "and", "a", "an", "act", "regulation", "directive",
+            "guide", "guides", "explainer", "deep", "dive", "ai", "data", "new",
+        }
+        msg_norm = _re.sub(r"[^a-z0-9]+", " ", message.lower())
+        msg_compact = msg_norm.replace(" ", "")
+        msg_words = set(msg_norm.split())
+
+        def _slug_tokens(url: str) -> list[str]:
+            path = _re.sub(r"^https://brubru\.beresol\.eu/", "", url)
+            toks = []
+            for t in _re.split(r"[/\-_.]+", path.lower()):
+                if not t or t in _noise or t.isdigit():
+                    continue
+                toks.append(t)
+            return toks
+
+        def _matches(url: str) -> bool:
+            toks = _slug_tokens(url)
+            if not toks:
+                return False
+            for t in toks:
+                # Long distinctive slug token: allow despaced substring match so
+                # "aiact" matches an answer that says "AI Act" (-> "aiact").
+                if len(t) >= 5 and t in msg_compact:
+                    return True
+                # Shorter token: require a whole-word hit to avoid false matches
+                # ("inc" must be the word "inc", not a substring of "including").
+                if t in msg_words:
+                    return True
+            return False
+
+        matched = next((u for u in to_add if _matches(u)), None)
+        if not matched:
+            return message
+        return message.rstrip() + f"\n\nRead Brubru's full deep-dive here: {matched}"
 
     def _build_system_prompt(self, is_pre_user: bool = False) -> str:
         """
@@ -1234,6 +1288,9 @@ For BROAD queries:
 4. Keep total response under 100 words until the user clarifies.
 
 Rule: When uncertain, ask. When certain, answer.
+
+CRITICAL - PERSONAL CONTEXT ANCHOR:
+If the EU CONTEXT opens with a per-user profile block (a "YOUR BRUBRU PROFILE" / private-guide / "what Brubru knows about you" section listing the user's organisation, sector, or tracked files), then any self-referential or scope-finding query -- "what can I do", "what does this mean for my work", "walk me through this", "how does this affect me/us", "where do I start" -- MUST be answered THROUGH that profile. Ground the answer in the user's own organisation, sector and tracked files from the profile block. Do NOT default to generic recent EU headlines (e.g. naming unrelated files the user never tracked) when a profile block is present -- that makes the assistant look like it forgot who the user is. Name the user's actual files/sector and offer next actions tied to them.
 
 When answering:
 - Start with a direct answer
@@ -2065,6 +2122,9 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         # 2) bare bracketed filenames ([COM_2025_847.pdf], [report.docx])
         cleaned = re.sub(r'\s*\[[A-Za-z0-9_\-]+\.(?:pdf|docx?|xml|html?|txt|json)\]', ' ', cleaned, flags=re.IGNORECASE)
         # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
+        # Collapse repeated commas/periods left by truncated enumerations
+        # ("2 December 2027,,,." -> "2 December 2027.") -- audit defect D4, 22 Jun 2026.
+        cleaned = re.sub(r',{2,}', ',', cleaned)
         cleaned = re.sub(r',\s*\.', '.', cleaned)
         cleaned = re.sub(r'\s+([.,;:])', r'\1', cleaned)
         cleaned = re.sub(r'  +', ' ', cleaned)
@@ -2074,6 +2134,37 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         if cleaned != text.strip():
             logger.info(f"Stripped leaked context markers from response")
         return cleaned
+
+    def _strip_leading_greeting(self, message: str) -> str:
+        """
+        Remove a self-introduction greeting the model occasionally prepends to a
+        substantive answer, e.g.:
+
+            "Hello! I'm Brubru, your expert AI assistant for European Union
+             legislative affairs. I can help you with EU legislation ... and more.
+
+             <the real answer>"
+
+        Pure greetings are already short-circuited before the LLM by
+        ``_greeting_response``; this catches the case where the model bolts an
+        intro onto real content (audit defect D2, recurring -- 5th confirmation
+        22 Jun 2026, now seen on authenticated traffic). Only strips when a
+        substantial answer remains, so a genuine short greeting is never gutted.
+        """
+        if not message:
+            return message
+        m = re.match(
+            r"\s*(?:hello|hi|hey|greetings)\b[^\n]{0,40}?\bbrubru\b[^\n]{0,260}?\n{1,}",
+            message,
+            flags=re.IGNORECASE,
+        )
+        if not m:
+            return message
+        remainder = message[m.end():].lstrip()
+        if len(remainder) >= 80:
+            logger.info("Stripped leaked self-introduction greeting preamble")
+            return remainder
+        return message
 
     def _strip_orphan_citations(self, text: str, citations: List[Dict]) -> str:
         """

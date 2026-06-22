@@ -2,6 +2,22 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-22",
+      "action": "updated",
+      "guide": "eu_funding_ipa_enlargement",
+      "title": "EU Funding for Enlargement Countries",
+      "summary": "Added 19 Jun: EU-Moldova Summit in Brussels + enlargement-support surveys + EUR 34m Armenia support",
+      "refs": []
+    },
+    {
+      "date": "2026-06-22",
+      "action": "updated",
+      "guide": "tech_sovereignty_package_2026",
+      "title": "EU Tech Sovereignty Package",
+      "summary": "Added 19 Jun: EUROPA consortium (led by Domyn) wins the Frontier AI Grand Challenge - open-source frontier model in all 24 EU languages",
+      "refs": []
+    },
+    {
       "date": "2026-06-19",
       "action": "updated",
       "guide": "mff_2028_2034",
