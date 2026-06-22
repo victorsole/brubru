@@ -32,7 +32,21 @@ _SYS = (
     "words. Reply ONLY with the numbered list, one line per act."
 )
 _LINE_RE = re.compile(r"^\s*(\d+)[.)]\s*(.+?)\s*$")
+# Leading markdown / bullets Mistral sometimes adds when it skips the number
+# on a single-item prompt (e.g. "**1.** ...", "- ...", "1) ...").
+_LEAD_NOISE_RE = re.compile(r"^\s*(?:\*+\s*\d+[.)]?\s*\*+|\d+[.)]|[\-•*])\s*")
 BATCH = 8
+
+
+def _clean_single(text: str) -> str:
+    """Single-item fallback: strip any leading bullet/number/markdown and pick
+    the first non-empty line. Mistral often omits the "1." prefix for a
+    single-item prompt — the strict regex would drop a perfectly valid answer."""
+    for raw in (text or "").splitlines():
+        line = _LEAD_NOISE_RE.sub("", raw).strip()
+        if line:
+            return line
+    return ""
 
 
 async def explain_batch(items: List[Dict[str, str]]) -> Dict[str, str]:
@@ -66,11 +80,19 @@ async def explain_batch(items: List[Dict[str, str]]) -> Dict[str, str]:
         except Exception as e:
             logger.warning(f"[OJ-EXPLAIN] Mistral generate failed ({e}); stopping batch")
             break
-        for line in (resp.message or "").splitlines():
+        text = resp.message or ""
+        # Strict numbered-list parse (multi-item batches need this to map back).
+        for line in text.splitlines():
             m = _LINE_RE.match(line)
             if not m:
                 continue
             idx = int(m.group(1)) - 1
             if 0 <= idx < len(chunk):
                 out[chunk[idx]["key"]] = m.group(2).strip()
+        # Single-item fallback: Mistral frequently returns bare prose without a
+        # "1." prefix when there is only one item — accept it.
+        if len(chunk) == 1 and chunk[0]["key"] not in out:
+            cleaned = _clean_single(text)
+            if cleaned:
+                out[chunk[0]["key"]] = cleaned
     return out
