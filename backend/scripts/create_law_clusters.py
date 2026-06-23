@@ -86,6 +86,17 @@ LAW_PACKAGES = {
         'date_from': 2020
     },
 
+    'cbam': {
+        'name': 'CBAM Package (Carbon Border Adjustment Mechanism)',
+        'primary_celex': '32023R0956',  # CBAM Regulation
+        'description': 'Carbon Border Adjustment Mechanism putting an EU-ETS-equivalent carbon price on emissions embedded in imported cement, iron & steel, aluminium, fertilisers, electricity and hydrogen',
+        'applicability': 'Importers of CBAM goods (cement, iron & steel, aluminium, fertilisers, electricity, hydrogen), authorised CBAM declarants, indirect customs representatives, third-country installation operators',
+        'policy_area': 'Climate Action',
+        'priority_level': 'high',
+        'keywords': ['cbam', 'carbon border adjustment', '2023/956', 'embedded emissions', 'cbam certificate', 'authorised cbam declarant', 'carbon leakage', 'cbam declaration'],
+        'date_from': 2023
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary

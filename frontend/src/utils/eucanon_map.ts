@@ -45,6 +45,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32022R2065': '/eucanon/2022-2065_dsa/',
   '32022R1925': '/eucanon/2022-1925_dma/',
   '32022L2555': '/eucanon/2022-2555_nis2/',
+  '32023R0956': '/eucanon/2023-956_cbam/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -78,6 +79,8 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Digital Services Act (Regulation (EU) 2022/2065)': '/eucanon/2022-2065_dsa/',
   'Digital Markets Act (Regulation (EU) 2022/1925)': '/eucanon/2022-1925_dma/',
   'NIS2 Directive (Directive (EU) 2022/2555)': '/eucanon/2022-2555_nis2/',
+  'CBAM Package (Carbon Border Adjustment Mechanism)': '/eucanon/2023-956_cbam/',
+  'CBAM (Regulation (EU) 2023/956)': '/eucanon/2023-956_cbam/',
 };
 
 export interface EucanonLookupInput {

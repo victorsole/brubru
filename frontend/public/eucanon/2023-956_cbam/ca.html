@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBAM explicat: Mecanisme d'Ajust al Carboni a la Frontera de la UE (Reg 2023/956) | Brubru</title>
+  <meta name="description" content="Guia completa del Reglament (UE) 2023/956 que estableix el Mecanisme d'Ajust al Carboni a la Frontera (CBAM). Sis sectors coberts, cronologia de dos fases, com funcionen els certificats CBAM, i la vinculació amb la fase de supressió de l'assignació gratuïta del règim de comerç de drets d'emissió.">
+  <meta property="og:title" content="Mecanisme d'Ajust al Carboni a la Frontera de la UE (CBAM) explicat | Brubru EU Canon">
+  <meta property="og:locale" content="ca_ES">
+  <meta property="og:description" content="El CBAM posa un preu del carboni en les mercaderies importades, del ciment a l'acer fins a l'alumini. No és un impost: els importadors compren certificats amb preu mitjà setmanal de les subhastes de l'ETS de la UE. Règim definitiu a partir de l'1 de gener de 2026.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2023-956_cbam/ca.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/16191930/pexels-photo-16191930.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CBAM de la UE explicat | Brubru EU Canon">
+  <meta name="twitter:description" content="Sis sectors. Dues fases. Un certificat per tona CO2e. El Mecanisme d'Ajust al Carboni a la Frontera de la UE, completament explicat.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/16191930/pexels-photo-16191930.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/ca.html">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2023-956_cbam/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Reglament (UE) 2023/956 del Parlament Europeu i del Consell que estableix un mecanisme d'ajust del carboni a la frontera",
+    "alternateName": "Reglament CBAM",
+    "identifier": "CELEX:32023R0956",
+    "legislationIdentifier": "32023R0956",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956",
+    "datePublished": "2023-05-10",
+    "dateModified": "2026-06-23",
+    "jurisdiction": "EU",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Parlament Europeu i Consell de la UE"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Ajust del carboni a la frontera, certificats CBAM, emissions incorporades, prevenció de fuita de carboni"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Container ---- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* ---- Hero image ---- */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* ---- Key figures strip ---- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ---- Sections ---- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* ---- Info boxes ---- */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(5,150,105,0.2);
+    }
+
+    /* ---- Six-sector grid: 3x2 ---- */
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .sector-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .sector-card:hover { border-color: var(--color-green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(5,150,105,0.1); }
+    .sector-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .sector-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .sector-card__cn { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.35rem; }
+    .sector-card__gas { font-size: 0.78rem; color: var(--color-secondary); }
+
+    /* ---- Declarant lifecycle (how it works) ---- */
+    .lifecycle {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .lifecycle-step {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .lifecycle-step:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .lifecycle-step__num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+    }
+    .lifecycle-step .mdi { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; color: var(--color-blue); }
+    .lifecycle-step__title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .lifecycle-step__desc { font-size: 0.78rem; color: var(--color-secondary); line-height: 1.45; }
+    .lifecycle-step__date { font-size: 0.72rem; color: var(--color-blue); font-weight: 700; margin-top: 0.4rem; }
+
+    /* ---- Two-phase timeline (visual) ---- */
+    .phase-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .phase-box {
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-box--transitional {
+      background: linear-gradient(135deg, rgba(6,147,227,0.08) 0%, rgba(155,81,224,0.06) 100%);
+      border: 2px solid rgba(6,147,227,0.3);
+    }
+    .phase-box--definitive {
+      background: linear-gradient(135deg, rgba(5,150,105,0.08) 0%, rgba(6,147,227,0.06) 100%);
+      border: 2px solid rgba(5,150,105,0.4);
+    }
+    .phase-box__label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .phase-box--transitional .phase-box__label { color: var(--color-blue); }
+    .phase-box--definitive .phase-box__label { color: var(--color-green); }
+    .phase-box__dates { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.2; }
+    .phase-box--transitional .phase-box__dates { color: var(--color-blue); }
+    .phase-box--definitive .phase-box__dates { color: var(--color-green); }
+    .phase-box ul { list-style: none; padding: 0; }
+    .phase-box ul li {
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .phase-box ul li:last-child { border-bottom: none; }
+    .phase-box ul li .mdi { flex-shrink: 0; margin-top: 0.15rem; }
+
+    /* ---- Comparison table ---- */
+    .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .comp-table th, .comp-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .comp-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .comp-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .comp-table .col-label { font-weight: 700; color: var(--color-text); }
+    .comp-table .col-ets { color: var(--color-blue); }
+    .comp-table .col-cbam { color: var(--color-green); }
+
+    /* ---- Timeline (legislative milestones) ---- */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* ---- Lineage family tree ---- */
+    .lineage-list {
+      border-left: 3px solid var(--color-border);
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .lineage-item {
+      position: relative;
+      padding: 0.6rem 0;
+      border-bottom: 1px dotted var(--color-border);
+    }
+    .lineage-item:last-child { border-bottom: none; }
+    .lineage-item::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 1rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--color-blue);
+      background: white;
+    }
+    .lineage-item.lineage-item--current::before { background: var(--color-green); border-color: var(--color-green); }
+    .lineage-item.lineage-item--future::before { background: white; border-color: var(--color-purple); }
+    .lineage-item__title { font-weight: 700; font-size: 0.95rem; }
+    .lineage-item__desc { font-size: 0.82rem; color: var(--color-secondary); margin-top: 0.15rem; }
+
+    /* ---- Glossary 3-col grid ---- */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Brubru features 3x2 grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* ---- Pill badges ---- */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* ---- CTA Strip ---- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---- Canon placeholder ---- */
+    .canon-placeholder {
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      color: var(--color-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* ---- Back to top ---- */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* ====================================================
+       RESPONSIVE BREAKPOINTS
+       ==================================================== */
+
+    /* Tablet and below: drop 4-col grids to 2-col */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .lifecycle { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Narrow tablet: drop any remaining 3-col grids to 2-col */
+    @media (max-width: 900px) {
+      .sectors-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .phase-container { grid-template-columns: 1fr; }
+      .comp-table { font-size: 0.85rem; }
+    }
+
+    /* Mobile: everything to 1 column */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .sectors-grid { grid-template-columns: 1fr; }
+      .lifecycle { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .phase-container { grid-template-columns: 1fr; }
+      .comp-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .hero-image img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     STICKY HEADER
+     ===================================================== -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Pàgina principal de Brubru">
+    <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  </a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">Intel·ligència sobre política europea</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Selector d'idioma">
+    <option value="./index.html">English</option>
+    <option value="./es.html">Español</option>
+    <option value="./fr.html">Français</option>
+    <option value="./it.html">Italiano</option>
+    <option value="./nl.html">Nederlands</option>
+    <option value="./ca.html" selected>Català</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Prova Brubru gratuïtament</a>
+</header>
+
+<div class="container">
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">Canon de la UE</a> / Clima i preus del carboni
+  </div>
+  <h1 class="hero__title">Mecanisme d'Ajust al Carboni a la Frontera de la <span>UE</span></h1>
+  <p class="hero__subtitle">
+    El Reglament (UE) 2023/956 estableix el CBAM, la primera mesura de frontera de carboni del món: els importadors de mercaderies cobertes han de comprar certificats amb preu mitjà setmanal de les subhastes del règim de comerç de drets d'emissió de la UE. No és un impost, sinó una obligació de preus de carboni reguladora dissenyada per prevenir la fuita de carboni i complementar el règim de comerç de drets d'emissió de la UE.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-tag-outline"></i> Reglament (UE) 2023/956 &middot; CELEX 32023R0956</span>
+    <span><i class="mdi mdi-calendar"></i> Adoptat el 10 de maig de 2023</span>
+    <span><i class="mdi mdi-leaf-circle-outline"></i> Paquet Ajusta't a la Sostenibilitat</span>
+    <span><i class="mdi mdi-gavel"></i> Art. 192(1) TFUE</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/16191930/pexels-photo-16191930.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600"
+    alt="Xemeneies industrials que emeten fum, il·lustrant la producció intensiva en carboni que el CBAM s'adreça"
+    loading="eager"
+  >
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@davidmcelwee" target="_blank" rel="noopener">David McElwee</a>
+    via <a href="https://www.pexels.com/photo/16191930" target="_blank" rel="noopener">Pexels</a>
+    | Emissions industrials, el risc de fuita de carboni que el CBAM està dissenyat per abordar
+  </figcaption>
+</figure>
+
+<!-- =====================================================
+     KEY FIGURES STRIP (2x2)
+     ===================================================== -->
+<div class="figures">
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">6</div>
+    <div class="figure-card__label">sectors coberts</div>
+    <div class="figure-card__context">ciment, electricitat, fertilitzants, ferro i acer, alumini, hidrogen (Annex I)</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">36</div>
+    <div class="figure-card__label">articles</div>
+    <div class="figure-card__context">11 capítols, 116 considerands, 6 annexos, 34 definicions (Art. 3)</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">1 gen. 2026</div>
+    <div class="figure-card__label">règim definitiu</div>
+    <div class="figure-card__context">comencen les obligacions financeres; primera declaració CBAM el 31 de maig de 2027 per l'any 2026</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">1 cert.</div>
+    <div class="figure-card__label">= 1 tona CO2e</div>
+    <div class="figure-card__context">amb preu mitjà setmanal de tancament de la subhasta del règim de comerç de drets d'emissió de la UE (Art. 21)</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     TABLE OF CONTENTS
+     ===================================================== -->
+<nav class="toc" aria-label="Continguts de la pàgina">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Continguts</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Resum</a>
+    <a href="#sectors" class="toc__link"><i class="mdi mdi-factory"></i> Sis sectors coberts</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-calendar-clock"></i> Cronologia de dos fases</a>
+    <a href="#how-it-works" class="toc__link"><i class="mdi mdi-cog-outline"></i> Com funciona</a>
+    <a href="#headline-numbers" class="toc__link"><i class="mdi mdi-numeric"></i> Xifres principals</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-outline"></i> Definicions clau</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-scale-balance"></i> CBAM vs règim ETS</a>
+    <a href="#lineage" class="toc__link"><i class="mdi mdi-family-tree"></i> Llinatge legal</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossari</a>
+    <a href="#leg-timeline" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Cronologia legislativa</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Fonts oficials</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explora amb Brubru</a>
+  </div>
+</nav>
+
+<!-- =====================================================
+     SECTION 1: OVERVIEW
+     ===================================================== -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Resum</h2>
+  </div>
+  <p class="section__subtitle">Què és el CBAM, què no és, i per què existeix</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Important: el CBAM no és un impost sobre carboni a la frontera</h3>
+    <p>El CBAM és una <strong>obligació reguladora de preus de carboni</strong>. Els importadors compren <strong>certificats CBAM</strong> el preu dels quals segueix el preu mitjà setmanal de tancament de la subhasta del règim de comerç de drets d'emissió de la UE, que reflecteix les emissions incorporades en les mercaderies que importen. L'obligació de comprar certificats és un instrument regulador, no un impost, cosa que el fa compatible amb les normes de l'Organització Mundial del Comerç (Considerand 15). No imposa límits quantitatius sobre les importacions (Considerand 21).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-leaf-circle-outline" style="color: var(--color-green);"></i> Objectiu: tres fins relacionats (Article 1)</div>
+    <p><strong>Prevenir la fuita de carboni.</strong> Mentre que la UE enforteix el seu preu del carboni sota el règim de comerç de drets d'emissió, els productors en països sense preus de carboni equivalents obtenen un avantatge competitiu. Sense el CBAM, podrien ser més barats que els productors de la UE per preu, o la producció (i les seves emissions) podria simplement relocalitzar-se fora de la UE, sense aconseguir cap benefici climàtic net. El CBAM tanca aquesta bretxa pel costat de les importacions.</p>
+    <p><strong>Complementar el règim de comerç de drets d'emissió de la UE.</strong> Els productors de la UE paguen el cost del carboni de les seves emissions a través de les assignacions del règim de comerç de drets d'emissió. El CBAM assegura que les mercaderies importades enfrontin un cost equivalent, creant un camp de joc nivelat entre la producció domèstica i la d'origen estranger.</p>
+    <p><strong>Encoratjar accions climàtiques de tercers països.</strong> Fent que les exportacions intensives en carboni a la UE siguin més cares, el CBAM crea un incentiu perquè els socis comercials adoptin preus de carboni. Els preus del carboni pagats al país d'origen compten com a crèdit contra les obligacions CBAM (Art. 9).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-earth" style="color: var(--color-blue);"></i> Directament aplicable en tots els Estats membres</div>
+    <p>Com a Reglament, el CBAM s'aplica directament sense transposició nacional. Tanmateix, s'administra conjuntament: la Comissió dirigeix el registre central del CBAM, la plataforma de certificats i el mecanisme de preus setmanal. Les autoritats competents dels Estats membres autoritzen declarants, venen certificats i imposen sancions. Les autoritats duana fan complir la frontera.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 2: SIX COVERED SECTORS (3x2 grid)
+     ===================================================== -->
+<section class="section" id="sectors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-factory"></i></div>
+    <h2 class="section__title">Els sis sectors coberts</h2>
+  </div>
+  <p class="section__subtitle">Annex I del Reglament (UE) 2023/956, definits per codis de Nomenclatura Combinada (NC)</p>
+
+  <div class="sectors-grid">
+    <div class="sector-card">
+      <i class="mdi mdi-domain" style="color: var(--color-blue);"></i>
+      <div class="sector-card__name">Ciment</div>
+      <div class="sector-card__cn">NC: 2507 00 80, 2523</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span></div>
+    </div>
+    <div class="sector-card">
+      <i class="mdi mdi-lightning-bolt" style="color: var(--color-amber);"></i>
+      <div class="sector-card__name">Electricitat</div>
+      <div class="sector-card__cn">NC: 2716 00 00</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span></div>
+    </div>
+    <div class="sector-card">
+      <i class="mdi mdi-leaf" style="color: var(--color-green);"></i>
+      <div class="sector-card__name">Fertilitzants</div>
+      <div class="sector-card__cn">NC: 2808, 2814, 2834 21, 3102, 3105</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span> <span class="pill pill--amber">N2O</span></div>
+    </div>
+    <div class="sector-card">
+      <i class="mdi mdi-iron-outline" style="color: var(--color-secondary);"></i>
+      <div class="sector-card__name">Ferro i acer</div>
+      <div class="sector-card__cn">NC: Capítol 72 + 7301-7311</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span></div>
+    </div>
+    <div class="sector-card">
+      <i class="mdi mdi-recycle" style="color: var(--color-purple);"></i>
+      <div class="sector-card__name">Alumini</div>
+      <div class="sector-card__cn">NC: 7601, 7603-7608, 7609</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span> <span class="pill pill--purple">PFCs</span></div>
+    </div>
+    <div class="sector-card">
+      <i class="mdi mdi-water-outline" style="color: var(--color-blue);"></i>
+      <div class="sector-card__name">Hidrogen</div>
+      <div class="sector-card__cn">NC: 2804 10</div>
+      <div class="sector-card__gas"><span class="pill pill--blue">CO2</span></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3><i class="mdi mdi-information-outline"></i> Gasos d'efecte hivernacle per sector</h3>
+    <p>El CO2 es mesura per a tots els sis sectors. L'<strong>òxid nitrós (N2O)</strong> es compta addicionalment per als fertilitzants i l'àcid nítric, ja que la producció de fertilitzants a base d'amoníac genera emissions significatives de N2O. Els <strong>perfluorocarburs (PFCs)</strong> es compten addicionalment per a l'alumini, resultants del procés de fusió d'alumini.</p>
+    <p style="margin-top:0.5rem;"><strong>Emissions directes i indirectes:</strong> L'Annex II llista sectors on només les emissions directes compten a la fase inicial (ferro i acer, alumini, hidrogen determinat). El ciment, els fertilitzants i l'electricitat compten tant les emissions directes com les indirectes (relacionades amb l'electricitat), reflectint el tractament simètric que reben els productors de la UE.</p>
+  </div>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-close-circle-outline" style="color: var(--color-amber);"></i> Fora de l'abast en l'adopció</h3>
+    <p>Els productes químics orgànics i els productes de refineria van ser deliberadament exclosos en l'adopció (Considerands 34-35) perquè les seves emissions incorporades no podien encara ser assignades sense ambigüitat a productes individuals. Les mercaderies amb valor de 150 euros o menys, mercaderies en equipatge personal de viatgers, mercaderies d'ús militar, i mercaderies dels país/territoris exempts de l'Annex III també estan exclos.</p>
+    <p style="margin-top: 0.5rem;"><strong>País i territoris exempts (Annex III):</strong> Islàndia, Liechtenstein, Noruega, Suïssa (socis EEE/ETS vinculats) més els territoris especials Büsingen, Heligoland, Livigno, Ceuta i Melilla.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 3: TWO-PHASE TIMELINE (visual centrepiece)
+     ===================================================== -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-calendar-clock"></i></div>
+    <h2 class="section__title">La cronologia de dos fases</h2>
+  </div>
+  <p class="section__subtitle">Període de transició seguit pel règim financer complet</p>
+
+  <div class="phase-container">
+    <div class="phase-box phase-box--transitional">
+      <div class="phase-box__label"><i class="mdi mdi-file-document-outline"></i> Fase 1: període de transició</div>
+      <div class="phase-box__dates">1 d'octubre de 2023 al 31 de desembre de 2025</div>
+      <ul>
+        <li><i class="mdi mdi-check-circle-outline" style="color: var(--color-blue);"></i> Informes CBAM trimestrals presentats (Art. 35): emissions incorporades i qualsevol preu de carboni pagat a l'estranger</li>
+        <li><i class="mdi mdi-close-circle-outline" style="color: var(--color-muted);"></i> No es requereixen certificats; sense pagament financer</li>
+        <li><i class="mdi mdi-check-circle-outline" style="color: var(--color-blue);"></i> Articles de registre/autorització (Arts. 5, 10, 14, 16, 17) s'apliquen a partir del 31 de desembre de 2024</li>
+        <li><i class="mdi mdi-calendar-check" style="color: var(--color-blue);"></i> Últim informe de transició (Q4 2025) venciment el 31 de gener de 2026</li>
+        <li><i class="mdi mdi-information-outline" style="color: var(--color-muted);"></i> Ara tancat: dades i hàbits construccions per al règim definitiu</li>
+      </ul>
+    </div>
+    <div class="phase-box phase-box--definitive">
+      <div class="phase-box__label"><i class="mdi mdi-cash-multiple"></i> Fase 2: règim definitiu</div>
+      <div class="phase-box__dates">A partir de l'1 de gener de 2026</div>
+      <ul>
+        <li><i class="mdi mdi-check-circle" style="color: var(--color-green);"></i> Només els declarants CBAM autoritzats poden importar mercaderies cobertes</li>
+        <li><i class="mdi mdi-currency-eur" style="color: var(--color-green);"></i> Comencen les obligacions financeres: comprar certificats al preu setmanal de l'ETS</li>
+        <li><i class="mdi mdi-percent" style="color: var(--color-green);"></i> Mantenir almenys el 80% de les emissions incorporades any-a-la-data cada final de trimestre</li>
+        <li><i class="mdi mdi-calendar-check" style="color: var(--color-green);"></i> Primera declaració CBAM anual (per a 2026) venciment el 31 de maig de 2027</li>
+        <li><i class="mdi mdi-chart-line" style="color: var(--color-green);"></i> El CBAM s'introdueix mentre l'assignació gratuïta del règim de comerç de drets d'emissió de la UE s'extingeix (2026-2034)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box--green info-box">
+    <h3><i class="mdi mdi-calendar-arrow-right" style="color: var(--color-green);"></i> Què ve a continuació: cap a 2030</h3>
+    <p>La Comissió ha de revisar el CBAM i informar per a 2025 sobre l'expansió del seu abast a tots els sectors del règim de comerç de drets d'emissió i a mercaderies aigua avall per a 2030. Una esmena activa ja està en curs: l'extensió de l'abast de mercaderies aigua avall i el paquet anti-circumvenció (COM(2025) 989, procediment 2025/0419(COD)) proposa estendre el CBAM a productes d'acer i alumini processats per tancar vies de circumvenció.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 4: HOW IT WORKS (declarant lifecycle)
+     ===================================================== -->
+<section class="section" id="how-it-works">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-cog-outline"></i></div>
+    <h2 class="section__title">Com funciona</h2>
+  </div>
+  <p class="section__subtitle">El cicle de vida del declarant CBAM autoritzat, pas a pas (règim definitiu a partir de l'1 de gener de 2026)</p>
+
+  <div class="lifecycle">
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">1</div>
+      <i class="mdi mdi-account-check-outline"></i>
+      <div class="lifecycle-step__title">Autoritzar</div>
+      <div class="lifecycle-step__desc">Només un declarant CBAM autoritzat pot importar mercaderies cobertes. L'estat es concedeix per l'autoritat competent de l'Estat membre de l'establiment; reconeixement a nivell de la UE; requereix historial net de duana/impostos, número EORI i capacitat financera.</div>
+      <div class="lifecycle-step__date">Arts. 4, 5, 17</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">2</div>
+      <i class="mdi mdi-calculator-variant-outline"></i>
+      <div class="lifecycle-step__title">Calcular</div>
+      <div class="lifecycle-step__desc">Les emissions incorporades es determinen a partir de dades reals quan és possible, altrament a partir de valors per defecte. Distingeix mercaderies simples de mercaderies complexes (les precursores de les quals porten les seves pròpies emissions incorporades).</div>
+      <div class="lifecycle-step__date">Art. 7, Annex IV</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">3</div>
+      <i class="mdi mdi-check-decagram-outline"></i>
+      <div class="lifecycle-step__title">Verificar</div>
+      <div class="lifecycle-step__desc">Les emissions incorporades declarades es verifiquen per un verificador acreditat (acreditació alineada amb el règim de verificació del règim de comerç de drets d'emissió de la UE, Reglament d'execució (UE) 2018/2067). Els operadors en tercers país podem registrar instal·lacions en el registre del CBAM.</div>
+      <div class="lifecycle-step__date">Art. 8, Annex VI</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">4</div>
+      <i class="mdi mdi-cash-multiple"></i>
+      <div class="lifecycle-step__title">Comprar certificats</div>
+      <div class="lifecycle-step__desc">Els Estats membres venen certificats CBAM en una plataforma central comuna al preu mitjà setmanal de tancament de la subhasta del règim de comerç de drets d'emissió de la UE. Cada certificat = 1 tona CO2e. El preu del carboni pagat a l'estranger al país d'origen dona una reducció (Art. 9).</div>
+      <div class="lifecycle-step__date">Arts. 20-21</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">5</div>
+      <i class="mdi mdi-lock-check-outline"></i>
+      <div class="lifecycle-step__title">Mantenir 80% cada trimestre</div>
+      <div class="lifecycle-step__desc">Al final de cada trimestre, el declarant ha de mantenir certificats que cobreixin almenys el 80% de les emissions incorporades any-a-la-data (base de valor per defecte). Aquest amortidor trimestral evita buits de conformitat de l'últim minut.</div>
+      <div class="lifecycle-step__date">Art. 22(2)</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">6</div>
+      <i class="mdi mdi-file-send-outline"></i>
+      <div class="lifecycle-step__title">Declarar i entregar</div>
+      <div class="lifecycle-step__desc">Antes del 31 de maig cada any, el declarant presenta la declaració CBAM anual de l'any anterior i entrega el nombre coincident de certificats, net de (a) qualsevol preu de carboni pagat a l'estranger i (b) l'ajust d'assignació lliure segons l'Art. 31.</div>
+      <div class="lifecycle-step__date">Arts. 6, 22 -- primer: 31 de maig de 2027</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">7</div>
+      <i class="mdi mdi-refresh"></i>
+      <div class="lifecycle-step__title">Recomprar</div>
+      <div class="lifecycle-step__desc">Els certificats en excés es podrien vendre de nou, limitats a un terç del total comprat l'any anterior. Petició de recompra avant del 30 de juny. Els certificats deixats sense utilitzar més enllà de la finestra de validesa són cancel·lats cada 1 de juliol sense compensació.</div>
+      <div class="lifecycle-step__date">Arts. 23-24</div>
+    </div>
+    <div class="lifecycle-step">
+      <div class="lifecycle-step__num">8</div>
+      <i class="mdi mdi-shield-alert-outline"></i>
+      <div class="lifecycle-step__title">Execució</div>
+      <div class="lifecycle-step__desc">La Comissió executa revisió basada en risc. Les autoritats competents imposen sancions que espellen el règim de comerç de drets d'emissió de la UE penalitat per emissions en excés (Art. 16(3)/(4), Dir. 2003/87/CE). El multiplicador de penalitat puja a 3-5x per a un importador no declarant que importa sense complir.</div>
+      <div class="lifecycle-step__date">Arts. 19, 26-27</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 5: HEADLINE NUMBERS
+     ===================================================== -->
+<section class="section" id="headline-numbers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+    <h2 class="section__title">Xifres principals</h2>
+  </div>
+  <p class="section__subtitle">Les xifres clau del Reglament (UE) 2023/956 d'un cop d'ull</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Mètrica</th>
+          <th>Valor</th>
+          <th>Font</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="col-label">Sectors coberts</td><td><strong>6</strong> (ciment, electricitat, fertilitzants, ferro i acer, alumini, hidrogen)</td><td>Annex I</td></tr>
+        <tr><td class="col-label">Articles</td><td><strong>36</strong></td><td>Estructura</td></tr>
+        <tr><td class="col-label">Considerands</td><td><strong>116</strong></td><td>Preàmbul</td></tr>
+        <tr><td class="col-label">Capítols</td><td><strong>11</strong></td><td>Estructura</td></tr>
+        <tr><td class="col-label">Annexos</td><td><strong>6</strong> (I-VI)</td><td>Estructura</td></tr>
+        <tr><td class="col-label">Definicions</td><td><strong>34</strong> (Art. 3)</td><td>Art. 3</td></tr>
+        <tr><td class="col-label">Certificat = 1 unitat de</td><td><strong>1 tona CO2e</strong> d'emissions incorporades</td><td>Art. 3</td></tr>
+        <tr><td class="col-label">Base de preu de certificat</td><td><strong>Setmanal</strong> preu mitjà de tancament de la subhasta del règim de comerç de drets d'emissió de la UE</td><td>Art. 21</td></tr>
+        <tr><td class="col-label">Llindar de manteniment trimestral</td><td><strong>80%</strong> de les emissions incorporades any-a-la-data (base de valor per defecte)</td><td>Art. 22(2)</td></tr>
+        <tr><td class="col-label">Límit de recompra</td><td><strong>1/3</strong> dels certificats comprats l'any anterior</td><td>Art. 23</td></tr>
+        <tr><td class="col-label">Termini anual de lliurament</td><td><strong>31 de maig</strong> cada any (primer: 31 de maig de 2027 per l'any 2026)</td><td>Art. 22(1)</td></tr>
+        <tr><td class="col-label">Cancel·lació de certificat</td><td><strong>1 de juliol</strong> cada any, per a qualsevol certificat més antic que l'any civil anterior</td><td>Art. 24</td></tr>
+        <tr><td class="col-label">Penalitat per importador no declarant</td><td><strong>3-5x</strong> la penalitat d'emissions en excés del règim de comerç de drets d'emissió de la UE</td><td>Art. 26</td></tr>
+        <tr><td class="col-label">País i territoris exempts (Annex III)</td><td><strong>4 país</strong> (Islàndia, Liechtenstein, Noruega, Suïssa) + <strong>5 territoris</strong></td><td>Annex III</td></tr>
+        <tr><td class="col-label">Objectiu d'expansió d'abast</td><td>Tots els sectors del règim de comerç de drets d'emissió de la UE per a <strong>2030</strong></td><td>Art. 30</td></tr>
+        <tr><td class="col-label">Base legal</td><td>Article 192(1) TFUE (medi ambient)</td><td>Preàmbul</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 6: KEY DEFINITIONS
+     ===================================================== -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-outline"></i></div>
+    <h2 class="section__title">Definicions clau</h2>
+  </div>
+  <p class="section__subtitle">Quatre conceptes bàsics que recolzen el CBAM, tal com es defineixen a l'article 3</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-certificate-outline" style="color: var(--color-green);"></i> Certificat CBAM (Art. 3 + Art. 21)</div>
+    <p>Un certificat electrònic que representa <strong>una tona de CO2 equivalent</strong> d'emissions incorporades. Els certificats no son negociables entre operadors: es podran comprar de la plataforma de l'Estat membre al mitjà setmanal de la subhasta del règim de comerç de drets d'emissió de la UE, mantinguts contra el llindar trimestral del 80%, lliurats antes del 31 de maig cada any, o venguts de nou (limitat). Els certificats més antics que l'any civil anterior són cancel·lats el 1 de juliol.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-smoke" style="color: var(--color-blue);"></i> Emissions incorporades (Art. 3 + Annex IV)</div>
+    <p>Les emissions de gas d'efecte hivernacle alliberats durant la <strong>producció de mercaderies</strong> cobertes pel CBAM. Per a <em>mercaderies simples</em>, les emissions incorporades es determinen a partir del procés de producció. Per a <em>mercaderies complexes</em> (que utilitzen mercaderies cobertes com a insums), les emissions incorporades dels insums precursors també es compten. Els valors per defecte s'apliquen quan els operadors no podran proporcionar xifres de dades reals verificades.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-check" style="color: var(--color-amber);"></i> Declarant CBAM autoritzat (Arts. 4-5, 17)</div>
+    <p>Un importador (o el seu representant duaner indirecte) que té l'estat formal autoritzat concedit per l'autoritat competent de l'Estat membre d'establiment. Només els declarants autoritzats podran posar en lliure circulació mercaderies cobertes a la UE a partir de l'1 de gener de 2026. L'estat és a nivell de la UE i condicional a un historial net de duana i impostos, un número EORI, capacitat financera i operativa, i una garantia per a entitats més recents.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-swap-horizontal-bold" style="color: var(--color-red);"></i> Fuita de carboni (Considerands + Art. 1)</div>
+    <p>El risc que, mentre que la UE puja el seu preu de carboni domèstic, la producció de mercaderies intensives en carboni es relocalitza en país amb preus de carboni més baixos o nuls, o que les mercaderies de la UE són desplaçades per importacions de major emissió. Aquesta relocalització produiria cap benefici climàtic global net mentre que debilitaria la competitivitat industrial de la UE. El CBAM és la resposta legislativa: estén un preu de carboni equivalent al costat de les importacions, tancant la bretxa que d'altra manera incentivaria la relocalització.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 7: CBAM VS EU ETS COMPARISON TABLE
+     ===================================================== -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">CBAM vs règim de comerç de drets d'emissió de la UE: com difereixen</h2>
+  </div>
+  <p class="section__subtitle">Dos instruments, un preu de carboni: les diferències clau de disseny</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th class="col-ets">Règim ETS (Dir. 2003/87/CE)</th>
+          <th class="col-cbam">CBAM (Reg. 2023/956)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">A qui cobreix</td>
+          <td class="col-ets">Instal·lacions de la UE que produeixen en sectors de la UE</td>
+          <td class="col-cbam">Importadors de mercaderies cobertes de tercers país</td>
+        </tr>
+        <tr>
+          <td class="col-label">Tipus d'instrument</td>
+          <td class="col-ets">Sistema de cap i mercat d'assignacions</td>
+          <td class="col-cbam">Obligació de certificat (cap límit a les importacions)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Unitat</td>
+          <td class="col-ets">Assignació de la UE (EUA) = 1 tona CO2e</td>
+          <td class="col-cbam">Certificat CBAM = 1 tona CO2e</td>
+        </tr>
+        <tr>
+          <td class="col-label">Base de preu</td>
+          <td class="col-ets">Preu de subhasta diari del règim de comerç de drets d'emissió de la UE (oferta/demanda)</td>
+          <td class="col-cbam">Preu mitjà setmanal de tancament de la subhasta del règim de comerç de drets d'emissió de la UE</td>
+        </tr>
+        <tr>
+          <td class="col-label">Negociació entre operadors</td>
+          <td class="col-ets">Sí: les assignacions és lliurement negociables</td>
+          <td class="col-cbam">No: els certificats no son negociables; només compra-manteniment-lliurament</td>
+        </tr>
+        <tr>
+          <td class="col-label">Assignació lliure</td>
+          <td class="col-ets">Extingint-se 2026-2034 (Art. 10a, Dir. 2003/87/CE)</td>
+          <td class="col-cbam">S'introdueix mentre l'assignació lliure del règim de comerç de drets d'emissió de la UE s'extingeix (Art. 31)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Règim de verificació</td>
+          <td class="col-ets">MRV de la UE a nivell de instal·lació (Reg. (UE) 601/2012)</td>
+          <td class="col-cbam">Nivell de declarant; verificador acreditat sota Reglament d'execució 2018/2067</td>
+        </tr>
+        <tr>
+          <td class="col-label">Crèdit de preu de carboni per a l'estranger</td>
+          <td class="col-ets">N/A (només instal·lacions de la UE)</td>
+          <td class="col-cbam">Sí: reducció de l'Art. 9 per al preu del carboni pagat al país d'origen</td>
+        </tr>
+        <tr>
+          <td class="col-label">Penalitat</td>
+          <td class="col-ets">Art. 16(3)/(4) Dir. 2003/87/CE penalitat per emissions en excés</td>
+          <td class="col-cbam">Penalitat de mirall de l'ETS; 3-5x per a importador no declarant (Art. 26)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 8: LEGAL FAMILY / LINEAGE
+     ===================================================== -->
+<section class="section" id="lineage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-family-tree"></i></div>
+    <h2 class="section__title">Llinatge legal</h2>
+  </div>
+  <p class="section__subtitle">Posició del CBAM en l'arquitectura legislativa de clima i duana de la UE</p>
+
+  <div class="lineage-list">
+    <div class="lineage-item">
+      <div class="lineage-item__title">Règim ETS: Directiva 2003/87/CE (tal com s'ha modificat)</div>
+      <div class="lineage-item__desc">Marc pare. El CBAM espella el seu abast, preu de certificat, i disseny de penalitat. La revisió de l'ETS (Dir. (UE) 2023/959) va introduir l'extinció de l'assignació lliure 2026-2034 contra la qual el CBAM està calibrat (Art. 31).</div>
+    </div>
+    <div class="lineage-item">
+      <div class="lineage-item__title">Llei europea del clima: Reglament (UE) 2021/1119</div>
+      <div class="lineage-item__desc">Estatut ancora. Estableix -55% net per a 2030 i neutralitat climàtica per a 2050. El CBAM és un dels instruments del paquet Ajusta't a la Sostenibilitat dissenyat per fer assolibles aquells objectius.</div>
+    </div>
+    <div class="lineage-item">
+      <div class="lineage-item__title">Paquet Ajusta't a la Sostenibilitat (2021-2023)</div>
+      <div class="lineage-item__desc">Instruments germans: revisió de l'ETS (Dir. (UE) 2023/959), ETS2 per a edificis i transport per carretera, Fons de Transició Justa, Reglament d'Esforç Compartit (UE) 2018/842, Reglament LULUCF (UE) 2018/841. El CBAM és el complement del costat de les importacions a l'enfortiment de l'ETS.</div>
+    </div>
+    <div class="lineage-item lineage-item--current">
+      <div class="lineage-item__title">CBAM: Reglament (UE) 2023/956 <span class="pill pill--green" style="margin-left:0.4rem;">aquesta pàgina</span></div>
+      <div class="lineage-item__desc">Adoptat el 10 de maig de 2023. En vigor el 17 de maig de 2023. Període de transició del 1 d'octubre de 2023 al 31 de desembre de 2025. Règim definitiu a partir de l'1 de gener de 2026. Columna vertebral duaner: Reglament de la Unió Aduanera Reg. (UE) nº 952/2013; codis NC: Reglament del Consell (CEE) nº 2658/87.</div>
+    </div>
+    <div class="lineage-item">
+      <div class="lineage-item__title">Reglament d'execució (UE) 2023/1773</div>
+      <div class="lineage-item__desc">Normes d'execució del període de transició. Governa el format de comunicació trimestral, valors per defecte per a la fase només de comunicació, i metodologia per calcular emissions incorporades durant l'1 d'octubre de 2023 al 31 de desembre de 2025.</div>
+    </div>
+    <div class="lineage-item lineage-item--future">
+      <div class="lineage-item__title">COM(2025) 989: extensió de l'abast de mercaderies aigua avall <span class="pill pill--purple" style="margin-left:0.4rem;">en curs</span></div>
+      <div class="lineage-item__desc">Procediment 2025/0419(COD). Proposa estendre el CBAM a mercaderies d'acer i alumini processades aigua avall per tancar vies de circumvenció. Inclou també disposicions anti-circumvenció. Sota procediment legislatiu ordinari.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 9: GLOSSARY (3-col)
+     ===================================================== -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossari</h2>
+  </div>
+  <p class="section__subtitle">Termes clau tal com s'utilitzen en el Reglament (UE) 2023/956 i les normes d'execució del CBAM</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">CBAM</div>
+      <div class="glossary-card__def">Mecanisme d'Ajust al Carboni a la Frontera. L'obligació de preus de carboni reguladora establerta pel Reglament (UE) 2023/956, que requereix que els importadors compin certificats equivalents a les emissions incorporades en mercaderies cobertes.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Certificat CBAM</div>
+      <div class="glossary-card__def">Certificat electrònic = 1 tona CO2e d'emissions incorporades, comprat de la plataforma de l'Estat membre al mitjà setmanal de la subhasta del règim de comerç de drets d'emissió de la UE. No negociable; lliurat anualment antes del 31 de maig o cancel·lat el 1 de juliol si més antiga que la validesa.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Emissions incorporades</div>
+      <div class="glossary-card__def">Emissions de gas d'efecte hivernacle alliberats durant la producció de les mercaderies importades. Calculades a partir de dades reals o valors per defecte. Les mercaderies complexes incluen també les emissions dels seus insums precursors.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Declarant CBAM autoritzat</div>
+      <div class="glossary-card__def">Un importador (o representant duaner indirecte) que té l'estat formal autoritzat d'una autoritat competent de l'Estat membre. Només els declarants autoritzats podran importar mercaderies cobertes a partir de l'1 de gener de 2026.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Fuita de carboni</div>
+      <div class="glossary-card__def">La relocalització de la producció (i les seves emissions) de la UE a país amb normes climàtiques més febles, impulsada per costos de carboni de la UE més alts. El CBAM ho evita posant un preu de carboni equivalent a les importacions.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Règim ETS</div>
+      <div class="glossary-card__def">Sistema de comerç de drets d'emissió de la UE (Directiva 2003/87/CE). El sistema mare de cap i mercat que cobreix instal·lacions de la UE. El CBAM espella el seu preu al costat de les importacions i s'introdueix mentre l'assignació lliure de l'ETS s'extingeix 2026-2034.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Assignació lliure (Art. 31)</div>
+      <div class="glossary-card__def">Assignacions del règim de comerç de drets d'emissió de la UE concedides gratuïtament a instal·lacions històricament. Extingint-se 2026-2034 sota la Directiva del règim de comerç de drets d'emissió. El CBAM s'introdueix per mantenir el cost de carboni equivalent a les importacions durant aquesta transició.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Codi NC</div>
+      <div class="glossary-card__def">Codi de Nomenclatura Combinada. El sistema de classificació aranzelària de la UE sota el Reglament del Consell (CEE) nº 2658/87. L'abast del CBAM a l'Annex I es defineix per codis NC, no només per descripcions de sectors.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">N2O / PFCs</div>
+      <div class="glossary-card__def">Òxid nitrós (N2O): gas d'efecte hivernacle addicional comptat per a fertilitzants/àcid nítric. Perfluorocarburs (PFCs): gas d'efecte hivernacle addicional comptat per a fusió d'alumini. Ambdós es mesuren en equivalent CO2.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Valor per defecte</div>
+      <div class="glossary-card__def">Un valor conservador d'intensitat d'emissió establert per la Comissió per a operadors que no podran proporcionar dades reals verificades sobre emissions incorporades. Els valors per defecte es fixen per sobre de les emissions mitjanes de producció per a incentivat la divulgació de dades reals.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Reducció de l'Art. 9</div>
+      <div class="glossary-card__def">Una reducció en el nombre de certificats CBAM a lliurar, que reflecteix un preu de carboni efectivament pagat al país d'origen. Evita la doble carrega quan els socis comercials ja imposen un cost de carboni.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CO2e</div>
+      <div class="glossary-card__def">Equivalent de CO2. La unitat comuna per a emissions de gas d'efecte hivernacle. 1 tona de N2O és aproximadament 273 tones CO2e; 1 tona del PFC més comú són milers de tones CO2e. Els certificats CBAM estan denominats en tones CO2e.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 10: LEGISLATIVE TIMELINE (no active markers)
+     ===================================================== -->
+<section class="section" id="leg-timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Cronologia legislativa</h2>
+  </div>
+  <p class="section__subtitle">De la proposta a l'abast complet: els fites clau del CBAM</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">14 de juliol de 2021</div>
+      <div class="timeline__text"><strong>Proposta de la Comissió</strong> publicada com a part del paquet Ajusta't a la Sostenibilitat. COM(2021) 564 va proposar un CBAM que cobreix ciment, electricitat, fertilitzants, ferro i acer, i alumini. L'hidrogen i les mercaderies aigua avall no estaven en la proposta original.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">22 de juny de 2022</div>
+      <div class="timeline__text">Vot del <strong>comitè ENVI del Parlament Europeu</strong>. El Parlament va ampliar l'abast a l'hidrogen i els productes químics orgànics i va proposar una cronologia més ambiciosa.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">13 de desembre de 2022</div>
+      <div class="timeline__text"><strong>Acord polític</strong> arrirat entre el Parlament i el Consell. L'hidrogen afegit a l'abast final; el període de transició i la cronologia definitiva confirmats.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">18 d'abril de 2023</div>
+      <div class="timeline__text"><strong>Parlament Europeu adoptat</strong> el text final en plenari (adopció formal).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">10 de maig de 2023</div>
+      <div class="timeline__text"><strong>Reglament (UE) 2023/956 adoptat</strong> pel Parlament Europeu i el Consell de la UE. Signat per la Presidenta Metsola (PE) i la Ministra Roswall (Presidència del Consell).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16-17 de maig de 2023</div>
+      <div class="timeline__text">Publicat en la Revista Oficial com a <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956" target="_blank" rel="noopener">OJ L 130/52</a> (38 pàgines). Va entrar en vigor el 17 de maig de 2023.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">1 d'octubre de 2023</div>
+      <div class="timeline__text"><strong>Comença el període de transició.</strong> Els importadors ha de presentar informes CBAM trimestrals sobre emissions incorporades. Cap obligació financera durant aquesta fase.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 de desembre de 2024</div>
+      <div class="timeline__text">Disposicions de registre i autorització (Arts. 5, 10, 14, 16, 17) s'apliquen a partir d'aquesta data. Declarants autoritzats durant 2024 per preparar-se per al règim definitiu.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 de gener de 2026</div>
+      <div class="timeline__text">Últim informe CBAM de transició (Q4 2025) vençut. El període de transició es tanca.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">1 de gener de 2026</div>
+      <div class="timeline__text"><strong>Comença el règim definitiu.</strong> Entren en efecte les obligacions financeres. Només els declarants CBAM autoritzats podran importar mercaderies cobertes. Comença simultàniament l'extinció de l'assignació lliure del règim de comerç de drets d'emissió de la UE (interacció de l'Art. 31).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">31 de maig de 2027</div>
+      <div class="timeline__text"><strong>Primera declaració CBAM anual vençuda</strong> (per a l'any 2026). Els certificats coincidents han de ser lliurats para aquesta data.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2030 (objectiu)</div>
+      <div class="timeline__text">Abast a expandir per cobrir tots els sectors del règim de comerç de drets d'emissió de la UE. La revisió de la Comissió (Art. 30) ha d'avaluar l'extensió a mercaderies aigua avall i sectors addicionals. L'extensió de mercaderies aigua avall ja està en procés legislatiu (COM(2025) 989).</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 11: OFFICIAL SOURCES
+     ===================================================== -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Fonts primàries per al Reglament (UE) 2023/956</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> EUR-Lex: acte base</div>
+    <p>Text complet del Reglament (UE) 2023/956 de 10 de maig de 2023 (36 articles, 116 considerands, 6 annexos):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956</a></p>
+    <p style="margin-top:0.5rem;">Número CELEX: <strong>32023R0956</strong> | Referència a la Revista Oficial: OJ L 130/52 de 16 de maig de 2023</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-web" style="color: var(--color-green);"></i> Centre de la Comissió sobre el CBAM (DG TAXUD)</div>
+    <p>El portal oficial d'informació de la Comissió sobre el CBAM, amb orientacions, preguntes freqüents, el registre de transició del CBAM, i enllaços als reglaments d'execució:</p>
+    <p><a href="https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en" target="_blank" rel="noopener">https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-amber);"></i> Reglament d'execució (UE) 2023/1773</div>
+    <p>Reglament d'execució de la Comissió que estableix les normes del període de transició, formularis de comunicació trimestral, i valors per defecte:</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1773" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1773</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-arrow-expand-right" style="color: var(--color-purple);"></i> Proposta d'extensió de mercaderies aigua avall</div>
+    <p>Proposta de la Comissió COM(2025) 989 per estendre el CBAM a mercaderies d'acer i alumini processades aigua avall i afegir disposicions anti-circumvenció. Procediment 2025/0419(COD) sota procediment legislatiu ordinari:</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2025:989:FIN" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2025:989:FIN</a></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =====================================================
+     SECTION 12: EXPLORE WITH BRUBRU (3x2)
+     ===================================================== -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explora el CBAM amb Brubru</h2>
+  </div>
+  <p class="section__subtitle">Sis eina per analitzar, fer seguiment i treballar amb el CBAM i la legislació climàtica de la UE</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Xat de Brubru</div>
+      <div class="feature-card__desc">Fes qualsevol pregunta sobre certificats CBAM, càlculs d'emissions incorporades, el llindar trimestral del 80%, la reducció de l'Art. 9, o la interacció CBAM/ETS. Les respostes estan fonamentades en fonts oficials.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Obrir Xat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">La Meva Bombolla Europea</div>
+      <div class="feature-card__desc">Fes seguiment de l'esmena de mercaderies aigua avall del CBAM (2025/0419(COD)), segueix els debats del comitè ENVI del PE, i supervisiona els actes d'execució de la Comissió i actualitzacions del registre del CBAM en temps real.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Obrir La Meva Bombolla Europea</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Esmendador</div>
+      <div class="feature-card__desc">Carrega el Reglament (UE) 2023/956 o la proposta d'extensió de mercaderies aigua avall a l'Esmendador i redacta idioma d'esmena directament contra el text oficial EUR-Lex.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Obrir Esmendador</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">Conformitat amb la Legislació de la UE</div>
+      <div class="feature-card__desc">Executa una anàlisi de deficiència de conformitat contra les obligacions del CBAM: estat de declarant autoritzat, manteniment trimestral del 80%, emissions incorporades verificades, i requisits de lliurament anual. Identifica l'exposició antes d'una auditoria.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Obrir Conformitat amb la Legislació de la UE</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Licitador</div>
+      <div class="feature-card__desc">Trobar oportunitats de contractació de la UE i dels Estats membres relacionades amb preus de carboni, serveis d'implementació del CBAM, infraestructura de registres del ETS, i ferramentes de conformitat climàtica.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Obrir Licitador</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">API de Brubru</div>
+      <div class="feature-card__desc">Accés programàtic a dades de legislació de la UE, seguiment de procediments CBAM, events de calendari, i monitorization de Ajusta't a la Sostenibilitat. Construeix els teus propis fluxos de treball de conformitat CBAM i seguiment de carboni en dades de la llei de la UE.</div>
+      <a href="https://brubru.beresol.eu/api" class="feature-card__btn">Veure Documentació de l'API</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     CTA STRIP
+     ===================================================== -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/21234960/pexels-photo-21234960.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Obtén la plataforma completa de Brubru</h2>
+  <p class="cta-strip__sub">Prova gratuïta de 14 dies. Cap targeta necessària.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Comença la prova gratuïta</a>
+</div>
+
+<div class="container">
+
+<!-- =====================================================
+     SECTION 13: RELATED CANON ENTRIES
+     ===================================================== -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Entrades relacionades del Canon</h2>
+  </div>
+  <p class="section__subtitle">Altres anàlisi profundes del Canon de la UE en el mateix llinatge legal</p>
+
+  <div class="canon-placeholder">
+    <p>Actualment l'única entrada del Canon sobre preus de carboni de la UE. Mentre que Brubru analitza instruments climàtics germans com el règim de comerç de drets d'emissió de la UE (Dir. 2003/87/CE), la Llei europea del clima (Reg. (UE) 2021/1119), i l'extensió de mercaderies aigua avall (COM(2025) 989), apareixeran aquí automàticament.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-outline" style="color: var(--color-blue);"></i> Biblioteca de Canon de la UE</div>
+    <p>El Canon de la UE és la biblioteca creixent de Brubru d'anàlisi en llenguatge pla sobre legislació de la UE històrica. Cada entrada analitza les disposicions operatives, context legal, i significació pràctica d'una llei de la UE fonamental, amb tots els fets traçats al text oficial de EUR-Lex.</p>
+    <p style="margin-top:0.5rem;"><a href="../index.html" style="color: var(--color-blue);">Navega totes les entrades del Canon</a>, cobreix actualment GDPR, DSA, DMA, NIS2, Llei de la IA, MiCA, CRR, CBAM, i un conjunt creixent d'instruments de defensa comercial, farmacèutics, i climàtics.</p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru és l'assistent d'intel·ligència sobre política de la UE impulsat per IA de <a href="https://beresol.eu">Beresol BV</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Comença la teva prova gratuïta de 14 dies</a> sense targeta necessària.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Xat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Esmendador</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">La Meva Bombolla Europea</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">Conformitat amb la Legislació de la UE</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">Biblioteca de Canon de la UE</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">Totes les entrades del Canon</a></li>
+          <li><a href="../2016-679_gdpr/index.html">GDPR -- Reglament (UE) 2016/679</a></li>
+          <li><a href="../2022-2065_dsa/index.html">DSA -- Reglament (UE) 2022/2065</a></li>
+          <li><a href="index.html">CBAM -- Reglament (UE) 2023/956 (aquesta pàgina)</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Fonts oficials</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956" target="_blank" rel="noopener">Reglament CBAM a EUR-Lex (CELEX 32023R0956)</a></li>
+          <li><a href="https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en" target="_blank" rel="noopener">Centre de la Comissió sobre el CBAM (DG TAXUD)</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1773" target="_blank" rel="noopener">Reg. d'execució (UE) 2023/1773</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Construït per Beresol BV</p>
+        <p>Apeldoorn, Països Baixos</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">Aquesta és una anàlisi independent i no és un document oficial de la UE. Tots els fets estan traçats al Reglament (UE) 2023/956 i fonts officials EUR-Lex.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Copyright Beresol BV 2026. Tots els drets reservats. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Crèdits de les imatges: Heroi -- <a href="https://www.pexels.com/photo/16191930" target="_blank" rel="noopener">David McElwee via Pexels</a> (ID de foto 16191930). Tira de CTA -- <a href="https://www.pexels.com/photo/21234960" target="_blank" rel="noopener">Wolfgang Weiser via Pexels</a> (ID de foto 21234960).</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Torna al principi"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

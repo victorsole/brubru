@@ -91,6 +91,7 @@ const ROUTE_META = {
   '/eucanon/2022-2065_dsa/':                 { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2022-1925_dma/':                 { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2022-2555_nis2/':                { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2023-956_cbam/':                 { priority: 0.9, changefreq: 'monthly' },
   '/legislacio-ue-catala/':         { priority: 0.9, changefreq: 'daily'   },
   '/main/':                         { priority: 0.9, changefreq: 'daily'   },
   '/my-eu-bubble/':                 { priority: 0.9, changefreq: 'daily'   },
