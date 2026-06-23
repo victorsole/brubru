@@ -2,6 +2,27 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-23",
+      "action": "updated",
+      "guide": "eu_chips_act_2_0",
+      "title": "Chips Act 2.0",
+      "summary": "EUR 76m German State aid approved for QuantumDiamonds semiconductor testing-equipment facility in Munich (IPF-ATEST)",
+      "refs": [
+        "IP/26/1393"
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "action": "updated",
+      "guide": "global_gateway_strategy",
+      "title": "Global Gateway Strategy",
+      "summary": "Connectivity Agenda Platform launched (EU-Central Asia via Black Sea + South Caucasus, up to EUR 2bn); first Regional Cable Hubs + EUR 40m cable-repair call; EU-Kazakhstan aviation agreement",
+      "refs": [
+        "IP/26/1430",
+        "IP/26/1429"
+      ]
+    },
+    {
       "date": "2026-06-22",
       "action": "updated",
       "guide": "eu_funding_ipa_enlargement",

@@ -2181,19 +2181,34 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         max_valid = len(citations)
 
         def replace_orphan(match):
-            num = int(match.group(1))
+            ws = match.group(1)
+            num = int(match.group(3))
             if num < 1 or num > max_valid:
-                return ""  # Strip orphan
-            return match.group(0)  # Keep valid
+                return ""  # Strip orphan (and its leading whitespace)
+            # Keep valid; normalise fullwidth CJK brackets to ASCII so the marker
+            # matches the rendered References footer.
+            return f"{ws}[{num}]"
 
-        # Match [N] patterns (standalone citation markers)
-        cleaned = re.sub(r'\s*\[(\d+)\]', replace_orphan, text)
+        # Match [N] AND fullwidth CJK 【N】 markers (audit defect A1, 23 Jun 2026).
+        # Cerebras/Gemini occasionally emit 【1】 (U+3010/U+3011) which the old
+        # ASCII-only regex never touched, so orphans survived with no footer.
+        cleaned = re.sub(r'(\s*)([\[【])(\d+)([\]】])', replace_orphan, text)
+
+        # Strip fabricated fullwidth bracket-URL citations the model invents, e.g.
+        # 【https://www.consilium.europa.eu/.../18-19/】 (audit defect A2, 23 Jun 2026).
+        # These are not real stored references and frequently point at unverified
+        # paths. Only fullwidth brackets containing a URL are removed; ASCII text
+        # and legitimate [N]/footer links are untouched.
+        cleaned = re.sub(r'\s*【[^】]*?https?://[^】]*?】', '', cleaned)
 
         # Clean up any double spaces left behind
         cleaned = re.sub(r'  +', ' ', cleaned)
 
         if cleaned != text:
-            orphan_count = len(re.findall(r'\[(\d+)\]', text)) - len(re.findall(r'\[(\d+)\]', cleaned))
+            orphan_count = (
+                len(re.findall(r'[\[【](\d+)[\]】]', text))
+                - len(re.findall(r'[\[【](\d+)[\]】]', cleaned))
+            )
             if orphan_count > 0:
                 logger.info(f"Stripped {orphan_count} orphan citation markers (had {max_valid} real sources)")
 

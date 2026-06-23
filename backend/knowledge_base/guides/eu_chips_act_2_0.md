@@ -1,6 +1,7 @@
 # Chips Act 2.0 (COM(2026) 504)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 23 June 2026 — STATE AID, chips testing):** the Commission approved a **EUR 76 million German State aid measure** for **QuantumDiamonds GmbH** to set up a first-of-a-kind facility producing **semiconductor testing equipment in Munich** (the "IPF-ATEST" project — advanced metrology and inspection systems based on novel quantum sensors, enabling high-resolution 3D testing of microchips). The Commission framed it as strengthening the EU's position and autonomy in the semiconductor value chain, in line with the European Chips Act and the 2024-2029 Political Guidelines. Source: EC press release IP/26/1393 (23 June 2026).
 - **ADOPTED by the College on 3 June 2026** as part of the European Technological Sovereignty Package (with the Cloud and AI Development Act / CADA, the EU Open Source Strategy, and the Strategic Roadmap for Digitalisation and AI in Energy).
 - Full name: Proposal for a Regulation on a framework of measures for strengthening the Union's semiconductor ecosystem, repealing Regulation (EU) 2023/1781 (Chips Act 2.0).
 - Reference **COM(2026) 504 final**; procedure **2026/0139(COD)** (proposal CELEX 52026PC0504). Accompanying: ANNEXES I-VII; Impact Assessment SWD(2026) 504 (Parts 1-3); IA executive summary SWD(2026) 505; SEC(2026) 504.
