@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DORA: el primer reglament horitzontal de ciberseguretat per al sector financer de la UE | Brubru EU Canon</title>
+  <meta name="description" content="Guia completa en llenguatge planer del Reglament (UE) 2022/2554 (DORA). Cinc pilars, el marc de supervisió per a proveïdors tercers crítics de serveis de TIC, unes 22.000 entitats financeres en l'àmbit d'aplicació, i la data d'aplicació del 17 de gener de 2025.">
+  <meta property="og:title" content="DORA: el primer reglament horitzontal de ciberseguretat per al sector financer de la UE | Brubru EU Canon">
+  <meta property="og:locale" content="ca_ES">
+  <meta property="og:description" content="DORA consolida els requisits de risc de TIC de CRD IV, MiFID II, Solvency II, PSD2 i altres nou actes sectorials en un sol Reglament. S'aplica a ~22.000 entitats financeres de la UE a partir del 17 de gener de 2025.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DORA explicat | Brubru EU Canon">
+  <meta name="twitter:description" content="Cinc pilars. Un reglament. 22.000 entitats financeres. La Llei de resiliència operativa digital de la UE, explicada completament.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Reglament (UE) 2022/2554 del Parlament Europeu i del Consell sobre la resiliència operativa digital del sector financer",
+    "alternateName": "DORA",
+    "identifier": "CELEX:32022R2554",
+    "legislationIdentifier": "32022R2554",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554",
+    "datePublished": "2022-12-14",
+    "dateModified": "2026-06-24",
+    "jurisdiction": "EU",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Parlament Europeu i Consell de la UE"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Resiliència operativa digital, gestió del risc de TIC, notificació de ciberamenaces, TLPT, proveïdors tercers crítics de serveis de TIC, ciberseguretat del sector financer"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Container ---- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 780px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* ---- Hero image ---- */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* ---- Key figures strip ---- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ---- Sections ---- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* ---- Info boxes ---- */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(5,150,105,0.2);
+    }
+    .info-box--blue {
+      background: linear-gradient(135deg, rgba(6,147,227,0.08) 0%, rgba(155,81,224,0.06) 100%);
+      border-color: rgba(6,147,227,0.25);
+    }
+
+    /* ---- 5-pillar grid: 3+2 centred ---- */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pillars-grid .pillar-card:nth-child(1),
+    .pillars-grid .pillar-card:nth-child(2),
+    .pillars-grid .pillar-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .pillar-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pillar-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .pillar-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .pillar-card__num { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin-bottom: 0.25rem; }
+    .pillar-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .pillar-card__chapter { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.35rem; }
+    .pillar-card__desc { font-size: 0.78rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Ratio / headline-number grid (3 cols) ---- */
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ratio-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .ratio-card:hover { border-color: var(--color-purple); transform: translateY(-2px); }
+    .ratio-card__value { font-size: 1.8rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.2rem; }
+    .ratio-card__label { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 0.2rem; }
+    .ratio-card__ref { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Comparison table ---- */
+    .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .comp-table th, .comp-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .comp-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .comp-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .comp-table .col-label { font-weight: 700; color: var(--color-text); }
+    .comp-table .col-dora { color: var(--color-blue); }
+    .comp-table .col-nis2 { color: var(--color-purple); }
+    .comp-table .col-crr { color: var(--color-green); }
+
+    /* ---- Timeline (legislative milestones) ---- */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* ---- Glossary 2-col grid ---- */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Related canon: 3+2 centred grid ---- */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .related-grid .related-card:nth-child(1),
+    .related-grid .related-card:nth-child(2),
+    .related-grid .related-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .related-grid .related-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .related-grid .related-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .related-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: all 0.2s;
+      display: block;
+    }
+    .related-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .related-card .mdi { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; color: var(--color-blue); }
+    .related-card__name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .related-card__celex { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Brubru features 3x2 grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* ---- Pill badges ---- */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* ---- CTA Strip ---- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---- Footer ---- */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* ---- Back to top ---- */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* ====================================================
+       RESPONSIVE BREAKPOINTS
+       ==================================================== */
+
+    /* Tablet and below: drop 4-col grids to 2-col */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* pillars: drop 3+2 centred to 2-col */
+      .pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .pillars-grid .pillar-card:nth-child(1),
+      .pillars-grid .pillar-card:nth-child(2),
+      .pillars-grid .pillar-card:nth-child(3),
+      .pillars-grid .pillar-card:nth-child(4),
+      .pillars-grid .pillar-card:nth-child(5) {
+        grid-column: span 1;
+      }
+      /* related: drop 3+2 centred to 2-col */
+      .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .related-grid .related-card:nth-child(1),
+      .related-grid .related-card:nth-child(2),
+      .related-grid .related-card:nth-child(3),
+      .related-grid .related-card:nth-child(4),
+      .related-grid .related-card:nth-child(5) {
+        grid-column: span 1;
+      }
+    }
+
+    /* Narrow tablet: drop any remaining 3-col grids to 2-col */
+    @media (max-width: 900px) {
+      .ratio-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .comp-table { font-size: 0.85rem; }
+    }
+
+    /* Mobile: everything to 1 column */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .pillars-grid .pillar-card:nth-child(n) { grid-column: span 1; }
+      .ratio-grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .related-grid .related-card:nth-child(n) { grid-column: span 1; }
+      .comp-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .hero-image img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     STICKY HEADER
+     ===================================================== -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Inici de Brubru">
+    <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  </a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">Intel·ligència de política de la UE</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Selector d'idioma">
+    <option value="./index.html">English</option>
+    <option value="./es.html">Español</option>
+    <option value="./fr.html">Français</option>
+    <option value="./it.html">Italiano</option>
+    <option value="./nl.html">Nederlands</option>
+    <option value="./ca.html" selected>Català</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Inicia la prova gratuïta</a>
+</header>
+
+<div class="container">
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / Finances Digitals i Ciberseguretat
+  </div>
+  <h1 class="hero__title">DORA: <span>el primer reglament horitzontal de ciberseguretat de la UE per al sector financer</span></h1>
+  <p class="hero__subtitle">
+    El Reglament (UE) 2022/2554 consolida els requisits de risc de TIC dispersos en CRD IV, MiFID II, Solvency II, PSD2, EMIR, CSDR i altres nou actes en un Reglament d'aplicació directa i un Single Rulebook únic. Cobreix aproximadament 22.000 entitats financeres de la UE i introdueix la primera supervisió a escala de la Unió de proveïdors crítics de núvol i programari de la resiliència del qual depèn el sistema financer.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32022R2554 &middot; Reglament (UE) 2022/2554</span>
+    <span><i class="mdi mdi-calendar"></i> Adoptat el 14 de desembre de 2022</span>
+    <span><i class="mdi mdi-shield-lock-outline"></i> Paquet de Finances Digitals</span>
+    <span><i class="mdi mdi-gavel"></i> Art. 114 TFUE</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600"
+    alt="Racks de servidors en un centre de dades, que representa la infraestructura de TIC que DORA està dissenyada per protegir"
+    loading="eager"
+  >
+  <figcaption>
+    Foto: <a href="https://www.pexels.com/@brett-sayles" target="_blank" rel="noopener">Brett Sayles</a>
+    via <a href="https://www.pexels.com/photo/5480781" target="_blank" rel="noopener">Pexels</a>
+    | Infraestructura de servidors de centre de dades: la base de TIC que DORA està dissenyada per protegir
+  </figcaption>
+</figure>
+
+<!-- =====================================================
+     KEY FIGURES STRIP (4x1, drops to 2x2)
+     ===================================================== -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">17 gen. 2025</div>
+    <div class="figure-card__label">data d'aplicació</div>
+    <div class="figure-card__context">dos anys de transició des de la publicació al DO el 27 de desembre de 2022 (Art. 64)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">21 + 1</div>
+    <div class="figure-card__label">categories en l'àmbit d'aplicació</div>
+    <div class="figure-card__context">21 categories d'entitat financera (Art. 2(1)(a)-(t)) més els proveïdors tercers de serveis de TIC (Art. 2(1)(u))</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">3 anys</div>
+    <div class="figure-card__label">cadència TLPT</div>
+    <div class="figure-card__context">proves avançades basades en amenaces almenys cada 3 anys per a les entitats sistèmicament importants (Art. 26(1))</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">22.000</div>
+    <div class="figure-card__label">entitats financeres de la UE en l'àmbit d'aplicació</div>
+    <div class="figure-card__context">estimació del considerant 3; inclou bancs, asseguradores, empreses d'inversió, DCVs, ECC, entitats de pagament i més</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     TABLE OF CONTENTS
+     ===================================================== -->
+<nav class="toc" aria-label="Continguts de la pàgina">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Continguts</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Visió general</a>
+    <a href="#pillars" class="toc__link"><i class="mdi mdi-view-grid-outline"></i> Cinc pilars</a>
+    <a href="#headline-numbers" class="toc__link"><i class="mdi mdi-numeric"></i> Xifres clau</a>
+    <a href="#pillar1" class="toc__link"><i class="mdi mdi-shield-lock-outline"></i> Pilar 1: gestió del risc de TIC</a>
+    <a href="#pillar2" class="toc__link"><i class="mdi mdi-alert-outline"></i> Pilar 2: notificació d'incidents</a>
+    <a href="#pillar3" class="toc__link"><i class="mdi mdi-bug-check-outline"></i> Pilar 3: proves</a>
+    <a href="#pillar4" class="toc__link"><i class="mdi mdi-link-variant"></i> Pilar 4: risc de tercers</a>
+    <a href="#oversight" class="toc__link"><i class="mdi mdi-eye-outline"></i> Marc de supervisió</a>
+    <a href="#pillar5" class="toc__link"><i class="mdi mdi-share-variant-outline"></i> Pilar 5: intercanvi d'informació</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-outline"></i> Definicions clau</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-scale-balance"></i> DORA vs NIS 2 vs CRR</a>
+    <a href="#lineage" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Calendari legislatiu</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossari</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Fonts oficials</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explorar amb Brubru</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-book-open-outline"></i> Entrades del canon relacionades</a>
+  </div>
+</nav>
+
+<!-- =====================================================
+     SECTION 1: OVERVIEW
+     ===================================================== -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Visió general</h2>
+  </div>
+  <p class="section__subtitle">Què és DORA, per què existeix i què no fa</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-blue);"></i> Un reglament en lloc de nou règims sectorials fragmentats</div>
+    <p>Abans de DORA, els requisits de risc de TIC per a les entitats financeres estaven dispersos en almenys nou actes jurídics de la UE: CRD IV, MiFID II, Solvency II, UCITS, AIFMD, PSD2, EMIR, CSDR, el Reglament CRA i el Reglament de referència. Cada acte abordava el risc operatiu i de TIC de manera diferent, cosa que creava fragmentació regulatòria per als grups transfronterers i una protecció desigual entre subsectors.</p>
+    <p style="margin-top:0.5rem;">DORA substitueix totes aquestes disposicions per un únic Reglament d'aplicació directa. Com a Reglament (no una Directiva), té efecte en tots els estats membres sense transposició nacional, creant un veritable Single Rulebook per a la resiliència operativa digital (considerants 9-14).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-compare" style="color: var(--color-purple);"></i> Lex specialis respecte a NIS 2 i Directiva DORA complementària</div>
+    <p>DORA és <strong>lex specialis</strong> respecte a NIS 2 (Directiva (UE) 2022/2555): quan DORA s'aplica a entitats financeres, les seves obligacions més específiques de risc de TIC i notificació d'incidents prevalen sobre NIS 2, mentre que les entitats financeres segueixen formant part de l'ecosistema NIS 2 per a la cooperació i l'aprenentatge intersectorials (considerant 16).</p>
+    <p style="margin-top:0.5rem;">La <strong>Directiva (UE) 2022/2556</strong> complementària modifica vuit Directives del sector financer (UCITS, Solvency II, AIFMD, CRD IV, BRRD, MiFID II, PSD2, IORP II) per alinear les seves disposicions de risc operatiu amb DORA i inserir una referència creuada. DORA modifica cinc Reglaments (Reg. CRA 1060/2009, EMIR 648/2012, MiFIR 600/2014, CSDR 909/2014, BMR 2016/1011) restringint o substituint les seves disposicions relatives a TIC.</p>
+  </div>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-close-circle-outline" style="color: var(--color-amber);"></i> Important: el que DORA no fa</h3>
+    <p><strong>Sense requisits de capital per al risc de TIC</strong> – s'allunya deliberadament de l'enfocament tradicional de «fixar una xifra de capital» per al risc operatiu (considerant 12). DORA és un instrument qualitatiu: protegir, detectar, contenir, recuperar, aprendre. El capital es manté en CRR i Solvency II.</p>
+    <p style="margin-top:0.4rem;"><strong>Sense localització de dades</strong> – el considerant 82 és explícit: DORA no requereix que l'emmagatzematge o el tractament de dades es dugui a terme a la Unió, ni tan sols per als proveïdors tercers crítics de serveis de TIC.</p>
+    <p style="margin-top:0.4rem;"><strong>Sense nous supervisors sectorials</strong> – DORA canalitza el compliment a través de les autoritats existents de CRD IV, MiFID II, Solvency II, PSD2, etc. (Art. 46).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 2: FIVE PILLARS INFOGRAPHIC (3+2 centred)
+     ===================================================== -->
+<section class="section" id="pillars">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+    <h2 class="section__title">Què cobreix DORA: cinc pilars</h2>
+  </div>
+  <p class="section__subtitle">L'article 1 del Reglament (UE) 2022/2554 estructura el Reglament entorn de cinc àrees bàsiques</p>
+
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <i class="mdi mdi-shield-lock" style="color: var(--color-blue);"></i>
+      <div class="pillar-card__num">Pilar 1</div>
+      <div class="pillar-card__name">Gestió del risc de TIC</div>
+      <div class="pillar-card__chapter">Capítol II, Arts. 5-16</div>
+      <div class="pillar-card__desc">Governança, identificació, protecció, detecció, resposta i recuperació, còpia de seguretat, aprenentatge, comunicació i un marc simplificat per a les entitats més petites</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-alert" style="color: var(--color-amber);"></i>
+      <div class="pillar-card__num">Pilar 2</div>
+      <div class="pillar-card__name">Notificació d'incidents relacionats amb les TIC</div>
+      <div class="pillar-card__chapter">Capítol III, Arts. 17-23</div>
+      <div class="pillar-card__desc">Notificacions inicials, intermèdies i finals a les autoritats competents; sis criteris de classificació; estudi de viabilitat del Hub de la UE; integració de la notificació de pagaments de PSD2</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-bug-check" style="color: var(--color-green);"></i>
+      <div class="pillar-card__num">Pilar 3</div>
+      <div class="pillar-card__name">Proves de resiliència operativa digital</div>
+      <div class="pillar-card__chapter">Capítol IV, Arts. 24-27</div>
+      <div class="pillar-card__desc">Proves bàsiques anuals dels sistemes crítics; TLPT avançades cada 3 anys per a les entitats sistèmicament importants; alineació amb el marc TIBER-EU</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-link-variant" style="color: var(--color-purple);"></i>
+      <div class="pillar-card__num">Pilar 4</div>
+      <div class="pillar-card__name">Gestió del risc TIC de tercers</div>
+      <div class="pillar-card__chapter">Capítol V Secció I, Arts. 28-30</div>
+      <div class="pillar-card__desc">Registre d'informació, anàlisi del risc de concentració, disposicions contractuals obligatòries, estratègies de sortida; l'entitat financera continua sent plenament responsable en tot moment</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-share-variant" style="color: var(--color-green);"></i>
+      <div class="pillar-card__num">Pilar 5</div>
+      <div class="pillar-card__name">Disposicions d'intercanvi d'informació</div>
+      <div class="pillar-card__chapter">Capítol VI, Art. 45</div>
+      <div class="pillar-card__desc">Intercanvi voluntari d'intel·ligència sobre ciberamenaces i indicadors de compromís en comunitats de confiança, subjecte al RGPD i la legislació de la competència</div>
+    </div>
+  </div>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-eye-outline" style="color: var(--color-blue);"></i> El sisè element: el marc de supervisió (Capítol V, Secció II)</h3>
+    <p>La disposició més innovadora de DORA és independent dels cinc pilars. El Capítol V, Secció II (Arts. 31-44) crea la primera supervisió a escala de la UE de proveïdors de serveis no financers: empreses de núvol, programari, centres de dades i anàlisi de dades de la disponibilitat dels quals depèn el sistema financer. El supervisor principal (una de ABE, AEVM o AESPJ) pot emetre recomanacions vinculants i imposar pagaments de sancions diàries de fins a l'1% del volum de negoci mundial als <strong>proveïdors tercers crítics de serveis de TIC (CTPP)</strong> designats.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 3: HEADLINE NUMBERS
+     ===================================================== -->
+<section class="section" id="headline-numbers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+    <h2 class="section__title">Xifres clau</h2>
+  </div>
+  <p class="section__subtitle">Les xifres principals del Reglament (UE) 2022/2554 i les seves mesures d'execució</p>
+
+  <div class="ratio-grid">
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">1%</div>
+      <div class="ratio-card__label">límit de sanció diària per a un CTPP</div>
+      <div class="ratio-card__ref">Art. 35(8) - màx. 6 mesos</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-purple);">12 mesos</div>
+      <div class="ratio-card__label">per a un CTPP de país tercer per establir una filial a la UE després de la designació</div>
+      <div class="ratio-card__ref">Art. 31(12)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-green);">&euro;2M / &lt;10</div>
+      <div class="ratio-card__label">llindar de microempresa (facturació o balanç / persones)</div>
+      <div class="ratio-card__ref">Art. 3(60)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-amber);">15 anys</div>
+      <div class="ratio-card__label">retenció màxima de dades personals per les AES i les ANC</div>
+      <div class="ratio-card__ref">Art. 56(2)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">&le;15</div>
+      <div class="ratio-card__label">membres IORP: exclusió de l'àmbit complet de DORA</div>
+      <div class="ratio-card__ref">Art. 2(3)(c)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-purple);">3 AES</div>
+      <div class="ratio-card__label">ABE, AEVM i AESPJ gestionen conjuntament el marc de supervisió a través del seu Comitè Mixt</div>
+      <div class="ratio-card__ref">Art. 31-32</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 4: PILLAR 1 - ICT RISK MANAGEMENT
+     ===================================================== -->
+<section class="section" id="pillar1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-lock-outline"></i></div>
+    <h2 class="section__title">Pilar 1: gestió del risc de TIC (Arts. 5-16)</h2>
+  </div>
+  <p class="section__subtitle">Governança, identificació, protecció, detecció, resposta, recuperació, aprenentatge i comunicació</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-blue);"></i> Governança (Art. 5)</div>
+    <p>L'<strong>òrgan de direcció té la responsabilitat última</strong> del risc de TIC. Ha de definir, aprovar i supervisar el marc de gestió del risc de TIC, establir la tolerància al risc, aprovar la política de continuïtat de negoci de TIC més els plans de resposta i recuperació, assignar el pressupost de TIC, aprovar la política de tercers de TIC i mantenir-se format en risc de TIC (Art. 5(4)).</p>
+    <p style="margin-top:0.5rem;">Les entitats financeres que no siguin microempreses han d'establir una funció dedicada per supervisar els acords amb tercers de TIC, o designar un membre de l'alta direcció responsable d'aquesta exposició (Art. 5(3)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> Marc de gestió del risc de TIC (Art. 6)</div>
+    <p>Ha de ser sòlid, complet i ben documentat. Revisat almenys anualment, més després de qualsevol incident greu relacionat amb les TIC o constatació supervisora. Sotmès a auditoria interna (Art. 6(6)). Ha d'incloure una <strong>estratègia de resiliència operativa digital</strong> (Art. 6(8)) que cobreixi la tolerància al risc, els objectius de seguretat, l'arquitectura de referència de TIC, els mecanismes de detecció, l'estat actual de resiliència, el pla de proves i l'estratègia de comunicació.</p>
+    <p style="margin-top:0.5rem;">Les microempreses i les entitats petites o no interconnectades segueixen un <strong>marc simplificat (Art. 16)</strong> – els Articles 5-15 no s'apliquen; en canvi, un conjunt més senzill de vuit obligacions.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-map-search-outline" style="color: var(--color-green);"></i> Identificació i protecció (Arts. 8-9)</div>
+    <p><strong>Art. 8 (identificació):</strong> Mapatge de totes les funcions empresarials recolzades per TIC, classificació de la informació i els actius de TIC, identificació de totes les dependències de tercers de TIC, avaluació del risc en cada canvi important, realització d'avaluacions anuals del risc de TIC dels sistemes llegats.</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 9 (protecció):</strong> Política de seguretat de la informació, gestió de xarxes i infraestructures, control d'accés, autenticació forta, criptografia, gestió de canvis de TIC i gestió de pegats. Les xarxes han de dissenyar-se per ser <strong>desconnectables o segmentables instantàniament</strong> per evitar el contagi.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-radar" style="color: var(--color-amber);"></i> Detecció, resposta i recuperació (Arts. 10-11)</div>
+    <p><strong>Art. 10 (detecció):</strong> Mecanismes per detectar activitats anòmales, controls multicapa, llindars d'alerta, escalada automàtica.</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 11 (resposta i recuperació):</strong> Política de continuïtat de negoci de TIC, plans de resposta i recuperació, <strong>anàlisi d'impacte empresarial (BIA)</strong>, capacitats redundants de TIC, proves almenys anuals incloent escenaris de ciberatac i commutació primari-a-redundant per a les entitats no microempreses, funció de gestió de crisi.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-database-sync-outline" style="color: var(--color-blue);"></i> Còpia de seguretat, aprenentatge i comunicació (Arts. 12-14)</div>
+    <p><strong>Art. 12 (còpia de seguretat):</strong> Sistemes de còpia de seguretat segregats física i lògicament dels sistemes de TIC font. Els DCVs han de mantenir almenys un lloc de processament secundari a una distància geogràfica del primari, amb capacitat de continuïtat total (Art. 12(5)).</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 13 (aprenentatge):</strong> Revisions posteriors a incidents, retroalimentació de lliçons apreses en el marc, <strong>programes de conscienciació en seguretat de TIC i formació en resiliència operativa digital com a mòduls obligatoris per al personal</strong> (Art. 13(6)) que cobreix tots els empleats i l'alta direcció.</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 14 (comunicació):</strong> Plans de comunicació de crisi per a la divulgació responsable d'incidents greus o vulnerabilitats. Almenys una persona responsable de la funció de comunicació pública i als mitjans.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 5: PILLAR 2 - INCIDENT REPORTING
+     ===================================================== -->
+<section class="section" id="pillar2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-alert-outline"></i></div>
+    <h2 class="section__title">Pilar 2: notificació d'incidents relacionats amb les TIC (Arts. 17-23)</h2>
+  </div>
+  <p class="section__subtitle">Notificació en tres etapes, sis criteris de classificació i l'estudi de viabilitat del Hub de la UE</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-sort-variant" style="color: var(--color-amber);"></i> Criteris de classificació (Art. 18)</div>
+    <p>Sis criteris determinen si un incident es qualifica com a <strong>incident greu relacionat amb les TIC</strong> (que requereix notificació obligatòria) o una ciberamenaça significativa:</p>
+    <ul>
+      <li>Nombre o rellevància dels clients o contraparts financeres afectades; transaccions afectades; impacte reputacional</li>
+      <li>Durada i temps d'inactivitat del servei</li>
+      <li>Extensió geogràfica, en particular si afecta més de dos estats membres</li>
+      <li>Pèrdues de dades (que afecten la disponibilitat, l'autenticitat, la integritat o la confidencialitat)</li>
+      <li>Criticitat dels serveis afectats, inclosa la de les funcions crítiques o importants</li>
+      <li>Impacte econòmic: directe i indirecte, absolut i relatiu</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-send-outline" style="color: var(--color-blue);"></i> Notificació en tres etapes a les autoritats competents (Art. 19)</div>
+    <p>Notificació obligatòria d'incidents greus a l'autoritat competent (es designa una única autoritat nacional on l'entitat té múltiples supervisors). Tres etapes:</p>
+    <ul>
+      <li><strong>Notificació inicial</strong> – tan aviat com es compleixin els llindars de materialitat</li>
+      <li><strong>Informe(s) intermedi(s)</strong> – sempre que l'estat canviï significativament</li>
+      <li><strong>Informe final</strong> – després de l'anàlisi de causa arrel, amb xifres d'impacte reals</li>
+    </ul>
+    <p style="margin-top:0.5rem;">Les ciberamenaces significatives poden notificar-se <strong>voluntàriament</strong>. Els impactes transfronterers es canalitzen a través de ABE, AEVM o AESPJ als estats membres pertinents. Les entitats de crèdit significatives sota el MUS notifiquen a l'ANC, que transmet immediatament al BCE. Els llindars de materialitat, els terminis i les plantilles s'estableixen per RTS i ITS (Art. 20), presentats a la Comissió el 17 de juliol de 2024.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-hub-outline" style="color: var(--color-purple);"></i> Estudi de viabilitat del Hub de la UE (Art. 21) i incidents de pagament (Art. 23)</div>
+    <p><strong>Art. 21:</strong> Les AES havien d'avaluar abans del 17 de gener de 2025 si és viable un Hub únic de la UE per a la notificació d'incidents greus relacionats amb les TIC, per racionalitzar la notificació entre les múltiples autoritats competents implicades.</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 23:</strong> Les entitats de crèdit, les entitats de pagament, els proveïdors de serveis d'informació sobre comptes i les entitats de diner electrònic notifiquen ara sota DORA els incidents operatius i de seguretat relacionats amb pagaments que anteriorment es notificaven sota l'article 96 de PSD2, independentment de si estan relacionats amb les TIC. DORA consolida i substitueix aquesta obligació de notificació de PSD2.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 6: PILLAR 3 - TESTING
+     ===================================================== -->
+<section class="section" id="pillar3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-bug-check-outline"></i></div>
+    <h2 class="section__title">Pilar 3: proves de resiliència operativa digital (Arts. 24-27)</h2>
+  </div>
+  <p class="section__subtitle">Proves bàsiques anuals, TLPT cada tres anys i alineació amb TIBER-EU</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-decagram-outline" style="color: var(--color-green);"></i> Programa de proves bàsic (Arts. 24-25)</div>
+    <p>Un <strong>programa de proves complet</strong> com a part integrant del marc de gestió del risc de TIC. Basat en el risc i realitzat per parts independents (internes o externes). Ampli menú d'eines: avaluacions i anàlisis de vulnerabilitats, anàlisis de codi obert, avaluacions de seguretat de xarxes, anàlisis de bretxes, revisions de seguretat física, qüestionaris, programari d'exploració, revisions de codi font quan sigui factible, proves basades en escenaris, proves de compatibilitat, proves de rendiment, proves d'extrem a extrem i proves de penetració. Proves <strong>almenys anuals</strong> de tots els sistemes i aplicacions de TIC que donen suport a funcions crítiques o importants.</p>
+    <p style="margin-top:0.5rem;">Els DCVs i les ECC han de realitzar avaluacions de vulnerabilitats abans de qualsevol desplegament o redespleguement de components d'aplicació o infraestructura nous o existents.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target-account" style="color: var(--color-red);"></i> TLPT – proves avançades basades en amenaces (Art. 26)</div>
+    <p>Les <strong>proves avançades basades en amenaces</strong> imiten les tàctiques, tècniques i procediments d'actors d'amenaces reals, oferint una prova controlada, a mida i basada en intel·ligència (equip vermell) dels <strong>sistemes de producció en viu crítics</strong> de l'entitat financera.</p>
+    <ul style="margin-top:0.5rem;">
+      <li>Realitzades <strong>almenys cada 3 anys</strong> (la freqüència pot ser ajustada per l'autoritat competent)</li>
+      <li>Requerides només per a les entitats financeres <strong>identificades</strong> per l'autoritat competent basant-se en: impacte en el sector financer, possibles preocupacions d'estabilitat financera inclòs el caràcter sistèmic, perfil de risc de TIC i maduresa de TIC</li>
+      <li>Han de cobrir diverses o totes les funcions crítiques o importants</li>
+      <li>Es permet TLPT agrupada (Art. 26(4)) quan la participació de tercers de TIC podria afectar negativament altres clients</li>
+      <li>Es permeten provadors interns amb aprovació supervisora prèvia, sense conflicte d'interessos, rotació periòdica (es requereixen provadors externs cada tres proves – Art. 26(8))</li>
+      <li><strong>Entitats de crèdit significatives sota el MUS: només provadors externs</strong></li>
+      <li>L'autoritat emet una atestació per al reconeixement mutu a tota la UE; l'entitat financera manté la responsabilitat total</li>
+      <li>Alineació amb el marc <strong>TIBER-EU</strong> (BCE)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-hard-hat-outline" style="color: var(--color-blue);"></i> Requisits per als provadors (Art. 27)</div>
+    <p>Els provadors TLPT han de demostrar: la màxima idoneïtat i reputació, experiència en intel·ligència sobre amenaces, proves de penetració i proves d'equip vermell, certificació per un organisme d'acreditació d'un estat membre o adherència a codis de conducta formals, garantia auditada sobre la gestió del risc i assegurança de responsabilitat professional que cobreixi la negligència en les activitats de proves.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 7: PILLAR 4 - THIRD-PARTY RISK
+     ===================================================== -->
+<section class="section" id="pillar4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Pilar 4: gestió del risc TIC de tercers (Arts. 28-30)</h2>
+  </div>
+  <p class="section__subtitle">Registre d'informació, risc de concentració, disposicions contractuals i estratègies de sortida</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clipboard-list-outline" style="color: var(--color-purple);"></i> Principis i artefactes obligatoris (Art. 28)</div>
+    <p>L'entitat financera <strong>en tot moment continua sent plenament responsable</strong> del compliment de DORA – l'externalització no transfereix les obligacions. Els artefactes obligatoris inclouen:</p>
+    <ul>
+      <li><strong>Estratègia sobre el risc TIC de tercers</strong>, revisada periòdicament per l'òrgan de direcció</li>
+      <li><strong>Registre d'informació</strong> de tots els acords contractuals sobre l'ús de serveis de TIC, distingint els que donen suport a funcions crítiques o importants dels que no; notificable anualment a l'autoritat competent (Art. 28(3))</li>
+      <li>Diligència deguda prèvia a la contractació: avaluació de la criticitat, condicions supervisores, anàlisi del risc de concentració de TIC, diligència deguda sobre el potencial tercer, examen de conflictes d'interessos (Art. 28(4))</li>
+      <li><strong>Clàusules de rescissió</strong> (Art. 28(7)): incompliment significatiu per part del tercer, canvis materials que afectin el rendiment, debilitats constatades en la gestió del risc de TIC, incapacitat de l'autoritat competent per supervisar eficaçment l'entitat financera</li>
+      <li><strong>Estratègies de sortida</strong> per als serveis de TIC que donen suport a funcions crítiques o importants (Art. 28(8)) – completes, documentades i suficientment provades</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Risc de concentració (Art. 29)</div>
+    <p>Anàlisi prèvia a la contractació: el contracte resultaria en dependència d'un tercer no fàcilment substituïble, o en múltiples contractes de funcions crítiques amb el mateix tercer o tercers estretament vinculats? Es requereix anàlisi de subcontractació especialment quan el subcontractista es troba en un país tercer, tenint en compte la legislació concursal d'aquell país, l'aplicació de la protecció de dades i la longitud i complexitat de les cadenes de subcontractació.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-sign" style="color: var(--color-blue);"></i> Disposicions contractuals obligatòries (Art. 30)</div>
+    <p>Tot contracte de serveis de TIC ha d'incloure com a mínim: descripció completa de funcions i serveis; ubicacions del tractament i emmagatzematge de dades; disposicions de disponibilitat, autenticitat, integritat i confidencialitat; accés a les dades, recuperació i retorn en cas d'insolvència o rescissió; descripcions del nivell de servei; assistència del tercer durant incidents de TIC; cooperació plena amb les autoritats competents i de resolució; drets de rescissió amb període de preavís mínim; condicions per a la participació del tercer en els programes de formació de l'entitat financera.</p>
+    <p style="margin-top:0.5rem;"><strong>Per als serveis de TIC que donen suport a funcions crítiques o importants</strong>, addicionalment: objectius precisos quantitatius i qualitatius de rendiment de l'SLA; períodes de preavís sobre novetats que afectin materialment la prestació del servei; plans de contingència empresarial; participació en TLPT; <strong>drets il·limitats d'accés, inspecció i auditoria</strong> per part de l'entitat financera, l'autoritat competent i el supervisor principal; <strong>períodes de transició adequats</strong> en les estratègies de sortida. Les microempreses poden delegar els drets d'auditoria a un tercer independent designat pel tercer (Art. 30(3)).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 8: OVERSIGHT FRAMEWORK
+     ===================================================== -->
+<section class="section" id="oversight">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-eye-outline"></i></div>
+    <h2 class="section__title">El marc de supervisió: proveïdors tercers crítics de serveis de TIC (Arts. 31-44)</h2>
+  </div>
+  <p class="section__subtitle">La primera supervisió a escala de la UE de proveïdors de serveis no financers: núvol, programari, centres de dades i anàlisi de dades</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-star-outline" style="color: var(--color-amber);"></i> La part més innovadora de DORA</h3>
+    <p>Per primera vegada, la UE supervisa directament, a escala de la Unió, els proveïdors de núvol, programari, centres de dades i anàlisi de dades de la disponibilitat continuada dels quals depèn el sistema financer. Aquestes entitats no són empreses financeres i fins ara estaven fora del perímetre de la supervisió financera. DORA canvia això per als proveïdors tercers crítics de serveis de TIC (CTPP) designats.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-certificate-outline" style="color: var(--color-blue);"></i> Designació com a CTPP (Art. 31)</div>
+    <p>Les tres AES, a través del seu Comitè Mixt, per recomanació del Fòrum de Supervisió (Art. 32), designen un proveïdor tercer de serveis de TIC com a <strong>crític</strong> basant-se en quatre criteris:</p>
+    <ul>
+      <li><strong>Impacte sistèmic</strong> sobre l'estabilitat, la continuïtat o la qualitat dels serveis financers si el proveïdor falla</li>
+      <li><strong>Caràcter sistèmic</strong> de les entitats financeres que hi confien (G-SII, O-SII i les seves interdependències)</li>
+      <li><strong>Dependència</strong> de les entitats financeres dels seus serveis per a funcions crítiques o importants</li>
+      <li><strong>Grau de substituïbilitat</strong> – alternatives limitades, quota de mercat, complexitat tècnica, cost i risc de migració</li>
+    </ul>
+    <p style="margin-top:0.5rem;">La llista de CTPP es publica anualment. Els TPP de TIC no designats automàticament <strong>poden adherir-se voluntàriament</strong> per sol·licitud (Art. 31(11)). <strong>Els CTPP de països tercers han d'establir una filial a la UE en un termini de 12 mesos des de la designació</strong> (Art. 31(12)) i poden continuar prestant serveis des de fora de la Unió, però la presència de supervisió a la UE és obligatòria.</p>
+    <p style="margin-top:0.5rem;"><strong>Exclosos</strong> (Art. 31(8)): entitats financeres que presten serveis de TIC a altres entitats financeres, proveïdors ja sota supervisió del SEBC (TARGET, T2S, etc.), proveïdors intragrupals i proveïdors actius en un sol estat membre que serveixen entitats actives únicament en aquell estat membre.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-sitemap-outline" style="color: var(--color-purple);"></i> Estructura: Comitè Mixt, Fòrum de Supervisió i JON (Arts. 32, 34)</div>
+    <ul>
+      <li><strong>Comitè Mixt</strong> (AES) – coordinació intersectorial, posicions conjuntes sobre els CTPP</li>
+      <li><strong>Fòrum de Supervisió</strong> – subcomitè; prepara posicions conjuntes; inclou els presidents de les tres AES, un representant d'alt nivell de l'ANC per estat membre, i el BCE, la JERS, l'ENISA i la Comissió com a observadors</li>
+      <li><strong>Xarxa Conjunta de Supervisió (JON, Art. 34)</strong> – coordina els tres supervisors principals per a l'alineació operativa</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-tie-outline" style="color: var(--color-blue);"></i> El supervisor principal (Art. 33)</div>
+    <p>Per a cada CTPP, el supervisor principal és l'AES (ABE, AEVM o AESPJ) responsable del subsector d'entitats financeres les entitats del qual conjuntament representen la major part dels actius totals entre totes les entitats financeres que utilitzen aquell CTPP. El supervisor principal és el <strong>punt de contacte principal</strong> per al CTPP i realitza l'avaluació de governança, gestió del risc de TIC, continuïtat de negoci, seguretat física, gestió d'incidents, portabilitat de dades, proves, auditories i estàndards.</p>
+    <p style="margin-top:0.5rem;">El supervisor principal adopta un <strong>pla de supervisió individual</strong> anual per CTPP (Art. 33(4)); el CTPP pot presentar una declaració motivada en un termini de 15 dies naturals abans de l'adopció.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-red);"></i> Poders del supervisor principal (Art. 35)</div>
+    <ul>
+      <li><strong>Sol·licituds d'informació i documentació</strong> (Art. 37): tots els registres, polítiques i acords pertinents</li>
+      <li><strong>Investigacions generals</strong> (Art. 38): examinar registres, obtenir còpies, convocar representants, entrevistar persones, sol·licitar registres de trànsit de dades</li>
+      <li><strong>Inspeccions in situ i a distància</strong> (Art. 39): accedir a les instal·lacions empresarials, precintar les instal·lacions, els llibres i els registres durant la inspecció</li>
+      <li><strong>Recomanacions</strong>: sobre estàndards de seguretat de TIC, condicions de servei que impedeixin punts únics de fallada o amplificació sistèmica, subcontractació planificada inclosa en països tercers, i (el més poderós) <strong>exigir al CTPP que s'abstingui d'un acord de subcontractació addicional</strong> quan afecti una funció crítica o important i plantegi un risc clar i greu per a l'estabilitat financera de la Unió</li>
+      <li><strong>Pagaments de sancions periòdiques</strong>: fins a l'<strong>1% del volum de negoci mundial diari mitjà</strong>, diàriament, durant un màxim de 6 mesos (Art. 35(8))</li>
+    </ul>
+    <p style="margin-top:0.5rem;">El supervisor principal pot exercir aquests poders fora de la Unió (Art. 36) si el CTPP hi consent i l'autoritat del país tercer pertinent no s'hi oposa, subjecte als acords de cooperació administrativa.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-circle-outline" style="color: var(--color-green);"></i> Seguiment i poders de suspensió d'últim recurs (Art. 42)</div>
+    <p>En un termini de 60 dies naturals, el CTPP notifica el compliment de la recomanació o proporciona una explicació motivada per no seguir-la. Si l'explicació és insuficient, el supervisor principal fa pública la no-conformitat.</p>
+    <p style="margin-top:0.5rem;">Les autoritats competents, com a mesura d'últim recurs, després de notificació i consulta (voluntària) amb les autoritats de NIS 2, poden adoptar una decisió (Art. 42(6)) <strong>que requereixi a les entitats financeres la suspensió temporal, parcial o completa, de l'ús d'un servei</strong> prestat pel CTPP, o la rescissió dels acords contractuals pertinents, fins que s'abordin els riscos identificats.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cash-multiple" style="color: var(--color-amber);"></i> Taxes de supervisió (Art. 43) i cooperació internacional (Art. 44)</div>
+    <p><strong>Art. 43:</strong> Les despeses del supervisor principal es financen íntegrament amb les taxes dels CTPP, de manera proporcional al volum de negoci. L'import i el mecanisme de pagament s'estableixen per acte delegat (termini: 17 de juliol de 2024).</p>
+    <p style="margin-top:0.5rem;"><strong>Art. 44:</strong> ABE, AEVM i AESPJ poden concloure acords administratius amb autoritats reguladores i supervisores de països tercers per compartir bones pràctiques sobre la revisió del risc TIC de tercers. Cada cinc anys s'elabora un informe confidencial per al PE, el Consell i la Comissió.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 9: PILLAR 5 - INFORMATION SHARING
+     ===================================================== -->
+<section class="section" id="pillar5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-share-variant-outline"></i></div>
+    <h2 class="section__title">Pilar 5: disposicions d'intercanvi d'informació (Art. 45)</h2>
+  </div>
+  <p class="section__subtitle">Intercanvi voluntari d'intel·ligència sobre ciberamenaces en comunitats de confiança</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-multiple-outline" style="color: var(--color-green);"></i> Comunitats de confiança per a l'intercanvi d'intel·ligència</div>
+    <p>Les entitats financeres poden <strong>voluntàriament</strong> intercanviar informació i intel·ligència sobre ciberamenaces dins de <strong>comunitats de confiança</strong>. La intel·ligència que es pot compartir inclou: indicadors de compromís, tàctiques, tècniques i procediments, alertes, eines de configuració i informació sobre actors de ciberamenaces o campanyes.</p>
+    <p style="margin-top:0.5rem;">Aquests acords han de regir-se per normes de conducta que respectin la confidencialitat empresarial, les normes de protecció de dades personals del RGPD i el dret de la competència de la UE (Art. 101 TFUE). La participació s'ha de notificar a l'autoritat competent. La Comissió i l'ENISA actuen com a observadors en aquestes comunitats quan sigui apropiat.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 10: KEY DEFINITIONS
+     ===================================================== -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-outline"></i></div>
+    <h2 class="section__title">Definicions clau (Art. 3)</h2>
+  </div>
+  <p class="section__subtitle">L'article 3 conté 65 definicions. Els sis conceptes fonamentals que estructuren la resta del Reglament:</p>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> Definicions fonamentals de l'article 3</h3>
+    <ul>
+      <li><strong>«funció crítica o important» (Art. 3(22))</strong> – una funció la interrupció de la qual deterioraria materialment el rendiment financer, la solidesa o la continuïtat, o el compliment de les condicions d'autorització. Aquesta definició determina quins serveis de TIC comporten les obligacions més elevades sota DORA.</li>
+      <li><strong>«incident greu relacionat amb les TIC» (Art. 3(10))</strong> – un incident de TIC amb un impacte advers elevat sobre els sistemes que donen suport a funcions crítiques o importants. El desencadenant de la notificació obligatòria en tres etapes sota l'Art. 19.</li>
+      <li><strong>«proves avançades basades en amenaces» o TLPT (Art. 3(17))</strong> – proves d'equip vermell basades en intel·ligència dels sistemes de producció en viu, imitant els actors d'amenaces reals. Requerides almenys cada 3 anys per a les entitats sistèmicament importants identificades.</li>
+      <li><strong>«proveïdor tercer de serveis de TIC» (Art. 3(19))</strong> – una empresa que presta serveis de TIC (inclòs el maquinari com a servei; la telefonia analògica exclosa). Diferent del «proveïdor intragrupal de serveis de TIC» (Art. 3(20)).</li>
+      <li><strong>«proveïdor tercer crític de serveis de TIC» o CTPP (Art. 3(23))</strong> – un TPP designat com a crític sota l'article 31, subjecte al marc de supervisió complet i als poders del supervisor principal.</li>
+      <li><strong>«risc de concentració de TIC» (Art. 3(29))</strong> – exposició a un o diversos TPP crítics relacionats que crea una dependència que podria posar en perill les funcions crítiques o importants o l'estabilitat financera de la Unió. El concepte que sustenta l'anàlisi de l'Art. 29 i la raó de ser del marc de supervisió.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 11: COMPARISON TABLE - DORA vs NIS 2 vs CRR
+     ===================================================== -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">DORA vs NIS 2 vs CRR (risc operatiu del Pilar 3)</h2>
+  </div>
+  <p class="section__subtitle">Tres marcs de la UE que es superposen: com difereixen i interactuen</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th class="col-dora">DORA (Reg (UE) 2022/2554)</th>
+          <th class="col-nis2">NIS 2 (Dir (UE) 2022/2555)</th>
+          <th class="col-crr">CRR (Reg (UE) 575/2013)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">Tipus d'instrument</td>
+          <td class="col-dora">Reglament (aplicació directa)</td>
+          <td class="col-nis2">Directiva (transposició nacional)</td>
+          <td class="col-crr">Reglament (aplicació directa)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Àmbit d'aplicació</td>
+          <td class="col-dora">21 categories d'entitat financera + CTPP</td>
+          <td class="col-nis2">Entitats essencials i importants en tots els sectors (ampli)</td>
+          <td class="col-crr">Entitats de crèdit i empreses d'inversió</td>
+        </tr>
+        <tr>
+          <td class="col-label">Objectiu principal</td>
+          <td class="col-dora">Resiliència operativa: protegir, detectar, respondre, recuperar</td>
+          <td class="col-nis2">Seguretat de xarxes i informació en tots els sectors crítics</td>
+          <td class="col-crr">Capital prudencial: absorbir pèrdues d'esdeveniments de risc operatiu</td>
+        </tr>
+        <tr>
+          <td class="col-label">Enfocament TIC / ciber</td>
+          <td class="col-dora">Profund i prescriptiu (5 pilars + marc de supervisió)</td>
+          <td class="col-nis2">Línia de base àmplia (gestió del risc + notificació d'incidents)</td>
+          <td class="col-crr">Mínim: només càrrec de capital per risc operatiu (BIA/AMA/SA)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Risc de tercers</td>
+          <td class="col-dora">Pilar dedicat + marc de supervisió CTPP a escala de la Unió</td>
+          <td class="col-nis2">Mesures de seguretat de la cadena de subministrament (Art. 21(2)(d))</td>
+          <td class="col-crr">No s'aborda específicament</td>
+        </tr>
+        <tr>
+          <td class="col-label">Notificació d'incidents</td>
+          <td class="col-dora">En tres etapes a l'autoritat competent; incidents PSD2 integrats</td>
+          <td class="col-nis2">Inicial i final al CSIRT en 24h / 1 mes</td>
+          <td class="col-crr">Dades de pèrdues per risc operatiu al regulador; sense règim específic de TIC</td>
+        </tr>
+        <tr>
+          <td class="col-label">Proves</td>
+          <td class="col-dora">Bàsiques anuals + TLPT cada 3 anys per a entitats sistèmiques</td>
+          <td class="col-nis2">No es prescriu amb el mateix detall</td>
+          <td class="col-crr">No es prescriu</td>
+        </tr>
+        <tr>
+          <td class="col-label">Relació</td>
+          <td class="col-dora">Lex specialis per a entitats financeres vs NIS 2 (considerant 16)</td>
+          <td class="col-nis2">Marc general; DORA preval per a entitats financeres</td>
+          <td class="col-crr">Complementari: coixí de capital prudencial; DORA gestiona la resiliència qualitativa</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 12: LEGISLATIVE TIMELINE
+     ===================================================== -->
+<section class="section" id="lineage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Calendari legislatiu i família jurídica</h2>
+  </div>
+  <p class="section__subtitle">De la Directiva NIS 1 a l'aplicació plena de DORA i més enllà</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">2016</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016L1148" target="_blank" rel="noopener"><strong>Directiva NIS 1 (UE) 2016/1148</strong></a> – el primer instrument horitzontal de ciberseguretat de la UE, que cobria determinades entitats de crèdit, plataformes de negociació i ECC identificades a escala nacional. Va reconèixer la bretxa: cobertura fragmentada del sector financer.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">8 de març de 2018</div>
+      <div class="timeline__text"><strong>Pla d'Acció FinTech de la Comissió</strong> – identifica la necessitat d'un instrument sectorial de resiliència operativa de TIC per abordar els riscos de transformació digital en els serveis financers.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Abril de 2019</div>
+      <div class="timeline__text"><strong>Assessorament Tècnic Conjunt de les AES</strong> – ABE, AESPJ i AEVM demanen un enfocament coherent de la UE sobre el risc de TIC en les finances, assenyalant nou actes sectorials amb requisits fragmentats i proposant un marc transversal únic.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Setembre de 2020</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52020PC0595" target="_blank" rel="noopener"><strong>Proposta DORA COM/2020/595</strong></a> – part del Paquet de Finances Digitals, juntament amb MiCA. Introdueix per primera vegada l'estructura de cinc pilars i el marc de supervisió de CTPP.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">14 de desembre de 2022</div>
+      <div class="timeline__text"><strong>DORA adoptada</strong> – <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">Reglament (UE) 2022/2554</a> i la Directiva (UE) 2022/2556 publicats conjuntament al <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC" target="_blank" rel="noopener">DO L 333 del 27 de desembre de 2022</a>. NIS 2 (Directiva (UE) 2022/2555) adoptada el mateix dia.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 de gener de 2023</div>
+      <div class="timeline__text"><strong>Entrada en vigor</strong> – dia 20 després de la publicació al DO. Comença el període de transició de dos anys. Les entitats financeres comencen a construir marcs, registres d'informació i programes de proves.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 de gener de 2024</div>
+      <div class="timeline__text"><strong>Termini del primer lot de RTS</strong> – les AES presenten a la Comissió les normes tècniques sobre polítiques de gestió del risc de TIC, gestió d'accés, mecanismes de detecció, components de la política de continuïtat de negoci, proves, resposta i recuperació, i el registre d'informació (Arts. 15, 16, 18, 28, 41).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 de juliol de 2024</div>
+      <div class="timeline__text"><strong>Termini del segon lot</strong> – RTS, ITS i actes delegats sobre plantilles i terminis de notificació d'incidents, TLPT, subcontractació, criteris de designació de CTPP i taxes de supervisió (Arts. 20, 26, 30, 31, 43).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 de gener de 2025</div>
+      <div class="timeline__text"><strong>DORA s'aplica plenament</strong> (Art. 64). Compliment exigit des d'aquesta data. L'informe de viabilitat del Hub de la UE (Art. 21) i la notificació de la llei d'execució dels estats membres (Art. 53) també vencen en aquesta data.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 de gener de 2026</div>
+      <div class="timeline__text"><strong>Informe de revisió d'auditors</strong> (Art. 58(3)) – la Comissió informa al PE i al Consell sobre si els auditors legals i les societats d'auditoria s'han d'afegir a l'àmbit d'aplicació de DORA.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 de gener de 2028</div>
+      <div class="timeline__text"><strong>Informe de revisió complet</strong> (Art. 58(1)) – cobreix els criteris de designació de CTPP, la notificació voluntària de ciberamenaces, el règim de CTPP de països tercers i l'eficàcia del JON. Pot donar lloc a esmenes legislatives.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 13: GLOSSARY (2-col)
+     ===================================================== -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossari</h2>
+  </div>
+  <p class="section__subtitle">Termes fonamentals tal com s'utilitzen en el Reglament (UE) 2022/2554 i les seves mesures d'execució</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">TLPT</div>
+      <div class="glossary-card__def">Proves Avançades Basades en Amenaces (Threat-Led Penetration Testing). Un exercici d'equip vermell basat en intel·ligència sobre sistemes de producció en viu, imitant les tàctiques, tècniques i procediments d'actors d'amenaces reals. Requerides cada 3 anys per a les entitats financeres sistèmicament importants sota l'Art. 26.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">TIBER-EU</div>
+      <div class="glossary-card__def">Threat Intelligence-Based Ethical Red Teaming, desenvolupat pel BCE. La metodologia TLPT adoptada per DORA com a marc de referència. Les proves TIBER-EU es realitzen sobre sistemes de producció en viu amb fases d'obtenció d'intel·ligència, equip vermell i equip morat.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CTPP</div>
+      <div class="glossary-card__def">Proveïdor Tercer Crític de Serveis de TIC. Un proveïdor de serveis de TIC (núvol, programari, anàlisi de dades, centre de dades) designat formalment sota l'Art. 31 per les AES com a crític per a l'estabilitat financera de la Unió. Subjecte als poders de supervisió del supervisor principal i als pagaments de sancions periòdiques.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">JON</div>
+      <div class="glossary-card__def">Xarxa Conjunta de Supervisió (Art. 34). Coordina els tres supervisors principals (un de cada ABE, AEVM, AESPJ) per garantir l'aplicació coherent del marc de supervisió entre les tres AES. Una xarxa permanent sense personalitat jurídica pròpia.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Supervisor principal</div>
+      <div class="glossary-card__def">L'AES (ABE, AEVM o AESPJ) designada com a punt de contacte principal i supervisora per a un CTPP específic. Es determina per quina AES supervisa les entitats financeres que en conjunt representen la major part dels actius totals entre totes les entitats financeres que utilitzen aquell CTPP (Art. 31(1)(b)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">AES</div>
+      <div class="glossary-card__def">Les tres Autoritats Europees de Supervisió: ABE (banca), AEVM (valors i mercats) i AESPJ (assegurances i pensions de jubilació). Governen conjuntament el marc de supervisió a través del seu Comitè Mixt i el Fòrum de Supervisió.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Comitè Mixt</div>
+      <div class="glossary-card__def">L'organisme de coordinació intersectorial d'ABE, AEVM i AESPJ establert sota l'Art. 54 de cada Reglament de les AES. Sota DORA, coordina posicions conjuntes, exercicis i decisions sobre la designació de CTPP i el treball del Fòrum de Supervisió (Art. 32).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Fòrum de Supervisió</div>
+      <div class="glossary-card__def">Subcomitè del Comitè Mixt, presidit pel supervisor principal, que inclou els presidents de les tres AES, un representant d'alt nivell de l'ANC per estat membre, i el BCE, la JERS, l'ENISA i la Comissió com a observadors. Prepara les recomanacions de designació de CTPP (Art. 32).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">JET</div>
+      <div class="glossary-card__def">Equip d'Examen Conjunt (Joint Examination Team). Un equip ad hoc compost de personal del supervisor principal i altres AES, format per realitzar investigacions específiques o inspeccions in situ d'un CTPP (Art. 39(2)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Risc de concentració de TIC</div>
+      <div class="glossary-card__def">Exposició a un o un grup de TPP crítics relacionats que crea una dependència que podria posar en perill les funcions crítiques o importants o l'estabilitat financera de la Unió (Art. 3(29)). La justificació de la designació de CTPP i l'anàlisi prèvia a la contractació de l'Art. 29.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Microempresa</div>
+      <div class="glossary-card__def">Una entitat amb menys de 10 persones ocupades I una facturació anual o un total del balanç que no superi els 2 milions d'EUR (Art. 3(60)). Les microempreses segueixen el marc simplificat de gestió del risc de TIC sota l'Art. 16 i tenen obligacions reduïdes al llarg del Reglament.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Funció crítica o important</div>
+      <div class="glossary-card__def">Una funció la interrupció de la qual deterioraria materialment el rendiment financer, la solidesa o la continuïtat de l'entitat financera, o el compliment de les seves condicions d'autorització (Art. 3(22)). El nivell d'obligació més elevat de tot DORA, que activa els requisits de proves, contractuals, d'estratègia de sortida i de notificació millorats.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Risc TIC de tercers</div>
+      <div class="glossary-card__def">El risc derivat de l'ús de serveis de TIC prestats per tercers, inclosos els subcontractistes (Art. 3(18)). El Pilar 4 (Arts. 28-30) i el marc de supervisió (Arts. 31-44) aborden aquest risc. L'entitat financera continua sent plenament responsable independentment de l'externalització.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Lex specialis</div>
+      <div class="glossary-card__def">Una regla d'interpretació jurídica: la llei més específica preval sobre la més general. DORA és lex specialis vs NIS 2 per a les entitats financeres (considerant 16). On DORA conté una disposició específica, s'aplica; NIS 2 omple les llacunes per a la cooperació intersectorial.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Registre d'informació</div>
+      <div class="glossary-card__def">L'inventari complet de tots els acords contractuals amb proveïdors tercers de serveis de TIC, distingint els que donen suport a funcions crítiques o importants. Mantingut contínuament, notificat anualment a l'autoritat competent i produït a demanda (Art. 28(3)). La base per a l'anàlisi del risc de concentració de l'Art. 29.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Resiliència operativa digital</div>
+      <div class="glossary-card__def">La capacitat de l'entitat financera per construir, garantir i revisar la seva integritat i fiabilitat operatives, assegurant directament o indirectament a través de l'ús de serveis de TIC la gamma completa de capacitats relacionades amb les TIC necessàries per abordar la seguretat de les xarxes i els sistemes d'informació (Art. 3(1)).</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 14: OFFICIAL SOURCES
+     ===================================================== -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Fonts primàries del Reglament (UE) 2022/2554 i la seva família</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> EUR-Lex: acte de base DORA</div>
+    <p>Text complet del Reglament (UE) 2022/2554 del 14 de desembre de 2022 (64 articles, 106 considerants, 9 capítols, 65 definicions):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554</a></p>
+    <p style="margin-top:0.5rem;">Número CELEX: <strong>32022R2554</strong> | Referència DO: DO L 333/1 del 27 de desembre de 2022 (79 pàgines)</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> Directiva DORA (acte complementari)</div>
+    <p>Directiva (UE) 2022/2556 que modifica 8 directives financeres per alinear-les amb DORA (UCITS, Solvency II, AIFMD, CRD IV, BRRD, MiFID II, PSD2, IORP II):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-newspaper-variant-outline" style="color: var(--color-amber);"></i> Diari Oficial L 333, 27 de desembre de 2022</div>
+    <p>DORA i la Directiva DORA es van publicar conjuntament al DO L 333. El mateix número conté també la Directiva NIS 2:</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-blue);"></i> Directiva NIS 2 (instrument de ciberseguretat germà)</div>
+    <p>Directiva (UE) 2022/2555 sobre mesures per a un nivell comú elevat de ciberseguretat a tota la Unió. DORA és lex specialis vs NIS 2 per a les entitats financeres (considerant 16):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target-account" style="color: var(--color-red);"></i> Marc TIBER-EU (BCE)</div>
+    <p>El marc d'equip vermell ètic basat en intel·ligència sobre amenaces del BCE, adoptat per DORA com a metodologia de referència per a TLPT (Art. 26):</p>
+    <p><a href="https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html" target="_blank" rel="noopener">https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-web" style="color: var(--color-green);"></i> ENISA i Estratègia de Finances Digitals de la Comissió</div>
+    <p>L'Agència de la Unió Europea per a la Ciberseguretat (ENISA) actua com a observadora del Fòrum de Supervisió i publica intel·ligència sobre amenaces rellevant per a la implementació de DORA:</p>
+    <p><a href="https://www.enisa.europa.eu" target="_blank" rel="noopener">https://www.enisa.europa.eu</a></p>
+    <p style="margin-top:0.5rem;">Estratègia de Finances Digitals de la Comissió (el paquet de polítiques en el qual es va proposar DORA):</p>
+    <p><a href="https://finance.ec.europa.eu/digital-finance_en" target="_blank" rel="noopener">https://finance.ec.europa.eu/digital-finance_en</a></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =====================================================
+     SECTION 15: EXPLORE WITH BRUBRU (3x2)
+     ===================================================== -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explorar DORA amb Brubru</h2>
+  </div>
+  <p class="section__subtitle">Sis eines per analitzar, fer seguiment i treballar amb DORA i la legislació del sector financer de la UE</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Pregunteu qualsevol cosa sobre DORA: els cinc pilars, els requisits TLPT, els criteris de designació de CTPP, el marc simplificat per a microempreses o la classificació d'incidents. Respostes basades en fonts oficials.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Obrir Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Executeu una anàlisi de bretxes de compliment de DORA: completesa del marc de gestió del risc de TIC, registre d'informació, disposicions contractuals per a funcions crítiques, calendari TLPT i procediments de notificació d'incidents.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Obrir EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Carregueu el Reglament (UE) 2022/2554 o la Directiva DORA a l'Amendator i redacteu el text d'esmenes directament contra el text oficial d'EUR-Lex de qualsevol llei del sector financer.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Obrir Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Seguiu els expedients de supervisió de TIC, les normes tècniques DORA d'ABE i AEVM, els informes de panorama d'amenaces de l'ENISA i les actualitzacions de designació de CTPP en temps real al PE i al Consell.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Obrir My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Trobeu oportunitats de contractació pública de la UE i dels estats membres relacionades amb els serveis d'implementació de DORA, les proves de resiliència de TIC, les eines de notificació d'incidents cibernètics i la ciberseguretat del sector financer.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Obrir Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Accés programàtic a les dades de la legislació de la UE, el seguiment del procediment DORA, la producció regulatòria de les AES i els esdeveniments del calendari del sector financer. Integreu DORA i 28.505 lleis als vostres propis fluxos de treball de compliment i monitoratge.</div>
+      <a href="https://brubru.beresol.eu/api-platform" class="feature-card__btn">Veure documentació de l'API</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     CTA STRIP (Pexels background - mandatory)
+     ===================================================== -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Obteniu la plataforma completa de Brubru</h2>
+  <p class="cta-strip__sub">Prova gratuïta de 14 dies. Sense targeta.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Inicia la prova gratuïta</a>
+</div>
+
+<div class="container">
+
+<!-- =====================================================
+     SECTION 16: RELATED CANON ENTRIES (3+2 centred)
+     ===================================================== -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-book-open-outline"></i></div>
+    <h2 class="section__title">Entrades del canon relacionades</h2>
+  </div>
+  <p class="section__subtitle">Altres anàlisis en profunditat de l'EU Canon en la família jurídica de DORA</p>
+
+  <div class="related-grid">
+    <a href="../2022-2555_nis2/index.html" class="related-card">
+      <i class="mdi mdi-shield-lock-outline"></i>
+      <div class="related-card__name">Directiva NIS 2</div>
+      <div class="related-card__celex">32022L2555</div>
+    </a>
+    <a href="../2023-1114_mica/index.html" class="related-card">
+      <i class="mdi mdi-currency-btc"></i>
+      <div class="related-card__name">MiCA</div>
+      <div class="related-card__celex">32023R1114</div>
+    </a>
+    <a href="../2013-575_crr/index.html" class="related-card">
+      <i class="mdi mdi-bank-outline"></i>
+      <div class="related-card__name">CRR</div>
+      <div class="related-card__celex">32013R0575</div>
+    </a>
+    <a href="../2014-65_mifid2/index.html" class="related-card">
+      <i class="mdi mdi-chart-line"></i>
+      <div class="related-card__name">MiFID II</div>
+      <div class="related-card__celex">32014L0065</div>
+    </a>
+    <a href="../2009-138_solvency2/index.html" class="related-card">
+      <i class="mdi mdi-umbrella-outline"></i>
+      <div class="related-card__name">Solvency II</div>
+      <div class="related-card__celex">32009L0138</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-outline" style="color: var(--color-blue);"></i> Biblioteca EU Canon</div>
+    <p>L'EU Canon és la biblioteca creixent de Brubru d'anàlisis en profunditat en llenguatge planer sobre la legislació de la UE d'importància clau. Cada entrada analitza les disposicions operatives, el context jurídic i la importància pràctica d'una llei fonamental de la UE, amb tots els fets rastrejats fins al text oficial d'EUR-Lex.</p>
+    <p style="margin-top:0.5rem;"><a href="../index.html" style="color: var(--color-blue);">Navegueu per totes les entrades de l'EU Canon</a>, que cobreix actualment GDPR, DSA, DMA, NIS2, DORA, Llei IA, MiCA, CBAM, CRR i un conjunt creixent d'instruments farmacèutics, de defensa comercial i financers.</p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru és l'assistent d'intel·ligència de política de la UE basat en IA per <a href="https://beresol.eu">Beresol SL</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Inicieu la vostra prova gratuïta de 14 dies</a> – sense targeta.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">Biblioteca EU Canon</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">Totes les entrades del canon</a></li>
+          <li><a href="../2016-679_gdpr/index.html">GDPR – Reglament (UE) 2016/679</a></li>
+          <li><a href="../2022-2065_dsa/index.html">DSA – Reglament (UE) 2022/2065</a></li>
+          <li><a href="../2023-956_cbam/index.html">CBAM – Reglament (UE) 2023/956</a></li>
+          <li><a href="index.html">DORA – Reglament (UE) 2022/2554 (aquesta pàgina)</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Fonts oficials</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">Reglament DORA a EUR-Lex (CELEX 32022R2554)</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556" target="_blank" rel="noopener">Directiva DORA (UE) 2022/2556 a EUR-Lex</a></li>
+          <li><a href="https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html" target="_blank" rel="noopener">Marc TIBER-EU (BCE)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Construït per Beresol SL</p>
+        <p>Brussel·les, Bèlgica</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">Aquesta és una anàlisi independent i no és un document oficial de la UE. Tots els fets estan rastrejats fins al Reglament (UE) 2022/2554 i les fonts oficials d'EUR-Lex.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>&copy; 2026 Beresol SL. Tots els drets reservats. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Crèdits d'imatges: Foto d'heroi de <a href="https://www.pexels.com/photo/5480781" target="_blank" rel="noopener">Brett Sayles via Pexels</a> (ID de foto 5480781). Foto de la franja CTA de <a href="https://www.pexels.com/photo/1089438" target="_blank" rel="noopener">Markus Spiske via Pexels</a> (ID de foto 1089438).</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Tornar a dalt"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

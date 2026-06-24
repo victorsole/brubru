@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DORA: the EU's first horizontal cybersecurity rulebook for finance | Brubru EU Canon</title>
+  <meta name="description" content="Complete plain-language guide to Regulation (EU) 2022/2554 (DORA). Five pillars, the Oversight Framework for critical ICT third-party providers, 22,000 financial entities in scope, and the 17 January 2025 application date.">
+  <meta property="og:title" content="DORA: the EU's first horizontal cybersecurity rulebook for finance | Brubru EU Canon">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:description" content="DORA consolidates ICT risk requirements from CRD IV, MiFID II, Solvency II, PSD2 and nine other sectoral acts into one Regulation. Applies to ~22,000 EU financial entities from 17 January 2025.">
+  <meta property="og:url" content="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DORA explained | Brubru EU Canon">
+  <meta name="twitter:description" content="Five pillars. One Regulation. 22,000 financial entities. The EU Digital Operational Resilience Act, fully explained.">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600">
+  <link rel="canonical" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <link rel="alternate" hreflang="en" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <link rel="alternate" hreflang="es" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/es.html">
+  <link rel="alternate" hreflang="fr" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/fr.html">
+  <link rel="alternate" hreflang="it" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/it.html">
+  <link rel="alternate" hreflang="nl" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/nl.html">
+  <link rel="alternate" hreflang="ca" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html">
+  <link rel="alternate" hreflang="x-default" href="https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html">
+  <link rel="icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="shortcut icon" type="image/png" href="../../assets/brubru_icon.png">
+  <link rel="apple-touch-icon" href="../../assets/brubru_icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "Regulation (EU) 2022/2554 of the European Parliament and of the Council on digital operational resilience for the financial sector",
+    "alternateName": "DORA",
+    "identifier": "CELEX:32022R2554",
+    "legislationIdentifier": "32022R2554",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554",
+    "datePublished": "2022-12-14",
+    "dateModified": "2026-06-24",
+    "jurisdiction": "EU",
+    "publisher": {
+      "@type": "Organization",
+      "name": "European Parliament and Council of the EU"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Digital operational resilience, ICT risk management, cyber threat reporting, TLPT, critical ICT third-party service providers, financial sector cybersecurity"
+    }
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      font-size: 0.82rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Container ---- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 780px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* ---- Hero image ---- */
+    .hero-image { margin: 2rem 0; border-radius: var(--radius); overflow: hidden; }
+    .hero-image img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .hero-image figcaption {
+      background: var(--color-bg-alt);
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: right;
+    }
+    .hero-image figcaption a { color: var(--color-blue); text-decoration: none; }
+
+    /* ---- Key figures strip ---- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .figure-card__context { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.35rem; }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ---- Sections ---- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+
+    /* ---- Info boxes ---- */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .info-box ul { color: var(--color-secondary); padding-left: 1.25rem; }
+    .info-box ul li { margin-bottom: 0.4rem; }
+    .info-box--amber {
+      background: linear-gradient(135deg, rgba(217,119,6,0.08) 0%, rgba(220,38,38,0.05) 100%);
+      border-color: rgba(217,119,6,0.25);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.04) 100%);
+      border-color: rgba(5,150,105,0.2);
+    }
+    .info-box--blue {
+      background: linear-gradient(135deg, rgba(6,147,227,0.08) 0%, rgba(155,81,224,0.06) 100%);
+      border-color: rgba(6,147,227,0.25);
+    }
+
+    /* ---- 5-pillar grid: 3+2 centred ---- */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pillars-grid .pillar-card:nth-child(1),
+    .pillars-grid .pillar-card:nth-child(2),
+    .pillars-grid .pillar-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .pillars-grid .pillar-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .pillar-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pillar-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .pillar-card .mdi { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+    .pillar-card__num { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); margin-bottom: 0.25rem; }
+    .pillar-card__name { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .pillar-card__chapter { font-size: 0.75rem; color: var(--color-muted); font-family: monospace; margin-bottom: 0.35rem; }
+    .pillar-card__desc { font-size: 0.78rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Ratio / headline-number grid (3 cols) ---- */
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ratio-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .ratio-card:hover { border-color: var(--color-purple); transform: translateY(-2px); }
+    .ratio-card__value { font-size: 1.8rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.2rem; }
+    .ratio-card__label { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 0.2rem; }
+    .ratio-card__ref { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Comparison table ---- */
+    .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.93rem; }
+    .comp-table th, .comp-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .comp-table th {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    .comp-table tr:hover td { background: rgba(6,147,227,0.03); }
+    .comp-table .col-label { font-weight: 700; color: var(--color-text); }
+    .comp-table .col-dora { color: var(--color-blue); }
+    .comp-table .col-nis2 { color: var(--color-purple); }
+    .comp-table .col-crr { color: var(--color-green); }
+
+    /* ---- Timeline (legislative milestones) ---- */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+    .timeline__text a { color: var(--color-blue); text-decoration: none; }
+    .timeline__text a:hover { text-decoration: underline; }
+
+    /* ---- Glossary 2-col grid ---- */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .glossary-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .glossary-card:hover { border-color: var(--color-purple); }
+    .glossary-card__term { font-size: 1rem; font-weight: 700; color: var(--color-purple); margin-bottom: 0.35rem; }
+    .glossary-card__def { font-size: 0.82rem; color: var(--color-secondary); line-height: 1.45; }
+
+    /* ---- Related canon: 3+2 centred grid ---- */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .related-grid .related-card:nth-child(1),
+    .related-grid .related-card:nth-child(2),
+    .related-grid .related-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .related-grid .related-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .related-grid .related-card:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .related-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: all 0.2s;
+      display: block;
+    }
+    .related-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .related-card .mdi { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; color: var(--color-blue); }
+    .related-card__name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .related-card__celex { font-size: 0.72rem; color: var(--color-muted); font-family: monospace; }
+
+    /* ---- Brubru features 3x2 grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card:hover { border-color: var(--color-blue); transform: translateY(-2px); }
+    .feature-card .mdi { font-size: 2.2rem; margin-bottom: 0.75rem; color: var(--color-blue); }
+    .feature-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .feature-card__desc { font-size: 0.82rem; color: var(--color-secondary); margin-bottom: 1rem; flex: 1; }
+    .feature-card__btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(6,147,227,0.3); }
+
+    /* ---- Pill badges ---- */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+
+    /* ---- CTA Strip ---- */
+    .cta-strip {
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: var(--radius);
+    }
+    .cta-strip__title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+    .cta-strip__sub { font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; }
+    .cta-strip__btn {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-blue);
+      background: white;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cta-strip__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* ---- Footer ---- */
+    .footer {
+      background: #f9f9f9;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)) 1;
+      padding: 2.5rem 2rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer__col { flex: 1; min-width: 220px; }
+    .footer__logos { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem; }
+    .footer__logo-brubru { height: 36px; }
+    .footer__logo-beresol { height: 36px; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); line-height: 1.6; }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+    .footer__text a:hover { text-decoration: underline; }
+    .footer__nav { list-style: none; padding: 0; }
+    .footer__nav li { margin-bottom: 0.35rem; }
+    .footer__nav a { font-size: 0.85rem; color: var(--color-secondary); text-decoration: none; }
+    .footer__nav a:hover { color: var(--color-blue); }
+    .footer__bottom {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    .footer__bottom a { color: var(--color-muted); text-decoration: none; }
+    .footer__bottom a:hover { color: var(--color-blue); }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
+
+    /* ---- Back to top ---- */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    html { scroll-behavior: smooth; }
+
+    /* ====================================================
+       RESPONSIVE BREAKPOINTS
+       ==================================================== */
+
+    /* Tablet and below: drop 4-col grids to 2-col */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      /* pillars: drop 3+2 centred to 2-col */
+      .pillars-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .pillars-grid .pillar-card:nth-child(1),
+      .pillars-grid .pillar-card:nth-child(2),
+      .pillars-grid .pillar-card:nth-child(3),
+      .pillars-grid .pillar-card:nth-child(4),
+      .pillars-grid .pillar-card:nth-child(5) {
+        grid-column: span 1;
+      }
+      /* related: drop 3+2 centred to 2-col */
+      .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .related-grid .related-card:nth-child(1),
+      .related-grid .related-card:nth-child(2),
+      .related-grid .related-card:nth-child(3),
+      .related-grid .related-card:nth-child(4),
+      .related-grid .related-card:nth-child(5) {
+        grid-column: span 1;
+      }
+    }
+
+    /* Narrow tablet: drop any remaining 3-col grids to 2-col */
+    @media (max-width: 900px) {
+      .ratio-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .comp-table { font-size: 0.85rem; }
+    }
+
+    /* Mobile: everything to 1 column */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.9rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .pillars-grid .pillar-card:nth-child(n) { grid-column: span 1; }
+      .ratio-grid { grid-template-columns: 1fr; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .related-grid .related-card:nth-child(n) { grid-column: span 1; }
+      .comp-table { font-size: 0.8rem; }
+      .header { padding: 0.75rem 1rem; gap: 0.75rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+      .footer__inner { flex-direction: column; gap: 1.5rem; }
+      .cta-strip { padding: 2rem 1.25rem; }
+      .cta-strip__title { font-size: 1.5rem; }
+      .hero-image img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     STICKY HEADER
+     ===================================================== -->
+<header class="header" id="top">
+  <a href="https://brubru.beresol.eu" aria-label="Brubru home">
+    <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  </a>
+  <div class="header__text">
+    <div class="header__title">Brubru</div>
+    <div class="header__subtitle">EU policy intelligence</div>
+  </div>
+  <select class="header__lang" onchange="window.location.href=this.value" aria-label="Language selector">
+    <option value="./index.html" selected>English</option>
+    <option value="./es.html">Espanol</option>
+    <option value="./fr.html">Francais</option>
+    <option value="./it.html">Italiano</option>
+    <option value="./nl.html">Nederlands</option>
+    <option value="./ca.html">Catala</option>
+  </select>
+  <a href="https://brubru.beresol.eu/signup" class="header__cta">Start free trial</a>
+</header>
+
+<div class="container">
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero">
+  <div class="hero__tag">
+    <a href="../index.html">EU Canon</a> / Digital Finance &amp; Cybersecurity
+  </div>
+  <h1 class="hero__title">DORA: <span>the EU's first horizontal cybersecurity rulebook for finance</span></h1>
+  <p class="hero__subtitle">
+    Regulation (EU) 2022/2554 consolidates ICT risk requirements scattered across CRD IV, MiFID II, Solvency II, PSD2, EMIR, CSDR and nine other acts into one directly applicable Single Rulebook. It covers approximately 22,000 EU financial entities and introduces the first Union-level oversight of critical cloud and software providers on whose resilience the financial system depends.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-tag-outline"></i> CELEX 32022R2554 &middot; Regulation (EU) 2022/2554</span>
+    <span><i class="mdi mdi-calendar"></i> Adopted 14 December 2022</span>
+    <span><i class="mdi mdi-shield-lock-outline"></i> Digital Finance Package</span>
+    <span><i class="mdi mdi-gavel"></i> Art 114 TFEU</span>
+  </div>
+</section>
+
+<!-- Hero image -->
+<figure class="hero-image">
+  <img
+    src="https://images.pexels.com/photos/5480781/pexels-photo-5480781.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600"
+    alt="Server racks inside a data centre, representing the ICT infrastructure DORA is designed to protect"
+    loading="eager"
+  >
+  <figcaption>
+    Photo: <a href="https://www.pexels.com/@brett-sayles" target="_blank" rel="noopener">Brett Sayles</a>
+    via <a href="https://www.pexels.com/photo/5480781" target="_blank" rel="noopener">Pexels</a>
+    | Data centre server infrastructure: the ICT foundation DORA is designed to protect
+  </figcaption>
+</figure>
+
+<!-- =====================================================
+     KEY FIGURES STRIP (4x1, drops to 2x2)
+     ===================================================== -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">17 Jan 2025</div>
+    <div class="figure-card__label">application date</div>
+    <div class="figure-card__context">two-year transition from OJ publication on 27 December 2022 (Art 64)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">21 + 1</div>
+    <div class="figure-card__label">categories in scope</div>
+    <div class="figure-card__context">21 categories of financial entity (Art 2(1)(a)-(t)) plus ICT third-party service providers (Art 2(1)(u))</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">3 years</div>
+    <div class="figure-card__label">TLPT cadence</div>
+    <div class="figure-card__context">threat-led penetration testing at least every 3 years for systemically important entities (Art 26(1))</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">22,000</div>
+    <div class="figure-card__label">EU financial entities in scope</div>
+    <div class="figure-card__context">estimated by recital 3; covers banks, insurers, investment firms, CSDs, CCPs, payment institutions and more</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     TABLE OF CONTENTS
+     ===================================================== -->
+<nav class="toc" aria-label="Page contents">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#overview" class="toc__link"><i class="mdi mdi-information-outline"></i> Overview</a>
+    <a href="#pillars" class="toc__link"><i class="mdi mdi-view-grid-outline"></i> Five pillars</a>
+    <a href="#headline-numbers" class="toc__link"><i class="mdi mdi-numeric"></i> Headline numbers</a>
+    <a href="#pillar1" class="toc__link"><i class="mdi mdi-shield-lock-outline"></i> Pillar 1: ICT risk management</a>
+    <a href="#pillar2" class="toc__link"><i class="mdi mdi-alert-outline"></i> Pillar 2: incident reporting</a>
+    <a href="#pillar3" class="toc__link"><i class="mdi mdi-bug-check-outline"></i> Pillar 3: testing</a>
+    <a href="#pillar4" class="toc__link"><i class="mdi mdi-link-variant"></i> Pillar 4: third-party risk</a>
+    <a href="#oversight" class="toc__link"><i class="mdi mdi-eye-outline"></i> Oversight Framework</a>
+    <a href="#pillar5" class="toc__link"><i class="mdi mdi-share-variant-outline"></i> Pillar 5: information sharing</a>
+    <a href="#definitions" class="toc__link"><i class="mdi mdi-book-outline"></i> Key definitions</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-scale-balance"></i> DORA vs NIS 2 vs CRR</a>
+    <a href="#lineage" class="toc__link"><i class="mdi mdi-timeline-outline"></i> Legislative timeline</a>
+    <a href="#glossary" class="toc__link"><i class="mdi mdi-alphabetical"></i> Glossary</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+    <a href="#brubru" class="toc__link"><i class="mdi mdi-robot-outline"></i> Explore with Brubru</a>
+    <a href="#related" class="toc__link"><i class="mdi mdi-book-open-outline"></i> Related canon entries</a>
+  </div>
+</nav>
+
+<!-- =====================================================
+     SECTION 1: OVERVIEW
+     ===================================================== -->
+<section class="section" id="overview">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-information-outline"></i></div>
+    <h2 class="section__title">Overview</h2>
+  </div>
+  <p class="section__subtitle">What DORA is, why it exists, and what it does not do</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-blue);"></i> One Regulation in place of nine fragmented sectoral regimes</div>
+    <p>Before DORA, ICT risk requirements for financial entities were scattered across at least nine different EU legal acts: CRD IV, MiFID II, Solvency II, UCITS, AIFMD, PSD2, EMIR, CSDR, the CRA Regulation, and the Benchmarks Regulation. Each act addressed operational and ICT risk differently, creating regulatory fragmentation for cross-border groups and uneven protection across subsectors.</p>
+    <p style="margin-top:0.5rem;">DORA replaces all of those provisions with a single, directly applicable Regulation. As a Regulation (not a Directive), it takes effect in every Member State without national transposition, creating a true Single Rulebook for digital operational resilience (recitals 9-14).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-compare" style="color: var(--color-purple);"></i> Lex specialis vs NIS 2 and companion DORA Directive</div>
+    <p>DORA is <strong>lex specialis</strong> with respect to NIS 2 (Directive (EU) 2022/2555): where DORA applies to financial entities, its more specific ICT risk and incident-reporting obligations prevail over NIS 2, while financial entities remain part of the NIS 2 ecosystem for cross-sector cooperation and learning (recital 16).</p>
+    <p style="margin-top:0.5rem;">The companion <strong>Directive (EU) 2022/2556</strong> amends eight financial-sector Directives (UCITS, Solvency II, AIFMD, CRD IV, BRRD, MiFID II, PSD2, IORP II) to align their operational-risk provisions with DORA and insert a cross-reference back to it. DORA itself amends five Regulations (CRA Reg 1060/2009, EMIR 648/2012, MiFIR 600/2014, CSDR 909/2014, BMR 2016/1011) by narrowing or replacing their ICT-related provisions.</p>
+  </div>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-close-circle-outline" style="color: var(--color-amber);"></i> Important: what DORA does not do</h3>
+    <p><strong>No capital requirements for ICT risk</strong> - that is a deliberate departure from the traditional "set a capital number" approach to operational risk (recital 12). DORA is a qualitative instrument: protect, detect, contain, recover, learn. Capital stays in CRR and Solvency II.</p>
+    <p style="margin-top:0.4rem;"><strong>No data localisation</strong> - recital 82 is explicit: DORA does not require data storage or processing to be undertaken in the Union, even for critical ICT third-party service providers.</p>
+    <p style="margin-top:0.4rem;"><strong>No new sectoral supervisors</strong> - DORA routes compliance through the existing CRD IV, MiFID II, Solvency II, PSD2 etc. authorities (Art 46).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 2: FIVE PILLARS INFOGRAPHIC (3+2 centred)
+     ===================================================== -->
+<section class="section" id="pillars">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-view-grid-outline"></i></div>
+    <h2 class="section__title">What DORA covers: five pillars</h2>
+  </div>
+  <p class="section__subtitle">Article 1 of Regulation (EU) 2022/2554 structures the Regulation around five core areas</p>
+
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <i class="mdi mdi-shield-lock" style="color: var(--color-blue);"></i>
+      <div class="pillar-card__num">Pillar 1</div>
+      <div class="pillar-card__name">ICT risk management</div>
+      <div class="pillar-card__chapter">Chapter II, Arts 5-16</div>
+      <div class="pillar-card__desc">Governance, identification, protection, detection, response and recovery, backup, learning, communication, and a simplified framework for smaller entities</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-alert" style="color: var(--color-amber);"></i>
+      <div class="pillar-card__num">Pillar 2</div>
+      <div class="pillar-card__name">ICT-related incident reporting</div>
+      <div class="pillar-card__chapter">Chapter III, Arts 17-23</div>
+      <div class="pillar-card__desc">Initial, intermediate and final reports to competent authorities; six classification criteria; EU Hub feasibility study; payment-incident merger from PSD2</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-bug-check" style="color: var(--color-green);"></i>
+      <div class="pillar-card__num">Pillar 3</div>
+      <div class="pillar-card__name">Digital operational resilience testing</div>
+      <div class="pillar-card__chapter">Chapter IV, Arts 24-27</div>
+      <div class="pillar-card__desc">Basic yearly tests on critical systems; advanced TLPT every 3 years for systemically important entities; aligned with TIBER-EU framework</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-link-variant" style="color: var(--color-purple);"></i>
+      <div class="pillar-card__num">Pillar 4</div>
+      <div class="pillar-card__name">ICT third-party risk management</div>
+      <div class="pillar-card__chapter">Chapter V Section I, Arts 28-30</div>
+      <div class="pillar-card__desc">Register of information, concentration risk analysis, mandatory contractual provisions, exit strategies; financial entity remains fully responsible at all times</div>
+    </div>
+    <div class="pillar-card">
+      <i class="mdi mdi-share-variant" style="color: var(--color-green);"></i>
+      <div class="pillar-card__num">Pillar 5</div>
+      <div class="pillar-card__name">Information-sharing arrangements</div>
+      <div class="pillar-card__chapter">Chapter VI, Art 45</div>
+      <div class="pillar-card__desc">Voluntary exchange of cyber threat intelligence and indicators of compromise within trusted communities, subject to GDPR and competition law</div>
+    </div>
+  </div>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-eye-outline" style="color: var(--color-blue);"></i> The sixth building block: the Oversight Framework (Chapter V Section II)</h3>
+    <p>DORA's most innovative provision is separate from the five pillars. Chapter V Section II (Arts 31-44) creates the first EU-level oversight of non-financial service providers: cloud, software, data-centre, and data-analytics companies whose availability the financial system depends on. The Lead Overseer (one of EBA, ESMA or EIOPA) can issue binding recommendations and impose daily penalty payments of up to 1% of worldwide turnover on designated <strong>critical ICT third-party service providers (CTPPs)</strong>.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 3: HEADLINE NUMBERS
+     ===================================================== -->
+<section class="section" id="headline-numbers">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-numeric"></i></div>
+    <h2 class="section__title">Headline numbers</h2>
+  </div>
+  <p class="section__subtitle">The key figures from Regulation (EU) 2022/2554 and its implementing measures</p>
+
+  <div class="ratio-grid">
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">1%</div>
+      <div class="ratio-card__label">daily penalty cap on a CTPP</div>
+      <div class="ratio-card__ref">Art 35(8) - max 6 months</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-purple);">12 months</div>
+      <div class="ratio-card__label">for a third-country CTPP to establish an EU subsidiary after designation</div>
+      <div class="ratio-card__ref">Art 31(12)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-green);">&euro;2M / &lt;10</div>
+      <div class="ratio-card__label">microenterprise threshold (turnover or balance / persons)</div>
+      <div class="ratio-card__ref">Art 3(60)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-amber);">15 years</div>
+      <div class="ratio-card__label">maximum personal data retention by ESAs and NCAs</div>
+      <div class="ratio-card__ref">Art 56(2)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-blue);">&le;15</div>
+      <div class="ratio-card__label">IORP members: carve-out from full DORA scope</div>
+      <div class="ratio-card__ref">Art 2(3)(c)</div>
+    </div>
+    <div class="ratio-card">
+      <div class="ratio-card__value" style="color: var(--color-purple);">3 ESAs</div>
+      <div class="ratio-card__label">EBA, ESMA and EIOPA jointly run the Oversight Framework via their Joint Committee</div>
+      <div class="ratio-card__ref">Art 31-32</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 4: PILLAR 1 - ICT RISK MANAGEMENT
+     ===================================================== -->
+<section class="section" id="pillar1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-lock-outline"></i></div>
+    <h2 class="section__title">Pillar 1: ICT risk management (Arts 5-16)</h2>
+  </div>
+  <p class="section__subtitle">Governance, identification, protection, detection, response, recovery, learning and communication</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-group-outline" style="color: var(--color-blue);"></i> Governance (Art 5)</div>
+    <p>The <strong>management body bears ultimate responsibility</strong> for ICT risk. It must define, approve and oversee the ICT risk management framework, set the risk tolerance, approve the ICT business continuity policy plus response and recovery plans, allocate the ICT budget, approve the ICT third-party policy, and keep itself trained on ICT risk (Art 5(4)).</p>
+    <p style="margin-top:0.5rem;">Financial entities other than microenterprises must establish a dedicated role to monitor ICT third-party arrangements, or designate a senior management member responsible for that exposure (Art 5(3)).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> ICT risk management framework (Art 6)</div>
+    <p>Must be sound, comprehensive and well-documented. Reviewed at least yearly, plus after every major ICT-related incident or supervisory finding. Subject to internal audit (Art 6(6)). Must include a <strong>digital operational resilience strategy</strong> (Art 6(8)) covering risk tolerance, security objectives, ICT reference architecture, detection mechanisms, current resilience status, testing plan, and communication strategy.</p>
+    <p style="margin-top:0.5rem;">Microenterprises and small or non-interconnected entities follow a <strong>simplified framework (Art 16)</strong> - Articles 5-15 do not apply; instead a leaner set of eight obligations.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-map-search-outline" style="color: var(--color-green);"></i> Identification and protection (Arts 8-9)</div>
+    <p><strong>Art 8 (identification):</strong> Map all ICT-supported business functions, classify information and ICT assets, identify all ICT third-party dependencies, run risk assessment on every major change, conduct yearly ICT risk assessments on legacy systems.</p>
+    <p style="margin-top:0.5rem;"><strong>Art 9 (protection):</strong> Information security policy, network and infrastructure management, access control, strong authentication, cryptography, ICT change management, and patch management. Networks must be designed to be <strong>instantaneously severable or segmentable</strong> to prevent contagion.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-radar" style="color: var(--color-amber);"></i> Detection, response and recovery (Arts 10-11)</div>
+    <p><strong>Art 10 (detection):</strong> Mechanisms to detect anomalous activities, multi-layer controls, alert thresholds, automatic escalation.</p>
+    <p style="margin-top:0.5rem;"><strong>Art 11 (response and recovery):</strong> ICT business continuity policy, response and recovery plans, <strong>business impact analysis (BIA)</strong>, redundant ICT capacities, testing at least yearly including cyber-attack scenarios and primary-to-redundant switchovers for non-microenterprises, crisis management function.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-database-sync-outline" style="color: var(--color-blue);"></i> Backup, learning and communication (Arts 12-14)</div>
+    <p><strong>Art 12 (backup):</strong> Backup systems segregated physically and logically from source ICT systems. CSDs must maintain at least one secondary processing site at a geographical distance from the primary, with full continuity capability (Art 12(5)).</p>
+    <p style="margin-top:0.5rem;"><strong>Art 13 (learning):</strong> Post-incident reviews, lessons-learned feedback into the framework, <strong>ICT security awareness programmes and digital operational resilience training as compulsory staff modules</strong> (Art 13(6)) covering all employees and senior management.</p>
+    <p style="margin-top:0.5rem;"><strong>Art 14 (communication):</strong> Crisis communication plans for responsible disclosure of major incidents or vulnerabilities. At least one person responsible for the public and media communication function.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 5: PILLAR 2 - INCIDENT REPORTING
+     ===================================================== -->
+<section class="section" id="pillar2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-alert-outline"></i></div>
+    <h2 class="section__title">Pillar 2: ICT-related incident reporting (Arts 17-23)</h2>
+  </div>
+  <p class="section__subtitle">Three-stage reporting, six classification criteria, and the EU Hub feasibility study</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-sort-variant" style="color: var(--color-amber);"></i> Classification criteria (Art 18)</div>
+    <p>Six criteria determine whether an incident qualifies as a <strong>major ICT-related incident</strong> (requiring mandatory reporting) or a significant cyber threat:</p>
+    <ul>
+      <li>Number or relevance of clients or financial counterparts affected; transactions affected; reputational impact</li>
+      <li>Duration and downtime of the service</li>
+      <li>Geographical spread, particularly if affecting more than two Member States</li>
+      <li>Data losses (affecting availability, authenticity, integrity or confidentiality)</li>
+      <li>Criticality of services affected, including for critical or important functions</li>
+      <li>Economic impact: direct and indirect, absolute and relative</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-send-outline" style="color: var(--color-blue);"></i> Three-stage reporting to competent authorities (Art 19)</div>
+    <p>Mandatory reporting of major incidents to the competent authority (a single national authority is designated where the entity has multiple supervisors). Three stages:</p>
+    <ul>
+      <li><strong>Initial notification</strong> - as soon as the materiality thresholds are met</li>
+      <li><strong>Intermediate report(s)</strong> - whenever status changes significantly</li>
+      <li><strong>Final report</strong> - after root-cause analysis, with actual impact figures</li>
+    </ul>
+    <p style="margin-top:0.5rem;">Significant cyber threats may be notified <strong>voluntarily</strong>. Cross-border impacts flow through EBA, ESMA or EIOPA to relevant Member States. Significant credit institutions under the SSM report to the NCA, which immediately transmits to the ECB. Materiality thresholds, time limits and templates are set by RTS and ITS (Art 20), submitted to the Commission by 17 July 2024.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-hub-outline" style="color: var(--color-purple);"></i> EU Hub feasibility study (Art 21) and payment incidents (Art 23)</div>
+    <p><strong>Art 21:</strong> The ESAs were required to assess by 17 January 2025 whether a single EU Hub for major ICT-related incident reporting is feasible - to streamline reporting across the multiple competent authorities currently involved.</p>
+    <p style="margin-top:0.5rem;"><strong>Art 23:</strong> Credit institutions, payment institutions, account information service providers and electronic money institutions now report operational and security payment-related incidents under DORA that were previously reported under PSD2 Article 96 - irrespective of whether they are ICT-related. DORA consolidates and replaces that PSD2 reporting obligation.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 6: PILLAR 3 - TESTING
+     ===================================================== -->
+<section class="section" id="pillar3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-bug-check-outline"></i></div>
+    <h2 class="section__title">Pillar 3: digital operational resilience testing (Arts 24-27)</h2>
+  </div>
+  <p class="section__subtitle">Yearly basic testing, TLPT every three years, and TIBER-EU alignment</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-decagram-outline" style="color: var(--color-green);"></i> Basic testing programme (Arts 24-25)</div>
+    <p>A <strong>comprehensive testing programme</strong> as an integral part of the ICT risk management framework. Risk-based and performed by independent parties (internal or external). Wide menu of tools: vulnerability assessments and scans, open-source analyses, network security assessments, gap analyses, physical security reviews, questionnaires, scanning software, source-code reviews where feasible, scenario-based tests, compatibility testing, performance testing, end-to-end testing, and penetration testing. <strong>At least yearly</strong> tests on all ICT systems and applications supporting critical or important functions.</p>
+    <p style="margin-top:0.5rem;">CSDs and CCPs must perform vulnerability assessments before any deployment or redeployment of new or existing applications and infrastructure components.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target-account" style="color: var(--color-red);"></i> TLPT - threat-led penetration testing (Art 26)</div>
+    <p><strong>Threat-led penetration testing</strong> mimics the tactics, techniques and procedures of real-life threat actors, delivering a controlled, bespoke, intelligence-led (red team) test of the financial entity's <strong>critical live production systems</strong>.</p>
+    <ul style="margin-top:0.5rem;">
+      <li>Performed <strong>at least every 3 years</strong> (frequency may be adjusted by the competent authority)</li>
+      <li>Required only of financial entities <strong>identified</strong> by the competent authority based on: impact on the financial sector, possible financial-stability concerns including systemic character, ICT risk profile and ICT maturity</li>
+      <li>Must cover several or all critical or important functions</li>
+      <li>Pooled TLPT permitted (Art 26(4)) where ICT third-party participation could adversely impact other customers</li>
+      <li>Internal testers allowed with prior supervisory approval, no conflict of interest, periodic rotation (external testers required every three tests - Art 26(8))</li>
+      <li><strong>Significant credit institutions under the SSM: external testers only</strong></li>
+      <li>Attestation provided by the authority for mutual recognition across the EU; the financial entity retains full responsibility</li>
+      <li>Aligned with the <strong>TIBER-EU</strong> framework (ECB)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-hard-hat-outline" style="color: var(--color-blue);"></i> Tester requirements (Art 27)</div>
+    <p>TLPT testers must demonstrate: highest suitability and reputability, expertise in threat intelligence, penetration testing and red team testing, certification by a Member State accreditation body or adherence to formal codes of conduct, audited assurance on risk management, and professional indemnity insurance covering negligence in testing activities.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 7: PILLAR 4 - THIRD-PARTY RISK
+     ===================================================== -->
+<section class="section" id="pillar4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Pillar 4: ICT third-party risk management (Arts 28-30)</h2>
+  </div>
+  <p class="section__subtitle">Register of information, concentration risk, contractual provisions, and exit strategies</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clipboard-list-outline" style="color: var(--color-purple);"></i> Principles and mandatory artefacts (Art 28)</div>
+    <p>The financial entity <strong>at all times remains fully responsible</strong> for compliance with DORA - outsourcing does not transfer obligations. Mandatory artefacts include:</p>
+    <ul>
+      <li><strong>Strategy on ICT third-party risk</strong>, reviewed regularly by the management body</li>
+      <li><strong>Register of information</strong> of all contractual arrangements on the use of ICT services, distinguishing those supporting critical or important functions from those that do not; reportable yearly to the competent authority (Art 28(3))</li>
+      <li>Pre-contracting due diligence: criticality assessment, supervisory conditions, ICT concentration risk analysis, due diligence on the prospective TPP, conflict-of-interest screening (Art 28(4))</li>
+      <li><strong>Termination triggers</strong> (Art 28(7)): significant breach by the TPP, material changes affecting performance, evidenced ICT risk-management weaknesses, inability of the competent authority to effectively supervise the financial entity</li>
+      <li><strong>Exit strategies</strong> for ICT services supporting critical or important functions (Art 28(8)) - comprehensive, documented, sufficiently tested</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-circle-outline" style="color: var(--color-amber);"></i> Concentration risk (Art 29)</div>
+    <p>Pre-contracting analysis: would the contract result in dependence on a TPP that is not easily substitutable, or in multiple critical-function contracts with the same TPP or closely connected TPPs? Subcontracting analysis is required especially where the subcontractor is in a third country - taking into account insolvency law of that country, data-protection enforcement, and the length and complexity of subcontracting chains.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-sign" style="color: var(--color-blue);"></i> Mandatory contractual provisions (Art 30)</div>
+    <p>Every contract for ICT services must include at a minimum: full description of functions and services; locations of data processing and storage; availability, authenticity, integrity and confidentiality provisions; data-access, recovery and return on insolvency or termination; service-level descriptions; TPP assistance during ICT incidents; full cooperation with competent and resolution authorities; termination rights with minimum notice; conditions for TPP participation in the financial entity's training programmes.</p>
+    <p style="margin-top:0.5rem;"><strong>For ICT services supporting critical or important functions</strong>, additionally: precise quantitative and qualitative SLA performance targets; notice periods on developments materially impacting service delivery; business contingency plans; TLPT participation; <strong>unrestricted rights of access, inspection and audit</strong> by the financial entity, the competent authority and the Lead Overseer; <strong>adequate transition periods</strong> in exit strategies. Microenterprises may delegate audit rights to an independent third party appointed by the TPP (Art 30(3)).</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 8: OVERSIGHT FRAMEWORK
+     ===================================================== -->
+<section class="section" id="oversight">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-eye-outline"></i></div>
+    <h2 class="section__title">The Oversight Framework: critical ICT third-party service providers (Arts 31-44)</h2>
+  </div>
+  <p class="section__subtitle">The first EU-level oversight of non-financial service providers - cloud, software, data centres, and data analytics</p>
+
+  <div class="info-box--amber info-box">
+    <h3><i class="mdi mdi-star-outline" style="color: var(--color-amber);"></i> The most innovative part of DORA</h3>
+    <p>For the first time, the EU directly oversees, at Union level, the cloud, software, data-centre, and data-analytics providers on whose continued availability the financial system depends. These entities are not financial firms and were previously outside the perimeter of financial supervision. DORA changes that for designated critical ICT third-party service providers (CTPPs).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-certificate-outline" style="color: var(--color-blue);"></i> Designation as a CTPP (Art 31)</div>
+    <p>The three ESAs, through their Joint Committee, on recommendation from the Oversight Forum (Art 32), designate an ICT third-party service provider as <strong>critical</strong> based on four criteria:</p>
+    <ul>
+      <li><strong>Systemic impact</strong> on the stability, continuity or quality of financial services if the provider fails</li>
+      <li><strong>Systemic character</strong> of the financial entities relying on it (G-SIIs, O-SIIs and their interdependencies)</li>
+      <li><strong>Reliance</strong> of financial entities on its services for critical or important functions</li>
+      <li><strong>Degree of substitutability</strong> - limited alternatives, market share, technical complexity, migration cost and risk</li>
+    </ul>
+    <p style="margin-top:0.5rem;">The list of CTPPs is published yearly. ICT TPPs not automatically designated <strong>may opt in</strong> by application (Art 31(11)). <strong>Third-country CTPPs must establish an EU subsidiary within 12 months of designation</strong> (Art 31(12)) and may continue providing services from outside the Union, but oversight presence in the EU is mandatory.</p>
+    <p style="margin-top:0.5rem;"><strong>Carved out</strong> (Art 31(8)): financial entities providing ICT services to other financial entities, providers already under ESCB oversight (TARGET, T2S etc.), intra-group providers, and providers active only in one Member State serving entities active only in that Member State.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-sitemap-outline" style="color: var(--color-purple);"></i> Structure: Joint Committee, Oversight Forum and JON (Arts 32, 34)</div>
+    <ul>
+      <li><strong>Joint Committee</strong> (ESAs) - cross-sector coordination, joint positions on CTPPs</li>
+      <li><strong>Oversight Forum</strong> - sub-committee; prepares joint positions; includes Chairs of the three ESAs, one high-level NCA representative per Member State, and ECB, ESRB, ENISA and Commission as observers</li>
+      <li><strong>Joint Oversight Network (JON, Art 34)</strong> - coordinates the three Lead Overseers for operational alignment</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-tie-outline" style="color: var(--color-blue);"></i> The Lead Overseer (Art 33)</div>
+    <p>For each CTPP, the Lead Overseer is the ESA (EBA, ESMA or EIOPA) responsible for the financial-entity sub-sector whose entities together hold the largest share of total assets among the financial entities using that CTPP. The Lead Overseer is the <strong>primary point of contact</strong> for the CTPP and conducts the assessment of governance, ICT risk management, business continuity, physical security, incident management, data portability, testing, audits and standards.</p>
+    <p style="margin-top:0.5rem;">The Lead Overseer adopts a yearly <strong>individual oversight plan</strong> per CTPP (Art 33(4)); the CTPP may submit a reasoned statement within 15 calendar days before adoption.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-gavel" style="color: var(--color-red);"></i> Powers of the Lead Overseer (Art 35)</div>
+    <ul>
+      <li><strong>Information and documentation requests</strong> (Art 37): all relevant records, policies, agreements</li>
+      <li><strong>General investigations</strong> (Art 38): examine records, take copies, summon representatives, interview persons, request data-traffic records</li>
+      <li><strong>On-site and off-site inspections</strong> (Art 39): enter business premises, seal premises, books and records during inspection</li>
+      <li><strong>Recommendations</strong>: on ICT security standards, service terms preventing single points of failure or systemic amplification, planned subcontracting including in third countries, and (most powerful) <strong>require the CTPP to refrain from a further subcontracting arrangement</strong> where it concerns a critical or important function and poses a clear and serious risk to Union financial stability</li>
+      <li><strong>Periodic penalty payments</strong>: up to <strong>1% of average daily worldwide turnover</strong>, daily, for a maximum of 6 months (Art 35(8))</li>
+    </ul>
+    <p style="margin-top:0.5rem;">The Lead Overseer can exercise these powers outside the Union (Art 36) if the CTPP consents and the relevant third-country authority does not object, subject to administrative cooperation arrangements.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-check-circle-outline" style="color: var(--color-green);"></i> Follow-up and last-resort suspension powers (Art 42)</div>
+    <p>Within 60 calendar days, the CTPP either notifies compliance with the recommendation or provides a reasoned explanation for not following it. If the explanation is insufficient, the Lead Overseer publicly discloses the non-compliance.</p>
+    <p style="margin-top:0.5rem;">Competent authorities - as a measure of last resort, after notification and (voluntary) consultation with NIS 2 authorities - may take a decision (Art 42(6)) <strong>requiring financial entities to temporarily suspend, in part or completely, the use of a service</strong> provided by the CTPP, or to terminate the relevant contractual arrangements, until the identified risks are addressed.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cash-multiple" style="color: var(--color-amber);"></i> Oversight fees (Art 43) and international cooperation (Art 44)</div>
+    <p><strong>Art 43:</strong> Lead Overseer expenditure is fully fee-funded by CTPPs, proportionate to turnover. The amount and payment mechanism are set by delegated act (deadline: 17 July 2024).</p>
+    <p style="margin-top:0.5rem;"><strong>Art 44:</strong> EBA, ESMA and EIOPA may conclude administrative arrangements with third-country regulatory and supervisory authorities to share best practices on ICT third-party risk review. A confidential report to the EP, Council and Commission is produced every five years.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 9: PILLAR 5 - INFORMATION SHARING
+     ===================================================== -->
+<section class="section" id="pillar5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-share-variant-outline"></i></div>
+    <h2 class="section__title">Pillar 5: information-sharing arrangements (Art 45)</h2>
+  </div>
+  <p class="section__subtitle">Voluntary cyber threat intelligence exchange in trusted communities</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-multiple-outline" style="color: var(--color-green);"></i> Trusted communities for intelligence sharing</div>
+    <p>Financial entities may <strong>voluntarily</strong> exchange cyber threat information and intelligence within <strong>trusted communities</strong>. Shareable intelligence includes: indicators of compromise, tactics, techniques and procedures, alerts, configuration tools, and information on cyber actors or campaigns.</p>
+    <p style="margin-top:0.5rem;">Such arrangements must be governed by rules of conduct that respect business confidentiality, GDPR personal data protection rules, and EU competition law (Art 101 TFEU). Participation must be notified to the competent authority. The Commission and ENISA act as observers at these communities where appropriate.</p>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 10: KEY DEFINITIONS
+     ===================================================== -->
+<section class="section" id="definitions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-book-outline"></i></div>
+    <h2 class="section__title">Key definitions (Art 3)</h2>
+  </div>
+  <p class="section__subtitle">Article 3 contains 65 definitions. The six load-bearing concepts that drive the rest of the Regulation:</p>
+
+  <div class="info-box--blue info-box">
+    <h3><i class="mdi mdi-information-outline" style="color: var(--color-blue);"></i> Load-bearing definitions from Article 3</h3>
+    <ul>
+      <li><strong>"critical or important function" (Art 3(22))</strong> - a function whose disruption would materially impair financial performance, soundness or continuity, or compliance with authorisation conditions. This definition determines which ICT services attract the highest obligations under DORA.</li>
+      <li><strong>"major ICT-related incident" (Art 3(10))</strong> - an ICT-related incident with high adverse impact on systems supporting critical or important functions. The trigger for mandatory three-stage reporting under Art 19.</li>
+      <li><strong>"threat-led penetration testing" or TLPT (Art 3(17))</strong> - intelligence-led red team testing of live production systems, mimicking real-life threat actors. Required at least every 3 years for identified systemically important entities.</li>
+      <li><strong>"ICT third-party service provider" (Art 3(19))</strong> - an undertaking providing ICT services (including hardware-as-a-service; analogue telephony excluded). Distinct from the "ICT intra-group service provider" (Art 3(20)).</li>
+      <li><strong>"critical ICT third-party service provider" or CTPP (Art 3(23))</strong> - a TPP designated as critical under Article 31, subject to the full Oversight Framework and the Lead Overseer's powers.</li>
+      <li><strong>"ICT concentration risk" (Art 3(29))</strong> - exposure to one or related critical TPPs creating a dependency that could endanger critical or important functions or Union financial stability. The concept underpinning Art 29 analysis and the Oversight Framework rationale.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 11: COMPARISON TABLE - DORA vs NIS 2 vs CRR
+     ===================================================== -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-scale-balance"></i></div>
+    <h2 class="section__title">DORA vs NIS 2 vs CRR (Pillar 3 operational risk)</h2>
+  </div>
+  <p class="section__subtitle">Three overlapping EU frameworks: how they differ and interact</p>
+
+  <div class="card">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="col-dora">DORA (Reg (EU) 2022/2554)</th>
+          <th class="col-nis2">NIS 2 (Dir (EU) 2022/2555)</th>
+          <th class="col-crr">CRR (Reg (EU) 575/2013)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">Instrument type</td>
+          <td class="col-dora">Regulation (directly applicable)</td>
+          <td class="col-nis2">Directive (national transposition)</td>
+          <td class="col-crr">Regulation (directly applicable)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Scope</td>
+          <td class="col-dora">21 categories of financial entity + CTPPs</td>
+          <td class="col-nis2">Essential and important entities across all sectors (broad)</td>
+          <td class="col-crr">Credit institutions and investment firms</td>
+        </tr>
+        <tr>
+          <td class="col-label">Primary objective</td>
+          <td class="col-dora">Operational resilience: protect, detect, respond, recover</td>
+          <td class="col-nis2">Network and information security across all critical sectors</td>
+          <td class="col-crr">Prudential capital: absorb losses from operational risk events</td>
+        </tr>
+        <tr>
+          <td class="col-label">ICT / cyber focus</td>
+          <td class="col-dora">Deep and prescriptive (5 pillars + Oversight Framework)</td>
+          <td class="col-nis2">Broad baseline (risk management + incident reporting)</td>
+          <td class="col-crr">Minimal: operational risk capital charge only (BIA/AMA/SA)</td>
+        </tr>
+        <tr>
+          <td class="col-label">Third-party risk</td>
+          <td class="col-dora">Dedicated pillar + Union-level CTPP Oversight Framework</td>
+          <td class="col-nis2">Supply chain security measures (Art 21(2)(d))</td>
+          <td class="col-crr">Not specifically addressed</td>
+        </tr>
+        <tr>
+          <td class="col-label">Incident reporting</td>
+          <td class="col-dora">Three-stage to competent authority; PSD2 incidents subsumed</td>
+          <td class="col-nis2">Initial and final to CSIRT within 24h / 1 month</td>
+          <td class="col-crr">Operational risk loss data to regulator; no prescribed ICT-specific regime</td>
+        </tr>
+        <tr>
+          <td class="col-label">Testing</td>
+          <td class="col-dora">Yearly basic + TLPT every 3 years for systemic entities</td>
+          <td class="col-nis2">Not mandated in same detail</td>
+          <td class="col-crr">Not prescribed</td>
+        </tr>
+        <tr>
+          <td class="col-label">Relationship</td>
+          <td class="col-dora">Lex specialis for financial entities vs NIS 2 (recital 16)</td>
+          <td class="col-nis2">General framework; DORA prevails for financial entities</td>
+          <td class="col-crr">Complementary: prudential capital cushion; DORA handles qualitative resilience</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 12: LEGISLATIVE TIMELINE (no active markers)
+     ===================================================== -->
+<section class="section" id="lineage">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-timeline-outline"></i></div>
+    <h2 class="section__title">Legislative timeline and legal family</h2>
+  </div>
+  <p class="section__subtitle">From the NIS 1 Directive to full DORA application and beyond</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">2016</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016L1148" target="_blank" rel="noopener"><strong>NIS 1 Directive (EU) 2016/1148</strong></a> - the first horizontal EU cybersecurity instrument, covering selected credit institutions, trading venues and CCPs identified at national level. Recognised the gap: fragmented financial-sector coverage.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">8 March 2018</div>
+      <div class="timeline__text"><strong>Commission FinTech Action Plan</strong> - identifies the need for a sector-specific ICT operational resilience instrument to address digital transformation risks in financial services.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">April 2019</div>
+      <div class="timeline__text"><strong>Joint ESA Technical Advice</strong> - EBA, EIOPA and ESMA call for a coherent EU approach to ICT risk in finance, flagging nine sectoral acts with fragmented requirements and proposing a single, cross-sectoral framework.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">September 2020</div>
+      <div class="timeline__text"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52020PC0595" target="_blank" rel="noopener"><strong>DORA proposal COM/2020/595</strong></a> - part of the Digital Finance Package, alongside MiCA. Introduces the five-pillar structure and the CTPP Oversight Framework for the first time.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">14 December 2022</div>
+      <div class="timeline__text"><strong>DORA adopted</strong> - <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">Regulation (EU) 2022/2554</a> and Directive (EU) 2022/2556 published together in <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC" target="_blank" rel="noopener">OJ L 333 of 27 December 2022</a>. NIS 2 (Directive (EU) 2022/2555) adopted on the same day.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 January 2023</div>
+      <div class="timeline__text"><strong>Entry into force</strong> - day 20 after OJ publication. The two-year transition period begins. Financial entities start building frameworks, registers of information and testing programmes.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 January 2024</div>
+      <div class="timeline__text"><strong>First-batch RTS deadline</strong> - ESAs submit to the Commission the technical standards on ICT risk management policies, access management, detection mechanisms, business-continuity policy components, testing, response and recovery, and the register of information (Arts 15, 16, 18, 28, 41).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 July 2024</div>
+      <div class="timeline__text"><strong>Second-batch deadline</strong> - RTS, ITS and delegated acts on incident reporting templates and time limits, TLPT, subcontracting, CTPP designation criteria, and oversight fees (Arts 20, 26, 30, 31, 43).</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 January 2025</div>
+      <div class="timeline__text"><strong>DORA applies in full</strong> (Art 64). Compliance enforced from this date. EU Hub feasibility report (Art 21) and Member State notification of implementing law (Art 53) also due by this date.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 January 2026</div>
+      <div class="timeline__text"><strong>Auditor review report</strong> (Art 58(3)) - the Commission reports to the EP and Council on whether statutory auditors and audit firms should be added to DORA's scope.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">17 January 2028</div>
+      <div class="timeline__text"><strong>Full review report</strong> (Art 58(1)) - covers CTPP designation criteria, voluntary cyber threat notification, the third-country CTPP regime, and JON effectiveness. May lead to legislative amendments.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 13: GLOSSARY (2-col)
+     ===================================================== -->
+<section class="section" id="glossary">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-alphabetical"></i></div>
+    <h2 class="section__title">Glossary</h2>
+  </div>
+  <p class="section__subtitle">Load-bearing terms as used in Regulation (EU) 2022/2554 and its implementing measures</p>
+
+  <div class="glossary-grid">
+    <div class="glossary-card">
+      <div class="glossary-card__term">TLPT</div>
+      <div class="glossary-card__def">Threat-Led Penetration Testing. An intelligence-led red team exercise on live production systems, mimicking real-life threat actors' tactics, techniques and procedures. Required every 3 years for systemically important financial entities under Art 26.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">TIBER-EU</div>
+      <div class="glossary-card__def">Threat Intelligence-Based Ethical Red Teaming, developed by the ECB. The TLPT methodology adopted by DORA as its reference framework. TIBER-EU tests are conducted on live production systems with intelligence-gathering, red team, and purple team phases.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">CTPP</div>
+      <div class="glossary-card__def">Critical ICT Third-Party Service Provider. An ICT service provider (cloud, software, data analytics, data centre) formally designated under Art 31 by the ESAs as critical to Union financial stability. Subject to the Lead Overseer's oversight powers and periodic penalty payments.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">JON</div>
+      <div class="glossary-card__def">Joint Oversight Network (Art 34). Coordinates the three Lead Overseers (one each from EBA, ESMA, EIOPA) to ensure consistent application of the Oversight Framework across the three ESAs. A permanent network without separate legal personality.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Lead Overseer</div>
+      <div class="glossary-card__def">The ESA (EBA, ESMA or EIOPA) designated as primary point of contact and overseer for a specific CTPP. Determined by which ESA's supervised entities hold the largest share of total assets among all financial entities using that CTPP (Art 31(1)(b)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ESAs</div>
+      <div class="glossary-card__def">The three European Supervisory Authorities: EBA (banking), ESMA (securities and markets), and EIOPA (insurance and occupational pensions). They jointly govern the Oversight Framework through their Joint Committee and the Oversight Forum.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Joint Committee</div>
+      <div class="glossary-card__def">The cross-sectoral coordination body of EBA, ESMA and EIOPA established under Art 54 of each ESA Regulation. Under DORA, it coordinates joint positions, exercises, and decisions on CTPP designation and the Oversight Forum's work (Art 32).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Oversight Forum</div>
+      <div class="glossary-card__def">Sub-committee of the Joint Committee, chaired by the Lead Overseer, including Chairs of the three ESAs, one high-level NCA representative per Member State, and ECB, ESRB, ENISA and Commission as observers. Prepares CTPP designation recommendations (Art 32).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">JET</div>
+      <div class="glossary-card__def">Joint Examination Team. An ad hoc team composed of staff of the Lead Overseer and other ESAs, formed to conduct specific investigations or on-site inspections of a CTPP (Art 39(2)).</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ICT concentration risk</div>
+      <div class="glossary-card__def">Exposure to one or a group of related critical TPPs creating a dependency that could endanger critical or important functions or Union financial stability (Art 3(29)). The rationale for CTPP designation and Art 29 pre-contracting analysis.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Microenterprise</div>
+      <div class="glossary-card__def">An entity with fewer than 10 persons employed AND annual turnover or balance sheet total not exceeding EUR 2 million (Art 3(60)). Microenterprises follow the simplified ICT risk management framework under Art 16 and have reduced obligations across the Regulation.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Critical or important function</div>
+      <div class="glossary-card__def">A function whose disruption would materially impair the financial performance, soundness or continuity of the financial entity, or compliance with its authorisation conditions (Art 3(22)). The highest-obligation tier throughout DORA, triggering enhanced testing, contractual, exit-strategy and reporting requirements.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">ICT third-party risk</div>
+      <div class="glossary-card__def">The risk arising from the use of ICT services provided by third parties, including through subcontractors (Art 3(18)). Pillar 4 (Arts 28-30) and the Oversight Framework (Arts 31-44) address this risk. The financial entity remains fully responsible regardless of outsourcing.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Lex specialis</div>
+      <div class="glossary-card__def">A rule of legal interpretation: the more specific law prevails over the more general one. DORA is lex specialis vs NIS 2 for financial entities (recital 16). Where DORA contains a specific provision, it applies; NIS 2 fills gaps for cross-sector cooperation.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Register of information</div>
+      <div class="glossary-card__def">The full inventory of all contractual arrangements with ICT third-party service providers, distinguishing those supporting critical or important functions. Maintained continuously, reported yearly to the competent authority, and produced on request (Art 28(3)). The foundation for Art 29 concentration risk analysis.</div>
+    </div>
+    <div class="glossary-card">
+      <div class="glossary-card__term">Digital operational resilience</div>
+      <div class="glossary-card__def">The financial entity's ability to build, assure and review its operational integrity and reliability, ensuring either directly or indirectly through use of ICT services the full range of ICT-related capabilities needed to address the security of network and information systems (Art 3(1)).</div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SECTION 14: OFFICIAL SOURCES
+     ===================================================== -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official sources</h2>
+  </div>
+  <p class="section__subtitle">Primary sources for Regulation (EU) 2022/2554 and its family</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-scale-balance" style="color: var(--color-blue);"></i> EUR-Lex: DORA base act</div>
+    <p>Full text of Regulation (EU) 2022/2554 of 14 December 2022 (64 articles, 106 recitals, 9 chapters, 65 definitions):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554</a></p>
+    <p style="margin-top:0.5rem;">CELEX number: <strong>32022R2554</strong> | OJ reference: OJ L 333/1 of 27 December 2022 (79 pages)</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-purple);"></i> DORA Directive (companion act)</div>
+    <p>Directive (EU) 2022/2556 amending 8 financial directives to align with DORA (UCITS, Solvency II, AIFMD, CRD IV, BRRD, MiFID II, PSD2, IORP II):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-newspaper-variant-outline" style="color: var(--color-amber);"></i> Official Journal L 333, 27 December 2022</div>
+    <p>DORA and the DORA Directive were published together in OJ L 333. The same issue also contains the NIS 2 Directive:</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L:2022:333:TOC</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-blue);"></i> NIS 2 Directive (sibling cybersecurity instrument)</div>
+    <p>Directive (EU) 2022/2555 on measures for a high common level of cybersecurity across the Union. DORA is lex specialis vs NIS 2 for financial entities (recital 16):</p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target-account" style="color: var(--color-red);"></i> TIBER-EU framework (ECB)</div>
+    <p>The ECB's Threat Intelligence-Based Ethical Red Teaming framework, adopted by DORA as the reference methodology for TLPT (Art 26):</p>
+    <p><a href="https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html" target="_blank" rel="noopener">https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-web" style="color: var(--color-green);"></i> ENISA and Commission Digital Finance Strategy</div>
+    <p>The European Union Agency for Cybersecurity (ENISA) acts as observer to the Oversight Forum and publishes threat intelligence relevant to DORA implementation:</p>
+    <p><a href="https://www.enisa.europa.eu" target="_blank" rel="noopener">https://www.enisa.europa.eu</a></p>
+    <p style="margin-top:0.5rem;">Commission Digital Finance Strategy (the policy package within which DORA was proposed):</p>
+    <p><a href="https://finance.ec.europa.eu/digital-finance_en" target="_blank" rel="noopener">https://finance.ec.europa.eu/digital-finance_en</a></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- =====================================================
+     SECTION 15: EXPLORE WITH BRUBRU (3x2)
+     ===================================================== -->
+<section class="section" id="brubru">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-robot-outline"></i></div>
+    <h2 class="section__title">Explore DORA with Brubru</h2>
+  </div>
+  <p class="section__subtitle">Six tools to analyse, track, and work with DORA and EU financial-sector legislation</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="mdi mdi-chat-outline"></i>
+      <div class="feature-card__title">Brubru Chat</div>
+      <div class="feature-card__desc">Ask anything about DORA: the five pillars, TLPT requirements, CTPP designation criteria, the simplified framework for microenterprises, or incident classification. Answers grounded in official sources.</div>
+      <a href="https://brubru.beresol.eu/main" class="feature-card__btn">Open Chat</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-clipboard-check-outline"></i>
+      <div class="feature-card__title">EU Law Comply</div>
+      <div class="feature-card__desc">Run a DORA compliance gap analysis: ICT risk management framework completeness, register of information, contractual provisions for critical functions, TLPT schedule, and incident-reporting procedures.</div>
+      <a href="https://brubru.beresol.eu/eulawcomply" class="feature-card__btn">Open EU Law Comply</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-file-edit-outline"></i>
+      <div class="feature-card__title">Amendator</div>
+      <div class="feature-card__desc">Load Regulation (EU) 2022/2554 or the DORA Directive into the Amendator and draft amendment language directly against the official EUR-Lex text of any financial-sector law.</div>
+      <a href="https://brubru.beresol.eu/amendator" class="feature-card__btn">Open Amendator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-view-dashboard-outline"></i>
+      <div class="feature-card__title">My EU Bubble</div>
+      <div class="feature-card__desc">Track ICT supervision files, EBA and ESMA DORA technical standards, ENISA threat-landscape reports, and CTPP designation updates in real time across EP and Council.</div>
+      <a href="https://brubru.beresol.eu/my-eu-bubble" class="feature-card__btn">Open My EU Bubble</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-hammer-wrench"></i>
+      <div class="feature-card__title">Tenderator</div>
+      <div class="feature-card__desc">Find EU and Member State procurement opportunities related to DORA implementation services, ICT resilience testing, cyber-incident reporting tooling, and financial-sector cybersecurity.</div>
+      <a href="https://brubru.beresol.eu/tenderator" class="feature-card__btn">Open Tenderator</a>
+    </div>
+    <div class="feature-card">
+      <i class="mdi mdi-api"></i>
+      <div class="feature-card__title">Brubru API</div>
+      <div class="feature-card__desc">Programmatic access to EU legislation data, DORA procedure tracking, ESA regulatory output, and financial-sector calendar events. Plug DORA and 28,505 laws into your own compliance and monitoring workflows.</div>
+      <a href="https://brubru.beresol.eu/api-platform" class="feature-card__btn">View API Docs</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     CTA STRIP (Pexels background - mandatory)
+     ===================================================== -->
+<div class="cta-strip" style="background-image: linear-gradient(135deg, rgba(6,147,227,0.85) 0%, rgba(155,81,224,0.85) 100%), url('https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'); background-size: cover; background-position: center;">
+  <h2 class="cta-strip__title">Get the full Brubru platform</h2>
+  <p class="cta-strip__sub">14-day free trial. No card needed.</p>
+  <a href="https://brubru.beresol.eu/signup" class="cta-strip__btn">Start free trial</a>
+</div>
+
+<div class="container">
+
+<!-- =====================================================
+     SECTION 16: RELATED CANON ENTRIES (3+2 centred)
+     ===================================================== -->
+<section class="section" id="related">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-book-open-outline"></i></div>
+    <h2 class="section__title">Related canon entries</h2>
+  </div>
+  <p class="section__subtitle">Other EU Canon deep-dives in DORA's legal family</p>
+
+  <div class="related-grid">
+    <a href="../2022-2555_nis2/index.html" class="related-card">
+      <i class="mdi mdi-shield-lock-outline"></i>
+      <div class="related-card__name">NIS 2 Directive</div>
+      <div class="related-card__celex">32022L2555</div>
+    </a>
+    <a href="../2023-1114_mica/index.html" class="related-card">
+      <i class="mdi mdi-currency-btc"></i>
+      <div class="related-card__name">MiCA</div>
+      <div class="related-card__celex">32023R1114</div>
+    </a>
+    <a href="../2013-575_crr/index.html" class="related-card">
+      <i class="mdi mdi-bank-outline"></i>
+      <div class="related-card__name">CRR</div>
+      <div class="related-card__celex">32013R0575</div>
+    </a>
+    <a href="../2014-65_mifid2/index.html" class="related-card">
+      <i class="mdi mdi-chart-line"></i>
+      <div class="related-card__name">MiFID II</div>
+      <div class="related-card__celex">32014L0065</div>
+    </a>
+    <a href="../2009-138_solvency2/index.html" class="related-card">
+      <i class="mdi mdi-umbrella-outline"></i>
+      <div class="related-card__name">Solvency II</div>
+      <div class="related-card__celex">32009L0138</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-outline" style="color: var(--color-blue);"></i> EU Canon library</div>
+    <p>The EU Canon is Brubru's growing library of plain-language deep-dives on landmark EU legislation. Each entry analyses the operative provisions, legal context, and practical significance of a foundational EU law, with all facts traced to the official EUR-Lex source text.</p>
+    <p style="margin-top:0.5rem;"><a href="../index.html" style="color: var(--color-blue);">Browse all EU Canon entries</a>, currently covering GDPR, DSA, DMA, NIS2, DORA, AI Act, MiCA, CBAM, CRR, and a growing set of pharma, trade defence, and finance instruments.</p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <div class="footer__logos">
+        <img src="../../assets/brubru_mainlogo.png" alt="Brubru" class="footer__logo-brubru">
+      </div>
+      <div class="footer__text">
+        <p>Brubru is the AI-powered EU policy intelligence assistant by <a href="https://beresol.eu">Beresol SL</a>.</p>
+        <p style="margin-top:0.4rem;"><a href="https://brubru.beresol.eu/signup">Start your 14-day free trial</a> - no card required.</p>
+        <p style="margin-top:0.4rem;">
+          <a href="https://brubru.beresol.eu/main">Chat</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/amendator">Amendator</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/my-eu-bubble">My EU Bubble</a> &nbsp;|&nbsp;
+          <a href="https://brubru.beresol.eu/eulawcomply">EU Law Comply</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer__col">
+      <div class="footer__text">
+        <p style="font-weight:700; margin-bottom:0.5rem;">EU Canon library</p>
+        <ul class="footer__nav">
+          <li><a href="../index.html">All canon entries</a></li>
+          <li><a href="../2016-679_gdpr/index.html">GDPR - Regulation (EU) 2016/679</a></li>
+          <li><a href="../2022-2065_dsa/index.html">DSA - Regulation (EU) 2022/2065</a></li>
+          <li><a href="../2023-956_cbam/index.html">CBAM - Regulation (EU) 2023/956</a></li>
+          <li><a href="index.html">DORA - Regulation (EU) 2022/2554 (this page)</a></li>
+        </ul>
+        <p style="font-weight:700; margin-top:1rem; margin-bottom:0.5rem;">Official sources</p>
+        <ul class="footer__nav">
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">DORA Regulation on EUR-Lex (CELEX 32022R2554)</a></li>
+          <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2556" target="_blank" rel="noopener">DORA Directive (EU) 2022/2556 on EUR-Lex</a></li>
+          <li><a href="https://www.ecb.europa.eu/paym/cyber-resilience/tiber-eu/html/index.en.html" target="_blank" rel="noopener">TIBER-EU framework (ECB)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__col" style="text-align:right;">
+      <img src="../../assets/beresol-logo.png" alt="Beresol" class="footer__logo-beresol" style="display:block; margin-left:auto; margin-bottom:0.75rem;">
+      <div class="footer__text">
+        <p style="font-weight:700;">Built by Beresol SL</p>
+        <p>Brussels, Belgium</p>
+        <p><a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+        <p style="margin-top:0.5rem; font-size:0.78rem;">This is an independent analysis and is not an official EU document. All facts are traced to Regulation (EU) 2022/2554 and official EUR-Lex sources.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>&copy; 2026 Beresol SL. All rights reserved. &nbsp;|&nbsp; <a href="https://brubru.beresol.eu">brubru.beresol.eu</a> &nbsp;|&nbsp; <a href="https://beresol.eu">beresol.eu</a></p>
+    <p style="margin-top:0.35rem;">Image credits: Hero photo by <a href="https://www.pexels.com/photo/5480781" target="_blank" rel="noopener">Brett Sayles via Pexels</a> (photo ID 5480781). CTA strip photo by <a href="https://www.pexels.com/photo/1089438" target="_blank" rel="noopener">Markus Spiske via Pexels</a> (photo ID 1089438).</p>
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

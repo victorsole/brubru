@@ -97,6 +97,66 @@ LAW_PACKAGES = {
         'date_from': 2023
     },
 
+    'dora_digital_operational_resilience': {
+        'name': 'DORA - Digital Operational Resilience Act',
+        'primary_celex': '32022R2554',  # DORA Regulation
+        'description': (
+            'Regulation (EU) 2022/2554 establishing a harmonised EU-wide framework '
+            'for digital operational resilience across the financial sector. Covers '
+            'ICT risk management (Chapter II), ICT-related incident reporting (Chapter '
+            'III, with three-stage initial/intermediate/final reporting), digital '
+            'operational resilience testing including threat-led penetration testing '
+            '(TLPT every 3 years) (Chapter IV), management of ICT third-party risk '
+            'with mandatory contractual provisions, register of information and exit '
+            'strategies (Chapter V Section I), and a Union-level Oversight Framework '
+            'for critical ICT third-party service providers run by Lead Overseers from '
+            'EBA / ESMA / EIOPA (Chapter V Section II). Applies from 17 January 2025. '
+            'Companion Directive (EU) 2022/2556 amends UCITS, Solvency II, AIFMD, CRD '
+            'IV, BRRD, MiFID II, PSD2 and IORP II. Lex specialis vs NIS 2 Directive.'
+        ),
+        'applicability': (
+            'Twenty-one categories of financial entity (Art 2): credit institutions, '
+            'payment institutions, account information service providers, electronic '
+            'money institutions, investment firms, crypto-asset service providers and '
+            'issuers of asset-referenced tokens (MiCA), CSDs, CCPs, trading venues, '
+            'trade repositories, AIFMs, UCITS management companies, data reporting '
+            'service providers, insurance and reinsurance undertakings, insurance / '
+            'reinsurance / ancillary insurance intermediaries, IORPs, credit rating '
+            'agencies, administrators of critical benchmarks, crowdfunding service '
+            'providers, securitisation repositories. Plus ICT third-party service '
+            'providers (cloud, software, data-centre, data-analytics) when designated '
+            'as critical under Article 31. Carve-outs for small AIFMs, small insurers, '
+            'IORPs with at most 15 members, MiFID Art 2/3 exempt persons, microenterprise '
+            'insurance intermediaries, post-office giro institutions.'
+        ),
+        'policy_area': 'Economic and Financial Affairs',
+        'priority_level': 'high',
+        'keywords': [
+            'dora', 'digital operational resilience', 'digital operational resilience act',
+            '2022/2554', '32022r2554', '2022/2556', '32022l2556',
+            'ict risk management', 'ict risk', 'ict-related incident',
+            'major ict-related incident', 'significant cyber threat',
+            'tlpt', 'threat-led penetration testing', 'tiber-eu',
+            'critical ict third-party service provider', 'ctpp', 'critical tpp',
+            'ict third-party risk', 'ict third-party service provider',
+            'oversight framework', 'lead overseer', 'oversight forum',
+            'joint oversight network', 'jon', 'joint examination team',
+            'register of information', 'exit strategy', 'subcontracting',
+            'ict concentration risk', 'critical or important function',
+            'digital operational resilience strategy', 'business impact analysis', 'bia',
+            'ict business continuity policy', 'ict response and recovery plan',
+            'cloud computing', 'cloud service provider', 'data centre',
+            'cyber threat intelligence', 'information sharing arrangement',
+            'cyber-attack', 'cyber resilience', 'cyber hygiene',
+            'esa joint committee', 'eba dora', 'esma dora', 'eiopa dora',
+            'nis 2', '2022/2555', 'lex specialis',
+            'periodic penalty payment', 'oversight fees',
+            'financial entity', 'microenterprise',
+            'simplified ict risk management framework',
+        ],
+        'date_from': 2022
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary
