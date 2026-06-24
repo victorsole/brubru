@@ -1,6 +1,7 @@
 # Europol Regulation Revision (Q2 2026 Commission Proposal Expected)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 24 June 2026)**: the **Law enforcement and criminal justice package** is on the College of Commissioners agenda for **24 June 2026**, with two flagship strands: **Strengthening Europol** and **Strengthening Eurojust**. EVP responsible: **Henna Virkkunen** (Tech Sovereignty, Security and Democracy); line Commissioner for home affairs: Magnus Brunner. This is the long-trailed Europol Regulation revision (anticipated Q2 2026) landing as a concrete proposal, paired for the first time with a parallel Eurojust-strengthening strand. Source: Commission tentative agenda SEC(2026)2572 final (16 June 2026), College meeting of 24 June. NOTE: the agenda date is marked **(tbc)** and the President may change the planning at any time, so treat as the Commission's current plan, not confirmed adoption, until the proposal text / IP release is published.
 - Topic: Upcoming revision of the Europol Regulation, expected as a Commission proposal in Q2 2026
 - Current Europol Regulation: Regulation (EU) 2022/991 (last major amendment, granting Europol direct private-party data exchange + complex-dataset processing + third-country exchange powers)
 - Founding Europol Regulation: Regulation (EU) 2016/794 (CELEX 32016R0794)

@@ -1,6 +1,7 @@
 # EU Corporate Tax Policy in a Changing Environment (Kollár ECON INI 2026)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 24 June 2026)**: an **Omnibus on taxation** and an **Omnibus on energy product legislation** are both on the College of Commissioners agenda for **24 June 2026**, led by EVP **Teresa Ribera** with EVP **Valdis Dombrovskis**. These are simplification/competitiveness omnibus packages — the taxation omnibus bundles streamlining of EU tax rules; the energy-product omnibus targets the Energy Taxation Directive area. Part of the Commission's broader 2026 simplification drive (alongside the digital, automotive, chemicals and food/feed omnibus packages). Source: Commission tentative agenda SEC(2026)2572 final (16 June 2026), College meeting of 24 June. NOTE: the agenda date is marked **(tbc)**; treat as the Commission's current plan until the proposal text / IP release confirms adoption.
 - Topic: EP own-initiative report on EU corporate tax policy under post-2025 conditions: Pillar Two implementation review, BEFIT proposal status, US tax-policy divergence (Trump corporate tax cuts), capital export competition, residence mobility, post-2027 EU tax instruments
 - **EP file**: ECON Draft Report **PE781.467v01-00**, tabled 22 April 2026
 - **Rapporteur**: **Kinga Kollár** (EPP, Hungary, ECON committee)

@@ -2,6 +2,30 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-24",
+      "action": "updated",
+      "guide": "eu_budget_emu_law",
+      "title": "EU Budget and EMU Law",
+      "summary": "2026 Convergence report on College agenda 24 June 2026 (Sejourne)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-24",
+      "action": "updated",
+      "guide": "eu_corporate_tax_policy_2026",
+      "title": "EU Corporate Tax Policy",
+      "summary": "Omnibus on taxation + Omnibus on energy product legislation on College agenda 24 June 2026 (Ribera/Dombrovskis)",
+      "refs": []
+    },
+    {
+      "date": "2026-06-24",
+      "action": "updated",
+      "guide": "europol_regulation_revision_2026",
+      "title": "Europol Regulation Revision",
+      "summary": "Law enforcement & criminal justice package (Strengthening Europol + Eurojust) on College agenda 24 June 2026 (Virkkunen)",
+      "refs": []
+    },
+    {
       "date": "2026-06-23",
       "action": "updated",
       "guide": "eu_chips_act_2_0",

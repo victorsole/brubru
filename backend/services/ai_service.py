@@ -2530,11 +2530,43 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 links_added += 1
                 return f'[{cleaned_text}]({eurlex_url})'
 
-            # For case-sensitive matching (most acronyms are uppercase)
-            text = re.sub(pattern, replace_func, text)
+            # For case-sensitive matching (most acronyms are uppercase).
+            # count=1 (24 Jun 2026): link only the FIRST unlinked occurrence of
+            # each acronym. Without it, re.sub linkified EVERY occurrence, so a
+            # single sentence rendered "[CBAM](url) ... buy [CBAM](url)
+            # certificates" -- the same EUR-Lex link repeated 2-3x per line,
+            # which reads as broken. Mirrors the count=1 doc-link injector above.
+            # See audit B1 2026-06-24.
+            text = re.sub(pattern, replace_func, text, count=1)
 
         if links_added > 0:
             logger.info(f"Added {links_added} legislation EUR-Lex links to response")
+
+        # STEP 3 (24 Jun 2026): convert bare [CELEX:<num>] bracket tokens the
+        # model sometimes emits as literal text (e.g. "...started on 1 January
+        # 2026 [CELEX:32023R0956].") into proper EUR-Lex markdown links. Only
+        # touches a [CELEX:...] token NOT already followed by "(" (i.e. not
+        # already a markdown link). See audit B2 2026-06-24.
+        celex_token_converted = 0
+
+        def _convert_bare_celex(match):
+            nonlocal celex_token_converted
+            celex_token_converted += 1
+            celex = match.group(1)
+            return (
+                f'[CELEX:{celex}](https://eur-lex.europa.eu/legal-content/'
+                f'EN/TXT/?uri=CELEX:{celex})'
+            )
+
+        text = re.sub(
+            r'\[CELEX:([0-9][0-9A-Za-z]+)\](?!\()',
+            _convert_bare_celex,
+            text,
+        )
+        if celex_token_converted > 0:
+            logger.info(
+                f"Converted {celex_token_converted} bare [CELEX:...] token(s) to EUR-Lex links"
+            )
 
         return text
 
