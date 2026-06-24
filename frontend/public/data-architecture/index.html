@@ -553,6 +553,93 @@
     }
     .query-demo__response.show { opacity: 1; }
 
+    /* --- Infographics: bar charts + donut --- */
+    .infographic {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+    }
+    .infographic__title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .infographic__title .mdi { color: var(--color-blue); font-size: 1.3rem; }
+    .infographic__caption { font-size: 0.85rem; color: var(--color-secondary); margin-top: 1rem; font-style: italic; }
+    .bar-row { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.75rem; }
+    .bar-label { flex: 0 0 172px; font-size: 0.85rem; font-weight: 600; text-align: right; }
+    .bar-track {
+      flex: 1;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      height: 24px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      width: var(--w, 0);
+      border-radius: 999px;
+      transform-origin: left center;
+      animation: growBar 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes growBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    .bar-fill--blue { background: linear-gradient(90deg, #0693e3, #5ec5f5); }
+    .bar-fill--green { background: linear-gradient(90deg, #059669, #34d399); }
+    .bar-fill--purple { background: linear-gradient(90deg, #9b51e0, #c79bf0); }
+    .bar-fill--amber { background: linear-gradient(90deg, #d97706, #fbbf24); }
+    .bar-fill--red { background: linear-gradient(90deg, #dc2626, #f87171); }
+    .bar-value { flex: 0 0 48px; font-size: 0.9rem; font-weight: 700; color: var(--color-text); }
+
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .donut {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+      background: conic-gradient(var(--color-blue) 0 47%, var(--color-purple) 47% 97.3%, var(--color-amber) 97.3% 100%);
+      animation: scaleIn 0.7s ease both;
+    }
+    .donut::after {
+      content: '';
+      position: absolute;
+      inset: 27%;
+      background: var(--color-bg-alt);
+      border-radius: 50%;
+    }
+    .donut__center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      line-height: 1.1;
+    }
+    .donut__center b { font-size: 2rem; color: var(--color-text); }
+    .donut__center span { font-size: 0.72rem; color: var(--color-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+    .donut-legend { flex: 1; min-width: 240px; }
+    .legend-item { display: flex; align-items: flex-start; gap: 0.65rem; margin-bottom: 0.9rem; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; margin-top: 0.3rem; }
+    .legend-text b { display: block; font-size: 0.95rem; }
+    .legend-text span { color: var(--color-secondary); font-size: 0.85rem; }
+    .table-caption { font-size: 0.85rem; color: var(--color-secondary); font-style: italic; margin: 0.25rem 0 1.5rem; }
+    .cmp-yes { color: var(--color-green); font-weight: 700; }
+    .cmp-no { color: var(--color-red); font-weight: 600; }
+
     /* --- Floating particles background --- */
     .particles {
       position: fixed;
@@ -599,6 +686,19 @@
       .container { padding: 1rem; }
       .flow-row { flex-direction: column; }
       .flow-arrow { transform: rotate(90deg); }
+      .infographic { padding: 1.25rem; }
+      .bar-label { flex-basis: 104px; font-size: 0.72rem; }
+      .bar-value { flex-basis: 36px; font-size: 0.8rem; }
+      .donut-wrap { gap: 1.25rem; }
+      .donut { width: 160px; height: 160px; }
+      .data-table { font-size: 0.85rem; }
+      .data-table th, .data-table td { padding: 0.6rem 0.7rem; }
+    }
+    @media (max-width: 480px) {
+      .data-table, .data-table thead, .data-table tbody, .data-table th, .data-table td, .data-table tr { display: block; }
+      .data-table thead { display: none; }
+      .data-table tr { margin-bottom: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; }
+      .data-table td { border-bottom: none; padding: 0.35rem 0; }
     }
   </style>
 </head>
@@ -633,8 +733,9 @@
     <h1 class="hero__title">Data is the new constraint in <span>AI</span>. Brubru is built data-first.</h1>
     <p class="hero__subtitle">Public legal sources are messy. Citations break. References point to laws that have been amended or repealed. Generic AI grounded in raw scraped legal text fails quietly with confident wrong answers. Brubru exists to make that not happen. This page documents the eight layers of EU data we ingest, the trust controls that keep them clean, and how every byte feeds the chatbot, the API and the MCP server. No good EU data, no Brubru.</p>
     <div class="hero__meta">
-      <span><i class="mdi mdi-update"></i> Last updated: 12 May 2026</span>
-      <span><i class="mdi mdi-database-outline"></i> PostgreSQL + Supabase &middot; 85 migrations</span>
+      <span><i class="mdi mdi-update"></i> Last updated: 24 June 2026</span>
+      <span><i class="mdi mdi-api"></i> 561 API endpoints &middot; one key, one envelope</span>
+      <span><i class="mdi mdi-database-outline"></i> PostgreSQL + Supabase &middot; 147 migrations</span>
       <span><i class="mdi mdi-shield-check-outline"></i> Citation verifier + response validator</span>
       <span><i class="mdi mdi-graph-outline"></i> DCAT-AP published + OP Core conformance</span>
     </div>
@@ -689,7 +790,7 @@
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-comment-question-outline"></i></div>
       <h2 class="section__title">What Brubru users actually ask</h2>
     </div>
-    <p class="section__intro reveal">The chat is the first thing every Brubru user sees. The questions that hit it are not generic. They are the kind of detailed, citation-grade EU-specialist asks a public-affairs professional, a parliamentary assistant, a compliance lead or a journalist on the EU beat actually needs answered: <em>which MEP tabled this amendment, what does Article 12 paragraph 2 say, what was said in last week's ECON, what is Commissioner Ribera's agenda on Wednesday, how do I draft a written parliamentary question, who do I contact at DG GROW</em>. Brubru is not a general-purpose chatbot dressed in EU clothes. It is an EU-specialised retrieval system powered by a frontier LLM. The table below maps the question shapes Brubru sees to the data layers that answer them &mdash; and is honest about where the wiring is partial or missing.</p>
+    <p class="section__intro reveal">The chat is the first thing every Brubru user sees. The questions that hit it are not generic. They are the kind of detailed, citation-grade EU-specialist asks a public-affairs professional, a parliamentary assistant, a compliance lead or a journalist on the EU beat actually needs answered: <em>which MEP tabled this amendment, what does Article 12 paragraph 2 say, what was said in last week's ECON, what is Commissioner Ribera's agenda on Wednesday, how do I draft a written parliamentary question, who do I contact at DG GROW</em>. Brubru is not a general-purpose chatbot dressed in EU clothes. It is an EU-specialised retrieval system powered by a frontier LLM. The table below maps the question shapes Brubru sees to the data layers that answer them, and is honest about where the wiring is partial or missing.</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">User question shape &rarr; Brubru data + chat intent</div>
@@ -711,7 +812,7 @@
             </tr>
             <tr>
               <td><strong>Specific articles or paragraphs of a law</strong><br>"What does Article 12(2) of the AI Act say?"<br>"Recital 14 of the Data Act"</td>
-              <td>Data layer is built: <code>/api/v1/legal-text/{celex}/recital-article-map</code>, <code>/defined-terms</code>, <code>/resolve-references</code>, <code>/resolve-aliases</code> &mdash; but no chat intent calls them today</td>
+              <td>Data layer is built: <code>/api/v1/legal-text/{celex}/recital-article-map</code>, <code>/defined-terms</code>, <code>/resolve-references</code>, <code>/resolve-aliases</code>, but no chat intent calls them today</td>
               <td><span style="color: var(--color-red); font-weight: 600;">Gap (shipping as W1b)</span></td>
             </tr>
             <tr>
@@ -812,7 +913,7 @@
         <tr><td><strong>EU news media</strong><br><span class="source-tag source-tag--amber">Media</span></td><td>Headlines and links from Politico EU, Euractiv, EUobserver, European Correspondent, Contexte</td><td>Daily</td><td>Web scraper (headlines only, no full text)</td></tr>
         <tr><td><strong>EU Transparency Register</strong><br><span class="source-tag source-tag--green">Interinstitutional</span></td><td>Organisation names, policy interests, contact information for advocacy organisations</td><td>On demand</td><td>TR API</td></tr>
         <tr><td><strong>EP plenary (CRE)</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Full plenary debate transcripts (verbatim records) in XML format</td><td>On demand</td><td>Doceo XML fetch</td></tr>
-        <tr><td><strong>Formex V4 XML corpus</strong><br><span class="source-tag">European Commission</span></td><td><strong>8,710 distinct laws</strong> across <strong>28,513 OJ publications</strong>, represented by <strong>61,219 translatable XML files</strong> (main texts + annexes) &mdash; the entire EU acquis as of November 2025</td><td>Bulk import (Nov 2025)</td><td>EU Publications Office export</td></tr>
+        <tr><td><strong>Formex V4 XML corpus</strong><br><span class="source-tag">European Commission</span></td><td><strong>8,710 distinct laws</strong> across <strong>28,513 OJ publications</strong>, represented by <strong>61,219 translatable XML files</strong> (main texts + annexes), the entire EU acquis as of November 2025</td><td>Bulk import (Nov 2025)</td><td>EU Publications Office export</td></tr>
       </tbody>
     </table>
   </div>
@@ -826,7 +927,7 @@
     <p class="section__intro reveal">The core of Brubru's knowledge: <strong>8,710 distinct laws</strong> across <strong>28,513 OJ publications</strong>, represented by <strong>61,219 translatable XML files</strong> (main texts + annexes), with full-text search, CELEX identification, and metadata.</p>
 
     <div class="info-card reveal">
-      <div class="info-card__title">eu_laws table &mdash; 8,710 distinct laws / 28,513 OJ entries / 61,219 XML files</div>
+      <div class="info-card__title">eu_laws table: 8,710 distinct laws / 28,513 OJ entries / 61,219 XML files</div>
       <div class="info-card__text">Every adopted EU legal act with CELEX number, title, document type (regulation, directive, decision), date, Official Journal reference, policy area classification, and full-text search index (TSVECTOR). Sourced from the Formex V4 XML acquis corpus (EU Publications Office, November 2025 snapshot). A single law's text is often split across multiple pages/files (e.g. REACH spans 7 files, AI Act spans 14 files), which is why the XML file count (61,219) exceeds the distinct-law count (8,710).</div>
     </div>
 
@@ -963,7 +1064,7 @@
   <div class="section" id="trust">
     <div class="section__header reveal-left">
       <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-check-outline"></i></div>
-      <h2 class="section__title">Trust layer &mdash; how every byte is verified</h2>
+      <h2 class="section__title">Trust layer: how every byte is verified</h2>
     </div>
     <p class="section__intro reveal">Quality data is the new constraint in AI. Public legal sources are messy: citations break, references point to laws that have been amended or repealed, scraped HTML drifts. Brubru treats this as the core engineering problem, not a footnote. Eight controls run on every chat response, every API row, and every dataset published outward.</p>
 
@@ -973,7 +1074,7 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">2. Response validator &mdash; second-LLM anti-hallucination pass (Workstream 1, shipped 12 May 2026)</div>
+      <div class="info-card__title">2. Response validator: second-LLM anti-hallucination pass (Workstream 1, shipped 12 May 2026)</div>
       <div class="info-card__text">After the generator produces a response, a Claude Haiku 4.5 validator receives the user query, the retrieved Brubru context blocks, and the proposed response. It returns strict JSON identifying three violation classes: <strong>hallucination</strong> (named entities or numbers in the response that do not appear in the context), <strong>completeness</strong> (lists truncated below 50% without a "showing k of N" disclaimer), and <strong>negation</strong> (refusing to surface data that the context clearly contains). Severity is <code>critical</code> / <code>warning</code> / <code>info</code>. Results land in the <code>chat_validations</code> table with full violation details. First seven days run in shadow mode (validate + log, never modify the shipped response) to size the real violation rate before enforcement. Phase 2 adds one regeneration retry on critical violation, with violation feedback prepended to the system prompt.</div>
     </div>
 
@@ -999,12 +1100,12 @@
 
     <div class="info-card reveal">
       <div class="info-card__title">7. DCAT-AP self-publication + OP Core conformance (Phases 2-3, shipped 2 May 2026)</div>
-      <div class="info-card__text">Brubru is itself a registered EU data publisher. The <code>brubru_dataset_catalog</code> table seeds six datasets (Catalan EU laws, chat knowledge base, eu_laws TSVECTOR corpus, v1 REST API as <code>dcat:DataService</code>, EU vocabularies cache, europa.eu source registry). Served at <code>/api/datasets.{ttl,rdf,json}</code> with publisher IRI <code>brubru.beresol.eu/.well-known/dcat-ap-publisher</code> &mdash; the structural shape <code>data.europa.eu</code> harvesters expect. Every <code>/api/v1/*</code> response carries Dublin-Core-aliased metadata (<code>dct:title</code>, <code>dct:identifier</code>, <code>dct:type</code>, <code>dct:language</code>, <code>dct:publisher</code>, <code>dct:conformsTo</code>) and an <code>X-OP-Core-Conformance: v1.0</code> header. Partners get standards-shaped responses out of the box.</div>
+      <div class="info-card__text">Brubru is itself a registered EU data publisher. The <code>brubru_dataset_catalog</code> table seeds six datasets (Catalan EU laws, chat knowledge base, eu_laws TSVECTOR corpus, v1 REST API as <code>dcat:DataService</code>, EU vocabularies cache, europa.eu source registry). Served at <code>/api/datasets.{ttl,rdf,json}</code> with publisher IRI <code>brubru.beresol.eu/.well-known/dcat-ap-publisher</code>, the structural shape <code>data.europa.eu</code> harvesters expect. Every <code>/api/v1/*</code> response carries Dublin-Core-aliased metadata (<code>dct:title</code>, <code>dct:identifier</code>, <code>dct:type</code>, <code>dct:language</code>, <code>dct:publisher</code>, <code>dct:conformsTo</code>) and an <code>X-OP-Core-Conformance: v1.0</code> header. Partners get standards-shaped responses out of the box.</div>
     </div>
 
     <div class="info-card reveal">
       <div class="info-card__title">8. Ontology drift CI test (Phase 4, shipped 2 May 2026)</div>
-      <div class="info-card__text">The legal-content ontologies that anchor Brubru's data &mdash; the Publications Office Common Data Model (CDM) and the European Legislation Identifier (ELI) &mdash; are vendored at known versions in <code>docs/ontologies/eli/{eli.owl, eli_ontology.xlsx, eli-sdo.ttl}</code> and <code>docs/ontologies/cdm/cdm-brubru-subset.ttl</code>. A pytest in <code>tests/test_ontology_drift.py</code> runs 11 static checks and fails the build if a new CDM predicate enters the codebase without a snapshot refresh. The ontology never silently shifts under our partners. The same test fired correctly when Phase 5 introduced 7 new <code>cdm:event_legal_*</code> predicates &mdash; proof the guardrail works.</div>
+      <div class="info-card__text">The legal-content ontologies that anchor Brubru's data, the Publications Office Common Data Model (CDM) and the European Legislation Identifier (ELI), are vendored at known versions in <code>docs/ontologies/eli/{eli.owl, eli_ontology.xlsx, eli-sdo.ttl}</code> and <code>docs/ontologies/cdm/cdm-brubru-subset.ttl</code>. A pytest in <code>tests/test_ontology_drift.py</code> runs 11 static checks and fails the build if a new CDM predicate enters the codebase without a snapshot refresh. The ontology never silently shifts under our partners. The same test fired correctly when Phase 5 introduced 7 new <code>cdm:event_legal_*</code> predicates, proof the guardrail works.</div>
     </div>
 
     <p class="section__intro reveal" style="font-size: 0.95rem; font-style: italic;">Quality framework reference: <code>docs/training/quality_framework.md</code>. Brubru Quality Score (BQS) formula: 0.30 &times; pass_rate + 0.25 &times; CELEX pass + 0.15 &times; language pass + 0.10 &times; cross-link pass + 0.10 &times; (1 &minus; deflection rate) + 0.05 &times; guide pass + 0.05 &times; latency score. Threshold &ge; 0.80 = healthy. Eight criteria evaluated against 30 golden answers per run. Three-stage pre-deploy gate (knowledge integrity / quality eval / cross-link) in <code>scripts/predeploy_gate.py</code>.</p>
@@ -1014,14 +1115,14 @@
   <div class="section" id="vocabularies">
     <div class="section__header reveal-right">
       <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-translate"></i></div>
-      <h2 class="section__title">Vocabularies &amp; ontologies &mdash; Brubru speaks the EU</h2>
+      <h2 class="section__title">Vocabularies &amp; ontologies: Brubru speaks the EU</h2>
     </div>
-    <p class="section__intro reveal">EU institutions publish their data through controlled vocabularies (EuroVoc, 12 authority tables) and binding schemas (Formex V4, CDM, ELI, AKN4EU, DCAT-AP). Brubru does not just store the data &mdash; it speaks the same languages the Publications Office and the European Commission do. The 13-phase EU Vocabularies arc shipped 2 May 2026 (140 pytest passing) closes the gap between "we have EU data" and "we serve EU data conformantly".</p>
+    <p class="section__intro reveal">EU institutions publish their data through controlled vocabularies (EuroVoc, 12 authority tables) and binding schemas (Formex V4, CDM, ELI, AKN4EU, DCAT-AP). Brubru does not just store the data, it speaks the same languages the Publications Office and the European Commission do. The 13-phase EU Vocabularies arc shipped 2 May 2026 (140 pytest passing) closes the gap between "we have EU data" and "we serve EU data conformantly".</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">EuroVoc 4.23 + 12 hot Named Authority Lists (NALs)</div>
       <div class="info-card__content">
-        <p>The Cellar SPARQL endpoint exposes 7,523 EuroVoc concepts (across 24 languages) and 130+ authority tables. Brubru's nightly job (<code>scripts/sync_eu_authority_labels.py</code>) caches the 12 highest-traffic ones in 6 languages into <code>eu_authority_labels</code>. The chatbot prepends a localised glossary block to its working context whenever an authority URI is in scope &mdash; the model sees URI + human label in the user's language at the same time.</p>
+        <p>The Cellar SPARQL endpoint exposes 7,523 EuroVoc concepts (across 24 languages) and 130+ authority tables. Brubru's nightly job (<code>scripts/sync_eu_authority_labels.py</code>) caches the 12 highest-traffic ones in 6 languages into <code>eu_authority_labels</code>. The chatbot prepends a localised glossary block to its working context whenever an authority URI is in scope, the model sees URI + human label in the user's language at the same time.</p>
         <table class="data-table">
           <thead><tr><th>NAL</th><th>Concepts</th><th>Brubru consumer</th></tr></thead>
           <tbody>
@@ -1044,13 +1145,13 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Standard identifier resolver &mdash; 9 EU identifier families</div>
+      <div class="info-card__title">Standard identifier resolver: 9 EU identifier families</div>
       <div class="info-card__text">Drop free text into <code>GET /api/v1/identify</code> and get back the structured identifiers: CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, COM number, ISBN, ISSN, DOI. No more per-partner regex maintenance. Court rulings get a dedicated discover endpoint with deep-links to e-Justice (<code>/api/v1/discover/ecli/{ecli}</code>).</div>
     </div>
 
     <div class="info-card reveal">
       <div class="info-card__title">Formex V4 + AKN4EU 4.2 + IMMC native rendering</div>
-      <div class="info-card__text">Brubru parses Formex V4 (the binding XML format for the Official Journal) via <code>services/api_clients/fmx4_notice_parser.py</code>. 100% success rate on a 100-CELEX random sample (corrigenda excluded by design). For outbound document generation, the <code>det_renderer.py</code> service emits AKN4EU 4.2-compliant XML for four document types (position paper, amendment, briefing note, EP question). IMMC tags (the inter-institutional metadata that Council/EP/Commission staff expect) live as JSONB on <code>legislative_carriages.immc_tags</code> via migration 049 &mdash; backed by <code>cdm:event_legal_*</code> predicates in Cellar.</div>
+      <div class="info-card__text">Brubru parses Formex V4 (the binding XML format for the Official Journal) via <code>services/api_clients/fmx4_notice_parser.py</code>. 100% success rate on a 100-CELEX random sample (corrigenda excluded by design). For outbound document generation, the <code>det_renderer.py</code> service emits AKN4EU 4.2-compliant XML for four document types (position paper, amendment, briefing note, EP question). IMMC tags (the inter-institutional metadata that Council/EP/Commission staff expect) live as JSONB on <code>legislative_carriages.immc_tags</code> via migration 049, backed by <code>cdm:event_legal_*</code> predicates in Cellar.</div>
     </div>
 
     <div class="info-card reveal">
@@ -1059,7 +1160,7 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Phase status &mdash; 13 phases shipped (2 May 2026)</div>
+      <div class="info-card__title">Phase status: 13 phases shipped (2 May 2026)</div>
       <div class="info-card__content">
         <ul>
           <li><strong>Phase 0-1</strong>: authority label cache (18,046 rows across 6 langs) + glossary injector + 4 paginated v1 endpoints (<code>/vocabularies/corporate-bodies</code> + procedures + directories + modification-types).</li>
@@ -1081,19 +1182,191 @@
   <div class="section" id="data-provider-api">
     <div class="section__header reveal-left">
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-api"></i></div>
-      <h2 class="section__title">Brubru API &mdash; the data provider vertical</h2>
+      <h2 class="section__title">Brubru API: the data provider vertical</h2>
     </div>
-    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 357 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
+    <p class="section__intro reveal">Brubru is a vertical EU data provider, and this is where the company makes its money: <strong>the most complete, best-curated, single-key access layer to the entire EU institutional data estate</strong>. The same legislation corpus, institutional databases, knowledge guides and legal-text intelligence that power Brubru's chatbot and My EU Bubble are sold as a REST API and an MCP server. Brubru is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) plus metered API credits, or the Enterprise plan (custom-quoted for teams needing higher throughput, multi-seat SSO, bulk exports, and SLA-backed support).</p>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Authentication (/api/v1/*)</div>
+      <div class="info-card__title">The API at a glance: 561 endpoints across the entire EU institutional map</div>
       <div class="info-card__content">
-        <p>API calls are authenticated with a key passed in the <code>X-API-Key</code> header. Keys are minted by the admin panel, issued only to Professional subscribers, and SHA-256 hashed at rest. Plaintext is shown once at creation.</p>
+        <p>The current generation of the Brubru API (v2) exposes <strong>561 live endpoints</strong> (555 data endpoints + 6 docs/schema routes). Every data endpoint returns the same five-datapoint contract (<code>public_url</code>, <code>body_txt</code>, <code>body_html</code>, <code>document_date</code>, <code>creation_date</code>) inside one canonical paginated envelope, with the same filters (<code>q</code> full-text, date ranges, <code>order</code>, pagination) on every surface. One key, one schema, one rate limiter, across institutions that otherwise publish in dozens of incompatible ways or publish no machine-readable surface at all. A partner integrates once and reads the whole EU.</p>
+        <div class="figures stagger-children reveal" style="margin: 1.5rem 0;">
+          <div class="figure-card fc-blue" style="padding: 1.25rem;">
+            <div class="figure-card__number" style="font-size: 1.9rem;" data-count="561">0</div>
+            <div class="figure-card__label">live API endpoints (one key, one envelope)</div>
+          </div>
+          <div class="figure-card fc-green" style="padding: 1.25rem;">
+            <div class="figure-card__number" style="font-size: 1.9rem;" data-count="261">0</div>
+            <div class="figure-card__label">unify official EU APIs (~47%)</div>
+          </div>
+          <div class="figure-card fc-purple" style="padding: 1.25rem;">
+            <div class="figure-card__number" style="font-size: 1.9rem;" data-count="279">0</div>
+            <div class="figure-card__label">data with no official API (~50%)</div>
+          </div>
+          <div class="figure-card fc-amber" style="padding: 1.25rem;">
+            <div class="figure-card__number" style="font-size: 1.9rem;" data-count="50">0</div>
+            <div class="figure-card__label">distinct EU bodies covered</div>
+          </div>
+        </div>
+        <p><strong>Where the data comes from is the whole story.</strong> About half the surface is a clean unification of official EU machine-readable APIs; the other half exists only because Brubru built the pipeline, data with no official API anywhere. That second half is the moat. No competitor surfaces it through a single contract.</p>
+        <table class="data-table">
+          <thead><tr><th>Provenance</th><th>Endpoints</th><th>What it is</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Official EU APIs</strong>, unified</td><td class="count">~261</td><td>Live-proxied or synced from documented EU machine-readable feeds: EUR-Lex / Cellar SPARQL, Eurostat JSON-stat, EP Open Data, data.europa.eu DCAT-AP, the DG REGIO Cohesion Open Data portal, the Funding &amp; Tenders (SEDIA) API, TED, the Financial Transparency System, the EU Transparency Register bulk XML, eAmbrosia, CORDIS, the consolidated financial-sanctions list. We do the joining, normalising and envelope work so the partner does not.</td></tr>
+            <tr><td><strong>Brubru-built pipelines</strong></td><td class="count">~279</td><td>Sources with <em>no</em> official API: reverse-engineered single-page-app back-ends (comitology, expert groups, RASFF food alerts, trade defence / TRON, EUIPO), Playwright-through-WAF rendering (the Council and European Council registers, FRA behind an Anubis proof-of-work wall, the EEAS diplomatic service behind its bot wall), HTML + PDF extraction across 18 decentralised agencies, and EP committee webstream &rarr; Whisper transcription. This is the data nobody else can hand you behind one key.</td></tr>
+            <tr><td><strong>Brubru-original</strong></td><td class="count">15</td><td>Analysis Brubru authors or computes: the EU Canon explainers, daily Catalan translations of the acquis, the expert knowledge guides, the EU Law Comply clusters, the funding-document templates, and the legislative-outcome predictions.</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.9rem; color: var(--color-secondary); margin-top: 0.5rem;"><em>Provenance classified by acquisition method (not storage) across the full mounted route table on 24 June 2026. A handful of reverse-engineered first-party JSON back-ends sit on the official/scraper line and are counted as pipelines; the ~50/50 split is robust to where those land.</em></p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">What the 561 endpoints cover</div>
+      <div class="info-card__content">
+        <p>Folder by folder, the API spans the whole institutional map, not a thin slice of it:</p>
         <ul>
-          <li>Key format: <code>brubru_live_</code> followed by 48 hex characters (192 bits of entropy).</li>
+          <li><strong>Core legislation &amp; procedure</strong>: EUR-Lex and the full acquis, EuroVoc, OEIL procedures, the Legislative Train, secondary acts, the Publications Office, and the open-data layer (Eurostat statistics, JRC datasets, cohesion datasets). ~50 endpoints.</li>
+          <li><strong>European Parliament</strong> (38 endpoints), MEPs (live EP Open Data), votes, amendments, committee agendas / work / minutes, eMeeting, EPRS think-tank, parliamentary questions, texts adopted, resolutions, supporting analyses, and committee transcripts (webstream &rarr; Whisper).</li>
+          <li><strong>European Commission</strong> (45 endpoints), Access2Markets, the Documents Register, commissioners + agendas, competition &amp; DMA cases, state aid, infringements, comitology, expert groups, RASFF food alerts, financial sanctions, CORDIS research projects, TARIC &amp; tariff rulings, trade defence, TRIS, transparency-initiative meetings, RSB opinions, and Have Your Say consultations.</li>
+          <li><strong>Council &amp; European Council</strong> (43 endpoints), documents, meetings, OJ agendas, preparatory bodies, press releases, the public register, voting results, treaties, sanctions regimes, the Euro Summit, the strategic agenda, and the Eurogroup.</li>
+          <li><strong>Funding &amp; tenders</strong> (113 endpoints), Horizon and Funding &amp; Tenders calls, news, events and funded projects (SEDIA); the structural and cohesion funds (ERDF, ESF+, EAFRD, EAGF, the Cohesion / Just Transition / Innovation funds, Interreg, AMIF, ISF, EMFAF); Financial Transparency System recipients; TED procurement; and live tender notices for 24 EU agencies.</li>
+          <li><strong>EU agencies</strong> (18 bodies): EMA, EFSA, ECHA, EEA, ECDC, EUDA, EIGE, Cedefop, EUAA, EU-OSHA, ENISA, eu-LISA, ACER, BEREC, CPVO, EIT, EUIPO, FRA.</li>
+          <li><strong>External action (EEAS)</strong> (11 endpoints): the EU diplomatic service. Press material, publications, events, calls for tenders and thematic / geographic reference pages, rendered through the EEAS bot wall. Its 352 officials are served through who-is-who.</li>
+          <li><strong>Economy &amp; finance</strong>: ECB (including banking supervision), ESM, EBA, ESMA, EIOPA, ESRB, SRB, AMLA, EIB, EPPO.</li>
+          <li><strong>Cross-cutting</strong>: the EU Transparency Register, geographical indications (PDO/PGI/TSG), the EU calendar, who-is-who (every EU institution's officials, EEAS included), and public consultations across ten agency bodies.</li>
+        </ul>
+        <p><em>Every one of these is reachable with the same key, the same filters and the same five-datapoint response shape. That uniformity is the product: the competitor's alternative is forty bespoke integrations, half of which require building a scraper first.</em></p>
+      </div>
+    </div>
+
+    <!-- Infographic: provenance donut -->
+    <div class="info-card reveal">
+      <div class="info-card__title">Where the data comes from, at a glance</div>
+      <div class="infographic">
+        <div class="infographic__title"><i class="mdi mdi-chart-donut"></i> Provenance of the 555 data endpoints</div>
+        <div class="donut-wrap">
+          <div class="donut">
+            <div class="donut__center"><b>555</b><span>data endpoints</span></div>
+          </div>
+          <div class="donut-legend">
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: var(--color-blue);"></span>
+              <span class="legend-text"><b>Official EU APIs, unified &middot; 261 (47%)</b><span>Live-proxied or synced from documented machine-readable feeds. We do the joining and normalising so you do not.</span></span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: var(--color-purple);"></span>
+              <span class="legend-text"><b>Brubru-built pipelines &middot; 279 (50%)</b><span>Sources with no official API: cracked single-page-app back-ends, headless-browser rendering, PDF extraction. The moat.</span></span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: var(--color-amber);"></span>
+              <span class="legend-text"><b>Brubru-original analysis &middot; 15 (3%)</b><span>Content we author or compute: the EU Canon, Catalan acquis, knowledge guides, Comply clusters, predictions.</span></span>
+            </div>
+          </div>
+        </div>
+        <p class="infographic__caption">Six further routes serve the OpenAPI spec and interactive docs, for 561 endpoints in total. Just over half the surface is now data that has no official API anywhere.</p>
+      </div>
+    </div>
+
+    <!-- Infographic: endpoints by institution family -->
+    <div class="info-card reveal">
+      <div class="info-card__title">How the 561 endpoints are distributed</div>
+      <div class="infographic">
+        <div class="infographic__title"><i class="mdi mdi-chart-bar"></i> Endpoints by institution family</div>
+        <div class="bar-row"><span class="bar-label">EU agencies (18 bodies)</span><span class="bar-track"><span class="bar-fill bar-fill--blue" style="--w: 100%;"></span></span><span class="bar-value">134</span></div>
+        <div class="bar-row"><span class="bar-label">Funding &amp; tenders</span><span class="bar-track"><span class="bar-fill bar-fill--green" style="--w: 84%;"></span></span><span class="bar-value">113</span></div>
+        <div class="bar-row"><span class="bar-label">Economy &amp; finance</span><span class="bar-track"><span class="bar-fill bar-fill--purple" style="--w: 57%;"></span></span><span class="bar-value">77</span></div>
+        <div class="bar-row"><span class="bar-label">Core law &amp; open data</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--w: 39%;"></span></span><span class="bar-value">52</span></div>
+        <div class="bar-row"><span class="bar-label">European Commission</span><span class="bar-track"><span class="bar-fill bar-fill--blue" style="--w: 34%;"></span></span><span class="bar-value">45</span></div>
+        <div class="bar-row"><span class="bar-label">Council &amp; Euro Council</span><span class="bar-track"><span class="bar-fill bar-fill--green" style="--w: 32%;"></span></span><span class="bar-value">43</span></div>
+        <div class="bar-row"><span class="bar-label">Cross-cutting</span><span class="bar-track"><span class="bar-fill bar-fill--purple" style="--w: 31%;"></span></span><span class="bar-value">42</span></div>
+        <div class="bar-row"><span class="bar-label">European Parliament</span><span class="bar-track"><span class="bar-fill bar-fill--amber" style="--w: 28%;"></span></span><span class="bar-value">38</span></div>
+        <div class="bar-row"><span class="bar-label">External action (EEAS)</span><span class="bar-track"><span class="bar-fill bar-fill--red" style="--w: 8%;"></span></span><span class="bar-value">11</span></div>
+        <p class="infographic__caption">Bars are scaled to the largest family. The long tail (transparency register, geographical indications, calendar, who-is-who, predictions) is folded into Cross-cutting. EEAS is the newest folder, shipped 24 June 2026.</p>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Institution family</th><th>Endpoints</th><th>What sits there</th><th>Example endpoint</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>EU agencies</strong> (18 sectoral bodies)</td><td class="count">134</td><td>EMA, EFSA, ECHA, EEA, ECDC, EUDA, EIGE, Cedefop, EUAA, EU-OSHA, ENISA, eu-LISA, ACER, BEREC, CPVO, EIT, EUIPO, FRA</td><td><code>/api/v2/ema</code></td></tr>
+          <tr><td><strong>Funding &amp; tenders</strong></td><td class="count">113</td><td>SEDIA calls, the cohesion and structural funds, Financial Transparency System recipients, TED procurement, agency tenders</td><td><code>/api/v2/funding/ft-calls-for-proposals</code></td></tr>
+          <tr><td><strong>Economy &amp; finance</strong></td><td class="count">77</td><td>ECB and banking supervision, ESM, EBA, ESMA, EIOPA, ESRB, SRB, AMLA, EIB, EPPO</td><td><code>/api/v2/eu-financial-institutions/esma</code></td></tr>
+          <tr><td><strong>Core law &amp; open data</strong></td><td class="count">52</td><td>EUR-Lex acquis, EuroVoc, OEIL procedures, the Legislative Train, secondary acts, Eurostat, JRC datasets</td><td><code>/api/v2/legislative/eur-lex</code></td></tr>
+          <tr><td><strong>European Commission</strong></td><td class="count">45</td><td>State aid, competition and DMA cases, comitology, sanctions, CORDIS, TARIC, infringements, consultations</td><td><code>/api/v2/commission/state-aid</code></td></tr>
+          <tr><td><strong>Council &amp; European Council</strong></td><td class="count">43</td><td>Documents, voting results, preparatory bodies, OJ agendas, summits, the strategic agenda, Eurogroup</td><td><code>/api/v2/council/voting-results</code></td></tr>
+          <tr><td><strong>Cross-cutting</strong></td><td class="count">42</td><td>Transparency Register, geographical indications, the EU calendar, who-is-who, consultations, predictions</td><td><code>/api/v2/transparency-register</code></td></tr>
+          <tr><td><strong>European Parliament</strong></td><td class="count">38</td><td>MEPs, votes, amendments, committee agendas and minutes, EPRS, parliamentary questions, transcripts</td><td><code>/api/v2/parliament/meps</code></td></tr>
+          <tr><td><strong>External action (EEAS)</strong></td><td class="count">11</td><td>EEAS press material, publications, events, tenders and thematic / geographic reference pages (officials via who-is-who)</td><td><code>/api/v2/eeas/news</code></td></tr>
+          <tr><td>Docs &amp; schema</td><td class="count">6</td><td>OpenAPI spec plus the interactive try-it documentation</td><td><code>/api/v2/openapi.json</code></td></tr>
+          <tr style="background: rgba(6,147,227,0.06);"><td><strong>Total</strong></td><td class="count"><strong>561</strong></td><td>The whole EU institutional map behind one key</td><td><code>X-API-Key: brubru_live_...</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Explanatory table: the five datapoints -->
+    <div class="info-card reveal">
+      <div class="info-card__title">The five datapoints, every endpoint, every time</div>
+      <p class="table-caption">Whether you ask for a court ruling, a lobbyist, a fishing quota or a Eurostat series, the shape of the answer is identical. Light list calls, full detail calls.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th>In plain English</th><th>List call</th><th>Detail call</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>public_url</code></td><td>The canonical link on the institution's own website, so the trail is always auditable</td><td><span class="cmp-yes">Present</span></td><td><span class="cmp-yes">Present</span></td></tr>
+          <tr><td><code>body_txt</code></td><td>The full text reduced to clean plain text, ready for search or an LLM</td><td>Null (kept light)</td><td><span class="cmp-yes">Full</span></td></tr>
+          <tr><td><code>body_html</code></td><td>The same body with its original formatting preserved</td><td>Null (kept light)</td><td><span class="cmp-yes">Full</span></td></tr>
+          <tr><td><code>document_date</code></td><td>The date the institution itself published the item</td><td>When known</td><td>When known</td></tr>
+          <tr><td><code>creation_date</code></td><td>The moment Brubru first ingested it, so you can poll for what is new</td><td><span class="cmp-yes">Present</span></td><td><span class="cmp-yes">Present</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Explanatory table: filters -->
+    <div class="info-card reveal">
+      <div class="info-card__title">The same filters, on every list endpoint</div>
+      <p class="table-caption">Learn the query language once. It works the same across all 555 data endpoints.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Filter</th><th>What it does</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>q</code></td><td>Free-text search over title, summary and body</td><td><code>?q=hydrogen</code></td></tr>
+          <tr><td><code>since</code> / <code>until</code></td><td>Restrict to a date window (also accepted as <code>published_from</code> / <code>published_to</code>)</td><td><code>?since=2026-01-01</code></td></tr>
+          <tr><td><code>order</code></td><td>Sort by <code>recent</code>, <code>oldest</code> or <code>title</code></td><td><code>?order=oldest</code></td></tr>
+          <tr><td><code>page</code> / <code>limit</code></td><td>Pagination, up to 100 items per page, with a rich envelope (<code>total</code>, <code>has_more</code>, <code>next_page</code>)</td><td><code>?page=2&amp;limit=50</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Comparison table: what one key replaces -->
+    <div class="info-card reveal">
+      <div class="info-card__title">What one Brubru key replaces</div>
+      <p class="table-caption">The honest pitch for the API: this is the work a partner does not have to do.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>If you build it yourself</th><th>What that actually takes</th><th>With one Brubru key</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Connect ~40 official EU APIs</td><td><i class="mdi mdi-alert-outline cmp-no"></i> 40 auth schemes, 40 schemas, 40 pagination styles to learn and maintain</td><td><i class="mdi mdi-check-circle cmp-yes"></i> One key, one envelope, one filter set</td></tr>
+          <tr><td>Reach the ~50 sources with no API</td><td><i class="mdi mdi-alert-outline cmp-no"></i> Reverse-engineer single-page apps, defeat WAFs, run headless browsers, extract PDFs</td><td><i class="mdi mdi-check-circle cmp-yes"></i> Already done, returned in the same shape</td></tr>
+          <tr><td>Keep all of it fresh</td><td><i class="mdi mdi-alert-outline cmp-no"></i> A cron, a monitor and a breakage alert per source, forever</td><td><i class="mdi mdi-check-circle cmp-yes"></i> Brubru maintains the pipelines</td></tr>
+          <tr><td>Trust the citations</td><td><i class="mdi mdi-alert-outline cmp-no"></i> Verify every CELEX and ECLI resolves before you ship it</td><td><i class="mdi mdi-check-circle cmp-yes"></i> Verified against Cellar before delivery</td></tr>
+          <tr><td>Serve six languages</td><td><i class="mdi mdi-alert-outline cmp-no"></i> Translate and curate the labels yourself</td><td><i class="mdi mdi-check-circle cmp-yes"></i> Multilingual labels and the Catalan acquis built in</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Authentication &amp; metered billing (/api/v2/* and /api/v1/*)</div>
+      <div class="info-card__content">
+        <p>API calls are authenticated with a key passed in the <code>X-API-Key</code> header or as <code>Authorization: Bearer &lt;key&gt;</code>. Keys are minted by the admin panel, SHA-256 hashed at rest, and the plaintext is shown once at creation.</p>
+        <ul>
+          <li>Key format: <code>brubru_live_</code> followed by 48 hex characters (192 bits of entropy). Sandbox keys (<code>brubru_test_</code>) hit the same endpoints against a sandbox meter for free integration testing.</li>
           <li>Storage: <code>api_keys</code> table with <code>key_hash</code>, <code>key_prefix</code>, <code>scopes</code>, <code>last_used_at</code>, <code>revoked_at</code>.</li>
-          <li>Gating: only users with <code>subscription_tier = "blue"</code> can authenticate &mdash; the tier that backs the Professional plan.</li>
-          <li>Rate limit: 60 requests per minute per key (sliding window). Exceeded requests return <code>429</code> with a <code>Retry-After</code> header.</li>
+          <li>Rate limit: per-key sliding window. Exceeded requests return <code>429</code> with a <code>Retry-After</code> header.</li>
+          <li>Metered billing (Stripe, live): each call resolves a per-endpoint cost and debits the key holder's API-credit balance; usage is recorded per event and refunded automatically on upstream failure. Brubru's own operator key is billing-exempt so the company never pays to call its own API.</li>
         </ul>
       </div>
     </div>
@@ -1103,9 +1376,9 @@
       <div class="info-card__content">
         <p>Brubru administrators mint, list, and revoke keys on behalf of Professional subscribers.</p>
         <ul>
-          <li><code>POST /api/admin/users/{user_id}/api-keys</code> &mdash; mint a key. Plaintext returned once, never again.</li>
-          <li><code>GET /api/admin/users/{user_id}/api-keys</code> &mdash; list a user's keys (active and revoked). Plaintext is never returned.</li>
-          <li><code>DELETE /api/admin/api-keys/{key_id}</code> &mdash; revoke a key by setting <code>revoked_at</code>. Revocation is an audit event, not a deletion.</li>
+          <li><code>POST /api/admin/users/{user_id}/api-keys</code>: mint a key. Plaintext returned once, never again.</li>
+          <li><code>GET /api/admin/users/{user_id}/api-keys</code>: list a user's keys (active and revoked). Plaintext is never returned.</li>
+          <li><code>DELETE /api/admin/api-keys/{key_id}</code>: revoke a key by setting <code>revoked_at</code>. Revocation is an audit event, not a deletion.</li>
         </ul>
       </div>
     </div>
@@ -1117,33 +1390,34 @@
         <ul>
           <li>Pagination: <code>total</code>, <code>pages</code>, <code>page</code>, <code>limit</code>, <code>has_more</code>, <code>next_page</code>, <code>remaining_pages</code>.</li>
           <li>Filter echo: <code>published_from</code>, <code>published_to</code>, <code>updated_from</code>, <code>updated_to</code>, <code>detail_level</code>.</li>
-          <li>Attribution: <code>meta.powered_by = "Brubru"</code> and <code>meta.source = "brubru.beresol.eu"</code> &mdash; machine-readable so partners can display credit programmatically.</li>
+          <li>Attribution: <code>meta.powered_by = "Brubru"</code> and <code>meta.source = "brubru.beresol.eu"</code>: machine-readable so partners can display credit programmatically.</li>
           <li>Dataset-specific aggregates (e.g. <code>by_country</code>, <code>by_user_type</code>) sit in an <code>aggregates</code> object alongside <code>data</code> so partners get analytics and detail in one call.</li>
         </ul>
       </div>
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">v1 endpoints live (10 routes)</div>
+      <div class="info-card__title">The original v1 core (still live, still dogfooded)</div>
       <div class="info-card__content">
+        <p>v1 is the original hand-built core that the chatbot still runs on internally. v2 (above) generalised it to the full 561-endpoint surface with the uniform five-datapoint contract; v1 remains live for the partners who integrated against it. The v1 core:</p>
         <p><strong>Meta:</strong></p>
         <ul>
-          <li><code>GET /api/v1/ping</code> &mdash; unauthenticated health check.</li>
-          <li><code>GET /api/v1/whoami</code> &mdash; returns the key holder's tier plus current rate-limit window.</li>
+          <li><code>GET /api/v1/ping</code>: unauthenticated health check.</li>
+          <li><code>GET /api/v1/whoami</code>: returns the key holder's tier plus current rate-limit window.</li>
         </ul>
         <p><strong>Datasets:</strong></p>
         <ul>
-          <li><code>GET /api/v1/laws</code> &mdash; 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files). Filters: <code>celex</code>, <code>doc_type</code>, <code>policy_area</code>, <code>q</code> (TSVECTOR full-text), <code>published_from</code>, <code>published_to</code>.</li>
-          <li><code>GET /api/v1/procedures</code> &mdash; 1,200+ legislative files. Filters: <code>reference</code>, <code>committee</code>, <code>rapporteur_mep_id</code>, <code>status</code>, <code>updated_from</code>, <code>updated_to</code>.</li>
-          <li><code>GET /api/v1/commissioners/{name}/agenda</code> &mdash; live calendar items for all 27 college members. Accent-insensitive name resolution.</li>
-          <li><code>GET /api/v1/consultations/by-initiative/{id}/feedback</code> &mdash; live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
+          <li><code>GET /api/v1/laws</code>: 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files). Filters: <code>celex</code>, <code>doc_type</code>, <code>policy_area</code>, <code>q</code> (TSVECTOR full-text), <code>published_from</code>, <code>published_to</code>.</li>
+          <li><code>GET /api/v1/procedures</code>: 1,200+ legislative files. Filters: <code>reference</code>, <code>committee</code>, <code>rapporteur_mep_id</code>, <code>status</code>, <code>updated_from</code>, <code>updated_to</code>.</li>
+          <li><code>GET /api/v1/commissioners/{name}/agenda</code>: live calendar items for all 27 college members. Accent-insensitive name resolution.</li>
+          <li><code>GET /api/v1/consultations/by-initiative/{id}/feedback</code>: live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
         </ul>
         <p><strong>Legal-Text Intelligence:</strong></p>
         <ul>
-          <li><code>GET /api/v1/legal-text/{celex}/recital-article-map</code> &mdash; TF-IDF cosine mapping, top-3 recitals per article.</li>
-          <li><code>GET /api/v1/legal-text/{celex}/defined-terms</code> &mdash; Article 3/4-style definitions dictionary.</li>
-          <li><code>POST /api/v1/legal-text/resolve-references</code> &mdash; plain text in, structured CELEX citations or annotated HTML out.</li>
-          <li><code>POST /api/v1/legal-text/resolve-aliases</code> &mdash; resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases.</li>
+          <li><code>GET /api/v1/legal-text/{celex}/recital-article-map</code>: TF-IDF cosine mapping, top-3 recitals per article.</li>
+          <li><code>GET /api/v1/legal-text/{celex}/defined-terms</code>: Article 3/4-style definitions dictionary.</li>
+          <li><code>POST /api/v1/legal-text/resolve-references</code>: plain text in, structured CELEX citations or annotated HTML out.</li>
+          <li><code>POST /api/v1/legal-text/resolve-aliases</code>: resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases.</li>
         </ul>
       </div>
     </div>
@@ -1151,21 +1425,21 @@
     <div class="info-card reveal">
       <div class="info-card__title">Three-tier coverage architecture (20 April 2026)</div>
       <div class="info-card__content">
-        <p>Every Brubru Chat query flows through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface &mdash; it is the internal reinforcer that guarantees coverage.</p>
+        <p>Every Brubru Chat query flows through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface, it is the internal reinforcer that guarantees coverage.</p>
         <ul>
-          <li><strong>Tier 1 &mdash; DB + smart filters.</strong> <code>context_builder.py</code> queries PostgreSQL directly: 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files), 417 calendar events, 229 knowledge guides, 1,717 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes, plus the 10 specialised EC clusters (119,542 rows). Fast, curated, no external dependency.</li>
-          <li><strong>Tier 2 &mdash; on-demand live fetchers.</strong> Six specialised clients fire when intent detectors match: Doceo (plenary debates via CRE XML), EP Multimedia (committee meeting transcripts via on-demand Whisper transcription), Have Your Say API (stakeholder feedback), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX document fetch), Tavily (25 trusted <code>.europa.eu</code> + policy-media domains).</li>
-          <li><strong>Tier 3 &mdash; v1 API backstop.</strong> When Tiers 1 and 2 leave a surface thin, the same service functions that power <code>/api/v1/calendar/events</code> and sibling endpoints re-query with broader filters. The simpler filter logic often catches what the chat's smart filters miss. Real example: on 17 April 2026 the "energy events next week?" query deflected because Tier 1 over-filtered; the Tier-3 backstop added 8 more relevant events. <strong>Promise: no query fails for lack of trying.</strong></li>
+          <li><strong>Tier 1, DB + smart filters.</strong> <code>context_builder.py</code> queries PostgreSQL directly: 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files), 417 calendar events, 229 knowledge guides, 1,717 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes, plus the 10 specialised EC clusters (119,542 rows). Fast, curated, no external dependency.</li>
+          <li><strong>Tier 2, on-demand live fetchers.</strong> Six specialised clients fire when intent detectors match: Doceo (plenary debates via CRE XML), EP Multimedia (committee meeting transcripts via on-demand Whisper transcription), Have Your Say API (stakeholder feedback), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX document fetch), Tavily (25 trusted <code>.europa.eu</code> + policy-media domains).</li>
+          <li><strong>Tier 3, v1 API backstop.</strong> When Tiers 1 and 2 leave a surface thin, the same service functions that power <code>/api/v1/calendar/events</code> and sibling endpoints re-query with broader filters. The simpler filter logic often catches what the chat's smart filters miss. Real example: on 17 April 2026 the "energy events next week?" query deflected because Tier 1 over-filtered; the Tier-3 backstop added 8 more relevant events. <strong>Promise: no query fails for lack of trying.</strong></li>
         </ul>
-        <p><em>Phase B-minimal shipped 20 April 2026 (calendar backstop). Assessment checkpoint 4 May 2026 &mdash; if materially improves answer quality, expand to guides, laws, EPRS, procedures, committees, MEPs.</em></p>
+        <p><em>Phase B-minimal shipped 20 April 2026 (calendar backstop). Assessment checkpoint 4 May 2026, if materially improves answer quality, expand to guides, laws, EPRS, procedures, committees, MEPs.</em></p>
       </div>
     </div>
 
     <div class="info-card reveal">
       <div class="info-card__title">Brubru as the first user of its own API (dogfooding)</div>
       <div class="info-card__content">
-        <p>The chatbot, My EU Bubble, Amendator, and Document Generator inside the Brubru app all consume the same <code>/api/v1/*</code> surface that paying customers do. This dogfooding rule means the API never lags behind the product &mdash; if a Brubru feature works, the API works. External partners get the same data quality Brubru itself relies on.</p>
-        <p><strong>Today (May 2026):</strong> 47 v1 routers covering the chatbot's full context cascade &mdash; <code>/knowledge-guides</code> (229 guides), <code>/laws/{celex}/text</code> (full EU law text via Formex or EUR-Lex Cellar fallback), <code>/eprs</code> (145 EPRS publications), <code>/committees/{code}/work-items</code> + <code>/minutes</code>, <code>/calendar/events</code> (417 institutional events), <code>/meps</code> (live from EP Open Data), <code>/predictions/{ref}/timeline</code> + <code>/outcome</code> (XGBoost + baseline), plus the 10 specialised EC clusters and the 9-identifier resolver. The chatbot consumes the same surface external partners do.</p>
+        <p>The chatbot, My EU Bubble, Amendator, and Document Generator inside the Brubru app all consume the same <code>/api/v1/*</code> surface that paying customers do. This dogfooding rule means the API never lags behind the product, if a Brubru feature works, the API works. External partners get the same data quality Brubru itself relies on.</p>
+        <p><strong>Today (May 2026):</strong> 47 v1 routers covering the chatbot's full context cascade, <code>/knowledge-guides</code> (229 guides), <code>/laws/{celex}/text</code> (full EU law text via Formex or EUR-Lex Cellar fallback), <code>/eprs</code> (145 EPRS publications), <code>/committees/{code}/work-items</code> + <code>/minutes</code>, <code>/calendar/events</code> (417 institutional events), <code>/meps</code> (live from EP Open Data), <code>/predictions/{ref}/timeline</code> + <code>/outcome</code> (XGBoost + baseline), plus the 10 specialised EC clusters and the 9-identifier resolver. The chatbot consumes the same surface external partners do.</p>
         <p><strong>Regression test: <code>/training api</code>.</strong> 50 representative user queries (EN/ES/CA/FR) from 7 query patterns are replayed against the live v1 API weekly. First run: <strong>48/50 pass (96%)</strong>. Every v1 change is verified against this baseline before ship. Dataset: <code>data/training/api_queries_50.json</code>.</p>
         <p><strong>Phase 2 (June 2026):</strong> cursor pagination, field projection (<code>?fields=</code>), sorting, ETag caching, <code>X-RateLimit-Reset</code> header across every endpoint. <strong>Phase 3 (September 2026):</strong> webhooks, bulk CSV/Parquet exports, multilingual responses (24 EU languages), semantic search via embeddings.</p>
       </div>
@@ -1176,9 +1450,9 @@
       <div class="info-card__content">
         <p>Brubru speaks the same vocabulary as the EU Publications Office. As of 2 May 2026, every authority code surfaced by the chatbot or API resolves to a multilingual label drawn from the official EU Authority Tables, every legal identifier is verified before delivery, and Brubru itself is published as a DCAT-AP-conformant dataset.</p>
         <ul>
-          <li><strong>Authority label cache.</strong> Local cache of the 12 highest-traffic EU Authority Tables (corporate bodies, procedures, document directories, modification types, and more), stored bilingually for the six languages Brubru supports. Refreshed nightly. The chatbot prepends a localised glossary block to its working context whenever an authority URI is in scope &mdash; the model sees both the URI and the human label in the user's language at the same time.</li>
-          <li><strong>Standard-identifier resolver.</strong> A unified resolver covering nine EU identifier families &mdash; CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number. Drop in any free text and get back the structured identifiers, ready for downstream linking. Court rulings (ECLI) get a dedicated discover endpoint with deep-links to e-Justice.</li>
-          <li><strong>DCAT-AP self-description.</strong> Brubru's own datasets &mdash; the Catalan EU legislation library, the chat knowledge base, the v1 API surface, the EU laws TSVECTOR corpus &mdash; are described in the same DCAT-AP profile that data.europa.eu harvesters expect. Available as Turtle, RDF/XML, and JSON-LD. The pointer Europe's official data portal needs to discover us, structurally compatible with their existing pipelines.</li>
+          <li><strong>Authority label cache.</strong> Local cache of the 12 highest-traffic EU Authority Tables (corporate bodies, procedures, document directories, modification types, and more), stored bilingually for the six languages Brubru supports. Refreshed nightly. The chatbot prepends a localised glossary block to its working context whenever an authority URI is in scope, the model sees both the URI and the human label in the user's language at the same time.</li>
+          <li><strong>Standard-identifier resolver.</strong> A unified resolver covering nine EU identifier families, CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number. Drop in any free text and get back the structured identifiers, ready for downstream linking. Court rulings (ECLI) get a dedicated discover endpoint with deep-links to e-Justice.</li>
+          <li><strong>DCAT-AP self-description.</strong> Brubru's own datasets, the Catalan EU legislation library, the chat knowledge base, the v1 API surface, the EU laws TSVECTOR corpus, are described in the same DCAT-AP profile that data.europa.eu harvesters expect. Available as Turtle, RDF/XML, and JSON-LD. The pointer Europe's official data portal needs to discover us, structurally compatible with their existing pipelines.</li>
           <li><strong>OP Core conformance on every response.</strong> Each v1 response carries Dublin-Core-aliased metadata (title, identifier, type, language, publisher, conforms-to) and an <code>X-OP-Core-Conformance</code> response header. Partners get standards-shaped responses out of the box, no custom adapter required.</li>
           <li><strong>ELI + CDM ontology pinning.</strong> The legal-content ontologies that anchor Brubru's data (European Legislation Identifier and the Publications Office Common Data Model) are vendored at known versions, with a CI test that fails the build if a new predicate enters the codebase without a snapshot refresh. The ontology never silently shifts under our partners.</li>
           <li><strong>Citation verification, extended.</strong> The model's outputs are verified against Cellar (for CELEX/COM) and against the local authority cache (for body codes and other authority URIs) before delivery. A class of "the AI cited a thing that doesn't exist" failures, common in generic GenAI tools applied to EU policy, is closed at the response layer.</li>
@@ -1208,9 +1482,9 @@
       <div class="info-card__title">Documentation surface</div>
       <div class="info-card__content">
         <ul>
-          <li><a href="/api"><code>/api</code></a> &mdash; public landing page (endpoints summary, response envelope, code samples, CTAs to docs and subscription). Header nav entry. <strong>No pricing shown here any more</strong> (pricing lives on <code>/subscription</code>).</li>
-          <li><a href="/api/docs/"><code>/api/docs/</code></a> &mdash; <strong>full docs microsite shipped 20 April 2026</strong>: 10 written pages (~130 KB), sticky sidebar nav, responsive. Introduction, Authentication, Envelope, Errors, Rate limits, Endpoints (all 24), Institutions matrix, Glossary (47 EU policy terms in plain English), Use cases (6 personas + 4 competitor patterns), Changelog. Soft-paywall banner links non-Professional visitors to <code>/subscription</code> but doesn't block reading.</li>
-          <li><code>/api/v1/openapi.json</code> &mdash; OpenAPI 3.1 spec auto-generated by FastAPI, filtered to v1 only. Postman imports in one click.</li>
+          <li><a href="/api"><code>/api</code></a>: public landing page (endpoints summary, response envelope, code samples, CTAs to docs and subscription). Header nav entry. <strong>No pricing shown here any more</strong> (pricing lives on <code>/subscription</code>).</li>
+          <li><a href="/api/docs/"><code>/api/docs/</code></a>: <strong>full docs microsite shipped 20 April 2026</strong>: 10 written pages (~130 KB), sticky sidebar nav, responsive. Introduction, Authentication, Envelope, Errors, Rate limits, Endpoints (the full v2 catalogue), Institutions matrix, Glossary (47 EU policy terms in plain English), Use cases (6 personas + 4 competitor patterns), Changelog. Soft-paywall banner links non-Professional visitors to <code>/subscription</code> but doesn't block reading.</li>
+          <li><code>/api/v1/openapi.json</code>: OpenAPI 3.1 spec auto-generated by FastAPI, filtered to v1 only. Postman imports in one click.</li>
           <li>Scalar live try-it reference remains at <a href="https://brubru-production.up.railway.app/api/docs">brubru-production.up.railway.app/api/docs</a> (backend-served, execution requires API key).</li>
         </ul>
       </div>
@@ -1220,13 +1494,13 @@
       <div class="info-card__title">Build progress</div>
       <div class="info-card__content">
         <ul>
-          <li><strong>Day 1</strong> (15 April 2026) &mdash; API key model, migration 033, admin endpoints, six-path auth dependency. 10 tests.</li>
-          <li><strong>Day 2</strong> (15 April 2026) &mdash; <code>/api/v1/*</code> sub-router, canonical paginated envelope, per-key sliding-window rate limiter (60 req/min), <code>X-RateLimit-*</code> headers, ping/whoami/feedback endpoints. 25 tests.</li>
-          <li><strong>Day 3</strong> (15 April 2026) &mdash; <code>/api/v1/laws</code> and <code>/api/v1/procedures</code> shipped with full filter sets. 30 tests.</li>
-          <li><strong>Day 4</strong> (15 April 2026) &mdash; <code>/api/v1/commissioners/{name}/agenda</code> shipped, four legal-text intelligence endpoints ported to v1. 34 tests.</li>
-          <li><strong>Day 5</strong> (15 April 2026) &mdash; Scalar docs at <code>/api/docs</code>, filtered OpenAPI at <code>/api/v1/openapi.json</code>, public landing page at <code>/api</code>, header nav entry next to Tenderator (i18n in 6 languages). <strong>36 tests passing in total.</strong></li>
-          <li><strong>Landing-page integration</strong> &mdash; the "For developers and RegTech partners" section now leads with the REST API (six flagship endpoints) plus the existing MCP server (six tools), with CTAs to <code>/api</code> and <code>/api/docs</code>.</li>
-          <li><strong>Jordi feedback pass</strong> (20 April 2026) &mdash; 11 correctness bugs fixed after the 18 April integration review:
+          <li><strong>Day 1</strong> (15 April 2026), API key model, migration 033, admin endpoints, six-path auth dependency. 10 tests.</li>
+          <li><strong>Day 2</strong> (15 April 2026), <code>/api/v1/*</code> sub-router, canonical paginated envelope, per-key sliding-window rate limiter (60 req/min), <code>X-RateLimit-*</code> headers, ping/whoami/feedback endpoints. 25 tests.</li>
+          <li><strong>Day 3</strong> (15 April 2026), <code>/api/v1/laws</code> and <code>/api/v1/procedures</code> shipped with full filter sets. 30 tests.</li>
+          <li><strong>Day 4</strong> (15 April 2026), <code>/api/v1/commissioners/{name}/agenda</code> shipped, four legal-text intelligence endpoints ported to v1. 34 tests.</li>
+          <li><strong>Day 5</strong> (15 April 2026), Scalar docs at <code>/api/docs</code>, filtered OpenAPI at <code>/api/v1/openapi.json</code>, public landing page at <code>/api</code>, header nav entry next to Tenderator (i18n in 6 languages). <strong>36 tests passing in total.</strong></li>
+          <li><strong>Landing-page integration</strong>: the "For developers and RegTech partners" section now leads with the REST API (six flagship endpoints) plus the existing MCP server (six tools), with CTAs to <code>/api</code> and <code>/api/docs</code>.</li>
+          <li><strong>Jordi feedback pass</strong> (20 April 2026), 11 correctness bugs fixed after the 18 April integration review:
             <ul>
               <li><code>/laws</code>: <code>422 conflicting_params</code> when <code>published_to</code> and <code>published_end</code> carry different values; <code>422 invalid_date_range</code> on inverted ranges.</li>
               <li><code>/meps</code>: rewired to direct <code>httpx</code> against EP Open Data REST v2. <code>full_name</code> and <code>profile_url</code> always populated; <code>total</code> now <code>offset + items + 1-hint</code> with <code>coverage_complete: false</code>.</li>
@@ -1238,17 +1512,17 @@
               <li>8 regression tests in <code>test_v1_jordi_feedback.py</code>; 68 total green.</li>
             </ul>
           </li>
-          <li><strong>Day 6</strong> (15 April 2026) &mdash; partner-compatibility pass inspired by GovClipping's Postman docs. Six items shipped:
+          <li><strong>Day 6</strong> (15 April 2026), partner-compatibility pass inspired by GovClipping's Postman docs. Six items shipped:
             <ul>
               <li><strong>Structured error envelope</strong> on every <code>/api/v1/*</code> response: <code>{ "error", "reason_code", "request_id" }</code>. Reason codes are stable machine-readable strings (<code>auth_missing_key</code>, <code>auth_invalid_format</code>, <code>auth_key_not_found</code>, <code>tier_insufficient</code>, <code>rate_limited</code>, <code>not_found</code>, <code>invalid_query</code>, <code>upstream_error</code>).</li>
               <li><strong><code>X-Request-Id</code> response header</strong> on every call (echoes the client's inbound value if supplied, otherwise generates a UUID4). Matches the <code>request_id</code> in error bodies for support traceability.</li>
               <li><strong>Envelope additions</strong>: <code>returned</code> (items in this page) and <code>coverage_complete</code> (True for DB-backed, False for live-scraped results).</li>
               <li><strong>Filter aliases</strong>: <code>published_end</code> and <code>updated_end</code> accepted alongside <code>published_to</code> / <code>updated_to</code>. The envelope echoes both. Matches GovClipping's convention so partners reuse existing SDK patterns.</li>
               <li><strong>Dual authentication</strong>: <code>Authorization: Bearer &lt;key&gt;</code> (OpenAPI/Postman default) and <code>X-API-Key: &lt;key&gt;</code> (curl-friendly) both accepted. Bearer wins if both present.</li>
-              <li><strong><code>GET /api/v1/meta/enums</code></strong>: a single lookup endpoint returning every valid filter value &mdash; doc_types, policy_areas (live from DB), EP committees, procedure statuses, stakeholder user types, detail levels. Partners call once, cache forever. 49 tests passing in total.</li>
+              <li><strong><code>GET /api/v1/meta/enums</code></strong>: a single lookup endpoint returning every valid filter value, doc_types, policy_areas (live from DB), EP committees, procedure statuses, stakeholder user types, detail levels. Partners call once, cache forever. 49 tests passing in total.</li>
             </ul>
           </li>
-          <li><strong>Internationalisation</strong> &mdash; the <code>/api</code> landing page is now translated to all six Brubru languages (English, Spanish, Catalan, French, Italian, Dutch) via the <code>api</code> i18n namespace in each locale file. Fully responsive (desktop / tablet / mobile breakpoints).</li>
+          <li><strong>Internationalisation</strong>: the <code>/api</code> landing page is now translated to all six Brubru languages (English, Spanish, Catalan, French, Italian, Dutch) via the <code>api</code> i18n namespace in each locale file. Fully responsive (desktop / tablet / mobile breakpoints).</li>
         </ul>
         <p><em>Caveat: rate limiter is in-memory (per backend instance). For one paying partner this is fine; pin Railway to one replica until Redis is added.</em></p>
       </div>
@@ -1262,17 +1536,17 @@
           <li><strong>Model + migration 035:</strong> <code>institutional_publications</code> table with unified shape (source_slug, institution_slug, category, title, summary, url, policy_areas, tags, published_date, full-text index). Row-Level Security enabled.</li>
           <li><strong>Ingester:</strong> <code>backend/services/ingestion/rss_ingestor.py</code> reads YAML configs from <code>configs/*.yaml</code>, fetches via <code>BaseRSSClient</code>, upserts with dedupe on <code>(source_slug, external_id)</code>.</li>
           <li><strong>Catalog (discovery-driven):</strong> <code>backend/scripts/discover_feeds.py</code> crawls all 519 base domains from <code>data/europa_eu/europa.eu_all_sources.md</code>, probes each for <code>&lt;link rel="alternate" type="application/rss+xml"&gt;</code> in the HTML head plus 13 common paths. Validated URLs land in <code>data/europa_eu/discovered_feeds.csv</code>. <code>configs_from_discovered.py</code> then turns each CSV row into a YAML ingestion config automatically. <strong>First full 519-domain discovery: 64 validated feeds found, 54 auto-generated YAML configs.</strong></li>
-          <li><strong>Live ingestion:</strong> <strong>52 of 78 configured feeds working</strong> after the discovery sweep &mdash; <strong>587 real publications across 44 sources and 35 institutions</strong> in the DB right now. Top contributors: JRC (91), European Commission (60), EMA (58), ECB (25), EEA (20), Frontex (20), EESC (20), CEPOL (20), FRA (12), EIGE (12). The remaining 26 configured URLs return 404/403 (retired feeds or WAF-blocked) and will be retired or re-curated in the next discovery pass.</li>
+          <li><strong>Live ingestion:</strong> <strong>52 of 78 configured feeds working</strong> after the discovery sweep, <strong>587 real publications across 44 sources and 35 institutions</strong> in the DB right now. Top contributors: JRC (91), European Commission (60), EMA (58), ECB (25), EEA (20), Frontex (20), EESC (20), CEPOL (20), FRA (12), EIGE (12). The remaining 26 configured URLs return 404/403 (retired feeds or WAF-blocked) and will be retired or re-curated in the next discovery pass.</li>
           <li><strong>CLI:</strong> <code>python3.12 scripts/ingest_publications.py [slug1 slug2 ...]</code>. Run for all configs or a subset.</li>
           <li><strong>New API:</strong> <code>GET /api/v1/publications</code> with filters (q, institution_slug, source_slug, category, policy_area, published_from/to). Plus <code>GET /api/v1/publications/sources</code> listing available feeds with counts. Same canonical envelope as every v1 endpoint.</li>
           <li><strong>Tests:</strong> 58/58 passing (9 new tests for publications + ingester added).</li>
         </ul>
-        <p><em>Ongoing curation: each week new YAML configs land. When an upstream feed URL breaks, the ingester logs the error and continues with the others &mdash; no cascading failure. This scales without rebuilding code.</em></p>
+        <p><em>Ongoing curation: each week new YAML configs land. When an upstream feed URL breaks, the ingester logs the error and continues with the others, no cascading failure. This scales without rebuilding code.</em></p>
       </div>
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Model Context Protocol (MCP) server &mdash; the AI-native partner surface</div>
+      <div class="info-card__title">Model Context Protocol (MCP) server: the AI-native partner surface</div>
       <div class="info-card__content">
         <p>The same data that powers the REST API is exposed over Anthropic's Model Context Protocol so partner AI assistants (Claude Desktop, Claude Code, third-party MCP clients) can query Brubru natively. Six tools live today, mirroring the six v1 surfaces partners ask for most.</p>
         <table class="data-table">
@@ -1293,16 +1567,8 @@
     <div class="info-card reveal">
       <div class="info-card__title">Source coverage today vs aspiration</div>
       <div class="info-card__content">
-        <p>The v1 API exposes <strong>6 underlying europa.eu data streams</strong> via 12 endpoints:</p>
-        <ul>
-          <li><code>/laws</code> &rarr; <code>eu_laws</code> table (EUR-Lex Cellar ingest)</li>
-          <li><code>/procedures</code> &rarr; <code>legislative_carriages</code> + OEIL XML feed</li>
-          <li><code>/commissioners/{name}/agenda</code> &rarr; live scrape of <code>commission.europa.eu</code></li>
-          <li><code>/consultations/by-initiative/{id}/feedback</code> &rarr; live Have Your Say <code>allFeedback</code> API</li>
-          <li><code>/legal-text/*</code> &rarr; derived from <code>eu_laws</code> (recital-article linker, definitions, cross-refs, aliases)</li>
-          <li><code>/publications</code> &rarr; <code>institutional_publications</code> populated by the generic RSS ingester (587 items from 44 sources / 35 institutions live after first discovery sweep)</li>
-        </ul>
-        <p>After Option A ship: Brubru's internal scraper fleet plus the generic RSS pipeline now covers <strong>~55 of the 519 europa.eu domains</strong> from <code>data/europa_eu/europa.eu_all_sources.md</code>. Discovery + config generation is fully automated now, so the catalog grows by running <code>discover_feeds.py</code> + <code>ingest_publications.py</code> on a weekly schedule &mdash; no more guessing URLs. Expansion to the full 519 is a tiered ingestion programme (<code>memory/project_data_provider.md</code>): Tier 1 structured APIs (15 sources), Tier 2 RSS/Atom feeds (50-80 sources), Tier 3 generic HTML (~400 sources), Tier 4 Tavily long-tail. Partner-driven priority: ship 10-30 well-picked reliably-fresh sources first, expand on paying demand.</p>
+        <p>The v2 API has moved coverage from a handful of streams to the full institutional map: <strong>561 endpoints</strong> drawing on roughly 40 official EU machine-readable APIs unified under one contract, plus around 50 sources Brubru reverse-engineered or scrapes itself because they ship no API. <code>data/europa_eu/europa.eu_all_sources.md</code> remains the source universe (519 europa.eu domains tracked); the API now surfaces the institutionally important core of it, not a thin sample.</p>
+        <p>The remaining frontier is breadth on the long tail. The generic RSS ingestion pipeline (<code>institutional_publications</code> + automated feed discovery via <code>discover_feeds.py</code> &rarr; <code>ingest_publications.py</code>) lets a new feed be added as a YAML config rather than code, so coverage grows on a weekly cadence without bespoke scrapers. Expansion of the long tail stays a tiered programme (<code>memory/project_data_provider.md</code>): structured APIs first, then RSS/Atom feeds, then generic HTML, with Tavily as the real-time backstop. Partner-driven priority: deepen the sources paying customers actually pull, before chasing the tail.</p>
       </div>
     </div>
   </div>
@@ -1311,9 +1577,9 @@
   <div class="section" id="specialised-ec-databases">
     <div class="section__header reveal-left">
       <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-database-search-outline"></i></div>
-      <h2 class="section__title">Specialised EC databases &mdash; 10 institutional surfaces wired into chat + API (May 2026)</h2>
+      <h2 class="section__title">Specialised EC databases: 10 institutional surfaces wired into chat + API (May 2026)</h2>
     </div>
-    <p class="section__intro reveal">Through May 2026 Brubru cracked ten EU institutional data sources that no other vendor surfaces through a single API key. Each cluster ships with a v1 endpoint under <code>/api/v1/specialised/*</code> AND a context-builder block in the chatbot &mdash; when a user asks about sanctions, lobbying, comitology, geographical indications, trade agreements, anti-dumping duties, competition cases, JRC scientific datasets, cohesion open data, or Combined Nomenclature tariff sections, the chat retrieves directly from these tables. Total specialised rows ingested: <strong>119,542</strong> (plus two live pass-throughs to upstream APIs).</p>
+    <p class="section__intro reveal">Through May 2026 Brubru cracked ten EU institutional data sources that no other vendor surfaces through a single API key. They were the proving ground for the much larger v2 build above, and each is now reachable both as a v2 endpoint and through the original <code>/api/v1/specialised/*</code> route, alongside a context-builder block in the chatbot, so when a user asks about sanctions, lobbying, comitology, geographical indications, trade agreements, anti-dumping duties, competition cases, JRC scientific datasets, cohesion open data, or Combined Nomenclature tariff sections, the chat retrieves directly from these tables. Total specialised rows ingested: <strong>119,542</strong> (plus two live pass-throughs to upstream APIs).</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">The 10 clusters at a glance</div>
@@ -1356,7 +1622,7 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Chatbot integration &mdash; Layer 1 (shipped 11 May 2026)</div>
+      <div class="info-card__title">Chatbot integration: Layer 1 (shipped 11 May 2026)</div>
       <div class="info-card__text">Each of the 10 clusters has a context-builder block in <code>backend/services/ai/context_builder.py</code> that fires when the user's query matches the cluster's intent regex. Blocks are capped at 4 kB per CLAUDE.md and injected at the TOP of the system prompt so they survive the 32 k truncation cap. End-to-end verified before deploy: <strong>10/10 positive queries</strong> surface relevant cluster data; <strong>0/6 negative queries</strong> trigger any of the 10 specialised intents (correct scoping).</div>
       <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
         <li>"EU sanctions on Iranian officials" &rarr; 6 IRN-programme entities from <code>eu_sanctions</code></li>
@@ -1488,8 +1754,8 @@
         </thead>
         <tbody>
           <tr><td>Beresol knowledge bundle</td><td>11 open reports + 7 monitors on EU policy topics (AI Act implementation, CBAM, EU-Mercosur, Iberian Blackout, RRF, Ukraine, Mediterranean Fisheries, Anti-Coercion Instrument, Letta-Draghi-Niinist&ouml;, Catalan Railway Crisis)</td><td>18 files</td></tr>
-          <tr><td>EU institutional organigrammes</td><td>All Commission DGs (DG REGIO, DG ENER, DG COMP, etc.), EP committees, Council configurations &mdash; with Director-General, Deputy DGs, directorates, heads of unit</td><td>35 JSON files</td></tr>
-          <tr><td>Document templates</td><td>Position papers, MEP briefings, parliamentary questions, amendments &mdash; all AKN4EU-4.2-conformant via the DET renderer</td><td>17 templates</td></tr>
+          <tr><td>EU institutional organigrammes</td><td>All Commission DGs (DG REGIO, DG ENER, DG COMP, etc.), EP committees, Council configurations, with Director-General, Deputy DGs, directorates, heads of unit</td><td>35 JSON files</td></tr>
+          <tr><td>Document templates</td><td>Position papers, MEP briefings, parliamentary questions, amendments, all AKN4EU-4.2-conformant via the DET renderer</td><td>17 templates</td></tr>
           <tr><td>Commissioners profiles</td><td>Canonical 2024-2029 mandate: 1 President + 6 EVPs + 20 Commissioners with portfolios, agendas, and Cabinet</td><td>27 profiles</td></tr>
           <tr><td>Legislation acronyms</td><td>Maps abbreviations (GDPR, AI Act, DSA, CBAM, EU Inc.) to CELEX numbers and EUR-Lex URLs</td><td>680+ entries (669 auto-extracted + Brubru-curated)</td></tr>
         </tbody>
@@ -1498,14 +1764,14 @@
 
     <div class="subsection reveal">
       <h3 class="subsection__title">Guide structure (every guide ships the same shape)</h3>
-      <p class="subsection__text">Each guide opens with a QUICK FACTS block (procedure ref, CELEX, status, committee, rapporteur, next milestone) the model can extract in a single read &mdash; survives the 32 k context truncation. The body sections are stable: LATEST (most recent development), LEGAL ARCHITECTURE, POLITICAL CONTEXT, KEY ARTICLES, INSTITUTIONAL ACTORS, USER QUESTIONS Q&amp;A, CROSS-LINKS to related guides + deep-dives. Frontmatter carries <code>eurovoc_concepts:</code> tags that feed <code>dcat:theme</code> on DCAT-AP harvest. Bulk trigger changes pass through an orphan-trigger audit (queries that previously matched a now-renamed trigger).</p>
+      <p class="subsection__text">Each guide opens with a QUICK FACTS block (procedure ref, CELEX, status, committee, rapporteur, next milestone) the model can extract in a single read, survives the 32 k context truncation. The body sections are stable: LATEST (most recent development), LEGAL ARCHITECTURE, POLITICAL CONTEXT, KEY ARTICLES, INSTITUTIONAL ACTORS, USER QUESTIONS Q&amp;A, CROSS-LINKS to related guides + deep-dives. Frontmatter carries <code>eurovoc_concepts:</code> tags that feed <code>dcat:theme</code> on DCAT-AP harvest. Bulk trigger changes pass through an orphan-trigger audit (queries that previously matched a now-renamed trigger).</p>
     </div>
 
     <div class="subsection reveal">
       <h3 class="subsection__title">Catalan EU legislation translation pipeline (since March 2026)</h3>
       <p class="subsection__text">Brubru is the only public source for daily Catalan EU legislation translations. The pipeline runs against the 28,513 Formex V4 XML acquis dump: Softcatal&agrave; NMT (<code>eng-cat-2024-09-24</code>, CTranslate2, local, free) is the primary engine, with Claude Sonnet as the paid fallback for high-quality passes. A post-processing glossary corrects known errors (d'execuci&oacute;, ha adoptat, Comit&egrave; dels Estats membres). Every output passes a 13-check OJEEP structural validator (lang declaration, doc-header, preamble pattern, articles, final block) before publishing.</p>
       <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
-        <li>Live at <a href="https://brubru.beresol.eu/legislacio-ue-catala/" target="_blank">/legislacio-ue-catala/</a> &mdash; structural rendering with hover-tooltip definitions, clickable cross-references, recital-article links.</li>
+        <li>Live at <a href="https://brubru.beresol.eu/legislacio-ue-catala/" target="_blank">/legislacio-ue-catala/</a>: structural rendering with hover-tooltip definitions, clickable cross-references, recital-article links.</li>
         <li>Source-of-truth corpus: <code>docs/LEG_2025-11/</code> (61,219 translatable XML files, ~28,513 acts).</li>
         <li>Daily-batch capacity: 50 acts/day on Softcatal&agrave;, ~10/day on Sonnet.</li>
         <li>Brubru Catalan standard (after the May 2026 Sant Jordi launch): d'execuci&oacute; (not d'implementaci&oacute;), Ha adoptat (not ha aconseguit), Tenint en compte, Dictamen, Par&agrave;graf, Comit&egrave; dels Estats membres, Brussel&middot;les. Accents always.</li>
@@ -1513,7 +1779,7 @@
     </div>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">Deep-dive HTMLs &mdash; 3 major proposals analysed, more shipping</h3>
+      <h3 class="subsection__title">Deep-dive HTMLs: 3 major proposals analysed, more shipping</h3>
       <p class="subsection__text">For the largest live legislative files, Brubru publishes long-form analysis pages with rapporteur identity (OEIL-anchored), draft-report status, amendment tally, EP committee debate transcripts, and compliance implications. Refreshed via <code>/deep-dive-refresh</code> as procedures move forward.</p>
       <div class="example-grid stagger-children reveal" style="margin-top: 1rem;">
         <a href="https://brubru.beresol.eu/eu-inc/" class="example-card example-card--blue" target="_blank">
@@ -1637,8 +1903,8 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">Response validator &mdash; Workstream 1, shipped 12 May 2026</div>
-      <div class="info-card__text">A second-LLM pass (Claude Haiku 4.5) runs after the generator. It checks the proposed response against the retrieved context for hallucination, completeness and negation violations and returns strict JSON with severity grading. Currently in shadow mode for the first seven days &mdash; the validator computes and logs to <code>chat_validations</code>, but never modifies the shipped response. After the measurement window we flip the flag to enable one regeneration retry on critical violations, with the violation feedback prepended to the system prompt. This closes the "confident wrong answer" failure mode at the response layer.</div>
+      <div class="info-card__title">Response validator: Workstream 1, shipped 12 May 2026</div>
+      <div class="info-card__text">A second-LLM pass (Claude Haiku 4.5) runs after the generator. It checks the proposed response against the retrieved context for hallucination, completeness and negation violations and returns strict JSON with severity grading. Currently in shadow mode for the first seven days, the validator computes and logs to <code>chat_validations</code>, but never modifies the shipped response. After the measurement window we flip the flag to enable one regeneration retry on critical violations, with the violation feedback prepended to the system prompt. This closes the "confident wrong answer" failure mode at the response layer.</div>
     </div>
 
     <div class="info-card reveal">
@@ -1702,7 +1968,7 @@
   <div class="section" id="roadmap">
     <div class="section__header reveal-left">
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-map-marker-path"></i></div>
-      <h2 class="section__title">Roadmap &mdash; data as the foundational layer</h2>
+      <h2 class="section__title">Roadmap: data as the foundational layer</h2>
     </div>
     <p class="section__intro reveal">Five workstreams keep the data foundation moving. A says what Brubru already is. B-E describe where the next year is going.</p>
 
@@ -1720,7 +1986,7 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">B. Organise &mdash; one canonical naming, retire the dead</div>
+      <div class="info-card__title">B. Organise: one canonical naming, retire the dead</div>
       <div class="info-card__content">
         <ul>
           <li><strong>Table-prefix convention.</strong> <code>eu_*</code> for institutional data (eu_laws, eu_sanctions, eu_transparency_register, eu_calendar_events, eu_authority_labels), <code>user_*</code> for user state, <code>chat_*</code> for chat surface (chat_conversations, chat_messages, chat_analytics, chat_validations), <code>legislative_*</code> for the procedure train. Migrations 048-068 already follow this; retro-rename of the few outliers is queued.</li>
@@ -1733,7 +1999,7 @@
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">C. Manage &mdash; observability, freshness, archive discipline</div>
+      <div class="info-card__title">C. Manage: observability, freshness, archive discipline</div>
       <div class="info-card__content">
         <ul>
           <li><strong>Nightly EuroVoc / NAL freshness gate</strong> in <code>/news</code> Step 1f.2 (<code>check_authority_labels_freshness.py</code>). Verdict ok/warn/fail with &gt;5% drop blocking the routine.</li>
@@ -1758,16 +2024,16 @@
           <li><strong>Amendator: TF-IDF auto-fill.</strong> When a user drafts an amendment on Article N, surface the top-3 recitals (already cached in <code>extra_metadata.recital_article_map</code>) as ready-made justifications.</li>
           <li><strong>EU Law Comply: authority-label dictionary.</strong> Feed <code>eu_authority_labels</code> into the compliance term dictionary so jurisdiction-specific labels show in the user's language.</li>
           <li><strong>Predictions: IMMC features.</strong> Use <code>legislative_carriages.immc_tags</code> (initiating institution, dossier responsibility, session council) as input features to the procedure outcome model.</li>
-          <li><strong>Retrieval upgrade research.</strong> NVIDIA NIM evaluation flagged <code>llama-nemotron-rerank-1b-v2</code> + NV-Embed-v2 as the highest-ROI swap in the retrieval pipeline &mdash; one afternoon to wire, one weekend to bench. Tracked in <code>memory/project_nvidia_nim_evaluation.md</code>.</li>
+          <li><strong>Retrieval upgrade research.</strong> NVIDIA NIM evaluation flagged <code>llama-nemotron-rerank-1b-v2</code> + NV-Embed-v2 as the highest-ROI swap in the retrieval pipeline, one afternoon to wire, one weekend to bench. Tracked in <code>memory/project_nvidia_nim_evaluation.md</code>.</li>
         </ul>
       </div>
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card__title">E. Sell the data &mdash; API, MCP, harvester, Enterprise</div>
+      <div class="info-card__title">E. Sell the data: API, MCP, harvester, Enterprise</div>
       <div class="info-card__content">
         <ul>
-          <li><strong>REST API today.</strong> 47 v1 routers, 130+ endpoints, structured error envelope, X-Request-Id traceability, OpenAPI 3.1 spec, Scalar live try-it docs, dual auth (Bearer + X-API-Key). Professional tier &euro;99/month self-serve; Enterprise custom-quoted.</li>
+          <li><strong>REST API today.</strong> 561 v2 endpoints across the whole EU institutional map, uniform five-datapoint contract, structured error envelope, X-Request-Id traceability, OpenAPI 3.1 spec, Scalar live try-it docs, dual auth (Bearer + X-API-Key), and live Stripe-metered API credits (sandbox keys for free testing). Professional tier &euro;99/month self-serve plus usage; Enterprise custom-quoted. The original v1 core stays live for partners already integrated against it.</li>
           <li><strong>MCP server live.</strong> Six tools (<code>ask_brubru</code>, <code>get_calendar_events</code>, <code>get_procedure_status</code>, <code>search_eprs</code>, <code>search_eu_legislation</code>, <code>search_knowledge_guides</code>). Same API key gates both surfaces. Anthropic's MCP marketplace listing is queued.</li>
           <li><strong>DCAT-AP harvester registration.</strong> <code>/api/datasets.{ttl,rdf,json}</code> is live and structurally valid. The one-time submission to <code>data.europa.eu</code> harvester is pending (manual form + Beresol identity). Once accepted, Brubru appears alongside official EU data publishers in the federated catalogue.</li>
           <li><strong>Phase 2 API roadmap (Q2 2026).</strong> Cursor pagination, field projection (<code>?fields=</code>), ETag caching, <code>X-RateLimit-Reset</code> header on every endpoint, Redis-backed rate limiter (currently in-memory, pinned to one Railway replica).</li>
@@ -1804,7 +2070,7 @@
     </div>
     <div class="subsection reveal">
       <h3 class="subsection__title">5. Trust pass (per query, shipped 12 May 2026)</h3>
-      <p class="subsection__text">Citation verifier extracts CELEX / COM / OEIL references and verifies each via Cellar + EUR-Lex HEAD (cached in <code>citation_verifications</code>). Response validator (Workstream 1) runs a second Haiku 4.5 LLM pass against the retrieved context to catch hallucination, completeness and negation violations &mdash; logged to <code>chat_validations</code>. Currently in shadow mode; regeneration on critical violations enables after 7-day measurement window.</p>
+      <p class="subsection__text">Citation verifier extracts CELEX / COM / OEIL references and verifies each via Cellar + EUR-Lex HEAD (cached in <code>citation_verifications</code>). Response validator (Workstream 1) runs a second Haiku 4.5 LLM pass against the retrieved context to catch hallucination, completeness and negation violations, logged to <code>chat_validations</code>. Currently in shadow mode; regeneration on critical violations enables after 7-day measurement window.</p>
     </div>
     <div class="subsection reveal">
       <h3 class="subsection__title">6. Distribution (daily)</h3>

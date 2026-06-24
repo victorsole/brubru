@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>All endpoints: Brubru EU Data API</title>
-<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 512 REST endpoints across 34 EU institution folders. One API key, one response envelope.">
+<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 523 REST endpoints across 34 EU institution folders. One API key, one response envelope.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -35,7 +35,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 512 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 523 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -91,6 +91,7 @@
     <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA: drugs</a></li>
     <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO: intellectual property</a></li>
     <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA: fundamental rights</a></li>
+    <li><a href="/api/docs/endpoints.html#eeas" data-nav="ep-eeas">EEAS: external action</a></li>
   </ul>
 
   <h3>Funding &amp; consultations</h3>
@@ -136,7 +137,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 512 endpoints across 34 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 523 endpoints across 34 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -147,7 +148,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </div>
 
 <p style="font-size:14.5px;color:var(--text-sec);margin:18px 0 8px;"><strong>Jump to a folder:</strong></p>
-<p style="font-size:14px;line-height:2;"><a href="#legislative">Legislation &amp; procedures</a> &middot; <a href="#parliament">European Parliament</a> &middot; <a href="#council">Council of the EU</a> &middot; <a href="#european-council">European Council</a> &middot; <a href="#eurogroup">Eurogroup</a> &middot; <a href="#commission">European Commission</a> &middot; <a href="#ecb">European Central Bank</a> &middot; <a href="#eu-financial-institutions">EU financial institutions</a> &middot; <a href="#esm">European Stability Mechanism</a> &middot; <a href="#acer">ACER</a> &middot; <a href="#berec">BEREC</a> &middot; <a href="#cedefop">Cedefop</a> &middot; <a href="#cpvo">CPVO</a> &middot; <a href="#ecdc">ECDC</a> &middot; <a href="#echa">ECHA</a> &middot; <a href="#eea">EEA</a> &middot; <a href="#efsa">EFSA</a> &middot; <a href="#eige">EIGE</a> &middot; <a href="#eit">EIT</a> &middot; <a href="#ema">EMA</a> &middot; <a href="#enisa">ENISA</a> &middot; <a href="#eu-lisa">eu-LISA</a> &middot; <a href="#eu-osha">EU-OSHA</a> &middot; <a href="#euaa">EUAA</a> &middot; <a href="#euda">EUDA</a> &middot; <a href="#euipo">EUIPO</a> &middot; <a href="#fra">FRA</a> &middot; <a href="#funding">Funding, grants &amp; tenders</a> &middot; <a href="#consultations">Agency public consultations</a> &middot; <a href="#open-data">Open data</a> &middot; <a href="#general-publications">General publications</a> &middot; <a href="#who-is-who">Who's Who</a> &middot; <a href="#geographical-indications">Geographical indications</a> &middot; <a href="#proprietary">Brubru proprietary EU intelligence</a> &middot; <a href="#tender-docs">Tender Docs</a></p>
+<p style="font-size:14px;line-height:2;"><a href="#legislative">Legislation &amp; procedures</a> &middot; <a href="#parliament">European Parliament</a> &middot; <a href="#council">Council of the EU</a> &middot; <a href="#european-council">European Council</a> &middot; <a href="#eurogroup">Eurogroup</a> &middot; <a href="#commission">European Commission</a> &middot; <a href="#ecb">European Central Bank</a> &middot; <a href="#eu-financial-institutions">EU financial institutions</a> &middot; <a href="#esm">European Stability Mechanism</a> &middot; <a href="#acer">ACER</a> &middot; <a href="#berec">BEREC</a> &middot; <a href="#cedefop">Cedefop</a> &middot; <a href="#cpvo">CPVO</a> &middot; <a href="#ecdc">ECDC</a> &middot; <a href="#echa">ECHA</a> &middot; <a href="#eea">EEA</a> &middot; <a href="#efsa">EFSA</a> &middot; <a href="#eige">EIGE</a> &middot; <a href="#eit">EIT</a> &middot; <a href="#ema">EMA</a> &middot; <a href="#enisa">ENISA</a> &middot; <a href="#eu-lisa">eu-LISA</a> &middot; <a href="#eu-osha">EU-OSHA</a> &middot; <a href="#euaa">EUAA</a> &middot; <a href="#euda">EUDA</a> &middot; <a href="#euipo">EUIPO</a> &middot; <a href="#fra">FRA</a> &middot; <a href="#eeas">EEAS</a> &middot; <a href="#funding">Funding, grants &amp; tenders</a> &middot; <a href="#consultations">Agency public consultations</a> &middot; <a href="#open-data">Open data</a> &middot; <a href="#general-publications">General publications</a> &middot; <a href="#who-is-who">Who's Who</a> &middot; <a href="#geographical-indications">Geographical indications</a> &middot; <a href="#proprietary">Brubru proprietary EU intelligence</a> &middot; <a href="#tender-docs">Tender Docs</a></p>
 
 <h2 id="legislative">Legislation &amp; procedures <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">37 endpoints</span></h2>
 <table class="endpoint-table">
@@ -711,6 +712,25 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/fra/charterpedia/{item_id}</code></td><td>European Union Agency for Fundamental Rights: one Charter article (full body)</td></tr>
 </tbody>
 </table>
+
+<h2 id="eeas">EEAS: European External Action Service <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">11 endpoints</span></h2>
+<table class="endpoint-table">
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas</code></td><td>EEAS folder directory: what EEAS carries</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/news</code></td><td>European External Action Service: press material (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/news/{item_id}</code></td><td>European External Action Service: one press item (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/publications</code></td><td>European External Action Service: publications (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/publications/{item_id}</code></td><td>European External Action Service: one publication (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/events</code></td><td>European External Action Service: events (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/events/{item_id}</code></td><td>European External Action Service: one event (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/tenders</code></td><td>European External Action Service: tenders (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/tenders/{item_id}</code></td><td>European External Action Service: one tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/topics</code></td><td>European External Action Service: topic pages (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eeas/topics/{item_id}</code></td><td>European External Action Service: one topic page (full body)</td></tr>
+</tbody>
+</table>
+<p style="font-size:14px;color:var(--text-mut);">EEAS people are served through <code>/api/v2/who-is-who/officials</code> (the 352 EEAS officials are in the EU Who Is Who directory, filterable by the EEAS organisation).</p>
 
 <h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">81 endpoints</span></h2>
 <table class="endpoint-table">

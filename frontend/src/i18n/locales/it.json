@@ -1932,6 +1932,7 @@
       "resolveRefs": "Testo semplice in ingresso, citazioni CELEX strutturate in uscita. Annotazione HTML opzionale.",
       "resolveAliases": "Risolvi nomi umani (GDPR, DSA, AI Act, CBAM, ...) in CELEX. Oltre 680 alias.",
       "tenderDocs": "Un modello completo di candidatura ai fondi europei per id: ogni sezione, semi di prompt del co-redattore IA, obiettivi di conformità, pacchetto di documenti di riferimento e URL della Convenzione di Sovvenzione. 19 modelli in 8 programmi (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
+      "eeas": "Materiale stampa, pubblicazioni, eventi, gare d’appalto e pagine tematiche del Servizio europeo per l’azione esterna, il servizio diplomatico dell’UE. I 352 funzionari provengono da who-is-who.",
       "eurostatSeries": "Un dataset Eurostat acquisito live: payload JSON-stat 2.0, dimensioni analizzate, osservazioni campione e data dell'ultimo aggiornamento Eurostat. 12 serie sanitarie curate su sport e fitness (attività fisica, IMC, spesa per sport domestica, occupazione culturale) più qualsiasi codice Eurostat dall'endpoint di dettaglio."
     },
     "auth": {

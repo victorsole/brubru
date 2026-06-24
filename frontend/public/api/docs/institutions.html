@@ -48,7 +48,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 512 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 523 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -104,6 +104,7 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA: drugs</a></li>
     <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO: intellectual property</a></li>
     <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA: fundamental rights</a></li>
+    <li><a href="/api/docs/endpoints.html#eeas" data-nav="ep-eeas">EEAS: external action</a></li>
   </ul>
 
   <h3>Funding &amp; consultations</h3>
@@ -164,7 +165,7 @@ What we ingest, where we ingest it from, and how fresh it is. Explicit about wha
 <tr><td>Council of the European Union</td><td><code>/calendar</code>, <code>/council-documents</code>, <code>/officials</code>, <code>/research-publications</code></td><td>consilium.europa.eu calendar + public register, ART (Council strategic papers), Council Secretariat organigrammes</td><td>Daily</td></tr>
 <tr><td>European Central Bank (ECB)</td><td><code>/publications</code>, <code>/press-releases</code></td><td>ecb.europa.eu/rss/press.html</td><td>6h</td></tr>
 <tr><td>European Court of Auditors (ECA)</td><td><code>/publications</code>, <code>/research-publications</code></td><td>eca.europa.eu/rss/news.xml + ECA audit reports portal</td><td>6h</td></tr>
-<tr><td>European External Action Service (EEAS)</td><td><code>/publications</code>, <code>/officials</code></td><td>eeas.europa.eu/rss.xml + organigramme</td><td>6h</td></tr>
+<tr><td>European External Action Service (EEAS)</td><td><code>/eeas</code> directory + <code>/news</code>, <code>/publications</code>, <code>/events</code>, <code>/tenders</code>, <code>/topics</code>; officials via <code>/who-is-who/officials</code></td><td>eeas.europa.eu (Playwright through the bot wall); 352 officials from the EU Who Is Who SPARQL</td><td>Playwright refresh (local)</td></tr>
 <tr><td>European Economic and Social Committee (EESC)</td><td><code>/publications</code>, <code>/officials</code></td><td>eesc.europa.eu RSS + organigramme</td><td>6h</td></tr>
 <tr><td>Committee of the Regions (CoR)</td><td><code>/publications</code>, <code>/officials</code></td><td>cor.europa.eu RSS + organigramme</td><td>6h</td></tr>
 <tr><td>European Ombudsman</td><td><code>/officials</code>, <code>/publications</code></td><td>ombudsman.europa.eu organigramme + decisions feed</td><td>Daily / 6h</td></tr>
@@ -205,6 +206,7 @@ What we ingest, where we ingest it from, and how fresh it is. Explicit about wha
 <tr><td>Eurojust</td><td><code>eurojust</code></td><td>Judicial cooperation</td></tr>
 <tr><td>Frontex</td><td><code>frontex</code></td><td>Migration, borders</td></tr>
 <tr><td>EU Agency for Fundamental Rights</td><td><code>fra</code></td><td>Fundamental rights</td></tr>
+<tr><td>European External Action Service</td><td><code>eeas</code></td><td>EU diplomacy, foreign &amp; security policy</td></tr>
 <tr><td>EU Agency for Asylum</td><td><code>euaa</code></td><td>Asylum</td></tr>
 <tr><td>EU Drugs Agency</td><td><code>euda</code></td><td>Drugs policy</td></tr>
 <tr><td>Cedefop</td><td><code>cedefop</code></td><td>Vocational training, skills</td></tr>

@@ -47,7 +47,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 512 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 523 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -103,6 +103,7 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA: drugs</a></li>
     <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO: intellectual property</a></li>
     <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA: fundamental rights</a></li>
+    <li><a href="/api/docs/endpoints.html#eeas" data-nav="ep-eeas">EEAS: external action</a></li>
   </ul>
 
   <h3>Funding &amp; consultations</h3>
@@ -163,6 +164,17 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 </ul>
 
 <h2>2026</h2>
+
+<h3>24 June 2026: European External Action Service (EEAS) folder shipped (523 total)</h3>
+<p>The EU's diplomatic service is now on the public API as its own folder, <code>/api/v2/eeas/</code>. The eeas.europa.eu site sits behind a JS / bot wall, so the feeds are rendered with Playwright headless Chromium and refreshed locally (same constraint as FRA / EUIPO). 11 endpoints: the folder directory plus list and detail pairs for five resources.</p>
+<ul>
+<li><strong>News:</strong> <code>GET /eeas/news</code> press releases, statements, speeches and op-eds from the EEAS and the EU delegations.</li>
+<li><strong>Publications:</strong> <code>GET /eeas/publications</code> reports, fact-sheets, strategy papers and annual reports.</li>
+<li><strong>Events:</strong> <code>GET /eeas/events</code> summits, dialogues, ministerials and conferences.</li>
+<li><strong>Tenders:</strong> <code>GET /eeas/tenders</code> ongoing EEAS calls for tenders and grants.</li>
+<li><strong>Topics:</strong> <code>GET /eeas/topics</code> snapshots of the EEAS thematic and geographic reference pages (structure, missions and operations, regional desks, security and defence, sanctions, Global Gateway and more).</li>
+<li><strong>People:</strong> the 352 EEAS officials are served through <code>/api/v2/who-is-who/officials</code> (the EU Who Is Who directory, filterable by the EEAS organisation), so they are not duplicated under the EEAS folder.</li>
+</ul>
 
 <h3>21 June 2026: Eurostat sport + fitness-relevant health series added to Open data (512 total)</h3>
 <p>Three new endpoints under <code>/api/v2/open-data/eurostat-series/</code> wrap Eurostat's dissemination JSON-stat 2.0 API for sport, physical activity, BMI, household sport expenditure, and cultural employment (the umbrella under which sport sub-activities sit in NACE Rev. 2). A curated whitelist of 12 datasets makes them discoverable without trawling thousands of Eurostat codes; any other Eurostat dataset code still works on the detail endpoint.</p>

@@ -1042,6 +1042,7 @@
       "resolveRefs": "Platte tekst erin, gestructureerde CELEX-citaties eruit. Optionele HTML-annotatie.",
       "resolveAliases": "Menselijke namen (AVG, DSA, AI Act, CBAM, ...) oplossen naar CELEX. Meer dan 680 aliassen.",
       "tenderDocs": "Eén volledig aanvraagmodel voor Europese fondsen per id: elke sectie, prompt-zaadjes voor de AI-co-schrijver, conformiteitsdoelen, een bundel referentiedocumenten en de URL's van de Subsidieovereenkomst. 19 modellen verspreid over 8 programma's (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
+      "eeas": "Persmateriaal, publicaties, evenementen, aanbestedingen en themapagina’s van de Europese Dienst voor extern optreden, de diplomatieke dienst van de EU. De 352 functionarissen komen uit who-is-who.",
       "eurostatSeries": "Één Eurostat-dataset live opgehaald: JSON-stat 2.0-payload, geparste dimensies, voorbeeldobservaties en Eurostat's laatste-bijwerkingsdatum. 12 samengestelde gezondheidsreeksen relevant voor sport en fitness (fysieke activiteit, BMI, huishoudelijke sportuitgaven, culturele werkgelegenheid) plus elke Eurostat-code op het detailendpoint."
     },
     "auth": {
