@@ -6,6 +6,8 @@ docs/
 # Never force-add: contains all daily LinkedIn / pitch / deep-dive visuals as
 # self-contained HTML sections, regenerated freely.
 docs/marketing/designs/
+# Brubru feature videos — rendered MP4s + intermediate assets, regenerated locally.
+docs/marketing/videos/
 data/
 # EU Vocabularies manifest must ship in the Railway image (cron sync reads it).
 # Narrow exception so the rest of backend/data/ stays ignored.
@@ -94,3 +96,49 @@ frontend/public/guides/private/
 # Keep a README explaining what should sit here on a fresh clone.
 frontend/public/clients/*
 !frontend/public/clients/README.md
+
+# Catalonia campaign send-script + sourced prospect emails (22 Jun 2026).
+# Local-only: contains live outreach logic + verified prospect contact emails
+# (PII). Never commit. See memory/project_catalonia_startups_campaign_2026_06.md.
+backend/scripts/send_catalonia_campaign.py
+backend/data/emails/
+
+# Lean repo (24 Jun 2026). Anything NOT needed to build or render Brubru's
+# website is ignored. Frontend = Vite build from frontend/src/; backend code +
+# migrations + knowledge_base/ stay; data dumps, outreach assets, historical
+# audits, top-level vestigial scaffolds, scratchpad scripts are all out.
+
+# Historical audit + log dumps
+audit/
+logs/
+
+# Outreach data + lead-gen PII (NOT website content)
+data/emails/
+data/eu_laws_master.csv
+
+# Apify / off-the-radar / campaign scratch dumps under backend/data/
+backend/data/apify/
+backend/data/catalonia_startups/
+backend/data/off_the_radar_*/
+backend/data/stripe_*/
+
+# Local scratch scripts (campaign, outreach, fetchers, video pipeline)
+backend/scripts/dormant_claim_provision.py
+backend/scripts/fetch_stripe_*.py
+backend/scripts/send_brubru_brief_*.py
+backend/scripts/send_batch_*.py
+backend/scripts/videos/
+
+# Top-level vestigial scaffolds + one-off artefacts
+/public/
+/scripts/
+frontend_app_tsx_template.tsx
+frontend_header_tsx_template.tsx
+frontend_vite_config_template.ts
+law_indexing_stats_*.json
+unclassified_laws_*.csv
+test_hybrid_chat.py
+test_scraper.py
+
+# Backup files
+*.bak

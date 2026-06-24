@@ -1,1 +1,0 @@
-{"celex": "32009R0392", "issues": [{"celex": "32009R0392", "rule_id": "untranslated_shall", "severity": "high", "count": 2, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["should", "shall"]}]}

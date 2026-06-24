@@ -1,4 +1,0 @@
-{"celex": "32016R0982", "issues": [{"celex": "32016R0982", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
-{"celex": "32016R1107", "issues": [{"celex": "32016R1107", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
-{"celex": "32016R1108", "issues": [{"celex": "32016R1108", "rule_id": "untranslated_shall", "severity": "high", "count": 1, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall"]}]}
-{"celex": "32016R1172", "issues": [{"celex": "32016R1172", "rule_id": "untranslated_shall", "severity": "high", "count": 2, "why": "English modal verb (shall/should/must) present", "suggestion": null, "samples": ["shall", "shall"]}]}
