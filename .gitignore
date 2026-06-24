@@ -97,6 +97,11 @@ frontend/public/guides/private/
 frontend/public/clients/*
 !frontend/public/clients/README.md
 
+# Data architecture page (24 Jun 2026). Standalone hand-maintained HTML, like
+# the api/docs microsite (caught by the generic docs/ rule): copied into the
+# Vite build and deployed to SiteGround via lftp, not tracked in git.
+frontend/public/data-architecture/
+
 # Catalonia campaign send-script + sourced prospect emails (22 Jun 2026).
 # Local-only: contains live outreach logic + verified prospect contact emails
 # (PII). Never commit. See memory/project_catalonia_startups_campaign_2026_06.md.
