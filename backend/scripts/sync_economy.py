@@ -231,6 +231,7 @@ INGESTORS = {
     ("acer", "topic"):          acer.ingest_acer_topics,
     ("eit", "news"):            eit.ingest_eit_news,
     ("eit", "event"):           eit.ingest_eit_events,
+    ("eit", "topic"):           eit.ingest_eit_topics,
     ("enisa", "news"):          enisa.ingest_enisa_news,
     ("enisa", "publication"):   enisa.ingest_enisa_publications,
     ("eu_lisa", "news"):        eulisa.ingest_eulisa_news,

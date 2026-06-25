@@ -18,10 +18,34 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date,
+    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, snapshot_topics,
 )
 
 _BASE = "https://www.eit.europa.eu"
+
+# Curated who-we-are + Innovation Community (KIC) landing pages, snapshotted as
+# topics. snapshot_topics drops any path that 404s.
+_TOPIC_PATHS = [
+    "/who-we-are/eit-glance",
+    "/community-activities",
+    "/global-challenges",
+    "/eit-ecosystem-map",
+    "/our-communities",
+    "/our-communities/eit-climate-kic",
+    "/our-communities/28digital",
+    "/our-communities/eit-food",
+    "/our-communities/eit-innoenergy",
+    "/our-communities/eit-rawmaterials",
+    "/our-communities/eit-urban-mobility",
+    "/our-communities/eit-water",
+    "/eit-community/eit-culture-creativity",
+    "/eit-community/eit-health",
+    "/eit-community/eit-manufacturing",
+]
+
+
+def ingest_eit_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("eit", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 
 NEWS_PAGES = [f"{_BASE}/news-events/news"]
 EVENT_PAGES = [f"{_BASE}/news-events/events"]
