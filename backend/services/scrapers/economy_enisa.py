@@ -20,10 +20,39 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
 )
 
 _BASE = "https://www.enisa.europa.eu"
+
+# Curated about + audience + thematic landing pages, snapshotted as topics.
+_TOPIC_PATHS = [
+    "/about-enisa/who-we-are",
+    "/about-enisa/what-we-do",
+    "/tools",
+    "/audience/citizens",
+    "/audience/national-eu-authorities",
+    "/audience/private-sector",
+    "/topics/artificial-intelligence-and-next-gen-technologies",
+    "/topics/awareness-and-cyber-hygiene",
+    "/topics/certification-and-standards",
+    "/topics/cyber-threats",
+    "/topics/cybersecurity-of-critical-sectors",
+    "/topics/digital-identity-and-data-protection",
+    "/topics/education-and-career-path",
+    "/topics/eu-incident-response-and-cyber-crisis-management",
+    "/topics/incident-management",
+    "/topics/market",
+    "/topics/product-security-and-certification",
+    "/topics/risk-management",
+    "/topics/skills-and-competences",
+    "/topics/state-of-cybersecurity-in-the-eu",
+    "/topics/vulnerability-disclosure",
+]
+
+
+def ingest_enisa_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("enisa", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 
 NEWS_PAGES = [f"{_BASE}/news"]
 PUB_PAGES = [f"{_BASE}/publications"]

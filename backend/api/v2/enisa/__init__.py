@@ -22,5 +22,13 @@ router = make_single_body_folder(
         {"item_type": "publication", "slug": "publications", "noun": "publications",
          "source": "the ENISA publications listing.",
          "extra": "Reports, threat landscapes, guidelines and studies from ENISA."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ENISA about, audience and cybersecurity-topic pages.",
+         "extra": "Snapshots of ENISA's about and audience pages and its cybersecurity "
+                  "topics: AI and next-gen technologies, cyber threats, certification and "
+                  "standards, critical-sector cybersecurity, digital identity and data "
+                  "protection, incident response and crisis management, risk management, "
+                  "product security, skills and competences, the state of cybersecurity "
+                  "in the EU and vulnerability disclosure."},
     ],
 )

@@ -234,6 +234,7 @@ INGESTORS = {
     ("eit", "topic"):           eit.ingest_eit_topics,
     ("enisa", "news"):          enisa.ingest_enisa_news,
     ("enisa", "publication"):   enisa.ingest_enisa_publications,
+    ("enisa", "topic"):         enisa.ingest_enisa_topics,
     ("eu_lisa", "news"):        eulisa.ingest_eulisa_news,
     ("eu_lisa", "publication"): eulisa.ingest_eulisa_publications,
     ("eu_lisa", "event"):       eulisa.ingest_eulisa_events,
