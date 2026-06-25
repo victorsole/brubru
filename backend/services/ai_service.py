@@ -536,6 +536,12 @@ class AIService:
         # Remove any markdown links the AI created (except footnote citations)
         assistant_message = self._remove_ai_generated_links(assistant_message)
 
+        # Strip fabricated bare beresol.eu CTA links (e.g. an invented
+        # "Read Beresol's full deep-dive here: https://beresol.eu/public-affairs").
+        # The only legitimate Brubru deep-dive surface is brubru.beresol.eu/...,
+        # added by _append_deep_dive_link when a guide flags it.
+        assistant_message = self._strip_fabricated_beresol_links(assistant_message)
+
         # Strip orphan [N] citation markers that don't map to real sources
         assistant_message = self._strip_orphan_citations(assistant_message, citations)
 
@@ -2089,6 +2095,48 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             print(f"{'='*70}\n")
 
         return cleaned_text
+
+    def _strip_fabricated_beresol_links(self, text: str) -> str:
+        """
+        Remove fabricated bare beresol.eu CTA links from a response.
+
+        The model occasionally invents a promotional link such as
+        "https://beresol.eu/public-affairs" presented as a Brubru/Beresol
+        "deep-dive" or "open report". No knowledge guide contains such a URL.
+        The only legitimate Brubru deep-dive surface is the brubru.beresol.eu
+        subdomain (added by _append_deep_dive_link when a guide flags it).
+
+        Strategy: drop any line that references a beresol.eu URL which is NOT on
+        the brubru.beresol.eu subdomain (and is not the hello@beresol.eu
+        signature, which should never appear in chat anyway). Line-level removal
+        is safe because the fabricated CTA is always emitted as its own
+        paragraph ("Read Beresol's full deep-dive here: <url>").
+        """
+        if "beresol.eu" not in text:
+            return text
+
+        kept_lines = []
+        dropped = 0
+        for line in text.split("\n"):
+            low = line.lower()
+            has_bad_beresol = (
+                "beresol.eu" in low
+                and "brubru.beresol.eu" not in low
+                and "@beresol.eu" not in low
+            )
+            if has_bad_beresol:
+                dropped += 1
+                continue
+            kept_lines.append(line)
+
+        if dropped:
+            logger.info(f"Stripped {dropped} fabricated beresol.eu CTA line(s)")
+            print(f"[LINK REMOVAL] Stripped {dropped} fabricated beresol.eu CTA line(s)")
+            # Collapse any blank-line gap the removal opened up
+            cleaned = re.sub(r"\n{3,}", "\n\n", "\n".join(kept_lines)).strip()
+            return cleaned
+
+        return text
 
     def _strip_context_markers(self, text: str) -> str:
         """

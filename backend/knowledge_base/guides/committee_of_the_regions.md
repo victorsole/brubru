@@ -1,6 +1,7 @@
 # European Committee of the Regions (CoR)
 
 ## QUICK FACTS
+- **LATEST (Thursday 25 June 2026 — AFCO draft reports tabled)**: The EP Committee on Constitutional Affairs (AFCO) tabled four institutional draft reports, including one directly on the CoR: **"Evaluation of the track record of the Committee of the Regions as guardian of the principle of subsidiarity"** (own-initiative, **2026/2014(INI)**). The other three AFCO draft reports tabled the same day: the institutional framework of the EU and its interaction with national authorities under **Article 19 TEU** (2025/2263(INI)); enhanced EU decision-making through means provided for in the EU treaties (2026/2012(INI)); and the European political parties and foundations 2026 report on Regulation (EU, Euratom) 2025/2445 (2026/2013(INI)). Source: EP AFCO committee documents, 25 June 2026. These are at draft-report stage; verify rapporteur and committee vote dates against OEIL before asserting them.
 - Full name: European Committee of the Regions (CoR)
 - Type: EU advisory body representing local and regional authorities
 - Treaty basis: Articles 300, 305-307 TFEU; established by Maastricht Treaty (1992)

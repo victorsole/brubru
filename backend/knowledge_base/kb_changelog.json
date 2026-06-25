@@ -2,6 +2,49 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-25",
+      "action": "updated",
+      "guide": "committee_of_the_regions",
+      "title": "European Committee of the Regions",
+      "summary": "Added 25 Jun 2026 AFCO draft reports incl. CoR subsidiarity track-record review (2026/2014/INI)",
+      "refs": [
+        "2026/2014",
+        "2025/2263"
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "action": "added",
+      "guide": "eu_islands_coastal_communities_strategy",
+      "title": "EU Strategies for Islands and Coastal Communities",
+      "summary": "New guide on the two Commission Communications adopted 10 Jun 2026 (IP/26/1318), presented in Cyprus 26 Jun; 4 pillars, blue economy, post-2027 Partnership Plans",
+      "refs": [
+        "IP/26/1318"
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "action": "updated",
+      "guide": "europol_regulation_revision_2026",
+      "title": "Europol Regulation Revision",
+      "summary": "Added LIBE-only committee anchor + no-COM-number guard to curb fabricated committee/doc references",
+      "refs": [
+        "32016R0794",
+        "32018R1727"
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "action": "added",
+      "guide": "tobacco_products_directive_revision",
+      "title": "Tobacco Products Directive (TPD) Revision",
+      "summary": "New guide on Directive 2014/40/EU and its 2026 revision (call for evidence 18 May, consultation to 14 Aug); distinct from the tobacco tax file",
+      "refs": [
+        "32014L0040",
+        "32003L0033"
+      ]
+    },
+    {
       "date": "2026-06-24",
       "action": "updated",
       "guide": "eu_budget_emu_law",

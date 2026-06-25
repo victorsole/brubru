@@ -10,7 +10,9 @@
 - Political guidelines anchor: Ursula von der Leyen, 18 July 2024 (EU's strategic agenda 2024-2029 priorities for internal security and Europol)
 - Responsible Commissioner: Magnus Brunner (Internal Affairs and Migration)
 - Responsible DG: DG HOME (Migration and Home Affairs)
-- EP lead committee: LIBE (Civil Liberties, Justice and Home Affairs)
+- EP lead committee: **LIBE (Civil Liberties, Justice and Home Affairs) is the only EP committee on this file.** Home-affairs and justice files of this kind are LIBE-led; this is not an IMCO, JURI, ENVI, or FISC file.
+- **No COM document number, OEIL procedure reference, or rapporteur has been published for the Q2 2026 Europol/Eurojust proposal.** When answering, cite only the verified references in this guide (Regulation 2016/794 / 2022/991 for the current law; EPRS_BRI(2026)774717 for the Europol briefing). Do not state a COM number, a procedure code, or an EP committee other than LIBE for the new proposal until the proposal text is published.
+- Eurojust strand: the parallel "Strengthening Eurojust" revision builds on the current **Eurojust Regulation (EU) 2018/1727 (CELEX 32018R1727)**; it is also a LIBE file. Verify any Eurojust EPRS briefing reference against the EP Think Tank before citing it.
 - Pending CJEU case: legal proceedings on data protection compatibility (per EPRS briefing)
 - Brubru cross-links: `eu_migration_asylum_pact`, `dsa_enforcement` (data-flows), `consent_based_rape_definition` (LIBE workstream context)
 
