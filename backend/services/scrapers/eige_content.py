@@ -14,9 +14,40 @@ from datetime import datetime, timezone
 
 import requests
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, snapshot_topics
 
 _BASE = "https://eige.europa.eu"
+
+# Curated about + thematic landing pages, snapshotted as topics.
+_TOPIC_PATHS = [
+    "/about",
+    "/about/our-work",
+    "/about/organisation",
+    "/about/projects",
+    "/about/planning-and-reporting-documents",
+    "/about/beijing-platform-for-action",
+    "/about/our-work/strategic-foresight",
+    "/gender-mainstreaming",
+    "/gender-mainstreaming/what-is-gender-mainstreaming",
+    "/gender-mainstreaming/policy-areas",
+    "/gender-mainstreaming/countries",
+    "/gender-mainstreaming/good-practices",
+    "/gender-mainstreaming/toolkits",
+    "/gender-based-violence",
+    "/gender-based-violence/what-is-gender-based-violence",
+    "/gender-based-violence/focus-areas",
+    "/gender-based-violence/regulatory-and-legal-framework",
+    "/gender-based-violence/data-collection",
+    "/gender-based-violence/european-institute-gender-equalitys-role-supporting-implementation-istanbul-convention",
+    "/gender-equality-index/2025",
+    "/gender-statistics/dgs",
+    "/publications-resources/thesaurus/overview",
+    "/publications-resources/toolkits-guides",
+]
+
+
+def ingest_eige_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("eige", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 _HEADERS = {"User-Agent": _UA}

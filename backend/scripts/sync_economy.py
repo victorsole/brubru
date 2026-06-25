@@ -161,6 +161,7 @@ INGESTORS = {
     ("eige", "news"): eige_content.ingest_eige_news,
     ("eige", "event"): eige_content.ingest_eige_events,
     ("eige", "publication"): eige_content.ingest_eige_publications,
+    ("eige", "topic"): eige_content.ingest_eige_topics,
     ("cedefop", "news"): cedefop_content.ingest_cedefop_news,
     ("cedefop", "event"): cedefop_content.ingest_cedefop_events,
     ("cedefop", "publication"): cedefop_content.ingest_cedefop_publications,

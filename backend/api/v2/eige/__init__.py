@@ -26,5 +26,13 @@ router = make_single_body_folder(
          "source": "the EIGE publications library.",
          "extra": "EIGE reports, studies, toolkits and guides on gender equality. Filter with q "
                   "(e.g. a topic such as 'gender-based violence' or 'gender mainstreaming')."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EIGE about, gender-mainstreaming and "
+                   "gender-based-violence pages.",
+         "extra": "Snapshots of EIGE's about and organisation pages, its gender "
+                  "mainstreaming work (what it is, policy areas, countries, good "
+                  "practices, toolkits), its gender-based-violence work (focus areas, "
+                  "the regulatory framework, data collection, the Istanbul Convention), "
+                  "the Gender Equality Index, gender statistics and the thesaurus."},
     ],
 )
