@@ -68,6 +68,7 @@ from .euspa import router as _euspa_router
 from .ela import router as _ela_router
 from .efca import router as _efca_router
 from .eurofound import router as _eurofound_router
+from .etf import router as _etf_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -123,6 +124,7 @@ router.include_router(_euspa_router)
 router.include_router(_ela_router)
 router.include_router(_efca_router)
 router.include_router(_eurofound_router)
+router.include_router(_etf_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
