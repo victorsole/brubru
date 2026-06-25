@@ -21,13 +21,63 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date,
+    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, extract_html,
 )
 
 _BASE = "https://www.acer.europa.eu"
 
 NEWS_PAGES = [f"{_BASE}/news-and-events/news", f"{_BASE}/news-and-events/press-releases"]
 PUB_PAGES = [f"{_BASE}/documents/publications"]
+
+# Curated thematic landing pages spanning ACER's domains: the agency, electricity,
+# gas, the green deal and REMIT market surveillance. Snapshotted as topics.
+_TOPIC_PATHS = [
+    "/the-agency/about-acer",
+    "/the-agency/our-mission",
+    "/electricity/about-electricity",
+    "/electricity/about-electricity/clean-energy-package",
+    "/electricity/market-rules",
+    "/electricity/infrastructure",
+    "/electricity/connection-codes",
+    "/electricity/security-of-supply",
+    "/electricity/operation-codes",
+    "/electricity/cybersecurity-network-code",
+    "/flexibility",
+    "/gas/about-gas",
+    "/gas/lng-price-assessment",
+    "/gas/market-correction-mechanism",
+    "/gas/decarbonisation-of-gas",
+    "/gas/network-codes",
+    "/green-deal/about-green-deal",
+    "/green-deal/energy-system-integration",
+    "/remit/about-remit",
+    "/remit/data-collection",
+    "/remit/market-surveillance",
+    "/remit/coordination-on-cases",
+]
+
+
+def ingest_acer_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 2:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        items.append(Item(body_code="acer", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
 
 
 def _parse_news(html: str):

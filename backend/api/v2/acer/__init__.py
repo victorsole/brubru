@@ -22,5 +22,12 @@ router = make_single_body_folder(
         {"item_type": "publication", "slug": "publications", "noun": "publications",
          "source": "the ACER publications listing; bodies are extracted from the source PDFs.",
          "extra": "Market monitoring reports, position papers, opinions and other ACER documents."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ACER thematic landing pages.",
+         "extra": "Snapshots of ACER's thematic pages across the agency, electricity "
+                  "(market rules, infrastructure, connection and operation codes, "
+                  "security of supply, cybersecurity), gas (LNG price assessment, the "
+                  "market correction mechanism, decarbonisation, network codes), the "
+                  "green deal and REMIT wholesale-market surveillance."},
     ],
 )
