@@ -66,6 +66,7 @@ from services.scrapers import economy_ela as ela  # noqa: E402
 from services.scrapers import economy_efca as efca_agency  # noqa: E402
 from services.scrapers import economy_eurofound as eurofound  # noqa: E402
 from services.scrapers import economy_etf as etf_agency  # noqa: E402
+from services.scrapers import economy_eurojust as eurojust_agency  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -270,6 +271,8 @@ INGESTORS = {
     ("etf", "news"):            etf_agency.ingest_etf_news,
     ("etf", "event"):           etf_agency.ingest_etf_events,
     ("etf", "topic"):           etf_agency.ingest_etf_topics,
+    ("eurojust", "news"):       eurojust_agency.ingest_eurojust_news,
+    ("eurojust", "topic"):      eurojust_agency.ingest_eurojust_topics,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
