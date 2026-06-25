@@ -535,7 +535,7 @@ _ECONOMY_BATCHES: list[list[str]] = [
      "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu"],
     # batch 1 (15:00 UTC) — Playwright-fed body for this window: europol.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
-     "emsa", "europol", "eacea", "ercea", "epso", "eas"],
+     "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca"],
     # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
      "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu"],
