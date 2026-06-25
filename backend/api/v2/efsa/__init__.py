@@ -18,6 +18,13 @@ _resources = [
     {"item_type": "publication", "slug": "publications", "noun": "publications",
      "source": "the EFSA publications listing (EFSA Journal scientific outputs and reports).",
      "extra": "Scientific opinions, statements, guidance and data reports from EFSA."},
+    {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+     "source": "a curated set of EFSA about and thematic topic pages.",
+     "extra": "Snapshots of EFSA's about page and its thematic topics: animal health and "
+              "welfare, antimicrobial resistance, biological hazards, chemical "
+              "contaminants, emerging risks, feed and food additives, food contact "
+              "materials, food ingredients, GMOs, novel food, nutrition, pesticides and "
+              "plant health."},
 ]
 # One resource per EFSA scientific database (OpenFoodTox, Xylella host plants, ...).
 _resources += [

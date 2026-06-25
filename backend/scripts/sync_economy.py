@@ -252,6 +252,7 @@ INGESTORS = {
     ("ecdc", "topic"):          ecdc.ingest_ecdc_topics,
     ("efsa", "news"):           efsa.ingest_efsa_news,
     ("efsa", "publication"):    efsa.ingest_efsa_publications,
+    ("efsa", "topic"):          efsa.ingest_efsa_topics,
     ("eu_osha", "news"):        eu_osha.ingest_eu_osha_news,
     ("eu_osha", "publication"): eu_osha.ingest_eu_osha_publications,
     ("eu_osha", "event"):       eu_osha.ingest_eu_osha_events,

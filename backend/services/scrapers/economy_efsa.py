@@ -18,16 +18,42 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
 )
 from services.scrapers.economy_ecb import ingest_feeds
 
 _BASE = "https://www.efsa.europa.eu"
 EFSA_NEWS_FEEDS = [f"{_BASE}/en/press/rss"]
 
+# Curated about + thematic topic landing pages, snapshotted as topics. The
+# harvested /en/topics/topic/* set plus core EFSA topics on the same URL pattern
+# (snapshot_topics drops any that 404).
+_TOPIC_PATHS = [
+    "/en/about/about-efsa",
+    "/en/topics/genetically-modified-organisms",
+    "/en/topics/topic/animal-health",
+    "/en/topics/topic/animal-welfare",
+    "/en/topics/topic/antimicrobial-resistance",
+    "/en/topics/topic/biological-hazards",
+    "/en/topics/topic/chemical-contaminants-food-feed",
+    "/en/topics/topic/emerging-risks",
+    "/en/topics/topic/feed-additives",
+    "/en/topics/topic/food-additives",
+    "/en/topics/topic/food-contact-materials",
+    "/en/topics/topic/food-ingredients",
+    "/en/topics/topic/novel-food",
+    "/en/topics/topic/nutrition",
+    "/en/topics/topic/pesticides",
+    "/en/topics/topic/plant-health",
+]
+
 
 def ingest_efsa_news(**kw) -> list[Item]:
     return ingest_feeds("efsa", "news", EFSA_NEWS_FEEDS, **kw)
+
+
+def ingest_efsa_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("efsa", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 
 
 def _parse_pubs(html: str):
