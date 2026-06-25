@@ -223,6 +223,7 @@ INGESTORS = {
     ("euda", "publication"): euda_publications.ingest_euda_publications,
     ("euda", "news"): euda_content.ingest_euda_news,
     ("euda", "event"): euda_content.ingest_euda_events,
+    ("euda", "topic"): euda_content.ingest_euda_topics,
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,

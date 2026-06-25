@@ -31,5 +31,11 @@ router = make_single_body_folder(
          "source": "the EUDA events section.",
          "extra": "Conferences, webinars and meetings hosted or co-hosted by the European "
                   "Union Drugs Agency."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EUDA about and key-indicator data pages.",
+         "extra": "Snapshots of EUDA's manifesto, partners and data-catalogue pages and "
+                  "its Statistical Bulletin key indicators: drug-induced deaths, drug use "
+                  "prevalence, treatment demand, problem drug use, drug law offences, "
+                  "health and social responses, seizures, and price and purity."},
     ],
 )
