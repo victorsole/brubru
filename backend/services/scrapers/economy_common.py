@@ -323,7 +323,10 @@ def scrape_ecl_file_listing(body_code: str, item_type: str, listing_urls, base: 
 # extract_html. Reference pages carry no publication date, so document_date is
 # left null. Used across single-body agency folders for their "topics" resource.
 def snapshot_topics(body_code: str, base: str, paths, *, fetch_bodies: bool = True,
-                    title_max: int = 300, pace: float = 0.3, retries: int = 2):
+                    title_max: int = 300, pace: float = 0.3, retries: int = 2,
+                    prefer_title: bool = False):
+    # prefer_title=True reads the title from <title> before the page h1 — for sites
+    # whose h1 is a fixed banner/slogan repeated on every page (e.g. CdT).
     items = []
     now = datetime.now(timezone.utc)
     for path in paths:
@@ -341,10 +344,13 @@ def snapshot_topics(body_code: str, base: str, paths, *, fetch_bodies: bool = Tr
             continue
         soup = BeautifulSoup(r.text, "html.parser")
         h1 = soup.select_one("main h1, h1")
-        if h1 and len(h1.get_text(strip=True)) > 2:
+        title_tag = soup.title.get_text(strip=True) if soup.title else ""
+        if prefer_title and title_tag:
+            title = clean(title_tag.split(" | ")[0].split(" - ")[0])
+        elif h1 and len(h1.get_text(strip=True)) > 2:
             title = clean(h1.get_text(" ", strip=True))
-        elif soup.title and soup.title.get_text(strip=True):
-            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        elif title_tag:
+            title = clean(title_tag.split(" | ")[0].split(" - ")[0])
         else:
             title = clean(url.rstrip("/").rsplit("/", 1)[-1].replace("_en", "").replace("-", " ").title())
         body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
