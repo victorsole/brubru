@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
@@ -313,6 +314,43 @@ def scrape_ecl_file_listing(body_code: str, item_type: str, listing_urls, base: 
             body_txt, body_html, kind = fetch_detail(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             it.source_kind = kind if kind in ("pdf", "html") else it.source_kind
+    return items
+
+
+# --- generic curated-page "topics" snapshotter -----------------------------
+# Snapshot a curated list of stable reference / thematic landing pages as topic
+# Items: title from the page h1 (or <title>, else the slug) and the body via
+# extract_html. Reference pages carry no publication date, so document_date is
+# left null. Used across single-body agency folders for their "topics" resource.
+def snapshot_topics(body_code: str, base: str, paths, *, fetch_bodies: bool = True,
+                    title_max: int = 300, pace: float = 0.3, retries: int = 2):
+    items = []
+    now = datetime.now(timezone.utc)
+    for path in paths:
+        url = base + path if path.startswith("/") else path
+        # ec.europa.eu subdomains rate-limit bursts: pace requests and retry the
+        # transient blocks (None) a couple of times before giving up on a page.
+        r = http_get(url)
+        attempt = 0
+        while r is None and attempt < retries:
+            attempt += 1
+            time.sleep(1.5 * attempt)
+            r = http_get(url)
+        time.sleep(pace)
+        if r is None:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 2:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = clean(url.rstrip("/").rsplit("/", 1)[-1].replace("_en", "").replace("-", " ").title())
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        items.append(Item(body_code=body_code, item_type="topic", title=(title or url)[:title_max],
+                          public_url=norm_url(url), creation_date=now, source_kind="html",
+                          guid=norm_url(url), body_txt=body_txt, body_html=body_html))
     return items
 
 
