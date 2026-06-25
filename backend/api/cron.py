@@ -532,7 +532,7 @@ _ECONOMY_BATCHES: list[list[str]] = [
     # Playwright-fed body for this window: cepol (one heavy Chromium body per
     # window so renders never overlap; see note below).
     ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa",
-     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc"],
+     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps"],
     # batch 1 (15:00 UTC) — Playwright-fed body for this window: europol.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
      "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor"],
