@@ -244,6 +244,7 @@ INGESTORS = {
     ("euipo", "news"):          euipo.ingest_euipo_news,
     ("euipo", "event"):         euipo.ingest_euipo_events,
     ("euipo", "trademark"):     euipo.ingest_euipo_trademarks,
+    ("euipo", "topic"):         euipo.ingest_euipo_topics,
     ("euipo", "geographical_indication"): euipo.ingest_euipo_giview,
     ("cpvo", "news"):           cpvo.ingest_cpvo_news,
     ("cpvo", "publication"):    cpvo.ingest_cpvo_publications,

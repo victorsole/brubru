@@ -30,5 +30,13 @@ router = make_single_body_folder(
                   "EUTMs; this surfaces the latest filings). Filter with q (e.g. an applicant or mark name)."},
         # NOTE: GIView (geographical_indication) was moved to the "Geographical Indications"
         # domain (/api/v2/geographical-indications/giview), alongside the eAmbrosia registers.
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EUIPO about and IP-domain pages.",
+         "extra": "Snapshots of EUIPO's about and governance pages (the office, the "
+                  "Strategic Plan, quality) and its IP domains: trade marks, designs, "
+                  "law and guidelines, the Boards of Appeal, the Mediation Centre, the "
+                  "Observatory on IP infringements (enforcement, publications), the "
+                  "copyright knowledge centre, the SME corner and SME Fund, and IP "
+                  "enforcement."},
     ],
 )
