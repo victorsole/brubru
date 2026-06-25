@@ -19,11 +19,55 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, extract_html,
 )
 
 _BASE = "https://www.ecdc.europa.eu"
 _SEARCH = _BASE + "/en/search?s=&sort_bef_combine=date_DESC&f%5B0%5D=categories%3A"
+
+# Curated about / tools / data-portal landing pages (stable reference content,
+# distinct from the time-sensitive outbreak pages), snapshotted as topics.
+_TOPIC_PATHS = [
+    "/en/about-us",
+    "/en/about-us/ecdcs-organisational-structure",
+    "/en/about-us/ecdcs-governance",
+    "/en/about-us/what-we-do",
+    "/en/about-us/ecdcs-partnerships-and-networks",
+    "/en/about-ecdc/partners-and-networks/disease-and-laboratory-networks",
+    "/en/about-us/what-we-do/country-support",
+    "/en/data-tools",
+    "/en/epiet-euphem",
+    "/en/training",
+    "/en/tools/outbreak-surveillance-tools",
+    "/en/tools/country-resources",
+    "/en/publications-data/epipulse-european-surveillance-portal-infectious-diseases",
+    "/en/publications-data/ecdc-geoportal",
+    "/en/publications-data/european-respiratory-diseases-forecasting-hub-respicast",
+    "/en/publications-data/learning-portal",
+]
+
+
+def ingest_ecdc_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 2:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        items.append(Item(body_code="ecdc", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
 _SOURCES = {
     "news": (f"{_SEARCH}1307", "article.ct-news"),
     "publication": (f"{_SEARCH}1244", "article.ct-publication"),

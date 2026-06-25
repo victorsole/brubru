@@ -26,5 +26,12 @@ router = make_single_body_folder(
          "extra": "Catalogue of the infectious diseases under EU surveillance — each with its Atlas "
                   "link and the REST API for the case figures by country and period. The Atlas holds "
                   "time-series surveillance data, so this is a catalogue of topics, not the numbers."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ECDC about, tools and data-portal pages.",
+         "extra": "Snapshots of ECDC reference pages: about us and governance, what we "
+                  "do, partnerships and disease/laboratory networks, country support, "
+                  "data tools, the EPIET/EUPHEM fellowship and training, outbreak "
+                  "surveillance tools, EpiPulse, the GeoPortal, RespiCast and the "
+                  "learning portal."},
     ],
 )
