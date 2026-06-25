@@ -238,6 +238,7 @@ INGESTORS = {
     ("eu_lisa", "news"):        eulisa.ingest_eulisa_news,
     ("eu_lisa", "publication"): eulisa.ingest_eulisa_publications,
     ("eu_lisa", "event"):       eulisa.ingest_eulisa_events,
+    ("eu_lisa", "topic"):       eulisa.ingest_eulisa_topics,
     ("euipo", "news"):          euipo.ingest_euipo_news,
     ("euipo", "event"):         euipo.ingest_euipo_events,
     ("euipo", "trademark"):     euipo.ingest_euipo_trademarks,

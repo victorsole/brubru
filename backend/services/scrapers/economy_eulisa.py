@@ -19,10 +19,36 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
 )
 
 _BASE = "https://www.eulisa.europa.eu"
+
+# Curated about + activities landing pages, snapshotted as topics. The individual
+# large-scale-IT-system sub-pages are tried too; snapshot_topics drops any 404s.
+_TOPIC_PATHS = [
+    "/about-us/who-we-are",
+    "/about-us/organisation",
+    "/about-us/access-to-documents",
+    "/activities/large-scale-it-systems",
+    "/activities/large-scale-it-systems/sis",
+    "/activities/large-scale-it-systems/eurodac",
+    "/activities/large-scale-it-systems/vis",
+    "/activities/large-scale-it-systems/ees",
+    "/activities/large-scale-it-systems/etias",
+    "/activities/interoperability",
+    "/activities/data-protection",
+    "/activities/security",
+    "/activities/research-and-development",
+    "/activities/training",
+    "/activities/carriers",
+    "/activities/empact",
+    "/activities/pilot-projects",
+]
+
+
+def ingest_eulisa_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("eu_lisa", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 
 _SOURCES = {
     "news": (f"{_BASE}/news-and-events?ts=&tp=77", ".node--type-news"),

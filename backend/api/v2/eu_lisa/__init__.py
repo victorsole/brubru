@@ -25,5 +25,11 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the eu-LISA events listing.",
          "extra": "Conferences, industry roundtables and Management Board meetings, with their dates."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of eu-LISA about and activities pages.",
+         "extra": "Snapshots of eu-LISA's about pages and its activities: the large-scale "
+                  "IT systems (SIS, VIS, Eurodac, EES, ETIAS), interoperability, data "
+                  "protection, security, research and innovation, training, carriers, "
+                  "EMPACT and pilot projects."},
     ],
 )
