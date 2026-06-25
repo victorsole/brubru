@@ -74,6 +74,7 @@ from .cepol import router as _cepol_router
 from .europol import router as _europol_router
 from .frontex import router as _frontex_router
 from .cinea import router as _cinea_router
+from .eacea import router as _eacea_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -136,6 +137,7 @@ router.include_router(_europol_router)
 router.include_router(_frontex_router)
 # Commission executive agencies (api_ec.md), each its own folder.
 router.include_router(_cinea_router)
+router.include_router(_eacea_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
