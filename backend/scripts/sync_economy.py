@@ -210,6 +210,7 @@ INGESTORS = {
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,
+    ("echa", "topic"): echa_news.ingest_echa_topics,
     ("euda", "publication"): euda_publications.ingest_euda_publications,
     ("euda", "news"): euda_content.ingest_euda_news,
     ("euda", "event"): euda_content.ingest_euda_events,

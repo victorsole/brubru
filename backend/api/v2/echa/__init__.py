@@ -28,5 +28,12 @@ router = make_single_body_folder(
          "source": "the ECHA news archive.",
          "extra": "News alerts from the European Chemicals Agency on REACH, CLP, biocides and "
                   "the agency's regulatory work."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ECHA about, committee and regulation pages.",
+         "extra": "Snapshots of ECHA reference pages: who we are and what we do, the "
+                  "committees and enforcement forum (Risk Assessment, Socio-Economic "
+                  "Analysis, Biocidal Products, Member State Committee), environment, "
+                  "health and chemicals at work, partners and networks, and the "
+                  "understanding-REACH, understanding-CLP and understanding-BPR guides."},
     ],
 )

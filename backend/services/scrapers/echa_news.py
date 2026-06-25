@@ -10,12 +10,34 @@ import html as _html
 import re
 from datetime import datetime, timezone
 
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, extract_html
 
 _ARCHIVE = "https://echa.europa.eu/news-and-events/news-alerts/archive"
 _BASE = "https://echa.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+
+# Curated about / committees / regulation landing pages, snapshotted as topics.
+# echa.europa.eu blocks the default crawler UA, so these are rendered through
+# Playwright (local refresh).
+_TOPIC_PATHS = [
+    "/about-us/who-we-are",
+    "/about-us/what-we-do",
+    "/about-us/committees-and-forum",
+    "/about-us/who-we-are/committee-for-risk-assessment",
+    "/about-us/who-we-are/committee-for-socio-economic-analysis",
+    "/about-us/who-we-are/biocidal-products-committee",
+    "/about-us/who-we-are/member-state-committee",
+    "/about-us/who-we-are/enforcement-forum",
+    "/about-us/what-we-do/environment",
+    "/about-us/health",
+    "/about-us/chemicals-at-work",
+    "/about-us/partners-and-networks/member-states-and-competent-authorities",
+    "/about-us/partners-and-networks/international-cooperation",
+    "/regulations/reach/understanding-reach",
+    "/regulations/clp/understanding-clp",
+    "/regulations/biocidal-products-regulation/understanding-bpr",
+]
 # <span ...>10 June 2026 - </span> ... <a href="/-/slug">Title</a>
 _ITEM = re.compile(
     r'<span[^>]*>\s*(\d{1,2}\s+\w+\s+\d{4})\s*-\s*</span>\s*'
@@ -72,3 +94,42 @@ async def _scrape() -> list[Item]:
 
 def ingest_echa_news(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return asyncio.run(_scrape())
+
+
+async def _scrape_topics(*, fetch_bodies: bool) -> list[Item]:
+    from playwright.async_api import async_playwright
+    from bs4 import BeautifulSoup
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    async with async_playwright() as p:
+        b = await p.chromium.launch(headless=True)
+        ctx = await b.new_context(user_agent=_UA)
+        page = await ctx.new_page()
+        for path in _TOPIC_PATHS:
+            url = _BASE + path
+            try:
+                resp = await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                await page.wait_for_timeout(1000)
+            except Exception:
+                continue
+            if resp is None or resp.status != 200:
+                continue
+            content = await page.content()
+            soup = BeautifulSoup(content, "html.parser")
+            h1 = soup.select_one("main h1, h1")
+            if h1 and len(h1.get_text(strip=True)) > 2:
+                title = clean(h1.get_text(" ", strip=True))
+            elif soup.title and soup.title.get_text(strip=True):
+                title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+            else:
+                title = path.rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+            body_txt, body_html = (extract_html(content) if fetch_bodies else (None, None))
+            items.append(Item(body_code="echa", item_type="topic", title=title[:300],
+                              public_url=url, creation_date=now, source_kind="html",
+                              guid=url, body_txt=body_txt, body_html=body_html))
+        await b.close()
+    return items
+
+
+def ingest_echa_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return asyncio.run(_scrape_topics(fetch_bodies=fetch_bodies))
