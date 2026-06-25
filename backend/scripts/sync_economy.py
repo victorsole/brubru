@@ -58,6 +58,10 @@ from services.scrapers import cedefop_content as cedefop_content  # noqa: E402
 from services.scrapers import euaa_content as euaa_content  # noqa: E402
 from services.scrapers import fra_databases as fra_databases  # noqa: E402
 from services.scrapers import economy_eeas as eeas  # noqa: E402
+from services.scrapers import economy_easa as easa  # noqa: E402
+from services.scrapers import economy_emsa as emsa  # noqa: E402
+from services.scrapers import economy_era as era_agency  # noqa: E402
+from services.scrapers import economy_euspa as euspa  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -237,6 +241,18 @@ INGESTORS = {
     ("eeas", "event"):          eeas.ingest_eeas_events,
     ("eeas", "tender"):         eeas.ingest_eeas_tenders,
     ("eeas", "topic"):          eeas.ingest_eeas_topics,
+    # Decentralised agencies (api_socjust.md) — server-rendered Drupal, plain requests.
+    ("easa", "news"):           easa.ingest_easa_news,
+    ("easa", "publication"):    easa.ingest_easa_publications,
+    ("easa", "event"):          easa.ingest_easa_events,
+    ("emsa", "news"):           emsa.ingest_emsa_news,
+    ("emsa", "publication"):    emsa.ingest_emsa_publications,
+    ("era", "news"):            era_agency.ingest_era_news,
+    ("era", "publication"):     era_agency.ingest_era_publications,
+    ("era", "event"):           era_agency.ingest_era_events,
+    ("euspa", "news"):          euspa.ingest_euspa_news,
+    ("euspa", "publication"):   euspa.ingest_euspa_publications,
+    ("euspa", "event"):         euspa.ingest_euspa_events,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
@@ -332,7 +348,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "eurofound"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "eurofound"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")

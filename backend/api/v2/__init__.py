@@ -61,6 +61,10 @@ from .euaa import router as _euaa_router
 from .fra import router as _fra_router
 from .eu_osha import router as _eu_osha_router
 from .eeas import router as _eeas_router
+from .easa import router as _easa_router
+from .emsa import router as _emsa_router
+from .era import router as _era_router
+from .euspa import router as _euspa_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -108,6 +112,11 @@ router.include_router(_fra_router)
 router.include_router(_eu_osha_router)
 # European External Action Service (api_eeas.md), its own folder. Playwright-fed.
 router.include_router(_eeas_router)
+# Decentralised agencies (api_socjust.md), each its own folder.
+router.include_router(_easa_router)
+router.include_router(_emsa_router)
+router.include_router(_era_router)
+router.include_router(_euspa_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
