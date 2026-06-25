@@ -83,6 +83,7 @@ from .epso import router as _epso_router
 from .eas import router as _eas_router
 from .cdt import router as _cdt_router
 from .cert_eu import router as _cert_eu_router
+from .cjeu import router as _cjeu_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -155,6 +156,8 @@ router.include_router(_epso_router)
 router.include_router(_eas_router)
 router.include_router(_cdt_router)
 router.include_router(_cert_eu_router)
+# Court of Justice of the EU (api_ecj.md), its own folder.
+router.include_router(_cjeu_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
