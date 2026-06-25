@@ -24,5 +24,14 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the EU-OSHA events listing.",
          "extra": "Seminars, campaign events and exchange meetings, with their dates."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EU-OSHA about, facts-and-figures, legislation and "
+                   "theme pages.",
+         "extra": "Snapshots of EU-OSHA's governance and focal-point pages, its surveys "
+                  "(ESENER, OSH Pulse, the workers' exposure survey), the EU strategic "
+                  "framework and OSH legislation, and its themes: dangerous substances, "
+                  "musculoskeletal disorders, psychosocial risks and mental health, "
+                  "digitalisation, cancer and work, climate change, work-related diseases, "
+                  "young workers and more."},
     ],
 )

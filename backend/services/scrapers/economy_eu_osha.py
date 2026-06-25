@@ -20,10 +20,40 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
 )
 
 _BASE = "https://osha.europa.eu"
+
+_THEMES = [
+    "cancer-and-work", "climate-change-and-occupational-safety-and-health",
+    "covid-19-resources-workplace", "dangerous-substances", "digitalisation-work",
+    "disability-and-occupational-safety-and-health", "good-osh-is-good-for-business",
+    "health-and-social-care-sector-osh", "leadership-and-worker-participation",
+    "mainstreaming-osh-education", "musculoskeletal-disorders", "osh-e-tools",
+    "osh-management-context-ageing-workforce", "psychosocial-risks-and-mental-health",
+    "safety-and-health-micro-and-small-enterprises", "support-compliance",
+    "women-and-health-work", "work-related-diseases", "young-workers",
+]
+# Curated about + facts-and-figures + legislation + theme pages, as topics.
+_TOPIC_PATHS = [
+    "/en/about-eu-osha/governance-eu-osha",
+    "/en/about-eu-osha/national-focal-points",
+    "/en/facts-and-figures",
+    "/en/facts-and-figures/esener",
+    "/en/facts-and-figures/osh-pulse",
+    "/en/facts-and-figures/workers-exposure-survey-cancer-risk-factors-europe",
+    "/en/safety-and-health-legislation/eu-strategic-framework-health-and-safety-work-2021-2027",
+    "/en/safety-and-health-legislation/european-directives",
+    "/en/safety-and-health-legislation/european-guidelines",
+    "/en/safety-and-health-legislation/osh-strategies",
+    "/en/emerging-risks/green-jobs",
+    "/en/emerging-risks/nanomaterials",
+] + [f"/en/themes/{t}" for t in _THEMES]
+
+
+def ingest_eu_osha_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("eu_osha", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 _SOURCES = {
     "news": f"{_BASE}/en/highlights",
     "publication": f"{_BASE}/en/publications",

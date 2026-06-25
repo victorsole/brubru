@@ -261,6 +261,7 @@ INGESTORS = {
     ("eu_osha", "news"):        eu_osha.ingest_eu_osha_news,
     ("eu_osha", "publication"): eu_osha.ingest_eu_osha_publications,
     ("eu_osha", "event"):       eu_osha.ingest_eu_osha_events,
+    ("eu_osha", "topic"):       eu_osha.ingest_eu_osha_topics,
     # European External Action Service (api_eeas.md) — Playwright-rendered, local
     # only (Chromium not on Railway cron), same as FRA / EASA / ERA.
     ("eeas", "news"):           eeas.ingest_eeas_news,
