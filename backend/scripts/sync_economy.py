@@ -63,6 +63,7 @@ from services.scrapers import economy_emsa as emsa  # noqa: E402
 from services.scrapers import economy_era as era_agency  # noqa: E402
 from services.scrapers import economy_euspa as euspa  # noqa: E402
 from services.scrapers import economy_ela as ela  # noqa: E402
+from services.scrapers import economy_efca as efca_agency  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -255,6 +256,7 @@ INGESTORS = {
     ("euspa", "publication"):   euspa.ingest_euspa_publications,
     ("euspa", "event"):         euspa.ingest_euspa_events,
     ("ela", "news"):            ela.ingest_ela_news,
+    ("efca", "news"):           efca_agency.ingest_efca_news,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
