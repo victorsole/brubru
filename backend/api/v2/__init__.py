@@ -65,6 +65,7 @@ from .easa import router as _easa_router
 from .emsa import router as _emsa_router
 from .era import router as _era_router
 from .euspa import router as _euspa_router
+from .ela import router as _ela_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -117,6 +118,7 @@ router.include_router(_easa_router)
 router.include_router(_emsa_router)
 router.include_router(_era_router)
 router.include_router(_euspa_router)
+router.include_router(_ela_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
