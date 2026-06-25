@@ -90,6 +90,7 @@ from .cor import router as _cor_router
 from .ombudsman import router as _ombudsman_router
 from .edps import router as _edps_router
 from .edpb import router as _edpb_router
+from .eccc import router as _eccc_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -173,6 +174,7 @@ router.include_router(_ombudsman_router)
 # Data-protection + cybersecurity bodies (api_market.md), each its own folder.
 router.include_router(_edps_router)
 router.include_router(_edpb_router)
+router.include_router(_eccc_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
