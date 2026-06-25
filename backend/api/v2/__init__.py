@@ -72,6 +72,7 @@ from .etf import router as _etf_router
 from .eurojust import router as _eurojust_router
 from .cepol import router as _cepol_router
 from .europol import router as _europol_router
+from .frontex import router as _frontex_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -131,6 +132,7 @@ router.include_router(_etf_router)
 router.include_router(_eurojust_router)
 router.include_router(_cepol_router)
 router.include_router(_europol_router)
+router.include_router(_frontex_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
