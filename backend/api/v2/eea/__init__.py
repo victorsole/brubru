@@ -30,5 +30,11 @@ router = make_single_body_folder(
          "source": "the EEA newsroom events (Plone REST API).",
          "extra": "Conferences, webinars and meetings hosted or co-hosted by the European "
                   "Environment Agency."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EEA about and in-depth thematic pages.",
+         "extra": "Snapshots of the EEA's about pages and its in-depth thematic pages "
+                  "across air pollution, biodiversity, climate change mitigation and "
+                  "adaptation, the circular economy, energy, water, soil, land use, "
+                  "transport, nature protection, sustainable finance and more."},
     ],
 )

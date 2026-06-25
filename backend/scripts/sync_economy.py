@@ -157,6 +157,7 @@ INGESTORS = {
     ("eea", "environmental_indicator"): eea_indicators.ingest_eea_indicators,
     ("eea", "news"): eea_content.ingest_eea_news,
     ("eea", "event"): eea_content.ingest_eea_events,
+    ("eea", "topic"): eea_content.ingest_eea_topics,
     ("eige", "news"): eige_content.ingest_eige_news,
     ("eige", "event"): eige_content.ingest_eige_events,
     ("eige", "publication"): eige_content.ingest_eige_publications,
