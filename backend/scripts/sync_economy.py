@@ -167,6 +167,7 @@ INGESTORS = {
     ("cedefop", "publication"): cedefop_content.ingest_cedefop_publications,
     ("cedefop", "topic"): cedefop_content.ingest_cedefop_topics,
     ("euaa", "news"): euaa_content.ingest_euaa_news,
+    ("euaa", "topic"): euaa_content.ingest_euaa_topics,
     ("fra", "case_law"): fra_databases.ingest_fra_case_law,
     ("efca", "tender"): agency_procurement.ingest_efca_tenders,
     ("efca", "eoi_call"): agency_procurement.ingest_efca_calls,

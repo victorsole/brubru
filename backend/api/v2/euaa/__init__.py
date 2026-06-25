@@ -19,5 +19,13 @@ router = make_single_body_folder(
          "source": "the EUAA press releases and news.",
          "extra": "News and press releases from the EU Agency for Asylum on the asylum situation, "
                   "country reports and operations."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EUAA about, asylum-knowledge and operations pages.",
+         "extra": "Snapshots of EUAA's about pages, its asylum-knowledge work (the asylum "
+                  "report, country guidance, courts and tribunals, the Dublin procedure, "
+                  "MedCOI, monitoring of the CEAS, reception, vulnerability), country of "
+                  "origin information, operations (country operations, operational "
+                  "assistance, resettlement) and the fundamental-rights and complaints "
+                  "mechanisms."},
     ],
 )
