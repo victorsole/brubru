@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date,
+    Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, extract_html,
 )
 
 _BASE = "https://www.berec.europa.eu"
@@ -29,6 +29,47 @@ _BASE = "https://www.berec.europa.eu"
 NEWS_PAGES = [f"{_BASE}/en/news/latest-news", f"{_BASE}/en/news/press-releases"]
 PUB_PAGES = [f"{_BASE}/en/news/publications"]
 EVENT_PAGES = [f"{_BASE}/en/events"]
+
+# Curated reference + thematic landing pages, snapshotted as topics.
+_TOPIC_PATHS = [
+    "/en/mission-strategy",
+    "/en/tasks",
+    "/en/tools",
+    "/en/board-of-regulators",
+    "/en/working-groups",
+    "/en/external-cooperation",
+    "/en/public-consultation-procedure",
+    "/en/all-topics",
+    "/en/all-topics/introduction-to-evolution-of-wireless-networks",
+    "/en/all-topics/introduction-to-digital-markets",
+    "/en/all-topics/introduction-to-roaming",
+    "/en/all-topics/introduction-to-end-user-protection",
+    "/en/all-topics/introduction-to-cybersecurity-and-resilience",
+    "/en/annual-work-programme",
+]
+
+
+def ingest_berec_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 2:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        items.append(Item(body_code="berec", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
 
 
 def _parse(html: str, item_type: str):

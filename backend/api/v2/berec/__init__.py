@@ -25,5 +25,12 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the BEREC events listing.",
          "extra": "Plenary meetings, workshops, public debriefings and stakeholder events, with their dates."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of BEREC mission, governance and thematic pages.",
+         "extra": "Snapshots of BEREC's mission and strategy, tasks, tools, the Board "
+                  "of Regulators, working groups, external cooperation, the public "
+                  "consultation procedure, the annual work programme and the all-topics "
+                  "introductions (evolution of wireless networks, digital markets, "
+                  "roaming, end-user protection, cybersecurity and resilience)."},
     ],
 )

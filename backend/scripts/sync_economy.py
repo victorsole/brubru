@@ -215,6 +215,7 @@ INGESTORS = {
     ("berec", "news"):          berec.ingest_berec_news,
     ("berec", "publication"):   berec.ingest_berec_publications,
     ("berec", "event"):         berec.ingest_berec_events,
+    ("berec", "topic"):         berec.ingest_berec_topics,
     ("acer", "news"):           acer.ingest_acer_news,
     ("acer", "publication"):    acer.ingest_acer_publications,
     ("acer", "topic"):          acer.ingest_acer_topics,
