@@ -532,13 +532,13 @@ _ECONOMY_BATCHES: list[list[str]] = [
     # Playwright-fed body for this window: cepol (one heavy Chromium body per
     # window so renders never overlap; see note below).
     ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa",
-     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc"],
+     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc", "hydrogen", "euratom"],
     # batch 1 (15:00 UTC) — Playwright-fed body for this window: europol.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
-     "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor", "edpb", "eda"],
+     "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor", "edpb", "eda", "edctp3"],
     # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
-     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman", "eccc", "satcen"],
+     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman", "eccc", "satcen", "eurohpc"],
 ]
 # Playwright note: cepol/europol/eeas (and the echa-topics + eurofound resources
 # already in the batches) render through headless Chromium inside the backend

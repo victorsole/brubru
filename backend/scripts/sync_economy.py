@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+from functools import partial
 import sys
 from pathlib import Path
 
@@ -92,6 +93,7 @@ from services.scrapers import economy_euiss as euiss_agency  # noqa: E402
 from services.scrapers import economy_eda as eda_agency  # noqa: E402
 from services.scrapers import economy_satcen as satcen_agency  # noqa: E402
 from services.scrapers import economy_esdc as esdc_agency  # noqa: E402
+from services.scrapers import economy_ju as ju  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -400,6 +402,18 @@ INGESTORS = {
     ("satcen", "topic"):        satcen_agency.ingest_satcen_topics,
     ("esdc", "news"):           esdc_agency.ingest_esdc_news,
     ("esdc", "topic"):          esdc_agency.ingest_esdc_topics,
+    ("hydrogen", "news"): partial(ju.ingest_ecl, "hydrogen", "news"),
+    ("hydrogen", "event"): partial(ju.ingest_ecl, "hydrogen", "event"),
+    ("hydrogen", "publication"): partial(ju.ingest_ecl, "hydrogen", "publication"),
+    ("hydrogen", "topic"): partial(ju.ingest_topics, "hydrogen"),
+    ("edctp3", "news"): partial(ju.ingest_ecl, "edctp3", "news"),
+    ("edctp3", "event"): partial(ju.ingest_ecl, "edctp3", "event"),
+    ("edctp3", "topic"): partial(ju.ingest_topics, "edctp3"),
+    ("eurohpc", "news"): partial(ju.ingest_ecl, "eurohpc", "news"),
+    ("eurohpc", "event"): partial(ju.ingest_ecl, "eurohpc", "event"),
+    ("eurohpc", "topic"): partial(ju.ingest_topics, "eurohpc"),
+    ("euratom", "publication"): partial(ju.ingest_ecl, "euratom", "publication"),
+    ("euratom", "topic"): partial(ju.ingest_topics, "euratom"),
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
@@ -495,7 +509,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol", "europol", "frontex", "cinea", "eacea", "hadea", "eismea", "ercea", "rea", "epso", "eas", "cdt", "cert_eu", "cjeu", "eca", "eesc", "cor", "ombudsman", "edps", "edpb", "eccc", "euiss", "eda", "satcen", "esdc"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol", "europol", "frontex", "cinea", "eacea", "hadea", "eismea", "ercea", "rea", "epso", "eas", "cdt", "cert_eu", "cjeu", "eca", "eesc", "cor", "ombudsman", "edps", "edpb", "eccc", "euiss", "eda", "satcen", "esdc", "hydrogen", "edctp3", "eurohpc", "euratom"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
