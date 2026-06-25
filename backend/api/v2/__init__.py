@@ -86,6 +86,7 @@ from .cert_eu import router as _cert_eu_router
 from .cjeu import router as _cjeu_router
 from .eca import router as _eca_router
 from .eesc import router as _eesc_router
+from .cor import router as _cor_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -164,6 +165,7 @@ router.include_router(_cjeu_router)
 router.include_router(_eca_router)
 # Advisory bodies (api_eesc_cor_ombud.md), each its own folder.
 router.include_router(_eesc_router)
+router.include_router(_cor_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
