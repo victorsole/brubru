@@ -68,6 +68,7 @@ from services.scrapers import economy_eurofound as eurofound  # noqa: E402
 from services.scrapers import economy_etf as etf_agency  # noqa: E402
 from services.scrapers import economy_eurojust as eurojust_agency  # noqa: E402
 from services.scrapers import economy_cepol as cepol_agency  # noqa: E402
+from services.scrapers import economy_europol as europol_agency  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -276,6 +277,8 @@ INGESTORS = {
     ("eurojust", "topic"):      eurojust_agency.ingest_eurojust_topics,
     ("cepol", "news"):          cepol_agency.ingest_cepol_news,
     ("cepol", "topic"):         cepol_agency.ingest_cepol_topics,
+    ("europol", "news"):        europol_agency.ingest_europol_news,
+    ("europol", "topic"):       europol_agency.ingest_europol_topics,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
@@ -371,7 +374,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol", "europol"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
