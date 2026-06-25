@@ -78,6 +78,7 @@ from .eacea import router as _eacea_router
 from .hadea import router as _hadea_router
 from .eismea import router as _eismea_router
 from .ercea import router as _ercea_router
+from .rea import router as _rea_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -144,6 +145,7 @@ router.include_router(_eacea_router)
 router.include_router(_hadea_router)
 router.include_router(_eismea_router)
 router.include_router(_ercea_router)
+router.include_router(_rea_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
