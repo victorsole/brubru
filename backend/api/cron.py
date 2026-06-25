@@ -538,7 +538,7 @@ _ECONOMY_BATCHES: list[list[str]] = [
      "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor"],
     # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
-     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu"],
+     "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman"],
 ]
 # Playwright note: cepol/europol/eeas (and the echa-topics + eurofound resources
 # already in the batches) render through headless Chromium inside the backend

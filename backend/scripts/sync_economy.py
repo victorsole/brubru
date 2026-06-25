@@ -84,6 +84,7 @@ from services.scrapers import economy_cjeu as cjeu_agency  # noqa: E402
 from services.scrapers import economy_eca as eca_agency  # noqa: E402
 from services.scrapers import economy_eesc as eesc_agency  # noqa: E402
 from services.scrapers import economy_cor as cor_agency  # noqa: E402
+from services.scrapers import economy_ombudsman as ombudsman_agency  # noqa: E402
 from services.scrapers import agency_procurement as agency_procurement  # noqa: E402
 from services.scrapers import agency_consultations as agency_consultations  # noqa: E402
 from services.scrapers import echa_candidate_list as echa_candidate_list  # noqa: E402
@@ -365,6 +366,8 @@ INGESTORS = {
     ("cor", "news"):            cor_agency.ingest_cor_news,
     ("cor", "opinion"):         cor_agency.ingest_cor_opinions,
     ("cor", "topic"):           cor_agency.ingest_cor_topics,
+    ("ombudsman", "news"):      ombudsman_agency.ingest_ombudsman_news,
+    ("ombudsman", "topic"):     ombudsman_agency.ingest_ombudsman_topics,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
@@ -460,7 +463,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backfill economy_items (ECB folder).")
     ap.add_argument("--body", choices=["ecb", "ecb_ssm", "eba", "esma", "eiopa", "esrb", "srb", "eib", "amla", "eppo", "esm", "berec", "acer", "eit", "enisa", "eu_lisa", "euipo", "cpvo",
-                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol", "europol", "frontex", "cinea", "eacea", "hadea", "eismea", "ercea", "rea", "epso", "eas", "cdt", "cert_eu", "cjeu", "eca", "eesc", "cor"])
+                             "ema", "ecdc", "efsa", "eu_osha", "commission", "parliament", "council", "eea", "echa", "emsa", "euda", "eige", "cedefop", "euaa", "fra", "eeas", "efca", "eurojust", "etf", "easa", "era", "euspa", "ela", "eurofound", "cepol", "europol", "frontex", "cinea", "eacea", "hadea", "eismea", "ercea", "rea", "epso", "eas", "cdt", "cert_eu", "cjeu", "eca", "eesc", "cor", "ombudsman"])
     ap.add_argument("--type", default="all",
                     help="'all' (every resource registered for the body) or a specific item_type.")
     ap.add_argument("--all-ecb", action="store_true", help="ECB + SSM, every available type")
