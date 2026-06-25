@@ -28,5 +28,12 @@ router = make_single_body_folder(
          "extra": "Reports and studies published by EMSA, including seafarer "
                   "statistics, pollution-response activity reports and technical "
                   "studies on maritime safety and sustainability."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EMSA thematic and operational-system pages.",
+         "extra": "Snapshots of EMSA's reference pages: its work areas (ship safety, "
+                  "accident investigation, pollution response, maritime surveillance, "
+                  "earth observation and RPAS) and its operational systems "
+                  "(SafeSeaNet, LRIT, the European Maritime Single Window, Copernicus, "
+                  "CISE)."},
     ],
 )

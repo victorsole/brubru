@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, extract_html, _iso_dt,
 )
 
 _BASE = "https://www.easa.europa.eu"
@@ -28,6 +28,21 @@ NEWS_PAGES = [f"{_BASE}/en/newsroom-and-events/news",
               f"{_BASE}/en/newsroom-and-events/press-releases"]
 PUB_PAGES = [f"{_BASE}/en/document-library/research-reports"]
 EVENT_PAGES = [f"{_BASE}/en/newsroom-and-events/events/current-and-upcoming-events"]
+
+# Curated thematic / reference pages (api_socjust.md): the regulatory domains and
+# the "EASA Light" topic hub. Snapshotted as item_type='topic'.
+_TOPIC_PATHS = [
+    "/en/domains/aerodromes", "/en/domains/air-operations",
+    "/en/domains/air-traffic-management", "/en/domains/aircraft-products",
+    "/en/domains/aircrew-and-medical", "/en/domains/civil-drones",
+    "/en/domains/cyber-security", "/en/domains/environment",
+    "/en/domains/general-aviation", "/en/domains/international-cooperation",
+    "/en/domains/safety-management", "/en/domains/research-innovation",
+    "/en/domains/rotorcraft-vtol",
+    "/en/light/topics/easa-and-you", "/en/light/topics/drones",
+    "/en/light/topics/urban-air-mobility", "/en/light/topics/sustainability",
+    "/en/light/topics/research-and-innovation", "/en/light/topics/international",
+]
 
 
 def _parse(html: str):
@@ -95,3 +110,29 @@ def ingest_easa_publications(*, fetch_bodies: bool = True) -> list[Item]:
 
 def ingest_easa_events(*, fetch_bodies: bool = True) -> list[Item]:
     return _scrape("event", EVENT_PAGES, fetch_bodies=fetch_bodies)
+
+
+def _snapshot_topics(base: str, paths, body_code: str, *, fetch_bodies: bool) -> list[Item]:
+    """Snapshot a curated list of thematic / reference pages as item_type='topic'.
+    Each page's H1 is the title and its main content is the body."""
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in paths:
+        url = base + path
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        title = clean(h1.get_text(" ", strip=True)) if h1 else path.rsplit("/", 1)[-1].replace("-", " ")
+        if not title:
+            continue
+        items.append(Item(body_code=body_code, item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
+
+
+def ingest_easa_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    return _snapshot_topics(_BASE, _TOPIC_PATHS, "easa", fetch_bodies=fetch_bodies)

@@ -21,12 +21,36 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail
+from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, extract_html
 
 _BASE = "https://www.emsa.europa.eu"
 
 NEWS_PAGES = [f"{_BASE}/newsroom/latest-news.html"]
 PUB_PAGES = [f"{_BASE}/publications/reports.html"]
+
+# Curated thematic / reference pages (api_socjust.md): EMSA's "what we do" areas
+# and its operational systems. Snapshotted as item_type='topic'.
+_TOPIC_PATHS = [
+    "/we-do.html",
+    "/we-do/sustainability/environment.html",
+    "/we-do/sustainability/pollution-response-services.html",
+    "/we-do/safety/accident-investigation.html",
+    "/we-do/safety/ship-safety-standards.html",
+    "/we-do/safety/places-of-refuge.html",
+    "/we-do/safety/marine-equipment.html",
+    "/we-do/safety/maritime-security.html",
+    "/we-do/safety/human-element.html",
+    "/we-do/digitalisation/maritime-monitoring.html",
+    "/we-do/digitalisation/ship-inspection-support.html",
+    "/we-do/digitalisation/mss.html",
+    "/we-do/surveillance/earthobservationservices.html",
+    "/we-do/surveillance/rpas.html",
+    "/we-do/assistance/training.html",
+    "/we-do/assistance/enlargement.html",
+    "/we-do/assistance/visits-and-inspections.html",
+    "/we-do/assistance/coast-guard-function.html",
+    "/ssn-main.html", "/lrit.html", "/emsw.html", "/copernicus.html", "/cise.html",
+]
 
 _DMY = re.compile(r"(\d{1,2})\.(\d{1,2})\.(\d{4})")
 
@@ -99,3 +123,28 @@ def ingest_emsa_news(*, fetch_bodies: bool = True) -> list[Item]:
 
 def ingest_emsa_publications(*, fetch_bodies: bool = True) -> list[Item]:
     return _scrape("publication", PUB_PAGES, fetch_bodies=fetch_bodies)
+
+
+def ingest_emsa_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1, .contentheading, .page-header")
+        if h1 and len(h1.get_text(strip=True)) > 3:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" - ")[0].split(" | ")[0])
+        else:
+            title = path.rsplit("/", 1)[-1].replace(".html", "").replace("-", " ").title()
+        if not title:
+            continue
+        items.append(Item(body_code="emsa", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items

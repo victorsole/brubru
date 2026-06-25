@@ -30,5 +30,11 @@ router = make_single_body_folder(
          "source": "the EASA events listing.",
          "extra": "Committee and expert-group meetings, stakeholder advisory bodies, "
                   "workshops and conferences hosted by EASA."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EASA regulatory-domain and topic-hub pages.",
+         "extra": "Snapshots of the EASA reference pages: the regulatory domains "
+                  "(aerodromes, air operations, air traffic management, aircraft "
+                  "products, aircrew, civil drones, cybersecurity, environment, "
+                  "safety management and more) and the EASA Light topic hub."},
     ],
 )
