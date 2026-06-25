@@ -217,6 +217,7 @@ INGESTORS = {
     ("easa", "consultation"): agency_consultations.ingest_easa_consultations,
     ("era", "consultation"): agency_consultations.ingest_era_consultations,
     ("fra", "charter_article"): fra_databases.ingest_fra_charterpedia,
+    ("fra", "topic"): fra_databases.ingest_fra_topics,
     ("echa", "svhc_substance"): echa_candidate_list.ingest_echa_candidate_list,
     ("echa", "news"): echa_news.ingest_echa_news,
     ("echa", "topic"): echa_news.ingest_echa_topics,

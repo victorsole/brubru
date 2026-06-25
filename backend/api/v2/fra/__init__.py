@@ -28,5 +28,12 @@ router = make_single_body_folder(
                   "article with its FRA page collecting the explanations, related EU and national "
                   "case-law and constitutional provisions. Filter with q (e.g. 'data protection' "
                   "or 'asylum')."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of FRA about and fundamental-rights theme pages.",
+         "extra": "Snapshots of FRA's about pages and its fundamental-rights themes: access "
+                  "to asylum, AI and big data, borders and information systems, business and "
+                  "human rights, child protection, data protection, hate crime, the rule of "
+                  "law, Roma, racial and ethnic origin, people with disabilities, victims' "
+                  "rights, trafficking and labour exploitation, and more."},
     ],
 )
