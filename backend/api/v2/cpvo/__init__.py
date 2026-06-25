@@ -24,5 +24,11 @@ router = make_single_body_folder(
         {"item_type": "event", "slug": "events", "noun": "events",
          "source": "the CPVO conferences and events listing.",
          "extra": "Seminars, conferences and meetings, with their dates."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of CPVO about, mission and law-and-practice pages.",
+         "extra": "Snapshots of CPVO reference pages: about us, our mission, the "
+                  "strategic plan, research and development, law and practice (board of "
+                  "appeal, legislation in force), reports, statistics and the FAQ on "
+                  "Community plant variety rights."},
     ],
 )

@@ -20,11 +20,48 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, extract_html,
 )
 
 _BASE = "https://cpvo.europa.eu"
 _PATH_DATE = re.compile(r"/(\d{4})-(\d{2})/")
+
+# Curated about / mission / law-and-practice landing pages, snapshotted as topics.
+_TOPIC_PATHS = [
+    "/en/about-us",
+    "/our-mission",
+    "/about-us/what-we-do/strategic-plan-cpvo",
+    "/about-us/what-we-do/research-and-development",
+    "/about-us/law-and-practice",
+    "/about-us/law-and-practice/board-appeal",
+    "/about-us/law-and-practice/legislation-in-force",
+    "/about-us/what-we-do/reports",
+    "/statistics",
+    "/en/help-center/faq",
+]
+
+
+def ingest_cpvo_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 2:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rstrip("/").rsplit("/", 1)[-1].replace("-", " ").title()
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        items.append(Item(body_code="cpvo", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
 
 
 def _parse_listing(html: str):

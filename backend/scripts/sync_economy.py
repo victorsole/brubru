@@ -234,6 +234,7 @@ INGESTORS = {
     ("cpvo", "news"):           cpvo.ingest_cpvo_news,
     ("cpvo", "publication"):    cpvo.ingest_cpvo_publications,
     ("cpvo", "event"):          cpvo.ingest_cpvo_events,
+    ("cpvo", "topic"):          cpvo.ingest_cpvo_topics,
     ("ema", "news"):            ema.ingest_ema_news,
     ("ema", "event"):           ema.ingest_ema_events,
     ("ema", "medicine"):        ema.ingest_ema_medicines,
