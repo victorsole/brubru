@@ -23,6 +23,12 @@ _resources = [
     {"item_type": "medicine", "slug": "medicines", "noun": "medicines",
      "source": "the EMA medicines dataset (the full register of EU-evaluated medicines / EPARs).",
      "extra": "Every medicine evaluated by EMA — name, EMA product number, status, INN, active substance, therapeutic area, marketing-authorisation holder, key dates and the EPAR URL. Filter with q (e.g. an active substance or therapeutic area)."},
+    {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+     "source": "a curated set of EMA about-us, scientific-committee and human-regulatory pages.",
+     "extra": "Snapshots of EMA's about-us pages (who we are, what we do, how we work, the "
+              "European medicines regulatory network, crisis preparedness, history, SME "
+              "support, annual reports), its scientific committees (CHMP, PRAC, CAT, COMP, "
+              "HMPC, CVMP, PDCO) and the human-regulatory overview."},
 ]
 # One resource per EMA register dataset (shortages, referrals, orphan designations, ...).
 _resources += [

@@ -21,10 +21,39 @@ from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
     Item, clean, norm_url, http_get, fetch_detail, parse_listing_date, _iso_dt,
+    snapshot_topics,
 )
 
 _BASE = "https://www.ema.europa.eu"
 _NEWS_SLUG = re.compile(r"^/en/news/[a-z0-9]")
+
+# Curated about-us, scientific-committee and human-regulatory landing pages,
+# snapshotted as topics.
+_TOPIC_PATHS = [
+    "/en/about-us/who-we-are",
+    "/en/about-us/what-we-do",
+    "/en/about-us/how-we-work",
+    "/en/about-us/how-we-work/european-medicines-regulatory-network",
+    "/en/about-us/what-we-do/crisis-preparedness-management",
+    "/en/about-us/history-ema",
+    "/en/about-us/support-smes",
+    "/en/about-us/annual-reports-work-programmes",
+    "/en/from-lab-to-patient-timeline",
+    "/en/committees/how-committees-work",
+    "/en/committees/committee-medicinal-products-human-use-chmp",
+    "/en/committees/pharmacovigilance-risk-assessment-committee-prac",
+    "/en/committees/committee-advanced-therapies-cat",
+    "/en/committees/committee-orphan-medicinal-products-comp",
+    "/en/committees/committee-herbal-medicinal-products-hmpc",
+    "/en/committees/committee-veterinary-medicinal-products-cvmp",
+    "/en/committees/paediatric-committee-pdco",
+    "/en/human-regulatory-overview",
+    "/en/human-regulatory-overview/advanced-therapy-medicinal-products-overview",
+]
+
+
+def ingest_ema_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return snapshot_topics("ema", _BASE, _TOPIC_PATHS, fetch_bodies=fetch_bodies)
 _EVENT_NAV = {"upcoming-events", "past-events", "events"}
 
 

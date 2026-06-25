@@ -248,6 +248,7 @@ INGESTORS = {
     ("ema", "news"):            ema.ingest_ema_news,
     ("ema", "event"):           ema.ingest_ema_events,
     ("ema", "medicine"):        ema.ingest_ema_medicines,
+    ("ema", "topic"):           ema.ingest_ema_topics,
     ("ecdc", "news"):           ecdc.ingest_ecdc_news,
     ("ecdc", "publication"):    ecdc.ingest_ecdc_publications,
     ("ecdc", "surveillance_topic"): ecdc.ingest_ecdc_surveillance,
