@@ -521,7 +521,7 @@ async def cron_sync_daily(
 # Economy folders (economy_items): the v2 institutional, agency and database
 # endpoints (/api/v2/<body>/* + Funding & Tenders + Public Consultations). One
 # sync_economy.py run per body backfills that body's news, events, publications,
-# databases, tenders, grants, calls and consultations. ~42 bodies are split into
+# databases, tenders, grants, calls and consultations. ~45 bodies are split into
 # three daily batches fired at 10:00 / 15:00 / 21:00 UTC (otherwise-quiet hours)
 # so the scraper load is spread rather than hitting every EU site at once.
 # `commission` is intentionally excluded: its sources (sanctions, comitology,
@@ -529,15 +529,22 @@ async def cron_sync_daily(
 # weekly tiers via their dedicated backfill scripts.
 _ECONOMY_BATCHES: list[list[str]] = [
     # batch 0 (10:00 UTC) — financial-sector + early-alphabet bodies
+    # Playwright-fed body for this window: cepol (one heavy Chromium body per
+    # window so renders never overlap; see note below).
     ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa",
-     "cinea", "easa", "ela"],
-    # batch 1 (15:00 UTC)
+     "cinea", "easa", "ela", "cepol"],
+    # batch 1 (15:00 UTC) — Playwright-fed body for this window: europol.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
-     "emsa"],
-    # batch 2 (21:00 UTC)
+     "emsa", "europol"],
+    # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
-     "euspa", "frontex"],
+     "euspa", "frontex", "eeas"],
 ]
+# Playwright note: cepol/europol/eeas (and the echa-topics + eurofound resources
+# already in the batches) render through headless Chromium inside the backend
+# container. They are spread one-per-window so at most one Chromium-heavy sync
+# runs at 10:00 / 15:00 / 21:00 UTC. If the container OOMs on these, move the
+# offending body to a local/manual refresh (drop it from this list).
 
 
 @router.post("/sync/economy")
@@ -549,7 +556,7 @@ async def cron_sync_economy(
     Economy folders sync (daily, batched): refreshes the v2 institutional,
     agency and database endpoints backed by economy_items -- news, events,
     publications, databases, tenders/grants/calls and agency consultations --
-    across ~42 EU bodies. Split into three batches (10:00 / 15:00 / 21:00 UTC)
+    across ~45 EU bodies. Split into three batches (10:00 / 15:00 / 21:00 UTC)
     to spread scraper load. Fail-soft per body: one body's scraper failing
     never blocks the rest.
 

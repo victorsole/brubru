@@ -24,7 +24,7 @@
       "freshness_label": "Synced once per day at 04:00 UTC from {source}."
     },
     "economy_daily": {
-      "description": "v2 institutional/agency/database endpoints (economy_items). Refreshed daily, batched across 10:00 / 15:00 / 21:00 UTC to spread scraper load over ~42 EU bodies.",
+      "description": "v2 institutional/agency/database endpoints (economy_items). Refreshed daily, batched across 10:00 / 15:00 / 21:00 UTC to spread scraper load over ~45 EU bodies.",
       "cron": "0 10,15,21 * * *",
       "freshness_label": "Synced once per day (10:00 / 15:00 / 21:00 UTC, batched by body) from {source}."
     },
@@ -526,7 +526,7 @@
       "source": "Per-body EU institutional, agency and database content: news, events, publications, databases",
       "script": "scripts/sync_economy.py --body <body> --type all (via POST /api/cron/sync/economy, batches 0-2)",
       "tier": "economy_daily",
-      "notes": "~42 bodies split across 10:00/15:00/21:00 UTC. 'commission' excluded -- its specialised sources (sanctions, comitology, GIs, trade defence, JRC, transparency) are on the daily/weekly tiers."
+      "notes": "~45 bodies split across 10:00/15:00/21:00 UTC. 'commission' excluded -- its specialised sources (sanctions, comitology, GIs, trade defence, JRC, transparency) are on the daily/weekly tiers."
     }
   ]
 }
