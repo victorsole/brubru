@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, _iso_dt
+from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, extract_html, _iso_dt
 
 _BASE = "https://www.era.europa.eu"
 
@@ -30,6 +30,26 @@ PUB_PAGES = [f"{_BASE}/library/documents-regulations/era-recommendations_en",
              f"{_BASE}/library/documents-regulations/opinions-and-technical-advices",
              f"{_BASE}/library/documents-regulations/era-work-programmes-activity-reports"]
 EVENT_PAGES = [f"{_BASE}/events-training/events-training"]
+
+# Curated thematic / reference pages (api_socjust.md): ERA's regulatory domains.
+# Snapshotted as item_type='topic'.
+_TOPIC_PATHS = [
+    "/agency/about-us",
+    "/domains/applicants",
+    "/domains/technical-specifications-interoperability_en",
+    "/domains/infrastructure/european-rail-traffic-management-system-ertms_en",
+    "/domains/safety-management",
+    "/domains/accident-incident",
+    "/domains/operation/transport-dangerous-goods_en",
+    "/domains/rail-environment",
+    "/domains/cybersecurity-railways",
+    "/domains/era-academy",
+    "/domains/trains/route-compatibility-check-rcc_en",
+    "/domains/trains/certification-entities-charge-maintenance_en",
+    "/domains/operation/train-drivers_en",
+    "/domains/conformity-assessment_en",
+    "/activities/national-rules_en",
+]
 
 _MONTHS = {m: i for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june", "july", "august",
@@ -119,3 +139,28 @@ def ingest_era_publications(*, fetch_bodies: bool = True) -> list[Item]:
 
 def ingest_era_events(*, fetch_bodies: bool = True) -> list[Item]:
     return _scrape("event", EVENT_PAGES, fetch_bodies=fetch_bodies)
+
+
+def ingest_era_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 3:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rsplit("/", 1)[-1].replace("_en", "").replace("-", " ").title()
+        if not title:
+            continue
+        items.append(Item(body_code="era", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items

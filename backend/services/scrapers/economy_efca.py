@@ -15,11 +15,31 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, _iso_dt
+from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, extract_html, _iso_dt
 
 _BASE = "https://www.efca.europa.eu"
 
 NEWS_PAGES = [f"{_BASE}/en/news/latest"]
+
+# Curated thematic / reference pages (api_socjust.md): EFCA's activities and the
+# sea-basin operations / joint deployment plans. Snapshotted as item_type='topic'.
+_TOPIC_PATHS = [
+    "/en/content/efca-activities",
+    "/en/content/eu-operations",
+    "/en/content/data-and-systems-fisheries-activities",
+    "/en/content/efca-fisheries-information-system",
+    "/en/content/training",
+    "/en/content/real-time-closures-rtc",
+    "/en/content/international-operations",
+    "/en/content/cooperation-regional-bodies",
+    "/en/content/joint-deployment-plans-eu-waters",
+    "/en/content/mediterranean",
+    "/en/content/baltic-sea",
+    "/en/content/north-sea",
+    "/en/content/black-sea",
+    "/en/content/western-waters",
+    "/en/content/eu-coast-guard-cooperation",
+]
 
 
 def _parse(html: str):
@@ -70,3 +90,28 @@ def _scrape(item_type: str, listing_urls, *, fetch_bodies: bool) -> list[Item]:
 
 def ingest_efca_news(*, fetch_bodies: bool = True) -> list[Item]:
     return _scrape("news", NEWS_PAGES, fetch_bodies=fetch_bodies)
+
+
+def ingest_efca_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 3:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rsplit("/", 1)[-1].replace("-", " ").title()
+        if not title:
+            continue
+        items.append(Item(body_code="efca", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items

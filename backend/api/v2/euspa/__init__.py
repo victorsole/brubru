@@ -30,5 +30,12 @@ router = make_single_body_folder(
          "source": "the EUSPA events listing.",
          "extra": "Conferences, forums, webinars and user-consultation events "
                   "organised or attended by EUSPA."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EUSPA space-programme and industry-sector pages.",
+         "extra": "Snapshots of EUSPA's reference pages: the EU space-programme "
+                  "components (Galileo, EGNOS, Copernicus, secure SatCom, space "
+                  "situational awareness) and the industry sectors it serves "
+                  "(agriculture, aviation and drones, maritime, rail, energy, "
+                  "emergency management, insurance and finance and more)."},
     ],
 )

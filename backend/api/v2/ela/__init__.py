@@ -23,5 +23,12 @@ router = make_single_body_folder(
          "extra": "News from the European Labour Authority on labour mobility, "
                   "posting of workers, social-security coordination, EURES and joint "
                   "inspections."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ELA policy-topic and activity pages.",
+         "extra": "Snapshots of ELA's reference pages: its policy topics (posting of "
+                  "workers, social-security coordination, international road transport, "
+                  "undeclared work) and its activities (EURES, concerted and joint "
+                  "inspections, cooperation between member states, mediation, analysis "
+                  "and risk assessment)."},
     ],
 )

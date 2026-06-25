@@ -17,12 +17,29 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, _iso_dt
+from services.scrapers.economy_common import Item, clean, norm_url, http_get, fetch_detail, extract_html, _iso_dt
 
 _BASE = "https://www.ela.europa.eu"
 
 NEWS_PAGES = [f"{_BASE}/en/news-events/news"]
 EVENT_PAGES = [f"{_BASE}/en/news-events/events"]
+
+# Curated thematic / reference pages (api_socjust.md): ELA's policy topics and
+# its activities. Snapshotted as item_type='topic'.
+_TOPIC_PATHS = [
+    "/en/topics/posting-workers",
+    "/en/topics/social-security-coordination",
+    "/en/topics/social-aspects-international-road-transport",
+    "/en/topics/tackling-undeclared-work",
+    "/en/activities/information-and-services",
+    "/en/activities/eures",
+    "/en/activities/concerted-and-joint-inspections",
+    "/en/activities/cooperation-between-member-states",
+    "/en/activities/training-and-capacity-building",
+    "/en/activities/mediation",
+    "/en/activities/analysis-and-risk-assessment",
+    "/en/activities/relations-social-partners",
+]
 
 _LINK_SEL = ("a.standalone, a.card-title, .oe-sc-news__node-title a[href], "
              ".node-title a[href], h2 a[href], h3 a[href]")
@@ -76,6 +93,31 @@ def _scrape(item_type: str, listing_urls, *, fetch_bodies: bool) -> list[Item]:
 
 def ingest_ela_news(*, fetch_bodies: bool = True) -> list[Item]:
     return _scrape("news", NEWS_PAGES, fetch_bodies=fetch_bodies)
+
+
+def ingest_ela_topics(*, fetch_bodies: bool = True) -> list[Item]:
+    items: list[Item] = []
+    now = datetime.now(timezone.utc)
+    for path in _TOPIC_PATHS:
+        url = _BASE + path
+        r = http_get(url)
+        if r is None:
+            continue
+        body_txt, body_html = (extract_html(r.text) if fetch_bodies else (None, None))
+        soup = BeautifulSoup(r.text, "html.parser")
+        h1 = soup.select_one("main h1, h1")
+        if h1 and len(h1.get_text(strip=True)) > 3:
+            title = clean(h1.get_text(" ", strip=True))
+        elif soup.title and soup.title.get_text(strip=True):
+            title = clean(soup.title.get_text(strip=True).split(" | ")[0].split(" - ")[0])
+        else:
+            title = path.rsplit("/", 1)[-1].replace("-", " ").title()
+        if not title:
+            continue
+        items.append(Item(body_code="ela", item_type="topic", title=title[:300],
+                          public_url=url, creation_date=now, source_kind="html",
+                          guid=url, body_txt=body_txt, body_html=body_html))
+    return items
 
 
 def ingest_ela_events(*, fetch_bodies: bool = True) -> list[Item]:

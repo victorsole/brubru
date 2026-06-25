@@ -31,5 +31,12 @@ router = make_single_body_folder(
          "source": "the ERA events and training listing.",
          "extra": "Training courses, workshops and events organised by the EU Agency "
                   "for Railways."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of ERA regulatory-domain pages.",
+         "extra": "Snapshots of ERA's reference pages: the regulatory domains "
+                  "(technical specifications for interoperability, ERTMS, safety "
+                  "management, accidents and incidents, dangerous goods, rail "
+                  "environment, railway cybersecurity, train drivers, conformity "
+                  "assessment and national rules)."},
     ],
 )

@@ -22,5 +22,11 @@ router = make_single_body_folder(
          "extra": "News from the European Fisheries Control Agency on joint "
                   "deployment plans, real-time closures, inspections, coast-guard "
                   "cooperation and fisheries-control operations."},
+        {"item_type": "topic", "slug": "topics", "noun": "topic pages",
+         "source": "a curated set of EFCA activity and sea-basin operation pages.",
+         "extra": "Snapshots of EFCA's reference pages: its activities (EU operations, "
+                  "fisheries data and systems, training, real-time closures, "
+                  "international operations) and the sea-basin joint deployment plans "
+                  "(Mediterranean, Baltic Sea, North Sea, Black Sea, western waters)."},
     ],
 )

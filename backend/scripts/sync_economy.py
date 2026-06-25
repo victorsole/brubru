@@ -254,11 +254,15 @@ INGESTORS = {
     ("era", "news"):            era_agency.ingest_era_news,
     ("era", "publication"):     era_agency.ingest_era_publications,
     ("era", "event"):           era_agency.ingest_era_events,
+    ("era", "topic"):           era_agency.ingest_era_topics,
     ("euspa", "news"):          euspa.ingest_euspa_news,
     ("euspa", "publication"):   euspa.ingest_euspa_publications,
     ("euspa", "event"):         euspa.ingest_euspa_events,
+    ("euspa", "topic"):         euspa.ingest_euspa_topics,
     ("ela", "news"):            ela.ingest_ela_news,
+    ("ela", "topic"):           ela.ingest_ela_topics,
     ("efca", "news"):           efca_agency.ingest_efca_news,
+    ("efca", "topic"):          efca_agency.ingest_efca_topics,
 }
 
 # EMA register datasets (downloadable .xlsx) — one resource per dataset.
