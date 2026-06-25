@@ -99,6 +99,7 @@ from .hydrogen import router as _hydrogen_router
 from .edctp3 import router as _edctp3_router
 from .eurohpc import router as _eurohpc_router
 from .euratom import router as _euratom_router
+from .aviation import router as _aviation_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -193,6 +194,7 @@ router.include_router(_hydrogen_router)
 router.include_router(_edctp3_router)
 router.include_router(_eurohpc_router)
 router.include_router(_euratom_router)
+router.include_router(_aviation_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
