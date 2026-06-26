@@ -755,6 +755,7 @@ def build_collection() -> dict:
     domains = [
         _build_flat_domain(paths, "events", "Events (all EU bodies)"),
         _build_flat_domain(paths, "news", "News (all EU bodies)"),
+        _build_flat_domain(paths, "programmes", "Funding Programmes (all EU)"),
         _build_legislative_domain(paths),
         _build_parliament_domain(paths),
         _build_commission_domain(paths),
