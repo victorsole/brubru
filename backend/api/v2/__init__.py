@@ -110,6 +110,7 @@ from .sns import router as _sns_router
 from .events import router as _events_router
 from .news import router as _news_router
 from .programmes import router as _programmes_router
+from .extract import router as _extract_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -215,6 +216,7 @@ router.include_router(_sns_router)
 router.include_router(_events_router)
 router.include_router(_news_router)
 router.include_router(_programmes_router)
+router.include_router(_extract_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
