@@ -165,6 +165,13 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>26 June 2026: Input-first extract endpoint (935 total)</h3>
+<p>A new folder, <code>/api/v2/extract</code>, turns the API input-first: give it any EU institutional URL and it returns structured items, the way Tavily does for the open web but built for the EU estate. It detects which of the eight EU web platforms the page is built on (the EC component library, Drupal, WordPress, Dynamics, JCMS, SharePoint, single-page apps, or bespoke), fetches it through the matching path (a plain request, or a headless browser for JavaScript-rendered and walled sites), and returns the same five-datapoint items as the rest of the API.</p>
+<ul>
+<li><strong>One call, any EU page:</strong> <code>GET /api/v2/extract?url=https://cinea.ec.europa.eu/news-events/news_en</code> returns the news items, dated and titled, without anyone writing a scraper for CINEA.</li>
+<li>You get the detected platform, how it was fetched, and the extracted items. Live, fetched at request time.</li>
+</ul>
+
 <h3>26 June 2026: Public Consultations made cross-body (934 total)</h3>
 <p>The <code>/api/v2/consultations/</code> folder now aggregates every EU public consultation from every body in one feed: the Commission's "Have Your Say" register and the decentralised agency consultations (EIOPA, BEREC, ACER, EASA, ECHA, EMA, EDPB and more) in one place, with the same pick-your-scope picker as Events and News.</p>
 <ul>
