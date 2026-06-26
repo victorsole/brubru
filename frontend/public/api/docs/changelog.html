@@ -165,6 +165,14 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>26 June 2026: Funding Programmes catalogue (931 total)</h3>
+<p>A new folder, <code>/api/v2/programmes/</code>, catalogues every EU funding programme in one place: the 46 programmes of the 2021-2027 budget plus the 10 Joint Undertakings that run Horizon Europe calls, enriched with the managing institution and body, the responsible department, programme type, period, indicative budget and the live "where to apply" portal.</p>
+<ul>
+<li><strong>Pick your scope:</strong> <code>?institution=Joint Undertaking</code> for everything a kind of body runs, <code>?body=cinea</code> or <code>?dg=DG CLIMA</code> for a specific managing body or department, or filter by MFF heading, cluster, programme type or free text.</li>
+<li><strong>Endpoints:</strong> directory (totals and budget by institution, heading, type and coverage), <code>/all</code> (the filterable list, largest budget first), <code>/institutions</code> (the pick-list of institutions, bodies and departments), <code>/{acronym}</code> (one programme in full).</li>
+<li>Each programme links to its live application portal and, where Brubru already serves the data, to its calls/projects endpoint. Budgets are indicative 2021-2027 headline allocations.</li>
+</ul>
+
 <h3>26 June 2026: Cross-body Events and News aggregators (927 total)</h3>
 <p>Two new folders centralise events and news across every EU body into a single feed each, so you no longer query 80+ folders one by one. Both are query-time aggregators (they store nothing new): <code>/api/v2/events/</code> unions the institutional calendar with every body's events, and <code>/api/v2/news/</code> bundles news, press releases, stories, speeches and statements.</p>
 <ul>
