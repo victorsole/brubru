@@ -165,6 +165,14 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>26 June 2026: Public Consultations made cross-body (934 total)</h3>
+<p>The <code>/api/v2/consultations/</code> folder now aggregates every EU public consultation from every body in one feed: the Commission's "Have Your Say" register and the decentralised agency consultations (EIOPA, BEREC, ACER, EASA, ECHA, EMA, EDPB and more) in one place, with the same pick-your-scope picker as Events and News.</p>
+<ul>
+<li><strong>Pick your scope:</strong> <code>?institution=European Commission</code>, <code>?body=echa,ema</code>, <code>?family=finance-economy</code>, or everything; <code>?status=open</code> for live consultations.</li>
+<li><strong>Endpoints:</strong> directory, <code>/all</code> (filter by body, family, institution, status, closing-date range and free text), <code>/bodies</code> (the pick-list), <code>/{id}</code> (one consultation in full). Each carries the responsible DG, policy areas, feedback count, closing date and the link.</li>
+<li>973 consultations across 12 bodies (288 currently open).</li>
+</ul>
+
 <h3>26 June 2026: Funding Programmes catalogue (931 total)</h3>
 <p>A new folder, <code>/api/v2/programmes/</code>, catalogues every EU funding programme in one place: the 46 programmes of the 2021-2027 budget plus the 10 Joint Undertakings that run Horizon Europe calls, enriched with the managing institution and body, the responsible department, programme type, period, indicative budget and the live "where to apply" portal.</p>
 <ul>
