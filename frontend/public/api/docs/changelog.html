@@ -47,7 +47,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 523 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 919 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -164,6 +164,16 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 </ul>
 
 <h2>2026</h2>
+
+<h3>26 June 2026: Every EU institution, body and agency now has a folder (919 total)</h3>
+<p>The build-out of the Data Provider vertical is complete: every EU institution, body and agency is now on the public API as its own folder. This release closes the long tail, the EURATOM Joint Undertakings and the remaining executive agencies, advisory bodies, justice-and-home-affairs agencies, and security-and-defence bodies, and brings the published surface to <strong>919 endpoints across 84 folders</strong>.</p>
+<ul>
+<li><strong>EURATOM &amp; Joint Undertakings (12):</strong> Fusion for Energy (F4E), Europe's Rail, Smart Networks and Services (SNS), Euratom Supply Agency, Clean Hydrogen, Clean Aviation, SESAR 3, Chips, Circular Bio-based Europe (CBE), Global Health EDCTP3, Innovative Health Initiative (IHI) and EuroHPC, each a <code>/api/v2/&lt;body&gt;/</code> folder with the folder directory plus list and detail pairs (news, publications, events and topic snapshots, per body).</li>
+<li><strong>Executive agencies:</strong> HaDEA, CINEA, EISMEA, ERCEA, REA and EACEA.</li>
+<li><strong>Justice and home affairs:</strong> the Court of Justice (CJEU), Eurojust, Europol, Frontex and CEPOL.</li>
+<li><strong>Advisory, oversight, defence and external action:</strong> the Committee of the Regions, the European Economic and Social Committee, the Court of Auditors, the Ombudsman, the EDPS and EDPB, plus the defence cluster (EDA, SatCen, EUISS, ESDC) and the European External Action Service.</li>
+<li><strong>Postman:</strong> all 919 requests are mirrored in the published <em>Brubru API v2</em> collection, grouped one folder per institutional domain.</li>
+</ul>
 
 <h3>24 June 2026: European External Action Service (EEAS) folder shipped (523 total)</h3>
 <p>The EU's diplomatic service is now on the public API as its own folder, <code>/api/v2/eeas/</code>. The eeas.europa.eu site sits behind a JS / bot wall, so the feeds are rendered with Playwright headless Chromium and refreshed locally (same constraint as FRA / EUIPO). 11 endpoints: the folder directory plus list and detail pairs for five resources.</p>

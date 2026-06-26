@@ -622,26 +622,125 @@ def _build_esm_domain(paths: dict) -> dict:
 
 # Single-market / digital EU agencies (api_market.md) — one flat folder each.
 _AGENCY_DOMAINS = [
-    ("berec", "BEREC — Electronic Communications"),
-    ("acer", "ACER — Energy Regulators"),
-    ("eit", "EIT — Innovation & Technology"),
-    ("enisa", "ENISA — Cybersecurity"),
-    ("eu-lisa", "eu-LISA — Large-Scale IT Systems"),
-    ("euipo", "EUIPO — Intellectual Property"),
-    ("cpvo", "CPVO — Plant Variety Rights"),
+    ("berec", "BEREC: Electronic Communications"),
+    ("acer", "ACER: Energy Regulators"),
+    ("eit", "EIT: Innovation and Technology"),
+    ("enisa", "ENISA: Cybersecurity"),
+    ("eu-lisa", "eu-LISA: Large-Scale IT Systems"),
+    ("euipo", "EUIPO: Intellectual Property"),
+    ("cpvo", "CPVO: Plant Variety Rights"),
     # Health agencies (api_health.md), one flat folder each.
-    ("ema", "EMA — Medicines"),
-    ("ecdc", "ECDC — Disease Prevention & Control"),
-    ("efsa", "EFSA — Food Safety"),
-    ("eu-osha", "EU-OSHA — Safety & Health at Work"),
-    ("eea", "EEA — Environment"),
-    ("echa", "ECHA — Chemicals"),
-    ("euda", "EUDA — Drugs"),
-    ("eige", "EIGE — Gender Equality"),
-    ("cedefop", "Cedefop — Vocational Training"),
-    ("euaa", "EUAA — Asylum"),
-    ("fra", "FRA — Fundamental Rights"),
+    ("ema", "EMA: Medicines"),
+    ("ecdc", "ECDC: Disease Prevention and Control"),
+    ("efsa", "EFSA: Food Safety"),
+    ("eu-osha", "EU-OSHA: Safety and Health at Work"),
+    ("eea", "EEA: Environment"),
+    ("echa", "ECHA: Chemicals"),
+    ("euda", "EUDA: Drugs"),
+    ("eige", "EIGE: Gender Equality"),
+    ("cedefop", "Cedefop: Vocational Training"),
+    ("euaa", "EUAA: Asylum"),
+    ("fra", "FRA: Fundamental Rights"),
 ]
+
+# Institutional bodies built via the single-body / economy factory (the EURATOM &
+# Joint Undertakings, executive agencies, JHA, advisory, defence and external-action
+# folders). Grouped into thematic top-level domains. Any v2 folder NOT listed here is
+# swept into a catch-all by build_collection(), so nothing is ever silently dropped.
+_INSTITUTIONAL_GROUPS = [
+    ("EURATOM & Joint Undertakings", [
+        ("f4e", "Fusion for Energy (F4E)"),
+        ("europes-rail", "Europe's Rail JU"),
+        ("sns", "Smart Networks and Services JU (SNS)"),
+        ("euratom", "Euratom Supply Agency"),
+        ("clean-hydrogen", "Clean Hydrogen JU"),
+        ("clean-aviation", "Clean Aviation JU"),
+        ("sesar", "SESAR 3 JU"),
+        ("chips", "Chips JU"),
+        ("cbe", "Circular Bio-based Europe JU (CBE)"),
+        ("edctp3", "Global Health EDCTP3 JU"),
+        ("ihi", "Innovative Health Initiative JU (IHI)"),
+        ("eurohpc", "EuroHPC JU"),
+    ]),
+    ("Executive Agencies", [
+        ("hadea", "HaDEA: Health and Digital"),
+        ("cinea", "CINEA: Climate, Infrastructure and Environment"),
+        ("eismea", "EISMEA: Innovation Council and SMEs"),
+        ("ercea", "ERCEA: Research Council"),
+        ("rea", "REA: Research"),
+        ("eacea", "EACEA: Education, Audiovisual and Culture"),
+    ]),
+    ("Justice and Home Affairs", [
+        ("cjeu", "Court of Justice of the EU (CJEU)"),
+        ("eurojust", "Eurojust"),
+        ("europol", "Europol"),
+        ("frontex", "Frontex: Border and Coast Guard"),
+        ("cepol", "CEPOL: Law Enforcement Training"),
+    ]),
+    ("Transport, Maritime and Space Agencies", [
+        ("easa", "EASA: Aviation Safety"),
+        ("emsa", "EMSA: Maritime Safety"),
+        ("efca", "EFCA: Fisheries Control"),
+        ("era", "ERA: Union Agency for Railways"),
+        ("euspa", "EUSPA: Space Programme"),
+    ]),
+    ("Labour, Training and Foundations", [
+        ("ela", "ELA: European Labour Authority"),
+        ("etf", "ETF: European Training Foundation"),
+        ("eurofound", "Eurofound: Living and Working Conditions"),
+        ("eas", "European School of Administration (EUSA)"),
+    ]),
+    ("Cybersecurity Bodies", [
+        ("eccc", "ECCC: Cybersecurity Competence Centre"),
+        ("cert-eu", "CERT-EU"),
+    ]),
+    ("Advisory and Oversight Bodies", [
+        ("cor", "Committee of the Regions (CoR)"),
+        ("eesc", "European Economic and Social Committee (EESC)"),
+        ("eca", "European Court of Auditors (ECA)"),
+        ("ombudsman", "European Ombudsman"),
+        ("edps", "European Data Protection Supervisor (EDPS)"),
+        ("edpb", "European Data Protection Board (EDPB)"),
+        ("cdt", "Translation Centre (CdT)"),
+    ]),
+    ("Security and Defence", [
+        ("eda", "European Defence Agency (EDA)"),
+        ("satcen", "EU Satellite Centre (SatCen)"),
+        ("euiss", "EU Institute for Security Studies (EUISS)"),
+        ("esdc", "European Security and Defence College (ESDC)"),
+    ]),
+    ("EU External Action", [
+        ("eeas", "European External Action Service (EEAS)"),
+    ]),
+    ("Cross-institutional Services and Registers", [
+        ("epso", "EPSO: Personnel Selection"),
+        ("transparency-register", "Transparency Register"),
+        ("calendar", "EU Institutional Calendar"),
+        ("predictions", "Legislative Predictions"),
+    ]),
+]
+
+
+def _build_grouped_domain(paths: dict, name: str, members: list) -> dict:
+    """A thematic top-level domain holding one flat sub-folder per institutional body."""
+    subs = []
+    for prefix, display in members:
+        folder = _build_flat_domain(paths, prefix, display)
+        if folder.get("item"):
+            subs.append(folder)
+    return {"name": name, "item": subs}
+
+
+def _display_for(prefix: str, paths: dict) -> str:
+    """Derive a body display name for a catch-all folder from its directory summary
+    ('<X> folder directory — what <X> carries') falling back to the upper-cased prefix."""
+    root = f"/api/v2/{prefix}"
+    op = (paths.get(root) or {}).get("get") or {}
+    summ = op.get("summary", "")
+    m = re.match(r"(.+?)\s+folder directory", summ)
+    if m:
+        return m.group(1).strip()
+    return prefix.upper()
 
 
 def _count(folder: dict) -> int:
@@ -670,10 +769,37 @@ def build_collection() -> dict:
         _build_eu_fin_domain(paths),
         _build_esm_domain(paths),
         *(_build_flat_domain(paths, prefix, name) for prefix, name in _AGENCY_DOMAINS),
+        *(_build_grouped_domain(paths, name, members) for name, members in _INSTITUTIONAL_GROUPS),
         _build_proprietary_domain(paths),
     ]
     # Drop agency domains that have no built endpoints yet.
     domains = [d for d in domains if d.get("item")]
+    # Catch-all: sweep any /api/v2 folder not represented in a domain above into an
+    # "Other EU bodies" domain, so a newly added folder is never silently dropped.
+    covered: set = set()
+
+    def _collect(it):
+        if "request" in it:
+            url = it["request"]["url"]
+            raw = (url["raw"] if isinstance(url, dict) else url).replace("{{baseUrl}}", "").split("?")[0]
+            parts = raw.split("/")
+            if len(parts) > 3 and parts[3]:
+                covered.add(parts[3])
+        for sub in it.get("item", []):
+            _collect(sub)
+
+    for d in domains:
+        _collect(d)
+    extra = sorted({
+        p.split("/")[3] for p in paths
+        if p.startswith("/api/v2") and len(p.split("/")) > 3 and p.split("/")[3]
+        and p.split("/")[3] not in covered
+    })
+    if extra:
+        subs = [_build_flat_domain(paths, seg, _display_for(seg, paths)) for seg in extra]
+        subs = [s for s in subs if s.get("item")]
+        if subs:
+            domains.append({"name": "Other EU bodies", "item": subs})
     n_requests = sum(_count(d) for d in domains)
     return {
         "info": {
