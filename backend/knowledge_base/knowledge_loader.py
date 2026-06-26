@@ -805,6 +805,38 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'iccu consent vote': ['international_claims_commission_ukraine'],
     'pe786.697': ['international_claims_commission_ukraine'],
     'gahler ukraine report': ['international_claims_commission_ukraine'],
+    # Ukraine Support Loan (USL) — Reg (EU) 2026/467 (added 26 Jun 2026, /news)
+    'ukraine support loan': ['ukraine_support_loan_recovery_2026'],
+    'ukraine support loan 2026': ['ukraine_support_loan_recovery_2026'],
+    '90 billion ukraine loan': ['ukraine_support_loan_recovery_2026'],
+    'eur 90 billion ukraine': ['ukraine_support_loan_recovery_2026'],
+    'ukraine recovery conference 2026': ['ukraine_support_loan_recovery_2026'],
+    'ukraine recovery conference': ['ukraine_support_loan_recovery_2026'],
+    '3.2 billion ukraine': ['ukraine_support_loan_recovery_2026'],
+    'first instalment ukraine': ['ukraine_support_loan_recovery_2026'],
+    'ukraine macro-financial assistance 2026': ['ukraine_support_loan_recovery_2026'],
+    'ukraine mfa': ['ukraine_support_loan_recovery_2026'],
+    'reg 2026/467': ['ukraine_support_loan_recovery_2026'],
+    '32026r0467': ['ukraine_support_loan_recovery_2026'],
+    'usl ukraine': ['ukraine_support_loan_recovery_2026'],
+    'ukraine defence industrial capacity loan': ['ukraine_support_loan_recovery_2026'],
+    # Spanish
+    'prestamo de apoyo a ucrania': ['ukraine_support_loan_recovery_2026'],
+    'prestamo ucrania 90000 millones': ['ukraine_support_loan_recovery_2026'],
+    'conferencia de recuperacion de ucrania': ['ukraine_support_loan_recovery_2026'],
+    # French
+    'pret de soutien a l ukraine': ['ukraine_support_loan_recovery_2026'],
+    'pret ukraine 90 milliards': ['ukraine_support_loan_recovery_2026'],
+    'conference sur la reconstruction de l ukraine': ['ukraine_support_loan_recovery_2026'],
+    # Italian
+    'prestito di sostegno all ucraina': ['ukraine_support_loan_recovery_2026'],
+    'conferenza sulla ricostruzione dell ucraina': ['ukraine_support_loan_recovery_2026'],
+    # German / Dutch
+    'ukraine-darlehen': ['ukraine_support_loan_recovery_2026'],
+    'oekrainse steunlening': ['ukraine_support_loan_recovery_2026'],
+    # Catalan
+    'prestec de suport a ucraina': ['ukraine_support_loan_recovery_2026'],
+    'conferencia de recuperacio d ucraina': ['ukraine_support_loan_recovery_2026'],
     'cohesion policy mtr results': ['cohesion_policy_audit', 'cohesion_policy_midterm_review'],
     'cohesion mid-term review results': ['cohesion_policy_audit', 'cohesion_policy_midterm_review'],
     'kadis ocean diplomacy': ['eu_fisheries_control'],
