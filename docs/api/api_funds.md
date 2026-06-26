@@ -1,6 +1,6 @@
 **This is a Markdown with all the URLs of the *funds, tenders, procurement, grants* organised, managed and monitored by the EU institutions, authorities, agencies & bodies.**
 
-<!-- Extracted from api_ec / api_ep / api_council / api_eeas / api_econ / api_market / api_op / api_health / api_socjust by keyword: procurement, tenders, grants, calls, startups, start-ups. Organised by source file and institution. -->
+<!-- Extracted from all 16 API source docs (api_ec, api_ep, api_council, api_consult, api_defence, api_eca, api_ecj, api_econ, api_eeas, api_eesc_cor_ombud, api_euratom_ju, api_health, api_leg, api_market, api_op, api_socjust) by keyword: procurement, tenders, grants, calls, expression-of-interest, funding, subsidies, prizes, startups. Organised by source file and institution. Last full sweep 26 June 2026 (+205 URLs: EC DG funding pages, all 12 EURATOM Joint Undertakings' procurement/calls, defence EDA+SatCen, market ECCC/EDPS/BEREC, consult, ECJ; council/eca/leg carry no funding data; ep/eesc journalism-film-civil-society prizes excluded as awards, not funding). -->
 
 
 # ===== Source: api_ec.md =====
@@ -146,6 +146,220 @@ https://commission.europa.eu/funding-and-tenders/rules-and-principles_en
 https://commission.europa.eu/funding-and-tenders/transparency-and-reporting_en
 
 
+
+<!-- + funding URLs extracted 26 June 2026 -->
+
+## Roles (added 26 Jun 2026)
+https://commission.europa.eu/about/role/budget-and-funding_en
+
+## News DG COMP (added 26 Jun 2026)
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/latest-news_en
+
+## News DG MOVE (added 26 Jun 2026)
+https://transport.ec.europa.eu/facts-funding/studies-data_en
+
+## DG CLIMA (added 26 Jun 2026)
+https://climate.ec.europa.eu/eu-action/eu-funding-climate-action/innovation-fund_en
+https://climate.ec.europa.eu/eu-action/eu-funding-climate-action_en
+https://climate.ec.europa.eu/citizens-stakeholders/funding-opportunities_en
+
+## DG Connect (added 26 Jun 2026)
+https://digital-strategy.ec.europa.eu/en/activities/funding-digital
+https://digital-strategy.ec.europa.eu/en/funding
+
+## DG COMP (added 26 Jun 2026)
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation_en
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/about_en
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/questions-and-answers_en
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/legislation_en
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/practical-information_en
+https://competition-policy.ec.europa.eu/foreign-subsidies-regulation/latest-news_en
+
+## DG DEFIS (added 26 Jun 2026)
+https://defence-industry-space.ec.europa.eu/funding-opportunities_en
+https://defence-industry-space.ec.europa.eu/funding-opportunities/strategic-technologies-europe-platform-step-boost-investments-critical-technologies_en
+
+## DG ECFIN (added 26 Jun 2026)
+https://commission.europa.eu/publications/annual-work-programmes-directorate-general-economic-and-financial-affairs_en
+https://economy-finance.ec.europa.eu/funding-opportunities_en
+
+## DG EAC (added 26 Jun 2026)
+https://commission.europa.eu/publications/annual-work-programmes-education-youth-sport-and-culture_en
+
+## DG EMPL (added 26 Jun 2026)
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/european-social-fund-plus-esf_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/microfinance-and-social-enterprise-finance_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/european-globalisation-adjustment-fund-displaced-workers-egf_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/social-climate-fund_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/fund-european-aid-most-deprived-fead_en
+https://employment-social-affairs.ec.europa.eu/policies-and-activities/funding/prior-information-notices_en
+
+## DG ENER (added 26 Jun 2026)
+https://energy.ec.europa.eu/topics/funding-and-financing_en
+https://energy.ec.europa.eu/topics/funding-and-financing/eu-funding-possibilities-energy-sector_en
+https://energy.ec.europa.eu/topics/funding-and-financing/clean-energy-investment_en
+https://energy.ec.europa.eu/topics/funding-and-financing/investors-dialogue-energy_en
+https://energy.ec.europa.eu/topics/funding-and-financing/recovery-and-resilience-facility-clean-energy_en
+https://energy.ec.europa.eu/topics/infrastructure/projects-common-interest-and-projects-mutual-interest/funding-pcis-and-pmis_en
+https://energy.ec.europa.eu/topics/funding-and-financing/financing-decisions_en
+https://energy.ec.europa.eu/topics/funding-and-financing/negotiated-procedures_en
+
+## DG ENEST (added 26 Jun 2026)
+https://enlargement.ec.europa.eu/funding-technical-assistance/taiex30-better-institutions-better-lives_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/growth-plan-moldova_en
+https://enlargement.ec.europa.eu/funding-technical-assistance_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/how-does-it-work_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/donor-coordination_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/former-assistance_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/albania-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/bosnia-and-herzegovina-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/iceland-financial-assistance_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/kosovo-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/montenegro-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/north-macedonia-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/serbia-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/turkiye-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/multi-country-financial-assistance-under-ipa_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/projects-focus_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance/national-ipa-coordinators_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/neighbourhood-development-and-international-cooperation-instrument-global-europe-ndici-global-europe_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/reform-and-growth-facility-western-balkans_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/neighbourhood-investment-platform-nip_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/reform-and-growth-facility-moldova_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/funding-recipients_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/monitoring-and-evaluation_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/enest-global-gateway-investment-hub_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/fraud-prevention-enlargement-and-eastern-neighbourhood_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/taiex_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/twinning_en
+https://enlargement.ec.europa.eu/funding-technical-assistance/twinning/twinning-moving-forward-together-eu-expertise_en
+
+## DG ENV (added 26 Jun 2026)
+https://environment.ec.europa.eu/index.php/funding_en
+
+## DG ECHO (added 26 Jun 2026)
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/channelling-aid-donations-ukrainians_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/transport-and-operations-co-financing-procedures-under-union-civil-protection-mechanism_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/work-programmes-response-decisions_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/prevention-and-preparedness-projects-civil-protection_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/eu-supported-civil-protection-exercises_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid/consultations-partners-financing-decisions_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid/protecting-aid-workers_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid/financing-decisions-hips_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/evaluations_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/evaluations/geographic-evaluations_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/evaluations/thematic-evaluations_en
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/online-databases_en
+
+## DG FISMA (added 26 Jun 2026)
+https://finance.ec.europa.eu/financial-markets/financial-markets-policy/crowdfunding_en
+
+## Public health (added 26 Jun 2026)
+https://health.ec.europa.eu/funding_en
+
+## DG HERA (added 26 Jun 2026)
+https://health.ec.europa.eu/health-emergency-preparedness-and-response-hera/funding-and-opportunities_en
+
+## IDEA (added 26 Jun 2026)
+https://commission.europa.eu/document/download/b5b0affd-0400-4ef1-a827-d20b6ba30ab3_en?filename=IDEA%20AD%202023%20FELLOWSHIP.pdf
+
+## DG GROW (added 26 Jun 2026)
+https://single-market-economy.ec.europa.eu/smes/funding-and-support_en
+https://youreurope.europa.eu/business/finance-funding/getting-funding/access-finance/en
+
+## DG INTPA (added 26 Jun 2026)
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/funding-instruments_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/funding-instruments/european-fund-sustainable-development-plus_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/funding-instruments/budget-support_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/funding-instruments/trust-funds_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/looking-funding_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/looking-funding/framework-contracts_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/managing-intervention_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/procedures-partner-countries_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/working-partner-organisations_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/contract-award-procedures-european-union-external-action-practical-guide-prag_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/users-guides-implementing-contracts-eus-external-action_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/financial-management-toolkit-recipients-eu-funds-external-actions_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/programme-estimates_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/guidelines/fraud-prevention-eu-international-partnerships_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/technical-assistance_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/technical-assistance/taiex-technical-assistance-and-information-exchange_en
+https://international-partnerships.ec.europa.eu/funding-and-technical-assistance/technical-assistance/twinning_en
+
+## DG MARE (added 26 Jun 2026)
+https://oceans-and-fisheries.ec.europa.eu/funding-and-investment/sustainable-ocean-finance_en
+https://oceans-and-fisheries.ec.europa.eu/funding-and-investment_en
+https://oceans-and-fisheries.ec.europa.eu/funding-and-investment/blueinvest_en
+https://oceans-and-fisheries.ec.europa.eu/funding-and-investment/emfaf_en
+https://oceans-and-fisheries.ec.europa.eu/funding-and-investment/famenet_en
+
+## DG HOME (added 26 Jun 2026)
+https://home-affairs.ec.europa.eu/funding_en
+https://home-affairs.ec.europa.eu/funding/asylum-migration-and-integration-funds_en
+https://home-affairs.ec.europa.eu/funding/borders-and-visa-funds_en
+https://home-affairs.ec.europa.eu/funding/internal-security-funds_en
+https://home-affairs.ec.europa.eu/funding/eu-civil-security-research-funds_en
+https://home-affairs.ec.europa.eu/funding/funding-contacts_en
+https://home-affairs.ec.europa.eu/funding/funding-communication-material_en
+
+## DG MOVE (added 26 Jun 2026)
+https://transport.ec.europa.eu/tourism/eu-funding-and-businesses_en
+https://transport.ec.europa.eu/facts-funding/studies-data_en
+https://transport.ec.europa.eu/facts-funding/financing-decisions-policy-support-and-pilot-projects-and-preparatory-actions_en
+
+## DG REGIO (added 26 Jun 2026)
+https://ec.europa.eu/regional_policy/funding/just-transition-fund_en
+https://ec.europa.eu/regional_policy/funding_en
+https://ec.europa.eu/regional_policy/funding/available-budget_en
+https://ec.europa.eu/regional_policy/funding/accessing-funds_en
+https://ec.europa.eu/regional_policy/funding/financial-management_en
+https://ec.europa.eu/regional_policy/funding/coronavirus-response_en
+https://ec.europa.eu/regional_policy/funding/just-transition-fund/just-transition-platform/opportunities_en#inline-nav-4
+https://ec.europa.eu/regional_policy/funding/financial-instruments_en
+https://ec.europa.eu/regional_policy/funding/react-eu_en
+https://ec.europa.eu/regional_policy/funding/care_en
+https://ec.europa.eu/regional_policy/funding/brexit-adjustment-reserve_en
+
+## RTD (added 26 Jun 2026)
+https://research-and-innovation.ec.europa.eu/funding_en
+https://research-and-innovation.ec.europa.eu/funding/funding-opportunities_en
+https://research-and-innovation.ec.europa.eu/funding/how-apply_en
+https://research-and-innovation.ec.europa.eu/funding/find-funding-partners_en
+https://research-and-innovation.ec.europa.eu/funding/how-projects-are-chosen-funding_en
+https://research-and-innovation.ec.europa.eu/funding/managing-project_en
+
+## DG TAXUD (added 26 Jun 2026)
+https://taxation-customs.ec.europa.eu/about-us/eu-funding-customs-and-tax_en
+https://taxation-customs.ec.europa.eu/about-us/eu-funding-customs-and-tax/fiscalis-programme_en
+https://taxation-customs.ec.europa.eu/about-us/eu-funding-customs-and-tax/customs-programme_en
+https://taxation-customs.ec.europa.eu/about-us/eu-funding-customs-and-tax/customs-control-equipment-instrument_en
+https://taxation-customs.ec.europa.eu/taxation/business-taxation/parent-subsidiary-directive_en
+
+## CINEA (added 26 Jun 2026)
+https://cinea.ec.europa.eu/funding-opportunities_en
+https://cinea.ec.europa.eu/funding-opportunities/find-your-funding-programme-0_en
+
+## EACEA (added 26 Jun 2026)
+https://www.eacea.ec.europa.eu/scholarships_en
+https://www.eacea.ec.europa.eu/scholarships/erasmus-mundus-catalogue_en
+https://www.eacea.ec.europa.eu/scholarships/intra-africa-scholarships-0_en
+
+## HADEA (added 26 Jun 2026)
+https://hadea.ec.europa.eu/about/programmes-funding_en
+
+## EISMEA (added 26 Jun 2026)
+https://eismea.ec.europa.eu/document/download/8da96974-cc19-4ffd-aa15-6234d1727957_en?filename=Annual-Work-Programme-2026.PDF
+https://eismea.ec.europa.eu/funding-opportunities_en
+
+## REA (added 26 Jun 2026)
+https://commission.europa.eu/publications/executive-agencies-2026-annual-work-programmes_en
 # ===== Source: api_ep.md =====
 
 ## European Parliament
@@ -215,6 +429,19 @@ https://www.euipo.europa.eu/en/about-us/the-office/procurement-and-grants
 https://cpvo.europa.eu/about-us/procurement
 
 
+
+<!-- + funding URLs extracted 26 June 2026 -->
+
+## News (added 26 Jun 2026)
+https://www.berec.europa.eu/en/annual-work-programme
+
+## European Data Protection Supervisor -  EDPS (added 26 Jun 2026)
+https://www.edps.europa.eu/about-edps/public-procurement_en
+
+## Cybersecurity Competence Centre - ECCC (added 26 Jun 2026)
+https://cybersecurity-centre.europa.eu/funding-opportunities_en
+https://cybersecurity-centre.europa.eu/funding-opportunities/call-expressions-interest_en
+https://cybersecurity-centre.europa.eu/funding-opportunities/calls-proposals_en
 # ===== Source: api_op.md =====
 
 ## Publications Office of the European Union
@@ -303,6 +530,96 @@ https://www.easa.europa.eu/en/the-agency/procurement
 https://www.frontex.europa.eu/about-frontex/procurement/procurement/
 https://www.frontex.europa.eu/about-frontex/grants/
 
+
+
+
+# ===== Source: api_consult.md =====
+
+## European Commission
+https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid/consultations-partners-financing-decisions_en
+
+# ===== Source: api_defence.md =====
+
+## European Defence Agency - EDA
+https://eda.europa.eu/procurement
+
+## EU Satellite Centre - SatCen
+https://www.satcen.europa.eu/procurement/procurement-policy-and-procedure
+https://www.satcen.europa.eu/page/ongoing-calls-tender
+https://www.satcen.europa.eu/page/completed-calls-for-tender
+
+# ===== Source: api_ecj.md =====
+
+## European Court of Justice - ECJ
+https://curia.europa.eu/site/jcms/d2_5144/en/calls-for-tenders
+
+# ===== Source: api_euratom_ju.md =====
+
+## Fusion for Energy - F4E
+https://fusionforenergy.europa.eu/governance-committees/procurement-contracts-committee/
+
+## Europe's Rail JU
+https://rail-research.europa.eu/participate/call-for-proposals/
+https://rail-research.europa.eu/participate/call-for-expression-of-interest-with-a-view-to-selecting-eu-rail-associated-members/
+https://rail-research.europa.eu/participate/procurement/ongoing-calls-for-tender/
+
+## Smart Networks and Services JU - SNS
+https://smart-networks.europa.eu/procurement/
+https://smart-networks.europa.eu/current-call-for-proposals/
+https://smart-networks.europa.eu/open-calls-from-sns-projects/
+
+## Clean Hydrogen JU
+https://www.clean-hydrogen.europa.eu/apply-funding_en
+https://www.clean-hydrogen.europa.eu/apply-funding/call-proposals-0_en
+https://www.clean-hydrogen.europa.eu/apply-funding/coordinators-day_en
+https://www.clean-hydrogen.europa.eu/apply-funding/info-days-0_en
+https://www.clean-hydrogen.europa.eu/apply-funding/procurements_en
+
+## Clean Aviation JU
+https://www.clean-aviation.eu/clean-aviation-calls/call-for-proposals
+https://www.clean-aviation.eu/clean-aviation-calls/calls-for-expression-of-interest
+https://www.clean-aviation.eu/clean-aviation-calls/calls-for-tenders
+
+## Chips JU
+https://www.chips-ju.europa.eu/Operational-Procurement
+https://www.chips-ju.europa.eu/Administrative-procurement
+
+## Circular Bio-based Europe JU (CBE)
+https://www.cbe.europa.eu/public-procurement
+
+## Funding
+https://www.cbe.europa.eu/open-calls-proposals
+https://www.cbe.europa.eu/how-apply-funding
+https://www.cbe.europa.eu/closed-calls-proposals
+https://www.global-health-edctp3.europa.eu/funding_en
+https://www.global-health-edctp3.europa.eu/funding/calls-proposals_en
+https://www.global-health-edctp3.europa.eu/funding/research-priorities-disease-area_en
+https://www.global-health-edctp3.europa.eu/funding/networking-platform_en
+https://www.global-health-edctp3.europa.eu/funding/edctp-prizes_en
+https://www.global-health-edctp3.europa.eu/funding/how-apply-funding_en
+https://www.global-health-edctp3.europa.eu/funding/tools-and-resources-researchers_en
+https://www.global-health-edctp3.europa.eu/funding/communicating-about-your-project_en
+https://www.global-health-edctp3.europa.eu/funding/legal-and-financial-guidance_en
+https://www.global-health-edctp3.europa.eu/funding/experts_en
+https://www.global-health-edctp3.europa.eu/funding/calls-tenders_en
+https://www.ihi.europa.eu/apply-funding
+https://www.ihi.europa.eu/apply-funding/why-apply
+https://www.ihi.europa.eu/apply-funding/future-opportunities
+https://www.ihi.europa.eu/apply-funding/open-calls
+https://www.ihi.europa.eu/apply-funding/find-partners
+https://www.ihi.europa.eu/apply-funding/closed-calls
+https://www.ihi.europa.eu/apply-funding/call-documents
+
+## Documents and research
+https://www.global-health-edctp3.europa.eu/results-and-insights/funding-and-co-funding_en
+
+## Innovative Health Initiative JU - IHI
+https://www.ihi.europa.eu/about-ihi/ihi-funding-model
+
+## EuroHPC JU
+https://www.eurohpc-ju.europa.eu/about/procurements-supercomputers_en
+https://www.eurohpc-ju.europa.eu/about/administrative-procurements_en
+https://grnet.gr/en/business-directory/grant-for-the-development-of-a-new-national-hpc-system-daedalus/
 
 # ===== TO COVER: EU funds not yet in Brubru, grouped by their data source =====
 
