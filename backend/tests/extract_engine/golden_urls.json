@@ -1,0 +1,10 @@
+{
+  "ecl":        ["https://hadea.ec.europa.eu/news_en","https://cinea.ec.europa.eu/news-events/news_en","https://eismea.ec.europa.eu/events_en"],
+  "drupal":     ["https://www.ema.europa.eu/en/news-and-events/publications","https://echa.europa.eu/news","https://www.berec.europa.eu/en/news/latest-news","https://www.easa.europa.eu/en/newsroom-and-events/news"],
+  "wordpress":  ["https://fusionforenergy.europa.eu/news/","https://rail-research.europa.eu/publications-3","https://www.clean-hydrogen.europa.eu/media/events_en"],
+  "dynamics":   ["https://www.chips-ju.europa.eu/Publications","https://www.chips-ju.europa.eu/Events/"],
+  "jcms":       ["https://curia.europa.eu/site/jcms/d2_5157/en/news","https://curia.europa.eu/site/jcms/d2_5160/en/events"],
+  "sharepoint": ["https://www.eca.europa.eu/en/events"],
+  "spa":        ["https://www.euipo.europa.eu/en/observatory/publications","https://eur-lex.europa.eu/content/news/index.html"],
+  "antibot":    ["https://fra.europa.eu/en/news-and-events/news","https://www.cedefop.europa.eu/en/publications/briefing-notes","https://www.ihi.europa.eu/news-events/newsroom","https://www.euda.europa.eu/publications/work-programmes"]
+}

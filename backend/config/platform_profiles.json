@@ -1,0 +1,156 @@
+{
+  "_doc": "Phase 0 of the EU extract engine. The platform taxonomy as DATA, not code. A scraper = (platform_type, selectors, date_strategy, anti_bot). Phase 1 handlers read this; per-body overrides specialise the common case. Source: reference_eu_web_estate_scraper_standard + every economy_*.py docstring.",
+  "platform_profiles": {
+    "ecl": {
+      "label": "Europa Component Library",
+      "handler": "ecl",
+      "selectors": [
+        ".ecl-content-item"
+      ],
+      "url_hint": "_en suffix; europa.eu domains",
+      "date_strategy": "ecl_native",
+      "anti_bot": "none"
+    },
+    "drupal": {
+      "label": "Drupal / OpenEuropa",
+      "handler": "drupal",
+      "selectors": [
+        ".teaser",
+        ".card",
+        ".views-row",
+        "article.node",
+        ".group-content"
+      ],
+      "pagination": "?page=N",
+      "date_strategy": "smart_date",
+      "anti_bot": "none"
+    },
+    "wordpress": {
+      "label": "WordPress / Elementor",
+      "handler": "wordpress",
+      "selectors": [
+        "a[href*='/latest-news/']",
+        "a[href*='/news/']",
+        "article"
+      ],
+      "note": "filename-title PDFs; Elementor post grids may need a browser",
+      "date_strategy": "smart_date",
+      "anti_bot": "none"
+    },
+    "dynamics": {
+      "label": "Microsoft Dynamics / Power Pages",
+      "handler": "dynamics",
+      "detail_pattern": "?id=",
+      "note": "Dataverse + AJAX; cards not in server HTML",
+      "date_strategy": "smart_date",
+      "anti_bot": "playwright"
+    },
+    "jcms": {
+      "label": "Jalios JCMS",
+      "handler": "jcms",
+      "url_hint": "jcms/ paths",
+      "date_strategy": "smart_date",
+      "anti_bot": "playwright",
+      "note": "probe 26 Jun: news/events JS-rendered, needs browser"
+    },
+    "sharepoint": {
+      "label": "Microsoft SharePoint",
+      "handler": "sharepoint",
+      "selectors": [
+        ".ms-rteElement",
+        "article",
+        ".item"
+      ],
+      "date_strategy": "smart_date",
+      "anti_bot": "playwright",
+      "note": "probe 26 Jun: eca/events served static via requests; browser is fallback not default"
+    },
+    "spa": {
+      "label": "SPA + search backend",
+      "handler": "spa",
+      "strategy": "api_first_then_render",
+      "note": "near-empty server HTML; hit the underlying JSON/Algolia API where one exists, else render",
+      "date_strategy": "smart_date",
+      "anti_bot": "playwright"
+    },
+    "bespoke": {
+      "label": "Bespoke / custom-article",
+      "handler": "bespoke",
+      "note": "per-site selector map maintained by hand",
+      "date_strategy": "smart_date",
+      "anti_bot": "none"
+    }
+  },
+  "anti_bot_profiles": {
+    "none": "plain requests, BrubruBot UA",
+    "playwright": "headless Chromium render",
+    "rate_limit_cooldown": "paced requests; on /challenge, pause IP-wide cooldown (minutes) then resume; never burst",
+    "pow_solve": "solve the proof-of-work (Anubis) in a real browser context",
+    "tls_relaxed": "browser with ignore_https_errors (broken cert chain)",
+    "cookie_handshake": "establish a session cookie via browser, then fetch",
+    "js_faceted": "cards render only after a client-side filter; run the filter in a browser or call the search API"
+  },
+  "overrides": {
+    "cedefop": {
+      "platform": "drupal",
+      "selectors": [
+        "div.group-content"
+      ],
+      "anti_bot": "rate_limit_cooldown"
+    },
+    "ihi": {
+      "platform": "drupal",
+      "anti_bot": [
+        "tls_relaxed",
+        "js_faceted"
+      ]
+    },
+    "fra": {
+      "platform": "drupal",
+      "anti_bot": "pow_solve"
+    },
+    "euda": {
+      "platform": "drupal",
+      "anti_bot": "playwright",
+      "note": "403 on non-browser UA"
+    },
+    "chips": {
+      "platform": "dynamics"
+    },
+    "cjeu": {
+      "platform": "jcms"
+    },
+    "eca": {
+      "platform": "sharepoint"
+    },
+    "euipo": {
+      "platform": "spa",
+      "note": "Algolia anti-bot SPA"
+    },
+    "eur-lex": {
+      "platform": "spa",
+      "anti_bot": "playwright",
+      "note": "JS-WAF on SEARCH; /content/news index is static (probe 26 Jun)"
+    },
+    "f4e": {
+      "platform": "wordpress"
+    },
+    "rail": {
+      "platform": "wordpress",
+      "note": "Elementor"
+    },
+    "sns": {
+      "platform": "wordpress"
+    },
+    "aviation": {
+      "platform": "drupal",
+      "anti_bot": "js_faceted"
+    },
+    "echa": {
+      "platform": "drupal",
+      "anti_bot": "playwright",
+      "note": "probe 26 Jun: 0 items in server HTML, JS-rendered"
+    }
+  },
+  "_probe_26jun": "12/21 golden URLs OK via requests, 9 need browser; all 4/4 passes stable. See tests/extract_engine/probe_golden.py output."
+}
