@@ -94,6 +94,27 @@ def _init_sbert() -> bool:
     return _state["ok"]
 
 
+# Confidence gate. Short proper-noun / acronym titles ("INSIDE Connect 2026", "Chips
+# JU 6G") make the embedder grasp at fragments and emit scattered low-margin garbage
+# ("jute", "second stage of EMU", "video cassette"). Measured: absolute score does NOT
+# separate signal from noise, but two cheap signals do, combined:
+#   - domain support: >=2 of the top-K share the top descriptor's microthesaurus, OR
+#   - score margin: top minus last kept score >= _MIN_MARGIN.
+# Real topics satisfy one; proper-noun noise satisfies neither -> return [] (no tags
+# beats wrong tags for a curated API). _STRONG keeps a rare lone high-confidence hit.
+_MIN_MARGIN = float(os.environ.get("EUROVOC_MIN_MARGIN", "0.015"))
+_STRONG = float(os.environ.get("EUROVOC_STRONG", "0.86"))
+
+
+def _is_confident(out: list[dict]) -> bool:
+    if not out:
+        return False
+    top_mt = out[0].get("mt")
+    support = sum(1 for o in out if top_mt and o.get("mt") == top_mt)
+    margin = out[0]["score"] - out[-1]["score"]
+    return support >= 2 or margin >= _MIN_MARGIN or out[0]["score"] >= _STRONG
+
+
 def classify(text: str | None, lang: str = "en", top_k: int | None = None) -> list[dict]:
     """Return [{id, label, score}] EuroVoc descriptors for the text (top-K by cosine),
     or [] on any failure. lang is informational (the model is multilingual)."""
@@ -113,10 +134,10 @@ def classify(text: str | None, lang: str = "en", top_k: int | None = None) -> li
             if s < _MIN_SCORE:
                 break
             d = _state["descs"][int(i)]
-            out.append({"id": d["id"], "label": d["label"], "score": round(s, 4)})
+            out.append({"id": d["id"], "label": d["label"], "score": round(s, 4), "mt": d.get("mt")})
             if len(out) >= k:
                 break
-        return out
+        return out if _is_confident(out) else []
     except Exception as e:
         logger.warning("EuroVoc classify failed: %s", type(e).__name__)
         return []

@@ -33,6 +33,10 @@ def _requests_fetch(url: str, *, cooldown: bool):
             r = s.get(url, timeout=30, allow_redirects=True)
         except requests.RequestException:
             return None, "error"
+        # requests defaults undeclared text/* to ISO-8859-1, but EU pages are UTF-8;
+        # honour the real charset so "Europe’s" doesn't mojibake to "Europeâ€™s".
+        if "charset=" not in r.headers.get("content-type", "").lower():
+            r.encoding = r.apparent_encoding or "utf-8"
         if r.status_code == 200 and not _is_challenge(r.url, r.text):
             return r.text, "ok"
         if cooldown and (_is_challenge(r.url, r.text)):

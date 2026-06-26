@@ -24,6 +24,32 @@ _LIST_HREF = re.compile(r"/(news|events?|publications?|press|media|consultations
 _NOISE = re.compile(r"(cookie|privacy|accessibility|sitemap|/login|sign[- ]?in|subscribe|"
                     r"newsletter|accept|skip to|legal[- ]notice|data protection|institutions-law)", re.I)
 
+# A content item must have a real headline. Nav links, calls-to-action and bare
+# section labels ("Registration", "Themes in focus", "Subscribe to ... News") are not
+# items: when they slip through they get classified into nonsense ("registration of
+# voters", "jurisdiction ratione materiae"). Filter them by title at every item-build
+# site. Kept deliberately tight so real headlines are never dropped.
+_JUNK_TITLE_EXACT = {
+    "registration", "register", "register now", "register here", "read more", "read all",
+    "see all", "see more", "view all", "view more", "show more", "load more", "more",
+    "themes in focus", "latest news", "all news", "news", "events", "event", "publications",
+    "documents", "newsletter", "subscribe", "sign up", "log in", "login", "search", "menu",
+    "home", "back to top", "previous", "next", "find out more", "learn more", "discover more",
+    "press releases", "press release", "media", "overview", "contact", "contact us", "share",
+}
+_JUNK_TITLE_RE = re.compile(
+    r"^(read|see|view|show|load|find out|learn|discover|explore)\s+(more|all|here)\b"
+    r"|registrations?\s+(are\s+)?(now\s+)?open"
+    r"|register\s+(now|here|today)"
+    r"|\bsubscribe\b|\bnewsletter\b|\bback to\b", re.I)
+
+
+def _is_junk_title(title: str) -> bool:
+    t = (title or "").strip().lower().rstrip(".:")
+    if t in _JUNK_TITLE_EXACT:
+        return True
+    return bool(_JUNK_TITLE_RE.search(t))
+
 
 def _content_anchors(soup, base_url, body_code, platform, item_type, limit):
     """Robust fallback for rendered/heterogeneous pages: title-like anchors (>=18
@@ -39,7 +65,7 @@ def _content_anchors(soup, base_url, body_code, platform, item_type, limit):
         title = clean(a.get_text(" ", strip=True))
         if not title or len(title) < 18 or href.startswith(("#", "javascript:", "mailto:", "tel:")):
             continue
-        if _NOISE.search(href) or _NOISE.search(title):
+        if _NOISE.search(href) or _NOISE.search(title) or _is_junk_title(title):
             continue
         url = href if href.startswith("http") else norm_url(_join(base_url, href))
         key = url.rstrip("/").lower()
@@ -108,7 +134,7 @@ def _card_to_item(card, base_url, body_code, platform, item_type) -> Item | None
     href = a["href"]
     url = href if href.startswith("http") else norm_url(_join(base_url, href))
     title = clean(a.get_text(" ", strip=True))
-    if not title or len(title) < 8:
+    if not title or len(title) < 8 or _is_junk_title(title):
         return None
     return Item(body_code=body_code, item_type=item_type, title=title[:300],
                 public_url=url, summary=clean(card.get_text(" ", strip=True))[:300],
