@@ -103,6 +103,7 @@ from .aviation import router as _aviation_router
 from .cbe import router as _cbe_router
 from .ihi import router as _ihi_router
 from .chips import router as _chips_router
+from .sesar import router as _sesar_router
 from . import docs as _docs
 
 router = APIRouter(prefix="/api/v2")
@@ -201,6 +202,7 @@ router.include_router(_aviation_router)
 router.include_router(_cbe_router)
 router.include_router(_ihi_router)
 router.include_router(_chips_router)
+router.include_router(_sesar_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 
