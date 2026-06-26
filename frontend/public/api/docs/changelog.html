@@ -165,6 +165,15 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>26 June 2026: Cross-body Events and News aggregators (927 total)</h3>
+<p>Two new folders centralise events and news across every EU body into a single feed each, so you no longer query 80+ folders one by one. Both are query-time aggregators (they store nothing new): <code>/api/v2/events/</code> unions the institutional calendar with every body's events, and <code>/api/v2/news/</code> bundles news, press releases, stories, speeches and statements.</p>
+<ul>
+<li><strong>Pick your scope:</strong> <code>?body=commission,parliament,ecb</code> for specific bodies, or <code>?family=defence-security-borders</code> for a Brubru policy family (a curated, many-to-many grouping of bodies by policy area), or neither for everything.</li>
+<li><strong>Events</strong> (<code>/api/v2/events/all</code>): 6,374 events across 49 bodies, filter by <code>when</code> (upcoming / past), date range, free text and source. <code>/api/v2/events/bodies</code> is the pick-list.</li>
+<li><strong>News</strong> (<code>/api/v2/news/all</code>): 8,670 items across 71 bodies, filter by <code>kind</code> (news / press_release), date range and free text.</li>
+<li>Both carry the 5-datapoint contract and a source-tagged, deduplicated envelope.</li>
+</ul>
+
 <h3>26 June 2026: Every EU institution, body and agency now has a folder (919 total)</h3>
 <p>The build-out of the Data Provider vertical is complete: every EU institution, body and agency is now on the public API as its own folder. This release closes the long tail, the EURATOM Joint Undertakings and the remaining executive agencies, advisory bodies, justice-and-home-affairs agencies, and security-and-defence bodies, and brings the published surface to <strong>919 endpoints across 84 folders</strong>.</p>
 <ul>
