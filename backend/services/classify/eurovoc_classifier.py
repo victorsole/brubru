@@ -19,25 +19,41 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-# EuroVoc also contains organisation NAMES and legal-instrument TYPES. They are not
-# subjects, and their surface words ("regulation", "Authority") outrank the real
-# topics, so they are excluded from the subject-classification set. Institutions are
-# "European ... <org-noun>" or known body acronyms; instruments are a small stoplist.
-_INSTITUTION = re.compile(
-    r"\bEuropean\b.*\b(Agency|Authorit|Supervisor|Office|Centre|Center|Board|Committee|"
-    r"Bank|Court|Foundation|Institute|Parliament|Commission|Council|Service|Ombudsman|"
-    r"College|Undertaking|Cooperation|Network)\b"
-    r"|\b(Eurostat|Europol|Eurojust|Frontex|Cedefop|EUIPO|ECDC|EFSA|ECHA|EMA|EEA|OLAF|"
-    r"Interpol|United Nations|International Organisation)\b", re.I)
+# EuroVoc also contains organisation NAMES, treaty NAMES and legal-instrument TYPES.
+# They are not subjects, and their surface words ("regulation", "Forum", "Treaty")
+# outrank the real topics, so they are excluded from the subject-classification set.
+#
+# The authoritative signal is EuroVoc's own domain structure: every descriptor carries
+# its microthesaurus code (`mt`, enriched into the descriptor file from the official
+# SPARQL endpoint). Organisation/institution names live in five "organisations"
+# microthesauri + EU-institutions; treaty markers (EAEC/ECSC/EEC Treaty, EU
+# Constitution) live inside "European construction" alongside legit subjects, so those
+# are pruned by name. Geography (e.g. "Community of Madrid" in 7211 regions) is KEPT.
+_ORG_MT = {"7606", "7611", "7616", "7621", "7626", "1006"}  # UN/European/extra-Eu/world/NGO orgs + EU institutions
+# Within "European construction" (1016), prune the EAEC/ECSC instrument + treaty markers.
+_TREATY_IN_CONSTRUCTION = re.compile(r"\b(EAEC|ECSC|EEC|EU|EC)\b|\bTreaty\b|\bConstitution\b")
+# Treaty NAMES anywhere (mt-independent, precise: suffix "... Treaty", "Treaty of/on/...",
+# "European Constitution"). Deliberately narrow so subject tags like "EU financing",
+# "EU aid", "international treaty" are NEVER removed.
+_TREATY_NAME = re.compile(r" Treaty$|^Treaty (on|of|establishing)\b|^European Constitution$")
 _NOISE_EXACT = {"regulation (eu)", "directive (eu)", "decision (eu)", "regulatory committee (eu)",
                 "ec regulation", "eaec regulation", "eu regulation", "eu directive",
                 "european union law", "application of eu law", "eu law", "regulation",
                 "directive", "decision", "proposal (eu)", "european union", "member state"}
 
 
-def _keep(label: str) -> bool:
-    low = label.strip().lower()
-    return low not in _NOISE_EXACT and not _INSTITUTION.search(label)
+def _keep(desc: dict) -> bool:
+    """Keep a EuroVoc descriptor only if it is a genuine subject (not an organisation,
+    institution, treaty or legal-instrument name). Uses the microthesaurus code."""
+    label = desc.get("label", "")
+    mt = desc.get("mt")
+    if mt in _ORG_MT:
+        return False
+    if mt == "1016" and _TREATY_IN_CONSTRUCTION.search(label):  # treaty markers within European construction
+        return False
+    if _TREATY_NAME.search(label):  # named treaties filed in other microthesauri
+        return False
+    return label.strip().lower() not in _NOISE_EXACT
 
 _BACKEND = os.environ.get("EUROVOC_BACKEND", "sbert")
 # multilingual-e5-base: retrieval-tuned, ranks precise topic descriptors above generic
@@ -58,7 +74,7 @@ def _init_sbert() -> bool:
     try:
         import numpy as np
         from sentence_transformers import SentenceTransformer
-        descs = [d for d in json.loads(_DESC_PATH.read_text()) if _keep(d["label"])]
+        descs = [d for d in json.loads(_DESC_PATH.read_text()) if _keep(d)]
         labels = [d["label"] for d in descs]
         model = SentenceTransformer(_MODEL_NAME)
         emb = None
