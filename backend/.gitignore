@@ -1,1 +1,2 @@
 tests/extract_engine/fixtures/
+data/eu_vocabularies/*.emb.npy

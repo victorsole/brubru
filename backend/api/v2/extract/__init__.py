@@ -32,6 +32,7 @@ class ExtractedItem(BaseModel):
     body_txt: Optional[str] = None
     body_html: Optional[str] = None
     source_kind: Optional[str] = Field(None, description="The platform handler that parsed it.")
+    eurovoc_descriptors: List[dict] = Field(default_factory=list, description="EuroVoc subject descriptors (when classify=true).")
 
 
 class ExtractResult(BaseModel):
@@ -63,15 +64,18 @@ async def extract_url(
     url: str = Query(..., description="The EU URL to extract."),
     item_type: str = Query("news", description="news | event | publication | topic | consultation | tender."),
     limit: int = Query(60, ge=1, le=100),
+    classify: bool = Query(False, description="Also tag each item with EuroVoc subject descriptors (slower)."),
+    lang: str = Query("en", description="Language for EuroVoc classification (en|es|fr|it|nl; ca->es)."),
 ):
     if not url.startswith(("http://", "https://")):
         raise HTTPException(400, "url must be an absolute http(s) URL")
     if item_type not in _ITEM_TYPES:
         raise HTTPException(400, f"item_type must be one of {sorted(_ITEM_TYPES)}")
-    res = _extract(url, item_type=item_type, limit=limit)
+    res = _extract(url, item_type=item_type, limit=limit, classify_eurovoc=classify, lang=lang)
     items = [ExtractedItem(title=it.title, summary=it.summary, public_url=it.public_url,
                            document_date=it.document_date, creation_date=it.creation_date,
-                           body_txt=it.body_txt, body_html=it.body_html, source_kind=it.source_kind)
+                           body_txt=it.body_txt, body_html=it.body_html, source_kind=it.source_kind,
+                           eurovoc_descriptors=it.extras.get("eurovoc", []))
              for it in res.get("items", [])]
     return ExtractResult(url=res["url"], platform=res["platform"], body_code=res["body_code"],
                          fetched_via=res["fetched_via"], item_count=res["item_count"], items=items)
