@@ -532,10 +532,10 @@ _ECONOMY_BATCHES: list[list[str]] = [
     # Playwright-fed body for this window: cepol (one heavy Chromium body per
     # window so renders never overlap; see note below).
     ["acer", "amla", "berec", "cedefop", "council", "cpvo", "eba", "ecb", "ecb_ssm", "ecdc", "echa",
-     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc", "hydrogen", "euratom", "chips"],
-    # batch 1 (15:00 UTC) — Playwright-fed body for this window: europol.
+     "cinea", "easa", "ela", "cepol", "eismea", "cdt", "cjeu", "eesc", "edps", "euiss", "esdc", "hydrogen", "euratom", "chips", "sesar"],
+    # batch 1 (15:00 UTC) — Playwright-fed bodies for this window: europol, rail.
     ["eea", "efca", "efsa", "eib", "eige", "eiopa", "eit", "ema", "enisa", "eppo", "era", "esm", "esma",
-     "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor", "edpb", "eda", "edctp3", "aviation", "cbe"],
+     "emsa", "europol", "eacea", "ercea", "epso", "eas", "eca", "cor", "edpb", "eda", "edctp3", "aviation", "cbe", "rail"],
     # batch 2 (21:00 UTC) — Playwright-fed body for this window: eeas.
     ["esrb", "etf", "eu_lisa", "eu_osha", "euaa", "euda", "eurofound", "euipo", "eurojust", "fra", "parliament", "srb",
      "euspa", "frontex", "eeas", "hadea", "rea", "cert_eu", "ombudsman", "eccc", "satcen", "eurohpc", "ihi", "f4e", "sns"],

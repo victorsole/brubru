@@ -1882,7 +1882,7 @@
     "eyebrow": "Per sviluppatori, RegTech e agenti IA",
     "titlePre": "L'UE,",
     "titleAccent": "strutturata",
-    "lede": "Brubru è un fornitore verticale di dati dell'UE. La nostra API REST ti dà accesso in tempo reale a oltre 28.500 leggi adottate, oltre 1.200 procedure legislative, feedback di consultazioni in tempo reale, agende dei commissari, previsioni AI sui risultati legislativi, il calendario istituzionale unificato dell'UE, il Registro di trasparenza e il livello di intelligenza dei testi legali che alimenta il chatbot e l'Amendator di Brubru. Brubru stesso è il primo utente della propria API.",
+    "lede": "Brubru è un fornitore verticale di dati dell'UE. La nostra API REST ora copre ogni istituzione, organo e agenzia dell'UE: 919 endpoint in 84 cartelle, una cartella per istituzione. Hai accesso in tempo reale a oltre 28.500 atti adottati, oltre 1.200 procedure legislative, i riscontri delle consultazioni in tempo reale, le agende dei commissari, le previsioni sugli esiti legislativi con IA, il calendario istituzionale unificato dell'UE, il Registro per la trasparenza e il livello di intelligence sul testo giuridico che alimenta il chatbot e l'Amendator di Brubru. Brubru è il primo utente della propria API.",
     "cta": {
       "reference": "Riferimento API",
       "trial": "Prova Professional gratuita",
