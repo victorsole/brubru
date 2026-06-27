@@ -75,7 +75,7 @@ def _content_anchors(soup, base_url, body_code, platform, item_type, limit):
             continue
         if _NOISE.search(href) or _NOISE.search(title) or _is_junk_title(title):
             continue
-        url = href if href.startswith("http") else norm_url(_join(base_url, href))
+        url = norm_url(href if href.startswith("http") else _join(base_url, href))
         key = url.rstrip("/").lower()
         if key in seen:
             continue
@@ -192,11 +192,12 @@ def _card_to_item(card, base_url, body_code, platform, item_type, *, permissive=
     href = a["href"] if a else ""
     if not href and not permissive:
         return None
-    url = href if href.startswith("http") else (norm_url(_join(base_url, href)) if href else "")
+    url = norm_url(href if href.startswith("http") else _join(base_url, href)) if href else ""
+    ident = url or f"{base_url}#{title[:80]}"  # never leave public_url empty (its one guarantee)
     return Item(body_code=body_code, item_type=item_type, title=title[:300],
-                public_url=url, summary=clean(card.get_text(" ", strip=True))[:300],
+                public_url=ident, summary=clean(card.get_text(" ", strip=True))[:300],
                 document_date=smart_date(card), creation_date=datetime.now(timezone.utc),
-                source_kind=platform, guid=url or f"{base_url}#{title[:80]}")
+                source_kind=platform, guid=ident)
 
 
 _CTA = re.compile(r"^(click here|read more|read the|read it|download|view|see more|see all|"
@@ -228,7 +229,7 @@ def _cta_cards(soup, base_url, body_code, platform, item_type, limit):
         if not heads:
             continue
         title = max(heads, key=len)
-        url = href if href.startswith("http") else norm_url(_join(base_url, href))
+        url = norm_url(href if href.startswith("http") else _join(base_url, href))
         key = url.rstrip("/").lower()
         if key in seen:
             continue
@@ -250,7 +251,7 @@ def _join(base, href):
 def _dedup(items):
     seen, out = set(), []
     for it in items:
-        k = (it.public_url or "").rstrip("/").lower()
+        k = (it.public_url or it.guid or "").rstrip("/").lower()  # guid fallback: empty-url items still dedup
         if k and k in seen:
             continue
         if k:

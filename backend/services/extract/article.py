@@ -12,6 +12,8 @@ import re
 
 from bs4 import BeautifulSoup
 
+from services.scrapers.economy_common import clean
+
 # Where EU detail pages keep the body, roughly best-first across the 8 platforms.
 _BODY_SELECTORS = [
     "article .ecl-content-block__description", ".ecl-paragraph", "article",
@@ -51,7 +53,8 @@ def extract_body(html: str, url: str = "", *, max_chars: int = 6000) -> tuple[st
         paras = [p for p in (soup.select("p") or []) if len(_txt(p)) >= 50]
         if paras:
             txt = _WS.sub(" ", " ".join(_txt(p) for p in paras)).strip()
-            return txt[:max_chars], "".join(str(p) for p in paras)[:max_chars * 3]
+            # clean(): strip C0 control chars Postgres TEXT rejects (PDF/HTML can emit them)
+            return clean(txt[:max_chars]), clean("".join(str(p) for p in paras)[:max_chars * 3])
     if not best or best_len < 80:
         return "", ""
-    return _txt(best)[:max_chars], best.decode()[:max_chars * 3]
+    return clean(_txt(best)[:max_chars]), clean(best.decode()[:max_chars * 3])

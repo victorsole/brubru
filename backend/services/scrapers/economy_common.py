@@ -23,8 +23,15 @@ _BODY_CAP = 800_000  # chars; working-paper PDFs can be large
 
 @dataclass
 class Item:
+    # CANONICAL item shape. The 5 "target" datapoints (public_url, body_txt, body_html,
+    # document_date, creation_date) are BEST-EFFORT, not guaranteed: creation_date is
+    # always set; public_url is always non-empty (extract handlers fall back to a
+    # synthetic guid); body_txt/body_html are populated only on the deep/detail-fetch
+    # path; document_date is best-effort. Type does not enforce this — see
+    # extract_engine_plan.md Contract A (relaxed to match reality).
     body_code: str
-    item_type: str            # news | publication | event | legal
+    item_type: str            # canonical, caller-supplied page-level hint:
+                              # news | event | publication | topic | consultation | tender | legal
     title: str
     public_url: str
     summary: str | None = None

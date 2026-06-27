@@ -30,7 +30,7 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # Broad candidate selectors across platform types — we only count, not extract.
 _CANDIDATE = [".ecl-content-item", ".teaser", ".card", ".views-row", "article",
               ".node", ".list-item", ".result", ".search-result"]
-_CHALLENGE = re.compile(r"/challenge|/sorry|/cdn-cgi|just a moment|/login|enable javascript", re.I)
+_CHALLENGE = re.compile(r"/challenge|/sorry|/cdn-cgi|just a moment|/login|enable javascript|anubis|making sure you.?re not a bot|proof[- ]of[- ]work", re.I)
 
 
 def _slug(url: str) -> str:

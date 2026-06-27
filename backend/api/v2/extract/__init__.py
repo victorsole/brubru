@@ -26,12 +26,15 @@ _ITEM_TYPES = {"news", "event", "publication", "topic", "consultation", "tender"
 
 class ExtractedItem(BaseModel):
     title: str
-    summary: Optional[str] = None
+    item_type: Optional[str] = Field(None, description="news | event | publication | topic | consultation | tender (caller-supplied page-level hint).")
     public_url: Optional[str] = None
+    summary: Optional[str] = None
     document_date: Optional[datetime] = None
     creation_date: Optional[datetime] = None
-    body_txt: Optional[str] = None
-    body_html: Optional[str] = None
+    body_txt: Optional[str] = Field(None, description="Article body — populated only with deep=true.")
+    body_html: Optional[str] = Field(None, description="Article HTML — populated only with deep=true.")
+    body_code: Optional[str] = None
+    guid: Optional[str] = None
     source_kind: Optional[str] = Field(None, description="The platform handler that parsed it.")
     eurovoc_descriptors: List[dict] = Field(default_factory=list, description="EuroVoc subject descriptors (when classify=true).")
 
@@ -66,28 +69,25 @@ async def extract_url(
     item_type: str = Query("news", description="news | event | publication | topic | consultation | tender."),
     limit: int = Query(60, ge=1, le=100),
     classify: bool = Query(False, description="Also tag each item with EuroVoc subject descriptors (slower)."),
-    deep: bool = Query(False, description="With classify=true, fetch each item's detail page and tag on the full article body (most accurate, slowest)."),
-    complete_dates: bool = Query(False, description="Fetch the detail page of any item missing a date to recover it (some sites only show the date on the article page)."),
+    shallow: bool = Query(False, description="Fast listing-only: skip the per-item detail fetches, so body_txt/body_html and some dates are left empty. Default is the full contract (each item's body + date filled from its detail page)."),
     lang: str = Query("en", description="Language for EuroVoc classification (en|es|fr|it|nl; ca->es)."),
 ):
     if not url.startswith(("http://", "https://")):
         raise HTTPException(400, "url must be an absolute http(s) URL")
     if item_type not in _ITEM_TYPES:
         raise HTTPException(400, f"item_type must be one of {sorted(_ITEM_TYPES)}")
-    if deep and not classify:  # deep only enriches classification; reject the abuse lever
-        raise HTTPException(400, "deep=true requires classify=true")
     # The engine is fully synchronous (requests + sync Playwright). Run it off the event
     # loop so one slow render can't block every other coroutine on the worker.
     res = await run_in_threadpool(_extract, url, item_type=item_type, limit=limit,
-                                  classify_eurovoc=classify, lang=lang, deep=deep,
-                                  complete_dates=complete_dates)
+                                  classify_eurovoc=classify, lang=lang, shallow=shallow)
     if res.get("error") == "fetch_failed" or res.get("fetched_via") in ("failed", "blocked"):
         # surface as 502 so the metered-call refund path (5xx) triggers and the caller
         # can tell "fetch failed / blocked" apart from "page genuinely empty".
         raise HTTPException(502, f"could not fetch the URL ({res.get('fetched_via', 'failed')})")
-    items = [ExtractedItem(title=it.title, summary=it.summary, public_url=it.public_url,
-                           document_date=it.document_date, creation_date=it.creation_date,
-                           body_txt=it.body_txt, body_html=it.body_html, source_kind=it.source_kind,
+    items = [ExtractedItem(title=it.title, item_type=it.item_type, public_url=it.public_url,
+                           summary=it.summary, document_date=it.document_date, creation_date=it.creation_date,
+                           body_txt=it.body_txt, body_html=it.body_html, body_code=it.body_code,
+                           guid=it.guid, source_kind=it.source_kind,
                            eurovoc_descriptors=it.extras.get("eurovoc", []))
              for it in res.get("items", [])]
     return ExtractResult(url=res["url"], platform=res["platform"], body_code=res["body_code"],

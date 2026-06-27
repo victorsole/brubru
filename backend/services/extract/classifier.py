@@ -43,13 +43,13 @@ def classify(url: str, html: str | None = None) -> tuple[str, object, str]:
     host = urlparse(url).netloc.lower()
     if body in _OVERRIDES:
         ov = _OVERRIDES[body]
-        platform = ov["platform"]
+        platform = ov["platform"] if ov.get("platform") in _PROFILES else "drupal"
         anti_bot = ov.get("anti_bot") or _PROFILES[platform]["anti_bot"]
         return platform, anti_bot, body
     # post-fetch HTML signature confirmation
     if html:
         for sel, plat in _SIGNATURES:
-            if sel.lstrip(".") in html or sel in html:
+            if (sel.lstrip(".") in html or sel in html) and plat in _PROFILES:
                 return plat, _PROFILES[plat]["anti_bot"], body
     # domain heuristic: *.ec.europa.eu = ECL (DG / executive agency); else agency Drupal
     platform = "ecl" if host.endswith(".ec.europa.eu") else "drupal"
