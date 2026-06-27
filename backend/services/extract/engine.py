@@ -10,26 +10,36 @@ def classify(url: str, html: str | None = None):
     return _clf.classify(url, html)
 
 
-def _deep_fill(items, anti_bot, *, limit_fetches: int = 20):
-    """Deep-fetch each item's detail page and replace its thin listing snippet with the
-    real article body, so classification sees genuine content. Best-effort per item."""
+def _deep_fill(items, anti_bot, *, limit_fetches: int = 25, body: bool = True, dates: bool = True):
+    """Deep-fetch item detail pages to enrich them. body=True replaces the thin listing
+    snippet with the real article text (for classification); dates=True recovers the
+    publication date when the listing card carried none (many Drupal sites — eige, easa,
+    enisa — only show the date on the detail page). Best-effort per item. When body is
+    off, only dateless items are fetched, so date-completion stays cheap."""
+    from bs4 import BeautifulSoup
     from . import article as _article
-    for it in items[:limit_fetches]:
-        if not it.public_url:
-            continue
+    from .handlers import smart_date
+    targets = [it for it in items if it.public_url and (body or (dates and not it.document_date))]
+    for it in targets[:limit_fetches]:
         try:
             html, _ = _fetch.fetch(it.public_url, anti_bot)
             if not html:
                 continue
-            body_txt, body_html = _article.extract_body(html, it.public_url)
-            if body_txt:
-                it.body_txt, it.body_html = body_txt, body_html
+            if dates and not it.document_date:
+                d = smart_date(BeautifulSoup(html, "html.parser"))
+                if d:
+                    it.document_date = d
+            if body:
+                body_txt, body_html = _article.extract_body(html, it.public_url)
+                if body_txt:
+                    it.body_txt, it.body_html = body_txt, body_html
         except Exception:
             continue
 
 
 def extract(url: str, *, item_type: str = "news", limit: int = 60,
-            classify_eurovoc: bool = False, lang: str = "en", deep: bool = False) -> dict:
+            classify_eurovoc: bool = False, lang: str = "en", deep: bool = False,
+            complete_dates: bool = False) -> dict:
     """Run the engine on one URL. Returns a result dict (items + diagnostics).
     classify_eurovoc=True runs the Phase-2 EuroVoc classify step on each item
     (slow: BERT per item; default off for the live endpoint, on for batch writers).
@@ -59,9 +69,12 @@ def extract(url: str, *, item_type: str = "news", limit: int = 60,
         html3, _ = _fetch.fetch(url, "playwright")
         if html3:
             items = _handlers.parse(platform, html3, url, body_code=body, item_type=item_type, limit=limit)
+    # detail-page enrichment: deep (body+dates, for classify) or just date-completion
+    if deep:
+        _deep_fill(items, anti_bot, body=True, dates=True)
+    elif complete_dates:
+        _deep_fill(items, anti_bot, body=False, dates=True)
     if classify_eurovoc:
-        if deep:
-            _deep_fill(items, anti_bot)
         from services.classify import classify_item
         for it in items:
             it.extras["eurovoc"] = classify_item(it, lang=lang)
