@@ -45,7 +45,7 @@ def _requests_fetch(url: str, *, cooldown: bool):
     return None, "challenged"
 
 
-def _playwright_fetch(url: str, *, tls_relaxed: bool, wait_ms: int = 3500):
+def _playwright_fetch(url: str, *, tls_relaxed: bool, wait_ms: int = 3500, settle: bool = True):
     try:
         from playwright.sync_api import sync_playwright
     except Exception:
@@ -57,6 +57,27 @@ def _playwright_fetch(url: str, *, tls_relaxed: bool, wait_ms: int = 3500):
             pg = ctx.new_page()
             pg.goto(url, wait_until="domcontentloaded", timeout=45000)
             pg.wait_for_timeout(wait_ms)
+            # Render-settle: slow AJAX grids (Power Pages / Dynamics data_grid, faceted
+            # SPAs) populate seconds after domcontentloaded. Poll body text until it
+            # stops growing (settled) or a hard cap, so we don't snapshot a "loading"
+            # state and extract 0 items.
+            if settle:
+                prev, stable = -1, 0
+                for i in range(12):  # up to ~18s extra
+                    try:
+                        cur = pg.evaluate("document.body && document.body.innerText.length || 0")
+                        spinner = pg.evaluate(
+                            "[...document.querySelectorAll('.loading,.spinner,[class*=loading],"
+                            "[class*=spinner]')].some(e=>e.offsetParent!==null)")
+                    except Exception:
+                        break
+                    stable = 0 if cur > prev * 1.02 else stable + 1
+                    prev = cur
+                    # settle only after a minimum dwell, two stable reads, no visible
+                    # spinner -> never snapshots a still-loading AJAX grid (Power Pages).
+                    if i >= 3 and stable >= 2 and not spinner:
+                        break
+                    pg.wait_for_timeout(1500)
             html = pg.content()
             b.close()
             return html

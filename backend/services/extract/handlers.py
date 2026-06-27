@@ -125,21 +125,86 @@ def smart_date(el) -> datetime | None:
     return None
 
 
-def _card_to_item(card, base_url, body_code, platform, item_type) -> Item | None:
+def _card_title(card) -> str | None:
+    """Pick the card's title. Prefer a real heading (12-200 chars, not junk/publisher),
+    else the card's main link text, else the longest paragraph. This handles both the
+    common case (title in <h2>) and Power Pages cards (publisher in <h5>, title in <p>)."""
+    for h in card.select("h1, h2, h3, h4, h5"):
+        t = clean(h.get_text(" ", strip=True))
+        if t and 12 <= len(t) <= 200 and not _is_junk_title(t):
+            return t
     a = next((x for x in card.select("a[href]")
-              if x.get_text(strip=True) and len(x.get_text(strip=True)) >= 10
-              and not x.get("href", "").startswith(("#", "javascript:", "mailto:"))), None)
-    if not a:
+              if not x.get("href", "").startswith(("#", "javascript:", "mailto:"))), None)
+    if a:
+        t = clean(a.get_text(" ", strip=True))
+        if t and 8 <= len(t) <= 200 and not _is_junk_title(t):
+            return t
+    cands = [clean(p.get_text(" ", strip=True)) for p in card.select("p, .title, strong, span")]
+    cands = [c for c in cands if c and 12 <= len(c) <= 200 and not _is_junk_title(c)]
+    return max(cands, key=len) if cands else None
+
+
+def _card_to_item(card, base_url, body_code, platform, item_type, *, permissive=False) -> Item | None:
+    """Build an Item from a card. Strict (default): a real anchor href is required, so
+    generic `article`/`.card` chrome (language menus, "About us") is not mistaken for an
+    item. Permissive (only for explicit item-class cards like .publication-item): allow
+    a heading/paragraph title with no anchor, for JS-gated Power Pages grids."""
+    title = _card_title(card)
+    if not title:
         return None
-    href = a["href"]
-    url = href if href.startswith("http") else norm_url(_join(base_url, href))
-    title = clean(a.get_text(" ", strip=True))
-    if not title or len(title) < 8 or _is_junk_title(title):
+    a = next((x for x in card.select("a[href]")
+              if not x.get("href", "").startswith(("#", "javascript:", "mailto:"))), None)
+    href = a["href"] if a else ""
+    if not href and not permissive:
         return None
+    url = href if href.startswith("http") else (norm_url(_join(base_url, href)) if href else "")
     return Item(body_code=body_code, item_type=item_type, title=title[:300],
                 public_url=url, summary=clean(card.get_text(" ", strip=True))[:300],
                 document_date=smart_date(card), creation_date=datetime.now(timezone.utc),
-                source_kind=platform, guid=url)
+                source_kind=platform, guid=url or f"{base_url}#{title[:80]}")
+
+
+_CTA = re.compile(r"^(click here|read more|read the|read it|download|view|see more|see all|"
+                  r"learn more|find out more|discover|more info|access)\b", re.I)
+
+
+def _cta_cards(soup, base_url, body_code, platform, item_type, limit):
+    """Cards whose title sits in a heading and whose link is a CTA ('Click here',
+    'Read more', 'Download') — the Power Pages / Dynamics data-grid shape, and many EU
+    portals. Climb from each CTA link to the card container and take its longest
+    non-junk heading as the title."""
+    body = BeautifulSoup(str(soup), "html.parser")
+    for tag in body.select("nav, header, footer, aside, .menu, .navbar, .ecl-site-header, .ecl-site-footer"):
+        tag.decompose()
+    out, seen = [], set()
+    for a in body.select("a[href]"):
+        if not _CTA.match(clean(a.get_text(" ", strip=True))):
+            continue
+        href = a.get("href", "")
+        if href.startswith(("#", "javascript:", "mailto:", "tel:")):
+            continue
+        card = a
+        for _ in range(4):  # climb to a container that carries a heading
+            card = card.find_parent(["div", "article", "li", "section"]) or card
+            if card.find(["h2", "h3", "h4", "h5"]):
+                break
+        heads = [clean(h.get_text(" ", strip=True)) for h in card.find_all(["h2", "h3", "h4", "h5"])]
+        heads = [h for h in heads if h and len(h) >= 8 and not _is_junk_title(h)]
+        if not heads:
+            continue
+        title = max(heads, key=len)
+        url = href if href.startswith("http") else norm_url(_join(base_url, href))
+        key = url.rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(Item(body_code=body_code, item_type=item_type, title=title[:300],
+                        public_url=url, summary=clean(card.get_text(" ", strip=True))[:300],
+                        document_date=smart_date(card), creation_date=datetime.now(timezone.utc),
+                        source_kind=platform, guid=url))
+        if len(out) >= limit:
+            break
+    return out
 
 
 def _join(base, href):
@@ -170,11 +235,28 @@ def parse(platform, html, base_url, *, body_code="extract", item_type="news", li
     elif platform == "wordpress":
         cards = soup.select("article") or [a.parent for a in soup.select("a[href*='/news/'], a[href*='/publications']")]
     else:  # jcms, sharepoint, dynamics, spa, bespoke (post-render): generic
-        cards = (soup.select("article") or soup.select(".card") or soup.select(".views-row")
-                 or soup.select("li.search-result, .result, .news-item, .event-item"))
+        # Explicit item-class cards first, extracted permissively (handles JS-gated
+        # Power Pages grids where the title is a <p> and the link is a JS span).
+        item_cards = soup.select(".publication-item, .news-item, .event-item, .card-item")
+        permissive = bool(item_cards)
+        cards = (item_cards or soup.select("article") or soup.select(".card")
+                 or soup.select(".views-row") or soup.select("li.search-result, .result, .teaser"))
         if not cards:  # last resort: anchors to listing-like detail pages
             cards = [a.parent or a for a in soup.select("a[href]")
                      if _LIST_HREF.search(a.get("href", "")) and len(a.get_text(strip=True)) >= 12]
+        out = []
+        for c in cards:
+            it = _card_to_item(c, base_url, body_code, platform, item_type, permissive=permissive)
+            if it:
+                out.append(it)
+            if len(out) >= limit:
+                break
+        out = _dedup(out)
+        if len(out) < 2:
+            out = _dedup(out + _cta_cards(soup, base_url, body_code, platform, item_type, limit))
+        if len(out) < 2:
+            out = _dedup(out + _content_anchors(soup, base_url, body_code, platform, item_type, limit))
+        return out[:limit]
     out = []
     for c in cards:
         it = _card_to_item(c, base_url, body_code, platform, item_type)
@@ -183,7 +265,10 @@ def parse(platform, html, base_url, *, body_code="extract", item_type="news", li
         if len(out) >= limit:
             break
     out = _dedup(out)
-    # Fallback: platform selectors found little -> robust content-anchor scan.
+    # Fallback 1: heading + CTA-link cards (Power Pages / Dynamics data-grid, portals).
+    if len(out) < 2:
+        out = _dedup(out + _cta_cards(soup, base_url, body_code, platform, item_type, limit))
+    # Fallback 2: robust content-anchor scan for anything still missed.
     if len(out) < 2:
         out = _dedup(out + _content_anchors(soup, base_url, body_code, platform, item_type, limit))
     return out[:limit]

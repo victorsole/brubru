@@ -65,13 +65,14 @@ async def extract_url(
     item_type: str = Query("news", description="news | event | publication | topic | consultation | tender."),
     limit: int = Query(60, ge=1, le=100),
     classify: bool = Query(False, description="Also tag each item with EuroVoc subject descriptors (slower)."),
+    deep: bool = Query(False, description="With classify=true, fetch each item's detail page and tag on the full article body (most accurate, slowest)."),
     lang: str = Query("en", description="Language for EuroVoc classification (en|es|fr|it|nl; ca->es)."),
 ):
     if not url.startswith(("http://", "https://")):
         raise HTTPException(400, "url must be an absolute http(s) URL")
     if item_type not in _ITEM_TYPES:
         raise HTTPException(400, f"item_type must be one of {sorted(_ITEM_TYPES)}")
-    res = _extract(url, item_type=item_type, limit=limit, classify_eurovoc=classify, lang=lang)
+    res = _extract(url, item_type=item_type, limit=limit, classify_eurovoc=classify, lang=lang, deep=deep)
     items = [ExtractedItem(title=it.title, summary=it.summary, public_url=it.public_url,
                            document_date=it.document_date, creation_date=it.creation_date,
                            body_txt=it.body_txt, body_html=it.body_html, source_kind=it.source_kind,
