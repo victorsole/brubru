@@ -146,6 +146,12 @@ def _init_sbert() -> bool:
 _MIN_MARGIN = _env_num("EUROVOC_MIN_MARGIN", 0.024, float)
 _MIN_CLUSTER = _env_num("EUROVOC_MIN_CLUSTER", 4, int)
 _GATE_K = _env_num("EUROVOC_GATE_K", 6, int)  # fixed gate window; calibration anchor
+# Microthesauri too heterogeneous to signal a coherent topic when they cluster. 1016
+# "European construction" mixes real subjects with organisation/body NAMES (ACP-EU Joint
+# Assembly, EEA Joint Committee, EU Military Committee), which cluster on proper-noun
+# event titles ("2nd EU-Japan Forum") and falsely trip the cluster branch. Excluded from
+# CLUSTER COUNTING only — descriptors in them can still be returned via the margin branch.
+_CLUSTER_EXCLUDE_MT = {"1016"}
 
 
 def classify(text: str | None, lang: str = "en", top_k: int | None = None) -> list[dict]:
@@ -171,8 +177,8 @@ def classify(text: str | None, lang: str = "en", top_k: int | None = None) -> li
         counts: dict = {}
         for _, d in win:
             mt = d.get("mt")
-            if mt:
-                counts[mt] = counts.get(mt, 0) + 1
+            if mt and mt not in _CLUSTER_EXCLUDE_MT:  # heterogeneous/institutional domains
+                counts[mt] = counts.get(mt, 0) + 1     # don't count as a coherent topic
         max_cluster = max(counts.values()) if counts else 0
         if max_cluster < _MIN_CLUSTER and gate_span < _MIN_MARGIN:
             return []

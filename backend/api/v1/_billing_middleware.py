@@ -45,8 +45,8 @@ class BillingRefundMiddleware(BaseHTTPMiddleware):
     ) -> Response:
         response = await call_next(request)
 
-        # Only consider /api/v1/* (matches debit scope)
-        if not request.url.path.startswith("/api/v1/"):
+        # Consider both metered API surfaces (the per-call debit runs for v1 and v2).
+        if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
             return response
 
         # If the dependency didn't set billing state, nothing to refund.

@@ -62,31 +62,36 @@ def _needs_browser(anti_bot) -> bool:
     return any(v in _BROWSER for v in vals)
 
 
-def _get_no_internal_redirects(s, url, *, max_hops=5):
+def _get_no_internal_redirects(s, url, *, max_hops=8):
     """GET following redirects manually, re-validating each hop against the SSRF guard
-    (a public host can 302 to an internal one). Returns the final Response or None."""
+    (a public host can 302 to an internal one). Returns (Response|None, reason). reason
+    is 'blocked' when a hop fails the SSRF guard, 'redirect_loop' when the hop cap is
+    exceeded (e.g. a long EU Login/SSO chain) — distinct so the caller can tell an SSRF
+    rejection from a benign deep redirect chain.
+    NOTE residual: requests re-resolves DNS at connect time, so a rebinding host that
+    resolves public here and private at connect is not fully closed (no IP pinning)."""
     cur = url
     for _ in range(max_hops):
         if not _is_safe_url(cur):
-            return None
+            return None, "blocked"
         r = s.get(cur, timeout=30, allow_redirects=False)
         if r.is_redirect or r.is_permanent_redirect:
             loc = r.headers.get("location")
             if not loc:
-                return r
+                return r, "ok"
             cur = requests.compat.urljoin(cur, loc)
             continue
-        return r
-    return None
+        return r, "ok"
+    return None, "redirect_loop"
 
 
 def _requests_fetch(url: str, *, cooldown: bool):
     s = requests.Session(); s.headers.update({"User-Agent": _UA})
     for attempt in range(3 if cooldown else 1):
         try:
-            r = _get_no_internal_redirects(s, url)
+            r, reason = _get_no_internal_redirects(s, url)
             if r is None:
-                return None, "blocked"
+                return None, reason  # 'blocked' (SSRF) or 'redirect_loop'
         except requests.RequestException:
             return None, "error"
         # requests defaults undeclared text/* to ISO-8859-1, but EU pages are UTF-8;
