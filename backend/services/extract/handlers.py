@@ -262,6 +262,11 @@ def _dedup(items):
 # ---- platform handlers ------------------------------------------------------ #
 def parse(platform, html, base_url, *, body_code="extract", item_type="news", limit=60):
     soup = BeautifulSoup(html, "html.parser")
+    # Strip filter/search forms and datepickers up front: their form-item divs and
+    # ecl-datepicker widgets were being mistaken for content cards (e.g. the
+    # civil-protection call-deadline filter extracted as a dateless "item").
+    for el in soup.select("form, .ecl-datepicker, [role=search], .js-form-item, .facets-widget"):
+        el.decompose()
     if platform == "ecl":
         cards = soup.select(".ecl-content-item")
     elif platform == "drupal":
