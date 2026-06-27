@@ -42,12 +42,16 @@ _RESOLVERS = {
 # Playwright context is throttled far less than per-row requests).
 _BULK_RESOLVERS = {
     "cedefop": cedefop_event_dates_bulk,
+    "euda": _tail.playwright_event_dates_bulk,
+    "chips": _tail.playwright_event_dates_bulk,
+    "cjeu": _tail.playwright_event_dates_bulk,
+    "era": _tail.playwright_event_dates_bulk,
 }
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--body", required=True, choices=sorted(_RESOLVERS))
+    ap.add_argument("--body", required=True, choices=sorted(set(_RESOLVERS) | set(_BULK_RESOLVERS)))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, default=0, help="cap rows processed (0 = all)")
     ap.add_argument("--pace", type=float, default=0.25, help="seconds between fetches")

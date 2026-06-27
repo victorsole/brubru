@@ -145,12 +145,15 @@ def ingest_cedefop_events(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return list(out.values())
 
 
-async def _cedefop_dates_async(urls, on_result, *, pace: float = 1.8) -> None:
+async def _cedefop_dates_async(urls, on_result, *, pace: float = 4.0,
+                               cooldown: float = 300.0) -> None:
     """Resolve event start dates through a single persistent headless-Chromium
     context. Cedefop rate-limits bursts behind a /challenge interstitial that
-    clears after a cooldown; a real-browser context is throttled far less than
-    bare requests, and on the rare challenge we wait the cooldown out. on_result
-    (url, date|None) is called per row so the caller can commit incrementally."""
+    only clears after an IP-wide cooldown (minutes), so per-row retries are
+    pointless while throttled: instead, on a challenge we pause the WHOLE grind
+    for `cooldown` seconds (letting the limit fully reset) and re-fetch the same
+    row, never skipping it. Slow base pace keeps us under the threshold.
+    on_result(url, date|None) is called per resolved row for incremental commit."""
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
         b = await p.chromium.launch(headless=True)
@@ -158,17 +161,17 @@ async def _cedefop_dates_async(urls, on_result, *, pace: float = 1.8) -> None:
         pg = await ctx.new_page()
         for url in urls:
             dt = None
-            for attempt in range(4):
+            for attempt in range(6):
                 try:
                     await pg.goto(url, wait_until="domcontentloaded", timeout=45000)
-                    await pg.wait_for_timeout(2500 if attempt == 0 else 4000)
+                    await pg.wait_for_timeout(3000)
                     html = await pg.content()
                 except Exception:
                     break
                 if "/challenge" not in pg.url:
                     dt = _event_start_date(BeautifulSoup(html, "html.parser"))
                     break
-                await pg.wait_for_timeout(20000 * (attempt + 1))  # cooldown
+                await pg.wait_for_timeout(int(cooldown * 1000))  # ride out the IP cooldown
             on_result(url, dt)
             await pg.wait_for_timeout(int(pace * 1000))
         await b.close()

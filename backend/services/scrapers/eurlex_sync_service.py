@@ -29,6 +29,7 @@ from models.legislative_train import (
     CarriageSourceEnum
 )
 from services.api_clients.eurlex_client import EURLexClient
+from services.tracking.policy_area_classifier import classify
 
 logger = logging.getLogger(__name__)
 
@@ -282,6 +283,11 @@ class EURLexSyncService:
 
         now = datetime.now(timezone.utc)
 
+        # Classify Policy Interest from title + description (same classifier the OEIL sync
+        # uses). EUR-Lex rows have no committee; classify returns [] for CELEX-only/
+        # keyword-less titles rather than guessing — honest empties stay empty.
+        policy_areas = classify(title or "", description or "")
+
         carriage = LegislativeCarriage(
             id=uuid.uuid4(),
             file_id=file_id,
@@ -290,6 +296,7 @@ class EURLexSyncService:
             current_status=status,
             text_type=text_type,
             celex_numbers=[celex],  # Store as array
+            policy_areas=policy_areas,
             source=CarriageSourceEnum.EURLEX,
             url=link,
             scraped_at=now,
@@ -315,6 +322,12 @@ class EURLexSyncService:
                 carriage.celex_numbers = [celex]
             elif celex not in carriage.celex_numbers:
                 carriage.celex_numbers = carriage.celex_numbers + [celex]
+
+        # Backfill Policy Interest on re-sync if still empty (and a signal now exists).
+        if not carriage.policy_areas:
+            pis = classify(carriage.title or "", carriage.description or "")
+            if pis:
+                carriage.policy_areas = pis
 
         carriage.last_updated = datetime.now(timezone.utc)
 

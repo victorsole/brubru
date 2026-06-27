@@ -111,3 +111,55 @@ def sesar_event_date(url):  return _resolve(url, selectors=[".date-details .date
 def euiss_event_date(url):  return _resolve(url)                                            # event-scoped <time>
 def eige_event_date(url):   return _resolve(url)                                            # event-scoped <time>
 def cinea_event_date(url):  return _resolve(url)                                            # JSON-LD startDate
+
+
+# --- Comprehensive extractor + Playwright bulk path (JS-walled / 403 bodies) --- #
+
+def extract_event_date(html: str) -> datetime | None:
+    """All strategies in priority order: JSON-LD startDate, event-scoped <time>,
+    any <time datetime>, then a DMY/ISO inside a date-labelled element."""
+    soup = BeautifulSoup(html, "html.parser")
+    return (_jsonld_start(soup)
+            or _time_tag(soup, allow_any=False)
+            or _time_tag(soup, allow_any=True)
+            or _date_in_labelled_element(soup))
+
+
+def _date_in_labelled_element(soup) -> datetime | None:
+    for el in soup.find_all(True):
+        cls = " ".join(el.get("class", [])).lower()
+        idv = (el.get("id") or "").lower()
+        if not any(k in cls + " " + idv for k in ("date", "when", "event-time", "schedule", "calendar")):
+            continue
+        txt = el.get_text(" ", strip=True)
+        if len(txt) > 80:
+            continue
+        d = _from_dmy(txt) or _from_iso(txt)
+        if d:
+            return d
+    return None
+
+
+async def _pw_dates_async(urls, on_result, *, wait_ms=5000, pace=1.5):
+    from playwright.async_api import async_playwright
+    async with async_playwright() as p:
+        b = await p.chromium.launch(headless=True)
+        ctx = await b.new_context(user_agent=_UA["User-Agent"])
+        pg = await ctx.new_page()
+        for url in urls:
+            d = None
+            try:
+                await pg.goto(url, wait_until="domcontentloaded", timeout=45000)
+                await pg.wait_for_timeout(wait_ms)
+                d = extract_event_date(await pg.content())
+            except Exception:
+                pass
+            on_result(url, d)
+            await pg.wait_for_timeout(int(pace * 1000))
+        await b.close()
+
+
+def playwright_event_dates_bulk(urls, on_result) -> None:
+    """One-browser bulk resolver for JS-rendered / 403 event pages."""
+    import asyncio
+    asyncio.run(_pw_dates_async(urls, on_result))

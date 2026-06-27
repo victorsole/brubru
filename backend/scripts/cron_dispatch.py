@@ -125,6 +125,12 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if hour == 4:
         fires.append(("daily", "/api/cron/sync/daily"))
 
+    # Procedure-snapshot cube: 05:00 UTC daily. Builds one row per carriage (slow state +
+    # 5 fast-signal counts) so the predictors gain count-trajectory features. Quiet hour
+    # (only collides with the Sunday weekly tier, which uses a separate endpoint).
+    if hour == 5:
+        fires.append(("procedure_snapshots", "/api/cron/build-procedure-snapshots"))
+
     # Economy folders (v2 institutional/agency/database endpoints backed by
     # economy_items: per-body news, events, publications, databases, tenders,
     # grants, calls, consultations). Daily, split into three batches on quiet

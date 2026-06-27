@@ -432,6 +432,30 @@ async def cron_precompute_journeys(
     return {"status": "success", "results": result}
 
 
+@router.post("/build-procedure-snapshots")
+async def cron_build_procedure_snapshots(
+    authorization: str = Header(...),
+    limit: int = Query(None, ge=1, description="Cap carriages (testing); omit for all"),
+):
+    """
+    Build today's procedure-snapshot cube: one row per legislative procedure (carriage)
+    with its slow state plus the five fast-signal counts (amendments, documents, committee
+    work, lobby meetings, EPRS briefings). Idempotent — re-running the same day refreshes
+    rows via ON CONFLICT (carriage_id, snapshot_date). Feeds the predictors' trajectory
+    features. Runs once daily on a quiet hour.
+    """
+    _verify_cron_secret(authorization)
+    from starlette.concurrency import run_in_threadpool
+    from services.snapshots.snapshot_writer import write_daily_snapshots
+    db = SessionLocal()
+    try:
+        result = await run_in_threadpool(write_daily_snapshots, db, limit=limit)
+    finally:
+        db.close()
+    logger.info(f"[CRON] build-procedure-snapshots complete: {result}")
+    return {"status": "success", "results": result}
+
+
 @router.post("/transcribe-pending")
 async def cron_transcribe_pending(
     authorization: str = Header(...),

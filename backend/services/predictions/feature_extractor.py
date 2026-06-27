@@ -92,6 +92,22 @@ class CarriageFeatures:
     similar_adoption_rate: Optional[float] = None  # % of similar procedures adopted
     similar_avg_days: Optional[float] = None  # Avg days for similar procedures
 
+    # --- Phase 3 trajectory features (from procedure_snapshots) ---------------
+    # The first signals the predictor ever gets about ACTIVITY and its trend, not just
+    # static metadata. Default 0 (graceful) when the carriage has no snapshots yet.
+    snapshot_history_len: int = 0          # how many snapshots we hold for this carriage
+    total_procedural_events: int = 0       # cumulative OEIL key-events (real, from snapshots)
+    events_last_90d: int = 0               # procedural events in the last 90 days (recent velocity)
+    events_last_180d: int = 0
+    event_acceleration: int = 0            # events_last_90d minus the prior 90-day window
+    avg_days_between_events: float = 0.0   # mean gap between milestones (cadence)
+    days_since_last_event: int = 0         # staleness: days since the latest milestone
+    # measured fast-signal counts (NEW to the predictor — it had none of these)
+    num_amendments: int = 0
+    num_commission_documents: int = 0
+    num_committee_work: int = 0
+    num_lobby_meetings: int = 0
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for ML processing."""
         return asdict(self)
@@ -261,6 +277,65 @@ class FeatureExtractor:
             'total_committees': len(carriage.committees or []),
         }
 
+    # default-zero trajectory block (no snapshots yet -> graceful, never None)
+    _EMPTY_TRAJECTORY = {
+        'snapshot_history_len': 0, 'total_procedural_events': 0,
+        'events_last_90d': 0, 'events_last_180d': 0, 'event_acceleration': 0,
+        'avg_days_between_events': 0.0, 'days_since_last_event': 0,
+        'num_amendments': 0, 'num_commission_documents': 0,
+        'num_committee_work': 0, 'num_lobby_meetings': 0,
+    }
+
+    def _get_trajectory_features(self, carriage) -> Dict[str, Any]:
+        """Trajectory features from procedure_snapshots: procedural-event velocity /
+        acceleration / cadence (real, reconstructed) plus the latest measured fast-signal
+        counts. All default 0 when the carriage has no snapshots, so the predictor degrades
+        gracefully on cold rows."""
+        from models.procedure_snapshot import ProcedureSnapshot
+
+        rows = (
+            self.db.query(ProcedureSnapshot)
+            .filter(ProcedureSnapshot.carriage_id == carriage.id)
+            .order_by(ProcedureSnapshot.snapshot_date.asc())
+            .all()
+        )
+        if not rows:
+            return dict(self._EMPTY_TRAJECTORY)
+
+        feats = dict(self._EMPTY_TRAJECTORY)
+        feats['snapshot_history_len'] = len(rows)
+        feats['total_procedural_events'] = max((r.num_status_changes or 0) for r in rows)
+
+        # event dates = the distinct snapshot dates that represent a milestone (bootstrap
+        # rows are one-per-event; the daily row reuses the latest date). Use all dates.
+        dates = sorted({r.snapshot_date for r in rows})
+        latest = dates[-1]
+        feats['days_since_last_event'] = max((latest - dates[-1]).days, 0)  # 0 by def; kept explicit
+
+        # the daily (measured) row carries the live counts and the real days_since_last_event
+        daily = [r for r in rows if r.snapshot_source == 'daily']
+        if daily:
+            d = daily[-1]
+            feats['days_since_last_event'] = d.days_in_current_status or 0
+            feats['num_amendments'] = d.num_amendments or 0
+            feats['num_commission_documents'] = d.num_documents or 0
+            feats['num_committee_work'] = d.num_committee_work or 0
+            feats['num_lobby_meetings'] = d.num_lobby_meetings or 0
+
+        # event-timeline windows: count milestone dates inside [latest-90, latest] etc.
+        event_dates = sorted({r.snapshot_date for r in rows if r.snapshot_source == 'bootstrap'})
+        if event_dates:
+            w90 = sum(1 for dt in event_dates if (latest - dt).days <= 90)
+            w180 = sum(1 for dt in event_dates if (latest - dt).days <= 180)
+            prior90 = sum(1 for dt in event_dates if 90 < (latest - dt).days <= 180)
+            feats['events_last_90d'] = w90
+            feats['events_last_180d'] = w180
+            feats['event_acceleration'] = w90 - prior90
+            if len(event_dates) > 1:
+                span = (event_dates[-1] - event_dates[0]).days
+                feats['avg_days_between_events'] = round(span / (len(event_dates) - 1), 1)
+        return feats
+
     def _get_ec_features(self, carriage) -> Dict[str, Any]:
         """Extract EC priority features."""
         ec_priority = None
@@ -313,6 +388,9 @@ class FeatureExtractor:
         # EC features
         ec = self._get_ec_features(carriage)
 
+        # Phase 3 trajectory features (procedure_snapshots)
+        traj = self._get_trajectory_features(carriage)
+
         # Title-based features
         title = carriage.title or ""
         is_recast = self._is_recast(title)
@@ -350,6 +428,17 @@ class FeatureExtractor:
             num_policy_areas=complexity['num_policy_areas'],
             ec_priority_number=ec['ec_priority_number'],
             is_spotlight=ec['is_spotlight'],
+            snapshot_history_len=traj['snapshot_history_len'],
+            total_procedural_events=traj['total_procedural_events'],
+            events_last_90d=traj['events_last_90d'],
+            events_last_180d=traj['events_last_180d'],
+            event_acceleration=traj['event_acceleration'],
+            avg_days_between_events=traj['avg_days_between_events'],
+            days_since_last_event=traj['days_since_last_event'],
+            num_amendments=traj['num_amendments'],
+            num_commission_documents=traj['num_commission_documents'],
+            num_committee_work=traj['num_committee_work'],
+            num_lobby_meetings=traj['num_lobby_meetings'],
         )
 
     def extract_all_features(
