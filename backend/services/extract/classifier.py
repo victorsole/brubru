@@ -55,6 +55,3 @@ def classify(url: str, html: str | None = None) -> tuple[str, object, str]:
     platform = "ecl" if host.endswith(".ec.europa.eu") else "drupal"
     return platform, _PROFILES[platform]["anti_bot"], body
 
-
-def profile(platform: str) -> dict:
-    return _PROFILES.get(platform, _PROFILES["drupal"])

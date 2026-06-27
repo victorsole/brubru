@@ -1,5 +1,5 @@
 {
-  "_doc": "Phase 0 of the EU extract engine. The platform taxonomy as DATA, not code. A scraper = (platform_type, selectors, date_strategy, anti_bot). Phase 1 handlers read this; per-body overrides specialise the common case. Source: reference_eu_web_estate_scraper_standard + every economy_*.py docstring.",
+  "_doc": "Phase 0 of the EU extract engine: the platform taxonomy. LIVE config (read by services/extract/classifier.py): each platform's `anti_bot` + the per-body `overrides` (platform, anti_bot) drive URL->platform routing. REFERENCE catalogue (NOT read at runtime; handlers.parse() implements the equivalent selectors in code, kept in sync by tests/extract_engine/test_extract_engine.py::test_config_selectors_no_drift): `selectors`, `date_strategy`, `pagination`. Source: reference_eu_web_estate_scraper_standard + every economy_*.py docstring.",
   "platform_profiles": {
     "ecl": {
       "label": "Europa Component Library",

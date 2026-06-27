@@ -14,9 +14,15 @@ def classify(url: str, html: str | None = None):
 
 
 _ERR_PAGE = re.compile(
+    # EN
     r"page (you requested |that you requested )?(could not be|cannot be|can't be|was not|not) found"
     r"|page not found|404 not found|error 404|\b404\b.{0,20}\bnot found\b"
-    r"|this page (does not exist|isn'?t available)|requested url was not found", re.I)
+    r"|this page (does not exist|isn'?t available)|requested url was not found"
+    # FR / DE / ES / NL / IT / PT localized "page not found" (EU sites serve 200-status localized errors)
+    r"|page (introuvable|non trouvée|n'existe pas|demandée est introuvable)"
+    r"|seite (nicht gefunden|wurde nicht gefunden|existiert nicht)"
+    r"|página no (encontrada|existe)|no se (encontró|ha encontrado) la página"
+    r"|pagina (niet gevonden|non trovata|non esiste)|pagina não encontrada", re.I)
 
 
 def _reg_domain(host: str) -> str:
@@ -56,20 +62,26 @@ def _deep_fill(items, anti_bot, *, limit_fetches: int = 10, body: bool = True, d
             if not html:
                 continue  # fetch failed -> leave fields as-is, do not fabricate
             soup = BeautifulSoup(html, "html.parser")
-            head = soup.get_text(" ", strip=True)[:400]
-            if _ERR_PAGE.search(head):
-                continue  # soft-404 / error page -> never assign its content as the item
+            body_txt, body_html = _article.extract_body(html, it.public_url)
+            # Soft-404 / error page (incl. localized 200-status pages): test the MAIN
+            # content, which on an error page IS the error message, plus a generous raw
+            # window (catches nav-buried strings). Skips BOTH body and date so a 404's
+            # footer date is never written either.
+            probe = ((body_txt or "")[:1000] + " " + soup.get_text(" ", strip=True)[:1000])
+            if _ERR_PAGE.search(probe):
+                continue
             if dates and not it.document_date:
                 d = smart_date(soup)
                 if d:
                     it.document_date = d
-            if body:
-                body_txt, body_html = _article.extract_body(html, it.public_url)
-                if body_txt:
-                    h = hashlib.md5(body_txt[:400].encode("utf-8", "ignore")).hexdigest()
-                    if h not in seen_body:  # not a duplicate of another item's body
-                        seen_body.add(h)
-                        it.body_txt, it.body_html = body_txt, body_html
+            if body and body_txt:
+                # full-body hash: two real articles sharing a boilerplate lede do NOT
+                # collide (their full bodies differ); a genuine wrong-fill (same page for
+                # several items) does -> dropped.
+                h = hashlib.md5(body_txt.encode("utf-8", "ignore")).hexdigest()
+                if h not in seen_body:
+                    seen_body.add(h)
+                    it.body_txt, it.body_html = body_txt, body_html
         except Exception:
             continue
 

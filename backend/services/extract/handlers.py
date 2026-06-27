@@ -193,11 +193,13 @@ def _card_to_item(card, base_url, body_code, platform, item_type, *, permissive=
     if not href and not permissive:
         return None
     url = norm_url(href if href.startswith("http") else _join(base_url, href)) if href else ""
-    ident = url or f"{base_url}#{title[:80]}"  # never leave public_url empty (its one guarantee)
+    # public_url is best-effort: empty when a card genuinely has no link (JS-span) rather
+    # than a misleading fake anchor. guid always carries a stable identity (real URL or a
+    # synthetic listing#title) so dedup and references still work.
     return Item(body_code=body_code, item_type=item_type, title=title[:300],
-                public_url=ident, summary=clean(card.get_text(" ", strip=True))[:300],
+                public_url=url, summary=clean(card.get_text(" ", strip=True))[:300],
                 document_date=smart_date(card), creation_date=datetime.now(timezone.utc),
-                source_kind=platform, guid=ident)
+                source_kind=platform, guid=url or f"{base_url}#{title[:80]}")
 
 
 _CTA = re.compile(r"^(click here|read more|read the|read it|download|view|see more|see all|"

@@ -67,7 +67,7 @@ async def extract_url(
     user: User = Depends(api_user_with_rate_limit),
     url: str = Query(..., description="The EU URL to extract."),
     item_type: str = Query("news", description="news | event | publication | topic | consultation | tender."),
-    limit: int = Query(60, ge=1, le=100),
+    limit: int = Query(30, ge=1, le=60, description="Max items (<=60 so every returned item is fully enriched in the default full-contract mode)."),
     classify: bool = Query(False, description="Also tag each item with EuroVoc subject descriptors (slower)."),
     shallow: bool = Query(False, description="Fast listing-only: skip the per-item detail fetches, so body_txt/body_html and some dates are left empty. Default is the full contract (each item's body + date filled from its detail page)."),
     lang: str = Query("en", description="Language for EuroVoc classification (en|es|fr|it|nl; ca->es)."),
