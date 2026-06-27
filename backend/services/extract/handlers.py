@@ -41,7 +41,9 @@ _JUNK_TITLE_RE = re.compile(
     r"^(read|see|view|show|load|find out|learn|discover|explore)\s+(more|all|here)\b"
     r"|registrations?\s+(are\s+)?(now\s+)?open"
     r"|register\s+(now|here|today)"
-    r"|\bsubscribe\b|\bnewsletter\b|\bback to\b", re.I)
+    r"|\bsubscribe\b|\bnewsletter\b|\bback to\b"
+    r"|^refine your search|^search page$|^send a question|^publications office of the e"
+    r"|^go to\b|^filter by\b", re.I)
 
 
 def _is_junk_title(title: str) -> bool:
