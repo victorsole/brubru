@@ -35,8 +35,11 @@ def _checks(items):
     for it in items:
         b = (it.body_txt or "")
         words = set(_SIG.findall((it.title or "").lower()))
-        # body present + title has content words + none appear in body -> suspicious
-        wrongbody = bool(b and words and not (words & set(_SIG.findall(b.lower()))))
+        # body present + title has >=2 content words + NONE appear in body -> suspicious.
+        # (>=2 avoids false positives on generic / single-proper-noun titles like
+        # "Calls 2019" or "Data Expo Jaarbeurs", whose one significant word legitimately
+        # may not sit in the body excerpt.)
+        wrongbody = bool(b and len(words) >= 2 and not (words & set(_SIG.findall(b.lower()))))
         h = hashlib.md5(b[:400].encode("utf-8", "ignore")).hexdigest() if b else None
         dupbody = bool(h and body_hash.get(h, 0) > 1)
         out.append({
