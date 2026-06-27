@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
 from models.user import User
@@ -73,8 +74,17 @@ async def extract_url(
         raise HTTPException(400, "url must be an absolute http(s) URL")
     if item_type not in _ITEM_TYPES:
         raise HTTPException(400, f"item_type must be one of {sorted(_ITEM_TYPES)}")
-    res = _extract(url, item_type=item_type, limit=limit, classify_eurovoc=classify, lang=lang,
-                   deep=deep, complete_dates=complete_dates)
+    if deep and not classify:  # deep only enriches classification; reject the abuse lever
+        raise HTTPException(400, "deep=true requires classify=true")
+    # The engine is fully synchronous (requests + sync Playwright). Run it off the event
+    # loop so one slow render can't block every other coroutine on the worker.
+    res = await run_in_threadpool(_extract, url, item_type=item_type, limit=limit,
+                                  classify_eurovoc=classify, lang=lang, deep=deep,
+                                  complete_dates=complete_dates)
+    if res.get("error") == "fetch_failed" or res.get("fetched_via") in ("failed", "blocked"):
+        # surface as 502 so the metered-call refund path (5xx) triggers and the caller
+        # can tell "fetch failed / blocked" apart from "page genuinely empty".
+        raise HTTPException(502, f"could not fetch the URL ({res.get('fetched_via', 'failed')})")
     items = [ExtractedItem(title=it.title, summary=it.summary, public_url=it.public_url,
                            document_date=it.document_date, creation_date=it.creation_date,
                            body_txt=it.body_txt, body_html=it.body_html, source_kind=it.source_kind,

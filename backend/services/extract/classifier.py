@@ -28,7 +28,8 @@ _SIGNATURES = [
 
 
 def _body_of(url: str) -> str:
-    host = urlparse(url).netloc.lower().lstrip("www.")
+    host = urlparse(url).netloc.lower()
+    host = host[4:] if host.startswith("www.") else host  # NOT lstrip: "webgate"->"ebgate"
     if host in _DOMAIN_BODY:
         return _DOMAIN_BODY[host]
     # eur-lex.europa.eu -> eur-lex ; ema.europa.eu -> ema

@@ -232,6 +232,12 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/ecb(/|$)"),                          "read:economy"),
     (re.compile(r"^/api/v2/eu-financial-institutions(/|$)"),    "read:economy"),
     (re.compile(r"^/api/v2/esm(/|$)"),                          "read:economy"),
+    # cross-body aggregators + input-first extract (else default to unreachable read:misc)
+    (re.compile(r"^/api/v2/extract(/|$)"),                      "read:economy"),
+    (re.compile(r"^/api/v2/events(/|$)"),                       "read:economy"),
+    (re.compile(r"^/api/v2/news(/|$)"),                         "read:economy"),
+    (re.compile(r"^/api/v2/programmes(/|$)"),                   "read:economy"),
+    (re.compile(r"^/api/v2/consultations(/|$)"),               "read:economy"),
 
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),

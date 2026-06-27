@@ -10,7 +10,7 @@ def classify(url: str, html: str | None = None):
     return _clf.classify(url, html)
 
 
-def _deep_fill(items, anti_bot, *, limit_fetches: int = 25, body: bool = True, dates: bool = True):
+def _deep_fill(items, anti_bot, *, limit_fetches: int = 10, body: bool = True, dates: bool = True):
     """Deep-fetch item detail pages to enrich them. body=True replaces the thin listing
     snippet with the real article text (for classification); dates=True recovers the
     publication date when the listing card carried none (many Drupal sites — eige, easa,

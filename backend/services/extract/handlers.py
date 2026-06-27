@@ -47,9 +47,9 @@ _JUNK_TITLE_RE = re.compile(
     r"^(read|see|view|show|load|find out|learn|discover|explore)\s+(more|all|here)\b"
     r"|registrations?\s+(are\s+)?(now\s+)?open"
     r"|register\s+(now|here|today)"
-    r"|\bsubscribe\b|\bnewsletter\b|\bback to\b"
+    r"|^subscribe\b|^newsletter\b"  # anchored: don't drop "manufacturing back to Europe" / "Commission to subscribe to the fund"
     r"|^refine your search|^search page$|^send a question|^publications office of the e"
-    r"|^go to\b|^filter by\b", re.I)
+    r"|^filter by\b", re.I)
 
 
 def _is_junk_title(title: str) -> bool:
@@ -265,7 +265,11 @@ def parse(platform, html, base_url, *, body_code="extract", item_type="news", li
     # Strip filter/search forms and datepickers up front: their form-item divs and
     # ecl-datepicker widgets were being mistaken for content cards (e.g. the
     # civil-protection call-deadline filter extracted as a dateless "item").
-    for el in soup.select("form, .ecl-datepicker, [role=search], .js-form-item, .facets-widget"):
+    # Strip filter/search WIDGETS only — never a bare <form>. ASP.NET WebForms pages
+    # (SharePoint classic, some Dynamics portals) wrap the ENTIRE body in one
+    # <form id="aspnetForm">, so decomposing all forms would delete the whole page.
+    for el in soup.select(".ecl-datepicker, [role=search], .js-form-item, .facets-widget, "
+                          "form.search-form, form[role=search], form[id*=filter], form[id*=search]"):
         el.decompose()
     if platform == "ecl":
         cards = soup.select(".ecl-content-item")
