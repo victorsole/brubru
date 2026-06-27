@@ -18,8 +18,14 @@ from services.scrapers.economy_common import Item, clean, norm_url
 _MONTHS = {m: i for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june", "july", "august",
      "september", "october", "november", "december"], 1)}
-_DMY = re.compile(r"\b(\d{1,2})\s+(" + "|".join(_MONTHS) + r")\s+(20\d{2})\b", re.I)
+_MON = "|".join(_MONTHS) + r"|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec"
+# "24 June 2026" / "24th June 2026" (ordinal suffix optional) -> (d, mon, y)
+_DMY = re.compile(r"\b(\d{1,2})(?:st|nd|rd|th)?\s+(" + _MON + r")\.?\s+(20\d{2})\b", re.I)
+# "June 24, 2026" / "Jun 24 2026" (US order) -> (mon, d, y)
+_MDY = re.compile(r"\b(" + _MON + r")\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(20\d{2})\b", re.I)
 _ISO = re.compile(r"\b(20\d{2})-(\d{2})-(\d{2})\b")
+# EU numeric "24/06/2026" or "24.06.2026" (day first) -> (d, m, y)
+_DMY_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](20\d{2})\b")
 _LIST_HREF = re.compile(r"/(news|events?|publications?|press|media|consultations?)/", re.I)
 _NOISE = re.compile(r"(cookie|privacy|accessibility|sitemap|/login|sign[- ]?in|subscribe|"
                     r"newsletter|accept|skip to|legal[- ]notice|data protection|institutions-law)", re.I)
@@ -85,8 +91,45 @@ def _content_anchors(soup, base_url, body_code, platform, item_type, limit):
 
 
 # ---- shared smart-date (1.4) ------------------------------------------------ #
+def _month_num(s: str) -> int | None:
+    s = s.lower().rstrip(".")
+    if s in _MONTHS:
+        return _MONTHS[s]
+    for name, n in _MONTHS.items():  # abbreviation: prefix match (jan, sept, ...)
+        if name.startswith(s) or s.startswith(name[:3]):
+            return n
+    return None
+
+
+def _mk(y, mo, d) -> datetime | None:
+    try:
+        if 2000 <= y <= 2099 and 1 <= mo <= 12 and 1 <= d <= 31:
+            return datetime(y, mo, d, tzinfo=timezone.utc)
+    except ValueError:
+        pass
+    return None
+
+
+def _parse_date_text(txt: str) -> datetime | None:
+    """Parse the first date in a string across the formats EU sites use:
+    ISO, '24 June 2026', '24th June 2026', 'June 24, 2026', '24/06/2026', '24.06.2026'."""
+    m = _ISO.search(txt)
+    if m and (dt := _mk(int(m[1]), int(m[2]), int(m[3]))):
+        return dt
+    m = _DMY.search(txt)
+    if m and (mo := _month_num(m[2])) and (dt := _mk(int(m[3]), mo, int(m[1]))):
+        return dt
+    m = _MDY.search(txt)
+    if m and (mo := _month_num(m[1])) and (dt := _mk(int(m[3]), mo, int(m[2]))):
+        return dt
+    m = _DMY_NUM.search(txt)
+    if m and (dt := _mk(int(m[3]), int(m[2]), int(m[1]))):  # EU = day first
+        return dt
+    return None
+
+
 def smart_date(el) -> datetime | None:
-    # JSON-LD startDate/datePublished anywhere under the element
+    # 1. JSON-LD startDate/datePublished anywhere under the element
     for s in el.find_all("script", type="application/ld+json"):
         try:
             data = json.loads(s.string or "{}")
@@ -96,35 +139,25 @@ def smart_date(el) -> datetime | None:
         while stack:
             o = stack.pop()
             if isinstance(o, dict):
-                for k in ("startDate", "datePublished"):
-                    if o.get(k):
-                        m = _ISO.search(str(o[k]))
-                        if m:
-                            return datetime(int(m[1]), int(m[2]), int(m[3]), tzinfo=timezone.utc)
+                for k in ("startDate", "datePublished", "dateCreated", "dateModified"):
+                    if o.get(k) and (dt := _parse_date_text(str(o[k]))):
+                        return dt
                 stack.extend(o.values())
             elif isinstance(o, list):
                 stack.extend(o)
-    # a <time datetime>
-    t = el.find("time")
-    if t and t.get("datetime"):
-        m = _ISO.search(t["datetime"])
-        if m:
-            return datetime(int(m[1]), int(m[2]), int(m[3]), tzinfo=timezone.utc)
-    # visible DMY / ISO in the card text
-    txt = el.get_text(" ", strip=True)
-    m = _DMY.search(txt)
-    if m:
-        try:
-            return datetime(int(m[3]), _MONTHS[m[2].lower()], int(m[1]), tzinfo=timezone.utc)
-        except ValueError:
-            pass
-    m = _ISO.search(txt)
-    if m:
-        try:
-            return datetime(int(m[1]), int(m[2]), int(m[3]), tzinfo=timezone.utc)
-        except ValueError:
-            pass
-    return None
+    # 2. a <time datetime> (or its text)
+    for t in el.find_all("time"):
+        if t.get("datetime") and (dt := _parse_date_text(t["datetime"])):
+            return dt
+        if (dt := _parse_date_text(t.get_text(" ", strip=True))):
+            return dt
+    # 3. a dedicated date element (class/itemprop) — more reliable than full-text scan
+    for d in el.select("[class*=date], [class*=Date], [itemprop=datePublished], "
+                       ".date-display-single, .field--name-created, .related-new-date, .meta"):
+        if (dt := _parse_date_text(d.get_text(" ", strip=True))):
+            return dt
+    # 4. fall back to the first date anywhere in the card text
+    return _parse_date_text(el.get_text(" ", strip=True))
 
 
 def _card_title(card) -> str | None:
