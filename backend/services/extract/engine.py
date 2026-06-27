@@ -1,6 +1,9 @@
 """Extract engine orchestration (Phase 1): classify -> fetch -> parse -> Items."""
 from __future__ import annotations
 
+import hashlib
+import re
+
 from . import classifier as _clf
 from . import fetcher as _fetch
 from . import handlers as _handlers
@@ -10,23 +13,41 @@ def classify(url: str, html: str | None = None):
     return _clf.classify(url, html)
 
 
-def _deep_fill(items, anti_bot, *, limit_fetches: int = 10, body: bool = True, dates: bool = True):
-    """Deep-fetch item detail pages to enrich them. body=True replaces the thin listing
-    snippet with the real article text (for classification); dates=True recovers the
-    publication date when the listing card carried none (many Drupal sites — eige, easa,
-    enisa — only show the date on the detail page). Best-effort per item. When body is
-    off, only dateless items are fetched, so date-completion stays cheap."""
+_ERR_PAGE = re.compile(
+    r"page (you requested |that you requested )?(could not be|cannot be|can't be|was not|not) found"
+    r"|page not found|404 not found|error 404|\b404\b.{0,20}\bnot found\b"
+    r"|this page (does not exist|isn'?t available)|requested url was not found", re.I)
+
+
+def _reg_domain(host: str) -> str:
+    parts = (host or "").split(".")
+    return ".".join(parts[-2:]) if len(parts) >= 2 else (host or "")
+
+
+def _deep_fill(items, anti_bot, *, limit_fetches: int = 10, body: bool = True, dates: bool = True,
+               site_url: str = ""):
+    """Deep-fetch item detail pages to fill body_txt/body_html + complete document_date.
+    Anti-hallucination is enforced HERE, not just in validation — a back-fill must come
+    from the item's OWN, real detail page or it is left empty (honest):
+      * synthetic URL (`{listing}#{title}`) -> skip (would resolve to the listing).
+      * OFF-SITE url (e.g. youtube.com) -> skip (not this body's detail page).
+      * SOFT-404 / error page -> skip (don't assign 'page not found' as the body/date).
+      * DUPLICATE body across items -> skip (a shared/wrong page fetched for several items).
+    """
     from bs4 import BeautifulSoup
+    from urllib.parse import urlparse
     from . import article as _article
     from .handlers import smart_date
 
-    def _real_detail(u: str | None) -> bool:
-        # ONLY fetch a real, distinct detail page. A synthetic public_url
-        # (`{listing}#{title}`, for JS-span cards with no real link) resolves to the
-        # LISTING page, whose content is NOT this item's body — assigning it would be a
-        # fabrication. Such items stay body/date-empty (honest), never back-filled wrong.
-        return bool(u) and u.startswith(("http://", "https://")) and "#" not in u
+    site_reg = _reg_domain(urlparse(site_url).hostname or "")
 
+    def _real_detail(u: str | None) -> bool:
+        if not u or not u.startswith(("http://", "https://")) or "#" in u:
+            return False
+        host = urlparse(u).hostname or ""
+        return _reg_domain(host) == site_reg if site_reg else False  # same EU site only
+
+    seen_body: set[str] = set()
     targets = [it for it in items
                if _real_detail(it.public_url) and (body or (dates and not it.document_date))]
     for it in targets[:limit_fetches]:
@@ -35,14 +56,20 @@ def _deep_fill(items, anti_bot, *, limit_fetches: int = 10, body: bool = True, d
             if not html:
                 continue  # fetch failed -> leave fields as-is, do not fabricate
             soup = BeautifulSoup(html, "html.parser")
+            head = soup.get_text(" ", strip=True)[:400]
+            if _ERR_PAGE.search(head):
+                continue  # soft-404 / error page -> never assign its content as the item
             if dates and not it.document_date:
                 d = smart_date(soup)
                 if d:
                     it.document_date = d
             if body:
                 body_txt, body_html = _article.extract_body(html, it.public_url)
-                if body_txt:  # only assign genuinely-extracted content
-                    it.body_txt, it.body_html = body_txt, body_html
+                if body_txt:
+                    h = hashlib.md5(body_txt[:400].encode("utf-8", "ignore")).hexdigest()
+                    if h not in seen_body:  # not a duplicate of another item's body
+                        seen_body.add(h)
+                        it.body_txt, it.body_html = body_txt, body_html
         except Exception:
             continue
 
@@ -90,7 +117,8 @@ def extract(url: str, *, item_type: str = "news", limit: int = 60,
     if items and (want_body or want_dates):
         # fill ALL returned items (budget scales with the requested limit, capped at 60),
         # so the contract holds for every item, not just the first few.
-        _deep_fill(items, anti_bot, body=want_body, dates=want_dates, limit_fetches=min(limit, 60))
+        _deep_fill(items, anti_bot, body=want_body, dates=want_dates,
+                   limit_fetches=min(limit, 60), site_url=url)
     if classify_eurovoc:
         from services.classify import classify_item
         for it in items:
