@@ -2,6 +2,27 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-29",
+      "action": "updated",
+      "guide": "eu_fdi_screening_regulation",
+      "title": "EU FDI Screening Regulation",
+      "summary": "Recast finalised: Council final approval 8 Jun 2026; mandatory screening in all 27 MS, dual-use+semiconductors/quantum/AI scope, EU-subsidiary loophole closed; replaces Reg 2019/452",
+      "refs": [
+        "32019R0452"
+      ]
+    },
+    {
+      "date": "2026-06-29",
+      "action": "added",
+      "guide": "eu_temporary_protection_directive",
+      "title": "EU Temporary Protection Directive (Ukraine)",
+      "summary": "New guide: Dir 2001/55/EC + activation 2022/382; 26 Jun 2026 Commission proposal to extend Ukraine temporary protection to 4 March 2028 + transition package",
+      "refs": [
+        "32001L0055",
+        "32022D0382"
+      ]
+    },
+    {
       "date": "2026-06-26",
       "action": "added",
       "guide": "ukraine_support_loan_recovery_2026",
