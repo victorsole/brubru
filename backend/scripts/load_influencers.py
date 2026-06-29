@@ -36,6 +36,29 @@ _TRANSLIT = {"ł": "l", "ø": "o", "đ": "d", "þ": "th", "ß": "ss", "æ": "ae"
 CONTEXTE_CACHE = ("/private/tmp/claude-501/-Users-victorsole-Documents-GitHub-brubru/"
                   "467dde5d-b102-4717-9258-3805a4ea37f8/scratchpad/contexte_cards.json")
 
+# Financial Times EU/Brussels-beat reporters (28 Jun 2026). Found via web search +
+# journalists.feedspot.com/financial_times_journalists, each verified Brussels/EU on their
+# ft.com author profile (stored in FT_PROFILES). X handles from feedspot + ft.com.
+FINANCIAL_TIMES = {
+    "Henry Foy": ["https://x.com/HenryJFoy"],            # Brussels Bureau Chief
+    "Paola Tamma": ["https://x.com/paolatamma"],          # EU economy correspondent, Brussels
+    "Andy Bounds": ["https://x.com/AndyBounds"],          # Brussels
+    "Alice Hancock": ["https://x.com/alicemhancock"],     # Brussels climate/energy
+    "Barbara Moens": ["https://x.com/BMoens"],            # EU tech/competition correspondent, Brussels
+    "Javier Espinoza": ["https://x.com/JavierespBX"],     # Brussels competition/digital
+    "Laura Pitel": ["https://x.com/laurapitel"],          # EU defence
+    "Sam Fleming": ["https://x.com/Sam1Fleming"],         # FT economics editor, ex-Brussels chief
+    "Laura Dubois": ["https://x.com/lauramdubois"],       # Brussels, EU migration
+    "Mercedes Ruehl": ["https://x.com/mjruehl", "https://bsky.app/profile/mjruehl.bsky.social"],  # Europe Express / EU
+}
+FT_PROFILES = {
+    "Henry Foy": "https://www.ft.com/henry-foy", "Paola Tamma": "https://www.ft.com/paola-tamma",
+    "Andy Bounds": "https://www.ft.com/andy-bounds", "Alice Hancock": "https://www.ft.com/alice-hancock",
+    "Barbara Moens": "https://www.ft.com/barbara-moens", "Javier Espinoza": "https://www.ft.com/javier-espinoza",
+    "Laura Pitel": "https://www.ft.com/laura-pitel", "Sam Fleming": "https://www.ft.com/sam-fleming",
+    "Laura Dubois": "https://www.ft.com/laura-dubois", "Mercedes Ruehl": "https://www.ft.com/mercedes-ruehl",
+}
+
 # Sifted newsroom (real social URLs only; author-page links dropped). From the roster page.
 SIFTED = {
     "Freya Pratty": ["https://www.linkedin.com/in/freyapratty111"],
@@ -114,7 +137,8 @@ def load_contexte_newsroom():
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
-    sources = {"politico": fetch_politico(), "sifted": SIFTED, "contexte": load_contexte_newsroom()}
+    sources = {"politico": fetch_politico(), "financial_times": FINANCIAL_TIMES,
+               "sifted": SIFTED, "contexte": load_contexte_newsroom()}
     for s, d in sources.items():
         print(f"  {s}: {len(d)} journalists")
     db = SessionLocal()
@@ -137,7 +161,7 @@ def main():
                            "platform": plat, "scope": "personal", "handle": cu.split("/")[-1].lstrip("@"),
                            "account_url": cu, "status": "candidate", "verified": False,
                            "discovery_source": source, "content_fetch_enabled": False,
-                           "extra": {"outlet": source}}
+                           "extra": {"outlet": source, **({"ft_profile": FT_PROFILES[name]} if source == "financial_times" and name in FT_PROFILES else {})}}
                     stmt = pg_insert(SocialAccount).values(**row)
                     stmt = stmt.on_conflict_do_update(
                         constraint="social_accounts_url_uq",
