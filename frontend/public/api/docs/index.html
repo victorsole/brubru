@@ -463,8 +463,18 @@ posts = bru.social.posts(entity_type="commissioner", platform="x")</code></pre>
 eurovoc.classify("Markets in crypto-assets regulation")
 # -> [{"descriptor": "financial instrument", "mt": "2426", "domain": "24", "score": 0.88}, ...]
 
-# or run it through the hosted classifier over the API
-eurovoc.classify("...", backend="brubru", api_key="brubru_live_...")</code></pre>
+# or classify a live EU URL through the hosted engine (needs the brubru SDK)
+eurovoc.classify_url("https://environment.ec.europa.eu/news_en", api_key="brubru_live_...")</code></pre>
+
+<p><strong>Download the built packages</strong> (or install straight from the hosted wheel):</p>
+
+<pre><code>pip install https://brubru.beresol.eu/api/docs/libraries/brubru-0.1.0-py3-none-any.whl
+pip install "eurovoc[local] @ https://brubru.beresol.eu/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl"</code></pre>
+
+<ul>
+<li><code>brubru</code>: <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
+<li><code>eurovoc</code>: <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+</ul>
 
 <h2>Where to go next</h2>
 <div class="toc-grid">
