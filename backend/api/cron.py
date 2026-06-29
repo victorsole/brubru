@@ -456,6 +456,37 @@ async def cron_build_procedure_snapshots(
     return {"status": "success", "results": result}
 
 
+@router.post("/fetch-social-posts")
+async def cron_fetch_social_posts(
+    authorization: str = Header(...),
+    mode: str = Query("open", description="'open' = Bluesky/Mastodon/YouTube batch; 'x' = paced X drip"),
+    limit: int = Query(None, ge=1, description="cap accounts this run (drip size)"),
+):
+    """
+    Fetch recent posts from mapped social accounts (Phase 4.2 content layer). Oldest-checked
+    accounts first, so each run drips through the set over time. mode='open' pulls the robust
+    keyless APIs (Bluesky/Mastodon/YouTube). mode='x' drips the 978 X accounts via the public
+    syndication endpoint with slow pacing + a throttle-stop (no paid API, no IG/LinkedIn/TikTok).
+    """
+    _verify_cron_secret(authorization)
+    from starlette.concurrency import run_in_threadpool
+    from services.social.post_fetcher import run
+    db = SessionLocal()
+    try:
+        if mode == "x":
+            result = await run_in_threadpool(
+                run, db, platforms=("x",), limit_accounts=limit or 40,
+                per_account=10, pace=5.0, empty_streak_stop=8)
+        else:
+            result = await run_in_threadpool(
+                run, db, platforms=("bluesky", "mastodon", "youtube"),
+                limit_accounts=limit or 150, per_account=10, pace=0.4)
+    finally:
+        db.close()
+    logger.info(f"[CRON] fetch-social-posts mode={mode} complete: {result}")
+    return {"status": "success", "results": result}
+
+
 @router.post("/transcribe-pending")
 async def cron_transcribe_pending(
     authorization: str = Header(...),

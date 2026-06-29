@@ -1,0 +1,267 @@
+"""Phase 4.2 — open-tier social post fetcher.
+
+Fetches recent posts from mapped accounts via public, keyless, ToS-clean APIs:
+  bluesky  -> public AppView XRPC app.bsky.feed.getAuthorFeed
+  mastodon -> instance REST /api/v1/accounts/lookup + /statuses
+  youtube  -> channel RSS (videos.xml) — only /channel/<UC..> urls
+Hard platforms (x/instagram/linkedin/tiktok/threads) are NEVER fetched (D1). Only accounts
+with content_fetch_enabled=true are processed. Idempotent UPSERT on (account_id, platform_post_id).
+"""
+from __future__ import annotations
+
+import json
+import logging
+import re
+import time
+import urllib.parse
+import urllib.request
+from datetime import datetime
+from html import unescape
+
+from sqlalchemy import func, text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+
+from models.social_post import SocialPost
+
+logger = logging.getLogger("social-post-fetcher")
+_UA = "BrubruBot/1.0 (https://brubru.beresol.eu; hello@beresol.eu)"
+# Browser-ish UA for X's public syndication embed endpoint.
+_BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+               "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+OPEN_TIER = ("bluesky", "mastodon", "youtube")
+# X added via its PUBLIC syndication/embed endpoint (keyless, login-free, the same feed
+# Twitter serves for embedded timelines). Instagram/LinkedIn/TikTok have no equivalent free
+# post feed -> content still deferred there (mapping only).
+FETCHABLE = ("bluesky", "mastodon", "youtube", "x")
+_REFRESH = ["post_url", "content", "lang", "posted_at", "like_count", "repost_count",
+            "reply_count", "view_count", "media", "extra"]
+
+
+def _get(url, parse="json", tries=3, timeout=25):
+    for _ in range(tries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": _UA}), timeout=timeout) as r:
+                raw = r.read().decode()
+                return json.loads(raw) if parse == "json" else raw
+        except Exception:
+            time.sleep(1.5)
+    return None
+
+
+def _strip(s):
+    return unescape(re.sub("<[^>]+>", " ", s or "")).strip()
+
+
+def _dt(s):
+    if not s:
+        return None
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return None
+
+
+def _dt_twitter(s):
+    try:
+        return datetime.strptime(s, "%a %b %d %H:%M:%S %z %Y")
+    except (ValueError, TypeError):
+        return None
+
+
+def fetch_x(handle, n=20):
+    """Recent tweets via the PUBLIC syndication embed endpoint (keyless). Parses __NEXT_DATA__."""
+    handle = handle.lstrip("@")
+    try:
+        req = urllib.request.Request(
+            f"https://syndication.twitter.com/srv/timeline-profile/screen-name/{urllib.parse.quote(handle)}",
+            headers={"User-Agent": _BROWSER_UA})
+        html = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
+    except Exception:
+        return []
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.S)
+    if not m:
+        return []
+    tweets = []
+
+    def walk(o):
+        if isinstance(o, dict):
+            if "full_text" in o and "id_str" in o:
+                tweets.append(o)
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+    try:
+        walk(json.loads(m.group(1)))
+    except (ValueError, TypeError):
+        return []
+    out = []
+    seen = set()
+    for t in tweets[:n]:
+        tid = t.get("id_str")
+        if not tid or tid in seen:
+            continue
+        seen.add(tid)
+        out.append({"platform_post_id": tid, "content": t.get("full_text"),
+                    "post_url": f"https://x.com/{handle}/status/{tid}",
+                    "posted_at": _dt_twitter(t.get("created_at")), "lang": t.get("lang"),
+                    "like_count": t.get("favorite_count"), "repost_count": t.get("retweet_count"),
+                    "reply_count": t.get("reply_count"), "view_count": None, "media": [], "extra": {}})
+    return out
+
+
+def fetch_bluesky(handle, n=10):
+    d = _get(f"https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor={urllib.parse.quote(handle)}&limit={n}")
+    out = []
+    for it in (d.get("feed", []) if isinstance(d, dict) else []):
+        p = it.get("post", {})
+        rec = p.get("record", {})
+        uri = p.get("uri", "")
+        rkey = uri.split("/")[-1] if uri else None
+        langs = rec.get("langs") or []
+        out.append({"platform_post_id": uri or rkey, "content": rec.get("text"),
+                    "post_url": f"https://bsky.app/profile/{handle}/post/{rkey}" if rkey else None,
+                    "posted_at": _dt(rec.get("createdAt")), "lang": langs[0] if langs else None,
+                    "like_count": p.get("likeCount"), "repost_count": p.get("repostCount"),
+                    "reply_count": p.get("replyCount"), "view_count": None, "media": [], "extra": {}})
+    return out
+
+
+def fetch_mastodon(instance, user, n=10):
+    look = _get(f"https://{instance}/api/v1/accounts/lookup?acct={urllib.parse.quote(user)}")
+    aid = look.get("id") if isinstance(look, dict) else None
+    if not aid:
+        return []
+    posts = _get(f"https://{instance}/api/v1/accounts/{aid}/statuses?limit={n}&exclude_reblogs=true")
+    out = []
+    for s in (posts if isinstance(posts, list) else []):
+        out.append({"platform_post_id": s.get("id"), "content": _strip(s.get("content")),
+                    "post_url": s.get("url"), "posted_at": _dt(s.get("created_at")),
+                    "lang": s.get("language"), "like_count": s.get("favourites_count"),
+                    "repost_count": s.get("reblogs_count"), "reply_count": s.get("replies_count"),
+                    "view_count": None, "media": s.get("media_attachments") or [], "extra": {}})
+    return out
+
+
+def resolve_youtube_channel_id(url):
+    """Resolve a YouTube /@handle, /user/X or /c/X URL to its channel id (UC...).
+    Fetches the page and reads the canonical channel id. Cached by the caller into
+    social_accounts.platform_account_id so it runs once per account."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": _BROWSER_UA})
+        html = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+    except Exception:
+        return None
+    m = (re.search(r'"channelId":"(UC[\w-]+)"', html)
+         or re.search(r'<link rel="canonical" href="https://www\.youtube\.com/channel/(UC[\w-]+)"', html)
+         or re.search(r'youtube\.com/channel/(UC[\w-]+)', html))
+    return m.group(1) if m else None
+
+
+def fetch_youtube(channel_id, n=10):
+    xml = _get(f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}", parse="raw")
+    if not isinstance(xml, str):
+        return []
+    out = []
+    for entry in re.findall(r"<entry>(.*?)</entry>", xml, re.S)[:n]:
+        vid = re.search(r"<yt:videoId>(.*?)</yt:videoId>", entry)
+        title = re.search(r"<title>(.*?)</title>", entry)
+        pub = re.search(r"<published>(.*?)</published>", entry)
+        views = re.search(r'views="(\d+)"', entry)
+        if not vid:
+            continue
+        out.append({"platform_post_id": vid.group(1), "content": unescape(title.group(1)) if title else None,
+                    "post_url": f"https://www.youtube.com/watch?v={vid.group(1)}",
+                    "posted_at": _dt(pub.group(1)) if pub else None, "lang": None,
+                    "like_count": None, "repost_count": None, "reply_count": None,
+                    "view_count": int(views.group(1)) if views else None, "media": [], "extra": {}})
+    return out
+
+
+def fetch_for_account(platform, account_url, n=10):
+    """Dispatch by platform; returns (posts, skip_reason)."""
+    try:
+        if platform == "bluesky":
+            return fetch_bluesky(account_url.rstrip("/").split("/")[-1], n), None
+        if platform == "mastodon":
+            m = re.match(r"https?://([^/]+)/@(.+)$", account_url)
+            return (fetch_mastodon(m.group(1), m.group(2), n), None) if m else ([], "bad_mastodon_url")
+        if platform == "youtube":
+            m = re.search(r"/channel/(UC[\w-]+)", account_url)
+            return (fetch_youtube(m.group(1), n), None) if m else ([], "no_channel_id")
+        if platform == "x":
+            h = account_url.rstrip("/").split("/")[-1].split("?")[0]
+            return (fetch_x(h, n), None) if h else ([], "bad_x_url")
+        return [], "unsupported_platform"
+    except Exception as e:
+        return [], f"error:{type(e).__name__}"
+
+
+def _resolve_youtube(db, a, dry_run):
+    """Return channel id for a youtube account; resolve + persist to platform_account_id once."""
+    cid = a["platform_account_id"]
+    if cid:
+        return cid
+    m = re.search(r"/channel/(UC[\w-]+)", a["account_url"])
+    if m:
+        cid = m.group(1)
+    else:
+        cid = resolve_youtube_channel_id(a["account_url"])
+    if cid and not dry_run:
+        db.execute(text("UPDATE social_accounts SET platform_account_id=:c WHERE id=:i"),
+                   {"c": cid, "i": a["id"]})
+    return cid
+
+
+def run(db, *, platforms=FETCHABLE, limit_accounts=None, per_account=10, pace=0.4,
+        empty_streak_stop=None, dry_run=False) -> dict:
+    """Fetch posts for content_fetch_enabled accounts, OLDEST-checked first (so a capped
+    cron run drips through the whole set over time). empty_streak_stop: stop the run after
+    this many consecutive empty fetches (X throttle signal). last_checked_at is bumped per
+    account so the next run advances."""
+    q = ("SELECT id, platform, account_url, platform_account_id, entity_name FROM social_accounts "
+         "WHERE content_fetch_enabled = true AND platform = ANY(:plats) "
+         "ORDER BY last_checked_at ASC NULLS FIRST")
+    rows = db.execute(text(q + (f" LIMIT {int(limit_accounts)}" if limit_accounts else "")),
+                      {"plats": list(platforms)}).mappings().all()
+    stats = {"accounts": len(rows), "fetched_ok": 0, "skipped": 0, "posts_written": 0,
+             "by_platform": {}, "skips": {}, "stopped_early": False, "dry_run": dry_run}
+    empty_streak = 0
+    for a in rows:
+        plat = a["platform"]
+        if plat == "youtube":
+            cid = _resolve_youtube(db, a, dry_run)
+            posts, skip = (fetch_youtube(cid, per_account), None) if cid else ([], "no_channel_id")
+        else:
+            posts, skip = fetch_for_account(plat, a["account_url"], per_account)
+        if not dry_run:
+            db.execute(text("UPDATE social_accounts SET last_checked_at=now() WHERE id=:i"), {"i": a["id"]})
+        if skip:
+            stats["skipped"] += 1
+            stats["skips"][skip] = stats["skips"].get(skip, 0) + 1
+        else:
+            stats["fetched_ok"] += 1
+            for p in posts:
+                if not p.get("platform_post_id"):
+                    continue
+                stats["posts_written"] += 1
+                stats["by_platform"][plat] = stats["by_platform"].get(plat, 0) + 1
+                if not dry_run:
+                    row = {"account_id": a["id"], "platform": plat, **p, "fetched_at": func.now()}
+                    stmt = pg_insert(SocialPost).values(**row)
+                    stmt = stmt.on_conflict_do_update(
+                        constraint="social_posts_account_post_uq",
+                        set_={c: getattr(stmt.excluded, c) for c in _REFRESH} | {"fetched_at": func.now(), "updated_at": func.now()})
+                    db.execute(stmt)
+        if not dry_run:
+            db.commit()
+        # cooldown / throttle detection (mainly X syndication): stop after an empty streak
+        if empty_streak_stop:
+            empty_streak = empty_streak + 1 if not posts else 0
+            if empty_streak >= empty_streak_stop:
+                stats["stopped_early"] = True
+                logger.warning("empty streak %d -> stopping run early (throttle?)", empty_streak)
+                break
+        time.sleep(pace)
+    return stats
