@@ -94,6 +94,11 @@ SCOPE_CATALOGUE: Tuple[Scope, ...] = (
         label="Economy & finance institutions",
         description="ECB, ECB Banking Supervision, the EU financial-supervision authorities (EBA/ESMA/EIOPA/ESRB/SRB/EIB/AMLA/EPPO) and the ESM: their news, publications, events and legal acts.",
     ),
+    Scope(
+        name="read:social",
+        label="EU social media directory & posts",
+        description="Mapped social accounts of EU institutions, agencies, MEPs, Commissioners and EU-affairs journalists, plus recent posts (Bluesky/Mastodon/YouTube/X).",
+    ),
 )
 
 SCOPE_NAMES: Tuple[str, ...] = tuple(s.name for s in SCOPE_CATALOGUE)
@@ -238,6 +243,7 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/news(/|$)"),                         "read:economy"),
     (re.compile(r"^/api/v2/programmes(/|$)"),                   "read:economy"),
     (re.compile(r"^/api/v2/consultations(/|$)"),               "read:economy"),
+    (re.compile(r"^/api/v2/social(/|$)"),                       "read:social"),
 
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),
