@@ -30,6 +30,8 @@ export const ApiPage = () => {
     { m: 'GET',  p: '/api/v2/eeas/news',                                             k: 'eeas' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map',  k: 'recitalMap' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/defined-terms',        k: 'definedTerms' },
+    { m: 'GET',  p: '/api/v2/extract',                                               k: 'extract' },
+    { m: 'GET',  p: '/api/v2/social/posts',                                          k: 'social' },
   ];
 
   const errorRows: Array<{ code: string; key: string }> = [
@@ -49,6 +51,7 @@ export const ApiPage = () => {
     { id: 'authentication', label: t('api.sections.authentication') },
     { id: 'envelope',       label: t('api.sections.envelope') },
     { id: 'examples',       label: t('api.sections.examples') },
+    { id: 'client-libraries', label: t('api.sections.clientLibraries') },
     { id: 'full-docs',      label: t('api.sections.fullDocs') },
     { id: 'errors',         label: t('api.sections.errors') },
     { id: 'start-building', label: t('api.sections.startBuilding') },
@@ -271,6 +274,41 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
     }
   }
 }`}</code></pre>
+          </section>
+
+          {/* Client libraries (preview: official Python wrappers in development) */}
+          <section className="policy-page__section" id="client-libraries">
+            <h2>{t('api.sections.clientLibraries')}</h2>
+            <p>{t('api.libraries.lede')}</p>
+
+            <h3>
+              <code>brubru</code>{' '}
+              <span className="api-page__badge">{t('api.libraries.status')}</span>
+            </h3>
+            <p>{t('api.libraries.brubruDesc')}</p>
+            <pre className="api-page__pre"><code>{`import brubru
+
+bru = brubru.Client(api_key="brubru_live_...")
+
+# Extract structured items from any EU URL, tagged with EuroVoc
+items = bru.extract("https://cinea.ec.europa.eu/news_en", classify=True)
+
+# Recent posts from a mapped entity (MEP, Commissioner, institution, journalist)
+posts = bru.social.posts(entity_type="commissioner", platform="x")`}</code></pre>
+
+            <h3>
+              <code>eurovoc</code>{' '}
+              <span className="api-page__badge">{t('api.libraries.status')}</span>
+            </h3>
+            <p>{t('api.libraries.eurovocDesc')}</p>
+            <pre className="api-page__pre"><code>{`import eurovoc
+
+eurovoc.classify("Markets in crypto-assets regulation")
+# -> [{"descriptor": "financial instrument", "mt": "2426",
+#      "domain": "24", "score": 0.88}, ...]
+
+# or run it through the hosted classifier over the API
+eurovoc.classify("...", backend="brubru", api_key="brubru_live_...")`}</code></pre>
           </section>
 
           {/* Full documentation CTA (replaces pricing section) */}

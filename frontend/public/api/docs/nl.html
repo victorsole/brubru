@@ -438,6 +438,25 @@ X-RateLimit-Tier: free</code></pre>
 <li><strong>Nationale parlementen.</strong> We nemen geen data op van <em>nationale</em> parlementen. Alleen het EP.</li>
 </ul>
 
+<h2>Clientbibliotheken</h2>
+
+<p>Twee officiële Python-bibliotheken zijn in ontwikkeling om de API en de EuroVoc-classifier op &eacute;&eacute;n import afstand te brengen. De REST-API is vandaag al live: bouw voorlopig tegen de endpoints. Beide zijn gemarkeerd als in ontwikkeling.</p>
+
+<p><strong><code>brubru</code></strong>: een lichte Python-SDK boven op de v2-API. Getypeerde objecten over het 5-datapuntcontract, automatische paginering en eerlijke fouten. De eigen client van de API.</p>
+
+<pre><code>import brubru
+
+bru = brubru.Client(api_key="brubru_live_...")
+items = bru.extract("https://cinea.ec.europa.eu/news_en", classify=True)
+posts = bru.social.posts(entity_type="commissioner", platform="x")</code></pre>
+
+<p><strong><code>eurovoc</code></strong>: een op zichzelf staande, open-source EuroVoc-classifier. Het labelt elke tekst in de officiële onderwerpsruimte van de EU (7.029 descriptoren, 127 microthesauri, 21 domeinen), meertalig inclusief Catalaans. Een moderne opvolger van het PyEuroVoc-pakket uit 2021.</p>
+
+<pre><code>import eurovoc
+
+eurovoc.classify("Markets in crypto-assets regulation")
+# -> [{"descriptor": "financial instrument", "mt": "2426", "domain": "24", "score": 0.88}, ...]</code></pre>
+
 <h2>Waar nu naartoe</h2>
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html">

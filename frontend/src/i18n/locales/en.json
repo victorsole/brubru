@@ -1011,7 +1011,8 @@
       "pricing": "Pricing",
       "errors": "Rate limits and errors",
       "startBuilding": "Start building",
-      "fullDocs": "Full documentation"
+      "fullDocs": "Full documentation",
+      "clientLibraries": "Client libraries"
     },
     "sidebar": {
       "onThisPage": "On this page"
@@ -1043,7 +1044,9 @@
       "resolveAliases": "Resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases.",
       "tenderDocs": "One full EU funding-application template by id: every section, AI co-writer prompt seeds, comply targets, reference-doc bundle and Grant Agreement URLs. 19 templates across 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
       "eeas": "Press material, publications, events, tenders and topic pages from the European External Action Service, the EU’s diplomatic service. The 352 officials come from who-is-who.",
-      "eurostatSeries": "One Eurostat dataset fetched live: JSON-stat 2.0 payload, parsed dimensions, sample observations and Eurostat's last-update date. 12 curated sport + fitness-relevant health series (physical activity, BMI, household sport spend, cultural employment) plus any Eurostat code on the detail endpoint."
+      "eurostatSeries": "One Eurostat dataset fetched live: JSON-stat 2.0 payload, parsed dimensions, sample observations and Eurostat's last-update date. 12 curated sport + fitness-relevant health series (physical activity, BMI, household sport spend, cultural employment) plus any Eurostat code on the detail endpoint.",
+      "extract": "Point it at any EU institutional URL: it detects the platform, fetches through the right anti-bot path, and returns structured items with the 5-datapoint contract.",
+      "social": "Recent posts from mapped EU accounts (institutions, MEPs, Commissioners, EU-affairs journalists) across the open platforms, newest first."
     },
     "auth": {
       "description": "Every /api/v1/* endpoint requires an API key. Pass it as Authorization: Bearer <key> (recommended) or X-API-Key: <key>. Keys are minted by Brubru's admin team for Professional subscribers. Rate limit is 60 requests per minute per key.",
@@ -1216,6 +1219,12 @@
           "refunded": "Refunded"
         }
       }
+    },
+    "libraries": {
+      "status": "In development",
+      "lede": "Two official Python libraries are on the way to put the API and its EuroVoc classifier one import away. The REST API is live today; these wrappers are in active development, so build against the endpoints above in the meantime.",
+      "brubruDesc": "A thin Python SDK over the v2 API: typed objects over the 5-datapoint contract, automatic pagination and honest errors. The API's own client.",
+      "eurovocDesc": "A standalone, open-source EuroVoc classifier that tags any text into the EU's official subject space (7,029 descriptors, 127 microthesauri, 21 domains), multilingual including Catalan. A modern successor to the 2021 PyEuroVoc package, and the natural home for a retrained long-context model."
     }
   },
   "auth": {

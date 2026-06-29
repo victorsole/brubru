@@ -1011,7 +1011,8 @@
       "pricing": "Prijzen",
       "errors": "Limieten en fouten",
       "startBuilding": "Begin met bouwen",
-      "fullDocs": "Volledige documentatie"
+      "fullDocs": "Volledige documentatie",
+      "clientLibraries": "Clientbibliotheken"
     },
     "sidebar": {
       "onThisPage": "Op deze pagina"
@@ -1043,7 +1044,9 @@
       "resolveAliases": "Menselijke namen (AVG, DSA, AI Act, CBAM, ...) oplossen naar CELEX. Meer dan 680 aliassen.",
       "tenderDocs": "Eén volledig aanvraagmodel voor Europese fondsen per id: elke sectie, prompt-zaadjes voor de AI-co-schrijver, conformiteitsdoelen, een bundel referentiedocumenten en de URL's van de Subsidieovereenkomst. 19 modellen verspreid over 8 programma's (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
       "eeas": "Persmateriaal, publicaties, evenementen, aanbestedingen en themapagina’s van de Europese Dienst voor extern optreden, de diplomatieke dienst van de EU. De 352 functionarissen komen uit who-is-who.",
-      "eurostatSeries": "Één Eurostat-dataset live opgehaald: JSON-stat 2.0-payload, geparste dimensies, voorbeeldobservaties en Eurostat's laatste-bijwerkingsdatum. 12 samengestelde gezondheidsreeksen relevant voor sport en fitness (fysieke activiteit, BMI, huishoudelijke sportuitgaven, culturele werkgelegenheid) plus elke Eurostat-code op het detailendpoint."
+      "eurostatSeries": "Één Eurostat-dataset live opgehaald: JSON-stat 2.0-payload, geparste dimensies, voorbeeldobservaties en Eurostat's laatste-bijwerkingsdatum. 12 samengestelde gezondheidsreeksen relevant voor sport en fitness (fysieke activiteit, BMI, huishoudelijke sportuitgaven, culturele werkgelegenheid) plus elke Eurostat-code op het detailendpoint.",
+      "extract": "Richt het op een willekeurige institutionele EU-URL: het detecteert het platform, haalt het op via de juiste anti-botroute en geeft gestructureerde items terug volgens het 5-datapuntcontract.",
+      "social": "Recente berichten van in kaart gebrachte EU-accounts (instellingen, EP-leden, commissarissen, EU-journalisten) op de open platforms, nieuwste eerst."
     },
     "auth": {
       "description": "Elk /api/v1/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",
@@ -1216,6 +1219,12 @@
           "refunded": "Gerestitueerd"
         }
       }
+    },
+    "libraries": {
+      "status": "In ontwikkeling",
+      "lede": "Twee officiële Python-bibliotheken zijn onderweg om de API en de EuroVoc-classifier op één import afstand te brengen. De REST-API is vandaag al live; deze wrappers zijn in ontwikkeling, dus bouw voorlopig rechtstreeks tegen de bovenstaande endpoints.",
+      "brubruDesc": "Een lichte Python-SDK boven op de v2-API: getypeerde objecten over het 5-datapuntcontract, automatische paginering en eerlijke fouten. De eigen client van de API.",
+      "eurovocDesc": "Een op zichzelf staande, open-source EuroVoc-classifier die elke tekst labelt in de officiële onderwerpsruimte van de EU (7.029 descriptoren, 127 microthesauri, 21 domeinen), meertalig inclusief Catalaans. Een moderne opvolger van het PyEuroVoc-pakket uit 2021 en de natuurlijke thuisbasis voor een opnieuw getraind langecontextmodel."
     }
   },
   "auth": {

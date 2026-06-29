@@ -1011,7 +1011,8 @@
       "pricing": "Tarifs",
       "errors": "Limites et erreurs",
       "startBuilding": "Commencer à intégrer",
-      "fullDocs": "Documentation complète"
+      "fullDocs": "Documentation complète",
+      "clientLibraries": "Bibliothèques clientes"
     },
     "sidebar": {
       "onThisPage": "Sur cette page"
@@ -1043,7 +1044,9 @@
       "resolveAliases": "Résolution de noms humains (RGPD, DSA, IA Act, CBAM, ...) en CELEX. Plus de 680 alias.",
       "tenderDocs": "Un modèle complet d'application aux fonds européens par id : chaque section, les amorces de prompts du co-rédacteur IA, les objectifs de conformité, le paquet de documents de référence et les URLs de la Convention de Subvention. 19 modèles dans 8 programmes (EIC, Erasmus+, Digital Europe, CERV, LIFE, Creative Europe, CEF, ESF+).",
       "eeas": "Communiqués, publications, événements, appels d’offres et pages thématiques du Service européen pour l’action extérieure, le service diplomatique de l’UE. Les 352 fonctionnaires proviennent de who-is-who.",
-      "eurostatSeries": "Un dataset Eurostat récupéré en direct : charge utile JSON-stat 2.0, dimensions analysées, observations d'échantillon et date de dernière mise à jour d'Eurostat. 12 séries de santé spécialisées en sport et forme physique (activité physique, IMC, dépenses de sport des ménages, emploi culturel) plus tout code Eurostat sur l'endpoint détail."
+      "eurostatSeries": "Un dataset Eurostat récupéré en direct : charge utile JSON-stat 2.0, dimensions analysées, observations d'échantillon et date de dernière mise à jour d'Eurostat. 12 séries de santé spécialisées en sport et forme physique (activité physique, IMC, dépenses de sport des ménages, emploi culturel) plus tout code Eurostat sur l'endpoint détail.",
+      "extract": "Pointez-le vers n'importe quelle URL institutionnelle de l'UE : il détecte la plateforme, la récupère par la bonne voie anti-bot et renvoie des éléments structurés selon le contrat à 5 données.",
+      "social": "Publications récentes des comptes UE répertoriés (institutions, eurodéputés, commissaires, journalistes des affaires européennes) sur les plateformes ouvertes, les plus récentes d'abord."
     },
     "auth": {
       "description": "Chaque endpoint /api/v1/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",
@@ -1216,6 +1219,12 @@
           "refunded": "Remboursée"
         }
       }
+    },
+    "libraries": {
+      "status": "En développement",
+      "lede": "Deux bibliothèques Python officielles arrivent pour mettre l'API et son classifieur EuroVoc à un seul import de distance. L'API REST est déjà active ; ces surcouches sont en cours de développement, alors intégrez-vous aux endpoints ci-dessus en attendant.",
+      "brubruDesc": "Un SDK Python léger au-dessus de l'API v2 : objets typés sur le contrat à 5 données, pagination automatique et erreurs honnêtes. Le client maison de l'API.",
+      "eurovocDesc": "Un classifieur EuroVoc autonome et open source qui étiquette n'importe quel texte dans l'espace thématique officiel de l'UE (7 029 descripteurs, 127 microthésaurus, 21 domaines), multilingue y compris le catalan. Un successeur moderne du paquet PyEuroVoc de 2021 et le foyer naturel d'un modèle à contexte long réentraîné."
     }
   },
   "auth": {

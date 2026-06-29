@@ -438,6 +438,25 @@ X-RateLimit-Tier: free</code></pre>
 <li><strong>Parlaments nacionals.</strong> No ingerim dels parlaments <em>nacionals</em>. Nom&eacute;s el PE.</li>
 </ul>
 
+<h2>Biblioteques client</h2>
+
+<p>Dues biblioteques oficials de Python estan en desenvolupament per deixar l'API i el seu classificador EuroVoc a nom&eacute;s un import de dist&agrave;ncia. L'API REST ja &eacute;s activa: integra't amb els endpoints mentrestant. Totes dues estan etiquetades com en desenvolupament.</p>
+
+<p><strong><code>brubru</code></strong>: un SDK lleuger de Python sobre l'API v2. Objectes tipats sobre el contracte de 5 dades, paginaci&oacute; autom&agrave;tica i errors honestos. El client propi de l'API.</p>
+
+<pre><code>import brubru
+
+bru = brubru.Client(api_key="brubru_live_...")
+items = bru.extract("https://cinea.ec.europa.eu/news_en", classify=True)
+posts = bru.social.posts(entity_type="commissioner", platform="x")</code></pre>
+
+<p><strong><code>eurovoc</code></strong>: un classificador EuroVoc independent i de codi obert. Etiqueta qualsevol text en l'espai tem&agrave;tic oficial de la UE (7.029 descriptors, 127 microtesaurus, 21 dominis), multiling&uuml;e incl&ograve;s el catal&agrave;. Un successor modern del paquet PyEuroVoc de 2021.</p>
+
+<pre><code>import eurovoc
+
+eurovoc.classify("Markets in crypto-assets regulation")
+# -> [{"descriptor": "financial instrument", "mt": "2426", "domain": "24", "score": 0.88}, ...]</code></pre>
+
 <h2>On anar despr&eacute;s</h2>
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html">
