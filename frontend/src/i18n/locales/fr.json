@@ -1221,10 +1221,11 @@
       }
     },
     "libraries": {
-      "status": "Source disponible",
-      "lede": "Deux bibliothèques Python officielles enveloppent désormais l'API et son classifieur EuroVoc. Elles sont développées et testées, installables depuis les sources aujourd'hui (publication sur PyPI à venir) ; les exemples REST ci-dessus fonctionnent déjà.",
+      "status": "Sur PyPI",
+      "lede": "Deux bibliothèques Python officielles enveloppent l'API et son classifieur EuroVoc pour vous mettre à un seul import de distance. Les deux sont sur PyPI et open source (MIT).",
       "brubruDesc": "Un SDK Python léger au-dessus de l'API v2 : objets typés sur le contrat à 5 données, pagination automatique et erreurs honnêtes. Le client maison de l'API.",
-      "eurovocDesc": "Un classifieur EuroVoc autonome et open source qui étiquette n'importe quel texte dans l'espace thématique officiel de l'UE (7 029 descripteurs, 127 microthésaurus, 21 domaines), multilingue y compris le catalan. Un successeur moderne du paquet PyEuroVoc de 2021 et le foyer naturel d'un modèle à contexte long réentraîné."
+      "eurovocDesc": "Un classifieur EuroVoc autonome et open source qui étiquette n'importe quel texte dans l'espace thématique officiel de l'UE (7 029 descripteurs, 127 microthésaurus, 21 domaines), multilingue y compris le catalan. Un successeur moderne du paquet PyEuroVoc de 2021 et le foyer naturel d'un modèle à contexte long réentraîné.",
+      "openSource": "Open source sur GitHub :"
     }
   },
   "auth": {

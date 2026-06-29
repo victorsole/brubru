@@ -440,10 +440,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Biblioth&egrave;ques clientes</h2>
 
-<p>Deux biblioth&egrave;ques Python officielles sont en cours de d&eacute;veloppement pour mettre l'API et son classifieur EuroVoc &agrave; un seul import de distance. L'API REST est d&eacute;j&agrave; active : int&eacute;grez-vous aux endpoints en attendant. D&eacute;velopp&eacute;es et test&eacute;es, installables depuis les sources (publication sur PyPI &agrave; venir).</p>
+<p>Deux biblioth&egrave;ques Python officielles, d&eacute;sormais sur PyPI et open source (MIT), sur <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a>. Installez-les avec pip :</p>
 
-<pre><code>pip install ./sdk/brubru
-pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
+<pre><code>pip install brubru
+pip install "brubru-eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong> : un SDK Python l&eacute;ger au-dessus de l'API v2. Objets typ&eacute;s sur le contrat &agrave; 5 donn&eacute;es, pagination automatique et erreurs honn&ecirc;tes. Le client maison de l'API.</p>
 
@@ -463,8 +463,9 @@ eurovoc.classify("Markets in crypto-assets regulation")
 <p><strong>T&eacute;l&eacute;chargez les paquets d&eacute;j&agrave; construits :</strong></p>
 
 <ul>
-<li><code>brubru</code>: <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
-<li><code>eurovoc</code>: <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru/">brubru on PyPI</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru-eurovoc/">brubru-eurovoc on PyPI</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a></li>
 </ul>
 
 <h2>O&ugrave; aller ensuite</h2>

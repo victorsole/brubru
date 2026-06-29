@@ -440,10 +440,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Bibliotecas cliente</h2>
 
-<p>Dos bibliotecas oficiales de Python est&aacute;n en desarrollo para dejar la API y su clasificador EuroVoc a un solo import de distancia. La API REST ya est&aacute; activa: int&eacute;grate con los endpoints en el &iacute;nterin. Construidas y probadas, instalables desde el c&oacute;digo fuente (publicaci&oacute;n en PyPI pendiente).</p>
+<p>Dos bibliotecas oficiales de Python, ya en PyPI y de c&oacute;digo abierto (MIT), en <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a>. Inst&aacute;lalas con pip:</p>
 
-<pre><code>pip install ./sdk/brubru
-pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
+<pre><code>pip install brubru
+pip install "brubru-eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong>: un SDK ligero de Python sobre la API v2. Objetos tipados sobre el contrato de 5 datos, paginaci&oacute;n autom&aacute;tica y errores honestos. El cliente propio de la API.</p>
 
@@ -463,8 +463,9 @@ eurovoc.classify("Markets in crypto-assets regulation")
 <p><strong>Descarga los paquetes ya construidos:</strong></p>
 
 <ul>
-<li><code>brubru</code>: <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
-<li><code>eurovoc</code>: <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru/">brubru on PyPI</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru-eurovoc/">brubru-eurovoc on PyPI</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a></li>
 </ul>
 
 <h2>A d&oacute;nde ir despu&eacute;s</h2>

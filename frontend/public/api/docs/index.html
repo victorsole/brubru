@@ -439,10 +439,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Client libraries</h2>
 
-<p>Two official Python libraries wrap the API and its EuroVoc classifier so you are one <code>import</code> away. They are built and tested; install from source today (PyPI publication pending):</p>
+<p>Two official Python libraries wrap the API and its EuroVoc classifier so you are one <code>import</code> away. Both are on PyPI and open source (MIT) at <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a>.</p>
 
-<pre><code>pip install ./sdk/brubru
-pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
+<pre><code>pip install brubru
+pip install "brubru-eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong>: a thin Python SDK over the v2 API. Typed objects over the 5-datapoint contract, automatic pagination, honest errors. The API's own client.</p>
 
@@ -456,7 +456,7 @@ items = bru.extract("https://cinea.ec.europa.eu/news_en", classify=True)
 # Recent posts from a mapped entity (MEP, Commissioner, institution, journalist)
 posts = bru.social.posts(entity_type="commissioner", platform="x")</code></pre>
 
-<p><strong><code>eurovoc</code></strong>: a standalone, open-source EuroVoc classifier. It tags any text into the EU's official subject space (7,029 descriptors, 127 microthesauri, 21 domains), multilingual including Catalan. A modern successor to the 2021 PyEuroVoc package, and the natural home for a retrained long-context model.</p>
+<p><strong><code>eurovoc</code></strong> (PyPI distribution <code>brubru-eurovoc</code>, import name <code>eurovoc</code>): a standalone, open-source EuroVoc classifier. It tags any text into the EU's official subject space (7,029 descriptors, 127 microthesauri, 21 domains), multilingual including Catalan. A modern successor to the 2021 PyEuroVoc package, and the natural home for a retrained long-context model.</p>
 
 <pre><code>import eurovoc
 
@@ -466,14 +466,12 @@ eurovoc.classify("Markets in crypto-assets regulation")
 # or classify a live EU URL through the hosted engine (needs the brubru SDK)
 eurovoc.classify_url("https://environment.ec.europa.eu/news_en", api_key="brubru_live_...")</code></pre>
 
-<p><strong>Download the built packages</strong> (or install straight from the hosted wheel):</p>
-
-<pre><code>pip install https://brubru.beresol.eu/api/docs/libraries/brubru-0.1.0-py3-none-any.whl
-pip install "eurovoc[local] @ https://brubru.beresol.eu/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl"</code></pre>
+<p>PyPI is the canonical install. Direct downloads are also available for offline use:</p>
 
 <ul>
-<li><code>brubru</code>: <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
-<li><code>eurovoc</code>: <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru/">brubru on PyPI</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru-eurovoc/">brubru-eurovoc on PyPI</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li>Source repository: <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a></li>
 </ul>
 
 <h2>Where to go next</h2>

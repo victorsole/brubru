@@ -280,9 +280,12 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
           <section className="policy-page__section" id="client-libraries">
             <h2>{t('api.sections.clientLibraries')}</h2>
             <p>{t('api.libraries.lede')}</p>
-            <pre className="api-page__pre"><code>{`# install from source (PyPI publication pending)
-pip install ./sdk/brubru
-pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model`}</code></pre>
+            <p className="api-page__note">
+              {t('api.libraries.openSource')}{' '}
+              <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a>
+            </p>
+            <pre className="api-page__pre"><code>{`pip install brubru
+pip install "brubru-eurovoc[local]"   # [local] adds the classifier model`}</code></pre>
 
             <h3>
               <code>brubru</code>{' '}

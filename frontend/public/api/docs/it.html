@@ -440,10 +440,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Librerie client</h2>
 
-<p>Due librerie Python ufficiali sono in sviluppo per mettere l'API e il suo classificatore EuroVoc a un solo import di distanza. L'API REST &egrave; gi&agrave; attiva: integrati con gli endpoint nel frattempo. Sviluppate e testate, installabili dal sorgente (pubblicazione su PyPI in arrivo).</p>
+<p>Due librerie Python ufficiali, ora su PyPI e open source (MIT), su <a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a>. Installale con pip:</p>
 
-<pre><code>pip install ./sdk/brubru
-pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
+<pre><code>pip install brubru
+pip install "brubru-eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong>: un SDK Python leggero sopra l'API v2. Oggetti tipizzati sul contratto a 5 dati, paginazione automatica ed errori onesti. Il client ufficiale dell'API.</p>
 
@@ -463,8 +463,9 @@ eurovoc.classify("Markets in crypto-assets regulation")
 <p><strong>Scarica i pacchetti gi&agrave; costruiti:</strong></p>
 
 <ul>
-<li><code>brubru</code>: <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
-<li><code>eurovoc</code>: <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru/">brubru on PyPI</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/brubru-0.1.0.tar.gz">source</a></li>
+<li><a href="https://pypi.org/project/brubru-eurovoc/">brubru-eurovoc on PyPI</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0-py3-none-any.whl">wheel</a> &middot; <a href="/api/docs/libraries/eurovoc-0.1.0.tar.gz">source</a></li>
+<li><a href="https://github.com/Beresol-BV/brubru-EU-scraper-library">github.com/Beresol-BV/brubru-EU-scraper-library</a></li>
 </ul>
 
 <h2>Dove andare dopo</h2>

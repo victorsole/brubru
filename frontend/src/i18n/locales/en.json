@@ -1221,10 +1221,11 @@
       }
     },
     "libraries": {
-      "status": "Source available",
-      "lede": "Two official Python libraries now wrap the API and its EuroVoc classifier. They are built and tested, installable from source today (PyPI publication pending); the REST examples above already work.",
+      "status": "On PyPI",
+      "lede": "Two official Python libraries wrap the API and its EuroVoc classifier so you are one import away. Both are on PyPI and open source (MIT).",
       "brubruDesc": "A thin Python SDK over the v2 API: typed objects over the 5-datapoint contract, automatic pagination and honest errors. The API's own client.",
-      "eurovocDesc": "A standalone, open-source EuroVoc classifier that tags any text into the EU's official subject space (7,029 descriptors, 127 microthesauri, 21 domains), multilingual including Catalan. A modern successor to the 2021 PyEuroVoc package, and the natural home for a retrained long-context model."
+      "eurovocDesc": "A standalone, open-source EuroVoc classifier that tags any text into the EU's official subject space (7,029 descriptors, 127 microthesauri, 21 domains), multilingual including Catalan. A modern successor to the 2021 PyEuroVoc package, and the natural home for a retrained long-context model.",
+      "openSource": "Open source on GitHub:"
     }
   },
   "auth": {
