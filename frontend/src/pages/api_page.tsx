@@ -280,6 +280,9 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
           <section className="policy-page__section" id="client-libraries">
             <h2>{t('api.sections.clientLibraries')}</h2>
             <p>{t('api.libraries.lede')}</p>
+            <pre className="api-page__pre"><code>{`# install from source (PyPI publication pending)
+pip install ./sdk/brubru
+pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model`}</code></pre>
 
             <h3>
               <code>brubru</code>{' '}

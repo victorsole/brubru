@@ -439,7 +439,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Client libraries</h2>
 
-<p>Two official Python libraries are in development to put the API and its EuroVoc classifier one <code>import</code> away. The REST API is live today: build against the endpoints in the meantime. Both are tagged <em>in development</em>.</p>
+<p>Two official Python libraries wrap the API and its EuroVoc classifier so you are one <code>import</code> away. They are built and tested; install from source today (PyPI publication pending):</p>
+
+<pre><code>pip install ./sdk/brubru
+pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong>: a thin Python SDK over the v2 API. Typed objects over the 5-datapoint contract, automatic pagination, honest errors. The API's own client.</p>
 

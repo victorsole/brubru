@@ -440,7 +440,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Biblioth&egrave;ques clientes</h2>
 
-<p>Deux biblioth&egrave;ques Python officielles sont en cours de d&eacute;veloppement pour mettre l'API et son classifieur EuroVoc &agrave; un seul import de distance. L'API REST est d&eacute;j&agrave; active : int&eacute;grez-vous aux endpoints en attendant. Les deux sont marqu&eacute;es en d&eacute;veloppement.</p>
+<p>Deux biblioth&egrave;ques Python officielles sont en cours de d&eacute;veloppement pour mettre l'API et son classifieur EuroVoc &agrave; un seul import de distance. L'API REST est d&eacute;j&agrave; active : int&eacute;grez-vous aux endpoints en attendant. D&eacute;velopp&eacute;es et test&eacute;es, installables depuis les sources (publication sur PyPI &agrave; venir).</p>
+
+<pre><code>pip install ./sdk/brubru
+pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong> : un SDK Python l&eacute;ger au-dessus de l'API v2. Objets typ&eacute;s sur le contrat &agrave; 5 donn&eacute;es, pagination automatique et erreurs honn&ecirc;tes. Le client maison de l'API.</p>
 

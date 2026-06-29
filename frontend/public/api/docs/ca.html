@@ -440,7 +440,10 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Biblioteques client</h2>
 
-<p>Dues biblioteques oficials de Python estan en desenvolupament per deixar l'API i el seu classificador EuroVoc a nom&eacute;s un import de dist&agrave;ncia. L'API REST ja &eacute;s activa: integra't amb els endpoints mentrestant. Totes dues estan etiquetades com en desenvolupament.</p>
+<p>Dues biblioteques oficials de Python estan en desenvolupament per deixar l'API i el seu classificador EuroVoc a nom&eacute;s un import de dist&agrave;ncia. L'API REST ja &eacute;s activa: integra't amb els endpoints mentrestant. Constru&iuml;des i provades, instal&middot;lables des del codi font (publicaci&oacute; a PyPI pendent).</p>
+
+<pre><code>pip install ./sdk/brubru
+pip install "./sdk/eurovoc[local]"   # [local] adds the classifier model</code></pre>
 
 <p><strong><code>brubru</code></strong>: un SDK lleuger de Python sobre l'API v2. Objectes tipats sobre el contracte de 5 dades, paginaci&oacute; autom&agrave;tica i errors honestos. El client propi de l'API.</p>
 

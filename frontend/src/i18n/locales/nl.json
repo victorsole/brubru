@@ -1221,8 +1221,8 @@
       }
     },
     "libraries": {
-      "status": "In ontwikkeling",
-      "lede": "Twee officiële Python-bibliotheken zijn onderweg om de API en de EuroVoc-classifier op één import afstand te brengen. De REST-API is vandaag al live; deze wrappers zijn in ontwikkeling, dus bouw voorlopig rechtstreeks tegen de bovenstaande endpoints.",
+      "status": "Broncode beschikbaar",
+      "lede": "Twee officiële Python-bibliotheken omhullen nu de API en de EuroVoc-classifier. Ze zijn gebouwd en getest, vandaag installeerbaar vanaf de broncode (publicatie op PyPI volgt); de REST-voorbeelden hierboven werken al.",
       "brubruDesc": "Een lichte Python-SDK boven op de v2-API: getypeerde objecten over het 5-datapuntcontract, automatische paginering en eerlijke fouten. De eigen client van de API.",
       "eurovocDesc": "Een op zichzelf staande, open-source EuroVoc-classifier die elke tekst labelt in de officiële onderwerpsruimte van de EU (7.029 descriptoren, 127 microthesauri, 21 domeinen), meertalig inclusief Catalaans. Een moderne opvolger van het PyEuroVoc-pakket uit 2021 en de natuurlijke thuisbasis voor een opnieuw getraind langecontextmodel."
     }
