@@ -947,6 +947,30 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/tender-docs/comply-clusters</code></td><td>EU Law Comply clusters relevant to a funding template, with match reasons (template / ethics / funding-mode)</td></tr>
 </tbody>
 </table>
+<h2 id="social">Social media directory <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">7 endpoints</span></h2>
+<p>The Brubru EU social directory: 3,800+ mapped accounts (institutions, agencies, MEPs, Commissioners, EU officials, EU-affairs journalists) across every major platform, and their posts on the open platforms (Bluesky, Mastodon, YouTube, and X via public syndication). Instagram, LinkedIn and TikTok are mapping-only. Same five-datapoint contract.</p>
+<table class="endpoint-table">
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social</code></td><td>Directory overview: totals, accounts by entity type and platform, posts by platform</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/posts</code></td><td>Recent posts from mapped accounts, newest first, filterable by entity, platform, since, text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/posts/{post_id}</code></td><td>One post with its full text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/accounts</code></td><td>The account directory, filterable by entity type, platform and verified</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/accounts/{account_id}</code></td><td>One account with its composed profile</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/entity/{entity_type}/{entity_key}</code></td><td>One entity's full social footprint: every mapped account plus recent posts</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/social/platforms</code></td><td>The platform pick-list with each platform's content-fetch tier</td></tr>
+</tbody>
+</table>
+
+<h2 id="extract">Extract engine <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">1 endpoint</span></h2>
+<p>Input-first extraction: give it any EU institutional URL and it detects which of the 8 EU web platforms the page uses, fetches through the matching anti-bot path, and returns structured five-datapoint items, optionally tagged with EuroVoc descriptors. One endpoint for the whole EU web estate.</p>
+<table class="endpoint-table">
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/extract</code></td><td>Structured items extracted from any EU URL: detected platform, how it was fetched, items with the five datapoints and optional EuroVoc tags</td></tr>
+</tbody>
+</table>
+
 <footer>
 &copy; 2026 Beresol BV: Brubru EU Data API v2.
 <a href="/api/">Back to marketing page</a> &middot;
