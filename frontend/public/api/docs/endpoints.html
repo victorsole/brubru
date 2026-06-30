@@ -63,6 +63,7 @@
   <h3>Commission</h3>
   <ul>
     <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (45)</a></li>
+    <li><a href="/api/docs/endpoints.html#interoperable" data-nav="ep-interoperable">EU Interoperable (9)</a></li>
   </ul>
 
   <h3>Economic &amp; financial</h3>
@@ -975,6 +976,23 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/extract</code></td><td>Structured items extracted from any EU URL: detected platform, how it was fetched, items with the five datapoints and optional EuroVoc tags</td></tr>
+</tbody>
+</table>
+
+<h2 id="interoperable">EU Interoperable <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">9 endpoints</span></h2>
+<p>The Interoperable Europe Portal (DG DIGIT): news, events and reusable interoperability solutions aggregated across the portal's thematic collections (OSOR, SEMIC, EU GovTech, EIF/Monitoring, Public Sector Tech Watch, EUPL, CAMSS/EIRA, and more). Every feed accepts <code>?collection=&lt;slug&gt;</code> to filter to one hub. Playwright-fed.</p>
+<table class="endpoint-table">
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable</code></td><td>Folder directory: item counts per type and the number of thematic collections</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/news</code></td><td>Cross-collection news, newest first; filter with ?collection=</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/news/{item_id}</code></td><td>One news item, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/events</code></td><td>Upcoming events across collections; filter with ?collection=</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/events/{item_id}</code></td><td>One event, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/solutions</code></td><td>Reusable interoperability solutions; filter with ?collection=</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/solutions/{item_id}</code></td><td>One solution, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/collections</code></td><td>Directory of the thematic collections (OSOR, SEMIC, EU GovTech, ...)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/collections/{collection_key}</code></td><td>One collection's footprint: its description plus recent news, events and solutions</td></tr>
 </tbody>
 </table>
 
