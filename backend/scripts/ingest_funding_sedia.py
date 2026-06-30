@@ -252,17 +252,47 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
     )
 
 
+# Default prefix-anchored SEDIA queries. Each entry narrows the 4M-row SEDIA
+# index to one programme's topic-call documents. text='*' returns ~4M rows
+# dominated by SEDIA_FAQ + SEDIA_PERSON noise and yields ~0 valid topic rows;
+# prefix queries (proven shape, mirrored from ingest_ft_programme_calls.py)
+# return only matching call/topic rows.
+DEFAULT_QUERIES: list[str] = [
+    "HORIZON-",
+    "HORIZON-CL",
+    "EIC-",
+    "EIE-",
+    "DIGITAL-",
+    "CEF-",
+    "ERASMUS-",
+    "CERV-",
+    "CREA-",
+    "EU4H-",
+    "LIFE-",
+    "JUST-",
+    "AMIF-",
+    "BMVI-",
+    "ISF-",
+    "INNOVFUND-",
+    "ESF-",
+    "EUDF-",
+    "EISMEA",
+]
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=200, help="Max rows to ingest (default 200)")
+    ap.add_argument("--limit", type=int, default=2000, help="Max rows to ingest across all queries (default 2000)")
     ap.add_argument("--apply", action="store_true", help="Write to DB. Default is dry-run.")
     ap.add_argument("--page-size", type=int, default=100)
     ap.add_argument("--status", choices=["forthcoming", "open", "closed", "any"], default="any")
-    ap.add_argument("--text", default="*",
-                    help="SEDIA full-text query (default '*'). Use '2026' to pull "
-                         "only 2026 calls, '2025' for 2025, etc. SEDIA's body-level "
-                         "filters/sort aren't honoured by the search endpoint, so "
-                         "the text query is the reliable way to scope by year.")
+    ap.add_argument("--text", default=None,
+                    help="SEDIA full-text query. If omitted, iterates over the "
+                         "DEFAULT_QUERIES programme prefixes (Horizon, EIC, "
+                         "Digital Europe, CEF, Erasmus+, CREA, CERV, EU4H, "
+                         "LIFE, JUST, AMIF, BMVI, ISF, Innovation Fund, ESF+, "
+                         "EUDF, EISMEA). Override with a single string to "
+                         "pull just that prefix (e.g. '2026').")
     ap.add_argument("--write-ft", action="store_true",
                     help="Also write the same rows to ft_calls_for_proposals "
                          "(the sibling table backing /api/v1/ft-calls-for-proposals).")
@@ -277,42 +307,63 @@ def main():
     if args.status != "any":
         status_filter = next((k for k, v in STATUS_MAP.items() if v == args.status), None)
 
+    queries = [args.text] if args.text else DEFAULT_QUERIES
+
     conn = psycopg2.connect(db)
     cur = conn.cursor()
 
     rows_seen = 0
     rows_written = 0
-    page = 1
-    while rows_seen < args.limit:
-        data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter, text=args.text)
-        if not data:
+    seen_topic_ids: set[str] = set()
+
+    for query in queries:
+        if rows_seen >= args.limit:
             break
-        results = data.get("results") or []
-        if not results:
-            break
-        for r in results:
-            row = normalise_row(r)
-            if row is None:
-                continue
-            rows_seen += 1
-            print(f"  [{row['status']:11s}] {row['topic_id']:35s}  {(row['title'] or '')[:60]}")
-            if args.apply:
-                try:
-                    upsert(cur, row)
-                    if args.write_ft:
-                        upsert_ft_calls(cur, row)
-                    rows_written += 1
-                except Exception as exc:  # noqa: BLE001
-                    print(f"    [DB ERR] {exc}")
-                    conn.rollback()
-            if rows_seen >= args.limit:
+        print(f"\n[QUERY] text={query!r}")
+        page = 1
+        per_query_seen = 0
+        # Cap pagination per query so one query can't monopolise the budget.
+        max_pages = 25
+        while rows_seen < args.limit and page <= max_pages:
+            data = fetch_sedia_page(page, page_size=args.page_size, status_filter=status_filter, text=query)
+            if not data:
                 break
-        if args.apply:
-            conn.commit()
-        if rows_seen >= data.get("totalResults", rows_seen):
-            break
-        page += 1
-        time.sleep(0.4)
+            results = data.get("results") or []
+            if not results:
+                break
+            page_valid = 0
+            for r in results:
+                row = normalise_row(r)
+                if row is None:
+                    continue
+                tid = row["topic_id"]
+                if tid in seen_topic_ids:
+                    continue
+                seen_topic_ids.add(tid)
+                rows_seen += 1
+                per_query_seen += 1
+                page_valid += 1
+                print(f"  [{row['status']:11s}] {tid:35s}  {(row['title'] or '')[:60]}")
+                if args.apply:
+                    try:
+                        upsert(cur, row)
+                        if args.write_ft:
+                            upsert_ft_calls(cur, row)
+                        rows_written += 1
+                    except Exception as exc:  # noqa: BLE001
+                        print(f"    [DB ERR] {exc}")
+                        conn.rollback()
+                if rows_seen >= args.limit:
+                    break
+            if args.apply:
+                conn.commit()
+            # Early-exit if a page returned only noise — no point burning more
+            # pages on the same query.
+            if page_valid == 0 and per_query_seen > 0:
+                break
+            page += 1
+            time.sleep(0.4)
+        print(f"  [QUERY DONE] {query!r}: {per_query_seen} valid rows")
 
     print(f"\n[DONE] seen={rows_seen} written={rows_written} apply={args.apply}")
 

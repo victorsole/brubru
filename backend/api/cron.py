@@ -541,6 +541,15 @@ async def cron_sync_daily(
     # F&T Portal news + events (economy_items body 'ftportal') backing
     # /api/v2/funding/ft-news + /ft-events. SEDIA news/events indexes.
     results["ft_news_events"] = _run_script("ft_news_events", "scripts/ingest_ft_news_events.py", ["--all", "--apply"], timeout=600)
+    # F&T Portal opportunities (funding_opportunities + ft_calls_for_proposals)
+    # — Horizon, EIC, EIE, CEF, Digital Europe, Erasmus+, CREA, CERV, EU4Health.
+    # Pulled from SEDIA search API; idempotent upsert on topic_id / call_id.
+    # Closes the 33-day ingest gap surfaced 30 June 2026 (last batch 27 May).
+    results["ft_funding_opportunities"] = _run_script(
+        "ft_funding_opportunities",
+        "scripts/ingest_funding_sedia.py",
+        ["--apply", "--limit", "500"], timeout=900,
+    )
 
     # Tenderator translations (MEUB-news pattern, migration 133): detect lang
     # on freshly-arrived TED + F&T rows and translate any foreign-language

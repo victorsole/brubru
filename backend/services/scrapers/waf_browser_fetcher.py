@@ -195,8 +195,23 @@ class WafBrowserFetcher:
         self._ctx = self._browser = self._pw = None
 
     # -- fetch -------------------------------------------------------------
-    def fetch(self, url: str, *, expand_accordions: bool = True, strip_chrome: bool = True) -> FetchResult:
-        """Render ``url`` past the WAF and return cleaned text + raw HTML."""
+    def fetch(
+        self,
+        url: str,
+        *,
+        expand_accordions: bool = True,
+        strip_chrome: bool = True,
+        wait_for_selector: str | None = None,
+        wait_for_selector_timeout_ms: int = 8000,
+    ) -> FetchResult:
+        """Render ``url`` past the WAF and return cleaned text + raw HTML.
+
+        ``wait_for_selector`` lets the caller pin extraction to a site-specific
+        content anchor (e.g. ``eui-accordion-item`` on the F&T Portal SPA)
+        instead of guessing from ``settle_ms``. If the selector never appears
+        within ``wait_for_selector_timeout_ms`` the fetch still returns whatever
+        DOM is present — same fail-soft behaviour as before.
+        """
         if self._ctx is None:
             raise RuntimeError("Use WafBrowserFetcher as a context manager (`with ...:`).")
 
@@ -212,23 +227,48 @@ class WafBrowserFetcher:
             except Exception:
                 pass
 
+            if wait_for_selector:
+                try:
+                    page.wait_for_selector(
+                        wait_for_selector, timeout=wait_for_selector_timeout_ms, state="attached",
+                    )
+                except Exception:
+                    pass
+
             if expand_accordions:
                 # EUR-Lex hides detail behind "More on..." accordions; open them all.
+                # F&T Portal (EUI Angular components) uses <eui-accordion-item>
+                # with shadow-DOM event handlers — including their header
+                # selectors here makes the same pass work for both.
                 try:
                     page.eval_on_selector_all(
                         "[aria-expanded='false'], a.toggle, .accordion-toggle, "
-                        "[data-toggle='collapse'], .moreLink",
-                        "els => els.forEach(e => { try { e.click(); } catch (_) {} })",
+                        "[data-toggle='collapse'], .moreLink, "
+                        "eui-accordion-item, eui-accordion-item [slot='header'], "
+                        ".eui-accordion__header, .eui-accordion-item__header",
+                        "els => els.forEach(e => { "
+                        "  try { e.click(); } catch (_) {} "
+                        "  try { if (typeof e.open === 'function') e.open(); } catch (_) {} "
+                        "  try { e.dispatchEvent(new MouseEvent('click', {bubbles: true})); } catch (_) {} "
+                        "})",
                     )
                 except Exception:
                     pass
                 page.wait_for_timeout(1200)
+                # F&T Portal lazy-loads accordion body content via XHR after
+                # the header click; let those settle before extraction.
+                try:
+                    page.wait_for_load_state("networkidle", timeout=4000)
+                except Exception:
+                    pass
                 # Force-reveal any still-collapsed panels.
                 try:
                     page.eval_on_selector_all(
-                        ".collapse, .panel-collapse, [hidden]",
+                        ".collapse, .panel-collapse, [hidden], "
+                        "eui-accordion-item:not([expanded])",
                         "els => els.forEach(e => { e.classList.add('in','show'); "
-                        "e.style.display='block'; e.removeAttribute('hidden'); })",
+                        "e.style.display='block'; e.removeAttribute('hidden'); "
+                        "try { e.setAttribute('expanded', ''); } catch (_) {} })",
                     )
                 except Exception:
                     pass

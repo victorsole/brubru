@@ -411,17 +411,17 @@
     },
     {
       "path_prefix": "/api/v1/funding",
-      "source": "Funding & Tenders Portal (ec.europa.eu/info/funding-tenders) — Horizon, EIC, EIT, Erasmus, Creative Europe",
-      "script": "scripts/backfill_tenders_description.py (calls/topics) + cordis services (projects)",
+      "source": "Funding & Tenders Portal SEDIA search API (api.tech.ec.europa.eu) — Horizon, EIC, EIE, Digital Europe, CEF, Erasmus+, CREA, CERV, EU4Health, LIFE, JUST, AMIF, BMVI, ISF, Innovation Fund, ESF+, EUDF, EISMEA",
+      "script": "scripts/ingest_funding_sedia.py --apply --limit 500",
       "tier": "daily",
-      "notes": "Funding calls open/close on a known schedule; daily refresh catches new topics + deadlines."
+      "notes": "Writes funding_opportunities (+ optionally ft_calls_for_proposals via --write-ft). Iterates ~19 programme prefix queries; one --text override available. Wired into cron_sync_daily 30 June 2026 after a 33-day silent gap (script was returning 0 rows on the old text='*' query because SEDIA now serves 4M rows dominated by FAQ/PERSON noise — fix anchors queries to programme prefixes)."
     },
     {
       "path_prefix": "/api/v1/calls-for-tenders",
-      "source": "Funding & Tenders Portal (tenders track)",
-      "script": "scripts/backfill_tenders_description.py",
+      "source": "Funding & Tenders Portal (tenders track) — SEDIA search API returns CFT (Call for Tenders) rows alongside topic-call rows",
+      "script": "scripts/ingest_funding_sedia.py (CFT rows ingest into funding_opportunities) + scripts/backfill_tenders_description.py (TED notices into tenders)",
       "tier": "daily",
-      "notes": "Same source as /funding."
+      "notes": "ft_calls_for_tenders table has no dedicated writer (the 386 frozen rows are a 31 Dec 2025 one-off seed). CFT rows from SEDIA (e.g. EIC Corporate Partnership Programme 4.0) currently land in funding_opportunities with topic_id ending in '-CN'. Follow-up: split into ft_calls_for_tenders with the CFT-specific schema (contractType, awardMethod, cftDocuments)."
     },
     {
       "path_prefix": "/api/v1/funded-projects",
