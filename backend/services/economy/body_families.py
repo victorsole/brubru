@@ -16,7 +16,8 @@ from __future__ import annotations
 # family slug -> {label, bodies (canonical codes)}. Bodies may repeat across families.
 FAMILIES: dict[str, dict] = {
     "digital-tech": {"label": "Digital & Tech",
-                     "bodies": ["euipo", "enisa", "berec", "eu_lisa", "chips", "sns", "eurohpc", "eccc"]},
+                     "bodies": ["euipo", "enisa", "berec", "eu_lisa", "chips", "sns", "eurohpc", "eccc",
+                                "interoperable", "eugovtech"]},
     "health-life-sciences": {"label": "Health & Life Sciences",
                              "bodies": ["ema", "ecdc", "efsa", "euda", "ihi", "edctp3", "hadea"]},
     "climate-energy-environment": {"label": "Climate, Energy & Environment",

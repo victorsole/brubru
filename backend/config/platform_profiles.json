@@ -150,6 +150,11 @@
       "platform": "drupal",
       "anti_bot": "playwright",
       "note": "probe 26 Jun: 0 items in server HTML, JS-rendered"
+    },
+    "interoperable-europe": {
+      "platform": "drupal",
+      "anti_bot": "js_faceted",
+      "note": "Interoperable Europe Portal (Joinup): JS-faceted listings (news/events/solutions) need a browser render; the requests path only returns the SSR shell."
     }
   },
   "_probe_26jun": "12/21 golden URLs OK via requests, 9 need browser; all 4/4 passes stable. See tests/extract_engine/probe_golden.py output."

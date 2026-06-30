@@ -28,7 +28,10 @@ _ISO = re.compile(r"\b(20\d{2})-(\d{2})-(\d{2})\b")
 _DMY_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](20\d{2})\b")
 _LIST_HREF = re.compile(r"/(news|events?|publications?|press|media|consultations?)/", re.I)
 _NOISE = re.compile(r"(cookie|privacy|accessibility|sitemap|/login|sign[- ]?in|subscribe|"
-                    r"newsletter|accept|skip to|legal[- ]notice|data protection|institutions-law)", re.I)
+                    r"newsletter|accept|skip to|legal[- ]notice|data protection|institutions-law|"
+                    # faceted-search / filter URLs (e.g. Joinup ?f[0]=topic:...) and bare
+                    # search-result pages are never content items.
+                    r"f%5b0%5d=|\?f\[0\]=|/search\?|authenticate-to-join)", re.I)
 
 # A content item must have a real headline. Nav links, calls-to-action and bare
 # section labels ("Registration", "Themes in focus", "Subscribe to ... News") are not
@@ -263,6 +266,39 @@ def _dedup(items):
 
 
 # ---- platform handlers ------------------------------------------------------ #
+_JOINUP_CONTENT = re.compile(r"/(news|event|solution|document)/", re.I)
+
+
+def _joinup_cards(soup, base_url, body_code, item_type, limit):
+    """Interoperable Europe / Joinup: a content card is an <article> whose heading
+    links to a /news|event|solution|document/ slug. Scoping to those excludes the
+    faceted-search sidebar, topic facets and related-link chrome that the generic
+    Drupal selectors otherwise pick up on these pages."""
+    from urllib.parse import urljoin
+    out, seen = [], set()
+    for art in soup.select("article"):
+        link = next((a for a in art.select("a[href]")
+                     if _JOINUP_CONTENT.search(a.get("href", ""))), None)
+        if not link:
+            continue
+        href = link.get("href", "")
+        url = norm_url(href if href.startswith("http") else urljoin(base_url, href))
+        key = url.rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        title = _card_title(art) or clean(link.get_text(" ", strip=True))
+        if not title or len(title) < 6:
+            continue
+        out.append(Item(body_code=body_code, item_type=item_type, title=title[:300],
+                        public_url=url, summary=clean(art.get_text(" ", strip=True))[:300],
+                        document_date=smart_date(art), creation_date=datetime.now(timezone.utc),
+                        source_kind="drupal", guid=url))
+        if len(out) >= limit:
+            break
+    return out
+
+
 def parse(platform, html, base_url, *, body_code="extract", item_type="news", limit=60):
     soup = BeautifulSoup(html, "html.parser")
     # Strip filter/search forms and datepickers up front: their form-item divs and
@@ -274,6 +310,14 @@ def parse(platform, html, base_url, *, body_code="extract", item_type="news", li
     for el in soup.select(".ecl-datepicker, [role=search], .js-form-item, .facets-widget, "
                           "form.search-form, form[role=search], form[id*=filter], form[id*=search]"):
         el.decompose()
+    # Interoperable Europe / Joinup (interoperable-europe.ec.europa.eu): a faceted
+    # portal whose content cards the generic Drupal selectors miss. Scope to the
+    # article cards that link to real content (host-gated, no effect elsewhere).
+    from urllib.parse import urlparse as _up
+    if "interoperable-europe.ec.europa.eu" in (_up(base_url).netloc or "").lower():
+        joinup = _joinup_cards(soup, base_url, body_code, item_type, limit)
+        if joinup:
+            return joinup
     if platform == "ecl":
         cards = soup.select(".ecl-content-item")
     elif platform == "drupal":
