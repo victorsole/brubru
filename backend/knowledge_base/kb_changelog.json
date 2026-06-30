@@ -2,6 +2,37 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-06-30",
+      "action": "updated",
+      "guide": "eu_trade_policy",
+      "title": "EU Trade Policy",
+      "summary": "New EU steel safeguard enters into application 30 Jun 2026 (IP/26/1484; Reg (EU) 2026/1457 tariff-quota distribution)",
+      "refs": [
+        "32026R1457"
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "action": "updated",
+      "guide": "eu_us_trade_deal_2026",
+      "title": "EU-US Trade Deal 2026",
+      "summary": "Tariff regulations adopted & published: Reg (EU) 2026/1455 + 2026/1461 (25 Jun 2026)",
+      "refs": [
+        "32026R1455",
+        "32026R1461"
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "action": "updated",
+      "guide": "victims_rights_directive_revision",
+      "title": "Victims' Rights Directive",
+      "summary": "Adopted & published as Directive (EU) 2026/1472 (17 Jun 2026); procedure 2023/0250(COD) complete",
+      "refs": [
+        "32026L1472"
+      ]
+    },
+    {
       "date": "2026-06-29",
       "action": "updated",
       "guide": "eu_fdi_screening_regulation",
