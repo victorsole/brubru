@@ -245,6 +245,7 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/consultations(/|$)"),               "read:economy"),
     (re.compile(r"^/api/v2/social(/|$)"),                       "read:social"),
     (re.compile(r"^/api/v2/interoperable(/|$)"),                "read:economy"),
+    (re.compile(r"^/api/v2/eugovtech(/|$)"),                    "read:economy"),
 
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),
