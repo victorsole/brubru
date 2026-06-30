@@ -64,6 +64,7 @@
   <ul>
     <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (45)</a></li>
     <li><a href="/api/docs/endpoints.html#interoperable" data-nav="ep-interoperable">EU Interoperable (9)</a></li>
+    <li><a href="/api/docs/endpoints.html#eugovtech" data-nav="ep-eugovtech">EC GovTech (11)</a></li>
   </ul>
 
   <h3>Economic &amp; financial</h3>
@@ -993,6 +994,25 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/solutions/{item_id}</code></td><td>One solution, full body</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/collections</code></td><td>Directory of the thematic collections (OSOR, SEMIC, EU GovTech, ...)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/interoperable/collections/{collection_key}</code></td><td>One collection's footprint: its description plus recent news, events and solutions</td></tr>
+</tbody>
+</table>
+
+<h2 id="eugovtech">EC GovTech <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">11 endpoints</span></h2>
+<p>The EU GovTech sub-portal on the Interoperable Europe Portal (DG DIGIT): news, events, reusable solutions, the Knowledge Centre (reports &amp; policy briefs), and snapshots of the GovTech hub pages (GovTech Atlas, GovTech4All). Promoted to its own folder because its listings carry the full history the cross-collection feeds only sample. Playwright-fed.</p>
+<table class="endpoint-table">
+<thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech</code></td><td>Folder directory: item counts per resource type</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/news</code></td><td>EU GovTech news, newest first (incl. GovTech4All challenge updates)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/news/{item_id}</code></td><td>One news item, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/events</code></td><td>EU GovTech events (conferences, webinars, matchmaking)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/events/{item_id}</code></td><td>One event, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/solutions</code></td><td>Reusable govtech solutions and toolkits</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/solutions/{item_id}</code></td><td>One solution, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/publications</code></td><td>Knowledge Centre: GovTech reports, policy briefs, foresight studies</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/publications/{item_id}</code></td><td>One publication, full body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/topics</code></td><td>Snapshots of the EU GovTech hub pages (Atlas, GovTech4All, Knowledge Centre)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/eugovtech/topics/{item_id}</code></td><td>One topic snapshot, full body</td></tr>
 </tbody>
 </table>
 
