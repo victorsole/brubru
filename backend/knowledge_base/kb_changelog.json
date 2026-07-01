@@ -2,6 +2,46 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-01",
+      "action": "updated",
+      "guide": "ukraine_support_loan_recovery_2026",
+      "title": "Ukraine Support Loan",
+      "summary": "€3.9bn drone disbursement 30 Jun (first of ~€6bn drone tranche); 30/60 budget/defence split",
+      "refs": []
+    },
+    {
+      "date": "2026-07-01",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "New steel safeguard in application 30 Jun; polyether anti-dumping initiation; US-tariff safeguard Reg 2026/1455",
+      "refs": [
+        "32026C03482",
+        "52026XC03478"
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "action": "updated",
+      "guide": "council_presidency_trio_programme",
+      "title": "Rotating Council Presidency & Trio",
+      "summary": "Added Irish Presidency H2 2026 section: motto, three pillars, One Market Roadmap, enlargement, Ukraine",
+      "refs": []
+    },
+    {
+      "date": "2026-07-01",
+      "action": "added",
+      "guide": "eu_indonesia_cepa",
+      "title": "EU-Indonesia CEPA & IPA",
+      "summary": "New guide: CEPA + Investment Protection Agreement; Commission tabled signing/conclusion proposals to Council 29 Jun 2026",
+      "refs": [
+        "52026PC0340",
+        "52026PC0341",
+        "52026PC0342",
+        "52026PC0343"
+      ]
+    },
+    {
       "date": "2026-06-30",
       "action": "updated",
       "guide": "eu_trade_policy",
