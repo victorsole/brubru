@@ -68,7 +68,13 @@ _GEO_NOUN = re.compile(
     r"geograafilin\w*\s+piirkon\w*|"                        # ET
     r"[ģg]eogr[āa]fisk\w*\s+apgabal\w*|"                    # LV
     r"geografin\w*\s+vietov\w*|"                            # LT
-    r"[żz]ona\s+[ġg]eografik\w*"                            # MT
+    r"[żz]ona\s+[ġg]eografik\w*|"                           # MT
+    # WINE single-document (Reg 2019/33) titles the demarcation "delimited/
+    # demarcated area" with no "geographical" word -> match it directly.
+    r"(?:zona|[áa]rea|aire|zone|regi[óo]n|regione|regi[ãa]o)\s+(?:delimit\w+|d[ée]limit\w+|demarcad\w+)|"
+    r"demarcated area|delimited area|covered area|"
+    r"abgegrenzt\w*\s+gebiet|afgebakend\s+gebied|"
+    r"zon[ăa]\s+delimitat\w*|vymezen[ée]\s+[úu]zem\w*|behat[áa]rolt\s+ter[üu]let"  # RO/CS/HU wine
     r")", re.I | re.U)
 # Definition / delimitation qualifier (or the heading is standalone-short).
 _QUAL = re.compile(
@@ -194,6 +200,36 @@ def confidence_of(area: str) -> str:
     return "clean" if _PLACE.search(area) else "needs_review"
 
 
+def _pdf_text(data: bytes) -> str | None:
+    """Extract PDF text. PyMuPDF preserves reading order far better than pypdf
+    (pypdf scrambles multi-column single-document layouts, separating the
+    demarcation heading from its content); fall back to pypdf if fitz fails."""
+    try:
+        import fitz  # PyMuPDF
+        doc = fitz.open(stream=data, filetype="pdf")
+        # sort=True orders text blocks by position (top-to-bottom, left-to-right),
+        # which keeps a section's content with its heading in multi-column single
+        # documents that otherwise scramble (heading flow vs content flow).
+        return "\n".join(page.get_text("text", sort=True) for page in doc)
+    except Exception:
+        try:
+            from pypdf import PdfReader
+            return "\n".join((p.extract_text() or "") for p in PdfReader(io.BytesIO(data)).pages)
+        except Exception:
+            return None
+
+
+def score_area(area: str) -> int:
+    """Rank a candidate demarcation: place-word density wins, wrong-section
+    markers lose. Used to pick the best source (OJ vs PDF) for one GI."""
+    if not area:
+        return -10_000
+    s = len(_PLACE.findall(area)) * 100 + min(len(area), 400)
+    if _NEG.search(area[:80]) or _AUTHORITY.search(area[:120]):
+        s -= 500
+    return s
+
+
 class GiGeoExtractor:
     """Resolves + fetches + extracts. Holds one Playwright page and a requests
     session for the run. Use as a context manager."""
@@ -226,9 +262,7 @@ class GiGeoExtractor:
                 r = self.sess.get(f"{ATTACHMENT_HOST}/{attachment_id}",
                                   headers={"Accept": "*/*"}, timeout=60)
                 if r.content[:4] == b"%PDF":
-                    from pypdf import PdfReader
-                    return "\n".join((p.extract_text() or "")
-                                     for p in PdfReader(io.BytesIO(r.content)).pages)
+                    return _pdf_text(r.content)
                 if r.status_code in (500, 502, 503):
                     time.sleep(1.3)
                     continue
@@ -280,23 +314,28 @@ class GiGeoExtractor:
         giview = self.giview_detail(gid) if gid else {}
         pdf_ids, urls = self.resolve_documents(amb, giview)
 
-        area = heading = src_url = src_type = None
+        # Try EVERY candidate document (OJ entries AND summary/technical PDFs) and
+        # keep the best-scoring demarcation. A GI's PDF may scramble under layout
+        # while its OJ entry is clean (or vice versa), so we do not stop at first.
+        best = None  # (score, heading, area, src_url, src_type)
+        for u in urls:
+            txt = self.fetch_eurlex(u)
+            hit = extract_geo(txt, name) if txt else None
+            if hit:
+                cand = (score_area(hit[1]), hit[0], hit[1], prefer_en(u),
+                        "eli" if "data.europa.eu/eli" in u else "eurlex")
+                if best is None or cand[0] > best[0]:
+                    best = cand
         for aid in pdf_ids:
             txt = self.fetch_pdf(aid)
             hit = extract_geo(txt, name) if txt else None
             if hit:
-                heading, area = hit
-                src_url, src_type = f"{ATTACHMENT_HOST}/{aid}", "pdf"
-                break
-        if not area:
-            for u in urls:
-                txt = self.fetch_eurlex(u)
-                hit = extract_geo(txt, name) if txt else None
-                if hit:
-                    heading, area = hit
-                    src_url = prefer_en(u)
-                    src_type = "eli" if "data.europa.eu/eli" in u else "eurlex"
-                    break
+                cand = (score_area(hit[1]), hit[0], hit[1], f"{ATTACHMENT_HOST}/{aid}", "pdf")
+                if best is None or cand[0] > best[0]:
+                    best = cand
+        area = heading = src_url = src_type = None
+        if best:
+            _, heading, area, src_url, src_type = best
 
         has_docs = bool(pdf_ids or urls)
         if area:
