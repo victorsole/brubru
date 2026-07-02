@@ -34,6 +34,13 @@ if settings.ENVIRONMENT == "production":
         pool_recycle=300,  # Recycle connections after 5 minutes
         pool_timeout=30,  # Timeout for getting connection from pool
     )
+    # Prod must not stream SQL to logs. echo=False alone is not enough: a root
+    # logger sitting at INFO makes the (NOTSET) sqlalchemy.engine logger inherit
+    # INFO and emit EVERY statement -> floods Railway (hit its 500 logs/sec cap,
+    # "Messages dropped") and adds per-query overhead. Pin the SQLAlchemy loggers
+    # to WARNING so only app logger.info lines flow (incident 2 Jul 2026).
+    for _noisy in ("sqlalchemy.engine", "sqlalchemy.engine.Engine", "sqlalchemy.pool"):
+        _logging.getLogger(_noisy).setLevel(_logging.WARNING)
 else:
     # Development: Use connection pooling
     engine = create_engine(
