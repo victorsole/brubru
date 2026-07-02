@@ -34,13 +34,6 @@ if settings.ENVIRONMENT == "production":
         pool_recycle=300,  # Recycle connections after 5 minutes
         pool_timeout=30,  # Timeout for getting connection from pool
     )
-    # Prod must not stream SQL to logs. echo=False alone is not enough: a root
-    # logger sitting at INFO makes the (NOTSET) sqlalchemy.engine logger inherit
-    # INFO and emit EVERY statement -> floods Railway (hit its 500 logs/sec cap,
-    # "Messages dropped") and adds per-query overhead. Pin the SQLAlchemy loggers
-    # to WARNING so only app logger.info lines flow (incident 2 Jul 2026).
-    for _noisy in ("sqlalchemy.engine", "sqlalchemy.engine.Engine", "sqlalchemy.pool"):
-        _logging.getLogger(_noisy).setLevel(_logging.WARNING)
 else:
     # Development: Use connection pooling
     engine = create_engine(
@@ -52,6 +45,19 @@ else:
         pool_recycle=300,  # Recycle connections after 5 minutes
         pool_timeout=30,  # Timeout for getting connection from pool
     )
+
+# Silence SQLAlchemy's per-statement SQL logging. This is UNCONDITIONAL (not
+# gated on ENVIRONMENT) because prod currently runs this dev branch — the app's
+# settings.ENVIRONMENT is unset in Railway (only RAILWAY_ENVIRONMENT is set) so
+# it defaults to "development", and DEBUG defaults to True -> echo=True streams
+# every statement to Railway, blowing past its 500 logs/sec cap ("Messages
+# dropped") and adding per-query overhead. Pinning the sqlalchemy loggers to
+# WARNING suppresses statement/pool spam while leaving app logger.info lines
+# intact, and overrides echo=True regardless of branch (incident 2 Jul 2026).
+# Proper fix is to set ENVIRONMENT=production in Railway (see memory); until
+# then this keeps the logs readable.
+for _noisy in ("sqlalchemy.engine", "sqlalchemy.engine.Engine", "sqlalchemy.pool"):
+    _logging.getLogger(_noisy).setLevel(_logging.WARNING)
 
 # Safety net against leaked sessions: cap idle-in-transaction at 5 minutes at the
 # Postgres level, so any connection whose session is never committed/closed (a
