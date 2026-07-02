@@ -29,7 +29,10 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port,
         limit_concurrency=100,
-        limit_max_requests=10000,
+        # limit_max_requests removed 2 Jul 2026: on a single-process uvicorn.run
+        # (no worker supervisor) it forced a full container cold-start every
+        # 10,000 requests, each restart a multi-second outage while the app
+        # reloaded 401 KB guides. Latent full-outage trigger; removed.
         access_log=True,
         proxy_headers=True,
         forwarded_allow_ips="*"

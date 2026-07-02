@@ -20,12 +20,19 @@ from .config import settings
 # Use NullPool for serverless environments (Cloud Run), or QueuePool for long-running servers
 # NullPool doesn't support pool-related arguments
 if settings.ENVIRONMENT == "production":
-    # Serverless: NullPool (no connection pooling, each request gets fresh connection)
+    # Railway is a LONG-RUNNING server, not serverless. NullPool (the original
+    # Cloud Run assumption) opened a fresh DB connection per request, causing
+    # per-request connection churn and connection-count spikes toward the DB
+    # ceiling under concurrency -> slow/failing logins (incident 2 Jul 2026).
+    # Use a bounded QueuePool with connection reuse via the Supabase pooler.
     engine = create_engine(
         settings.DATABASE_URL,
-        poolclass=NullPool,
         echo=False,  # Disable SQL logging in production
         pool_pre_ping=True,  # Verify connections before using
+        pool_size=20,  # Reused connections for concurrent requests
+        max_overflow=20,  # Burst headroom
+        pool_recycle=300,  # Recycle connections after 5 minutes
+        pool_timeout=30,  # Timeout for getting connection from pool
     )
 else:
     # Development: Use connection pooling
