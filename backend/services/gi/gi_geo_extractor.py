@@ -74,7 +74,13 @@ _GEO_NOUN = re.compile(
     r"(?:zona|[áa]rea|aire|zone|regi[óo]n|regione|regi[ãa]o)\s+(?:delimit\w+|d[ée]limit\w+|demarcad\w+)|"
     r"demarcated area|delimited area|covered area|"
     r"abgegrenzt\w*\s+gebiet|afgebakend\s+gebied|"
-    r"zon[ăa]\s+delimitat\w*|vymezen[ée]\s+[úu]zem\w*|behat[áa]rolt\s+ter[üu]let"  # RO/CS/HU wine
+    r"zon[ăa]\s+delimitat\w*|vymezen[ée]\s+[úu]zem\w*|behat[áa]rolt\s+ter[üu]let|"  # RO/CS/HU wine
+    # Greek + Bulgarian (Cyrillic) wine demarcation: "demarcated area" / "defined
+    # district" — NOT "geographical area". Foundational Cyrillic pattern for later
+    # Macedonian/Russian/Ukrainian (определен/визначений район).
+    r"οριοθετημ\w*\s+(?:περιοχ|ζών)\w*|"           # EL ΟΡΙΟΘΕΤΗΜΕΝΗ ΠΕΡΙΟΧΗ/ΖΩΝΗ
+    r"οριοθ[έε]τηση\s+τη[ςσ]\s+περιοχ\w*|"        # EL delimitation of the area
+    r"определен\w*\s+район\w*"                    # BG ОПРЕДЕЛЕН РАЙОН
     r")", re.I | re.U)
 # Definition / delimitation qualifier (or the heading is standalone-short).
 _QUAL = re.compile(
@@ -109,7 +115,8 @@ _NEG = re.compile(
     r"derogation|derogare|eltérés|elt[ée]r[ée]s|"                 # derogation (EN/RO/HU)
     r"προϋποθέσ|εθνικ\w*\s+νομοθεσ|μεθοδολογ|"  # EL conditions / national legislation / methodology
     r"feltétel|felt[ée]tel|"                                       # HU condition
-    r"condi[țt]i\w*|podmínk\w*|podmienk\w*|warunk\w*|pogoj\w*)", re.I | re.U)  # condition RO/CS/SK/PL/SI
+    r"condi[țt]i\w*|podmínk\w*|podmienk\w*|warunk\w*|pogoj\w*|"      # condition RO/CS/SK/PL/SI
+    r"\bmaps?\b|\bmapa|mappa|\bcarte\b|χάρτ|\bκαρτ|карт)", re.I | re.U)  # maps sub-item (all scripts)
 _NEXTH = re.compile(r"^(\d+(\.\d+)*\.?|\([a-z]\)|[a-z]\)|[A-Z]\.)\s+\S")
 # Place descriptors across EU languages, for the clean-vs-needs_review confidence call.
 _PLACE = re.compile(
@@ -131,6 +138,12 @@ _AUTHORITY = re.compile(
     r"directorate|minist[eèé]r|ministerio|ministero|ministri|directie|dirécción|"
     r"agriculture directorate|competent authorit|control body|inspection body|"
     r"Δ/νση|Διεύθυνση|υπουργ", re.I | re.U)
+# Reject a body that opens with a LINK / history / specificity narrative (a generic
+# "geographical area" heading whose content is actually the causal-link section).
+_LINK_BODY = re.compile(
+    r"^(α\.?\s*)?(ιστορικ|ιδιαιτερ|δεσμ|link\b|historical|causal|"
+    r"v[íi]nculo|legame|verband|zusammenhang|lien\b|връзка|специфич|особен|"
+    r"\(?φεκ|\(?φ\.ε\.κ|αριθ\w*\s+πρωτ)", re.I | re.U)  # + Greek gazette/legal ref (ΦΕΚ...)
 
 
 def _strip_num(line: str) -> str:
@@ -177,6 +190,8 @@ def extract_geo(text: str, name: str | None = None) -> tuple[str, str] | None:
             if re.search(r"☒|☐", body) or len(body) < 20:   # reject checkbox forms / empties
                 continue
             if _AUTHORITY.search(body[:120]):            # authority address, not a demarcation
+                continue
+            if _LINK_BODY.match(body):                   # link/history narrative, not a demarcation
                 continue
             cands.append((l, body))
     if not cands:
