@@ -10,10 +10,20 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import NullPool
 from typing import Generator
 import logging as _logging
+import os as _os
 
 _db_log = _logging.getLogger(__name__)
 
 from .config import settings
+
+# Prod actually runs the `else` (dev) engine branch below: the app-level
+# settings.ENVIRONMENT is unset in Railway (only RAILWAY_ENVIRONMENT is set), so
+# it defaults to "development" and DEBUG defaults to True. Detect real prod via
+# Railway's own var so we can force SQL echo OFF there. `echo=True` sets an
+# instance flag (engine._echo) that SQLAlchemy checks as `_echo OR
+# logger.isEnabledFor(INFO)` — so it BYPASSES logger levels; the only reliable
+# way to silence it is to not set echo=True in the first place (incident 2 Jul).
+_RAILWAY_PROD = _os.environ.get("RAILWAY_ENVIRONMENT") == "production"
 
 
 # Create SQLAlchemy engine
@@ -38,7 +48,7 @@ else:
     # Development: Use connection pooling
     engine = create_engine(
         settings.DATABASE_URL,
-        echo=settings.DEBUG,  # Log SQL queries in debug mode
+        echo=settings.DEBUG and not _RAILWAY_PROD,  # SQL echo in LOCAL dev only; never on Railway
         pool_pre_ping=True,  # Verify connections before using
         pool_size=5,  # Pool size for concurrent requests
         max_overflow=5,  # Allow overflow connections
@@ -46,16 +56,11 @@ else:
         pool_timeout=30,  # Timeout for getting connection from pool
     )
 
-# Silence SQLAlchemy's per-statement SQL logging. This is UNCONDITIONAL (not
-# gated on ENVIRONMENT) because prod currently runs this dev branch — the app's
-# settings.ENVIRONMENT is unset in Railway (only RAILWAY_ENVIRONMENT is set) so
-# it defaults to "development", and DEBUG defaults to True -> echo=True streams
-# every statement to Railway, blowing past its 500 logs/sec cap ("Messages
-# dropped") and adding per-query overhead. Pinning the sqlalchemy loggers to
-# WARNING suppresses statement/pool spam while leaving app logger.info lines
-# intact, and overrides echo=True regardless of branch (incident 2 Jul 2026).
-# Proper fix is to set ENVIRONMENT=production in Railway (see memory); until
-# then this keeps the logs readable.
+# Defense-in-depth: with echo now off in prod, statement logging is already
+# gated by logger level, so pin the sqlalchemy loggers to WARNING to also mute
+# pool checkout/checkin chatter and any stray INFO. App logger.info lines are
+# separate loggers and unaffected. (The real SQL-echo fix is echo=... above; a
+# logger pin alone can't beat echo=True because engine._echo bypasses levels.)
 for _noisy in ("sqlalchemy.engine", "sqlalchemy.engine.Engine", "sqlalchemy.pool"):
     _logging.getLogger(_noisy).setLevel(_logging.WARNING)
 
