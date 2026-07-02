@@ -331,6 +331,24 @@ def _run_script(name: str, script_relpath: str, args: list[str] | None = None, t
         return {"status": "failed", "error": str(e)}
 
 
+async def _run_script_async(name: str, script_relpath: str, args: list[str] | None = None, timeout: int = 600):
+    """Async wrapper for `_run_script`.
+
+    `_run_script` runs a blocking `subprocess.run`. The backend is a SINGLE
+    uvicorn worker (one event loop), so calling it directly from an `async def`
+    cron endpoint freezes EVERY HTTP request for the whole subprocess duration.
+    A fast-tier chain (news/OJ/votes) is 15+ minutes of back-to-back scripts, so
+    the entire backend went unresponsive during each cron window and all MEUB
+    surfaces (Calendar, Votes, cockpit) hung on "Loading..." (incident 2 Jul 2026).
+
+    Offloading to the threadpool keeps the event loop free to serve users while
+    the sync runs. subprocess.run releases the GIL while waiting on the child, so
+    the loop is genuinely unblocked.
+    """
+    from starlette.concurrency import run_in_threadpool
+    return await run_in_threadpool(_run_script, name, script_relpath, args, timeout)
+
+
 @router.post("/sync/hot-6h")
 async def cron_sync_hot_6h(
     authorization: str = Header(...),
@@ -371,10 +389,10 @@ async def cron_sync_hot_6h(
     results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
 
     # Script-based syncs (no service wrapper yet)
-    results["texts_submitted"] = _run_script("texts_submitted", "scripts/ingest_texts_submitted.py", ["--apply"], timeout=600)
-    results["college_agendas"] = _run_script("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
-    results["calendar"] = _run_script("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
-    results["cellar_recent"] = _run_script("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
+    results["texts_submitted"] = await _run_script_async("texts_submitted", "scripts/ingest_texts_submitted.py", ["--apply"], timeout=600)
+    results["college_agendas"] = await _run_script_async("college_agendas", "scripts/sync_college_agendas.py", [], timeout=600)
+    results["calendar"] = await _run_script_async("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
+    results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
 
     logger.info(f"[CRON] hot-6h tier sync complete: {results}")
     return {"status": "success", "tier": "hot_6h", "results": results}
@@ -397,14 +415,14 @@ async def cron_sync_warm_12h(
         return await CommitteeWorkSyncService(db=db).sync_all(skip_existing=True)
 
     results["committee_work"] = await _run_async_service("committee_work", _committee_work)
-    results["eprs_publications"] = _run_script("eprs_publications", "scripts/sync_eprs_publications.py", ["--days", "3"], timeout=900)
-    results["eprs_legislation"] = _run_script("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
-    results["committee_minutes"] = _run_script("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
-    results["committee_agendas"] = _run_script("committee_agendas", "scripts/sync_committee_agendas.py", [], timeout=600)
-    results["committee_transcripts"] = _run_script("committee_transcripts", "scripts/sync_committee_transcripts.py", ["--days", "30", "--max", "50"], timeout=900)
+    results["eprs_publications"] = await _run_script_async("eprs_publications", "scripts/sync_eprs_publications.py", ["--days", "3"], timeout=900)
+    results["eprs_legislation"] = await _run_script_async("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
+    results["committee_minutes"] = await _run_script_async("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
+    results["committee_agendas"] = await _run_script_async("committee_agendas", "scripts/sync_committee_agendas.py", [], timeout=600)
+    results["committee_transcripts"] = await _run_script_async("committee_transcripts", "scripts/sync_committee_transcripts.py", ["--days", "30", "--max", "50"], timeout=900)
     # Auto-archive items past their lifespan (adopted carriages 90d+, closed
     # consultations 30d+, stale Commission docs 180d+). Idempotent; applies.
-    results["auto_archive"] = _run_script("auto_archive", "scripts/auto_archive_old_items.py", [], timeout=300)
+    results["auto_archive"] = await _run_script_async("auto_archive", "scripts/auto_archive_old_items.py", [], timeout=300)
 
     logger.info(f"[CRON] warm-12h tier sync complete: {results}")
     return {"status": "success", "tier": "warm_12h", "results": results}
@@ -500,7 +518,7 @@ async def cron_transcribe_pending(
     (default 3/run) and fired on otherwise-quiet hours so a run stays bounded.
     """
     _verify_cron_secret(authorization)
-    result = _run_script(
+    result = await _run_script_async(
         "transcribe_pending",
         "scripts/transcribe_pending_committees.py",
         ["--all", "--max", str(limit), "--engine", "groq", "--reset-stuck"],
@@ -523,29 +541,29 @@ async def cron_sync_daily(
     _verify_cron_secret(authorization)
     results = {}
 
-    results["consultations"] = _run_script("consultations", "scripts/sync_consultations.py", [], timeout=900)
-    results["comitology"] = _run_script("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
-    results["tris"] = _run_script("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
-    results["sanctions"] = _run_script("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
-    results["transparency_register"] = _run_script("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
-    results["jrc"] = _run_script("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)
-    results["infringements"] = _run_script("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
-    results["eesc"] = _run_script("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
-    results["cor"] = _run_script("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
-    results["euagenda"] = _run_script("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
-    results["tenders"] = _run_script("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
+    results["consultations"] = await _run_script_async("consultations", "scripts/sync_consultations.py", [], timeout=900)
+    results["comitology"] = await _run_script_async("comitology", "scripts/backfill_eu_comitology.py", ["--apply", "--limit", "100"], timeout=900)
+    results["tris"] = await _run_script_async("tris", "scripts/sync_dg_grow.py", ["--source", "tris", "--days", "7"], timeout=600)
+    results["sanctions"] = await _run_script_async("sanctions", "scripts/backfill_eu_sanctions.py", ["--apply", "--limit", "100"], timeout=600)
+    results["transparency_register"] = await _run_script_async("transparency_register", "scripts/backfill_eu_transparency_register.py", ["--apply", "--limit", "1000"], timeout=900)
+    results["jrc"] = await _run_script_async("jrc", "scripts/backfill_eu_jrc_datasets.py", ["--apply", "--max-pages", "5"], timeout=600)
+    results["infringements"] = await _run_script_async("infringements", "scripts/backfill_infringement_summary.py", ["--apply", "--limit", "50"], timeout=600)
+    results["eesc"] = await _run_script_async("eesc", "scripts/backfill_eu_eesc.py", ["--apply"], timeout=600)
+    results["cor"] = await _run_script_async("cor", "scripts/backfill_eu_cor.py", ["--apply"], timeout=600)
+    results["euagenda"] = await _run_script_async("euagenda", "scripts/sync_euagenda.py", ["--max", "100"], timeout=600)
+    results["tenders"] = await _run_script_async("tenders", "scripts/backfill_tenders_description.py", ["--apply", "--limit", "200"], timeout=900)
     # Per-programme F&T grant calls (economy_items, item_type='grant') backing
     # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id
     # prefix; idempotent upsert on (body_code, item_type, public_url).
-    results["ft_programme_calls"] = _run_script("ft_programme_calls", "scripts/ingest_ft_programme_calls.py", ["--all", "--apply"], timeout=900)
+    results["ft_programme_calls"] = await _run_script_async("ft_programme_calls", "scripts/ingest_ft_programme_calls.py", ["--all", "--apply"], timeout=900)
     # F&T Portal news + events (economy_items body 'ftportal') backing
     # /api/v2/funding/ft-news + /ft-events. SEDIA news/events indexes.
-    results["ft_news_events"] = _run_script("ft_news_events", "scripts/ingest_ft_news_events.py", ["--all", "--apply"], timeout=600)
+    results["ft_news_events"] = await _run_script_async("ft_news_events", "scripts/ingest_ft_news_events.py", ["--all", "--apply"], timeout=600)
     # F&T Portal opportunities (funding_opportunities + ft_calls_for_proposals)
     # — Horizon, EIC, EIE, CEF, Digital Europe, Erasmus+, CREA, CERV, EU4Health.
     # Pulled from SEDIA search API; idempotent upsert on topic_id / call_id.
     # Closes the 33-day ingest gap surfaced 30 June 2026 (last batch 27 May).
-    results["ft_funding_opportunities"] = _run_script(
+    results["ft_funding_opportunities"] = await _run_script_async(
         "ft_funding_opportunities",
         "scripts/ingest_funding_sedia.py",
         ["--apply", "--limit", "500"], timeout=900,
@@ -557,22 +575,22 @@ async def cron_sync_daily(
     # rows are skipped. Capped per table per day so a single Railway cron run
     # stays inside the 30-min ceiling (M2M100 on CPU is ~1-3s per translation;
     # 6 langs × 2 fields per foreign row). Cheap (~seconds) when nothing new.
-    results["tenderator_translations_ted"] = _run_script(
+    results["tenderator_translations_ted"] = await _run_script_async(
         "tenderator_translations_ted",
         "scripts/backfill_tenderator_translations.py",
         ["--table", "tenders", "--limit", "100", "--batch", "20"], timeout=900,
     )
-    results["tenderator_translations_ft_tenders"] = _run_script(
+    results["tenderator_translations_ft_tenders"] = await _run_script_async(
         "tenderator_translations_ft_tenders",
         "scripts/backfill_tenderator_translations.py",
         ["--table", "ft_calls_for_tenders", "--limit", "50", "--batch", "20"], timeout=600,
     )
-    results["tenderator_translations_ft_proposals"] = _run_script(
+    results["tenderator_translations_ft_proposals"] = await _run_script_async(
         "tenderator_translations_ft_proposals",
         "scripts/backfill_tenderator_translations.py",
         ["--table", "ft_calls_for_proposals", "--limit", "50", "--batch", "20"], timeout=600,
     )
-    results["tenderator_translations_ft_projects"] = _run_script(
+    results["tenderator_translations_ft_projects"] = await _run_script_async(
         "tenderator_translations_ft_projects",
         "scripts/backfill_tenderator_translations.py",
         ["--table", "ft_funded_projects", "--limit", "50", "--batch", "20"], timeout=600,
@@ -631,7 +649,7 @@ async def cron_sync_economy(
     bodies = _ECONOMY_BATCHES[batch] if 0 <= batch < len(_ECONOMY_BATCHES) else []
     results = {}
     for body in bodies:
-        results[body] = _run_script(
+        results[body] = await _run_script_async(
             f"economy_{body}", "scripts/sync_economy.py",
             ["--body", body, "--type", "all"], timeout=600,
         )
@@ -641,7 +659,7 @@ async def cron_sync_economy(
     # row (DE / PL / SV / etc. — ~8% of the agency-procurement universe) gets
     # its title + summary cached in Brubru's 6 languages by the next read.
     # Capped per batch to stay within the per-batch Railway cron budget.
-    results["tenderator_translations_agency"] = _run_script(
+    results["tenderator_translations_agency"] = await _run_script_async(
         "tenderator_translations_agency",
         "scripts/backfill_tenderator_translations.py",
         ["--table", "economy_items", "--funding-only", "--limit", "100", "--batch", "20"],
@@ -665,16 +683,16 @@ async def cron_sync_weekly(
     _verify_cron_secret(authorization)
     results = {}
 
-    results["fta"] = _run_script("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
-    results["trade_defence"] = _run_script("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
-    results["gi"] = _run_script("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
-    results["cohesion"] = _run_script("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
+    results["fta"] = await _run_script_async("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
+    results["trade_defence"] = await _run_script_async("trade_defence", "scripts/backfill_eu_trade_defence.py", ["--apply", "--limit", "20"], timeout=1800)
+    results["gi"] = await _run_script_async("gi", "scripts/backfill_eu_gi.py", ["--apply", "--limit", "50"], timeout=900)
+    results["cohesion"] = await _run_script_async("cohesion", "scripts/backfill_eu_cohesion_datasets.py", ["--apply", "--limit", "50"], timeout=900)
     # Per-fund cohesion finance + outcome data backing /api/v2/funding/<fund>[/outcomes].
-    results["cohesion_finances"] = _run_script("cohesion_finances", "scripts/backfill_cohesion_finances.py", ["--all", "--apply"], timeout=900)
-    results["cohesion_outcomes"] = _run_script("cohesion_outcomes", "scripts/backfill_cohesion_outcomes.py", ["--all", "--apply"], timeout=1800)
-    results["eusf"] = _run_script("eusf", "scripts/backfill_eusf.py", ["--apply"], timeout=300)
-    results["cap_payments"] = _run_script("cap_payments", "scripts/backfill_cap_payments.py", ["--all", "--apply"], timeout=300)
-    results["commissioner_agendas"] = _run_script("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
+    results["cohesion_finances"] = await _run_script_async("cohesion_finances", "scripts/backfill_cohesion_finances.py", ["--all", "--apply"], timeout=900)
+    results["cohesion_outcomes"] = await _run_script_async("cohesion_outcomes", "scripts/backfill_cohesion_outcomes.py", ["--all", "--apply"], timeout=1800)
+    results["eusf"] = await _run_script_async("eusf", "scripts/backfill_eusf.py", ["--apply"], timeout=300)
+    results["cap_payments"] = await _run_script_async("cap_payments", "scripts/backfill_cap_payments.py", ["--all", "--apply"], timeout=300)
+    results["commissioner_agendas"] = await _run_script_async("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
 
     logger.info(f"[CRON] weekly tier sync complete: {results}")
     return {"status": "success", "tier": "weekly", "results": results}
@@ -692,9 +710,9 @@ async def cron_sync_monthly(
     _verify_cron_secret(authorization)
     results = {}
 
-    results["officials"] = _run_script("officials", "scripts/backfill_officials_country.py", ["--apply"], timeout=1800)
-    results["euvoc_releases"] = _run_script("euvoc_releases", "scripts/check_euvoc_releases.py", [], timeout=600)
-    results["authority_labels_freshness"] = _run_script("authority_labels_freshness", "scripts/check_authority_labels_freshness.py", [], timeout=300)
+    results["officials"] = await _run_script_async("officials", "scripts/backfill_officials_country.py", ["--apply"], timeout=1800)
+    results["euvoc_releases"] = await _run_script_async("euvoc_releases", "scripts/check_euvoc_releases.py", [], timeout=600)
+    results["authority_labels_freshness"] = await _run_script_async("authority_labels_freshness", "scripts/check_authority_labels_freshness.py", [], timeout=300)
 
     logger.info(f"[CRON] monthly tier sync complete: {results}")
     return {"status": "success", "tier": "monthly", "results": results}
@@ -779,7 +797,7 @@ async def cron_sync_tier(
     try:
         for spec in specs:
             started = datetime.now(timezone.utc)
-            res = _run_script(spec.key, spec.script, list(spec.args), timeout=spec.timeout)
+            res = await _run_script_async(spec.key, spec.script, list(spec.args), timeout=spec.timeout)
             status = res.get("status", "failed")
             err = res.get("stderr_tail") or res.get("error") or res.get("reason")
             record_run(
