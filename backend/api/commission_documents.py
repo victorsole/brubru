@@ -78,7 +78,7 @@ async def get_my_dgs(
     summary="Get Commission documents",
     description="Get Commission documents with filtering, sorting, and pagination"
 )
-async def get_items(
+def get_items(
     doc_type: Optional[CommissionDocType] = Query(None, description="Filter by document type"),
     dg: Optional[str] = Query(None, description="Filter by responsible DG"),
     search: Optional[str] = Query(None, description="Search in title or reference"),
@@ -263,7 +263,7 @@ async def get_item(
     summary="Get tracked documents",
     description="Get all Commission documents the current user is tracking"
 )
-async def get_tracked_documents(
+def get_tracked_documents(
     archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

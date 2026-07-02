@@ -476,7 +476,7 @@ async def unsubscribe_feed(
     summary="Get feeds by institution",
     description="Get all RSS feeds for specific EU institution"
 )
-async def get_institutional_feeds(
+def get_institutional_feeds(
     institution: str,
     include_entries: bool = Query(False, description="Include entry count"),
     db: Session = Depends(get_db)

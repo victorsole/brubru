@@ -39,7 +39,7 @@ router = APIRouter(prefix="/api/eprs", tags=["EPRS Publications"])
     summary="Search EPRS publications",
     description="Search EPRS publications by query, type, or policy area"
 )
-async def search_publications(
+def search_publications(
     search: Optional[str] = Query(None, description="Search in title or summary"),
     publication_type: Optional[str] = Query(None, description="Filter by type: at_a_glance, briefing, in_depth_analysis, study"),
     policy_area: Optional[str] = Query(None, description="Filter by policy area keyword"),

@@ -149,7 +149,7 @@ def _pi_clause(user: User):
 # ============================================================================
 
 @router.get("/events", response_model=CalendarEventListResponse)
-async def list_events(
+def list_events(
     date_from: Optional[date] = Query(None),
     date_to: Optional[date] = Query(None),
     institution: Optional[str] = Query(None),
@@ -235,7 +235,7 @@ async def list_events(
 
 
 @router.get("/events/range", response_model=CalendarRangeResponse)
-async def get_events_in_range(
+def get_events_in_range(
     date_from: date = Query(...),
     date_to: date = Query(...),
     institution: Optional[str] = Query(None),

@@ -68,7 +68,7 @@ _DEFAULT_KEYWORDS = ["Catalan", "Basque", "Galician", "Aranese"]
 
 
 @router.get("/language-mentions", response_model=LanguageMentionsResponse)
-async def language_mentions(
+def language_mentions(
     keywords: Optional[str] = Query(
         default=None,
         description="Comma-separated keywords. Defaults to Catalan,Basque,Galician,Aranese.",

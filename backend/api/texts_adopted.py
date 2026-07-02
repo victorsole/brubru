@@ -62,7 +62,7 @@ router = APIRouter(prefix="/api/texts-adopted", tags=["Texts Adopted"])
     summary="Get adopted texts",
     description="Get adopted texts with filtering, sorting, and pagination"
 )
-async def get_items(
+def get_items(
     text_type: Optional[TextType] = Query(None, description="Filter by text type"),
     parliamentary_term: Optional[int] = Query(None, ge=4, le=10, description="Filter by term"),
     procedure_ref: Optional[str] = Query(None, description="Filter by procedure reference"),
@@ -240,7 +240,7 @@ async def get_by_reference(
     summary="Get tracked texts",
     description="Get all texts the current user is tracking"
 )
-async def get_tracked_texts(
+def get_tracked_texts(
     archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

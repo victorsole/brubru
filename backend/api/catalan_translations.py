@@ -33,7 +33,7 @@ router = APIRouter(prefix="/api/catalan-translations", tags=["Catalan Translatio
     summary="List Catalan translations",
     description="Search and paginate the catalogue of translated EU legislation in Catalan"
 )
-async def list_translations(
+def list_translations(
     search: Optional[str] = Query(None, description="Search in titles and CELEX"),
     category: Optional[str] = Query(None, description="Filter by category"),
     subcategory: Optional[str] = Query(None, description="Filter by subcategory"),

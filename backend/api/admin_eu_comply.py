@@ -26,7 +26,7 @@ extraction_jobs: Dict[int, dict] = {}
 
 
 @router.get("/clusters/stats")
-async def get_clusters_stats(
+def get_clusters_stats(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)
 ):

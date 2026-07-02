@@ -149,7 +149,7 @@ class AdminProfileSummary(BaseModel):
 # ============================================================================
 
 @router.get("", response_model=Dict[str, Any])
-async def list_tenders(
+def list_tenders(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     search: Optional[str] = Query(None, description="Search in title"),
@@ -223,7 +223,7 @@ async def list_tenders(
 
 
 @router.get("/{tender_id}")
-async def get_tender_detail(
+def get_tender_detail(
     tender_id: int,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -326,7 +326,7 @@ async def delete_tender(
 
 
 @router.post("/bulk-delete")
-async def bulk_delete_tenders(
+def bulk_delete_tenders(
     tender_ids: List[int],
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -533,7 +533,7 @@ async def send_notifications(
 
 
 @router.get("/matches")
-async def list_all_matches(
+def list_all_matches(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     user_email: Optional[str] = Query(None),
@@ -601,7 +601,7 @@ async def list_all_matches(
 # ============================================================================
 
 @router.get("/profiles")
-async def list_all_profiles(
+def list_all_profiles(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     active_only: bool = Query(False),

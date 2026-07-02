@@ -131,7 +131,7 @@ async def get_train_statistics(
     summary="Get legislative carriages",
     description="Get legislative files with filtering options"
 )
-async def get_carriages(
+def get_carriages(
     train_id: Optional[UUID] = Query(None, description="Filter by train"),
     status: Optional[CarriageStatusEnum] = Query(None, description="Filter by status"),
     committee: Optional[str] = Query(None, description="Filter by committee"),
@@ -597,7 +597,7 @@ async def sync_from_interests(
     summary="Get tracked files",
     description="Get all legislative files tracked by current user"
 )
-async def get_tracked_carriages(
+def get_tracked_carriages(
     archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

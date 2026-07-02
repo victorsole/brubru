@@ -287,7 +287,7 @@ async def create_tender_file(
     response_model=List[TenderFileResponse],
     summary="List my Tender Files",
 )
-async def list_tender_files(
+def list_tender_files(
     programme: Optional[str] = None,
     sub_instrument: Optional[str] = None,
     status_filter: Optional[str] = None,

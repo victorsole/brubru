@@ -220,7 +220,7 @@ async def list_plenary(
                 "member state, qualified-majority %, and a link to the source sheet. "
                 "The per-country breakdown is auto-read from the Council's image-only "
                 "result sheet (confidence flag + source link travel with each card)."))
-async def list_council(
+def list_council(
     config: Optional[str] = Query(None, description="Council configuration codes, e.g. GAC,FAC"),
     search: Optional[str] = Query(None),
     sort_by: str = Query("date"),

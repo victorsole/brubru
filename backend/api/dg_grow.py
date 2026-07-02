@@ -91,7 +91,7 @@ async def get_notified_bodies_for_tender(
 # --- TRIS: Technical Regulations ---
 
 @router.get("/technical-regulations")
-async def list_technical_regulations(
+def list_technical_regulations(
     country: Optional[str] = Query(None, description="ISO alpha-2 country code"),
     sector: Optional[str] = Query(None, description="Product sector"),
     cpv: Optional[str] = Query(None, description="CPV code"),
@@ -127,7 +127,7 @@ async def list_technical_regulations(
 # --- TBT: Trade Barriers ---
 
 @router.get("/trade-barriers")
-async def list_trade_barriers(
+def list_trade_barriers(
     country: Optional[str] = Query(None),
     product_area: Optional[str] = Query(None),
     cpv: Optional[str] = Query(None),
@@ -183,7 +183,7 @@ async def get_ecosystems_for_cpv(
 
 
 @router.get("/ecosystem-data")
-async def list_ecosystem_data(
+def list_ecosystem_data(
     ecosystem: Optional[str] = Query(None),
     country: Optional[str] = Query(None),
     dimension: Optional[str] = Query(None),

@@ -140,7 +140,7 @@ async def subscribe_to_feed(
     summary="List user's subscriptions",
     description="Get all RSS feeds user is subscribed to"
 )
-async def list_subscriptions(
+def list_subscriptions(
     active_only: bool = Query(True, description="Show only active subscriptions"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -529,7 +529,7 @@ async def save_entry(
     summary="Get saved entries",
     description="Get user's saved/bookmarked entries"
 )
-async def get_saved_entries(
+def get_saved_entries(
     collection: Optional[str] = Query(None, description="Filter by collection"),
     starred_only: bool = Query(False, description="Show only starred entries"),
     tags: Optional[List[str]] = Query(None, description="Filter by tags"),
@@ -832,7 +832,7 @@ async def get_available_sources(
     summary="Refresh RSS feeds database",
     description="Re-seed RSS feeds including EC Newsletters (admin operation)"
 )
-async def refresh_rss_feeds(
+def refresh_rss_feeds(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -1321,7 +1321,7 @@ async def enrich_entries_with_ai(
     summary="Get all legislative trains",
     description="Fetch all EU Commission priority trains with their legislative files"
 )
-async def get_legislative_trains(
+def get_legislative_trains(
     include_files: bool = Query(True, description="Include legislative files"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

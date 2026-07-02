@@ -134,7 +134,7 @@ class ScraperStatus(BaseModel):
 # ============================================================================
 
 @router.get("/users", response_model=List[UserManagementResponse])
-async def get_all_users(
+def get_all_users(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     search: Optional[str] = Query(None),
@@ -288,7 +288,7 @@ async def delete_user(
 # ============================================================================
 
 @router.get("/feeds", response_model=List[FeedManagementResponse])
-async def get_all_feeds(
+def get_all_feeds(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     search: Optional[str] = Query(None),
@@ -561,7 +561,7 @@ async def get_admin_activity_log(
 # ============================================================================
 
 @router.get("/scrapers/status", response_model=List[ScraperStatus])
-async def get_scrapers_status(
+def get_scrapers_status(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):

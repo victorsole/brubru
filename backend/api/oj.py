@@ -88,7 +88,7 @@ async def oj_dates(db: Session = Depends(get_db)):
                 "Interests; `institution`; `act_type`; `search`.\n\n"
                 "**You get back**\nThe acts plus day-at-a-glance facets (counts by "
                 "series, type, institution)."))
-async def oj_entries(
+def oj_entries(
     date: Optional[str] = Query(None, description="YYYY-MM-DD; default = latest ingested"),
     series: Optional[str] = Query(None, description="L or C"),
     my_interests: bool = Query(False),

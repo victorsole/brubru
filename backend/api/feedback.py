@@ -193,7 +193,7 @@ async def add_comment(
 # Admin Endpoints
 
 @router.get("/admin/all", response_model=FeedbackListResponse)
-async def get_all_feedback_admin(
+def get_all_feedback_admin(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     status_filter: Optional[str] = Query(None),

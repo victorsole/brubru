@@ -878,7 +878,7 @@ async def cron_sync_authority_labels(
 
 
 @router.post("/daily-brief")
-async def cron_daily_brief(
+def cron_daily_brief(
     authorization: str = Header(...),
 ):
     """

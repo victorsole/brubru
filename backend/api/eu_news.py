@@ -96,7 +96,7 @@ def _item_dict(e: EuNewsItem, interests: set, dgs: set, keywords: List[str], tra
                 "**You get back**\nNews cards (title, summary, image, DG, date, areas, link) "
                 "each flagged with why it matches your interests / tracked files, plus "
                 "facets and a featured list."))
-async def list_news(
+def list_news(
     my_interests: bool = Query(False),
     my_files: bool = Query(False),
     institution: Optional[str] = Query(None),

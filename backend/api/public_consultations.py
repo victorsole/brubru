@@ -256,7 +256,7 @@ def consultation_to_list_item(
     summary="Get public consultations",
     description="Get consultations with filtering, sorting, and pagination"
 )
-async def get_consultations(
+def get_consultations(
     status: Optional[ConsultationStatus] = Query(None, description="Filter by status"),
     consultation_type: Optional[ConsultationType] = Query(None, description="Filter by type"),
     dg: Optional[str] = Query(None, description="Filter by responsible body code (Commission DG or EU agency)"),
@@ -453,7 +453,7 @@ async def get_policy_areas() -> PolicyAreasListResponse:
     response_model=TrackedConsultationsListResponse,
     summary="Get tracked consultations"
 )
-async def get_tracked_consultations(
+def get_tracked_consultations(
     archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

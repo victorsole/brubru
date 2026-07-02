@@ -130,7 +130,7 @@ async def create_document(
     summary="List documents",
     description="Get user's documents with filtering and pagination"
 )
-async def list_documents(
+def list_documents(
     document_type: Optional[str] = Query(None, description="Filter by type"),
     policy_areas: Optional[List[str]] = Query(None, description="Filter by policy areas"),
     tags: Optional[List[str]] = Query(None, description="Filter by tags"),

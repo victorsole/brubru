@@ -69,7 +69,7 @@ router = APIRouter(prefix="/api/committee-work", tags=["Committee Work"])
     summary="Get committee work items",
     description="Get work items with filtering, sorting, and pagination"
 )
-async def get_work_items(
+def get_work_items(
     committee_code: Optional[str] = Query(None, description="Filter by committee code"),
     procedure_type: Optional[ProcedureType] = Query(None, description="Filter by procedure type"),
     status: Optional[CommitteeWorkStatus] = Query(None, description="Filter by status"),
@@ -261,7 +261,7 @@ async def get_committees() -> CommitteesListResponse:
     summary="Get user's tracked work items",
     description="Get all work items the current user is tracking"
 )
-async def get_tracked_items(
+def get_tracked_items(
     archived: bool = Query(False, description="False = active tracks (default); True = archived tracks"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

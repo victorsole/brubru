@@ -102,7 +102,7 @@ async def run_compliance_analysis_task(
 # ============================================================================
 
 @router.get("/clusters")
-async def list_clusters(
+def list_clusters(
     startup_focused: Optional[bool] = None,
     policy_area: Optional[str] = None,
     db: Session = Depends(get_db),
@@ -185,7 +185,7 @@ async def list_clusters(
                 "**When to use it**\nThe 'For you' section at the top of EU Law Comply.\n\n"
                 "**You get back**\nClusters with law/requirement counts + `matches_interests` "
                 "and `matches_tracked` registers."))
-async def clusters_for_me(
+def clusters_for_me(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
