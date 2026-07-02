@@ -358,7 +358,7 @@ async def update_profile(
     summary="Get tender statistics",
     description="Get aggregated tender statistics"
 )
-async def get_statistics(
+def get_statistics(
     db: Session = Depends(get_db)
 ) -> TenderStatistics:
     """
@@ -435,7 +435,7 @@ async def get_statistics(
     summary="Get my tender statistics",
     description="Get personalized tender statistics"
 )
-async def get_my_statistics(
+def get_my_statistics(
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db)
 ) -> UserTenderStatistics:
@@ -516,7 +516,7 @@ async def get_my_statistics(
         "any source on the right day. Blue tier only."
     ),
 )
-async def get_calendar_deadlines(
+def get_calendar_deadlines(
     months_ahead: int = Query(6, ge=1, le=12, description="How many months ahead to include"),
     only_open: bool = Query(True, description="When true, exclude already-closed items"),
     current_user: User = Depends(require_blue_tier),
@@ -671,7 +671,7 @@ async def get_calendar_deadlines(
         "Blue tier only."
     ),
 )
-async def get_portal_activity(
+def get_portal_activity(
     news_limit: int = Query(5, ge=1, le=25, description="Latest news items to return"),
     events_limit: int = Query(5, ge=1, le=25, description="Upcoming events to return"),
     only_upcoming: bool = Query(True, description="When true, exclude past events"),
@@ -752,7 +752,7 @@ async def get_portal_activity(
         "etc.) with budget, period, and source URL. Blue tier only."
     ),
 )
-async def list_programmes(
+def list_programmes(
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
 ):
@@ -1127,7 +1127,7 @@ async def generate_opportunity_brief(
         "partners. Blue tier only."
     ),
 )
-async def get_similar_projects(
+def get_similar_projects(
     opportunity_id: str = Query(..., description="<source>:<id>"),
     limit: int = Query(10, ge=1, le=50),
     current_user: User = Depends(require_blue_tier),
@@ -1358,7 +1358,7 @@ _EIC_BUCKET_TO_THEMES: Dict[str, Optional[List[int]]] = {
         "other buckets return any-sector samples."
     ),
 )
-async def get_eic_fund_grantees(
+def get_eic_fund_grantees(
     bucket: Optional[str] = Query(None, description="EIC sub-bucket slug: accelerator | pathfinder | transition | step-scale | ..."),
     limit: int = Query(5, ge=1, le=20),
     db: Session = Depends(get_db),
@@ -1417,7 +1417,7 @@ async def get_eic_fund_grantees(
         "before — the Funder's Lens evidence-pack widget. Blue tier only."
     ),
 )
-async def get_fts_recipients(
+def get_fts_recipients(
     opportunity_id: Optional[str] = Query(None, description="<source>:<id>"),
     programme: Optional[str] = Query(None, description="Free-text programme substring (overrides the one inferred from opportunity_id)."),
     q: Optional[str] = Query(None, description="Free-text overlay on title/summary."),
@@ -1510,7 +1510,7 @@ async def get_fts_recipients(
         "country' drawer panel on the Tenderator. Blue tier only."
     ),
 )
-async def get_intl_coop_summary(
+def get_intl_coop_summary(
     country: str = Query(..., min_length=2, description="Beneficiary country substring."),
     programme: Optional[str] = Query(None, description="ndici | ipa3 | humanitarian (optional)."),
     years_back: int = Query(5, ge=1, le=20, description="Look back N years from today."),
@@ -1648,7 +1648,7 @@ async def get_intl_coop_summary(
         "published_at, detected_lang, translated_from?}. Blue tier only."
     ),
 )
-async def get_unified_feed(
+def get_unified_feed(
     source: str = Query("all", description="ted | ft_proposals | ft_tenders | ft_projects | agency | matches | all"),
     match_source: str = Query("all", description="When source=matches: all | ted | ft_proposals | ft_tenders | agency. Backed by tender_matches (TED) + on-the-fly scoring (F&T + agency) against the user's TenderProfile keywords + CPV + countries, blended with their MEUB Policy Interests when personalised is on."),
     q: Optional[str] = Query(None, description="Substring match on title + description"),
