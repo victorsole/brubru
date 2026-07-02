@@ -130,7 +130,9 @@ _PLACE = re.compile(
     r"gmin\w*|powiat|wojew[óo]dztw|"                         # PL
     r"megye|j[áa]r[áa]s|telep[üu]l[ée]s|"                    # HU
     r"op[ćc]in\w*|[žz]upanij\w*|ob[čc]in\w*|"                # HR/SI
-    r"kommun\w*|maakun\w*|\bkunta\b|l[äa][äa]n", re.I | re.U)
+    r"kommun\w*|maakun\w*|\bkunta\b|l[äa][äa]n|"             # Nordic/FI
+    r"freguesi|villagg|\bilha\b|concello|bundesland|землищ|\btoda?\b|\btutt[oa]\b|"  # PT/IT/BG + whole
+    r"comprises|comprende|circunscrit|очертан|constitu[ií]d", re.I | re.U)
 # Reject a "heading" that is really a mid-sentence OCR fragment (starts with a preposition).
 _FRAG = re.compile(r"^(of|des|della|dell'|van de|van het|της|του|van)\b", re.I | re.U)
 # Reject a body that is a competent-authority / control-body address, not a demarcation.
@@ -144,6 +146,18 @@ _LINK_BODY = re.compile(
     r"^(α\.?\s*)?(ιστορικ|ιδιαιτερ|δεσμ|link\b|historical|causal|"
     r"v[íi]nculo|legame|verband|zusammenhang|lien\b|връзка|специфич|особен|"
     r"\(?φεκ|\(?φ\.ε\.κ|αριθ\w*\s+πρωτ)", re.I | re.U)  # + Greek gazette/legal ref (ΦΕΚ...)
+# A body that is a hard-wrong section (history / method / product / derogation-proximity /
+# amendment / table-of-contents / condition) -> not a demarcation. Mirrors the verification
+# pass so the extractor never selects these and the real demarcation wins.
+_WRONG_BODY = re.compile(
+    r"^\W*(d\)\s*)?(antecedent|alrededor del a[ñn]o|geschicht|storia|"
+    r"m[ée]todo\b|method\b|obtention|obtenci[óo]n|processing|trasformazione|transforma[çc]|"
+    r"organolept|eigenschap|proprietà|"
+    r"d[ée]rogat|derogaz|proximit[éa]|aire de proximit|"
+    r"modificat|modification|modifi[ée]|cahier des charges est modifi|standard amendment|ref\.?\s*ares|"
+    r"prueba del origen|cadre juridique|type de condition|"
+    r"description (of|de) (the|la) condition|descripci[óo]n de la condici[óo]n|"
+    r"beschrijving van de voorwaarde)", re.I | re.U)
 
 
 def _strip_num(line: str) -> str:
@@ -192,6 +206,8 @@ def extract_geo(text: str, name: str | None = None) -> tuple[str, str] | None:
             if _AUTHORITY.search(body[:120]):            # authority address, not a demarcation
                 continue
             if _LINK_BODY.match(body):                   # link/history narrative, not a demarcation
+                continue
+            if _WRONG_BODY.match(body):                  # method/derogation/amendment/ToC, not a demarcation
                 continue
             cands.append((l, body))
     if not cands:
