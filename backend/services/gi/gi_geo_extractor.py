@@ -176,12 +176,14 @@ def _is_demarcation_heading(core: str) -> bool:
     return bool(_QUAL.search(core)) or len(core) < 45
 
 
-def extract_geo(text: str, name: str | None = None, is_pdf: bool = False) -> tuple[str, str] | None:
-    """Return (heading, area_text) of the demarcation, or None. Name-scopes big
-    multi-GI gazette pages (EUR-Lex :FULL/:TOC) to the block for this GI. NOT for
-    PDFs: a single-GI technical file is one document, and its demarcation can sit
-    well past a fixed window (e.g. a Greek wine file with the section at ~17k chars)."""
-    if name and not is_pdf and len(text) > 45000 and name.split()[0] in text:
+def extract_geo(text: str, name: str | None = None, is_pdf: bool = False,
+                multi_gi: bool = False) -> tuple[str, str] | None:
+    """Return (heading, area_text) of the demarcation, or None. Name-scopes ONLY
+    genuine multi-GI gazette pages (EUR-Lex :FULL/:TOC, passed via multi_gi) to the
+    block for this GI. A large single-GI document (a technical file, or a long
+    standard-amendment) is one GI: never scope it, or its demarcation deep in the
+    doc (Friuli at line ~1666, Greek wine at ~17k chars) gets truncated away."""
+    if name and multi_gi and len(text) > 45000 and name.split()[0] in text:
         i = text.find(name)
         text = text[i:i + 16000]
     lines = [l.strip() for l in text.split("\n")]
@@ -386,7 +388,10 @@ class GiGeoExtractor:
             if not txt:
                 continue
             note_nuts(txt); last_src = prefer_en(u)
-            hit = extract_geo(txt, name)
+            # A whole-gazette page is uri=OJ:...:FULL. NOT :TOC — every EUR-Lex URL
+            # carries a ubiquitous &toc=OJ:...:TOC parameter that is not a gazette marker.
+            multi_gi = bool(re.search(r":FULL\b", u, re.I))
+            hit = extract_geo(txt, name, multi_gi=multi_gi)
             if hit:
                 cand = (score_area(hit[1]), hit[0], hit[1], prefer_en(u),
                         "eli" if "data.europa.eu/eli" in u else "eurlex")
