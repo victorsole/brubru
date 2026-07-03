@@ -79,6 +79,7 @@ def main():
     ap.add_argument("--resume", action="store_true", help="skip GIs already in gi_details")
     ap.add_argument("--restatus", default="", help="re-process only GIs at these geo_status values, e.g. pending,none")
     ap.add_argument("--jsonl", default="", help="also append each result to this JSONL file")
+    ap.add_argument("--delay", type=float, default=0.0, help="seconds to pause between GIs (polite throttle for EUR-Lex)")
     ap.add_argument("--log", default="")
     a = ap.parse_args()
     countries = [c.strip().upper() for c in a.countries.split(",") if c.strip()]
@@ -148,6 +149,8 @@ def main():
             if n % 20 == 0:
                 res = sum(1 for x in rows if x.get("geo_status") == "resolved")
                 log(f"  ...{n}/{len(gis)} | resolved {res} | {time.time()-t0:.0f}s")
+            if a.delay:
+                time.sleep(a.delay)
 
     by_status = Counter(x.get("geo_status") for x in rows)
     by_conf = Counter(x.get("geo_confidence") for x in rows)

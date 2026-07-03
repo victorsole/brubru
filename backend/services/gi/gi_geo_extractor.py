@@ -350,18 +350,17 @@ class GiGeoExtractor:
         if not m:
             return None
         celex = requests.utils.unquote(m.group(1))
-        for _ in range(3):                                # retry transient failures under load
-            try:
-                # EUR-Lex wants the CELEX literal in the query (no %2F/%3A encoding).
-                r = self.sess.get(f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}",
-                                  headers={"Accept": "application/pdf,*/*"}, timeout=60)
-                if r.content[:4] == b"%PDF":
-                    return _pdf_text(r.content)
-                if r.status_code in (429, 500, 502, 503):
-                    time.sleep(1.5); continue
-                return None
-            except Exception:
-                time.sleep(1.5)
+        # ONE polite attempt: EUR-Lex rate-limits the PDF endpoint hard, and rapid
+        # retries trigger an IP throttle. Recover the old-application tail with a
+        # throttled runner (--delay) instead of hammering here.
+        try:
+            # EUR-Lex wants the CELEX literal in the query (no %2F/%3A encoding).
+            r = self.sess.get(f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}",
+                              headers={"Accept": "application/pdf,*/*"}, timeout=60)
+            if r.content[:4] == b"%PDF":
+                return _pdf_text(r.content)
+        except Exception:
+            pass
         return None
 
     # --- resolution --------------------------------------------------------
