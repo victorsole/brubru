@@ -54,7 +54,7 @@ _GEO_NOUN = re.compile(
     r"aire g[ée]ographique|zone g[ée]ographique|"          # FR
     r"zona geografica|area geografica|"                     # IT
     r"geografisch\w*\s+gebied|"                             # NL
-    r"geograf\w*\s+gebiet|"                                 # DE
+    r"geogra[fp]h?\w*\s+gebiet|"                            # DE geografisch/geographisch (both spellings)
     r"γεωγραφικ\w*\s+περιοχ\w*|"  # EL γεωγραφικ* περιοχ*
     r"географск\w*\s+район\w*|"        # BG географск* район*
     r"zem[ěe]pisn\w*\s+oblast\w*|"                          # CS/SK
@@ -102,7 +102,7 @@ _QUAL = re.compile(
     r"robe[žz]\w*|kodol[īi]g\w*|apibr[ėe][žz]\w*|glaust\w*|nustatym\w*)", re.I | re.U)
 # Sections that ALSO contain the geo-area noun but are NOT the demarcation.
 _NEG = re.compile(
-    r"(\blink\b|\blien\b|v[íi]nculo|enlace|legame|verband|verbindung|liga[çc][ãa]o|"
+    r"(\blink\b|\blien\b|v[íi]nculo|enlace|legame|verband|verbindung|zusammenhang|liga[çc][ãa]o|"
     r"leg[ăa]tur\w*|souvislost|zwi[ąa]zek|kapcsolat|povezanost|povezav\w*|"          # link (RO/CS/PL/HU/HR/SI)
     r"δεσμ|връзк|"                        # EL δεσμ / BG връзк (link)
     r"specificit|sp[ée]cificit|especificidad|specificit[àa]|especificidade|"
@@ -133,6 +133,7 @@ _PLACE = re.compile(
     r"megye|j[áa]r[áa]s|telep[üu]l[ée]s|"                    # HU
     r"op[ćc]in\w*|[žz]upanij\w*|ob[čc]in\w*|"                # HR/SI
     r"kommun\w*|maakun\w*|\bkunta\b|l[äa][äa]n|"             # Nordic/FI
+    r"landkreis|\bkreis|bezirk|gemeind|regierungsbezirk|"   # DE districts
     r"freguesi|villagg|\bilha\b|concello|bundesland|землищ|\btoda?\b|\btutt[oa]\b|"  # PT/IT/BG + whole
     r"comprises|comprende|circunscrit|очертан|constitu[ií]d", re.I | re.U)
 # Reject a "heading" that is really a mid-sentence OCR fragment (starts with a preposition).
