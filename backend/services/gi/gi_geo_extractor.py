@@ -185,11 +185,12 @@ def extract_geo(text: str, name: str | None = None, is_pdf: bool = False) -> tup
     lines = [l.strip() for l in text.split("\n")]
     cands: list[tuple[str, str]] = []
     for i, l in enumerate(lines):
-        if not l or len(l) > 200:
+        if not l or len(l) > 3000:
             continue
-        # Old summary format puts heading AND content on one line:
-        # "(c) geographical area : Municipality of Egina and communes of ...".
+        # Old summary format puts heading AND content on one long line:
+        # "4.3 Geographical area: ...covers the departments of Haute-Corse and...".
         # So test the part BEFORE the colon as the heading, take the rest as content.
+        # (The len(core) > 90 guard below still rejects non-heading sentences.)
         head_part = l.split(":", 1)[0] if ":" in l else l
         core = _strip_num(head_part)
         if _FRAG.match(core) or len(core) > 90:          # OCR fragment or a full sentence, not a heading
