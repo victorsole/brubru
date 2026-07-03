@@ -338,6 +338,23 @@ class GiGeoExtractor:
         except Exception:
             return None
 
+    def fetch_eurlex_pdf(self, url: str) -> str | None:
+        """Pre-2000 OJ documents are PDF-only: the HTML view is metadata. Fetch the
+        EUR-Lex PDF rendition by CELEX (e.g. C1998/172/03 -> the application text)."""
+        m = re.search(r"CELEX[:%3A]+([0-9A-Za-z/()%]+)", url, re.I)
+        if not m:
+            return None
+        celex = requests.utils.unquote(m.group(1))
+        try:
+            # EUR-Lex wants the CELEX literal in the query (no %2F/%3A encoding).
+            r = self.sess.get(f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}",
+                              headers={"Accept": "application/pdf,*/*"}, timeout=60)
+            if r.content[:4] == b"%PDF":
+                return _pdf_text(r.content)
+        except Exception:
+            pass
+        return None
+
     # --- resolution --------------------------------------------------------
     def giview_detail(self, gid: str) -> dict:
         try:
@@ -385,6 +402,10 @@ class GiGeoExtractor:
                     nuts.append(cd)
         for u in urls:
             txt = self.fetch_eurlex(u)
+            if txt and len(txt) < 3500:            # metadata-only HTML -> pre-2000 PDF-only OJ doc
+                pdf_txt = self.fetch_eurlex_pdf(u)
+                if pdf_txt:
+                    txt = pdf_txt
             if not txt:
                 continue
             note_nuts(txt); last_src = prefer_en(u)
