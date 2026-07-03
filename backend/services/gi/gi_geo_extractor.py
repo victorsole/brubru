@@ -185,13 +185,21 @@ def extract_geo(text: str, name: str | None = None, is_pdf: bool = False) -> tup
     lines = [l.strip() for l in text.split("\n")]
     cands: list[tuple[str, str]] = []
     for i, l in enumerate(lines):
-        if not l or len(l) > 110:
+        if not l or len(l) > 200:
             continue
-        core = _strip_num(l)
-        if _FRAG.match(core):                            # OCR fragment ("of the geographical area.")
+        # Old summary format puts heading AND content on one line:
+        # "(c) geographical area : Municipality of Egina and communes of ...".
+        # So test the part BEFORE the colon as the heading, take the rest as content.
+        head_part = l.split(":", 1)[0] if ":" in l else l
+        core = _strip_num(head_part)
+        if _FRAG.match(core) or len(core) > 90:          # OCR fragment or a full sentence, not a heading
             continue
         if _is_demarcation_heading(core):
             out: list[str] = []
+            if ":" in l:
+                inline = l.split(":", 1)[1].strip()
+                if inline:
+                    out.append(inline)
             for l2 in lines[i + 1:i + 45]:
                 if not l2:
                     continue
@@ -201,8 +209,6 @@ def extract_geo(text: str, name: str | None = None, is_pdf: bool = False) -> tup
                 if sum(len(x) for x in out) > 600:
                     break
             body = " ".join(out).strip()
-            if not body and ":" in l:
-                body = l.split(":", 1)[1].strip()
             if re.search(r"☒|☐", body) or len(body) < 20:   # reject checkbox forms / empties
                 continue
             if _AUTHORITY.search(body[:120]):            # authority address, not a demarcation
