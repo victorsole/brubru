@@ -80,7 +80,9 @@ _GEO_NOUN = re.compile(
     # Macedonian/Russian/Ukrainian (определен/визначений район).
     r"οριοθετημ\w*\s+(?:περιοχ|ζών)\w*|"           # EL ΟΡΙΟΘΕΤΗΜΕΝΗ ΠΕΡΙΟΧΗ/ΖΩΝΗ
     r"οριοθ[έε]τηση\s+τη[ςσ]\s+περιοχ\w*|"        # EL delimitation of the area
-    r"определен\w*\s+район\w*"                    # BG ОПРЕДЕЛЕН РАЙОН
+    r"определен\w*\s+район\w*|"                   # BG ОПРЕДЕЛЕН РАЙОН
+    r"ograni[čc]en\w*\s+podru[čc]j\w*|"           # HR OGRANIČENO PODRUČJE (delimited area)
+    r"omejen\w*\s+obmo[čc]j\w*|vymedzen\w*\s+oblas\w*"  # SI omejeno območje / SK vymedzená oblasť
     r")", re.I | re.U)
 # Definition / delimitation qualifier (or the heading is standalone-short).
 _QUAL = re.compile(
