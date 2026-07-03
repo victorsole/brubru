@@ -2,6 +2,98 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Added 29 Jun 2026 joint SANT-ITRE committee meeting CJ53(2026)0629_1 on 2025/0406(COD)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "savings_and_investment_union",
+      "title": "Savings and Investment Union",
+      "summary": "Added 2 Jul 2026 SIU package in ECON (2025/0381-0383) + Claudia Buch SSM hearing",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "digital_services_act",
+      "title": "Digital Services Act",
+      "summary": "Added 2 Jul 2026 DSA minors-protection report + European Board for Digital Services 19th meeting",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "European Neighbourhood Policy (East and South)",
+      "summary": "Added 2 Jul 2026 EU-Armenia partnership deepening (VdL/Pashinyan) + South Caucasus programmes",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Added 2 Jul 2026 UCC Implementing Act amendment streamlining non-preferential origin rules",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "added",
+      "guide": "eu_omnibus_iv_small_midcap",
+      "title": "Omnibus IV Small Mid-Cap package",
+      "summary": "New guide: SMC simplification package (2025/0130 Reg + 2025/0131 Dir); provisional agreement 2 Jul 2026",
+      "refs": [
+        "32016R0679",
+        "32017R1129",
+        "32014L0065"
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "action": "added",
+      "guide": "modernisation_fund",
+      "title": "EU Modernisation Fund",
+      "summary": "New guide: ETS-funded Modernisation Fund; 2 Jul 2026 EUR 2.5bn to 51 projects in 11 MS (EUR 23.2bn total since 2021)",
+      "refs": [
+        "32003L0087",
+        "32023L0959",
+        "32020R1001"
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "Commission hosted a DMA stakeholder roundtable on cloud computing services (1 Jul 2026)",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "eu_islands_coastal_communities_strategy",
+      "title": "EU Strategies for Islands and Coastal Communities",
+      "summary": "EVP Fitto launched implementation discussions in Cyprus (1 Jul 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "EUR 3 flat customs duty + abolition of EUR 150 e-commerce exemption ENTERS INTO APPLICATION 1 Jul 2026 (temporary until 1 Jul 2028)",
+      "refs": [
+        "32026R1200"
+      ]
+    },
+    {
       "date": "2026-07-01",
       "action": "updated",
       "guide": "ukraine_support_loan_recovery_2026",

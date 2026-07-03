@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Thursday 2 July 2026 — EU-Armenia partnership deepened):** President **von der Leyen and Armenian Prime Minister Nikol Pashinyan** issued a joint statement announcing a strengthened EU-Armenia partnership focused on **resilience, trade and connectivity**. The move continues the EU's intensified engagement in the **South Caucasus**: in the same window the Commission (DG NEAR) launched **connectivity and communities support programmes for peace in the South Caucasus** (linked to the Armenia-Azerbaijan normalisation track), and President von der Leyen issued a parallel statement with **Azerbaijani President Aliyev**. Armenia is a member of the **Eastern Partnership (6)**; deepening ties sit within the ENP-East framework and the EU-Armenia Comprehensive and Enhanced Partnership Agreement (CEPA, in force since March 2021). Source: EC News / DG NEAR, 2 July 2026.
 - **Policy name:** European Neighbourhood Policy (ENP)
 - **Launched:** 2003 (Communication COM/2003/104), formalised 2004; major review 2015; institutional overhaul 2024-2025 with split of former DG NEAR into DG ENEST (Eastern) and DG MENA (Southern)
 - **Legal basis:** Article 8 TEU ("The Union shall develop a special relationship with neighbouring countries, aiming to establish an area of prosperity and good neighbourliness, founded on the values of the Union and characterised by close and peaceful relations based on cooperation")
