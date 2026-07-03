@@ -214,8 +214,8 @@ def extract_geo(text: str, name: str | None = None, is_pdf: bool = False,
                 if sum(len(x) for x in out) > 600:
                     break
             body = " ".join(out).strip()
-            if re.search(r"☒|☐", body) or len(body) < 20:   # reject checkbox forms / empties
-                continue
+            if re.search(r"☒|☐", body) or len(body) < 4:    # reject checkbox forms / empties
+                continue                                     # (a region name like "Bavaria" is valid)
             if _AUTHORITY.search(body[:120]):            # authority address, not a demarcation
                 continue
             if _LINK_BODY.match(body):                   # link/history narrative, not a demarcation
@@ -241,7 +241,13 @@ def prefer_en(url: str) -> str:
 def confidence_of(area: str) -> str:
     if re.search(r"☒|☐|\.doc|\.pdf", area) or _NEG.search(area[:70]):
         return "needs_review"
-    return "clean" if _PLACE.search(area) else "needs_review"
+    if _PLACE.search(area):
+        return "clean"
+    # A short proper-noun region name (e.g. "Bavaria", "Lazio", "Crete") is a valid
+    # whole-region demarcation on its own.
+    if re.fullmatch(r"[A-ZÀ-Þ][\wÀ-þ'’.\- ]{2,34}", area.strip()):
+        return "clean"
+    return "needs_review"
 
 
 def _pdf_text(data: bytes) -> str | None:
