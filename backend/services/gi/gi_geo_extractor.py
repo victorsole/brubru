@@ -252,6 +252,21 @@ def _pdf_text(data: bytes) -> str | None:
             return None
 
 
+def extract_nuts(text: str) -> list[str]:
+    """Pull NUTS region codes the single document states directly (it has a
+    'NUTS area' / 'Περιοχή NUTS' field). e.g. GR14, GR133, ITH2, ES52. This is
+    machine-readable geography straight from the source, region-level."""
+    out: list[str] = []
+    lines = text.split("\n")
+    for i, l in enumerate(lines):
+        if re.search(r"\bNUTS\b|Περιοχ[ήη]\s+NUTS", l, re.I | re.U):
+            window = " ".join(lines[i:i + 8])
+            for m in re.findall(r"\b([A-Z]{2}\d{1,3}[A-Z0-9]{0,2})\b", window):
+                if re.match(r"[A-Z]{2}\d", m) and m not in out:
+                    out.append(m)
+    return out[:15]
+
+
 def score_area(area: str) -> int:
     """Rank a candidate demarcation: place-word density wins, wrong-section
     markers lose. Used to pick the best source (OJ vs PDF) for one GI."""
@@ -351,9 +366,18 @@ class GiGeoExtractor:
         # keep the best-scoring demarcation. A GI's PDF may scramble under layout
         # while its OJ entry is clean (or vice versa), so we do not stop at first.
         best = None  # (score, heading, area, src_url, src_type)
+        nuts: list[str] = []
+        last_src = None
+        def note_nuts(t):
+            for cd in extract_nuts(t):
+                if cd not in nuts:
+                    nuts.append(cd)
         for u in urls:
             txt = self.fetch_eurlex(u)
-            hit = extract_geo(txt, name) if txt else None
+            if not txt:
+                continue
+            note_nuts(txt); last_src = prefer_en(u)
+            hit = extract_geo(txt, name)
             if hit:
                 cand = (score_area(hit[1]), hit[0], hit[1], prefer_en(u),
                         "eli" if "data.europa.eu/eli" in u else "eurlex")
@@ -361,18 +385,29 @@ class GiGeoExtractor:
                     best = cand
         for aid in pdf_ids:
             txt = self.fetch_pdf(aid)
-            hit = extract_geo(txt, name, is_pdf=True) if txt else None
+            if not txt:
+                continue
+            note_nuts(txt); last_src = f"{ATTACHMENT_HOST}/{aid}"
+            hit = extract_geo(txt, name, is_pdf=True)
             if hit:
                 cand = (score_area(hit[1]), hit[0], hit[1], f"{ATTACHMENT_HOST}/{aid}", "pdf")
                 if best is None or cand[0] > best[0]:
                     best = cand
+        # Priority: a CLEAN text demarcation > the document's own NUTS region code >
+        # a weak/ambiguous text demarcation. So a region code beats a legal-reference
+        # preamble, but a real municipality list still wins over the region code.
         area = heading = src_url = src_type = None
-        if best:
+        if best and confidence_of(best[2]) == "clean":
+            _, heading, area, src_url, src_type = best
+        if area is None and nuts:
+            area = "NUTS region(s): " + ", ".join(nuts[:12])
+            heading = "NUTS area"; src_url = last_src; src_type = "nuts"
+        if area is None and best:
             _, heading, area, src_url, src_type = best
 
         has_docs = bool(pdf_ids or urls)
         if area:
-            conf = confidence_of(area)
+            conf = "clean" if (src_type == "nuts" or confidence_of(area) == "clean") else "approximate"
             status = "resolved" if conf == "clean" else "approximate"
         else:
             conf, status = "none", ("no_source" if not has_docs else "pending")
@@ -393,6 +428,7 @@ class GiGeoExtractor:
             "competent_authority": amb.get("producerGroupName")
                                    or (giview.get("competentControlAuthorities")),
             "geographical_area": area[:8000] if area else None,
+            "geo_nuts": nuts or None,
             "geo_heading": (heading or "")[:200] or None,
             "geo_source_url": src_url,
             "geo_source_type": src_type,

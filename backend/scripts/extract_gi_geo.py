@@ -35,13 +35,13 @@ _UPSERT = """
 INSERT INTO gi_details (
     file_number, gi_identifier, protected_name, gi_type, product_type, countries,
     status, eu_protection_date, classification, legal_instrument, publications,
-    competent_authority, geographical_area, geo_heading, geo_source_url,
+    competent_authority, geographical_area, geo_nuts, geo_heading, geo_source_url,
     geo_source_type, geo_confidence, geo_status, extracted_at
 ) VALUES (
     %(file_number)s, %(gi_identifier)s, %(protected_name)s, %(gi_type)s, %(product_type)s,
     %(countries)s, %(status)s, %(eu_protection_date)s, %(classification)s,
     %(legal_instrument)s, %(publications)s, %(competent_authority)s, %(geographical_area)s,
-    %(geo_heading)s, %(geo_source_url)s, %(geo_source_type)s, %(geo_confidence)s,
+    %(geo_nuts)s, %(geo_heading)s, %(geo_source_url)s, %(geo_source_type)s, %(geo_confidence)s,
     %(geo_status)s, NOW()
 )
 ON CONFLICT (file_number) DO UPDATE SET
@@ -50,7 +50,8 @@ ON CONFLICT (file_number) DO UPDATE SET
     status=EXCLUDED.status, eu_protection_date=EXCLUDED.eu_protection_date,
     classification=EXCLUDED.classification, legal_instrument=EXCLUDED.legal_instrument,
     publications=EXCLUDED.publications, competent_authority=EXCLUDED.competent_authority,
-    geographical_area=EXCLUDED.geographical_area, geo_heading=EXCLUDED.geo_heading,
+    geographical_area=EXCLUDED.geographical_area, geo_nuts=EXCLUDED.geo_nuts,
+    geo_heading=EXCLUDED.geo_heading,
     geo_source_url=EXCLUDED.geo_source_url, geo_source_type=EXCLUDED.geo_source_type,
     geo_confidence=EXCLUDED.geo_confidence, geo_status=EXCLUDED.geo_status,
     extracted_at=NOW(), updated_at=NOW();
@@ -161,7 +162,7 @@ def main():
 
 _COLS = ["file_number", "gi_identifier", "protected_name", "gi_type", "product_type",
          "countries", "status", "eu_protection_date", "classification", "legal_instrument",
-         "publications", "competent_authority", "geographical_area", "geo_heading",
+         "publications", "competent_authority", "geographical_area", "geo_nuts", "geo_heading",
          "geo_source_url", "geo_source_type", "geo_confidence", "geo_status"]
 
 if __name__ == "__main__":
