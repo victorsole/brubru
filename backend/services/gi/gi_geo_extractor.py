@@ -331,12 +331,17 @@ class GiGeoExtractor:
         return None
 
     def fetch_eurlex(self, url: str) -> str | None:
-        try:
-            self.page.goto(prefer_en(url), wait_until="domcontentloaded", timeout=30000)
-            self.page.wait_for_timeout(1300)
-            return self.page.inner_text("body")
-        except Exception:
-            return None
+        for _ in range(2):                                # retry transient render failures under load
+            try:
+                self.page.goto(prefer_en(url), wait_until="domcontentloaded", timeout=35000)
+                self.page.wait_for_timeout(1300)
+                return self.page.inner_text("body")
+            except Exception:
+                try:
+                    self.page.wait_for_timeout(1200)
+                except Exception:
+                    pass
+        return None
 
     def fetch_eurlex_pdf(self, url: str) -> str | None:
         """Pre-2000 OJ documents are PDF-only: the HTML view is metadata. Fetch the
@@ -345,14 +350,18 @@ class GiGeoExtractor:
         if not m:
             return None
         celex = requests.utils.unquote(m.group(1))
-        try:
-            # EUR-Lex wants the CELEX literal in the query (no %2F/%3A encoding).
-            r = self.sess.get(f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}",
-                              headers={"Accept": "application/pdf,*/*"}, timeout=60)
-            if r.content[:4] == b"%PDF":
-                return _pdf_text(r.content)
-        except Exception:
-            pass
+        for _ in range(3):                                # retry transient failures under load
+            try:
+                # EUR-Lex wants the CELEX literal in the query (no %2F/%3A encoding).
+                r = self.sess.get(f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}",
+                                  headers={"Accept": "application/pdf,*/*"}, timeout=60)
+                if r.content[:4] == b"%PDF":
+                    return _pdf_text(r.content)
+                if r.status_code in (429, 500, 502, 503):
+                    time.sleep(1.5); continue
+                return None
+            except Exception:
+                time.sleep(1.5)
         return None
 
     # --- resolution --------------------------------------------------------
