@@ -174,10 +174,12 @@ def _is_demarcation_heading(core: str) -> bool:
     return bool(_QUAL.search(core)) or len(core) < 45
 
 
-def extract_geo(text: str, name: str | None = None) -> tuple[str, str] | None:
+def extract_geo(text: str, name: str | None = None, is_pdf: bool = False) -> tuple[str, str] | None:
     """Return (heading, area_text) of the demarcation, or None. Name-scopes big
-    multi-GI gazette pages to the block for this GI."""
-    if name and len(text) > 45000 and name.split()[0] in text:
+    multi-GI gazette pages (EUR-Lex :FULL/:TOC) to the block for this GI. NOT for
+    PDFs: a single-GI technical file is one document, and its demarcation can sit
+    well past a fixed window (e.g. a Greek wine file with the section at ~17k chars)."""
+    if name and not is_pdf and len(text) > 45000 and name.split()[0] in text:
         i = text.find(name)
         text = text[i:i + 16000]
     lines = [l.strip() for l in text.split("\n")]
@@ -359,7 +361,7 @@ class GiGeoExtractor:
                     best = cand
         for aid in pdf_ids:
             txt = self.fetch_pdf(aid)
-            hit = extract_geo(txt, name) if txt else None
+            hit = extract_geo(txt, name, is_pdf=True) if txt else None
             if hit:
                 cand = (score_area(hit[1]), hit[0], hit[1], f"{ATTACHMENT_HOST}/{aid}", "pdf")
                 if best is None or cand[0] > best[0]:
