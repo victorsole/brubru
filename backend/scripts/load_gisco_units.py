@@ -99,6 +99,25 @@ def load_lau(engine, src: str):
     print(f"[gisco] LAU appended: {len(out)} units")
 
 
+def populate_lau_parents(engine):
+    """LAU GeoJSON carries no NUTS3 code, but the geographic-clustering precision
+    guard in Phase C.2 needs each LAU's province. Derive it spatially (the NUTS3
+    that contains the LAU's interior point), batched per country to stay under the
+    statement timeout."""
+    with engine.begin() as cx:
+        countries = [r[0] for r in cx.execute(text("SELECT DISTINCT country FROM gisco_units WHERE level='LAU' ORDER BY 1"))]
+    total = 0
+    for ctry in countries:
+        with engine.begin() as cx:
+            cx.execute(text("SET statement_timeout='115s'"))
+            res = cx.execute(text("""UPDATE gisco_units lau SET nuts_parent=n.unit_code
+                FROM gisco_units n WHERE lau.level='LAU' AND lau.country=:c
+                  AND n.level='NUTS3' AND n.country=:c
+                  AND ST_Contains(n.geometry, ST_PointOnSurface(lau.geometry))"""), {"c": ctry})
+            total += res.rowcount
+    print(f"[gisco] LAU->NUTS3 parents assigned: {total}")
+
+
 def add_indexes(engine):
     with engine.begin() as cx:
         cx.execute(text("CREATE EXTENSION IF NOT EXISTS pg_trgm"))
@@ -122,6 +141,7 @@ def main():
     if a.lau:
         load_lau(engine, a.src or LAU_URL)
         add_indexes(engine)
+        populate_lau_parents(engine)
 
 
 if __name__ == "__main__":
