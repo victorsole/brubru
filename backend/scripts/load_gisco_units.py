@@ -52,7 +52,11 @@ def _engine():
 
 def load_nuts(engine, src: str):
     g = gpd.read_file(src).to_crs(4326)
-    name_cols = ["NUTS_NAME", "NAME_LATN", "NAME_ENGL", "NAME_FREN", "NAME_GERM"]
+    # NUTS_NAME (native) + NAME_LATN (Latin transliteration) ONLY. GISCO's
+    # NAME_ENGL/FREN/GERM hold the COUNTRY name for sub-national units (Modena->"Italy"),
+    # NOT a regional translation — including them poisons every unit's index with its
+    # country name, so any text mentioning the country matches a random unit.
+    name_cols = ["NUTS_NAME", "NAME_LATN"]
 
     def search_blob(row):
         vals = {norm(row.get(c)) for c in name_cols if row.get(c)}
