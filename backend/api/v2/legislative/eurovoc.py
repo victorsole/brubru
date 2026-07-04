@@ -18,6 +18,8 @@ from datetime import date
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
+from pydantic import BaseModel, Field
+from sqlalchemy import text as _sql
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -26,7 +28,7 @@ from models.user import User
 from api.v1 import cellar_discover as _v1_cellar
 from api.v1 import vocabularies as _v1_vocab
 from api.v1._deps import api_user_with_rate_limit
-from api.v1._envelope import PaginatedResponse
+from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.cellar_discover import CellarRecentItem, EuroVocConcept
 from api.v1.vocabularies import VocabularyConcept
 
@@ -219,3 +221,168 @@ async def directories_legal_acts(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[VocabularyConcept]:
     return await _v1_vocab.list_directories(request, q=q, lang=lang, limit=limit, page=page, user=user, db=db)
+
+
+# ===========================================================================
+# EuroVoc TAXONOMY tree — the full walkable thesaurus.
+# Served from the local eurovoc_concepts table (migration 199): 21 domains ->
+# 127 microthesauri -> 7,502 descriptors, with the skos:broader hierarchy and
+# multilingual labels (en/es/fr/it/nl; ca reserved for the Catalan taxonomy).
+# This differs from /search (which only *finds* concepts): these routes *walk*
+# the tree top-down for building a subject navigator or a translated taxonomy.
+# ===========================================================================
+
+class EuroVocTaxonomyConcept(BaseModel):
+    uri: str
+    notation: Optional[str] = None
+    concept_type: str = Field(..., description="domain | microthesaurus | descriptor")
+    labels: dict = Field(default_factory=dict, description="prefLabel per language {en,es,fr,it,nl[,ca]}")
+    alt_labels: Optional[dict] = None
+    domain_uri: Optional[str] = None
+    microthesaurus_uri: Optional[str] = None
+    broader_uri: Optional[str] = None
+    # 5 mandatory Brubru datapoints
+    public_url: Optional[str] = Field(None, description="The concept's EuroVoc URI (stable key; links to EUR-Lex tagging).")
+    body_txt: Optional[str] = Field(None, description="Preferred label in the requested language.")
+    body_html: Optional[str] = Field(None, description="HTML composition of the label.")
+    document_date: Optional[str] = None
+    creation_date: Optional[str] = None
+
+
+def _tx_item(r, lang: str) -> EuroVocTaxonomyConcept:
+    labels = r["labels"] or {}
+    pref = labels.get(lang) or labels.get("en") or ""
+    return EuroVocTaxonomyConcept(
+        uri=r["concept_uri"], notation=r["notation"], concept_type=r["concept_type"],
+        labels=labels, alt_labels=r["alt_labels"], domain_uri=r["domain_uri"],
+        microthesaurus_uri=r["microthesaurus_uri"], broader_uri=r["broader_uri"],
+        public_url=r["concept_uri"], body_txt=pref, body_html=f"<p>{pref}</p>",
+    )
+
+
+def _tx_page(db: Session, where: str, params: dict, page: int, limit: int, lang: str):
+    off = (page - 1) * limit
+    total = db.execute(_sql(f"SELECT count(*) FROM eurovoc_concepts WHERE {where}"), params).scalar() or 0
+    rows = db.execute(_sql(
+        "SELECT concept_uri, notation, concept_type, labels, alt_labels, domain_uri, "
+        "microthesaurus_uri, broader_uri FROM eurovoc_concepts WHERE " + where +
+        " ORDER BY notation LIMIT :lim OFFSET :off"),
+        {**params, "lim": limit, "off": off}).mappings().all()
+    items = [_tx_item(r, lang) for r in rows]
+    return build_envelope(items, total, page, limit, op_core_title="EuroVoc taxonomy", op_core_type="Thesaurus")
+
+
+_TX_DESC = """**What it does**
+Walks the EuroVoc thesaurus tree top-down: {level}. Labels in en/es/fr/it/nl (ca once the Catalan taxonomy is loaded).
+
+**When to use it**
+Build a subject navigator over the acquis, or export the taxonomy to translate/re-use as an official classification.
+
+**Input**
+{inp}`lang` (en|es|fr|it|nl|ca, default en) selects which label to surface in `body_txt`; `labels` always carries every language. Pagination via `page`/`limit`.
+
+**Try it**
+`GET /api/v2/legislative/eurovoc/taxonomy/{ex}`
+
+**You get back**
+A `PaginatedResponse[EuroVocTaxonomyConcept]`: each concept's stable `uri` (== `public_url`), `notation`, `concept_type`, the multilingual `labels`, and its `domain_uri`/`microthesaurus_uri`/`broader_uri` for walking the hierarchy."""
+
+
+@router.get("/taxonomy/domains", response_model=PaginatedResponse[EuroVocTaxonomyConcept],
+            summary="EuroVoc top level — the 21 subject domains (Politics, Law, Environment, ...)",
+            description=_TX_DESC.format(level="the 21 top domains", inp="", ex="domains"))
+async def taxonomy_domains(
+    request: Request,
+    lang: str = Query("en", description="Label language (en|es|fr|it|nl|ca)"),
+    limit: int = Query(50, ge=1, le=200), page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[EuroVocTaxonomyConcept]:
+    return _tx_page(db, "concept_type='domain'", {}, page, limit, lang)
+
+
+@router.get("/taxonomy/microthesauri", response_model=PaginatedResponse[EuroVocTaxonomyConcept],
+            summary="EuroVoc mid level — the 127 microthesauri (optionally within one domain)",
+            description=_TX_DESC.format(level="the 127 microthesauri, optionally filtered to one domain",
+                                        inp="`domain` — a domain notation like `28` to list only that domain's microthesauri. ",
+                                        ex="microthesauri?domain=28"))
+async def taxonomy_microthesauri(
+    request: Request,
+    domain: Optional[str] = Query(None, description="Domain notation (e.g. 28) to filter"),
+    lang: str = Query("en"), limit: int = Query(200, ge=1, le=200), page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[EuroVocTaxonomyConcept]:
+    where, params = "concept_type='microthesaurus'", {}
+    if domain:
+        where += " AND domain_uri = (SELECT concept_uri FROM eurovoc_concepts WHERE concept_type='domain' AND notation=:d)"
+        params["d"] = domain
+    return _tx_page(db, where, params, page, limit, lang)
+
+
+@router.get("/taxonomy/descriptors", response_model=PaginatedResponse[EuroVocTaxonomyConcept],
+            summary="EuroVoc descriptors — the ~7,500 subject terms (by microthesaurus or free-text)",
+            description=_TX_DESC.format(level="the descriptors, filtered by microthesaurus and/or a label search",
+                                        inp="`microthesaurus` — a microthesaurus notation (e.g. 2826); `q` — substring match on the label in `lang`. ",
+                                        ex="descriptors?microthesaurus=2826"))
+async def taxonomy_descriptors(
+    request: Request,
+    microthesaurus: Optional[str] = Query(None, description="Microthesaurus notation (e.g. 2826)"),
+    q: Optional[str] = Query(None, description="Label substring search (in `lang`)"),
+    lang: str = Query("en"), limit: int = Query(50, ge=1, le=200), page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[EuroVocTaxonomyConcept]:
+    where, params = "concept_type='descriptor'", {}
+    if microthesaurus:
+        where += " AND microthesaurus_uri = (SELECT concept_uri FROM eurovoc_concepts WHERE concept_type='microthesaurus' AND notation=:m)"
+        params["m"] = microthesaurus
+    if q:
+        where += " AND labels->>:lg ILIKE :q"
+        params["lg"] = lang if lang in ("en", "es", "fr", "it", "nl", "ca") else "en"
+        params["q"] = f"%{q}%"
+    return _tx_page(db, where, params, page, limit, lang)
+
+
+@router.get("/taxonomy/concept/{notation}", response_model=PaginatedResponse[EuroVocTaxonomyConcept],
+            summary="One EuroVoc concept by notation, with its full hierarchy path",
+            description="""**What it does**
+Returns one EuroVoc concept (domain, microthesaurus or descriptor) by its `notation`, plus its ancestors (domain > microthesaurus > broader-terms) so you have the full path in one call.
+
+**When to use it**
+Resolve a EuroVoc code to its multilingual labels and place in the tree.
+
+**Input**
+`notation` — the EuroVoc code (descriptor id like `1764`, microthesaurus `2826`, or domain `28`). `lang` selects `body_txt`.
+
+**Try it**
+`GET /api/v2/legislative/eurovoc/taxonomy/concept/1764`
+
+**You get back**
+A `PaginatedResponse[EuroVocTaxonomyConcept]` whose `data` is the concept followed by its ancestors, root-last.""")
+async def taxonomy_concept(
+    request: Request,
+    notation: str = Path(..., description="EuroVoc notation (e.g. 1764, 2826, 28)"),
+    lang: str = Query("en"),
+    user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
+) -> PaginatedResponse[EuroVocTaxonomyConcept]:
+    row = db.execute(_sql(
+        "SELECT concept_uri, notation, concept_type, labels, alt_labels, domain_uri, "
+        "microthesaurus_uri, broader_uri FROM eurovoc_concepts WHERE notation=:n LIMIT 1"),
+        {"n": notation}).mappings().first()
+    if not row:
+        raise HTTPException(status_code=404, detail={"reason_code": "not_found", "notation": notation})
+    chain = [row]
+    # walk broader-terms, then microthesaurus, then domain
+    seen = {row["concept_uri"]}
+    cur_uri = row["broader_uri"]
+    for uri in (row["broader_uri"], row["microthesaurus_uri"], row["domain_uri"]):
+        while uri and uri not in seen:
+            anc = db.execute(_sql(
+                "SELECT concept_uri, notation, concept_type, labels, alt_labels, domain_uri, "
+                "microthesaurus_uri, broader_uri FROM eurovoc_concepts WHERE concept_uri=:u LIMIT 1"),
+                {"u": uri}).mappings().first()
+            if not anc:
+                break
+            chain.append(anc); seen.add(uri)
+            uri = anc["broader_uri"] if anc["concept_type"] == "descriptor" else None
+    items = [_tx_item(r, lang) for r in chain]
+    return build_envelope(items, len(items), 1, len(items) or 1,
+                          op_core_title="EuroVoc concept path", op_core_type="Thesaurus")
