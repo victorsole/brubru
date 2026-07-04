@@ -30,6 +30,18 @@ import psycopg2
 import requests
 from core.config import settings
 from gi_geo_phase_c2 import load_lau_gazetteer, resolve_lau, write_geometry as write_lau_geom
+from gi_geo_phase_c7_commune import title_commune
+
+
+def resolve_annex(sec, name, countries, gaz, mw, parent):
+    """Multi-commune: the >=2 clustering guard on the scoped section. Single-commune
+    AOCs (Auxey-Duresses, Beaune, Chablis): fall back to the TITLE-commune match,
+    which is clean — matching the section directly leaked fragments of the
+    departement name ("La Cote" out of "Cote-d'Or")."""
+    codes = resolve_lau(sec, countries, gaz, mw, parent)
+    if codes:
+        return codes
+    return title_commune(name, countries, gaz)
 
 ROSTER = "https://webgate.ec.europa.eu/eambrosia-api/api/v1/geographical-indications"
 ATTACH = "https://ec.europa.eu/geographical-indications-register/eambrosia-public-api/api/v1/attachments/{}"
@@ -121,7 +133,7 @@ def main():
             sec = geo_section(pdf_text(data))
             if not sec:
                 stats["no_section"] += 1; continue
-            codes = resolve_lau(sec, ctry or [], gaz, mw, parent)
+            codes = resolve_annex(sec, nm, ctry or [], gaz, mw, parent)
             if not codes:
                 stats["no_match"] += 1; continue
             stats["resolved"] += 1
