@@ -43,6 +43,7 @@ _STOP = {
     "relevant", "used", "vita", "vignes", "caves", "fins", "avril", "this", "that",
     "grand", "cru", "crus", "aceituna", "amendoa", "azeite", "azeitona", "beira",
     "madeira", "acores", "azores",  # island regions collide with distant mainland parishes
+    "vallata", "vallee", "manzanilla", "bergland", "entre", "deux", "montagne", "colli",
 }
 MIN_LEN = 4
 
