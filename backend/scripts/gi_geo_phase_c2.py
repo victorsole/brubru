@@ -41,6 +41,8 @@ _STOP = {
     # common-word municipality/parish names that ride along on ordinary text words
     "vinhas", "vinhos", "vales", "areias", "franca", "gloria", "vila", "vinha",
     "relevant", "used", "vita", "vignes", "caves", "fins", "avril", "this", "that",
+    "grand", "cru", "crus", "aceituna", "amendoa", "azeite", "azeitona", "beira",
+    "madeira", "acores", "azores",  # island regions collide with distant mainland parishes
 }
 MIN_LEN = 4
 
