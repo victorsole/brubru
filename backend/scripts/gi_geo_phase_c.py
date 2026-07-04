@@ -32,7 +32,7 @@ _WORD = re.compile(r"[^\W\d_]+", re.UNICODE)  # unicode letters only (drops digi
 _GENERIC_TOKENS = {
     "north", "south", "east", "west", "northern", "southern", "eastern", "western",
     "northeast", "northwest", "southeast", "southwest", "central", "centre", "center",
-    "border", "midland", "midlands", "region", "mid",
+    "border", "midland", "midlands", "region", "mid", "isole", "isles", "islands", "continent",
     "nord", "sud", "est", "ouest", "ovest", "centro", "centrale",              # FR/IT
     "sur", "norte", "este", "oeste",                                           # ES
     "ost", "westen", "osten", "norden", "sueden", "mitte",                     # DE
