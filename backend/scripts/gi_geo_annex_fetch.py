@@ -33,11 +33,66 @@ from gi_geo_phase_c2 import load_lau_gazetteer, resolve_lau, write_geometry as w
 from gi_geo_phase_c7_commune import title_commune
 
 
-def resolve_annex(sec, name, countries, gaz, mw, parent):
+# Romance/German PLURAL commune-list heading ("comuni di ...", "municipios de ...",
+# "concelhos de ...", "communes de ..."). Restricting the LAU match to the text AFTER
+# such a heading is what makes the Italian/Spanish sheets safe: province phrases
+# ("province di Bari, BAT, Brindisi ..." = whole region) and single-comune wrappers
+# ("provincia di Frosinone e ... comune di Anagni") sit OUTSIDE the list span, so their
+# province-name-as-comune collisions (Frosinone-the-province -> Frosinone-the-comune)
+# never enter the matcher.
+# plural commune-list heads across the Italian phrasings ("comuni di", "seguenti
+# comuni:", "territori comunali di:", "territorio comunale di X, Y e Z") plus the
+# Romance/Iberian forms. Bare singular "comune di X" is deliberately NOT here (that is
+# a whole-single-comune wrapper, e.g. Anagni) and even if a span slips through, the
+# resolve_lau >=2 cluster guard drops any 1-comune result.
+# connectors are WORD-BOUNDED: "di"/"de"/"des" must be whole words, NOT the prefix of
+# "della"/"delle"/"degli"/"dei" ("comuni della provincia di X" is a province COUNT, not a
+# list -- letting "de" match inside "della" captured province names as comuni).
+_COMMUNE_LIST_HEAD = re.compile(
+    r"\b(?:comuni|comunal[ei]|communes|municipios|municipis|concelhos|freguesias)"
+    r"\s*(?:di\b|de\b|des\b|d[’']|:)\s*:?\s*", re.I)
+# a "N comuni della provincia di X" / "comuni delle province" phrase means the area is a
+# WHOLE province (or several) -- province-level, not an enumerated list. Its presence
+# disqualifies the sheet from annex_lau; it stays at its honest NUTS3 province floor.
+_PROVINCE_COUNT = re.compile(r"comun[ei]\s+(?:dell[ae]|dei|degli)\s+provinc", re.I)
+# stop the span before the following section AND before any province tail
+# ("... in provincia di Nuoro") whose province name could collide with a comune.
+_LIST_STOP = re.compile(
+    r"(\x0c|\n\s*\n|\n\s*\d+\s*[.)]|vitigni|descrizione del legame|principali|"
+    r"in\s+provincia|della\s+provincia|nella\s+provincia|\bnuts\b)", re.I)
+
+
+def commune_span(sec: str) -> str:
+    """Concatenate only the enumerated commune-list spans (text after a PLURAL
+    'comuni di' style heading), so the LAU matcher never sees surrounding province
+    prose. Returns '' when the section is province-level or single-comune only."""
+    spans = []
+    for m in _COMMUNE_LIST_HEAD.finditer(sec):
+        tail = sec[m.end():m.end() + 500]
+        s = _LIST_STOP.search(tail)
+        spans.append(tail[:s.start()] if s else tail[:300])
+    return " , ".join(spans)
+
+
+def resolve_annex(sec, name, countries, gaz, mw, parent, cluster_only=False):
     """Multi-commune: the >=2 clustering guard on the scoped section. Single-commune
     AOCs (Auxey-Duresses, Beaune, Chablis): fall back to the TITLE-commune match,
     which is clean — matching the section directly leaked fragments of the
-    departement name ("La Cote" out of "Cote-d'Or")."""
+    departement name ("La Cote" out of "Cote-d'Or").
+
+    cluster_only=True disables the single-commune title fallback. Use for Italy:
+    an Italian GI named after a town (Canelli, Barolo, Bra) spans MANY comuni, so a
+    single-comune title write would UNDER-represent and regress the honest province-
+    level (name_nuts3) approximation. Only the genuinely-enumerated short lists that
+    the summary sheet actually names ("comuni di Vittoria, Comiso, Acate...") should
+    win — those come through resolve_lau's >=2 cluster."""
+    if cluster_only:
+        # IT/ES: match ONLY inside the enumerated commune-list span; skip province-level
+        # and single-comune sheets (they stay at their honest province floor / go to 1.2).
+        if _PROVINCE_COUNT.search(sec):
+            return set()
+        span = commune_span(sec)
+        return resolve_lau(span, countries, gaz, mw, parent) if span else set()
     codes = resolve_lau(sec, countries, gaz, mw, parent)
     if codes:
         return codes
@@ -103,7 +158,22 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--country", required=True)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--offset", type=int, default=0,
+                    help="skip N targets — for chunked runs (the headless chromium context "
+                         "hard-crashes over long runs, so process ~50 at a time)")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--cluster-only", action="store_true",
+                    help="disable single-commune title fallback (safe for IT/ES where a "
+                         "title-named town spans many comuni)")
+    ap.add_argument("--all-coarse", action="store_true",
+                    help="target EVERY coarse GI, not only those whose (truncated, "
+                         "unreliable) stored geographical_area carries a commune marker. "
+                         "The PDF section-scan + resolve_lau cluster guard is the real "
+                         "filter; the stored text often lacks the list entirely.")
+    ap.add_argument("--revalidate", action="store_true",
+                    help="re-check EXISTING annex_lau rows against the current (fixed) "
+                         "resolver. Rows that no longer resolve are CLEARED (geometry set "
+                         "NULL) so phase C/C6 can re-floor them to their honest NUTS level.")
     a = ap.parse_args()
 
     roster = requests.get(ROSTER, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"}, timeout=120).json()
@@ -114,28 +184,47 @@ def main():
     cur = c.cursor()
     print("[annex] loading LAU gazetteer...", flush=True)
     gaz, mw, parent = load_lau_gazetteer(cur)
+    if a.revalidate:
+        where = " AND geo_geom_confidence='annex_lau'"
+    else:
+        marker = "" if a.all_coarse else \
+            " AND geographical_area ~* 'commune|comuni|t[ée]rmino|concelho|gemeinde|localit'"
+        where = marker + " AND (geo_geom_confidence LIKE 'name_nuts%%' OR geo_shape IS NULL)"
     cur.execute("""SELECT file_number, protected_name, countries FROM gi_details
-        WHERE %s=ANY(countries) AND geographical_area ~* 'commune|comuni|t[ée]rmino|concelho|gemeinde|localit'
-          AND (geo_geom_confidence LIKE 'name_nuts%%' OR geo_shape IS NULL)
-        ORDER BY protected_name""" + (f" LIMIT {a.limit}" if a.limit else ""), (a.country,))
+        WHERE %s=ANY(countries)""" + where + """
+        ORDER BY protected_name""" + (f" LIMIT {a.limit}" if a.limit else "")
+        + (f" OFFSET {a.offset}" if a.offset else ""), (a.country,))
     rows = cur.fetchall()
     print(f"[annex] targets: {len(rows)}")
 
-    stats = {"no_sheet": 0, "no_pdf": 0, "no_section": 0, "no_match": 0, "resolved": 0}
+    stats = {"no_sheet": 0, "no_pdf": 0, "no_section": 0, "no_match": 0, "resolved": 0, "cleared": 0}
+    def clear(fn):
+        """Revert a false-positive annex_lau row to unmapped so phase C/C6 re-floors it."""
+        cur.execute("""UPDATE gi_details SET geo_shape=NULL, geo_centroid=NULL,
+            geo_area_km2=NULL, geo_geometry=NULL, geo_lau=NULL, geo_nuts=NULL,
+            geo_geom_confidence=NULL WHERE file_number=%s""", (fn,))
+        stats["cleared"] += 1
+
     with Browser() as br:
         for fn, nm, ctry in rows:
             aid = sheet.get(fn)
             if not aid:
-                stats["no_sheet"] += 1; continue
+                stats["no_sheet"] += 1; continue           # transient/roster — never clear
             data = br.pdf(str(aid))
             if not data:
-                stats["no_pdf"] += 1; continue
+                stats["no_pdf"] += 1; continue              # transient fetch — never clear
             sec = geo_section(pdf_text(data))
             if not sec:
-                stats["no_section"] += 1; continue
-            codes = resolve_annex(sec, nm, ctry or [], gaz, mw, parent)
+                stats["no_section"] += 1
+                if a.revalidate and not a.dry_run:
+                    clear(fn)
+                continue
+            codes = resolve_annex(sec, nm, ctry or [], gaz, mw, parent, cluster_only=a.cluster_only)
             if not codes:
-                stats["no_match"] += 1; continue
+                stats["no_match"] += 1
+                if a.revalidate and not a.dry_run:
+                    clear(fn)                               # fixed logic rejects it -> revert
+                continue
             stats["resolved"] += 1
             if a.dry_run:
                 cur2 = c.cursor(); cur2.execute("SELECT string_agg(name,', ') FROM gisco_units WHERE unit_code=ANY(%s)", (list(codes),))
