@@ -1,74 +1,67 @@
 """
-Fill gi_details.competent_authority from the GIView technical documents.
+Fill gi_details.competent_authority from the GIView "Country authorities" card.
 
-The authority is stated in the tech doc, but the FORMAT varies and it lives in more than
-one attachment:
-  - spirit drinks: a "Contact details / Applicant name and title" block,
-  - food PDO/PGI: the control body ("Consorzio ...", "Consejo Regulador ...", "Groupement
-    ...", "autorité compétente ...", "zuständige Behörde ..."),
-  - wine single-documents: usually OMIT it (nothing to extract).
+Every GI profile on GIView (EUIPO) carries a Country-authorities card. It is served by two
+backend API calls (both work server-side, no browser needed):
 
-So we fetch BOTH the summary sheet AND the first publications attachment, run pdftotext,
-and try a set of multilingual anchors. Idempotent: only fills NULL rows; self-resuming.
-competent_authority is jsonb (a scalar string).
+  1. GET  /giview/api/geographical-indications/{EUGI-guid}?language=EN
+         -> extendedData.countryAuthorities = [{id, representative}]
+  2. POST /giview/api/country-authorities/search   body {"countryAuthorityIds": [...]}
+         -> records = [{id, name, ...}]     (name = the competent authority)
 
-  python3.12 scripts/gi_fill_competent_authority.py --dry-run --limit 60
-  python3.12 scripts/gi_fill_competent_authority.py            # full crawl (background)
+Idempotent: only fills NULL competent_authority rows; self-resuming. competent_authority
+is jsonb (a scalar string).
+
+  python3.12 scripts/gi_fill_competent_authority.py --dry-run --limit 20
+  python3.12 scripts/gi_fill_competent_authority.py            # full (background)
 """
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import psycopg2
 import requests
 from core.config import settings
-from gi_geo_annex_fetch import ROSTER, Browser, pdf_text
 
-# ordered anchors; the first clean capture wins
-_ANCHORS = [
-    re.compile(r"Applicant name and title\s*\n\s*Applicant name and title\s+([^\n]{3,90})", re.I),
-    re.compile(r"name and address of the (?:competent authorit\w+|applicant|group)[^\n]*\n+\s*([A-ZÀ-Ú][^\n]{3,90})", re.I),
-    re.compile(r"\b(Consorzio\s+(?:di\s+)?[Tt]utela[^\n,;.]{2,70})"),
-    re.compile(r"\b(Consejo\s+Regulador[^\n,;.]{2,70})"),
-    re.compile(r"\b(Agrupaci[óo]n[^\n,;.]{2,70})"),
-    re.compile(r"\b(Groupement[^\n,;.]{2,70})"),
-    re.compile(r"autorit[ée]s?\s+comp[ée]tentes?\s*:?\s*\n?\s*([A-ZÀ-Ú][^\n]{3,90})", re.I),
-    re.compile(r"autoridad(?:es)?\s+competentes?\s*:?\s*\n?\s*([A-ZÀ-Ú][^\n]{3,90})", re.I),
-    re.compile(r"autorit[àa]\s+competente\s*:?\s*\n?\s*([A-ZÀ-Ú][^\n]{3,90})", re.I),
-    re.compile(r"zust[äa]ndige\s+Beh[öo]rde\s*:?\s*\n?\s*([A-ZÀ-Ú][^\n]{3,90})", re.I),
-]
-_JUNK = re.compile(r"^(the|le|la|el|il|der|die|das|n/?a|none|\W+)$", re.I)
+GIVIEW = "https://www.tmdn.org/giview/api"
+HDR = {"User-Agent": "Mozilla/5.0", "Accept": "application/json", "Content-Type": "application/json"}
 
 
-def extract_authority(txt: str) -> str | None:
-    for pat in _ANCHORS:
-        m = pat.search(txt)
-        if not m:
+def gi_authority_ids(s, guid):
+    """[(id, representative)] for a GI, or None on failure."""
+    try:
+        r = s.get(f"{GIVIEW}/geographical-indications/{guid}?language=EN", headers=HDR, timeout=30)
+    except Exception:
+        return None
+    if r.status_code != 200:
+        return None
+    ed = (r.json() or {}).get("extendedData") or {}
+    return [(x.get("id"), x.get("representative")) for x in (ed.get("countryAuthorities") or []) if x.get("id")]
+
+
+def resolve_names(s, ids):
+    """id -> name, resolved in batches via the search endpoint."""
+    out = {}
+    ids = list(ids)
+    for i in range(0, len(ids), 50):
+        chunk = ids[i:i + 50]
+        try:
+            r = s.post(f"{GIVIEW}/country-authorities/search", headers=HDR,
+                       data=json.dumps({"countryAuthorityIds": chunk}), timeout=30)
+        except Exception:
             continue
-        val = " ".join(m.group(1).split()).strip(" .,:;-")
-        if len(val) >= 4 and not _JUNK.match(val):
-            return val[:200]
-    return None
-
-
-def attachments(entry) -> list[str]:
-    """summary sheet first, then numeric publications attachments (the fuller docs)."""
-    out = []
-    s = (entry.get("summarySheets") or [{}])[0].get("uri")
-    if s:
-        out.append(str(s))
-    for p in (entry.get("publications") or []):
-        u = str(p.get("uri", ""))
-        if u.isdigit():
-            out.append(u)
-    return out[:3]
+        if r.status_code == 200:
+            for rec in (r.json() or {}).get("records") or []:
+                nm = " ".join((rec.get("name") or "").split()).strip()
+                if rec.get("id") and nm:
+                    out[rec["id"]] = nm[:400]
+    return out
 
 
 def main():
@@ -77,46 +70,50 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     a = ap.parse_args()
 
-    roster = requests.get(ROSTER, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"}, timeout=120).json()
-    by_fn = {x["fileNumber"]: x for x in roster if x.get("fileNumber")}
-
     c = psycopg2.connect(settings.DATABASE_URL, connect_timeout=20); c.autocommit = True
     cur = c.cursor()
-    cur.execute("""SELECT file_number, protected_name FROM gi_details
-        WHERE competent_authority IS NULL ORDER BY protected_name"""
-        + (f" LIMIT {a.limit}" if a.limit else ""))
+    cur.execute("""SELECT file_number, protected_name, gi_identifier FROM gi_details
+        WHERE competent_authority IS NULL AND gi_identifier IS NOT NULL
+        ORDER BY protected_name""" + (f" LIMIT {a.limit}" if a.limit else ""))
     rows = cur.fetchall()
     print(f"[ca] targets: {len(rows)}", flush=True)
 
-    stats = {"filled": 0, "no_attach": 0, "no_pdf": 0, "no_anchor": 0}
-    with Browser() as br:
-        for fn, nm in rows:
-            atts = attachments(by_fn.get(fn, {}))
-            if not atts:
-                stats["no_attach"] += 1; continue
-            authority = None
-            fetched = False
-            for aid in atts:
-                data = br.pdf(aid)
-                if not data:
-                    continue
-                fetched = True
-                authority = extract_authority(pdf_text(data))
-                if authority:
-                    break
-            if not fetched:
-                stats["no_pdf"] += 1; continue
-            if not authority:
-                stats["no_anchor"] += 1; continue
-            stats["filled"] += 1
-            if a.dry_run:
-                print(f"  [{','.join(str(x) for x in [])}] {nm[:30]:30} -> {authority}")
-            else:
-                cur.execute("UPDATE gi_details SET competent_authority=%s::jsonb WHERE file_number=%s",
-                            (json.dumps(authority), fn))
-                if stats["filled"] % 25 == 0:
-                    print(f"  ...{stats['filled']} filled", flush=True)
-    print(f"[ca] {stats}")
+    s = requests.Session()
+    # pass 1: per-GI authority id refs
+    per_gi = {}
+    all_ids = set()
+    stats = {"no_detail": 0, "no_authority": 0}
+    for n, (fn, nm, guid) in enumerate(rows, 1):
+        refs = gi_authority_ids(s, guid)
+        if refs is None:
+            stats["no_detail"] += 1; continue
+        if not refs:
+            stats["no_authority"] += 1; continue
+        per_gi[fn] = refs
+        all_ids.update(i for i, _ in refs)
+        if n % 200 == 0:
+            print(f"  ...scanned {n}/{len(rows)}", flush=True)
+        time.sleep(0.12)
+
+    # pass 2: resolve ids -> names
+    names = resolve_names(s, all_ids)
+    print(f"[ca] resolved {len(names)} authority names for {len(all_ids)} ids", flush=True)
+
+    # pass 3: write (prefer the representative authority)
+    filled = 0
+    for fn, refs in per_gi.items():
+        rep = [i for i, r in refs if r] or [i for i, _ in refs]
+        chosen = next((names[i] for i in rep if i in names), None) \
+            or next((names[i] for i, _ in refs if i in names), None)
+        if not chosen:
+            continue
+        filled += 1
+        if a.dry_run:
+            print(f"  {fn:16} -> {chosen[:70]}")
+        else:
+            cur.execute("UPDATE gi_details SET competent_authority=%s::jsonb WHERE file_number=%s",
+                        (json.dumps(chosen), fn))
+    print(f"[ca] filled: {filled} | {stats}")
     c.close()
 
 
