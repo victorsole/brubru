@@ -119,8 +119,9 @@ def main():
     # coarse target: anything not already at commune precision
     cur.execute("""SELECT file_number, protected_name, countries, geographical_area, geo_geom_confidence
         FROM gi_details
-        WHERE geo_geom_confidence IS NULL
-           OR geo_geom_confidence NOT IN ('name_lau','annex_lau','union','exact_nuts')
+        WHERE (geo_geom_confidence IS NULL
+           OR geo_geom_confidence NOT IN ('name_lau','annex_lau','text_lau','union','exact_nuts'))
+          AND COALESCE(geo_refine_track,'') <> 'crosswalk'
         ORDER BY protected_name""")
     rows = cur.fetchall()
 
@@ -159,7 +160,7 @@ def main():
             cur.execute("UPDATE gi_details SET geo_refine_track=%s WHERE file_number=%s", (track, fn))
         # precise rows get an explicit 'precise' marker for a complete picture
         cur.execute("""UPDATE gi_details SET geo_refine_track='precise'
-            WHERE geo_geom_confidence IN ('name_lau','annex_lau','union','exact_nuts')""")
+            WHERE geo_geom_confidence IN ('name_lau','annex_lau','text_lau','union','exact_nuts')""")
         print(f"\n[classify] wrote geo_refine_track for {len(tagged)} coarse + precise rows")
     c.close()
 
