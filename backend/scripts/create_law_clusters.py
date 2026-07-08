@@ -157,6 +157,92 @@ LAW_PACKAGES = {
         'date_from': 2022
     },
 
+    'ehds_european_health_data_space': {
+        'name': 'EHDS - European Health Data Space',
+        'primary_celex': '32025R0327',  # EHDS Regulation
+        'description': (
+            'Regulation (EU) 2025/327 establishing the European Health Data Space, '
+            'the first sector-specific European data space. Grants natural persons '
+            'six substantive rights over their personal electronic health data '
+            '(access, insertion, rectification, portability, restriction, information '
+            'on access) in six priority categories (patient summaries, e-prescriptions, '
+            'e-dispensations, medical imaging, medical test results, discharge '
+            'reports). Establishes MyHealth@EU (Chapter II Section 3) for cross-border '
+            'primary use and HealthData@EU (Chapter IV Section 4) for cross-border '
+            'secondary use. Certifies EHR systems as CE-marked products with two '
+            'mandatory harmonised software components (European interoperability + '
+            'European logging, Annex II). Sets 17 minimum categories of electronic '
+            'health data for secondary use (Art 51) with 6 permitted purposes (Art 53) '
+            'and 5 prohibited uses (Art 54). Fines up to EUR 20 000 000 or 4 % of '
+            'worldwide turnover for re-identification or extraction from secure '
+            'processing environments. Amends Directive 2011/24/EU (Art 14 deleted '
+            'from 26 March 2031) and Regulation (EU) 2024/2847 (Cyber Resilience Act). '
+            'General application 26 March 2027; secondary use from 26 March 2029; '
+            'EHR systems from 26 March 2031; third-country participation from 26 March '
+            '2035.'
+        ),
+        'applicability': (
+            'Every EU natural person (rights holder) and every EHR system placed on '
+            'the market or put into service in the Union (including systems '
+            'manufactured and used within Union health institutions and Software-as-'
+            'a-Service EHR systems). All healthcare providers must connect to their '
+            'national contact point for digital health. All pharmacies (including '
+            'online pharmacies) must be able to dispense electronic prescriptions '
+            'issued in other Member States. For secondary use: every health data '
+            'holder in the healthcare or care sectors (public authorities, private '
+            'entities, wellness application developers, research organisations, '
+            'mortality registries, Union institutions) — except natural-person '
+            'individual researchers and microenterprises (Art 50 exemption). Health '
+            'data users may be natural or legal persons including Union institutions. '
+            'Manufacturers of medical devices, in vitro diagnostic medical devices '
+            'and high-risk AI systems that claim interoperability with EHR systems '
+            'are covered by Chapter III. Wellness applications claiming interoperability '
+            'with EHR systems must carry a label (Art 47).'
+        ),
+        'policy_area': 'Public Health',
+        'priority_level': 'high',
+        'keywords': [
+            'ehds', 'european health data space', 'health data space',
+            '2025/327', '32025r0327', 'regulation 2025/327', 'regulation (eu) 2025/327',
+            'myhealth@eu', 'myhealth eu', 'healthdata@eu', 'healthdata eu',
+            'electronic health record', 'ehr system', 'ehr systems',
+            'personal electronic health data', 'electronic health data',
+            'primary use of health data', 'secondary use of health data',
+            'priority categories of personal electronic health data',
+            'patient summary', 'patient summaries',
+            'electronic prescription', 'electronic prescriptions',
+            'electronic dispensation', 'electronic dispensations',
+            'medical imaging study', 'medical test results', 'discharge report',
+            'european electronic health record exchange format',
+            'european interoperability software component',
+            'european logging software component',
+            'harmonised software components of ehr systems',
+            'digital health authority', 'digital health authorities',
+            'health data access body', 'health data access bodies',
+            'health data holder', 'health data user', 'health data applicant',
+            'data permit', 'health data request', 'health data access application',
+            'trusted health data holder', 'secure processing environment',
+            'wellness application', 'wellness applications',
+            'data quality and utility label', 'dataset catalogue',
+            'eu dataset catalogue', 'dataset of high impact for secondary use',
+            'ehds board', 'european health data space board',
+            'national contact point for digital health',
+            'national contact point for secondary use',
+            'union health data access service',
+            'european digital testing environment',
+            'eu database for registration of ehr systems and wellness applications',
+            'health professional access service', 'electronic health data access service',
+            're-identification', 're-identify',
+            'right to opt out primary use', 'right to opt out secondary use',
+            'directive 2011/24/eu', 'ehealth network',
+            'gdpr', 'data governance act', 'data act', 'ai act',
+            'cyber resilience act', 'nis 2', 'medical device regulation', 'ivdr',
+            'genetic data', 'genomic data', 'omics data', 'biobank',
+            'ce marking ehr', 'declaration of conformity ehr',
+        ],
+        'date_from': 2025
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary
