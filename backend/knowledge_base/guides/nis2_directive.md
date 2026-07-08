@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Wednesday 8 July 2026 — FOUR MEMBER STATES REFERRED TO THE COURT OF JUSTICE FOR NON-TRANSPOSITION):** In its **July 2026 infringements package**, the Commission decided to **refer Ireland, Spain, France and the Netherlands to the Court of Justice of the European Union** for failing to transpose the NIS2 cybersecurity rules (Directive (EU) 2022/2555) into national law. The transposition deadline was **17 October 2024** — nearly two years earlier — and these four had still not notified complete transposition measures. This is the enforcement escalation stage (reasoned-opinion phase having lapsed): the Court can ultimately impose financial penalties under Article 260 TFEU. Source: EC July infringements package, 8 July 2026 (ec.europa.eu/commission/presscorner — IP referral). NIS2 transposition remains uneven across the Union; this raises the compliance-risk profile for essential and important entities established in the four referred states, which may face national frameworks that are late, partial, or retroactive.
 - **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2022-2555_nis2/
 - **Instrument:** Directive (EU) 2022/2555 (CELEX 32022L2555), OJ L 333, 27.12.2022; the EU's horizontal cybersecurity framework
 - **Legal base:** Article 114 TFEU (internal market approximation)

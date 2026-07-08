@@ -1,6 +1,7 @@
 # EU Competition Law Enforcement
 
 ## QUICK FACTS
+- **LATEST (Tuesday 7-8 July 2026 — ANNUAL REPORT ADOPTED + SANOFI MARKET TEST + JULY INFRINGEMENTS)**: The European Parliament **adopted its resolution on Competition policy — annual report 2025** at the July Strasbourg plenary (adopted text in the 7 July 2026 sitting, europarl.europa.eu/doceo, TA-10-2026-07-07). On **8 July 2026** DG COMP opened a **market test on commitments offered by Sanofi** to address possible anti-competitive conduct in the promotion of a flu vaccine for vulnerable patients (Article 102 TFEU concerns; feedback invited from third parties before the Commission decides whether to make the commitments binding). The same day's July infringements package referred several Member States to the Court of Justice (see `nis2_directive` for the NIS2 cybersecurity referrals of IE/ES/FR/NL). Source: EC Press Corner, 7-8 July 2026.
 - Topic: EU antitrust enforcement -- Articles 101 and 102 TFEU
 - Legal basis: TFEU Articles 101-109
 - Article 101: Prohibits anti-competitive agreements (price fixing, market sharing, bid rigging)

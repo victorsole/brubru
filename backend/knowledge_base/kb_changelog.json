@@ -2,6 +2,66 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-08",
+      "action": "added",
+      "guide": "eu_livestock_strategy_protein_plan",
+      "title": "EU Livestock Strategy and Protein Action Plan",
+      "summary": "New guide: College adopted Livestock Strategy + Protein Action Plan (7 Jul)",
+      "refs": [
+        "52026DC0576",
+        "52026DC0355"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "EP competition annual report 2025 adopted (7 Jul); Sanofi flu-vaccine commitments market test (8 Jul)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "cybersecurity_act",
+      "title": "EU Cybersecurity Act",
+      "summary": "Action Plan on Cybersecurity and AI factsheet (7 Jul); NIS2 transposition referrals",
+      "refs": [
+        "32019R0881"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "nis2_directive",
+      "title": "NIS2 Directive",
+      "summary": "July infringements: Ireland, Spain, France, Netherlands referred to CJEU for non-transposition",
+      "refs": [
+        "32022L2555"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "eu_solidarity_fund_eusf",
+      "title": "EU Solidarity Fund",
+      "summary": "EP adopted the 144.1m mobilisation for Romania, Cyprus, Spain (2025 disasters), 7 Jul",
+      "refs": [
+        "32002R2012"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "Plenary re-vote under urgency (Tue 7 Jul 331-304-11); binding vote Thu 9 Jul (361 needed)",
+      "refs": [
+        "32021R1232",
+        "2025/0429(COD)"
+      ]
+    },
+    {
       "date": "2026-07-03",
       "action": "updated",
       "guide": "biotech_act",
