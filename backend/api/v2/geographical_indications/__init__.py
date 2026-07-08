@@ -16,8 +16,13 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 from ..economy_endpoints import register_resource
+from .details import register_gi_details
 
 router = APIRouter(prefix="/geographical-indications")
+
+# gi_details layer: harvested area text, competent authority, and the resolved GEOMETRY
+# (GeoJSON) — the only place the mapped polygons are served.
+register_gi_details(router)
 
 register_resource(
     router, body_code="commission", item_type="geographical_indication",
