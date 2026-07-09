@@ -2,6 +2,65 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "Derogation extension ADOPTED by plenary 9 Jul; rejection failed to reach 361; applies until 3 Apr 2028",
+      "refs": [
+        "2025/0429(COD)",
+        "32021R1232"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "digital_euro_project",
+      "title": "Digital Euro",
+      "summary": "Plenary confirms negotiating mandate 9 Jul (416/169/22); trilogues open with Irish Presidency; orphan guide fixed with 16 triggers",
+      "refs": [
+        "2023/0212(COD)",
+        "2023/0208(COD)"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "eu_trade_policy",
+      "title": "EU Trade Policy",
+      "summary": "Parliament backs modernised EU-Mexico Global Agreement 9 Jul",
+      "refs": []
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "Plenary backs faster permit-granting for grids and renewables 9 Jul",
+      "refs": []
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "General Court dismisses Apple's three actions 8 Jul; App Store + iOS gatekeeper designation upheld",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "added",
+      "guide": "critical_medicines_alliance",
+      "title": "Critical Medicines Alliance (CMA)",
+      "summary": "New guide: DG HERA/DG SANTE consultative platform on medicine shortages and supply-chain resilience, launched 24 April 2024, 250+ members; feeds the Critical Medicines Act.",
+      "refs": [
+        "COM(2025)102",
+        "2025/0102(COD)"
+      ]
+    },
+    {
       "date": "2026-07-08",
       "action": "added",
       "guide": "eu_livestock_strategy_protein_plan",
