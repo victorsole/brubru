@@ -653,6 +653,7 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
     started = datetime.now(timezone.utc)
     results: dict = {}
     ok_count = 0
+    first_fail: str = ""  # "body: <stderr/return summary>" for the first non-success body
     try:
         for body in bodies:
             res = await _run_script_async(
@@ -662,6 +663,10 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
             results[body] = res.get("status")
             if res.get("status") == "success":
                 ok_count += 1
+            elif not first_fail:
+                _detail = (res.get("stderr_tail") or res.get("error")
+                           or res.get("reason") or f"rc={res.get('returncode')}")
+                first_fail = f"{body}: {str(_detail)[:400]}"
 
         # Tenderator translations for economy_items funding rows, AFTER all
         # bodies so freshly-arrived foreign agency rows get their 6-language
@@ -682,7 +687,7 @@ async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
                 status=("success" if ok_count else "failed"),
                 items_added=ok_count, started_at=started,
                 finished_at=datetime.now(timezone.utc),
-                error=(None if ok_count else "0 bodies synced successfully"),
+                error=(None if ok_count else f"{ok_count}/{len(bodies)} bodies ok; first_fail {first_fail}"),
             )
         finally:
             db.close()
