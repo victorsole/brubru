@@ -6351,9 +6351,46 @@ class ContextBuilder:
             logger.debug("[today-block] legislative_carriages lookup skipped: %s", e)
             # non-fatal
 
+        # Section D: EP plenary adopted texts in the last 5 days (verified DB).
+        # Self-gating: texts_adopted only gains rows around a plenary sitting, so
+        # this section is empty off-week and populated during/after a plenary.
+        # Fixes the gap where "brief me on today's plenary agenda" fell back to the
+        # Commissioner-diary calendar rows in Section A (audit defect D3, 10 Jul 2026).
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                ta_rows = db.execute(_sql_text(
+                    """
+                    SELECT ta_reference, title, procedure_ref, adoption_date
+                    FROM texts_adopted
+                    WHERE adoption_date >= :cutoff
+                    ORDER BY adoption_date DESC
+                    LIMIT 20
+                    """
+                ), {"cutoff": today - timedelta(days=5)}).fetchall()
+            finally:
+                db.close()
+            if ta_rows:
+                lines.append(
+                    "EP plenary adopted texts in the last 5 days (verified DB -- this IS the current"
+                    " plenary's voting record; use it for 'today's plenary' / 'this week's plenary' /"
+                    " plenary-agenda questions):"
+                )
+                for r in ta_rows:
+                    taref, ta_title, proc, adopted = r
+                    d = adopted.date().isoformat() if hasattr(adopted, "date") else str(adopted)[:10]
+                    procs = f" [{proc}]" if proc else ""
+                    lines.append(f"- {d} {taref}: {(ta_title or '')[:150]}{procs}")
+                lines.append("")
+        except Exception as e:
+            logger.debug("[today-block] texts_adopted lookup skipped: %s", e)
+            # non-fatal
+
         # CRITICAL instruction for the model
         lines.append("CRITICAL -- when the user asks about 'today' / 'hoy' / 'avui' / 'aujourd\\'hui' / 'this week' / 'esta semana':")
         lines.append("- Anchor every claim in the TODAY BLOCK above (today's date, week type, verified events).")
+        lines.append("- For 'today's plenary' / 'this week's plenary' / plenary-agenda / 'what is Parliament voting on' questions, answer from the EP plenary adopted texts section above (real TA references + procedure refs), NOT from Commissioner diary entries in the events list.")
         lines.append("- Do NOT describe previous weeks or confabulate committee meetings from past dates as if they were current.")
         lines.append("- If no verified event is listed for today, say so explicitly and point to the current EP week type.")
         lines.append("- Never invent a Council/ECOFIN/Eurogroup or committee meeting on a date not present in the TODAY BLOCK.")

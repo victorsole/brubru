@@ -548,6 +548,9 @@ class AIService:
         # Strip leaked internal context markers from response
         assistant_message = self._strip_context_markers(assistant_message)
 
+        # ASCII-fold Unicode hyphens inside URLs so eur‑lex (U+2011) links resolve
+        assistant_message = self._normalise_url_hyphens(assistant_message)
+
         # Strip a self-introduction greeting the model sometimes bolts onto a
         # real answer ("Hello! I'm Brubru ... I can help you with ...\n\n<answer>")
         assistant_message = self._strip_leading_greeting(assistant_message)
@@ -2175,6 +2178,14 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         cleaned = re.sub(r'\s*\[[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\]', ' ', cleaned)
         # 2) bare bracketed filenames ([COM_2025_847.pdf], [report.docx])
         cleaned = re.sub(r'\s*\[[A-Za-z0-9_\-]+\.(?:pdf|docx?|xml|html?|txt|json)\]', ' ', cleaned, flags=re.IGNORECASE)
+        # 3) bracketed internal context-BLOCK labels the model echoes from the
+        # injected section headers, e.g. [Today Block] (from "=== TODAY BLOCK ==="),
+        # [Web Summary] (web-search source label). Audit defect D2, 10 Jul 2026:
+        # these are Title-Case with a space, so the ALL-CAPS-underscore rule (1)
+        # never caught them and they leaked verbatim (11x in one plenary-brief
+        # answer). Explicit allowlist so legitimate bracketed prose is never touched.
+        cleaned = re.sub(r'\s*\[\s*(?:end\s+)?today\s+block\s*\]', ' ', cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r'\s*\[\s*web\s+summary\s*\]', ' ', cleaned, flags=re.IGNORECASE)
         # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
         # Collapse repeated commas/periods left by truncated enumerations
         # ("2 December 2027,,,." -> "2 December 2027.") -- audit defect D4, 22 Jun 2026.
@@ -2188,6 +2199,38 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         if cleaned != text.strip():
             logger.info(f"Stripped leaked context markers from response")
         return cleaned
+
+    # Unicode hyphen/dash code points a model may "prettify" into a URL, all of
+    # which break the link (a browser will not resolve eur‑lex.europa.eu).
+    _URL_HYPHENS = str.maketrans({
+        "‐": "-",  # HYPHEN
+        "‑": "-",  # NON-BREAKING HYPHEN (the confirmed offender)
+        "‒": "-",  # FIGURE DASH
+        "–": "-",  # EN DASH
+        "—": "-",  # EM DASH
+        "―": "-",  # HORIZONTAL BAR
+        "−": "-",  # MINUS SIGN
+    })
+
+    def _normalise_url_hyphens(self, text: str) -> str:
+        """
+        ASCII-fold Unicode hyphens/dashes that appear INSIDE http(s) URLs.
+
+        Sonnet occasionally typographically prettifies a hyphen inside a URL,
+        e.g. ``https://eur‑lex.europa.eu/...`` with a NON-BREAKING HYPHEN
+        (U+2011). Browsers cannot resolve such a host, so every EUR-Lex CELEX
+        link in the answer is dead when clicked (audit defect D1, 10 Jul 2026).
+        Only characters inside a matched URL token are folded; ordinary prose
+        (where an en/em dash is legitimate typography) is never touched.
+        """
+        if not text:
+            return text
+
+        def _fold(match: "re.Match") -> str:
+            return match.group(0).translate(self._URL_HYPHENS)
+
+        # A URL token runs until whitespace or a markdown/paren delimiter.
+        return re.sub(r'https?://[^\s\)\]<>"]+', _fold, text)
 
     def _strip_leading_greeting(self, message: str) -> str:
         """
