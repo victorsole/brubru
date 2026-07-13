@@ -95,7 +95,7 @@ class BrubruCuration(BaseModel):
 _DEEP_DIVE_BASE = "https://brubru.beresol.eu/eu-inc"
 
 _EU_INC = BrubruCuration(
-    as_of="2026-06-04",
+    as_of="2026-07-13",
     headline=(
         "EU Inc. (the 28th Regime): a single, optional, fully-digital EU company "
         "form, now in the European Parliament's JURI committee."
@@ -114,11 +114,17 @@ _EU_INC = BrubruCuration(
         "Parliament, with a political commitment to conclude by the end of 2026."
     ),
     plain_status=(
-        "Awaiting committee decision. The Commission tabled the proposal on 18 March "
-        "2026; the European Parliament referred it to the JURI committee on 18 May 2026 "
-        "(committee dossier JURI/10/05459). No committee report or vote has been tabled "
-        "yet. The first committee debate was a JURI exchange of views on 4 May 2026. The "
-        "three institutions have committed to concluding negotiations by the end of 2026."
+        "In committee. During the 13-17 July 2026 committee week (the last before the "
+        "summer recess of 27 July to 21 August), EU Inc. is on the agenda of three "
+        "committees on the same day, Wednesday 15 July 2026: the lead committee JURI "
+        "(committee consideration, rapporteur Repasi), ECON as an opinion-giving committee, "
+        "and EMPL for an exchange of views with stakeholders on the 28th regime. This is "
+        "the first concurrent committee-stage activity across all three since the file was "
+        "referred. No committee report or final committee vote has been tabled yet; the "
+        "Commission tabled the proposal on 18 March 2026 and the European Parliament "
+        "referred it to JURI on 18 May 2026 (committee dossier JURI/10/05459). The first "
+        "committee debate was a JURI exchange of views on 4 May 2026. The three institutions "
+        "have committed to concluding negotiations by the end of 2026."
     ),
     deep_dive={
         "en": f"{_DEEP_DIVE_BASE}/index.html",
@@ -163,9 +169,11 @@ _EU_INC = BrubruCuration(
         CuratedShadow(name="Arash Saeidi", group="The Left", country="France"),
     ],
     committee_notes=(
-        "JURI is lead; ECON and EMPL give opinions; BUDG declined. As of 4 June 2026, "
-        "only JURI has debated EU Inc. (the 4 May exchange of views). EMPL and BUDG have "
-        "not. The six shadows span the entire political spectrum, from EPP to The Left."
+        "JURI is lead; ECON and EMPL give opinions; BUDG declined. In the 13-17 July 2026 "
+        "committee week the file reaches all three active committees at once: JURI, ECON and "
+        "EMPL each take it up on Wednesday 15 July 2026 (EMPL via a stakeholder exchange of "
+        "views), the first time the file is worked in three committees the same week. The "
+        "six shadows span the entire political spectrum, from EPP to The Left."
     ),
     timeline_highlights=[
         CuratedEvent(date="2025-12-17", event="EP own-initiative report A10-0269/2025 tabled (predecessor INL, 2025/2079(INL))."),
@@ -174,6 +182,7 @@ _EU_INC = BrubruCuration(
         CuratedEvent(date="2026-05-04", event="First JURI exchange of views on the proposal."),
         CuratedEvent(date="2026-05-18", event="JURI committee referral announced in plenary (dossier JURI/10/05459)."),
         CuratedEvent(date="2026-06-03", event="ECON adopts the companion '28th tax regime' report (2025/2211(INI))."),
+        CuratedEvent(date="2026-07-15", event="Committee week: EU Inc. on the agenda of JURI (lead), ECON (opinion) and EMPL (stakeholder exchange of views) the same day, the first concurrent three-committee activity on the file."),
         CuratedEvent(date="2026-12-31", event="Three-institution target to conclude negotiations."),
     ],
     key_debates=[
