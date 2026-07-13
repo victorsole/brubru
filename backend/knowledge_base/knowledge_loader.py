@@ -25,6 +25,26 @@ logger = logging.getLogger(__name__)
 # Maps keywords (lowercase) to guide file stems that should be surfaced
 # when those keywords appear in user queries
 GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
+    # /news 13 July 2026 — EP committee week (13-17 Jul): EU Inc. active in ECON+JURI+EMPL, BUDG on MFF successor programmes, long-term CSA Reg back at LIBE
+    'eu inc empl': ['28th_regime_innovation_act'],
+    'eu inc econ opinion': ['28th_regime_innovation_act'],
+    'eu inc committee week': ['28th_regime_innovation_act'],
+    '28th regime committee stage': ['28th_regime_innovation_act'],
+    'agoraeu programme': ['mff_2028_2034'],
+    'internal security fund 2028': ['mff_2028_2034'],
+    'justice programme 2028-2034': ['mff_2028_2034'],
+    'mff spending programmes': ['mff_2028_2034'],
+    'post-2027 spending programmes': ['mff_2028_2034'],
+    'erdf 2028-2034': ['mff_2028_2034'],
+    'esf 2028-2034': ['mff_2028_2034'],
+    'amif 2028-2034': ['mff_2028_2034'],
+    'budg spending programmes': ['mff_2028_2034'],
+    '2022 0155': ['eu_eprivacy_csam_derogation_2025_0429'],
+    'long-term csam regulation': ['eu_eprivacy_csam_derogation_2025_0429'],
+    'csa regulation': ['eu_eprivacy_csam_derogation_2025_0429'],
+    'child sexual abuse regulation': ['eu_eprivacy_csam_derogation_2025_0429'],
+    'detection order regulation': ['eu_eprivacy_csam_derogation_2025_0429'],
+    'csa regulation libe': ['eu_eprivacy_csam_derogation_2025_0429'],
     # /news 9 July 2026 — final plenary before recess: digital euro mandate, CSAM adopted, Apple/DMA, grids permitting, EU-Mexico
     # digital_euro_project was ORPHAN (0 triggers) — full multilingual set added 9 July 2026
     'digital euro': ['digital_euro_project'],

@@ -2,6 +2,40 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "CSAM derogation / long-term CSA Regulation",
+      "summary": "Long-term CSA Regulation 2022/0155 back on LIBE agenda 13 Jul (distinct from the 2025/0429 derogation)",
+      "refs": [
+        "2022/0155",
+        "2025/0429"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "BUDG examines the post-2027 successor spending programmes (ERDF, ESF, AMIF, ISF, Justice, AgoraEU, CFP, Euratom) on 15 Jul",
+      "refs": [
+        "2025/0238",
+        "2025/0239",
+        "2025/0540"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. (28th Regime)",
+      "summary": "Committee week 13-17 Jul: file active in JURI (lead), ECON and EMPL on 15 Jul",
+      "refs": [
+        "2026/0074",
+        "COM2026_321"
+      ]
+    },
+    {
       "date": "2026-07-10",
       "action": "updated",
       "guide": "eu_competitiveness_council_debate",

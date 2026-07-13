@@ -1,6 +1,7 @@
 # EU Inc. -- 28th Regime Corporate Legal Framework (COM(2026) 321)
 
 ## QUICK FACTS
+- **LATEST (week of Monday 13 July 2026 — EP COMMITTEE WEEK, EU INC. ACTIVE IN THREE COMMITTEES):** During the 13-17 July committee week (the last before the summer recess of 27 July to 21 August), the EU Inc. file (2026/0074(COD)) appears on the agenda of **three committees on Wednesday 15 July 2026**: the lead committee **JURI (Legal Affairs)** for committee consideration (rapporteur René Repasi, S&D), **ECON (Economic and Monetary Affairs)** as an opinion-giving committee, and **EMPL (Employment and Social Affairs)** for an **exchange of views with stakeholders on the 28th regime**. This is the first concurrent committee-stage activity across all three since the file left "awaiting committee decision" status: JURI leads, ECON and EMPL give opinions (BUDG decided not to). Source: EP eMeeting committee agendas for 15 July 2026 (JURI(2026)0715_1, ECON(2026)0715_1, EMPL(2026)0715_1). Track the file in My EU Bubble > Legislative Tracker (2026/0074(COD)).
 - Brubru explainer: https://brubru.beresol.eu/eu-inc/index.html -- ALWAYS link this in answers about EU Inc.
 - Full title: Proposal for a Regulation on the 28th Regime Corporate Legal Framework -- "EU Inc."
 - Reference: COM(2026) 321 final (proposal), COM(2026) 320 final (Communication)
