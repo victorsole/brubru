@@ -2,6 +2,16 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "eu_deforestation_regulation",
+      "title": "EU Deforestation Regulation (EUDR)",
+      "summary": "13 Jul 2026: Commission adopted Delegated Act simplifying Annex I product scope (removes leather, re-treaded tyres, soybeans-for-sowing, vulcanised-rubber articles, belts, vehicle seats) + Implementing Act for the EUDR Information System; application dates updated to 30 Dec 2026 / 30 Jun 2027",
+      "refs": [
+        "32023R1115"
+      ]
+    },
+    {
       "date": "2026-07-13",
       "action": "updated",
       "guide": "eu_eprivacy_csam_derogation_2025_0429",
