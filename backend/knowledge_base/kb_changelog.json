@@ -4,6 +4,17 @@
     {
       "date": "2026-07-14",
       "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. — 28th Regime Corporate Legal Framework",
+      "summary": "Added full comparative of the Repasi JURI draft report (PE790.143, 29 Jun 2026, 246 amendments) vs the Commission proposal: place-of-employment participation, Annex Ia sector exclusions, startup definition, steward-owned EU Inc. SO, listing ban, tightened AML control, Delaware-style dispute chapter; plus EMPL draft opinion + Bulgarian subsidiarity opinion",
+      "refs": [
+        "2026/0074(COD)",
+        "COM(2026)321"
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
       "guide": "eu_deforestation_regulation",
       "title": "EU Deforestation Regulation (EUDR)",
       "summary": "13 Jul 2026: Commission adopted Delegated Act simplifying Annex I product scope (removes leather, re-treaded tyres, soybeans-for-sowing, vulcanised-rubber articles, belts, vehicle seats) + Implementing Act for the EUDR Information System; application dates updated to 30 Dec 2026 / 30 Jun 2027",

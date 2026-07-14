@@ -95,7 +95,7 @@ class BrubruCuration(BaseModel):
 _DEEP_DIVE_BASE = "https://brubru.beresol.eu/eu-inc"
 
 _EU_INC = BrubruCuration(
-    as_of="2026-07-13",
+    as_of="2026-07-14",
     headline=(
         "EU Inc. (the 28th Regime): a single, optional, fully-digital EU company "
         "form, now in the European Parliament's JURI committee."
@@ -120,11 +120,14 @@ _EU_INC = BrubruCuration(
         "(committee consideration, rapporteur Repasi), ECON as an opinion-giving committee, "
         "and EMPL for an exchange of views with stakeholders on the 28th regime. This is "
         "the first concurrent committee-stage activity across all three since the file was "
-        "referred. No committee report or final committee vote has been tabled yet; the "
-        "Commission tabled the proposal on 18 March 2026 and the European Parliament "
-        "referred it to JURI on 18 May 2026 (committee dossier JURI/10/05459). The first "
-        "committee debate was a JURI exchange of views on 4 May 2026. The three institutions "
-        "have committed to concluding negotiations by the end of 2026."
+        "referred. On 29 June 2026 the lead rapporteur, Repasi, tabled his JURI draft report "
+        "(PE790.143, 246 amendments); an EMPL draft opinion (Danielsson, PE788.967) and a "
+        "Bulgarian subsidiarity reasoned opinion (PE790.116, unanimous) are tabled for the same "
+        "15 July meeting. No final committee vote has been tabled yet. The Commission tabled the "
+        "proposal on 18 March 2026 and the European Parliament referred it to JURI on 18 May 2026 "
+        "(committee dossier JURI/10/05459). The first committee debate was a JURI exchange of "
+        "views on 4 May 2026. The three institutions have committed to concluding negotiations by "
+        "the end of 2026."
     ),
     deep_dive={
         "en": f"{_DEEP_DIVE_BASE}/index.html",
@@ -146,6 +149,20 @@ _EU_INC = BrubruCuration(
         CuratedKeyFact(label="Target date of application", value="2028"),
         CuratedKeyFact(label="Estimated impact", value="~308,000 EU Inc. companies over 10 years; EUR 328-440m in savings"),
         CuratedKeyFact(label="Negotiation target", value="Agreement by end of 2026"),
+        CuratedKeyFact(
+            label="Rapporteur draft report (PE790.143, 29 Jun 2026)",
+            value=(
+                "246 amendments. Keeps the Commission's ambition (EUR 0 capital, fast digital "
+                "formation, employee equity, simplified insolvency) but re-engineers it around "
+                "anti-circumvention: employee participation follows the place of employment (not "
+                "the registered office); low-innovation sectors excluded via a new Annex Ia; "
+                "'innovative' deleted and 'startup' hard-defined (<100 staff, <=EUR 10m, <10 years); "
+                "tightened preventive AML control; a voluntary steward-owned 'EU Inc. SO'; share "
+                "listing barred unless the company first converts to a public limited company; "
+                "longer creditor/worker protection windows; and a new dispute-resolution chapter "
+                "plus public case-law database and digital platform."
+            ),
+        ),
     ],
     lead_committee=CuratedActor(
         committee="JURI",
@@ -182,7 +199,9 @@ _EU_INC = BrubruCuration(
         CuratedEvent(date="2026-05-04", event="First JURI exchange of views on the proposal."),
         CuratedEvent(date="2026-05-18", event="JURI committee referral announced in plenary (dossier JURI/10/05459)."),
         CuratedEvent(date="2026-06-03", event="ECON adopts the companion '28th tax regime' report (2025/2211(INI))."),
-        CuratedEvent(date="2026-07-15", event="Committee week: EU Inc. on the agenda of JURI (lead), ECON (opinion) and EMPL (stakeholder exchange of views) the same day, the first concurrent three-committee activity on the file."),
+        CuratedEvent(date="2026-06-22", event="EMPL tables its draft opinion (Danielsson, PE788.967)."),
+        CuratedEvent(date="2026-06-29", event="Rapporteur Repasi tables the lead JURI draft report (PE790.143), 246 amendments: place-of-employment participation, Annex Ia sector exclusions, steward-owned EU Inc. SO, listing ban, tightened AML control, Delaware-style dispute chapter."),
+        CuratedEvent(date="2026-07-15", event="Committee week: EU Inc. on the agenda of JURI (lead, consideration of the Repasi draft report), ECON (opinion) and EMPL (stakeholder exchange of views) the same day, with a Bulgarian subsidiarity reasoned opinion (PE790.116) also tabled."),
         CuratedEvent(date="2026-12-31", event="Three-institution target to conclude negotiations."),
     ],
     key_debates=[
@@ -212,7 +231,15 @@ _EU_INC = BrubruCuration(
         "majority wants an optional tax module, some of it via qualified-majority voting "
         "or enhanced cooperation, while ECR and PfE defend tax unanimity. The EU Inc. "
         "corporate file itself is broadly supported; the contested ground is how far the "
-        "'28th regime' extends beyond company law into tax and employee participation."
+        "'28th regime' extends beyond company law into tax and employee participation. "
+        "The rapporteur's draft report (29 June 2026) is complementary in ambition but "
+        "materially different in safeguards from the Commission text: participation follows "
+        "the workplace not the registered office, low-innovation sectors are carved out, "
+        "steward ownership is added, listing is restricted, and creditor/worker protections "
+        "are lengthened. The EMPL opinion (Danielsson) pushes the same social-dimension line, "
+        "while Bulgaria's unanimous reasoned opinion attacks the file from the opposite "
+        "direction on subsidiarity and proportionality, calling the zero-capital rule "
+        "'wholly unacceptable'."
     ),
     related_procedures=[
         CuratedRelatedProcedure(
@@ -236,6 +263,8 @@ _EU_INC = BrubruCuration(
     ],
     sources=[
         CuratedLink(label="EP Legislative Observatory (OEIL) procedure file", url="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)"),
+        CuratedLink(label="JURI draft report (Repasi, PE790.143)", url="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf"),
+        CuratedLink(label="EMPL draft opinion (Danielsson, PE788.967)", url="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/EMPL/PA/2026/07-15/1344254EN.pdf"),
         CuratedLink(label="European Commission - EU Inc.", url="https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en"),
         CuratedLink(label="Commission press release IP/26/614", url="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_614"),
         CuratedLink(label="Brubru deep-dive (EN)", url=f"{_DEEP_DIVE_BASE}/index.html"),
@@ -244,7 +273,7 @@ _EU_INC = BrubruCuration(
         "Curated and verified by Brubru (https://brubru.beresol.eu), an EU policy "
         "intelligence service by Beresol. Every fact in this overlay is cross-checked "
         "against the European Parliament Legislative Observatory and primary committee "
-        "documents as of 4 June 2026. Reuse with attribution to Brubru."
+        "documents as of 14 July 2026. Reuse with attribution to Brubru."
     ),
 )
 
