@@ -70,4 +70,4 @@ When users ask about cross-border evidence gathering, EIO, EU-MLA, or evidence r
 - EPRS Briefing — "European Investigation Order", 10 May 2026
 - Eurojust EIO casework: eurojust.europa.eu
 - European Judicial Network: ejn-crimjust.europa.eu
-- DG JUST landing: commission.europa.eu/strategy-and-policy/policies/justice-and-fundamental-rights/criminal-justice/judicial-cooperation-criminal-matters_en
+- DG JUST landing: commission.europa.eu/law/cross-border-cases/judicial-cooperation_en

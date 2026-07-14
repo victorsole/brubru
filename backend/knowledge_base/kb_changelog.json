@@ -2,6 +2,324 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-14",
+      "action": "added",
+      "guide": "knowledge_base_expansion_2026_07",
+      "title": "P1 knowledge-base expansion: 126 new institutional, agency and instrument guides",
+      "summary": "Batch build across 6 clusters: EU legislative/open-data plumbing and new/rebranded DGs (MENA, HERA, ENEST, INTPA); Council/Eurogroup/EEAS and EP-internal machinery (EPRS, STOA, budget, discharge, SANT/HOUS committees); Court of Auditors, Ombudsman, EESC, CJEU; 19 funding programmes (InvestEU, STEP, NDICI, EPF, CEF, Interreg, Social Climate Fund, MSCA, EIB Group); strategic frameworks and Joint Undertakings (Clean Industrial Deal, EuroHPC, Chips JU, IHI, F4E/ITER); financial regulators (SRB, ESRB, ESMA, AMLA, digital euro, Pillar Two, DAC); and cyber/IP/JHA-IT + health/JHA + labour/social/transport agencies (ENISA, ACER, BEREC, eu-LISA, EES/ETIAS/SIS, EUIPO, EDPS/EDPB, ECDC, EFSA, EEA, ECHA, Eurojust, Europol, Frontex, EUAA, FRA, EIGE, ELA, Eurofound, Cedefop, EDA/EDF, EASA, ERA, EMSA, EUSPA, IRIS2). All wired into the retrieval layer: 493 guides now carry triggers (zero orphans), 10,472 distinct keys in 6 languages.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "GDPR: Procedural Regulation now adopted",
+      "summary": "Corrected the GDPR Procedural Regulation status from 'preparing to apply' to adopted as Regulation (EU) 2025/2518 (in force 1 January 2026, applicable 2 April 2027); cross-linked the new EDPB one-stop-shop guide.",
+      "refs": [
+        "2025/2518"
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "european_investigation_order",
+      "title": "EIO: fixed dead DG JUST link",
+      "summary": "Replaced a 404 DG JUST judicial-cooperation URL with the working commission.europa.eu/law/cross-border-cases/judicial-cooperation_en.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "fp10_ecf_competitiveness",
+      "title": "FP10/ECF: cross-linked the dedicated ECF guide",
+      "summary": "Added a companion cross-reference to the new european_competitiveness_fund deep-dive so the two ECF guides are hub-and-spoke rather than silent duplicates.",
+      "refs": [
+        "COM(2025)555"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "added",
+      "guide": "ema_medicine_shortages_spoc",
+      "title": "EMA Medicine Shortages: SPOC, ESMP and the Critical Medicines link",
+      "summary": "New guide covering EMA's operational shortage-monitoring machinery under Regulation 2022/123: MSSG, SPOC Working Party, ESMP platform, MAH reporting obligations, links to Critical Medicines Act and Alliance.",
+      "refs": [
+        "32022R0123",
+        "2025/0102(COD)"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "CSAM derogation / long-term CSA Regulation",
+      "summary": "Long-term CSA Regulation 2022/0155 back on LIBE agenda 13 Jul (distinct from the 2025/0429 derogation)",
+      "refs": [
+        "2022/0155",
+        "2025/0429"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "BUDG examines the post-2027 successor spending programmes (ERDF, ESF, AMIF, ISF, Justice, AgoraEU, CFP, Euratom) on 15 Jul",
+      "refs": [
+        "2025/0238",
+        "2025/0239",
+        "2025/0540"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "updated",
+      "guide": "28th_regime_innovation_act",
+      "title": "EU Inc. (28th Regime)",
+      "summary": "Committee week 13-17 Jul: file active in JURI (lead), ECON and EMPL on 15 Jul",
+      "refs": [
+        "2026/0074",
+        "COM2026_321"
+      ]
+    },
+    {
+      "date": "2026-07-10",
+      "action": "updated",
+      "guide": "eu_competitiveness_council_debate",
+      "title": "EU Competitiveness Debate",
+      "summary": "European Innovation Scoreboard 2026 published (DG GROW, 9 Jul)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-10",
+      "action": "updated",
+      "guide": "eu_trade_policy",
+      "title": "EU Trade Policy",
+      "summary": "EU-South Africa Clean Trade and Investment Partnership (CTIP) intergovernmental dialogue launched 9 Jul",
+      "refs": []
+    },
+    {
+      "date": "2026-07-10",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Definitive anti-dumping duty on Chinese car/bus/lorry tyres (Reg (EU) 2026/1540, in force 6 Jul; DG TRADE announced 9 Jul)",
+      "refs": [
+        "32026R1540"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "Derogation extension ADOPTED by plenary 9 Jul; rejection failed to reach 361; applies until 3 Apr 2028",
+      "refs": [
+        "2025/0429(COD)",
+        "32021R1232"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "digital_euro_project",
+      "title": "Digital Euro",
+      "summary": "Plenary confirms negotiating mandate 9 Jul (416/169/22); trilogues open with Irish Presidency; orphan guide fixed with 16 triggers",
+      "refs": [
+        "2023/0212(COD)",
+        "2023/0208(COD)"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "eu_trade_policy",
+      "title": "EU Trade Policy",
+      "summary": "Parliament backs modernised EU-Mexico Global Agreement 9 Jul",
+      "refs": []
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "Plenary backs faster permit-granting for grids and renewables 9 Jul",
+      "refs": []
+    },
+    {
+      "date": "2026-07-09",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "General Court dismisses Apple's three actions 8 Jul; App Store + iOS gatekeeper designation upheld",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "action": "added",
+      "guide": "critical_medicines_alliance",
+      "title": "Critical Medicines Alliance (CMA)",
+      "summary": "New guide: DG HERA/DG SANTE consultative platform on medicine shortages and supply-chain resilience, launched 24 April 2024, 250+ members; feeds the Critical Medicines Act.",
+      "refs": [
+        "COM(2025)102",
+        "2025/0102(COD)"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "added",
+      "guide": "eu_livestock_strategy_protein_plan",
+      "title": "EU Livestock Strategy and Protein Action Plan",
+      "summary": "New guide: College adopted Livestock Strategy + Protein Action Plan (7 Jul)",
+      "refs": [
+        "52026DC0576",
+        "52026DC0355"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "EP competition annual report 2025 adopted (7 Jul); Sanofi flu-vaccine commitments market test (8 Jul)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "cybersecurity_act",
+      "title": "EU Cybersecurity Act",
+      "summary": "Action Plan on Cybersecurity and AI factsheet (7 Jul); NIS2 transposition referrals",
+      "refs": [
+        "32019R0881"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "nis2_directive",
+      "title": "NIS2 Directive",
+      "summary": "July infringements: Ireland, Spain, France, Netherlands referred to CJEU for non-transposition",
+      "refs": [
+        "32022L2555"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "eu_solidarity_fund_eusf",
+      "title": "EU Solidarity Fund",
+      "summary": "EP adopted the 144.1m mobilisation for Romania, Cyprus, Spain (2025 disasters), 7 Jul",
+      "refs": [
+        "32002R2012"
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "Plenary re-vote under urgency (Tue 7 Jul 331-304-11); binding vote Thu 9 Jul (361 needed)",
+      "refs": [
+        "32021R1232",
+        "2025/0429(COD)"
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "biotech_act",
+      "title": "European Biotech Act",
+      "summary": "Added 29 Jun 2026 joint SANT-ITRE committee meeting CJ53(2026)0629_1 on 2025/0406(COD)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "savings_and_investment_union",
+      "title": "Savings and Investment Union",
+      "summary": "Added 2 Jul 2026 SIU package in ECON (2025/0381-0383) + Claudia Buch SSM hearing",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "digital_services_act",
+      "title": "Digital Services Act",
+      "summary": "Added 2 Jul 2026 DSA minors-protection report + European Board for Digital Services 19th meeting",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "eu_neighbourhood_policy_east_south",
+      "title": "European Neighbourhood Policy (East and South)",
+      "summary": "Added 2 Jul 2026 EU-Armenia partnership deepening (VdL/Pashinyan) + South Caucasus programmes",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Added 2 Jul 2026 UCC Implementing Act amendment streamlining non-preferential origin rules",
+      "refs": []
+    },
+    {
+      "date": "2026-07-03",
+      "action": "added",
+      "guide": "eu_omnibus_iv_small_midcap",
+      "title": "Omnibus IV Small Mid-Cap package",
+      "summary": "New guide: SMC simplification package (2025/0130 Reg + 2025/0131 Dir); provisional agreement 2 Jul 2026",
+      "refs": [
+        "32016R0679",
+        "32017R1129",
+        "32014L0065"
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "action": "added",
+      "guide": "modernisation_fund",
+      "title": "EU Modernisation Fund",
+      "summary": "New guide: ETS-funded Modernisation Fund; 2 Jul 2026 EUR 2.5bn to 51 projects in 11 MS (EUR 23.2bn total since 2021)",
+      "refs": [
+        "32003L0087",
+        "32023L0959",
+        "32020R1001"
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "Commission hosted a DMA stakeholder roundtable on cloud computing services (1 Jul 2026)",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "eu_islands_coastal_communities_strategy",
+      "title": "EU Strategies for Islands and Coastal Communities",
+      "summary": "EVP Fitto launched implementation discussions in Cyprus (1 Jul 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-02",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "EUR 3 flat customs duty + abolition of EUR 150 e-commerce exemption ENTERS INTO APPLICATION 1 Jul 2026 (temporary until 1 Jul 2028)",
+      "refs": [
+        "32026R1200"
+      ]
+    },
+    {
       "date": "2026-07-01",
       "action": "updated",
       "guide": "ukraine_support_loan_recovery_2026",
