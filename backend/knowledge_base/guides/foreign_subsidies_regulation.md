@@ -1,6 +1,7 @@
 # Foreign Subsidies Regulation (FSR)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 14 July 2026 — FIRST FSR REVIEW: FIT FOR PURPOSE, TARGETED CHANGES CONSIDERED):** The Commission published its **first review of the Foreign Subsidies Regulation**, covering the first three years of enforcement. It concludes the FSR is **fit for purpose** to address distortions in the internal market caused by foreign subsidies; its objective of maintaining a level playing field is widely acknowledged and remains relevant; and the instrument is **working well in practice**. The concentration-review and public-procurement foreign-financial-contribution procedures let the Commission identify and address distortive subsidies before a merger is concluded or a high-value contract is awarded, and the ex officio powers add reach. The Commission is nonetheless **considering targeted changes** to improve efficiency and proportionality. Source: Commission press release IP/26/1606 + Q&A (14 July 2026).
 - Full name: Regulation (EU) 2022/2560 of the European Parliament and of the Council of 14 December 2022 on foreign subsidies distorting the internal market
 - CELEX: 32022R2560
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2560

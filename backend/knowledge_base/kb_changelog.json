@@ -2,6 +2,58 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-15",
+      "action": "updated",
+      "guide": "eu_eprivacy_csam_derogation_2025_0429",
+      "title": "ePrivacy CSAM Derogation Extension",
+      "summary": "Council first-reading position (Position No 9/2026, 52026AG0009) published in OJ C-series",
+      "refs": [
+        "32021R1232",
+        "52026AG0009"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "action": "updated",
+      "guide": "eu_water_legislation",
+      "title": "EU Water Legislation",
+      "summary": "Nitrates Directive evaluation: effective and relevant, scope for smarter implementation (IP/26/1594, 15 Jul 2026)",
+      "refs": [
+        "31991L0676"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "action": "updated",
+      "guide": "digital_euro_project",
+      "title": "Digital Euro",
+      "summary": "ECB selected 36 payment service providers for the digital euro pilot (14 Jul 2026)",
+      "refs": [
+        "52023PC0369"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "action": "updated",
+      "guide": "ecodesign_digital_product_passport",
+      "title": "Ecodesign (ESPR) and Digital Product Passport",
+      "summary": "Harmonised standards for the Digital Product Passport adopted (32026D1736), DPP Registry operational 19 Jul 2026",
+      "refs": [
+        "32024R1781",
+        "32026D1736"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "action": "updated",
+      "guide": "foreign_subsidies_regulation",
+      "title": "Foreign Subsidies Regulation",
+      "summary": "First FSR review published: fit for purpose, targeted changes considered (IP/26/1606, 14 Jul 2026)",
+      "refs": [
+        "32022R2560"
+      ]
+    },
+    {
       "date": "2026-07-14",
       "action": "updated",
       "guide": "28th_regime_innovation_act",

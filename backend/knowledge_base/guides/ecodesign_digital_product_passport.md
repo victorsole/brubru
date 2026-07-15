@@ -1,6 +1,7 @@
 # Ecodesign for Sustainable Products Regulation (ESPR) and Digital Product Passport (DPP)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 14 July 2026 — HARMONISED STANDARDS FOR THE DIGITAL PRODUCT PASSPORT ADOPTED):** **Commission Implementing Decision (EU) 2026/1736 (CELEX 32026D1736)** on harmonised standards for digital product passports, drafted in support of Regulation (EU) 2024/1781 (ESPR), was published in the OJ L-series. Harmonised standards carry a **presumption of conformity** for the referenced DPP requirements, giving industry the technical baseline for the DPP data carrier and interoperability just as the **DPP Registry goes operational (19 July 2026)**. Source: OJ L, 32026D1736 (14 July 2026).
 - Full name: Ecodesign for Sustainable Products Regulation (ESPR)
 - Reference: Regulation (EU) 2024/1781
 - CELEX: 32024R1781
