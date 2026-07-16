@@ -3,6 +3,14 @@
   "entries": [
     {
       "date": "2026-07-16",
+      "action": "added",
+      "guide": "ecj_spanish_amnesty_catalonia",
+      "title": "Spanish Amnesty Law for Catalonia before the Court of Justice (C-523/24 + C-666/24)",
+      "summary": "CJEU Grand Chamber, 16 Jul 2026: EU law does not preclude the Spanish amnesty law; holding, per-case questions, AG Spielmann vs Court comparison, Catalan deep-dive link",
+      "refs": []
+    },
+    {
+      "date": "2026-07-16",
       "action": "updated",
       "guide": "new_genomic_techniques_plant_breeding",
       "title": "New Genomic Techniques for Plant Breeding",
