@@ -2,6 +2,16 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-16",
+      "action": "updated",
+      "guide": "new_genomic_techniques_plant_breeding",
+      "title": "New Genomic Techniques for Plant Breeding",
+      "summary": "NGT Regulation (EU) 2026/1388 entered into force 16 Jul 2026 + Commission implementation strategy; adopted CELEX 32026R1388, OJ 26 Jun 2026, Arts 29/30/31 apply from 16 Jul",
+      "refs": [
+        "32026R1388"
+      ]
+    },
+    {
       "date": "2026-07-15",
       "action": "added",
       "guide": "p2_financial_cluster_2026_07",

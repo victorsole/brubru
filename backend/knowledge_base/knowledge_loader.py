@@ -604,6 +604,15 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     '2023/0226(cod)': ['new_genomic_techniques_plant_breeding'],
     'polfjärd ngt': ['new_genomic_techniques_plant_breeding'],
     'polfjard ngt': ['new_genomic_techniques_plant_breeding'],
+    # NGT Regulation (EU) 2026/1388 adopted + entered into force 16 Jul 2026 — added 16 July 2026
+    'regulation 2026/1388': ['new_genomic_techniques_plant_breeding'],
+    '32026r1388': ['new_genomic_techniques_plant_breeding'],
+    'ngt regulation entry into force': ['new_genomic_techniques_plant_breeding'],
+    'ngt implementation strategy': ['new_genomic_techniques_plant_breeding'],
+    'reglamento tecnicas genomicas': ['new_genomic_techniques_plant_breeding'],
+    'nouvelles techniques genomiques': ['new_genomic_techniques_plant_breeding'],
+    'noves tecniques genomiques': ['new_genomic_techniques_plant_breeding'],
+    'nuove tecniche genomiche': ['new_genomic_techniques_plant_breeding'],
     # End-of-Life Vehicles Regulation (2023/0284(COD)) — added 15 June 2026 (plenary week)
     'end-of-life vehicles': ['end_of_life_vehicles_regulation'],
     'end of life vehicles': ['end_of_life_vehicles_regulation'],
