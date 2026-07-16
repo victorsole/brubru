@@ -56,6 +56,7 @@ _CATALAN_TITLES = {
     "32019D1194": "Decisió (UE) 2019/1194",
     "32019D1194-softcatala": "Decisió (UE) 2019/1194 (Softcatalà)",
     "eu-andorra": "Acord UE-Andorra",
+    "tjue-amnistia-catalunya": "La llei d'amnistia per als polítics independentistes catalans davant el Tribunal de Justícia (C-523/24 i C-666/24)",
 }
 
 
