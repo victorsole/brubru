@@ -4,6 +4,14 @@
     {
       "date": "2026-07-16",
       "action": "added",
+      "guide": "p2_spine_ep_health_cluster_2026_07",
+      "title": "P2 cluster: legislative/open-data spine + EP-internal + health/chemicals (25 guides)",
+      "summary": "25 new KB guides + 492 trigger keys (11,275 total, 0 orphans). Spine (8): oeil_legislative_observatory, eur_lex_portal, cellar_semantic_repository, have_your_say_consultations, transparency_register_eu, regulatory_scrutiny_board, refit_fit_for_future_platform, trilogue_interinstitutional_negotiations. EP-internal (7): ep_rules_of_procedure, ep_bureau_conference_of_presidents, ep_president_and_vice_presidents, ep_secretariat_and_dgs (DG IPOL retired Jan 2025 -> ECTI/CASP/IUST/BUDG), ep_budgetary_powers_and_discharge, ep_consent_procedure, ep_rapporteur_shadow_system. Health/chemicals (10): biocidal_products_regulation (+Reg 2026/1165), pfas_universal_restriction, one_substance_one_assessment (Reg 2025/2455+2457, Dir 2025/2456), scheer_scientific_committees, soho_regulation_blood_tissues_cells (Reg 2024/1938), ivdr_in_vitro_diagnostics, cosmetics_regulation, detergents_regulation (Reg 2026/405), toy_safety_regulation (Reg 2025/2509), fertilising_products_regulation.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-16",
+      "action": "added",
       "guide": "ecj_spanish_amnesty_catalonia",
       "title": "Spanish Amnesty Law for Catalonia before the Court of Justice (C-523/24 + C-666/24)",
       "summary": "CJEU Grand Chamber, 16 Jul 2026: EU law does not preclude the Spanish amnesty law; holding, per-case questions, AG Spielmann vs Court comparison, Catalan deep-dive link",
