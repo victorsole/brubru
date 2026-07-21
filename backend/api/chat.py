@@ -615,6 +615,18 @@ async def stream_message(
                 if chunk.startswith("{"):
                     try:
                         parsed = json.loads(chunk)
+                        # The post-processed final text. Swap it into the copy
+                        # we persist as well as forwarding it to the client:
+                        # otherwise the DB keeps the RAW streamed answer, and
+                        # every later read of it (query audits, conversation
+                        # history, exports) sees defects that were already
+                        # fixed on screen.
+                        if parsed.get("type") == "replace":
+                            replacement = parsed.get("content")
+                            if isinstance(replacement, str) and replacement:
+                                full_response = replacement
+                            yield f"data: {chunk}\n\n"
+                            continue
                         if parsed.get("type") in ("status", "entities", "actions"):
                             yield f"data: {chunk}\n\n"
                             continue

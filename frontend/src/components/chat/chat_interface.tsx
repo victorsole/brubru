@@ -606,6 +606,22 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                   });
                   continue;
                 }
+                // Backend finished post-processing the completed response
+                // (orphan [N] citation stripping, fabricated-link removal,
+                // URL hyphen normalisation, legislation linkification). The
+                // raw tokens are already on screen, so swap in the cleaned
+                // text. Only sent when clean-up actually changed something.
+                if (parsed.type === 'replace' && typeof parsed.content === 'string') {
+                  accumulatedContent = parsed.content;
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === streamingMessageId
+                        ? { ...msg, content: accumulatedContent }
+                        : msg
+                    )
+                  );
+                  continue;
+                }
                 if (parsed.type === 'actions' && parsed.actions) {
                   setMessages((prev) =>
                     prev.map((msg) =>

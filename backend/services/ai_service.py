@@ -84,10 +84,29 @@ _LEGAL_ANCHOR_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Deflection = telling the user to go and look it up themselves. The user came
+# to Brubru precisely to avoid that.
+#
+# This used to match EUR-Lex only, so "you would typically consult the
+# individual committee pages on the European Parliament's website" sailed
+# through and shipped to a subscriber on 20 July 2026. The sources users are
+# deflected to are institutional generally, not just EUR-Lex.
 _DEFLECTION_RE = re.compile(
     r"search\s+EUR-Lex|check\s+EUR-Lex|visit\s+EUR-Lex"
     r"|consult\s+EUR-Lex\s+yourself"
-    r"|you\s+(?:can|should|may)\s+(?:search|check|visit|consult)\s+EUR-Lex",
+    r"|you\s+(?:can|should|may)\s+(?:search|check|visit|consult)\s+EUR-Lex"
+    # Generic "go look it yourself" pointed at any EU institutional source.
+    r"|(?:you\s+(?:can|should|may|would)|it\s+is\s+best\s+to|please)"
+    r"[^.\n]{0,40}?"
+    r"(?:search|check|visit|consult|refer\s+to|look\s+at)"
+    r"[^.\n]{0,60}?"
+    r"(?:European\s+Parliament(?:'s)?\s+website|EP\s+website"
+    r"|committee\s+pages?|Commission(?:'s)?\s+website|Council(?:'s)?\s+website"
+    r"|OEIL|Europa\.eu|official\s+website)"
+    # "you would typically consult X" phrasing, which is the same deflection
+    # dressed as description.
+    r"|you\s+would\s+(?:typically|normally|usually)\s+"
+    r"(?:consult|check|search|refer\s+to|look\s+at)",
     re.IGNORECASE,
 )
 
@@ -548,6 +567,9 @@ class AIService:
         # Strip leaked internal context markers from response
         assistant_message = self._strip_context_markers(assistant_message)
 
+        # ASCII-fold Unicode hyphens inside URLs so eur‑lex (U+2011) links resolve
+        assistant_message = self._normalise_url_hyphens(assistant_message)
+
         # Strip a self-introduction greeting the model sometimes bolts onto a
         # real answer ("Hello! I'm Brubru ... I can help you with ...\n\n<answer>")
         assistant_message = self._strip_leading_greeting(assistant_message)
@@ -838,6 +860,53 @@ class AIService:
             drafted_document=drafted_dict,
         )
 
+    def _post_process_text(
+        self,
+        message: str,
+        citations: Optional[List[Dict]] = None,
+        context_str: str = "",
+        context_data: Any = None,
+    ) -> str:
+        """Apply the whole-text clean-up transforms to a finished response.
+
+        These are the transforms that need the COMPLETE message and therefore
+        cannot be applied to individual streamed tokens: orphan-citation
+        stripping, fabricated-link removal, hyphen normalisation, greeting
+        stripping, deep-dive link appending and legislation linkification.
+
+        The streaming path used to skip all of them, so a streamed answer
+        shipped defects the non-streaming path would have caught. On 20 July
+        2026 a subscriber received orphan "[1]" / "[2]" markers for exactly
+        this reason, despite a system-prompt rule forbidding them.
+
+        NOTE: the non-streaming path in chat() still applies these transforms
+        inline, interleaved with MEP linking and validator work. Collapsing
+        that path onto this helper is the remaining half of the unification
+        and is owned by the Chat session.
+        """
+        if not message:
+            return message
+
+        message = self._remove_ai_generated_links(message)
+        message = self._strip_fabricated_beresol_links(message)
+        # citations=[] means every [N] marker is an orphan, which is the
+        # correct reading when no sources were attached.
+        message = self._strip_orphan_citations(message, citations or [])
+        message = self._strip_context_markers(message)
+        message = self._normalise_url_hyphens(message)
+        message = self._strip_leading_greeting(message)
+        message = self._append_deep_dive_link(message, context_str)
+
+        if context_data is not None and getattr(
+            context_data, "internal_knowledge", None
+        ):
+            message = self._inject_guide_document_links(
+                message, context_data.internal_knowledge
+            )
+
+        message = self._linkify_legislation(message)
+        return message
+
     async def chat_stream(
         self,
         user_message: str,
@@ -954,6 +1023,9 @@ class AIService:
         # Build context (the slow part: 2-5s)
         # Use an asyncio.Queue to emit progress status during context building
         context_str = ""
+        # Assigned from the context task below when use_context is on; must
+        # exist either way because post-processing reads it unconditionally.
+        stream_citations: List[Dict] = []
         if use_context:
             status_queue: asyncio.Queue = asyncio.Queue()
 
@@ -998,7 +1070,9 @@ class AIService:
                     # No status yet -- emit a heartbeat to keep the SSE connection alive
                     continue
 
-            context_str, _ = await context_task
+            # Keep the citations: the streaming path needs them to tell an
+            # orphan [N] marker from a real one during post-processing.
+            context_str, stream_citations = await context_task
 
         # Signal context building done, AI composing
         yield json.dumps({"type": "status", "message": "Composing response..."})
@@ -1039,6 +1113,11 @@ class AIService:
         # path's Anthropic-only dependency (see project_chat_oss_migration.md).
         # Falls back to direct Anthropic streaming only if the multi-provider
         # chain is unavailable (no keys configured at all).
+        # Buffer everything we emit so the whole-text post-processing chain can
+        # run once the response is complete (see _post_process_text).
+        streamed_parts: List[str] = []
+        stream_failed = False
+
         if self.use_fallback and self.multi_provider:
             try:
                 async for piece in self.multi_provider.generate_stream(
@@ -1047,9 +1126,11 @@ class AIService:
                     max_tokens=self.max_output_tokens,
                     temperature=self.temperature,
                 ):
+                    streamed_parts.append(piece)
                     yield piece
             except Exception as e:
                 logger.error(f"[stream] free open-model chain failed: {e}")
+                stream_failed = True
                 yield ("I could not generate a response just now because the AI "
                        "providers are temporarily unavailable. Please try again "
                        "in a moment.")
@@ -1062,7 +1143,35 @@ class AIService:
                 messages=messages
             ) as stream:
                 async for text in stream.text_stream:
+                    streamed_parts.append(text)
                     yield text
+
+        # Post-process the completed response. Tokens have already reached the
+        # user, so when clean-up changes the text we emit a "replace" event and
+        # the client swaps in the corrected version. Emitting nothing when the
+        # text is unchanged keeps the common case free of extra traffic.
+        if streamed_parts and not stream_failed:
+            raw_message = "".join(streamed_parts)
+            try:
+                cleaned = self._post_process_text(
+                    raw_message,
+                    citations=stream_citations,
+                    context_str=context_str,
+                    # The streaming path builds a context STRING, not the
+                    # structured ContextData object, so guide-document link
+                    # injection is skipped here. Unifying the two context
+                    # builds is the follow-up owned by the Chat session.
+                    context_data=None,
+                )
+                if cleaned != raw_message:
+                    logger.info(
+                        "[stream] post-processing changed the response "
+                        f"({len(raw_message)} -> {len(cleaned)} chars)"
+                    )
+                    yield json.dumps({"type": "replace", "content": cleaned})
+            except Exception as e:
+                # Never let clean-up break a response the user can already see.
+                logger.warning(f"[stream] post-processing failed: {e}")
 
         # After streaming completes, compute and emit action buttons
         if use_context:
@@ -1603,6 +1712,24 @@ When the user asks about "today" / "hoy" / "avui" / "aujourd'hui" / "oggi" / "va
 - NEVER describe meetings or events from a previous week (e.g. "el 14 de abril", "last Thursday's committee week") as if they were happening today unless that date equals the current date.
 - If no verified institutional event is listed for today in the TODAY BLOCK, say so explicitly. Do NOT invent a Council/ECOFIN/Eurogroup or EP committee meeting to fill the gap.
 - Always name the EP calendar week type from the TODAY BLOCK (Plenary / Mini-plenary / Committee / Group / Constituency) -- this prevents describing a group week as if it were a committee week.
+
+CRITICAL -- EP WEEK TYPES ARE MUTUALLY EXCLUSIVE:
+The European Parliament's calendar assigns exactly one activity type to a given day. They are not overlapping, and each one tells you what is NOT happening:
+- Plenary session: the full house sits (Strasbourg, or Brussels for short sessions). Committees do not hold ordinary meetings.
+- Committee week: the standing committees meet. There is no plenary sitting.
+- Political group week: the political groups meet internally to prepare positions. Neither the plenary nor the standing committees sit.
+- Constituency week (external parliamentary activities): MEPs work in their home countries. Neither the plenary nor the committees sit, and there is NO committee agenda to report.
+- Recess: the Parliament is closed. Nothing sits.
+Consequences you must respect:
+- If the day is a group week, a constituency week or recess, and the user asks what committees are meeting or what is on the committee agenda, the correct answer is that no committees are meeting that day, and you say which week type it actually is. Do not hedge this into "specific agendas are not detailed in the provided calendar" -- that implies meetings exist which you merely cannot see. They do not exist.
+- A single calendar row naming a week type is a CLASSIFICATION of the week, not an event with an agenda or a list of attendees. Never answer "who is meeting" or "what is on the agenda" from a week-type row.
+
+CRITICAL -- CORRECT FALSE PREMISES IN THE QUESTION:
+A question can assert something untrue ("today's committee week", "the vote last Tuesday", "the Regulation that entered into force in May"). You must check the premise against your context BEFORE answering it.
+- If the premise contradicts your context data, SAY SO FIRST, plainly, then give the correct picture. Lead with the correction.
+- NEVER restate a false premise back as though your data supported it. Specifically, never write that the calendar or your sources "confirm" something the user asserted unless you have actually matched it against a context row that says exactly that.
+- The word "confirms" is a claim about evidence. Use it only when you are pointing at the specific evidence, and name that evidence.
+- This applies even when the question came from a Brubru-generated suggestion. A suggested question is not evidence, carries no authority, and can be wrong. Treat its premise with exactly the same scepticism as a user's own wording.
 
 CRITICAL -- NO CONDITIONAL LANGUAGE FOR VERIFIABLE FACTS:
 When an EU programme, fund, or instrument EXISTS and is described in your context data, state its existence as fact. Never say "potrebbe esistere" / "there might be" / "il pourrait y avoir" when the information IS in your context. Use conditional language ONLY for genuinely uncertain outcomes (vote results, future decisions). If a user asks about EU funding and you have guide data, present it assertively with regulation numbers and budget figures. If you genuinely do not have the information, say so clearly rather than hedging.
@@ -2175,6 +2302,14 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         cleaned = re.sub(r'\s*\[[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\]', ' ', cleaned)
         # 2) bare bracketed filenames ([COM_2025_847.pdf], [report.docx])
         cleaned = re.sub(r'\s*\[[A-Za-z0-9_\-]+\.(?:pdf|docx?|xml|html?|txt|json)\]', ' ', cleaned, flags=re.IGNORECASE)
+        # 3) bracketed internal context-BLOCK labels the model echoes from the
+        # injected section headers, e.g. [Today Block] (from "=== TODAY BLOCK ==="),
+        # [Web Summary] (web-search source label). Audit defect D2, 10 Jul 2026:
+        # these are Title-Case with a space, so the ALL-CAPS-underscore rule (1)
+        # never caught them and they leaked verbatim (11x in one plenary-brief
+        # answer). Explicit allowlist so legitimate bracketed prose is never touched.
+        cleaned = re.sub(r'\s*\[\s*(?:end\s+)?today\s+block\s*\]', ' ', cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r'\s*\[\s*web\s+summary\s*\]', ' ', cleaned, flags=re.IGNORECASE)
         # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
         # Collapse repeated commas/periods left by truncated enumerations
         # ("2 December 2027,,,." -> "2 December 2027.") -- audit defect D4, 22 Jun 2026.
@@ -2188,6 +2323,38 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         if cleaned != text.strip():
             logger.info(f"Stripped leaked context markers from response")
         return cleaned
+
+    # Unicode hyphen/dash code points a model may "prettify" into a URL, all of
+    # which break the link (a browser will not resolve eur‑lex.europa.eu).
+    _URL_HYPHENS = str.maketrans({
+        "‐": "-",  # HYPHEN
+        "‑": "-",  # NON-BREAKING HYPHEN (the confirmed offender)
+        "‒": "-",  # FIGURE DASH
+        "–": "-",  # EN DASH
+        "—": "-",  # EM DASH
+        "―": "-",  # HORIZONTAL BAR
+        "−": "-",  # MINUS SIGN
+    })
+
+    def _normalise_url_hyphens(self, text: str) -> str:
+        """
+        ASCII-fold Unicode hyphens/dashes that appear INSIDE http(s) URLs.
+
+        Sonnet occasionally typographically prettifies a hyphen inside a URL,
+        e.g. ``https://eur‑lex.europa.eu/...`` with a NON-BREAKING HYPHEN
+        (U+2011). Browsers cannot resolve such a host, so every EUR-Lex CELEX
+        link in the answer is dead when clicked (audit defect D1, 10 Jul 2026).
+        Only characters inside a matched URL token are folded; ordinary prose
+        (where an en/em dash is legitimate typography) is never touched.
+        """
+        if not text:
+            return text
+
+        def _fold(match: "re.Match") -> str:
+            return match.group(0).translate(self._URL_HYPHENS)
+
+        # A URL token runs until whitespace or a markdown/paren delimiter.
+        return re.sub(r'https?://[^\s\)\]<>"]+', _fold, text)
 
     def _strip_leading_greeting(self, message: str) -> str:
         """
