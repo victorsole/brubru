@@ -1096,6 +1096,8 @@ def generate_html(translated: dict, celex: str) -> str:
     @media (max-width: 767px) {{ .container {{ padding: 1.25rem; }} .header {{ padding: 0.75rem 1rem; }} .header__cta {{ display: none; }} .doc-header h1 {{ font-size: 1.3rem; }} }}
     html {{ scroll-behavior: smooth; }}
   </style>
+  <!-- Contentsquare (Hotjar) analytics. Kept in sync by scripts/ensure_analytics_tag.py -->
+  <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
 </head>
 <body>
 
@@ -1143,6 +1145,7 @@ def generate_html(translated: dict, celex: str) -> str:
 </footer>
 
 <a href="#top" class="back-to-top" id="backToTop"><span class="mdi mdi-chevron-up"></span></a>
+<script src="/legislacio-ue-catala/eurovoc-tags.js" defer></script>
 <script>
   window.addEventListener('scroll', function() {{
     var btn = document.getElementById('backToTop');
