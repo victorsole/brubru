@@ -67,6 +67,27 @@ INSTITUTION_LABELS = {
     "EESC": "The European Economic and Social Committee",
     "CJEU": "The Court of Justice of the EU",
     "THIRD_PARTY": "A Brussels policy event",
+    # Agencies. Without these the acronym fallback title-cased them into
+    # nonsense ("EMA" -> "Ema has on its agenda today").
+    "EMA": "The European Medicines Agency",
+    "EFSA": "The European Food Safety Authority",
+    "ECHA": "The European Chemicals Agency",
+    "EEA": "The European Environment Agency",
+    "EASA": "The EU Aviation Safety Agency",
+    "ENISA": "The EU Agency for Cybersecurity",
+    "EBA": "The European Banking Authority",
+    "EIOPA": "The European Insurance and Occupational Pensions Authority",
+    "ESMA": "The European Securities and Markets Authority",
+    "FRONTEX": "Frontex",
+    "EUROPOL": "Europol",
+    "EUIPO": "The EU Intellectual Property Office",
+    "ACER": "The EU Agency for the Cooperation of Energy Regulators",
+    "AMLA": "The Anti-Money Laundering Authority",
+    "EPSO": "The European Personnel Selection Office",
+    "CEPOL": "CEPOL",
+    "EEAS": "The European External Action Service",
+    "REA": "The European Research Executive Agency",
+    "ERC": "The European Research Council",
 }
 
 
@@ -76,6 +97,10 @@ def _humanise_institution(raw: Optional[str]) -> str:
     key = str(raw).strip().upper()
     if key in INSTITUTION_LABELS:
         return INSTITUTION_LABELS[key]
+    # Unknown value. Short all-caps tokens are acronyms and must keep their
+    # capitalisation; .title() would render "EMA" as "Ema".
+    if key.isalpha() and len(key) <= 6:
+        return key
     return key.replace("_", " ").title()
 
 
@@ -300,6 +325,73 @@ def _briefing_amendment_surge(
     )
 
 
+# Calendar rows that classify a WEEK rather than describe an event.
+#
+# These are banners spanning Mon-Fri ("EP Committee Week", "EP Recess"). They
+# have no agenda, no attendee list and no start time, so they must never be
+# fed into a briefing that promises "agenda, who is meeting, and what to
+# watch" -- there is nothing behind that promise to retrieve.
+#
+# On 20 July 2026 an "EP Committee Week" banner (itself wrongly classified;
+# see migration 203 and scripts/derive_ep_calendar_from_pdf.py) produced
+# exactly that briefing for a subscriber, who clicked it and was told a
+# constituency week was a committee week. Excluding these rows here is the
+# second line of defence: even with correct calendar data, a week banner is
+# not an event.
+_WEEK_BANNER_EVENT_TYPES = (
+    "committee_week",
+    "group_week",
+    "recess",
+    "external_activities",
+)
+
+# Single source of truth for the exclusion, substituted into the calendar
+# queries below. The values are module constants, never user input.
+_EXCLUDE_WEEK_BANNERS = "AND event_type::text NOT IN ({})".format(
+    ", ".join(f"'{t}'" for t in _WEEK_BANNER_EVENT_TYPES)
+)
+
+
+# Rank events by institutional weight so the morning briefing leads with the
+# most significant thing happening, not whichever row the planner happened to
+# return first. Without this, a plenary-session day led with a routine agency
+# committee meeting purely because start_time was NULL on both.
+_SIGNIFICANCE_ORDER = """
+        CASE
+            WHEN event_type::text IN (
+                'plenary_session', 'european_council_summit',
+                'commission_college_meeting', 'council_meeting', 'eurogroup'
+            ) THEN 0
+            -- Outreach and awareness events are demoted even when a DG runs
+            -- them: a local beach clean-up is not the day's institutional
+            -- headline just because its institution column says COMMISSION.
+            WHEN event_type::text IN (
+                'conference', 'webinar', 'roundtable', 'training', 'workshop'
+            ) THEN 3
+            WHEN institution IN (
+                'EP', 'COMMISSION', 'COUNCIL', 'EUROPEAN_COUNCIL', 'ECB'
+            ) THEN 1
+            WHEN institution = 'THIRD_PARTY' THEN 4
+            ELSE 2
+        END ASC,
+        start_time ASC NULLS LAST
+"""
+
+
+def _sql(query: str) -> str:
+    """Substitute shared fragments into a calendar query.
+
+    Uses str.replace rather than str.format because these queries contain
+    literal ``%`` wildcards and ``:param`` placeholders that format() would
+    either choke on or mangle.
+    """
+    return (
+        query
+        .replace("{exclude_week_banners}", _EXCLUDE_WEEK_BANNERS)
+        .replace("{significance_order}", _SIGNIFICANCE_ORDER)
+    )
+
+
 def _briefing_morning(
     db: Session, user: User, today: date
 ) -> Optional[ProactiveBriefing]:
@@ -319,12 +411,14 @@ def _briefing_morning(
             row = (
                 db.execute(
                     text(
-                        """
+                        _sql(
+                            """
                         SELECT title, institution, source_url
                         FROM eu_calendar_events
                         WHERE start_date = :today
                           AND status != 'cancelled'
                           AND institution != 'THIRD_PARTY'
+                          {exclude_week_banners}
                           AND EXISTS (
                       SELECT 1 FROM unnest(policy_areas) AS area_v
                       WHERE EXISTS (
@@ -334,9 +428,10 @@ def _briefing_morning(
                              OR LOWER(interest_v) LIKE '%' || LOWER(area_v) || '%'
                       )
                   )
-                        ORDER BY start_time ASC NULLS LAST
+                        ORDER BY {significance_order}
                         LIMIT 1
                         """
+                        )
                     ),
                     {"today": today, "interests": interests},
                 )
@@ -349,15 +444,18 @@ def _briefing_morning(
             row = (
                 db.execute(
                     text(
-                        """
+                        _sql(
+                            """
                         SELECT title, institution, source_url
                         FROM eu_calendar_events
                         WHERE start_date = :today
                           AND status != 'cancelled'
                           AND institution != 'THIRD_PARTY'
-                        ORDER BY start_time ASC NULLS LAST
+                          {exclude_week_banners}
+                        ORDER BY {significance_order}
                         LIMIT 1
                         """
+                        )
                     ),
                     {"today": today},
                 )
@@ -370,14 +468,17 @@ def _briefing_morning(
             row = (
                 db.execute(
                     text(
-                        """
+                        _sql(
+                            """
                         SELECT title, institution, source_url
                         FROM eu_calendar_events
                         WHERE start_date = :today
                           AND status != 'cancelled'
-                        ORDER BY start_time ASC NULLS LAST
+                          {exclude_week_banners}
+                        ORDER BY {significance_order}
                         LIMIT 1
                         """
+                        )
                     ),
                     {"today": today},
                 )

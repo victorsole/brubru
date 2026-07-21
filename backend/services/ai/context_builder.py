@@ -6151,71 +6151,115 @@ class ContextBuilder:
                 return True
         return False
 
+    # Cache of {year: {date: week_type}} built from the verified calendar JSON.
+    _EP_WEEK_TYPE_CACHE: Dict[int, Dict[str, str]] = {}
+
+    @classmethod
+    def _load_ep_week_types(cls, year: int) -> Dict[str, str]:
+        """Build a {ISO date: week type} map from the verified EP calendar.
+
+        Single source of truth: backend/knowledge_base/calendars/
+        ep_calendar_{year}.json, generated from the European Parliament's own
+        calendar PDF by scripts/derive_ep_calendar_from_pdf.py and verified
+        against the EP's published session dates.
+        """
+        if year in cls._EP_WEEK_TYPE_CACHE:
+            return cls._EP_WEEK_TYPE_CACHE[year]
+
+        import json as _json
+        import os as _os
+        from datetime import date as _date, timedelta as _timedelta
+
+        label = {
+            "committee_week": "Committee week",
+            "group_week": "Group week",
+            "external_activities": "Constituency week",
+            "recess": "Recess",
+        }
+        day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+        path = _os.path.join(
+            _os.path.dirname(_os.path.dirname(_os.path.dirname(
+                _os.path.abspath(__file__)))),
+            "knowledge_base", "calendars", f"ep_calendar_{year}.json",
+        )
+        mapping: Dict[str, str] = {}
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                data = _json.load(handle)
+        except Exception as exc:
+            logger.warning("[WARN] EP week-type calendar unavailable: %s", exc)
+            cls._EP_WEEK_TYPE_CACHE[year] = mapping
+            return mapping
+
+        seen = set()
+        for month in data.get("months", {}).values():
+            for week in month.get("weeks", []):
+                dates = week.get("dates", "")
+                if not dates or dates in seen:
+                    continue
+                seen.add(dates)
+                try:
+                    monday = _date.fromisoformat(dates.split(" to ")[0].strip())
+                except Exception:
+                    continue
+
+                activity = week.get("activity_type", "")
+                daily = week.get("daily") or {}
+
+                if activity == "plenary_session":
+                    # The PDF marks all sessions the same red. The EP holds
+                    # four-day part-sessions in Strasbourg and short two-day
+                    # (or one-day) sessions in Brussels, so session length is
+                    # what distinguishes them.
+                    session_days = week.get("session_days") or []
+                    week_label = (
+                        "Mini-plenary Brussels" if len(session_days) <= 2
+                        else "Plenary Strasbourg"
+                    )
+                else:
+                    week_label = label.get(activity, "Committee week")
+
+                for offset in range(7):
+                    day = monday + _timedelta(days=offset)
+                    if day.year != year:
+                        continue
+                    if offset < 5 and daily.get(day_names[offset]):
+                        mapping[day.isoformat()] = label.get(
+                            daily[day_names[offset]], week_label
+                        )
+                    else:
+                        mapping[day.isoformat()] = week_label
+
+        cls._EP_WEEK_TYPE_CACHE[year] = mapping
+        return mapping
+
     def _lookup_ep_week_type(self, d: "date") -> str:
         """Return the EP calendar week type for the given date.
 
         Values: "Plenary Strasbourg", "Mini-plenary Brussels",
-        "Committee week", "Group week", "Constituency week", or "Unknown".
+        "Committee week", "Group week", "Constituency week", "Recess",
+        or "Unknown".
 
-        Source of truth: memory/ep_calendar_2026.md (Victor maintains this).
-        We encode the 2026 calendar inline so the chat retrieval path does not
-        need to read a file from the /memory directory at request time.
+        Reads the verified calendar JSON (see _load_ep_week_types). This used
+        to be a hardcoded table of date ranges citing "memory/
+        ep_calendar_2026.md" as its source, but that file does not exist and
+        the table had drifted badly: it placed the September plenary in the
+        wrong week, and had no entry at all for 20-24 July 2026, so that week
+        fell through to a `return "Committee week"` default. That default is
+        what told a subscriber on 20 July 2026 that a constituency week was a
+        committee week. There is now exactly one calendar in the codebase.
         """
         try:
-            from datetime import date as _date  # local import to avoid cycle
-
-            # 2026 Strasbourg plenary weeks (Mon-Thu) -- "P-STRASBOURG"
-            plenary_strasbourg = [
-                (_date(2026, 1, 19), _date(2026, 1, 22)),
-                (_date(2026, 2, 2),  _date(2026, 2, 5)),
-                (_date(2026, 3, 9),  _date(2026, 3, 12)),
-                (_date(2026, 3, 23), _date(2026, 3, 26)),
-                (_date(2026, 3, 30), _date(2026, 4, 2)),
-                (_date(2026, 4, 27), _date(2026, 4, 30)),
-                (_date(2026, 5, 18), _date(2026, 5, 21)),
-                (_date(2026, 6, 15), _date(2026, 6, 18)),
-                (_date(2026, 7, 6),  _date(2026, 7, 9)),
-                (_date(2026, 9, 7),  _date(2026, 9, 10)),
-                (_date(2026, 10, 5), _date(2026, 10, 8)),
-                (_date(2026, 11, 9), _date(2026, 11, 12)),
-                (_date(2026, 12, 14), _date(2026, 12, 17)),
-            ]
-            mini_plenary_brussels = [
-                (_date(2026, 2, 18), _date(2026, 2, 18)),
-                (_date(2026, 3, 25), _date(2026, 3, 26)),
-                (_date(2026, 5, 11), _date(2026, 5, 11)),
-                (_date(2026, 6, 3),  _date(2026, 6, 3)),
-                (_date(2026, 10, 21), _date(2026, 10, 22)),
-            ]
-            group_weeks = [
-                (_date(2026, 2, 23), _date(2026, 2, 27)),
-                (_date(2026, 4, 20), _date(2026, 4, 24)),
-                (_date(2026, 6, 8),  _date(2026, 6, 12)),
-                (_date(2026, 9, 14), _date(2026, 9, 18)),
-                (_date(2026, 11, 30), _date(2026, 12, 4)),
-            ]
-            constituency_weeks = [
-                (_date(2026, 4, 6),  _date(2026, 4, 12)),   # Easter
-                (_date(2026, 5, 25), _date(2026, 5, 29)),
-                (_date(2026, 8, 3),  _date(2026, 8, 28)),   # summer recess
-                (_date(2026, 10, 26), _date(2026, 10, 30)),
-                (_date(2026, 11, 23), _date(2026, 11, 27)),
-            ]
-            # Committee weeks by default otherwise
-            for start, end in plenary_strasbourg:
-                if start <= d <= end:
-                    return "Plenary Strasbourg"
-            for start, end in mini_plenary_brussels:
-                if start <= d <= end:
-                    return "Mini-plenary Brussels"
-            for start, end in group_weeks:
-                if start <= d <= end:
-                    return "Group week"
-            for start, end in constituency_weeks:
-                if start <= d <= end:
-                    return "Constituency week"
-            # Default: committee week (most non-plenary weeks)
-            return "Committee week"
+            week_types = self._load_ep_week_types(d.year)
+            resolved = week_types.get(d.isoformat())
+            if resolved:
+                return resolved
+            logger.warning(
+                "[WARN] No EP week type for %s -- calendar JSON may be missing "
+                "or out of range", d.isoformat()
+            )
+            return "Unknown"
         except Exception:
             return "Unknown"
 
@@ -6280,7 +6324,10 @@ class ContextBuilder:
                 )
                 for e in events:
                     time_str = str(e.start_time)[:5] if e.start_time else "--:--"
-                    inst = e.institution or "EU"
+                    # e.institution is a SQLAlchemy enum; str() on it yields
+                    # "InstitutionEnum.COMMISSION", which leaked that internal
+                    # repr straight into the model's context. Take .value.
+                    inst = getattr(e.institution, "value", e.institution) or "EU"
                     committee = f" ({e.ep_committee_code})" if e.ep_committee_code else ""
                     title = (e.title or "")[:160]
                     location = _resolve_event_location(inst, title, week_type)
@@ -6351,9 +6398,46 @@ class ContextBuilder:
             logger.debug("[today-block] legislative_carriages lookup skipped: %s", e)
             # non-fatal
 
+        # Section D: EP plenary adopted texts in the last 5 days (verified DB).
+        # Self-gating: texts_adopted only gains rows around a plenary sitting, so
+        # this section is empty off-week and populated during/after a plenary.
+        # Fixes the gap where "brief me on today's plenary agenda" fell back to the
+        # Commissioner-diary calendar rows in Section A (audit defect D3, 10 Jul 2026).
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                ta_rows = db.execute(_sql_text(
+                    """
+                    SELECT ta_reference, title, procedure_ref, adoption_date
+                    FROM texts_adopted
+                    WHERE adoption_date >= :cutoff
+                    ORDER BY adoption_date DESC
+                    LIMIT 20
+                    """
+                ), {"cutoff": today - timedelta(days=5)}).fetchall()
+            finally:
+                db.close()
+            if ta_rows:
+                lines.append(
+                    "EP plenary adopted texts in the last 5 days (verified DB -- this IS the current"
+                    " plenary's voting record; use it for 'today's plenary' / 'this week's plenary' /"
+                    " plenary-agenda questions):"
+                )
+                for r in ta_rows:
+                    taref, ta_title, proc, adopted = r
+                    d = adopted.date().isoformat() if hasattr(adopted, "date") else str(adopted)[:10]
+                    procs = f" [{proc}]" if proc else ""
+                    lines.append(f"- {d} {taref}: {(ta_title or '')[:150]}{procs}")
+                lines.append("")
+        except Exception as e:
+            logger.debug("[today-block] texts_adopted lookup skipped: %s", e)
+            # non-fatal
+
         # CRITICAL instruction for the model
         lines.append("CRITICAL -- when the user asks about 'today' / 'hoy' / 'avui' / 'aujourd\\'hui' / 'this week' / 'esta semana':")
         lines.append("- Anchor every claim in the TODAY BLOCK above (today's date, week type, verified events).")
+        lines.append("- For 'today's plenary' / 'this week's plenary' / plenary-agenda / 'what is Parliament voting on' questions, answer from the EP plenary adopted texts section above (real TA references + procedure refs), NOT from Commissioner diary entries in the events list.")
         lines.append("- Do NOT describe previous weeks or confabulate committee meetings from past dates as if they were current.")
         lines.append("- If no verified event is listed for today, say so explicitly and point to the current EP week type.")
         lines.append("- Never invent a Council/ECOFIN/Eurogroup or committee meeting on a date not present in the TODAY BLOCK.")

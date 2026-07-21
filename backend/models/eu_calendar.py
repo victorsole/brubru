@@ -75,6 +75,10 @@ class EventTypeEnum(str, enum.Enum):
     COMMITTEE_WEEK = "committee_week"
     COMMITTEE_MEETING = "committee_meeting"
     GROUP_WEEK = "group_week"
+    # EP constituency week: neither plenary nor committees sit. Added with
+    # migration 203; previously folded into GROUP_WEEK, which misdescribed
+    # roughly nine weeks a year as political-group meeting weeks.
+    EXTERNAL_ACTIVITIES = "external_activities"
     RECESS = "recess"
     COUNCIL_MEETING = "council_meeting"
     INFORMAL_MEETING = "informal_meeting"

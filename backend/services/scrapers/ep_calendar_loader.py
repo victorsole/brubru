@@ -28,22 +28,31 @@ DAY_OFFSETS = {
     "Sunday": 6,
 }
 
-# Activity type to event_type mapping
+# Activity type to event_type mapping.
+#
+# external_activities used to be mapped onto group_week because the DB enum
+# had no value for it. That told users the political groups were meeting in
+# Brussels during what is actually a constituency week. Migration 203 added
+# the enum value; the mapping is now 1:1 and must stay that way.
 ACTIVITY_TYPE_MAP = {
     "plenary_session": "plenary_session",
     "committee_week": "committee_week",
     "group_week": "group_week",
     "recess": "recess",
-    "external_activities": "group_week",  # Map to group_week
+    "external_activities": "external_activities",
 }
 
-# Activity type to human-readable title
+# Activity type to human-readable title.
+#
+# These titles are user-facing: they are read aloud in chat answers and are
+# interpolated into proactive briefings. Each must be unambiguous on its own,
+# because a reader only ever sees the title, never the activity_type key.
 ACTIVITY_TITLES = {
     "plenary_session": "EP Plenary Session",
     "committee_week": "EP Committee Week",
     "group_week": "EP Political Group Week",
     "recess": "EP Recess",
-    "external_activities": "EP External Activities",
+    "external_activities": "EP Constituency Week (external parliamentary activities)",
 }
 
 # Activity type to description
@@ -65,8 +74,11 @@ ACTIVITY_DESCRIPTIONS = {
     ),
     "recess": None,
     "external_activities": (
-        "External parliamentary activities: committee delegations, "
-        "fact-finding missions, and inter-parliamentary meetings."
+        "EP constituency week (external parliamentary activities): neither the "
+        "plenary nor the standing committees sit. MEPs work in their home "
+        "countries and constituencies; delegations, fact-finding missions and "
+        "inter-parliamentary meetings may take place. There is no committee "
+        "agenda and no plenary agenda for this week."
     ),
 }
 
@@ -184,6 +196,40 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                         "source": "ep_calendar_json",
                         "external_id": ext_id,
                         "source_url": source_url,
+                    })
+            elif week.get("daily") and set(week["daily"].values()) != {activity}:
+                # Mixed week: the days are not all the same activity (e.g.
+                # 7-11 Sep 2026 is committee / group / group / committee).
+                # Emit one event per day so anything answering "what is on
+                # TODAY" gets the right answer instead of the week label.
+                for day_name, day_activity in week["daily"].items():
+                    day_date = _get_weekday_date(start_date, day_name)
+                    if day_date is None:
+                        continue
+
+                    ext_id = f"ep_{year}_w{week_num}_{day_name.lower()}_{day_activity}"
+                    if ext_id in seen_external_ids:
+                        continue
+                    seen_external_ids.add(ext_id)
+
+                    events.append({
+                        "institution": "EP",
+                        "event_type": ACTIVITY_TYPE_MAP.get(day_activity, day_activity),
+                        "title": ACTIVITY_TITLES.get(
+                            day_activity,
+                            f"EP {day_activity.replace('_', ' ').title()}",
+                        ),
+                        "description": ACTIVITY_DESCRIPTIONS.get(day_activity),
+                        "start_date": day_date,
+                        "all_day": True,
+                        "status": "confirmed",
+                        "ep_activity_type": day_activity,
+                        "source": "ep_calendar_json",
+                        "external_id": ext_id,
+                        "source_url": ACTIVITY_SOURCE_URLS.get(
+                            day_activity,
+                            "https://www.europarl.europa.eu/plenary/en/agendas.html",
+                        ),
                     })
             else:
                 # Single multi-day event for the week
