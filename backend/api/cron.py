@@ -629,6 +629,83 @@ _ECONOMY_BATCHES: list[list[str]] = [
 # offending body to a local/manual refresh (drop it from this list).
 
 
+# Strong references to in-flight economy background tasks. Without this the
+# event loop can garbage-collect a bare create_task() coroutine mid-run.
+_economy_tasks: set = set()
+_economy_running: set[int] = set()
+
+
+async def _run_economy_batch_bg(batch: int, bodies: list[str]) -> None:
+    """Run one economy batch in the background (fire-and-forget from the endpoint).
+
+    Moved off the request path 10 Jul 2026: a batch runs ~26 heavy bodies
+    sequentially (up to 600s each, several via headless Chromium), which on the
+    single uvicorn worker routinely overran the dispatcher's 1800s `_fire`
+    timeout and got cut off before rows committed -- economy news ingestion had
+    silently frozen since ~25 June. Returning immediately lets the dispatcher's
+    HTTP call finish fast; the work continues here and records its own run so
+    `/api/sync/health` surfaces the tier (root cause: it never called
+    record_run, so the stall was invisible).
+    """
+    from datetime import datetime, timezone
+    from services.sync.freshness import record_run
+
+    started = datetime.now(timezone.utc)
+    results: dict = {}
+    ok_count = 0
+    first_fail: str = ""  # "body: <stderr/return summary>" for the first non-success body
+    try:
+        for body in bodies:
+            res = await _run_script_async(
+                f"economy_{body}", "scripts/sync_economy.py",
+                ["--body", body, "--type", "all"], timeout=600,
+            )
+            results[body] = res.get("status")
+            if res.get("status") == "success":
+                ok_count += 1
+            elif not first_fail:
+                _detail = (res.get("stderr_tail") or res.get("error")
+                           or res.get("reason") or f"rc={res.get('returncode')}")
+                first_fail = f"{body}: {str(_detail)[:400]}"
+
+        # Tenderator translations for economy_items funding rows, AFTER all
+        # bodies so freshly-arrived foreign agency rows get their 6-language
+        # cache. Capped per batch to stay within budget.
+        res_tr = await _run_script_async(
+            "tenderator_translations_agency",
+            "scripts/backfill_tenderator_translations.py",
+            ["--table", "economy_items", "--funding-only", "--limit", "100", "--batch", "20"],
+            timeout=900,
+        )
+        results["tenderator_translations_agency"] = res_tr.get("status")
+        logger.info(f"[CRON] economy batch {batch} sync complete: {results}")
+
+        db = SessionLocal()
+        try:
+            record_run(
+                db, source_key="cron_dispatch", tier=f"economy_b{batch}",
+                status=("success" if ok_count else "failed"),
+                items_added=ok_count, started_at=started,
+                finished_at=datetime.now(timezone.utc),
+                error=(None if ok_count else f"{ok_count}/{len(bodies)} bodies ok; first_fail {first_fail}"),
+            )
+        finally:
+            db.close()
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.warning(f"[CRON] economy batch {batch} background run failed: {exc}")
+        db = SessionLocal()
+        try:
+            record_run(
+                db, source_key="cron_dispatch", tier=f"economy_b{batch}",
+                status="failed", error=str(exc)[:500], started_at=started,
+                finished_at=datetime.now(timezone.utc),
+            )
+        finally:
+            db.close()
+    finally:
+        _economy_running.discard(batch)
+
+
 @router.post("/sync/economy")
 async def cron_sync_economy(
     batch: int = Query(0, ge=0, le=2, description="Economy body batch (0=10:00, 1=15:00, 2=21:00 UTC)."),
@@ -642,33 +719,23 @@ async def cron_sync_economy(
     to spread scraper load. Fail-soft per body: one body's scraper failing
     never blocks the rest.
 
-    Cadence: once per day per body. `commission` is excluded (its sources are
-    already scheduled via the dedicated daily/weekly backfill scripts).
+    Runs the batch as a BACKGROUND task and returns immediately so the
+    dispatcher's HTTP call cannot time out and kill the run mid-flight. Records
+    a freshness run at the end (visible in /api/sync/health). Cadence: once per
+    day per body. `commission` is excluded (already on the daily/weekly tiers).
     """
     _verify_cron_secret(authorization)
+    import asyncio
     bodies = _ECONOMY_BATCHES[batch] if 0 <= batch < len(_ECONOMY_BATCHES) else []
-    results = {}
-    for body in bodies:
-        results[body] = await _run_script_async(
-            f"economy_{body}", "scripts/sync_economy.py",
-            ["--body", body, "--type", "all"], timeout=600,
-        )
-
-    # Tenderator translations for economy_items funding rows. Runs AFTER all
-    # bodies in this batch have synced so any freshly-arrived foreign agency
-    # row (DE / PL / SV / etc. — ~8% of the agency-procurement universe) gets
-    # its title + summary cached in Brubru's 6 languages by the next read.
-    # Capped per batch to stay within the per-batch Railway cron budget.
-    results["tenderator_translations_agency"] = await _run_script_async(
-        "tenderator_translations_agency",
-        "scripts/backfill_tenderator_translations.py",
-        ["--table", "economy_items", "--funding-only", "--limit", "100", "--batch", "20"],
-        timeout=900,
-    )
-
-    logger.info(f"[CRON] economy batch {batch} sync complete: "
-                f"{ {k: v.get('status') for k, v in results.items()} }")
-    return {"status": "success", "tier": f"economy_b{batch}", "results": results}
+    if not bodies:
+        return {"status": "noop", "tier": f"economy_b{batch}", "bodies": 0}
+    if batch in _economy_running:
+        return {"status": "already_running", "tier": f"economy_b{batch}", "bodies": len(bodies)}
+    _economy_running.add(batch)
+    task = asyncio.create_task(_run_economy_batch_bg(batch, bodies))
+    _economy_tasks.add(task)
+    task.add_done_callback(_economy_tasks.discard)
+    return {"status": "started", "tier": f"economy_b{batch}", "bodies": len(bodies)}
 
 
 @router.post("/sync/weekly")

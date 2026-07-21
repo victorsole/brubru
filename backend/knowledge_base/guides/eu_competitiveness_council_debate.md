@@ -1,6 +1,7 @@
 # EU Competitiveness Debate: Member State Positions and Council Dynamics
 
 ## QUICK FACTS
+- **LATEST (Thursday 9 July 2026 — EUROPEAN INNOVATION SCOREBOARD 2026)**: DG GROW published the **European Innovation Scoreboard 2026** ("Europe's innovation performance strengthens amidst global competition"), the Commission's annual comparative assessment of research-and-innovation performance across EU Member States and selected global competitors. Headline: EU innovation performance continues to strengthen even as global competition intensifies. The Scoreboard classifies Member States into Innovation Leaders / Strong / Moderate / Emerging Innovators and tracks the EU-vs-US/China/South Korea/Japan gap — a recurring evidence base cited in the Draghi/Letta competitiveness debate. Source: DG GROW press, 9 July 2026. Cross-link: `european_competitiveness_fund`, `fp10_ecf_competitiveness`.
 Competitiveness Compass: COM(2025)30, adopted 29 January 2025
 Clean Industrial Deal Communication: COM(2025)85, adopted 26 February 2025
 Draghi Report: "The future of European competitiveness", September 2024, EUR 750-800 billion/year additional investment needed

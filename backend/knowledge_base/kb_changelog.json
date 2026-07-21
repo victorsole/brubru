@@ -165,6 +165,14 @@
       ]
     },
     {
+      "date": "2026-07-15",
+      "action": "added",
+      "guide": "insurance_protection_gap_climate",
+      "title": "Insurance Protection Gap (Natural Catastrophes): EIOPA Dashboard and Policy Response",
+      "summary": "New guide on the EU natural-catastrophe insurance protection gap: EIOPA dashboard (30 countries, ~25% insured share), France/Spain/Italy national schemes, EIOPA-ECB two-pillar EU reinsurance and disaster-fund proposal.",
+      "refs": []
+    },
+    {
       "date": "2026-07-14",
       "action": "updated",
       "guide": "28th_regime_innovation_act",
@@ -1149,14 +1157,6 @@
       "guide": "european_semester_communication",
       "title": "European Semester",
       "summary": "Added the 2026 Spring Package (country-specific recommendations, reformed Stability and Growth Pact dimension).",
-      "refs": []
-    },
-    {
-      "date": "2026-07-15",
-      "action": "added",
-      "guide": "insurance_protection_gap_climate",
-      "title": "Insurance Protection Gap (Natural Catastrophes): EIOPA Dashboard and Policy Response",
-      "summary": "New guide on the EU natural-catastrophe insurance protection gap: EIOPA dashboard (30 countries, ~25% insured share), France/Spain/Italy national schemes, EIOPA-ECB two-pillar EU reinsurance and disaster-fund proposal.",
       "refs": []
     }
   ]

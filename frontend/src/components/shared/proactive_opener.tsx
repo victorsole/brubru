@@ -45,6 +45,27 @@ const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
   weekly_digest: 'Open dashboard',
 };
 
+// Primary CTA label. Defaults to "Tell me more" (which opens Chat with the
+// suggested query). Overridden per trigger where the primary action is NOT a
+// chat query — e.g. learn_about_you routes to the profile setup.
+const PRIMARY_LABEL: Partial<Record<ProactiveTriggerSource, string>> = {
+  learn_about_you: 'Set up your watchlist',
+};
+
+/**
+ * A briefing is a "stub" when its suggested_query is a fill-in-the-blank
+ * prompt (e.g. learn_about_you's "I follow the following EU files and topics:")
+ * rather than a complete, send-ready question. Stubs must NEVER be auto-fired
+ * into Chat: they reach Brubru as an empty request and waste the user's first
+ * interaction. Two real leads (Guiomar Ibáñez, Julia Svets) were lost this way
+ * in Jun/Jul 2026 — they clicked the CTA and Brubru sent a half-sentence in
+ * their name. Route stubs to the profile/watchlist setup instead.
+ */
+const isStubBriefing = (b: ProactiveBriefing): boolean => {
+  const q = (b.suggested_query || '').trim();
+  return b.trigger_source === 'learn_about_you' || q === '' || q.endsWith(':');
+};
+
 interface ProactiveOpenerProps {
   /** Where the opener is mounted, used for styling variants. */
   surface?: 'chat' | 'dashboard';
@@ -71,6 +92,12 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
   }
 
   const onAct = (b: ProactiveBriefing) => {
+    // Never auto-fire an incomplete stub into Chat — send it to the setup
+    // destination instead (defaults to /profile). See isStubBriefing.
+    if (isStubBriefing(b)) {
+      navigate(b.drill_down_path || '/profile');
+      return;
+    }
     navigate(
       `/chat?q=${encodeURIComponent(b.suggested_query)}&autofire=1`,
     );
@@ -101,10 +128,10 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
                 onClick={() => onAct(b)}
               >
                 <Icon path={mdiMessageOutline} size={0.7} />
-                Tell me more
+                {PRIMARY_LABEL[b.trigger_source] || 'Tell me more'}
                 <Icon path={mdiArrowRight} size={0.7} />
               </button>
-              {b.drill_down_path && (
+              {b.drill_down_path && !isStubBriefing(b) && (
                 <button
                   type="button"
                   className="proactive-opener__cta proactive-opener__cta--secondary"

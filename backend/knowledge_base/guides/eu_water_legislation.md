@@ -1,6 +1,7 @@
 # EU Water Legislation
 
 ## QUICK FACTS
+**LATEST (Wednesday 15 July 2026 — NITRATES DIRECTIVE EVALUATION: EFFECTIVE AND RELEVANT):** The Commission published its evaluation of the **Nitrates Directive (Council Directive 91/676/EEC, CELEX 31991L0676)**, covering more than 30 years of implementation since 1991. It concludes the Directive **remains effective and relevant** in protecting Europe's waters from agricultural nitrate pollution and has driven better nutrient management and pollution reductions, while identifying **scope for smarter implementation** — simplifying application, reducing administrative burden and improving outcomes for both farmers and the environment. Published alongside the **2020-2023 country reports** with per-Member-State recommendations. Excess nutrients in rivers, lakes, groundwater and marine waters remain one of Europe's most serious environmental challenges. Source: Commission IP/26/1594 + DG ENV (15 July 2026).
 Water Framework Directive (WFD): Directive 2000/60/EC, CELEX 32000L0060
 WFD adopted: 23 October 2000
 **WFD amendment (March 2026): Directive (EU) 2026/805** of the European Parliament and of the Council of 30 March 2026 amending Directive 2000/60/EC establishing a framework for Community action in the field of water policy. Published OJ L, 20.4.2026. CELEX 32026L0805. Entry into force 20 days after OJ publication.

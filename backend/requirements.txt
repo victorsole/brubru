@@ -100,6 +100,7 @@ python-dateutil==2.8.2
 pytz==2024.1
 
 # Development
+openpyxl==3.1.5
 pytest==7.4.4
 pytest-asyncio==0.23.3
 black==24.1.1
