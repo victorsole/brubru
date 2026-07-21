@@ -2,6 +2,77 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-21",
+      "action": "added",
+      "guide": "eu_methane_regulation",
+      "title": "EU Methane Regulation (EU) 2024/1787",
+      "summary": "New guide: MRV, LDAR, venting/flaring limits, well and coal-mine duties, the importer question, and the 5 August 2026 deadlines",
+      "refs": [
+        "32024R1787"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "added",
+      "guide": "ep_internal_ai_epgenai",
+      "title": "European Parliament internal AI and the EPGenAI Hub",
+      "summary": "New guide: EP internal generative-AI platform (Meta/OpenAI/Anthropic/Mistral, local vs external hosting), September 2026 earliest rollout, April 2024 staff AI guidelines under redraft",
+      "refs": []
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "foreign_subsidies_regulation",
+      "title": "Foreign Subsidies Regulation",
+      "summary": "General Court order T-335/26 Goldwind v Commission (20 Jul 2026): interim suspension of an FSR information request refused for lack of urgency",
+      "refs": [
+        "62026TO0335",
+        "32022R2560"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "EESC mandatory opinion INT/1119 adopted 15 July 2026 (rapporteur Diamantouros): backs the 20%-of-GDP goal, wants complementary indicators and permitting safeguards",
+      "refs": [
+        "2026/0068"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "ecodesign_digital_product_passport",
+      "title": "Ecodesign Regulation and Digital Product Passport",
+      "summary": "DPP Registry live 20 July 2026; scope, testing phase, first deadline 18 Feb 2027 for certain large batteries",
+      "refs": [
+        "32024R1781"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "eu_deforestation_regulation",
+      "title": "EU Deforestation Regulation",
+      "summary": "Commission Notice: guidance document for Regulation (EU) 2023/1115, published 20 July 2026",
+      "refs": [
+        "52026XC03896",
+        "32023R1115"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "ai_act_regulation",
+      "title": "EU Artificial Intelligence Act",
+      "summary": "Commission Implementing Regulation (EU) 2026/1755 (20 Jul 2026): procedure for GPAI model evaluations, independent experts, model access via APIs/source code, and fining proceedings under Articles 92 and 101",
+      "refs": [
+        "32026R1755",
+        "32024R1689"
+      ]
+    },
+    {
       "date": "2026-07-16",
       "action": "added",
       "guide": "p2_spine_ep_health_cluster_2026_07",
