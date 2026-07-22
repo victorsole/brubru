@@ -5,6 +5,7 @@ import { RoutePresence, AnimatedPage } from './components/animations/page_transi
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from './hooks/use_auth';
 import { Header } from './components/shared/header';
+import { ImpersonationBanner } from './components/shared/impersonation_banner';
 import { Footer } from './components/shared/footer';
 import { CookieConsent } from './components/shared/cookie_consent';
 import { TourProvider } from './components/tour';
@@ -55,6 +56,7 @@ export const App = () => {
       <BrowserRouter>
       <TourProvider>
       <div className="app">
+        <ImpersonationBanner />
         <RoutePresence>
         <Routes>
           {/* Public routes */}

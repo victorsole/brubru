@@ -1,31 +1,36 @@
 // frontend/src/components/admin/user_management.tsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/use_auth';
 import './admin_common.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-interface User {
+interface AdminUser {
   id: string;
-  email: string;
+  email: string | null;
   full_name: string | null;
   organization: string | null;
   role: string;
   subscription_tier: string;
+  subscription_expires_at: string | null;
   is_active: boolean;
+  is_dormant: boolean;
   created_at: string;
   last_login: string | null;
 }
 
 export const UserManagement = () => {
-  const { token } = useAuth();
-  const [users, setUsers] = useState<User[]>([]);
+  const { token, impersonate } = useAuth();
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [impersonating, setImpersonating] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -44,7 +49,7 @@ export const UserManagement = () => {
     } catch (err: any) {
       console.error('Failed to fetch users:', err);
       setError(err.response?.data?.detail || 'Failed to load users');
-      setUsers([]); // Reset to empty array on error
+      setUsers([]);
       setTotal(0);
     } finally {
       setLoading(false);
@@ -54,6 +59,36 @@ export const UserManagement = () => {
   const handleSearch = () => {
     setPage(1);
     fetchUsers();
+  };
+
+  const handleImpersonate = async (user: AdminUser) => {
+    if (!confirm(`View Brubru as ${user.email || user.full_name}? Your admin session is kept and you can exit any time from the banner.`)) {
+      return;
+    }
+    try {
+      setImpersonating(user.id);
+      // 1. Mint the short-lived token for the target user (logged server-side)
+      const tokenRes = await axios.post(
+        `${API_BASE_URL}/api/admin/users/${user.id}/impersonate`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const targetToken = tokenRes.data.access_token;
+
+      // 2. Fetch the canonical user object with the target token
+      const meRes = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${targetToken}` }
+      });
+
+      // 3. Swap the session (admin session is stashed in the auth store)
+      impersonate(targetToken, meRes.data);
+      navigate('/my-eu-bubble');
+    } catch (err: any) {
+      console.error('Impersonation failed:', err);
+      alert(err.response?.data?.detail || 'Failed to impersonate user');
+    } finally {
+      setImpersonating(null);
+    }
   };
 
   if (loading && users.length === 0) {
@@ -90,7 +125,7 @@ export const UserManagement = () => {
 
       <div className="admin-section__stats">
         <span>Total Users: <strong>{total}</strong></span>
-        <span>Showing: <strong>{Array.isArray(users) ? users.length : 0}</strong></span>
+        <span>Showing: <strong>{users.length}</strong></span>
       </div>
 
       <div className="admin-section__table-container">
@@ -105,13 +140,19 @@ export const UserManagement = () => {
               <th>Status</th>
               <th>Created</th>
               <th>Last Login</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(users) && users.map((user) => (
+            {users.map((user) => (
               <tr key={user.id}>
-                <td>{user.email}</td>
-                <td>{user.full_name || '-'}</td>
+                <td>{user.email || <small className="admin-section__text-muted">(no email)</small>}</td>
+                <td>
+                  {user.full_name || '-'}
+                  {user.is_dormant && (
+                    <span className="admin-section__badge" style={{ marginLeft: '0.4rem' }}>dormant</span>
+                  )}
+                </td>
                 <td>{user.organization || '-'}</td>
                 <td>
                   <span className={`admin-section__badge ${user.role === 'admin' ? 'admin-section__badge--admin' : ''}`}>
@@ -122,6 +163,11 @@ export const UserManagement = () => {
                   <span className={`admin-section__badge admin-section__badge--${user.subscription_tier}`}>
                     {user.subscription_tier}
                   </span>
+                  {user.subscription_expires_at && (
+                    <><br /><small className="admin-section__text-muted">
+                      until {new Date(user.subscription_expires_at).toLocaleDateString()}
+                    </small></>
+                  )}
                 </td>
                 <td>
                   <span className={`admin-section__status ${user.is_active ? 'admin-section__status--active' : 'admin-section__status--inactive'}`}>
@@ -130,6 +176,19 @@ export const UserManagement = () => {
                 </td>
                 <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 <td>{user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Never'}</td>
+                <td>
+                  {user.role !== 'admin' && (
+                    <button
+                      className="btn btn--secondary btn--small"
+                      onClick={() => handleImpersonate(user)}
+                      disabled={impersonating !== null}
+                      title="View Brubru as this user"
+                    >
+                      <span className="mdi mdi-account-switch"></span>
+                      {impersonating === user.id ? '...' : 'Impersonate'}
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -1242,3 +1242,54 @@ def get_outreach_overview(
             "claimed_total": claimed,
         },
     }
+
+
+# ============================================================================
+# USER IMPERSONATION (added Jul 2026)
+# ============================================================================
+
+@router.post("/users/{user_id}/impersonate")
+def impersonate_user(
+    user_id: UUID,
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Mint a short-lived (2h) access token for the target user so the admin can
+    see Brubru exactly as that user does (profile, MEUB filters, tier gating).
+
+    Every impersonation is written to the admin activity log. The token embeds
+    an impersonated_by claim for traceability.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    if user.id == admin.id:
+        raise HTTPException(status_code=400, detail="You are already this user")
+
+    from api.auth import create_access_token
+
+    token = create_access_token(
+        data={"sub": str(user.id), "impersonated_by": str(admin.id)},
+        expires_delta=timedelta(hours=2),
+    )
+
+    db.add(AdminActivityLog(
+        admin_user_id=admin.id,
+        action_type="impersonate_user",
+        target_type="user",
+        target_id=str(user.id),
+        action_details={"target_email": user.email, "expires_in_hours": 2},
+    ))
+    db.commit()
+
+    logger.info("[ADMIN] %s impersonating user %s (%s)", admin.email, user.id, user.email)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in_hours": 2,
+        "target_user_id": str(user.id),
+        "target_email": user.email,
+    }

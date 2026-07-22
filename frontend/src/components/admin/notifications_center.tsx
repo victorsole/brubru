@@ -122,7 +122,7 @@ export const NotificationsCenter = () => {
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <h2>Notifications Center</h2>
+        <h2>Notifications Center (your own account)</h2>
         <div className="admin-section__actions">
           <button
             className="btn btn--success btn--small"
