@@ -41,6 +41,7 @@ import CommitteeDocumentsCard from './committee_documents_card';
 import LegislativeJourneyPanel from './legislative_journey_panel';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -518,7 +519,7 @@ export const LegislativeFileDetail = () => {
                     {timelineEvents.map((event, idx) => (
                       <div key={idx} className="legislative-file-detail__event">
                         <div className="legislative-file-detail__event-date">
-                          {new Date(event.date).toLocaleDateString('en-GB', {
+                          {new Date(event.date).toLocaleDateString(uiDateLocale(), {
                             day: 'numeric',
                             month: 'short',
                             year: 'numeric'

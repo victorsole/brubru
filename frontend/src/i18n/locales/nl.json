@@ -255,7 +255,9 @@
       "myInterests": "Mijn interesses",
       "all": "Alle",
       "body": "Orgaan",
-      "allBodies": "Alle organen"
+      "allBodies": "Alle organen",
+      "openOnAgencyNamed": "Openen op {{agency}}",
+      "openOnAgency": "Openen op de website van het agentschap"
     },
     "feedbackTitle": "Mijn EU Bubble",
     "feedbackDescription": "Help ons Mijn EU Bubble te verbeteren door uw gedachten, suggesties of problemen te delen. Uw feedback helpt ons betere tools te bouwen voor de EU-beleidsgemeenschap.",
@@ -510,7 +512,8 @@
       "desc_corner": "Je startpunt: stel je beleidsinteresses in, beheer je eigen documenten en lees het nieuws dat er voor jou toe doet.",
       "desc_legislative": "Volg wetgevingsdossiers en hun documenten: gevolgde dossiers, Publicatieblad, amendementen, vergelijkingen, de wetgevingstrein en stemmingen.",
       "desc_institutional": "Volg de EU-instellingen: kalender, nieuws, commissietranscripties, Raad- en Europarlementariër-activiteit, plenaire, vragen, consultaties en lobbyontmoetingen.",
-      "desc_strategy": "Analyseer en handel: standpunten, voorspellingen, de Brubru-bibliotheken, EU-onderzoek, stakeholderkaarten en je belangenbehartigingsdocumenten."
+      "desc_strategy": "Analyseer en handel: standpunten, voorspellingen, de Brubru-bibliotheken, EU-onderzoek, stakeholderkaarten en je belangenbehartigingsdocumenten.",
+      "workspace": "Wat je werkruimte heeft geraakt"
     },
     "ask": {
       "title": "Vraag het Brubru",
@@ -840,7 +843,8 @@
       "thu": "do",
       "tue": "di",
       "wed": "wo"
-    }
+    },
+    "dismiss": "Sluiten"
   },
   "landing": {
     "nav": {
@@ -1494,7 +1498,8 @@
       "hotFiles": "Hot dossiers deze week:",
       "examplesLoading": "Laden…",
       "examplesError": "Kon de uitgelichte voorbeelden niet laden ({{error}}).",
-      "examplesEmpty": "Nog geen uitgelichte voorbeelden - plak hierboven een willekeurige EUR-Lex-URL."
+      "examplesEmpty": "Nog geen uitgelichte voorbeelden - plak hierboven een willekeurige EUR-Lex-URL.",
+      "myFiles": "Amendeer een dossier dat je volgt"
     },
     "upload": {
       "title": "Document uploaden",
@@ -1540,7 +1545,14 @@
       "copyForJustification": "Kopieer voor motivering",
       "copyTooltip": "Kopieer een voorgemaakte motiveringszin",
       "copied": "Gekopieerd"
-    }
+    },
+    "badgeOriginalMismatch": "Het geciteerde origineel komt mogelijk niet overeen met de brontekst",
+    "badgeScopeCreep": "Grote herschrijving ({{pct}}% gewijzigd)",
+    "badgePhantom": "Onbekende verwijzing: {{refs}}",
+    "badgeVerified": "Origineel geverifieerd met de bron",
+    "unplacedCount": "{{count}} AI-suggestie(s) konden niet automatisch worden geplaatst",
+    "unplacedHint": "Selecteer het doelelement in de tabel en gebruik Wijzigen om de voorgestelde tekst hieronder toe te passen.",
+    "unknownPosition": "Onbekende positie"
   },
   "comply": {
     "title": "EU Law Comply",
@@ -1578,7 +1590,9 @@
       "requirements": "vereisten",
       "selectPackage": "Pakket selecteren",
       "eucanonReminder": "Lees de uitleg in duidelijke taal",
-      "eucanonAria": "Open de EU Canon-uitleg in een nieuw tabblad"
+      "eucanonAria": "Open de EU Canon-uitleg in een nieuw tabblad",
+      "forYou": "Voor jou",
+      "fromTracked": "Raakt een dossier dat je volgt"
     },
     "report": {
       "title": "Nalevingsrapport",
@@ -1665,7 +1679,10 @@
     "defaultDescription": "Help ons {{name}} te verbeteren door uw gedachten, suggesties of problemen te delen. Uw feedback helpt ons betere tools te bouwen voor de EU-beleidsgemeenschap."
   },
   "dashboard": {
-    "loadingCockpit": "Uw cockpit laden..."
+    "loadingCockpit": "Uw cockpit laden...",
+    "dragToReorder": "Sleep om te herschikken",
+    "expandTile": "Uitvouwen",
+    "collapseTile": "Samenvouwen"
   },
   "updates": {
     "title": "Wetgevingsupdates",
@@ -2140,7 +2157,8 @@
     "confirmUntrack": "Dit dossier niet meer volgen?",
     "stopTracking": "Niet meer volgen",
     "untrackFailed": "Kan het volgen niet stoppen. Probeer opnieuw.",
-    "loginToTrack": "Log in om dossiers te volgen."
+    "loginToTrack": "Log in om dossiers te volgen.",
+    "viewBtn": "Bekijk"
   },
   "calendar": {
     "myEuToday": "Mijn EU vandaag",
@@ -2248,7 +2266,8 @@
     "noAmendmentsDrafted": "Voor dit dossier zijn nog geen amendementen opgesteld.",
     "ask": "Vraag het Brubru",
     "askTitle": "Vraag Brubru over dit dossier",
-    "askPrompt": "Vertel me over {{title}}{{ref}}: hoe het ervoor staat, wie het trekt en wat ik zou moeten doen."
+    "askPrompt": "Vertel me over {{title}}{{ref}}: hoe het ervoor staat, wie het trekt en wat ik zou moeten doen.",
+    "readDeepDive": "Lees de diepteanalyse"
   },
   "stagePipeline": {
     "withdrawn": "Ingetrokken",
@@ -3346,7 +3365,8 @@
     },
     "explainAi": "Leg uit met AI",
     "explaining": "Uitleggen…",
-    "explainRetry": "Uitleg mislukt, probeer opnieuw"
+    "explainRetry": "Uitleg mislukt, probeer opnieuw",
+    "emptyFiles": "Geen handelingen die jouw gevolgde dossiers raken op deze dag."
   },
   "news": {
     "title": "Nieuws",
@@ -3402,7 +3422,8 @@
     },
     "translated": "Vertaald",
     "translatedFrom": "Vertaald uit {{lang}}",
-    "error": "We konden het nieuws nu niet laden. Probeer het zo opnieuw."
+    "error": "We konden het nieuws nu niet laden. Probeer het zo opnieuw.",
+    "emptyFiles": "Geen nieuws over de dossiers die je volgt op dit moment."
   },
   "db": {
     "subtitle": "Brubru’s kennisbibliotheken en een kaart van wie wat doet in de EU, afgestemd op jouw interesses.",
@@ -3484,7 +3505,8 @@
     "summaryFailed": "Kon dit document nu niet samenvatten.",
     "generatedBy": "Gegenereerd door",
     "cached": "in cache",
-    "resDepartments": "Commissie-departementen"
+    "resDepartments": "Commissie-departementen",
+    "whatsNew": "Nieuw in de kennisbank"
   },
   "sm": {
     "subtitle": "Wie ertoe doet op je dossiers en binnen je interesses: de actoren van Parlement, Commissie en Raad en de organisaties eromheen.",
@@ -4527,7 +4549,8 @@
         "ftTenders": "F&T-oproepen voor aanbiedingen",
         "ftProjects": "F&T-gefinancierde projecten",
         "agencyProcurement": "Agentschapsopdracht"
-      }
+      },
+      "askBrubruLabel": "Vraag het Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Zoeken op titel, organisatie, programma...",
@@ -4583,5 +4606,9 @@
         }
       }
     }
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "Ook zichtbaar in Documenten · Funding & Tenders",
+    "alsoInTenderator": "Openen in de Tenderator"
   }
 }

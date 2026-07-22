@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './usage_history.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -109,7 +110,7 @@ export const UsageHistory = ({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-GB', {
+    return new Date(dateString).toLocaleDateString(uiDateLocale(), {
       day: '2-digit',
       month: 'short',
       year: 'numeric',

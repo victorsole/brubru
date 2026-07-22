@@ -11,6 +11,7 @@ import { ActionButtons } from './action_buttons';
 import { DraftedDocumentCard } from './drafted_document_card';
 import { getEultUrl } from '../../utils/eu_links';
 import './message_list.css';
+import { uiDateLocale } from '../../i18n/config';
 
 interface MessageListProps {
   messages: Message[];
@@ -118,7 +119,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
   }, [messages]);
 
   const formatTime = (date: Date) => {
-    return new Intl.DateTimeFormat('en-GB', {
+    return new Intl.DateTimeFormat(uiDateLocale(), {
       hour: '2-digit',
       minute: '2-digit',
     }).format(date);

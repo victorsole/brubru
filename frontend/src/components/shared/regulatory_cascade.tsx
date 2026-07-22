@@ -26,6 +26,7 @@ import {
 
 import { useAuth } from '../../hooks/use_auth';
 import './regulatory_cascade.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -81,7 +82,7 @@ interface RegulatoryCascadeProps {
 const formatDate = (iso: string | null) => {
   if (!iso) return '';
   try {
-    return new Date(iso).toLocaleDateString('en-GB', {
+    return new Date(iso).toLocaleDateString(uiDateLocale(), {
       day: 'numeric',
       month: 'short',
       year: 'numeric',

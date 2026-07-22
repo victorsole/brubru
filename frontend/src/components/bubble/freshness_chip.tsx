@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './freshness_chip.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -75,7 +76,7 @@ export const FreshnessChip = ({ sourceKey }: { sourceKey: string | string[] }) =
   };
 
   const title = info.last_success_at
-    ? `${t('bubble.freshness.updated', 'Updated')} ${new Date(info.last_success_at).toLocaleString('en-GB')}`
+    ? `${t('bubble.freshness.updated', 'Updated')} ${new Date(info.last_success_at).toLocaleString(uiDateLocale())}`
     : t('bubble.freshness.notSynced', 'not synced yet');
 
   return (

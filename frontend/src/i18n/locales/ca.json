@@ -255,7 +255,9 @@
       "myInterests": "Els meus interessos",
       "all": "Totes",
       "body": "Organisme",
-      "allBodies": "Tots els organismes"
+      "allBodies": "Tots els organismes",
+      "openOnAgencyNamed": "Obre a {{agency}}",
+      "openOnAgency": "Obre al web de l'agència"
     },
     "feedbackTitle": "La meva Bombolla UE",
     "feedbackDescription": "Ajuda'ns a millorar La meva Bombolla UE compartint les teves opinions, suggeriments o reportant qualsevol problema. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE.",
@@ -510,7 +512,8 @@
       "desc_corner": "El teu punt de partida: defineix els teus interessos polítics, gestiona els teus documents i llegeix les notícies que t'importen.",
       "desc_legislative": "Segueix els expedients legislatius i la seva documentació: expedients seguits, Diari Oficial, esmenes, comparacions, tren legislatiu i votacions.",
       "desc_institutional": "Segueix les institucions de la UE: calendari, notícies, transcripcions de comissions, activitat del Consell i dels eurodiputats, ple, preguntes, consultes i reunions de lobby.",
-      "desc_strategy": "Analitza i actua: posicions, prediccions, les biblioteques de Brubru, recerca de la UE, mapes d'actors i els teus documents d'incidència."
+      "desc_strategy": "Analitza i actua: posicions, prediccions, les biblioteques de Brubru, recerca de la UE, mapes d'actors i els teus documents d'incidència.",
+      "workspace": "Què ha tocat el teu espai de treball"
     },
     "ask": {
       "title": "Pregunta a Brubru",
@@ -840,7 +843,8 @@
       "thu": "dj",
       "tue": "dt",
       "wed": "dc"
-    }
+    },
+    "dismiss": "Descarta"
   },
   "landing": {
     "nav": {
@@ -1494,7 +1498,8 @@
       "hotFiles": "Expedients destacats aquesta setmana:",
       "examplesLoading": "Carregant…",
       "examplesError": "No s'han pogut carregar els exemples destacats ({{error}}).",
-      "examplesEmpty": "Encara no hi ha exemples destacats; enganxa qualsevol URL d'EUR-Lex aquí dalt."
+      "examplesEmpty": "Encara no hi ha exemples destacats; enganxa qualsevol URL d'EUR-Lex aquí dalt.",
+      "myFiles": "Esmena un expedient que segueixes"
     },
     "upload": {
       "title": "Puja un document",
@@ -1540,7 +1545,14 @@
       "copyForJustification": "Copia per a justificació",
       "copyTooltip": "Copia una línia de justificació preformatada",
       "copied": "Copiat"
-    }
+    },
+    "badgeOriginalMismatch": "El text original citat podria no coincidir amb la font",
+    "badgeScopeCreep": "Reescriptura àmplia ({{pct}}% modificat)",
+    "badgePhantom": "Referència no reconeguda: {{refs}}",
+    "badgeVerified": "Original verificat amb la font",
+    "unplacedCount": "{{count}} suggeriment(s) d'IA no s'han pogut col·locar automàticament",
+    "unplacedHint": "Selecciona l'element de destinació a la taula i fes servir Modifica per aplicar el text proposat a sota.",
+    "unknownPosition": "Posició desconeguda"
   },
   "comply": {
     "title": "EU Law Comply",
@@ -1578,7 +1590,9 @@
       "requirements": "requisits",
       "selectPackage": "Selecciona el paquet",
       "eucanonReminder": "Llegeix l'explicació en llenguatge planer",
-      "eucanonAria": "Obre l'explicació del Cànon de la UE en una nova pestanya"
+      "eucanonAria": "Obre l'explicació del Cànon de la UE en una nova pestanya",
+      "forYou": "Per a tu",
+      "fromTracked": "Afecta un expedient que segueixes"
     },
     "report": {
       "title": "Informe de compliment",
@@ -2462,7 +2476,8 @@
         "ftTenders": "Convocatòries F&T de licitació",
         "ftProjects": "Projectes finançats F&T",
         "agencyProcurement": "Contractació de l'agència"
-      }
+      },
+      "askBrubruLabel": "Pregunta al Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Cercar per títol, organització, programa...",
@@ -2555,7 +2570,10 @@
     "defaultDescription": "Ajuda'ns a millorar {{name}} compartint les teves opinions, suggeriments o reportant problemes. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE."
   },
   "dashboard": {
-    "loadingCockpit": "Carregant el teu tauler..."
+    "loadingCockpit": "Carregant el teu tauler...",
+    "dragToReorder": "Arrossega per reordenar",
+    "expandTile": "Amplia",
+    "collapseTile": "Redueix"
   },
   "updates": {
     "title": "Actualitzacions legislatives",
@@ -3030,7 +3048,8 @@
     "confirmUntrack": "Vols deixar de seguir aquest expedient?",
     "stopTracking": "Deixa de seguir",
     "untrackFailed": "No s'ha pogut deixar de seguir. Torna-ho a provar.",
-    "loginToTrack": "Inicia la sessió per seguir expedients."
+    "loginToTrack": "Inicia la sessió per seguir expedients.",
+    "viewBtn": "Mostra"
   },
   "calendar": {
     "myEuToday": "La meva UE avui",
@@ -3138,7 +3157,8 @@
     "noAmendmentsDrafted": "Encara no s'han redactat esmenes per a aquest fitxer.",
     "ask": "Pregunta a Brubru",
     "askTitle": "Pregunta a Brubru sobre aquest expedient",
-    "askPrompt": "Parla'm de {{title}}{{ref}}: en quin punt està, qui l'impulsa i què hauria de fer."
+    "askPrompt": "Parla'm de {{title}}{{ref}}: en quin punt està, qui l'impulsa i què hauria de fer.",
+    "readDeepDive": "Llegeix l'anàlisi en profunditat"
   },
   "stagePipeline": {
     "withdrawn": "Retirat",
@@ -4236,7 +4256,8 @@
     },
     "explainAi": "Explica-ho amb IA",
     "explaining": "Explicant…",
-    "explainRetry": "L’explicació ha fallat, torna-ho a provar"
+    "explainRetry": "L’explicació ha fallat, torna-ho a provar",
+    "emptyFiles": "Cap acte que afecti els expedients que segueixes en aquesta data."
   },
   "news": {
     "title": "Actualitat",
@@ -4292,7 +4313,8 @@
     },
     "translated": "Traduït",
     "translatedFrom": "Traduït del {{lang}}",
-    "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment."
+    "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment.",
+    "emptyFiles": "Cap notícia relacionada amb els expedients que segueixes ara mateix."
   },
   "db": {
     "subtitle": "Les biblioteques de coneixement de Brubru i un mapa de qui fa què a la UE, adaptat als teus interessos.",
@@ -4374,7 +4396,8 @@
     "summaryFailed": "Ara mateix no s’ha pogut resumir aquest document.",
     "generatedBy": "Generat per",
     "cached": "a la memòria cau",
-    "resDepartments": "Departaments de la Comissió"
+    "resDepartments": "Departaments de la Comissió",
+    "whatsNew": "Novetats a la base de coneixement"
   },
   "sm": {
     "subtitle": "Qui importa als teus expedients i als teus interessos: els actors del Parlament, la Comissió i el Consell i les organitzacions al seu voltant.",
@@ -4583,5 +4606,9 @@
     "archivedFiles": "Fitxers arxivats",
     "archivedItems": "Elements arxivats",
     "noArchived": "Encara no hi ha res arxivat"
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "També visible a Documents · Funding & Tenders",
+    "alsoInTenderator": "Obre al Tenderator"
   }
 }

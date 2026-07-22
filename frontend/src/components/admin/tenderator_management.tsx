@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
 import { AdminStatsCard } from './shared/admin_stats_card';
 import './tenderator_management.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -324,7 +325,7 @@ export const TenderatorManagement = () => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('en-EU', {
+    return new Date(dateStr).toLocaleDateString(uiDateLocale(), {
       year: 'numeric',
       month: 'short',
       day: 'numeric'

@@ -7,6 +7,7 @@
 
 import { create } from 'zustand';
 import axios from 'axios';
+import { uiDateLocale } from '../i18n/config';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
@@ -190,7 +191,7 @@ export const formatRelativeTime = (dateString: string): string => {
   if (diffHours < 24) return `${diffHours}h ago`;
   if (diffDays < 7) return `${diffDays}d ago`;
 
-  return date.toLocaleDateString('en-GB', {
+  return date.toLocaleDateString(uiDateLocale(), {
     day: 'numeric',
     month: 'short'
   });

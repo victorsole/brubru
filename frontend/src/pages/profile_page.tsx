@@ -31,6 +31,7 @@ import {
   mdiLogout,
 } from '@mdi/js';
 import './profile_page.css';
+import { uiDateLocale } from '../i18n/config';
 
 type Section = 'overview' | 'personal' | 'billing' | 'policies' | 'sectors' | 'background' | 'feedback' | 'account';
 
@@ -299,7 +300,7 @@ export const ProfilePage = () => {
             <p className="profile-dashboard__stat-label">Member Since</p>
             <p className="profile-dashboard__stat-value">{accountAge}<small style={{ fontWeight: 400, color: 'var(--color-text-muted)' }}> days</small></p>
             <span className="profile-dashboard__stat-badge profile-dashboard__stat-badge--amber">
-              {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : ''}
+              {user?.created_at ? new Date(user.created_at).toLocaleDateString(uiDateLocale(), { month: 'short', year: 'numeric' }) : ''}
             </span>
           </div>
           <div className="profile-dashboard__stat-icon profile-dashboard__stat-icon--amber">
@@ -508,7 +509,7 @@ export const ProfilePage = () => {
               <div className="profile-dashboard__billing-usage-item">
                 <span className="profile-dashboard__billing-usage-label">{t('profile.renewsOn')}</span>
                 <span className="profile-dashboard__billing-usage-value">
-                  {new Date(user.subscription_expires_at).toLocaleDateString('en-GB', {
+                  {new Date(user.subscription_expires_at).toLocaleDateString(uiDateLocale(), {
                     day: 'numeric', month: 'long', year: 'numeric'
                   })}
                 </span>
@@ -657,13 +658,13 @@ export const ProfilePage = () => {
         <div className="profile-dashboard__account-info">
           <div className="profile-dashboard__account-item">
             <span>{t('profile.accountCreated')}</span>
-            <strong>{user?.created_at && new Date(user.created_at).toLocaleDateString('en-GB', {
+            <strong>{user?.created_at && new Date(user.created_at).toLocaleDateString(uiDateLocale(), {
               day: 'numeric', month: 'long', year: 'numeric'
             })}</strong>
           </div>
           <div className="profile-dashboard__account-item">
             <span>{t('profile.lastLogin')}</span>
-            <strong>{user?.last_login && new Date(user.last_login).toLocaleDateString('en-GB', {
+            <strong>{user?.last_login && new Date(user.last_login).toLocaleDateString(uiDateLocale(), {
               day: 'numeric', month: 'long', year: 'numeric'
             })}</strong>
           </div>

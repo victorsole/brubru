@@ -255,7 +255,9 @@
       "myInterests": "Mis intereses",
       "all": "Todas",
       "body": "Organismo",
-      "allBodies": "Todos los organismos"
+      "allBodies": "Todos los organismos",
+      "openOnAgencyNamed": "Abrir en {{agency}}",
+      "openOnAgency": "Abrir en la web de la agencia"
     },
     "feedbackTitle": "Mi Burbuja UE",
     "feedbackDescription": "Ayúdanos a mejorar Mi Burbuja UE compartiendo tus comentarios, sugerencias o reportando cualquier problema. Tu opinión nos ayuda a crear mejores herramientas para la comunidad de políticas UE.",
@@ -510,7 +512,8 @@
       "desc_corner": "Tu punto de partida: define tus intereses políticos, gestiona tus documentos y lee las noticias que te importan.",
       "desc_legislative": "Sigue los expedientes legislativos y su documentación: expedientes seguidos, Diario Oficial, enmiendas, comparaciones, tren legislativo y votaciones.",
       "desc_institutional": "Sigue a las instituciones de la UE: calendario, noticias, transcripciones de comisiones, actividad del Consejo y de los eurodiputados, pleno, preguntas, consultas y reuniones de lobby.",
-      "desc_strategy": "Analiza y actúa: posiciones, predicciones, las bibliotecas de Brubru, investigación de la UE, mapas de actores y tus documentos de incidencia."
+      "desc_strategy": "Analiza y actúa: posiciones, predicciones, las bibliotecas de Brubru, investigación de la UE, mapas de actores y tus documentos de incidencia.",
+      "workspace": "Qué ha tocado tu espacio de trabajo"
     },
     "ask": {
       "title": "Pregunta a Brubru",
@@ -840,7 +843,8 @@
       "thu": "jue",
       "tue": "mar",
       "wed": "mié"
-    }
+    },
+    "dismiss": "Descartar"
   },
   "landing": {
     "nav": {
@@ -1494,7 +1498,8 @@
       "hotFiles": "Expedientes destacados esta semana:",
       "examplesLoading": "Cargando…",
       "examplesError": "No se pudieron cargar los ejemplos destacados ({{error}}).",
-      "examplesEmpty": "Aún no hay ejemplos destacados; pega cualquier URL de EUR-Lex arriba."
+      "examplesEmpty": "Aún no hay ejemplos destacados; pega cualquier URL de EUR-Lex arriba.",
+      "myFiles": "Enmienda un expediente que sigues"
     },
     "upload": {
       "title": "Subir documento",
@@ -1540,7 +1545,14 @@
       "copyForJustification": "Copiar para justificación",
       "copyTooltip": "Copia una línea de justificación preformateada",
       "copied": "Copiado"
-    }
+    },
+    "badgeOriginalMismatch": "El texto original citado podría no coincidir con la fuente",
+    "badgeScopeCreep": "Reescritura amplia ({{pct}}% modificado)",
+    "badgePhantom": "Referencia no reconocida: {{refs}}",
+    "badgeVerified": "Original verificado con la fuente",
+    "unplacedCount": "{{count}} sugerencia(s) de IA no se han podido colocar automáticamente",
+    "unplacedHint": "Selecciona el elemento de destino en la tabla y usa Modificar para aplicar el texto propuesto abajo.",
+    "unknownPosition": "Posición desconocida"
   },
   "comply": {
     "title": "EU Law Comply",
@@ -1578,7 +1590,9 @@
       "requirements": "requisitos",
       "selectPackage": "Seleccionar paquete",
       "eucanonReminder": "Lee la explicación en lenguaje claro",
-      "eucanonAria": "Abrir la explicación del Canon de la UE en una nueva pestaña"
+      "eucanonAria": "Abrir la explicación del Canon de la UE en una nueva pestaña",
+      "forYou": "Para ti",
+      "fromTracked": "Afecta a un expediente que sigues"
     },
     "report": {
       "title": "Informe de cumplimiento",
@@ -2462,7 +2476,8 @@
         "ftTenders": "Convocatorias de ofertas F&T",
         "ftProjects": "Proyectos financiados F&T",
         "agencyProcurement": "Contratación de agencia"
-      }
+      },
+      "askBrubruLabel": "Pregunta a Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Buscar por título, organización, programa...",
@@ -2555,7 +2570,10 @@
     "defaultDescription": "Ayúdanos a mejorar {{name}} compartiendo tus comentarios, sugerencias o reportando cualquier problema. Tu opinión nos ayuda a crear mejores herramientas para la comunidad de políticas UE."
   },
   "dashboard": {
-    "loadingCockpit": "Cargando tu panel..."
+    "loadingCockpit": "Cargando tu panel...",
+    "dragToReorder": "Arrastra para reordenar",
+    "expandTile": "Ampliar",
+    "collapseTile": "Contraer"
   },
   "updates": {
     "title": "Actualizaciones legislativas",
@@ -3030,7 +3048,8 @@
     "confirmUntrack": "¿Dejar de seguir este expediente?",
     "stopTracking": "Dejar de seguir",
     "untrackFailed": "No se pudo dejar de seguir. Inténtalo de nuevo.",
-    "loginToTrack": "Inicia sesión para seguir expedientes."
+    "loginToTrack": "Inicia sesión para seguir expedientes.",
+    "viewBtn": "Ver"
   },
   "calendar": {
     "myEuToday": "Mi UE hoy",
@@ -3138,7 +3157,8 @@
     "noAmendmentsDrafted": "Aún no se han redactado enmiendas para este archivo.",
     "ask": "Pregunta a Brubru",
     "askTitle": "Pregunta a Brubru sobre este expediente",
-    "askPrompt": "Háblame de {{title}}{{ref}}: en qué punto está, quién lo impulsa y qué debería hacer."
+    "askPrompt": "Háblame de {{title}}{{ref}}: en qué punto está, quién lo impulsa y qué debería hacer.",
+    "readDeepDive": "Leer el análisis en profundidad"
   },
   "stagePipeline": {
     "withdrawn": "Retirado",
@@ -4236,7 +4256,8 @@
     },
     "explainAi": "Explicar con IA",
     "explaining": "Explicando…",
-    "explainRetry": "La explicación ha fallado, inténtalo de nuevo"
+    "explainRetry": "La explicación ha fallado, inténtalo de nuevo",
+    "emptyFiles": "Ningún acto que afecte a los expedientes que sigues en esta fecha."
   },
   "news": {
     "title": "Actualidad",
@@ -4292,7 +4313,8 @@
     },
     "translated": "Traducido",
     "translatedFrom": "Traducido del {{lang}}",
-    "error": "No hemos podido cargar las noticias ahora mismo. Inténtalo de nuevo en un momento."
+    "error": "No hemos podido cargar las noticias ahora mismo. Inténtalo de nuevo en un momento.",
+    "emptyFiles": "Ninguna noticia relacionada con los expedientes que sigues ahora mismo."
   },
   "db": {
     "subtitle": "Las bibliotecas de conocimiento de Brubru y un mapa de quién hace qué en la UE, adaptado a tus intereses.",
@@ -4374,7 +4396,8 @@
     "summaryFailed": "No se ha podido resumir este documento ahora mismo.",
     "generatedBy": "Generado por",
     "cached": "en caché",
-    "resDepartments": "Departamentos de la Comisión"
+    "resDepartments": "Departamentos de la Comisión",
+    "whatsNew": "Novedades en la base de conocimiento"
   },
   "sm": {
     "subtitle": "Quién importa en tus expedientes y en tus intereses: los actores del Parlamento, la Comisión y el Consejo y las organizaciones a su alrededor.",
@@ -4583,5 +4606,9 @@
     "archivedFiles": "Archivos archivados",
     "archivedItems": "Elementos archivados",
     "noArchived": "Aún no hay nada archivado"
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "También visible en Documentos · Funding & Tenders",
+    "alsoInTenderator": "Abrir en el Tenderator"
   }
 }

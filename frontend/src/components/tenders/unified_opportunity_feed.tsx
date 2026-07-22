@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/use_auth';
 import { LensToggle, type LensMode } from '../bubble/lens_toggle';
 import './unified_opportunity_feed.css';
 import type { SourceFilter } from './tenderator_dashboard';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -120,7 +121,7 @@ const formatDeadline = (iso: string | null, t: any): string => {
   if (days === 0) return t('tenderator.unifiedFeed.deadlineToday');
   if (days === 1) return t('tenderator.unifiedFeed.deadlineOneDay');
   if (days <= 30) return t('tenderator.unifiedFeed.deadlineDays', { days });
-  return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  return new Date(iso).toLocaleDateString(uiDateLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
 export const UnifiedOpportunityFeed = ({ source, matchSubSource = 'all', initialQuery = '', programme = '', eicProgramme = '', body = '', externalAction = false, beneficiaryCountry = '', frameworkOnly = false, lensModeOverride = null, onLensModeChange, onSelectOpportunity }: UnifiedFeedProps) => {

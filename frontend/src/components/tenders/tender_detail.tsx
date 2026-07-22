@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_detail.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -288,7 +289,7 @@ export const TenderDetail = ({
 
   const formatValue = (value: number | null, currency: string): string => {
     if (!value) return t('tenderator.detail.notSpecified');
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat(uiDateLocale(), {
       style: 'currency',
       currency: currency || 'EUR',
       minimumFractionDigits: 0,
@@ -298,7 +299,7 @@ export const TenderDetail = ({
 
   const formatDate = (dateStr: string | null): string => {
     if (!dateStr) return t('tenderator.detail.notSpecified');
-    return new Date(dateStr).toLocaleDateString('en-EU', {
+    return new Date(dateStr).toLocaleDateString(uiDateLocale(), {
       day: 'numeric',
       month: 'long',
       year: 'numeric',

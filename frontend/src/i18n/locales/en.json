@@ -255,7 +255,9 @@
       "myInterests": "My interests",
       "all": "All",
       "body": "Body",
-      "allBodies": "All bodies"
+      "allBodies": "All bodies",
+      "openOnAgencyNamed": "Open on {{agency}}",
+      "openOnAgency": "Open on its agency website"
     },
     "feedbackTitle": "My EU Bubble",
     "feedbackDescription": "Help us improve My EU Bubble by sharing your thoughts, suggestions, or reporting any issues. Your feedback helps us create better tools for the EU policy community.",
@@ -510,7 +512,8 @@
       "desc_corner": "Your starting point: set your policy interests, manage your own documents and read the news that matters to you.",
       "desc_legislative": "Track legislative files and their paperwork: tracked files, the Official Journal, amendments, comparisons, the legislative train and votes.",
       "desc_institutional": "Follow the EU institutions: calendar, news, committee transcripts, Council and MEP activity, plenary, parliamentary questions, consultations and lobby meetings.",
-      "desc_strategy": "Analyse and act: positions, predictions, the Brubru libraries, EU research, stakeholder maps and your advocacy documents."
+      "desc_strategy": "Analyse and act: positions, predictions, the Brubru libraries, EU research, stakeholder maps and your advocacy documents.",
+      "workspace": "What touched your workspace"
     },
     "ask": {
       "title": "Ask Brubru",
@@ -840,7 +843,8 @@
       "thu": "Thu",
       "fri": "Fri",
       "sat": "Sat"
-    }
+    },
+    "dismiss": "Dismiss"
   },
   "landing": {
     "nav": {
@@ -1494,7 +1498,8 @@
       "hotFiles": "Hot files this week:",
       "examplesLoading": "Loading…",
       "examplesError": "Could not load featured examples ({{error}}).",
-      "examplesEmpty": "No featured examples yet - paste any EUR-Lex URL above."
+      "examplesEmpty": "No featured examples yet - paste any EUR-Lex URL above.",
+      "myFiles": "Amend a file you track"
     },
     "upload": {
       "title": "Upload Document",
@@ -1540,7 +1545,14 @@
       "copyForJustification": "Copy for justification",
       "copyTooltip": "Copy a pre-formatted justification line",
       "copied": "Copied"
-    }
+    },
+    "badgeOriginalMismatch": "Quoted original may not match the source text",
+    "badgeScopeCreep": "Large rewrite ({{pct}}% changed)",
+    "badgePhantom": "Unrecognised reference: {{refs}}",
+    "badgeVerified": "Original verified against the source",
+    "unplacedCount": "{{count}} AI suggestion(s) could not be placed automatically",
+    "unplacedHint": "Select the target element in the table and use Modify to apply the proposed text below.",
+    "unknownPosition": "Unknown position"
   },
   "comply": {
     "title": "EU Law Comply",
@@ -1578,7 +1590,9 @@
       "requirements": "requirements",
       "selectPackage": "Select Package",
       "eucanonReminder": "Read the plain-language explainer",
-      "eucanonAria": "Open the Brubru EU Canon explainer in a new tab"
+      "eucanonAria": "Open the Brubru EU Canon explainer in a new tab",
+      "forYou": "For you",
+      "fromTracked": "Touches a file you track"
     },
     "report": {
       "title": "Compliance Report",
@@ -2462,7 +2476,8 @@
         "ftTenders": "F&T calls for tenders",
         "ftProjects": "F&T funded projects",
         "agencyProcurement": "Agency procurement"
-      }
+      },
+      "askBrubruLabel": "Ask Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Search by title, organisation, programme...",
@@ -2555,7 +2570,10 @@
     "defaultDescription": "Help us improve {{name}} by sharing your thoughts, suggestions, or reporting any issues. Your feedback helps us create better tools for the EU policy community."
   },
   "dashboard": {
-    "loadingCockpit": "Loading your cockpit..."
+    "loadingCockpit": "Loading your cockpit...",
+    "dragToReorder": "Drag to reorder",
+    "expandTile": "Expand",
+    "collapseTile": "Collapse"
   },
   "updates": {
     "title": "Legislative Updates",
@@ -3030,7 +3048,8 @@
     "confirmUntrack": "Stop tracking this file?",
     "stopTracking": "Stop tracking",
     "untrackFailed": "Could not stop tracking. Please try again.",
-    "loginToTrack": "Please log in to track files."
+    "loginToTrack": "Please log in to track files.",
+    "viewBtn": "View"
   },
   "calendar": {
     "myEuToday": "My EU Today",
@@ -3138,7 +3157,8 @@
     "noAmendmentsDrafted": "No amendments drafted yet for this file.",
     "ask": "Ask Brubru",
     "askTitle": "Ask Brubru about this file",
-    "askPrompt": "Tell me about {{title}}{{ref}}: where it stands, who is driving it, and what I should do."
+    "askPrompt": "Tell me about {{title}}{{ref}}: where it stands, who is driving it, and what I should do.",
+    "readDeepDive": "Read the deep dive"
   },
   "stagePipeline": {
     "withdrawn": "Withdrawn",
@@ -4236,7 +4256,8 @@
     },
     "explainAi": "Explain with AI",
     "explaining": "Explaining…",
-    "explainRetry": "Explanation failed, try again"
+    "explainRetry": "Explanation failed, try again",
+    "emptyFiles": "No acts touching the files you track on this day."
   },
   "news": {
     "title": "News",
@@ -4292,7 +4313,8 @@
     },
     "translated": "Translated",
     "translatedFrom": "Translated from {{lang}}",
-    "error": "We could not load the news right now. Please try again in a moment."
+    "error": "We could not load the news right now. Please try again in a moment.",
+    "emptyFiles": "No news related to the files you track right now."
   },
   "db": {
     "subtitle": "Brubru’s knowledge libraries and a map of who does what across the EU, tailored to your interests.",
@@ -4374,7 +4396,8 @@
     "summaryFailed": "Could not summarise this document right now.",
     "generatedBy": "Generated by",
     "cached": "cached",
-    "resDepartments": "Commission departments"
+    "resDepartments": "Commission departments",
+    "whatsNew": "What's new in the knowledge base"
   },
   "sm": {
     "subtitle": "Who matters on your files and across your interests: the Parliament, Commission and Council actors and the organisations active around them.",
@@ -4583,5 +4606,9 @@
     "archivedFiles": "Archived files",
     "archivedItems": "Archived items",
     "noArchived": "Nothing archived yet"
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "Also visible in My Documents · Funding & Tenders",
+    "alsoInTenderator": "Open in the Tenderator"
   }
 }
