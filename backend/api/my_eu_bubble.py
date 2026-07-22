@@ -46,6 +46,7 @@ from schemas.rss_schemas import (
 )
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
+from api.admin_auth import get_current_admin_user
 
 logger = logging.getLogger(__name__)
 
@@ -833,7 +834,7 @@ async def get_available_sources(
     description="Re-seed RSS feeds including EC Newsletters (admin operation)"
 )
 def refresh_rss_feeds(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -906,7 +907,7 @@ legislative_train_job = {
     description="Trigger legislative train scraping (admin operation)"
 )
 async def refresh_legislative_trains(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -1094,7 +1095,7 @@ async def refresh_legislative_trains(
     description="Check the progress of legislative train scraping"
 )
 async def get_legislative_trains_status(
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_admin_user)
 ):
     """
     Get the current status and progress of legislative train scraping.
@@ -1108,7 +1109,7 @@ async def get_legislative_trains_status(
     description="Fetch latest entries from all active RSS feeds (admin operation)"
 )
 async def fetch_rss_entries(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -1252,7 +1253,7 @@ async def fetch_rss_entries(
 async def enrich_entries_with_ai(
     hours: int = Query(24, description="Process entries from last N hours"),
     limit: int = Query(50, description="Maximum entries to process"),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
