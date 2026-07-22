@@ -4533,7 +4533,55 @@
     "explainAi": "Explain with AI",
     "explaining": "Explaining…",
     "explainRetry": "Explanation failed, try again",
-    "emptyFiles": "No acts touching the files you track on this day."
+    "emptyFiles": "No acts touching the files you track on this day.",
+    "categoryName": {
+      "Regulations": "Regulations",
+      "Directives": "Directives",
+      "Decisions": "Decisions",
+      "Other acts": "Other acts",
+      "Information and notices": "Information and notices"
+    },
+    "actTypeName": {
+      "Agreement": "Agreement",
+      "Communication": "Communication",
+      "Decision": "Decision",
+      "Delegated Regulation": "Delegated Regulation",
+      "Directive": "Directive",
+      "Guideline": "Guideline",
+      "Implementing Decision": "Implementing Decision",
+      "Implementing Regulation": "Implementing Regulation",
+      "Notice": "Notice",
+      "Opinion": "Opinion",
+      "Other": "Other",
+      "Recommendation": "Recommendation",
+      "Regulation": "Regulation",
+      "Resolution": "Resolution"
+    },
+    "institutionName": {
+      "Commission": "Commission",
+      "Council": "Council",
+      "Court of Justice": "Court of Justice",
+      "European Parliament and Council": "European Parliament and Council",
+      "Other EU body": "Other EU body"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Agriculture & CAP",
+      "Animal health": "Animal health",
+      "Biocides": "Biocides",
+      "Customs & tariffs": "Customs & tariffs",
+      "Feed additives": "Feed additives",
+      "Financial & monetary": "Financial & monetary",
+      "Fisheries": "Fisheries",
+      "Food safety": "Food safety",
+      "Justice & security": "Justice & security",
+      "Migration & borders": "Migration & borders",
+      "Other": "Other",
+      "Plant protection": "Plant protection",
+      "Sanctions (CFSP)": "Sanctions (CFSP)",
+      "State aid": "State aid",
+      "Trade defence": "Trade defence"
+    },
+    "readInCatalan": "Read the full act in Catalan"
   },
   "news": {
     "title": "News",

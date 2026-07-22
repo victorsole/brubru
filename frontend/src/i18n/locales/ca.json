@@ -4533,7 +4533,55 @@
     "explainAi": "Explica-ho amb IA",
     "explaining": "Explicant…",
     "explainRetry": "L’explicació ha fallat, torna-ho a provar",
-    "emptyFiles": "Cap acte que afecti els expedients que segueixes en aquesta data."
+    "emptyFiles": "Cap acte que afecti els expedients que segueixes en aquesta data.",
+    "categoryName": {
+      "Regulations": "Reglaments",
+      "Directives": "Directives",
+      "Decisions": "Decisions",
+      "Other acts": "Altres actes",
+      "Information and notices": "Comunicacions i informacions"
+    },
+    "actTypeName": {
+      "Agreement": "Acord",
+      "Communication": "Comunicació",
+      "Decision": "Decisió",
+      "Delegated Regulation": "Reglament delegat",
+      "Directive": "Directiva",
+      "Guideline": "Orientació",
+      "Implementing Decision": "Decisió d'execució",
+      "Implementing Regulation": "Reglament d'execució",
+      "Notice": "Anunci",
+      "Opinion": "Dictamen",
+      "Other": "Altres",
+      "Recommendation": "Recomanació",
+      "Regulation": "Reglament",
+      "Resolution": "Resolució"
+    },
+    "institutionName": {
+      "Commission": "Comissió",
+      "Council": "Consell",
+      "Court of Justice": "Tribunal de Justícia",
+      "European Parliament and Council": "Parlament Europeu i Consell",
+      "Other EU body": "Altres òrgans de la UE"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Agricultura i PAC",
+      "Animal health": "Salut animal",
+      "Biocides": "Biocides",
+      "Customs & tariffs": "Duanes i aranzels",
+      "Feed additives": "Additius per a pinsos",
+      "Financial & monetary": "Financer i monetari",
+      "Fisheries": "Pesca",
+      "Food safety": "Seguretat alimentària",
+      "Justice & security": "Justícia i seguretat",
+      "Migration & borders": "Migració i fronteres",
+      "Other": "Altres",
+      "Plant protection": "Protecció vegetal",
+      "Sanctions (CFSP)": "Sancions (PESC)",
+      "State aid": "Ajuts d'Estat",
+      "Trade defence": "Defensa comercial"
+    },
+    "readInCatalan": "Llegeix l’acte en català"
   },
   "news": {
     "title": "Actualitat",
