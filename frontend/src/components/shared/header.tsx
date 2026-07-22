@@ -29,8 +29,8 @@ export const Header = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { triggerTour } = useTour();
 
-  // Check if user has Blue tier access (blue or admin)
-  const hasBlueAccess = user?.subscription_tier === 'blue' || user?.subscription_tier === 'admin';
+  // Check if user has Blue tier access (blue tier, or the admin role)
+  const hasBlueAccess = user?.subscription_tier === 'blue' || user?.role === 'admin';
 
   const isActive = (path: string) => {
     return location.pathname === path;

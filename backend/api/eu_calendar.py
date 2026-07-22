@@ -98,8 +98,8 @@ def _is_blue_tier(user: User) -> bool:
 
 
 def _is_admin(user: User) -> bool:
-    """Check if user is admin."""
-    return user and getattr(user, "is_admin", False)
+    """Check if user is admin (admin is a role on users.role, not a column)."""
+    return bool(user) and user.role == "admin"
 
 
 def _pi_clause(user: User):

@@ -28,7 +28,8 @@ def require_tier(user: User, allowed_tiers: List[str]) -> None:
     Check if user has required subscription tier.
     Raises HTTPException if not authorized.
     """
-    if user.subscription_tier not in allowed_tiers and user.subscription_tier != 'admin':
+    # Admins bypass tier gating (admin is a role, not a subscription tier)
+    if user.subscription_tier not in allowed_tiers and user.role != 'admin':
         raise HTTPException(
             status_code=403,
             detail=f"This feature requires {' or '.join(allowed_tiers)} tier subscription"
@@ -351,7 +352,7 @@ async def train_timeline_model(
 
     **Requires:** Admin role.
     """
-    if not current_user.is_admin:
+    if current_user.role != 'admin':
         raise HTTPException(status_code=403, detail="Admin access required")
 
     try:
@@ -383,7 +384,7 @@ async def train_outcome_model(
 
     **Requires:** Admin role.
     """
-    if not current_user.is_admin:
+    if current_user.role != 'admin':
         raise HTTPException(status_code=403, detail="Admin access required")
 
     try:

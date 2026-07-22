@@ -276,7 +276,7 @@ async def get_sync_status(
 ) -> SyncStatusResponse:
     """Get aggregate sync status for amendment documents (Admin only)."""
     try:
-        if current_user.subscription_tier != 'admin':
+        if current_user.role != 'admin':
             raise HTTPException(status_code=403, detail="Admin access required")
 
         from services.scrapers.bulk_amendment_sync_service import BulkAmendmentSyncService
@@ -328,7 +328,7 @@ async def trigger_bulk_sync(
     Returns 202 Accepted immediately; sync runs in background.
     """
     try:
-        if current_user.subscription_tier != 'admin':
+        if current_user.role != 'admin':
             raise HTTPException(status_code=403, detail="Admin access required")
 
         request = body or BulkSyncRequest()

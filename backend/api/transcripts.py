@@ -58,7 +58,7 @@ def _require_yellow(user: User):
 
 
 def _is_blue_or_admin(user: User) -> bool:
-    return bool(user and (user.subscription_tier == "blue" or getattr(user, "is_admin", False)))
+    return bool(user and (user.subscription_tier == "blue" or user.role == "admin"))
 
 
 def _pi_committees(user: User) -> set:

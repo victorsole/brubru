@@ -52,7 +52,7 @@ def _require_yellow(user: User):
 
 
 def _is_blue(user: User) -> bool:
-    return bool(user and (user.subscription_tier in ("blue", "admin") or getattr(user, "is_admin", False)))
+    return bool(user and (user.subscription_tier == "blue" or user.role == "admin"))
 
 
 def _mep_profile_url(mep_id: Optional[str], name: Optional[str]) -> Optional[str]:
