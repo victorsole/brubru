@@ -75,8 +75,11 @@ export const UserManagement = () => {
       );
       const targetToken = tokenRes.data.access_token;
 
-      // 2. Fetch the canonical user object with the target token
-      const meRes = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+      // 2. Fetch the canonical user object with the target token.
+      // Use a bare axios instance: the global interceptor in use_auth would
+      // otherwise overwrite the Authorization header with the admin token.
+      const bareAxios = axios.create();
+      const meRes = await bareAxios.get(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${targetToken}` }
       });
 
@@ -134,7 +137,7 @@ export const UserManagement = () => {
             <tr>
               <th>Email</th>
               <th>Name</th>
-              <th>Organization</th>
+              <th>Organisation</th>
               <th>Role</th>
               <th>Tier</th>
               <th>Status</th>
