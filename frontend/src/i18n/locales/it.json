@@ -4236,7 +4236,55 @@
     },
     "explainAi": "Spiega con l’IA",
     "explaining": "Spiegazione…",
-    "explainRetry": "Spiegazione non riuscita, riprova"
+    "explainRetry": "Spiegazione non riuscita, riprova",
+    "categoryName": {
+      "Regulations": "Regolamenti",
+      "Directives": "Direttive",
+      "Decisions": "Decisioni",
+      "Other acts": "Altri atti",
+      "Information and notices": "Comunicazioni e informazioni"
+    },
+    "actTypeName": {
+      "Agreement": "Accordo",
+      "Communication": "Comunicazione",
+      "Decision": "Decisione",
+      "Delegated Regulation": "Regolamento delegato",
+      "Directive": "Direttiva",
+      "Guideline": "Indirizzo",
+      "Implementing Decision": "Decisione di esecuzione",
+      "Implementing Regulation": "Regolamento di esecuzione",
+      "Notice": "Avviso",
+      "Opinion": "Parere",
+      "Other": "Altri",
+      "Recommendation": "Raccomandazione",
+      "Regulation": "Regolamento",
+      "Resolution": "Risoluzione"
+    },
+    "institutionName": {
+      "Commission": "Commissione",
+      "Council": "Consiglio",
+      "Court of Justice": "Corte di giustizia",
+      "European Parliament and Council": "Parlamento europeo e Consiglio",
+      "Other EU body": "Altro organo dell'UE"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Agricoltura e PAC",
+      "Animal health": "Salute animale",
+      "Biocides": "Biocidi",
+      "Customs & tariffs": "Dogane e tariffe",
+      "Feed additives": "Additivi per mangimi",
+      "Financial & monetary": "Finanziario e monetario",
+      "Fisheries": "Pesca",
+      "Food safety": "Sicurezza alimentare",
+      "Justice & security": "Giustizia e sicurezza",
+      "Migration & borders": "Migrazione e frontiere",
+      "Other": "Altri",
+      "Plant protection": "Protezione delle piante",
+      "Sanctions (CFSP)": "Sanzioni (PESC)",
+      "State aid": "Aiuti di Stato",
+      "Trade defence": "Difesa commerciale"
+    },
+    "readInCatalan": "Leggi l’atto completo in catalano"
   },
   "news": {
     "title": "Notizie",

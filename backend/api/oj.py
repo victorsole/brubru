@@ -10,7 +10,7 @@ My Tracked Files (an act carries its matched carriage when the CELEX lines up).
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -41,8 +41,42 @@ def _matches(entry: OjEntry, keywords: List[str]) -> bool:
     return any(k in hay for k in keywords)
 
 
+# Languages with cached entry translations in oj_entry_translations (mig 201).
+# Backfilled locally by scripts/backfill_oj_translations.py (Softcatala, free).
+_TRANSLATED_LANGS = {"ca"}
+
+
+def _translations_map(db: Session, lang: str, entry_ids: List[str]) -> dict:
+    """One batch lookup: {entry_id: (title, plain_explanation)} for a target lang."""
+    if lang not in _TRANSLATED_LANGS or not entry_ids:
+        return {}
+    rows = db.execute(text("""
+        SELECT oj_entry_id, title, plain_explanation
+          FROM oj_entry_translations
+         WHERE lang = :lang AND oj_entry_id = ANY(CAST(:ids AS uuid[]))
+    """), {"lang": lang, "ids": entry_ids}).fetchall()
+    return {str(r[0]): (r[1], r[2]) for r in rows}
+
+
+def _catalan_acts(db: Session, celexes: List[str]) -> set:
+    """CELEXes with a deployed full-text Catalan translation at
+    brubru.beresol.eu/legislacio-ue-catala/ (fed daily by
+    scripts/translate_oj_daily_acts.py + the acquis corpus)."""
+    celexes = [c for c in celexes if c]
+    if not celexes:
+        return set()
+    rows = db.execute(text("""
+        SELECT celex FROM catalan_translations
+         WHERE deployed_at IS NOT NULL AND celex = ANY(:cx)
+    """), {"cx": celexes}).fetchall()
+    return {r[0] for r in rows}
+
+
 def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(),
-                tracked_celex: set = frozenset()) -> dict:
+                tracked_celex: set = frozenset(), trans: Optional[tuple] = None,
+                catalan_acts: set = frozenset()) -> dict:
+    # PI/keyword matching always runs on the English title (display-only i18n).
+    t_title, t_expl = (trans or (None, None))
     return {
         "id": str(e.id),
         "matches_tracked": bool((e.matched_procedure_ref and e.matched_procedure_ref in tracked_procs)
@@ -52,12 +86,15 @@ def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(
         "oj_number": e.oj_number,
         "oj_id": e.oj_id,
         "celex": e.celex,
-        "title": e.title,
+        "title": t_title or e.title,
         "act_type": e.act_type,
         "category": e.category,
         "institution": e.institution,
         "eurlex_url": e.eurlex_url,
-        "plain_explanation": e.plain_explanation,
+        "plain_explanation": t_expl or e.plain_explanation,
+        "translated_from": "en" if t_title else None,
+        "catalan_url": (f"https://brubru.beresol.eu/legislacio-ue-catala/{e.celex}/"
+                        if e.celex and e.celex in catalan_acts else None),
         "change_kind": e.change_kind,
         "theme": e.theme,
         "carriage_id": str(e.carriage_id) if e.carriage_id else None,
@@ -85,9 +122,14 @@ async def oj_dates(db: Session = Depends(get_db)):
                 "**When to use it**\nThe MEUB 'My OJ' tab.\n\n"
                 "**Input**\n`date` (YYYY-MM-DD; defaults to the latest); `series` (L|C); "
                 "`my_interests=true` to keep only acts whose title matches your Policy "
-                "Interests; `institution`; `act_type`; `search`.\n\n"
+                "Interests; `institution`; `act_type`; `search`; `lang` (UI language — "
+                "'ca' serves cached Catalan titles and explanations, translated locally "
+                "with the free Softcatala engine; other languages fall back to English "
+                "for now).\n\n"
                 "**You get back**\nThe acts plus day-at-a-glance facets (counts by "
-                "series, type, institution)."))
+                "series, type, institution). Each act carries `catalan_url` when its "
+                "full text is available in Catalan at "
+                "brubru.beresol.eu/legislacio-ue-catala/."))
 def oj_entries(
     date: Optional[str] = Query(None, description="YYYY-MM-DD; default = latest ingested"),
     series: Optional[str] = Query(None, description="L or C"),
@@ -97,6 +139,7 @@ def oj_entries(
     act_type: Optional[str] = Query(None),
     theme: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    lang: Optional[str] = Query(None, description="UI language; 'ca' serves cached Catalan"),
     current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db),
 ):
@@ -127,7 +170,10 @@ def oj_entries(
             q = q.filter(OjEntry.title.ilike(f"%{search}%"))
 
         rows = q.order_by(OjEntry.series, OjEntry.act_type, OjEntry.oj_number).all()
-        items = [_entry_dict(e, keywords, tracked_procs, tracked_celex) for e in rows]
+        trans_map = _translations_map(db, (lang or "en").lower()[:2], [str(e.id) for e in rows])
+        catalan_acts = _catalan_acts(db, [e.celex for e in rows])
+        items = [_entry_dict(e, keywords, tracked_procs, tracked_celex,
+                             trans_map.get(str(e.id)), catalan_acts) for e in rows]
         if my_interests and keywords:
             items = [i for i in items if i["matches_interests"]]
         if my_files and (tracked_procs or tracked_celex):

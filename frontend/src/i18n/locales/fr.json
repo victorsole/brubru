@@ -4236,7 +4236,55 @@
     },
     "explainAi": "Expliquer avec l’IA",
     "explaining": "Explication…",
-    "explainRetry": "Échec de l’explication, réessayer"
+    "explainRetry": "Échec de l’explication, réessayer",
+    "categoryName": {
+      "Regulations": "Règlements",
+      "Directives": "Directives",
+      "Decisions": "Décisions",
+      "Other acts": "Autres actes",
+      "Information and notices": "Communications et informations"
+    },
+    "actTypeName": {
+      "Agreement": "Accord",
+      "Communication": "Communication",
+      "Decision": "Décision",
+      "Delegated Regulation": "Règlement délégué",
+      "Directive": "Directive",
+      "Guideline": "Orientation",
+      "Implementing Decision": "Décision d'exécution",
+      "Implementing Regulation": "Règlement d'exécution",
+      "Notice": "Avis",
+      "Opinion": "Avis",
+      "Other": "Autres",
+      "Recommendation": "Recommandation",
+      "Regulation": "Règlement",
+      "Resolution": "Résolution"
+    },
+    "institutionName": {
+      "Commission": "Commission",
+      "Council": "Conseil",
+      "Court of Justice": "Cour de justice",
+      "European Parliament and Council": "Parlement européen et Conseil",
+      "Other EU body": "Autre organe de l'UE"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Agriculture et PAC",
+      "Animal health": "Santé animale",
+      "Biocides": "Biocides",
+      "Customs & tariffs": "Douanes et tarifs",
+      "Feed additives": "Additifs pour l'alimentation animale",
+      "Financial & monetary": "Financier et monétaire",
+      "Fisheries": "Pêche",
+      "Food safety": "Sécurité alimentaire",
+      "Justice & security": "Justice et sécurité",
+      "Migration & borders": "Migration et frontières",
+      "Other": "Autres",
+      "Plant protection": "Protection des végétaux",
+      "Sanctions (CFSP)": "Sanctions (PESC)",
+      "State aid": "Aides d'État",
+      "Trade defence": "Défense commerciale"
+    },
+    "readInCatalan": "Lire l’acte complet en catalan"
   },
   "news": {
     "title": "Actualité",

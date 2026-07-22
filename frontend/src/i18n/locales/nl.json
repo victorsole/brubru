@@ -3346,7 +3346,55 @@
     },
     "explainAi": "Leg uit met AI",
     "explaining": "Uitleggen…",
-    "explainRetry": "Uitleg mislukt, probeer opnieuw"
+    "explainRetry": "Uitleg mislukt, probeer opnieuw",
+    "categoryName": {
+      "Regulations": "Verordeningen",
+      "Directives": "Richtlijnen",
+      "Decisions": "Besluiten",
+      "Other acts": "Overige handelingen",
+      "Information and notices": "Mededelingen en bekendmakingen"
+    },
+    "actTypeName": {
+      "Agreement": "Overeenkomst",
+      "Communication": "Mededeling",
+      "Decision": "Besluit",
+      "Delegated Regulation": "Gedelegeerde verordening",
+      "Directive": "Richtlijn",
+      "Guideline": "Richtsnoer",
+      "Implementing Decision": "Uitvoeringsbesluit",
+      "Implementing Regulation": "Uitvoeringsverordening",
+      "Notice": "Bekendmaking",
+      "Opinion": "Advies",
+      "Other": "Overige",
+      "Recommendation": "Aanbeveling",
+      "Regulation": "Verordening",
+      "Resolution": "Resolutie"
+    },
+    "institutionName": {
+      "Commission": "Commissie",
+      "Council": "Raad",
+      "Court of Justice": "Hof van Justitie",
+      "European Parliament and Council": "Europees Parlement en Raad",
+      "Other EU body": "Ander EU-orgaan"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Landbouw en GLB",
+      "Animal health": "Diergezondheid",
+      "Biocides": "Biociden",
+      "Customs & tariffs": "Douane en tarieven",
+      "Feed additives": "Toevoegingsmiddelen voor diervoeders",
+      "Financial & monetary": "Financieel en monetair",
+      "Fisheries": "Visserij",
+      "Food safety": "Voedselveiligheid",
+      "Justice & security": "Justitie en veiligheid",
+      "Migration & borders": "Migratie en grenzen",
+      "Other": "Overige",
+      "Plant protection": "Gewasbescherming",
+      "Sanctions (CFSP)": "Sancties (GBVB)",
+      "State aid": "Staatssteun",
+      "Trade defence": "Handelsbescherming"
+    },
+    "readInCatalan": "Lees de volledige handeling in het Catalaans"
   },
   "news": {
     "title": "Nieuws",

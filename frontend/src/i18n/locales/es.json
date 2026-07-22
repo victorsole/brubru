@@ -4236,7 +4236,55 @@
     },
     "explainAi": "Explicar con IA",
     "explaining": "Explicando…",
-    "explainRetry": "La explicación ha fallado, inténtalo de nuevo"
+    "explainRetry": "La explicación ha fallado, inténtalo de nuevo",
+    "categoryName": {
+      "Regulations": "Reglamentos",
+      "Directives": "Directivas",
+      "Decisions": "Decisiones",
+      "Other acts": "Otros actos",
+      "Information and notices": "Comunicaciones e informaciones"
+    },
+    "actTypeName": {
+      "Agreement": "Acuerdo",
+      "Communication": "Comunicación",
+      "Decision": "Decisión",
+      "Delegated Regulation": "Reglamento delegado",
+      "Directive": "Directiva",
+      "Guideline": "Orientación",
+      "Implementing Decision": "Decisión de ejecución",
+      "Implementing Regulation": "Reglamento de ejecución",
+      "Notice": "Anuncio",
+      "Opinion": "Dictamen",
+      "Other": "Otros",
+      "Recommendation": "Recomendación",
+      "Regulation": "Reglamento",
+      "Resolution": "Resolución"
+    },
+    "institutionName": {
+      "Commission": "Comisión",
+      "Council": "Consejo",
+      "Court of Justice": "Tribunal de Justicia",
+      "European Parliament and Council": "Parlamento Europeo y Consejo",
+      "Other EU body": "Otros órganos de la UE"
+    },
+    "themeName": {
+      "Agriculture & CAP": "Agricultura y PAC",
+      "Animal health": "Sanidad animal",
+      "Biocides": "Biocidas",
+      "Customs & tariffs": "Aduanas y aranceles",
+      "Feed additives": "Aditivos para piensos",
+      "Financial & monetary": "Financiero y monetario",
+      "Fisheries": "Pesca",
+      "Food safety": "Seguridad alimentaria",
+      "Justice & security": "Justicia y seguridad",
+      "Migration & borders": "Migración y fronteras",
+      "Other": "Otros",
+      "Plant protection": "Protección fitosanitaria",
+      "Sanctions (CFSP)": "Sanciones (PESC)",
+      "State aid": "Ayudas de Estado",
+      "Trade defence": "Defensa comercial"
+    },
+    "readInCatalan": "Lee el acto completo en catalán"
   },
   "news": {
     "title": "Actualidad",

@@ -17,7 +17,7 @@ import { MeubHeader } from './meub_header';
 import {
   mdiNewspaperVariantOutline, mdiStar, mdiOpenInNew,
   mdiMagnify, mdiBookmarkCheck, mdiCalendarBlankOutline, mdiScaleBalance, mdiBullhornOutline,
-  mdiInformationOutline, mdiCreation, mdiTagOutline, mdiClose,
+  mdiInformationOutline, mdiCreation, mdiTagOutline, mdiClose, mdiTranslate,
 } from '@mdi/js';
 import axios from 'axios';
 import { useAuth } from '../../hooks/use_auth';
@@ -39,6 +39,8 @@ interface OjEntry {
   institution: string | null;
   eurlex_url: string | null;
   plain_explanation: string | null;
+  translated_from?: string | null;
+  catalan_url?: string | null;
   change_kind: string | null;
   theme: string | null;
   carriage_id: string | null;
@@ -59,9 +61,9 @@ const authCfg = () => {
   return token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
 };
 
-const fmtDate = (iso: string) => {
+const fmtDate = (iso: string, locale?: string) => {
   try {
-    return new Date(iso + 'T00:00:00').toLocaleDateString(undefined,
+    return new Date(iso + 'T00:00:00').toLocaleDateString(locale || undefined,
       { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   } catch { return iso; }
 };
@@ -76,7 +78,8 @@ const CHANGE_COLORS: Record<string, string> = {
 };
 
 export const OJTab = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const uiLang = (i18n.language || 'en').split('-')[0];
   const [dates, setDates] = useState<{ date: string; count: number }[]>([]);
   const [activeDate, setActiveDate] = useState<string>('');
   const [series, setSeries] = useState<'' | 'L' | 'C'>('');
@@ -125,11 +128,12 @@ export const OJTab = () => {
     if (institution) params.set('institution', institution);
     if (theme) params.set('theme', theme);
     if (search.trim()) params.set('search', search.trim());
+    if (uiLang !== 'en') params.set('lang', uiLang);
     axios.get<EntriesResponse>(`${API_BASE}/oj/entries?${params.toString()}`, authCfg())
       .then((r) => setData(r.data))
       .catch(() => setData(null))
       .finally(() => setLoading(false));
-  }, [activeDate, series, mode, institution, theme, search]);
+  }, [activeDate, series, mode, institution, theme, search, uiLang]);
 
   const grouped = useMemo(() => {
     const items = data?.items || [];
@@ -164,7 +168,7 @@ export const OJTab = () => {
             <Icon path={mdiCalendarBlankOutline} size={0.8} />
             <select value={activeDate} onChange={(e) => setActiveDate(e.target.value)}>
               {dates.map((d) => (
-                <option key={d.date} value={d.date}>{fmtDate(d.date)} ({d.count})</option>
+                <option key={d.date} value={d.date}>{fmtDate(d.date, uiLang)} ({d.count})</option>
               ))}
             </select>
           </label>
@@ -216,7 +220,7 @@ export const OJTab = () => {
         {facets && (
           <select className="oj-sort" value={institution} onChange={(e) => setInstitution(e.target.value)}>
             <option value="">{t('oj.allInstitutions', 'All institutions')}</option>
-            {Object.keys(facets.institution).map((i) => <option key={i} value={i}>{i}</option>)}
+            {Object.keys(facets.institution).map((i) => <option key={i} value={i}>{t(`oj.institutionName.${i}`, i)}</option>)}
           </select>
         )}
         <div className="oj-search">
@@ -232,7 +236,7 @@ export const OJTab = () => {
           {Object.entries(facets.theme).filter(([k]) => k !== 'Other').map(([th, n]) => (
             <button key={th} className={`oj-themechip ${theme === th ? 'is-active' : ''}`}
               onClick={() => setTheme(theme === th ? '' : th)}>
-              {th} <span>{n}</span>
+              {t(`oj.themeName.${th}`, th)} <span>{n}</span>
             </button>
           ))}
           {theme && (
@@ -258,7 +262,7 @@ export const OJTab = () => {
         grouped.map(([cat, entries]) => (
           <section key={cat} className="oj-group">
             <h2 className="oj-group__title">
-              {cat} <span className="oj-muted">({entries.length})</span>
+              {t(`oj.categoryName.${cat}`, cat)} <span className="oj-muted">({entries.length})</span>
             </h2>
             <div className="oj-list">
               {entries.map((e) => (
@@ -308,16 +312,21 @@ export const OJTab = () => {
                     )}
                     <div className="oj-card__meta">
                       {e.theme && e.theme !== 'Other' && (
-                        <span className="oj-chip is-theme"><Icon path={mdiTagOutline} size={0.5} /> {e.theme}</span>
+                        <span className="oj-chip is-theme"><Icon path={mdiTagOutline} size={0.5} /> {t(`oj.themeName.${e.theme}`, e.theme)}</span>
                       )}
                       {e.act_type && (
-                        <span className="oj-chip"><Icon path={mdiScaleBalance} size={0.5} /> {e.act_type}</span>
+                        <span className="oj-chip"><Icon path={mdiScaleBalance} size={0.5} /> {t(`oj.actTypeName.${e.act_type}`, e.act_type)}</span>
                       )}
-                      {e.institution && <span className="oj-chip is-muted">{e.institution}</span>}
+                      {e.institution && <span className="oj-chip is-muted">{t(`oj.institutionName.${e.institution}`, e.institution)}</span>}
                       {e.celex && (
                         <span className="oj-chip is-muted" title={t('oj.celexTip', 'CELEX number: the act’s unique EUR-Lex ID') as string}>
                           {e.celex}
                         </span>
+                      )}
+                      {uiLang === 'ca' && e.catalan_url && (
+                        <a className="oj-chip is-catalan" href={e.catalan_url} target="_blank" rel="noopener noreferrer">
+                          <Icon path={mdiTranslate} size={0.5} /> {t('oj.readInCatalan', 'Llegeix l’acte en català')}
+                        </a>
                       )}
                       {e.matches_interests && (
                         <span className="oj-chip is-pi"><Icon path={mdiStar} size={0.5} /> {t('oj.mine', 'My interests')}</span>
@@ -338,7 +347,7 @@ export const OJTab = () => {
 
       {data?.date && (
         <p className="oj-foot oj-muted">
-          <Icon path={mdiBullhornOutline} size={0.6} /> {t('oj.sourceNote', 'Source: EUR-Lex Official Journal daily view')} {' · '} {fmtDate(data.date)}
+          <Icon path={mdiBullhornOutline} size={0.6} /> {t('oj.sourceNote', 'Source: EUR-Lex Official Journal daily view')} {' · '} {fmtDate(data.date, uiLang)}
         </p>
       )}
     </div>
