@@ -13,7 +13,7 @@ audience IS NULL rows. Public anonymous users keep the existing behaviour.
 from datetime import date, timedelta
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Header, Query
+from fastapi import APIRouter, Depends, Form, Header, Query, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -186,19 +186,21 @@ def get_brief_stats(db: Session = Depends(get_db)):
     }
 
 
-@router.get("/unsubscribe", response_class=HTMLResponse)
-def unsubscribe_daily_brief(
-    email: str = Query(...),
-    db: Session = Depends(get_db),
-):
-    """
-    Unsubscribe from the daily brief. Works for both registered users and pre-users.
-    Returns a simple confirmation page.
+def _do_unsubscribe(email: str, request: Request, db: Session) -> bool:
+    """Perform the actual unsubscribe across all three pools + log the event.
+
+    Called ONLY from the POST handler, never from the GET. A GET request just
+    renders a confirmation page: corporate email-security scanners
+    (Mimecast/Proofpoint) that pre-fetch every link auto-click the GET but do
+    NOT submit the POST form, so scanner traffic can no longer false-unsubscribe
+    a recipient (memory feedback_unsubscribe_get_scanner_false_positives,
+    10 Jul 2026).
     """
     from models.user import User
     from models.pre_user_event import PreUserEvent
     from sqlalchemy import text
     import uuid as _uuid
+    import json as _json
     from datetime import datetime as _dt
 
     unsubscribed = False
@@ -244,8 +246,12 @@ def unsubscribe_daily_brief(
 
     # 4. ALWAYS log a daily_brief_unsubscribe event, even if email was not
     # found in any of the three pools. This makes the recipient filter
-    # in send pipelines authoritative on a single source of truth, and
-    # prevents repeat sends to addresses that previously clicked unsubscribe.
+    # in send pipelines authoritative on a single source of truth. Capture
+    # user-agent / IP / referer so a residual scanner (or a genuine burst) can
+    # be diagnosed after the fact.
+    _ua = (request.headers.get("user-agent") or "")[:300]
+    _ip = (request.client.host if request.client else "") or ""
+    _ref = (request.headers.get("referer") or "")[:300]
     try:
         db.execute(
             text(
@@ -257,25 +263,19 @@ def unsubscribe_daily_brief(
             {
                 "id": str(_uuid.uuid4()),
                 "pre_user_id": str(_uuid.uuid4()),
-                "metadata": '{"email": "' + email.replace('"', '') + '"}',
+                "metadata": _json.dumps({"email": email, "ua": _ua, "ip": _ip, "referer": _ref}),
                 "ts": _dt.utcnow(),
             },
         )
         db.commit()
-        # If none of the three pools matched but the event log went through,
-        # treat as a successful unsubscribe (right-to-object honoured at the
-        # event-log layer; future sends filter by this event).
         unsubscribed = True
     except Exception:
         db.rollback()
 
-    if unsubscribed:
-        message = "You have been unsubscribed from the Brubru Brief."
-        sub_message = "You will no longer receive Brubru Brief emails."
-    else:
-        message = "We could not unsubscribe this email address."
-        sub_message = "If you are still receiving emails, please contact hello@beresol.eu."
+    return unsubscribed
 
+
+def _unsub_page(body_html: str) -> str:
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -283,11 +283,64 @@ def unsubscribe_daily_brief(
 <body style="margin: 0; padding: 0; background: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <div style="max-width: 480px; margin: 80px auto; text-align: center; padding: 32px;">
     <img src="https://brubru.beresol.eu/assets/brubru_mainlogo.png" alt="Brubru" style="height: 40px; margin-bottom: 24px;" />
+    {body_html}
+  </div>
+</body>
+</html>"""
+
+
+@router.get("/unsubscribe", response_class=HTMLResponse)
+def unsubscribe_confirm_page(
+    email: str = Query(...),
+):
+    """
+    Render an unsubscribe CONFIRMATION page. This GET has NO side effects: it
+    does not unsubscribe. The actual unsubscribe happens only when the user
+    submits the form (POST). This defeats corporate email-security link
+    scanners that auto-GET every URL in an email (they would otherwise
+    false-unsubscribe recipients who never clicked). Memory:
+    feedback_unsubscribe_get_scanner_false_positives (10 Jul 2026).
+    """
+    import html as _html
+    safe_email = _html.escape(email, quote=True)
+    body = f"""
+    <h1 style="font-size: 20px; color: #111827; margin: 0 0 12px 0;">Unsubscribe from the Brubru Brief?</h1>
+    <p style="font-size: 15px; color: #6b7280; line-height: 1.5;">
+      Confirm you want to stop receiving the Brubru Brief at<br><strong>{safe_email}</strong>.
+    </p>
+    <form method="POST" action="/api/daily-brief/unsubscribe" style="margin-top: 24px;">
+      <input type="hidden" name="email" value="{safe_email}" />
+      <button type="submit" style="display: inline-block; padding: 10px 24px; background: #dc2626; color: #ffffff; border: none; text-decoration: none; border-radius: 8px; font-size: 14px; cursor: pointer;">
+        Confirm unsubscribe
+      </button>
+    </form>
+    <a href="https://brubru.beresol.eu" style="display: inline-block; margin-top: 18px; font-size: 13px; color: #6b7280; text-decoration: none;">
+      No, keep me subscribed
+    </a>"""
+    return _unsub_page(body)
+
+
+@router.post("/unsubscribe", response_class=HTMLResponse)
+def unsubscribe_daily_brief(
+    request: Request,
+    email: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    """
+    Perform the unsubscribe (invoked by the confirmation form's POST). Works for
+    registered users, pre-users and EU Transparency Register orgs.
+    """
+    unsubscribed = _do_unsubscribe(email, request, db)
+    if unsubscribed:
+        message = "You have been unsubscribed from the Brubru Brief."
+        sub_message = "You will no longer receive Brubru Brief emails."
+    else:
+        message = "We could not unsubscribe this email address."
+        sub_message = "If you are still receiving emails, please contact hello@beresol.eu."
+    body = f"""
     <h1 style="font-size: 20px; color: #111827; margin: 0 0 12px 0;">{message}</h1>
     <p style="font-size: 15px; color: #6b7280; line-height: 1.5;">{sub_message}</p>
     <a href="https://brubru.beresol.eu" style="display: inline-block; margin-top: 24px; padding: 10px 24px; background: #0693e3; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px;">
       Go to Brubru
-    </a>
-  </div>
-</body>
-</html>"""
+    </a>"""
+    return _unsub_page(body)

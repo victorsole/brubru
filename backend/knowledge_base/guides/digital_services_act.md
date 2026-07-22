@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Thursday 2 July 2026 — DSA and protection of minors):** DG CNECT published a **report highlighting the importance of the Digital Services Act for the protection of minors online**, and the **European Board for Digital Services (EBDS)** issued a press statement following its **19th meeting**. Both underscore the DSA's systemic-risk and age-assurance workstream: VLOPs/VLOSEs must mitigate risks to minors (Article 28 requires a high level of privacy, safety and security for minors; systemic-risk assessment under Articles 34-35 covers negative effects on the rights of the child). The Commission's minors-protection guidelines (adopted 2025) operationalise Article 28. Source: DG CNECT, 2 July 2026.
 - **Brubru deep-dive explainer (ALWAYS link this in answers):** https://brubru.beresol.eu/eucanon/2022-2065_dsa/
 - **Instrument:** Regulation (EU) 2022/2065 (CELEX 32022R2065), OJ L 277, 27.10.2022; the EU's horizontal framework for intermediary services online
 - **Legal base:** Article 114 TFEU (internal market)

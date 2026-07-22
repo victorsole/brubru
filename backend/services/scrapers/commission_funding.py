@@ -19,7 +19,11 @@ import io
 from datetime import datetime, timezone
 
 import requests
-from openpyxl import load_workbook
+# openpyxl is imported lazily inside the one function that needs it (below), so a
+# missing optional Excel dependency can never break importing this module -- which
+# sync_economy.py imports at top level for EVERY body. A hard top-level import here
+# froze ALL economy ingestion on prod ~25 Jun to 10 Jul 2026 (openpyxl not in
+# requirements.txt at the time). Fixed 10 Jul: added to requirements + made lazy.
 
 from services.scrapers.economy_common import Item, clean, _iso_dt
 
@@ -66,8 +70,9 @@ def ingest_eu_funding_recipients(*, fetch_bodies: bool = True, year: int | None 
             return []
         year, raw = found
     try:
+        from openpyxl import load_workbook  # lazy import (see module-top note)
         ws = load_workbook(io.BytesIO(raw), read_only=True).active
-    except (ValueError, OSError):
+    except (ValueError, OSError, ImportError):
         return []
     rows = ws.iter_rows(values_only=True)
     header = list(next(rows))
