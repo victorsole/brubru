@@ -559,7 +559,7 @@
     },
     "overview": {
       "corner": "Comença aquí",
-      "explore": "Explora la teva EU bubble",
+      "explore": "Explora la teva bombolla UE",
       "morning": "Bon dia",
       "afternoon": "Bona tarda",
       "evening": "Bona nit",
@@ -718,7 +718,8 @@
       "categorySelected": "{{count}} seleccionades",
       "selectedTitle": "Les teves àrees de polítiques seleccionades:",
       "remove": "Elimina {{name}}"
-    }
+    },
+    "basicPlanName": "Bàsic"
   },
   "subscription": {
     "hero": {
@@ -1642,7 +1643,7 @@
       "errorFetch": "No s'ha pogut obtenir el document",
       "hotFiles": "Expedients destacats aquesta setmana:",
       "examplesLoading": "Carregant…",
-      "examplesError": "No s'han pogut carregar els exemples destacats ({{error}}).",
+      "examplesError": "No s'han pogut carregar els exemples destacats.",
       "examplesEmpty": "Encara no hi ha exemples destacats; enganxa qualsevol URL d'EUR-Lex aquí dalt.",
       "myFiles": "Esmena un expedient que segueixes",
       "examplesLoadFailed": "No s'han pogut carregar els exemples"

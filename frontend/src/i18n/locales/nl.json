@@ -559,7 +559,7 @@
     },
     "overview": {
       "corner": "Begin hier",
-      "explore": "Verken jouw EU bubble",
+      "explore": "Verken jouw EU-bubbel",
       "morning": "Goedemorgen",
       "afternoon": "Goedemiddag",
       "evening": "Goedenavond",
@@ -718,7 +718,8 @@
       "categorySelected": "{{count}} geselecteerd",
       "selectedTitle": "Je geselecteerde beleidsterreinen:",
       "remove": "{{name}} verwijderen"
-    }
+    },
+    "basicPlanName": "Basis"
   },
   "subscription": {
     "hero": {
@@ -1642,7 +1643,7 @@
       "errorFetch": "Document kon niet worden opgehaald",
       "hotFiles": "Hot dossiers deze week:",
       "examplesLoading": "Laden…",
-      "examplesError": "Kon de uitgelichte voorbeelden niet laden ({{error}}).",
+      "examplesError": "Kon de uitgelichte voorbeelden niet laden.",
       "examplesEmpty": "Nog geen uitgelichte voorbeelden - plak hierboven een willekeurige EUR-Lex-URL.",
       "myFiles": "Amendeer een dossier dat je volgt",
       "examplesLoadFailed": "Kon de voorbeelden niet laden"

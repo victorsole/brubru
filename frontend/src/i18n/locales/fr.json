@@ -559,7 +559,7 @@
     },
     "overview": {
       "corner": "Commencez ici",
-      "explore": "Explorez votre EU bubble",
+      "explore": "Explorez votre bulle UE",
       "morning": "Bonjour",
       "afternoon": "Bon après-midi",
       "evening": "Bonsoir",
@@ -718,7 +718,8 @@
       "categorySelected": "{{count}} sélectionnés",
       "selectedTitle": "Vos domaines d'action sélectionnés :",
       "remove": "Supprimer {{name}}"
-    }
+    },
+    "basicPlanName": "Basique"
   },
   "subscription": {
     "hero": {
@@ -1642,7 +1643,7 @@
       "errorFetch": "Impossible de récupérer le document",
       "hotFiles": "Dossiers chauds cette semaine :",
       "examplesLoading": "Chargement…",
-      "examplesError": "Impossible de charger les exemples mis en avant ({{error}}).",
+      "examplesError": "Impossible de charger les exemples mis en avant.",
       "examplesEmpty": "Aucun exemple mis en avant pour le moment - collez n'importe quelle URL EUR-Lex ci-dessus.",
       "myFiles": "Amender un dossier que vous suivez",
       "examplesLoadFailed": "Impossible de charger les exemples"

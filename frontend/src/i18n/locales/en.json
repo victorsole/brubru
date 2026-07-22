@@ -718,7 +718,8 @@
       "categorySelected": "{{count}} selected",
       "selectedTitle": "Your selected policy areas:",
       "remove": "Remove {{name}}"
-    }
+    },
+    "basicPlanName": "Basic"
   },
   "subscription": {
     "hero": {
@@ -1642,7 +1643,7 @@
       "errorFetch": "Failed to fetch document",
       "hotFiles": "Hot files this week:",
       "examplesLoading": "Loading…",
-      "examplesError": "Could not load featured examples ({{error}}).",
+      "examplesError": "Could not load featured examples.",
       "examplesEmpty": "No featured examples yet - paste any EUR-Lex URL above.",
       "myFiles": "Amend a file you track",
       "examplesLoadFailed": "Failed to load examples"

@@ -559,7 +559,7 @@
     },
     "overview": {
       "corner": "Inizia qui",
-      "explore": "Esplora la tua EU bubble",
+      "explore": "Esplora la tua bolla UE",
       "morning": "Buongiorno",
       "afternoon": "Buon pomeriggio",
       "evening": "Buonasera",
@@ -718,7 +718,8 @@
       "categorySelected": "{{count}} selezionate",
       "selectedTitle": "Le tue aree di policy selezionate:",
       "remove": "Rimuovi {{name}}"
-    }
+    },
+    "basicPlanName": "Base"
   },
   "subscription": {
     "hero": {
@@ -2533,7 +2534,7 @@
       "errorFetch": "Impossibile recuperare il documento",
       "hotFiles": "Fascicoli in evidenza questa settimana:",
       "examplesLoading": "Caricamento…",
-      "examplesError": "Impossibile caricare gli esempi in evidenza ({{error}}).",
+      "examplesError": "Impossibile caricare gli esempi in evidenza.",
       "examplesEmpty": "Ancora nessun esempio in evidenza; incolla un qualsiasi URL di EUR-Lex qui sopra.",
       "myFiles": "Emenda un fascicolo che segui",
       "examplesLoadFailed": "Impossibile caricare gli esempi"

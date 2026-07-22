@@ -261,7 +261,7 @@ export const ProfilePage = () => {
             <p className="profile-dashboard__stat-label">{t('profile.subscription')}</p>
             <p className="profile-dashboard__stat-value">
               <span className={`profile-dashboard__tier-badge profile-dashboard__tier-badge--${user?.subscription_tier || 'white'}`}>
-                {user?.is_trainer ? 'Brubru Trainer' : (currentTier?.name || 'White (Basic)')}
+                {user?.is_trainer ? 'Brubru Trainer' : (currentTier?.name || t('profile.basicPlanName', 'Basic'))}
               </span>
             </p>
           </div>
@@ -451,7 +451,7 @@ export const ProfilePage = () => {
       <>
         {/* Tier card */}
         <div className={`profile-dashboard__billing-tier profile-dashboard__billing-tier--${user?.subscription_tier || 'white'}`}>
-          <p className="profile-dashboard__billing-tier-name">{currentTier?.name || 'White (Basic)'}</p>
+          <p className="profile-dashboard__billing-tier-name">{currentTier?.name || t('profile.basicPlanName', 'Basic')}</p>
           <p className="profile-dashboard__billing-tier-price">
             {currentTier?.price_monthly === 0
               ? t('profile.free', 'Free')

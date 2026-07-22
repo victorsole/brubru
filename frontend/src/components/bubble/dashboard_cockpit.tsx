@@ -525,7 +525,8 @@ export const DashboardCockpit = () => {
   if (error && !data) {
     return (
       <section className="dashboard-cockpit dashboard-cockpit--error">
-        <p>{i18nT('cockpit.error', 'We could not load the cockpit right now.')} {error}</p>
+        {/* The raw API detail is English-only; keep the visible message translated. */}
+        <p>{i18nT('cockpit.error', 'We could not load the cockpit right now.')}</p>
       </section>
     );
   }
