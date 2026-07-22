@@ -27,6 +27,19 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
+# Victor's own accounts. These must always survive admin-panel operations:
+# they can never be deleted, deactivated, or (for admins) demoted -- by anyone,
+# including from an impersonated or future second-admin session.
+PROTECTED_OWNER_EMAILS = {
+    "hello@beresol.eu",
+    "helloberesol@gmail.com",
+    "vsoleferioli@gmail.com",
+}
+
+
+def _is_protected_owner(user: User) -> bool:
+    return bool(user.email) and user.email.lower() in PROTECTED_OWNER_EMAILS
+
 
 # Pydantic Schemas
 
@@ -243,6 +256,19 @@ async def update_user(
             detail="Cannot demote yourself from admin role"
         )
 
+    # Owner accounts can never be demoted or deactivated
+    if _is_protected_owner(user):
+        if updates.role and updates.role != user.role and user.role == 'admin':
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This is a protected owner account: its admin role cannot be removed"
+            )
+        if updates.is_active is False:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This is a protected owner account: it cannot be deactivated"
+            )
+
     # Update fields
     update_data = updates.dict(exclude_unset=True)
     for field, value in update_data.items():
@@ -283,6 +309,13 @@ async def delete_user(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot delete your own admin account"
+        )
+
+    # Owner accounts can never be deleted
+    if _is_protected_owner(user):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This is a protected owner account: it cannot be deleted"
         )
 
     # Log admin action
