@@ -70,11 +70,11 @@ const getStageFromStatus = (status: string): number => {
 };
 
 const stages = [
-  { id: 0, label: 'Proposal', shortLabel: 'Prop' },
-  { id: 1, label: 'Committee', shortLabel: 'Comm' },
-  { id: 2, label: 'Plenary', shortLabel: 'Plen' },
-  { id: 3, label: 'Trilogue', shortLabel: 'Tril' },
-  { id: 4, label: 'Adopted', shortLabel: 'Adpt' },
+  { id: 0, labelKey: 'stagePipeline.proposal', label: 'Proposal', shortKey: 'stagePipeline.proposalShort', shortLabel: 'Prop' },
+  { id: 1, labelKey: 'stagePipeline.committee', label: 'Committee', shortKey: 'stagePipeline.committeeShort', shortLabel: 'Comm' },
+  { id: 2, labelKey: 'stagePipeline.plenary', label: 'Plenary', shortKey: 'stagePipeline.plenaryShort', shortLabel: 'Plen' },
+  { id: 3, labelKey: 'stagePipeline.trilogue', label: 'Trilogue', shortKey: 'stagePipeline.trilogueShort', shortLabel: 'Tril' },
+  { id: 4, labelKey: 'stagePipeline.adopted', label: 'Adopted', shortKey: 'stagePipeline.adoptedShort', shortLabel: 'Adpt' },
 ];
 
 export const StagePipeline = ({ currentStatus, compact = false }: StagePipelineProps) => {
@@ -128,7 +128,7 @@ export const StagePipeline = ({ currentStatus, compact = false }: StagePipelineP
                   )}
                 </div>
                 <span className="stage-pipeline__label">
-                  {compact ? stage.shortLabel : stage.label}
+                  {compact ? t(stage.shortKey, stage.shortLabel) : t(stage.labelKey, stage.label)}
                 </span>
                 {isCurrent && isBlocked && (
                   <span className="stage-pipeline__blocked-indicator">{t('myFilesTab.blocked')}</span>

@@ -139,15 +139,24 @@ export const ProfilePage = () => {
   }, [user?.created_at]);
 
   const navItems: NavItem[] = [
-    { id: 'overview', label: 'Overview', icon: mdiViewDashboardOutline },
+    { id: 'overview', label: t('profile.overview', 'Overview'), icon: mdiViewDashboardOutline },
     { id: 'personal', label: t('profile.personalInfo'), icon: mdiAccountOutline },
-    { id: 'billing', label: 'Billing', icon: mdiCreditCardOutline },
+    { id: 'billing', label: t('profile.billing', 'Billing'), icon: mdiCreditCardOutline },
     { id: 'policies', label: t('profile.policyInterests'), icon: mdiBookmarkMultipleOutline },
-    { id: 'sectors', label: 'Sectors', icon: mdiBriefcaseOutline },
-    { id: 'background', label: 'Background', icon: mdiImageOutline },
+    { id: 'sectors', label: t('profile.sectors', 'Sectors'), icon: mdiBriefcaseOutline },
+    { id: 'background', label: t('profile.background', 'Background'), icon: mdiImageOutline },
     { id: 'feedback', label: t('profile.feedback'), icon: mdiMessageTextOutline },
     { id: 'account', label: t('profile.accountSettings'), icon: mdiCogOutline },
   ];
+
+  // EU countries translated for the current UI language, sorted alphabetically.
+  const euCountries = useMemo(
+    () =>
+      EU_COUNTRIES
+        .map((c) => ({ code: c.code, name: t(`countries.${c.code}`, c.name) }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [t]
+  );
 
   // Handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -237,17 +246,19 @@ export const ProfilePage = () => {
     <>
       <div className="profile-dashboard__welcome">
         <h2 className="profile-dashboard__welcome-title">
-          Welcome back, {user?.full_name?.split(' ')[0] || 'there'}
+          {user?.full_name
+            ? t('profile.welcomeBack', 'Welcome back, {{name}}', { name: user.full_name.split(' ')[0] })
+            : t('profile.welcomeBackNoName', 'Welcome back')}
         </h2>
         <p className="profile-dashboard__welcome-text">
-          Manage your profile, subscription, and policy preferences from your personal dashboard.
+          {t('profile.welcomeText', 'Manage your profile, subscription, and policy preferences from your personal dashboard.')}
         </p>
       </div>
 
       <div className="profile-dashboard__stats">
         <div className="profile-dashboard__stat-card">
           <div className="profile-dashboard__stat-content">
-            <p className="profile-dashboard__stat-label">Subscription</p>
+            <p className="profile-dashboard__stat-label">{t('profile.subscription')}</p>
             <p className="profile-dashboard__stat-value">
               <span className={`profile-dashboard__tier-badge profile-dashboard__tier-badge--${user?.subscription_tier || 'white'}`}>
                 {user?.is_trainer ? 'Brubru Trainer' : (currentTier?.name || 'White (Basic)')}
@@ -297,8 +308,8 @@ export const ProfilePage = () => {
 
         <div className="profile-dashboard__stat-card">
           <div className="profile-dashboard__stat-content">
-            <p className="profile-dashboard__stat-label">Member Since</p>
-            <p className="profile-dashboard__stat-value">{accountAge}<small style={{ fontWeight: 400, color: 'var(--color-text-muted)' }}> days</small></p>
+            <p className="profile-dashboard__stat-label">{t('profile.memberSince', 'Member Since')}</p>
+            <p className="profile-dashboard__stat-value">{accountAge}<small style={{ fontWeight: 400, color: 'var(--color-text-muted)' }}> {t('profile.days', 'days')}</small></p>
             <span className="profile-dashboard__stat-badge profile-dashboard__stat-badge--amber">
               {user?.created_at ? new Date(user.created_at).toLocaleDateString(uiDateLocale(), { month: 'short', year: 'numeric' }) : ''}
             </span>
@@ -312,7 +323,7 @@ export const ProfilePage = () => {
       {/* Quick actions */}
       <div className="profile-dashboard__card">
         <div className="profile-dashboard__card-header">
-          <h3 className="profile-dashboard__card-title">Quick Actions</h3>
+          <h3 className="profile-dashboard__card-title">{t('profile.quickActions', 'Quick Actions')}</h3>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
@@ -320,21 +331,21 @@ export const ProfilePage = () => {
             onClick={() => setActiveSection('personal')}
           >
             <Icon path={mdiAccountOutline} size={0.8} />
-            Edit Profile
+            {t('profile.editProfile', 'Edit Profile')}
           </button>
           <button
             className="profile-dashboard__btn profile-dashboard__btn--secondary"
             onClick={() => setActiveSection('billing')}
           >
             <Icon path={mdiCreditCardOutline} size={0.8} />
-            Billing
+            {t('profile.billing', 'Billing')}
           </button>
           <button
             className="profile-dashboard__btn profile-dashboard__btn--secondary"
             onClick={() => setActiveSection('policies')}
           >
             <Icon path={mdiBookmarkMultipleOutline} size={0.8} />
-            Policy Interests ({policyInterests.length})
+            {t('profile.policyInterests')} ({policyInterests.length})
           </button>
           {user?.subscription_tier !== 'blue' && (
             <Link to="/#pricing" className="profile-dashboard__btn profile-dashboard__btn--upgrade">
@@ -389,7 +400,7 @@ export const ProfilePage = () => {
         </div>
 
         <div className="profile-dashboard__field">
-          <label htmlFor="role_title">Role / Title</label>
+          <label htmlFor="role_title">{t('profile.roleTitle', 'Role / Title')}</label>
           <input
             id="role_title"
             name="role_title"
@@ -397,10 +408,10 @@ export const ProfilePage = () => {
             value={formData.role_title}
             onChange={handleChange}
             disabled={loading}
-            placeholder="e.g. Policy officer, In-house counsel, EU affairs consultant"
+            placeholder={t('profile.roleTitlePlaceholder', 'e.g. Policy officer, In-house counsel, EU affairs consultant')}
             maxLength={120}
           />
-          <small>How you describe your professional role. Brubru tailors answers based on this.</small>
+          <small>{t('profile.roleTitleHelp', 'How you describe your professional role. Brubru tailors answers based on this.')}</small>
         </div>
 
         <div className="profile-dashboard__field">
@@ -413,7 +424,7 @@ export const ProfilePage = () => {
             disabled={loading}
           >
             <option value="">{t('profile.selectCountry')}</option>
-            {EU_COUNTRIES.map(c => (
+            {euCountries.map(c => (
               <option key={c.code} value={c.code}>{c.name}</option>
             ))}
           </select>
@@ -443,22 +454,22 @@ export const ProfilePage = () => {
           <p className="profile-dashboard__billing-tier-name">{currentTier?.name || 'White (Basic)'}</p>
           <p className="profile-dashboard__billing-tier-price">
             {currentTier?.price_monthly === 0
-              ? 'Free'
+              ? t('profile.free', 'Free')
               : <>
                   {'\u20AC'}{currentTier?.price_monthly ?? 0}
-                  <small> / month</small>
+                  <small> {t('profile.perMonth', '/ month')}</small>
                 </>
             }
           </p>
           <p className="profile-dashboard__billing-tier-desc">
-            {currentTier?.description || 'Basic access to Brubru features'}
+            {currentTier?.description || t('profile.basicTierDescription', 'Basic access to Brubru features')}
           </p>
         </div>
 
         {/* Usage */}
         <div className="profile-dashboard__card">
           <div className="profile-dashboard__card-header">
-            <h3 className="profile-dashboard__card-title">Usage This Month</h3>
+            <h3 className="profile-dashboard__card-title">{t('profile.usageThisMonth', 'Usage This Month')}</h3>
           </div>
           <div className="profile-dashboard__billing-usage">
             <div>
@@ -522,7 +533,7 @@ export const ProfilePage = () => {
         {currentTier?.features && currentTier.features.length > 0 && (
           <div className="profile-dashboard__card">
             <div className="profile-dashboard__card-header">
-              <h3 className="profile-dashboard__card-title">Included Features</h3>
+              <h3 className="profile-dashboard__card-title">{t('profile.includedFeatures', 'Included Features')}</h3>
             </div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
               {currentTier.features.map((feature, i) => (
@@ -538,7 +549,7 @@ export const ProfilePage = () => {
         {/* Actions */}
         <div className="profile-dashboard__card">
           <div className="profile-dashboard__card-header">
-            <h3 className="profile-dashboard__card-title">Manage Subscription</h3>
+            <h3 className="profile-dashboard__card-title">{t('profile.manageSubscription', 'Manage Subscription')}</h3>
           </div>
           <div className="profile-dashboard__billing-actions">
             <button
@@ -546,7 +557,7 @@ export const ProfilePage = () => {
               onClick={() => createPortalSession()}
             >
               <Icon path={mdiOpenInNew} size={0.8} />
-              Stripe Customer Portal
+              {t('profile.stripePortal', 'Stripe Customer Portal')}
             </button>
             {user?.subscription_tier !== 'blue' && (
               <Link
@@ -591,7 +602,7 @@ export const ProfilePage = () => {
   const renderSectors = () => (
     <div className="profile-dashboard__card">
       <div className="profile-dashboard__card-header">
-        <h3 className="profile-dashboard__card-title">Your sectors</h3>
+        <h3 className="profile-dashboard__card-title">{t('profile.yourSectors', 'Your sectors')}</h3>
         <div>
           {sectorsLoading && (
             <span className="profile-dashboard__loading">{t('profile.saving')}</span>
@@ -604,9 +615,7 @@ export const ProfilePage = () => {
         </div>
       </div>
       <p className="profile-dashboard__card-description">
-        Pick the EU economic-activity sectors you work in. These power the
-        Dashboard's Voice opportunities, Compliance signals, and New this
-        week tiles.
+        {t('profile.sectorsDescription', "Pick the EU economic-activity sectors you work in. These power the Dashboard's Voice opportunities, Compliance signals, and New this week tiles.")}
       </p>
       <SectorsSelector selectedSectors={sectors} onUpdate={handleSectorsUpdate} />
     </div>
@@ -615,7 +624,7 @@ export const ProfilePage = () => {
   const renderBackground = () => (
     <div className="profile-dashboard__card">
       <div className="profile-dashboard__card-header">
-        <h3 className="profile-dashboard__card-title">Page Background</h3>
+        <h3 className="profile-dashboard__card-title">{t('profile.pageBackground', 'Page Background')}</h3>
         <div>
           {backgroundLoading && (
             <span className="profile-dashboard__loading">{t('profile.saving')}</span>
@@ -628,7 +637,7 @@ export const ProfilePage = () => {
         </div>
       </div>
       <p className="profile-dashboard__card-description">
-        Personalise your My EU Bubble and Profile pages with a beautiful European cityscape or landmark.
+        {t('profile.backgroundDescription', 'Personalise your My EU Bubble and Profile pages with a beautiful European cityscape or landmark.')}
       </p>
       <BackgroundSelector
         selectedBackground={backgroundPreference}
@@ -669,19 +678,19 @@ export const ProfilePage = () => {
             })}</strong>
           </div>
           <div className="profile-dashboard__account-item">
-            <span>Email</span>
+            <span>{t('profile.email')}</span>
             <strong>{user?.email}</strong>
           </div>
           <div className="profile-dashboard__account-item">
-            <span>Organisation</span>
-            <strong>{user?.organization || 'Not set'}</strong>
+            <span>{t('profile.organisation')}</span>
+            <strong>{user?.organization || t('profile.notSet', 'Not set')}</strong>
           </div>
         </div>
       </div>
 
       <div className="profile-dashboard__card">
         <div className="profile-dashboard__card-header">
-          <h3 className="profile-dashboard__card-title" style={{ color: 'var(--color-danger)' }}>Danger Zone</h3>
+          <h3 className="profile-dashboard__card-title" style={{ color: 'var(--color-danger)' }}>{t('profile.dangerZone', 'Danger Zone')}</h3>
         </div>
         <div className="profile-dashboard__danger-zone">
           <p className="profile-dashboard__danger-text">
@@ -708,25 +717,25 @@ export const ProfilePage = () => {
   };
 
   const sectionTitles: Record<Section, string> = {
-    overview: 'Overview',
+    overview: t('profile.overview', 'Overview'),
     personal: t('profile.personalInfo'),
-    billing: 'Billing',
+    billing: t('profile.billing', 'Billing'),
     policies: t('profile.policyInterests'),
-    sectors: 'Sectors',
-    background: 'Background',
+    sectors: t('profile.sectors', 'Sectors'),
+    background: t('profile.background', 'Background'),
     feedback: t('profile.feedback'),
     account: t('profile.accountSettings'),
   };
 
   const sectionSubtitles: Record<Section, string> = {
-    overview: 'Your Brubru dashboard at a glance',
-    personal: 'Update your name, role, organisation, and country',
-    billing: 'Manage your subscription and billing',
-    policies: 'Select the EU policy areas you follow',
-    sectors: 'Pick your industry sectors so Brubru can personalise',
-    background: 'Personalise your page backgrounds',
-    feedback: 'Share your feedback and suggestions',
-    account: 'Account details and settings',
+    overview: t('profile.subtitleOverview', 'Your Brubru dashboard at a glance'),
+    personal: t('profile.subtitlePersonal', 'Update your name, role, organisation, and country'),
+    billing: t('profile.subtitleBilling', 'Manage your subscription and billing'),
+    policies: t('profile.subtitlePolicies', 'Select the EU policy areas you follow'),
+    sectors: t('profile.subtitleSectors', 'Pick your industry sectors so Brubru can personalise'),
+    background: t('profile.subtitleBackground', 'Personalise your page backgrounds'),
+    feedback: t('profile.subtitleFeedback', 'Share your feedback and suggestions'),
+    account: t('profile.subtitleAccount', 'Account details and settings'),
   };
 
   return (
@@ -759,7 +768,7 @@ export const ProfilePage = () => {
           </div>
         </div>
 
-        <p className="profile-dashboard__nav-label">Dashboard</p>
+        <p className="profile-dashboard__nav-label">{t('profile.dashboard', 'Dashboard')}</p>
         <ul className="profile-dashboard__nav">
           {navItems.map(item => (
             <li key={item.id}>

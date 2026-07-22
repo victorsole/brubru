@@ -116,7 +116,7 @@ export interface DetectedEntities {
 }
 
 export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate, onDocumentUpload }: ChatInterfaceProps = {}) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   // Read ?q= param directly from URL as well as initialQuestion prop
   const urlQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') : null;
@@ -240,7 +240,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   useEffect(() => {
     const fetchExamples = async () => {
       try {
-        const locale = (navigator.language || 'en').toLowerCase();
+        // Use the in-app language choice, not the browser locale: a user who
+        // switched Brubru to Catalan gets Catalan example prompts.
+        const locale = (i18n.language || navigator.language || 'en').toLowerCase();
         const tier = (user?.subscription_tier || 'blue').toLowerCase();
         const resp = await axios.get(`${API_BASE_URL}/api/chat/examples`, {
           params: { locale, scope: 'main_chat', tier, limit: 4 },

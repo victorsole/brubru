@@ -11,6 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
 import {
@@ -80,6 +81,7 @@ const recommendationPath = (axis: string): string => {
 };
 
 export const ComplianceMaturity = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<MaturityData | null>(null);
@@ -90,7 +92,7 @@ export const ComplianceMaturity = () => {
     if (!isAuthenticated) return;
     const token = useAuth.getState().token;
     if (!token) {
-      setError('You appear to be signed out. Sign in to see your compliance maturity.');
+      setError(t('maturity.signedOut', 'You appear to be signed out. Sign in to see your compliance maturity.'));
       return;
     }
     setIsLoading(true);
@@ -106,7 +108,10 @@ export const ComplianceMaturity = () => {
       .catch((err) => {
         const detail =
           err?.response?.data?.detail || err?.message || 'unknown error';
-        setError(`Could not load your maturity score: ${detail}`);
+        setError(t('maturity.loadError', {
+          defaultValue: 'Could not load your maturity score: {{detail}}',
+          detail,
+        }));
         setIsLoading(false);
       });
   };
@@ -124,7 +129,7 @@ export const ComplianceMaturity = () => {
   if (isLoading) {
     return (
       <section className="compliance-maturity compliance-maturity--loading">
-        <p>Composing your compliance maturity score…</p>
+        <p>{t('shared.composeMaturity', 'Composing your compliance maturity score…')}</p>
       </section>
     );
   }
@@ -138,7 +143,7 @@ export const ComplianceMaturity = () => {
           onClick={load}
           style={{ marginTop: '0.5rem' }}
         >
-          Try again
+          {t('maturity.tryAgain', 'Try again')}
         </button>
       </section>
     );
@@ -151,12 +156,12 @@ export const ComplianceMaturity = () => {
   return (
     <section
       className="compliance-maturity"
-      aria-label="Your compliance maturity score"
+      aria-label={t('shared.yourMaturityScore', 'Your compliance maturity score')}
     >
       <header className="compliance-maturity__header">
         <Icon path={mdiTrophyOutline} size={1.1} color={tierColour} />
         <div className="compliance-maturity__header-text">
-          <h2>Your compliance maturity</h2>
+          <h2>{t('shared.yourMaturity', 'Your compliance maturity')}</h2>
           <p>{data.tier_label}</p>
         </div>
         <div
@@ -204,7 +209,7 @@ export const ComplianceMaturity = () => {
 
       {data.recommendations.length > 0 && (
         <div className="compliance-maturity__recommendations">
-          <h3>Highest-lift next steps</h3>
+          <h3>{t('shared.highestLiftSteps', 'Highest-lift next steps')}</h3>
           <ul>
             {data.recommendations.map((rec) => (
               <li key={rec.axis + rec.action}>
@@ -222,7 +227,7 @@ export const ComplianceMaturity = () => {
                   className="compliance-maturity__rec-cta"
                   onClick={() => navigate(recommendationPath(rec.axis))}
                 >
-                  Take me there
+                  {t('maturity.takeMeThere', 'Take me there')}
                   <Icon path={mdiArrowRight} size={0.65} />
                 </button>
               </li>
@@ -234,15 +239,13 @@ export const ComplianceMaturity = () => {
       {data.recommendations.length === 0 && data.score === data.max_score && (
         <div className="compliance-maturity__perfect">
           <Icon path={mdiCheckCircleOutline} size={0.9} color="#2e7d32" />
-          <span>You are at maximum maturity. Keep going.</span>
+          <span>{t('shared.maxMaturity', 'You are at maximum maturity. Keep going.')}</span>
         </div>
       )}
 
       {!data.has_any_activity && !data.profile_complete && (
         <div className="compliance-maturity__intro">
-          You are at zero because Brubru does not yet have signals on your
-          activity. The recommendations above each unlock 5–10 points the
-          moment you act on them.
+          {t('maturity.zeroExplainer', 'You are at zero because Brubru does not yet have signals on your activity. The recommendations above each unlock 5-10 points the moment you act on them.')}
         </div>
       )}
     </section>

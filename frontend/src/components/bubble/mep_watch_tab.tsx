@@ -113,7 +113,7 @@ export function MepWatchTab() {
                 <ul className="mepw-qlist">
                   {questions.map((q) => (
                     <li key={q.reference}>
-                      <span className={`mepw-status ${q.answered ? 'is-answered' : 'is-awaiting'}`} title={q.answered ? 'Answered' : 'Awaiting answer'}>
+                      <span className={`mepw-status ${q.answered ? 'is-answered' : 'is-awaiting'}`} title={q.answered ? (t('bubble.parlq.answered', 'Answered') as string) : (t('bubble.parlq.awaiting', 'Awaiting answer') as string)}>
                         <Icon path={q.answered ? mdiCheckCircle : mdiClockOutline} size={0.55} />
                       </span>
                       <a href={q.source_url} target="_blank" rel="noopener noreferrer">{q.subject}</a>

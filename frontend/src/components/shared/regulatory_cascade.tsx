@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
 import {
@@ -149,6 +150,7 @@ const SecondaryActRow = ({ act }: { act: SecondaryAct }) => {
 };
 
 export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenRelevant = false }: RegulatoryCascadeProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<CascadeData | null>(null);
@@ -183,7 +185,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
   if (isLoading) {
     return (
       <section className="regulatory-cascade regulatory-cascade--loading">
-        <p>Composing the regulatory cascade…</p>
+        <p>{t('shared.composeRegCascade', 'Composing the regulatory cascade…')}</p>
       </section>
     );
   }
@@ -197,12 +199,12 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
   return (
     <section
       className="regulatory-cascade"
-      aria-label="Regulatory cascade for this file"
+      aria-label={t('shared.regCascadeAria', 'Regulatory cascade for this file')}
     >
       <header className="regulatory-cascade__header">
         <Icon path={mdiSitemap} size={1} color="#563ea3" />
         <div>
-          <h3>Regulatory cascade</h3>
+          <h3>{t('shared.regCascade', 'Regulatory cascade')}</h3>
           <p className="regulatory-cascade__subtitle">
             What else hangs off this file: implementing acts, delegated acts,
             and related in-flight work.
@@ -214,10 +216,10 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__empty">
           <Icon path={mdiInformationOutline} size={0.9} color="#666" />
           <span>
-            No secondary acts or recent related files found.
+            {t('cascade.noSecondaryActs', 'No secondary acts or recent related files found.')}{' '}
             {data.celex_numbers.length === 0
-              ? ' This file is still pre-adoption — secondary acts emerge only after the primary act is adopted.'
-              : ' Brubru will surface them automatically once they are published.'}
+              ? t('cascade.preAdoptionNote', 'This file is still pre-adoption: secondary acts emerge only after the primary act is adopted.')
+              : t('cascade.autoSurfaceNote', 'Brubru will surface them automatically once they are published.')}
           </span>
         </div>
       )}
@@ -312,11 +314,9 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>
-            <strong>Member State transposition deadlines</strong>
+            <strong>{t('shared.memberStateDeadlines', 'Member State transposition deadlines')}</strong>
             <p>
-              Brubru does not yet ingest national transposition data for every
-              Member State. When this data is available, deadlines will appear
-              here per country.
+              {t('cascade.transpositionExplainer', 'Brubru does not yet ingest national transposition data for every Member State. When this data is available, deadlines will appear here per country.')}
             </p>
           </div>
         </div>
@@ -327,11 +327,9 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>
-            <strong>CEN / CENELEC standards</strong>
+            <strong>{t('shared.cenStandards', 'CEN / CENELEC standards')}</strong>
             <p>
-              Standard revisions linked to this act are not yet ingested. Once
-              connected to the CEN/CENELEC work programme, related standard
-              revisions will appear here.
+              {t('cascade.cenExplainer', 'Standard revisions linked to this act are not yet ingested. Once connected to the CEN/CENELEC work programme, related standard revisions will appear here.')}
             </p>
           </div>
         </div>

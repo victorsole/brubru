@@ -23,6 +23,7 @@ from services.personalization.greeting_service import (
     compose_hooks_from_brief_headlines,
     compose_hooks_from_briefings,
     generate_personalized_greeting,
+    resolve_greeting_language,
 )
 
 
@@ -45,11 +46,100 @@ class GreetingResponse(BaseModel):
     policy_hooks: List[PolicyHook] = []
 
 
+# Localised fragments for the welcome-back recap, in Brubru's 6 languages.
+# Keys: today / yesterday anchors, weekday names (Mon..Sun), month names
+# (Jan..Dec, with the preposition where the language needs one), sentence
+# templates, and carriage-status labels.
+_RECAP_I18N = {
+    "en": {
+        "today": "earlier today", "yesterday": "yesterday",
+        "weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "months": ["January", "February", "March", "April", "May", "June", "July",
+                   "August", "September", "October", "November", "December"],
+        "date_fmt": "{day} {month}",
+        "single": "Since {anchor}: your file '{title}' moved to {status}.",
+        "multi": "Since {anchor}: {n} of your tracked files moved. {titles}.",
+        "status": {},
+    },
+    "ca": {
+        "today": "avui mateix", "yesterday": "ahir",
+        "weekdays": ["dilluns", "dimarts", "dimecres", "dijous", "divendres", "dissabte", "diumenge"],
+        "months": ["de gener", "de febrer", "de març", "d'abril", "de maig", "de juny", "de juliol",
+                   "d'agost", "de setembre", "d'octubre", "de novembre", "de desembre"],
+        "date_fmt": "el {day} {month}",
+        "single": "Des de {anchor}: el teu expedient '{title}' ha passat a {status}.",
+        "multi": "Des de {anchor}: {n} dels expedients que segueixes s'han mogut. {titles}.",
+        "status": {
+            "announced": "anunciat", "tabled": "presentat", "in committee": "en comissió",
+            "close to adoption": "a prop de l'adopció", "adopted": "adoptat",
+            "completed": "completat", "rejected": "rebutjat", "withdrawn": "retirat",
+        },
+    },
+    "es": {
+        "today": "hoy mismo", "yesterday": "ayer",
+        "weekdays": ["el lunes", "el martes", "el miércoles", "el jueves", "el viernes", "el sábado", "el domingo"],
+        "months": ["de enero", "de febrero", "de marzo", "de abril", "de mayo", "de junio", "de julio",
+                   "de agosto", "de septiembre", "de octubre", "de noviembre", "de diciembre"],
+        "date_fmt": "el {day} {month}",
+        "single": "Desde {anchor}: tu expediente '{title}' ha pasado a {status}.",
+        "multi": "Desde {anchor}: {n} de los expedientes que sigues se han movido. {titles}.",
+        "status": {
+            "announced": "anunciado", "tabled": "presentado", "in committee": "en comisión",
+            "close to adoption": "cerca de la adopción", "adopted": "adoptado",
+            "completed": "completado", "rejected": "rechazado", "withdrawn": "retirado",
+        },
+    },
+    "fr": {
+        "today": "plus tôt aujourd'hui", "yesterday": "hier",
+        "weekdays": ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"],
+        "months": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+                   "août", "septembre", "octobre", "novembre", "décembre"],
+        "date_fmt": "le {day} {month}",
+        "single": "Depuis {anchor} : votre dossier '{title}' est passé à {status}.",
+        "multi": "Depuis {anchor} : {n} de vos dossiers suivis ont évolué. {titles}.",
+        "status": {
+            "announced": "annoncé", "tabled": "déposé", "in committee": "en commission",
+            "close to adoption": "proche de l'adoption", "adopted": "adopté",
+            "completed": "clos", "rejected": "rejeté", "withdrawn": "retiré",
+        },
+    },
+    "it": {
+        "today": "oggi stesso", "yesterday": "ieri",
+        "weekdays": ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"],
+        "months": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio",
+                   "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+        "date_fmt": "il {day} {month}",
+        "single": "Da {anchor}: il tuo fascicolo '{title}' è passato a {status}.",
+        "multi": "Da {anchor}: {n} dei fascicoli che segui si sono mossi. {titles}.",
+        "status": {
+            "announced": "annunciato", "tabled": "presentato", "in committee": "in commissione",
+            "close to adoption": "vicino all'adozione", "adopted": "adottato",
+            "completed": "completato", "rejected": "respinto", "withdrawn": "ritirato",
+        },
+    },
+    "nl": {
+        "today": "eerder vandaag", "yesterday": "gisteren",
+        "weekdays": ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"],
+        "months": ["januari", "februari", "maart", "april", "mei", "juni", "juli",
+                   "augustus", "september", "oktober", "november", "december"],
+        "date_fmt": "{day} {month}",
+        "single": "Sinds {anchor}: je dossier '{title}' is nu {status}.",
+        "multi": "Sinds {anchor}: {n} van je gevolgde dossiers zijn in beweging. {titles}.",
+        "status": {
+            "announced": "aangekondigd", "tabled": "ingediend", "in committee": "in de commissie",
+            "close to adoption": "dicht bij vaststelling", "adopted": "vastgesteld",
+            "completed": "afgerond", "rejected": "verworpen", "withdrawn": "ingetrokken",
+        },
+    },
+}
+
+
 def _compose_welcome_back_recap(
     db: Session, user: User, previous_last_login: datetime
 ) -> Optional[str]:
     """
-    Build a "since we last spoke" portfolio diff for the welcome-back tail.
+    Build a "since we last spoke" portfolio diff for the welcome-back tail,
+    in the user's profile language (falls back to English).
 
     Reads status changes on the user's tracked carriages between
     previous_last_login and now. Returns a short spoken sentence or None
@@ -81,29 +171,32 @@ def _compose_welcome_back_recap(
     if not rows:
         return None
 
-    # Format the gap as a relative time anchor ("since Friday", "since
-    # Tuesday", "since 14 May") to make the recap conversational.
+    lang = resolve_greeting_language(getattr(user, "language", None))
+    L = _RECAP_I18N.get(lang, _RECAP_I18N["en"])
+
+    # Format the gap as a relative time anchor ("since Friday" / "des de
+    # divendres", "since 14 May" / "des del 14 de maig") in the user's language.
     now = datetime.now(previous_last_login.tzinfo) if previous_last_login.tzinfo else datetime.utcnow()
     gap_days = (now - previous_last_login).days
     if gap_days <= 0:
-        anchor = "earlier today"
+        anchor = L["today"]
     elif gap_days == 1:
-        anchor = "yesterday"
+        anchor = L["yesterday"]
     elif gap_days < 7:
-        anchor = previous_last_login.strftime("%A")  # "Friday"
+        anchor = L["weekdays"][previous_last_login.weekday()]
     else:
-        anchor = previous_last_login.strftime("%-d %B")  # "14 May"
+        anchor = L["date_fmt"].format(
+            day=previous_last_login.day,
+            month=L["months"][previous_last_login.month - 1],
+        )
 
     if len(rows) == 1:
         r = rows[0]
-        status_label = str(r["status"]).replace("_", " ").lower()
-        return (
-            f"Since {anchor}: your file '{r['title']}' moved to {status_label}."
-        )
+        status_en = str(r["status"]).replace("_", " ").lower()
+        status_label = L["status"].get(status_en, status_en)
+        return L["single"].format(anchor=anchor, title=r["title"], status=status_label)
     titles = "; ".join(r["title"] for r in rows[:3])
-    return (
-        f"Since {anchor}: {len(rows)} of your tracked files moved. {titles}."
-    )
+    return L["multi"].format(anchor=anchor, n=len(rows), titles=titles)
 
 
 def _latest_onboarding_policy_area(db: Session, pre_user_id: str) -> Optional[Dict[str, str]]:
@@ -312,14 +405,11 @@ async def get_greeting(
     if prev_login:
         recap = _compose_welcome_back_recap(db, current_user, prev_login)
         if recap:
-            generic_tails = (
-                "Great to see you again! A lot has happened in EU policy since your last visit.",
-                "Welcome back!",
-            )
-            for tail in generic_tails:
-                if tail in result.message:
-                    result.message = result.message.replace(tail, recap)
-                    break
+            # The greeting service reports which (localised) welcome-back tail
+            # it used via metadata; swap that exact string for the recap.
+            generic_tail = result.metadata.get("welcome_back") or ""
+            if generic_tail and generic_tail in result.message:
+                result.message = result.message.replace(generic_tail, recap)
             else:
                 # No generic tail to swap in: append the recap as a fresh sentence.
                 result.message = f"{result.message.rstrip('.')}. {recap}"

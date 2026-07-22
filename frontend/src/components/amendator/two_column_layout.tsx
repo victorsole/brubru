@@ -458,13 +458,13 @@ export const TwoColumnLayout = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to improve text');
+        throw new Error(errorData.detail || t('amendator.improveFailed', 'Failed to improve text'));
       }
 
       const result = await response.json();
       handleCellChange(index, result.improved_text);
     } catch (error) {
-      setImproveError(error instanceof Error ? error.message : 'Could not improve text');
+      setImproveError(error instanceof Error ? error.message : t('amendator.improveError', 'Could not improve text'));
       setTimeout(() => setImproveError(null), 5000);
     } finally {
       setImprovingCell(null);
@@ -505,7 +505,7 @@ export const TwoColumnLayout = ({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save amendment');
+        throw new Error(t('amendator.saveAmendmentFailed', 'Failed to save amendment'));
       }
 
       setSavedCells(prev => new Set(prev).add(index));
@@ -815,8 +815,8 @@ export const TwoColumnLayout = ({
                                         className={`two-column-layout__improve-button ${improvingCell === additionKey ? 'two-column-layout__improve-button--loading' : ''}`}
                                         onClick={(e) => { e.stopPropagation(); handleImproveText(additionKey); }}
                                         disabled={improvingCell === additionKey || !(additionAmendment.proposedText || '').trim()}
-                                        title="Improve with AI"
-                                        aria-label="Improve text with AI"
+                                        title={t('amendator.improveWithAi', 'Improve with AI')}
+                                        aria-label={t('amendator.improveTextWithAi', 'Improve text with AI')}
                                       >
                                         <Icon path={mdiAutoFix} size={0.65} className={improvingCell === additionKey ? 'two-column-layout__spin' : ''} />
                                         <span>{improvingCell === additionKey ? t('amendator.improving') : t('amendator.improve')}</span>
@@ -837,7 +837,7 @@ export const TwoColumnLayout = ({
                                         className="two-column-layout__undo-improve"
                                         onClick={(e) => { e.stopPropagation(); handleCellChange(additionKey, preImproveText); setPreImproveText(null); }}
                                       >
-                                        Undo
+                                        {t('amendator.undo', 'Undo')}
                                       </button>
                                     )}
                                     {improveError && editingCell === additionKey && (

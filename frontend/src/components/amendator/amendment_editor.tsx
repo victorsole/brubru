@@ -1,5 +1,6 @@
 // frontend/src/components/amendator/amendment_editor.tsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Amendment, AmendmentType, AmendmentStatus, StructureLevel } from '../../pages/amendator_page';
 import { detectChanges } from '../../utils/amendment_formatter';
 import './amendment_editor.css';
@@ -11,6 +12,8 @@ interface AmendmentEditorProps {
 }
 
 export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditorProps) => {
+  const { t } = useTranslation();
+
   // Amendment Type System
   const [type, setType] = useState<AmendmentType>('modification');
   const [structureLevel, setStructureLevel] = useState<StructureLevel>('article');
@@ -91,7 +94,7 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
 
   const handleAIDraft = () => {
     // Placeholder for AI drafting functionality
-    alert('AI drafting assistance coming soon! This will use Anthropic Claude to help draft amendments.');
+    alert(t('amendator.editor.aiDraftComingSoon', 'AI drafting assistance coming soon! This will use Anthropic Claude to help draft amendments.'));
   };
 
   return (
@@ -99,9 +102,9 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
       <div className="amendment-editor__content">
         {!amendment && !position ? (
           <div className="amendment-editor__empty">
-            <p>Select text from the original document to start drafting an amendment.</p>
+            <p>{t('amendatorExtras.selectTextPrompt', 'Select text from the original document to start drafting an amendment.')}</p>
             <p className="amendment-editor__empty-hint">
-              Or manually configure the amendment details below.
+              {t('amendator.editor.emptyHint', 'Or manually configure the amendment details below.')}
             </p>
           </div>
         ) : null}
@@ -109,7 +112,7 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
         {/* Amendment Type Selector */}
         <div className="amendment-editor__field">
           <label htmlFor="type" className="amendment-editor__label">
-            Amendment Type <span className="amendment-editor__required">*</span>
+            {t('amendator.editor.typeLabel', 'Amendment Type')} <span className="amendment-editor__required">*</span>
           </label>
           <select
             id="type"
@@ -117,21 +120,21 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
             value={type}
             onChange={(e) => setType(e.target.value as AmendmentType)}
           >
-            <option value="modification">Modification - Change specific words or phrases</option>
-            <option value="suppression">Suppression - Delete text partially or completely</option>
-            <option value="addition">Addition - Insert entirely new text</option>
+            <option value="modification">{t('amendatorExtras.modificationDesc', 'Modification - Change specific words or phrases')}</option>
+            <option value="suppression">{t('amendatorExtras.suppressionDesc', 'Suppression - Delete text partially or completely')}</option>
+            <option value="addition">{t('amendatorExtras.additionDesc', 'Addition - Insert entirely new text')}</option>
           </select>
           <p className="amendment-editor__hint">
-            {type === 'modification' && 'Original: old words in bold italic. Amendment: new words in bold italic.'}
-            {type === 'suppression' && 'Original: deleted text in bold italic. Amendment: remaining text or "Suppressed text".'}
-            {type === 'addition' && 'Original: "No original text". Amendment: new text in bold italic.'}
+            {type === 'modification' && t('amendator.editor.typeHintModification', 'Original: old words in bold italic. Amendment: new words in bold italic.')}
+            {type === 'suppression' && t('amendator.editor.typeHintSuppression', 'Original: deleted text in bold italic. Amendment: remaining text or "Suppressed text".')}
+            {type === 'addition' && t('amendator.editor.typeHintAddition', 'Original: "No original text". Amendment: new text in bold italic.')}
           </p>
         </div>
 
         {/* Structure Level */}
         <div className="amendment-editor__field">
           <label htmlFor="structure-level" className="amendment-editor__label">
-            Structure Level <span className="amendment-editor__required">*</span>
+            {t('amendator.editor.structureLabel', 'Structure Level')} <span className="amendment-editor__required">*</span>
           </label>
           <select
             id="structure-level"
@@ -139,30 +142,30 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
             value={structureLevel}
             onChange={(e) => setStructureLevel(e.target.value as StructureLevel)}
           >
-            <option value="recital">Recital - (1), (2), (3)...</option>
-            <option value="article">Article - Article number</option>
-            <option value="article-title">Article Title</option>
-            <option value="point">Point - 1, 2, 3...</option>
-            <option value="paragraph">Paragraph - (a), (b), (c)...</option>
-            <option value="subparagraph">Subparagraph - (i), (ii), (iii)...</option>
+            <option value="recital">{t('amendatorExtras.recitalDesc', 'Recital - (1), (2), (3)...')}</option>
+            <option value="article">{t('amendatorExtras.articleDesc', 'Article - Article number')}</option>
+            <option value="article-title">{t('amendatorExtras.articleTitleDesc', 'Article Title')}</option>
+            <option value="point">{t('amendatorExtras.pointDesc', 'Point - 1, 2, 3...')}</option>
+            <option value="paragraph">{t('amendatorExtras.paragraphDesc', 'Paragraph - (a), (b), (c)...')}</option>
+            <option value="subparagraph">{t('amendatorExtras.subparagraphDesc', 'Subparagraph - (i), (ii), (iii)...')}</option>
           </select>
         </div>
 
         {/* Position Reference */}
         <div className="amendment-editor__field">
           <label htmlFor="position" className="amendment-editor__label">
-            Position Reference <span className="amendment-editor__required">*</span>
+            {t('amendator.editor.positionLabel', 'Position Reference')} <span className="amendment-editor__required">*</span>
           </label>
           <input
             id="position"
             type="text"
             className="amendment-editor__input"
             placeholder={
-              structureLevel === 'recital' ? 'Recital 15' :
-              structureLevel === 'article' ? 'Article 3' :
-              structureLevel === 'point' ? 'Article 3, point 2' :
-              structureLevel === 'paragraph' ? 'Article 3, point 2, paragraph (a)' :
-              'Article 3, point 2, paragraph (a), subparagraph (i)'
+              structureLevel === 'recital' ? t('amendator.editor.positionPhRecital', 'Recital 15') :
+              structureLevel === 'article' ? t('amendator.editor.positionPhArticle', 'Article 3') :
+              structureLevel === 'point' ? t('amendator.editor.positionPhPoint', 'Article 3, point 2') :
+              structureLevel === 'paragraph' ? t('amendator.editor.positionPhParagraph', 'Article 3, point 2, paragraph (a)') :
+              t('amendator.editor.positionPhSubparagraph', 'Article 3, point 2, paragraph (a), subparagraph (i)')
             }
             value={position}
             onChange={(e) => setPosition(e.target.value)}
@@ -178,12 +181,12 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
                 checked={isCompleteSupression}
                 onChange={(e) => setIsCompleteSupression(e.target.checked)}
               />
-              <span>Complete Suppression (entire element)</span>
+              <span>{t('amendatorExtras.completeSuppression', 'Complete Suppression (entire element)')}</span>
             </label>
             <p className="amendment-editor__hint">
               {isCompleteSupression
-                ? 'Will show "Suppressed text" in amendment column'
-                : 'Will show remaining text after deletion'}
+                ? t('amendator.editor.completeSuppressionOnHint', 'Will show "Suppressed text" in the amendment column')
+                : t('amendator.editor.completeSuppressionOffHint', 'Will show the remaining text after deletion')}
             </p>
           </div>
         )}
@@ -191,20 +194,20 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
         {/* Original Text (disabled for Addition type) */}
         <div className="amendment-editor__field">
           <label htmlFor="original-text" className="amendment-editor__label">
-            Original Text {type !== 'addition' && <span className="amendment-editor__required">*</span>}
+            {t('amendator.editor.originalLabel', 'Original Text')} {type !== 'addition' && <span className="amendment-editor__required">*</span>}
           </label>
           {type === 'addition' ? (
             <div className="amendment-editor__system-message">
-              <em>No original text</em>
+              <em>{t('amendatorExtras.noOriginalText', 'No original text')}</em>
               <p className="amendment-editor__hint">
-                Addition amendments introduce entirely new text with no original reference.
+                {t('amendator.editor.additionNoOriginalHint', 'Addition amendments introduce entirely new text with no original reference.')}
               </p>
             </div>
           ) : (
             <textarea
               id="original-text"
               className="amendment-editor__textarea"
-              placeholder="Enter the original text from the document..."
+              placeholder={t('amendatorExtras.enterOriginalText', 'Enter the original text from the document...')}
               rows={5}
               value={originalText}
               onChange={(e) => setOriginalText(e.target.value)}
@@ -215,21 +218,21 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
         {/* Proposed Text with Track Changes */}
         <div className="amendment-editor__field">
           <label htmlFor="proposed-text" className="amendment-editor__label">
-            Proposed Amendment <span className="amendment-editor__required">*</span>
+            {t('amendator.editor.proposedLabel', 'Proposed Amendment')} <span className="amendment-editor__required">*</span>
           </label>
           <div className="amendment-editor__toolbar">
             <button
               className="amendment-editor__ai-button button button-accent button-sm"
               onClick={handleAIDraft}
             >
-              AI Draft Assistance
+              {t('amendator.editor.aiDraftBtn', 'AI Draft Assistance')}
             </button>
           </div>
           {type === 'suppression' && isCompleteSupression ? (
             <div className="amendment-editor__system-message">
-              <em>Suppressed text</em>
+              <em>{t('amendatorExtras.suppressedText', 'Suppressed text')}</em>
               <p className="amendment-editor__hint">
-                Complete suppression removes the entire element. Amendment column will show "Suppressed text".
+                {t('amendator.editor.completeSuppressionNote', 'Complete suppression removes the entire element. The amendment column will show "Suppressed text".')}
               </p>
             </div>
           ) : (
@@ -237,9 +240,9 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
               id="proposed-text"
               className="amendment-editor__textarea"
               placeholder={
-                type === 'addition' ? 'Enter your new text (will be shown in bold italic)...' :
-                type === 'suppression' ? 'Enter the remaining text after deletion...' :
-                'Enter your proposed amendment text...'
+                type === 'addition' ? t('amendator.editor.proposedPhAddition', 'Enter your new text (will be shown in bold italic)...') :
+                type === 'suppression' ? t('amendator.editor.proposedPhSuppression', 'Enter the remaining text after deletion...') :
+                t('amendator.editor.proposedPhModification', 'Enter your proposed amendment text...')
               }
               rows={8}
               value={proposedText}
@@ -248,39 +251,39 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
             />
           )}
           <p className="amendment-editor__hint">
-            {type === 'modification' && 'Changed words will be automatically highlighted in bold italic.'}
-            {type === 'addition' && 'New text will be shown in bold italic in the amendment column.'}
-            {type === 'suppression' && !isCompleteSupression && 'Deleted portions will be marked in bold italic in the original column.'}
+            {type === 'modification' && t('amendator.editor.proposedHintModification', 'Changed words will be automatically highlighted in bold italic.')}
+            {type === 'addition' && t('amendator.editor.proposedHintAddition', 'New text will be shown in bold italic in the amendment column.')}
+            {type === 'suppression' && !isCompleteSupression && t('amendator.editor.proposedHintSuppression', 'Deleted portions will be marked in bold italic in the original column.')}
           </p>
         </div>
 
         {/* Optional: Group/Committee Label */}
         <div className="amendment-editor__field">
           <label htmlFor="group" className="amendment-editor__label">
-            Group / Committee (Optional)
+            {t('amendator.editor.groupLabel', 'Group / Committee (Optional)')}
           </label>
           <input
             id="group"
             type="text"
             className="amendment-editor__input"
-            placeholder="e.g., LIBE, ECON, EPP, S&D..."
+            placeholder={t('amendatorExtras.groupPlaceholder', 'e.g., LIBE, ECON, EPP, S&D...')}
             value={group}
             onChange={(e) => setGroup(e.target.value)}
           />
           <p className="amendment-editor__hint">
-            Will appear as a green badge in the amendment grid.
+            {t('amendator.editor.groupHint', 'Will appear as a green badge in the amendment grid.')}
           </p>
         </div>
 
         {/* Optional: Justification */}
         <div className="amendment-editor__field">
           <label htmlFor="justification" className="amendment-editor__label">
-            Justification (Optional)
+            {t('amendator.editor.justificationLabel', 'Justification (Optional)')}
           </label>
           <textarea
             id="justification"
             className="amendment-editor__textarea"
-            placeholder="Explain why this amendment is needed..."
+            placeholder={t('amendator.editor.justificationPlaceholder', 'Explain why this amendment is needed...')}
             rows={3}
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
@@ -290,7 +293,7 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
         {/* Status Selector */}
         <div className="amendment-editor__field">
           <label htmlFor="status" className="amendment-editor__label">
-            Status
+            {t('amendator.editor.statusLabel', 'Status')}
           </label>
           <select
             id="status"
@@ -298,9 +301,9 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
             value={status}
             onChange={(e) => setStatus(e.target.value as 'candidate' | 'tabled' | 'withdrawn')}
           >
-            <option value="candidate">Candidate</option>
-            <option value="tabled">Tabled</option>
-            <option value="withdrawn">Withdrawn</option>
+            <option value="candidate">{t('amendments.candidate', 'Candidate')}</option>
+            <option value="tabled">{t('amendments.tabled', 'Tabled')}</option>
+            <option value="withdrawn">{t('amendments.withdrawn', 'Withdrawn')}</option>
           </select>
         </div>
 
@@ -315,13 +318,13 @@ export const AmendmentEditor = ({ amendment, onSave, onCancel }: AmendmentEditor
               (type !== 'suppression' || !isCompleteSupression) && !proposedText
             }
           >
-            Save Amendment
+            {t('amendator.editor.saveAmendmentBtn', 'Save Amendment')}
           </button>
           <button
             className="amendment-editor__button button button-secondary"
             onClick={onCancel}
           >
-            Cancel
+            {t('common.cancel', 'Cancel')}
           </button>
         </div>
       </div>

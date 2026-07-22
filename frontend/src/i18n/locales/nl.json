@@ -91,6 +91,60 @@
         "compliance": "Naleving",
         "tenders": "Aanbestedingen"
       }
+    },
+    "suggestWalkThrough": "Leg me uit wat dit betekent voor mijn werk.",
+    "suggestStatus": "Wat is de huidige stand van zaken van {{ref}}?",
+    "suggestKeyArticles": "Toon me de belangrijkste artikelen van {{celex}}.",
+    "suggestWhoElse": "Wie werkt er nog meer aan dit dossier?",
+    "suggestCommitteeAgenda": "Wat staat er deze maand op de agenda van de commissie {{code}}?",
+    "suggestDraftBrief": "Stel voor mij een briefing van één pagina hierover op.",
+    "citationLegislation": "Wetgeving",
+    "citationProcedure": "Wetgevingsprocedure",
+    "citationMep": "Profiel van Europarlementariër",
+    "citationNews": "Nieuwsartikel",
+    "citationSearchResult": "Zoekresultaat",
+    "hideSources": "Bronnen verbergen",
+    "viewSources": "Bronnen bekijken",
+    "thankYouReport": "Bedankt voor het melden van dit probleem!",
+    "thankYouFeedback": "Bedankt voor je feedback!",
+    "submitting": "Bezig met verzenden...",
+    "submitReport": "Melding verzenden",
+    "removeFile": "{{name}} verwijderen",
+    "draftedDoc": {
+      "onePager": "One-pager",
+      "positionPaper": "Position paper",
+      "mepBriefing": "MEP-briefing",
+      "talkingPoints": "Spreekpunten",
+      "resolution": "EP-resolutie",
+      "epQuestion": "Schriftelijke vraag EP",
+      "euEmail": "EU-e-mail",
+      "pressRelease": "EU-persbericht",
+      "stakeholderMap": "Stakeholderoverzicht",
+      "impactAssessment": "Effectbeoordeling",
+      "presentation": "Presentatie",
+      "document": "Document",
+      "openEdit": "Openen en bewerken in Documenten",
+      "openNewTab": "Openen in nieuw tabblad"
+    },
+    "onboarding": {
+      "step1Title": "Wat houdt je op dit moment bezig?",
+      "step1Sub": "Kies het beleidsterrein dat je vandaag bezighoudt. Ik stem af wat ik je hierna laat zien.",
+      "step2Title": "Volg je iets specifieks?",
+      "step2Sub": "Typ een naam (AI Act, CSRD, AVG), een OEIL-referentie of een CELEX. Ik houd het in de gaten.",
+      "step2Placeholder": "bv. AI Act, 2024/0079(COD), 32024R1689",
+      "step3Title": "Wil je dat ik het in de gaten houd?",
+      "step3Sub": "Meld je gratis aan en ik volg wetgeving voor je, signaleer wijzigingen en stel amendementen en position papers op wanneer je ze nodig hebt. Geen creditcard nodig.",
+      "skipForNow": "Nu overslaan",
+      "skip": "Overslaan",
+      "continue": "Doorgaan",
+      "noFileYet": "Nog geen specifiek dossier",
+      "maybeLater": "Misschien later",
+      "chipAiDigital": "AI en digitaal",
+      "chipClimateEnergy": "Klimaat en energie",
+      "chipFinance": "Financiën",
+      "chipHealth": "Gezondheid",
+      "chipTrade": "Handel",
+      "chipAgriFisheries": "Landbouw en visserij"
     }
   },
   "docs": {
@@ -584,7 +638,87 @@
     "accountCreated": "Account aangemaakt",
     "lastLogin": "Laatste login",
     "deleteWarning": "Verwijder je account en alle bijbehorende gegevens. Deze actie kan niet ongedaan worden gemaakt.",
-    "deleteAccount": "Account Verwijderen"
+    "deleteAccount": "Account Verwijderen",
+    "overview": "Overzicht",
+    "billing": "Facturering",
+    "sectors": "Sectoren",
+    "background": "Achtergrond",
+    "welcomeBack": "Welkom terug, {{name}}",
+    "welcomeBackNoName": "Welkom terug",
+    "welcomeText": "Beheer je profiel, abonnement en beleidsvoorkeuren vanuit je persoonlijke dashboard.",
+    "memberSince": "Lid sinds",
+    "days": "dagen",
+    "quickActions": "Snelle acties",
+    "editProfile": "Profiel bewerken",
+    "roleTitle": "Functie / Titel",
+    "roleTitlePlaceholder": "bijv. beleidsmedewerker, bedrijfsjurist, EU-adviseur",
+    "roleTitleHelp": "Hoe je je professionele rol omschrijft. Brubru stemt zijn antwoorden hierop af.",
+    "free": "Gratis",
+    "perMonth": "/ maand",
+    "basicTierDescription": "Basistoegang tot de functies van Brubru",
+    "usageThisMonth": "Gebruik deze maand",
+    "includedFeatures": "Inbegrepen functies",
+    "manageSubscription": "Abonnement beheren",
+    "stripePortal": "Stripe-klantenportaal",
+    "yourSectors": "Jouw sectoren",
+    "sectorsDescription": "Kies de EU-sectoren waarin je werkt. Deze voeden de dashboardtegels: inspraakkansen, compliancesignalen en nieuw deze week.",
+    "pageBackground": "Pagina-achtergrond",
+    "backgroundDescription": "Personaliseer je My EU Bubble- en profielpagina's met een mooi Europees stadsgezicht of monument.",
+    "notSet": "Niet ingesteld",
+    "dangerZone": "Gevarenzone",
+    "dashboard": "Dashboard",
+    "subtitleOverview": "Je Brubru-dashboard in één oogopslag",
+    "subtitlePersonal": "Werk je naam, functie, organisatie en land bij",
+    "subtitleBilling": "Beheer je abonnement en facturering",
+    "subtitlePolicies": "Selecteer de EU-beleidsterreinen die je volgt",
+    "subtitleSectors": "Kies je sectoren zodat Brubru kan personaliseren",
+    "subtitleBackground": "Personaliseer je pagina-achtergronden",
+    "subtitleFeedback": "Deel je feedback en suggesties",
+    "subtitleAccount": "Accountgegevens en instellingen",
+    "backgrounds": {
+      "default": "Standaard",
+      "defaultBackground": "Standaardachtergrond",
+      "selectedAlt": "Geselecteerde achtergrond",
+      "hide": "Achtergronden verbergen",
+      "change": "Achtergrond wijzigen",
+      "amsterdam": "Amsterdam",
+      "amsterdamCanals": "Amsterdamse grachten",
+      "athens": "Athene",
+      "aurora": "Noorderlicht",
+      "barcelona": "Barcelona",
+      "brussels": "Brussel",
+      "canal": "Gracht",
+      "church": "Kerk",
+      "colosseum": "Colosseum",
+      "dome": "Koepel",
+      "eu": "Europese Unie",
+      "florence": "Florence",
+      "greece": "Griekenland",
+      "lake": "Meer",
+      "london": "Londen",
+      "map": "Kaart",
+      "mapCompass": "Kaart en kompas",
+      "netherlands": "Nederland",
+      "paris": "Parijs",
+      "santorini": "Santorini",
+      "venice": "Venetië"
+    },
+    "policies": {
+      "searchPlaceholder": "Zoek beleid, bijv. landbouw, handelsbescherming, drones, vluchtelingen…",
+      "searchAria": "Beleidsterreinen zoeken",
+      "clearSearch": "Zoekopdracht wissen",
+      "askBrubru": "Vind je niet wat je zoekt? Praat met Brubru!",
+      "selectedLabel": "Geselecteerd:",
+      "area": "beleidsterrein",
+      "areas": "beleidsterreinen",
+      "selectAll": "Alles selecteren",
+      "clearAll": "Alles wissen",
+      "noMatch": "Geen beleidsterreinen gevonden voor",
+      "noMatchHint": "Probeer een breder begrip of wis de zoekopdracht om alle terreinen te bekijken.",
+      "categorySelected": "{{count}} geselecteerd",
+      "selectedTitle": "Je geselecteerde beleidsterreinen:",
+      "remove": "{{name}} verwijderen"
+    }
   },
   "subscription": {
     "hero": {
@@ -603,7 +737,8 @@
     },
     "modules": {
       "title": "Individuele Modules",
-      "subtitle": "Kies alleen wat je nodig hebt"
+      "subtitle": "Kies alleen wat je nodig hebt",
+      "subscribe": "Abonneren"
     },
     "starter": {
       "name": "Starter",
@@ -792,7 +927,8 @@
       "f6": "On-demand commissie-transcripties en diepgaande analyses",
       "note": "Enterprise-plannen zijn op maat. Vertel ons je scope en we bezorgen je een offerte binnen 48 uur.",
       "button": "Contact met verkoop"
-    }
+    },
+    "checkoutError": "Kan het afrekenen niet starten. Probeer het opnieuw."
   },
   "euLawComply": {
     "history": "Analyse Geschiedenis",
@@ -1273,6 +1409,15 @@
       "passwordTooShort": "Wachtwoord moet minstens 8 tekens lang zijn",
       "passwordNeedsDigit": "Wachtwoord moet minstens één cijfer bevatten",
       "passwordNeedsUppercase": "Wachtwoord moet minstens één hoofdletter bevatten"
+    },
+    "linkedin": {
+      "invalidState": "Ongeldige statusparameter",
+      "noCode": "Geen autorisatiecode ontvangen",
+      "failed": "LinkedIn-authenticatie mislukt",
+      "authFailedTitle": "Authenticatie mislukt",
+      "windowClose": "Dit venster wordt automatisch gesloten...",
+      "authenticating": "Authenticeren met LinkedIn...",
+      "pleaseWait": "Even geduld..."
     }
   },
   "cookies": {
@@ -1499,7 +1644,8 @@
       "examplesLoading": "Laden…",
       "examplesError": "Kon de uitgelichte voorbeelden niet laden ({{error}}).",
       "examplesEmpty": "Nog geen uitgelichte voorbeelden - plak hierboven een willekeurige EUR-Lex-URL.",
-      "myFiles": "Amendeer een dossier dat je volgt"
+      "myFiles": "Amendeer een dossier dat je volgt",
+      "examplesLoadFailed": "Kon de voorbeelden niet laden"
     },
     "upload": {
       "title": "Document uploaden",
@@ -1514,7 +1660,8 @@
       "errorUnsupported": "{{name}}: niet-ondersteund bestandstype. Upload PDF-, DOC- of DOCX-bestanden.",
       "errorTooLarge": "{{name}}: bestand overschrijdt de limiet van 10 MB.",
       "errorSelectFile": "Selecteer ten minste één bestand",
-      "errorFailed": "Documenten konden niet worden geüpload"
+      "errorFailed": "Documenten konden niet worden geüpload",
+      "errorFetchContent": "Kon de inhoud van het document niet ophalen"
     },
     "tracked": {
       "title": "Laden vanuit gevolgde dossiers",
@@ -1552,7 +1699,83 @@
     "badgeVerified": "Origineel geverifieerd met de bron",
     "unplacedCount": "{{count}} AI-suggestie(s) konden niet automatisch worden geplaatst",
     "unplacedHint": "Selecteer het doelelement in de tabel en gebruik Wijzigen om de voorgestelde tekst hieronder toe te passen.",
-    "unknownPosition": "Onbekende positie"
+    "unknownPosition": "Onbekende positie",
+    "editor": {
+      "emptyHint": "Of stel de details van het amendement hieronder handmatig in.",
+      "typeLabel": "Type amendement",
+      "typeHintModification": "Origineel: oude woorden in vet cursief. Amendement: nieuwe woorden in vet cursief.",
+      "typeHintSuppression": "Origineel: geschrapte tekst in vet cursief. Amendement: resterende tekst of \"Geschrapte tekst\".",
+      "typeHintAddition": "Origineel: \"Geen oorspronkelijke tekst\". Amendement: nieuwe tekst in vet cursief.",
+      "structureLabel": "Structuurniveau",
+      "positionLabel": "Positieverwijzing",
+      "positionPhRecital": "Overweging 15",
+      "positionPhArticle": "Artikel 3",
+      "positionPhPoint": "Artikel 3, punt 2",
+      "positionPhParagraph": "Artikel 3, punt 2, alinea (a)",
+      "positionPhSubparagraph": "Artikel 3, punt 2, alinea (a), subalinea (i)",
+      "completeSuppressionOnHint": "Toont \"Geschrapte tekst\" in de amendementkolom",
+      "completeSuppressionOffHint": "Toont de resterende tekst na de schrapping",
+      "originalLabel": "Oorspronkelijke tekst",
+      "additionNoOriginalHint": "Toevoegingsamendementen introduceren volledig nieuwe tekst zonder oorspronkelijke verwijzing.",
+      "proposedLabel": "Voorgesteld amendement",
+      "aiDraftBtn": "AI-opstelhulp",
+      "aiDraftComingSoon": "AI-opstelhulp komt binnenkort. Deze zal Anthropic Claude gebruiken om te helpen bij het opstellen van amendementen.",
+      "completeSuppressionNote": "Volledige schrapping verwijdert het hele element. De amendementkolom toont \"Geschrapte tekst\".",
+      "proposedPhAddition": "Voer uw nieuwe tekst in (wordt in vet cursief getoond)...",
+      "proposedPhSuppression": "Voer de resterende tekst na de schrapping in...",
+      "proposedPhModification": "Voer de tekst van uw voorgestelde amendement in...",
+      "proposedHintModification": "Gewijzigde woorden worden automatisch in vet cursief gemarkeerd.",
+      "proposedHintAddition": "Nieuwe tekst wordt in vet cursief getoond in de amendementkolom.",
+      "proposedHintSuppression": "Geschrapte delen worden in vet cursief gemarkeerd in de oorspronkelijke kolom.",
+      "groupLabel": "Fractie / Commissie (optioneel)",
+      "groupHint": "Verschijnt als een groene badge in het amendementenoverzicht.",
+      "justificationLabel": "Motivering (optioneel)",
+      "justificationPlaceholder": "Leg uit waarom dit amendement nodig is...",
+      "statusLabel": "Status",
+      "saveAmendmentBtn": "Amendement opslaan"
+    },
+    "improveFailed": "Kon de tekst niet verbeteren",
+    "improveError": "De tekst kon niet worden verbeterd",
+    "saveAmendmentFailed": "Kon het amendement niet opslaan",
+    "banner": {
+      "loginToTrack": "Log in om wetgeving te volgen.",
+      "notInTracker": "Deze wetgeving staat nog niet in onze database voor wetgevingsmonitoring.",
+      "trackFailed": "Kon dit dossier niet volgen. Probeer het opnieuw.",
+      "notTrackedLead": "Deze wetgeving",
+      "notTrackedEmphasis": "wordt niet gevolgd",
+      "tracking": "Volgen...",
+      "viewFileDetails": "Dossierdetails bekijken",
+      "daysInStatus_one": "{{count}} dag in deze status",
+      "daysInStatus_other": "{{count}} dagen in deze status"
+    },
+    "sidebar": {
+      "exportFailed": "Kon de amendementen niet exporteren"
+    },
+    "page": {
+      "httpError": "EUR-Lex gaf HTTP {{status}} terug. De wet kon niet automatisch worden geladen.",
+      "parseError": "EUR-Lex gaf het document terug, maar de wetgevingsstructuur kon niet worden geparseerd. Dit gebeurt soms wanneer EUR-Lex een WAF-verificatiepagina toont.",
+      "networkError": "Netwerkfout bij het laden van de wet.",
+      "saveFailed": "Kon de amendementen niet opslaan",
+      "loadingText": "Wetgevingstekst laden…",
+      "restoringAmendments": "Uw amendementen herstellen…",
+      "autoOpenFailed": "Kon {{celex}} niet automatisch openen",
+      "dismiss": "Sluiten"
+    },
+    "aiSidebar": {
+      "uploadFailed": "Uploaden mislukt",
+      "extractFailed": "Kon de tekst niet extraheren",
+      "processFailed": "Verwerking mislukt",
+      "loadFirst": "Laad eerst een wetgevingsdocument.",
+      "suggestFailed": "Kon geen AI-suggestie genereren",
+      "suggestBatchFailed": "Kon geen suggesties genereren",
+      "noElementSelected": "Geen element geselecteerd: de AI analyseert het volledige document",
+      "letsAmend": "Aan de slag met amenderen",
+      "tipSelectElement": "Tip: selecteer een specifiek element voor gerichte suggesties, of laat de AI het volledige document analyseren",
+      "apply": "Toepassen",
+      "acceptAll": "Alles accepteren",
+      "suggestionsCount_one": "{{count}} suggestie",
+      "suggestionsCount_other": "{{count}} suggesties"
+    }
   },
   "comply": {
     "title": "EU Law Comply",
@@ -1676,7 +1899,31 @@
     "emailFooter": "Uw e-mail wordt verzonden naar ons team op hello@beresol.eu",
     "subject": "Feedback over {{name}}",
     "bodyTemplate": "Hallo Beresol-team,\n\nIk wil graag mijn feedback delen over {{name}}:\n\n[Schrijf hier uw feedback]\n\nBedankt!",
-    "defaultDescription": "Help ons {{name}} te verbeteren door uw gedachten, suggesties of problemen te delen. Uw feedback helpt ons betere tools te bouwen voor de EU-beleidsgemeenschap."
+    "defaultDescription": "Help ons {{name}} te verbeteren door uw gedachten, suggesties of problemen te delen. Uw feedback helpt ons betere tools te bouwen voor de EU-beleidsgemeenschap.",
+    "form": {
+      "submit": "Feedback versturen",
+      "heading": "Stuur ons je feedback",
+      "closeAria": "Feedbackformulier sluiten",
+      "successTitle": "Bedankt voor je feedback!",
+      "successBody": "We waarderen dat je de tijd neemt om ons te helpen Brubru te verbeteren.",
+      "typeLabel": "Type",
+      "typeGeneral": "Algemene feedback",
+      "typeBug": "Bugmelding",
+      "typeFeature": "Functieverzoek",
+      "typeOther": "Overig",
+      "titleLabel": "Titel",
+      "titlePlaceholder": "Korte samenvatting van je feedback",
+      "descriptionLabel": "Beschrijving",
+      "descriptionPlaceholder": "Geef gedetailleerde informatie...",
+      "categoryLabel": "Categorie (optioneel)",
+      "categoryPlaceholder": "bijv. UI/UX, prestaties, beveiliging",
+      "affectedFeatureLabel": "Getroffen functie",
+      "affectedFeaturePlaceholder": "Welke functie is getroffen?",
+      "screenshotLabel": "URL van schermafbeelding (optioneel)",
+      "screenshotHelp": "Upload je schermafbeelding naar een dienst zoals Imgur en plak de URL hier",
+      "submitError": "Feedback versturen is mislukt. Probeer het opnieuw.",
+      "submitting": "Versturen..."
+    }
   },
   "dashboard": {
     "loadingCockpit": "Uw cockpit laden...",
@@ -1907,7 +2154,14 @@
     "stance_mixed": "Gemengd",
     "stance_pending": "Standpunt ingediend",
     "stance_unclear": "Standpunt ingediend",
-    "alignNoLobby": "Er zijn nog geen lobbyontmoetingen met de rapporteur of schaduwrapporteurs vastgelegd voor dit dossier, dus er zijn geen standpunten om af te stemmen."
+    "alignNoLobby": "Er zijn nog geen lobbyontmoetingen met de rapporteur of schaduwrapporteurs vastgelegd voor dit dossier, dus er zijn geen standpunten om af te stemmen.",
+    "stanceSupport": "Steun",
+    "stanceSupportWithAmendments": "Steun met amendementen",
+    "stanceOppose": "Tegen",
+    "stanceNeutral": "Neutraal",
+    "stanceUndecided": "Onbeslist",
+    "errLoadFiles": "Kan de dossiers niet laden",
+    "errLoadPosition": "Kan de positie niet laden"
   },
   "mepAmendmentsTab": {
     "textProposedByCommission": "Door de Commissie voorgestelde tekst",
@@ -1944,7 +2198,8 @@
     "loadingShort": "Laden…",
     "examplePlaceholder": "bv. Axel Voss",
     "amendmentsShowing": "Amendementen ({{total}}) - {{from}}-{{to}} weergegeven",
-    "noAmendmentsMatchFilters": "Geen amendementen voldoen aan de huidige filters."
+    "noAmendmentsMatchFilters": "Geen amendementen voldoen aan de huidige filters.",
+    "committeeRapporteurProposal": "Voorstel van de rapporteur van de commissie"
   },
   "mepComparativeTab": {
     "positionPlaceholder": "Bijv.: we steunen sterke normen voor consumentenbescherming en verplichte transparantievereisten, maar verzetten ons tegen bepalingen die onevenredige nalevingslasten voor het mkb creëren...",
@@ -2220,7 +2475,8 @@
       "sat": "za",
       "sun": "zo"
     },
-    "allDay": "Hele dag"
+    "allDay": "Hele dag",
+    "errLoadEvents": "Kan de kalenderevenementen niet laden"
   },
   "newsSidebar": {
     "loadingFeeds": "Feeds laden..."
@@ -2267,14 +2523,28 @@
     "ask": "Vraag het Brubru",
     "askTitle": "Vraag Brubru over dit dossier",
     "askPrompt": "Vertel me over {{title}}{{ref}}: hoe het ervoor staat, wie het trekt en wat ik zou moeten doen.",
-    "readDeepDive": "Lees de diepteanalyse"
+    "readDeepDive": "Lees de diepteanalyse",
+    "viewOnEurlex": "Bekijk op EUR-Lex",
+    "analysing": "Bezig met analyseren...",
+    "aiAnalyze": "Dit dossier met AI analyseren",
+    "analyzeFailed": "Kan het dossier niet analyseren. Probeer het opnieuw."
   },
   "stagePipeline": {
     "withdrawn": "Ingetrokken",
     "blocked": "Geblokkeerd",
     "completed": "Voltooid",
     "current": "Huidig",
-    "future": "Toekomst"
+    "future": "Toekomst",
+    "proposal": "Voorstel",
+    "committee": "Commissie",
+    "plenary": "Plenaire vergadering",
+    "trilogue": "Triloog",
+    "adopted": "Aangenomen",
+    "proposalShort": "Voorst",
+    "committeeShort": "Comm",
+    "plenaryShort": "Plen",
+    "trilogueShort": "Tril",
+    "adoptedShort": "Aang"
   },
   "trains": {
     "myInterests": "Mijn interesses",
@@ -2388,7 +2658,10 @@
     "regCascade": "Regelgevingscascade",
     "memberStateDeadlines": "Lidstaat-omzettingsdeadlines",
     "cenStandards": "CEN / CENELEC-normen",
-    "brubruTrainer": "Brubru-trainer"
+    "brubruTrainer": "Brubru-trainer",
+    "noIdentifierToTrack": "Geen identificator om te volgen",
+    "trackingUpdateFailed": "Kan het volgen niet bijwerken",
+    "viewNotRendered": "Deze weergave kon niet worden weergegeven."
   },
   "tenders": {
     "espdChecklist": "ESPD-documentchecklist",
@@ -2601,7 +2874,9 @@
     "sendToComply": "Verzenden naar EU-juridische naleving",
     "useInChat": "Gebruiken in Chat",
     "versionHistory": "Versiegeschiedenis",
-    "versionHistoryTitle": "Versiegeschiedenis, {{title}}"
+    "versionHistoryTitle": "Versiegeschiedenis, {{title}}",
+    "editTitleLabel": "Titel",
+    "versionPillTitle": "Documentversie"
   },
   "analyticsTab": {
     "title": "Analytics & inzichten",
@@ -3506,7 +3781,13 @@
     "generatedBy": "Gegenereerd door",
     "cached": "in cache",
     "resDepartments": "Commissie-departementen",
-    "whatsNew": "Nieuw in de kennisbank"
+    "whatsNew": "Nieuw in de kennisbank",
+    "action": {
+      "added": "Nieuwe gids",
+      "updated": "Bijgewerkt",
+      "canon": "Canon",
+      "deep_dive": "Diepteanalyse"
+    }
   },
   "sm": {
     "subtitle": "Wie ertoe doet op je dossiers en binnen je interesses: de actoren van Parlement, Commissie en Raad en de organisaties eromheen.",
@@ -4610,5 +4891,339 @@
   "tenderDocs": {
     "alsoInDocuments": "Ook zichtbaar in Documenten · Funding & Tenders",
     "alsoInTenderator": "Openen in de Tenderator"
+  },
+  "committeeWork": {
+    "typeCod": "Gewone wetgeving",
+    "typeInl": "Wetgevingsinitiatief",
+    "typeApp": "Goedkeuring",
+    "typeCns": "Raadpleging",
+    "typeAci": "Interinstitutioneel akkoord",
+    "typeBud": "Begroting",
+    "typeGbd": "Algemene begroting",
+    "typeBui": "Begrotingsinitiatief",
+    "typeDec": "Kwijting",
+    "typeNle": "Akkoord / benoeming",
+    "typeRsp": "Resolutie",
+    "typeRso": "Interne resolutie",
+    "typeIni": "Eigen initiatief",
+    "typeCos": "Strategiedocument",
+    "typeDce": "Schriftelijke verklaring",
+    "typeDea": "Toezicht op gedelegeerde handelingen",
+    "typeRps": "Toezicht op uitvoeringshandelingen",
+    "typeReg": "Reglement van orde",
+    "typeImm": "Immuniteit van leden",
+    "statusInCommittee": "In commissie",
+    "statusAwaitingVote": "Wacht op stemming",
+    "statusPending": "In behandeling",
+    "statusCompleted": "Afgerond",
+    "statusUnknown": "Onbekend"
+  },
+  "consultations": {
+    "typePublicConsultation": "Openbare raadpleging",
+    "typeCallForEvidence": "Verzoek om input",
+    "typeFeedback": "Feedback",
+    "typeRoadmap": "Routekaart",
+    "typeInitiative": "Initiatief",
+    "statusOpen": "Open",
+    "statusUpcoming": "Aankomend",
+    "statusClosed": "Gesloten",
+    "statusWithdrawn": "Ingetrokken",
+    "subNotStarted": "Niet gestart",
+    "subDraft": "Concept in bewerking",
+    "subSubmitted": "Ingediend",
+    "subNotParticipating": "Geen deelname",
+    "errLoadConsultations": "Kan de raadplegingen niet laden",
+    "errLoadDetail": "Kan de details van de raadpleging niet laden",
+    "errLoadTracked": "Kan de gevolgde raadplegingen niet laden",
+    "errTrack": "Kan de raadpleging niet volgen",
+    "errUntrack": "Kan het volgen van de raadpleging niet stoppen",
+    "errUpdateTracking": "Kan de volgvoorkeuren niet bijwerken"
+  },
+  "predictions": {
+    "errGenerate": "Kan de voorspelling niet genereren",
+    "errRefresh": "Kan de voorspelling niet vernieuwen"
+  },
+  "proactive": {
+    "triggerMorningBrief": "Ochtendbriefing",
+    "triggerNewForYou": "Nieuw voor jou",
+    "triggerTrackedFiles": "Je gevolgde dossiers",
+    "triggerAmendmentSurge": "Golf van amendementen",
+    "triggerSetupWatchlist": "Stel je volglijst in",
+    "triggerConversationRecall": "Ga verder waar je gebleven was",
+    "triggerWeeklyDigest": "Jouw week op Brubru",
+    "openCalendar": "Mijn EU-kalender openen",
+    "openMyFiles": "Mijn dossiers openen",
+    "openAmendments": "Amendementen openen",
+    "openProfile": "Profiel openen",
+    "openChatHistory": "Chatgeschiedenis openen",
+    "openDashboard": "Dashboard openen",
+    "open": "Openen",
+    "briefing": "Briefing",
+    "ariaBriefings": "Brubru-briefings",
+    "dismissBriefing": "Briefing sluiten",
+    "raisedForYou": "Brubru heeft dit voor je opgemerkt"
+  },
+  "claim": {
+    "reason": {
+      "notFound": "Deze claimlink komt niet overeen met een vooraf aangemaakt Brubru-profiel.",
+      "expired": "Deze claimlink is verlopen. Mail naar hello@beresol.eu en we sturen je een nieuwe.",
+      "alreadyClaimed": "Dit profiel is al geclaimd. Log in plaats daarvan gewoon in."
+    },
+    "loadError": "Kan de claimlink niet laden. Probeer het later opnieuw.",
+    "loading": "Je Brubru-profiel wordt geladen...",
+    "notActive": "Claimlink niet actief",
+    "signIn": "Inloggen",
+    "createAccount": "Account aanmaken",
+    "hello": "Hallo {{name}}",
+    "welcome": "Welkom bij Brubru",
+    "configuredForAt": "{{name}} bij {{org}}",
+    "you": "jou",
+    "subtitle": "Brubru is al geconfigureerd voor {{who}}. Log hieronder in om het te claimen: je beleidsinteresses, gevolgde EU-dossiers, nieuwsfeeds en privékennisgidsen staan al klaar.",
+    "googleFailed": "Inloggen met Google is mislukt. Probeer LinkedIn of de wachtwoordoptie.",
+    "googleCancelled": "Inloggen met Google is geannuleerd.",
+    "continueLinkedIn": "Doorgaan met LinkedIn",
+    "or": "of",
+    "passwordFallback": "Stel in plaats daarvan een e-mailadres en wachtwoord in",
+    "passwordPlaceholder": "Min. 8 tekens, 1 cijfer, 1 hoofdletter",
+    "passwordError": "Kan het wachtwoord niet instellen. Controleer het e-mailadres en probeer het opnieuw.",
+    "claiming": "Bezig met claimen...",
+    "claimButton": "Mijn profiel claimen",
+    "legal": "Vooraf aangemaakt profiel via een privé-uitnodiging. Niveau: {{tier}}. Vragen? hello@beresol.eu."
+  },
+  "sectors": {
+    "hint": "Selecteer de sectoren waarin je actief bent. Brubru gebruikt ze om dashboardtegels, kalenderevenementen en raadplegingen te filteren op wat voor jou belangrijk is.",
+    "agriculture_food": {
+      "label": "Landbouw en voeding",
+      "description": "Landbouw, voedselverwerking, agrarische handel"
+    },
+    "automotive_mobility": {
+      "label": "Automobiel en mobiliteit",
+      "description": "Voertuigen, batterijen, mobiliteitsdiensten"
+    },
+    "banking_finance": {
+      "label": "Bankwezen, financiën en verzekeringen",
+      "description": "Krediet, kapitaalmarkten, verzekeringen"
+    },
+    "chemicals_pharma": {
+      "label": "Chemie en farmacie",
+      "description": "Industriële chemie, geneesmiddelen, biotech"
+    },
+    "construction_real_estate": {
+      "label": "Bouw en vastgoed",
+      "description": "Gebouwen, infrastructuur, vastgoed"
+    },
+    "defence_aerospace": {
+      "label": "Defensie en ruimtevaart",
+      "description": "Defensie-industrie, ruimtevaart, dual-usetechnologie"
+    },
+    "digital_tech": {
+      "label": "Digitaal en tech",
+      "description": "Software, AI, cloud, telecom, platforms"
+    },
+    "education_research": {
+      "label": "Onderwijs en onderzoek",
+      "description": "Universiteiten, scholen, onderzoeksinstellingen"
+    },
+    "energy_utilities": {
+      "label": "Energie en nutsbedrijven",
+      "description": "Elektriciteit, gas, waterstof, net"
+    },
+    "environment_climate": {
+      "label": "Milieu en klimaat",
+      "description": "Milieu-ngo's, klimaatadviesbureaus"
+    },
+    "health_social_care": {
+      "label": "Zorg en welzijn",
+      "description": "Ziekenhuizen, zorgaanbieders, volksgezondheid"
+    },
+    "manufacturing_industry": {
+      "label": "Maakindustrie",
+      "description": "Zware industrie, staal, materialen"
+    },
+    "maritime_fisheries": {
+      "label": "Maritiem en visserij",
+      "description": "Scheepvaart, havens, visserij"
+    },
+    "media_communication": {
+      "label": "Media en communicatie",
+      "description": "Uitgevers, omroepen, reclame"
+    },
+    "mining_raw_materials": {
+      "label": "Mijnbouw en grondstoffen",
+      "description": "Kritieke grondstoffen, mijnbouw"
+    },
+    "public_sector": {
+      "label": "Publieke sector",
+      "description": "Overheid, agentschappen, gemeenten"
+    },
+    "retail_consumer": {
+      "label": "Detailhandel en consumentengoederen",
+      "description": "Retailers, consumentenmerken, e-commerce"
+    },
+    "services_consulting": {
+      "label": "Diensten en consultancy",
+      "description": "Juridische, advies- en professionele diensten"
+    },
+    "transport_logistics": {
+      "label": "Transport en logistiek",
+      "description": "Logistiek, spoor, lucht- en wegvervoer"
+    },
+    "civil_society": {
+      "label": "Maatschappelijk middenveld en ngo's",
+      "description": "Belangenbehartiging, stichtingen, denktanks"
+    }
+  },
+  "countries": {
+    "AT": "Oostenrijk",
+    "BE": "België",
+    "BG": "Bulgarije",
+    "HR": "Kroatië",
+    "CY": "Cyprus",
+    "CZ": "Tsjechië",
+    "DK": "Denemarken",
+    "EE": "Estland",
+    "FI": "Finland",
+    "FR": "Frankrijk",
+    "DE": "Duitsland",
+    "GR": "Griekenland",
+    "HU": "Hongarije",
+    "IE": "Ierland",
+    "IT": "Italië",
+    "LV": "Letland",
+    "LT": "Litouwen",
+    "LU": "Luxemburg",
+    "MT": "Malta",
+    "NL": "Nederland",
+    "PL": "Polen",
+    "PT": "Portugal",
+    "RO": "Roemenië",
+    "SK": "Slowakije",
+    "SI": "Slovenië",
+    "ES": "Spanje",
+    "SE": "Zweden"
+  },
+  "impact": {
+    "whatItIs": "Wat het is",
+    "whyItTouchesYou": "Waarom het u raakt",
+    "completeProfile": "Vul uw profiel aan",
+    "whatToWatch": "Wat te volgen",
+    "actionsYouCanTake": "Acties die u kunt ondernemen",
+    "alreadyTracking": "U volgt dit dossier al",
+    "alreadyTrackingTitle": "U volgt dit dossier al op Brubru.",
+    "loadError": "Kon de impactbriefing niet laden."
+  },
+  "maturity": {
+    "tryAgain": "Probeer opnieuw",
+    "takeMeThere": "Breng me erheen",
+    "zeroExplainer": "U staat op nul omdat Brubru nog geen signalen over uw activiteit heeft. Elke aanbeveling hierboven levert 5 tot 10 punten op zodra u ernaar handelt.",
+    "signedOut": "U lijkt uitgelogd te zijn. Log in om uw nalevingsvolwassenheid te zien.",
+    "loadError": "Kon uw volwassenheidsscore niet laden: {{detail}}"
+  },
+  "cascade": {
+    "noSecondaryActs": "Geen secundaire handelingen of recente gerelateerde dossiers gevonden.",
+    "preAdoptionNote": "Dit dossier is nog niet aangenomen: secundaire handelingen verschijnen pas nadat de primaire handeling is aangenomen.",
+    "autoSurfaceNote": "Brubru toont ze automatisch zodra ze zijn gepubliceerd.",
+    "transpositionExplainer": "Brubru verwerkt nog geen nationale omzettingsgegevens voor elke lidstaat. Zodra deze gegevens beschikbaar zijn, verschijnen de termijnen hier per land.",
+    "cenExplainer": "Herzieningen van normen die aan deze handeling zijn gekoppeld, zijn nog niet verwerkt. Zodra de koppeling met het werkprogramma van CEN/CENELEC er is, verschijnen gerelateerde normherzieningen hier."
+  },
+  "futureComply": {
+    "openComply": "Open EU Law Comply"
+  },
+  "tour": {
+    "steps": {
+      "welcome": {
+        "askAnything": {
+          "title": "Vraag Brubru wat je maar wilt",
+          "content": "Typ vragen over EU-wetgeving, Europarlementariërs of beleidsterreinen, of plak documenten voor analyse. Brubru is beschikbaar in 6 talen."
+        },
+        "exploreTools": {
+          "title": "Ontdek de tools van Brubru",
+          "content": "Gebruik gespecialiseerde tools: stel amendementen op, controleer naleving, volg aanbestedingen en houd je EU-bubbel in de gaten."
+        },
+        "chooseLanguage": {
+          "title": "Kies je taal",
+          "content": "Brubru is beschikbaar in het Engels, Frans, Nederlands, Spaans, Catalaans en Italiaans. Selecteer je voorkeurstaal."
+        }
+      },
+      "chat": {
+        "yourQuestion": {
+          "title": "Jouw vraag hier",
+          "content": "Typ vragen over EU-beleid, wetgeving of instellingen. Druk op Enter om te versturen of Shift+Enter voor een nieuwe regel."
+        },
+        "uploadDocuments": {
+          "title": "Upload documenten",
+          "content": "Upload PDF's voor nalevingscontrole, samenvatting of analyse. Brubru verwijst ernaar in zijn antwoorden."
+        },
+        "exampleQuestions": {
+          "title": "Voorbeeldvragen",
+          "content": "Weet je niet waar je moet beginnen? Klik op een voorbeeld om het te proberen. Ze zijn samengesteld door EU-beleidsexperts."
+        }
+      },
+      "amendator": {
+        "selectText": {
+          "title": "Selecteer de wetgevingstekst",
+          "content": "Kies het EU-wetgevingsdocument dat je wilt amenderen. Zoek op titel, CELEX-nummer of procedurereferentie."
+        },
+        "draftAmendment": {
+          "title": "Stel je amendement op",
+          "content": "Schrijf amendementen in het standaardformaat van het Europees Parlement. Wijzigingen worden automatisch bijgehouden."
+        },
+        "aiAssistant": {
+          "title": "AI-schrijfassistent",
+          "content": "Ontvang AI-suggesties voor je amendementen. Brubru helpt juridische consistentie en duidelijkheid te waarborgen."
+        },
+        "export": {
+          "title": "Exporteer je werk",
+          "content": "Exporteer amendementen als Akoma Ntoso-XML (officieel EP-formaat) of Word om ze met collega's te delen."
+        }
+      },
+      "euBubble": {
+        "personalisedFeed": {
+          "title": "Jouw gepersonaliseerde feed",
+          "content": "Realtime updates uit meer dan 15 institutionele EU-bronnen, waaronder het Parlement, de Commissie en de Raad."
+        },
+        "filterFeed": {
+          "title": "Filter je feed",
+          "content": "Filter op instelling, beleidsterrein, documenttype of datumbereik om precies te vinden wat voor jou belangrijk is."
+        },
+        "trackTrends": {
+          "title": "Volg trends",
+          "content": "Volg patronen in wetgevende activiteit, stemtrends en beleidsontwikkelingen in de tijd."
+        }
+      },
+      "euComply": {
+        "lawDatabase": {
+          "title": "EU-wetgevingsdatabank",
+          "content": "Zoek in EU-verordeningen, richtlijnen en besluiten. Filter op beleidsterrein, datum of juridische status."
+        },
+        "uploadDocument": {
+          "title": "Upload je document",
+          "content": "Upload je beleidsdocument, contract of interne regels voor een geautomatiseerde analyse van nalevingslacunes."
+        },
+        "complianceReport": {
+          "title": "Nalevingsrapport",
+          "content": "Bekijk een gedetailleerde analyse met verwijzingen naar specifieke artikelen en bruikbare aanbevelingen."
+        }
+      },
+      "tenderator": {
+        "findTenders": {
+          "title": "Vind EU-aanbestedingen",
+          "content": "Filter aanbestedingen uit TED (Tenders Electronic Daily) op sector, contractwaarde, deadline en locatie."
+        },
+        "browseOpportunities": {
+          "title": "Bekijk kansen",
+          "content": "Bekijk passende aanbestedingen met de belangrijkste gegevens: aanbestedende dienst, deadline, geraamde waarde en vereisten."
+        },
+        "matchScoring": {
+          "title": "AI-matchscore",
+          "content": "Elke aanbesteding toont een door AI berekende relevantiescore op basis van je profiel en eerdere interesses."
+        }
+      }
+    },
+    "skip": "Rondleiding overslaan",
+    "back": "Terug",
+    "finish": "Voltooien",
+    "closeAria": "Rondleiding sluiten",
+    "progressOf": "{{current}} van {{total}}"
   }
 }

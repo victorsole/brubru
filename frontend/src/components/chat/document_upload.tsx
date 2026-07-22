@@ -62,7 +62,7 @@ export const DocumentUpload = ({ onUpload }: DocumentUploadProps = {}) => {
         });
 
         if (!response.ok) {
-          alert(`${t('docs.uploadFailed') || 'Upload failed'}: ${file.name}`);
+          alert(`${t('docs.uploadFailed', 'Upload failed')}: ${file.name}`);
           continue;
         }
 
@@ -86,7 +86,7 @@ export const DocumentUpload = ({ onUpload }: DocumentUploadProps = {}) => {
       }
     } catch (error) {
       console.error('Failed to upload files:', error);
-      alert(t('docs.uploadFailed') || 'Failed to upload files');
+      alert(t('docs.uploadFailed', 'Upload failed'));
     } finally {
       setIsUploading(false);
     }
@@ -194,7 +194,7 @@ export const DocumentUpload = ({ onUpload }: DocumentUploadProps = {}) => {
               <button
                 className="document-upload__file-remove"
                 onClick={() => handleRemoveFile(file.id)}
-                aria-label={`Remove ${file.name}`}
+                aria-label={t('chat.removeFile', 'Remove {{name}}', { name: file.name })}
               >
                 ×
               </button>

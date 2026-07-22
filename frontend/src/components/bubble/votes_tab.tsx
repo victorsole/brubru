@@ -266,11 +266,12 @@ const ProvenanceTag = ({ cb }: { cb: CouncilBreakdown }) => {
 };
 
 const ResultPill = ({ result }: { result: string | null }) => {
+  const { t } = useTranslation();
   const adopted = result === 'adopted';
   return (
     <span className={`votes-pill ${adopted ? 'is-adopted' : 'is-rejected'}`}>
       <Icon path={adopted ? mdiCheckCircle : mdiCloseCircle} size={0.6} />
-      {adopted ? 'Adopted' : 'Rejected'}
+      {adopted ? t('amendmentsTab.statusAdopted', 'Adopted') : t('amendmentsTab.statusRejected', 'Rejected')}
     </span>
   );
 };

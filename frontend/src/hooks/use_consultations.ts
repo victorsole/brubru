@@ -8,6 +8,7 @@
  */
 
 import { create } from 'zustand';
+import i18n from '../i18n/config';
 import {
   consultationService,
 } from '../services/consultation_service';
@@ -118,7 +119,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to fetch consultations:', error);
       set({
         isLoadingConsultations: false,
-        error: 'Failed to load consultations',
+        error: i18n.t('consultations.errLoadConsultations', { defaultValue: 'Failed to load consultations' }),
       });
     }
   },
@@ -137,7 +138,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to fetch consultation detail:', error);
       set({
         isLoadingDetail: false,
-        error: 'Failed to load consultation details',
+        error: i18n.t('consultations.errLoadDetail', { defaultValue: 'Failed to load consultation details' }),
       });
     }
   },
@@ -156,7 +157,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to fetch tracked consultations:', error);
       set({
         isLoadingTracked: false,
-        error: 'Failed to load tracked consultations',
+        error: i18n.t('consultations.errLoadTracked', { defaultValue: 'Failed to load tracked consultations' }),
       });
     }
   },
@@ -206,7 +207,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to track consultation:', error);
       set({
         isTracking: false,
-        error: 'Failed to track consultation',
+        error: i18n.t('consultations.errTrack', { defaultValue: 'Failed to track consultation' }),
       });
       throw error;
     }
@@ -236,7 +237,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to untrack consultation:', error);
       set({
         isTracking: false,
-        error: 'Failed to untrack consultation',
+        error: i18n.t('consultations.errUntrack', { defaultValue: 'Failed to untrack consultation' }),
       });
       throw error;
     }
@@ -257,7 +258,7 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
       console.error('Failed to update tracking:', error);
       set({
         isTracking: false,
-        error: 'Failed to update tracking preferences',
+        error: i18n.t('consultations.errUpdateTracking', { defaultValue: 'Failed to update tracking preferences' }),
       });
       throw error;
     }
@@ -308,27 +309,33 @@ export const useConsultations = create<ConsultationsState>((set, get) => ({
 // Display Constants
 // ============================================================================
 
+// `name` is a lazy getter so labels follow the active UI language.
+const labelInfo = (key: string, fallback: string, color: string) => ({
+  get name(): string { return i18n.t(key, { defaultValue: fallback }); },
+  color,
+});
+
 export const CONSULTATION_TYPE_INFO: Record<ConsultationType, { name: string; color: string }> = {
-  public_consultation: { name: 'Public Consultation', color: '#059669' },
-  call_for_evidence: { name: 'Call for Evidence', color: '#0693e3' },
-  feedback: { name: 'Feedback', color: '#f97316' },
-  roadmap: { name: 'Roadmap', color: '#8b5cf6' },
-  initiative: { name: 'Initiative', color: '#6b7280' },
+  public_consultation: labelInfo('consultations.typePublicConsultation', 'Public Consultation', '#059669'),
+  call_for_evidence: labelInfo('consultations.typeCallForEvidence', 'Call for Evidence', '#0693e3'),
+  feedback: labelInfo('consultations.typeFeedback', 'Feedback', '#f97316'),
+  roadmap: labelInfo('consultations.typeRoadmap', 'Roadmap', '#8b5cf6'),
+  initiative: labelInfo('consultations.typeInitiative', 'Initiative', '#6b7280'),
 };
 
 export const STATUS_INFO: Record<ConsultationStatus, { name: string; color: string }> = {
-  open: { name: 'Open', color: '#059669' },
-  upcoming: { name: 'Upcoming', color: '#3b82f6' },
-  closed: { name: 'Closed', color: '#d97706' },
-  outcome_published: { name: 'Outcome Published', color: '#0693e3' },
-  withdrawn: { name: 'Withdrawn', color: '#6b7280' },
+  open: labelInfo('consultations.statusOpen', 'Open', '#059669'),
+  upcoming: labelInfo('consultations.statusUpcoming', 'Upcoming', '#3b82f6'),
+  closed: labelInfo('consultations.statusClosed', 'Closed', '#d97706'),
+  outcome_published: labelInfo('bubble.consultations.outcomePublished', 'Outcome Published', '#0693e3'),
+  withdrawn: labelInfo('consultations.statusWithdrawn', 'Withdrawn', '#6b7280'),
 };
 
 export const SUBMISSION_STATUS_INFO: Record<string, { name: string; color: string }> = {
-  not_started: { name: 'Not Started', color: '#6b7280' },
-  draft: { name: 'Draft in Progress', color: '#f97316' },
-  submitted: { name: 'Submitted', color: '#059669' },
-  not_participating: { name: 'Not Participating', color: '#9ca3af' },
+  not_started: labelInfo('consultations.subNotStarted', 'Not Started', '#6b7280'),
+  draft: labelInfo('consultations.subDraft', 'Draft in Progress', '#f97316'),
+  submitted: labelInfo('consultations.subSubmitted', 'Submitted', '#059669'),
+  not_participating: labelInfo('consultations.subNotParticipating', 'Not Participating', '#9ca3af'),
 };
 
 // ============================================================================

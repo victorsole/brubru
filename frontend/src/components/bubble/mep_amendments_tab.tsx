@@ -298,7 +298,7 @@ const AmendmentCard = ({
           </div>
         ) : isRapporteur ? (
           <div className="mep-card__authors mep-card__authors--rapporteur">
-            Committee rapporteur proposal
+            {t('mepAmendmentsTab.committeeRapporteurProposal', 'Committee rapporteur proposal')}
           </div>
         ) : null}
         {amendment.on_behalf_of_group && amendment.political_group && !isRapporteur && (

@@ -81,7 +81,7 @@ export const AmendmentSidebar = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to export amendments');
+        throw new Error(errorData.detail || t('amendator.sidebar.exportFailed', 'Failed to export amendments'));
       }
 
       // Get the blob from response

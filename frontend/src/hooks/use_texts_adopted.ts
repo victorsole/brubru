@@ -9,6 +9,7 @@
 
 import { create } from 'zustand';
 import axios from 'axios';
+import i18n from '../i18n/config';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
@@ -311,11 +312,16 @@ export const useTextsAdopted = create<TextsAdoptedState>((set, get) => ({
   },
 }));
 
-// Text type display names and colours
+// Text type display names and colours. `name` is a lazy getter so the label
+// follows the active UI language (keys reused from myFilesTab, same values).
+const typeInfo = (key: string, fallback: string, color: string) => ({
+  get name(): string { return i18n.t(key, { defaultValue: fallback }); },
+  color,
+});
 export const TEXT_TYPE_INFO: Record<TextType, { name: string; color: string }> = {
-  resolution: { name: 'Resolution', color: '#b91c1c' },
-  legislative_resolution: { name: 'Legislative Resolution', color: '#0066cc' },
-  decision: { name: 'Decision', color: '#d97706' },
-  recommendation: { name: 'Recommendation', color: '#7c3aed' },
-  other: { name: 'Other', color: '#6b7280' },
+  resolution: typeInfo('myFilesTab.resolution', 'Resolution', '#b91c1c'),
+  legislative_resolution: typeInfo('myFilesTab.legislativeResolution', 'Legislative Resolution', '#0066cc'),
+  decision: typeInfo('myFilesTab.decision', 'Decision', '#d97706'),
+  recommendation: typeInfo('myFilesTab.recommendation', 'Recommendation', '#7c3aed'),
+  other: typeInfo('myFilesTab.other', 'Other', '#6b7280'),
 };

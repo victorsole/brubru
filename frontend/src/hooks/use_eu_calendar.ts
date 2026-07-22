@@ -8,6 +8,7 @@
  */
 
 import { create } from 'zustand';
+import i18n from '../i18n/config';
 import {
   euCalendarService,
   POLICY_AREA_CONFIG,
@@ -200,7 +201,7 @@ export const useEUCalendar = create<EUCalendarState>((set, get) => ({
       console.error('Failed to fetch calendar events:', error);
       set({
         isLoading: false,
-        error: 'Failed to load calendar events',
+        error: i18n.t('calendar.errLoadEvents', { defaultValue: 'Failed to load calendar events' }),
       });
     }
   },

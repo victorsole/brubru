@@ -8,6 +8,7 @@
  */
 
 import { create } from 'zustand';
+import i18n from '../i18n/config';
 import {
   getFullPrediction,
   getTimelinePrediction,
@@ -163,7 +164,9 @@ export const usePredictions = create<PredictionsState>((set, get) => ({
       clearInterval(messageInterval);
 
       const errorMessage =
-        err instanceof Error ? err.message : 'Failed to generate prediction';
+        err instanceof Error
+          ? err.message
+          : i18n.t('predictions.errGenerate', { defaultValue: 'Failed to generate prediction' });
 
       set({
         isGeneratingPrediction: false,
@@ -221,7 +224,9 @@ export const usePredictions = create<PredictionsState>((set, get) => ({
       }));
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : 'Failed to refresh prediction';
+        err instanceof Error
+          ? err.message
+          : i18n.t('predictions.errRefresh', { defaultValue: 'Failed to refresh prediction' });
 
       set({
         loadingState: { status: 'error', message: errorMessage },
@@ -352,12 +357,18 @@ export const EP_GROUPS = [
 ];
 
 /**
- * Timeline stages for display
+ * Timeline stages for display. `label` is a lazy getter so it follows the
+ * active UI language (keys reused from predictionsTab, same values).
  */
+const stage = (id: string, key: string, fallback: string, icon: string) => ({
+  id,
+  get label(): string { return i18n.t(key, { defaultValue: fallback }); },
+  icon,
+});
 export const TIMELINE_STAGES = [
-  { id: 'committee', label: 'Committee', icon: 'mdi-account-group' },
-  { id: 'plenary', label: 'Plenary', icon: 'mdi-account-voice' },
-  { id: 'trilogue', label: 'Trilogue', icon: 'mdi-handshake' },
-  { id: 'council', label: 'Council', icon: 'mdi-gavel' },
-  { id: 'oj', label: 'OJ', icon: 'mdi-book-open-page-variant' },
+  stage('committee', 'predictionsTab.committee', 'Committee', 'mdi-account-group'),
+  stage('plenary', 'predictionsTab.plenary', 'Plenary', 'mdi-account-voice'),
+  stage('trilogue', 'predictionsTab.trilogue', 'Trilogue', 'mdi-handshake'),
+  stage('council', 'predictionsTab.council', 'Council', 'mdi-gavel'),
+  stage('oj', 'predictionsTab.oj', 'OJ', 'mdi-book-open-page-variant'),
 ];

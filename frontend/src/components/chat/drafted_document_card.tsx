@@ -11,6 +11,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiFileDocumentEditOutline,
@@ -29,18 +30,20 @@ import {
 import type { DraftedDocument } from './chat_interface';
 import './drafted_document_card.css';
 
-const SUBTYPE_META: Record<string, { label: string; icon: string; color: string }> = {
-  one_pager:         { label: 'One-pager',          icon: mdiFileDocumentEditOutline, color: '#16a34a' },
-  position_paper:    { label: 'Position paper',     icon: mdiFileDocumentOutline,     color: '#2e7d32' },
-  mep_briefing:      { label: 'MEP briefing',       icon: mdiFileDocumentOutline,     color: '#1565c0' },
-  talking_points:    { label: 'Talking points',     icon: mdiMessageText,             color: '#7b1fa2' },
-  resolution:        { label: 'EP resolution',      icon: mdiScriptTextOutline,       color: '#b91c1c' },
-  ep_question:       { label: 'EP written question', icon: mdiCommentQuestionOutline, color: '#0693e3' },
-  eu_email:          { label: 'EU email',           icon: mdiEmailOutline,            color: '#0d9488' },
-  press_release:     { label: 'EU press release',   icon: mdiBullhornOutline,         color: '#ea580c' },
-  stakeholder_map:   { label: 'Stakeholder map',    icon: mdiAccountGroupOutline,     color: '#4f46e5' },
-  impact_assessment: { label: 'Impact assessment',  icon: mdiClipboardListOutline,    color: '#0891b2' },
-  presentation:      { label: 'Presentation',       icon: mdiPresentation,            color: '#a21caf' },
+// Labels are i18n keys resolved with t() at render time; labelDefault is the
+// English fallback shown when a locale is missing the key.
+const SUBTYPE_META: Record<string, { labelKey: string; labelDefault: string; icon: string; color: string }> = {
+  one_pager:         { labelKey: 'chat.draftedDoc.onePager',         labelDefault: 'One-pager',           icon: mdiFileDocumentEditOutline, color: '#16a34a' },
+  position_paper:    { labelKey: 'chat.draftedDoc.positionPaper',    labelDefault: 'Position paper',      icon: mdiFileDocumentOutline,     color: '#2e7d32' },
+  mep_briefing:      { labelKey: 'chat.draftedDoc.mepBriefing',      labelDefault: 'MEP briefing',        icon: mdiFileDocumentOutline,     color: '#1565c0' },
+  talking_points:    { labelKey: 'chat.draftedDoc.talkingPoints',    labelDefault: 'Talking points',      icon: mdiMessageText,             color: '#7b1fa2' },
+  resolution:        { labelKey: 'chat.draftedDoc.resolution',       labelDefault: 'EP resolution',       icon: mdiScriptTextOutline,       color: '#b91c1c' },
+  ep_question:       { labelKey: 'chat.draftedDoc.epQuestion',       labelDefault: 'EP written question', icon: mdiCommentQuestionOutline,  color: '#0693e3' },
+  eu_email:          { labelKey: 'chat.draftedDoc.euEmail',          labelDefault: 'EU email',            icon: mdiEmailOutline,            color: '#0d9488' },
+  press_release:     { labelKey: 'chat.draftedDoc.pressRelease',     labelDefault: 'EU press release',    icon: mdiBullhornOutline,         color: '#ea580c' },
+  stakeholder_map:   { labelKey: 'chat.draftedDoc.stakeholderMap',   labelDefault: 'Stakeholder map',     icon: mdiAccountGroupOutline,     color: '#4f46e5' },
+  impact_assessment: { labelKey: 'chat.draftedDoc.impactAssessment', labelDefault: 'Impact assessment',   icon: mdiClipboardListOutline,    color: '#0891b2' },
+  presentation:      { labelKey: 'chat.draftedDoc.presentation',     labelDefault: 'Presentation',        icon: mdiPresentation,            color: '#a21caf' },
 };
 
 interface DraftedDocumentCardProps {
@@ -49,8 +52,10 @@ interface DraftedDocumentCardProps {
 
 export const DraftedDocumentCard = ({ drafted }: DraftedDocumentCardProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const meta = SUBTYPE_META[drafted.document_subtype] || {
-    label: 'Document',
+    labelKey: 'chat.draftedDoc.document',
+    labelDefault: 'Document',
     icon: mdiFileDocumentOutline,
     color: '#0066cc',
   };
@@ -70,7 +75,7 @@ export const DraftedDocumentCard = ({ drafted }: DraftedDocumentCardProps) => {
           <Icon path={meta.icon} size={0.85} color={meta.color} />
         </span>
         <div className="drafted-doc-card__head-text">
-          <span className="drafted-doc-card__kind">{meta.label}</span>
+          <span className="drafted-doc-card__kind">{t(meta.labelKey, meta.labelDefault)}</span>
           <h4 className="drafted-doc-card__title">{drafted.title}</h4>
         </div>
         <span className="drafted-doc-card__words">{drafted.word_count} words</span>
@@ -81,7 +86,7 @@ export const DraftedDocumentCard = ({ drafted }: DraftedDocumentCardProps) => {
       <div className="drafted-doc-card__actions">
         <button type="button" className="drafted-doc-card__primary" onClick={handleOpen}>
           <Icon path={mdiPencilOutline} size={0.75} />
-          Open and edit in Documents
+          {t('chat.draftedDoc.openEdit', 'Open and edit in Documents')}
         </button>
         <a
           className="drafted-doc-card__secondary"
@@ -90,7 +95,7 @@ export const DraftedDocumentCard = ({ drafted }: DraftedDocumentCardProps) => {
           rel="noopener noreferrer"
         >
           <Icon path={mdiOpenInNew} size={0.7} />
-          Open in new tab
+          {t('chat.draftedDoc.openNewTab', 'Open in new tab')}
         </a>
       </div>
     </div>

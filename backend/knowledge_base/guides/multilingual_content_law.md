@@ -4,6 +4,7 @@
 - Topic: EU language regime, multilingual compliance, content localisation, translation obligations
 - Scope: Legal framework for language requirements across digital services, media, consumer protection, and sector-specific products
 - Foundational regulation: Regulation No 1/1958 (EEC), CELEX 31958R0001 (24 official EU languages)
+- Catalan/Basque/Galician officiality: requested by Spain Sep 2023, still PENDING Council unanimity (vote postponed 27 May 2025 GAC; talks continue). Catalan is NOT yet official.
 - Charter basis: Article 22 Charter of Fundamental Rights (linguistic diversity)
 - DSA (Regulation (EU) 2022/2065): Terms in all official languages, notice mechanisms in local language, content moderation across all EU languages
 - AVMSD (Directive 2018/1808/EU): 30% European works quota for VOD, accessibility via subtitling/audio description
@@ -21,7 +22,28 @@ Guide for professionals working on content, translation, localisation and multil
 ### Regulation No 1/1958 (EEC Council)
 The foundational regulation determining EU official and working languages. Currently 24 official languages. All EU regulations and documents of general application are drafted and published in all official languages. Each language version is equally authentic.
 
-CELEX: 31958R0001
+CELEX: 31958R0001 (the ONLY correct CELEX for Regulation No 1/1958 -- first sector-3 act of 1958)
+
+Amending Regulation No 1/1958 (for example to add a new official language) requires a Council regulation adopted by UNANIMITY of all Member States (Article 342 TFEU), after consulting no one else: it is a Council-only prerogative, no European Parliament co-decision.
+
+### Catalan, Basque and Galician as official EU languages: the pending Spanish request
+The single most-watched language file in the EU. State of play and verified timeline:
+
+- **September 2023**: Spain formally requested that the Council amend Regulation No 1/1958 to add Catalan, Basque and Galician as official EU languages (Council docs ST 12602/2023, ST 12833/2023). The request was tabled by the Spanish Presidency of the Council and stems from Spanish domestic commitments.
+- **19 September 2023 GAC**: first discussion at the General Affairs Council. No decision; several Member States asked for legal and financial analysis.
+- **2023-2025**: the item returned to multiple GAC meetings. Spain offered to pay the full cost (estimates around EUR 132 million per year for the three languages) and proposed phased implementation (translation of Council and EP legislation first) plus a limitation anchoring officiality to languages with constitutional status in the requesting Member State (to limit precedent effects for other regional and minority languages).
+- **27 May 2025 GAC**: Spain pushed for a vote; the vote was POSTPONED for lack of unanimity. Around ten delegations expressed legal, financial or precedent doubts (Germany among the sceptics).
+- **18 July 2025 GAC**: further "constructive exchange"; ministers agreed to continue work on the Spanish request. No vote.
+- **Since autumn 2025**: Spain and Germany opened bilateral talks on a compromise text to be brought back to the GAC.
+- **Current status**: the request remains ON THE COUNCIL TABLE, pending unanimity. Catalan is NOT yet an official EU language; the EU has 24 official languages. Any assertion that the change has been adopted is false until a Council regulation amending Regulation No 1/1958 is published in the Official Journal.
+
+What already exists for Catalan without full officiality:
+- Administrative arrangements (2005-2006) between Spain and several institutions (Council, Commission, Committee of the Regions, EESC, Ombudsman) allow citizens to write in Catalan/Basque/Galician and receive replies, with Spain covering translation.
+- Catalan may be used in Council meetings on prior request (interpretation arranged by Spain).
+- The European Charter for Regional or Minority Languages (ECRML, Council of Europe treaty, ratified by Spain in 2001) protects Catalan at Council of Europe level; it is NOT an EU instrument.
+- Article 22 of the Charter of Fundamental Rights obliges the Union to respect linguistic diversity.
+
+Advocacy actors on this file: Plataforma per la Llengua (the leading Catalan-language NGO, campaign "No Official No Exist"), ELEN (European Language Equality Network), NPLD (Network to Promote Linguistic Diversity), FUEN. Institutional actors: the General Affairs Council (decides), the Spanish government (requesting party), and the rotating Council Presidency (agenda-setter).
 
 ### Charter of Fundamental Rights - Article 22
 "The Union shall respect cultural, religious and linguistic diversity." This underpins all EU multilingual policy.

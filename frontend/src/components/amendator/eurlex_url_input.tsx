@@ -109,7 +109,7 @@ export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
         const data = await res.json();
         if (!cancelled) setExamples(data.items || []);
       } catch (e) {
-        if (!cancelled) setExamplesError(e instanceof Error ? e.message : 'Failed to load examples');
+        if (!cancelled) setExamplesError(e instanceof Error ? e.message : t('amendator.eurlex.examplesLoadFailed', 'Failed to load examples'));
       } finally {
         if (!cancelled) setExamplesLoading(false);
       }

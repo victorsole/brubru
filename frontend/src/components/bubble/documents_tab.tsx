@@ -791,25 +791,25 @@ export const DocumentsTab = () => {
               <option value="event_poster">{t('docType.event_poster')}</option>
               <option value="consultation_response">{t('docType.consultation_response')}</option>
             </optgroup>
-            <optgroup label="Funding & Tenders">
-              <option value="funding">All Tender Docs</option>
-              <option value="tender_application_short">Part B (short proposal)</option>
-              <option value="tender_application_full">Part B (full proposal)</option>
-              <option value="tender_pitch_deck">Pitch deck</option>
-              <option value="tender_video_script">Video script</option>
-              <option value="tender_implementation_plan">Implementation plan</option>
-              <option value="tender_financial_plan">Financial plan</option>
-              <option value="tender_lump_sum_budget">Lump-sum budget</option>
-              <option value="tender_fto_analysis">FTO analysis</option>
-              <option value="tender_letters_of_intent">Letters of intent</option>
-              <option value="tender_consortium_agreement">Consortium agreement</option>
-              <option value="tender_ownership_control">Ownership control</option>
-              <option value="tender_clinical_studies_annex">Clinical studies annex</option>
-              <option value="tender_ethics_self_assessment">Ethics self-assessment</option>
-              <option value="tender_org_profile_consent">NCP consent</option>
-              <option value="tender_budget_table">Budget table</option>
-              <option value="tender_budget_narrative">Budget narrative</option>
-              <option value="tender_eligibility_dossier">Eligibility dossier (ESPD)</option>
+            <optgroup label={t('documentsTab.grpFundingTenders') as string}>
+              <option value="funding">{t('documentsTab.kindAllTenderDocs')}</option>
+              <option value="tender_application_short">{t('documentsTab.kindTenderApplicationShort')}</option>
+              <option value="tender_application_full">{t('documentsTab.kindTenderApplicationFull')}</option>
+              <option value="tender_pitch_deck">{t('documentsTab.kindTenderPitchDeck')}</option>
+              <option value="tender_video_script">{t('documentsTab.kindTenderVideoScript')}</option>
+              <option value="tender_implementation_plan">{t('documentsTab.kindTenderImplementationPlan')}</option>
+              <option value="tender_financial_plan">{t('documentsTab.kindTenderFinancialPlan')}</option>
+              <option value="tender_lump_sum_budget">{t('documentsTab.kindTenderLumpSumBudget')}</option>
+              <option value="tender_fto_analysis">{t('documentsTab.kindTenderFtoAnalysis')}</option>
+              <option value="tender_letters_of_intent">{t('documentsTab.kindTenderLettersOfIntent')}</option>
+              <option value="tender_consortium_agreement">{t('documentsTab.kindTenderConsortiumAgreement')}</option>
+              <option value="tender_ownership_control">{t('documentsTab.kindTenderOwnershipControl')}</option>
+              <option value="tender_clinical_studies_annex">{t('documentsTab.kindTenderClinicalStudiesAnnex')}</option>
+              <option value="tender_ethics_self_assessment">{t('documentsTab.kindTenderEthicsSelfAssessment')}</option>
+              <option value="tender_org_profile_consent">{t('documentsTab.kindTenderOrgProfileConsent')}</option>
+              <option value="tender_budget_table">{t('documentsTab.kindTenderBudgetTable')}</option>
+              <option value="tender_budget_narrative">{t('documentsTab.kindTenderBudgetNarrative')}</option>
+              <option value="tender_eligibility_dossier">{t('documentsTab.kindTenderEligibilityDossier')}</option>
             </optgroup>
           </select>
         </div>
@@ -861,7 +861,7 @@ export const DocumentsTab = () => {
                     </span>
                     <span className="documents-tab__card-badge-right">
                       {doc.version && doc.version > 1 && (
-                        <span className="documents-tab__version-pill" title="Document version">
+                        <span className="documents-tab__version-pill" title={t('documentsTab.versionPillTitle', 'Document version') as string}>
                           v{doc.version}
                         </span>
                       )}
@@ -942,7 +942,7 @@ export const DocumentsTab = () => {
                         }
                       }}
                     >
-                      {isCarriage ? 'Open in Amendator' : t('documentsTab.viewBtn')}
+                      {isCarriage ? t('documentsTab.openInAmendator') : t('documentsTab.viewBtn')}
                     </button>
 
                     <div className="documents-tab__menu-wrap">
@@ -950,8 +950,8 @@ export const DocumentsTab = () => {
                         className="documents-tab__action-btn documents-tab__action-btn--icon"
                         data-doc-menu-trigger={doc.id}
                         onClick={() => setOpenMenuId(openMenuId === doc.id ? null : doc.id)}
-                        title="More actions"
-                        aria-label="More actions"
+                        title={t('documentsTab.moreActions') as string}
+                        aria-label={t('documentsTab.moreActions') as string}
                         aria-haspopup="menu"
                         aria-expanded={openMenuId === doc.id}
                       >
@@ -994,7 +994,7 @@ export const DocumentsTab = () => {
                                   }}
                                 >
                                   <Icon path={mdiPencilOutline} size={0.7} />
-                                  {isSlide ? 'Edit slide text' : 'Edit'}
+                                  {isSlide ? t('documentsTab.editSlideText') : t('documentsTab.edit')}
                                 </button>
                               )}
                               {!isCarriage && (
@@ -1006,7 +1006,7 @@ export const DocumentsTab = () => {
                                   }}
                                 >
                                   <Icon path={mdiHistory} size={0.7} />
-                                  Version history
+                                  {t('documentsTab.versionHistory')}
                                 </button>
                               )}
                               <button
@@ -1017,7 +1017,7 @@ export const DocumentsTab = () => {
                                 }}
                               >
                                 <Icon path={mdiDownload} size={0.7} />
-                                Download DOCX
+                                {t('documentsTab.downloadDocx')}
                               </button>
                               <button
                                 role="menuitem"
@@ -1027,7 +1027,7 @@ export const DocumentsTab = () => {
                                 }}
                               >
                                 <Icon path={mdiFilePdfBox} size={0.7} />
-                                Download PDF
+                                {t('documentsTab.downloadPdf')}
                               </button>
                               {isSlide && (
                                 <button
@@ -1038,7 +1038,7 @@ export const DocumentsTab = () => {
                                   }}
                                 >
                                   <Icon path={mdiDownload} size={0.7} />
-                                  Download PowerPoint (PPTX)
+                                  {t('documentsTab.downloadPptx')}
                                 </button>
                               )}
                               {doc.celex_number && !isCarriage && (
@@ -1050,7 +1050,7 @@ export const DocumentsTab = () => {
                                   }}
                                 >
                                   <Icon path={mdiOpenInNew} size={0.7} />
-                                  Open in Amendator
+                                  {t('documentsTab.openInAmendator')}
                                 </button>
                               )}
                               <button
@@ -1061,7 +1061,7 @@ export const DocumentsTab = () => {
                                 }}
                               >
                                 <Icon path={mdiChatOutline} size={0.7} />
-                                Use in Chat
+                                {t('documentsTab.useInChat')}
                               </button>
                               <button
                                 role="menuitem"
@@ -1071,7 +1071,7 @@ export const DocumentsTab = () => {
                                 }}
                               >
                                 <Icon path={mdiClipboardCheckOutline} size={0.7} />
-                                Send to EU Law Comply
+                                {t('documentsTab.sendToComply')}
                               </button>
                               <div className="documents-tab__menu-sep" />
                               <button
@@ -1369,10 +1369,10 @@ export const DocumentsTab = () => {
                     onClick={() => navigator.clipboard.writeText(viewingDocument.content || '')}
                   >
                     <Icon path={mdiContentCopy} size={0.65} />
-                    Copy
+                    {t('documentsTab.copyBtn')}
                   </button>
                   <span className="documents-tab__view-footer-sep">·</span>
-                  <span className="documents-tab__view-footer-label">Download</span>
+                  <span className="documents-tab__view-footer-label">{t('documentsTab.downloadLabel')}</span>
                   <button
                     className="documents-tab__link-btn"
                     onClick={() => handleDownload(viewingDocument, 'docx')}
@@ -1396,7 +1396,7 @@ export const DocumentsTab = () => {
                     }}
                   >
                     <Icon path={mdiPencilOutline} size={0.7} />
-                    Edit
+                    {t('documentsTab.editBtn')}
                   </button>
                 )}
               </div>
@@ -1411,19 +1411,19 @@ export const DocumentsTab = () => {
           <div className="documents-tab__modal-overlay" onClick={() => setEditingDocument(null)}>
             <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
               <div className="documents-tab__modal-header">
-                <h3>Edit document</h3>
+                <h3>{t('documentsTab.editDocModalTitle')}</h3>
                 <button onClick={() => setEditingDocument(null)} aria-label={t('documentsTab.close')}>
                   <Icon path={mdiClose} size={0.85} />
                 </button>
               </div>
 
               <div className="documents-tab__form-group">
-                <label>Title</label>
+                <label>{t('documentsTab.editTitleLabel', 'Title')}</label>
                 <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
               </div>
 
               <div className="documents-tab__form-group">
-                <label>Content</label>
+                <label>{t('documentsTab.contentLabel')}</label>
                 <textarea
                   rows={18}
                   value={editContent}
@@ -1438,22 +1438,22 @@ export const DocumentsTab = () => {
                   onClick={() => setEditingDocument(null)}
                   disabled={savingEdit}
                 >
-                  Cancel
+                  {t('documentsTab.cancelBtn')}
                 </button>
                 <button
                   className="documents-tab__modal-btn documents-tab__modal-btn--secondary"
                   onClick={() => saveEdit(true)}
                   disabled={savingEdit}
-                  title="Keep the current version and save edits as v+1"
+                  title={t('documentsTab.saveAsNewVersionTooltip') as string}
                 >
-                  Save as new version
+                  {t('documentsTab.saveAsNewVersion')}
                 </button>
                 <button
                   className="documents-tab__modal-btn documents-tab__modal-btn--primary"
                   onClick={() => saveEdit(false)}
                   disabled={savingEdit}
                 >
-                  {savingEdit ? 'Saving…' : 'Save'}
+                  {savingEdit ? t('documentsTab.saving') : t('documentsTab.saveBtn')}
                 </button>
               </div>
             </div>
@@ -1467,7 +1467,7 @@ export const DocumentsTab = () => {
           <div className="documents-tab__modal-overlay" onClick={() => setVersionsFor(null)}>
             <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
               <div className="documents-tab__modal-header">
-                <h3>Version history — {versionsFor.title}</h3>
+                <h3>{t('documentsTab.versionHistoryTitle', { title: versionsFor.title })}</h3>
                 <button onClick={() => setVersionsFor(null)} aria-label={t('documentsTab.close')}>
                   <Icon path={mdiClose} size={0.85} />
                 </button>
@@ -1475,10 +1475,10 @@ export const DocumentsTab = () => {
 
               <div className="documents-tab__view-content">
                 {versionsLoading ? (
-                  <p>Loading versions…</p>
+                  <p>{t('documentsTab.loadingVersions')}</p>
                 ) : versionList.length === 0 ? (
                   <p className="documents-tab__view-empty">
-                    Only the current version exists. Use “Save as new version” in Edit to start a history.
+                    {t('documentsTab.noVersionsYet')}
                   </p>
                 ) : (
                   <ul className="documents-tab__version-list">

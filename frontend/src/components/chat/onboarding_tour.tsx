@@ -13,6 +13,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { trackPreUserEvent } from '../../services/preuser_tracker';
 import './onboarding_tour.css';
 
@@ -24,13 +25,15 @@ interface OnboardingTourProps {
   isAuthenticated: boolean;
 }
 
-const POLICY_CHIPS: Array<{ slug: string; label: string }> = [
-  { slug: 'ai_digital', label: 'AI and Digital' },
-  { slug: 'climate_energy', label: 'Climate and Energy' },
-  { slug: 'finance', label: 'Finance' },
-  { slug: 'health', label: 'Health' },
-  { slug: 'trade', label: 'Trade' },
-  { slug: 'agri_fisheries', label: 'Agriculture and Fisheries' },
+// label = canonical English (kept for pre-user analytics events);
+// labelKey = i18n key used for display.
+const POLICY_CHIPS: Array<{ slug: string; label: string; labelKey: string }> = [
+  { slug: 'ai_digital', label: 'AI and Digital', labelKey: 'chat.onboarding.chipAiDigital' },
+  { slug: 'climate_energy', label: 'Climate and Energy', labelKey: 'chat.onboarding.chipClimateEnergy' },
+  { slug: 'finance', label: 'Finance', labelKey: 'chat.onboarding.chipFinance' },
+  { slug: 'health', label: 'Health', labelKey: 'chat.onboarding.chipHealth' },
+  { slug: 'trade', label: 'Trade', labelKey: 'chat.onboarding.chipTrade' },
+  { slug: 'agri_fisheries', label: 'Agriculture and Fisheries', labelKey: 'chat.onboarding.chipAgriFisheries' },
 ];
 
 const getPreUserId = (): string => {
@@ -43,6 +46,7 @@ const getPreUserId = (): string => {
 };
 
 export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(false);
   const [watchedItem, setWatchedItem] = useState('');
@@ -98,7 +102,7 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
           type="button"
           className="onboarding-tour__close"
           onClick={close}
-          aria-label="Close"
+          aria-label={t('common.close', 'Close')}
         >
           <span className="mdi mdi-close" />
         </button>
@@ -116,8 +120,8 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
           {step === 0 && (
             <>
               <span className="mdi mdi-hand-wave-outline onboarding-tour__icon" />
-              <h3>What is on your mind right now?</h3>
-              <p>Pick the policy area you care about today. I will tailor what I show you next.</p>
+              <h3>{t('chat.onboarding.step1Title', 'What is on your mind right now?')}</h3>
+              <p>{t('chat.onboarding.step1Sub', 'Pick the policy area you care about today. I will tailor what I show you next.')}</p>
               <div className="onboarding-tour__chips">
                 {POLICY_CHIPS.map((chip) => (
                   <button
@@ -126,7 +130,7 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
                     className="onboarding-tour__chip"
                     onClick={() => pickPolicyArea(chip.slug, chip.label)}
                   >
-                    {chip.label}
+                    {t(chip.labelKey, chip.label)}
                   </button>
                 ))}
               </div>
@@ -136,12 +140,12 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
           {step === 1 && (
             <>
               <span className="mdi mdi-eye-outline onboarding-tour__icon" />
-              <h3>Anything specific you watch?</h3>
-              <p>Type a name (AI Act, CSRD, GDPR), an OEIL reference, or a CELEX. I will keep an eye on it.</p>
+              <h3>{t('chat.onboarding.step2Title', 'Anything specific you watch?')}</h3>
+              <p>{t('chat.onboarding.step2Sub', 'Type a name (AI Act, CSRD, GDPR), an OEIL reference, or a CELEX. I will keep an eye on it.')}</p>
               <input
                 type="text"
                 className="onboarding-tour__input"
-                placeholder="e.g. AI Act, 2024/0079(COD), 32024R1689"
+                placeholder={t('chat.onboarding.step2Placeholder', 'e.g. AI Act, 2024/0079(COD), 32024R1689')}
                 value={watchedItem}
                 onChange={(e) => setWatchedItem(e.target.value)}
                 onKeyDown={(e) => {
@@ -155,8 +159,8 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
           {step === 2 && (
             <>
               <span className="mdi mdi-rocket-launch-outline onboarding-tour__icon" />
-              <h3>Want me to keep an eye on it?</h3>
-              <p>Sign up free and I will track legislation for you, flag changes, and draft amendments and position papers when you need them. No credit card.</p>
+              <h3>{t('chat.onboarding.step3Title', 'Want me to keep an eye on it?')}</h3>
+              <p>{t('chat.onboarding.step3Sub', 'Sign up free and I will track legislation for you, flag changes, and draft amendments and position papers when you need them. No credit card.')}</p>
             </>
           )}
         </div>
@@ -168,7 +172,7 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
               className="onboarding-tour__btn onboarding-tour__btn--skip"
               onClick={close}
             >
-              Skip for now
+              {t('chat.onboarding.skipForNow', 'Skip for now')}
             </button>
           )}
 
@@ -179,14 +183,16 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
                 className="onboarding-tour__btn onboarding-tour__btn--skip"
                 onClick={skipWatchedItem}
               >
-                Skip
+                {t('chat.onboarding.skip', 'Skip')}
               </button>
               <button
                 type="button"
                 className="onboarding-tour__btn onboarding-tour__btn--primary"
                 onClick={submitWatchedItem}
               >
-                {watchedItem.trim() ? 'Continue' : 'No specific file yet'}
+                {watchedItem.trim()
+                  ? t('chat.onboarding.continue', 'Continue')
+                  : t('chat.onboarding.noFileYet', 'No specific file yet')}
               </button>
             </>
           )}
@@ -198,14 +204,14 @@ export const OnboardingTour = ({ isAuthenticated }: OnboardingTourProps) => {
                 className="onboarding-tour__btn onboarding-tour__btn--secondary"
                 onClick={close}
               >
-                Maybe later
+                {t('chat.onboarding.maybeLater', 'Maybe later')}
               </button>
               <button
                 type="button"
                 className="onboarding-tour__btn onboarding-tour__btn--primary"
                 onClick={goSignup}
               >
-                Sign up free
+                {t('header.signUpFree', 'Sign up free')}
               </button>
             </>
           )}

@@ -155,7 +155,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
           setDeepLinkStatus({
             kind: 'error',
             celex,
-            reason: `EUR-Lex returned HTTP ${response.status}. The law could not be auto-loaded.`,
+            reason: t('amendator.page.httpError', { status: response.status, defaultValue: 'EUR-Lex returned HTTP {{status}}. The law could not be auto-loaded.' }),
           });
           return;
         }
@@ -164,9 +164,10 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
           setDeepLinkStatus({
             kind: 'error',
             celex,
-            reason:
-              'EUR-Lex returned the document but its legislative structure could not be parsed. ' +
-              'This sometimes happens when EUR-Lex serves a WAF challenge page.',
+            reason: t(
+              'amendator.page.parseError',
+              'EUR-Lex returned the document but its legislative structure could not be parsed. This sometimes happens when EUR-Lex serves a WAF challenge page.',
+            ),
           });
           return;
         }
@@ -204,7 +205,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
         setDeepLinkStatus({
           kind: 'error',
           celex,
-          reason: err instanceof Error ? err.message : 'Network error while loading the law.',
+          reason: err instanceof Error ? err.message : t('amendator.page.networkError', 'Network error while loading the law.'),
         });
       } finally {
         // Clear the params so they don't re-trigger
@@ -574,7 +575,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save amendments');
+        throw new Error(t('amendator.page.saveFailed', 'Failed to save amendments'));
       }
 
       const savedAmendments = await response.json();
@@ -723,8 +724,8 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               <div className="amendator-page__loading-spinner" />
               <div className="amendator-page__loading-title">
                 {deepLinkStatus.kind === 'loading'
-                  ? 'Loading legislative text…'
-                  : 'Restoring your amendments…'}
+                  ? t('amendator.page.loadingText', 'Loading legislative text…')
+                  : t('amendator.page.restoringAmendments', 'Restoring your amendments…')}
               </div>
               <div className="amendator-page__loading-sub">
                 {formatCelexLabel(deepLinkStatus.celex)}
@@ -735,11 +736,11 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
         )}
         {deepLinkStatus.kind === 'error' && (
           <div className="amendator-page__deeplink amendator-page__deeplink--error" role="alert">
-            <span>Couldn't auto-open {deepLinkStatus.celex}: {deepLinkStatus.reason}</span>
+            <span>{t('amendator.page.autoOpenFailed', { celex: deepLinkStatus.celex, defaultValue: "Couldn't auto-open {{celex}}" })}: {deepLinkStatus.reason}</span>
             <button
               className="amendator-page__deeplink-dismiss"
               onClick={() => setDeepLinkStatus({ kind: 'idle' })}
-              aria-label="Dismiss"
+              aria-label={t('amendator.page.dismiss', 'Dismiss')}
             >
               ×
             </button>

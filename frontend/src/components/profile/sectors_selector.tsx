@@ -4,6 +4,7 @@
  * the parent via `onUpdate` (which calls the auth /me PATCH endpoint).
  */
 
+import { useTranslation } from 'react-i18next';
 import './sectors_selector.css';
 
 export interface SectorOption {
@@ -11,6 +12,10 @@ export interface SectorOption {
   label: string;
   description: string;
 }
+
+// `label` / `description` are the English defaults; translated strings live
+// under `sectors.<slug>.label` / `sectors.<slug>.description` and are
+// resolved at render time.
 
 export const SECTORS: SectorOption[] = [
   { slug: 'agriculture_food', label: 'Agriculture & Food', description: 'Farming, food processing, agri-trade' },
@@ -41,6 +46,8 @@ interface SectorsSelectorProps {
 }
 
 export const SectorsSelector = ({ selectedSectors, onUpdate }: SectorsSelectorProps) => {
+  const { t } = useTranslation();
+
   const toggle = (slug: string) => {
     if (selectedSectors.includes(slug)) {
       onUpdate(selectedSectors.filter((s) => s !== slug));
@@ -52,9 +59,7 @@ export const SectorsSelector = ({ selectedSectors, onUpdate }: SectorsSelectorPr
   return (
     <div className="sectors-selector">
       <div className="sectors-selector__hint">
-        Select the sectors you operate in. Brubru uses these to filter
-        Dashboard tiles, calendar events, and consultations to what matters to
-        you.
+        {t('sectors.hint', 'Select the sectors you operate in. Brubru uses these to filter Dashboard tiles, calendar events, and consultations to what matters to you.')}
       </div>
       <div className="sectors-selector__grid">
         {SECTORS.map((sector) => {
@@ -69,8 +74,8 @@ export const SectorsSelector = ({ selectedSectors, onUpdate }: SectorsSelectorPr
               onClick={() => toggle(sector.slug)}
               aria-pressed={selected}
             >
-              <span className="sectors-selector__label">{sector.label}</span>
-              <span className="sectors-selector__desc">{sector.description}</span>
+              <span className="sectors-selector__label">{t(`sectors.${sector.slug}.label`, sector.label)}</span>
+              <span className="sectors-selector__desc">{t(`sectors.${sector.slug}.description`, sector.description)}</span>
             </button>
           );
         })}

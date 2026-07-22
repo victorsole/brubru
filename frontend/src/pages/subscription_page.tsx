@@ -39,7 +39,7 @@ export const SubscriptionPage = () => {
       await createCheckoutSession(plan, billingPeriod);
     } catch (err) {
       console.error('Checkout failed', err);
-      alert('Failed to start checkout. Please try again.');
+      alert(t('subscription.checkoutError', 'Failed to start checkout. Please try again.'));
     } finally {
       setLoading(null);
     }
@@ -145,7 +145,7 @@ export const SubscriptionPage = () => {
                   className={`subscription__pricing-button button ${isFeatured || isProfessional ? 'button-primary' : 'button-outline'}`}
                   disabled={loading === loadingKey}
                 >
-                  {loading === loadingKey ? 'Loading...' : t(`subscription.${bundle.id}.button`)}
+                  {loading === loadingKey ? t('common.loading', 'Loading...') : t(`subscription.${bundle.id}.button`)}
                 </button>
               </div>
             );
@@ -185,7 +185,7 @@ export const SubscriptionPage = () => {
               className="subscription__pricing-button button button-primary"
               disabled={loading === `ep-${billingPeriod}`}
             >
-              {loading === `ep-${billingPeriod}` ? 'Loading...' : t('subscription.ep.button')}
+              {loading === `ep-${billingPeriod}` ? t('common.loading', 'Loading...') : t('subscription.ep.button')}
             </button>
           </div>
         </div>
@@ -248,7 +248,7 @@ export const SubscriptionPage = () => {
                   className="subscription__pricing-button button button-outline"
                   disabled={loading === loadingKey}
                 >
-                  {loading === loadingKey ? 'Loading...' : 'Subscribe'}
+                  {loading === loadingKey ? t('common.loading', 'Loading...') : t('subscription.modules.subscribe', 'Subscribe')}
                 </button>
               </div>
             );

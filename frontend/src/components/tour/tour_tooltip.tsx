@@ -1,5 +1,6 @@
 // frontend/src/components/tour/tour_tooltip.tsx
 import { motion, useReducedMotion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import type { TooltipRenderProps } from 'react-joyride';
 import Icon from '@mdi/react';
 import { mdiClose, mdiArrowLeft, mdiArrowRight, mdiCheck } from '@mdi/js';
@@ -17,7 +18,23 @@ export const TourTooltip = ({
   tooltipProps,
   isLastStep,
 }: TooltipRenderProps) => {
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+
+  // tour_steps.ts stores i18n keys (titleKey/contentKey) alongside the
+  // English fallback held in title/content.
+  const stepWithKeys = step as typeof step & {
+    titleKey?: string;
+    contentKey?: string;
+  };
+  const stepTitle =
+    stepWithKeys.titleKey && typeof step.title === 'string'
+      ? t(stepWithKeys.titleKey, step.title)
+      : step.title;
+  const stepContent =
+    stepWithKeys.contentKey && typeof step.content === 'string'
+      ? t(stepWithKeys.contentKey, step.content)
+      : step.content;
 
   const tooltipVariants = {
     initial: shouldReduceMotion
@@ -53,20 +70,20 @@ export const TourTooltip = ({
       <button
         className="tour-tooltip__close"
         {...closeProps}
-        aria-label="Close tour"
+        aria-label={t('tour.closeAria', 'Close tour')}
       >
         <Icon path={mdiClose} size={0.8} />
       </button>
 
       {/* Content */}
       <div className="tour-tooltip__content">
-        {step.title && (
+        {stepTitle && (
           <h3 id="tour-step-title" className="tour-tooltip__title">
-            {step.title}
+            {stepTitle}
           </h3>
         )}
         <div id="tour-step-content" className="tour-tooltip__body">
-          {step.content}
+          {stepContent}
         </div>
       </div>
 
@@ -75,7 +92,11 @@ export const TourTooltip = ({
         {/* Progress indicator */}
         <div className="tour-tooltip__progress">
           <span className="tour-tooltip__progress-text">
-            {index + 1} of {size}
+            {t('tour.progressOf', {
+              defaultValue: '{{current}} of {{total}}',
+              current: index + 1,
+              total: size,
+            })}
           </span>
           <div className="tour-tooltip__progress-dots">
             {Array.from({ length: size }, (_, i) => (
@@ -97,7 +118,7 @@ export const TourTooltip = ({
               className="tour-tooltip__button tour-tooltip__button--skip"
               {...skipProps}
             >
-              Skip tour
+              {t('tour.skip', 'Skip tour')}
             </button>
           )}
 
@@ -108,7 +129,7 @@ export const TourTooltip = ({
               {...backProps}
             >
               <Icon path={mdiArrowLeft} size={0.7} />
-              <span>Back</span>
+              <span>{t('tour.back', 'Back')}</span>
             </button>
           )}
 
@@ -121,11 +142,11 @@ export const TourTooltip = ({
               {isLastStep ? (
                 <>
                   <Icon path={mdiCheck} size={0.7} />
-                  <span>Finish</span>
+                  <span>{t('tour.finish', 'Finish')}</span>
                 </>
               ) : (
                 <>
-                  <span>Next</span>
+                  <span>{t('common.next', 'Next')}</span>
                   <Icon path={mdiArrowRight} size={0.7} />
                 </>
               )}

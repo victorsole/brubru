@@ -139,7 +139,7 @@ export const LegislativeFileDetail = () => {
       await analyzeFile(selectedFile.file_id);
       // Success - data will refresh automatically
     } catch (error) {
-      alert('Failed to analyze file. Please try again.');
+      alert(t('fileDetail.analyzeFailed', 'Failed to analyse file. Please try again.'));
     }
   };
 
@@ -498,7 +498,7 @@ export const LegislativeFileDetail = () => {
                   <div className="legislative-file-detail__reference">
                     <strong>{t('fileDetail.legalText')}</strong>
                     <a href={selectedFile.legal_text_url} target="_blank" rel="noopener noreferrer">
-                      View on EUR-Lex
+                      {t('fileDetail.viewOnEurlex', 'View on EUR-Lex')}
                     </a>
                   </div>
                 )}
@@ -593,7 +593,7 @@ export const LegislativeFileDetail = () => {
                         }}
                       >
                         <Icon path={mdiPlus} size={0.8} />
-                        Draft Amendment
+                        {t('myFilesTab.draftAmendment', 'Draft Amendment')}
                       </button>
                     </div>
                   ) : (
@@ -624,7 +624,7 @@ export const LegislativeFileDetail = () => {
                         }}
                       >
                         <Icon path={mdiPencilOutline} size={0.8} />
-                        Draft More Amendments
+                        {t('amendmentsTab.draftMore', 'Draft More Amendments')}
                       </button>
                     </div>
                   )}
@@ -646,7 +646,7 @@ export const LegislativeFileDetail = () => {
                   disabled={isAnalyzing}
                 >
                   <Icon path={mdiRobotOutline} size={0.9} />
-                  {isAnalyzing ? 'Analyzing...' : 'AI Analyze This File'}
+                  {isAnalyzing ? t('fileDetail.analysing', 'Analysing...') : t('fileDetail.aiAnalyze', 'AI Analyse This File')}
                 </button>
               </div>
             )}

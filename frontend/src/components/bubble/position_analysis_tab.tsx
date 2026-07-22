@@ -51,11 +51,11 @@ const STANCE_LABEL: Record<string, string> = {
   support: 'SUPPORT', oppose: 'OPPOSE', neutral: 'NEUTRAL', undecided: 'UNDECIDED',
 };
 const USER_STANCE_OPTIONS = [
-  { value: 'support', label: 'Support' },
-  { value: 'support_with_amendments', label: 'Support with amendments' },
-  { value: 'oppose', label: 'Oppose' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'undecided', label: 'Undecided' },
+  { value: 'support', labelKey: 'positionTab.stanceSupport', label: 'Support' },
+  { value: 'support_with_amendments', labelKey: 'positionTab.stanceSupportWithAmendments', label: 'Support with amendments' },
+  { value: 'oppose', labelKey: 'positionTab.stanceOppose', label: 'Oppose' },
+  { value: 'neutral', labelKey: 'positionTab.stanceNeutral', label: 'Neutral' },
+  { value: 'undecided', labelKey: 'positionTab.stanceUndecided', label: 'Undecided' },
 ];
 
 function ConfidencePill({ level }: { level: string }) {
@@ -352,7 +352,7 @@ function UserPositionCard({ pos, onSave, onAction }: {
       <div className="pos-user-form">
         <label>{t('positionTab.stanceLabel')}
           <select value={stance} onChange={(e) => setStance(e.target.value)}>
-            {USER_STANCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            {USER_STANCE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{t(o.labelKey, o.label)}</option>)}
           </select>
         </label>
         <label>{t('positionTab.notesLabel')}
@@ -504,7 +504,7 @@ export const PositionAnalysisTab: React.FC = () => {
           setSearchParams((prev) => { const n = new URLSearchParams(prev); n.delete('ref'); return n; }, { replace: true });
         }
       })
-      .catch((e: any) => setListError(e?.response?.data?.detail || e.message || 'Failed to load files'));
+      .catch((e: any) => setListError(e?.response?.data?.detail || e.message || t('positionTab.errLoadFiles', 'Failed to load files')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myInterests]);
 
@@ -513,7 +513,7 @@ export const PositionAnalysisTab: React.FC = () => {
     setDetailLoading(true); setDetailError(null); setLobbying(null); setActual(null);
     positionService.get(selectedId)
       .then((d) => setDetail(d))
-      .catch((e: any) => setDetailError(e?.response?.data?.detail || e.message || 'Failed to load position'))
+      .catch((e: any) => setDetailError(e?.response?.data?.detail || e.message || t('positionTab.errLoadPosition', 'Failed to load position')))
       .finally(() => setDetailLoading(false));
     positionService.amendments(selectedId).then(setDrilldown).catch(() => setDrilldown(null));
     positionService.lobbying(selectedId).then(setLobbying).catch(() => setLobbying(null));
