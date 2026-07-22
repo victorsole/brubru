@@ -1,6 +1,7 @@
 # IRIS2: EU Secure Connectivity Programme
 
 ## QUICK FACTS
+- **LATEST (Tuesday 21 July 2026 — POLAND JOINS WITH EUR 656 MILLION):** at a signature ceremony in Warsaw, **Poland joined the IRIS2 programme with an additional contribution of EUR 656 million**, integrating its national system with IRIS2. Commissioner **Andrius Kubilius**: Poland "chooses to go European instead of going alone". Kubilius also met the CEOs of SES, Eutelsat and Hispasat (the SpaceRISE consortium leads) in Warsaw. Sources: Commissioner Kubilius speech at the IRIS2 Polish-contribution signature ceremony (EC press corner, 21 July 2026) + his account posts of the same day.
 - Full name: Infrastructure for Resilience, Interconnectivity and Security by Satellite (IRIS2)
 - Legal basis: Regulation (EU) 2023/588 of 15 March 2023 establishing the Union Secure Connectivity Programme for the period 2023-2027
 - Type: Multi-orbit (MEO + LEO) sovereign satellite-communications constellation -- the EU's third flagship space programme after Galileo (navigation) and Copernicus (Earth observation)

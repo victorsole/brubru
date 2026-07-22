@@ -1,6 +1,7 @@
 # Clean Hydrogen Joint Undertaking, Hydrogen Valleys and the European Hydrogen Safety Panel
 
 ## QUICK FACTS
+- **LATEST (Monday 20 July 2026):** the Clean Hydrogen Partnership selected **13 Hydrogen Valleys to receive Project Development Assistance under the second call of the H2V Facility**. PDA is advisory support to bring valley projects to investment readiness rather than a grant to build. Source: Clean Hydrogen JU news, 20 July 2026. **Tenderator-relevant** (signals where the valley pipeline is maturing).
 - Topic: Clean Hydrogen Joint Undertaking (Clean Hydrogen Partnership) -- the EU public-private R&I partnership funding hydrogen technology, Hydrogen Valleys, and the safety/observatory layer around them
 - Legal name: Clean Hydrogen Joint Undertaking (branded "Clean Hydrogen Partnership")
 - Legal basis: Council Regulation (EU) 2021/2085 of 19 November 2021, establishing the Joint Undertakings under Horizon Europe (the "Single Basic Act" covering all 10 Horizon Europe JUs) -- CELEX 32021R2085
