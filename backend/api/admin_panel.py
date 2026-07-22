@@ -969,3 +969,276 @@ async def send_reengagement_emails(
         failed=len(all_failed),
         failed_addresses=all_failed,
     )
+
+
+# ============================================================================
+# SYSTEM-WIDE AMENDMENTS & DOCUMENTS (added Jul 2026)
+# ============================================================================
+
+@router.get("/amendments")
+def get_all_amendments(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """System-wide amendments list (the /api/amendments router is user-scoped)."""
+    from models.amendment import Amendment
+
+    query = db.query(Amendment, User.email).join(User, Amendment.user_id == User.id)
+    total = query.count()
+    rows = query.order_by(Amendment.updated_at.desc()) \
+        .offset((page - 1) * page_size).limit(page_size).all()
+
+    items = []
+    for amendment, email in rows:
+        data = amendment.to_dict() if hasattr(amendment, "to_dict") else {
+            "id": str(amendment.id),
+        }
+        data["user_email"] = email
+        items.append(data)
+
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+@router.delete("/amendments/{amendment_id}")
+def admin_delete_amendment(
+    amendment_id: UUID,
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Delete any user's amendment (admin moderation)."""
+    from models.amendment import Amendment
+
+    amendment = db.query(Amendment).filter(Amendment.id == amendment_id).first()
+    if not amendment:
+        raise HTTPException(status_code=404, detail="Amendment not found")
+
+    db.add(AdminActivityLog(
+        admin_user_id=admin.id,
+        action_type="delete_amendment",
+        target_type="amendment",
+        action_details={"amendment_id": str(amendment_id), "user_id": str(amendment.user_id)},
+    ))
+    db.delete(amendment)
+    db.commit()
+    return {"message": "Amendment deleted"}
+
+
+@router.get("/documents")
+def get_all_documents(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """System-wide user documents list (the /api/documents router is user-scoped)."""
+    from models.user_document import UserDocument
+
+    query = db.query(UserDocument, User.email).join(User, UserDocument.user_id == User.id)
+    total = query.count()
+    rows = query.order_by(UserDocument.updated_at.desc()) \
+        .offset((page - 1) * page_size).limit(page_size).all()
+
+    items = []
+    for doc, email in rows:
+        items.append({
+            "id": str(doc.id),
+            "user_email": email,
+            "title": getattr(doc, "title", None) or getattr(doc, "filename", None),
+            "document_type": getattr(doc, "document_type", None),
+            "created_at": doc.created_at.isoformat() if doc.created_at else None,
+            "updated_at": doc.updated_at.isoformat() if doc.updated_at else None,
+        })
+
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+# ============================================================================
+# BILLING & API OVERVIEW (added Jul 2026)
+# ============================================================================
+
+@router.get("/billing/overview")
+def get_billing_overview(
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """API-credits billing overview: balances, usage, top-ups, keys."""
+    from models.api_billing import ApiUsageEvent, ApiTopupEvent
+    from models.api_key import ApiKey
+    from datetime import timezone
+
+    seven_ago = datetime.now(timezone.utc) - timedelta(days=7)
+
+    total_balance_micro = db.query(func.coalesce(func.sum(User.api_balance_eur_micro), 0)).scalar()
+    funded_users = db.query(func.count(User.id)).filter(User.api_balance_eur_micro > 0).scalar()
+
+    usage_7d_count = db.query(func.count(ApiUsageEvent.id)).filter(
+        ApiUsageEvent.created_at >= seven_ago, ApiUsageEvent.is_sandbox == False  # noqa: E712
+    ).scalar()
+    usage_7d_cost_micro = db.query(func.coalesce(func.sum(ApiUsageEvent.cost_eur_micro), 0)).filter(
+        ApiUsageEvent.created_at >= seven_ago, ApiUsageEvent.is_sandbox == False  # noqa: E712
+    ).scalar()
+
+    recent_usage = db.query(ApiUsageEvent, User.email) \
+        .outerjoin(User, ApiUsageEvent.user_id == User.id) \
+        .order_by(ApiUsageEvent.created_at.desc()).limit(20).all()
+    recent_topups = db.query(ApiTopupEvent, User.email) \
+        .outerjoin(User, ApiTopupEvent.user_id == User.id) \
+        .order_by(ApiTopupEvent.created_at.desc()).limit(10).all()
+
+    active_keys = db.query(func.count(ApiKey.id)).filter(ApiKey.revoked_at.is_(None)).scalar()
+
+    keys = db.query(ApiKey, User.email).join(User, ApiKey.user_id == User.id) \
+        .order_by(ApiKey.created_at.desc()).limit(50).all()
+
+    return {
+        "total_balance_eur": round((total_balance_micro or 0) / 1_000_000, 2),
+        "funded_users": funded_users or 0,
+        "usage_7d_count": usage_7d_count or 0,
+        "usage_7d_cost_eur": round((usage_7d_cost_micro or 0) / 1_000_000, 4),
+        "active_keys": active_keys or 0,
+        "recent_usage": [
+            {
+                "user_email": email,
+                "endpoint": ev.endpoint,
+                "method": ev.method,
+                "cost_eur": round((ev.cost_eur_micro or 0) / 1_000_000, 6),
+                "status_code": ev.status_code,
+                "is_sandbox": ev.is_sandbox,
+                "created_at": ev.created_at.isoformat() if ev.created_at else None,
+            }
+            for ev, email in recent_usage
+        ],
+        "recent_topups": [
+            {
+                "user_email": email,
+                "amount_eur": round((t.amount_eur_micro or 0) / 1_000_000, 2),
+                "status": t.status,
+                "created_at": t.created_at.isoformat() if t.created_at else None,
+            }
+            for t, email in recent_topups
+        ],
+        "keys": [
+            {
+                "id": str(k.id),
+                "user_email": email,
+                "name": k.name,
+                "key_prefix": k.key_prefix,
+                "api_tier": k.api_tier,
+                "is_sandbox": k.is_sandbox,
+                "last_used_at": k.last_used_at.isoformat() if k.last_used_at else None,
+                "revoked": k.revoked_at is not None,
+                "created_at": k.created_at.isoformat() if k.created_at else None,
+            }
+            for k, email in keys
+        ],
+    }
+
+
+# ============================================================================
+# OUTREACH OVERVIEW (added Jul 2026)
+# ============================================================================
+
+@router.get("/outreach/overview")
+def get_outreach_overview(
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Brief sends, unsubscribes, EUTR pool state and dormant claim profiles."""
+    from sqlalchemy import text
+
+    def _rows_sql(sql: str) -> list:
+        try:
+            return [dict(r) for r in db.execute(text(sql)).mappings().all()]
+        except Exception as exc:
+            logger.warning("outreach query failed: %s", exc)
+            db.rollback()
+            return []
+
+    def _scalar_sql(sql: str):
+        try:
+            return db.execute(text(sql)).scalar()
+        except Exception:
+            db.rollback()
+            return None
+
+    # Brief sends
+    last_send = _scalar_sql("SELECT MAX(sent_at) FROM daily_brief_sends")
+    sends_30d = _scalar_sql(
+        "SELECT COUNT(*) FROM daily_brief_sends WHERE sent_at >= now() - interval '30 days'"
+    ) or 0
+    recipients_30d = _scalar_sql(
+        "SELECT COUNT(DISTINCT email) FROM daily_brief_sends WHERE sent_at >= now() - interval '30 days'"
+    ) or 0
+    recent_sends = _rows_sql(
+        """
+        SELECT brief_date, COUNT(*) AS recipients, MAX(sent_at) AS sent_at
+        FROM daily_brief_sends
+        GROUP BY brief_date ORDER BY brief_date DESC LIMIT 10
+        """
+    )
+
+    # Registered users unsubscribed from the brief
+    unsubscribed_users = _scalar_sql(
+        "SELECT COUNT(*) FROM users WHERE (preferences->>'daily_brief_unsubscribed')::boolean IS TRUE"
+    ) or 0
+
+    # EUTR outreach pool (table managed outside the ORM; fail-soft)
+    eutr_total = _scalar_sql("SELECT COUNT(*) FROM transparency_register_orgs")
+    eutr_sendable = _scalar_sql(
+        """
+        SELECT COUNT(*) FROM transparency_register_orgs
+        WHERE email_verified IS TRUE
+          AND COALESCE(outreach_status, '') NOT IN ('bounced', 'unsubscribed')
+        """
+    )
+    eutr_bounced = _scalar_sql(
+        "SELECT COUNT(*) FROM transparency_register_orgs WHERE outreach_status = 'bounced'"
+    )
+    eutr_unsubscribed = _scalar_sql(
+        "SELECT COUNT(*) FROM transparency_register_orgs WHERE outreach_status = 'unsubscribed'"
+    )
+
+    # Dormant pre-provisioned profiles (migration 148)
+    dormant = db.query(User).filter(
+        User.pre_provisioned_at.isnot(None), User.claimed_at.is_(None)
+    ).order_by(User.pre_provisioned_at.desc()).limit(25).all()
+    claimed = db.query(func.count(User.id)).filter(User.claimed_at.isnot(None)).scalar() or 0
+
+    return {
+        "brief": {
+            "last_send_at": last_send.isoformat() if last_send else None,
+            "sends_30d": sends_30d,
+            "recipients_30d": recipients_30d,
+            "recent_sends": [
+                {
+                    "brief_date": str(r["brief_date"]),
+                    "recipients": r["recipients"],
+                    "sent_at": r["sent_at"].isoformat() if r["sent_at"] else None,
+                }
+                for r in recent_sends
+            ],
+            "unsubscribed_users": unsubscribed_users,
+        },
+        "eutr": {
+            "total_orgs": eutr_total,
+            "sendable": eutr_sendable,
+            "bounced": eutr_bounced,
+            "unsubscribed": eutr_unsubscribed,
+        },
+        "dormant_profiles": {
+            "pending": [
+                {
+                    "id": str(u.id),
+                    "full_name": u.full_name,
+                    "organization": u.organization,
+                    "linkedin_url": u.linkedin_url,
+                    "pre_provisioned_at": u.pre_provisioned_at.isoformat() if u.pre_provisioned_at else None,
+                    "claim_token_expires_at": u.claim_token_expires_at.isoformat() if u.claim_token_expires_at else None,
+                }
+                for u in dormant
+            ],
+            "claimed_total": claimed,
+        },
+    }
