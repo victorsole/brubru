@@ -16,6 +16,9 @@ import { NotificationsCenter } from '../components/admin/notifications_center';
 import { EUBubbleAdmin } from '../components/admin/eu_bubble_admin';
 import { LegislativeTracking } from '../components/admin/legislative_tracking';
 import { ChatAnalytics } from '../components/admin/chat_analytics';
+import { BillingManagement } from '../components/admin/billing_management';
+import { OutreachManagement } from '../components/admin/outreach_management';
+import { TenderatorManagement } from '../components/admin/tenderator_management';
 import './admin_panel_page.css';
 
 type AdminTab =
@@ -29,6 +32,9 @@ type AdminTab =
   | 'amendments'
   | 'documents'
   | 'subscriptions'
+  | 'billing'
+  | 'outreach'
+  | 'tenderator'
   | 'notifications'
   | 'eu_bubble'
   | 'legislative_tracking'
@@ -92,6 +98,27 @@ export const AdminPanelPage = () => {
         >
           <span className="admin-panel__nav-icon mdi mdi-cash-multiple"></span>
           Subscriptions
+        </button>
+        <button
+          className={`admin-panel__nav-item ${activeTab === 'billing' ? 'admin-panel__nav-item--active' : ''}`}
+          onClick={() => setActiveTab('billing')}
+        >
+          <span className="admin-panel__nav-icon mdi mdi-credit-card-outline"></span>
+          Billing &amp; API
+        </button>
+        <button
+          className={`admin-panel__nav-item ${activeTab === 'outreach' ? 'admin-panel__nav-item--active' : ''}`}
+          onClick={() => setActiveTab('outreach')}
+        >
+          <span className="admin-panel__nav-icon mdi mdi-email-fast"></span>
+          Outreach
+        </button>
+        <button
+          className={`admin-panel__nav-item ${activeTab === 'tenderator' ? 'admin-panel__nav-item--active' : ''}`}
+          onClick={() => setActiveTab('tenderator')}
+        >
+          <span className="admin-panel__nav-icon mdi mdi-file-certificate"></span>
+          Tenderator
         </button>
         <button
           className={`admin-panel__nav-item ${activeTab === 'amendments' ? 'admin-panel__nav-item--active' : ''}`}
@@ -177,6 +204,9 @@ export const AdminPanelPage = () => {
         {activeTab === 'dashboard' && <AdminDashboard />}
         {activeTab === 'users' && <UserManagement />}
         {activeTab === 'subscriptions' && <SubscriptionsManagement />}
+        {activeTab === 'billing' && <BillingManagement />}
+        {activeTab === 'outreach' && <OutreachManagement />}
+        {activeTab === 'tenderator' && <TenderatorManagement />}
         {activeTab === 'amendments' && <AmendmentsManagement />}
         {activeTab === 'documents' && <DocumentsManagement />}
         {activeTab === 'feeds' && <FeedManagement />}

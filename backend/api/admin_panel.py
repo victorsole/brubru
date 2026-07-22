@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_, and_
 
@@ -27,14 +27,28 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
+# Victor's own accounts. These must always survive admin-panel operations:
+# they can never be deleted, deactivated, or (for admins) demoted -- by anyone,
+# including from an impersonated or future second-admin session.
+PROTECTED_OWNER_EMAILS = {
+    "hello@beresol.eu",
+    "helloberesol@gmail.com",
+    "vsoleferioli@gmail.com",
+}
+
+
+def _is_protected_owner(user: User) -> bool:
+    return bool(user.email) and user.email.lower() in PROTECTED_OWNER_EMAILS
+
 
 # Pydantic Schemas
 
 class UserManagementResponse(BaseModel):
     """User details for admin panel"""
     id: UUID
-    email: str
+    email: Optional[str]  # nullable since migration 148 (dormant profiles)
     full_name: Optional[str]
+    organization: Optional[str] = None
     role: str
     is_active: bool
     is_verified: bool
@@ -42,7 +56,10 @@ class UserManagementResponse(BaseModel):
     created_at: datetime
     last_login: Optional[datetime]
     subscription_tier: Optional[str]
+    subscription_expires_at: Optional[datetime] = None
+    stripe_subscription_id: Optional[str] = None
     policy_interests: Optional[List[str]] = None
+    is_dormant: bool = False  # pre-provisioned, never claimed (migration 148)
 
     class Config:
         from_attributes = True  # Pydantic v2
@@ -54,6 +71,7 @@ class UserManagementResponse(BaseModel):
             id=obj.id,
             email=obj.email,
             full_name=obj.full_name,
+            organization=obj.organization,
             role=obj.role,
             is_active=obj.is_active,
             is_verified=obj.is_verified,
@@ -61,8 +79,21 @@ class UserManagementResponse(BaseModel):
             created_at=obj.created_at,
             last_login=obj.last_login,
             subscription_tier=obj.subscription_tier,
-            policy_interests=obj.policy_interests_list  # Use the property that handles conversion
+            subscription_expires_at=obj.subscription_expires_at,
+            stripe_subscription_id=obj.stripe_subscription_id,
+            policy_interests=obj.policy_interests_list,  # Use the property that handles conversion
+            is_dormant=bool(
+                getattr(obj, 'pre_provisioned_at', None) and not getattr(obj, 'claimed_at', None)
+            ),
         )
+
+
+class UserListResponse(BaseModel):
+    """Paginated user list envelope"""
+    users: List[UserManagementResponse]
+    total: int
+    page: int
+    page_size: int
 
 
 class UserUpdateRequest(BaseModel):
@@ -116,24 +147,21 @@ class SystemStatsResponse(BaseModel):
     total_subscriptions: int
     total_feedback: int
     unresolved_feedback: int
-
-
-class ScraperStatus(BaseModel):
-    """Status of a scraper"""
-    name: str
-    is_active: bool
-    last_run: Optional[datetime]
-    next_run: Optional[datetime]
-    items_scraped: int
-    error_count: int
-    status: str  # idle, running, error
+    # Business metrics (added Jul 2026)
+    signups_7d: int = 0
+    signups_30d: int = 0
+    paying_users: int = 0
+    wapu_7d: int = 0  # Weekly Active Paid Users: paid tier + 1 core action in 7d
+    dormant_profiles: int = 0  # pre-provisioned, never claimed (migration 148)
+    sync_failures_24h: int = 0
+    brief_sends_7d: int = 0
 
 
 # ============================================================================
 # USER MANAGEMENT
 # ============================================================================
 
-@router.get("/users", response_model=List[UserManagementResponse])
+@router.get("/users", response_model=UserListResponse)
 def get_all_users(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
@@ -185,7 +213,12 @@ def get_all_users(
     db.commit()
 
     # Convert using custom from_orm to handle policy_interests
-    return [UserManagementResponse.from_orm(user) for user in users]
+    return UserListResponse(
+        users=[UserManagementResponse.from_orm(user) for user in users],
+        total=total,
+        page=page,
+        page_size=page_size,
+    )
 
 
 @router.get("/users/{user_id}", response_model=UserManagementResponse)
@@ -222,6 +255,19 @@ async def update_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot demote yourself from admin role"
         )
+
+    # Owner accounts can never be demoted or deactivated
+    if _is_protected_owner(user):
+        if updates.role and updates.role != user.role and user.role == 'admin':
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This is a protected owner account: its admin role cannot be removed"
+            )
+        if updates.is_active is False:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This is a protected owner account: it cannot be deactivated"
+            )
 
     # Update fields
     update_data = updates.dict(exclude_unset=True)
@@ -263,6 +309,13 @@ async def delete_user(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot delete your own admin account"
+        )
+
+    # Owner accounts can never be deleted
+    if _is_protected_owner(user):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This is a protected owner account: it cannot be deleted"
         )
 
     # Log admin action
@@ -514,6 +567,69 @@ async def get_system_stats(
         FeedbackSubmission.status.in_(['new', 'in_review', 'in_progress'])
     ).scalar()
 
+    # --- Business metrics (added Jul 2026) ---
+    from datetime import timezone
+    from sqlalchemy import text
+
+    now_utc = datetime.now(timezone.utc)
+    seven_ago = now_utc - timedelta(days=7)
+    thirty_ago = now_utc - timedelta(days=30)
+
+    signups_7d = db.query(func.count(User.id)).filter(User.created_at >= seven_ago).scalar()
+    signups_30d = db.query(func.count(User.id)).filter(User.created_at >= thirty_ago).scalar()
+
+    paid_tiers = ('yellow', 'blue')
+    paying_users = db.query(func.count(User.id)).filter(
+        User.subscription_tier.in_(paid_tiers),
+        User.role != 'admin',
+    ).scalar()
+
+    # WAPU: paid tier + at least one core action (chat, amendment, document) in 7d
+    wapu_7d = 0
+    try:
+        from models.chat import Chat
+        from models.amendment import Amendment
+        from models.user_document import UserDocument
+
+        active_ids = set()
+        for uid, in db.query(Chat.user_id).filter(
+            Chat.user_id.isnot(None), Chat.last_message_at >= seven_ago
+        ).distinct():
+            active_ids.add(uid)
+        for uid, in db.query(Amendment.user_id).filter(Amendment.updated_at >= seven_ago).distinct():
+            active_ids.add(uid)
+        for uid, in db.query(UserDocument.user_id).filter(UserDocument.updated_at >= seven_ago).distinct():
+            active_ids.add(uid)
+
+        if active_ids:
+            wapu_7d = db.query(func.count(User.id)).filter(
+                User.id.in_(active_ids),
+                User.subscription_tier.in_(paid_tiers),
+                User.role != 'admin',
+            ).scalar() or 0
+    except Exception as exc:
+        logger.warning("WAPU computation failed: %s", exc)
+
+    dormant_profiles = db.query(func.count(User.id)).filter(
+        User.pre_provisioned_at.isnot(None),
+        User.claimed_at.is_(None),
+    ).scalar()
+
+    # Raw-SQL counters, fail-soft (tables managed outside ORM)
+    def _scalar_sql(sql: str) -> int:
+        try:
+            return db.execute(text(sql)).scalar() or 0
+        except Exception:
+            db.rollback()
+            return 0
+
+    sync_failures_24h = _scalar_sql(
+        "SELECT COUNT(*) FROM sync_runs WHERE status = 'failed' AND started_at >= now() - interval '24 hours'"
+    )
+    brief_sends_7d = _scalar_sql(
+        "SELECT COUNT(*) FROM daily_brief_sends WHERE sent_at >= now() - interval '7 days'"
+    )
+
     return {
         "total_users": total_users or 0,
         "active_users_7d": active_users_7d or 0,
@@ -523,7 +639,76 @@ async def get_system_stats(
         "entries_today": entries_today or 0,
         "total_subscriptions": total_subscriptions or 0,
         "total_feedback": total_feedback or 0,
-        "unresolved_feedback": unresolved_feedback or 0
+        "unresolved_feedback": unresolved_feedback or 0,
+        "signups_7d": signups_7d or 0,
+        "signups_30d": signups_30d or 0,
+        "paying_users": paying_users or 0,
+        "wapu_7d": wapu_7d,
+        "dormant_profiles": dormant_profiles or 0,
+        "sync_failures_24h": sync_failures_24h,
+        "brief_sends_7d": brief_sends_7d,
+    }
+
+
+@router.get("/subscriptions/overview")
+def get_subscriptions_overview(
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Server-side subscription overview across ALL users.
+
+    Tier counts come from the database (internal gating tiers). Plan names and
+    real MRR come from Stripe, the only source of plan identity: the webhook
+    persists just subscription_tier on the user row, so per-plan revenue must
+    be read from the active Stripe subscriptions.
+    """
+    # Tier counts over the whole user base (not just one page)
+    tier_rows = db.query(User.subscription_tier, func.count(User.id)) \
+        .group_by(User.subscription_tier).all()
+    by_tier = {(tier or "white"): count for tier, count in tier_rows}
+
+    total_users = sum(by_tier.values())
+    paying_users = db.query(func.count(User.id)).filter(
+        User.stripe_subscription_id.isnot(None),
+        User.role != 'admin',
+    ).scalar() or 0
+
+    # Real MRR + plan breakdown from Stripe (fail-soft if not configured)
+    mrr_eur = None
+    by_plan: Dict[str, int] = {}
+    stripe_error = None
+    try:
+        import stripe as stripe_lib
+        from core.config import settings as app_settings
+        from api.stripe_payment import PRICE_ID_TO_PLAN
+
+        if not app_settings.STRIPE_SECRET_KEY:
+            raise RuntimeError("STRIPE_SECRET_KEY not configured")
+
+        stripe_lib.api_key = app_settings.STRIPE_SECRET_KEY
+        mrr_cents = 0.0
+        subs = stripe_lib.Subscription.list(status="active", limit=100)
+        for sub in subs.auto_paging_iter():
+            for item in sub["items"]["data"]:
+                price = item["price"]
+                plan = PRICE_ID_TO_PLAN.get(price["id"], "unknown")
+                by_plan[plan] = by_plan.get(plan, 0) + 1
+                amount = (price.get("unit_amount") or 0) * (item.get("quantity") or 1)
+                interval = (price.get("recurring") or {}).get("interval", "month")
+                mrr_cents += amount / 12 if interval == "year" else amount
+        mrr_eur = round(mrr_cents / 100, 2)
+    except Exception as exc:
+        stripe_error = str(exc)
+        logger.warning("Stripe MRR fetch failed: %s", exc)
+
+    return {
+        "total_users": total_users,
+        "by_tier": by_tier,
+        "paying_users": paying_users,
+        "by_plan": by_plan,
+        "mrr_eur": mrr_eur,
+        "stripe_error": stripe_error,
     }
 
 
@@ -557,67 +742,131 @@ async def get_admin_activity_log(
 
 
 # ============================================================================
-# SCRAPER MANAGEMENT
+# SYNC HEALTH (real sync_runs ledger, replaces the old faked scraper status)
 # ============================================================================
 
-@router.get("/scrapers/status", response_model=List[ScraperStatus])
-def get_scrapers_status(
+@router.get("/sync/health")
+def get_sync_health(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
-    Get status of all scrapers (newsletters, RSS feeds, etc).
+    Freshness of every registered MEUB sync source plus recent failures.
 
-    Returns current status, last run time, and error information.
+    Reads the sync_runs ledger written by the cron tier endpoints via
+    services.sync.freshness.record_run.
     """
-    # This is a placeholder - implementation depends on scraper architecture
-    # For now, returning basic info about RSS feeds as "scrapers"
+    from sqlalchemy import text
+    from services.sync.freshness import get_freshness
 
-    feeds = db.query(RSSFeed).all()
+    sources = get_freshness(db)
 
-    scrapers = []
-    for feed in feeds:
-        entry_count = db.query(func.count(RSSEntry.id)).filter(RSSEntry.feed_id == feed.id).scalar()
+    try:
+        failures = db.execute(
+            text(
+                """
+                SELECT source_key, tier, status, error, started_at, finished_at
+                FROM sync_runs
+                WHERE status = 'failed'
+                ORDER BY started_at DESC
+                LIMIT 25
+                """
+            )
+        ).mappings().all()
+        recent_failures = [
+            {
+                "source_key": f["source_key"],
+                "tier": f["tier"],
+                "error": f["error"],
+                "started_at": f["started_at"].isoformat() if f["started_at"] else None,
+                "finished_at": f["finished_at"].isoformat() if f["finished_at"] else None,
+            }
+            for f in failures
+        ]
+    except Exception as exc:
+        logger.warning("sync_runs failures query failed: %s", exc)
+        db.rollback()
+        recent_failures = []
 
-        scrapers.append({
-            "name": f"{feed.source} - {feed.name}",
-            "is_active": feed.is_active,
-            "last_run": feed.last_fetched_at,
-            "next_run": None,  # Calculate based on fetch_interval_minutes
-            "items_scraped": entry_count or 0,
-            "error_count": 0,  # Would need error tracking
-            "status": "idle" if feed.is_active else "disabled"
-        })
+    stale = [s for s in sources if s.get("stale")]
 
-    return scrapers
+    return {
+        "sources": sources,
+        "stale_count": len(stale),
+        "recent_failures": recent_failures,
+    }
 
 
-@router.post("/scrapers/{scraper_name}/run")
-async def trigger_scraper(
-    scraper_name: str,
+async def _run_sync_tier_background(tier: str, admin_id: str):
+    """Run every source of a MEUB cadence tier, recording freshness rows.
+
+    Mirrors api/cron.py::cron_sync_tier but is fired from the admin panel as a
+    FastAPI background task, so the HTTP response returns immediately.
+    """
+    from datetime import timezone as _tz
+    from core.database import SessionLocal
+    from services.sync.source_registry import sources_for_tier
+    from services.sync.freshness import record_run
+    from api.cron import _run_script_async
+
+    db = SessionLocal()
+    try:
+        for spec in sources_for_tier(tier):
+            started = datetime.now(_tz.utc)
+            res = await _run_script_async(spec.key, spec.script, list(spec.args), timeout=spec.timeout)
+            status_str = res.get("status", "failed")
+            err = res.get("stderr_tail") or res.get("error") or res.get("reason")
+            record_run(
+                db,
+                source_key=spec.key,
+                tier=tier,
+                status=status_str,
+                error=(err if status_str != "success" else None),
+                started_at=started,
+                finished_at=datetime.now(_tz.utc),
+            )
+        logger.info("[ADMIN] Sync tier '%s' finished (triggered by admin %s)", tier, admin_id)
+    except Exception as exc:
+        logger.error("[ADMIN] Sync tier '%s' crashed: %s", tier, exc)
+    finally:
+        db.close()
+
+
+@router.post("/sync/run/{tier}")
+async def trigger_sync_tier(
+    tier: str,
+    background_tasks: BackgroundTasks,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
     """
-    Manually trigger a scraper run.
+    Manually run a MEUB sync cadence tier ('fast' or 'warm') in the background.
 
-    This will queue the scraper for immediate execution.
+    Same source registry the Railway cron uses; progress lands in the
+    sync_runs ledger and is visible via GET /api/admin/sync/health.
     """
-    # Log admin action
+    from services.sync.source_registry import sources_for_tier
+
+    if tier not in ("fast", "warm"):
+        raise HTTPException(status_code=400, detail="tier must be 'fast' or 'warm'")
+
+    specs = sources_for_tier(tier)
+
     log_entry = AdminActivityLog(
         admin_user_id=admin.id,
-        action_type="trigger_scraper",
-        target_type="scraper",
-        action_details={"scraper_name": scraper_name}
+        action_type="trigger_sync_tier",
+        target_type="sync",
+        action_details={"tier": tier, "sources": [s.key for s in specs]}
     )
     db.add(log_entry)
     db.commit()
 
-    logger.info(f"Scraper {scraper_name} triggered by admin {admin.id}")
+    background_tasks.add_task(_run_sync_tier_background, tier, str(admin.id))
 
     return {
-        "message": f"Scraper {scraper_name} triggered successfully",
-        "status": "queued"
+        "message": f"Sync tier '{tier}' started in background ({len(specs)} sources)",
+        "sources": [s.key for s in specs],
+        "status": "started",
     }
 
 
@@ -753,3 +1002,327 @@ async def send_reengagement_emails(
         failed=len(all_failed),
         failed_addresses=all_failed,
     )
+
+
+# ============================================================================
+# SYSTEM-WIDE AMENDMENTS & DOCUMENTS (added Jul 2026)
+# ============================================================================
+
+@router.get("/amendments")
+def get_all_amendments(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """System-wide amendments list (the /api/amendments router is user-scoped)."""
+    from models.amendment import Amendment
+
+    query = db.query(Amendment, User.email).join(User, Amendment.user_id == User.id)
+    total = query.count()
+    rows = query.order_by(Amendment.updated_at.desc()) \
+        .offset((page - 1) * page_size).limit(page_size).all()
+
+    items = []
+    for amendment, email in rows:
+        data = amendment.to_dict() if hasattr(amendment, "to_dict") else {
+            "id": str(amendment.id),
+        }
+        data["user_email"] = email
+        items.append(data)
+
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+@router.delete("/amendments/{amendment_id}")
+def admin_delete_amendment(
+    amendment_id: UUID,
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Delete any user's amendment (admin moderation)."""
+    from models.amendment import Amendment
+
+    amendment = db.query(Amendment).filter(Amendment.id == amendment_id).first()
+    if not amendment:
+        raise HTTPException(status_code=404, detail="Amendment not found")
+
+    db.add(AdminActivityLog(
+        admin_user_id=admin.id,
+        action_type="delete_amendment",
+        target_type="amendment",
+        action_details={"amendment_id": str(amendment_id), "user_id": str(amendment.user_id)},
+    ))
+    db.delete(amendment)
+    db.commit()
+    return {"message": "Amendment deleted"}
+
+
+@router.get("/documents")
+def get_all_documents(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """System-wide user documents list (the /api/documents router is user-scoped)."""
+    from models.user_document import UserDocument
+
+    query = db.query(UserDocument, User.email).join(User, UserDocument.user_id == User.id)
+    total = query.count()
+    rows = query.order_by(UserDocument.updated_at.desc()) \
+        .offset((page - 1) * page_size).limit(page_size).all()
+
+    items = []
+    for doc, email in rows:
+        items.append({
+            "id": str(doc.id),
+            "user_email": email,
+            "title": getattr(doc, "title", None) or getattr(doc, "filename", None),
+            "document_type": getattr(doc, "document_type", None),
+            "created_at": doc.created_at.isoformat() if doc.created_at else None,
+            "updated_at": doc.updated_at.isoformat() if doc.updated_at else None,
+        })
+
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+# ============================================================================
+# BILLING & API OVERVIEW (added Jul 2026)
+# ============================================================================
+
+@router.get("/billing/overview")
+def get_billing_overview(
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """API-credits billing overview: balances, usage, top-ups, keys."""
+    from models.api_billing import ApiUsageEvent, ApiTopupEvent
+    from models.api_key import ApiKey
+    from datetime import timezone
+
+    seven_ago = datetime.now(timezone.utc) - timedelta(days=7)
+
+    total_balance_micro = db.query(func.coalesce(func.sum(User.api_balance_eur_micro), 0)).scalar()
+    funded_users = db.query(func.count(User.id)).filter(User.api_balance_eur_micro > 0).scalar()
+
+    usage_7d_count = db.query(func.count(ApiUsageEvent.id)).filter(
+        ApiUsageEvent.created_at >= seven_ago, ApiUsageEvent.is_sandbox == False  # noqa: E712
+    ).scalar()
+    usage_7d_cost_micro = db.query(func.coalesce(func.sum(ApiUsageEvent.cost_eur_micro), 0)).filter(
+        ApiUsageEvent.created_at >= seven_ago, ApiUsageEvent.is_sandbox == False  # noqa: E712
+    ).scalar()
+
+    recent_usage = db.query(ApiUsageEvent, User.email) \
+        .outerjoin(User, ApiUsageEvent.user_id == User.id) \
+        .order_by(ApiUsageEvent.created_at.desc()).limit(20).all()
+    recent_topups = db.query(ApiTopupEvent, User.email) \
+        .outerjoin(User, ApiTopupEvent.user_id == User.id) \
+        .order_by(ApiTopupEvent.created_at.desc()).limit(10).all()
+
+    active_keys = db.query(func.count(ApiKey.id)).filter(ApiKey.revoked_at.is_(None)).scalar()
+
+    keys = db.query(ApiKey, User.email).join(User, ApiKey.user_id == User.id) \
+        .order_by(ApiKey.created_at.desc()).limit(50).all()
+
+    return {
+        "total_balance_eur": round((total_balance_micro or 0) / 1_000_000, 2),
+        "funded_users": funded_users or 0,
+        "usage_7d_count": usage_7d_count or 0,
+        "usage_7d_cost_eur": round((usage_7d_cost_micro or 0) / 1_000_000, 4),
+        "active_keys": active_keys or 0,
+        "recent_usage": [
+            {
+                "user_email": email,
+                "endpoint": ev.endpoint,
+                "method": ev.method,
+                "cost_eur": round((ev.cost_eur_micro or 0) / 1_000_000, 6),
+                "status_code": ev.status_code,
+                "is_sandbox": ev.is_sandbox,
+                "created_at": ev.created_at.isoformat() if ev.created_at else None,
+            }
+            for ev, email in recent_usage
+        ],
+        "recent_topups": [
+            {
+                "user_email": email,
+                "amount_eur": round((t.amount_eur_micro or 0) / 1_000_000, 2),
+                "status": t.status,
+                "created_at": t.created_at.isoformat() if t.created_at else None,
+            }
+            for t, email in recent_topups
+        ],
+        "keys": [
+            {
+                "id": str(k.id),
+                "user_email": email,
+                "name": k.name,
+                "key_prefix": k.key_prefix,
+                "api_tier": k.api_tier,
+                "is_sandbox": k.is_sandbox,
+                "last_used_at": k.last_used_at.isoformat() if k.last_used_at else None,
+                "revoked": k.revoked_at is not None,
+                "created_at": k.created_at.isoformat() if k.created_at else None,
+            }
+            for k, email in keys
+        ],
+    }
+
+
+# ============================================================================
+# OUTREACH OVERVIEW (added Jul 2026)
+# ============================================================================
+
+@router.get("/outreach/overview")
+def get_outreach_overview(
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Brief sends, unsubscribes, EUTR pool state and dormant claim profiles."""
+    from sqlalchemy import text
+
+    def _rows_sql(sql: str) -> list:
+        try:
+            return [dict(r) for r in db.execute(text(sql)).mappings().all()]
+        except Exception as exc:
+            logger.warning("outreach query failed: %s", exc)
+            db.rollback()
+            return []
+
+    def _scalar_sql(sql: str):
+        try:
+            return db.execute(text(sql)).scalar()
+        except Exception:
+            db.rollback()
+            return None
+
+    # Brief sends
+    last_send = _scalar_sql("SELECT MAX(sent_at) FROM daily_brief_sends")
+    sends_30d = _scalar_sql(
+        "SELECT COUNT(*) FROM daily_brief_sends WHERE sent_at >= now() - interval '30 days'"
+    ) or 0
+    recipients_30d = _scalar_sql(
+        "SELECT COUNT(DISTINCT email) FROM daily_brief_sends WHERE sent_at >= now() - interval '30 days'"
+    ) or 0
+    recent_sends = _rows_sql(
+        """
+        SELECT brief_date, COUNT(*) AS recipients, MAX(sent_at) AS sent_at
+        FROM daily_brief_sends
+        GROUP BY brief_date ORDER BY brief_date DESC LIMIT 10
+        """
+    )
+
+    # Registered users unsubscribed from the brief
+    unsubscribed_users = _scalar_sql(
+        "SELECT COUNT(*) FROM users WHERE (preferences->>'daily_brief_unsubscribed')::boolean IS TRUE"
+    ) or 0
+
+    # EUTR outreach pool (table managed outside the ORM; fail-soft)
+    eutr_total = _scalar_sql("SELECT COUNT(*) FROM transparency_register_orgs")
+    eutr_sendable = _scalar_sql(
+        """
+        SELECT COUNT(*) FROM transparency_register_orgs
+        WHERE email_verified IS TRUE
+          AND COALESCE(outreach_status, '') NOT IN ('bounced', 'unsubscribed')
+        """
+    )
+    eutr_bounced = _scalar_sql(
+        "SELECT COUNT(*) FROM transparency_register_orgs WHERE outreach_status = 'bounced'"
+    )
+    eutr_unsubscribed = _scalar_sql(
+        "SELECT COUNT(*) FROM transparency_register_orgs WHERE outreach_status = 'unsubscribed'"
+    )
+
+    # Dormant pre-provisioned profiles (migration 148)
+    dormant = db.query(User).filter(
+        User.pre_provisioned_at.isnot(None), User.claimed_at.is_(None)
+    ).order_by(User.pre_provisioned_at.desc()).limit(25).all()
+    claimed = db.query(func.count(User.id)).filter(User.claimed_at.isnot(None)).scalar() or 0
+
+    return {
+        "brief": {
+            "last_send_at": last_send.isoformat() if last_send else None,
+            "sends_30d": sends_30d,
+            "recipients_30d": recipients_30d,
+            "recent_sends": [
+                {
+                    "brief_date": str(r["brief_date"]),
+                    "recipients": r["recipients"],
+                    "sent_at": r["sent_at"].isoformat() if r["sent_at"] else None,
+                }
+                for r in recent_sends
+            ],
+            "unsubscribed_users": unsubscribed_users,
+        },
+        "eutr": {
+            "total_orgs": eutr_total,
+            "sendable": eutr_sendable,
+            "bounced": eutr_bounced,
+            "unsubscribed": eutr_unsubscribed,
+        },
+        "dormant_profiles": {
+            "pending": [
+                {
+                    "id": str(u.id),
+                    "full_name": u.full_name,
+                    "organization": u.organization,
+                    "linkedin_url": u.linkedin_url,
+                    "pre_provisioned_at": u.pre_provisioned_at.isoformat() if u.pre_provisioned_at else None,
+                    "claim_token_expires_at": u.claim_token_expires_at.isoformat() if u.claim_token_expires_at else None,
+                }
+                for u in dormant
+            ],
+            "claimed_total": claimed,
+        },
+    }
+
+
+# ============================================================================
+# USER IMPERSONATION (added Jul 2026)
+# ============================================================================
+
+@router.post("/users/{user_id}/impersonate")
+def impersonate_user(
+    user_id: UUID,
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Mint a short-lived (2h) access token for the target user so the admin can
+    see Brubru exactly as that user does (profile, MEUB filters, tier gating).
+
+    Every impersonation is written to the admin activity log. The token embeds
+    an impersonated_by claim for traceability.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    if user.id == admin.id:
+        raise HTTPException(status_code=400, detail="You are already this user")
+
+    from api.auth import create_access_token
+
+    token = create_access_token(
+        data={"sub": str(user.id), "impersonated_by": str(admin.id)},
+        expires_delta=timedelta(hours=2),
+    )
+
+    db.add(AdminActivityLog(
+        admin_user_id=admin.id,
+        action_type="impersonate_user",
+        target_type="user",
+        target_id=str(user.id),
+        action_details={"target_email": user.email, "expires_in_hours": 2},
+    ))
+    db.commit()
+
+    logger.info("[ADMIN] %s impersonating user %s (%s)", admin.email, user.id, user.email)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in_hours": 2,
+        "target_user_id": str(user.id),
+        "target_email": user.email,
+    }

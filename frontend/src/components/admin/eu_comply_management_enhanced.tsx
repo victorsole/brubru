@@ -12,6 +12,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/use_auth';
 import './eu_comply_management.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 interface ClusterStats {
   id: number;
   name: string;
@@ -61,7 +63,7 @@ export const EUComplyManagementEnhanced = () => {
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('extraction');
   const [clusters, setClusters] = useState<ClusterStats[]>([]);
-  const [selectedModel, setSelectedModel] = useState<string>('gpt-4');
+  const [selectedModel, setSelectedModel] = useState<string>('saul-7b');
   const [availableModels, setAvailableModels] = useState<AIModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [_error, setError] = useState<string | null>(null);
@@ -101,7 +103,7 @@ export const EUComplyManagementEnhanced = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/api/admin/eu-comply/clusters/stats', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/eu-comply/clusters/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -131,7 +133,7 @@ export const EUComplyManagementEnhanced = () => {
 
   const fetchModels = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/eu-comply/models/available', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/eu-comply/models/available`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -150,7 +152,7 @@ export const EUComplyManagementEnhanced = () => {
   const fetchExtractionStatus = async (clusterId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/eu-comply/clusters/${clusterId}/extraction-status`,
+        `${API_BASE_URL}/api/admin/eu-comply/clusters/${clusterId}/extraction-status`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -193,7 +195,7 @@ export const EUComplyManagementEnhanced = () => {
   const startExtraction = async (clusterId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/eu-comply/clusters/${clusterId}/extract-with-model?model=${selectedModel}`,
+        `${API_BASE_URL}/api/admin/eu-comply/clusters/${clusterId}/extract-with-model?model=${selectedModel}`,
         {
           method: 'POST',
           headers: {
@@ -237,7 +239,7 @@ export const EUComplyManagementEnhanced = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8000/api/admin/eu-comply/search/requirements?${params}`,
+        `${API_BASE_URL}/api/admin/eu-comply/search/requirements?${params}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -275,7 +277,7 @@ export const EUComplyManagementEnhanced = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8000/api/admin/eu-comply/chatbot/ask?${params}`,
+        `${API_BASE_URL}/api/admin/eu-comply/chatbot/ask?${params}`,
         {
           method: 'POST',
           headers: {
@@ -378,15 +380,14 @@ export const EUComplyManagementEnhanced = () => {
             >
               {availableModels.map((model) => (
                 <option key={model.id} value={model.id}>
-                  {model.id === 'gpt-4' ? '🔥 ' : ''}
                   {model.id.toUpperCase()} - {model.quality} quality, {model.speed} speed
                 </option>
               ))}
             </select>
             <span className="model-hint">
               {selectedModel === 'gpt-4'
-                ? '💰 Premium quality, higher cost'
-                : '💚 Open-source, 95% cost savings'}
+                ? 'Proprietary model, higher cost'
+                : 'Open-source model, no per-token cost'}
             </span>
           </div>
 

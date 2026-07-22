@@ -35,6 +35,8 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  /** Admin session stashed while impersonating another user (admin panel feature) */
+  adminBackup: { user: User; token: string } | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (data: any) => Promise<void>;
   logout: () => void;
@@ -42,6 +44,8 @@ interface AuthState {
   loginWithLinkedIn: (claimToken?: string) => void;
   updateProfile: (data: any) => Promise<void>;
   refreshToken: () => Promise<void>;
+  impersonate: (targetToken: string, targetUser: User) => void;
+  exitImpersonation: () => void;
 }
 
 // Listen for LinkedIn OAuth callback
@@ -68,6 +72,7 @@ export const useAuth = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      adminBackup: null,
 
       login: async (email: string, password: string) => {
         const formData = new FormData();
@@ -92,7 +97,26 @@ export const useAuth = create<AuthState>()(
 
       logout: () => {
         sessionStorage.removeItem('brubru_previous_login');
-        set({ user: null, token: null, isAuthenticated: false });
+        set({ user: null, token: null, isAuthenticated: false, adminBackup: null });
+      },
+
+      impersonate: (targetToken: string, targetUser: User) => {
+        const { user, token, adminBackup } = get();
+        // Keep the ORIGINAL admin session even across chained impersonations
+        const backup = adminBackup || (user && token ? { user, token } : null);
+        if (!backup) return;
+        set({ token: targetToken, user: targetUser, isAuthenticated: true, adminBackup: backup });
+      },
+
+      exitImpersonation: () => {
+        const { adminBackup } = get();
+        if (!adminBackup) return;
+        set({
+          token: adminBackup.token,
+          user: adminBackup.user,
+          isAuthenticated: true,
+          adminBackup: null,
+        });
       },
 
       loginWithGoogle: async (credentialResponse: any, claimToken?: string) => {
@@ -186,7 +210,8 @@ export const useAuth = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
-        isAuthenticated: state.isAuthenticated
+        isAuthenticated: state.isAuthenticated,
+        adminBackup: state.adminBackup
       }),
       // Returning session: re-apply the profile language so a 'ca' user
       // gets a Catalan UI without having to log in again.

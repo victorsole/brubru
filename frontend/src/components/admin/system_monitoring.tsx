@@ -16,30 +16,48 @@ interface ActivityLog {
   created_at: string;
 }
 
-interface ScraperStatus {
-  scraper_name: string;
-  is_active: boolean;
+interface SyncSource {
+  key: string;
+  label: string;
+  tier: string;
+  status: string;
   last_run_at: string | null;
-  last_run_status: string | null;
-  entries_added: number;
-  error_message: string | null;
+  last_success_at: string | null;
+  items_added: number | null;
+  stale: boolean;
+}
+
+interface SyncFailure {
+  source_key: string;
+  tier: string | null;
+  error: string | null;
+  started_at: string | null;
+  finished_at: string | null;
+}
+
+interface SyncHealth {
+  sources: SyncSource[];
+  stale_count: number;
+  recent_failures: SyncFailure[];
 }
 
 export const SystemMonitoring = () => {
   const { token } = useAuth();
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
-  const [scraperStatus, setScraperStatus] = useState<ScraperStatus[]>([]);
+  const [syncHealth, setSyncHealth] = useState<SyncHealth | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [activeTab, setActiveTab] = useState<'logs' | 'scrapers'>('logs');
+  const [activeTab, setActiveTab] = useState<'sync' | 'logs'>('sync');
+  const [runningTier, setRunningTier] = useState<string | null>(null);
+  const [runMessage, setRunMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (activeTab === 'logs') {
       fetchActivityLogs();
     } else {
-      fetchScraperStatus();
+      fetchSyncHealth();
     }
   }, [page, activeTab]);
 
@@ -61,33 +79,50 @@ export const SystemMonitoring = () => {
     }
   };
 
-  const fetchScraperStatus = async () => {
+  const fetchSyncHealth = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/api/admin/scrapers/status`, {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/sync/health`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setScraperStatus(response.data);
+      setSyncHealth(response.data);
       setError(null);
     } catch (err: any) {
-      console.error('Failed to fetch scraper status:', err);
-      setError(err.response?.data?.detail || 'Failed to load scraper status');
+      console.error('Failed to fetch sync health:', err);
+      setError(err.response?.data?.detail || 'Failed to load sync health');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading && (activityLogs.length === 0 && scraperStatus.length === 0)) {
+  const runSyncTier = async (tier: 'fast' | 'warm') => {
+    if (!confirm(`Run the '${tier}' sync tier now? Sources run one by one in the background.`)) return;
+    try {
+      setRunningTier(tier);
+      const response = await axios.post(
+        `${API_BASE_URL}/api/admin/sync/run/${tier}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setRunMessage(response.data.message);
+    } catch (err: any) {
+      setRunMessage(err.response?.data?.detail || `Failed to start ${tier} sync`);
+    } finally {
+      setRunningTier(null);
+    }
+  };
+
+  if (loading && activityLogs.length === 0 && !syncHealth) {
     return <div className="admin-section__loading">Loading monitoring data...</div>;
   }
 
-  if (error && (activityLogs.length === 0 && scraperStatus.length === 0)) {
+  if (error && activityLogs.length === 0 && !syncHealth) {
     return (
       <div className="admin-section__error">
         <p>{error}</p>
         <button
           className="btn btn--primary btn--small"
-          onClick={() => activeTab === 'logs' ? fetchActivityLogs() : fetchScraperStatus()}
+          onClick={() => activeTab === 'logs' ? fetchActivityLogs() : fetchSyncHealth()}
         >
           Retry
         </button>
@@ -98,22 +133,128 @@ export const SystemMonitoring = () => {
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <h2>System Monitoring</h2>
+        <h2>Ops &amp; Monitoring</h2>
         <div className="admin-section__actions">
+          <button
+            className={`btn btn--small ${activeTab === 'sync' ? 'btn--primary' : 'btn--secondary'}`}
+            onClick={() => setActiveTab('sync')}
+          >
+            Sync Health
+          </button>
           <button
             className={`btn btn--small ${activeTab === 'logs' ? 'btn--primary' : 'btn--secondary'}`}
             onClick={() => setActiveTab('logs')}
           >
             Activity Logs
           </button>
-          <button
-            className={`btn btn--small ${activeTab === 'scrapers' ? 'btn--primary' : 'btn--secondary'}`}
-            onClick={() => setActiveTab('scrapers')}
-          >
-            Scrapers
-          </button>
         </div>
       </div>
+
+      {activeTab === 'sync' && syncHealth && (
+        <>
+          <div className="admin-section__stats">
+            <span>Sources: <strong>{syncHealth.sources.length}</strong></span>
+            <span>Stale: <strong style={{ color: syncHealth.stale_count > 0 ? '#dc2626' : undefined }}>
+              {syncHealth.stale_count}
+            </strong></span>
+            <span style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
+              <button
+                className="btn btn--secondary btn--small"
+                onClick={() => runSyncTier('fast')}
+                disabled={runningTier !== null}
+              >
+                <span className="mdi mdi-play"></span>
+                {runningTier === 'fast' ? 'Starting...' : 'Run fast tier'}
+              </button>
+              <button
+                className="btn btn--secondary btn--small"
+                onClick={() => runSyncTier('warm')}
+                disabled={runningTier !== null}
+              >
+                <span className="mdi mdi-play"></span>
+                {runningTier === 'warm' ? 'Starting...' : 'Run warm tier'}
+              </button>
+              <button className="btn btn--primary btn--small" onClick={fetchSyncHealth}>
+                <span className="mdi mdi-refresh"></span>
+                Refresh
+              </button>
+            </span>
+          </div>
+
+          {runMessage && (
+            <p style={{ margin: '0.5rem 0', fontSize: '0.875rem', color: '#374151' }}>
+              {runMessage} Refresh to see freshness updates as sources finish.
+            </p>
+          )}
+
+          <div className="admin-section__table-container">
+            <table className="admin-section__table">
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Tier</th>
+                  <th>Status</th>
+                  <th>Last Success</th>
+                  <th>Items Added</th>
+                  <th>Freshness</th>
+                </tr>
+              </thead>
+              <tbody>
+                {syncHealth.sources.map((s) => (
+                  <tr key={s.key}>
+                    <td><strong>{s.label}</strong><br /><small className="admin-section__text-muted">{s.key}</small></td>
+                    <td>{s.tier}</td>
+                    <td>
+                      <span className={`admin-section__badge admin-section__badge--${s.status === 'success' ? 'success' : (s.status === 'never' ? 'default' : 'error')}`}>
+                        {s.status}
+                      </span>
+                    </td>
+                    <td>{s.last_success_at ? new Date(s.last_success_at).toLocaleString() : 'Never'}</td>
+                    <td>{s.items_added ?? '-'}</td>
+                    <td>
+                      <span className={`admin-section__status ${s.stale ? 'admin-section__status--inactive' : 'admin-section__status--active'}`}>
+                        {s.stale ? 'Stale' : 'Fresh'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {syncHealth.recent_failures.length > 0 && (
+            <div style={{ marginTop: '2rem' }}>
+              <h3 style={{ margin: '0 0 1rem', fontSize: '1.1rem' }}>Recent Failures</h3>
+              <div className="admin-section__table-container">
+                <table className="admin-section__table">
+                  <thead>
+                    <tr>
+                      <th>Source</th>
+                      <th>Tier</th>
+                      <th>When</th>
+                      <th>Error</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {syncHealth.recent_failures.map((f, i) => (
+                      <tr key={`${f.source_key}-${i}`}>
+                        <td><strong>{f.source_key}</strong></td>
+                        <td>{f.tier || '-'}</td>
+                        <td>{f.started_at ? new Date(f.started_at).toLocaleString() : '-'}</td>
+                        <td>
+                          <small className="admin-section__text-error">
+                            {(f.error || '').substring(0, 120)}
+                          </small>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       {activeTab === 'logs' && (
         <>
@@ -178,65 +319,6 @@ export const SystemMonitoring = () => {
               </button>
             </div>
           )}
-        </>
-      )}
-
-      {activeTab === 'scrapers' && (
-        <>
-          <div className="admin-section__stats">
-            <span>Total Scrapers: <strong>{scraperStatus.length}</strong></span>
-            <span>Active: <strong>{scraperStatus.filter(s => s.is_active).length}</strong></span>
-          </div>
-
-          <div className="admin-section__table-container">
-            <table className="admin-section__table">
-              <thead>
-                <tr>
-                  <th>Scraper Name</th>
-                  <th>Status</th>
-                  <th>Last Run</th>
-                  <th>Last Status</th>
-                  <th>Entries Added</th>
-                  <th>Error</th>
-                </tr>
-              </thead>
-              <tbody>
-                {scraperStatus.map((scraper) => (
-                  <tr key={scraper.scraper_name}>
-                    <td>
-                      <strong>{scraper.scraper_name}</strong>
-                    </td>
-                    <td>
-                      <span className={`admin-section__status ${scraper.is_active ? 'admin-section__status--active' : 'admin-section__status--inactive'}`}>
-                        {scraper.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td>
-                      {scraper.last_run_at
-                        ? new Date(scraper.last_run_at).toLocaleString()
-                        : 'Never'}
-                    </td>
-                    <td>
-                      {scraper.last_run_status && (
-                        <span className={`admin-section__badge admin-section__badge--${scraper.last_run_status === 'success' ? 'success' : 'error'}`}>
-                          {scraper.last_run_status}
-                        </span>
-                      )}
-                    </td>
-                    <td>{scraper.entries_added || 0}</td>
-                    <td>
-                      {scraper.error_message && (
-                        <small className="admin-section__text-error">
-                          {scraper.error_message.substring(0, 50)}
-                          {scraper.error_message.length > 50 && '...'}
-                        </small>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         </>
       )}
     </div>

@@ -408,7 +408,7 @@ export const ConsultationDetail: React.FC<ConsultationDetailProps> = ({
   };
 
   const isUrgent = consultation.is_closing_soon && consultation.status === 'open';
-  const isBlue = user?.subscription_tier === 'blue' || user?.subscription_tier === 'admin';
+  const isBlue = user?.subscription_tier === 'blue' || user?.role === 'admin';
   const isYellowPlus = isBlue || user?.subscription_tier === 'yellow';
 
   // Fetch AI analysis

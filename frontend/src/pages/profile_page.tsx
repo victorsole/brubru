@@ -784,7 +784,7 @@ export const ProfilePage = () => {
         </ul>
 
         <div className="profile-dashboard__sidebar-footer">
-          {user?.email === 'hello@beresol.eu' && (
+          {user?.role === 'admin' && (
             <Link
               to="/admin"
               className="profile-dashboard__nav-item profile-dashboard__nav-item--admin"

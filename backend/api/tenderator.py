@@ -3456,7 +3456,7 @@ async def fetch_tenders(
     - `source`: Data source (ted_api or ted_sparql)
     """
     # Check admin status
-    if current_user.subscription_tier != 'admin':
+    if current_user.role != 'admin':
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required"
@@ -3496,7 +3496,7 @@ async def run_matching(
 
     **Admin only** - Matches open tenders to all active user profiles.
     """
-    if current_user.subscription_tier != 'admin':
+    if current_user.role != 'admin':
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required"
@@ -3535,7 +3535,7 @@ async def batch_sme_scoring(
     - All unscored tenders (default)
     - All tenders (when recalculate=true)
     """
-    if current_user.subscription_tier != 'admin':
+    if current_user.role != 'admin':
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required"
