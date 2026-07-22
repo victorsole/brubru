@@ -251,7 +251,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {data.implementing_acts.length > 0 && (
         <div className="regulatory-cascade__branch">
-          <h4>Implementing acts ({data.implementing_acts.length})</h4>
+          <h4>{t('cascade.implementingActs', 'Implementing acts')} ({data.implementing_acts.length})</h4>
           <ul className="regulatory-cascade__list">
             {data.implementing_acts.map((act) => (
               <SecondaryActRow key={act.id} act={act} />
@@ -262,7 +262,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {data.delegated_acts.length > 0 && (
         <div className="regulatory-cascade__branch">
-          <h4>Delegated acts ({data.delegated_acts.length})</h4>
+          <h4>{t('cascade.delegatedActs', 'Delegated acts')} ({data.delegated_acts.length})</h4>
           <ul className="regulatory-cascade__list">
             {data.delegated_acts.map((act) => (
               <SecondaryActRow key={act.id} act={act} />
@@ -273,7 +273,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {hasRelated && (
         <div className="regulatory-cascade__branch">
-          <h4>Related in-flight files ({data.related_files.length})</h4>
+          <h4>{t('cascade.relatedFiles', 'Related in-flight files')} ({data.related_files.length})</h4>
           <ul className="regulatory-cascade__related-list">
             {data.related_files.map((r) => (
               <li key={r.carriage_id} className="regulatory-cascade__related">
@@ -299,7 +299,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
                   {r.lead_committee && <span>{r.lead_committee}</span>}
                   {r.shared_policy_areas.length > 0 && (
                     <span className="regulatory-cascade__related-tags">
-                      shares: {r.shared_policy_areas.slice(0, 3).join(', ')}
+                      {t('cascade.shares', 'shares:')} {r.shared_policy_areas.slice(0, 3).join(', ')}
                     </span>
                   )}
                 </div>

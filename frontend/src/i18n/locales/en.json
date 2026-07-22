@@ -5117,14 +5117,40 @@
     "takeMeThere": "Take me there",
     "zeroExplainer": "You are at zero because Brubru does not yet have signals on your activity. The recommendations above each unlock 5-10 points the moment you act on them.",
     "signedOut": "You appear to be signed out. Sign in to see your compliance maturity.",
-    "loadError": "Could not load your maturity score: {{detail}}"
+    "loadError": "Could not load your maturity score: {{detail}}",
+    "axis": {
+      "awareness": "Awareness",
+      "impact_analysis": "Impact analysis",
+      "advocacy": "Advocacy",
+      "follow_through": "Follow-through"
+    },
+    "tier": {
+      "beginner": "beginner",
+      "intermediate": "intermediate",
+      "advanced": "advanced",
+      "expert": "expert"
+    }
   },
   "cascade": {
     "noSecondaryActs": "No secondary acts or recent related files found.",
     "preAdoptionNote": "This file is still pre-adoption: secondary acts emerge only after the primary act is adopted.",
     "autoSurfaceNote": "Brubru will surface them automatically once they are published.",
     "transpositionExplainer": "Brubru does not yet ingest national transposition data for every Member State. When this data is available, deadlines will appear here per country.",
-    "cenExplainer": "Standard revisions linked to this act are not yet ingested. Once connected to the CEN/CENELEC work programme, related standard revisions will appear here."
+    "cenExplainer": "Standard revisions linked to this act are not yet ingested. Once connected to the CEN/CENELEC work programme, related standard revisions will appear here.",
+    "subtitle": "What else hangs off this file: implementing acts, delegated acts, and related in-flight work.",
+    "statusAdopted": "adopted",
+    "statusDraft": "draft",
+    "published": "published",
+    "objectionDeadline": "objection deadline",
+    "source": "source",
+    "countImplementing": "implementing",
+    "countDelegated": "delegated",
+    "countDraft": "{{count}} draft",
+    "countRelated": "in-flight files in the same policy area",
+    "implementingActs": "Implementing acts",
+    "delegatedActs": "Delegated acts",
+    "relatedFiles": "Related in-flight files",
+    "shares": "shares:"
   },
   "futureComply": {
     "openComply": "Open EU Law Comply"

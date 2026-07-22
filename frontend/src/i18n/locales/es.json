@@ -5117,14 +5117,40 @@
     "takeMeThere": "Llévame allí",
     "zeroExplainer": "Estás a cero porque Brubru todavía no tiene señales sobre tu actividad. Cada una de las recomendaciones anteriores desbloquea de 5 a 10 puntos en cuanto actúes.",
     "signedOut": "Parece que has cerrado la sesión. Inicia sesión para ver tu madurez de cumplimiento.",
-    "loadError": "No se pudo cargar tu puntuación de madurez: {{detail}}"
+    "loadError": "No se pudo cargar tu puntuación de madurez: {{detail}}",
+    "axis": {
+      "awareness": "Conocimiento",
+      "impact_analysis": "Análisis de impacto",
+      "advocacy": "Incidencia",
+      "follow_through": "Seguimiento"
+    },
+    "tier": {
+      "beginner": "inicial",
+      "intermediate": "intermedio",
+      "advanced": "avanzado",
+      "expert": "experto"
+    }
   },
   "cascade": {
     "noSecondaryActs": "No se han encontrado actos secundarios ni expedientes relacionados recientes.",
     "preAdoptionNote": "Este expediente todavía no se ha adoptado: los actos secundarios aparecen solo una vez adoptado el acto principal.",
     "autoSurfaceNote": "Brubru los mostrará automáticamente en cuanto se publiquen.",
     "transpositionExplainer": "Brubru todavía no incorpora los datos de transposición nacional de todos los Estados miembros. Cuando estos datos estén disponibles, los plazos aparecerán aquí por país.",
-    "cenExplainer": "Las revisiones de normas vinculadas a este acto todavía no se han incorporado. Una vez conectado al programa de trabajo de CEN/CENELEC, las revisiones de normas relacionadas aparecerán aquí."
+    "cenExplainer": "Las revisiones de normas vinculadas a este acto todavía no se han incorporado. Una vez conectado al programa de trabajo de CEN/CENELEC, las revisiones de normas relacionadas aparecerán aquí.",
+    "subtitle": "Qué más cuelga de este expediente: actos de ejecución, actos delegados y trabajo relacionado en curso.",
+    "statusAdopted": "adoptado",
+    "statusDraft": "borrador",
+    "published": "publicado",
+    "objectionDeadline": "plazo de objeción",
+    "source": "fuente",
+    "countImplementing": "de ejecución",
+    "countDelegated": "delegados",
+    "countDraft": "{{count}} en borrador",
+    "countRelated": "expedientes en curso en la misma área política",
+    "implementingActs": "Actos de ejecución",
+    "delegatedActs": "Actos delegados",
+    "relatedFiles": "Expedientes relacionados en curso",
+    "shares": "comparte:"
   },
   "futureComply": {
     "openComply": "Abrir EU Law Comply"

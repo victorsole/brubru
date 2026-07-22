@@ -174,7 +174,7 @@ export const ComplianceMaturity = () => {
       </header>
 
       <div className="compliance-maturity__tier-badge" style={{ background: tierColour }}>
-        {data.tier}
+        {t(`maturity.tier.${data.tier}`, data.tier)}
       </div>
 
       <div className="compliance-maturity__axes">
@@ -184,7 +184,7 @@ export const ComplianceMaturity = () => {
             <div className="compliance-maturity__axis" key={axis.name}>
               <div className="compliance-maturity__axis-head">
                 <span className="compliance-maturity__axis-name">
-                  {AXIS_LABEL[axis.name] || axis.name}
+                  {t(`maturity.axis.${axis.name}`, AXIS_LABEL[axis.name] || axis.name)}
                 </span>
                 <span className="compliance-maturity__axis-score">
                   {axis.score}/{axis.max_score}

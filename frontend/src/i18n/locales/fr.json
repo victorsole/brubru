@@ -5117,14 +5117,40 @@
     "takeMeThere": "M'y emmener",
     "zeroExplainer": "Vous êtes à zéro parce que Brubru ne dispose pas encore de signaux sur votre activité. Chacune des recommandations ci-dessus débloque 5 à 10 points dès que vous agissez.",
     "signedOut": "Vous semblez déconnecté. Connectez-vous pour voir votre maturité de conformité.",
-    "loadError": "Impossible de charger votre score de maturité : {{detail}}"
+    "loadError": "Impossible de charger votre score de maturité : {{detail}}",
+    "axis": {
+      "awareness": "Connaissance",
+      "impact_analysis": "Analyse d'impact",
+      "advocacy": "Plaidoyer",
+      "follow_through": "Suivi"
+    },
+    "tier": {
+      "beginner": "débutant",
+      "intermediate": "intermédiaire",
+      "advanced": "avancé",
+      "expert": "expert"
+    }
   },
   "cascade": {
     "noSecondaryActs": "Aucun acte secondaire ni dossier lié récent trouvé.",
     "preAdoptionNote": "Ce dossier n'est pas encore adopté : les actes secondaires n'apparaissent qu'une fois l'acte principal adopté.",
     "autoSurfaceNote": "Brubru les affichera automatiquement dès leur publication.",
     "transpositionExplainer": "Brubru n'ingère pas encore les données de transposition nationale pour chaque État membre. Lorsque ces données seront disponibles, les délais apparaîtront ici par pays.",
-    "cenExplainer": "Les révisions de normes liées à cet acte ne sont pas encore ingérées. Une fois la connexion au programme de travail CEN/CENELEC établie, les révisions de normes associées apparaîtront ici."
+    "cenExplainer": "Les révisions de normes liées à cet acte ne sont pas encore ingérées. Une fois la connexion au programme de travail CEN/CENELEC établie, les révisions de normes associées apparaîtront ici.",
+    "subtitle": "Ce qui découle de ce dossier : actes d'exécution, actes délégués et travaux connexes en cours.",
+    "statusAdopted": "adopté",
+    "statusDraft": "projet",
+    "published": "publié",
+    "objectionDeadline": "délai d'objection",
+    "source": "source",
+    "countImplementing": "d'exécution",
+    "countDelegated": "délégués",
+    "countDraft": "{{count}} en projet",
+    "countRelated": "dossiers en cours dans le même domaine",
+    "implementingActs": "Actes d'exécution",
+    "delegatedActs": "Actes délégués",
+    "relatedFiles": "Dossiers connexes en cours",
+    "shares": "partage :"
   },
   "futureComply": {
     "openComply": "Ouvrir EU Law Comply"

@@ -5117,14 +5117,40 @@
     "takeMeThere": "Porta-m'hi",
     "zeroExplainer": "Estàs a zero perquè Brubru encara no té senyals sobre la teva activitat. Cadascuna de les recomanacions anteriors desbloqueja de 5 a 10 punts tan bon punt hi actuïs.",
     "signedOut": "Sembla que has tancat la sessió. Inicia la sessió per veure la teva maduresa de compliment.",
-    "loadError": "No s'ha pogut carregar la teva puntuació de maduresa: {{detail}}"
+    "loadError": "No s'ha pogut carregar la teva puntuació de maduresa: {{detail}}",
+    "axis": {
+      "awareness": "Coneixement",
+      "impact_analysis": "Anàlisi d'impacte",
+      "advocacy": "Incidència",
+      "follow_through": "Seguiment"
+    },
+    "tier": {
+      "beginner": "inicial",
+      "intermediate": "intermedi",
+      "advanced": "avançat",
+      "expert": "expert"
+    }
   },
   "cascade": {
     "noSecondaryActs": "No s'han trobat actes secundaris ni expedients relacionats recents.",
     "preAdoptionNote": "Aquest expedient encara no s'ha adoptat: els actes secundaris apareixen només un cop adoptat l'acte principal.",
     "autoSurfaceNote": "Brubru els mostrarà automàticament quan es publiquin.",
     "transpositionExplainer": "Brubru encara no incorpora les dades de transposició nacional de tots els Estats membres. Quan aquestes dades estiguin disponibles, els terminis apareixeran aquí per país.",
-    "cenExplainer": "Les revisions de normes vinculades a aquest acte encara no s'han incorporat. Un cop connectat al programa de treball del CEN/CENELEC, les revisions de normes relacionades apareixeran aquí."
+    "cenExplainer": "Les revisions de normes vinculades a aquest acte encara no s'han incorporat. Un cop connectat al programa de treball del CEN/CENELEC, les revisions de normes relacionades apareixeran aquí.",
+    "subtitle": "Què més penja d'aquest expedient: actes d'execució, actes delegats i treball relacionat en curs.",
+    "statusAdopted": "adoptat",
+    "statusDraft": "esborrany",
+    "published": "publicat",
+    "objectionDeadline": "termini d'objecció",
+    "source": "font",
+    "countImplementing": "d'execució",
+    "countDelegated": "delegats",
+    "countDraft": "{{count}} en esborrany",
+    "countRelated": "expedients en curs en la mateixa àrea política",
+    "implementingActs": "Actes d'execució",
+    "delegatedActs": "Actes delegats",
+    "relatedFiles": "Expedients relacionats en curs",
+    "shares": "comparteix:"
   },
   "futureComply": {
     "openComply": "Obre EU Law Comply"

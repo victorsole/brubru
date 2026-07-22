@@ -2,6 +2,16 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "multilingual_content_law",
+      "title": "EU Multilingual, Translation and Content Localisation Law",
+      "summary": "Added the Catalan/Basque/Galician EU-officiality file: Sep 2023 Spanish request, 27 May 2025 postponed GAC vote, 18 Jul 2025 continued work, Spain-Germany talks, existing 2005-2006 administrative arrangements. 22 new triggers incl. Catalan/Spanish keywords.",
+      "refs": [
+        "31958R0001"
+      ]
+    },
+    {
       "date": "2026-07-21",
       "action": "added",
       "guide": "eu_methane_regulation",

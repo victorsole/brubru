@@ -5117,14 +5117,40 @@
     "takeMeThere": "Portami lì",
     "zeroExplainer": "Sei a zero perché Brubru non ha ancora segnali sulla tua attività. Ognuna delle raccomandazioni qui sopra sblocca da 5 a 10 punti nel momento in cui agisci.",
     "signedOut": "Sembra che tu sia disconnesso. Accedi per vedere la tua maturità della conformità.",
-    "loadError": "Impossibile caricare il tuo punteggio di maturità: {{detail}}"
+    "loadError": "Impossibile caricare il tuo punteggio di maturità: {{detail}}",
+    "axis": {
+      "awareness": "Consapevolezza",
+      "impact_analysis": "Analisi d'impatto",
+      "advocacy": "Advocacy",
+      "follow_through": "Follow-up"
+    },
+    "tier": {
+      "beginner": "iniziale",
+      "intermediate": "intermedio",
+      "advanced": "avanzato",
+      "expert": "esperto"
+    }
   },
   "cascade": {
     "noSecondaryActs": "Nessun atto secondario o fascicolo correlato recente trovato.",
     "preAdoptionNote": "Questo fascicolo non è ancora adottato: gli atti secondari emergono solo dopo l'adozione dell'atto principale.",
     "autoSurfaceNote": "Brubru li mostrerà automaticamente non appena saranno pubblicati.",
     "transpositionExplainer": "Brubru non acquisisce ancora i dati di recepimento nazionale per ogni Stato membro. Quando questi dati saranno disponibili, le scadenze appariranno qui per paese.",
-    "cenExplainer": "Le revisioni delle norme collegate a questo atto non sono ancora acquisite. Una volta collegato al programma di lavoro CEN/CENELEC, le revisioni delle norme correlate appariranno qui."
+    "cenExplainer": "Le revisioni delle norme collegate a questo atto non sono ancora acquisite. Una volta collegato al programma di lavoro CEN/CENELEC, le revisioni delle norme correlate appariranno qui.",
+    "subtitle": "Cos'altro dipende da questo fascicolo: atti di esecuzione, atti delegati e lavori correlati in corso.",
+    "statusAdopted": "adottato",
+    "statusDraft": "bozza",
+    "published": "pubblicato",
+    "objectionDeadline": "termine per obiezioni",
+    "source": "fonte",
+    "countImplementing": "di esecuzione",
+    "countDelegated": "delegati",
+    "countDraft": "{{count}} in bozza",
+    "countRelated": "fascicoli in corso nella stessa area",
+    "implementingActs": "Atti di esecuzione",
+    "delegatedActs": "Atti delegati",
+    "relatedFiles": "Fascicoli correlati in corso",
+    "shares": "condivide:"
   },
   "futureComply": {
     "openComply": "Apri EU Law Comply"

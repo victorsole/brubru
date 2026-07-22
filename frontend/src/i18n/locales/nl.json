@@ -5117,14 +5117,40 @@
     "takeMeThere": "Breng me erheen",
     "zeroExplainer": "U staat op nul omdat Brubru nog geen signalen over uw activiteit heeft. Elke aanbeveling hierboven levert 5 tot 10 punten op zodra u ernaar handelt.",
     "signedOut": "U lijkt uitgelogd te zijn. Log in om uw nalevingsvolwassenheid te zien.",
-    "loadError": "Kon uw volwassenheidsscore niet laden: {{detail}}"
+    "loadError": "Kon uw volwassenheidsscore niet laden: {{detail}}",
+    "axis": {
+      "awareness": "Bewustzijn",
+      "impact_analysis": "Impactanalyse",
+      "advocacy": "Belangenbehartiging",
+      "follow_through": "Opvolging"
+    },
+    "tier": {
+      "beginner": "beginner",
+      "intermediate": "gemiddeld",
+      "advanced": "gevorderd",
+      "expert": "expert"
+    }
   },
   "cascade": {
     "noSecondaryActs": "Geen secundaire handelingen of recente gerelateerde dossiers gevonden.",
     "preAdoptionNote": "Dit dossier is nog niet aangenomen: secundaire handelingen verschijnen pas nadat de primaire handeling is aangenomen.",
     "autoSurfaceNote": "Brubru toont ze automatisch zodra ze zijn gepubliceerd.",
     "transpositionExplainer": "Brubru verwerkt nog geen nationale omzettingsgegevens voor elke lidstaat. Zodra deze gegevens beschikbaar zijn, verschijnen de termijnen hier per land.",
-    "cenExplainer": "Herzieningen van normen die aan deze handeling zijn gekoppeld, zijn nog niet verwerkt. Zodra de koppeling met het werkprogramma van CEN/CENELEC er is, verschijnen gerelateerde normherzieningen hier."
+    "cenExplainer": "Herzieningen van normen die aan deze handeling zijn gekoppeld, zijn nog niet verwerkt. Zodra de koppeling met het werkprogramma van CEN/CENELEC er is, verschijnen gerelateerde normherzieningen hier.",
+    "subtitle": "Wat er nog aan dit dossier hangt: uitvoeringshandelingen, gedelegeerde handelingen en lopend gerelateerd werk.",
+    "statusAdopted": "vastgesteld",
+    "statusDraft": "ontwerp",
+    "published": "gepubliceerd",
+    "objectionDeadline": "bezwaartermijn",
+    "source": "bron",
+    "countImplementing": "uitvoerings",
+    "countDelegated": "gedelegeerd",
+    "countDraft": "{{count}} in ontwerp",
+    "countRelated": "lopende dossiers in hetzelfde beleidsterrein",
+    "implementingActs": "Uitvoeringshandelingen",
+    "delegatedActs": "Gedelegeerde handelingen",
+    "relatedFiles": "Gerelateerde lopende dossiers",
+    "shares": "deelt:"
   },
   "futureComply": {
     "openComply": "Open EU Law Comply"
