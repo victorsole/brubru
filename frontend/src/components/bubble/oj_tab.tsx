@@ -135,6 +135,11 @@ export const OJTab = () => {
       .finally(() => setLoading(false));
   }, [activeDate, series, mode, institution, theme, search, uiLang]);
 
+  // In Catalan UI, an entry with a full Catalan text links there directly;
+  // EUR-Lex stays one click away via the meta chip.
+  const entryHref = (e: OjEntry) =>
+    (uiLang === 'ca' && e.catalan_url) ? e.catalan_url : (e.eurlex_url || '#');
+
   const grouped = useMemo(() => {
     const items = data?.items || [];
     const m: Record<string, OjEntry[]> = {};
@@ -286,13 +291,13 @@ export const OJTab = () => {
                           <Icon path={mdiCreation} size={0.6} className="oj-card__plainicon" />
                           {e.plain_explanation || explained[e.id]?.text}
                         </p>
-                        <a className="oj-card__official" href={e.eurlex_url || '#'} target="_blank" rel="noopener noreferrer">
+                        <a className="oj-card__official" href={entryHref(e)} target="_blank" rel="noopener noreferrer">
                           {e.title} <Icon path={mdiOpenInNew} size={0.5} />
                         </a>
                       </>
                     ) : (
                       <>
-                        <a className="oj-card__title" href={e.eurlex_url || '#'} target="_blank" rel="noopener noreferrer">
+                        <a className="oj-card__title" href={entryHref(e)} target="_blank" rel="noopener noreferrer">
                           {e.title} <Icon path={mdiOpenInNew} size={0.55} />
                         </a>
                         <div className="oj-card__ai">
@@ -324,9 +329,16 @@ export const OJTab = () => {
                         </span>
                       )}
                       {uiLang === 'ca' && e.catalan_url && (
-                        <a className="oj-chip is-catalan" href={e.catalan_url} target="_blank" rel="noopener noreferrer">
-                          <Icon path={mdiTranslate} size={0.5} /> {t('oj.readInCatalan', 'Llegeix l’acte en català')}
-                        </a>
+                        <>
+                          <a className="oj-chip is-catalan" href={e.catalan_url} target="_blank" rel="noopener noreferrer">
+                            <Icon path={mdiTranslate} size={0.5} /> {t('oj.readInCatalan', 'Llegeix l’acte en català')}
+                          </a>
+                          {e.eurlex_url && (
+                            <a className="oj-chip is-muted" href={e.eurlex_url} target="_blank" rel="noopener noreferrer">
+                              <Icon path={mdiOpenInNew} size={0.5} /> EUR-Lex
+                            </a>
+                          )}
+                        </>
                       )}
                       {e.matches_interests && (
                         <span className="oj-chip is-pi"><Icon path={mdiStar} size={0.5} /> {t('oj.mine', 'My interests')}</span>

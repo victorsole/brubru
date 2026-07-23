@@ -23,6 +23,7 @@ Usage (from backend/):
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -37,6 +38,30 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 BACKEND = Path(__file__).resolve().parent.parent
 OUT_ROOT = BACKEND.parent / "data" / "legislacio-ue-catala"
+
+# Fresh acts 404 on Cellar for a few days after OJ publication; without a
+# cooldown they sit at the head of every newest-first run and burn slots.
+FAIL_STATE = BACKEND / "logs" / "oj_acts" / "failed_celexes.json"
+FAIL_COOLDOWN_H = 24
+
+
+def _load_failures() -> dict:
+    try:
+        return json.loads(FAIL_STATE.read_text())
+    except Exception:
+        return {}
+
+
+def _record_failure(celex: str):
+    fails = _load_failures()
+    fails[celex] = time.time()
+    FAIL_STATE.parent.mkdir(parents=True, exist_ok=True)
+    FAIL_STATE.write_text(json.dumps(fails))
+
+
+def _in_cooldown(celex: str, fails: dict) -> bool:
+    ts = fails.get(celex)
+    return bool(ts) and (time.time() - ts) < FAIL_COOLDOWN_H * 3600
 
 _TITLE = re.compile(r"<title>(.*?)\s*\|\s*Brubru</title>", re.S)
 _COUNTS = re.compile(r"(\d+)\s+articles?,\s+(\d+)\s+recitals?")
@@ -57,6 +82,10 @@ def _pending(limit: int, date: str | None):
             SELECT DISTINCT ON (e.celex) e.celex, e.oj_date, e.title
               FROM oj_entries e
              WHERE e.series = 'L' AND e.celex IS NOT NULL
+               -- EEA Joint Committee decisions carry scraper-derived CELEXes in
+               -- the wrong sector (32026R... instead of 22026D...) and 404
+               -- everywhere; their cards keep the (working) OJ-id EUR-Lex link.
+               AND e.title NOT ILIKE '%%EEA Joint Committee%%'
                AND NOT EXISTS (SELECT 1 FROM catalan_translations ct
                                 WHERE ct.celex = e.celex)
         """
@@ -82,8 +111,38 @@ def _register(celex: str, html_path: Path, articles: int, recitals: int):
                  "softcatala", file_type="main", deployed=False)
 
 
+def _eurlex_fallback(celex: str) -> str | None:
+    """Fetch the act's HTML from EUR-Lex (WAF browser bypass) and translate it.
+    Returns the translate subprocess output on success, None on failure."""
+    try:
+        sys.path.insert(0, str(BACKEND))
+        from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+        url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:{celex}"
+        print("  [INFO] Cellar miss; trying EUR-Lex HTML via WAF fetcher", flush=True)
+        with WafBrowserFetcher() as f:
+            r = f.fetch(url)
+        html = (r.html or "")
+        if "Article" not in html or len(html) < 5000:
+            return None
+        tmp = f"/tmp/{celex}_eurlex.html"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(html)
+        p = subprocess.run(
+            [sys.executable, "scripts/catalan_translate.py", "--html", tmp, "--celex", celex],
+            cwd=BACKEND, capture_output=True, text=True, timeout=3600)
+        return (p.stdout + p.stderr) if p.returncode == 0 else None
+    except Exception as e:
+        print(f"  [WARN] EUR-Lex fallback error: {str(e)[:80]}", flush=True)
+        return None
+
+
 def run(limit: int, date: str | None):
-    rows = _pending(limit, date)
+    fails = _load_failures()
+    rows = _pending(limit + len(fails), date)
+    skipped = [r for r in rows if _in_cooldown(r["celex"], fails)]
+    rows = [r for r in rows if not _in_cooldown(r["celex"], fails)][:limit]
+    if skipped:
+        print(f"[INFO] {len(skipped)} in Cellar-404 cooldown, retried after {FAIL_COOLDOWN_H}h", flush=True)
     print(f"[INFO] {len(rows)} pending OJ L-series acts", flush=True)
     ok = failed = 0
     t0 = time.time()
@@ -99,10 +158,16 @@ def run(limit: int, date: str | None):
                 cwd=BACKEND, capture_output=True, text=True, timeout=3600)
             out = p.stdout + p.stderr
             if p.returncode != 0 or not html_path.exists():
-                reason = [l for l in out.splitlines() if "ERROR" in l or "raise" in l][-1:] or ["?"]
-                print(f"  [SKIP] translate failed: {reason[0][:100]}", flush=True)
-                failed += 1
-                continue
+                # Fresh acts 404 on Cellar for days; EUR-Lex HTML via the WAF
+                # browser fetcher is available from day one.
+                out = _eurlex_fallback(celex)
+                if out is None or not html_path.exists():
+                    reason = [l for l in (out or "").splitlines()
+                              if "ERROR" in l or "raise" in l][-1:] or ["Cellar + EUR-Lex both failed"]
+                    print(f"  [SKIP] translate failed: {reason[0][:100]}", flush=True)
+                    _record_failure(celex)
+                    failed += 1
+                    continue
             mc = _COUNTS.search(out)
             if mc:
                 articles, recitals = int(mc.group(1)), int(mc.group(2))
