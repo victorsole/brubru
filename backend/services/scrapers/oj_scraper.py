@@ -63,24 +63,41 @@ def _absolute(href: str) -> str:
 
 # ---- title -> structured facets ------------------------------------------
 
+# The ENACTING type leads the title; later matches are citations ("... pursuant
+# to Regulation (EU) 2023/1230 ..."). Pick the EARLIEST occurrence; at equal
+# position the more specific compound form (listed first) wins. Incident
+# 23 Jul 2026: substring-anywhere matching classified 19 Implementing Decisions
+# as "Regulation" (their titles cite a regulation), deriving CELEXes in the
+# wrong type letter (32026R... instead of 32026D...), which 404 on EUR-Lex/Cellar.
+_ACT_TYPE_PATTERNS = [
+    ("Implementing Regulation", "implementing regulation"),
+    ("Delegated Regulation", "delegated regulation"),
+    ("Implementing Decision", "implementing decision"),
+    ("Delegated Decision", "delegated decision"),
+    ("Regulation", "regulation"),
+    ("Decision", "decision"),
+    ("Directive", "directive"),
+    ("Recommendation", "recommendation"),
+    ("Guideline", "guideline"),
+    ("Communication", "communication"),
+    ("Opinion", "opinion"),
+    ("Resolution", "resolution"),
+    ("Notice", "notice"),
+    ("Notice", "call for"),
+    ("Agreement", "agreement"),
+    ("Agreement", "protocol"),
+    ("Corrigendum", "corrigendum"),
+]
+
+
 def derive_act_type(title: str) -> str:
     t = title.lower()
-    if "implementing regulation" in t: return "Implementing Regulation"
-    if "delegated regulation" in t: return "Delegated Regulation"
-    if "regulation" in t: return "Regulation"
-    if "implementing decision" in t: return "Implementing Decision"
-    if "delegated decision" in t: return "Delegated Decision"
-    if "decision" in t: return "Decision"
-    if "directive" in t: return "Directive"
-    if "recommendation" in t: return "Recommendation"
-    if "guideline" in t: return "Guideline"
-    if "communication" in t: return "Communication"
-    if "opinion" in t: return "Opinion"
-    if "resolution" in t: return "Resolution"
-    if "notice" in t or "call for" in t: return "Notice"
-    if "agreement" in t or "protocol" in t: return "Agreement"
-    if "corrigendum" in t: return "Corrigendum"
-    return "Other"
+    best = None  # (position, list_rank, name)
+    for rank, (name, pat) in enumerate(_ACT_TYPE_PATTERNS):
+        pos = t.find(pat)
+        if pos >= 0 and (best is None or (pos, rank) < (best[0], best[1])):
+            best = (pos, rank, name)
+    return best[2] if best else "Other"
 
 
 def derive_institution(title: str) -> str:
@@ -126,9 +143,13 @@ _CELEX_LETTER = {
 }
 
 
-def derive_celex(oj_number: str, act_type: str, series: str) -> Optional[str]:
+def derive_celex(oj_number: str, act_type: str, series: str, title: str = "") -> Optional[str]:
     """L-series legislation -> a 3xxxx CELEX (the join key to MEUB carriages)."""
     if series.upper() != "L":
+        return None
+    # EEA Joint Committee decisions live in CELEX sector 2 with their OWN
+    # numbering (No 123/2026 != OJ number) — a sector-3 derivation would 404.
+    if "eea joint committee" in (title or "").lower():
         return None
     letter = _CELEX_LETTER.get(act_type)
     m = re.match(r"(\d{4})/(\d+)", oj_number or "")
@@ -224,7 +245,7 @@ def parse_daily_view(html: str, series: str) -> List[OjAct]:
             act_type=act_type,
             category=category_for(act_type, series),
             institution=derive_institution(title),
-            celex=derive_celex(oj_number, act_type, series),
+            celex=derive_celex(oj_number, act_type, series, title),
             series=series.upper(),
             change_kind=derive_change_kind(title),
             theme=derive_theme(title),
