@@ -23,9 +23,6 @@ from services.email_scheduler import start_email_scheduler, stop_email_scheduler
 from services.schedulers.amendment_sync_scheduler import (
     start_amendment_sync_scheduler, stop_amendment_sync_scheduler
 )
-from services.schedulers.calendar_sync_scheduler import (
-    start_calendar_sync_scheduler, stop_calendar_sync_scheduler
-)
 
 # Import routers
 from api import (
@@ -94,15 +91,6 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Amendment sync scheduler failed to start (non-fatal): {str(e)}")
 
-    # Start calendar sync scheduler (daily My EU Bubble calendar refresh).
-    # Offloads the blocking sync_all() to a worker thread, so it never wedges
-    # the single web worker (unlike the RSS scheduler above).
-    try:
-        start_calendar_sync_scheduler()
-        print("[OK] Calendar sync scheduler started")
-    except Exception as e:
-        print(f"[WARN] Calendar sync scheduler failed to start (non-fatal): {str(e)}")
-
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:
         from services.toolbox_service import get_toolbox_service
@@ -144,13 +132,6 @@ async def lifespan(app: FastAPI):
         print("[OK] Amendment sync scheduler stopped")
     except Exception as e:
         print(f"[WARN] Amendment sync scheduler shutdown error: {str(e)}")
-
-    # Stop calendar sync scheduler
-    try:
-        stop_calendar_sync_scheduler()
-        print("[OK] Calendar sync scheduler stopped")
-    except Exception as e:
-        print(f"[WARN] Calendar sync scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app
