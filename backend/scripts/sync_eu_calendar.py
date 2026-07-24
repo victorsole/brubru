@@ -79,10 +79,7 @@ def main():
         print(f"[OK] EC College: +{r['added']} added, ~{r['updated']} updated")
 
     elif args.source == "council":
-        async def _sync_council():
-            return await service.sync_council_meetings(args.months_ahead)
-
-        r = asyncio.run(_sync_council())
+        r = service.sync_council_meetings(args.months_ahead)
         print(f"[OK] Council: +{r['added']} added, ~{r['updated']} updated")
 
     print("[STOP] EU Calendar sync finished")

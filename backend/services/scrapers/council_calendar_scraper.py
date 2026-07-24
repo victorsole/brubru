@@ -10,7 +10,7 @@ Created: February 2026
 
 import logging
 import re
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from typing import List, Dict, Any, Optional
 
 from bs4 import BeautifulSoup
@@ -22,6 +22,16 @@ logger = logging.getLogger(__name__)
 
 BASE_URL = "https://www.consilium.europa.eu"
 CALENDAR_URL = f"{BASE_URL}/en/meetings/calendar/"
+
+# consilium.europa.eu encodes the configuration in the meeting URL path
+# (/en/meetings/<slug>/<yyyy>/<mm>/<dd>[-dd]/). Map the slug to the Council
+# configuration code used elsewhere in Brubru.
+_SLUG_TO_CONFIG = {
+    "gac": "GAC", "fac": "FAC", "ecofin": "ECOFIN", "jha": "JHA",
+    "epsco": "EPSCO", "compet": "COMPET", "tte": "TTE", "agrifish": "AGRIFISH",
+    "env": "ENVI", "envi": "ENVI", "eycs": "EYCS", "educ": "EDUC",
+    "eurogroup": "EUROGROUP",
+}
 
 
 def _detect_council_configuration(title: str) -> Optional[str]:
@@ -74,135 +84,163 @@ class CouncilCalendarScraper(BaseScraper):
     """Scrapes Council of the EU meetings calendar."""
 
     def __init__(self):
+        # consilium.europa.eu sits behind a WAF that 403s aiohttp requests, so
+        # scrape_meetings() renders the page with the headless-Chromium
+        # WafBrowserFetcher rather than the BaseScraper aiohttp path.
         super().__init__(
             base_url=BASE_URL,
-            rate_limit=2.0,
+            name="Council Calendar",
+            rate_limit_delay=2.0,
         )
 
-    async def scrape_meetings(
-        self, months_ahead: int = 6
-    ) -> List[Dict[str, Any]]:
-        """
-        Scrape Council meetings from the calendar page.
+    # BaseScraper is an ABC with three abstract methods (search / get_document /
+    # get_latest_updates) aimed at document databases. This scraper only lists
+    # meetings via scrape_meetings(), but the abstract methods still need
+    # concrete implementations or the class cannot be instantiated at all (the
+    # bug that silently killed the live Council calendar sync). These are sync
+    # stubs — scrape_meetings uses the WAF browser fetcher (sync Chromium), so
+    # the whole scraper is deliberately synchronous.
+    async def search(self, query: str, **kwargs) -> List[Dict[str, Any]]:
+        """Not applicable: the Council calendar scraper only lists meetings."""
+        return []
 
-        Returns list of event dicts ready for the sync service.
+    async def get_document(self, document_id: str) -> Dict[str, Any]:
+        """Not applicable: the Council calendar scraper only lists meetings."""
+        raise NotImplementedError("CouncilCalendarScraper does not fetch documents")
+
+    async def get_latest_updates(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Not applicable here; use scrape_meetings() for the calendar."""
+        return []
+
+    def scrape_meetings(self, months_ahead: int = 6) -> List[Dict[str, Any]]:
         """
-        events = []
+        Scrape upcoming Council + European Council meetings from the calendar.
+
+        Renders the WAF-protected consilium calendar with headless Chromium and
+        parses the ``gsc-excerpt-list`` structure. SYNCHRONOUS: the WAF fetcher
+        uses sync Playwright and must not run inside an asyncio loop.
+
+        Returns a list of event dicts ready for EUCalendarSyncService._upsert_event.
+        """
+        from services.scrapers.waf_browser_fetcher import fetch_one
+
+        events: List[Dict[str, Any]] = []
+        seen: set[str] = set()
 
         try:
-            html = await self.fetch(CALENDAR_URL)
-            soup = BeautifulSoup(html, "html.parser")
-
-            # The Council calendar uses various selectors
-            meeting_items = soup.select(
-                ".council-filters__list-item, "
-                ".meeting-item, "
-                "[class*='meeting'], "
-                ".calendar-list__item"
+            result = fetch_one(
+                CALENDAR_URL, expand_accordions=False, strip_chrome=False
             )
+        except Exception as e:
+            logger.error(f"[ERROR] Council calendar render failed: {e}")
+            return events
 
-            if not meeting_items:
-                # Fallback: look for any list items with dates
-                meeting_items = soup.select("li[data-date], .event-item, article")
+        if not getattr(result, "ok", False) or not getattr(result, "html", ""):
+            logger.error(
+                f"[ERROR] Council calendar fetch blocked/empty "
+                f"(status={getattr(result, 'nav_status', None)})"
+            )
+            return events
 
-            logger.info(f"[INFO] Found {len(meeting_items)} potential Council meeting entries")
+        soup = BeautifulSoup(result.html, "html.parser")
+        groups = soup.select(".gsc-excerpt-list__item")
+        logger.info(f"[INFO] Found {len(groups)} Council calendar date groups")
 
-            for item in meeting_items:
+        cutoff = date.today() + timedelta(days=int(months_ahead * 31))
+
+        for group in groups:
+            date_el = group.select_one(".gsc-excerpt-list__item-date")
+            group_date = _parse_long_date(date_el.get_text(strip=True)) if date_el else None
+            for item in group.select(".gsc-excerpt-item"):
                 try:
-                    event = self._parse_meeting_item(item)
-                    if event:
-                        events.append(event)
+                    event = self._parse_excerpt(item, group_date)
                 except Exception as e:
                     logger.warning(f"[WARN] Failed to parse Council meeting item: {e}")
                     continue
-
-        except ScraperError as e:
-            logger.error(f"[ERROR] Council calendar scrape failed: {e}")
-        except Exception as e:
-            logger.error(f"[ERROR] Unexpected error scraping Council calendar: {e}")
+                if not event:
+                    continue
+                if event["external_id"] in seen:
+                    continue
+                if event["start_date"] and event["start_date"] > cutoff:
+                    continue
+                seen.add(event["external_id"])
+                events.append(event)
 
         logger.info(f"[OK] Scraped {len(events)} Council meetings")
         return events
 
-    def _parse_meeting_item(self, item) -> Optional[Dict[str, Any]]:
-        """Parse a single meeting item from the calendar HTML."""
-        # Extract title
-        title_el = item.select_one(
-            "h3, h4, .meeting-item__title, "
-            "[class*='title'], a[class*='link']"
-        )
+    def _parse_excerpt(self, item, group_date: Optional[date]) -> Optional[Dict[str, Any]]:
+        """Parse one ``gsc-excerpt-item`` (a single meeting) into an event dict."""
+        title_el = item.select_one(".gsc-excerpt-item__title")
         if not title_el:
             return None
-
         title = title_el.get_text(strip=True)
         if not title or len(title) < 3:
             return None
 
-        # Extract date
-        date_el = item.select_one(
-            "time, [datetime], .meeting-item__date, "
-            "[class*='date']"
-        )
-        meeting_date = None
-        if date_el:
-            datetime_attr = date_el.get("datetime", "")
-            if datetime_attr:
-                try:
-                    meeting_date = datetime.fromisoformat(
-                        datetime_attr.replace("Z", "+00:00")
-                    ).date()
-                except ValueError:
-                    pass
-            if not meeting_date:
-                date_text = date_el.get_text(strip=True)
-                for fmt in ("%d %B %Y", "%d/%m/%Y", "%Y-%m-%d"):
-                    try:
-                        meeting_date = datetime.strptime(date_text, fmt).date()
-                        break
-                    except ValueError:
-                        continue
+        link_el = item.select_one(".gsc-excerpt-item__link")
+        href = link_el.get("href", "") if link_el else ""
+        theme = (item.get("data-theme") or "").lower()  # 'ceu' = Council, 'euco' = European Council
+        source_url = f"{BASE_URL}{href}" if href.startswith("/") else (href or CALENDAR_URL)
 
-        if not meeting_date:
+        # The URL carries the true date range + configuration slug:
+        #   /en/meetings/<slug>/<yyyy>/<mm>/<dd>[-<dd>]/
+        start_date, end_date, slug = group_date, None, None
+        m = re.search(r"/meetings/([a-z0-9\-]+)/(\d{4})/(\d{2})/(\d{2})(?:-(\d{2}))?", href)
+        if m:
+            slug = m.group(1)
+            year, month, day1 = int(m.group(2)), int(m.group(3)), int(m.group(4))
+            try:
+                start_date = date(year, month, day1)
+                if m.group(5):
+                    end_date = date(year, month, int(m.group(5)))
+            except ValueError:
+                pass
+        if not start_date:
             return None
 
-        # Extract link
-        link_el = item.select_one("a[href]")
-        source_url = None
-        if link_el:
-            href = link_el.get("href", "")
-            if href.startswith("/"):
-                source_url = f"{BASE_URL}{href}"
-            elif href.startswith("http"):
-                source_url = href
+        # Institution / event type / configuration
+        is_euco = theme == "euco" or _detect_european_council(title)
+        config = _SLUG_TO_CONFIG.get(slug) if slug else None
+        if not config:
+            config = _detect_council_configuration(title)
 
-        # Determine institution and event type
-        is_european_council = _detect_european_council(title)
-        config = _detect_council_configuration(title)
-
-        if is_european_council:
-            institution = "EUROPEAN_COUNCIL"
-            event_type = "european_council_summit"
-        elif config == "EUROGROUP":
-            institution = "COUNCIL"
-            event_type = "eurogroup"
+        if is_euco:
+            institution, event_type = "EUROPEAN_COUNCIL", "european_council_summit"
+        elif config == "EUROGROUP" or "eurogroup" in title.lower():
+            institution, event_type, config = "COUNCIL", "eurogroup", "EUROGROUP"
+        elif "informal" in title.lower():
+            institution, event_type = "COUNCIL", "informal_meeting"
         else:
-            institution = "COUNCIL"
-            event_type = "council_meeting"
+            institution, event_type = "COUNCIL", "council_meeting"
 
-        # Build external_id
-        date_str = meeting_date.isoformat()
-        clean_title = re.sub(r"[^a-z0-9]", "_", title.lower())[:40]
-        external_id = f"council_{date_str}_{clean_title}"
+        # Stable external_id from the meeting URL so the same multi-day meeting
+        # (listed under each of its days) collapses to one event.
+        key = href.strip("/").replace("/", "_")
+        if not key:
+            key = f"{start_date.isoformat()}_{re.sub(r'[^a-z0-9]+', '_', title.lower())[:40]}"
+        external_id = f"council_{key}"
 
         return {
             "institution": institution,
             "event_type": event_type,
             "title": title,
-            "start_date": meeting_date,
+            "start_date": start_date,
+            "end_date": end_date,
             "all_day": True,
-            "status": "confirmed",
+            "status": "scheduled",
             "council_configuration": config,
             "source": "council_calendar",
             "external_id": external_id,
-            "source_url": source_url or CALENDAR_URL,
+            "source_url": source_url,
         }
+
+
+def _parse_long_date(text: str) -> Optional[date]:
+    """Parse consilium's ``24 July 2026`` heading into a date."""
+    for fmt in ("%d %B %Y", "%d %b %Y"):
+        try:
+            return datetime.strptime(text.strip(), fmt).date()
+        except (ValueError, AttributeError):
+            continue
+    return None

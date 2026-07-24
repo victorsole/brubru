@@ -61,9 +61,20 @@ class EUCalendarSyncService:
         result = self.sync_ec_college(months_ahead=6)
         results.append(result)
 
-        # Council meetings (static JSON)
+        # Council meetings.
+        # Static JSON (European Council summit dates) — cheap, kept for coverage.
         result = self.sync_council_json(2026)
         results.append(result)
+        # LIVE Council + European Council scrape from consilium. The static JSON
+        # above froze at Feb 2026 and silently no-ops (load_council_meetings
+        # returns nothing for the current year), which left Council stale for
+        # months even though sync_all runs twice daily via brubru-cron-sync.
+        # sync_council_meetings is synchronous (headless-Chromium WAF fetcher),
+        # so call it directly — no asyncio, no event loop.
+        try:
+            results.append(self.sync_council_meetings(months_ahead=6))
+        except Exception as e:
+            logger.warning(f"[WARN] Council live sync skipped in sync_all: {e}")
 
         # ECB Governing Council meetings
         result = self.sync_ecb_meetings(2026)
@@ -543,8 +554,10 @@ class EUCalendarSyncService:
             filters.append(getattr(EUCalendarEvent, f) == val)
         return db.query(EUCalendarEvent.id).filter(*filters).first() is not None
 
-    async def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
-        """Sync Council meetings (async scraper)."""
+    def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
+        """Sync Council + European Council meetings from the live consilium
+        calendar. SYNCHRONOUS: the scraper renders the WAF-protected page with
+        sync Playwright, which must not run inside an asyncio loop."""
         start_time = time.time()
         result = {"source": "council_calendar", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
 
@@ -552,7 +565,7 @@ class EUCalendarSyncService:
             from services.scrapers.council_calendar_scraper import CouncilCalendarScraper
 
             scraper = CouncilCalendarScraper()
-            events_data = await scraper.scrape_meetings(months_ahead)
+            events_data = scraper.scrape_meetings(months_ahead)
 
             db = self._get_db()
             try:
