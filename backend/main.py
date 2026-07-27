@@ -158,6 +158,12 @@ app.add_middleware(
 from api.v1._billing_middleware import BillingRefundMiddleware  # noqa: E402
 app.add_middleware(BillingRefundMiddleware)
 
+# Tabular export — ?format=csv|xlsx turns any JSON list response into a CSV/Excel download.
+# Added LAST so it is outermost and transforms the FINAL response (after CORS + billing);
+# it only acts when the caller sets the format param, so normal traffic is untouched.
+from api.export_middleware import TabularExportMiddleware  # noqa: E402
+app.add_middleware(TabularExportMiddleware)
+
 
 # Health check endpoint
 @app.get("/")
