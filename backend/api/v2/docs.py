@@ -47,6 +47,28 @@ def v2_openapi(request: Request) -> JSONResponse:
     """
     full = request.app.openapi()
     paths = {p: v for p, v in full.get("paths", {}).items() if p.startswith("/api/v2/")}
+
+    # Expose the export layer in the spec: every GET list operation accepts ?format=
+    # (json|csv|xlsx). The TabularExportMiddleware turns csv/xlsx into a spreadsheet
+    # download. Add the param wherever it isn't already declared so Scalar's Try-It and
+    # any generated SDK/Postman collection surface it automatically.
+    _FORMAT_PARAM = {
+        "name": "format", "in": "query", "required": False,
+        "description": "Response format. Omit or 'json' for JSON; 'csv' or 'xlsx' "
+                       "downloads the list as a CSV / Excel spreadsheet (all fields "
+                       "auto-flattened).",
+        "schema": {"type": "string", "enum": ["json", "csv", "xlsx"], "default": "json"},
+    }
+    for _p, _item in paths.items():
+        if "{" in _p:                       # detail-by-id returns a single object, not a list
+            continue
+        op = _item.get("get")
+        if not op:
+            continue
+        params = op.setdefault("parameters", [])
+        if not any(isinstance(p, dict) and p.get("name") == "format" for p in params):
+            params.append(dict(_FORMAT_PARAM))
+
     info = dict(full.get("info", {}))
     info["title"] = "Brubru EU Data API"
     info["description"] = (
