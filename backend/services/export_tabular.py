@@ -16,10 +16,14 @@ from __future__ import annotations
 import csv
 import io
 import json
+import re
 from typing import Any, Optional
 
 CELL_MAX = 32767            # Excel hard per-cell character limit
 _TRUNC = "…[truncated]"
+# openpyxl rejects these XML-illegal control chars (common in scraped body_html/body_txt)
+# with IllegalCharacterError; strip them for the xlsx path (CSV tolerates them fine).
+_ILLEGAL_XLSX = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
 
 
 def _cell(v: Any) -> Any:
@@ -91,22 +95,27 @@ def to_csv(records: list[dict]) -> bytes:
     return buf.getvalue().encode("utf-8-sig")   # BOM so Excel opens UTF-8 cleanly
 
 
+def _xlsx_cell(v: Any) -> Any:
+    c = _cell(v)
+    return _ILLEGAL_XLSX.sub("", c) if isinstance(c, str) else c
+
+
 def to_xlsx(records: list[dict]) -> bytes:
     from openpyxl import Workbook
     rows = [flatten(r) for r in records]
     cols = _columns(rows)
     wb = Workbook(write_only=True)              # streaming writer, low memory
     ws = wb.create_sheet("data")
-    ws.append(cols)
+    ws.append([_xlsx_cell(c) for c in cols])
     for r in rows:
-        ws.append([_cell(r.get(k)) for k in cols])
+        ws.append([_xlsx_cell(r.get(k)) for k in cols])
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
 
 
 CONTENT_TYPES = {
-    "csv": "text/csv; charset=utf-8",
+    "csv": "text/csv",   # Starlette appends charset=utf-8 for text/* (avoids a doubled param)
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 }
 

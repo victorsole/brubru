@@ -56,8 +56,13 @@ class TabularExportMiddleware(BaseHTTPMiddleware):
 
         # serialise off the event loop — openpyxl/csv on a big export is CPU-bound and
         # would otherwise block the single worker (the documented event-loop-starvation
-        # pattern behind the prod 502 freezes).
-        data = await anyio.to_thread.run_sync(serialize, records, fmt)
+        # pattern behind the prod 502 freezes). If it fails (an un-encodable value),
+        # degrade gracefully to the JSON body rather than a 500.
+        try:
+            data = await anyio.to_thread.run_sync(serialize, records, fmt)
+        except Exception:
+            return Response(content=body, status_code=200, media_type="application/json",
+                            headers=passthrough_headers)
         fname = (request.url.path.strip("/").split("/")[-1] or "export").replace(".", "_")
         passthrough_headers["Content-Disposition"] = f'attachment; filename="{fname}.{fmt}"'
         passthrough_headers["X-Export-Rows"] = str(len(records))
