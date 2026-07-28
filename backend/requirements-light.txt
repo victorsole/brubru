@@ -93,3 +93,8 @@ rdflib==7.6.0
 # YAML manifest parsing (Phase 0 manifest, sync scripts).
 # Range matches mistralai 1.9.11's transitive requirement (pyyaml<7.0.0,>=6.0.2).
 PyYAML>=6.0.2,<7.0.0
+
+# Excel export for the ?format=xlsx API/MCP export layer (services/export_tabular.py).
+# Lightweight (pure-Python + et-xmlfile); without it to_xlsx ImportErrors and the
+# export middleware silently falls back to JSON. Keep in sync with requirements.txt.
+openpyxl==3.1.5
