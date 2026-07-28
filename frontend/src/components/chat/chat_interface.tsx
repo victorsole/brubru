@@ -70,6 +70,10 @@ interface ChatInterfaceProps {
 // Pre-user helpers
 const PRE_USER_QUERY_LIMIT = 3;
 
+// Two identical sends inside this window are treated as one double-fire, not
+// as a user deliberately repeating themselves (audit defect D6, 28 Jul 2026).
+const DUPLICATE_SEND_WINDOW_MS = 3000;
+
 const getPreUserId = (): string => {
   let id = localStorage.getItem('brubru_preuser_id');
   if (!id) {
@@ -291,6 +295,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   // directly with the explicit text so we don't depend on the state-closure
   // having flushed. The ref + sessionStorage key together dedupe across
   // React StrictMode's double-invocation in dev.
+  // Guards against the same message being sent twice before React state has
+  // re-rendered (audit defect D6, 28 Jul 2026). Every send path funnels through
+  // handleSendMessageStreaming, so one ref covers the Send button, the Enter
+  // key, the autofire effect, the Dashboard tile and the briefing cards alike.
+  const inFlightSendRef = useRef<{ text: string; at: number }>({ text: '', at: 0 });
+
   const autofireFiredRef = useRef(false);
   useEffect(() => {
     if (!autofirePendingRef.current || autofireFiredRef.current) return;
@@ -493,6 +503,21 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     // when called from the Send button or Enter-key handler.
     const messageText = (overrideText !== undefined ? overrideText : inputValue);
     if (!messageText.trim() || isLoading || isStreaming) return;
+
+    // isLoading / isStreaming are React state, so two calls landing before the
+    // first re-render both read `false` and both open a conversation. On
+    // 24 Jul 2026 a subscriber's briefing-card query was sent twice, 708 ms
+    // apart, creating two chats and billing two model calls (audit defect D6).
+    // A ref is synchronous, so it closes the window that state cannot.
+    const now = Date.now();
+    const trimmed = messageText.trim();
+    if (
+      inFlightSendRef.current.text === trimmed
+      && now - inFlightSendRef.current.at < DUPLICATE_SEND_WINDOW_MS
+    ) {
+      return;
+    }
+    inFlightSendRef.current = { text: trimmed, at: now };
 
     const userMessage: Message = {
       id: Date.now().toString(),

@@ -19,6 +19,7 @@ import json
 import os
 import re
 import base64
+import unicodedata
 from pathlib import Path
 from typing import List, Dict, Any, Optional, AsyncGenerator
 from datetime import datetime
@@ -70,6 +71,258 @@ def _is_linkify_safe_act(full_title: Optional[str]) -> bool:
     are never the canonical target for a popular acronym and must not auto-link."""
     ft = full_title or ""
     return not any(marker in ft for marker in _NON_BASE_ACT_MARKERS)
+
+
+# Internal context-block headers injected by context_builder.py (and named in the
+# system prompt) that the model sometimes echoes back inside square brackets, e.g.
+# "[COMMISSIONER AGENDA]". They are retrieval scaffolding, never a citation, and
+# must be stripped before the answer reaches the user (audit defect D5, 28 Jul
+# 2026 -- two leaks in one subscriber answer). Kept as an explicit allowlist so a
+# legitimate bracketed phrase such as [AI ACT] is never touched. When a new
+# ALL-CAPS section header is added to context_builder.py, add it here too.
+_CONTEXT_BLOCK_LABELS = (
+    "COMMISSIONER AGENDA",
+    "COMMITTEE TRANSCRIPT",
+    "EP PLENARY DEBATE TRANSCRIPT",
+    "EP COMMITTEE WORK IN PROGRESS",
+    "EP COMMITTEE MEETING MINUTES",
+    "POSITION ANALYSIS",
+    "AVAILABLE DATA FOR THIS FILE",
+    "YOUR BRUBRU PROFILE",
+    "USER UPLOADED DOCUMENTS",
+    "USER PROFILE",
+    "SUPPLEMENTARY DATABASE RESULTS",
+    "REFERENCE DATA",
+    "RECENT UPDATES",
+    "LEGISLATIVE PROCEDURES",
+    "LEGISLATIVE FILES",
+    "LEGISLATION DETAILS",
+    "INTERNAL KNOWLEDGE",
+    "EUROPEAN COMMISSION PERSONNEL",
+    "EU LAWS DATABASE",
+    "EU INSTITUTIONAL SOURCES",
+    "EU INSTITUTIONAL CALENDAR",
+    "EU LAW SNAPSHOT",
+    "EPRS RESEARCH & BRIEFINGS",
+    "EPRS PUBLICATIONS",
+    "EC PUBLIC CONSULTATIONS",
+    "COMMITTEE INFORMATION",
+    "COMMISSION DOCUMENTS",
+    "CELLAR LEGISLATION",
+    "CELLAR DISCOVERY",
+    "DAILY NEWS",
+    "BERESOL OPEN REPORTS & MONITORS",
+)
+
+# Matches any allowlisted label in brackets, with an optional "END " prefix and
+# an optional " (live)" / " (2 days)" qualifier the headers carry.
+_CONTEXT_BLOCK_LABEL_RE = re.compile(
+    r"\s*\[\s*(?:END\s+)?(?:"
+    + "|".join(re.escape(label) for label in _CONTEXT_BLOCK_LABELS)
+    + r")(?:\s*\([^)\]]{0,30}\))?\s*\]",
+    flags=re.IGNORECASE,
+)
+
+# Safe-refusal template in Brubru's six languages (audit defect D3, 28 Jul 2026).
+# Previously English-only, so a Catalan or Spanish user who tripped the validator
+# guard received an English wall. British English is the EN base. No em-dashes.
+_SAFE_REFUSAL_TEXT = {
+    "EN": {
+        "lead": "I cannot answer that with confidence from Brubru's verified record.",
+        "user_claim": (
+            "Your question asserts a specific role for a named person on a procedure that "
+            "Brubru's record does not currently confirm. I will not validate that assertion "
+            "from training-data memory."
+        ),
+        "meeting": (
+            "I also cannot confirm any specific meeting between a named person and a "
+            "Commission service on the date you mention. That meeting is not in Brubru's "
+            "calendar, Transparency Register snapshot, or press-release feed."
+        ),
+        "future_date": (
+            "Specific future committee or plenary vote dates for this file are not in "
+            "Brubru's calendar yet."
+        ),
+        "hallucination": (
+            "The initial draft of my answer included specific names, quotes, or numbers "
+            "that I could not verify against Brubru's retrieved sources."
+        ),
+        "completeness": (
+            "My initial answer omitted items that Brubru does have on record. I would rather "
+            "stop and offer to deliver the full list than ship an incomplete one."
+        ),
+        "on_record": "What Brubru does hold on this topic: {items}. Ask me about any of those and I will answer from the record.",
+        "offer": (
+            "What I can offer: track this file in your Legislative Tracker (My EU Bubble > "
+            "Legislative Tracker) so Brubru pings you the moment the rapporteur, lead committee, "
+            "or vote date is recorded. I can also pull the Commission proposal text, the EPRS "
+            "briefing, and any calendar events that ARE on file. Ask me for any of those."
+        ),
+    },
+    "FR": {
+        "lead": "Je ne peux pas répondre à cela avec certitude à partir des sources vérifiées de Brubru.",
+        "user_claim": (
+            "Votre question attribue un rôle précis à une personne nommée sur une procédure que "
+            "les données de Brubru ne confirment pas actuellement. Je ne validerai pas cette "
+            "affirmation de mémoire."
+        ),
+        "meeting": (
+            "Je ne peux pas non plus confirmer une réunion entre une personne nommée et un "
+            "service de la Commission à la date que vous mentionnez. Cette réunion ne figure ni "
+            "dans le calendrier de Brubru, ni dans le registre de transparence, ni dans le flux "
+            "de communiqués."
+        ),
+        "future_date": (
+            "Les dates précises de vote en commission ou en plénière pour ce dossier ne figurent "
+            "pas encore dans le calendrier de Brubru."
+        ),
+        "hallucination": (
+            "Le premier brouillon de ma réponse contenait des noms, des citations ou des chiffres "
+            "que je n'ai pas pu vérifier dans les sources récupérées par Brubru."
+        ),
+        "completeness": (
+            "Ma réponse initiale omettait des éléments que Brubru possède pourtant. Je préfère "
+            "m'arrêter et vous proposer la liste complète plutôt que d'en livrer une incomplète."
+        ),
+        "on_record": "Ce que Brubru possède sur ce sujet : {items}. Interrogez-moi sur l'un de ces points et je répondrai à partir des sources.",
+        "offer": (
+            "Ce que je peux faire : suivez ce dossier dans votre Legislative Tracker (My EU Bubble > "
+            "Legislative Tracker) pour que Brubru vous alerte dès que le rapporteur, la commission "
+            "compétente ou la date de vote sont enregistrés. Je peux aussi vous fournir le texte de "
+            "la proposition de la Commission, la note de l'EPRS et les événements de calendrier "
+            "déjà disponibles. Demandez-les moi."
+        ),
+    },
+    "ES": {
+        "lead": "No puedo responder a eso con seguridad a partir de las fuentes verificadas de Brubru.",
+        "user_claim": (
+            "Su pregunta atribuye un papel concreto a una persona identificada en un procedimiento "
+            "que los datos de Brubru no confirman actualmente. No voy a validar esa afirmación de memoria."
+        ),
+        "meeting": (
+            "Tampoco puedo confirmar ninguna reunión entre una persona identificada y un servicio "
+            "de la Comisión en la fecha que menciona. Esa reunión no consta en el calendario de "
+            "Brubru, ni en el registro de transparencia, ni en el flujo de notas de prensa."
+        ),
+        "future_date": (
+            "Las fechas concretas de votación en comisión o en pleno para este expediente todavía "
+            "no constan en el calendario de Brubru."
+        ),
+        "hallucination": (
+            "El primer borrador de mi respuesta incluía nombres, citas o cifras que no pude "
+            "verificar con las fuentes recuperadas por Brubru."
+        ),
+        "completeness": (
+            "Mi respuesta inicial omitía elementos que Brubru sí tiene registrados. Prefiero "
+            "detenerme y ofrecerle la lista completa antes que entregarle una incompleta."
+        ),
+        "on_record": "Lo que Brubru sí tiene sobre este tema: {items}. Pregúnteme por cualquiera de ellos y le responderé a partir de las fuentes.",
+        "offer": (
+            "Lo que sí puedo ofrecerle: siga este expediente en su Legislative Tracker (My EU Bubble > "
+            "Legislative Tracker) para que Brubru le avise en cuanto se registren el ponente, la "
+            "comisión competente o la fecha de votación. También puedo facilitarle el texto de la "
+            "propuesta de la Comisión, la nota del EPRS y los eventos de calendario que sí constan. "
+            "Pídame cualquiera de ellos."
+        ),
+    },
+    "CA": {
+        "lead": "No puc respondre això amb seguretat a partir de les fonts verificades de Brubru.",
+        "user_claim": (
+            "La vostra pregunta atribueix un paper concret a una persona identificada en un "
+            "procediment que les dades de Brubru no confirmen actualment. No validaré aquesta "
+            "afirmació de memòria."
+        ),
+        "meeting": (
+            "Tampoc no puc confirmar cap reunió entre una persona identificada i un servei de la "
+            "Comissió en la data que esmenteu. Aquesta reunió no consta al calendari de Brubru, "
+            "ni al registre de transparència, ni al flux de notes de premsa."
+        ),
+        "future_date": (
+            "Les dates concretes de votació en comissió o en ple per a aquest expedient encara no "
+            "consten al calendari de Brubru."
+        ),
+        "hallucination": (
+            "El primer esborrany de la meva resposta incloïa noms, citacions o xifres que no vaig "
+            "poder verificar amb les fonts recuperades per Brubru."
+        ),
+        "completeness": (
+            "La meva resposta inicial ometia elements que Brubru sí que té registrats. Prefereixo "
+            "aturar-me i oferir-vos la llista completa abans que lliurar-ne una d'incompleta."
+        ),
+        "on_record": "El que Brubru sí que té sobre aquest tema: {items}. Pregunteu-me per qualsevol d'aquests punts i us respondré a partir de les fonts.",
+        "offer": (
+            "El que sí que us puc oferir: seguiu aquest expedient al vostre Legislative Tracker "
+            "(My EU Bubble > Legislative Tracker) perquè Brubru us avisi tan bon punt es registrin "
+            "el ponent, la comissió competent o la data de votació. També us puc facilitar el text "
+            "de la proposta de la Comissió, la nota de l'EPRS i els esdeveniments de calendari que "
+            "sí que consten. Demaneu-me'n qualsevol."
+        ),
+    },
+    "IT": {
+        "lead": "Non posso rispondere con certezza sulla base delle fonti verificate di Brubru.",
+        "user_claim": (
+            "La sua domanda attribuisce un ruolo preciso a una persona indicata in una procedura "
+            "che i dati di Brubru al momento non confermano. Non convaliderò tale affermazione a memoria."
+        ),
+        "meeting": (
+            "Non posso nemmeno confermare alcun incontro tra una persona indicata e un servizio "
+            "della Commissione nella data che lei menziona. Quell'incontro non figura nel "
+            "calendario di Brubru, né nel registro per la trasparenza, né nel flusso dei comunicati."
+        ),
+        "future_date": (
+            "Le date precise di voto in commissione o in plenaria per questo fascicolo non sono "
+            "ancora nel calendario di Brubru."
+        ),
+        "hallucination": (
+            "La prima bozza della mia risposta conteneva nomi, citazioni o cifre che non ho potuto "
+            "verificare con le fonti recuperate da Brubru."
+        ),
+        "completeness": (
+            "La mia risposta iniziale ometteva elementi che Brubru ha invece in archivio. Preferisco "
+            "fermarmi e offrirle l'elenco completo piuttosto che consegnarne uno incompleto."
+        ),
+        "on_record": "Ciò che Brubru ha su questo tema: {items}. Mi chieda di uno qualsiasi di questi e risponderò sulla base delle fonti.",
+        "offer": (
+            "Quello che posso offrirle: segua questo fascicolo nel suo Legislative Tracker "
+            "(My EU Bubble > Legislative Tracker) così Brubru la avvisa non appena vengono registrati "
+            "il relatore, la commissione competente o la data di voto. Posso anche fornirle il testo "
+            "della proposta della Commissione, la nota dell'EPRS e gli eventi di calendario già "
+            "disponibili. Me li chieda pure."
+        ),
+    },
+    "NL": {
+        "lead": "Ik kan dat niet met zekerheid beantwoorden op basis van de geverifieerde bronnen van Brubru.",
+        "user_claim": (
+            "Uw vraag kent een specifieke rol toe aan een genoemde persoon in een procedure die de "
+            "gegevens van Brubru op dit moment niet bevestigen. Ik ga die bewering niet uit het "
+            "geheugen bevestigen."
+        ),
+        "meeting": (
+            "Ik kan evenmin een ontmoeting bevestigen tussen een genoemde persoon en een dienst van "
+            "de Commissie op de datum die u noemt. Die ontmoeting staat niet in de agenda van "
+            "Brubru, niet in het transparantieregister en niet in de persberichtenstroom."
+        ),
+        "future_date": (
+            "Concrete toekomstige stemmingsdata in commissie of plenaire vergadering voor dit "
+            "dossier staan nog niet in de agenda van Brubru."
+        ),
+        "hallucination": (
+            "De eerste versie van mijn antwoord bevatte namen, citaten of cijfers die ik niet kon "
+            "verifiëren aan de hand van de door Brubru opgehaalde bronnen."
+        ),
+        "completeness": (
+            "Mijn eerste antwoord liet onderdelen weg die Brubru wél in het bestand heeft. Ik stop "
+            "liever en bied u de volledige lijst aan dan een onvolledige te leveren."
+        ),
+        "on_record": "Wat Brubru wél over dit onderwerp heeft: {items}. Vraag mij naar een daarvan en ik antwoord op basis van de bronnen.",
+        "offer": (
+            "Wat ik wel kan doen: volg dit dossier in uw Legislative Tracker (My EU Bubble > "
+            "Legislative Tracker), dan waarschuwt Brubru u zodra de rapporteur, de bevoegde commissie "
+            "of de stemdatum wordt vastgelegd. Ik kan ook de tekst van het Commissievoorstel, de "
+            "EPRS-nota en de reeds bekende agendapunten ophalen. Vraag er gerust naar."
+        ),
+    },
+}
 
 
 # ---------------------------------------------------------------------------
@@ -226,15 +479,40 @@ def _detect_query_language(text: str) -> str:
     """
     if not text:
         return "EN"
-    words = re.findall(r"\b\w+\b", text.lower())
+
+    # The interpunct (U+00B7, as in "sol.licitud", "Brussel.les") is Catalan
+    # orthography and appears in no other Brubru language. Decisive on its own,
+    # and it fires on short queries where the bag-of-words detector has no
+    # signal at all. Added 28 Jul 2026 (audit defect D7): a Catalan
+    # subscriber's query scored ES, because every function word it used ("la",
+    # "el", "de", "es") is shared with Spanish and none of the CA-only
+    # tie-break words appeared.
+    if "·" in text:
+        return "CA"
+
+    # Fold diacritics once, so the marker sets below stay pure ASCII and the
+    # detector is not defeated by a user typing "perque" for "perqu<e-grave>".
+    folded = "".join(
+        ch for ch in unicodedata.normalize("NFD", text.lower())
+        if unicodedata.category(ch) != "Mn"
+    )
+    words = re.findall(r"\b\w+\b", folded)
     if not words:
         return "EN"
     scores = {lang: sum(1 for w in words if w in markers) / len(words)
               for lang, markers in _LANG_MARKERS.items()}
     # CA/ES disambiguation
     if scores.get("CA", 0) > 0 and scores.get("ES", 0) > 0:
-        ca_only = {"amb", "aquesta", "dels", "pel", "als", "pero"}
-        es_only = {"con", "esta", "por", "pero"}
+        # Accent-folded and CA-exclusive. Deliberately excludes words that fold
+        # onto a Spanish form: CA "esta<grave>" folds to "esta" (= ES "esta"),
+        # and "pero"/"son" are common in both, so none of those may arbitrate.
+        ca_only = {
+            "amb", "aquesta", "aquest", "aquests", "aquestes", "dels", "pel",
+            "als", "perque", "aixo", "quin", "quina", "quins", "quines",
+            "hi", "seva", "meva", "nostra", "fins", "troba", "llengua",
+        }
+        es_only = {"con", "por", "tambien", "porque", "asi",
+                   "solicitud", "cual", "donde"}
         ca = sum(1 for w in words if w in ca_only)
         es = sum(1 for w in words if w in es_only)
         if ca > es:
@@ -574,6 +852,15 @@ class AIService:
         # real answer ("Hello! I'm Brubru ... I can help you with ...\n\n<answer>")
         assistant_message = self._strip_leading_greeting(assistant_message)
 
+        # Drop an invented regulation number stated in apposition to a named act
+        # (audit defect D2, 28 Jul 2026)
+        assistant_message = self._strip_contradicting_act_numbers(assistant_message)
+
+        # Zero em-dashes on user-facing surfaces, and the recurring Catalan
+        # slips (audit defect D7, 28 Jul 2026)
+        assistant_message = self._fold_prose_dashes(assistant_message)
+        assistant_message = self._apply_catalan_corrections(assistant_message, user_message)
+
         # Ensure a guide-flagged Brubru deep-dive/explainer URL is surfaced
         assistant_message = self._append_deep_dive_link(assistant_message, context_str)
 
@@ -664,6 +951,7 @@ class AIService:
                         assistant_message = self._build_safe_refusal_response(
                             query=user_message,
                             violations=_validation.violations,
+                            context_str=context_str,
                         )
         except Exception as _e:  # noqa: BLE001
             logger.warning("validator pass failed (non-fatal): %s", _e)
@@ -866,6 +1154,7 @@ class AIService:
         citations: Optional[List[Dict]] = None,
         context_str: str = "",
         context_data: Any = None,
+        user_query: str = "",
     ) -> str:
         """Apply the whole-text clean-up transforms to a finished response.
 
@@ -895,6 +1184,9 @@ class AIService:
         message = self._strip_context_markers(message)
         message = self._normalise_url_hyphens(message)
         message = self._strip_leading_greeting(message)
+        message = self._strip_contradicting_act_numbers(message)
+        message = self._fold_prose_dashes(message)
+        message = self._apply_catalan_corrections(message, user_query or "")
         message = self._append_deep_dive_link(message, context_str)
 
         if context_data is not None and getattr(
@@ -1162,6 +1454,7 @@ class AIService:
                     # injection is skipped here. Unifying the two context
                     # builds is the follow-up owned by the Chat session.
                     context_data=None,
+                    user_query=user_message,
                 )
                 if cleaned != raw_message:
                     logger.info(
@@ -1477,6 +1770,15 @@ CRITICAL - Maintain the user's language:
 - If the user writes in Catalan, respond entirely in Catalan -- including follow-up questions and suggestions.
 - If the user writes in French, respond entirely in French. Same for Spanish, Italian, Dutch, German, or any other language.
 - NEVER switch to English mid-response for follow-ups, headings, or section labels when the user wrote in another language.
+
+CRITICAL - Catalan EU legal terminology (Brubru Catalan standard):
+When answering in Catalan, name EU legal instruments with their Catalan forms:
+- A Regulation is a "Reglament": write "Reglament (UE) 2024/1689", "Reglament (CE) 1049/2001". The noun "regulació" means regulating in the abstract sense and is never the name of the instrument.
+- Directive -> "Directiva". Decision -> "Decisió". Recommendation -> "Recomanació". Opinion -> "Dictamen". Communication -> "Comunicació". Proposal -> "Proposta". Treaty -> "Tractat". Judgment -> "Sentència".
+- Implementing act -> "d'execució" (Reglament d'execució). Delegated act -> "delegat" / "delegada".
+- Recitals open with "Atenent que"; "Tenint en compte" for Having regard to; "Ha adoptat" for has adopted; "Paràgraf" for paragraph; "Comitè dels Estats membres".
+- Accents and the middle dot are obligatory: sóc, perquè, política, Brussel·les, intel·ligència, execució, Víctor Solé.
+- Write Catalan only -- do not let Spanish forms such as "Reglamento", "Decisión", "Recomendación" or "Sentencia" leak in.
 
 CRITICAL - Verified EU data vs web:
 Knowledge guides in the EU CONTEXT are verified and authoritative — treat their article numbers, dates, mechanisms, and definitions as fact and use them confidently (never say "I don't have detailed information" when the guide provides it). Flag web/general-knowledge content explicitly ("Based on publicly available information...") and never present it as verified EU institutional data or invent figures from it.
@@ -2310,6 +2612,14 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         # answer). Explicit allowlist so legitimate bracketed prose is never touched.
         cleaned = re.sub(r'\s*\[\s*(?:end\s+)?today\s+block\s*\]', ' ', cleaned, flags=re.IGNORECASE)
         cleaned = re.sub(r'\s*\[\s*web\s+summary\s*\]', ' ', cleaned, flags=re.IGNORECASE)
+        # 4) SPACE-separated multiword section headers the model echoes verbatim,
+        # e.g. [COMMISSIONER AGENDA] (from "COMMISSIONER AGENDA (live):"). Rule (1)
+        # only matches underscore-joined tags and rule (3) only covers two named
+        # labels, so these leaked untouched -- twice in one subscriber answer on
+        # 24 Jul 2026 (audit defect D5, 28 Jul 2026). Allowlisted rather than
+        # pattern-matched: a blanket "bracketed ALL-CAPS words" rule would eat
+        # legitimate prose such as [AI ACT] or [EU INC].
+        cleaned = _CONTEXT_BLOCK_LABEL_RE.sub(' ', cleaned)
         # Tidy stray punctuation left behind ("(MOVE),." -> "(MOVE).") and double spaces
         # Collapse repeated commas/periods left by truncated enumerations
         # ("2 December 2027,,,." -> "2 December 2027.") -- audit defect D4, 22 Jun 2026.
@@ -3294,7 +3604,9 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         except Exception as e:
             logger.error(f"Error in _log_analytics: {e}")
 
-    def _build_safe_refusal_response(self, query: str, violations) -> str:
+    def _build_safe_refusal_response(
+        self, query: str, violations, context_str: str = ""
+    ) -> str:
         """
         Build a safe refusal response that ships when the validator flags a
         critical violation (added 28 May 2026 after the EFPIA-demo Biotech Act
@@ -3304,40 +3616,31 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         cannot confirm and points them to the Legislative Tracker so they can
         be alerted when the data lands. It does NOT repeat any of the
         problematic content from the original response.
+
+        Localised into Brubru's six languages on 28 Jul 2026 (audit defect D3):
+        the template was hardcoded English, so a Catalan or Spanish user who hit
+        the guard got a wall of English. The refusal is the single worst moment
+        to switch language on someone.
         """
         violation_types = {v.type for v in (violations or [])}
+        lang = _detect_query_language(query)
+        t = _SAFE_REFUSAL_TEXT.get(lang, _SAFE_REFUSAL_TEXT["EN"])
 
-        lines = [
-            "I cannot answer that with confidence from Brubru's verified record.",
-        ]
+        lines = [t["lead"]]
 
         if "user_claim_capitulation" in violation_types or "name_splitting" in violation_types:
-            lines.append(
-                "Your question asserts a specific role for a named person on a procedure that "
-                "Brubru's record does not currently confirm. I will not validate that assertion "
-                "from training-data memory."
-            )
+            lines.append(t["user_claim"])
         if "fabricated_meeting" in violation_types:
-            lines.append(
-                "I also cannot confirm any specific meeting between a named person and a "
-                "Commission service on the date you mention -- that meeting is not in Brubru's calendar, "
-                "Transparency Register snapshot, or press-release feed."
-            )
+            lines.append(t["meeting"])
         if "fabricated_future_date" in violation_types:
-            lines.append(
-                "Specific future committee or plenary vote dates for this file are not in "
-                "Brubru's calendar yet."
-            )
+            lines.append(t["future_date"])
         if "hallucination" in violation_types and not (
             "user_claim_capitulation" in violation_types
             or "name_splitting" in violation_types
             or "fabricated_meeting" in violation_types
             or "fabricated_future_date" in violation_types
         ):
-            lines.append(
-                "The initial draft of my answer included specific names, quotes, or numbers "
-                "that I could not verify against Brubru's retrieved sources."
-            )
+            lines.append(t["hallucination"])
         if "completeness" in violation_types and not violation_types & {
             "user_claim_capitulation",
             "name_splitting",
@@ -3345,19 +3648,200 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             "fabricated_future_date",
             "hallucination",
         }:
-            lines.append(
-                "My initial answer omitted items that Brubru does have on record. I would rather "
-                "stop and offer to deliver the full list than ship an incomplete one."
-            )
+            lines.append(t["completeness"])
 
-        lines.append(
-            "What I can offer: track this file in your Legislative Tracker (My EU Bubble > "
-            "Legislative Tracker) so Brubru pings you the moment the rapporteur, lead committee, "
-            "or vote date is recorded. I can also pull the Commission proposal text, the EPRS "
-            "briefing, and any calendar events that ARE on file -- ask me for any of those."
-        )
+        # Name what retrieval DID find. A bare refusal reads as "Brubru knows
+        # nothing"; naming the guides that were actually retrieved shows the
+        # user there is a thread to pull, and turns a dead end into a follow-up
+        # (audit defect D3, 28 Jul 2026: a two-word query got a pure wall).
+        anchors = self._retrieved_guide_titles(context_str)
+        if anchors:
+            lines.append(t["on_record"].format(items="; ".join(anchors)))
+
+        lines.append(t["offer"])
 
         return "\n\n".join(lines)
+
+    # "<Act name> (Regulation (EU) 2019/785 ...)" -- an act named, then given a
+    # regulation number in apposition. The number is what goes wrong.
+    _ACT_NUMBER_APPOSITION_RE = re.compile(
+        r"\(\s*(?:Regulation|Directive|Decision)\s*\((?:EU|EC|EEC|Euratom)\)\s*"
+        r"(?:No\.?\s*)?(\d{4})/(\d{1,4})"      # the asserted year/number
+        r"[^()]*"                               # any trailing prose
+        r"(?:\[CELEX:[^\]]+\]\([^)]*\))?"      # an optional linkified CELEX
+        r"[^()]*\)",
+        re.IGNORECASE,
+    )
+
+    # A spaced em/en dash used as an appositive or parenthetical break. Folding
+    # it to a comma is grammatical in all six Brubru languages ("X — the Y — is
+    # Z" becomes "X, the Y, is Z"). Digit-flanked dashes are ranges and are left
+    # alone, as are dashes already adjacent to a comma.
+    _PROSE_DASH_RE = re.compile(r"(?<![\d,])\s*[—–]\s*(?![\d,])")
+
+    def _fold_prose_dashes(self, text: str) -> str:
+        """
+        Remove em/en dashes from user-facing answer prose (audit defect D7,
+        28 Jul 2026: a Catalan answer shipped an em-dash, against the
+        zero-em-dash rule for every Brubru surface).
+
+        The model is copying the system prompt's own typography, which is
+        littered with em-dashes. Rather than rewrite the prompt and risk
+        perturbing behaviour, fold the dash out of the OUTPUT, where the rule
+        actually applies. Markdown tables, code fences and URLs are skipped:
+        a dash is structural there, not punctuation.
+        """
+        if not text or ("—" not in text and "–" not in text):
+            return text
+
+        out_lines: List[str] = []
+        in_code_fence = False
+        for line in text.split("\n"):
+            stripped = line.lstrip()
+            if stripped.startswith("```"):
+                in_code_fence = not in_code_fence
+                out_lines.append(line)
+                continue
+            if in_code_fence or stripped.startswith("|") or stripped.startswith("    "):
+                out_lines.append(line)
+                continue
+            # Protect URLs, then fold, then restore.
+            urls: List[str] = []
+
+            def _stash(match: "re.Match") -> str:
+                urls.append(match.group(0))
+                return f"\x00{len(urls) - 1}\x00"
+
+            protected = re.sub(r"https?://[^\s\)\]]+", _stash, line)
+            folded = self._PROSE_DASH_RE.sub(", ", protected)
+            for idx, url in enumerate(urls):
+                folded = folded.replace(f"\x00{idx}\x00", url)
+            out_lines.append(folded)
+
+        result = "\n".join(out_lines)
+        # A folded dash before punctuation leaves ", ." style debris.
+        result = re.sub(r",\s*([.,;:!?])", r"\1", result)
+        return result
+
+    # Catalan forms the models get wrong most often. Applied only when the query
+    # language is Catalan (audit defect D7, 28 Jul 2026: "per a que" and
+    # "la aprovi" both shipped to a subscriber in one answer).
+    _CATALAN_CORRECTIONS = (
+        (r"\bper a què\b", "perquè"),
+        (r"\bper a que\b", "perquè"),
+        (r"\bper que\b", "perquè"),
+        (r"\bla aprovi\b", "l'aprovi"),
+        (r"\bla aprova\b", "l'aprova"),
+        (r"\bla adopti\b", "l'adopti"),
+        (r"\bla aplica\b", "l'aplica"),
+        (r"\bes debatuda\b", "és debatuda"),
+    )
+
+    def _apply_catalan_corrections(self, text: str, query: str) -> str:
+        """Fix the recurring Catalan slips, but only on Catalan answers."""
+        if not text or _detect_query_language(query) != "CA":
+            return text
+        result = text
+        for pattern, replacement in self._CATALAN_CORRECTIONS:
+            result = re.sub(pattern, replacement, result, flags=re.IGNORECASE)
+        return result
+
+    def _strip_contradicting_act_numbers(self, text: str) -> str:
+        """
+        Remove a regulation number stated in apposition to a named act when it
+        contradicts that act's canonical number.
+
+        Audit defect D2 (28 Jul 2026): an answer rendered the AI Act as
+        "[AI Act](...CELEX:32024R1689) (Regulation (EU) 2019/785
+        [CELEX:32019R0785](...))". The link was right, the apposition was
+        invented, and the linkifier then dressed the invention as a real
+        EUR-Lex URL. Truncating to the act name alone is always safe: the
+        canonical link is already in the text.
+
+        Only fires when the act name is in legislation_acronyms.json AND the
+        asserted number differs from the canonical one, so a legitimate
+        "the AI Act (amending Regulation (EU) 2018/1139)" is untouched: that
+        parenthetical does not open with a bare number in apposition, it opens
+        with a verb.
+        """
+        if not text or "(" not in text:
+            return text
+
+        acronyms = self._get_legislation_acronyms()
+        if not acronyms:
+            return text
+
+        def _canonical_number(celex: str) -> Optional[str]:
+            m = re.match(r"^\d(\d{4})[A-Z]{1,2}(\d{4})$", celex or "")
+            if not m:
+                return None
+            return f"{m.group(1)}/{int(m.group(2))}"
+
+        result = text
+        for name, entry in acronyms.items():
+            if len(name) < 3:
+                continue
+            canonical = _canonical_number((entry or {}).get("celex", ""))
+            if not canonical:
+                continue
+            for name_match in re.finditer(re.escape(name) + r"\b", result):
+                tail_start = name_match.end()
+                # Only look immediately after the act name. The name is often
+                # the label of a markdown link, so skip an optional "](url)"
+                # closer and any whitespace before testing for the apposition.
+                gap = re.compile(r"(?:\]\([^)\s]*\))?\s*").match(result, tail_start)
+                appos = self._ACT_NUMBER_APPOSITION_RE.match(result, gap.end())
+                if not appos:
+                    continue
+                asserted = f"{appos.group(1)}/{int(appos.group(2))}"
+                if asserted == canonical:
+                    continue
+                logger.warning(
+                    "[post] dropped contradicting act number for %s: asserted %s, canonical %s",
+                    name, asserted, canonical,
+                )
+                result = result[:appos.start()] + result[appos.end():]
+                break  # positions shifted; the next pass over names re-scans
+        return re.sub(r"\s{2,}", " ", result).replace(" .", ".").replace(" ,", ",")
+
+    def _get_legislation_acronyms(self) -> Dict[str, Dict[str, Any]]:
+        """Cached accessor for the acronym -> canonical CELEX map."""
+        cached = getattr(self, "_legislation_acronyms_cache", None)
+        if cached is not None:
+            return cached
+        data: Dict[str, Dict[str, Any]] = {}
+        try:
+            path = (
+                Path(__file__).resolve().parent.parent
+                / "knowledge_base" / "institutions" / "legislation_acronyms.json"
+            )
+            with open(path, "r", encoding="utf-8") as fh:
+                data = json.load(fh).get("acronyms", {}) or {}
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("could not load legislation acronyms: %s", exc)
+        self._legislation_acronyms_cache = data
+        return data
+
+    @staticmethod
+    def _retrieved_guide_titles(context_str: str, limit: int = 3) -> List[str]:
+        """
+        Pull the human-readable guide titles out of the injected context string,
+        so a refusal can still tell the user what Brubru does hold on the topic.
+        Guides are injected with a "## <Title>" heading by the knowledge loader.
+        """
+        if not context_str:
+            return []
+        titles: List[str] = []
+        for match in re.finditer(r"^#{1,3}\s+([^\n#][^\n]{3,80})$", context_str, flags=re.MULTILINE):
+            title = match.group(1).strip().rstrip(":")
+            # Skip internal block headers -- they are scaffolding, not content.
+            if title.isupper():
+                continue
+            if title not in titles:
+                titles.append(title)
+            if len(titles) >= limit:
+                break
+        return titles
 
     async def _log_chat_validation(
         self,

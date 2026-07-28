@@ -2,6 +2,27 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-28",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Amendments 2026 -- Simplification Omnibus",
+      "summary": "In force since 27 July 2026 as Regulation (EU) 2026/1744; Council adoption caveat resolved",
+      "refs": [
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "action": "updated",
+      "guide": "digital_omnibus_package",
+      "title": "EU Digital Omnibus Package",
+      "summary": "AI Omnibus entered into force 27 July 2026 as Regulation (EU) 2026/1744; high-risk dates confirmed at 2 Dec 2027 and 2 Aug 2028",
+      "refs": [
+        "32026R1744",
+        "32024R1689"
+      ]
+    },
+    {
       "date": "2026-07-22",
       "action": "updated",
       "guide": "eeas_institution_hrvp_kallas",

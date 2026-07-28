@@ -2432,6 +2432,14 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'ai act delay': ['ai_act_regulation'],
     'digital omnibus': ['digital_omnibus_package', 'ai_act_regulation'],
     'omnibus ai': ['digital_omnibus_package', 'ai_act_regulation'],
+    # Entry into force 27 Jul 2026 as Regulation (EU) 2026/1744 -- users will
+    # search by the new act number and by the plain name (added 28 Jul 2026).
+    'ai omnibus': ['ai_act_amendments_2026', 'digital_omnibus_package', 'ai_act_regulation'],
+    '2026/1744': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    '32026r1744': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'omnibus ia': ['digital_omnibus_package', 'ai_act_regulation'],
+    'omnibus ia entra en vigor': ['ai_act_amendments_2026'],
+    'omnibus sur ia': ['digital_omnibus_package', 'ai_act_regulation'],
     'omnibus digital': ['digital_omnibus_package', 'ai_act_regulation'],
     'omnibus data': ['digital_omnibus_package'],
     'omnibus gdpr': ['digital_omnibus_package'],
