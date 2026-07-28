@@ -177,6 +177,13 @@ def _dispatch_initialize(req_id: Any, params: Dict[str, Any]) -> Dict[str, Any]:
     else:
         protocol = PROTOCOL_VERSION
 
+    try:
+        from services.mcp.stats import format_summary
+
+        coverage = format_summary()
+    except Exception:  # noqa: BLE001
+        coverage = "EU laws, knowledge guides, procedures, calendar events, EPRS publications"
+
     return _ok(
         req_id,
         {
@@ -186,10 +193,15 @@ def _dispatch_initialize(req_id: Any, params: Dict[str, Any]) -> Dict[str, Any]:
                 "tools": {"listChanged": False},
             },
             "instructions": (
-                "Brubru exposes EU policy intelligence as MCP tools — laws, procedures, "
-                "calendar events, knowledge guides, EPRS publications. Each call is "
-                "metered in euros against your Brubru API balance; mint a key and top "
-                "up at https://brubru.beresol.eu/api."
+                "Brubru is EU policy intelligence for any AI assistant. For almost any "
+                "question, call the single tool `ask_brubru` with the user's question — "
+                "it returns the matching policy guides, the relevant EU laws (with CELEX "
+                "and EUR-Lex links), and live procedure status in one call. The other "
+                "tools (calendar events, EPRS, raw law/guide search) are advanced and "
+                "rarely needed.\n\n"
+                f"Live coverage: {coverage}.\n\n"
+                "Each call is metered in euros against your Brubru API balance; mint a "
+                "key and top up at https://brubru.beresol.eu/api."
             ),
         },
     )

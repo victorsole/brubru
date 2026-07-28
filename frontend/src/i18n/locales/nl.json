@@ -3114,7 +3114,7 @@
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru in",
     "titleAccent": "Claude, ChatGPT en je IDE",
-    "lede": "Verbind Brubru met elke MCP-compatibele client - Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, custom GPT's in ChatGPT. Dezelfde API-sleutel, hetzelfde euro-saldo. Vandaag zes tools, meer onderweg.",
+    "lede": "Verbind Brubru met elke MCP-compatibele client: Claude, ChatGPT, Cursor, Gemini en meer. Dezelfde API-sleutel, hetzelfde eurosaldo. Meestal heb je maar één tool nodig: ask_brubru.",
     "sidebar": {
       "onThisPage": "Op deze pagina"
     },
@@ -3211,10 +3211,10 @@
       "title": "Tools vandaag beschikbaar",
       "lede": "Zes tools, 1:1 gekoppeld aan de relevante /api/v1/*-endpoints. Elke call kost € 0,005 van je saldo.",
       "descs": {
-        "ask_brubru": "Open EU-beleidsvraag. Retourneert de 3 best passende, curated kennisgidsen.",
-        "search_eu_legislation": "Full-text zoeken in 28 710 EU-wetten via CELEX, titel of keyword.",
-        "search_knowledge_guides": "Zoek in Brubru's curated kennisgidsen (200+ beleidstopics).",
-        "get_procedure_status": "Live status van een EU-wetgevingsprocedure via OEIL-referentie.",
+        "ask_brubru": "Degene die je nodig hebt. Stel elke vraag over de EU en krijg de bijpassende beleidsgidsen, de relevante wetten (met EUR-Lex-links) en de actuele procedurestatus, in één aanroep.",
+        "search_eu_legislation": "Geavanceerd: zoeken op trefwoord in de EU-wetgevingsdatabase. ask_brubru bevat de bijpassende wetten al.",
+        "search_knowledge_guides": "Geavanceerd: doorzoek alleen de samengestelde kennisgidsen.",
+        "get_procedure_status": "Geavanceerd: één procedure via de exacte OEIL-referentie. ask_brubru lost referenties automatisch op.",
         "get_calendar_events": "Aankomende agendapunten van Parlement, Raad en Commissie.",
         "search_eprs": "Publicaties van de Onderzoeksdienst van het EP (briefings, studies)."
       }

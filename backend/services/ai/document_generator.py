@@ -658,7 +658,7 @@ NOW WRITE THE EMAIL.
                     limit=5,
                 )
                 if framework_laws:
-                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's database of 28,505 laws):\n"
+                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's EU legislation database):\n"
                     for law in framework_laws:
                         celex = law.get('celex', 'N/A')
                         legal_framework_text += f"- {law.get('title', 'Unknown')} (CELEX: {celex}, {law.get('doc_type', '')}, {law.get('date', 'N/A')})\n"
@@ -734,7 +734,7 @@ NOW WRITE THE EMAIL.
                     limit=5,
                 )
                 if framework_laws:
-                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's database of 28,505 laws):\n"
+                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's EU legislation database):\n"
                     for law in framework_laws:
                         celex = law.get('celex', 'N/A')
                         legal_framework_text += f"- {law.get('title', 'Unknown')} (CELEX: {celex}, {law.get('doc_type', '')}, {law.get('date', 'N/A')})\n"

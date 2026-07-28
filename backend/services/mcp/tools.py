@@ -23,11 +23,78 @@ If handler raises, the billing middleware refunds the call.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+import re
+from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Any, Callable, Dict, List, Optional
 
 from sqlalchemy import text
+
+# OEIL procedure reference, e.g. "2023/0131(COD)" or "2025/0076(NLE)".
+_PROC_REF = re.compile(r"\b(\d{4}/\d{4}\s*\([A-Z]{2,4}\))")
+
+# Stop-words dropped when relaxing a conversational query to an OR search.
+_STOP = {
+    "what", "when", "where", "which", "does", "affect", "affects", "about", "with",
+    "from", "into", "that", "this", "have", "will", "would", "should", "there",
+    "status", "under", "tell", "explain", "show", "find", "give", "much", "many",
+    "your", "they", "them", "than", "then", "here", "over", "some", "such",
+}
+
+
+def _related_laws(query: str, limit: int = 5) -> List[Dict[str, Any]]:
+    """Laws for the ask_brubru front door. Precise first, then relaxed.
+
+    Tries plainto_tsquery (all terms, high precision). If that finds nothing --
+    common for conversational phrasing like 'how does CBAM affect steel?' -- it
+    falls back to an OR of the significant words so the answer still carries real
+    CELEX references. Kept out of the advanced search_eu_legislation tool, whose
+    AND semantics direct callers rely on.
+    """
+    laws = _handle_search_eu_legislation(query, limit=limit).get("laws", [])
+    if laws:
+        return laws
+
+    terms = [
+        w for w in re.findall(r"[A-Za-z]{4,}", query)
+        if w.lower() not in _STOP
+    ]
+    if not terms:
+        return []
+
+    db = _get_db()
+    try:
+        or_query = " | ".join(terms[:8])
+        rows = db.execute(
+            text(
+                """
+                SELECT celex,
+                       title,
+                       COALESCE(doc_type_normalized, doc_type) AS doc_type,
+                       ts_rank(search_vector, to_tsquery('english', :q)) AS rank
+                FROM eu_laws
+                WHERE search_vector @@ to_tsquery('english', :q)
+                  AND celex IS NOT NULL
+                ORDER BY rank DESC
+                LIMIT :lim
+                """
+            ),
+            {"q": or_query, "lim": limit},
+        ).fetchall()
+        return [
+            {
+                "celex": r[0],
+                "title": (r[1] or "")[:300],
+                "doc_type": r[2],
+                "relevance": round(float(r[3]), 4),
+                "url": f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r[0]}" if r[0] else None,
+            }
+            for r in rows
+        ]
+    except Exception:  # noqa: BLE001
+        return []
+    finally:
+        db.close()
 
 # ---------------------------------------------------------------------------
 # Costs (μEUR) — keep in sync with services/billing/pricing_table.json
@@ -66,25 +133,24 @@ def _get_db():
 # ---------------------------------------------------------------------------
 
 def _handle_ask_brubru(question: str) -> Dict[str, Any]:
-    """Lightweight version: returns top 3 matching guides with QUICK FACTS.
-    The full Claude pipeline is intentionally NOT invoked here — that's what
-    a future `chat` MCP tool would do; currently this is a retrieval-only
-    surface so its cost matches the read:knowledge price tier.
+    """The single front door: one free-text question -> a combined answer.
+
+    Routes internally so the calling LLM never has to pick a retrieval mode:
+        - always: top matching knowledge guides (QUICK FACTS)
+        - always: the most relevant EU laws (CELEX + EUR-Lex links)
+        - if the question names a procedure reference: its live status
+
+    Retrieval-only (the host's own model writes the prose from this context);
+    that keeps the cost in the read:knowledge tier, not the chat tier.
     """
     from knowledge_base.knowledge_loader import KnowledgeLoader
+    from services.mcp.stats import get_corpus_stats
 
     loader = KnowledgeLoader()
     loader.load_all()
     guides = loader.search_guides(question)
 
-    if not guides:
-        return {
-            "answer": "No knowledge guide matched this query. Try rephrasing or use search_eu_legislation for direct law search.",
-            "guides_matched": 0,
-            "top_guides": [],
-        }
-
-    results: List[Dict[str, Any]] = []
+    guide_results: List[Dict[str, Any]] = []
     for g in guides[:3]:
         guide_id = g["id"]
         content = loader.guides.get(guide_id, "")
@@ -93,13 +159,43 @@ def _handle_ask_brubru(question: str) -> Dict[str, Any]:
             start = content.index("## QUICK FACTS")
             end = content.index("\n## ", start + 15) if "\n## " in content[start + 15:] else start + 5000
             quick_facts = content[start:end].strip()[:4000]
-        results.append({"guide_id": guide_id, "quick_facts": quick_facts})
+        guide_results.append({"guide_id": guide_id, "quick_facts": quick_facts})
 
-    return {
+    # Concrete laws so the answer carries real CELEX references + EUR-Lex links.
+    # Strip any procedure ref first so its digits don't pollute the full-text match.
+    law_query = _PROC_REF.sub(" ", question).strip() or question
+    try:
+        related_laws = _related_laws(law_query, limit=5)
+    except Exception:  # noqa: BLE001
+        related_laws = []
+
+    payload: Dict[str, Any] = {
         "question": question,
         "guides_matched": len(guides),
-        "top_guides": results,
+        "guides": guide_results,
+        "related_laws": related_laws,
+        "coverage": get_corpus_stats(),
     }
+
+    # If the user referenced a specific procedure, resolve its live status too.
+    ref_match = _PROC_REF.search(question)
+    if ref_match:
+        ref = ref_match.group(1).replace(" ", "")
+        try:
+            proc = _handle_get_procedure_status(ref)
+            if "error" not in proc:
+                payload["procedure"] = proc
+        except Exception:  # noqa: BLE001
+            pass
+
+    if not guide_results and not related_laws:
+        payload["note"] = (
+            "No direct match yet. Rephrase, or narrow to a topic, CELEX, procedure "
+            "reference, MEP, or institution — Brubru covers EU legislation, procedures, "
+            "the institutional calendar, and curated policy guides."
+        )
+
+    return payload
 
 
 def _handle_search_eu_legislation(query: str, limit: int = 10) -> Dict[str, Any]:
@@ -143,10 +239,12 @@ def _handle_search_eu_legislation(query: str, limit: int = 10) -> Dict[str, Any]
             }
             for r in rows
         ]
+        from services.mcp.stats import get_corpus_stats
+
         return {
             "query": query,
             "total_results": len(laws),
-            "database_size_hint": 28_710,  # canonical 28,710 distinct laws (LEG_2025-11)
+            "database_size_hint": get_corpus_stats().get("laws"),
             "laws": laws,
         }
     finally:
@@ -292,11 +390,15 @@ TOOLS: List[McpTool] = [
     McpTool(
         name="ask_brubru",
         description=(
-            "Ask any question about EU policy, legislation, or institutions. "
-            "Returns the top 3 matching Brubru knowledge guides (curated by EU policy "
-            "experts; covers 200+ topics including AI Act, GDPR, DSA, CSRD, MFF, CBAM). "
-            "Use this when the user asks an open-ended policy question and you want "
-            "structured background before drilling into specific laws."
+            "PRIMARY TOOL — use this first for ANY question about the EU: policy, "
+            "legislation, institutions, procedures, MEPs, or what's happening in "
+            "Brussels. One free-text question in, a combined answer out: the most "
+            "relevant curated policy guides (AI Act, GDPR, DSA, CSRD, MFF, CBAM and "
+            "hundreds more), the specific EU laws that match (with CELEX numbers and "
+            "EUR-Lex links), and — if the question names a procedure reference like "
+            "'2023/0131(COD)' — its live legislative status. Aliases: ask, query, "
+            "look up, what is, tell me about, explain, brubru. Prefer this over the "
+            "narrower search_* tools unless the user explicitly wants a raw list."
         ),
         input_schema={
             "type": "object",
@@ -315,10 +417,11 @@ TOOLS: List[McpTool] = [
     McpTool(
         name="search_eu_legislation",
         description=(
-            "Full-text search across Brubru's database of 28,710 distinct EU laws "
-            "(28,513 OJ publications). Returns matching laws with CELEX number, title "
-            "and document type, ranked by relevance. Use this when the user wants to "
-            "find specific laws by keyword or topic."
+            "ADVANCED — raw full-text search across Brubru's EU legislation database. "
+            "Returns matching laws with CELEX number, title and document type, ranked "
+            "by relevance. Most callers should use ask_brubru instead (it already "
+            "includes the matching laws). Reach for this only when the user explicitly "
+            "wants a longer raw list of laws by keyword."
         ),
         input_schema={
             "type": "object",
@@ -335,10 +438,10 @@ TOOLS: List[McpTool] = [
     McpTool(
         name="search_knowledge_guides",
         description=(
-            "Search Brubru's curated EU policy knowledge guides. Each guide covers a "
-            "policy domain with QUICK FACTS, CELEX numbers, key actors, and current "
-            "status. Updated daily. Use this when you want a structured policy briefing "
-            "rather than raw law search."
+            "ADVANCED — search only Brubru's curated policy knowledge guides (no laws). "
+            "Each guide has QUICK FACTS, CELEX numbers, key actors and current status, "
+            "updated daily. Most callers should use ask_brubru instead, which already "
+            "returns the matching guides plus the relevant laws in one call."
         ),
         input_schema={
             "type": "object",
@@ -354,10 +457,11 @@ TOOLS: List[McpTool] = [
     McpTool(
         name="get_procedure_status",
         description=(
-            "Look up the live status of an EU legislative procedure by its OEIL "
-            "reference. Returns title, current stage, lead committee, key events. "
-            "Use when the user references a specific procedure number (e.g. "
-            "'2023/0131(COD)', '2025/0076(NLE)')."
+            "ADVANCED — look up one EU legislative procedure by its exact OEIL "
+            "reference (e.g. '2023/0131(COD)'). Returns title, current stage, lead "
+            "committee, key events. ask_brubru already resolves a procedure reference "
+            "automatically when the question contains one, so use this only for a "
+            "direct reference lookup with no surrounding question."
         ),
         input_schema={
             "type": "object",

@@ -11020,7 +11020,7 @@ class ContextBuilder:
 
         # Local EU Laws Database (28K+ laws from LEG_2025-11, TSVECTOR-ranked)
         if context_data.local_eu_laws:
-            sections.append(f"\nEU LAWS DATABASE ({len(context_data.local_eu_laws)} relevant laws from 28,505 in database):")
+            sections.append(f"\nEU LAWS DATABASE ({len(context_data.local_eu_laws)} relevant laws from Brubru's EU legislation database):")
             sections.append("These are adopted EU laws matched by full-text relevance ranking.")
             sections.append("Present their CELEX numbers and titles to the user. Mention related citations.\n")
 

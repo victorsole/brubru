@@ -33,15 +33,24 @@ DEFAULT_BASE_URL = os.environ.get("BRUBRU_PUBLIC_URL", "https://brubru.beresol.e
 
 def _spec(base_url: str) -> dict:
     """Build the slim OpenAPI 3.1 spec. Hand-written for ChatGPT picker quality."""
+    try:
+        from services.mcp.stats import get_corpus_stats
+
+        _s = get_corpus_stats()
+        _laws = f"{_s['laws']:,}"
+        _guides = f"{_s['guides']:,}"
+    except Exception:  # noqa: BLE001
+        _laws, _guides = "16,998", "538"
+
     return {
         "openapi": "3.1.0",
         "info": {
             "title": "Brubru — EU Policy Tools",
             "description": (
-                "Live EU policy intelligence: 28,710 laws, 200+ curated knowledge guides, "
-                "live legislative procedure status, institutional calendar, EPRS publications. "
-                "Use these tools when the user asks about EU regulations, laws, MEPs, "
-                "Commission proposals, Council decisions, or policy events.\n\n"
+                f"Live EU policy intelligence: {_laws} laws, {_guides} curated knowledge "
+                "guides, live legislative procedure status, institutional calendar, EPRS "
+                "publications. Use these tools when the user asks about EU regulations, "
+                "laws, MEPs, Commission proposals, Council decisions, or policy events.\n\n"
                 "Authenticate with a Brubru API key from https://brubru.beresol.eu/api. "
                 "Each call costs €0.001-€0.020 against your euro balance."
             ),
@@ -67,7 +76,7 @@ def _spec(base_url: str) -> dict:
                     "operationId": "searchEuLegislation",
                     "summary": "Search EU laws by keyword",
                     "description": (
-                        "Full-text search across 28,710 distinct EU laws (regulations, "
+                        f"Full-text search across {_laws} distinct EU laws (regulations, "
                         "directives, decisions, recommendations). Returns matching laws "
                         "with CELEX number, title, doc type and relevance score, ranked "
                         "by relevance. Use this when the user wants to find specific EU "
@@ -203,7 +212,7 @@ def _spec(base_url: str) -> dict:
                     "operationId": "searchKnowledgeGuides",
                     "summary": "Search Brubru's curated EU policy knowledge guides",
                     "description": (
-                        "Search 200+ curated knowledge guides written by EU policy "
+                        f"Search {_guides} curated knowledge guides written by EU policy "
                         "experts. Each guide has QUICK FACTS (CELEX, status, rapporteur, "
                         "key dates), background, and current state. Use this when the "
                         "user wants a structured policy briefing rather than raw law "

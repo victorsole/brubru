@@ -4004,7 +4004,7 @@
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru dans",
     "titleAccent": "Claude, ChatGPT et votre IDE",
-    "lede": "Connectez Brubru à tout client compatible MCP - Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, GPTs personnalisés ChatGPT. Même clé API, même solde en euros. Six outils aujourd'hui, davantage en route.",
+    "lede": "Connectez Brubru à n'importe quel client compatible MCP : Claude, ChatGPT, Cursor, Gemini et plus. Même clé API, même solde en euros. Le plus souvent, un seul outil suffit : ask_brubru.",
     "sidebar": {
       "onThisPage": "Sur cette page"
     },
@@ -4101,10 +4101,10 @@
       "title": "Outils disponibles aujourd'hui",
       "lede": "Six outils, mappés 1:1 aux endpoints /api/v1/* pertinents. Chaque appel coûte 0,005 € de votre solde.",
       "descs": {
-        "ask_brubru": "Question ouverte de politique UE. Renvoie les 3 guides de connaissance curatés les plus pertinents.",
-        "search_eu_legislation": "Recherche plein texte sur 28 710 lois UE par CELEX, titre ou mot-clé.",
-        "search_knowledge_guides": "Recherche dans les guides de connaissance curatés par Brubru (200+ sujets).",
-        "get_procedure_status": "Statut en direct d'une procédure législative UE par référence OEIL.",
+        "ask_brubru": "Celui qu'il vous faut. Posez n'importe quelle question sur l'UE et obtenez les guides de politique correspondants, les textes pertinents (avec liens EUR-Lex) et le statut en direct de la procédure, en un seul appel.",
+        "search_eu_legislation": "Avancé : recherche par mots-clés dans la base de données de la législation de l'UE. ask_brubru inclut déjà les textes correspondants.",
+        "search_knowledge_guides": "Avancé : recherche uniquement dans les guides de connaissances sélectionnés.",
+        "get_procedure_status": "Avancé : une procédure par sa référence OEIL exacte. ask_brubru résout les références automatiquement.",
         "get_calendar_events": "Prochains événements d'agenda Parlement, Conseil et Commission.",
         "search_eprs": "Publications du Service d'études du PE (briefings, études)."
       }
