@@ -1466,6 +1466,19 @@ class AIService:
                 # Never let clean-up break a response the user can already see.
                 logger.warning(f"[stream] post-processing failed: {e}")
 
+            # Send the citation list. Without this the streaming path renders
+            # bare [1] [2] markers with nothing to resolve to: the markers are
+            # NOT orphans (they map to real sources, which is why the stripper
+            # keeps them), the client simply never received the sources. The
+            # non-streaming path has always returned them in its JSON body.
+            # Audit follow-up, 28 Jul 2026. Emitted after any "replace" so the
+            # client applies them to the final text.
+            if stream_citations:
+                yield json.dumps({
+                    "type": "citations",
+                    "citations": stream_citations,
+                })
+
         # After streaming completes, compute and emit action buttons
         if use_context:
             try:

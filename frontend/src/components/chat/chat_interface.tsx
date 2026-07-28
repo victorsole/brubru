@@ -649,6 +649,28 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                   );
                   continue;
                 }
+                // The sources behind the [N] markers. Until 28 July 2026 the
+                // streaming path never sent these, so every streamed answer
+                // rendered bare markers with no reference list underneath.
+                if (parsed.type === 'citations' && Array.isArray(parsed.citations)) {
+                  const withIds: Citation[] = parsed.citations.map(
+                    (c: Partial<Citation>, i: number) => ({
+                      id: typeof c.id === 'number' ? c.id : i + 1,
+                      type: c.type || 'source',
+                      title: c.title || 'Source',
+                      url: c.url || '',
+                      metadata: c.metadata,
+                    })
+                  );
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === streamingMessageId
+                        ? { ...msg, citations: withIds }
+                        : msg
+                    )
+                  );
+                  continue;
+                }
                 if (parsed.type === 'actions' && parsed.actions) {
                   setMessages((prev) =>
                     prev.map((msg) =>

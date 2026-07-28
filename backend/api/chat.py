@@ -602,6 +602,7 @@ async def stream_message(
 
         async def generate():
             full_response = ""
+            stream_citations: list = []
 
             async for chunk in ai_service.chat_stream(
                 user_message=request.message,
@@ -627,6 +628,16 @@ async def stream_message(
                                 full_response = replacement
                             yield f"data: {chunk}\n\n"
                             continue
+                        # The citation list backing the [N] markers. Forward it
+                        # to the client AND keep it so the saved message stores
+                        # its sources: otherwise conversation history renders
+                        # bare markers forever (audit follow-up, 28 Jul 2026).
+                        if parsed.get("type") == "citations":
+                            found = parsed.get("citations")
+                            if isinstance(found, list):
+                                stream_citations = found
+                            yield f"data: {chunk}\n\n"
+                            continue
                         if parsed.get("type") in ("status", "entities", "actions"):
                             yield f"data: {chunk}\n\n"
                             continue
@@ -645,6 +656,7 @@ async def stream_message(
                 chat_id,
                 request.message,
                 full_response,
+                citations=stream_citations or None,
                 user_id=request.user_id,
             )
 
