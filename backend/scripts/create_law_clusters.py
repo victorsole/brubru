@@ -243,6 +243,99 @@ LAW_PACKAGES = {
         'date_from': 2025
     },
 
+    'ppwr_packaging_and_packaging_waste': {
+        'name': 'PPWR - Packaging and Packaging Waste Regulation',
+        'primary_celex': '32025R0040',
+        'description': (
+            'Regulation (EU) 2025/40 on packaging and packaging waste, amending '
+            'Regulation (EU) 2019/1020 and Directive (EU) 2019/904, and repealing '
+            'Directive 94/62/EC after 30 years. First EU-wide horizontal packaging '
+            'law binding on economic operators (not just Member States) with 13 '
+            'Chapters, 71 Articles and 13 Annexes. Sets sustainability requirements '
+            'for every packaging placed on the Union market: PFAS ban in food-contact '
+            'packaging (from 12 August 2026 + 18 months), lead + cadmium + mercury + '
+            'hexavalent chromium sum threshold 100 mg/kg, mandatory recyclability '
+            'Grade A/B/C from 1 January 2030 with Grade C losing market access from '
+            '1 January 2038, minimum recycled-content targets in plastic packaging '
+            'from 2030 and 2040, empty-space ratio ceiling of 50 % for grouped/'
+            'transport/e-commerce packaging from 1 January 2030, sector-specific '
+            'reuse and refill targets, and Annex V bans on specific single-use '
+            'packaging formats (hospitality single-serve sachets, hotel amenities, '
+            'fruit and vegetable pre-packs under 1.5 kg, e-commerce shrink wrap). '
+            'Mandates Deposit Return Systems reaching 90 % separate collection of '
+            'single-use PET beverage bottles and aluminium beverage cans up to 3 L '
+            'by 1 January 2029, with a derogation route for Member States already '
+            'at 80 % by end 2026. Modernises Extended Producer Responsibility with '
+            'fee modulation based on recyclability class. Amends the Single-Use '
+            'Plastics Directive (2019/904) to add multi-pack plastic rings to the '
+            'SUP ban list. Enters into force 11 February 2025; general application '
+            '12 August 2026; penalties framework by 12 February 2027; Commission '
+            'evaluation by 12 August 2034.'
+        ),
+        'applicability': (
+            'Every producer placing packaging on the Union market (manufacturer, '
+            'importer, distributor, authorised representative, fulfilment service '
+            'provider); every final distributor selling packaged products or '
+            'offering services using packaging (retailers, wholesalers, HORECA, '
+            'e-commerce marketplaces); every waste-management operator handling '
+            'packaging waste; every producer responsibility organisation (PRO). '
+            'Directly applicable across all Member States without transposition. '
+            'Applies regardless of packaging material (plastic, paper, cardboard, '
+            'glass, metal, wood, composite, ceramic, textile, biobased) and covers '
+            'sales, grouped and transport packaging, including e-commerce shipping '
+            'packaging and primary production packaging. Green public procurement '
+            'rules (Article 63) bind contracting authorities under Directive '
+            '2014/24/EU and Directive 2014/25/EU when packaging exceeds 30 % of '
+            'contract value. Market surveillance authorities operate under '
+            'Regulation (EU) 2019/1020.'
+        ),
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': [
+            'ppwr', 'packaging regulation', 'packaging and packaging waste',
+            '2025/40', '32025r0040', 'regulation 2025/40', 'regulation (eu) 2025/40',
+            'directive 94/62', '94/62/ec', 'packaging directive',
+            'single-use plastics', 'sup', 'directive 2019/904', '2019/904',
+            'multi-pack plastic rings', 'plastic rings',
+            'market surveillance', 'regulation 2019/1020', '2019/1020',
+            'sales packaging', 'grouped packaging', 'transport packaging',
+            'primary packaging', 'secondary packaging', 'tertiary packaging',
+            'service packaging', 'e-commerce packaging',
+            'reusable packaging', 'refillable packaging', 'refill',
+            'compostable packaging', 'biodegradable packaging',
+            'recyclable packaging', 'design for recycling',
+            'recyclability grade', 'grade a', 'grade b', 'grade c',
+            'recycled content', 'post-consumer plastic', 'pcr',
+            'recycled plastic', 'recycled pet',
+            'contact-sensitive packaging', 'contact sensitive',
+            'empty space ratio', 'empty-space ratio', 'packaging minimisation',
+            'excessive packaging', 'over-packaging', 'overpackaging',
+            'lightweight plastic carrier bag', 'plastic carrier bag',
+            'deposit return system', 'drs', 'deposit refund',
+            'pet bottle', 'aluminium beverage can', 'beverage bottle',
+            'separate collection', 'collection target',
+            'recycling target', 'recycling rate',
+            'extended producer responsibility', 'epr', 'eco-modulation',
+            'fee modulation', 'producer responsibility organisation', 'pro',
+            'circular economy', 'circular economy action plan', 'ceap',
+            'waste hierarchy', 'waste framework directive', '2008/98',
+            'pfas', 'per- and polyfluoroalkyl',
+            'bisphenol a', 'bpa', 'heavy metals in packaging',
+            'substances of concern',
+            'material identification', 'harmonised label', 'sorting label',
+            'annex v', 'annex x', 'annex ii',
+            'hospitality', 'horeca', 'take-away',
+            'hotel amenities', 'condiment sachet', 'single-serve',
+            'fruit and vegetables', 'pre-packed produce',
+            'green public procurement', 'gpp',
+            'declaration of conformity', 'technical documentation',
+            'ecodesign', 'espr', '2024/1781', 'digital product passport',
+            'reach', '1907/2006', 'clp', '1272/2008',
+            'green deal', 'zero pollution',
+        ],
+        'date_from': 2025
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary
