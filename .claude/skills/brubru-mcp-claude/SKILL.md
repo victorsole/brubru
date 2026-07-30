@@ -106,12 +106,24 @@ curl -s -X POST "$URL?key=$KEY" -H 'Content-Type: application/json' \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"ask_brubru","arguments":{"question":"What is CBAM?"}}}'
 ```
 
-## Connector branding (the logo)
+## Connector branding (the logo) — UNSOLVED, and a landmine
 
-Hosts derive the connector icon from the **favicon at the server origin**. The backend
-serves `/favicon.ico` + `/favicon.png` (`backend/main.py`, files in `backend/static/`)
-and advertises `title` + `icons[]` in `initialize.serverInfo`. Clients **cache** the
-icon — to refresh it the user must **remove + re-add** the connector.
+Claude's connector shows the **Railway icon**, not Brubru's. Two attempts failed
+(30 Jul), and one of them broke everything — read before touching:
+
+- **Origin favicon does NOT work.** The backend serves `/favicon.ico` + `/favicon.png`
+  (`backend/main.py`), but claude.ai does not use the backend origin favicon for the
+  connector icon — it still shows Railway after a clean re-add. Harmless, left in place.
+- **NEVER add `icons`/`websiteUrl`/`title` to `initialize.serverInfo`.** Doing so
+  (commit 2fe721f3) BROKE the claude.ai connector: Claude validates the initialize
+  result, rejected the extra Implementation fields, treated the server as invalid, and
+  fell into a failing OAuth-registration flow ("Couldn't register with Brubru's sign-in
+  service"). It looks exactly like "claude.ai requires OAuth" but it is NOT — it is a
+  malformed handshake. Keep `SERVER_INFO = {name, version}` only. curl-valid does not
+  mean claude.ai-client-valid; always test the real connector after any handshake change.
+
+Branding Claude's connector remains an open question (likely OAuth AS metadata
+`logo_uri` once Option B lands). Deferred.
 
 ## Troubleshooting
 
@@ -119,8 +131,12 @@ icon — to refresh it the user must **remove + re-add** the connector.
   (a char dropped on paste — the key ends `...db12e`), or (b) the **wrong URL**
   (brubru.beresol.eu instead of the Railway origin). Rule these out before suspecting
   transport. Verify with the `?key=` `tools/list` curl above.
-- **Wrong/Railway icon** -> origin favicon; ensure `/favicon.ico` is 200 on the backend,
-  then have the user remove + re-add the connector to bust the cache.
+- **"Couldn't register with Brubru's sign-in service" / "not a valid MCP server"** ->
+  the `initialize` handshake is malformed for Claude's validator. Check `SERVER_INFO`
+  is `{name, version}` ONLY — extra fields break it (see branding section). NOT an
+  OAuth requirement.
+- **Wrong/Railway icon** -> known-unsolved; origin favicon does not rebrand Claude's
+  connector. Leave it; do not add serverInfo icons to "fix" it (that breaks connect).
 - **xlsx/export or import errors on prod but not local** -> prod installs
   `requirements-light.txt`; see `feedback_prod_uses_requirements_light`.
 - **Tool call fails with insufficient balance** -> non-admin key with €0 balance; top up
