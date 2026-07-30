@@ -28,7 +28,7 @@ from services.schedulers.amendment_sync_scheduler import (
 from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
-    feedback, admin_panel, admin_api_keys, me_api_keys, billing, mcp_http, mcp_openapi, committees, amendments, legislative_train,
+    feedback, admin_panel, admin_api_keys, me_api_keys, billing, mcp_http, mcp_openapi, mcp_oauth, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders, tender_files, tender_templates,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
@@ -237,6 +237,7 @@ app.include_router(me_api_keys.router, tags=["Self-Serve API Keys"])
 app.include_router(billing.router, tags=["API Billing"])
 app.include_router(mcp_http.router, tags=["MCP — HTTP transport"])
 app.include_router(mcp_openapi.router, tags=["MCP — OpenAPI for ChatGPT"])
+app.include_router(mcp_oauth.router, tags=["MCP — OAuth 2.1"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
 app.include_router(committees.router, tags=["Committees"])
 app.include_router(committee_work.router, tags=["Committee Work"])

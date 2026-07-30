@@ -42,6 +42,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Tuple
 
 from fastapi import APIRouter, Header, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -130,7 +131,16 @@ def _resolve_api_key(
     if not plaintext:
         return None, None, (_ERR_AUTH_MISSING, "Missing API key. Send Authorization: Bearer brubru_live_... or X-API-Key: ...")
     if not plaintext.startswith(KEY_PREFIX):
-        return None, None, (_ERR_AUTH_INVALID, "Invalid API key format. Keys start with 'brubru_live_'.")
+        # Not a brubru_live_ key — maybe an OAuth access token (Option B). Resolve
+        # it to the ApiKey it was minted against, so scope + billing are unchanged.
+        try:
+            from api.mcp_oauth import resolve_oauth_access_token
+            oauth_key, oauth_user = resolve_oauth_access_token(db, plaintext)
+        except Exception:  # noqa: BLE001
+            oauth_key, oauth_user = None, None
+        if oauth_key is not None:
+            return oauth_key, oauth_user, None
+        return None, None, (_ERR_AUTH_INVALID, "Invalid credentials. Use a brubru_live_ key or an OAuth access token.")
 
     key_hash = ApiKey.hash_plaintext(plaintext)
     api_key = (
@@ -401,6 +411,20 @@ async def mcp_endpoint(
     # custom connector, some Gemini/ChatGPT flows): ?key=... or ?api_key=...
     query_key = request.query_params.get("key") or request.query_params.get("api_key")
     plaintext = _extract_key(authorization, x_api_key, query_key)
+
+    # No credentials at all -> emit the OAuth 2.1 discovery challenge (HTTP 401 +
+    # WWW-Authenticate per the MCP Authorization spec / RFC 9728). This is what
+    # makes the claude.ai connector start the OAuth flow. Clients that DO send a
+    # key (?key= or header) never reach here, so Option A is untouched.
+    if not plaintext:
+        base = f"https://{request.headers.get('host', 'brubru-production.up.railway.app')}"
+        return JSONResponse(
+            {"jsonrpc": "2.0", "id": req_id,
+             "error": {"code": _ERR_AUTH_MISSING, "message": "Authentication required."}},
+            status_code=401,
+            headers={"WWW-Authenticate": f'Bearer resource_metadata="{base}/.well-known/oauth-protected-resource"'},
+        )
+
     db = SessionLocal()
     try:
         api_key, user, auth_err = _resolve_api_key(db, plaintext or "")
