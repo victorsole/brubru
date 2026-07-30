@@ -268,8 +268,7 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
 {
   "mcpServers": {
     "brubru": {
-      "type": "sse",
-      "url": "https://brubru.beresol.eu/api/mcp",
+      "url": "https://brubru-production.up.railway.app/api/mcp",
       "headers": { "Authorization": "Bearer brubru_live_..." }
     }
   }
