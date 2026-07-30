@@ -4300,7 +4300,7 @@
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru dentro",
     "titleAccent": "Claude, ChatGPT e il tuo IDE",
-    "lede": "Collega Brubru a qualsiasi client compatibile con MCP - Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, GPT personalizzati di ChatGPT. Stessa API key, stesso saldo in euro. Sei strumenti oggi, altri in arrivo.",
+    "lede": "Collega Brubru a qualsiasi client compatibile con MCP: Claude, ChatGPT, Cursor, Gemini e altri. Stessa chiave API, stesso saldo in euro. Nella maggior parte dei casi ti serve un solo strumento: ask_brubru.",
     "sidebar": {
       "onThisPage": "In questa pagina"
     },
@@ -4349,7 +4349,11 @@
       "s1": "Apri Claude Desktop → Settings → Developer → Edit config.",
       "s2": "Incolla il JSON sotto. Sostituisci YOUR_KEY con il testo che hai copiato a brubru.beresol.eu/api.",
       "s3": "Salva e riavvia Claude Desktop.",
-      "s4": "Chiedi a Claude: «Con Brubru, qual è lo stato dell'AI Act?» - search_eu_legislation o get_procedure_status dovrebbe partire."
+      "s4": "Chiedi a Claude: «Con Brubru, qual è lo stato dell'AI Act?» - search_eu_legislation o get_procedure_status dovrebbe partire.",
+      "webTitle": "In claude.ai (web) o nell'app desktop",
+      "webBody": "Apri Impostazioni → Connettori → Aggiungi connettore personalizzato. Incolla l'URL qui sotto (contiene già la tua chiave API) e lascia vuoti i campi OAuth. Genera una chiave su brubru.beresol.eu/api e sostituisci brubru_live_YOUR_KEY.",
+      "webUrlLabel": "URL del connettore (contiene la tua chiave)",
+      "cfgTitle": "Oppure — file di configurazione di Claude Desktop"
     },
     "cursor": {
       "title": "Cursor",
@@ -4397,10 +4401,10 @@
       "title": "Strumenti disponibili oggi",
       "lede": "Sei strumenti, mappati 1:1 agli endpoint /api/v1/* rilevanti. Ogni chiamata costa 0,005 € dal tuo saldo.",
       "descs": {
-        "ask_brubru": "Domanda aperta di politica UE. Restituisce le 3 guide di conoscenza curate più pertinenti.",
-        "search_eu_legislation": "Ricerca full-text su 28 710 leggi UE per CELEX, titolo o keyword.",
-        "search_knowledge_guides": "Cerca nelle guide di conoscenza curate da Brubru (200+ argomenti).",
-        "get_procedure_status": "Stato in tempo reale di una procedura legislativa UE per riferimento OEIL.",
+        "ask_brubru": "Quello che ti serve. Chiedi qualsiasi cosa sull'UE e ottieni le guide di policy pertinenti, le leggi rilevanti (con link a EUR-Lex) e lo stato in tempo reale della procedura, in un'unica chiamata.",
+        "search_eu_legislation": "Avanzato: ricerca per parole chiave nel database della legislazione UE. ask_brubru include già le leggi pertinenti.",
+        "search_knowledge_guides": "Avanzato: cerca solo nelle guide di conoscenza curate.",
+        "get_procedure_status": "Avanzato: una procedura tramite il riferimento OEIL esatto. ask_brubru risolve i riferimenti automaticamente.",
         "get_calendar_events": "Prossimi eventi del calendario Parlamento, Consiglio e Commissione.",
         "search_eprs": "Pubblicazioni del Servizio Ricerca del PE (briefing, studi)."
       }

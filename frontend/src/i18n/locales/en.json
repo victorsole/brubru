@@ -4300,7 +4300,7 @@
     "eyebrow": "MCP - Model Context Protocol",
     "titlePre": "Brubru inside",
     "titleAccent": "Claude, ChatGPT and your IDE",
-    "lede": "Connect Brubru to any MCP-capable client - Claude Desktop, Cursor, Cline, Continue, Claude Cowork, VS Code, ChatGPT custom GPTs. Same API key, same euro balance. Six tools today, more on the way.",
+    "lede": "Connect Brubru to any MCP-capable client - Claude, ChatGPT, Cursor, Gemini and more. Same API key, same euro balance. Most of the time you only need one tool: ask_brubru.",
     "sidebar": {
       "onThisPage": "On this page"
     },
@@ -4349,7 +4349,11 @@
       "s1": "Open Claude Desktop → Settings → Developer → Edit config.",
       "s2": "Paste the JSON below. Replace YOUR_KEY with the plaintext you copied at brubru.beresol.eu/api.",
       "s3": "Save and restart Claude Desktop.",
-      "s4": "Ask Claude: \"Using Brubru, what's the status of the AI Act?\" - the search_eu_legislation or get_procedure_status tool should fire."
+      "s4": "Ask Claude: \"Using Brubru, what's the status of the AI Act?\" - the search_eu_legislation or get_procedure_status tool should fire.",
+      "webTitle": "In claude.ai (web) or the Desktop app",
+      "webBody": "Open Settings → Connectors → Add custom connector. Paste the URL below (it already carries your API key) and leave the OAuth fields blank. Mint a key at brubru.beresol.eu/api and swap it in place of brubru_live_YOUR_KEY.",
+      "webUrlLabel": "Connector URL (includes your key)",
+      "cfgTitle": "Or — Claude Desktop config file"
     },
     "cursor": {
       "title": "Cursor",
@@ -4397,10 +4401,10 @@
       "title": "Tools available today",
       "lede": "Six tools, mapped 1:1 to the relevant /api/v1/* endpoints. Each call is metered at €0.005 against your balance.",
       "descs": {
-        "ask_brubru": "Open-ended EU policy question. Returns the top 3 matching curated knowledge guides.",
-        "search_eu_legislation": "Full-text search across 28,710 EU laws by CELEX, title or keyword.",
-        "search_knowledge_guides": "Search Brubru's curated knowledge guides (200+ policy topics).",
-        "get_procedure_status": "Live status of an EU legislative procedure by OEIL reference.",
+        "ask_brubru": "The one you need. Ask anything about the EU and get the matching policy guides, the relevant laws (with EUR-Lex links) and live procedure status - in a single call.",
+        "search_eu_legislation": "Advanced: raw keyword search over the EU legislation database. ask_brubru already includes the matching laws.",
+        "search_knowledge_guides": "Advanced: search only the curated knowledge guides.",
+        "get_procedure_status": "Advanced: one procedure by exact OEIL reference. ask_brubru resolves references automatically.",
         "get_calendar_events": "Upcoming Parliament, Council and Commission calendar events.",
         "search_eprs": "European Parliamentary Research Service publications (briefings, studies)."
       }
