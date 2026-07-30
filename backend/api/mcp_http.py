@@ -74,9 +74,19 @@ _ERR_TOOL_NOT_FOUND = -32007
 _ERR_TOOL_HANDLER_FAILED = -32008
 
 # Server capabilities reported in `initialize`.
+# `icons` + `title` follow the MCP 2025 Implementation-metadata additions so
+# spec-aware hosts brand the connector as Brubru rather than a generic icon.
+# Hosts that ignore these fall back to the origin favicon (served by main.py).
+_ICON_ORIGIN = "https://brubru-production.up.railway.app"
 SERVER_INFO = {
     "name": "Brubru",
+    "title": "Brubru — EU Policy Intelligence",
     "version": "1.0.0",
+    "websiteUrl": "https://brubru.beresol.eu/mcp",
+    "icons": [
+        {"src": f"{_ICON_ORIGIN}/favicon.png", "mimeType": "image/png", "sizes": "192x192"},
+        {"src": f"{_ICON_ORIGIN}/favicon.ico", "mimeType": "image/x-icon", "sizes": "any"},
+    ],
 }
 PROTOCOL_VERSION = "2024-11-05"  # MCP spec version we implement
 

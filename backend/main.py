@@ -164,6 +164,35 @@ app.add_middleware(BillingRefundMiddleware)
 from api.export_middleware import TabularExportMiddleware  # noqa: E402
 app.add_middleware(TabularExportMiddleware)
 
+# ---------------------------------------------------------------------------
+# Brand favicon at the backend origin. MCP hosts (Claude, ChatGPT, Gemini,
+# DeepSeek) derive a remote connector's icon from the favicon of the server's
+# ORIGIN — i.e. this Railway host, not brubru.beresol.eu. Without this the
+# connector shows a generic/Railway icon. Serve the Brubru marks here so any
+# host that reads the origin favicon brands the connector as Brubru.
+# ---------------------------------------------------------------------------
+from fastapi.responses import FileResponse  # noqa: E402
+
+_STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon_ico():
+    return FileResponse(
+        os.path.join(_STATIC_DIR, "favicon.ico"),
+        media_type="image/x-icon",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
+@app.get("/favicon.png", include_in_schema=False)
+async def favicon_png():
+    return FileResponse(
+        os.path.join(_STATIC_DIR, "brubru-icon.png"),
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
 
 # Health check endpoint
 @app.get("/")
