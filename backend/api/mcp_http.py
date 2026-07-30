@@ -11,9 +11,11 @@ Speaks JSON-RPC 2.0 per the MCP spec
     tools/list                  — return tool catalogue (free, no debit)
     tools/call                  — invoke a tool (scope-checked + per-call debit)
 
-Authentication:
-    Authorization: Bearer brubru_live_...   (preferred)
+Authentication (any one of):
+    Authorization: Bearer brubru_live_...   (preferred, most secure)
     X-API-Key:    brubru_live_...           (also accepted, mirror REST)
+    ?key=brubru_live_...  /  ?api_key=...   (query string; for one-URL hosts
+                                             like the claude.ai web connector)
 
 The same ApiKey scopes + balance system as the REST surface. Each tool in
 services/mcp/tools.py declares its required scope (read:laws, read:ep, ...)
@@ -86,14 +88,30 @@ PROTOCOL_VERSION = "2024-11-05"  # MCP spec version we implement
 # ---------------------------------------------------------------------------
 
 def _extract_key(
-    authorization: Optional[str], x_api_key: Optional[str]
+    authorization: Optional[str],
+    x_api_key: Optional[str],
+    query_key: Optional[str] = None,
 ) -> Optional[str]:
+    """Resolve the plaintext API key from, in order of preference:
+        1. Authorization: Bearer <key>   (most secure)
+        2. X-API-Key: <key>
+        3. ?key=<key> / ?api_key=<key>   (query string)
+
+    Header auth is preferred, but many MCP hosts (notably the claude.ai web
+    custom-connector UI) only let the user enter a URL, with no field for a
+    header. For those, the key rides in the query string -- the same pattern
+    Tavily's hosted MCP uses (mcp.tavily.com/mcp/?tavilyApiKey=...). Less
+    private (URLs can land in logs/history) so OAuth is the eventual answer,
+    but it makes one-URL hosts work today.
+    """
     if authorization:
         parts = authorization.strip().split(None, 1)
         if len(parts) == 2 and parts[0].lower() == "bearer":
             return parts[1].strip()
     if x_api_key:
         return x_api_key.strip()
+    if query_key:
+        return query_key.strip()
     return None
 
 
@@ -371,7 +389,10 @@ async def mcp_endpoint(
         return _dispatch_initialize(req_id, params if isinstance(params, dict) else {})
 
     # ---- All other methods require auth ----------------------------------
-    plaintext = _extract_key(authorization, x_api_key)
+    # Query-string fallback for hosts that only accept a URL (claude.ai web
+    # custom connector, some Gemini/ChatGPT flows): ?key=... or ?api_key=...
+    query_key = request.query_params.get("key") or request.query_params.get("api_key")
+    plaintext = _extract_key(authorization, x_api_key, query_key)
     db = SessionLocal()
     try:
         api_key, user, auth_err = _resolve_api_key(db, plaintext or "")
@@ -417,5 +438,6 @@ async def mcp_probe():
         "protocolVersion": PROTOCOL_VERSION,
         "transport": "HTTP / JSON-RPC 2.0 (POST this URL)",
         "tools_available": len(TOOLS),
+        "auth": "Authorization: Bearer <key> | X-API-Key: <key> | ?key=<key>",
         "docs": "https://brubru.beresol.eu/mcp",
     }
