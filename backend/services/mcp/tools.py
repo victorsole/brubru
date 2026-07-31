@@ -39,6 +39,30 @@ _STOP = {
     "from", "into", "that", "this", "have", "will", "would", "should", "there",
     "status", "under", "tell", "explain", "show", "find", "give", "much", "many",
     "your", "they", "them", "than", "then", "here", "over", "some", "such",
+    "opportunit", "opportunities", "opportunity", "funding", "grants", "grant",
+    "call", "calls", "scheme", "schemes", "available", "open",
+}
+
+# When ask_brubru should ALSO pull live EU funding calls (not just guide facts).
+_FUNDING_INTENT = re.compile(
+    r"\b(funding|grants?|subsid\w+|calls?\s+for\s+proposals?|tenders?|"
+    r"horizon|eafrd|eagf|eco-?schemes?|cohesion\s+fund|life\s+programme|"
+    r"financing|opportunit\w+)\b",
+    re.IGNORECASE,
+)
+
+# Light domain-synonym expansion so a broad topic hits the calls' actual vocabulary
+# (calls are titled by specific topic, rarely by the umbrella word "agriculture").
+_FUNDING_SYNONYMS = {
+    "agriculture": ["agri", "farm", "rural", "food"],
+    "agricultural": ["agri", "farm", "rural"],
+    "farming": ["agri", "farm", "rural"],
+    "farmers": ["agri", "farm", "rural"],
+    "health": ["health", "medical", "pharma"],
+    "climate": ["climate", "green", "emission"],
+    "digital": ["digital", "data", "cyber"],
+    "energy": ["energy", "renewable", "hydrogen"],
+    "defence": ["defence", "security", "military"],
 }
 
 
@@ -129,6 +153,87 @@ def _get_db():
 
 
 # ---------------------------------------------------------------------------
+# Live EU funding calls (funding_opportunities, synced daily from the F&T Portal)
+# ---------------------------------------------------------------------------
+
+def _funding_rows(where_extra: str, params: Dict[str, Any], limit: int) -> List[Dict[str, Any]]:
+    db = _get_db()
+    params = {**params, "lim": limit}
+    try:
+        rows = db.execute(
+            text(
+                f"""
+                SELECT topic_id, programme, title, short_summary, status,
+                       to_char(deadline, 'YYYY-MM-DD') AS deadline,
+                       indicative_budget, budget_currency, source_url
+                FROM funding_opportunities
+                WHERE is_test = false AND lower(status) IN ('open', 'forthcoming')
+                {where_extra}
+                ORDER BY (lower(status) = 'open') DESC, deadline ASC NULLS LAST
+                LIMIT :lim
+                """
+            ),
+            params,
+        ).fetchall()
+        return [
+            {
+                "topic_id": r[0],
+                "programme": r[1],
+                "title": (r[2] or "")[:160],
+                "summary": (r[3] or "")[:280],
+                "status": r[4],
+                "deadline": r[5],
+                "budget": (f"{float(r[6]):,.0f} {r[7] or 'EUR'}" if r[6] is not None else None),
+                "url": r[8],
+            }
+            for r in rows
+        ]
+    except Exception:  # noqa: BLE001
+        return []
+    finally:
+        db.close()
+
+
+def _related_funding(query: str, limit: int = 8) -> List[Dict[str, Any]]:
+    """Live open/forthcoming EU funding calls matching a free-text query.
+
+    ask_brubru maps policy 'architecture'; without this it never surfaces the
+    actual open calls (with deadlines + apply URLs) that Brubru syncs daily. A
+    broad topic is expanded via _FUNDING_SYNONYMS because calls are titled by
+    specific topic, not the umbrella word. Falls back to the soonest open calls.
+    """
+    words = [w.lower() for w in re.findall(r"[A-Za-z]{4,}", query) if w.lower() not in _STOP]
+    terms: List[str] = []
+    for w in words:
+        terms.append(w)
+        terms.extend(_FUNDING_SYNONYMS.get(w, []))
+    seen: set = set()
+    terms = [t for t in terms if not (t in seen or seen.add(t))]
+
+    if terms:
+        ors, params = [], {}
+        for i, t in enumerate(terms[:8]):
+            k = f"t{i}"
+            params[k] = f"%{t}%"
+            ors.append(
+                f"(title ILIKE :{k} OR short_summary ILIKE :{k} OR programme ILIKE :{k} "
+                f"OR array_to_string(keywords, ' ') ILIKE :{k})"
+            )
+        rows = _funding_rows("AND (" + " OR ".join(ors) + ")", params, limit)
+        if rows:
+            return rows
+    # No term match (or no terms) -> the soonest open/forthcoming calls.
+    return _funding_rows("", {}, limit)
+
+
+def _handle_search_funding(query: str = "", limit: int = 15) -> Dict[str, Any]:
+    """Search live open + forthcoming EU funding calls."""
+    limit = max(1, min(int(limit or 15), 40))
+    items = _related_funding(query or "", limit=limit)
+    return {"query": query, "total_results": len(items), "opportunities": items}
+
+
+# ---------------------------------------------------------------------------
 # Handlers (each returns a dict; the HTTP transport JSON-encodes it)
 # ---------------------------------------------------------------------------
 
@@ -185,6 +290,16 @@ def _handle_ask_brubru(question: str) -> Dict[str, Any]:
             proc = _handle_get_procedure_status(ref)
             if "error" not in proc:
                 payload["procedure"] = proc
+        except Exception:  # noqa: BLE001
+            pass
+
+    # If the question is about money (funding/grants/calls/tenders), surface the
+    # actual OPEN calls with deadlines + apply URLs — not just the policy architecture.
+    if _FUNDING_INTENT.search(question):
+        try:
+            funding = _related_funding(question, limit=8)
+            if funding:
+                payload["funding_opportunities"] = funding
         except Exception:  # noqa: BLE001
             pass
 
@@ -511,6 +626,29 @@ TOOLS: List[McpTool] = [
         scope="read:knowledge",
         cost_micro=COST_LIGHT_MCP,
         handler=lambda query, limit=10, **_: _handle_search_eprs(query, limit),
+    ),
+    McpTool(
+        name="search_funding",
+        description=(
+            "Search LIVE open + forthcoming EU funding calls (Funding & Tenders Portal, "
+            "synced daily): Horizon Europe, CAP/agriculture, Digital Europe, CEF, "
+            "EU4Health, LIFE, Erasmus+ and more. Returns each call's topic_id, "
+            "programme, title, status, DEADLINE, budget and apply URL. Use whenever the "
+            "user asks about funding, grants, subsidies, calls for proposals or tenders "
+            "in a sector — ask_brubru also folds these in automatically for money "
+            "questions, but call this directly for a longer, focused list."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Sector or topic. E.g. 'agriculture', 'clean hydrogen', 'AI health', 'rural development'."},
+                "limit": {"type": "integer", "description": "Maximum results (default 15, capped at 40)", "default": 15, "minimum": 1, "maximum": 40},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=15, **_: _handle_search_funding(query, limit),
     ),
 ]
 
