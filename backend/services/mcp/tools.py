@@ -309,6 +309,88 @@ def _handle_search_consultations(query: str = "", limit: int = 15) -> Dict[str, 
 
 
 # ---------------------------------------------------------------------------
+# Generic gateway — reach ANY of Brubru's v2 endpoints through 2 tools, so the
+# whole API is callable without hundreds of per-endpoint tools. Runs a blocking
+# self-HTTP call (urllib, stdlib) which is safe because mcp_http runs tool
+# handlers off the event loop. Uses a server-side service key (admin, billing-
+# exempt) — the MCP caller was already authed + billed at the tool layer.
+# ---------------------------------------------------------------------------
+
+_V2_PREFIX = "/api/v2/"
+
+
+def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) -> Dict[str, Any]:
+    import os
+    import json as _json
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    base = os.environ.get("BRUBRU_PUBLIC_URL", "https://brubru-production.up.railway.app").rstrip("/")
+    qs = urllib.parse.urlencode({k: v for k, v in (params or {}).items() if v is not None})
+    url = base + path + (("?" + qs) if qs else "")
+    req = urllib.request.Request(url, method="GET")
+    if authed:
+        key = os.environ.get("BRUBRU_INTERNAL_API_KEY", "")
+        if not key:
+            return {"error": "gateway_unconfigured",
+                    "detail": "Set BRUBRU_INTERNAL_API_KEY on the server to enable the gateway."}
+        req.add_header("X-API-Key", key)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw, status = resp.read().decode("utf-8", "replace"), resp.getcode()
+    except urllib.error.HTTPError as e:
+        raw, status = e.read().decode("utf-8", "replace"), e.code
+    except Exception as exc:  # noqa: BLE001
+        return {"error": "gateway_call_failed", "detail": str(exc)[:200], "path": path}
+    try:
+        body = _json.loads(raw)
+    except Exception:  # noqa: BLE001
+        body = {"raw": raw[:2000]}
+    return {"http_status": status, "path": path, "body": body}
+
+
+def _handle_query_brubru_api(path: str = "", params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Call any Brubru v2 GET endpoint (from list_brubru_datasets) and return its JSON."""
+    p = (path or "").strip()
+    if not p:
+        return {"error": "invalid_path", "detail": "Provide a v2 path, e.g. /api/v2/funding/funding-opportunities"}
+    if not p.startswith("/"):
+        p = "/" + p
+    if not p.startswith(_V2_PREFIX):
+        p = _V2_PREFIX + p.lstrip("/")
+    if ".." in p:
+        return {"error": "invalid_path"}
+    return _self_get(p, params or {}, authed=True)
+
+
+def _handle_list_brubru_datasets(filter: str = "", limit: int = 60) -> Dict[str, Any]:
+    """Browse the whole v2 API catalogue (GET endpoints: path + summary), filterable."""
+    res = _self_get("/api/v2/openapi.json", {}, authed=False)
+    spec = res.get("body") if isinstance(res, dict) else None
+    if not isinstance(spec, dict) or "paths" not in spec:
+        return {"error": "catalogue_unavailable", "detail": res}
+    f = (filter or "").lower()
+    cap = max(1, min(int(limit or 60), 200))
+    endpoints: List[Dict[str, Any]] = []
+    for path, item in spec["paths"].items():
+        if not isinstance(item, dict) or "get" not in item:
+            continue
+        summary = (item["get"] or {}).get("summary", "")
+        if f and f not in path.lower() and f not in (summary or "").lower():
+            continue
+        endpoints.append({"path": path, "summary": summary})
+        if len(endpoints) >= cap:
+            break
+    return {
+        "filter": filter,
+        "total": len(endpoints),
+        "endpoints": endpoints,
+        "next": "Pass any 'path' to query_brubru_api with optional params to fetch the data.",
+    }
+
+
+# ---------------------------------------------------------------------------
 # Handlers (each returns a dict; the HTTP transport JSON-encodes it)
 # ---------------------------------------------------------------------------
 
@@ -800,6 +882,50 @@ TOOLS: List[McpTool] = [
         scope="read:knowledge",
         cost_micro=COST_LIGHT_MCP,
         handler=lambda query="", limit=15, **_: _handle_search_consultations(query, limit),
+    ),
+    McpTool(
+        name="list_brubru_datasets",
+        description=(
+            "Browse Brubru's FULL EU data API catalogue (900+ GET endpoints across 80+ "
+            "domains: legislation, procedures, MEPs, votes, committees, calendar, funding, "
+            "tenders, sanctions, GIs, lobbyists, consultations, trade, cohesion, agencies, "
+            "and much more). Returns matching endpoint paths + summaries. Use this to "
+            "discover what data exists, then call query_brubru_api with a path. Filter by "
+            "keyword to narrow (e.g. 'votes', 'agriculture', 'infringement')."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "filter": {"type": "string", "description": "Keyword to match on endpoint path or summary. Empty = first 60 endpoints."},
+                "limit": {"type": "integer", "default": 60, "minimum": 1, "maximum": 200},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda filter="", limit=60, **_: _handle_list_brubru_datasets(filter, limit),
+    ),
+    McpTool(
+        name="query_brubru_api",
+        description=(
+            "Call ANY Brubru v2 GET endpoint by path and return its live JSON — the "
+            "universal gateway to all of Brubru's EU data. First use list_brubru_datasets "
+            "to find the path, then call this. Example: path='/api/v2/funding/"
+            "funding-opportunities', params={'programme':'Horizon','status':'open'}. Use "
+            "when a dedicated tool (ask_brubru, search_funding, ...) doesn't cover the exact "
+            "dataset the user needs."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "A v2 path from list_brubru_datasets, e.g. '/api/v2/legislative/eur-lex/laws'."},
+                "params": {"type": "object", "description": "Optional query parameters as key/value pairs, e.g. {'q':'AI','limit':10}."},
+            },
+            "required": ["path"],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda path="", params=None, **_: _handle_query_brubru_api(path, params),
     ),
 ]
 

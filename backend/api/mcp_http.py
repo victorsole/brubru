@@ -41,6 +41,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Tuple
 
+import anyio
+
 from fastapi import APIRouter, Header, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -247,7 +249,7 @@ def _dispatch_tools_list(req_id: Any) -> Dict[str, Any]:
     return _ok(req_id, {"tools": list_tools_for_mcp()})
 
 
-def _dispatch_tools_call(
+async def _dispatch_tools_call(
     req_id: Any,
     params: Dict[str, Any],
     db: Session,
@@ -323,9 +325,12 @@ def _dispatch_tools_call(
             is_sandbox=is_sandbox,
         )
 
-    # Invoke the handler
+    # Invoke the handler OFF the event loop. Handlers do blocking DB work (and the
+    # gateway tool makes a self-HTTP call); running them on the loop would starve
+    # the single worker and would DEADLOCK the gateway's self-call. Billing above
+    # + refunds below stay on the loop with `db`; the handler opens its own session.
     try:
-        payload = invoke_tool(tool, arguments or {})
+        payload = await anyio.to_thread.run_sync(invoke_tool, tool, arguments or {})
     except TypeError as exc:
         # Bad arguments — refund (caller-side error, but the work didn't ship).
         if not is_sandbox and not is_admin and usage_evt is not None:
@@ -437,7 +442,7 @@ async def mcp_endpoint(
 
         if method == "tools/call":
             client_ip = request.client.host if request.client else None
-            return _dispatch_tools_call(
+            return await _dispatch_tools_call(
                 req_id,
                 params if isinstance(params, dict) else {},
                 db,
