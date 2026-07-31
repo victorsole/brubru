@@ -234,6 +234,81 @@ def _handle_search_funding(query: str = "", limit: int = 15) -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Domain tools — direct, safe DB reads over specific EU datasets. One shared
+# helper so each domain is a few lines. AND across query terms, OR across the
+# match columns; array columns are matched via ::text.
+# ---------------------------------------------------------------------------
+
+def _simple_search(select_cols: str, table: str, match_cols: List[str],
+                   query: str, limit: int, order_by: str = "",
+                   extra_where: str = "") -> List[Dict[str, Any]]:
+    terms = [w for w in re.findall(r"[A-Za-z0-9]{3,}", query or "") if w.lower() not in _STOP]
+    params: Dict[str, Any] = {"lim": max(1, min(int(limit or 15), 40))}
+    where = ["1=1"]
+    if extra_where:
+        where.append(extra_where)
+    if terms:
+        for i, t in enumerate(terms[:6]):
+            k = f"t{i}"
+            params[k] = f"%{t}%"
+            where.append("(" + " OR ".join(f"{c} ILIKE :{k}" for c in match_cols) + ")")
+    sql = f"SELECT {select_cols} FROM {table} WHERE " + " AND ".join(where)
+    if order_by:
+        sql += f" ORDER BY {order_by}"
+    sql += " LIMIT :lim"
+    db = _get_db()
+    try:
+        return [dict(r) for r in db.execute(text(sql), params).mappings().all()]
+    except Exception:  # noqa: BLE001
+        return []
+    finally:
+        db.close()
+
+
+def _handle_search_sanctions(query: str = "", limit: int = 15) -> Dict[str, Any]:
+    items = _simple_search(
+        "eu_ref_num, full_name, subject_type, programme, function, aliases, legal_basis_title, legal_basis_url",
+        "eu_sanctions",
+        ["full_name", "aliases::text", "programme", "function", "legal_basis_title"],
+        query, limit, order_by="legal_basis_publication_date DESC NULLS LAST",
+    )
+    return {"query": query, "total_results": len(items), "sanctions": items}
+
+
+def _handle_search_geographical_indications(query: str = "", limit: int = 15) -> Dict[str, Any]:
+    items = _simple_search(
+        "gi_identifier, protected_names, gi_type, product_type, countries, status, eurlex_url, public_url",
+        "eu_geographical_indications",
+        ["protected_names::text", "product_type", "countries::text", "cn_classification::text"],
+        query, limit, order_by="eu_protection_date DESC NULLS LAST",
+    )
+    return {"query": query, "total_results": len(items), "geographical_indications": items}
+
+
+def _handle_search_lobbyists(query: str = "", limit: int = 15) -> Dict[str, Any]:
+    items = _simple_search(
+        "identification_code, original_name, acronym, registration_category, head_office_country, "
+        "ep_accredited_number, members_fte, costs_min, costs_max, website_url, public_url",
+        "eu_transparency_register",
+        ["original_name", "acronym", "interests::text", "goals"],
+        query, limit, order_by="last_update_date DESC NULLS LAST",
+    )
+    return {"query": query, "total_results": len(items), "organisations": items}
+
+
+def _handle_search_consultations(query: str = "", limit: int = 15) -> Dict[str, Any]:
+    items = _simple_search(
+        "initiative_id, title, status, consultation_type, dg_responsible, "
+        "to_char(start_date,'YYYY-MM-DD') AS start_date, to_char(end_date,'YYYY-MM-DD') AS end_date, portal_url",
+        "public_consultations",
+        ["title", "description::text", "policy_areas::text"],
+        query, limit,
+        order_by="(lower(status) IN ('open','ongoing')) DESC, end_date DESC NULLS LAST",
+    )
+    return {"query": query, "total_results": len(items), "consultations": items}
+
+
+# ---------------------------------------------------------------------------
 # Handlers (each returns a dict; the HTTP transport JSON-encodes it)
 # ---------------------------------------------------------------------------
 
@@ -649,6 +724,82 @@ TOOLS: List[McpTool] = [
         scope="read:knowledge",
         cost_micro=COST_LIGHT_MCP,
         handler=lambda query="", limit=15, **_: _handle_search_funding(query, limit),
+    ),
+    McpTool(
+        name="search_sanctions",
+        description=(
+            "Search EU restrictive measures (sanctions): listed persons and entities, "
+            "their programme, aliases, function and the legal basis. Use for questions "
+            "about who is sanctioned, asset freezes, or a specific sanctions regime."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Name, alias, country or programme. E.g. 'Russia', 'Wagner', a person's name."},
+                "limit": {"type": "integer", "default": 15, "minimum": 1, "maximum": 40},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=15, **_: _handle_search_sanctions(query, limit),
+    ),
+    McpTool(
+        name="search_geographical_indications",
+        description=(
+            "Search EU geographical indications (PDO/PGI/TSG): protected food, wine and "
+            "spirit names, their product type, countries, status and legal instrument. "
+            "Use for questions about protected designations of origin / regional products."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Product name, type or country. E.g. 'Rioja', 'cheese', 'Spain', 'olive oil'."},
+                "limit": {"type": "integer", "default": 15, "minimum": 1, "maximum": 40},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=15, **_: _handle_search_geographical_indications(query, limit),
+    ),
+    McpTool(
+        name="search_lobbyists",
+        description=(
+            "Search the EU Transparency Register: interest representatives / lobbying "
+            "organisations, with their category, EP-accredited passes, FTEs, declared "
+            "costs and country. Use for questions about who lobbies on a topic or an org's footprint."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Organisation name, acronym or interest area. E.g. 'Google', 'pharma', 'digital'."},
+                "limit": {"type": "integer", "default": 15, "minimum": 1, "maximum": 40},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=15, **_: _handle_search_lobbyists(query, limit),
+    ),
+    McpTool(
+        name="search_consultations",
+        description=(
+            "Search EU public consultations (Have Your Say): open and past calls for "
+            "feedback on initiatives, with status, responsible DG, dates and portal URL. "
+            "Use for questions about how to give feedback or which consultations are open."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Policy topic or DG. E.g. 'AI', 'environment', 'financial services'."},
+                "limit": {"type": "integer", "default": 15, "minimum": 1, "maximum": 40},
+            },
+            "required": [],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=15, **_: _handle_search_consultations(query, limit),
     ),
 ]
 
