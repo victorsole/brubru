@@ -1,0 +1,86 @@
+-- Migration 202: RLS audit certificate — 2026-08-01
+-- Monthly sweep of all public.* tables for missing ENABLE ROW LEVEL SECURITY.
+--
+-- Sweep scope: migrations 045 → 201 (all files numbered >044 since the last
+--   sweep filed in 044_enable_rls_post_034.sql, 30 April 2026).
+--
+-- Result: NO GAPS FOUND
+--   73 new public.* tables scanned across 145 migration files.
+--   All 73 tables have ENABLE ROW LEVEL SECURITY, either:
+--     (a) in the same migration file as the CREATE TABLE, or
+--     (b) in a dedicated follow-up migration (107_efpia_scraped_items_enable_rls.sql).
+--
+-- Protected tables (73):
+--   infringement_procedures, funding_opportunities           (046)
+--   ft_calls_for_proposals, ft_calls_for_tenders,
+--     ft_funded_projects                                     (047)
+--   eu_authority_labels, brubru_dataset_catalog             (048)
+--   commission_calendar_urls                                 (050)
+--   comparator_grids, comparator_cells                      (054)
+--   eu_sanctions                                            (055)
+--   eu_trade_agreements                                     (056)
+--   eu_trade_defence_measures                               (057)
+--   eu_geographical_indications                             (058)
+--   eu_transparency_register                                (059)
+--   eu_cohesion_datasets                                    (060)
+--   eu_comitology_documents, eu_comitology_committees       (061)
+--   eu_jrc_datasets                                         (062)
+--   eu_eesc_opinions                                        (064)
+--   eu_cor_opinions                                         (065)
+--   chat_validations                                        (069)
+--   ft_programmes, ft_participants                          (075)
+--   private_guides                                          (077)
+--   api_usage_events, api_topup_events, api_sandbox_pool    (079)
+--   client_submissions                                      (083)
+--   user_alert_subscriptions                                (084)
+--   law_xref                                                (085)
+--   legissum_summaries                                      (086)
+--   proprietary_report_bodies                               (087)
+--   efpia_scraped_items                        (092 + patched by 107)
+--   oeil_procedure_titles                                   (096)
+--   ep_roll_call_votes, ep_roll_call_records                (098)
+--   oj_entries                                              (099)
+--   eu_news_items                                           (101)
+--   sync_runs                                               (108)
+--   council_register_items                                  (109)
+--   ep_emeeting_agendas                                     (110)
+--   ep_emeeting_documents                                   (111)
+--   open_data_datasets, open_data_catalogues                (112)
+--   who_is_who_departments, who_is_who_officials            (113)
+--   eu_general_publications                                 (114)
+--   emeeting_doc_text_cache, file_journey_analyses          (115)
+--   brussels_lobby_profiles, brussels_lobby_news_items      (117)
+--   brussels_lobby_news_translations                        (118)
+--   economy_bodies, economy_items                           (119)
+--   tenders_translations, ft_calls_for_proposals_translations,
+--     ft_calls_for_tenders_translations,
+--     ft_funded_projects_translations,
+--     economy_items_translations                            (133)
+--   eu_cohesion_finances                                    (136)
+--   eu_cohesion_outcomes                                    (137)
+--   eu_solidarity_fund                                      (139)
+--   eu_cap_payments                                         (140)
+--   tender_pipeline                                         (143)
+--   eic_fund_portfolio_companies                            (145)
+--   tender_files                                            (146)
+--   procedure_snapshots                                     (191)
+--   social_platforms, social_accounts                       (193)
+--   social_posts                                            (195)
+--   eurovoc_concepts                                        (199)
+--   oj_entry_translations                                   (201)
+--
+-- Reference: memory/feedback_supabase_rls.md + CLAUDE.md learned rule
+-- Previous sweeps: 034_enable_rls_all_tables.sql (15 Apr 2026)
+--                  044_enable_rls_post_034.sql    (30 Apr 2026)
+--
+-- This file contains NO DDL — it is an audit certificate only.
+-- No action required on the database.
+--
+-- Next sweep: 2026-09-01 (automated, first of month at 07:00 UTC)
+
+-- Verify after each migration deploy:
+-- SELECT c.relname, c.relrowsecurity
+--   FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+--  WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relrowsecurity = false
+--  ORDER BY c.relname;
+-- Expected: 0 rows.
