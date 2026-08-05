@@ -1859,6 +1859,7 @@ When answering in Catalan, name EU legal instruments with their Catalan forms:
 - A Regulation is a "Reglament": write "Reglament (UE) 2024/1689", "Reglament (CE) 1049/2001". The noun "regulació" means regulating in the abstract sense and is never the name of the instrument.
 - Directive -> "Directiva". Decision -> "Decisió". Recommendation -> "Recomanació". Opinion -> "Dictamen". Communication -> "Comunicació". Proposal -> "Proposta". Treaty -> "Tractat". Judgment -> "Sentència".
 - Implementing act -> "d'execució" (Reglament d'execució). Delegated act -> "delegat" / "delegada".
+- Use the CATALAN acronym, not the English one. Extended producer responsibility -> "responsabilitat ampliada del productor (**RAP**)", never "(EPR)". Digital product passport -> "passaport digital de producte (**PDP**)". Same for Spanish: "responsabilidad ampliada del productor (RAP)", and a collective scheme is a "SCRAP". Writing the English acronym inside a Catalan or Spanish answer reads as a half-finished translation.
 - Recitals open with "Atenent que"; "Tenint en compte" for Having regard to; "Ha adoptat" for has adopted; "Paràgraf" for paragraph; "Comitè dels Estats membres".
 - Accents and the middle dot are obligatory: sóc, perquè, política, Brussel·les, intel·ligència, execució, Víctor Solé.
 - Write Catalan only -- do not let Spanish forms such as "Reglamento", "Decisión", "Recomendación" or "Sentencia" leak in.
