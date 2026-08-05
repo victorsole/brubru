@@ -426,6 +426,28 @@ def generate_html(guides: list[dict]) -> str:
 </html>'''
 
 
+def _live_inventory_counts():
+    """Live counts for the data-architecture inventory sentence.
+
+    Returns None if the DB is unreachable so the generator still works offline;
+    it then patches only the guide count, which it knows from the corpus.
+    """
+    try:
+        from sqlalchemy import text
+        from core.database import SessionLocal
+        db = SessionLocal()
+        try:
+            r = db.execute(text(
+                "SELECT (SELECT count(*) FROM eu_calendar_events) AS events, "
+                "(SELECT count(*) FROM legislative_carriages) AS carriages")).fetchone()
+            return {"events": r.events, "carriages": r.carriages}
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"[WARN] live inventory counts unavailable ({e}); leaving them as-is")
+        return None
+
+
 def update_data_architecture_counts(guide_count: int, trigger_count: int) -> bool:
     """Sync hardcoded guide/trigger counts in data-architecture/index.html.
 
@@ -434,6 +456,11 @@ def update_data_architecture_counts(guide_count: int, trigger_count: int) -> boo
       2. section__intro line "519 europa.eu sources, N knowledge guides"
       3. subsection__title "N expert knowledge guides"
       4. subsection__title "N,NNN keyword triggers in 6 languages"
+      5. the "N calendar events, N knowledge guides, N legislative carriages"
+         inventory sentence, which drifted badly because nothing patched it:
+         on 5 Aug 2026 it still said 417 calendar events / 509 guides / 2,237
+         carriages while the real figures were 3,866 / 542 / 2,714. Live counts
+         are read from the DB so the sentence cannot go stale again.
     """
     data_arch = Path(__file__).parent.parent.parent / 'frontend' / 'public' / 'data-architecture' / 'index.html'
     if not data_arch.exists():
@@ -467,6 +494,19 @@ def update_data_architecture_counts(guide_count: int, trigger_count: int) -> boo
         rf'\g<1>{trigger_count:,}\g<2>',
         html,
     )
+
+    # 5. inventory sentence: "N calendar events, N knowledge guides,
+    #    N legislative carriages". Counts come from the live DB, because they
+    #    are not derivable from the guide corpus and had drifted for months.
+    counts = _live_inventory_counts()
+    if counts:
+        html = re.sub(
+            r'[\d,]+(\s+calendar events,\s*)[\d,]+(\s+knowledge guides,\s*)[\d,]+(\s+legislative)',
+            rf'{counts["events"]:,}\g<1>{guide_count}\g<2>{counts["carriages"]:,}\g<3>',
+            html)
+    else:
+        html = re.sub(r'(\s+calendar events,\s*)[\d,]+(\s+knowledge guides)',
+                      rf'\g<1>{guide_count}\g<2>', html)
 
     if html != original:
         data_arch.write_text(html, encoding='utf-8')
