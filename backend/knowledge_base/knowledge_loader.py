@@ -13133,6 +13133,34 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'obiettivi spreco alimentare': ['textile_epr_waste_framework_directive_2025_1892'],
     # NL
     'uitgebreide producentenverantwoordelijkheid textiel': ['textile_epr_waste_framework_directive_2025_1892'],
+    # Spain / Catalonia national + regional waste layer. Added 5 Aug 2026: the
+    # audit found this was the weakest area (one answer cited the REPEALED Ley
+    # 22/2011 as current, another applied a healthcare-waste decree to municipal
+    # workwear), and it is exactly what a Barcelona environmental lawyer is paid
+    # to know.
+    'ley 7/2022': ['spain_catalonia_waste_epr_national_law'],
+    'ley 7 2022 residuos': ['spain_catalonia_waste_epr_national_law'],
+    'ley de residuos espana': ['spain_catalonia_waste_epr_national_law'],
+    'ley 22/2011': ['spain_catalonia_waste_epr_national_law'],
+    'rap textil espana': ['spain_catalonia_waste_epr_national_law'],
+    'scrap textil': ['spain_catalonia_waste_epr_national_law'],
+    'real decreto textil': ['spain_catalonia_waste_epr_national_law'],
+    'registro de productores de producto': ['spain_catalonia_waste_epr_national_law'],
+    'spanish waste law': ['spain_catalonia_waste_epr_national_law'],
+    'spain textile epr': ['spain_catalonia_waste_epr_national_law'],
+    'spain extended producer responsibility': ['spain_catalonia_waste_epr_national_law'],
+    'agencia de residus de catalunya': ['spain_catalonia_waste_epr_national_law'],
+    'arc catalunya residus': ['spain_catalonia_waste_epr_national_law'],
+    'decret legislatiu 1/2009': ['spain_catalonia_waste_epr_national_law'],
+    'decret 27/1999': ['spain_catalonia_waste_epr_national_law'],
+    'normativa catalana de residus': ['spain_catalonia_waste_epr_national_law'],
+    'residus textils catalunya': ['spain_catalonia_waste_epr_national_law'],
+    'deixalleria': ['spain_catalonia_waste_epr_national_law'],
+    'punto limpio': ['spain_catalonia_waste_epr_national_law'],
+    'catalan waste law': ['spain_catalonia_waste_epr_national_law'],
+    'normativa espanyola de residus': ['spain_catalonia_waste_epr_national_law'],
+    'que ley regula los residuos en espana': ['spain_catalonia_waste_epr_national_law'],
+    'quina llei regula els residus': ['spain_catalonia_waste_epr_national_law'],
     'textielafval richtlijn': ['textile_epr_waste_framework_directive_2025_1892'],
     'doelstellingen voedselverspilling': ['textile_epr_waste_framework_directive_2025_1892'],
 }

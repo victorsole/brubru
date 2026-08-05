@@ -471,6 +471,51 @@ _LANG_MARKERS = {
     "NL": {"de", "het", "een", "van", "voor", "met", "die", "dat", "deze", "wordt"},
 }
 
+# Catalan-exclusive tokens, accent-folded. Any single hit settles the language,
+# the same way the interpunct rule does below.
+#
+# Why this exists (audit, 5 Aug 2026): the CA marker set above is 10 function
+# words, and a real Catalan query can contain NONE of them. "Quina normativa
+# catalana i espanyola de residus textils s'ha d'aplicar a un projecte pilot de
+# reciclatge d'uniformes municipals?" scored **NL**, because its only marker
+# hits were "de" twice and "de" lives in the Dutch set. The CA-versus-ES
+# tie-break further down could not rescue it either, because that block only
+# runs once CA already scores above zero. Chicken and egg.
+#
+# Membership rule: a token qualifies only if it cannot appear in EN, ES, FR, IT
+# or NL after accent folding. Deliberately EXCLUDED, and why:
+#   "i"      folds onto the English pronoun "I", which would break EN queries
+#   "pero"   CA "pero" with a grave accent folds onto ES "pero"
+#   "son"    shared with ES and FR
+#   "esta"   CA "esta" with a grave accent folds onto ES "esta"
+#   "un", "sobre", "normativa"  shared with ES, FR or IT
+_CA_DECISIVE = frozenset({
+    # determiners, pronouns and connectors with no cross-language collision
+    "amb", "aquest", "aquests", "aquesta", "aquestes", "aixo", "perque",
+    "quin", "quina", "quins", "quines", "seva", "seves", "meva", "nostra",
+    "fins", "tambe", "molt", "molts", "moltes", "nomes", "aquell", "aquella",
+    "dins", "tots", "totes", "altres", "qualsevol",
+    # domain nouns whose Spanish form differs after folding
+    "residus", "recollida", "malbaratament", "envasos", "llei", "lleis",
+    "expedient", "expedients", "termini", "terminis", "empreses",
+    "obligacions", "reglament", "estats",
+    # verb forms
+    "tindra", "tindran", "hauran", "haura", "poden", "podra",
+    "estableix", "aplicar", "seguir", "complir",
+    "soc", "som", "sou", "ets", "escric", "voldria", "podriem",
+    # -cio nouns: the Catalan singular folds to "-cio" where Spanish folds to
+    # "-cion" and French keeps "-tion". Listed explicitly rather than matched by
+    # suffix, because a bare "acio" suffix test would also catch the Spanish
+    # "espacio", "palacio" and "prefacio".
+    "relacio", "informacio", "gestio", "situacio", "aplicacio", "obligacio",
+    "regulacio", "adaptacio", "transposicio", "recollicio", "reutilitzacio",
+})
+
+# Catalan plural of the -cio nouns. "-cions" has no counterpart in the other
+# five Brubru languages: Spanish forms "-ciones", Italian "-zioni", French
+# "-tions". Safe as a suffix test where the singular is not.
+_CA_DECISIVE_SUFFIX = ("cions",)
+
 
 def _detect_query_language(text: str) -> str:
     """
@@ -499,6 +544,15 @@ def _detect_query_language(text: str) -> str:
     words = re.findall(r"\b\w+\b", folded)
     if not words:
         return "EN"
+
+    # Catalan-exclusive token, decisive on its own. Runs BEFORE scoring, because
+    # the bag-of-words pass can hand a Catalan query to Dutch on the strength of
+    # "de" alone (audit, 5 Aug 2026). See _CA_DECISIVE for the exclusion rules.
+    if any(w in _CA_DECISIVE for w in words) or any(
+        w.endswith(_CA_DECISIVE_SUFFIX) for w in words
+    ):
+        return "CA"
+
     scores = {lang: sum(1 for w in words if w in markers) / len(words)
               for lang, markers in _LANG_MARKERS.items()}
     # CA/ES disambiguation
@@ -769,7 +823,10 @@ class AIService:
             context_str = memory_context
 
         # Build system prompt
-        system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)
+        system_prompt = self._build_system_prompt(
+            is_pre_user=is_pre_user,
+            query_lang=_detect_query_language(user_message),
+        )
 
         # Build messages
         messages = self._build_messages(
@@ -1390,7 +1447,10 @@ class AIService:
                 document_content = []
 
         # Build prompts
-        system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)
+        system_prompt = self._build_system_prompt(
+            is_pre_user=is_pre_user,
+            query_lang=_detect_query_language(user_message),
+        )
         messages = self._build_messages(
             user_message=user_message,
             context=context_str,
@@ -1671,7 +1731,7 @@ class AIService:
             return message
         return message.rstrip() + f"\n\nRead Brubru's full deep-dive here: {matched}"
 
-    def _build_system_prompt(self, is_pre_user: bool = False) -> str:
+    def _build_system_prompt(self, is_pre_user: bool = False, query_lang: str = "EN") -> str:
         """
         Build system prompt for Claude.
 
@@ -1779,7 +1839,17 @@ CRITICAL - Lists of legal acts must be relevant, specific, and real:
 - Every item in a legislation list must be DIRECTLY relevant (no tangential stretches) and must be an actual EU legal act with a specific number (e.g. Regulation (EU) 2022/2065). Never list news articles, company announcements, or vague categories ("EU Translation Guidelines") as regulations.
 - If you cannot identify a specific legal act with a number, leave it out. A short accurate list beats a padded one — 1-2 genuine items is fine.
 
+CRITICAL -- A LEGAL STATEMENT NEEDS A LEGAL SOURCE:
+Statements about what the law REQUIRES, PERMITS, PROHIBITS, RECOGNISES or REPEALS are only as good as their source. A blog, a consultancy page, an NGO explainer, a vendor's marketing site or a law-firm newsletter is NOT authority for any of them.
+- Authoritative: EUR-Lex and the Publications Office (Cellar), the Official Journal, national official gazettes (BOE, DOGC, Bundesanzeiger, Legifrance, Staatsblad, Gazzetta Ufficiale), an EU institution's own page, and the act text supplied in your EU CONTEXT.
+- NOT authoritative for a legal claim: any other website, however expert-sounding, and any general recollection.
+- If the only support you have is a secondary source, you may still answer, but you MUST say the status is unconfirmed and name what would confirm it ("the consolidated text on EUR-Lex", "the transposing measure in the national gazette").
+- NEVER state that a national statute is in force, repealed or replaced unless the context contains it or you can name the amending or repealing instrument. Getting this wrong is worse than saying you do not know: a lawyer who is told a repealed statute is current will build advice on it.
+- An EMPOWERMENT to adopt delegated or implementing acts is NOT a present obligation. If a framework act lets the Commission set requirements later, say exactly that. Do not describe a future delegated act's content as if it already binds anyone.
+- Distinguish a private or industry standard from law. A certification scheme, an ISO or EN standard, or a trade-body label is evidence a party may choose to rely on, not a legal requirement, unless an act names it.
+
 CRITICAL - Maintain the user's language:
+- THE LANGUAGE OF THIS QUERY HAS ALREADY BEEN DETECTED AS: {{QUERY_LANG_NAME}}. Write your ENTIRE answer in {{QUERY_LANG_NAME}}. Do not re-decide this from the wording; the detection is authoritative and covers short queries where the language is not obvious to you.
 - If the user writes in Catalan, respond entirely in Catalan -- including follow-up questions and suggestions.
 - If the user writes in French, respond entirely in French. Same for Spanish, Italian, Dutch, German, or any other language.
 - NEVER switch to English mid-response for follow-ups, headings, or section labels when the user wrote in another language.
@@ -2242,6 +2312,18 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
         # Inject dynamic date into temporal accuracy section
         from datetime import date as _date
         prompt = prompt.replace('{today}', _date.today().isoformat())
+
+        # Inject the detected query language as a stated fact. Leaving the model
+        # to infer it produced a Catalan question answered entirely in English
+        # (audit, 5 Aug 2026: T1-ca detected CA correctly yet the answer came
+        # back in English, because the rule asked the model to decide).
+        _LANG_NAMES = {
+            "EN": "English", "ES": "Spanish", "FR": "French",
+            "IT": "Italian", "NL": "Dutch", "CA": "Catalan",
+        }
+        prompt = prompt.replace(
+            '{{QUERY_LANG_NAME}}', _LANG_NAMES.get(query_lang, "English")
+        )
 
         return prompt
 
