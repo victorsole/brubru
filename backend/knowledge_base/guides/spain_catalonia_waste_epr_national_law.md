@@ -11,6 +11,19 @@
 
 This guide covers the Spanish and Catalan layer that sits under the EU waste and circular-economy acquis. It exists because answers on this layer were the weakest area found in the 5 August 2026 query audit: one answer cited the repealed Ley 22/2011 as current, and another applied a healthcare-waste decree to municipal workwear.
 
+## Which government adopted what (get this right before anything else)
+
+| Instrument | Adopted by | Published in |
+|---|---|---|
+| Directive 2008/98/EC, Directive (EU) 2025/1892 | European Parliament and Council | Official Journal of the EU |
+| **Ley 7/2022** | **Spanish State**, Cortes Generales | **BOE** |
+| Reales Decretos per waste stream | Spanish Government (Council of Ministers) | BOE |
+| **Decret Legislatiu 1/2009** | **Generalitat de Catalunya** | **DOGC** |
+| Decret 27/1999 (healthcare waste) | Generalitat de Catalunya | DOGC |
+| Municipal ordinances | Individual town councils | municipal bulletins |
+
+**Ley 7/2022 is State law, not Catalan law.** Attributing it to the Generalitat is a confirmed defect (5 August 2026). Equally, do not attribute the Catalan decrees to Madrid.
+
 ## The instrument hierarchy, in order
 
 1. **EU**: Directive 2008/98/EC as amended. A Directive, so it binds Spain as to result and needs national transposition.
@@ -58,6 +71,9 @@ As of August 2026 the position is:
 | Wrong | Right |
 |---|---|
 | "Ley 22/2011, de residuos y economía circular" | Ley 22/2011 is **repealed**; the current law is **Ley 7/2022**. The phrase "y economía circular" belongs to Ley 7/2022's title, not to Ley 22/2011 ("y suelos contaminados") |
+| "Llei 7/2022 de la Generalitat de Catalunya" | **Ley 7/2022 is Spanish STATE law**, adopted by the Cortes Generales and published in the BOE. It is not a Generalitat de Catalunya act. The Catalan instrument is **Decret Legislatiu 1/2009**. Do not attribute State law to the Generalitat, or Catalan law to the State |
+| "Ley 7/2022 sobre gestión de residuos textiles" | Ley 7/2022 is the **general** waste and contaminated-soils law. It is **not** textile-specific; it only provides the basis on which a textile-specific Real Decreto will be built |
+| "Regulació SCRAP" / "la Regulació espanyola" | In Catalan an EU Regulation is a **Reglament**; a Spanish implementing instrument is a **Reial Decret**. "Regulació" means regulating in the abstract and is never an instrument name |
 | Decret 27/1999 governs textile waste classification | Decret 27/1999 governs **healthcare** waste. Use Decret Legislatiu 1/2009 for the general Catalan waste framework |
 | "Reglament (UE) 2023/956" for ecodesign | 2023/956 is **CBAM**. The ESPR is Regulation (EU) **2024/1781** |
 | Spanish textile EPR obligations already apply | Framework exists in Ley 7/2022; the **operative Real Decreto is pending**. EU dates: 17 June 2027 and 17 April 2028 |
