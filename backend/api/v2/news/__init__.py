@@ -222,10 +222,16 @@ async def latest_news(request: Request,
     `/{item_id}`, returning a Pydantic int-parsing error. The /news skill
     documents this path as its staleness guard, so the guard was unusable.
     """
+    def _as_date(v):
+        """economy_items.document_date is timestamptz, so max() hands back a
+        datetime. Subtracting that from date.today() raises TypeError, which is
+        how the first cut of this endpoint 500'd in production on 5 Aug 2026."""
+        return v.date() if isinstance(v, datetime) else v
+
     row = db.execute(text(
         "SELECT max(document_date) AS latest, count(*) AS n FROM economy_items "
         "WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
-    latest = row.latest if row else None
+    latest = _as_date(row.latest) if row and row.latest else None
     age = (date.today() - latest).days if latest else None
     per_body = db.execute(text(
         "SELECT body_code, max(document_date) AS latest, count(*) AS n FROM economy_items "
@@ -241,7 +247,8 @@ async def latest_news(request: Request,
         "total_items": row.n if row else 0,
         "by_body": [
             {"code": r.body_code, "name": names.get(r.body_code),
-             "latest_date": r.latest.isoformat() if r.latest else None, "item_count": r.n}
+             "latest_date": _as_date(r.latest).isoformat() if r.latest else None,
+             "item_count": r.n}
             for r in per_body
         ],
     }
