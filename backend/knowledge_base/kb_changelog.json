@@ -2,6 +2,47 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-08-05",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Added Commission IR (EU) 2026/1930: bilateral steel safeguard for FTA-partner origins",
+      "refs": [
+        "32026R1930"
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "action": "added",
+      "guide": "textile_epr_waste_framework_directive_2025_1892",
+      "title": "EU Textile EPR and Food Waste Directive",
+      "summary": "Directive (EU) 2025/1892 canon entry: textile EPR by 17 April 2028, food waste targets by 31 December 2030",
+      "refs": [
+        "32025L1892"
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "action": "added",
+      "guide": "spain_catalonia_waste_epr_national_law",
+      "title": "Spain and Catalonia: waste law and extended producer responsibility",
+      "summary": "Ley 7/2022 (which repealed Ley 22/2011), Decret Legislatiu 1/2009, ARC, SCRAP terminology, pending textile EPR Real Decreto",
+      "refs": []
+    },
+    {
+      "date": "2026-08-05",
+      "action": "added",
+      "guide": "eu_legislation_milestones_aug_sep_2026",
+      "title": "EU legislation milestones: 1 August to 15 September 2026",
+      "summary": "Every act entering into force or becoming applicable in the window, from Commission factsheet FS/26/1716",
+      "refs": [
+        "32024R1689",
+        "32025R0040",
+        "32024R2847",
+        "32023R2854"
+      ]
+    },
+    {
       "date": "2026-07-28",
       "action": "updated",
       "guide": "ai_act_amendments_2026",

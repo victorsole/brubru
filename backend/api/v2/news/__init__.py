@@ -195,6 +195,58 @@ async def list_news(
     )
 
 
+@router.get("/latest", response_model=dict, tags=["v2-news"],
+            summary="How fresh is the news data?",
+            description=(
+                "**What it does**\nReports the newest ingested news date, overall and per body, so you "
+                "can tell whether the feed is current before you trust an empty result.\n\n"
+                "**When to use it**\nWhen a date-filtered query on `/api/v2/news/all` comes back empty. "
+                "An empty window plus a stale `latest_date` here means the ingestion is behind, not that "
+                "nothing happened.\n\n**Input**\n`stale_after_days` (optional, default 3) - how many days "
+                "old the newest item may be before this endpoint reports `stale: true`.\n\n**Try it**\n"
+                "```\nGET /api/v2/news/latest\n```\n\n**You get back**\n`latest_date`, `age_days`, "
+                "`stale`, `total_items`, and `by_body` (the ten most recently updated bodies with their "
+                "newest date).\n\n**Data freshness**\nLive."))
+async def latest_news(request: Request,
+                      stale_after_days: int = Query(
+                          3, ge=1, le=60,
+                          description="Age in days beyond which the feed is reported as stale."),
+                      db: Session = Depends(get_db),
+                      user: User = Depends(api_user_with_rate_limit)):
+    """Freshness probe for the cross-body news feed.
+
+    Declared BEFORE `/{item_id}` on purpose: FastAPI matches routes in
+    declaration order, so a literal path registered after the int-typed
+    parameter route would be swallowed by it. Until 5 Aug 2026 this endpoint
+    did not exist at all, and `GET /api/v2/news/latest` fell through to
+    `/{item_id}`, returning a Pydantic int-parsing error. The /news skill
+    documents this path as its staleness guard, so the guard was unusable.
+    """
+    row = db.execute(text(
+        "SELECT max(document_date) AS latest, count(*) AS n FROM economy_items "
+        "WHERE item_type = ANY(:t)"), {"t": _NEWS_TYPES}).fetchone()
+    latest = row.latest if row else None
+    age = (date.today() - latest).days if latest else None
+    per_body = db.execute(text(
+        "SELECT body_code, max(document_date) AS latest, count(*) AS n FROM economy_items "
+        "WHERE item_type = ANY(:t) AND document_date IS NOT NULL "
+        "GROUP BY body_code ORDER BY max(document_date) DESC LIMIT 10"),
+        {"t": _NEWS_TYPES}).fetchall()
+    names = _body_names(db)
+    return {
+        "latest_date": latest.isoformat() if latest else None,
+        "age_days": age,
+        "stale": (age is None or age > stale_after_days),
+        "stale_after_days": stale_after_days,
+        "total_items": row.n if row else 0,
+        "by_body": [
+            {"code": r.body_code, "name": names.get(r.body_code),
+             "latest_date": r.latest.isoformat() if r.latest else None, "item_count": r.n}
+            for r in per_body
+        ],
+    }
+
+
 @router.get("/bodies", response_model=dict, tags=["v2-news"],
             summary="Pick-list: bodies and policy families with news counts",
             description=(
