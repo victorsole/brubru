@@ -619,6 +619,16 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             if (content.startsWith('{')) {
               try {
                 const parsed = JSON.parse(content);
+                // First event of the stream: the conversation id. Until 5 Aug
+                // 2026 the streaming path sent chat_id up but never read one
+                // back, so chatId stayed null and every message started a
+                // fresh conversation -- Chat could not remember the previous
+                // turn. Functional update: the chatId captured in this
+                // closure is stale by the time the event arrives.
+                if (parsed.type === 'chat' && typeof parsed.chat_id === 'string') {
+                  setChatId((prev) => prev ?? parsed.chat_id);
+                  continue;
+                }
                 if (parsed.type === 'status') {
                   setThinkingStatus(parsed.message);
                   continue;
@@ -679,6 +689,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                         : msg
                     )
                   );
+                  continue;
+                }
+                // Any other control event is a newer backend talking to an
+                // older bundle. Swallow it. Falling through would append the
+                // raw JSON to the answer as visible text, which is how every
+                // past event addition (citations, replace) could surface as
+                // gibberish in a stale tab.
+                if (parsed && typeof parsed.type === 'string') {
                   continue;
                 }
               } catch {

@@ -604,6 +604,15 @@ async def stream_message(
             full_response = ""
             stream_citations: list = []
 
+            # The conversation id, before any text. The non-streaming path
+            # returns it in the response body, but the SSE path never sent it,
+            # so the browser's chatId stayed null forever and every message
+            # opened a NEW conversation with no history. Result: zero
+            # multi-turn chats in 694 conversations between 1 May and 5 Aug
+            # 2026 -- every user talking to an assistant with no memory of the
+            # previous sentence.
+            yield f"data: {json.dumps({'type': 'chat', 'chat_id': str(chat_id)})}\n\n"
+
             async for chunk in ai_service.chat_stream(
                 user_message=request.message,
                 conversation_history=history,

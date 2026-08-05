@@ -34,8 +34,17 @@ class MetadataExtractor:
 
     # Regex patterns for EU-specific entities
     PATTERNS = {
-        # CELEX number: 32016R0679 (year=2016, type=R, number=0679)
-        'celex': re.compile(r'\b[0-9]{5}[A-Z][0-9]{4,}\b'),
+        # CELEX number: 32016R0679 (sector=3, year=2016, type=R, number=0679)
+        # One OR TWO letters in the type position: adopted acts are single
+        # (R/L/D/H/X) but Commission proposals are double (PC, DC, JC), and the
+        # single-letter form silently dropped every proposal reference
+        # (52026PC0429, 52020DC0098) -- known bug, fixed 5 Aug 2026.
+        # Four OR five trailing digits, deliberately: five-digit document
+        # numbers are legitimate. Verified against Cellar on 5 Aug 2026 --
+        # 32026D04226 resolves (200, legal year 2026-07-13) and the 9NNNN
+        # corrigendum form is used by 126 rows in eu_laws. An earlier draft of
+        # this pattern pinned it to exactly {4} and would have discarded both.
+        'celex': re.compile(r'\b[0-9]{5}[A-Z]{1,2}[0-9]{4,5}\b'),
 
         # Procedure reference: 2021/0106(COD)
         # Note: no trailing \b. The closing `)` is already a non-word
