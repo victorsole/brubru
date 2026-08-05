@@ -13082,6 +13082,59 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'who is the ep secretary-general': ['ep_secretariat_and_dgs'],
     'ep secretary-general': ['ep_secretariat_and_dgs'],
     'discharge procedure': ['eu_discharge_procedure_cont', 'ep_budgetary_powers_and_discharge'],
+    # Directive (EU) 2025/1892 -- textile EPR + food waste revision of the Waste
+    # Framework Directive. Added 5 Aug 2026 after the query audit found the act
+    # was absent from all 539 guides while being the central instrument for a
+    # live inbound lead (Terraqui / LIFE DPP-TEX). Six languages, per the
+    # EN + at-least-one-other rule.
+    '32025l1892': ['textile_epr_waste_framework_directive_2025_1892'],
+    '2025/1892': ['textile_epr_waste_framework_directive_2025_1892'],
+    'directive 2025 1892': ['textile_epr_waste_framework_directive_2025_1892'],
+    'textile epr': ['textile_epr_waste_framework_directive_2025_1892'],
+    'textile extended producer responsibility': ['textile_epr_waste_framework_directive_2025_1892'],
+    'extended producer responsibility for textiles': ['textile_epr_waste_framework_directive_2025_1892'],
+    'waste framework directive revision': ['textile_epr_waste_framework_directive_2025_1892'],
+    'waste framework directive textiles': ['textile_epr_waste_framework_directive_2025_1892'],
+    'textile waste directive': ['textile_epr_waste_framework_directive_2025_1892'],
+    'separate collection of textiles': ['textile_epr_waste_framework_directive_2025_1892'],
+    'annex ivc': ['textile_epr_waste_framework_directive_2025_1892'],
+    'producer responsibility organisation textiles': ['textile_epr_waste_framework_directive_2025_1892'],
+    'fibre-to-fibre recycling': ['textile_epr_waste_framework_directive_2025_1892'],
+    'fast fashion eco-modulation': ['textile_epr_waste_framework_directive_2025_1892'],
+    'ultra-fast fashion fees': ['textile_epr_waste_framework_directive_2025_1892'],
+    'used textiles fit for re-use': ['textile_epr_waste_framework_directive_2025_1892'],
+    'eu food waste targets': ['textile_epr_waste_framework_directive_2025_1892'],
+    'food waste reduction target 2030': ['textile_epr_waste_framework_directive_2025_1892'],
+    'binding food waste targets': ['textile_epr_waste_framework_directive_2025_1892'],
+    'food waste prevention programme': ['textile_epr_waste_framework_directive_2025_1892'],
+    'register of textile producers': ['textile_epr_waste_framework_directive_2025_1892'],
+    'mattress epr': ['textile_epr_waste_framework_directive_2025_1892'],
+    'when must textile epr schemes be in place': ['textile_epr_waste_framework_directive_2025_1892'],
+    'textile epr deadline': ['textile_epr_waste_framework_directive_2025_1892'],
+    'workwear textile epr': ['textile_epr_waste_framework_directive_2025_1892'],
+    # ES
+    'responsabilidad ampliada del productor textil': ['textile_epr_waste_framework_directive_2025_1892'],
+    'rap textil': ['textile_epr_waste_framework_directive_2025_1892'],
+    'residuos textiles directiva': ['textile_epr_waste_framework_directive_2025_1892'],
+    'objetivos desperdicio alimentario': ['textile_epr_waste_framework_directive_2025_1892'],
+    'recogida separada de textiles': ['textile_epr_waste_framework_directive_2025_1892'],
+    # CA
+    'responsabilitat ampliada del productor textil': ['textile_epr_waste_framework_directive_2025_1892'],
+    'residus textils': ['textile_epr_waste_framework_directive_2025_1892'],
+    'recollida separada de textils': ['textile_epr_waste_framework_directive_2025_1892'],
+    'malbaratament alimentari objectius': ['textile_epr_waste_framework_directive_2025_1892'],
+    # FR
+    'responsabilite elargie du producteur textile': ['textile_epr_waste_framework_directive_2025_1892'],
+    'dechets textiles directive': ['textile_epr_waste_framework_directive_2025_1892'],
+    'objectifs gaspillage alimentaire': ['textile_epr_waste_framework_directive_2025_1892'],
+    # IT
+    'responsabilita estesa del produttore tessile': ['textile_epr_waste_framework_directive_2025_1892'],
+    'rifiuti tessili direttiva': ['textile_epr_waste_framework_directive_2025_1892'],
+    'obiettivi spreco alimentare': ['textile_epr_waste_framework_directive_2025_1892'],
+    # NL
+    'uitgebreide producentenverantwoordelijkheid textiel': ['textile_epr_waste_framework_directive_2025_1892'],
+    'textielafval richtlijn': ['textile_epr_waste_framework_directive_2025_1892'],
+    'doelstellingen voedselverspilling': ['textile_epr_waste_framework_directive_2025_1892'],
 }
 
 

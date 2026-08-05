@@ -49,6 +49,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32022R2554': '/eucanon/2022-2554_dora/',
   '32025R0327': '/eucanon/2025-327_ehds/',
   '32025R0040': '/eucanon/2025-40_ppwr/',
+  '32025L1892': '/eucanon/2025-1892_wfd_textiles/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -78,6 +79,7 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Nimes Airport State Aid Decision (Decision (EU) 2016/633)': '/eucanon/2016-633_nimes_airport/',
   'Cineca State Aid Decision (Decision (EU) 2025/1963)': '/eucanon/2025-1963_cineca/',
   'Tirrenia State Aid Decision (Decision (EU) 2020/1412)': '/eucanon/2020-1412_tirrenia/',
+  'Textile EPR and Food Waste Package': '/eucanon/2025-1892_wfd_textiles/',
   'GDPR (Regulation (EU) 2016/679)': '/eucanon/2016-679_gdpr/',
   'Digital Services Act (Regulation (EU) 2022/2065)': '/eucanon/2022-2065_dsa/',
   'Digital Markets Act (Regulation (EU) 2022/1925)': '/eucanon/2022-1925_dma/',

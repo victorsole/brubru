@@ -95,6 +95,7 @@ const ROUTE_META = {
   '/eucanon/2022-2554_dora/':                { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-327_ehds/':                 { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-40_ppwr/':                  { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2025-1892_wfd_textiles/':        { priority: 0.9, changefreq: 'monthly' },
   '/legislacio-ue-catala/':         { priority: 0.9, changefreq: 'daily'   },
   '/main/':                         { priority: 0.9, changefreq: 'daily'   },
   '/my-eu-bubble/':                 { priority: 0.9, changefreq: 'daily'   },

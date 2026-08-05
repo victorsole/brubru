@@ -870,6 +870,17 @@ LAW_PACKAGES = {
         'startup_focused': True,
         'affordability': 'Essential GDPR + NIS2 compliance without expensive DPO hiring'
     },
+
+    'textile_epr': {
+        'name': 'Textile EPR and Food Waste Package',
+        'primary_celex': '32025L1892',  # Dir (EU) 2025/1892 amending the Waste Framework Directive
+        'description': 'Extended producer responsibility for textile, textile-related and footwear products, plus binding food waste reduction targets, introduced into Directive 2008/98/EC',
+        'applicability': 'Producers, importers, distributors and distance sellers of apparel, home textiles and footwear (Annex IVc CN codes); producer responsibility organisations; online platforms and fulfilment service providers; social economy collectors; food processors, retailers and food service operators',
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': ['textile epr', 'extended producer responsibility', 'waste framework directive', 'textile waste', '2025/1892', 'food waste', 'fibre-to-fibre recycling', 'separate collection of textiles'],
+        'date_from': 2025
+    },
 }
 
 
