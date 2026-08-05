@@ -1,6 +1,7 @@
 // frontend/src/components/feedback/feedback_form.tsx
 import { useState } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './feedback_form.css';
 
@@ -11,6 +12,7 @@ interface FeedbackFormProps {
 }
 
 export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
+  const { t } = useTranslation();
   const { token } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -100,7 +102,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
       }, 2000);
     } catch (err: any) {
       console.error('Failed to submit feedback:', err);
-      setError(err.response?.data?.detail || 'Failed to submit feedback. Please try again.');
+      setError(err.response?.data?.detail || t('feedback.form.submitError', 'Failed to submit feedback. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +114,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
         className="feedback-form__trigger btn btn--secondary"
         onClick={() => setIsOpen(true)}
       >
-        Submit Feedback
+        {t('feedback.form.submit', 'Submit Feedback')}
       </button>
     );
   }
@@ -120,11 +122,11 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
   return (
     <div className="feedback-form">
       <div className="feedback-form__header">
-        <h3>Send Feedback</h3>
+        <h3>{t('feedback.form.heading', 'Send Feedback')}</h3>
         <button
           className="feedback-form__close"
           onClick={() => setIsOpen(false)}
-          aria-label="Close feedback form"
+          aria-label={t('feedback.form.closeAria', 'Close feedback form')}
         >
           ×
         </button>
@@ -133,15 +135,15 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
       {submitted ? (
         <div className="feedback-form__success">
           <div className="feedback-form__success-icon">✓</div>
-          <h4>Thank you for your feedback!</h4>
-          <p>We appreciate you taking the time to help us improve Brubru.</p>
+          <h4>{t('feedback.form.successTitle', 'Thank you for your feedback!')}</h4>
+          <p>{t('feedback.form.successBody', 'We appreciate you taking the time to help us improve Brubru.')}</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="feedback-form__content">
           {/* Feedback Type */}
           <div className="feedback-form__field">
             <label htmlFor="feedback_type">
-              Type <span className="feedback-form__required">*</span>
+              {t('feedback.form.typeLabel', 'Type')} <span className="feedback-form__required">*</span>
             </label>
             <select
               id="feedback_type"
@@ -151,17 +153,17 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
               required
               disabled={loading}
             >
-              <option value="general">General Feedback</option>
-              <option value="bug">Bug Report</option>
-              <option value="feature_request">Feature Request</option>
-              <option value="other">Other</option>
+              <option value="general">{t('feedback.form.typeGeneral', 'General Feedback')}</option>
+              <option value="bug">{t('feedback.form.typeBug', 'Bug Report')}</option>
+              <option value="feature_request">{t('feedback.form.typeFeature', 'Feature Request')}</option>
+              <option value="other">{t('feedback.form.typeOther', 'Other')}</option>
             </select>
           </div>
 
           {/* Title */}
           <div className="feedback-form__field">
             <label htmlFor="title">
-              Title <span className="feedback-form__required">*</span>
+              {t('feedback.form.titleLabel', 'Title')} <span className="feedback-form__required">*</span>
             </label>
             <input
               id="title"
@@ -169,7 +171,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
               type="text"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Brief summary of your feedback"
+              placeholder={t('feedback.form.titlePlaceholder', 'Brief summary of your feedback')}
               minLength={5}
               maxLength={200}
               required
@@ -180,14 +182,14 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
           {/* Description */}
           <div className="feedback-form__field">
             <label htmlFor="description">
-              Description <span className="feedback-form__required">*</span>
+              {t('feedback.form.descriptionLabel', 'Description')} <span className="feedback-form__required">*</span>
             </label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Please provide detailed information..."
+              placeholder={t('feedback.form.descriptionPlaceholder', 'Please provide detailed information...')}
               rows={6}
               minLength={10}
               required
@@ -197,14 +199,14 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
 
           {/* Category (Optional) */}
           <div className="feedback-form__field">
-            <label htmlFor="category">Category (optional)</label>
+            <label htmlFor="category">{t('feedback.form.categoryLabel', 'Category (optional)')}</label>
             <input
               id="category"
               name="category"
               type="text"
               value={formData.category}
               onChange={handleChange}
-              placeholder="e.g., UI/UX, Performance, Security"
+              placeholder={t('feedback.form.categoryPlaceholder', 'e.g., UI/UX, Performance, Security')}
               disabled={loading}
             />
           </div>
@@ -212,14 +214,14 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
           {/* Affected Feature (for bugs) */}
           {formData.feedback_type === 'bug' && (
             <div className="feedback-form__field">
-              <label htmlFor="affected_feature">Affected Feature</label>
+              <label htmlFor="affected_feature">{t('feedback.form.affectedFeatureLabel', 'Affected Feature')}</label>
               <input
                 id="affected_feature"
                 name="affected_feature"
                 type="text"
                 value={formData.affected_feature}
                 onChange={handleChange}
-                placeholder="Which feature is affected?"
+                placeholder={t('feedback.form.affectedFeaturePlaceholder', 'Which feature is affected?')}
                 disabled={loading}
               />
             </div>
@@ -227,7 +229,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
 
           {/* Screenshot URL (Optional) */}
           <div className="feedback-form__field">
-            <label htmlFor="screenshot_url">Screenshot URL (optional)</label>
+            <label htmlFor="screenshot_url">{t('feedback.form.screenshotLabel', 'Screenshot URL (optional)')}</label>
             <input
               id="screenshot_url"
               name="screenshot_url"
@@ -237,7 +239,7 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
               placeholder="https://..."
               disabled={loading}
             />
-            <small>Upload your screenshot to a service like Imgur and paste the URL here</small>
+            <small>{t('feedback.form.screenshotHelp', 'Upload your screenshot to a service like Imgur and paste the URL here')}</small>
           </div>
 
           {/* Error Message */}
@@ -255,14 +257,14 @@ export const FeedbackForm = ({ onSuccess }: FeedbackFormProps) => {
               onClick={() => setIsOpen(false)}
               disabled={loading}
             >
-              Cancel
+              {t('common.cancel', 'Cancel')}
             </button>
             <button
               type="submit"
               className="btn btn--primary btn--small"
               disabled={loading}
             >
-              {loading ? 'Submitting...' : 'Submit Feedback'}
+              {loading ? t('feedback.form.submitting', 'Submitting...') : t('feedback.form.submit', 'Submit Feedback')}
             </button>
           </div>
         </form>

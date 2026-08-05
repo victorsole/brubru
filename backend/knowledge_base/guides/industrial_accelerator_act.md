@@ -1,6 +1,11 @@
 # Industrial Accelerator Act (COM(2026)100)
 
 ## QUICK FACTS
+- **LATEST (adopted Wednesday 15 July 2026, announced Monday 20 July 2026 — EESC OPINION):** The **European Economic and Social Committee adopted its mandatory opinion on the Industrial Accelerator Act** at its **607th plenary session on 15 July 2026** (reference **INT/1119-EESC-2026-00379-00-00-AC**; Bureau decision 20 January 2026; section: Single Market, Production and Consumption (INT)). **Rapporteur: Konstantinos Diamantouros** (Employers' Group I, Greece). Referral: **COM(2026) 100 final — 2026/0068(COD)** (this file). The EESC press release of 20 July frames it as backing "Made in Europe" **but calling for stricter safeguards and more focus on workers**. Key points from the adopted opinion:
+  - **Welcomes** the IAA as a timely response to declining industrial competitiveness, external economic pressure, and the need to strengthen Europe's strategic industrial base.
+  - **Supports the 20%-of-GDP-by-2035 manufacturing objective**, but asks for **complementary indicators** on decarbonisation, electrification, resource efficiency, quality jobs and strategic autonomy — i.e. not a single headline metric.
+  - **Endorses faster and more efficient permitting**, including digital procedures and acceleration areas, **provided** environmental safeguards, public participation, access to justice and regional balance are fully respected.
+  The EESC opinion is **consultative, not binding**, but on a mandatory referral it is a formal step in the file and a reliable read on employer/worker/civil-society positioning ahead of the ITRE committee stage. Note the EESC opinion arrives while the lead ITRE committee (rapporteur **Christophe Grudler**, Renew, France) is still in the pre-report phase.
 - Full name: Industrial Accelerator Act
 - Reference: COM(2026)100, procedure 2026/0068(COD)
 - OEIL: https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)

@@ -25,6 +25,7 @@ import { PortalActivityPanel } from './portal_activity_panel';
 import { PipelineView } from './pipeline_view';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import './tenderator_dashboard.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -107,7 +108,7 @@ const formatValue = (value: number | null, currency: string = 'EUR'): string => 
   return `${value} ${currency}`;
 };
 
-const formatNumber = (n: number): string => n.toLocaleString('en-GB');
+const formatNumber = (n: number): string => n.toLocaleString(uiDateLocale());
 
 const renderDelta = (wow: number, t: any): { label: string; cls: string } => {
   if (wow > 0) return { label: `+${wow} ${t('tenderator.dashboard.thisWeek')}`, cls: 'tenderator-dashboard__delta--up' };
@@ -608,7 +609,7 @@ export const TenderatorDashboard = ({
             title={t('tenderator.dashboard.askBrubruAboutMarket')}
           >
             <span className="mdi mdi-message-outline" aria-hidden="true" />
-            {t('tenderator.dashboard.askBrubru')}
+            {t('tenderator.dashboard.askBrubruLabel')}
           </a>
         </section>
       )}

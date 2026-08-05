@@ -9,6 +9,7 @@
 
 import { create } from 'zustand';
 import axios from 'axios';
+import i18n from '../i18n/config';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
@@ -386,37 +387,47 @@ export const useCommitteeWork = create<CommitteeWorkState>((set, get) => ({
 
 // Procedure type display names and colors. Keyed by string so any OEIL code
 // resolves; callers fall back to the raw code for anything not listed.
+// `name` is a lazy getter so the label follows the active UI language.
+const procType = (key: string, fallback: string, color: string, score: number) => ({
+  get name(): string { return i18n.t(key, { defaultValue: fallback }); },
+  color,
+  score,
+});
 export const PROCEDURE_TYPE_INFO: Record<string, { name: string; color: string; score: number }> = {
-  COD: { name: 'Ordinary legislative', color: '#0066cc', score: 100 },
-  INL: { name: 'Legislative initiative', color: '#0066cc', score: 90 },
-  APP: { name: 'Consent', color: '#7c3aed', score: 80 },
-  CNS: { name: 'Consultation', color: '#059669', score: 70 },
-  ACI: { name: 'Interinstitutional agreement', color: '#6b7280', score: 65 },
-  BUD: { name: 'Budget', color: '#0891b2', score: 60 },
-  GBD: { name: 'General budget', color: '#0891b2', score: 60 },
-  BUI: { name: 'Budget initiative', color: '#0891b2', score: 58 },
-  DEC: { name: 'Discharge', color: '#0891b2', score: 58 },
-  NLE: { name: 'Agreement / appointment', color: '#d97706', score: 50 },
-  RSP: { name: 'Resolution', color: '#8b5cf6', score: 45 },
-  RSO: { name: 'Internal resolution', color: '#8b5cf6', score: 42 },
-  INI: { name: 'Own-initiative', color: '#6b7280', score: 40 },
-  COS: { name: 'Strategy paper', color: '#6b7280', score: 40 },
-  DCE: { name: 'Written declaration', color: '#9ca3af', score: 38 },
-  DEA: { name: 'Delegated-act scrutiny', color: '#94a3b8', score: 30 },
-  RPS: { name: 'Implementing-act scrutiny', color: '#94a3b8', score: 30 },
-  REG: { name: 'Rules of Procedure', color: '#9ca3af', score: 25 },
-  IMM: { name: 'MEP immunity', color: '#9ca3af', score: 15 },
+  COD: procType('committeeWork.typeCod', 'Ordinary legislative', '#0066cc', 100),
+  INL: procType('committeeWork.typeInl', 'Legislative initiative', '#0066cc', 90),
+  APP: procType('committeeWork.typeApp', 'Consent', '#7c3aed', 80),
+  CNS: procType('committeeWork.typeCns', 'Consultation', '#059669', 70),
+  ACI: procType('committeeWork.typeAci', 'Interinstitutional agreement', '#6b7280', 65),
+  BUD: procType('committeeWork.typeBud', 'Budget', '#0891b2', 60),
+  GBD: procType('committeeWork.typeGbd', 'General budget', '#0891b2', 60),
+  BUI: procType('committeeWork.typeBui', 'Budget initiative', '#0891b2', 58),
+  DEC: procType('committeeWork.typeDec', 'Discharge', '#0891b2', 58),
+  NLE: procType('committeeWork.typeNle', 'Agreement / appointment', '#d97706', 50),
+  RSP: procType('committeeWork.typeRsp', 'Resolution', '#8b5cf6', 45),
+  RSO: procType('committeeWork.typeRso', 'Internal resolution', '#8b5cf6', 42),
+  INI: procType('committeeWork.typeIni', 'Own-initiative', '#6b7280', 40),
+  COS: procType('committeeWork.typeCos', 'Strategy paper', '#6b7280', 40),
+  DCE: procType('committeeWork.typeDce', 'Written declaration', '#9ca3af', 38),
+  DEA: procType('committeeWork.typeDea', 'Delegated-act scrutiny', '#94a3b8', 30),
+  RPS: procType('committeeWork.typeRps', 'Implementing-act scrutiny', '#94a3b8', 30),
+  REG: procType('committeeWork.typeReg', 'Rules of Procedure', '#9ca3af', 25),
+  IMM: procType('committeeWork.typeImm', 'MEP immunity', '#9ca3af', 15),
 };
 
-// Status display names and colors
+// Status display names and colors (lazy-translated, same pattern as above)
+const statusInfo = (key: string, fallback: string, color: string) => ({
+  get name(): string { return i18n.t(key, { defaultValue: fallback }); },
+  color,
+});
 export const STATUS_INFO: Record<CommitteeWorkStatus, { name: string; color: string }> = {
-  in_committee: { name: 'In Committee', color: '#3b82f6' },
-  awaiting_vote: { name: 'Awaiting Vote', color: '#f59e0b' },
-  tabled: { name: 'Tabled', color: '#10b981' },
-  adopted: { name: 'Adopted', color: '#059669' },
-  rejected: { name: 'Rejected', color: '#ef4444' },
-  withdrawn: { name: 'Withdrawn', color: '#6b7280' },
-  pending: { name: 'Pending', color: '#8b5cf6' },
-  completed: { name: 'Completed', color: '#10b981' },
-  unknown: { name: 'Unknown', color: '#9ca3af' },
+  in_committee: statusInfo('committeeWork.statusInCommittee', 'In Committee', '#3b82f6'),
+  awaiting_vote: statusInfo('committeeWork.statusAwaitingVote', 'Awaiting Vote', '#f59e0b'),
+  tabled: statusInfo('amendmentsTab.statusTabled', 'Tabled', '#10b981'),
+  adopted: statusInfo('amendmentsTab.statusAdopted', 'Adopted', '#059669'),
+  rejected: statusInfo('amendmentsTab.statusRejected', 'Rejected', '#ef4444'),
+  withdrawn: statusInfo('amendmentsTab.statusWithdrawn', 'Withdrawn', '#6b7280'),
+  pending: statusInfo('committeeWork.statusPending', 'Pending', '#8b5cf6'),
+  completed: statusInfo('committeeWork.statusCompleted', 'Completed', '#10b981'),
+  unknown: statusInfo('committeeWork.statusUnknown', 'Unknown', '#9ca3af'),
 };

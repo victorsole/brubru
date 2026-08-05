@@ -24,6 +24,38 @@ export const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
   nl: 'Nederlands',
 };
 
+// BCP 47 locales for date/number formatting, keyed by UI language.
+// Used instead of hardcoded 'en-GB' so "22 July 2026" renders as
+// "22 de juliol del 2026" when the app is in Catalan, etc.
+const DATE_LOCALES: Record<SupportedLanguage, string> = {
+  en: 'en-GB',
+  es: 'es-ES',
+  ca: 'ca-ES',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  nl: 'nl-NL',
+};
+
+/** Current BCP 47 locale for toLocaleDateString / Intl formatters. */
+export const uiDateLocale = (): string => {
+  const lang = (i18n.language || 'en').split('-')[0] as SupportedLanguage;
+  return DATE_LOCALES[lang] || 'en-GB';
+};
+
+/**
+ * Apply a user's stored profile language to the UI. Called after login /
+ * auth restore so `users.language` actually drives the interface instead
+ * of silently falling back to English. No-ops on unknown or already-active
+ * languages.
+ */
+export const applyUserLanguage = (lang: string | null | undefined): void => {
+  if (!lang) return;
+  const code = lang.toLowerCase().split('-')[0] as SupportedLanguage;
+  if (!SUPPORTED_LANGUAGES.includes(code)) return;
+  if (i18n.language === code) return;
+  void i18n.changeLanguage(code);
+};
+
 // Initialize i18next with static resources
 i18n
   .use(LanguageDetector)

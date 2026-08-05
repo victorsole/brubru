@@ -7,6 +7,7 @@ import Icon from '@mdi/react';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import './amendment_sidebar.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
 
@@ -80,7 +81,7 @@ export const AmendmentSidebar = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to export amendments');
+        throw new Error(errorData.detail || t('amendator.sidebar.exportFailed', 'Failed to export amendments'));
       }
 
       // Get the blob from response
@@ -182,7 +183,7 @@ export const AmendmentSidebar = ({
 
               {/* Date */}
               <span className="amendment-grid__date">
-                {new Date(amendment.createdAt).toLocaleDateString('en-GB', {
+                {new Date(amendment.createdAt).toLocaleDateString(uiDateLocale(), {
                   day: '2-digit',
                   month: 'short',
                   year: 'numeric',

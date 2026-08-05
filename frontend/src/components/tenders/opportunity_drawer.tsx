@@ -13,6 +13,7 @@ import { useAuth } from '../../hooks/use_auth';
 import type { UnifiedOpportunity } from './unified_opportunity_feed';
 import { ClientScorecardPanel } from './client_scorecard_panel';
 import './opportunity_drawer.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -145,7 +146,7 @@ const formatValue = (value: number | null, currency: string = 'EUR'): string | n
 const formatDate = (iso: string | null): string | null => {
   if (!iso) return null;
   try {
-    return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    return new Date(iso).toLocaleDateString(uiDateLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
   } catch {
     return iso;
   }

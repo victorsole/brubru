@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { mdiMagnify, mdiClose, mdiChatProcessingOutline } from '@mdi/js';
 import './policy_preferences_selector.css';
@@ -32,6 +33,7 @@ export const PolicyPreferencesSelector = ({
   selectedPolicies,
   onUpdate
 }: PolicyPreferencesSelectorProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selected, setSelected] = useState<string[]>(selectedPolicies || []);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
@@ -133,15 +135,15 @@ export const PolicyPreferencesSelector = ({
           className="policy-preferences__search-input"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search policies, e.g. agriculture, trade defence, drones, refugees…"
-          aria-label="Search policy areas"
+          placeholder={t('profile.policies.searchPlaceholder', 'Search policies, e.g. agriculture, trade defence, drones, refugees…')}
+          aria-label={t('profile.policies.searchAria', 'Search policy areas')}
         />
         {query.length > 0 && (
           <button
             type="button"
             className="policy-preferences__search-clear"
             onClick={() => setQuery('')}
-            aria-label="Clear search"
+            aria-label={t('profile.policies.clearSearch', 'Clear search')}
           >
             <Icon path={mdiClose} size={0.75} />
           </button>
@@ -154,12 +156,15 @@ export const PolicyPreferencesSelector = ({
         onClick={askBrubru}
       >
         <Icon path={mdiChatProcessingOutline} size={0.8} />
-        <span>Can&rsquo;t find what you are looking for? Talk to Brubru!</span>
+        <span>{t('profile.policies.askBrubru', "Can't find what you are looking for? Talk to Brubru!")}</span>
       </button>
 
       <div className="policy-preferences__header">
         <p className="policy-preferences__count">
-          Selected: <strong>{selected.length}</strong> policy {selected.length === 1 ? 'area' : 'areas'}
+          {t('profile.policies.selectedLabel', 'Selected:')} <strong>{selected.length}</strong>{' '}
+          {selected.length === 1
+            ? t('profile.policies.area', 'policy area')
+            : t('profile.policies.areas', 'policy areas')}
         </p>
         <div className="policy-preferences__header-actions">
           <button
@@ -167,14 +172,14 @@ export const PolicyPreferencesSelector = ({
             className="policy-preferences__select-all"
             disabled={selected.length === totalPolicies}
           >
-            Select All
+            {t('profile.policies.selectAll', 'Select All')}
           </button>
           {selected.length > 0 && (
             <button
               onClick={clearAll}
               className="policy-preferences__clear"
             >
-              Clear All
+              {t('profile.policies.clearAll', 'Clear All')}
             </button>
           )}
         </div>
@@ -183,10 +188,10 @@ export const PolicyPreferencesSelector = ({
       {isSearching && filteredCategories.length === 0 ? (
         <div className="policy-preferences__no-results">
           <p>
-            No policy areas match <strong>&ldquo;{query.trim()}&rdquo;</strong>.
+            {t('profile.policies.noMatch', 'No policy areas match')} <strong>&ldquo;{query.trim()}&rdquo;</strong>.
           </p>
           <p className="policy-preferences__no-results-hint">
-            Try a broader term, or clear the search to browse all areas.
+            {t('profile.policies.noMatchHint', 'Try a broader term, or clear the search to browse all areas.')}
           </p>
         </div>
       ) : (
@@ -214,7 +219,7 @@ export const PolicyPreferencesSelector = ({
                         {category.description}
                         {categorySelectedCount > 0 && (
                           <span className="policy-preferences__category-selected">
-                            {' '}• {categorySelectedCount} selected
+                            {' '}• {t('profile.policies.categorySelected', '{{count}} selected', { count: categorySelectedCount })}
                           </span>
                         )}
                       </span>
@@ -261,7 +266,7 @@ export const PolicyPreferencesSelector = ({
 
       {selected.length > 0 && (
         <div className="policy-preferences__selected-tags">
-          <h4>Your selected policy areas:</h4>
+          <h4>{t('profile.policies.selectedTitle', 'Your selected policy areas:')}</h4>
           <div className="policy-preferences__tags">
             {selected.map((policyName) => (
               <span key={policyName} className="policy-preferences__tag">
@@ -269,7 +274,7 @@ export const PolicyPreferencesSelector = ({
                 <button
                   onClick={() => togglePolicy(policyName)}
                   className="policy-preferences__tag-remove"
-                  aria-label={`Remove ${policyName}`}
+                  aria-label={t('profile.policies.remove', 'Remove {{name}}', { name: policyName })}
                 >
                   ×
                 </button>

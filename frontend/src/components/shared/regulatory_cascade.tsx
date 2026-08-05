@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
 import {
@@ -26,6 +27,7 @@ import {
 
 import { useAuth } from '../../hooks/use_auth';
 import './regulatory_cascade.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -81,7 +83,7 @@ interface RegulatoryCascadeProps {
 const formatDate = (iso: string | null) => {
   if (!iso) return '';
   try {
-    return new Date(iso).toLocaleDateString('en-GB', {
+    return new Date(iso).toLocaleDateString(uiDateLocale(), {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -148,6 +150,7 @@ const SecondaryActRow = ({ act }: { act: SecondaryAct }) => {
 };
 
 export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenRelevant = false }: RegulatoryCascadeProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<CascadeData | null>(null);
@@ -182,7 +185,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
   if (isLoading) {
     return (
       <section className="regulatory-cascade regulatory-cascade--loading">
-        <p>Composing the regulatory cascade…</p>
+        <p>{t('shared.composeRegCascade', 'Composing the regulatory cascade…')}</p>
       </section>
     );
   }
@@ -196,12 +199,12 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
   return (
     <section
       className="regulatory-cascade"
-      aria-label="Regulatory cascade for this file"
+      aria-label={t('shared.regCascadeAria', 'Regulatory cascade for this file')}
     >
       <header className="regulatory-cascade__header">
         <Icon path={mdiSitemap} size={1} color="#563ea3" />
         <div>
-          <h3>Regulatory cascade</h3>
+          <h3>{t('shared.regCascade', 'Regulatory cascade')}</h3>
           <p className="regulatory-cascade__subtitle">
             What else hangs off this file: implementing acts, delegated acts,
             and related in-flight work.
@@ -213,10 +216,10 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__empty">
           <Icon path={mdiInformationOutline} size={0.9} color="#666" />
           <span>
-            No secondary acts or recent related files found.
+            {t('cascade.noSecondaryActs', 'No secondary acts or recent related files found.')}{' '}
             {data.celex_numbers.length === 0
-              ? ' This file is still pre-adoption — secondary acts emerge only after the primary act is adopted.'
-              : ' Brubru will surface them automatically once they are published.'}
+              ? t('cascade.preAdoptionNote', 'This file is still pre-adoption: secondary acts emerge only after the primary act is adopted.')
+              : t('cascade.autoSurfaceNote', 'Brubru will surface them automatically once they are published.')}
           </span>
         </div>
       )}
@@ -248,7 +251,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {data.implementing_acts.length > 0 && (
         <div className="regulatory-cascade__branch">
-          <h4>Implementing acts ({data.implementing_acts.length})</h4>
+          <h4>{t('cascade.implementingActs', 'Implementing acts')} ({data.implementing_acts.length})</h4>
           <ul className="regulatory-cascade__list">
             {data.implementing_acts.map((act) => (
               <SecondaryActRow key={act.id} act={act} />
@@ -259,7 +262,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {data.delegated_acts.length > 0 && (
         <div className="regulatory-cascade__branch">
-          <h4>Delegated acts ({data.delegated_acts.length})</h4>
+          <h4>{t('cascade.delegatedActs', 'Delegated acts')} ({data.delegated_acts.length})</h4>
           <ul className="regulatory-cascade__list">
             {data.delegated_acts.map((act) => (
               <SecondaryActRow key={act.id} act={act} />
@@ -270,7 +273,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
 
       {hasRelated && (
         <div className="regulatory-cascade__branch">
-          <h4>Related in-flight files ({data.related_files.length})</h4>
+          <h4>{t('cascade.relatedFiles', 'Related in-flight files')} ({data.related_files.length})</h4>
           <ul className="regulatory-cascade__related-list">
             {data.related_files.map((r) => (
               <li key={r.carriage_id} className="regulatory-cascade__related">
@@ -296,7 +299,7 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
                   {r.lead_committee && <span>{r.lead_committee}</span>}
                   {r.shared_policy_areas.length > 0 && (
                     <span className="regulatory-cascade__related-tags">
-                      shares: {r.shared_policy_areas.slice(0, 3).join(', ')}
+                      {t('cascade.shares', 'shares:')} {r.shared_policy_areas.slice(0, 3).join(', ')}
                     </span>
                   )}
                 </div>
@@ -311,11 +314,9 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>
-            <strong>Member State transposition deadlines</strong>
+            <strong>{t('shared.memberStateDeadlines', 'Member State transposition deadlines')}</strong>
             <p>
-              Brubru does not yet ingest national transposition data for every
-              Member State. When this data is available, deadlines will appear
-              here per country.
+              {t('cascade.transpositionExplainer', 'Brubru does not yet ingest national transposition data for every Member State. When this data is available, deadlines will appear here per country.')}
             </p>
           </div>
         </div>
@@ -326,11 +327,9 @@ export const RegulatoryCascade = ({ procedureRef, isDirective = false, cenReleva
         <div className="regulatory-cascade__not-yet">
           <Icon path={mdiAlertCircleOutline} size={0.85} color="#b56500" />
           <div>
-            <strong>CEN / CENELEC standards</strong>
+            <strong>{t('shared.cenStandards', 'CEN / CENELEC standards')}</strong>
             <p>
-              Standard revisions linked to this act are not yet ingested. Once
-              connected to the CEN/CENELEC work programme, related standard
-              revisions will appear here.
+              {t('cascade.cenExplainer', 'Standard revisions linked to this act are not yet ingested. Once connected to the CEN/CENELEC work programme, related standard revisions will appear here.')}
             </p>
           </div>
         </div>

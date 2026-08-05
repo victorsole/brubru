@@ -120,7 +120,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
         );
 
         if (!contentResponse.ok) {
-          throw new Error('Failed to fetch document content');
+          throw new Error(t('amendator.upload.errorFetchContent', 'Failed to fetch document content'));
         }
 
         const content: UploadedDocument = await contentResponse.json();

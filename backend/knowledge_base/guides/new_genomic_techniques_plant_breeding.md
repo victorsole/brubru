@@ -11,7 +11,9 @@
 - Responsible Commissioner: Christophe Hansen (Agriculture and Food) and Olivér Várhelyi (Health and Animal Welfare)
 - Legal basis: Article 43(2) TFEU (Common Agricultural Policy) and Article 114 TFEU (internal market)
 - Source: https://www.consilium.europa.eu/en/policies/new-genomic-techniques-for-plant-breeding/
-- **LATEST (Wednesday 17 June 2026 — plenary vote this week + companion seeds/PRM deal)**: The **NGT Regulation (2023/0226(COD))** reached its EP final plenary stage in Strasbourg during the 15-18 June session, the last EP step before signature and OJ publication (following the Council's 21 April 2026 adoption). ENVI held a **press conference on Wednesday 17 June at 14:00 CEST**. The text confirms the two-tier classification (NGT Category 1 plants treated like conventionally-bred; NGT Category 2 keep GMO-style requirements). **Confirm the final-vote tally against the EP texts-adopted record before asserting the file is closed.** Companion development: the Commission **welcomed a political agreement on the revision of the rules on seeds and other plant reproductive materials (PRM)** (DG SANTE, 16 June 2026) — the co-legislators reached a provisional deal that, per trade-press framing ("EU deal saves farmer seed swaps with strings attached"), preserves farmer seed exchanges subject to conditions. The PRM file travels alongside NGT in the plant-reproductive-material reform package. Sources: EP plenary newsletter 15-18 June 2026; ENVI press notice (17 June 2026); DG SANTE press release (16 June 2026).
+- **Adopted act**: **Regulation (EU) 2026/1388** of the European Parliament and of the Council of 17 June 2026 on plants obtained by certain new genomic techniques and their products, and amending Regulation (EU) 2017/625 (Official Controls). CELEX **32026R1388**; ELI http://data.europa.eu/eli/reg/2026/1388/oj. Published in the OJ on **26 June 2026**.
+- **LATEST (Thursday 16 July 2026 — Regulation enters into force + Commission implementation strategy)**: The **NGT Regulation (EU) 2026/1388** **enters into force today, 16 July 2026** (20 days after its 26 June 2026 OJ publication). Most of the framework applies after a **two-year transition** (from mid-2028), but **Articles 29, 30 and 31 apply from today** — the provisions the Commission needs operational to build out the regime during the transition. To accompany entry into force, the Commission **published an implementation strategy** (DG SANTE, 16 July 2026) setting out the roadmap for the secondary legislation and implementing acts it will develop across the two-year window (detailed rules on the NGT1 verification procedure, labelling/traceability of NGT2 plants, the public databases, and the detailed monitoring programme for economic, environmental and social impacts). The 12-month **patenting study** clock (impact of patents on innovation, seed availability and EU plant-breeding competitiveness) and the **patenting expert group** (Member State experts + European Patent Office + Community Plant Variety Office) also start from entry into force. Sources: Regulation (EU) 2026/1388 (OJ 26 June 2026); DG SANTE food-safety NGT pages + implementation-strategy news (16 July 2026). *(Implementation-strategy line-items described at the level confirmed against the Regulation's own mandate; verify specific deliverable dates against the published strategy before asserting them.)*
+- **PREVIOUS (Wednesday 17 June 2026 — plenary vote + companion seeds/PRM deal)**: The **NGT Regulation (2023/0226(COD))** reached its EP final plenary stage in Strasbourg during the 15-18 June session, the last EP step before signature and OJ publication (following the Council's 21 April 2026 adoption). ENVI held a **press conference on Wednesday 17 June at 14:00 CEST**. The text confirms the two-tier classification (NGT Category 1 plants treated like conventionally-bred; NGT Category 2 keep GMO-style requirements). **Confirm the final-vote tally against the EP texts-adopted record before asserting the file is closed.** Companion development: the Commission **welcomed a political agreement on the revision of the rules on seeds and other plant reproductive materials (PRM)** (DG SANTE, 16 June 2026) — the co-legislators reached a provisional deal that, per trade-press framing ("EU deal saves farmer seed swaps with strings attached"), preserves farmer seed exchanges subject to conditions. The PRM file travels alongside NGT in the plant-reproductive-material reform package. Sources: EP plenary newsletter 15-18 June 2026; ENVI press notice (17 June 2026); DG SANTE press release (16 June 2026).
 
 ## **LATEST (21 April 2026)**: Council adopted the new NGT rules
 
@@ -100,12 +102,13 @@ The 4 December 2025 provisional agreement was reached after long-running tension
 - Civil-society organisations preparing oppositions to NGT cultivation
 - EFSA secretariat coordinating Category-2 risk assessments
 
-## Status (28 April 2026)
+## Status (16 July 2026)
 
 - Council adoption: **21 April 2026** ✓
-- EP plenary signing: PENDING
-- OJ publication: PENDING (expected May/June 2026)
-- Entry into force: 20 days after OJ publication
+- EP final approval: **17 June 2026** ✓
+- OJ publication: **26 June 2026** ✓ (Regulation (EU) 2026/1388, CELEX 32026R1388)
+- Entry into force: **16 July 2026** ✓ (20 days after OJ publication; Articles 29, 30, 31 apply from this date)
+- Commission implementation strategy published: **16 July 2026** ✓
 - Application date: ~mid-2028 (24-month transition for implementing rules)
-- Patenting study: within 12 months of entry into force
-- Commission follow-up on patenting: post-study, mid-2027 / 2028
+- Patenting study: within 12 months of entry into force (i.e. by ~16 July 2027)
+- Commission follow-up on patenting: post-study, 2027 / 2028

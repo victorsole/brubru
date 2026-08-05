@@ -11,6 +11,7 @@ import { ActionButtons } from './action_buttons';
 import { DraftedDocumentCard } from './drafted_document_card';
 import { getEultUrl } from '../../utils/eu_links';
 import './message_list.css';
+import { uiDateLocale } from '../../i18n/config';
 
 interface MessageListProps {
   messages: Message[];
@@ -69,33 +70,40 @@ const extractFollowUps = (content: string): { cleanContent: string; followUps: s
 // detected for this turn. Always rendered under the last assistant message,
 // independent of A/B variant or query count. Distinct from ActionButtons
 // (deep-links) and from regex-scraped follow-ups (model prose).
-const generateSmartSuggestions = (entities: DetectedEntities | null | undefined): string[] => {
+// Takes the component's `t` so suggestions render in the UI language.
+type TranslateFn = (key: string, defaultValue: string, options?: Record<string, unknown>) => string;
+
+const generateSmartSuggestions = (
+  entities: DetectedEntities | null | undefined,
+  t: TranslateFn,
+): string[] => {
   const suggestions: string[] = [];
+  const walkThrough = t('chat.suggestWalkThrough', 'Walk me through what this means for my work.');
   if (!entities) {
-    suggestions.push('Walk me through what this means for my work.');
+    suggestions.push(walkThrough);
     return suggestions.slice(0, 3);
   }
 
   if (entities.procedure_references.length > 0) {
     const ref = entities.procedure_references[0];
-    suggestions.push(`What is the current status of ${ref}?`);
+    suggestions.push(t('chat.suggestStatus', 'What is the current status of {{ref}}?', { ref }));
   }
   if (entities.celex_numbers.length > 0) {
     const celex = entities.celex_numbers[0];
-    suggestions.push(`Show me the key articles of ${celex}.`);
+    suggestions.push(t('chat.suggestKeyArticles', 'Show me the key articles of {{celex}}.', { celex }));
   }
   if (entities.mep_names.length > 0) {
-    suggestions.push('Who else is working on this file?');
+    suggestions.push(t('chat.suggestWhoElse', 'Who else is working on this file?'));
   }
   if (entities.committee_codes.length > 0) {
     const code = entities.committee_codes[0];
-    suggestions.push(`What is on the ${code} committee agenda this month?`);
+    suggestions.push(t('chat.suggestCommitteeAgenda', 'What is on the {{code}} committee agenda this month?', { code }));
   }
   if (suggestions.length < 3 && entities.policy_areas.length > 0) {
-    suggestions.push('Draft a one-page brief on this for me.');
+    suggestions.push(t('chat.suggestDraftBrief', 'Draft a one-page brief on this for me.'));
   }
   if (suggestions.length === 0) {
-    suggestions.push('Walk me through what this means for my work.');
+    suggestions.push(walkThrough);
   }
   return suggestions.slice(0, 3);
 };
@@ -118,7 +126,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
   }, [messages]);
 
   const formatTime = (date: Date) => {
-    return new Intl.DateTimeFormat('en-GB', {
+    return new Intl.DateTimeFormat(uiDateLocale(), {
       hour: '2-digit',
       minute: '2-digit',
     }).format(date);
@@ -328,11 +336,11 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
 
   const formatCitationType = (type: string): string => {
     const typeMap: Record<string, string> = {
-      legislation: 'Legislation',
-      procedure: 'Legislative Procedure',
-      mep: 'MEP Profile',
-      news: 'News Article',
-      search_result: 'Search Result',
+      legislation: t('chat.citationLegislation', 'Legislation'),
+      procedure: t('chat.citationProcedure', 'Legislative Procedure'),
+      mep: t('chat.citationMep', 'MEP Profile'),
+      news: t('chat.citationNews', 'News Article'),
+      search_result: t('chat.citationSearchResult', 'Search Result'),
     };
     return typeMap[type] || type;
   };
@@ -373,7 +381,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 // themselves are deterministic from the entities the backend
                 // already detected for this answer.
                 const showSmartSuggestions = !!isLastAssistant && !message.isStreaming;
-                const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities) : [];
+                const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities, t) : [];
                 return (
                   <>
                     {renderContentWithCitations(cleanContent, message.citations)}
@@ -438,7 +446,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                     className="message-list__view-sources-button"
                     onClick={() => toggleSources(message.id)}
                   >
-                    {expandedSources.has(message.id) ? 'Hide sources' : 'View sources'}
+                    {expandedSources.has(message.id) ? t('chat.hideSources', 'Hide sources') : t('chat.viewSources', 'View sources')}
                   </button>
                 )}
               </div>
@@ -542,8 +550,8 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                 {feedbackGiven.has(message.id) && (
                   <span className="message-list__feedback-thank-you">
                     {feedbackGiven.get(message.id) === 'hallucination'
-                      ? 'Thank you for reporting this issue!'
-                      : 'Thank you for your feedback!'}
+                      ? t('chat.thankYouReport', 'Thank you for reporting this issue!')
+                      : t('chat.thankYouFeedback', 'Thank you for your feedback!')}
                   </span>
                 )}
 
@@ -573,7 +581,7 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                       onClick={() => submitHallucinationReport(message.id, message.content)}
                       disabled={feedbackLoading.has(message.id)}
                     >
-                      {feedbackLoading.has(message.id) ? 'Submitting...' : 'Submit Report'}
+                      {feedbackLoading.has(message.id) ? t('chat.submitting', 'Submitting...') : t('chat.submitReport', 'Submit Report')}
                     </button>
                   </div>
                 )}

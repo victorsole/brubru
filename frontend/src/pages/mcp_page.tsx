@@ -12,7 +12,9 @@
 //   - Pricing reminder
 //   - Links to /api (mint key) and /billing (top up)
 //
-// Backend endpoint: POST https://brubru.beresol.eu/api/mcp (JSON-RPC 2.0)
+// Backend endpoint: POST https://brubru-production.up.railway.app/api/mcp (JSON-RPC 2.0)
+// NOTE: the public brubru.beresol.eu/api/* path is NOT proxied to the backend
+// (SiteGround serves the SPA there), so the MCP endpoint is the Railway origin.
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -32,9 +34,13 @@ const TOOLS = [
   { name: 'search_eprs',           scope: 'read:knowledge', costEur: 0.005 },
 ] as const;
 
-// Production URL — used in the copy-paste blocks. Dev pointers stay
-// implicit (devs run locally).
-const PROD_URL = 'https://brubru.beresol.eu/api/mcp';
+// Production URL — used in the copy-paste blocks. This is the Railway backend
+// ORIGIN; brubru.beresol.eu/api/* is the static SPA, not the backend.
+const PROD_URL = 'https://brubru-production.up.railway.app/api/mcp';
+
+// For hosts whose "add connector" UI only accepts a URL (claude.ai web
+// connector, some Gemini/ChatGPT flows) the key rides in the query string.
+const PROD_URL_WITH_KEY = (key = 'brubru_live_YOUR_KEY') => `${PROD_URL}?key=${key}`;
 
 const CONFIG_JSON_CLAUDE = (key = 'brubru_live_YOUR_KEY') =>
   JSON.stringify(
@@ -226,9 +232,17 @@ export const McpPage = () => {
             <CopyableBlock value={CURL_EXAMPLE()} label={t('mcp.quickstart.curlLabel') as string} />
           </section>
 
-          {/* ===== Claude Desktop ===== */}
+          {/* ===== Claude ===== */}
           <section className="policy-page__section" id="claude">
             <h2>{t('mcp.claude.title')}</h2>
+
+            {/* Path 1 — claude.ai web / Desktop Connectors UI (URL only) */}
+            <h3 className="mcp-subhead">{t('mcp.claude.webTitle')}</h3>
+            <p>{t('mcp.claude.webBody')}</p>
+            <CopyableBlock value={PROD_URL_WITH_KEY()} label={t('mcp.claude.webUrlLabel') as string} />
+
+            {/* Path 2 — Desktop config file (header auth) */}
+            <h3 className="mcp-subhead">{t('mcp.claude.cfgTitle')}</h3>
             <p>{t('mcp.claude.body')}</p>
             <ol className="mcp-list">
               <li>{t('mcp.claude.s1')}</li>

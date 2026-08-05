@@ -5,6 +5,7 @@
  * Reset it by giving it a new `key` (the SM tab keys it by view + focus).
  */
 import { Component, type ReactNode } from 'react';
+import i18n from '../../i18n/config';
 
 interface Props { children: ReactNode; fallback?: ReactNode }
 interface State { err: Error | null }
@@ -16,7 +17,7 @@ export class GraphBoundary extends Component<Props, State> {
   render() {
     if (this.state.err) {
       return this.props.fallback ?? (
-        <div className="db-note"><span>This view could not be rendered.</span></div>
+        <div className="db-note"><span>{i18n.t('shared.viewNotRendered', 'This view could not be rendered.')}</span></div>
       );
     }
     return this.props.children;

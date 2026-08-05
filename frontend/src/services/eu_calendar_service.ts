@@ -9,6 +9,7 @@
 
 import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
+import { uiDateLocale } from '../i18n/config';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api/eu-calendar`;
 
@@ -397,7 +398,7 @@ export function getEventTypeLabel(eventType: EventType): string {
  */
 export function formatCalendarDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  return d.toLocaleDateString(uiDateLocale(), { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
 /**

@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
 import {
@@ -50,6 +51,7 @@ interface PersonalisedImpactProps {
 }
 
 export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { trackedFiles } = useLegislativeTrains();
@@ -83,8 +85,9 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
       })
       .catch((err) => {
         if (!cancelled) {
-          const detail = err?.response?.data?.detail || 'Could not load impact briefing.';
-          setError(typeof detail === 'string' ? detail : 'Could not load impact briefing.');
+          const fallback = t('impact.loadError', 'Could not load impact briefing.');
+          const detail = err?.response?.data?.detail || fallback;
+          setError(typeof detail === 'string' ? detail : fallback);
           setIsLoading(false);
         }
       });
@@ -100,7 +103,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
   if (isLoading) {
     return (
       <section className="personalised-impact personalised-impact--loading">
-        <p>Composing your impact briefing…</p>
+        <p>{t('shared.composeImpact', 'Composing your impact briefing…')}</p>
       </section>
     );
   }
@@ -110,11 +113,11 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
   }
 
   return (
-    <section className="personalised-impact" aria-label="What this means for you">
+    <section className="personalised-impact" aria-label={t('shared.whatThisMeans', 'What this means for you')}>
       <header className="personalised-impact__header">
         <Icon path={mdiTargetVariant} size={1} color="#0693E3" />
         <div>
-          <h3 className="personalised-impact__title">What this means for you</h3>
+          <h3 className="personalised-impact__title">{t('shared.whatThisMeans', 'What this means for you')}</h3>
           <p className="personalised-impact__subtitle">{block.headline}</p>
         </div>
       </header>
@@ -123,7 +126,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
         <article className="personalised-impact__section">
           <h4>
             <Icon path={mdiCompassOutline} size={0.8} color="#0570a8" />
-            What it is
+            {t('impact.whatItIs', 'What it is')}
           </h4>
           <p>{block.what_it_is}</p>
         </article>
@@ -137,7 +140,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
         >
           <h4>
             <Icon path={mdiAccountCircleOutline} size={0.8} color="#0570a8" />
-            Why it touches you
+            {t('impact.whyItTouchesYou', 'Why it touches you')}
           </h4>
           <p>{block.why_it_touches_you}</p>
           {block.user_profile_was_partial && (
@@ -146,7 +149,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
               className="personalised-impact__profile-cta"
               onClick={() => navigate('/profile')}
             >
-              Complete your profile
+              {t('impact.completeProfile', 'Complete your profile')}
               <Icon path={mdiArrowRight} size={0.7} />
             </button>
           )}
@@ -176,7 +179,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
         <article className="personalised-impact__section">
           <h4>
             <Icon path={mdiBinoculars} size={0.8} color="#0570a8" />
-            What to watch
+            {t('impact.whatToWatch', 'What to watch')}
           </h4>
           <p>{block.what_to_watch}</p>
         </article>
@@ -184,7 +187,7 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
         <article className="personalised-impact__section">
           <h4>
             <Icon path={mdiLightbulbOutline} size={0.8} color="#0570a8" />
-            Actions you can take
+            {t('impact.actionsYouCanTake', 'Actions you can take')}
           </h4>
           <ul className="personalised-impact__actions">
             {block.actions_you_can_take.map((action) => {
@@ -203,11 +206,11 @@ export const PersonalisedImpact = ({ procedureRef }: PersonalisedImpactProps) =>
                     disabled={alreadyTracking}
                     title={
                       alreadyTracking
-                        ? "You're already tracking this file on Brubru."
+                        ? t('impact.alreadyTrackingTitle', "You're already tracking this file on Brubru.")
                         : action.rationale
                     }
                   >
-                    {alreadyTracking ? 'Already tracking this file' : action.label}
+                    {alreadyTracking ? t('impact.alreadyTracking', 'Already tracking this file') : action.label}
                     {!alreadyTracking && <Icon path={mdiArrowRight} size={0.65} />}
                   </button>
                   {action.rationale && (

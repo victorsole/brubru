@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
 import {
@@ -43,6 +44,7 @@ interface FutureComplyPreviewProps {
 }
 
 export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<FutureComplyPreviewData | null>(null);
@@ -78,7 +80,7 @@ export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) 
   if (isLoading) {
     return (
       <section className="future-comply-preview future-comply-preview--loading">
-        <p>Composing future-comply preview…</p>
+        <p>{t('shared.composeFutureComply', 'Composing future-comply preview…')}</p>
       </section>
     );
   }
@@ -99,7 +101,7 @@ export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) 
           className="future-comply-preview__cta"
           onClick={() => navigate('/eulawcomply')}
         >
-          Open EU Law Comply
+          {t('futureComply.openComply', 'Open EU Law Comply')}
           <Icon path={mdiArrowRight} size={0.7} />
         </button>
       </section>
@@ -115,7 +117,7 @@ export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) 
       <header className="future-comply-preview__header">
         <Icon path={mdiShieldAlertOutline} size={1} color="#b56500" />
         <div>
-          <h3>Future-Comply preview</h3>
+          <h3>{t('shared.futureComplyPreview', 'Future-Comply preview')}</h3>
           <p className="future-comply-preview__subtitle">{data.headline}</p>
         </div>
       </header>
@@ -124,7 +126,7 @@ export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) 
 
       <div className="future-comply-preview__sections">
         <article>
-          <h4>Likely obligation areas if this passes</h4>
+          <h4>{t('shared.likelyObligations', 'Likely obligation areas if this passes')}</h4>
           <ul>
             {data.likely_obligation_areas.map((item) => (
               <li key={item.label}>
@@ -134,7 +136,7 @@ export const FutureComplyPreview = ({ procedureRef }: FutureComplyPreviewProps) 
           </ul>
         </article>
         <article>
-          <h4>Recommended next steps</h4>
+          <h4>{t('shared.recommendedNextSteps', 'Recommended next steps')}</h4>
           <ul>
             {data.recommended_next_steps.map((step) => (
               <li key={step.label}>

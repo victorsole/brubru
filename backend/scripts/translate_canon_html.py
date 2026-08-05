@@ -61,6 +61,53 @@ SYSTEM = (
 )
 
 
+# Model refusals / clarifying questions that must never be written into a page.
+#
+# The previous detector matched only three literal substrings and missed the
+# most common phrasing ("I need the actual HTML content to translate. You've
+# only provided the opening `<body>` tag..."). Eighteen EU Canon language pages
+# shipped to production with that sentence spliced mid-CSS, which left <style>
+# unclosed and made the browser swallow the rest of the document, so each page
+# served HTTP 200 and rendered blank. Repaired 21 July 2026.
+REFUSAL_RE = re.compile(
+    r"I need (the|to see|more)"
+    r"|You'?ve only (provided|sent|given)"
+    r"|Please (share|provide|send) the (full|actual|complete)"
+    r"|fragment you('d| would)? (like|want)"
+    r"|message was cut off"
+    r"|I'?d be happy to (translate|help)"
+    r"|Could you (please )?(share|provide|clarify|send)"
+    r"|As an AI"
+    r"|I'?m sorry, (but )?I can'?t",
+    re.IGNORECASE,
+)
+
+
+def validate_document(html, source_html, lang):
+    """Return a list of structural problems with an assembled translation.
+
+    Per-chunk guards are not enough: chunks are validated in isolation but the
+    file is written as their concatenation, so a head truncated mid-<style>
+    only becomes visible once the pieces are joined. Nothing reaches disk
+    without passing this.
+    """
+    problems = []
+    for tag in ("</style>", "</head>", "</body>", "</html>"):
+        if source_html.count(tag) and not html.count(tag):
+            problems.append(f"missing {tag}")
+    if html.count("<body") != source_html.count("<body"):
+        problems.append(
+            f"<body count {html.count('<body')} != source {source_html.count('<body')}"
+        )
+    if REFUSAL_RE.search(html):
+        problems.append("model refusal text present in output")
+    if len(html) < len(source_html) * 0.6:
+        problems.append(f"suspiciously short: {len(html)} vs source {len(source_html)}")
+    if f'<html lang="{lang}"' not in html:
+        problems.append(f'missing <html lang="{lang}">')
+    return problems
+
+
 def _translatable_chars(text):
     """Count letters outside HTML tags/comments, to decide if a chunk is worth sending."""
     stripped = re.sub(r'<[^>]+>', ' ', text)
@@ -94,8 +141,7 @@ def translate_chunk(text, lang):
             # preserved) rather than corrupting the file.
             looks_html = ("<" in out) if ("<" in text) else True
             truncated = getattr(resp, "stop_reason", None) == "max_tokens"
-            refusal = ("I need to see" in out or "message was cut off" in out
-                       or "fragment you want" in out)
+            refusal = bool(REFUSAL_RE.search(out))
             if truncated and attempt < 3:
                 out_cap = min(32000, out_cap + 8000)
                 print(f"    [chunk truncated, raising cap to {out_cap}, retry]")
@@ -166,8 +212,19 @@ def main():
         out = out_head + "".join(out_parts)
         out = patch_selector(out, lang)
         dest = src_path.parent / f"{lang}.html"
+
+        problems = validate_document(out, html, lang)
+        if problems:
+            # Refuse to write. A broken page is worse than a missing one: it
+            # serves HTTP 200, renders blank, and nothing alerts on it.
+            print(f"  [ERROR] NOT written -- {dest} failed validation:")
+            for p in problems:
+                print(f"          - {p}")
+            print("          Re-run this language; the source file is untouched.")
+            continue
+
         dest.write_text(out, encoding="utf-8")
-        print(f"  wrote {dest} ({len(out)} bytes)")
+        print(f"  [OK] wrote {dest} ({len(out)} bytes)")
 
 
 if __name__ == "__main__":

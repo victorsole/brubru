@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/use_auth';
 import './tenderator_widget.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -77,7 +78,7 @@ export const TenderatorWidget = () => {
 
   const formatValue = (value: number | null, currency: string): string => {
     if (!value) return '-';
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat(uiDateLocale(), {
       style: 'currency',
       currency: currency || 'EUR',
       notation: 'compact',

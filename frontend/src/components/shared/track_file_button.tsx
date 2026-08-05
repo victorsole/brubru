@@ -49,7 +49,7 @@ export const TrackFileButton = ({
     e.preventDefault();
 
     if (!identifier) {
-      setError('No identifier to track');
+      setError(t('shared.noIdentifierToTrack', 'No identifier to track'));
       return;
     }
 
@@ -67,7 +67,7 @@ export const TrackFileButton = ({
         onTrackChange?.(true);
       }
     } catch {
-      setError('Failed to update tracking');
+      setError(t('shared.trackingUpdateFailed', 'Failed to update tracking'));
     }
   };
 

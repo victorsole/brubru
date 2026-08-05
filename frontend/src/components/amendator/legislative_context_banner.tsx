@@ -73,11 +73,11 @@ export const LegislativeContextBanner = ({
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       if (err?.response?.status === 401) {
-        setTrackError('Please log in to track legislation.');
+        setTrackError(t('amendator.banner.loginToTrack', 'Please log in to track legislation.'));
       } else if (err?.response?.status === 404) {
-        setTrackError('This legislation is not yet in our legislative tracker database.');
+        setTrackError(t('amendator.banner.notInTracker', 'This legislation is not yet in our legislative tracker database.'));
       } else {
-        setTrackError(typeof detail === 'string' ? detail : 'Failed to track this file. Try again.');
+        setTrackError(typeof detail === 'string' ? detail : t('amendator.banner.trackFailed', 'Failed to track this file. Try again.'));
       }
     }
   };
@@ -115,7 +115,7 @@ export const LegislativeContextBanner = ({
         <div className="legislative-context-banner__content">
           <span className="legislative-context-banner__icon mdi mdi-file-document"></span>
           <span className="legislative-context-banner__text">
-            This legislation is <strong>not tracked</strong>
+            {t('amendator.banner.notTrackedLead', 'This legislation is')} <strong>{t('amendator.banner.notTrackedEmphasis', 'not tracked')}</strong>
           </span>
         </div>
         <button
@@ -123,7 +123,7 @@ export const LegislativeContextBanner = ({
           onClick={handleTrackFile}
           disabled={isTracking}
         >
-          {isTracking ? 'Tracking...' : 'Track this file'}
+          {isTracking ? t('amendator.banner.tracking', 'Tracking...') : t('common.trackThisFile', 'Track this file')}
         </button>
         {trackError && (
           <div className="legislative-context-banner__error">{trackError}</div>
@@ -158,7 +158,7 @@ export const LegislativeContextBanner = ({
             )}
             {matchedFile.days_in_current_status && (
               <span className="legislative-context-banner__days">
-                {matchedFile.days_in_current_status} days in status
+                {t('amendator.banner.daysInStatus', { count: matchedFile.days_in_current_status, defaultValue: '{{count}} days in status' })}
               </span>
             )}
           </div>
@@ -179,7 +179,7 @@ export const LegislativeContextBanner = ({
                 className="legislative-context-banner__action-button button button-sm button-primary"
                 onClick={() => onViewDetails(matchedFile.carriage_id)}
               >
-                View File Details
+                {t('amendator.banner.viewFileDetails', 'View File Details')}
               </button>
             )}
             <a

@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../hooks/use_auth';
 import { useTranslation } from 'react-i18next';
 import './pipeline_view.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -64,7 +65,7 @@ const formatDate = (iso: string | null): string => {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  return d.toLocaleDateString(uiDateLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
 const daysUntil = (iso: string | null): number | null => {

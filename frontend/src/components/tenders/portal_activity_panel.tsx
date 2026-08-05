@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/use_auth';
 import './portal_activity_panel.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -22,7 +23,7 @@ const formatDate = (iso: string | null, shortLabel = false): string => {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  return d.toLocaleDateString('en-GB', {
+  return d.toLocaleDateString(uiDateLocale(), {
     day: '2-digit',
     month: shortLabel ? 'short' : 'long',
     year: 'numeric',

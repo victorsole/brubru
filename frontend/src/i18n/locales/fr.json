@@ -91,6 +91,60 @@
         "compliance": "Conformité",
         "tenders": "Appels d'offres"
       }
+    },
+    "suggestWalkThrough": "Expliquez-moi ce que cela signifie pour mon travail.",
+    "suggestStatus": "Quel est l'état actuel de {{ref}} ?",
+    "suggestKeyArticles": "Montrez-moi les articles clés de {{celex}}.",
+    "suggestWhoElse": "Qui d'autre travaille sur ce dossier ?",
+    "suggestCommitteeAgenda": "Qu'y a-t-il à l'ordre du jour de la commission {{code}} ce mois-ci ?",
+    "suggestDraftBrief": "Rédigez-moi une note d'une page à ce sujet.",
+    "citationLegislation": "Législation",
+    "citationProcedure": "Procédure législative",
+    "citationMep": "Profil de député européen",
+    "citationNews": "Article de presse",
+    "citationSearchResult": "Résultat de recherche",
+    "hideSources": "Masquer les sources",
+    "viewSources": "Voir les sources",
+    "thankYouReport": "Merci d'avoir signalé ce problème !",
+    "thankYouFeedback": "Merci pour votre retour !",
+    "submitting": "Envoi en cours...",
+    "submitReport": "Envoyer le signalement",
+    "removeFile": "Supprimer {{name}}",
+    "draftedDoc": {
+      "onePager": "Note d'une page",
+      "positionPaper": "Prise de position",
+      "mepBriefing": "Briefing pour député européen",
+      "talkingPoints": "Éléments de langage",
+      "resolution": "Résolution du PE",
+      "epQuestion": "Question écrite du PE",
+      "euEmail": "Courriel UE",
+      "pressRelease": "Communiqué de presse UE",
+      "stakeholderMap": "Cartographie des parties prenantes",
+      "impactAssessment": "Analyse d'impact",
+      "presentation": "Présentation",
+      "document": "Document",
+      "openEdit": "Ouvrir et modifier dans Documents",
+      "openNewTab": "Ouvrir dans un nouvel onglet"
+    },
+    "onboarding": {
+      "step1Title": "Qu'avez-vous en tête en ce moment ?",
+      "step1Sub": "Choisissez le domaine politique qui vous intéresse aujourd'hui. J'adapterai ce que je vous montrerai ensuite.",
+      "step2Title": "Suivez-vous quelque chose en particulier ?",
+      "step2Sub": "Saisissez un nom (AI Act, CSRD, RGPD), une référence OEIL ou un CELEX. Je garderai un œil dessus.",
+      "step2Placeholder": "p. ex. AI Act, 2024/0079(COD), 32024R1689",
+      "step3Title": "Voulez-vous que je garde un œil dessus ?",
+      "step3Sub": "Inscrivez-vous gratuitement et je suivrai la législation pour vous, signalerai les changements et rédigerai amendements et prises de position quand vous en aurez besoin. Sans carte bancaire.",
+      "skipForNow": "Passer pour l'instant",
+      "skip": "Passer",
+      "continue": "Continuer",
+      "noFileYet": "Pas encore de dossier précis",
+      "maybeLater": "Peut-être plus tard",
+      "chipAiDigital": "IA et numérique",
+      "chipClimateEnergy": "Climat et énergie",
+      "chipFinance": "Finance",
+      "chipHealth": "Santé",
+      "chipTrade": "Commerce",
+      "chipAgriFisheries": "Agriculture et pêche"
     }
   },
   "docs": {
@@ -255,7 +309,9 @@
       "myInterests": "Mes intérêts",
       "all": "Toutes",
       "body": "Organe",
-      "allBodies": "Tous les organes"
+      "allBodies": "Tous les organes",
+      "openOnAgencyNamed": "Ouvrir sur {{agency}}",
+      "openOnAgency": "Ouvrir sur le site de l'agence"
     },
     "feedbackTitle": "Ma Bulle UE",
     "feedbackDescription": "Aidez-nous à améliorer Ma Bulle UE en partageant vos commentaires, suggestions ou en signalant des problèmes. Vos retours nous aident à créer de meilleurs outils pour la communauté des politiques UE.",
@@ -503,14 +559,15 @@
     },
     "overview": {
       "corner": "Commencez ici",
-      "explore": "Explorez votre EU bubble",
+      "explore": "Explorez votre bulle UE",
       "morning": "Bonjour",
       "afternoon": "Bon après-midi",
       "evening": "Bonsoir",
       "desc_corner": "Votre point de départ : définissez vos intérêts politiques, gérez vos documents et lisez les actualités qui comptent pour vous.",
       "desc_legislative": "Suivez les dossiers législatifs et leurs documents : dossiers suivis, Journal officiel, amendements, comparaisons, train législatif et votes.",
       "desc_institutional": "Suivez les institutions de l'UE : calendrier, actualités, transcriptions de commissions, activité du Conseil et des députés, plénière, questions, consultations et réunions de lobbying.",
-      "desc_strategy": "Analysez et agissez : positions, prévisions, les bibliothèques Brubru, la recherche de l'UE, les cartographies d'acteurs et vos documents de plaidoyer."
+      "desc_strategy": "Analysez et agissez : positions, prévisions, les bibliothèques Brubru, la recherche de l'UE, les cartographies d'acteurs et vos documents de plaidoyer.",
+      "workspace": "Ce qui a touché votre espace de travail"
     },
     "ask": {
       "title": "Demander à Brubru",
@@ -581,7 +638,88 @@
     "accountCreated": "Compte créé",
     "lastLogin": "Dernière connexion",
     "deleteWarning": "Supprimez votre compte et toutes les données associées. Cette action ne peut pas être annulée.",
-    "deleteAccount": "Supprimer le Compte"
+    "deleteAccount": "Supprimer le Compte",
+    "overview": "Aperçu",
+    "billing": "Facturation",
+    "sectors": "Secteurs",
+    "background": "Arrière-plan",
+    "welcomeBack": "Bon retour, {{name}}",
+    "welcomeBackNoName": "Bon retour",
+    "welcomeText": "Gérez votre profil, votre abonnement et vos préférences de politiques depuis votre tableau de bord personnel.",
+    "memberSince": "Membre depuis",
+    "days": "jours",
+    "quickActions": "Actions rapides",
+    "editProfile": "Modifier le profil",
+    "roleTitle": "Rôle / Titre",
+    "roleTitlePlaceholder": "p. ex. Chargé de politiques, juriste d'entreprise, consultant en affaires européennes",
+    "roleTitleHelp": "La façon dont vous décrivez votre rôle professionnel. Brubru adapte ses réponses en conséquence.",
+    "free": "Gratuit",
+    "perMonth": "/ mois",
+    "basicTierDescription": "Accès de base aux fonctionnalités de Brubru",
+    "usageThisMonth": "Utilisation ce mois-ci",
+    "includedFeatures": "Fonctionnalités incluses",
+    "manageSubscription": "Gérer l'abonnement",
+    "stripePortal": "Portail client Stripe",
+    "yourSectors": "Vos secteurs",
+    "sectorsDescription": "Choisissez les secteurs d'activité économique de l'UE dans lesquels vous travaillez. Ils alimentent les tuiles du tableau de bord : opportunités d'expression, signaux de conformité et nouveautés de la semaine.",
+    "pageBackground": "Arrière-plan de page",
+    "backgroundDescription": "Personnalisez vos pages My EU Bubble et Profil avec un beau paysage urbain ou monument européen.",
+    "notSet": "Non défini",
+    "dangerZone": "Zone de danger",
+    "dashboard": "Tableau de bord",
+    "subtitleOverview": "Votre tableau de bord Brubru en un coup d'œil",
+    "subtitlePersonal": "Mettez à jour votre nom, rôle, organisation et pays",
+    "subtitleBilling": "Gérez votre abonnement et votre facturation",
+    "subtitlePolicies": "Sélectionnez les domaines d'action de l'UE que vous suivez",
+    "subtitleSectors": "Choisissez vos secteurs pour que Brubru puisse personnaliser",
+    "subtitleBackground": "Personnalisez les arrière-plans de vos pages",
+    "subtitleFeedback": "Partagez vos retours et suggestions",
+    "subtitleAccount": "Détails et paramètres du compte",
+    "backgrounds": {
+      "default": "Par défaut",
+      "defaultBackground": "Arrière-plan par défaut",
+      "selectedAlt": "Arrière-plan sélectionné",
+      "hide": "Masquer les arrière-plans",
+      "change": "Changer d'arrière-plan",
+      "amsterdam": "Amsterdam",
+      "amsterdamCanals": "Canaux d'Amsterdam",
+      "athens": "Athènes",
+      "aurora": "Aurore boréale",
+      "barcelona": "Barcelone",
+      "brussels": "Bruxelles",
+      "canal": "Canal",
+      "church": "Église",
+      "colosseum": "Colisée",
+      "dome": "Dôme",
+      "eu": "Union européenne",
+      "florence": "Florence",
+      "greece": "Grèce",
+      "lake": "Lac",
+      "london": "Londres",
+      "map": "Carte",
+      "mapCompass": "Carte et boussole",
+      "netherlands": "Pays-Bas",
+      "paris": "Paris",
+      "santorini": "Santorin",
+      "venice": "Venise"
+    },
+    "policies": {
+      "searchPlaceholder": "Recherchez des politiques, p. ex. agriculture, défense commerciale, drones, réfugiés…",
+      "searchAria": "Rechercher des domaines d'action",
+      "clearSearch": "Effacer la recherche",
+      "askBrubru": "Vous ne trouvez pas ce que vous cherchez ? Parlez à Brubru !",
+      "selectedLabel": "Sélectionnés :",
+      "area": "domaine d'action",
+      "areas": "domaines d'action",
+      "selectAll": "Tout sélectionner",
+      "clearAll": "Tout effacer",
+      "noMatch": "Aucun domaine d'action ne correspond à",
+      "noMatchHint": "Essayez un terme plus large, ou effacez la recherche pour parcourir tous les domaines.",
+      "categorySelected": "{{count}} sélectionnés",
+      "selectedTitle": "Vos domaines d'action sélectionnés :",
+      "remove": "Supprimer {{name}}"
+    },
+    "basicPlanName": "Basique"
   },
   "subscription": {
     "hero": {
@@ -600,7 +738,8 @@
     },
     "modules": {
       "title": "Modules Individuels",
-      "subtitle": "Choisissez uniquement ce dont vous avez besoin"
+      "subtitle": "Choisissez uniquement ce dont vous avez besoin",
+      "subscribe": "S'abonner"
     },
     "starter": {
       "name": "Starter",
@@ -789,7 +928,8 @@
       "f6": "Transcriptions de commissions à la demande et analyses approfondies",
       "note": "Les plans Entreprise sont personnalisés. Parlez-nous de votre périmètre et nous vous ferons un devis sous 48 heures.",
       "button": "Contacter les ventes"
-    }
+    },
+    "checkoutError": "Impossible de lancer le paiement. Veuillez réessayer."
   },
   "euLawComply": {
     "history": "Historique des Analyses",
@@ -840,7 +980,8 @@
       "thu": "jeu",
       "tue": "mar",
       "wed": "mer"
-    }
+    },
+    "dismiss": "Ignorer"
   },
   "landing": {
     "nav": {
@@ -1269,6 +1410,15 @@
       "passwordTooShort": "Le mot de passe doit comporter au moins 8 caractères",
       "passwordNeedsDigit": "Le mot de passe doit contenir au moins un chiffre",
       "passwordNeedsUppercase": "Le mot de passe doit contenir au moins une majuscule"
+    },
+    "linkedin": {
+      "invalidState": "Paramètre d'état non valide",
+      "noCode": "Aucun code d'autorisation reçu",
+      "failed": "L'authentification LinkedIn a échoué",
+      "authFailedTitle": "Échec de l'authentification",
+      "windowClose": "Cette fenêtre se fermera automatiquement...",
+      "authenticating": "Authentification avec LinkedIn...",
+      "pleaseWait": "Veuillez patienter..."
     }
   },
   "cookies": {
@@ -1493,8 +1643,10 @@
       "errorFetch": "Impossible de récupérer le document",
       "hotFiles": "Dossiers chauds cette semaine :",
       "examplesLoading": "Chargement…",
-      "examplesError": "Impossible de charger les exemples mis en avant ({{error}}).",
-      "examplesEmpty": "Aucun exemple mis en avant pour le moment - collez n'importe quelle URL EUR-Lex ci-dessus."
+      "examplesError": "Impossible de charger les exemples mis en avant.",
+      "examplesEmpty": "Aucun exemple mis en avant pour le moment - collez n'importe quelle URL EUR-Lex ci-dessus.",
+      "myFiles": "Amender un dossier que vous suivez",
+      "examplesLoadFailed": "Impossible de charger les exemples"
     },
     "upload": {
       "title": "Téléverser un document",
@@ -1509,7 +1661,8 @@
       "errorUnsupported": "{{name}} : type de fichier non pris en charge. Téléversez des fichiers PDF, DOC ou DOCX.",
       "errorTooLarge": "{{name}} : le fichier dépasse la limite de 10 Mo.",
       "errorSelectFile": "Sélectionnez au moins un fichier",
-      "errorFailed": "Impossible de téléverser les documents"
+      "errorFailed": "Impossible de téléverser les documents",
+      "errorFetchContent": "Impossible de récupérer le contenu du document"
     },
     "tracked": {
       "title": "Charger depuis les dossiers suivis",
@@ -1540,6 +1693,89 @@
       "copyForJustification": "Copier pour la justification",
       "copyTooltip": "Copier une ligne de justification préformatée",
       "copied": "Copié"
+    },
+    "badgeOriginalMismatch": "L'original cité peut ne pas correspondre au texte source",
+    "badgeScopeCreep": "Réécriture importante ({{pct}} % modifié)",
+    "badgePhantom": "Référence non reconnue : {{refs}}",
+    "badgeVerified": "Original vérifié par rapport à la source",
+    "unplacedCount": "{{count}} suggestion(s) d'IA n'ont pas pu être placées automatiquement",
+    "unplacedHint": "Sélectionnez l'élément cible dans le tableau et utilisez Modifier pour appliquer le texte proposé ci-dessous.",
+    "unknownPosition": "Position inconnue",
+    "editor": {
+      "emptyHint": "Ou configurez manuellement les détails de l'amendement ci-dessous.",
+      "typeLabel": "Type d'amendement",
+      "typeHintModification": "Original : anciens mots en gras et italique. Amendement : nouveaux mots en gras et italique.",
+      "typeHintSuppression": "Original : texte supprimé en gras et italique. Amendement : texte restant ou \"Texte supprimé\".",
+      "typeHintAddition": "Original : \"Pas de texte original\". Amendement : nouveau texte en gras et italique.",
+      "structureLabel": "Niveau de structure",
+      "positionLabel": "Référence de position",
+      "positionPhRecital": "Considérant 15",
+      "positionPhArticle": "Article 3",
+      "positionPhPoint": "Article 3, point 2",
+      "positionPhParagraph": "Article 3, point 2, paragraphe (a)",
+      "positionPhSubparagraph": "Article 3, point 2, paragraphe (a), sous-paragraphe (i)",
+      "completeSuppressionOnHint": "Affichera \"Texte supprimé\" dans la colonne de l'amendement",
+      "completeSuppressionOffHint": "Affichera le texte restant après la suppression",
+      "originalLabel": "Texte original",
+      "additionNoOriginalHint": "Les amendements d'ajout introduisent un texte entièrement nouveau sans référence originale.",
+      "proposedLabel": "Amendement proposé",
+      "aiDraftBtn": "Assistance de rédaction par IA",
+      "aiDraftComingSoon": "L'assistance de rédaction par IA arrive bientôt. Elle utilisera Anthropic Claude pour aider à rédiger des amendements.",
+      "completeSuppressionNote": "La suppression complète retire l'élément entier. La colonne de l'amendement affichera \"Texte supprimé\".",
+      "proposedPhAddition": "Saisissez votre nouveau texte (affiché en gras et italique)...",
+      "proposedPhSuppression": "Saisissez le texte restant après la suppression...",
+      "proposedPhModification": "Saisissez le texte de votre amendement proposé...",
+      "proposedHintModification": "Les mots modifiés seront automatiquement mis en évidence en gras et italique.",
+      "proposedHintAddition": "Le nouveau texte sera affiché en gras et italique dans la colonne de l'amendement.",
+      "proposedHintSuppression": "Les parties supprimées seront marquées en gras et italique dans la colonne originale.",
+      "groupLabel": "Groupe / Commission (facultatif)",
+      "groupHint": "Apparaîtra sous forme de badge vert dans la liste des amendements.",
+      "justificationLabel": "Justification (facultatif)",
+      "justificationPlaceholder": "Expliquez pourquoi cet amendement est nécessaire...",
+      "statusLabel": "Statut",
+      "saveAmendmentBtn": "Enregistrer l'amendement"
+    },
+    "improveFailed": "Impossible d'améliorer le texte",
+    "improveError": "Le texte n'a pas pu être amélioré",
+    "saveAmendmentFailed": "Impossible d'enregistrer l'amendement",
+    "banner": {
+      "loginToTrack": "Veuillez vous connecter pour suivre la législation.",
+      "notInTracker": "Cette législation ne figure pas encore dans notre base de données de suivi législatif.",
+      "trackFailed": "Impossible de suivre ce dossier. Réessayez.",
+      "notTrackedLead": "Cette législation",
+      "notTrackedEmphasis": "n'est pas suivie",
+      "tracking": "Suivi en cours...",
+      "viewFileDetails": "Voir les détails du dossier",
+      "daysInStatus_one": "{{count}} jour dans ce statut",
+      "daysInStatus_other": "{{count}} jours dans ce statut"
+    },
+    "sidebar": {
+      "exportFailed": "Impossible d'exporter les amendements"
+    },
+    "page": {
+      "httpError": "EUR-Lex a renvoyé HTTP {{status}}. La loi n'a pas pu être chargée automatiquement.",
+      "parseError": "EUR-Lex a renvoyé le document, mais sa structure législative n'a pas pu être analysée. Cela arrive parfois lorsque EUR-Lex sert une page de vérification WAF.",
+      "networkError": "Erreur réseau lors du chargement de la loi.",
+      "saveFailed": "Impossible d'enregistrer les amendements",
+      "loadingText": "Chargement du texte législatif…",
+      "restoringAmendments": "Restauration de vos amendements…",
+      "autoOpenFailed": "Impossible d'ouvrir automatiquement {{celex}}",
+      "dismiss": "Fermer"
+    },
+    "aiSidebar": {
+      "uploadFailed": "Échec du téléversement",
+      "extractFailed": "Impossible d'extraire le texte",
+      "processFailed": "Échec du traitement",
+      "loadFirst": "Veuillez d'abord charger un document législatif.",
+      "suggestFailed": "Impossible de générer la suggestion de l'IA",
+      "suggestBatchFailed": "Impossible de générer des suggestions",
+      "noElementSelected": "Aucun élément sélectionné : l'IA analysera l'ensemble du document",
+      "letsAmend": "Commençons à amender",
+      "tipSelectElement": "Astuce : sélectionnez un élément précis pour des suggestions ciblées, ou laissez l'IA analyser l'ensemble du document",
+      "apply": "Appliquer",
+      "acceptAll": "Tout accepter",
+      "suggestionsCount_one": "{{count}} suggestion",
+      "suggestionsCount_other": "{{count}} suggestions"
     }
   },
   "comply": {
@@ -1578,7 +1814,9 @@
       "requirements": "exigences",
       "selectPackage": "Sélectionner le paquet",
       "eucanonReminder": "Lire l'explication en langage clair",
-      "eucanonAria": "Ouvrir l'explication du Canon de l'UE dans un nouvel onglet"
+      "eucanonAria": "Ouvrir l'explication du Canon de l'UE dans un nouvel onglet",
+      "forYou": "Pour vous",
+      "fromTracked": "Touche un dossier que vous suivez"
     },
     "report": {
       "title": "Rapport de conformité",
@@ -2462,7 +2700,8 @@
         "ftTenders": "Appels d'offres F&T",
         "ftProjects": "Projets financés F&T",
         "agencyProcurement": "Marchés d'agences"
-      }
+      },
+      "askBrubruLabel": "Demander à Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Rechercher par titre, organisation, programme...",
@@ -2552,10 +2791,37 @@
     "emailFooter": "Votre e-mail sera envoyé à notre équipe à hello@beresol.eu",
     "subject": "Retour sur {{name}}",
     "bodyTemplate": "Bonjour équipe Beresol,\n\nJe souhaite partager mon retour sur {{name}} :\n\n[Veuillez rédiger votre retour ici]\n\nMerci !",
-    "defaultDescription": "Aidez-nous à améliorer {{name}} en partageant vos commentaires, suggestions ou en signalant des problèmes. Vos retours nous aident à créer de meilleurs outils pour la communauté des politiques UE."
+    "defaultDescription": "Aidez-nous à améliorer {{name}} en partageant vos commentaires, suggestions ou en signalant des problèmes. Vos retours nous aident à créer de meilleurs outils pour la communauté des politiques UE.",
+    "form": {
+      "submit": "Envoyer un commentaire",
+      "heading": "Envoyez-nous vos commentaires",
+      "closeAria": "Fermer le formulaire de commentaires",
+      "successTitle": "Merci pour vos commentaires !",
+      "successBody": "Nous vous remercions de prendre le temps de nous aider à améliorer Brubru.",
+      "typeLabel": "Type",
+      "typeGeneral": "Commentaire général",
+      "typeBug": "Signalement de bug",
+      "typeFeature": "Demande de fonctionnalité",
+      "typeOther": "Autre",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Bref résumé de votre commentaire",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Veuillez fournir des informations détaillées...",
+      "categoryLabel": "Catégorie (facultatif)",
+      "categoryPlaceholder": "par ex. UI/UX, performance, sécurité",
+      "affectedFeatureLabel": "Fonctionnalité concernée",
+      "affectedFeaturePlaceholder": "Quelle fonctionnalité est concernée ?",
+      "screenshotLabel": "URL de la capture d'écran (facultatif)",
+      "screenshotHelp": "Téléversez votre capture d'écran sur un service comme Imgur et collez l'URL ici",
+      "submitError": "L'envoi du commentaire a échoué. Veuillez réessayer.",
+      "submitting": "Envoi en cours..."
+    }
   },
   "dashboard": {
-    "loadingCockpit": "Chargement de votre cockpit..."
+    "loadingCockpit": "Chargement de votre cockpit...",
+    "dragToReorder": "Glisser pour réorganiser",
+    "expandTile": "Agrandir",
+    "collapseTile": "Réduire"
   },
   "updates": {
     "title": "Mises à jour législatives",
@@ -2780,7 +3046,14 @@
     "stance_mixed": "Mitigée",
     "stance_pending": "Position déposée",
     "stance_unclear": "Position déposée",
-    "alignNoLobby": "Aucune réunion de lobbying avec le rapporteur ou les rapporteurs fictifs n'est enregistrée pour ce dossier, il n'y a donc aucune position à aligner."
+    "alignNoLobby": "Aucune réunion de lobbying avec le rapporteur ou les rapporteurs fictifs n'est enregistrée pour ce dossier, il n'y a donc aucune position à aligner.",
+    "stanceSupport": "Soutien",
+    "stanceSupportWithAmendments": "Soutien avec amendements",
+    "stanceOppose": "Opposition",
+    "stanceNeutral": "Neutre",
+    "stanceUndecided": "Indécis",
+    "errLoadFiles": "Impossible de charger les dossiers",
+    "errLoadPosition": "Impossible de charger la position"
   },
   "mepAmendmentsTab": {
     "textProposedByCommission": "Texte proposé par la Commission",
@@ -2817,7 +3090,8 @@
     "loadingShort": "Chargement…",
     "examplePlaceholder": "p. ex. Axel Voss",
     "amendmentsShowing": "Amendements ({{total}}) - Affichage {{from}}-{{to}}",
-    "noAmendmentsMatchFilters": "Aucun amendement ne correspond aux filtres actuels."
+    "noAmendmentsMatchFilters": "Aucun amendement ne correspond aux filtres actuels.",
+    "committeeRapporteurProposal": "Proposition du rapporteur de la commission"
   },
   "mepComparativeTab": {
     "positionPlaceholder": "Ex. : nous soutenons des normes strictes de protection des consommateurs et des exigences obligatoires de transparence, mais nous nous opposons aux dispositions qui créeraient des charges de conformité disproportionnées pour les PME...",
@@ -3030,7 +3304,8 @@
     "confirmUntrack": "Arrêter de suivre ce dossier ?",
     "stopTracking": "Arrêter le suivi",
     "untrackFailed": "Impossible d'arrêter le suivi. Veuillez réessayer.",
-    "loginToTrack": "Connectez-vous pour suivre des dossiers."
+    "loginToTrack": "Connectez-vous pour suivre des dossiers.",
+    "viewBtn": "Voir"
   },
   "calendar": {
     "myEuToday": "Mon UE aujourd'hui",
@@ -3092,7 +3367,8 @@
       "sat": "sam",
       "sun": "dim"
     },
-    "allDay": "Toute la journée"
+    "allDay": "Toute la journée",
+    "errLoadEvents": "Impossible de charger les événements du calendrier"
   },
   "newsSidebar": {
     "loadingFeeds": "Chargement des flux..."
@@ -3138,14 +3414,29 @@
     "noAmendmentsDrafted": "Aucun amendement n'a encore été rédigé pour ce dossier.",
     "ask": "Demander à Brubru",
     "askTitle": "Interroger Brubru sur ce dossier",
-    "askPrompt": "Parlez-moi de {{title}}{{ref}} : où il en est, qui le porte et ce que je devrais faire."
+    "askPrompt": "Parlez-moi de {{title}}{{ref}} : où il en est, qui le porte et ce que je devrais faire.",
+    "readDeepDive": "Lire l'analyse approfondie",
+    "viewOnEurlex": "Voir sur EUR-Lex",
+    "analysing": "Analyse en cours...",
+    "aiAnalyze": "Analyser ce dossier avec l'IA",
+    "analyzeFailed": "Impossible d'analyser le dossier. Veuillez réessayer."
   },
   "stagePipeline": {
     "withdrawn": "Retiré",
     "blocked": "Bloqué",
     "completed": "Terminé",
     "current": "En cours",
-    "future": "À venir"
+    "future": "À venir",
+    "proposal": "Proposition",
+    "committee": "Commission",
+    "plenary": "Plénière",
+    "trilogue": "Trilogue",
+    "adopted": "Adopté",
+    "proposalShort": "Prop",
+    "committeeShort": "Com",
+    "plenaryShort": "Plén",
+    "trilogueShort": "Tril",
+    "adoptedShort": "Adop"
   },
   "trains": {
     "myInterests": "Mes intérêts",
@@ -3259,7 +3550,10 @@
     "regCascade": "Cascade réglementaire",
     "memberStateDeadlines": "Échéances de transposition par État membre",
     "cenStandards": "Normes CEN / CENELEC",
-    "brubruTrainer": "Entraîneur Brubru"
+    "brubruTrainer": "Entraîneur Brubru",
+    "noIdentifierToTrack": "Aucun identifiant à suivre",
+    "trackingUpdateFailed": "Impossible de mettre à jour le suivi",
+    "viewNotRendered": "Cette vue n'a pas pu être affichée."
   },
   "tenders": {
     "espdChecklist": "Liste de documents ESPD",
@@ -3472,7 +3766,9 @@
     "sendToComply": "Envoyer à EU Law Comply",
     "useInChat": "Utiliser dans Chat",
     "versionHistory": "Historique des versions",
-    "versionHistoryTitle": "Historique des versions, {{title}}"
+    "versionHistoryTitle": "Historique des versions, {{title}}",
+    "editTitleLabel": "Titre",
+    "versionPillTitle": "Version du document"
   },
   "analyticsTab": {
     "title": "Analytiques et insights",
@@ -4053,7 +4349,11 @@
       "s1": "Ouvrez Claude Desktop → Settings → Developer → Edit config.",
       "s2": "Collez le JSON ci-dessous. Remplacez YOUR_KEY par le texte que vous avez copié à brubru.beresol.eu/api.",
       "s3": "Enregistrez et redémarrez Claude Desktop.",
-      "s4": "Demandez à Claude : « Avec Brubru, quel est le statut de l'AI Act ? » - search_eu_legislation ou get_procedure_status devrait se déclencher."
+      "s4": "Demandez à Claude : « Avec Brubru, quel est le statut de l'AI Act ? » - search_eu_legislation ou get_procedure_status devrait se déclencher.",
+      "webTitle": "Dans claude.ai (web) ou l'app de bureau",
+      "webBody": "Ouvrez Paramètres → Connecteurs → Ajouter un connecteur personnalisé. Collez l'URL ci-dessous (elle contient déjà votre clé API) et laissez les champs OAuth vides. Générez une clé sur brubru.beresol.eu/api et remplacez brubru_live_YOUR_KEY.",
+      "webUrlLabel": "URL du connecteur (contient votre clé)",
+      "cfgTitle": "Ou — fichier de configuration Claude Desktop"
     },
     "cursor": {
       "title": "Cursor",
@@ -4237,6 +4537,7 @@
     "explainAi": "Expliquer avec l’IA",
     "explaining": "Explication…",
     "explainRetry": "Échec de l’explication, réessayer",
+    "emptyFiles": "Aucun acte touchant les dossiers que vous suivez à cette date.",
     "categoryName": {
       "Regulations": "Règlements",
       "Directives": "Directives",
@@ -4340,7 +4641,8 @@
     },
     "translated": "Traduit",
     "translatedFrom": "Traduit du {{lang}}",
-    "error": "Nous n'avons pas pu charger les actualités pour le moment. Veuillez réessayer dans un instant."
+    "error": "Nous n'avons pas pu charger les actualités pour le moment. Veuillez réessayer dans un instant.",
+    "emptyFiles": "Aucune actualité liée aux dossiers que vous suivez pour le moment."
   },
   "db": {
     "subtitle": "Les bibliothèques de connaissances de Brubru et une carte de qui fait quoi dans l'UE, adaptée à vos intérêts.",
@@ -4422,7 +4724,14 @@
     "summaryFailed": "Impossible de résumer ce document pour le moment.",
     "generatedBy": "Généré par",
     "cached": "en cache",
-    "resDepartments": "Départements de la Commission"
+    "resDepartments": "Départements de la Commission",
+    "whatsNew": "Nouveautés dans la base de connaissances",
+    "action": {
+      "added": "Nouveau guide",
+      "updated": "Mis à jour",
+      "canon": "Canon",
+      "deep_dive": "Analyse approfondie"
+    }
   },
   "sm": {
     "subtitle": "Qui compte sur vos dossiers et dans vos intérêts : les acteurs du Parlement, de la Commission et du Conseil et les organisations qui gravitent autour.",
@@ -4631,5 +4940,369 @@
     "archivedFiles": "Fichiers archivés",
     "archivedItems": "Éléments archivés",
     "noArchived": "Rien d'archivé pour l'instant"
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "Aussi visible dans Documents · Funding & Tenders",
+    "alsoInTenderator": "Ouvrir dans le Tenderator"
+  },
+  "committeeWork": {
+    "typeCod": "Législatif ordinaire",
+    "typeInl": "Initiative législative",
+    "typeApp": "Approbation",
+    "typeCns": "Consultation",
+    "typeAci": "Accord interinstitutionnel",
+    "typeBud": "Budget",
+    "typeGbd": "Budget général",
+    "typeBui": "Initiative budgétaire",
+    "typeDec": "Décharge",
+    "typeNle": "Accord / nomination",
+    "typeRsp": "Résolution",
+    "typeRso": "Résolution interne",
+    "typeIni": "Rapport d'initiative",
+    "typeCos": "Document stratégique",
+    "typeDce": "Déclaration écrite",
+    "typeDea": "Contrôle des actes délégués",
+    "typeRps": "Contrôle des actes d'exécution",
+    "typeReg": "Règlement intérieur",
+    "typeImm": "Immunité des députés",
+    "statusInCommittee": "En commission",
+    "statusAwaitingVote": "En attente de vote",
+    "statusPending": "En attente",
+    "statusCompleted": "Terminé",
+    "statusUnknown": "Inconnu"
+  },
+  "consultations": {
+    "typePublicConsultation": "Consultation publique",
+    "typeCallForEvidence": "Appel à contributions",
+    "typeFeedback": "Retour d'information",
+    "typeRoadmap": "Feuille de route",
+    "typeInitiative": "Initiative",
+    "statusOpen": "Ouverte",
+    "statusUpcoming": "À venir",
+    "statusClosed": "Clôturée",
+    "statusWithdrawn": "Retirée",
+    "subNotStarted": "Non commencée",
+    "subDraft": "Brouillon en cours",
+    "subSubmitted": "Envoyée",
+    "subNotParticipating": "Sans participation",
+    "errLoadConsultations": "Impossible de charger les consultations",
+    "errLoadDetail": "Impossible de charger les détails de la consultation",
+    "errLoadTracked": "Impossible de charger les consultations suivies",
+    "errTrack": "Impossible de suivre la consultation",
+    "errUntrack": "Impossible de ne plus suivre la consultation",
+    "errUpdateTracking": "Impossible de mettre à jour les préférences de suivi"
+  },
+  "predictions": {
+    "errGenerate": "Impossible de générer la prédiction",
+    "errRefresh": "Impossible d'actualiser la prédiction"
+  },
+  "proactive": {
+    "triggerMorningBrief": "Brief du matin",
+    "triggerNewForYou": "Nouveautés pour vous",
+    "triggerTrackedFiles": "Vos dossiers suivis",
+    "triggerAmendmentSurge": "Vague d'amendements",
+    "triggerSetupWatchlist": "Configurez votre liste de suivi",
+    "triggerConversationRecall": "Reprenez là où vous en étiez",
+    "triggerWeeklyDigest": "Votre semaine sur Brubru",
+    "openCalendar": "Ouvrir Mon calendrier UE",
+    "openMyFiles": "Ouvrir Mes dossiers",
+    "openAmendments": "Ouvrir Amendements",
+    "openProfile": "Ouvrir le profil",
+    "openChatHistory": "Ouvrir l'historique du chat",
+    "openDashboard": "Ouvrir le tableau de bord",
+    "open": "Ouvrir",
+    "briefing": "Briefing",
+    "ariaBriefings": "Briefings Brubru",
+    "dismissBriefing": "Ignorer le briefing",
+    "raisedForYou": "Brubru a relevé ceci pour vous"
+  },
+  "claim": {
+    "reason": {
+      "notFound": "Ce lien d'activation ne correspond à aucun profil Brubru préconfiguré.",
+      "expired": "Ce lien d'activation a expiré. Écrivez à hello@beresol.eu et nous vous en enverrons un nouveau.",
+      "alreadyClaimed": "Ce profil a déjà été activé. Connectez-vous normalement."
+    },
+    "loadError": "Impossible de charger le lien d'activation. Veuillez réessayer plus tard.",
+    "loading": "Chargement de votre profil Brubru...",
+    "notActive": "Lien d'activation inactif",
+    "signIn": "Se connecter",
+    "createAccount": "Créer un compte",
+    "hello": "Bonjour {{name}}",
+    "welcome": "Bienvenue sur Brubru",
+    "configuredForAt": "{{name}} chez {{org}}",
+    "you": "vous",
+    "subtitle": "Brubru est déjà configuré pour {{who}}. Connectez-vous ci-dessous pour l'activer : vos intérêts politiques, vos dossiers UE suivis, vos flux d'actualités et vos guides de connaissances privés sont préchargés.",
+    "googleFailed": "La connexion avec Google a échoué. Essayez LinkedIn ou l'option par mot de passe.",
+    "googleCancelled": "La connexion avec Google a été annulée.",
+    "continueLinkedIn": "Continuer avec LinkedIn",
+    "or": "ou",
+    "passwordFallback": "Définir un e-mail et un mot de passe à la place",
+    "passwordPlaceholder": "Min. 8 caractères, 1 chiffre, 1 majuscule",
+    "passwordError": "Impossible de définir le mot de passe. Vérifiez l'e-mail et réessayez.",
+    "claiming": "Activation...",
+    "claimButton": "Activer mon profil",
+    "legal": "Profil préconfiguré créé sur invitation privée. Niveau : {{tier}}. Des questions ? hello@beresol.eu."
+  },
+  "sectors": {
+    "hint": "Sélectionnez les secteurs dans lesquels vous opérez. Brubru les utilise pour filtrer les tuiles du tableau de bord, les événements du calendrier et les consultations selon ce qui compte pour vous.",
+    "agriculture_food": {
+      "label": "Agriculture et alimentation",
+      "description": "Agriculture, transformation alimentaire, commerce agricole"
+    },
+    "automotive_mobility": {
+      "label": "Automobile et mobilité",
+      "description": "Véhicules, batteries, services de mobilité"
+    },
+    "banking_finance": {
+      "label": "Banque, finance et assurance",
+      "description": "Crédit, marchés de capitaux, assurance"
+    },
+    "chemicals_pharma": {
+      "label": "Chimie et pharmacie",
+      "description": "Chimie industrielle, médicaments, biotechnologies"
+    },
+    "construction_real_estate": {
+      "label": "Construction et immobilier",
+      "description": "Bâtiments, infrastructures, immobilier"
+    },
+    "defence_aerospace": {
+      "label": "Défense et aérospatiale",
+      "description": "Industrie de défense, espace, technologies à double usage"
+    },
+    "digital_tech": {
+      "label": "Numérique et tech",
+      "description": "Logiciels, IA, cloud, télécoms, plateformes"
+    },
+    "education_research": {
+      "label": "Éducation et recherche",
+      "description": "Universités, écoles, organismes de recherche"
+    },
+    "energy_utilities": {
+      "label": "Énergie et services publics",
+      "description": "Électricité, gaz, hydrogène, réseau"
+    },
+    "environment_climate": {
+      "label": "Environnement et climat",
+      "description": "ONG environnementales, cabinets de conseil climat"
+    },
+    "health_social_care": {
+      "label": "Santé et action sociale",
+      "description": "Hôpitaux, prestataires, santé publique"
+    },
+    "manufacturing_industry": {
+      "label": "Industrie manufacturière",
+      "description": "Industrie lourde, acier, matériaux"
+    },
+    "maritime_fisheries": {
+      "label": "Maritime et pêche",
+      "description": "Transport maritime, ports, pêche"
+    },
+    "media_communication": {
+      "label": "Médias et communication",
+      "description": "Éditeurs, diffuseurs, publicité"
+    },
+    "mining_raw_materials": {
+      "label": "Mines et matières premières",
+      "description": "Matières premières critiques, exploitation minière"
+    },
+    "public_sector": {
+      "label": "Secteur public",
+      "description": "Administrations, agences, communes"
+    },
+    "retail_consumer": {
+      "label": "Commerce de détail et biens de consommation",
+      "description": "Détaillants, marques grand public, e-commerce"
+    },
+    "services_consulting": {
+      "label": "Services et conseil",
+      "description": "Services juridiques, de conseil et professionnels"
+    },
+    "transport_logistics": {
+      "label": "Transport et logistique",
+      "description": "Logistique, rail, fret aérien et routier"
+    },
+    "civil_society": {
+      "label": "Société civile et ONG",
+      "description": "Plaidoyer, fondations, think tanks"
+    }
+  },
+  "countries": {
+    "AT": "Autriche",
+    "BE": "Belgique",
+    "BG": "Bulgarie",
+    "HR": "Croatie",
+    "CY": "Chypre",
+    "CZ": "République tchèque",
+    "DK": "Danemark",
+    "EE": "Estonie",
+    "FI": "Finlande",
+    "FR": "France",
+    "DE": "Allemagne",
+    "GR": "Grèce",
+    "HU": "Hongrie",
+    "IE": "Irlande",
+    "IT": "Italie",
+    "LV": "Lettonie",
+    "LT": "Lituanie",
+    "LU": "Luxembourg",
+    "MT": "Malte",
+    "NL": "Pays-Bas",
+    "PL": "Pologne",
+    "PT": "Portugal",
+    "RO": "Roumanie",
+    "SK": "Slovaquie",
+    "SI": "Slovénie",
+    "ES": "Espagne",
+    "SE": "Suède"
+  },
+  "impact": {
+    "whatItIs": "De quoi il s'agit",
+    "whyItTouchesYou": "Pourquoi cela vous concerne",
+    "completeProfile": "Complétez votre profil",
+    "whatToWatch": "Ce qu'il faut surveiller",
+    "actionsYouCanTake": "Actions que vous pouvez entreprendre",
+    "alreadyTracking": "Vous suivez déjà ce dossier",
+    "alreadyTrackingTitle": "Vous suivez déjà ce dossier sur Brubru.",
+    "loadError": "Impossible de charger le briefing d'impact."
+  },
+  "maturity": {
+    "tryAgain": "Réessayer",
+    "takeMeThere": "M'y emmener",
+    "zeroExplainer": "Vous êtes à zéro parce que Brubru ne dispose pas encore de signaux sur votre activité. Chacune des recommandations ci-dessus débloque 5 à 10 points dès que vous agissez.",
+    "signedOut": "Vous semblez déconnecté. Connectez-vous pour voir votre maturité de conformité.",
+    "loadError": "Impossible de charger votre score de maturité : {{detail}}",
+    "axis": {
+      "awareness": "Connaissance",
+      "impact_analysis": "Analyse d'impact",
+      "advocacy": "Plaidoyer",
+      "follow_through": "Suivi"
+    },
+    "tier": {
+      "beginner": "débutant",
+      "intermediate": "intermédiaire",
+      "advanced": "avancé",
+      "expert": "expert"
+    }
+  },
+  "cascade": {
+    "noSecondaryActs": "Aucun acte secondaire ni dossier lié récent trouvé.",
+    "preAdoptionNote": "Ce dossier n'est pas encore adopté : les actes secondaires n'apparaissent qu'une fois l'acte principal adopté.",
+    "autoSurfaceNote": "Brubru les affichera automatiquement dès leur publication.",
+    "transpositionExplainer": "Brubru n'ingère pas encore les données de transposition nationale pour chaque État membre. Lorsque ces données seront disponibles, les délais apparaîtront ici par pays.",
+    "cenExplainer": "Les révisions de normes liées à cet acte ne sont pas encore ingérées. Une fois la connexion au programme de travail CEN/CENELEC établie, les révisions de normes associées apparaîtront ici.",
+    "subtitle": "Ce qui découle de ce dossier : actes d'exécution, actes délégués et travaux connexes en cours.",
+    "statusAdopted": "adopté",
+    "statusDraft": "projet",
+    "published": "publié",
+    "objectionDeadline": "délai d'objection",
+    "source": "source",
+    "countImplementing": "d'exécution",
+    "countDelegated": "délégués",
+    "countDraft": "{{count}} en projet",
+    "countRelated": "dossiers en cours dans le même domaine",
+    "implementingActs": "Actes d'exécution",
+    "delegatedActs": "Actes délégués",
+    "relatedFiles": "Dossiers connexes en cours",
+    "shares": "partage :"
+  },
+  "futureComply": {
+    "openComply": "Ouvrir EU Law Comply"
+  },
+  "tour": {
+    "steps": {
+      "welcome": {
+        "askAnything": {
+          "title": "Posez toutes vos questions à Brubru",
+          "content": "Posez des questions sur la législation de l'UE, les eurodéputés ou les domaines politiques, ou collez des documents à analyser. Brubru est disponible en 6 langues."
+        },
+        "exploreTools": {
+          "title": "Explorez les outils de Brubru",
+          "content": "Accédez à des outils spécialisés : rédigez des amendements, vérifiez la conformité, suivez les appels d'offres et surveillez votre bulle européenne."
+        },
+        "chooseLanguage": {
+          "title": "Choisissez votre langue",
+          "content": "Brubru est disponible en anglais, français, néerlandais, espagnol, catalan et italien. Sélectionnez votre langue préférée."
+        }
+      },
+      "chat": {
+        "yourQuestion": {
+          "title": "Votre question ici",
+          "content": "Posez des questions sur les politiques, la législation ou les institutions de l'UE. Appuyez sur Entrée pour envoyer ou Maj+Entrée pour une nouvelle ligne."
+        },
+        "uploadDocuments": {
+          "title": "Téléversez des documents",
+          "content": "Téléversez des PDF pour vérifier la conformité, les résumer ou les analyser. Brubru s'y référera dans ses réponses."
+        },
+        "exampleQuestions": {
+          "title": "Exemples de questions",
+          "content": "Vous ne savez pas par où commencer ? Cliquez sur un exemple pour l'essayer. Ils sont sélectionnés par des experts des politiques de l'UE."
+        }
+      },
+      "amendator": {
+        "selectText": {
+          "title": "Sélectionnez le texte législatif",
+          "content": "Choisissez le document législatif de l'UE que vous souhaitez amender. Recherchez par titre, numéro CELEX ou référence de procédure."
+        },
+        "draftAmendment": {
+          "title": "Rédigez votre amendement",
+          "content": "Rédigez des amendements au format standard du Parlement européen. Les modifications sont suivies automatiquement."
+        },
+        "aiAssistant": {
+          "title": "Assistant de rédaction IA",
+          "content": "Recevez des suggestions générées par l'IA pour vos amendements. Brubru vous aide à garantir cohérence juridique et clarté."
+        },
+        "export": {
+          "title": "Exportez votre travail",
+          "content": "Exportez les amendements en XML Akoma Ntoso (format officiel du PE) ou en Word pour les partager avec vos collègues."
+        }
+      },
+      "euBubble": {
+        "personalisedFeed": {
+          "title": "Votre fil personnalisé",
+          "content": "Des mises à jour en temps réel de plus de 15 sources institutionnelles de l'UE, dont le Parlement, la Commission et le Conseil."
+        },
+        "filterFeed": {
+          "title": "Filtrez votre fil",
+          "content": "Filtrez par institution, domaine politique, type de document ou période pour trouver exactement ce qui compte pour vous."
+        },
+        "trackTrends": {
+          "title": "Suivez les tendances",
+          "content": "Surveillez les tendances de l'activité législative, des votes et de l'évolution des politiques dans le temps."
+        }
+      },
+      "euComply": {
+        "lawDatabase": {
+          "title": "Base de données du droit de l'UE",
+          "content": "Recherchez parmi les règlements, directives et décisions de l'UE. Filtrez par domaine politique, date ou statut juridique."
+        },
+        "uploadDocument": {
+          "title": "Téléversez votre document",
+          "content": "Téléversez votre document de politique, contrat ou règles internes pour une analyse automatisée des écarts de conformité."
+        },
+        "complianceReport": {
+          "title": "Rapport de conformité",
+          "content": "Consultez une analyse détaillée des écarts avec des références précises aux articles et des recommandations concrètes."
+        }
+      },
+      "tenderator": {
+        "findTenders": {
+          "title": "Trouvez des appels d'offres de l'UE",
+          "content": "Filtrez les appels d'offres de TED (Tenders Electronic Daily) par secteur, valeur du contrat, échéance et lieu."
+        },
+        "browseOpportunities": {
+          "title": "Parcourez les opportunités",
+          "content": "Consultez les appels d'offres pertinents avec les détails clés : pouvoir adjudicateur, échéance, valeur estimée et exigences."
+        },
+        "matchScoring": {
+          "title": "Score de pertinence par IA",
+          "content": "Chaque appel d'offres affiche un score de pertinence calculé par l'IA selon votre profil et vos centres d'intérêt."
+        }
+      }
+    },
+    "skip": "Passer la visite",
+    "back": "Retour",
+    "finish": "Terminer",
+    "closeAria": "Fermer la visite",
+    "progressOf": "{{current}} sur {{total}}"
   }
 }

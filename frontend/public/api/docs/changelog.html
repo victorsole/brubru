@@ -7,6 +7,7 @@
 <meta name="description" content="Brubru API versioned changelog. Dated entries for every endpoint change, response shape tweak, and bug fix.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css">
+  <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
@@ -57,7 +58,7 @@ active link by adding class="active" to the matching <a>.
 
   <h3>Legislation</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (37)</a></li>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (41)</a></li>
   </ul>
 
   <h3>European Parliament</h3>
@@ -174,6 +175,13 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>4 July 2026: EuroVoc taxonomy tree (966 total)</h3>
+<p>The EuroVoc subject thesaurus, the EU's official multilingual classification, is now walkable as a tree rather than only searchable. Four new routes under <code>/api/v2/legislative/eurovoc/taxonomy</code> expose the full hierarchy: 21 domains, 127 microthesauri and ~7,500 descriptors, each with its <code>skos:broader</code> parent and labels in English, Spanish, French, Italian and Dutch.</p>
+<ul>
+<li><strong>Walk top-down:</strong> <code>GET /taxonomy/domains</code> (the 21 domains), <code>GET /taxonomy/microthesauri?domain=28</code> (a domain's microthesauri), <code>GET /taxonomy/descriptors?microthesaurus=2826&amp;q=climate</code> (leaf terms, by microthesaurus or free text).</li>
+<li><strong>Resolve one concept + its path:</strong> <code>GET /taxonomy/concept/1764</code> returns the concept followed by its ancestors (domain &gt; microthesaurus &gt; broader terms). Every concept carries its stable EuroVoc URI, so it stays linkable to EUR-Lex act tagging.</li>
+</ul>
+
 <h3>26 June 2026: Input-first extract endpoint (935 total)</h3>
 <p>A new folder, <code>/api/v2/extract</code>, turns the API input-first: give it any EU institutional URL and it returns structured items, the way Tavily does for the open web but built for the EU estate. It detects which of the eight EU web platforms the page is built on (the EC component library, Drupal, WordPress, Dynamics, JCMS, SharePoint, single-page apps, or bespoke), fetches it through the matching path (a plain request, or a headless browser for JavaScript-rendered and walled sites), and returns the same five-datapoint items as the rest of the API.</p>
 <ul>
@@ -265,7 +273,7 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 </ul>
 
 <h3>14 June 2026: API v2 is the only public surface</h3>
-<p>The API has been reorganised into <strong>34 institution folders across 437 endpoints</strong>: one folder per EU institution or body. The earlier flat surface has been retired from the published OpenAPI spec; all documented paths now live under <code>/api/v2/</code>. The full live reference is at <a href="/api/docs/reference.html">/api/docs/reference.html</a>.</p>
+<p>The API has been reorganised into <strong>34 institution folders across 441 endpoints</strong>: one folder per EU institution or body. The earlier flat surface has been retired from the published OpenAPI spec; all documented paths now live under <code>/api/v2/</code>. The full live reference is at <a href="/api/docs/reference.html">/api/docs/reference.html</a>.</p>
 <ul>
 <li><strong>34 institution folders</strong>: legislative (EUR-Lex / OEIL), parliament, commission, council, european-council, eurogroup, ecb, eu-financial-institutions, esm, and one folder each for every EU agency (ACER, BEREC, Cedefop, CPVO, ECDC, ECHA, EEA, EFSA, EIGE, EIT, EMA, ENISA, eu-LISA, EU-OSHA, EUAA, EUDA, EUIPO, FRA), plus funding, consultations, open-data, general-publications, who-is-who, geographical-indications, and proprietary.</li>
 <li><strong>OpenAPI spec</strong>: the canonical live JSON is at <code>https://brubru.beresol.eu/api/openapi.json</code>.</li>

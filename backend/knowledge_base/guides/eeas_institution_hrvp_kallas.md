@@ -1,6 +1,7 @@
 # European External Action Service (EEAS), HR/VP Kaja Kallas and the EU Diplomatic Service
 
 ## QUICK FACTS
+- **LATEST (Tuesday 21 July 2026 — EU DELEGATION TO OMAN):** the EU and the **Sultanate of Oman signed the Establishment Agreement for an EU Delegation in Muscat**. High Representative **Kaja Kallas** called it "a milestone in our relations" and framed the EU's network of **145 delegations worldwide** as one of its greatest strategic assets. Sources: EEAS news + the High Representative's remarks at the signing ceremony, 21 July 2026.
 - **LATEST (9 June 2026)**: HR/VP Kaja Kallas co-led with President von der Leyen the announcement of the **21st Russia sanctions package** at a Brussels press conference (source: EC press corner statement_26_1314). Measures target the shadow fleet (30 additional vessels listed), crypto firms assisting evasion, Russia's fishing industry, EU entry bans for former Russian combatants, and further energy/LNG measures. Status at announcement: **proposed, not yet adopted** (Council unanimity still required under Articles 29 TEU + 215 TFEU). Cross-link: `eu_sanctions_implementation_framework`.
 - **Legal basis**: Article 27(3) TEU (Lisbon Treaty, in force 1 December 2009) establishes the EEAS; **Council Decision 2010/427/EU** of 26 July 2010 sets out the organisation and functioning of the EEAS (OJ L 201/30, 3 August 2010)
 - **Full name**: European External Action Service (EEAS) -- the diplomatic service of the European Union

@@ -95,7 +95,7 @@ class BrubruCuration(BaseModel):
 _DEEP_DIVE_BASE = "https://brubru.beresol.eu/eu-inc"
 
 _EU_INC = BrubruCuration(
-    as_of="2026-07-14",
+    as_of="2026-07-21",
     headline=(
         "EU Inc. (the 28th Regime): a single, optional, fully-digital EU company "
         "form, now in the European Parliament's JURI committee."
@@ -163,6 +163,29 @@ _EU_INC = BrubruCuration(
                 "plus public case-law database and digital platform."
             ),
         ),
+        CuratedKeyFact(
+            label="ECON opinion adopted (PE788.878, 15 Jul 2026) - 34/13/9",
+            value=(
+                "Delivered to JURI as a letter under Rule 57(1) 'due to the urgency of the "
+                "matter', signed by ECON Chair Aurore Lalucq. 31 suggestions, 16 of them on a "
+                "TAX MODULE the Commission proposal does not contain: opt-in structure or "
+                "enhanced cooperation as a last resort to work around Council unanimity; scope "
+                "limited at first to cross-border growth start-ups and scale-ups; a single "
+                "consolidated corporate tax base apportioned by a formula reflecting real "
+                "economic activity (sales, labour, tangible assets, digital presence); "
+                "centralised VAT via a single EU VAT number and ViDA One-Stop Shop; common "
+                "simplified withholding procedure plus minimum effective taxation; employee "
+                "stock options made MANDATORY under the module and taxed at disposal as capital "
+                "income; R&D incentives calibrated to OECD Pillar Two. On company law it asks "
+                "JURI to bar Member States from restricting EU Inc. access to MTFs and regulated "
+                "markets, to verify Article 54's digital share register against CSDR "
+                "dematerialisation and DLT-pilot tokenisation, to add permanent and irrevocable "
+                "asset locks against killer acquisitions, and to DELETE the reference to "
+                "'another company body' in Article 67(2). Vote: EPP, S&D, Renew and Greens/EFA "
+                "in favour; opposed simultaneously by the hard right (PfE, ESN, part of ECR) and "
+                "The Left; ECR and PfE both split rather than voting as blocs."
+            ),
+        ),
     ],
     lead_committee=CuratedActor(
         committee="JURI",
@@ -173,7 +196,7 @@ _EU_INC = BrubruCuration(
         note="Germany (SPD); also led the predecessor own-initiative report 2025/2079(INL).",
     ),
     opinion_committees=[
-        CuratedActor(committee="ECON", role="opinion", rapporteur="Aurore Lalucq", group="S&D", appointed="2026-05-18", note="Chair on behalf of the committee (France)."),
+        CuratedActor(committee="ECON", role="opinion", rapporteur="Aurore Lalucq", group="S&D", appointed="2026-05-18", note="Chair on behalf of the committee (France). OPINION DELIVERED 15 July 2026 as a Rule 57(1) letter (PE788.878), adopted 34/13/9."),
         CuratedActor(committee="EMPL", role="opinion", rapporteur="Johan Danielsson", group="S&D", appointed="2026-05-13", note="Sweden."),
         CuratedActor(committee="BUDG", role="budgetary", note="Decided NOT to give an opinion."),
     ],
@@ -190,7 +213,12 @@ _EU_INC = BrubruCuration(
         "committee week the file reaches all three active committees at once: JURI, ECON and "
         "EMPL each take it up on Wednesday 15 July 2026 (EMPL via a stakeholder exchange of "
         "views), the first time the file is worked in three committees the same week. The "
-        "six shadows span the entire political spectrum, from EPP to The Left."
+        "six shadows span the entire political spectrum, from EPP to The Left. ECON has "
+        "now DELIVERED its opinion (15 July 2026, adopted 34/13/9, PE788.878), in the form "
+        "of a Rule 57(1) letter rather than a full opinion because ECON Coordinators judged "
+        "the file urgent when they decided the format on 5 May 2026. EMPL's opinion "
+        "(Danielsson) remains at draft stage. So of the two opinion-giving committees, one "
+        "has concluded and one has not."
     ),
     timeline_highlights=[
         CuratedEvent(date="2025-12-17", event="EP own-initiative report A10-0269/2025 tabled (predecessor INL, 2025/2079(INL))."),
@@ -202,6 +230,7 @@ _EU_INC = BrubruCuration(
         CuratedEvent(date="2026-06-22", event="EMPL tables its draft opinion (Danielsson, PE788.967)."),
         CuratedEvent(date="2026-06-29", event="Rapporteur Repasi tables the lead JURI draft report (PE790.143), 246 amendments: place-of-employment participation, Annex Ia sector exclusions, steward-owned EU Inc. SO, listing ban, tightened AML control, Delaware-style dispute chapter."),
         CuratedEvent(date="2026-07-15", event="Committee week: EU Inc. on the agenda of JURI (lead, consideration of the Repasi draft report), ECON (opinion) and EMPL (stakeholder exchange of views) the same day, with a Bulgarian subsidiarity reasoned opinion (PE790.116) also tabled."),
+        CuratedEvent(date="2026-07-15", event="ECON adopts its opinion 34/13/9 and sends it to JURI as a Rule 57(1) letter (PE788.878): 31 suggestions, 16 on a tax module (opt-in or enhanced cooperation, consolidated base with formulary apportionment, centralised VAT, mandatory employee stock options taxed at disposal as capital income, Pillar Two-aligned R&D incentives), plus MTF/regulated-market access, CSDR and DLT compatibility for the Article 54 share register, asset locks, and deletion of 'another company body' in Article 67(2)."),
         CuratedEvent(date="2026-12-31", event="Three-institution target to conclude negotiations."),
     ],
     key_debates=[
@@ -239,7 +268,19 @@ _EU_INC = BrubruCuration(
         "are lengthened. The EMPL opinion (Danielsson) pushes the same social-dimension line, "
         "while Bulgaria's unanimous reasoned opinion attacks the file from the opposite "
         "direction on subsidiarity and proportionality, calling the zero-capital rule "
-        "'wholly unacceptable'."
+        "'wholly unacceptable'. The ECON opinion of 15 July 2026 materially changes the "
+        "balance on the tax question: the tax module now carries a formal committee majority "
+        "(34/13/9) built on EPP, S&D, Renew and Greens/EFA, which strengthens those in JURI "
+        "arguing the 28th regime should extend beyond company law. Two caveats matter. "
+        "First, an opinion is a call on the lead committee, not a binding instruction: JURI "
+        "is free not to incorporate it. Second, ECON itself concedes the constitutional "
+        "problem, noting that a tax module is only reachable through an opt-in structure "
+        "or, 'as a last resort', enhanced cooperation, because tax remains subject to "
+        "unanimity in Council. The opposition pattern is also unusual and worth reading "
+        "carefully: the 13 votes against combine the sovereigntist right (PfE, ESN, part of "
+        "ECR, plus non-attached De Masi) with The Left, groups that oppose the file for "
+        "opposite reasons, while ECR and PfE each split between voting against and "
+        "abstaining rather than holding as blocs."
     ),
     related_procedures=[
         CuratedRelatedProcedure(
@@ -265,6 +306,7 @@ _EU_INC = BrubruCuration(
         CuratedLink(label="EP Legislative Observatory (OEIL) procedure file", url="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0074(COD)"),
         CuratedLink(label="JURI draft report (Repasi, PE790.143)", url="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/JURI/PR/2026/07-15/1347416EN.pdf"),
         CuratedLink(label="EMPL draft opinion (Danielsson, PE788.967)", url="https://www.europarl.europa.eu/meetdocs/2024_2029/plmrep/COMMITTEES/EMPL/PA/2026/07-15/1344254EN.pdf"),
+        CuratedLink(label="ECON opinion letter (Lalucq, PE788.878)", url="https://www.europarl.europa.eu/doceo/document/ECON-AL-788878_EN.pdf"),
         CuratedLink(label="European Commission - EU Inc.", url="https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en"),
         CuratedLink(label="Commission press release IP/26/614", url="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_614"),
         CuratedLink(label="Brubru deep-dive (EN)", url=f"{_DEEP_DIVE_BASE}/index.html"),

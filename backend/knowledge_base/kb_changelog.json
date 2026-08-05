@@ -2,6 +2,196 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-07-28",
+      "action": "updated",
+      "guide": "ai_act_amendments_2026",
+      "title": "AI Act Amendments 2026 -- Simplification Omnibus",
+      "summary": "In force since 27 July 2026 as Regulation (EU) 2026/1744; Council adoption caveat resolved",
+      "refs": [
+        "32026R1744"
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "action": "updated",
+      "guide": "digital_omnibus_package",
+      "title": "EU Digital Omnibus Package",
+      "summary": "AI Omnibus entered into force 27 July 2026 as Regulation (EU) 2026/1744; high-risk dates confirmed at 2 Dec 2027 and 2 Aug 2028",
+      "refs": [
+        "32026R1744",
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "eeas_institution_hrvp_kallas",
+      "title": "EEAS and the High Representative",
+      "summary": "EU and Oman sign the Establishment Agreement for an EU Delegation in Muscat (21 Jul)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "Recovery and Resilience Facility",
+      "summary": "ECA Special report 20/2026 on RRF home energy-efficiency renovations: broad support, weak foundations",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "iris2_secure_connectivity",
+      "title": "IRIS2 Secure Connectivity",
+      "summary": "Poland joins IRIS2 with an additional EUR 656 million (Warsaw signature, 21 July)",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "clean_hydrogen_ju",
+      "title": "Clean Hydrogen JU",
+      "summary": "13 Hydrogen Valleys selected for Project Development Assistance under the second H2V Facility call",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "eu_commission_funding_programmes_map",
+      "title": "EU funding programmes map",
+      "summary": "ERC Work Programme 2027 adopted (EUR 2,810.75m): Starting Grant call opens 22 July; broader eligibility windows, proposal limits",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "added",
+      "guide": "european_pillar_social_rights_action_plan",
+      "title": "European Pillar of Social Rights: the new Action Plan",
+      "summary": "New guide: the 22 Jul College Communication on the Pillar (agenda-confirmed), the Article 154 activation consultation, 2030 targets and where the EU stands",
+      "refs": []
+    },
+    {
+      "date": "2026-07-22",
+      "action": "updated",
+      "guide": "multilingual_content_law",
+      "title": "EU Multilingual, Translation and Content Localisation Law",
+      "summary": "Added the Catalan/Basque/Galician EU-officiality file: Sep 2023 Spanish request, 27 May 2025 postponed GAC vote, 18 Jul 2025 continued work, Spain-Germany talks, existing 2005-2006 administrative arrangements. 22 new triggers incl. Catalan/Spanish keywords.",
+      "refs": [
+        "31958R0001"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "added",
+      "guide": "eu_methane_regulation",
+      "title": "EU Methane Regulation (EU) 2024/1787",
+      "summary": "New guide: MRV, LDAR, venting/flaring limits, well and coal-mine duties, the importer question, and the 5 August 2026 deadlines",
+      "refs": [
+        "32024R1787"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "added",
+      "guide": "ep_internal_ai_epgenai",
+      "title": "European Parliament internal AI and the EPGenAI Hub",
+      "summary": "New guide: EP internal generative-AI platform (Meta/OpenAI/Anthropic/Mistral, local vs external hosting), September 2026 earliest rollout, April 2024 staff AI guidelines under redraft",
+      "refs": []
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "foreign_subsidies_regulation",
+      "title": "Foreign Subsidies Regulation",
+      "summary": "General Court order T-335/26 Goldwind v Commission (20 Jul 2026): interim suspension of an FSR information request refused for lack of urgency",
+      "refs": [
+        "62026TO0335",
+        "32022R2560"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "industrial_accelerator_act",
+      "title": "Industrial Accelerator Act",
+      "summary": "EESC mandatory opinion INT/1119 adopted 15 July 2026 (rapporteur Diamantouros): backs the 20%-of-GDP goal, wants complementary indicators and permitting safeguards",
+      "refs": [
+        "2026/0068"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "ecodesign_digital_product_passport",
+      "title": "Ecodesign Regulation and Digital Product Passport",
+      "summary": "DPP Registry live 20 July 2026; scope, testing phase, first deadline 18 Feb 2027 for certain large batteries",
+      "refs": [
+        "32024R1781"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "eu_deforestation_regulation",
+      "title": "EU Deforestation Regulation",
+      "summary": "Commission Notice: guidance document for Regulation (EU) 2023/1115, published 20 July 2026",
+      "refs": [
+        "52026XC03896",
+        "32023R1115"
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "action": "updated",
+      "guide": "ai_act_regulation",
+      "title": "EU Artificial Intelligence Act",
+      "summary": "Commission Implementing Regulation (EU) 2026/1755 (20 Jul 2026): procedure for GPAI model evaluations, independent experts, model access via APIs/source code, and fining proceedings under Articles 92 and 101",
+      "refs": [
+        "32026R1755",
+        "32024R1689"
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "action": "added",
+      "guide": "p2_spine_ep_health_cluster_2026_07",
+      "title": "P2 cluster: legislative/open-data spine + EP-internal + health/chemicals (25 guides)",
+      "summary": "25 new KB guides + 492 trigger keys (11,275 total, 0 orphans). Spine (8): oeil_legislative_observatory, eur_lex_portal, cellar_semantic_repository, have_your_say_consultations, transparency_register_eu, regulatory_scrutiny_board, refit_fit_for_future_platform, trilogue_interinstitutional_negotiations. EP-internal (7): ep_rules_of_procedure, ep_bureau_conference_of_presidents, ep_president_and_vice_presidents, ep_secretariat_and_dgs (DG IPOL retired Jan 2025 -> ECTI/CASP/IUST/BUDG), ep_budgetary_powers_and_discharge, ep_consent_procedure, ep_rapporteur_shadow_system. Health/chemicals (10): biocidal_products_regulation (+Reg 2026/1165), pfas_universal_restriction, one_substance_one_assessment (Reg 2025/2455+2457, Dir 2025/2456), scheer_scientific_committees, soho_regulation_blood_tissues_cells (Reg 2024/1938), ivdr_in_vitro_diagnostics, cosmetics_regulation, detergents_regulation (Reg 2026/405), toy_safety_regulation (Reg 2025/2509), fertilising_products_regulation.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-16",
+      "action": "added",
+      "guide": "ecj_spanish_amnesty_catalonia",
+      "title": "Spanish Amnesty Law for Catalonia before the Court of Justice (C-523/24 + C-666/24)",
+      "summary": "CJEU Grand Chamber, 16 Jul 2026: EU law does not preclude the Spanish amnesty law; holding, per-case questions, AG Spielmann vs Court comparison, Catalan deep-dive link",
+      "refs": []
+    },
+    {
+      "date": "2026-07-16",
+      "action": "updated",
+      "guide": "new_genomic_techniques_plant_breeding",
+      "title": "New Genomic Techniques for Plant Breeding",
+      "summary": "NGT Regulation (EU) 2026/1388 entered into force 16 Jul 2026 + Commission implementation strategy; adopted CELEX 32026R1388, OJ 26 Jun 2026, Arts 29/30/31 apply from 16 Jul",
+      "refs": [
+        "32026R1388"
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "action": "added",
+      "guide": "p2_financial_cluster_2026_07",
+      "title": "P2 Financial cluster: 16 banking, capital-markets, tax and budget guides",
+      "summary": "TARGET/T2/TIPS/ECMS market infrastructure, ESCB/Eurosystem governance, ECB climate plan, SREP, EU-wide stress test, Pillar 3 Data Hub, EMIR 3.0, CSDR T+1 (Reg 2025/2650), PEPP/IORP II, insurance protection gap, ATAD, BEFIT, FASTER (Dir 2025/50), AEO, own-resources reform, and ESM/EFSF. All wired: 509 guides, zero orphans.",
+      "refs": [
+        "32024R0886",
+        "32025R2650",
+        "32024R2987",
+        "32025L0050",
+        "32024R1623"
+      ]
+    },
+    {
       "date": "2026-07-15",
       "action": "updated",
       "guide": "eu_eprivacy_csam_derogation_2025_0429",
@@ -54,6 +244,14 @@
       ]
     },
     {
+      "date": "2026-07-15",
+      "action": "added",
+      "guide": "insurance_protection_gap_climate",
+      "title": "Insurance Protection Gap (Natural Catastrophes): EIOPA Dashboard and Policy Response",
+      "summary": "New guide on the EU natural-catastrophe insurance protection gap: EIOPA dashboard (30 countries, ~25% insured share), France/Spain/Italy national schemes, EIOPA-ECB two-pillar EU reinsurance and disaster-fund proposal.",
+      "refs": []
+    },
+    {
       "date": "2026-07-14",
       "action": "updated",
       "guide": "28th_regime_innovation_act",
@@ -72,6 +270,53 @@
       "summary": "13 Jul 2026: Commission adopted Delegated Act simplifying Annex I product scope (removes leather, re-treaded tyres, soybeans-for-sowing, vulcanised-rubber articles, belts, vehicle seats) + Implementing Act for the EUDR Information System; application dates updated to 30 Dec 2026 / 30 Jun 2027",
       "refs": [
         "32023R1115"
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "action": "added",
+      "guide": "knowledge_base_expansion_2026_07",
+      "title": "P1 knowledge-base expansion: 126 new institutional, agency and instrument guides",
+      "summary": "Batch build across 6 clusters: EU legislative/open-data plumbing and new/rebranded DGs (MENA, HERA, ENEST, INTPA); Council/Eurogroup/EEAS and EP-internal machinery (EPRS, STOA, budget, discharge, SANT/HOUS committees); Court of Auditors, Ombudsman, EESC, CJEU; 19 funding programmes (InvestEU, STEP, NDICI, EPF, CEF, Interreg, Social Climate Fund, MSCA, EIB Group); strategic frameworks and Joint Undertakings (Clean Industrial Deal, EuroHPC, Chips JU, IHI, F4E/ITER); financial regulators (SRB, ESRB, ESMA, AMLA, digital euro, Pillar Two, DAC); and cyber/IP/JHA-IT + health/JHA + labour/social/transport agencies (ENISA, ACER, BEREC, eu-LISA, EES/ETIAS/SIS, EUIPO, EDPS/EDPB, ECDC, EFSA, EEA, ECHA, Eurojust, Europol, Frontex, EUAA, FRA, EIGE, ELA, Eurofound, Cedefop, EDA/EDF, EASA, ERA, EMSA, EUSPA, IRIS2). All wired into the retrieval layer: 493 guides now carry triggers (zero orphans), 10,472 distinct keys in 6 languages.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "gdpr_data_protection",
+      "title": "GDPR: Procedural Regulation now adopted",
+      "summary": "Corrected the GDPR Procedural Regulation status from 'preparing to apply' to adopted as Regulation (EU) 2025/2518 (in force 1 January 2026, applicable 2 April 2027); cross-linked the new EDPB one-stop-shop guide.",
+      "refs": [
+        "2025/2518"
+      ]
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "european_investigation_order",
+      "title": "EIO: fixed dead DG JUST link",
+      "summary": "Replaced a 404 DG JUST judicial-cooperation URL with the working commission.europa.eu/law/cross-border-cases/judicial-cooperation_en.",
+      "refs": []
+    },
+    {
+      "date": "2026-07-14",
+      "action": "updated",
+      "guide": "fp10_ecf_competitiveness",
+      "title": "FP10/ECF: cross-linked the dedicated ECF guide",
+      "summary": "Added a companion cross-reference to the new european_competitiveness_fund deep-dive so the two ECF guides are hub-and-spoke rather than silent duplicates.",
+      "refs": [
+        "COM(2025)555"
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "action": "added",
+      "guide": "ema_medicine_shortages_spoc",
+      "title": "EMA Medicine Shortages: SPOC, ESMP and the Critical Medicines link",
+      "summary": "New guide covering EMA's operational shortage-monitoring machinery under Regulation 2022/123: MSSG, SPOC Working Party, ESMP platform, MAH reporting obligations, links to Critical Medicines Act and Alliance.",
+      "refs": [
+        "32022R0123",
+        "2025/0102(COD)"
       ]
     },
     {

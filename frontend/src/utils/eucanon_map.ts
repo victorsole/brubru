@@ -47,6 +47,8 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32022L2555': '/eucanon/2022-2555_nis2/',
   '32023R0956': '/eucanon/2023-956_cbam/',
   '32022R2554': '/eucanon/2022-2554_dora/',
+  '32025R0327': '/eucanon/2025-327_ehds/',
+  '32025R0040': '/eucanon/2025-40_ppwr/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -84,6 +86,10 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'CBAM (Regulation (EU) 2023/956)': '/eucanon/2023-956_cbam/',
   'DORA - Digital Operational Resilience Act': '/eucanon/2022-2554_dora/',
   'DORA (Regulation (EU) 2022/2554)': '/eucanon/2022-2554_dora/',
+  'EHDS - European Health Data Space': '/eucanon/2025-327_ehds/',
+  'European Health Data Space (Regulation (EU) 2025/327)': '/eucanon/2025-327_ehds/',
+  'PPWR - Packaging and Packaging Waste Regulation': '/eucanon/2025-40_ppwr/',
+  'Packaging and Packaging Waste Regulation (Regulation (EU) 2025/40)': '/eucanon/2025-40_ppwr/',
 };
 
 export interface EucanonLookupInput {

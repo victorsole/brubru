@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { Tender, TenderMatch, TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_calendar.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -190,7 +191,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
         <div
           key={`day-${day}`}
           className={`tender-calendar__day ${isToday ? 'tender-calendar__day--today' : ''} ${isPast ? 'tender-calendar__day--past' : ''} ${dayMatches.length > 0 ? 'tender-calendar__day--has-deadlines' : ''}`}
-          onClick={() => handleDayClick(dayMatches, date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }))}
+          onClick={() => handleDayClick(dayMatches, date.toLocaleDateString(uiDateLocale(), { day: 'numeric', month: 'short' }))}
         >
           <span className="tender-calendar__day-number">{day}</span>
           {dayMatches.length > 0 && (
@@ -282,7 +283,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
               <span className="mdi mdi-chevron-left"></span>
             </button>
             <h3 className="tender-calendar__month-title">
-              {currentDate.toLocaleDateString('en-EU', { month: 'long', year: 'numeric' })}
+              {currentDate.toLocaleDateString(uiDateLocale(), { month: 'long', year: 'numeric' })}
             </h3>
             <button className="tender-calendar__nav-btn" onClick={goToNextMonth}>
               <span className="mdi mdi-chevron-right"></span>
@@ -351,7 +352,7 @@ export const TenderCalendar = ({ onSelectTender, userProfile: _userProfile }: Te
                         {new Date(match.tender.submission_deadline!).getDate()}
                       </span>
                       <span className="tender-calendar__list-month">
-                        {new Date(match.tender.submission_deadline!).toLocaleDateString('en-EU', { month: 'short' })}
+                        {new Date(match.tender.submission_deadline!).toLocaleDateString(uiDateLocale(), { month: 'short' })}
                       </span>
                     </div>
                     <div className="tender-calendar__list-content">

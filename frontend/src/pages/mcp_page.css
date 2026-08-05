@@ -211,3 +211,12 @@
   .mcp-tool-card__desc { font-size: 0.82rem; }
   .mcp-codeblock__pre { font-size: 0.72rem; padding: 0.75rem 0.85rem; }
 }
+
+/* Sub-headings inside a connect section (e.g. Claude web vs config-file paths) */
+.mcp-subhead {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.9rem 0 0.5rem;
+  line-height: 1.3;
+}

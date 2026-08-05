@@ -157,6 +157,185 @@ LAW_PACKAGES = {
         'date_from': 2022
     },
 
+    'ehds_european_health_data_space': {
+        'name': 'EHDS - European Health Data Space',
+        'primary_celex': '32025R0327',  # EHDS Regulation
+        'description': (
+            'Regulation (EU) 2025/327 establishing the European Health Data Space, '
+            'the first sector-specific European data space. Grants natural persons '
+            'six substantive rights over their personal electronic health data '
+            '(access, insertion, rectification, portability, restriction, information '
+            'on access) in six priority categories (patient summaries, e-prescriptions, '
+            'e-dispensations, medical imaging, medical test results, discharge '
+            'reports). Establishes MyHealth@EU (Chapter II Section 3) for cross-border '
+            'primary use and HealthData@EU (Chapter IV Section 4) for cross-border '
+            'secondary use. Certifies EHR systems as CE-marked products with two '
+            'mandatory harmonised software components (European interoperability + '
+            'European logging, Annex II). Sets 17 minimum categories of electronic '
+            'health data for secondary use (Art 51) with 6 permitted purposes (Art 53) '
+            'and 5 prohibited uses (Art 54). Fines up to EUR 20 000 000 or 4 % of '
+            'worldwide turnover for re-identification or extraction from secure '
+            'processing environments. Amends Directive 2011/24/EU (Art 14 deleted '
+            'from 26 March 2031) and Regulation (EU) 2024/2847 (Cyber Resilience Act). '
+            'General application 26 March 2027; secondary use from 26 March 2029; '
+            'EHR systems from 26 March 2031; third-country participation from 26 March '
+            '2035.'
+        ),
+        'applicability': (
+            'Every EU natural person (rights holder) and every EHR system placed on '
+            'the market or put into service in the Union (including systems '
+            'manufactured and used within Union health institutions and Software-as-'
+            'a-Service EHR systems). All healthcare providers must connect to their '
+            'national contact point for digital health. All pharmacies (including '
+            'online pharmacies) must be able to dispense electronic prescriptions '
+            'issued in other Member States. For secondary use: every health data '
+            'holder in the healthcare or care sectors (public authorities, private '
+            'entities, wellness application developers, research organisations, '
+            'mortality registries, Union institutions) — except natural-person '
+            'individual researchers and microenterprises (Art 50 exemption). Health '
+            'data users may be natural or legal persons including Union institutions. '
+            'Manufacturers of medical devices, in vitro diagnostic medical devices '
+            'and high-risk AI systems that claim interoperability with EHR systems '
+            'are covered by Chapter III. Wellness applications claiming interoperability '
+            'with EHR systems must carry a label (Art 47).'
+        ),
+        'policy_area': 'Public Health',
+        'priority_level': 'high',
+        'keywords': [
+            'ehds', 'european health data space', 'health data space',
+            '2025/327', '32025r0327', 'regulation 2025/327', 'regulation (eu) 2025/327',
+            'myhealth@eu', 'myhealth eu', 'healthdata@eu', 'healthdata eu',
+            'electronic health record', 'ehr system', 'ehr systems',
+            'personal electronic health data', 'electronic health data',
+            'primary use of health data', 'secondary use of health data',
+            'priority categories of personal electronic health data',
+            'patient summary', 'patient summaries',
+            'electronic prescription', 'electronic prescriptions',
+            'electronic dispensation', 'electronic dispensations',
+            'medical imaging study', 'medical test results', 'discharge report',
+            'european electronic health record exchange format',
+            'european interoperability software component',
+            'european logging software component',
+            'harmonised software components of ehr systems',
+            'digital health authority', 'digital health authorities',
+            'health data access body', 'health data access bodies',
+            'health data holder', 'health data user', 'health data applicant',
+            'data permit', 'health data request', 'health data access application',
+            'trusted health data holder', 'secure processing environment',
+            'wellness application', 'wellness applications',
+            'data quality and utility label', 'dataset catalogue',
+            'eu dataset catalogue', 'dataset of high impact for secondary use',
+            'ehds board', 'european health data space board',
+            'national contact point for digital health',
+            'national contact point for secondary use',
+            'union health data access service',
+            'european digital testing environment',
+            'eu database for registration of ehr systems and wellness applications',
+            'health professional access service', 'electronic health data access service',
+            're-identification', 're-identify',
+            'right to opt out primary use', 'right to opt out secondary use',
+            'directive 2011/24/eu', 'ehealth network',
+            'gdpr', 'data governance act', 'data act', 'ai act',
+            'cyber resilience act', 'nis 2', 'medical device regulation', 'ivdr',
+            'genetic data', 'genomic data', 'omics data', 'biobank',
+            'ce marking ehr', 'declaration of conformity ehr',
+        ],
+        'date_from': 2025
+    },
+
+    'ppwr_packaging_and_packaging_waste': {
+        'name': 'PPWR - Packaging and Packaging Waste Regulation',
+        'primary_celex': '32025R0040',
+        'description': (
+            'Regulation (EU) 2025/40 on packaging and packaging waste, amending '
+            'Regulation (EU) 2019/1020 and Directive (EU) 2019/904, and repealing '
+            'Directive 94/62/EC after 30 years. First EU-wide horizontal packaging '
+            'law binding on economic operators (not just Member States) with 13 '
+            'Chapters, 71 Articles and 13 Annexes. Sets sustainability requirements '
+            'for every packaging placed on the Union market: PFAS ban in food-contact '
+            'packaging (from 12 August 2026 + 18 months), lead + cadmium + mercury + '
+            'hexavalent chromium sum threshold 100 mg/kg, mandatory recyclability '
+            'Grade A/B/C from 1 January 2030 with Grade C losing market access from '
+            '1 January 2038, minimum recycled-content targets in plastic packaging '
+            'from 2030 and 2040, empty-space ratio ceiling of 50 % for grouped/'
+            'transport/e-commerce packaging from 1 January 2030, sector-specific '
+            'reuse and refill targets, and Annex V bans on specific single-use '
+            'packaging formats (hospitality single-serve sachets, hotel amenities, '
+            'fruit and vegetable pre-packs under 1.5 kg, e-commerce shrink wrap). '
+            'Mandates Deposit Return Systems reaching 90 % separate collection of '
+            'single-use PET beverage bottles and aluminium beverage cans up to 3 L '
+            'by 1 January 2029, with a derogation route for Member States already '
+            'at 80 % by end 2026. Modernises Extended Producer Responsibility with '
+            'fee modulation based on recyclability class. Amends the Single-Use '
+            'Plastics Directive (2019/904) to add multi-pack plastic rings to the '
+            'SUP ban list. Enters into force 11 February 2025; general application '
+            '12 August 2026; penalties framework by 12 February 2027; Commission '
+            'evaluation by 12 August 2034.'
+        ),
+        'applicability': (
+            'Every producer placing packaging on the Union market (manufacturer, '
+            'importer, distributor, authorised representative, fulfilment service '
+            'provider); every final distributor selling packaged products or '
+            'offering services using packaging (retailers, wholesalers, HORECA, '
+            'e-commerce marketplaces); every waste-management operator handling '
+            'packaging waste; every producer responsibility organisation (PRO). '
+            'Directly applicable across all Member States without transposition. '
+            'Applies regardless of packaging material (plastic, paper, cardboard, '
+            'glass, metal, wood, composite, ceramic, textile, biobased) and covers '
+            'sales, grouped and transport packaging, including e-commerce shipping '
+            'packaging and primary production packaging. Green public procurement '
+            'rules (Article 63) bind contracting authorities under Directive '
+            '2014/24/EU and Directive 2014/25/EU when packaging exceeds 30 % of '
+            'contract value. Market surveillance authorities operate under '
+            'Regulation (EU) 2019/1020.'
+        ),
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': [
+            'ppwr', 'packaging regulation', 'packaging and packaging waste',
+            '2025/40', '32025r0040', 'regulation 2025/40', 'regulation (eu) 2025/40',
+            'directive 94/62', '94/62/ec', 'packaging directive',
+            'single-use plastics', 'sup', 'directive 2019/904', '2019/904',
+            'multi-pack plastic rings', 'plastic rings',
+            'market surveillance', 'regulation 2019/1020', '2019/1020',
+            'sales packaging', 'grouped packaging', 'transport packaging',
+            'primary packaging', 'secondary packaging', 'tertiary packaging',
+            'service packaging', 'e-commerce packaging',
+            'reusable packaging', 'refillable packaging', 'refill',
+            'compostable packaging', 'biodegradable packaging',
+            'recyclable packaging', 'design for recycling',
+            'recyclability grade', 'grade a', 'grade b', 'grade c',
+            'recycled content', 'post-consumer plastic', 'pcr',
+            'recycled plastic', 'recycled pet',
+            'contact-sensitive packaging', 'contact sensitive',
+            'empty space ratio', 'empty-space ratio', 'packaging minimisation',
+            'excessive packaging', 'over-packaging', 'overpackaging',
+            'lightweight plastic carrier bag', 'plastic carrier bag',
+            'deposit return system', 'drs', 'deposit refund',
+            'pet bottle', 'aluminium beverage can', 'beverage bottle',
+            'separate collection', 'collection target',
+            'recycling target', 'recycling rate',
+            'extended producer responsibility', 'epr', 'eco-modulation',
+            'fee modulation', 'producer responsibility organisation', 'pro',
+            'circular economy', 'circular economy action plan', 'ceap',
+            'waste hierarchy', 'waste framework directive', '2008/98',
+            'pfas', 'per- and polyfluoroalkyl',
+            'bisphenol a', 'bpa', 'heavy metals in packaging',
+            'substances of concern',
+            'material identification', 'harmonised label', 'sorting label',
+            'annex v', 'annex x', 'annex ii',
+            'hospitality', 'horeca', 'take-away',
+            'hotel amenities', 'condiment sachet', 'single-serve',
+            'fruit and vegetables', 'pre-packed produce',
+            'green public procurement', 'gpp',
+            'declaration of conformity', 'technical documentation',
+            'ecodesign', 'espr', '2024/1781', 'digital product passport',
+            'reach', '1907/2006', 'clp', '1272/2008',
+            'green deal', 'zero pollution',
+        ],
+        'date_from': 2025
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary

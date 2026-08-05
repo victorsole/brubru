@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const LinkedInCallback = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [error, setError] = useState('');
 
@@ -16,13 +18,13 @@ export const LinkedInCallback = () => {
 
       // Verify state to prevent CSRF
       if (!state || state !== storedState) {
-        setError('Invalid state parameter');
+        setError(t('auth.linkedin.invalidState', 'Invalid state parameter'));
         setTimeout(() => window.close(), 3000);
         return;
       }
 
       if (!code) {
-        setError('No authorization code received');
+        setError(t('auth.linkedin.noCode', 'No authorisation code received'));
         setTimeout(() => window.close(), 3000);
         return;
       }
@@ -57,7 +59,7 @@ export const LinkedInCallback = () => {
         // Close popup
         window.close();
       } catch (err: any) {
-        setError(err.response?.data?.detail || 'LinkedIn authentication failed');
+        setError(err.response?.data?.detail || t('auth.linkedin.failed', 'LinkedIn authentication failed'));
         setTimeout(() => window.close(), 3000);
       }
     };
@@ -76,14 +78,14 @@ export const LinkedInCallback = () => {
     }}>
       {error ? (
         <>
-          <h2>❌ Authentication Failed</h2>
+          <h2>{t('auth.linkedin.authFailedTitle', 'Authentication Failed')}</h2>
           <p>{error}</p>
-          <p>This window will close automatically...</p>
+          <p>{t('auth.linkedin.windowClose', 'This window will close automatically...')}</p>
         </>
       ) : (
         <>
-          <h2>🔐 Authenticating with LinkedIn...</h2>
-          <p>Please wait...</p>
+          <h2>{t('auth.linkedin.authenticating', 'Authenticating with LinkedIn...')}</h2>
+          <p>{t('auth.linkedin.pleaseWait', 'Please wait...')}</p>
         </>
       )}
     </div>

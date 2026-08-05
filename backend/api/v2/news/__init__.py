@@ -9,7 +9,7 @@ events folder. The 5 mandatory datapoints. Scope: read:economy.
 """
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query, Request
@@ -142,12 +142,15 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "it**\nOne call for 'all news from the bodies I care about'. Scope with `body` "
                 "(comma-separated codes) and/or `family` (a Brubru policy family); omit both for every "
                 "body.\n\n**Input**\n`body`, `family`, `kind` (news | press_release | all), `from` / `to` "
-                "(YYYY-MM-DD), `q` (free text), `order` (recent | oldest | title), `page`, `limit` (max "
-                "100).\n\n**Try it**\n```\nGET /api/v2/news/all?family=finance-economy&order=recent\n"
+                "(YYYY-MM-DD), `days` (shorthand for the last N days; ignored when `from` is given), "
+                "`q` (free text), `order` (recent | oldest | title), `page`, `limit` (max "
+                "100).\n\n**Try it**\n```\nGET /api/v2/news/all?days=3\n"
+                "GET /api/v2/news/all?family=finance-economy&order=recent\n"
                 "GET /api/v2/news/all?body=commission,ecb&q=inflation\n```\n\n**You get back**\nA paginated "
                 "envelope. Each item carries the 5 datapoints (`body_txt` / `body_html` null on the list), "
-                "plus body_code, body_name, the policy families and kind.\n\n**Data freshness**\nLive from "
-                "economy_items."))
+                "plus body_code, body_name, the policy families and kind. `published_from` / `published_to` "
+                "echo the date window actually applied, so you can confirm your filter took "
+                "effect.\n\n**Data freshness**\nLive from economy_items."))
 async def list_news(
     request: Request,
     db: Session = Depends(get_db),
@@ -157,6 +160,7 @@ async def list_news(
     kind: str = Query("all", description="news | press_release | all."),
     from_: Optional[date] = Query(None, alias="from", description="Only items on/after this date (YYYY-MM-DD)."),
     to: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD)."),
+    days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand for a recent window: only items from the last N days. Ignored if `from` is given."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
@@ -166,6 +170,12 @@ async def list_news(
         raise HTTPException(400, f"kind must be one of {sorted(_KINDS)}")
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
+    # `days` is the window callers reach for first, and it silently did nothing
+    # until 28 July 2026: it was never declared, so FastAPI dropped it and the
+    # caller got the whole 11,900-item corpus back believing it was filtered.
+    # An explicit `from` always wins, so existing callers are unaffected.
+    if from_ is None and days is not None:
+        from_ = date.today() - timedelta(days=days)
     kinds = _NEWS_TYPES if kind == "all" else [kind]
     codes = _resolve_scope(body, family)
     clause, params = _build_where(codes, kinds, from_, to, q)
@@ -176,7 +186,13 @@ async def list_news(
         f"FROM economy_items WHERE {clause} ORDER BY {_ORDERS[order]} LIMIT :limit OFFSET :offset"),
         params2).fetchall()
     names = _body_names(db)
-    return build_envelope([_to_item(r, names, with_body=False) for r in rows], total, page, limit)
+    # Report the window that was actually applied. These envelope fields existed
+    # but were never populated here, so every response claimed a null date range
+    # regardless of the filter in force.
+    return build_envelope(
+        [_to_item(r, names, with_body=False) for r in rows], total, page, limit,
+        published_from=from_, published_to=to,
+    )
 
 
 @router.get("/bodies", response_model=dict, tags=["v2-news"],

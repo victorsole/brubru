@@ -161,7 +161,7 @@ export const AIAssistantPanel = ({
         });
 
         if (!uploadResponse.ok) {
-          throw new Error('Upload failed');
+          throw new Error(t('amendator.aiSidebar.uploadFailed', 'Upload failed'));
         }
 
         const uploadResult = await uploadResponse.json();
@@ -174,7 +174,7 @@ export const AIAssistantPanel = ({
         });
 
         if (!contentResponse.ok) {
-          throw new Error('Could not extract text');
+          throw new Error(t('amendator.aiSidebar.extractFailed', 'Could not extract text'));
         }
 
         const contentResult = await contentResponse.json();
@@ -191,7 +191,7 @@ export const AIAssistantPanel = ({
         setUploadedDocuments(prev =>
           prev.map(d =>
             d.file === file
-              ? { ...d, isUploading: false, error: 'Failed to process' }
+              ? { ...d, isUploading: false, error: t('amendator.aiSidebar.processFailed', 'Failed to process') }
               : d
           )
         );
@@ -215,7 +215,7 @@ export const AIAssistantPanel = ({
 
     // Validate: need at least a document loaded OR an element selected
     if (!isTargetedMode && !hasDocument) {
-      setErrorMessage('Please load a legislative document first.');
+      setErrorMessage(t('amendator.aiSidebar.loadFirst', 'Please load a legislative document first.'));
       return;
     }
 
@@ -272,7 +272,7 @@ export const AIAssistantPanel = ({
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.detail || 'Failed to generate AI suggestion');
+          throw new Error(errorData.detail || t('amendator.aiSidebar.suggestFailed', 'Failed to generate AI suggestion'));
         }
 
         const suggestion = await response.json();
@@ -289,7 +289,7 @@ export const AIAssistantPanel = ({
         // --- DOCUMENT-WIDE MODE: Analyse key elements ---
         const elements = getDocumentElements();
         if (elements.length === 0) {
-          setErrorMessage('No legislative elements found in the document.');
+          setErrorMessage(t('amendator.noElements', 'No legislative elements found in the document.'));
           return;
         }
 
@@ -310,7 +310,7 @@ export const AIAssistantPanel = ({
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.detail || 'Failed to generate suggestions');
+          throw new Error(errorData.detail || t('amendator.aiSidebar.suggestBatchFailed', 'Failed to generate suggestions'));
         }
 
         const result = await response.json();
@@ -328,7 +328,7 @@ export const AIAssistantPanel = ({
       }
     } catch (error) {
       console.error('AI suggestion error:', error);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to generate AI suggestion');
+      setErrorMessage(error instanceof Error ? error.message : t('amendator.aiSidebar.suggestFailed', 'Failed to generate AI suggestion'));
     } finally {
       setIsLoading(false);
     }
@@ -452,13 +452,13 @@ export const AIAssistantPanel = ({
               <div key={index} className={`ai-panel__document ${doc.error ? 'ai-panel__document--error' : ''}`}>
                 <span className="ai-panel__document-icon mdi mdi-file-document"></span>
                 <span className="ai-panel__document-name">{doc.file.name}</span>
-                {doc.isUploading && <span className="ai-panel__document-status">Processing...</span>}
-                {doc.extractedText && <span className="ai-panel__document-status ai-panel__document-status--ok">Ready</span>}
+                {doc.isUploading && <span className="ai-panel__document-status">{t('amendatorExtras.processing', 'Processing...')}</span>}
+                {doc.extractedText && <span className="ai-panel__document-status ai-panel__document-status--ok">{t('amendatorExtras.ready', 'Ready')}</span>}
                 {doc.error && <span className="ai-panel__document-status ai-panel__document-status--error">{doc.error}</span>}
                 <button
                   className="ai-panel__document-remove"
                   onClick={() => handleRemoveDocument(index)}
-                  aria-label="Remove document"
+                  aria-label={t('amendatorExtras.removeDocument', 'Remove document')}
                 >
                   <span className="mdi mdi-close"></span>
                 </button>
@@ -487,7 +487,7 @@ export const AIAssistantPanel = ({
         ) : (
           <p className="ai-panel__no-selection">
             {isDocumentLoaded
-              ? 'No element selected - AI will analyse the full document'
+              ? t('amendator.aiSidebar.noElementSelected', 'No element selected: AI will analyse the full document')
               : t('ai.clickRow')}
           </p>
         )}
@@ -512,13 +512,13 @@ export const AIAssistantPanel = ({
           ? t('ai.thinking')
           : selectedElement
             ? t('ai.suggest')
-            : "Let's Amend"}
+            : t('amendator.aiSidebar.letsAmend', "Let's Amend")}
       </button>
       {!canSuggest && (
-        <p className="ai-panel__hint">Load a legislative document to enable AI analysis</p>
+        <p className="ai-panel__hint">{t('amendatorExtras.loadDocFirst', 'Load a legislative document to enable AI analysis')}</p>
       )}
       {canSuggest && !selectedElement && !isLoading && (
-        <p className="ai-panel__hint">Tip: select a specific element for targeted suggestions, or let the AI analyse the full document</p>
+        <p className="ai-panel__hint">{t('amendator.aiSidebar.tipSelectElement', 'Tip: select a specific element for targeted suggestions, or let the AI analyse the full document')}</p>
       )}
 
       {/* Single Suggestion (Targeted Mode) */}
@@ -562,7 +562,7 @@ export const AIAssistantPanel = ({
 
           <div className="ai-panel__suggestion-actions">
             <button className="button button-sm button-success" onClick={handleAccept}>
-              <span className="mdi mdi-check"></span> {isEditing ? 'Apply' : t('ai.accept')}
+              <span className="mdi mdi-check"></span> {isEditing ? t('amendator.aiSidebar.apply', 'Apply') : t('ai.accept')}
             </button>
             {!isEditing && (
               <button className="button button-sm button-secondary" onClick={handleModify}>
@@ -570,7 +570,7 @@ export const AIAssistantPanel = ({
               </button>
             )}
             <button className="button button-sm button-danger" onClick={handleReject}>
-              <span className="mdi mdi-close"></span> {isEditing ? 'Cancel' : t('ai.reject')}
+              <span className="mdi mdi-close"></span> {isEditing ? t('common.cancel', 'Cancel') : t('ai.reject')}
             </button>
           </div>
         </div>
@@ -581,11 +581,11 @@ export const AIAssistantPanel = ({
         <div className="ai-panel__batch">
           <div className="ai-panel__batch-header">
             <h3 className="ai-panel__suggestion-title">
-              <span className="mdi mdi-lightbulb"></span> {batchSuggestions.length} Suggestions
+              <span className="mdi mdi-lightbulb"></span> {t('amendator.aiSidebar.suggestionsCount', { count: batchSuggestions.length, defaultValue: '{{count}} Suggestions' })}
             </h3>
             {onBatchSuggestionsAccepted && (
               <button className="button button-sm button-success" onClick={handleAcceptAll}>
-                Accept All
+                {t('amendator.aiSidebar.acceptAll', 'Accept All')}
               </button>
             )}
           </div>
@@ -616,13 +616,13 @@ export const AIAssistantPanel = ({
                     className="button button-sm button-success"
                     onClick={() => handleAcceptBatchItem(index)}
                   >
-                    <span className="mdi mdi-check"></span> Accept
+                    <span className="mdi mdi-check"></span> {t('ai.accept', 'Accept')}
                   </button>
                   <button
                     className="button button-sm button-danger"
                     onClick={() => handleRejectBatchItem(index)}
                   >
-                    <span className="mdi mdi-close"></span> Reject
+                    <span className="mdi mdi-close"></span> {t('ai.reject', 'Reject')}
                   </button>
                 </div>
               </div>

@@ -41,11 +41,12 @@ import {
 import { useAuth } from '../../hooks/use_auth';
 import { ProactiveOpener } from '../shared/proactive_opener';
 import './dashboard_cockpit.css';
+import { uiDateLocale } from '../../i18n/config';
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return '';
   try {
-    return new Date(iso).toLocaleDateString('en-GB', {
+    return new Date(iso).toLocaleDateString(uiDateLocale(), {
       day: 'numeric',
       month: 'short',
     });
@@ -524,7 +525,8 @@ export const DashboardCockpit = () => {
   if (error && !data) {
     return (
       <section className="dashboard-cockpit dashboard-cockpit--error">
-        <p>{i18nT('cockpit.error', 'We could not load the cockpit right now.')} {error}</p>
+        {/* The raw API detail is English-only; keep the visible message translated. */}
+        <p>{i18nT('cockpit.error', 'We could not load the cockpit right now.')}</p>
       </section>
     );
   }

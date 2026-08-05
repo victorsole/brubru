@@ -1,0 +1,26 @@
+-- 203_event_type_external_activities.sql
+--
+-- Add 'external_activities' to event_type_enum.
+--
+-- WHY: the European Parliament's calendar has four working week types, not
+-- three. Alongside plenary sessions, committee weeks and political group
+-- weeks, roughly nine weeks a year are "External parliamentary activities"
+-- (constituency weeks), when MEPs work in their home countries and neither
+-- committees nor the plenary sit.
+--
+-- The enum had no value for this, so services/scrapers/ep_calendar_loader.py
+-- mapped external_activities onto group_week. Every constituency week was
+-- therefore presented to users as a week when the political groups were
+-- meeting in Brussels, which is false.
+--
+-- This compounded a data error in ep_calendar_2026.json (33 of 53 weeks were
+-- wrong, since corrected by scripts/derive_ep_calendar_from_pdf.py) and on
+-- 20 July 2026 produced a proactive briefing telling a subscriber that a
+-- constituency week was an "EP Committee Week". See the audit in
+-- docs/morning_routine/2026/07_july/2026-07-21-Tuesday.md.
+--
+-- Note: ALTER TYPE ... ADD VALUE cannot run inside a transaction block in
+-- PostgreSQL versions before 12. On 15+ it is transactional-safe. IF NOT
+-- EXISTS makes this migration idempotent.
+
+ALTER TYPE event_type_enum ADD VALUE IF NOT EXISTS 'external_activities';

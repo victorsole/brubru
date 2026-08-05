@@ -70,6 +70,10 @@ interface ChatInterfaceProps {
 // Pre-user helpers
 const PRE_USER_QUERY_LIMIT = 3;
 
+// Two identical sends inside this window are treated as one double-fire, not
+// as a user deliberately repeating themselves (audit defect D6, 28 Jul 2026).
+const DUPLICATE_SEND_WINDOW_MS = 3000;
+
 const getPreUserId = (): string => {
   let id = localStorage.getItem('brubru_preuser_id');
   if (!id) {
@@ -116,7 +120,7 @@ export interface DetectedEntities {
 }
 
 export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate, onDocumentUpload }: ChatInterfaceProps = {}) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   // Read ?q= param directly from URL as well as initialQuestion prop
   const urlQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') : null;
@@ -240,7 +244,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   useEffect(() => {
     const fetchExamples = async () => {
       try {
-        const locale = (navigator.language || 'en').toLowerCase();
+        // Use the in-app language choice, not the browser locale: a user who
+        // switched Brubru to Catalan gets Catalan example prompts.
+        const locale = (i18n.language || navigator.language || 'en').toLowerCase();
         const tier = (user?.subscription_tier || 'blue').toLowerCase();
         const resp = await axios.get(`${API_BASE_URL}/api/chat/examples`, {
           params: { locale, scope: 'main_chat', tier, limit: 4 },
@@ -289,6 +295,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   // directly with the explicit text so we don't depend on the state-closure
   // having flushed. The ref + sessionStorage key together dedupe across
   // React StrictMode's double-invocation in dev.
+  // Guards against the same message being sent twice before React state has
+  // re-rendered (audit defect D6, 28 Jul 2026). Every send path funnels through
+  // handleSendMessageStreaming, so one ref covers the Send button, the Enter
+  // key, the autofire effect, the Dashboard tile and the briefing cards alike.
+  const inFlightSendRef = useRef<{ text: string; at: number }>({ text: '', at: 0 });
+
   const autofireFiredRef = useRef(false);
   useEffect(() => {
     if (!autofirePendingRef.current || autofireFiredRef.current) return;
@@ -492,6 +504,21 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     const messageText = (overrideText !== undefined ? overrideText : inputValue);
     if (!messageText.trim() || isLoading || isStreaming) return;
 
+    // isLoading / isStreaming are React state, so two calls landing before the
+    // first re-render both read `false` and both open a conversation. On
+    // 24 Jul 2026 a subscriber's briefing-card query was sent twice, 708 ms
+    // apart, creating two chats and billing two model calls (audit defect D6).
+    // A ref is synchronous, so it closes the window that state cannot.
+    const now = Date.now();
+    const trimmed = messageText.trim();
+    if (
+      inFlightSendRef.current.text === trimmed
+      && now - inFlightSendRef.current.at < DUPLICATE_SEND_WINDOW_MS
+    ) {
+      return;
+    }
+    inFlightSendRef.current = { text: trimmed, at: now };
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -592,6 +619,16 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             if (content.startsWith('{')) {
               try {
                 const parsed = JSON.parse(content);
+                // First event of the stream: the conversation id. Until 5 Aug
+                // 2026 the streaming path sent chat_id up but never read one
+                // back, so chatId stayed null and every message started a
+                // fresh conversation -- Chat could not remember the previous
+                // turn. Functional update: the chatId captured in this
+                // closure is stale by the time the event arrives.
+                if (parsed.type === 'chat' && typeof parsed.chat_id === 'string') {
+                  setChatId((prev) => prev ?? parsed.chat_id);
+                  continue;
+                }
                 if (parsed.type === 'status') {
                   setThinkingStatus(parsed.message);
                   continue;
@@ -606,6 +643,44 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                   });
                   continue;
                 }
+                // Backend finished post-processing the completed response
+                // (orphan [N] citation stripping, fabricated-link removal,
+                // URL hyphen normalisation, legislation linkification). The
+                // raw tokens are already on screen, so swap in the cleaned
+                // text. Only sent when clean-up actually changed something.
+                if (parsed.type === 'replace' && typeof parsed.content === 'string') {
+                  accumulatedContent = parsed.content;
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === streamingMessageId
+                        ? { ...msg, content: accumulatedContent }
+                        : msg
+                    )
+                  );
+                  continue;
+                }
+                // The sources behind the [N] markers. Until 28 July 2026 the
+                // streaming path never sent these, so every streamed answer
+                // rendered bare markers with no reference list underneath.
+                if (parsed.type === 'citations' && Array.isArray(parsed.citations)) {
+                  const withIds: Citation[] = parsed.citations.map(
+                    (c: Partial<Citation>, i: number) => ({
+                      id: typeof c.id === 'number' ? c.id : i + 1,
+                      type: c.type || 'source',
+                      title: c.title || 'Source',
+                      url: c.url || '',
+                      metadata: c.metadata,
+                    })
+                  );
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === streamingMessageId
+                        ? { ...msg, citations: withIds }
+                        : msg
+                    )
+                  );
+                  continue;
+                }
                 if (parsed.type === 'actions' && parsed.actions) {
                   setMessages((prev) =>
                     prev.map((msg) =>
@@ -614,6 +689,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                         : msg
                     )
                   );
+                  continue;
+                }
+                // Any other control event is a newer backend talking to an
+                // older bundle. Swallow it. Falling through would append the
+                // raw JSON to the answer as visible text, which is how every
+                // past event addition (citations, replace) could surface as
+                // gibberish in a stale tab.
+                if (parsed && typeof parsed.type === 'string') {
                   continue;
                 }
               } catch {

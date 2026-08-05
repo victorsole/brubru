@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
+import { applyUserLanguage } from '../i18n/config';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 interface User {
@@ -12,6 +14,8 @@ interface User {
   role: string;
   avatar_url: string | null;
   country: string | null;
+  /** Preferred UI language ('en' | 'es' | 'ca' | 'fr' | 'it' | 'nl'); applied on login. */
+  language: string | null;
   policy_interests: string | null;
   /** P1b — Monitoring overhaul (May 2026) */
   role_title: string | null;
@@ -57,6 +61,7 @@ if (typeof window !== 'undefined') {
       useAuth.getState().user = user;
       useAuth.getState().isAuthenticated = true;
       useAuth.setState({ token, user, isAuthenticated: true });
+      applyUserLanguage(user?.language);
     }
   });
 }
@@ -80,6 +85,7 @@ export const useAuth = create<AuthState>()(
         // Store previous login for welcome-back greeting
         sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
         set({ token: access_token, user, isAuthenticated: true });
+        applyUserLanguage(user?.language);
       },
 
       signup: async (data: any) => {
@@ -125,6 +131,7 @@ export const useAuth = create<AuthState>()(
           // Store previous login for welcome-back greeting
           sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
           set({ token: access_token, user, isAuthenticated: true });
+          applyUserLanguage(user?.language);
         } catch (error) {
           console.error('Google login failed:', error);
           throw error;
@@ -205,7 +212,12 @@ export const useAuth = create<AuthState>()(
         token: state.token,
         isAuthenticated: state.isAuthenticated,
         adminBackup: state.adminBackup
-      })
+      }),
+      // Returning session: re-apply the profile language so a 'ca' user
+      // gets a Catalan UI without having to log in again.
+      onRehydrateStorage: () => (state) => {
+        if (state?.isAuthenticated) applyUserLanguage(state.user?.language);
+      }
     }
   )
 );

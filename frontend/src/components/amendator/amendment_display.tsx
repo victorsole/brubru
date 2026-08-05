@@ -1,4 +1,5 @@
 // Amendment Display Component with EP-compliant formatting
+import { useTranslation } from 'react-i18next';
 import type { Amendment } from '../../pages/amendator_page';
 import { formatOriginalColumn, formatAmendmentColumn } from '../../utils/amendment_formatter';
 import './amendment_display.css';
@@ -8,6 +9,21 @@ interface AmendmentDisplayProps {
 }
 
 export const AmendmentDisplay = ({ amendment }: AmendmentDisplayProps) => {
+  const { t } = useTranslation();
+
+  const getStatusLabel = (status: Amendment['status']) => {
+    switch (status) {
+      case 'tabled':
+        return t('amendments.tabled', 'Tabled');
+      case 'candidate':
+        return t('amendments.candidate', 'Candidate');
+      case 'withdrawn':
+        return t('amendments.withdrawn', 'Withdrawn');
+      default:
+        return status;
+    }
+  };
+
   // Format text according to amendment type
   const formattedOriginal = formatOriginalColumn(
     amendment.originalText,
@@ -34,7 +50,7 @@ export const AmendmentDisplay = ({ amendment }: AmendmentDisplayProps) => {
           <h3 className="amendment-display__position">{amendment.position}</h3>
         </div>
         <span className={`amendment-display__status amendment-display__status--${amendment.status}`}>
-          {amendment.status}
+          {getStatusLabel(amendment.status)}
         </span>
       </div>
 
@@ -43,10 +59,10 @@ export const AmendmentDisplay = ({ amendment }: AmendmentDisplayProps) => {
         {/* Column Headers */}
         <div className="amendment-display__table-header">
           <div className="amendment-display__table-cell amendment-display__table-cell--header">
-            Original Text
+            {t('amendator.editor.originalLabel', 'Original Text')}
           </div>
           <div className="amendment-display__table-cell amendment-display__table-cell--header">
-            Proposed Amendment
+            {t('amendator.editor.proposedLabel', 'Proposed Amendment')}
           </div>
         </div>
 
@@ -70,7 +86,7 @@ export const AmendmentDisplay = ({ amendment }: AmendmentDisplayProps) => {
       {/* Justification (if provided) */}
       {amendment.justification && (
         <div className="amendment-display__justification">
-          <h4 className="amendment-display__justification-title">Justification</h4>
+          <h4 className="amendment-display__justification-title">{t('amendatorExtras.justification', 'Justification')}</h4>
           <p className="amendment-display__justification-text">{amendment.justification}</p>
         </div>
       )}

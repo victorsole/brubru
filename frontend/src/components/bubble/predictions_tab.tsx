@@ -75,6 +75,7 @@ import {
   type InterestFiles,
 } from '../../services/prediction_service';
 import './predictions_tab.css';
+import { uiDateLocale } from '../../i18n/config';
 
 // ============================================================================
 // Types
@@ -241,7 +242,7 @@ const ResolutionIndicatorRow: React.FC<{
         </span>
         {resolution.adoption_date && (
           <span className="prediction-card__resolution-date">
-            {new Date(resolution.adoption_date).toLocaleDateString('en-GB', {
+            {new Date(resolution.adoption_date).toLocaleDateString(uiDateLocale(), {
               day: 'numeric',
               month: 'short',
               year: 'numeric',
@@ -379,7 +380,7 @@ const PredictionCard: React.FC<{
 
   // Format date
   const predictedDate = new Date(prediction.predicted_at).toLocaleDateString(
-    'en-GB',
+    uiDateLocale(),
     { day: 'numeric', month: 'short', year: 'numeric' }
   );
 
@@ -835,7 +836,7 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
       // Calculate next month reset date
       const now = new Date();
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      const resetDate = nextMonth.toLocaleDateString('en-GB', {
+      const resetDate = nextMonth.toLocaleDateString(uiDateLocale(), {
         day: 'numeric',
         month: 'short',
         year: 'numeric',

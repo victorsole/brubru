@@ -14,7 +14,7 @@ freshness comes from each body's existing sync. Scope: read:economy.
 """
 from __future__ import annotations
 
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query, Request
@@ -265,13 +265,16 @@ async def directory(request: Request, db: Session = Depends(get_db),
                 "with `body` (comma-separated codes) and/or `family` (a Brubru policy family, e.g. "
                 "`defence-security-borders`); omit both for every body.\n\n**Input**\n`body` "
                 "(comma list of body codes), `family` (comma list of family slugs), `when` "
-                "(upcoming | past | all), `from` / `to` (YYYY-MM-DD on the event date), `q` (free text), "
+                "(upcoming | past | all), `from` / `to` (YYYY-MM-DD on the event date), `days` (shorthand "
+                "window: the next N days when `when=upcoming`, otherwise the last N days), `q` (free text), "
                 "`source` (economy | calendar | all), `order` (recent | oldest | title), `page`, `limit` "
-                "(max 100).\n\n**Try it**\n```\nGET /api/v2/events/all?family=defence-security-borders&when=upcoming\n"
+                "(max 100).\n\n**Try it**\n```\nGET /api/v2/events/all?when=upcoming&days=14\n"
+                "GET /api/v2/events/all?family=defence-security-borders&when=upcoming\n"
                 "GET /api/v2/events/all?body=commission,parliament,ecb&order=recent\n```\n\n**You get back**\n"
                 "A paginated envelope of events. Each carries the 5 datapoints (`body_txt` / `body_html` "
                 "null on the list — fetch the detail endpoint), plus body_code, body_name, the policy "
-                "families, source and (for calendar events) event_type and venue. Undated events sort "
+                "families, source and (for calendar events) event_type and venue. `published_from` / "
+                "`published_to` echo the date window actually applied. Undated events sort "
                 "last.\n\n**Data freshness**\nLive union of economy_items + eu_calendar_events."))
 async def list_events(
     request: Request,
@@ -282,6 +285,7 @@ async def list_events(
     when: str = Query("all", description="upcoming | past | all."),
     from_: Optional[date] = Query(None, alias="from", description="Only events on/after this date (YYYY-MM-DD)."),
     to: Optional[date] = Query(None, description="Only events on/before this date (YYYY-MM-DD)."),
+    days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand window: with when=upcoming, the next N days; otherwise the last N days. Ignored if `from`/`to` already bound that side."),
     q: Optional[str] = Query(None, description="Free-text search over title and summary."),
     source: str = Query("all", description="economy | calendar | all."),
     order: str = Query("recent", description="recent | oldest | title."),
@@ -295,6 +299,16 @@ async def list_events(
     if order not in _ORDERS:
         raise HTTPException(400, f"order must be one of {sorted(_ORDERS)}")
     sources = {"economy", "calendar"} if source == "all" else {source}
+    # `days` was never declared, so FastAPI dropped it silently and the caller
+    # got the entire 7,300-event corpus back believing it was windowed
+    # (28 July 2026). For a forward-looking query the window runs forwards;
+    # otherwise backwards. An explicit from/to always wins on its own side.
+    if days is not None:
+        if when == "upcoming":
+            if to is None:
+                to = date.today() + timedelta(days=days)
+        elif from_ is None:
+            from_ = date.today() - timedelta(days=days)
     codes = _resolve_scope(body, family)
     items = _fetch(db, codes=codes, since=from_, until=to, when=when, q=q, sources=sources)
     keyf, rev = _sort_key(order)
@@ -302,7 +316,10 @@ async def list_events(
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
     names = _body_names(db)
-    return build_envelope([_to_item(it, names, with_body=False) for it in window], total, page, limit)
+    return build_envelope(
+        [_to_item(it, names, with_body=False) for it in window], total, page, limit,
+        published_from=from_, published_to=to,
+    )
 
 
 @router.get("/bodies", response_model=dict, tags=["v2-events"],

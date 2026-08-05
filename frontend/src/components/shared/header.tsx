@@ -81,6 +81,14 @@ export const Header = () => {
 
     try {
       await i18n.changeLanguage(newLanguage);
+      // Persist the choice to the profile so the preference follows the
+      // user across devices and drives the UI on next login. Best-effort:
+      // a failed PATCH must never block the in-session switch.
+      if (user) {
+        useAuth.getState().updateProfile({ language: newLanguage }).catch((err) => {
+          console.error('[ERROR] Failed to save language preference:', err);
+        });
+      }
     } catch (error) {
       console.error('[ERROR] Failed to change language:', error);
     } finally {

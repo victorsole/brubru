@@ -1,6 +1,7 @@
 // frontend/src/components/tour/tour_trigger.tsx
 import Icon from '@mdi/react';
 import { mdiHelpCircleOutline } from '@mdi/js';
+import { useTranslation } from 'react-i18next';
 import { useTour } from './tour_provider';
 import type { TourKey } from '../../stores/tour_store';
 import './tour_trigger.css';
@@ -14,11 +15,13 @@ interface TourTriggerProps {
 
 export const TourTrigger = ({
   tourKey,
-  label = 'Take a tour',
+  label,
   variant = 'button',
   className = '',
 }: TourTriggerProps) => {
+  const { t } = useTranslation();
   const { triggerTour } = useTour();
+  const resolvedLabel = label ?? t('header.takeTour', 'Take a tour');
 
   const handleClick = () => {
     triggerTour(tourKey, true); // force=true to always show
@@ -30,8 +33,8 @@ export const TourTrigger = ({
         type="button"
         className={`tour-trigger tour-trigger--icon ${className}`}
         onClick={handleClick}
-        aria-label={label}
-        title={label}
+        aria-label={resolvedLabel}
+        title={resolvedLabel}
       >
         <Icon path={mdiHelpCircleOutline} size={1} />
       </button>
@@ -46,7 +49,7 @@ export const TourTrigger = ({
         onClick={handleClick}
       >
         <Icon path={mdiHelpCircleOutline} size={0.8} />
-        <span>{label}</span>
+        <span>{resolvedLabel}</span>
       </button>
     );
   }
@@ -58,7 +61,7 @@ export const TourTrigger = ({
       onClick={handleClick}
     >
       <Icon path={mdiHelpCircleOutline} size={0.9} />
-      <span>{label}</span>
+      <span>{resolvedLabel}</span>
     </button>
   );
 };

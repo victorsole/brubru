@@ -91,6 +91,60 @@
         "compliance": "Compliment",
         "tenders": "Licitacions"
       }
+    },
+    "suggestWalkThrough": "Explica'm què implica això per a la meva feina.",
+    "suggestStatus": "Quin és l'estat actual de {{ref}}?",
+    "suggestKeyArticles": "Mostra'm els articles clau de {{celex}}.",
+    "suggestWhoElse": "Qui més està treballant en aquest expedient?",
+    "suggestCommitteeAgenda": "Què hi ha a l'agenda de la comissió {{code}} aquest mes?",
+    "suggestDraftBrief": "Redacta'm un informe d'una pàgina sobre això.",
+    "citationLegislation": "Legislació",
+    "citationProcedure": "Procediment legislatiu",
+    "citationMep": "Perfil d'eurodiputat",
+    "citationNews": "Article de premsa",
+    "citationSearchResult": "Resultat de cerca",
+    "hideSources": "Amaga les fonts",
+    "viewSources": "Mostra les fonts",
+    "thankYouReport": "Gràcies per informar d'aquest problema!",
+    "thankYouFeedback": "Gràcies per la teva valoració!",
+    "submitting": "S'està enviant...",
+    "submitReport": "Envia l'informe",
+    "removeFile": "Elimina {{name}}",
+    "draftedDoc": {
+      "onePager": "Document d'una pàgina",
+      "positionPaper": "Document de posició",
+      "mepBriefing": "Briefing per a eurodiputat",
+      "talkingPoints": "Argumentari",
+      "resolution": "Resolució del PE",
+      "epQuestion": "Pregunta escrita del PE",
+      "euEmail": "Correu electrònic UE",
+      "pressRelease": "Nota de premsa UE",
+      "stakeholderMap": "Mapa d'actors",
+      "impactAssessment": "Avaluació d'impacte",
+      "presentation": "Presentació",
+      "document": "Document",
+      "openEdit": "Obre i edita a Documents",
+      "openNewTab": "Obre en una pestanya nova"
+    },
+    "onboarding": {
+      "step1Title": "Què et passa pel cap ara mateix?",
+      "step1Sub": "Tria l'àmbit polític que t'interessa avui. Adaptaré el que et mostraré a continuació.",
+      "step2Title": "Segueixes res en concret?",
+      "step2Sub": "Escriu un nom (AI Act, CSRD, RGPD), una referència OEIL o un CELEX. Li seguiré la pista.",
+      "step2Placeholder": "p. ex. AI Act, 2024/0079(COD), 32024R1689",
+      "step3Title": "Vols que li segueixi la pista?",
+      "step3Sub": "Registra't gratis i seguiré la legislació per tu, t'avisaré dels canvis i redactaré esmenes i documents de posició quan els necessitis. Sense targeta de crèdit.",
+      "skipForNow": "Omet-ho per ara",
+      "skip": "Omet",
+      "continue": "Continua",
+      "noFileYet": "Encara cap expedient concret",
+      "maybeLater": "Potser més tard",
+      "chipAiDigital": "IA i digital",
+      "chipClimateEnergy": "Clima i energia",
+      "chipFinance": "Finances",
+      "chipHealth": "Salut",
+      "chipTrade": "Comerç",
+      "chipAgriFisheries": "Agricultura i pesca"
     }
   },
   "docs": {
@@ -255,7 +309,9 @@
       "myInterests": "Els meus interessos",
       "all": "Totes",
       "body": "Organisme",
-      "allBodies": "Tots els organismes"
+      "allBodies": "Tots els organismes",
+      "openOnAgencyNamed": "Obre a {{agency}}",
+      "openOnAgency": "Obre al web de l'agència"
     },
     "feedbackTitle": "La meva Bombolla UE",
     "feedbackDescription": "Ajuda'ns a millorar La meva Bombolla UE compartint les teves opinions, suggeriments o reportant qualsevol problema. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE.",
@@ -503,14 +559,15 @@
     },
     "overview": {
       "corner": "Comença aquí",
-      "explore": "Explora la teva EU bubble",
+      "explore": "Explora la teva bombolla UE",
       "morning": "Bon dia",
       "afternoon": "Bona tarda",
       "evening": "Bona nit",
       "desc_corner": "El teu punt de partida: defineix els teus interessos polítics, gestiona els teus documents i llegeix les notícies que t'importen.",
       "desc_legislative": "Segueix els expedients legislatius i la seva documentació: expedients seguits, Diari Oficial, esmenes, comparacions, tren legislatiu i votacions.",
       "desc_institutional": "Segueix les institucions de la UE: calendari, notícies, transcripcions de comissions, activitat del Consell i dels eurodiputats, ple, preguntes, consultes i reunions de lobby.",
-      "desc_strategy": "Analitza i actua: posicions, prediccions, les biblioteques de Brubru, recerca de la UE, mapes d'actors i els teus documents d'incidència."
+      "desc_strategy": "Analitza i actua: posicions, prediccions, les biblioteques de Brubru, recerca de la UE, mapes d'actors i els teus documents d'incidència.",
+      "workspace": "Què ha tocat el teu espai de treball"
     },
     "ask": {
       "title": "Pregunta a Brubru",
@@ -581,7 +638,88 @@
     "accountCreated": "Compte creat",
     "lastLogin": "Últim inici de sessió",
     "deleteWarning": "Elimina el teu compte i totes les dades associades. Aquesta acció no es pot desfer.",
-    "deleteAccount": "Eliminar Compte"
+    "deleteAccount": "Eliminar Compte",
+    "overview": "Resum",
+    "billing": "Facturació",
+    "sectors": "Sectors",
+    "background": "Fons",
+    "welcomeBack": "Hola de nou, {{name}}",
+    "welcomeBackNoName": "Hola de nou",
+    "welcomeText": "Gestiona el teu perfil, la teva subscripció i les teves preferències de polítiques des del teu tauler personal.",
+    "memberSince": "Membre des de",
+    "days": "dies",
+    "quickActions": "Accions ràpides",
+    "editProfile": "Edita el perfil",
+    "roleTitle": "Càrrec / Títol",
+    "roleTitlePlaceholder": "p. ex. Responsable de polítiques, advocat intern, consultor d'afers europeus",
+    "roleTitleHelp": "Com descrius la teva funció professional. Brubru adapta les respostes en funció d'això.",
+    "free": "Gratuït",
+    "perMonth": "/ mes",
+    "basicTierDescription": "Accés bàsic a les funcions de Brubru",
+    "usageThisMonth": "Ús aquest mes",
+    "includedFeatures": "Funcions incloses",
+    "manageSubscription": "Gestiona la subscripció",
+    "stripePortal": "Portal de clients de Stripe",
+    "yourSectors": "Els teus sectors",
+    "sectorsDescription": "Tria els sectors d'activitat econòmica de la UE en què treballes. Alimenten les targetes del tauler: oportunitats de veu, senyals de compliment i novetats de la setmana.",
+    "pageBackground": "Fons de pàgina",
+    "backgroundDescription": "Personalitza les teves pàgines de My EU Bubble i de perfil amb un bonic paisatge urbà o monument europeu.",
+    "notSet": "Sense definir",
+    "dangerZone": "Zona de perill",
+    "dashboard": "Tauler",
+    "subtitleOverview": "El teu tauler de Brubru d'un cop d'ull",
+    "subtitlePersonal": "Actualitza el teu nom, càrrec, organització i país",
+    "subtitleBilling": "Gestiona la teva subscripció i facturació",
+    "subtitlePolicies": "Selecciona les àrees de polítiques de la UE que segueixes",
+    "subtitleSectors": "Tria els teus sectors perquè Brubru pugui personalitzar",
+    "subtitleBackground": "Personalitza els fons de les teves pàgines",
+    "subtitleFeedback": "Comparteix els teus comentaris i suggeriments",
+    "subtitleAccount": "Dades i configuració del compte",
+    "backgrounds": {
+      "default": "Predeterminat",
+      "defaultBackground": "Fons predeterminat",
+      "selectedAlt": "Fons seleccionat",
+      "hide": "Amaga els fons",
+      "change": "Canvia el fons",
+      "amsterdam": "Amsterdam",
+      "amsterdamCanals": "Canals d'Amsterdam",
+      "athens": "Atenes",
+      "aurora": "Aurora boreal",
+      "barcelona": "Barcelona",
+      "brussels": "Brussel·les",
+      "canal": "Canal",
+      "church": "Església",
+      "colosseum": "Coliseu",
+      "dome": "Cúpula",
+      "eu": "Unió Europea",
+      "florence": "Florència",
+      "greece": "Grècia",
+      "lake": "Llac",
+      "london": "Londres",
+      "map": "Mapa",
+      "mapCompass": "Mapa i brúixola",
+      "netherlands": "Països Baixos",
+      "paris": "París",
+      "santorini": "Santorí",
+      "venice": "Venècia"
+    },
+    "policies": {
+      "searchPlaceholder": "Cerca polítiques, p. ex. agricultura, defensa comercial, drons, refugiats…",
+      "searchAria": "Cerca àrees de polítiques",
+      "clearSearch": "Esborra la cerca",
+      "askBrubru": "No trobes el que busques? Parla amb Brubru!",
+      "selectedLabel": "Seleccionades:",
+      "area": "àrea de polítiques",
+      "areas": "àrees de polítiques",
+      "selectAll": "Selecciona-ho tot",
+      "clearAll": "Esborra-ho tot",
+      "noMatch": "Cap àrea de polítiques coincideix amb",
+      "noMatchHint": "Prova amb un terme més ampli o esborra la cerca per veure totes les àrees.",
+      "categorySelected": "{{count}} seleccionades",
+      "selectedTitle": "Les teves àrees de polítiques seleccionades:",
+      "remove": "Elimina {{name}}"
+    },
+    "basicPlanName": "Bàsic"
   },
   "subscription": {
     "hero": {
@@ -600,7 +738,8 @@
     },
     "modules": {
       "title": "Moduls Individuals",
-      "subtitle": "Tria nomes el que necessites"
+      "subtitle": "Tria nomes el que necessites",
+      "subscribe": "Subscriu-te"
     },
     "starter": {
       "name": "Starter",
@@ -789,7 +928,8 @@
       "f6": "Transcripcions de comissions sota demanda i anàlisis en profunditat",
       "note": "Els plans Enterprise s'adapten a cada equip. Explica'ns el teu abast i t'oferirem una proposta en 48 hores.",
       "button": "Contactar amb vendes"
-    }
+    },
+    "checkoutError": "No s'ha pogut iniciar el pagament. Torna-ho a provar."
   },
   "euLawComply": {
     "history": "Historial d'Anàlisis",
@@ -840,7 +980,8 @@
       "thu": "dj",
       "tue": "dt",
       "wed": "dc"
-    }
+    },
+    "dismiss": "Descarta"
   },
   "landing": {
     "nav": {
@@ -1269,6 +1410,15 @@
       "passwordTooShort": "La contrasenya ha de tenir almenys 8 caràcters",
       "passwordNeedsDigit": "La contrasenya ha de contenir almenys un dígit",
       "passwordNeedsUppercase": "La contrasenya ha de contenir almenys una lletra majúscula"
+    },
+    "linkedin": {
+      "invalidState": "Paràmetre d'estat no vàlid",
+      "noCode": "No s'ha rebut cap codi d'autorització",
+      "failed": "Ha fallat l'autenticació amb LinkedIn",
+      "authFailedTitle": "Autenticació fallida",
+      "windowClose": "Aquesta finestra es tancarà automàticament...",
+      "authenticating": "S'està autenticant amb LinkedIn...",
+      "pleaseWait": "Espera un moment..."
     }
   },
   "cookies": {
@@ -1493,8 +1643,10 @@
       "errorFetch": "No s'ha pogut obtenir el document",
       "hotFiles": "Expedients destacats aquesta setmana:",
       "examplesLoading": "Carregant…",
-      "examplesError": "No s'han pogut carregar els exemples destacats ({{error}}).",
-      "examplesEmpty": "Encara no hi ha exemples destacats; enganxa qualsevol URL d'EUR-Lex aquí dalt."
+      "examplesError": "No s'han pogut carregar els exemples destacats.",
+      "examplesEmpty": "Encara no hi ha exemples destacats; enganxa qualsevol URL d'EUR-Lex aquí dalt.",
+      "myFiles": "Esmena un expedient que segueixes",
+      "examplesLoadFailed": "No s'han pogut carregar els exemples"
     },
     "upload": {
       "title": "Puja un document",
@@ -1509,7 +1661,8 @@
       "errorUnsupported": "{{name}}: tipus de fitxer no admès. Puja fitxers PDF, DOC o DOCX.",
       "errorTooLarge": "{{name}}: el fitxer supera el límit de 10 MB.",
       "errorSelectFile": "Selecciona almenys un fitxer",
-      "errorFailed": "No s'han pogut pujar els documents"
+      "errorFailed": "No s'han pogut pujar els documents",
+      "errorFetchContent": "No s'ha pogut obtenir el contingut del document"
     },
     "tracked": {
       "title": "Carrega des d'expedients seguits",
@@ -1540,6 +1693,89 @@
       "copyForJustification": "Copia per a justificació",
       "copyTooltip": "Copia una línia de justificació preformatada",
       "copied": "Copiat"
+    },
+    "badgeOriginalMismatch": "El text original citat podria no coincidir amb la font",
+    "badgeScopeCreep": "Reescriptura àmplia ({{pct}}% modificat)",
+    "badgePhantom": "Referència no reconeguda: {{refs}}",
+    "badgeVerified": "Original verificat amb la font",
+    "unplacedCount": "{{count}} suggeriment(s) d'IA no s'han pogut col·locar automàticament",
+    "unplacedHint": "Selecciona l'element de destinació a la taula i fes servir Modifica per aplicar el text proposat a sota.",
+    "unknownPosition": "Posició desconeguda",
+    "editor": {
+      "emptyHint": "O configura manualment els detalls de l'esmena a continuació.",
+      "typeLabel": "Tipus d'esmena",
+      "typeHintModification": "Original: paraules antigues en negreta i cursiva. Esmena: paraules noves en negreta i cursiva.",
+      "typeHintSuppression": "Original: text eliminat en negreta i cursiva. Esmena: text restant o \"Text suprimit\".",
+      "typeHintAddition": "Original: \"No hi ha text original\". Esmena: text nou en negreta i cursiva.",
+      "structureLabel": "Nivell d'estructura",
+      "positionLabel": "Referència de posició",
+      "positionPhRecital": "Considerant 15",
+      "positionPhArticle": "Article 3",
+      "positionPhPoint": "Article 3, punt 2",
+      "positionPhParagraph": "Article 3, punt 2, paràgraf (a)",
+      "positionPhSubparagraph": "Article 3, punt 2, paràgraf (a), subparàgraf (i)",
+      "completeSuppressionOnHint": "Mostrarà \"Text suprimit\" a la columna de l'esmena",
+      "completeSuppressionOffHint": "Mostrarà el text restant després de la supressió",
+      "originalLabel": "Text original",
+      "additionNoOriginalHint": "Les esmenes d'addició introdueixen text totalment nou sense referència original.",
+      "proposedLabel": "Esmena proposada",
+      "aiDraftBtn": "Assistència de redacció amb IA",
+      "aiDraftComingSoon": "L'assistència de redacció amb IA arribarà aviat. Utilitzarà Anthropic Claude per ajudar a redactar esmenes.",
+      "completeSuppressionNote": "La supressió completa elimina tot l'element. La columna de l'esmena mostrarà \"Text suprimit\".",
+      "proposedPhAddition": "Introdueix el teu text nou (es mostrarà en negreta i cursiva)...",
+      "proposedPhSuppression": "Introdueix el text restant després de la supressió...",
+      "proposedPhModification": "Introdueix el text de la teva esmena proposada...",
+      "proposedHintModification": "Les paraules modificades es ressaltaran automàticament en negreta i cursiva.",
+      "proposedHintAddition": "El text nou es mostrarà en negreta i cursiva a la columna de l'esmena.",
+      "proposedHintSuppression": "Les parts eliminades es marcaran en negreta i cursiva a la columna original.",
+      "groupLabel": "Grup / Comissió (opcional)",
+      "groupHint": "Apareixerà com una insígnia verda a la llista d'esmenes.",
+      "justificationLabel": "Justificació (opcional)",
+      "justificationPlaceholder": "Explica per què cal aquesta esmena...",
+      "statusLabel": "Estat",
+      "saveAmendmentBtn": "Desa l'esmena"
+    },
+    "improveFailed": "No s'ha pogut millorar el text",
+    "improveError": "No ha estat possible millorar el text",
+    "saveAmendmentFailed": "No s'ha pogut desar l'esmena",
+    "banner": {
+      "loginToTrack": "Inicia la sessió per seguir la legislació.",
+      "notInTracker": "Aquesta legislació encara no és a la nostra base de dades de seguiment legislatiu.",
+      "trackFailed": "No s'ha pogut seguir aquest expedient. Torna-ho a provar.",
+      "notTrackedLead": "Aquesta legislació",
+      "notTrackedEmphasis": "no s'està seguint",
+      "tracking": "S'està seguint...",
+      "viewFileDetails": "Mostra els detalls de l'expedient",
+      "daysInStatus_one": "{{count}} dia en aquest estat",
+      "daysInStatus_other": "{{count}} dies en aquest estat"
+    },
+    "sidebar": {
+      "exportFailed": "No s'han pogut exportar les esmenes"
+    },
+    "page": {
+      "httpError": "EUR-Lex ha retornat HTTP {{status}}. No s'ha pogut carregar la llei automàticament.",
+      "parseError": "EUR-Lex ha retornat el document, però no se n'ha pogut analitzar l'estructura legislativa. Això passa de vegades quan EUR-Lex serveix una pàgina de verificació WAF.",
+      "networkError": "Error de xarxa en carregar la llei.",
+      "saveFailed": "No s'han pogut desar les esmenes",
+      "loadingText": "S'està carregant el text legislatiu…",
+      "restoringAmendments": "S'estan restaurant les teves esmenes…",
+      "autoOpenFailed": "No s'ha pogut obrir automàticament {{celex}}",
+      "dismiss": "Descarta"
+    },
+    "aiSidebar": {
+      "uploadFailed": "Error en pujar el fitxer",
+      "extractFailed": "No s'ha pogut extreure el text",
+      "processFailed": "Error en processar",
+      "loadFirst": "Primer carrega un document legislatiu.",
+      "suggestFailed": "No s'ha pogut generar el suggeriment de la IA",
+      "suggestBatchFailed": "No s'han pogut generar suggeriments",
+      "noElementSelected": "Cap element seleccionat: la IA analitzarà tot el document",
+      "letsAmend": "Comencem a esmenar",
+      "tipSelectElement": "Consell: selecciona un element concret per a suggeriments específics, o deixa que la IA analitzi tot el document",
+      "apply": "Aplica",
+      "acceptAll": "Accepta-ho tot",
+      "suggestionsCount_one": "{{count}} suggeriment",
+      "suggestionsCount_other": "{{count}} suggeriments"
     }
   },
   "comply": {
@@ -1578,7 +1814,9 @@
       "requirements": "requisits",
       "selectPackage": "Selecciona el paquet",
       "eucanonReminder": "Llegeix l'explicació en llenguatge planer",
-      "eucanonAria": "Obre l'explicació del Cànon de la UE en una nova pestanya"
+      "eucanonAria": "Obre l'explicació del Cànon de la UE en una nova pestanya",
+      "forYou": "Per a tu",
+      "fromTracked": "Afecta un expedient que segueixes"
     },
     "report": {
       "title": "Informe de compliment",
@@ -2462,7 +2700,8 @@
         "ftTenders": "Convocatòries F&T de licitació",
         "ftProjects": "Projectes finançats F&T",
         "agencyProcurement": "Contractació de l'agència"
-      }
+      },
+      "askBrubruLabel": "Pregunta al Brubru"
     },
     "unifiedFeed": {
       "searchPlaceholder": "Cercar per títol, organització, programa...",
@@ -2552,10 +2791,37 @@
     "emailFooter": "El teu correu s'enviarà al nostre equip a hello@beresol.eu",
     "subject": "Feedback sobre {{name}}",
     "bodyTemplate": "Hola equip de Beresol,\n\nM'agradaria compartir el meu feedback sobre {{name}}:\n\n[Escriu aquí el teu feedback]\n\nGràcies!",
-    "defaultDescription": "Ajuda'ns a millorar {{name}} compartint les teves opinions, suggeriments o reportant problemes. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE."
+    "defaultDescription": "Ajuda'ns a millorar {{name}} compartint les teves opinions, suggeriments o reportant problemes. El teu feedback ens ajuda a crear millors eines per a la comunitat de polítiques UE.",
+    "form": {
+      "submit": "Envia els comentaris",
+      "heading": "Envia'ns els teus comentaris",
+      "closeAria": "Tanca el formulari de comentaris",
+      "successTitle": "Gràcies pels teus comentaris!",
+      "successBody": "T'agraïm que dediquis el teu temps a ajudar-nos a millorar Brubru.",
+      "typeLabel": "Tipus",
+      "typeGeneral": "Comentari general",
+      "typeBug": "Informe d'error",
+      "typeFeature": "Sol·licitud de funcionalitat",
+      "typeOther": "Altres",
+      "titleLabel": "Títol",
+      "titlePlaceholder": "Resum breu del teu comentari",
+      "descriptionLabel": "Descripció",
+      "descriptionPlaceholder": "Proporciona informació detallada...",
+      "categoryLabel": "Categoria (opcional)",
+      "categoryPlaceholder": "p. ex., UI/UX, rendiment, seguretat",
+      "affectedFeatureLabel": "Funcionalitat afectada",
+      "affectedFeaturePlaceholder": "Quina funcionalitat està afectada?",
+      "screenshotLabel": "URL de la captura de pantalla (opcional)",
+      "screenshotHelp": "Puja la teva captura de pantalla a un servei com Imgur i enganxa aquí l'URL",
+      "submitError": "No s'han pogut enviar els comentaris. Torna-ho a provar.",
+      "submitting": "S'està enviant..."
+    }
   },
   "dashboard": {
-    "loadingCockpit": "Carregant el teu tauler..."
+    "loadingCockpit": "Carregant el teu tauler...",
+    "dragToReorder": "Arrossega per reordenar",
+    "expandTile": "Amplia",
+    "collapseTile": "Redueix"
   },
   "updates": {
     "title": "Actualitzacions legislatives",
@@ -2780,7 +3046,14 @@
     "stance_mixed": "Mixta",
     "stance_pending": "Posició presentada",
     "stance_unclear": "Posició presentada",
-    "alignNoLobby": "Encara no hi ha reunions de lobby amb el ponent o ponents alternatius registrades per a aquest expedient, així que no hi ha posicions per alinear."
+    "alignNoLobby": "Encara no hi ha reunions de lobby amb el ponent o ponents alternatius registrades per a aquest expedient, així que no hi ha posicions per alinear.",
+    "stanceSupport": "Suport",
+    "stanceSupportWithAmendments": "Suport amb esmenes",
+    "stanceOppose": "Oposició",
+    "stanceNeutral": "Neutral",
+    "stanceUndecided": "Indecís",
+    "errLoadFiles": "No s'han pogut carregar els expedients",
+    "errLoadPosition": "No s'ha pogut carregar la posició"
   },
   "mepAmendmentsTab": {
     "textProposedByCommission": "Text proposat per la Comissió",
@@ -2817,7 +3090,8 @@
     "loadingShort": "Carregant…",
     "examplePlaceholder": "p. ex. Axel Voss",
     "amendmentsShowing": "Esmenes ({{total}}) - Mostrant {{from}}-{{to}}",
-    "noAmendmentsMatchFilters": "Cap esmena coincideix amb els filtres actuals."
+    "noAmendmentsMatchFilters": "Cap esmena coincideix amb els filtres actuals.",
+    "committeeRapporteurProposal": "Proposta del ponent de la comissió"
   },
   "mepComparativeTab": {
     "positionPlaceholder": "Ex.: donem suport a estàndards forts de protecció al consumidor i a requisits obligatoris de transparència, però ens oposem a disposicions que generin càrregues de compliment desproporcionades per a les pimes...",
@@ -3030,7 +3304,8 @@
     "confirmUntrack": "Vols deixar de seguir aquest expedient?",
     "stopTracking": "Deixa de seguir",
     "untrackFailed": "No s'ha pogut deixar de seguir. Torna-ho a provar.",
-    "loginToTrack": "Inicia la sessió per seguir expedients."
+    "loginToTrack": "Inicia la sessió per seguir expedients.",
+    "viewBtn": "Mostra"
   },
   "calendar": {
     "myEuToday": "La meva UE avui",
@@ -3092,7 +3367,8 @@
       "sat": "ds.",
       "sun": "dg."
     },
-    "allDay": "Tot el dia"
+    "allDay": "Tot el dia",
+    "errLoadEvents": "No s'han pogut carregar els esdeveniments del calendari"
   },
   "newsSidebar": {
     "loadingFeeds": "Carregant fonts..."
@@ -3138,14 +3414,29 @@
     "noAmendmentsDrafted": "Encara no s'han redactat esmenes per a aquest fitxer.",
     "ask": "Pregunta a Brubru",
     "askTitle": "Pregunta a Brubru sobre aquest expedient",
-    "askPrompt": "Parla'm de {{title}}{{ref}}: en quin punt està, qui l'impulsa i què hauria de fer."
+    "askPrompt": "Parla'm de {{title}}{{ref}}: en quin punt està, qui l'impulsa i què hauria de fer.",
+    "readDeepDive": "Llegeix l'anàlisi en profunditat",
+    "viewOnEurlex": "Veure a EUR-Lex",
+    "analysing": "S'està analitzant...",
+    "aiAnalyze": "Analitza aquest expedient amb IA",
+    "analyzeFailed": "No s'ha pogut analitzar l'expedient. Torneu-ho a provar."
   },
   "stagePipeline": {
     "withdrawn": "Retirat",
     "blocked": "Bloquejat",
     "completed": "Completat",
     "current": "Actual",
-    "future": "Pròxim"
+    "future": "Pròxim",
+    "proposal": "Proposta",
+    "committee": "Comissió",
+    "plenary": "Ple",
+    "trilogue": "Triàleg",
+    "adopted": "Adoptat",
+    "proposalShort": "Prop",
+    "committeeShort": "Com",
+    "plenaryShort": "Ple",
+    "trilogueShort": "Trià",
+    "adoptedShort": "Adop"
   },
   "trains": {
     "myInterests": "Els meus interessos",
@@ -3259,7 +3550,10 @@
     "regCascade": "Cascada regulatòria",
     "memberStateDeadlines": "Terminis de transposició per Estat membre",
     "cenStandards": "Normes CEN / CENELEC",
-    "brubruTrainer": "Entrenador de Brubru"
+    "brubruTrainer": "Entrenador de Brubru",
+    "noIdentifierToTrack": "No hi ha cap identificador per seguir",
+    "trackingUpdateFailed": "No s'ha pogut actualitzar el seguiment",
+    "viewNotRendered": "No s'ha pogut mostrar aquesta vista."
   },
   "tenders": {
     "espdChecklist": "Llista de documents ESPD",
@@ -3472,7 +3766,9 @@
     "sendToComply": "Enviar a EU Law Comply",
     "useInChat": "Utilitzar en Chat",
     "versionHistory": "Historial de versions",
-    "versionHistoryTitle": "Historial de versions, {{title}}"
+    "versionHistoryTitle": "Historial de versions, {{title}}",
+    "editTitleLabel": "Títol",
+    "versionPillTitle": "Versió del document"
   },
   "analyticsTab": {
     "title": "Analítiques i insights",
@@ -4053,7 +4349,11 @@
       "s1": "Obre Claude Desktop → Ajustaments → Developer → Edit config.",
       "s2": "Enganxa el JSON de sota. Substitueix YOUR_KEY amb el text pla que vas copiar a brubru.beresol.eu/api.",
       "s3": "Desa i reinicia Claude Desktop.",
-      "s4": "Pregunta a Claude: «Usant Brubru, quin és l'estat de la AI Act?» - s'ha de disparar search_eu_legislation o get_procedure_status."
+      "s4": "Pregunta a Claude: «Usant Brubru, quin és l'estat de la AI Act?» - s'ha de disparar search_eu_legislation o get_procedure_status.",
+      "webTitle": "A claude.ai (web) o a l'app d'escriptori",
+      "webBody": "Obre Configuració → Connectors → Afegeix un connector personalitzat. Enganxa l'URL de sota (ja inclou la teva clau API) i deixa en blanc els camps d'OAuth. Genera una clau a brubru.beresol.eu/api i substitueix brubru_live_YOUR_KEY.",
+      "webUrlLabel": "URL del connector (inclou la teva clau)",
+      "cfgTitle": "O — fitxer de configuració de Claude Desktop"
     },
     "cursor": {
       "title": "Cursor",
@@ -4237,6 +4537,7 @@
     "explainAi": "Explica-ho amb IA",
     "explaining": "Explicant…",
     "explainRetry": "L’explicació ha fallat, torna-ho a provar",
+    "emptyFiles": "Cap acte que afecti els expedients que segueixes en aquesta data.",
     "categoryName": {
       "Regulations": "Reglaments",
       "Directives": "Directives",
@@ -4340,7 +4641,8 @@
     },
     "translated": "Traduït",
     "translatedFrom": "Traduït del {{lang}}",
-    "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment."
+    "error": "No hem pogut carregar les notícies ara mateix. Torna-ho a provar d'aquí a un moment.",
+    "emptyFiles": "Cap notícia relacionada amb els expedients que segueixes ara mateix."
   },
   "db": {
     "subtitle": "Les biblioteques de coneixement de Brubru i un mapa de qui fa què a la UE, adaptat als teus interessos.",
@@ -4422,7 +4724,14 @@
     "summaryFailed": "Ara mateix no s’ha pogut resumir aquest document.",
     "generatedBy": "Generat per",
     "cached": "a la memòria cau",
-    "resDepartments": "Departaments de la Comissió"
+    "resDepartments": "Departaments de la Comissió",
+    "whatsNew": "Novetats a la base de coneixement",
+    "action": {
+      "added": "Guia nova",
+      "updated": "Actualitzat",
+      "canon": "Canon",
+      "deep_dive": "Anàlisi en profunditat"
+    }
   },
   "sm": {
     "subtitle": "Qui importa als teus expedients i als teus interessos: els actors del Parlament, la Comissió i el Consell i les organitzacions al seu voltant.",
@@ -4631,5 +4940,369 @@
     "archivedFiles": "Fitxers arxivats",
     "archivedItems": "Elements arxivats",
     "noArchived": "Encara no hi ha res arxivat"
+  },
+  "tenderDocs": {
+    "alsoInDocuments": "També visible a Documents · Funding & Tenders",
+    "alsoInTenderator": "Obre al Tenderator"
+  },
+  "committeeWork": {
+    "typeCod": "Legislatiu ordinari",
+    "typeInl": "Iniciativa legislativa",
+    "typeApp": "Aprovació",
+    "typeCns": "Consulta",
+    "typeAci": "Acord interinstitucional",
+    "typeBud": "Pressupost",
+    "typeGbd": "Pressupost general",
+    "typeBui": "Iniciativa pressupostària",
+    "typeDec": "Aprovació de la gestió",
+    "typeNle": "Acord / nomenament",
+    "typeRsp": "Resolució",
+    "typeRso": "Resolució interna",
+    "typeIni": "Iniciativa pròpia",
+    "typeCos": "Document estratègic",
+    "typeDce": "Declaració per escrit",
+    "typeDea": "Control d'actes delegats",
+    "typeRps": "Control d'actes d'execució",
+    "typeReg": "Reglament intern",
+    "typeImm": "Immunitat de diputats",
+    "statusInCommittee": "En comissió",
+    "statusAwaitingVote": "Pendent de votació",
+    "statusPending": "Pendent",
+    "statusCompleted": "Completat",
+    "statusUnknown": "Desconegut"
+  },
+  "consultations": {
+    "typePublicConsultation": "Consulta pública",
+    "typeCallForEvidence": "Convocatòria de dades",
+    "typeFeedback": "Comentaris",
+    "typeRoadmap": "Full de ruta",
+    "typeInitiative": "Iniciativa",
+    "statusOpen": "Oberta",
+    "statusUpcoming": "Propera",
+    "statusClosed": "Tancada",
+    "statusWithdrawn": "Retirada",
+    "subNotStarted": "No iniciada",
+    "subDraft": "Esborrany en curs",
+    "subSubmitted": "Enviada",
+    "subNotParticipating": "Sense participació",
+    "errLoadConsultations": "No s'han pogut carregar les consultes",
+    "errLoadDetail": "No s'han pogut carregar els detalls de la consulta",
+    "errLoadTracked": "No s'han pogut carregar les consultes seguides",
+    "errTrack": "No s'ha pogut seguir la consulta",
+    "errUntrack": "No s'ha pogut deixar de seguir la consulta",
+    "errUpdateTracking": "No s'han pogut actualitzar les preferències de seguiment"
+  },
+  "predictions": {
+    "errGenerate": "No s'ha pogut generar la predicció",
+    "errRefresh": "No s'ha pogut actualitzar la predicció"
+  },
+  "proactive": {
+    "triggerMorningBrief": "Resum del matí",
+    "triggerNewForYou": "Novetats per a tu",
+    "triggerTrackedFiles": "Els teus expedients en seguiment",
+    "triggerAmendmentSurge": "Allau d'esmenes",
+    "triggerSetupWatchlist": "Configura la teva llista de seguiment",
+    "triggerConversationRecall": "Reprèn on ho vas deixar",
+    "triggerWeeklyDigest": "La teva setmana a Brubru",
+    "openCalendar": "Obre El meu calendari UE",
+    "openMyFiles": "Obre Els meus expedients",
+    "openAmendments": "Obre Esmenes",
+    "openProfile": "Obre el perfil",
+    "openChatHistory": "Obre l'historial de xat",
+    "openDashboard": "Obre el tauler",
+    "open": "Obre",
+    "briefing": "Briefing",
+    "ariaBriefings": "Briefings de Brubru",
+    "dismissBriefing": "Descarta el briefing",
+    "raisedForYou": "Brubru ha destacat això per a tu"
+  },
+  "claim": {
+    "reason": {
+      "notFound": "Aquest enllaç d'activació no correspon a cap perfil de Brubru preconfigurat.",
+      "expired": "Aquest enllaç d'activació ha caducat. Escriu a hello@beresol.eu i te n'enviarem un de nou.",
+      "alreadyClaimed": "Aquest perfil ja ha estat activat. Inicia la sessió de manera normal."
+    },
+    "loadError": "No s'ha pogut carregar l'enllaç d'activació. Torna-ho a provar més tard.",
+    "loading": "S'està carregant el teu perfil de Brubru...",
+    "notActive": "L'enllaç d'activació no està actiu",
+    "signIn": "Inicia la sessió",
+    "createAccount": "Crea un compte",
+    "hello": "Hola, {{name}}",
+    "welcome": "Et donem la benvinguda a Brubru",
+    "configuredForAt": "{{name}} a {{org}}",
+    "you": "tu",
+    "subtitle": "Brubru ja està configurat per a {{who}}. Inicia la sessió a continuació per activar-lo: els teus interessos polítics, els expedients de la UE que segueixes, els teus canals de notícies i les teves guies de coneixement privades ja estan precarregats.",
+    "googleFailed": "No s'ha pogut iniciar la sessió amb Google. Prova amb LinkedIn o amb l'opció de contrasenya.",
+    "googleCancelled": "S'ha cancel·lat l'inici de sessió amb Google.",
+    "continueLinkedIn": "Continua amb LinkedIn",
+    "or": "o",
+    "passwordFallback": "Configura un correu i una contrasenya en el seu lloc",
+    "passwordPlaceholder": "Mín. 8 caràcters, 1 dígit, 1 majúscula",
+    "passwordError": "No s'ha pogut establir la contrasenya. Comprova el correu i torna-ho a provar.",
+    "claiming": "S'està activant...",
+    "claimButton": "Activa el meu perfil",
+    "legal": "Perfil preconfigurat creat mitjançant invitació privada. Nivell: {{tier}}. Preguntes? hello@beresol.eu."
+  },
+  "sectors": {
+    "hint": "Selecciona els sectors en què operes. Brubru els fa servir per filtrar les targetes del tauler, els esdeveniments del calendari i les consultes segons el que t'importa.",
+    "agriculture_food": {
+      "label": "Agricultura i alimentació",
+      "description": "Agricultura, transformació alimentària, comerç agrícola"
+    },
+    "automotive_mobility": {
+      "label": "Automoció i mobilitat",
+      "description": "Vehicles, bateries, serveis de mobilitat"
+    },
+    "banking_finance": {
+      "label": "Banca, finances i assegurances",
+      "description": "Crèdit, mercats de capitals, assegurances"
+    },
+    "chemicals_pharma": {
+      "label": "Química i farmàcia",
+      "description": "Química industrial, medicaments, biotecnologia"
+    },
+    "construction_real_estate": {
+      "label": "Construcció i immobiliari",
+      "description": "Edificis, infraestructures, propietat"
+    },
+    "defence_aerospace": {
+      "label": "Defensa i aeroespacial",
+      "description": "Indústria de defensa, espai, tecnologia de doble ús"
+    },
+    "digital_tech": {
+      "label": "Digital i tecnologia",
+      "description": "Programari, IA, núvol, telecomunicacions, plataformes"
+    },
+    "education_research": {
+      "label": "Educació i recerca",
+      "description": "Universitats, escoles, organismes de recerca"
+    },
+    "energy_utilities": {
+      "label": "Energia i serveis públics",
+      "description": "Electricitat, gas, hidrogen, xarxa elèctrica"
+    },
+    "environment_climate": {
+      "label": "Medi ambient i clima",
+      "description": "ONG ambientals, consultories climàtiques"
+    },
+    "health_social_care": {
+      "label": "Salut i atenció social",
+      "description": "Hospitals, proveïdors, salut pública"
+    },
+    "manufacturing_industry": {
+      "label": "Manufactura i indústria",
+      "description": "Indústria pesant, acer, materials"
+    },
+    "maritime_fisheries": {
+      "label": "Marítim i pesca",
+      "description": "Transport marítim, ports, pesca"
+    },
+    "media_communication": {
+      "label": "Mitjans i comunicació",
+      "description": "Editors, radiodifusors, publicitat"
+    },
+    "mining_raw_materials": {
+      "label": "Mineria i matèries primeres",
+      "description": "Matèries primeres crítiques, mineria"
+    },
+    "public_sector": {
+      "label": "Sector públic",
+      "description": "Govern, agències, municipis"
+    },
+    "retail_consumer": {
+      "label": "Comerç minorista i béns de consum",
+      "description": "Minoristes, marques de consum, comerç electrònic"
+    },
+    "services_consulting": {
+      "label": "Serveis i consultoria",
+      "description": "Serveis jurídics, d'assessoria i professionals"
+    },
+    "transport_logistics": {
+      "label": "Transport i logística",
+      "description": "Logística, ferrocarril, transport aeri i per carretera"
+    },
+    "civil_society": {
+      "label": "Societat civil i ONG",
+      "description": "Incidència política, fundacions, think tanks"
+    }
+  },
+  "countries": {
+    "AT": "Àustria",
+    "BE": "Bèlgica",
+    "BG": "Bulgària",
+    "HR": "Croàcia",
+    "CY": "Xipre",
+    "CZ": "República Txeca (Txèquia)",
+    "DK": "Dinamarca",
+    "EE": "Estònia",
+    "FI": "Finlàndia",
+    "FR": "França",
+    "DE": "Alemanya",
+    "GR": "Grècia",
+    "HU": "Hongria",
+    "IE": "Irlanda",
+    "IT": "Itàlia",
+    "LV": "Letònia",
+    "LT": "Lituània",
+    "LU": "Luxemburg",
+    "MT": "Malta",
+    "NL": "Països Baixos",
+    "PL": "Polònia",
+    "PT": "Portugal",
+    "RO": "Romania",
+    "SK": "Eslovàquia",
+    "SI": "Eslovènia",
+    "ES": "Espanya",
+    "SE": "Suècia"
+  },
+  "impact": {
+    "whatItIs": "Què és",
+    "whyItTouchesYou": "Per què t'afecta",
+    "completeProfile": "Completa el teu perfil",
+    "whatToWatch": "Què cal vigilar",
+    "actionsYouCanTake": "Accions que pots emprendre",
+    "alreadyTracking": "Ja segueixes aquest expedient",
+    "alreadyTrackingTitle": "Ja estàs seguint aquest expedient a Brubru.",
+    "loadError": "No s'ha pogut carregar l'informe d'impacte."
+  },
+  "maturity": {
+    "tryAgain": "Torna-ho a provar",
+    "takeMeThere": "Porta-m'hi",
+    "zeroExplainer": "Estàs a zero perquè Brubru encara no té senyals sobre la teva activitat. Cadascuna de les recomanacions anteriors desbloqueja de 5 a 10 punts tan bon punt hi actuïs.",
+    "signedOut": "Sembla que has tancat la sessió. Inicia la sessió per veure la teva maduresa de compliment.",
+    "loadError": "No s'ha pogut carregar la teva puntuació de maduresa: {{detail}}",
+    "axis": {
+      "awareness": "Coneixement",
+      "impact_analysis": "Anàlisi d'impacte",
+      "advocacy": "Incidència",
+      "follow_through": "Seguiment"
+    },
+    "tier": {
+      "beginner": "inicial",
+      "intermediate": "intermedi",
+      "advanced": "avançat",
+      "expert": "expert"
+    }
+  },
+  "cascade": {
+    "noSecondaryActs": "No s'han trobat actes secundaris ni expedients relacionats recents.",
+    "preAdoptionNote": "Aquest expedient encara no s'ha adoptat: els actes secundaris apareixen només un cop adoptat l'acte principal.",
+    "autoSurfaceNote": "Brubru els mostrarà automàticament quan es publiquin.",
+    "transpositionExplainer": "Brubru encara no incorpora les dades de transposició nacional de tots els Estats membres. Quan aquestes dades estiguin disponibles, els terminis apareixeran aquí per país.",
+    "cenExplainer": "Les revisions de normes vinculades a aquest acte encara no s'han incorporat. Un cop connectat al programa de treball del CEN/CENELEC, les revisions de normes relacionades apareixeran aquí.",
+    "subtitle": "Què més penja d'aquest expedient: actes d'execució, actes delegats i treball relacionat en curs.",
+    "statusAdopted": "adoptat",
+    "statusDraft": "esborrany",
+    "published": "publicat",
+    "objectionDeadline": "termini d'objecció",
+    "source": "font",
+    "countImplementing": "d'execució",
+    "countDelegated": "delegats",
+    "countDraft": "{{count}} en esborrany",
+    "countRelated": "expedients en curs en la mateixa àrea política",
+    "implementingActs": "Actes d'execució",
+    "delegatedActs": "Actes delegats",
+    "relatedFiles": "Expedients relacionats en curs",
+    "shares": "comparteix:"
+  },
+  "futureComply": {
+    "openComply": "Obre EU Law Comply"
+  },
+  "tour": {
+    "steps": {
+      "welcome": {
+        "askAnything": {
+          "title": "Pregunta a Brubru el que vulguis",
+          "content": "Escriu preguntes sobre legislació de la UE, eurodiputats o àmbits polítics, o enganxa documents per analitzar-los. Brubru està disponible en 6 llengües."
+        },
+        "exploreTools": {
+          "title": "Explora les eines de Brubru",
+          "content": "Accedeix a eines especialitzades: redacta esmenes, comprova el compliment, segueix licitacions i supervisa la teva bombolla de la UE."
+        },
+        "chooseLanguage": {
+          "title": "Tria la teva llengua",
+          "content": "Brubru està disponible en anglès, francès, neerlandès, espanyol, català i italià. Selecciona la llengua que prefereixis."
+        }
+      },
+      "chat": {
+        "yourQuestion": {
+          "title": "La teva pregunta aquí",
+          "content": "Escriu preguntes sobre política, legislació o institucions de la UE. Prem Retorn per enviar o Maj+Retorn per fer una línia nova."
+        },
+        "uploadDocuments": {
+          "title": "Puja documents",
+          "content": "Puja fitxers PDF per comprovar-ne el compliment, resumir-los o analitzar-los. Brubru els citarà a les respostes."
+        },
+        "exampleQuestions": {
+          "title": "Preguntes d'exemple",
+          "content": "No saps per on començar? Fes clic en qualsevol exemple per provar-lo. Estan seleccionats per experts en polítiques de la UE."
+        }
+      },
+      "amendator": {
+        "selectText": {
+          "title": "Selecciona el text legislatiu",
+          "content": "Tria el document legislatiu de la UE que vols esmenar. Cerca per títol, número CELEX o referència de procediment."
+        },
+        "draftAmendment": {
+          "title": "Redacta la teva esmena",
+          "content": "Escriu esmenes amb el format estàndard del Parlament Europeu. Els canvis es registren automàticament."
+        },
+        "aiAssistant": {
+          "title": "Assistent de redacció amb IA",
+          "content": "Rep suggeriments generats per IA per a les teves esmenes. Brubru t'ajuda a garantir coherència jurídica i claredat."
+        },
+        "export": {
+          "title": "Exporta la teva feina",
+          "content": "Exporta esmenes en XML Akoma Ntoso (format oficial del PE) o Word per compartir-les amb col·legues."
+        }
+      },
+      "euBubble": {
+        "personalisedFeed": {
+          "title": "El teu canal personalitzat",
+          "content": "Actualitzacions en temps real de més de 15 fonts institucionals de la UE, incloent-hi el Parlament, la Comissió i el Consell."
+        },
+        "filterFeed": {
+          "title": "Filtra el teu canal",
+          "content": "Filtra per institució, àmbit polític, tipus de document o interval de dates per trobar exactament el que t'importa."
+        },
+        "trackTrends": {
+          "title": "Segueix les tendències",
+          "content": "Supervisa patrons d'activitat legislativa, tendències de vot i evolució de les polítiques al llarg del temps."
+        }
+      },
+      "euComply": {
+        "lawDatabase": {
+          "title": "Base de dades de legislació de la UE",
+          "content": "Cerca entre reglaments, directives i decisions de la UE. Filtra per àmbit polític, data o estat jurídic."
+        },
+        "uploadDocument": {
+          "title": "Puja el teu document",
+          "content": "Puja el teu document de polítiques, contracte o normes internes per a una anàlisi automatitzada de mancances de compliment."
+        },
+        "complianceReport": {
+          "title": "Informe de compliment",
+          "content": "Consulta una anàlisi detallada de mancances amb referències a articles concrets i recomanacions pràctiques."
+        }
+      },
+      "tenderator": {
+        "findTenders": {
+          "title": "Troba licitacions de la UE",
+          "content": "Filtra licitacions de TED (Tenders Electronic Daily) per sector, valor del contracte, termini i ubicació."
+        },
+        "browseOpportunities": {
+          "title": "Explora oportunitats",
+          "content": "Consulta licitacions rellevants amb les dades clau: òrgan de contractació, termini, valor estimat i requisits."
+        },
+        "matchScoring": {
+          "title": "Puntuació d'afinitat amb IA",
+          "content": "Cada licitació mostra una puntuació de rellevància calculada per IA segons el teu perfil i els teus interessos anteriors."
+        }
+      }
+    },
+    "skip": "Omet la visita",
+    "back": "Enrere",
+    "finish": "Finalitza",
+    "closeAria": "Tanca la visita",
+    "progressOf": "{{current}} de {{total}}"
   }
 }

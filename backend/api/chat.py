@@ -602,6 +602,16 @@ async def stream_message(
 
         async def generate():
             full_response = ""
+            stream_citations: list = []
+
+            # The conversation id, before any text. The non-streaming path
+            # returns it in the response body, but the SSE path never sent it,
+            # so the browser's chatId stayed null forever and every message
+            # opened a NEW conversation with no history. Result: zero
+            # multi-turn chats in 694 conversations between 1 May and 5 Aug
+            # 2026 -- every user talking to an assistant with no memory of the
+            # previous sentence.
+            yield f"data: {json.dumps({'type': 'chat', 'chat_id': str(chat_id)})}\n\n"
 
             async for chunk in ai_service.chat_stream(
                 user_message=request.message,
@@ -615,6 +625,28 @@ async def stream_message(
                 if chunk.startswith("{"):
                     try:
                         parsed = json.loads(chunk)
+                        # The post-processed final text. Swap it into the copy
+                        # we persist as well as forwarding it to the client:
+                        # otherwise the DB keeps the RAW streamed answer, and
+                        # every later read of it (query audits, conversation
+                        # history, exports) sees defects that were already
+                        # fixed on screen.
+                        if parsed.get("type") == "replace":
+                            replacement = parsed.get("content")
+                            if isinstance(replacement, str) and replacement:
+                                full_response = replacement
+                            yield f"data: {chunk}\n\n"
+                            continue
+                        # The citation list backing the [N] markers. Forward it
+                        # to the client AND keep it so the saved message stores
+                        # its sources: otherwise conversation history renders
+                        # bare markers forever (audit follow-up, 28 Jul 2026).
+                        if parsed.get("type") == "citations":
+                            found = parsed.get("citations")
+                            if isinstance(found, list):
+                                stream_citations = found
+                            yield f"data: {chunk}\n\n"
+                            continue
                         if parsed.get("type") in ("status", "entities", "actions"):
                             yield f"data: {chunk}\n\n"
                             continue
@@ -633,6 +665,7 @@ async def stream_message(
                 chat_id,
                 request.message,
                 full_response,
+                citations=stream_citations or None,
                 user_id=request.user_id,
             )
 

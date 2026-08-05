@@ -342,6 +342,8 @@ def generate_html(guides: list[dict]) -> str:
     @media (max-width: 767px) {{ .hero__title {{ font-size: 1.8rem; }} .figures {{ grid-template-columns: 1fr 1fr; }} .toc__grid {{ grid-template-columns: 1fr; }} .header {{ padding: 0.75rem 1rem; }} .header__cta {{ display: none; }} .container {{ padding: 1.25rem; }} .hero__meta {{ flex-direction: column; gap: 0.5rem; }} .guide-card__header {{ flex-direction: column; gap: 0.25rem; }} }}
     html {{ scroll-behavior: smooth; }}
   </style>
+  <!-- Contentsquare (Hotjar) analytics. Kept in sync by scripts/ensure_analytics_tag.py -->
+  <script src="https://t.contentsquare.net/uxa/f2e32d332b6a1.js" defer></script>
 </head>
 <body>
 

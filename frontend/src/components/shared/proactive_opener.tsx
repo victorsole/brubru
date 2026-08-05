@@ -9,6 +9,7 @@
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
   mdiBellRingOutline,
@@ -25,31 +26,38 @@ import {
 } from '../../hooks/use_proactive';
 import './proactive_opener.css';
 
-const TRIGGER_LABEL: Record<ProactiveTriggerSource, string> = {
-  morning_brief: 'Morning brief',
-  new_file_match: 'New for you',
-  tracked_file_movement: 'Your tracked files',
-  amendment_surge: 'Amendment surge',
-  learn_about_you: 'Set up your watchlist',
-  conversation_recall: 'Pick up where you left off',
-  weekly_digest: 'Your week on Brubru',
+// Label maps hold i18n keys + English defaults; resolved with t() at render
+// time inside the component so they follow the UI language.
+interface I18nLabel {
+  key: string;
+  defaultValue: string;
+}
+
+const TRIGGER_LABEL: Record<ProactiveTriggerSource, I18nLabel> = {
+  morning_brief: { key: 'proactive.triggerMorningBrief', defaultValue: 'Morning brief' },
+  new_file_match: { key: 'proactive.triggerNewForYou', defaultValue: 'New for you' },
+  tracked_file_movement: { key: 'proactive.triggerTrackedFiles', defaultValue: 'Your tracked files' },
+  amendment_surge: { key: 'proactive.triggerAmendmentSurge', defaultValue: 'Amendment surge' },
+  learn_about_you: { key: 'proactive.triggerSetupWatchlist', defaultValue: 'Set up your watchlist' },
+  conversation_recall: { key: 'proactive.triggerConversationRecall', defaultValue: 'Pick up where you left off' },
+  weekly_digest: { key: 'proactive.triggerWeeklyDigest', defaultValue: 'Your week on Brubru' },
 };
 
-const OPEN_LABEL: Record<ProactiveTriggerSource, string> = {
-  morning_brief: 'Open My EU Calendar',
-  new_file_match: 'Open My Files',
-  tracked_file_movement: 'Open My Files',
-  amendment_surge: 'Open Amendments',
-  learn_about_you: 'Open profile',
-  conversation_recall: 'Open chat history',
-  weekly_digest: 'Open dashboard',
+const OPEN_LABEL: Record<ProactiveTriggerSource, I18nLabel> = {
+  morning_brief: { key: 'proactive.openCalendar', defaultValue: 'Open My EU Calendar' },
+  new_file_match: { key: 'proactive.openMyFiles', defaultValue: 'Open My Files' },
+  tracked_file_movement: { key: 'proactive.openMyFiles', defaultValue: 'Open My Files' },
+  amendment_surge: { key: 'proactive.openAmendments', defaultValue: 'Open Amendments' },
+  learn_about_you: { key: 'proactive.openProfile', defaultValue: 'Open profile' },
+  conversation_recall: { key: 'proactive.openChatHistory', defaultValue: 'Open chat history' },
+  weekly_digest: { key: 'proactive.openDashboard', defaultValue: 'Open dashboard' },
 };
 
 // Primary CTA label. Defaults to "Tell me more" (which opens Chat with the
 // suggested query). Overridden per trigger where the primary action is NOT a
 // chat query — e.g. learn_about_you routes to the profile setup.
-const PRIMARY_LABEL: Partial<Record<ProactiveTriggerSource, string>> = {
-  learn_about_you: 'Set up your watchlist',
+const PRIMARY_LABEL: Partial<Record<ProactiveTriggerSource, I18nLabel>> = {
+  learn_about_you: { key: 'proactive.triggerSetupWatchlist', defaultValue: 'Set up your watchlist' },
 };
 
 /**
@@ -73,6 +81,7 @@ interface ProactiveOpenerProps {
 
 export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const { briefings, dismissedTitles, fetchPending, dismiss } = useProactive();
 
@@ -107,17 +116,23 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
     <section
       className={`proactive-opener proactive-opener--${surface}`}
       role="region"
-      aria-label="Brubru briefings"
+      aria-label={t('proactive.ariaBriefings', 'Brubru briefings')}
     >
       <header className="proactive-opener__header">
         <Icon path={mdiBellRingOutline} size={0.9} color="#0693E3" />
-        <h3>Brubru raised this for you</h3>
+        <h3>{t('proactive.raisedForYou', 'Brubru raised this for you')}</h3>
       </header>
       <div className="proactive-opener__cards">
-        {visible.map((b) => (
+        {visible.map((b) => {
+          const triggerLabel = TRIGGER_LABEL[b.trigger_source];
+          const primaryLabel = PRIMARY_LABEL[b.trigger_source];
+          const openLabel = OPEN_LABEL[b.trigger_source];
+          return (
           <article key={b.title} className="proactive-opener__card">
             <div className="proactive-opener__card-tag">
-              {TRIGGER_LABEL[b.trigger_source] || 'Briefing'}
+              {triggerLabel
+                ? t(triggerLabel.key, triggerLabel.defaultValue)
+                : t('proactive.briefing', 'Briefing')}
             </div>
             <h4 className="proactive-opener__card-title">{b.title}</h4>
             <p className="proactive-opener__card-summary">{b.summary}</p>
@@ -128,7 +143,9 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
                 onClick={() => onAct(b)}
               >
                 <Icon path={mdiMessageOutline} size={0.7} />
-                {PRIMARY_LABEL[b.trigger_source] || 'Tell me more'}
+                {primaryLabel
+                  ? t(primaryLabel.key, primaryLabel.defaultValue)
+                  : t('chat.tellMeMore', 'Tell me more')}
                 <Icon path={mdiArrowRight} size={0.7} />
               </button>
               {b.drill_down_path && !isStubBriefing(b) && (
@@ -137,20 +154,21 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
                   className="proactive-opener__cta proactive-opener__cta--secondary"
                   onClick={() => navigate(b.drill_down_path as string)}
                 >
-                  {OPEN_LABEL[b.trigger_source] || 'Open'}
+                  {openLabel ? t(openLabel.key, openLabel.defaultValue) : t('proactive.open', 'Open')}
                 </button>
               )}
               <button
                 type="button"
                 className="proactive-opener__dismiss"
                 onClick={() => dismiss(b.title)}
-                aria-label="Dismiss briefing"
+                aria-label={t('proactive.dismissBriefing', 'Dismiss briefing')}
               >
                 <Icon path={mdiClose} size={0.7} />
               </button>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

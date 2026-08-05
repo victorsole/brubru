@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/use_auth';
 import './auth_pages.css';
 
@@ -19,15 +20,26 @@ type ClaimInfo = {
   reason?: string | null;
 };
 
-const REASON_COPY: Record<string, string> = {
-  not_found: 'This claim link does not match a pre-provisioned Brubru profile.',
-  expired:
-    'This claim link has expired. Reach out to hello@beresol.eu and we will issue a fresh one.',
-  already_claimed:
-    'This profile has already been claimed. Sign in normally instead.',
+// Maps API reason codes to i18n keys + English defaults; translated at render time.
+const REASON_COPY: Record<string, { key: string; defaultText: string }> = {
+  not_found: {
+    key: 'claim.reason.notFound',
+    defaultText:
+      'This claim link does not match a pre-provisioned Brubru profile.',
+  },
+  expired: {
+    key: 'claim.reason.expired',
+    defaultText:
+      'This claim link has expired. Reach out to hello@beresol.eu and we will issue a fresh one.',
+  },
+  already_claimed: {
+    key: 'claim.reason.alreadyClaimed',
+    defaultText: 'This profile has already been claimed. Sign in normally instead.',
+  },
 };
 
 export const ClaimPage = () => {
+  const { t } = useTranslation();
   const { token = '' } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const { loginWithGoogle, loginWithLinkedIn } = useAuth();
@@ -52,7 +64,7 @@ export const ClaimPage = () => {
         if (!cancelled) {
           setError(
             e.response?.data?.detail ||
-              'Unable to load the claim link. Please try again later.',
+              t('claim.loadError', 'Unable to load the claim link. Please try again later.'),
           );
         }
       } finally {
@@ -89,7 +101,7 @@ export const ClaimPage = () => {
     } catch (e: any) {
       setError(
         e.response?.data?.detail ||
-          'Google sign-in failed. Try LinkedIn or the password fallback.',
+          t('claim.googleFailed', 'Google sign-in failed. Try LinkedIn or the password fallback.'),
       );
     }
   };
@@ -131,7 +143,7 @@ export const ClaimPage = () => {
     } catch (e: any) {
       setError(
         e.response?.data?.detail ||
-          'Could not set the password. Double-check the email and try again.',
+          t('claim.passwordError', 'Could not set the password. Double-check the email and try again.'),
       );
     } finally {
       setPwBusy(false);
@@ -142,21 +154,22 @@ export const ClaimPage = () => {
     return (
       <div className="auth-page">
         <div className="auth-page__card">
-          <h2 className="auth-page__title">Loading your Brubru profile...</h2>
+          <h2 className="auth-page__title">{t('claim.loading', 'Loading your Brubru profile...')}</h2>
         </div>
       </div>
     );
   }
 
   if (!info || !info.valid) {
-    const reason = (info?.reason && REASON_COPY[info.reason]) || error;
+    const reasonCopy = info?.reason ? REASON_COPY[info.reason] : undefined;
+    const reason = reasonCopy ? t(reasonCopy.key, reasonCopy.defaultText) : error;
     return (
       <div className="auth-page">
         <div className="auth-page__card">
-          <h2 className="auth-page__title">Claim link not active</h2>
+          <h2 className="auth-page__title">{t('claim.notActive', 'Claim link not active')}</h2>
           <p className="auth-page__subtitle">{reason}</p>
           <p className="auth-page__subtitle">
-            <a href="/login">Sign in</a> · <a href="/signup">Create an account</a>
+            <a href="/login">{t('claim.signIn', 'Sign in')}</a> · <a href="/signup">{t('claim.createAccount', 'Create an account')}</a>
           </p>
         </div>
       </div>
@@ -164,18 +177,26 @@ export const ClaimPage = () => {
   }
 
   const greeting = info.first_name
-    ? `Hello ${info.first_name}`
-    : 'Welcome to Brubru';
+    ? t('claim.hello', 'Hello {{name}}', { name: info.first_name })
+    : t('claim.welcome', 'Welcome to Brubru');
+
+  const configuredFor = info.organization
+    ? t('claim.configuredForAt', '{{name}} at {{org}}', {
+        name: info.full_name || t('claim.you', 'you'),
+        org: info.organization,
+      })
+    : info.full_name || t('claim.you', 'you');
 
   return (
     <div className="auth-page">
       <div className="auth-page__card">
         <h2 className="auth-page__title">{greeting}</h2>
         <p className="auth-page__subtitle">
-          Brubru is already configured for {info.full_name || 'you'}
-          {info.organization ? ` at ${info.organization}` : ''}. Sign in below
-          to claim it - your policy interests, EU file tracks, news feeds and
-          private knowledge guides are pre-loaded.
+          {t(
+            'claim.subtitle',
+            'Brubru is already configured for {{who}}. Sign in below to claim it - your policy interests, EU file tracks, news feeds and private knowledge guides are pre-loaded.',
+            { who: configuredFor },
+          )}
         </p>
 
         {error && <div className="auth-page__error">{error}</div>}
@@ -184,7 +205,7 @@ export const ClaimPage = () => {
           <div className="google-login-wrapper">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError('Google sign-in was cancelled.')}
+              onError={() => setError(t('claim.googleCancelled', 'Google sign-in was cancelled.'))}
               size="large"
               text="continue_with"
             />
@@ -194,11 +215,11 @@ export const ClaimPage = () => {
             onClick={handleLinkedIn}
             className="btn btn--oauth btn--oauth-linkedin"
           >
-            Continue with LinkedIn
+            {t('claim.continueLinkedIn', 'Continue with LinkedIn')}
           </button>
         </div>
 
-        <div className="auth-page__divider"><span>or</span></div>
+        <div className="auth-page__divider"><span>{t('claim.or', 'or')}</span></div>
 
         {!showPassword ? (
           <button
@@ -206,12 +227,12 @@ export const ClaimPage = () => {
             className="btn btn--link"
             onClick={() => setShowPassword(true)}
           >
-            Set an email and password instead
+            {t('claim.passwordFallback', 'Set an email and password instead')}
           </button>
         ) : (
           <form onSubmit={handlePassword} className="auth-page__form">
             <label>
-              Email
+              {t('auth.email', 'Email')}
               <input
                 type="email"
                 required
@@ -221,25 +242,28 @@ export const ClaimPage = () => {
               />
             </label>
             <label>
-              Password
+              {t('auth.password', 'Password')}
               <input
                 type="password"
                 required
                 minLength={8}
                 value={pwPassword}
                 onChange={(e) => setPwPassword(e.target.value)}
-                placeholder="Min 8 chars, 1 digit, 1 uppercase"
+                placeholder={t('claim.passwordPlaceholder', 'Min 8 chars, 1 digit, 1 uppercase')}
               />
             </label>
             <button type="submit" className="btn btn--primary" disabled={pwBusy}>
-              {pwBusy ? 'Claiming...' : 'Claim my profile'}
+              {pwBusy ? t('claim.claiming', 'Claiming...') : t('claim.claimButton', 'Claim my profile')}
             </button>
           </form>
         )}
 
         <p className="auth-page__legal" style={{ marginTop: '2rem' }}>
-          Pre-provisioned profile created via private invitation. Tier:{' '}
-          {info.subscription_tier || 'white'}. Questions? hello@beresol.eu.
+          {t(
+            'claim.legal',
+            'Pre-provisioned profile created via private invitation. Tier: {{tier}}. Questions? hello@beresol.eu.',
+            { tier: info.subscription_tier || 'white' },
+          )}
         </p>
       </div>
     </div>
