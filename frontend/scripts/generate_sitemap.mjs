@@ -96,6 +96,8 @@ const ROUTE_META = {
   '/eucanon/2025-327_ehds/':                 { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-40_ppwr/':                  { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-1892_wfd_textiles/':        { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2022-2464_csrd/':                { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2024-1760_csddd/':               { priority: 0.9, changefreq: 'monthly' },
   '/legislacio-ue-catala/':         { priority: 0.9, changefreq: 'daily'   },
   '/main/':                         { priority: 0.9, changefreq: 'daily'   },
   '/my-eu-bubble/':                 { priority: 0.9, changefreq: 'daily'   },
