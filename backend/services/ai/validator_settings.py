@@ -39,8 +39,25 @@ def _env_int(key: str, default: int) -> int:
 VALIDATOR_ENABLED = _env_bool("VALIDATOR_ENABLED", True)
 
 # Shadow mode: validate + log, but never modify the shipped response.
-# OFF by default since 28 May 2026 -- we now act on critical findings.
-VALIDATOR_SHADOW_MODE = _env_bool("VALIDATOR_SHADOW_MODE", False)
+#
+# BACK ON by default, 6 August 2026. The 28 May decision to run in override
+# mode was made for a code path that never executed: the validator lived only
+# in chat(), and the UI calls chat_stream() exclusively, so it had not run for
+# a single real user in over two months. Those defaults were therefore never
+# tested against production traffic.
+#
+# Unifying the two paths this morning made it live for the first time, and the
+# first thing it did was replace a correct, well-grounded answer about the
+# Ecodesign Regulation with the safe-refusal template. A validator whose
+# false-positive rate has never been measured must not hold a veto over
+# answers.
+#
+# Shadow mode keeps the protection visible without the veto: every verdict is
+# still computed and logged to chat_validations, so the override decision can
+# be re-made from real data instead of an assumption. Turn override back on
+# with VALIDATOR_SHADOW_MODE=false once the logged false-positive rate on real
+# queries justifies it.
+VALIDATOR_SHADOW_MODE = _env_bool("VALIDATOR_SHADOW_MODE", True)
 
 # Action on critical violation:
 #   "override" -- replace the assistant response with a safe refusal template
