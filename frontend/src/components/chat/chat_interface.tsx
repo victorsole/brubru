@@ -70,6 +70,25 @@ interface ChatInterfaceProps {
 // Pre-user helpers
 const PRE_USER_QUERY_LIMIT = 3;
 
+/**
+ * The trial wall shown once a signed-out visitor spends their free queries.
+ *
+ * Defined once. It was written out twice, in the streaming and non-streaming
+ * send handlers, and both copies listed four products against the canonical
+ * six: "Document Generator" is not one of them (Documents is a sub-tab of My
+ * EU Bubble), while Tenderator and the API were missing entirely. Chat is the
+ * first thing a visitor meets, so this list is the product tour for anyone who
+ * never gets further.
+ */
+const buildTrialWallMessage = (limit: number): string =>
+  `You have used your ${limit} free queries. Start a free trial to keep asking, and to open the rest of Brubru:\n\n`
+  + '- **My EU Bubble** -- your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
+  + '- **Amendator** -- draft EU legislative amendments in proper EP format\n'
+  + '- **EU Law Comply** -- compliance gap analysis against the acts that bind you\n'
+  + '- **Tenderator** -- EU tenders and funding calls matched to what you do\n'
+  + '- **API** -- the same EU data behind everything above, straight into your own tools\n\n'
+  + '[Start your 14-day free trial](/signup)';
+
 // Two identical sends inside this window are treated as one double-fire, not
 // as a user deliberately repeating themselves (audit defect D6, 28 Jul 2026).
 const DUPLICATE_SEND_WINDOW_MS = 3000;
@@ -102,12 +121,15 @@ const getProgressiveCTA = (queryNumber: number): string | null => {
     // Query 2: Subtle feature discovery
     return '\n\n---\n\nDid you know? Brubru can also track legislation, draft amendments, and generate position papers. [Discover all features](/signup)';
   }
-  // Query 3: Prominent feature cards
-  return '\n\n---\n\n**Unlock the full Brubru toolkit:**\n\n'
-    + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work in real time\n'
-    + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
-    + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
-    + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
+  // Query 3: Prominent feature cards. Same canonical list as the trial wall;
+  // this was the third hardcoded copy and also named a product that does not
+  // exist ("Document Generator") while omitting Tenderator and the API.
+  return '\n\n---\n\n**The rest of Brubru:**\n\n'
+    + '- **My EU Bubble** -- your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
+    + '- **Amendator** -- draft EU legislative amendments in proper EP format\n'
+    + '- **EU Law Comply** -- compliance gap analysis against the acts that bind you\n'
+    + '- **Tenderator** -- EU tenders and funding calls matched to what you do\n'
+    + '- **API** -- the same EU data behind everything above, straight into your own tools\n\n'
     + '[Start your 14-day free trial](/signup)';
 };
 
@@ -392,12 +414,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         const blockedMessage: Message = {
           id: 'blocked_' + Date.now(),
           role: 'assistant',
-          content: 'You have used your 3 free queries. Start a free trial to continue chatting and unlock the full Brubru toolkit:\n\n'
-            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
-            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
-            + '[Start your 14-day free trial](/signup)',
+          content: buildTrialWallMessage(PRE_USER_QUERY_LIMIT),
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, userMessage, blockedMessage]);
@@ -533,12 +550,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         const blockedMessage: Message = {
           id: 'blocked_' + Date.now(),
           role: 'assistant',
-          content: 'You have used your 3 free queries. Start a free trial to continue chatting and unlock the full Brubru toolkit:\n\n'
-            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
-            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
-            + '[Start your 14-day free trial](/signup)',
+          content: buildTrialWallMessage(PRE_USER_QUERY_LIMIT),
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, userMessage, blockedMessage]);

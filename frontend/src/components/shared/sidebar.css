@@ -27,6 +27,15 @@
   padding: var(--space-6);
 }
 
+/* The toggle is position:fixed at top 80px / left 16px, which lands ON TOP of
+   the first line of sidebar content once the panel is open: the "Chat History"
+   heading rendered as "t History", with the arrow covering the first
+   characters. Clear it vertically when open rather than moving the button, so
+   the open/close animation and every other page using Sidebar are unchanged. */
+.sidebar--open .sidebar__content {
+  padding-top: 56px;
+}
+
 .sidebar__toggle {
   position: fixed;
   top: 80px;
@@ -112,6 +121,12 @@
 
   .sidebar__content {
     padding: var(--space-4);
+  }
+
+  /* Mobile header is taller, so the toggle sits at 130px against a sidebar
+     starting at 120px. Same overlap, smaller numbers. */
+  .sidebar--open .sidebar__content {
+    padding-top: 54px;
   }
 }
 
