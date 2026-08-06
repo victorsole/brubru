@@ -24,10 +24,21 @@ Cost: €0 at current volume — Groq/Cerebras free tiers (open models) + Gemini
 Mistral free tiers. Anthropic/OpenAI are reached only as a last resort.
 """
 
+import asyncio
+import json
 import logging
+import os
 import re
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
+
+# Wall-clock ceilings for a SINGLE provider attempt. The chain has seven links;
+# no one of them may hold the caller hostage. Two budgets because the callers
+# differ: generate() also backs document generation (position papers, tender
+# sections, compliance analyses) where a long output is legitimate, whereas a
+# chat stream that has produced no token in half a minute is simply stuck.
+PROVIDER_TIMEOUT_S = float(os.getenv("PROVIDER_TIMEOUT_S", "90"))
+FIRST_TOKEN_TIMEOUT_S = float(os.getenv("FIRST_TOKEN_TIMEOUT_S", "30"))
 from datetime import datetime, date
 from dataclasses import dataclass, field
 
@@ -354,7 +365,24 @@ class _OpenAICompatibleProvider(AIProvider):
         self.api_key = api_key
         self.model = model or self.MODEL
         self.extra_body = extra_body or {}
-        self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.BASE_URL) if self.api_key else None
+        # max_retries=0 is the whole point of having a fallback chain.
+        #
+        # The OpenAI SDK retries 429s internally with exponential backoff. On a
+        # rate-limited free tier that turns a refusal into a very long wait:
+        # measured 6 Aug 2026, Cerebras took 122.5 SECONDS to surface a 429 that
+        # the server returns immediately. Production latency was ~126s and this
+        # was essentially all of it -- Gemini then answered the same prompt in
+        # 1.7s. Retrying inside one provider while five alternatives sit idle is
+        # exactly backwards: fail fast and let the chain do the retrying.
+        self.client = (
+            AsyncOpenAI(
+                api_key=self.api_key,
+                base_url=self.BASE_URL,
+                max_retries=0,
+                timeout=PROVIDER_TIMEOUT_S,
+            )
+            if self.api_key else None
+        )
 
     @property
     def name(self) -> str:
@@ -546,6 +574,13 @@ class GeminiProvider(AIProvider):
 
     MODEL = "gemini-2.5-flash"  # 11 Jun 2026: gemini-2.0-flash free tier was zeroed by Google (limit:0, persistent, not a daily reset); 2.5-flash has working free quota on the same key. Was 'gemini-1.5-pro' (Apr 2026, dropped from v1beta).
 
+    # A fallback chain is only as fast as the time it wastes on a provider that
+    # is not going to answer. This was a hardcoded 120s, so a single
+    # unresponsive Gemini cost two minutes before the chain tried the next
+    # provider. Now shares the chain-wide ceiling; the stream's first-token
+    # bound (FIRST_TOKEN_TIMEOUT_S) catches a stall much earlier than this.
+    TIMEOUT_S = PROVIDER_TIMEOUT_S
+
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or settings.GOOGLE_GEMINI_API_KEY
         self.client = None
@@ -568,43 +603,23 @@ class GeminiProvider(AIProvider):
     def is_available(self) -> bool:
         return bool(self.api_key and self.client)
 
-    async def generate(
-        self,
-        system_prompt: str,
-        messages: List[Dict[str, Any]],
-        max_tokens: int = 4000,
-        temperature: float = 0.3
-    ) -> ProviderResponse:
-        if not self.is_available:
-            raise RuntimeError("Gemini provider not configured")
-
-        import google.generativeai as genai
-
-        # Build conversation for Gemini
-        # Gemini uses a different format - combine system prompt with first message
-        conversation_parts = []
-
-        # Add system instruction as context
-        conversation_parts.append(f"System Instructions:\n{system_prompt}\n\n---\n\n")
-
-        # Add message history
+    def _flatten(self, system_prompt: str, messages: List[Dict[str, Any]]) -> str:
+        """Flatten the system prompt + messages into Gemini's single-text form."""
+        conversation_parts = [f"System Instructions:\n{system_prompt}\n\n---\n\n"]
         for msg in messages:
             role_label = "User" if msg["role"] == "user" else "Assistant"
-
             if isinstance(msg.get("content"), list):
-                # Handle multi-modal - extract text
-                text_parts = []
-                for block in msg["content"]:
-                    if block.get("type") == "text":
-                        text_parts.append(block.get("text", ""))
-                content = "\n".join(text_parts)
+                content = "\n".join(
+                    block.get("text", "")
+                    for block in msg["content"]
+                    if block.get("type") == "text"
+                )
             else:
                 content = msg["content"]
-
             conversation_parts.append(f"{role_label}: {content}\n\n")
+        return "".join(conversation_parts)
 
-        full_prompt = "".join(conversation_parts)
-
+    def _gen_cfg(self, max_tokens: int, temperature: float) -> Dict[str, Any]:
         # Call the REST endpoint directly (not the SDK) so we can disable
         # thinking. gemini-2.5-flash is a "thinking" model that burns reasoning
         # tokens before answering (~30-150s on Brubru's large prompt); the
@@ -620,18 +635,83 @@ class GeminiProvider(AIProvider):
         # thinkingBudget=0 is only valid on 2.5 thinking models (not -lite / 2.0).
         if "2.5-flash" in self.MODEL and "lite" not in self.MODEL:
             gen_cfg["thinkingConfig"] = {"thinkingBudget": 0}
+        return gen_cfg
+
+    async def generate_stream(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3,
+    ):
+        """Stream text deltas from Gemini via streamGenerateContent (SSE).
+
+        Added 6 August 2026. Gemini serves about a quarter of Brubru's chat
+        traffic but had no generate_stream, so MultiProviderService fell back to
+        generate() and yielded the whole answer as ONE chunk. Measured on
+        production: time-to-first-token 130.7s against a 130.9s total, i.e. the
+        user watched a frozen "Composing response..." for the entire wait and
+        then the answer appeared at once. Nothing about the product streamed.
+        """
+        if not self.is_available:
+            raise RuntimeError("Gemini provider not configured")
+
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{self.MODEL}:streamGenerateContent?alt=sse&key={self.api_key}"
+        )
+        payload = {
+            "contents": [{"parts": [{"text": self._flatten(system_prompt, messages)}]}],
+            "generationConfig": self._gen_cfg(max_tokens, temperature),
+        }
+
+        import httpx
+        self._last_stream_tokens = 0
+        async with httpx.AsyncClient(timeout=self.TIMEOUT_S) as http_client:
+            async with http_client.stream("POST", url, json=payload) as resp:
+                if resp.status_code != 200:
+                    body = (await resp.aread())[:200]
+                    raise RuntimeError(f"Gemini stream {resp.status_code}: {body!r}")
+                async for line in resp.aiter_lines():
+                    if not line.startswith("data:"):
+                        continue
+                    raw = line[5:].strip()
+                    if not raw or raw == "[DONE]":
+                        continue
+                    try:
+                        chunk = json.loads(raw)
+                    except json.JSONDecodeError:
+                        continue
+                    usage = chunk.get("usageMetadata") or {}
+                    if usage.get("totalTokenCount"):
+                        self._last_stream_tokens = usage["totalTokenCount"]
+                    for cand in chunk.get("candidates") or []:
+                        for part in (cand.get("content", {}) or {}).get("parts", []) or []:
+                            text = part.get("text")
+                            if text:
+                                yield text
+
+    async def generate(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3
+    ) -> ProviderResponse:
+        if not self.is_available:
+            raise RuntimeError("Gemini provider not configured")
 
         url = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{self.MODEL}:generateContent?key={self.api_key}"
         )
         payload = {
-            "contents": [{"parts": [{"text": full_prompt}]}],
-            "generationConfig": gen_cfg,
+            "contents": [{"parts": [{"text": self._flatten(system_prompt, messages)}]}],
+            "generationConfig": self._gen_cfg(max_tokens, temperature),
         }
 
         import httpx
-        async with httpx.AsyncClient(timeout=120.0) as http_client:
+        async with httpx.AsyncClient(timeout=self.TIMEOUT_S) as http_client:
             resp = await http_client.post(url, json=payload)
         if resp.status_code != 200:
             # 429 / quota / other -> raise so the chain falls through to the next provider
@@ -850,11 +930,16 @@ class MultiProviderService:
                 logger.info(f"Attempting generation with {provider.name}")
                 start = datetime.now()
 
-                response = await provider.generate(
-                    system_prompt=system_prompt,
-                    messages=messages,
-                    max_tokens=max_tokens,
-                    temperature=temperature
+                # Same ceiling as generate_stream: no single link in a
+                # seven-link chain may hold the caller.
+                response = await asyncio.wait_for(
+                    provider.generate(
+                        system_prompt=system_prompt,
+                        messages=messages,
+                        max_tokens=max_tokens,
+                        temperature=temperature
+                    ),
+                    timeout=PROVIDER_TIMEOUT_S,
                 )
 
                 elapsed = (datetime.now() - start).total_seconds()
@@ -928,17 +1013,38 @@ class MultiProviderService:
         for provider in self.providers:
             produced = False
             try:
-                if isinstance(provider, _OpenAICompatibleProvider):
+                # Any provider exposing generate_stream streams. Testing for
+                # _OpenAICompatibleProvider instead meant Gemini -- about a
+                # quarter of traffic -- was forced down the single-blob path
+                # even after it grew a working generate_stream.
+                if hasattr(provider, "generate_stream"):
                     provider._last_stream_tokens = 0
-                    async for delta in provider.generate_stream(
+                    agen = provider.generate_stream(
                         system_prompt, messages, max_tokens, temperature
-                    ):
-                        produced = True
+                    )
+                    # Bound the wait for the FIRST delta. Once tokens are
+                    # flowing we let the provider finish; before that, a silent
+                    # provider must not stall the chain.
+                    # StopAsyncIteration must not escape an async generator
+                    # (Python turns that into RuntimeError); convert it to the
+                    # empty-output signal the loop below already handles.
+                    try:
+                        first = await asyncio.wait_for(
+                            agen.__anext__(), timeout=FIRST_TOKEN_TIMEOUT_S
+                        )
+                    except StopAsyncIteration:
+                        raise RuntimeError("empty output")
+                    produced = True
+                    yield first
+                    async for delta in agen:
                         yield delta
                     _tokens = getattr(provider, "_last_stream_tokens", 0) or 0
                 else:
-                    resp = await provider.generate(
-                        system_prompt, messages, max_tokens, temperature
+                    resp = await asyncio.wait_for(
+                        provider.generate(
+                            system_prompt, messages, max_tokens, temperature
+                        ),
+                        timeout=PROVIDER_TIMEOUT_S,
                     )
                     if resp.message:
                         produced = True
@@ -948,7 +1054,15 @@ class MultiProviderService:
                     logger.info(f"[stream] {provider.name} produced response")
                     if telemetry is not None:
                         telemetry["provider"] = provider.name
-                        telemetry["model"] = getattr(provider, "model", "") or ""
+                        # _OpenAICompatibleProvider carries an instance `model`;
+                        # Gemini/Mistral/Anthropic/OpenAI carry a class `MODEL`.
+                        # Reading only the lowercase one recorded provider=Gemini
+                        # with model=NULL on the first production probe.
+                        telemetry["model"] = (
+                            getattr(provider, "model", "")
+                            or getattr(provider, "MODEL", "")
+                            or ""
+                        )
                         telemetry["tokens_used"] = _tokens
                         telemetry["attempts"] = list(errors)
                     return
