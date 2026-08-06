@@ -100,7 +100,7 @@
 
   <h3>Funding &amp; consultations</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (81)</a></li>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (82)</a></li>
     <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (11)</a></li>
   </ul>
 
@@ -121,7 +121,7 @@
 
   <h3>Proprietary</h3>
   <ul>
-    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (10)</a></li>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (11)</a></li>
     <li><a href="/api/docs/endpoints.html#tender-docs" data-nav="ep-tender-docs">Tender Docs (4)</a></li>
   </ul>
 
@@ -746,7 +746,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </table>
 <p style="font-size:14px;color:var(--text-mut);">EEAS people are served through <code>/api/v2/who-is-who/officials</code> (the 352 EEAS officials are in the EU Who Is Who directory, filterable by the EEAS organisation).</p>
 
-<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">81 endpoints</span></h2>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">82 endpoints</span></h2>
 <table class="endpoint-table">
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -827,6 +827,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice/{item_id}</code></td><td>Justice Programme: one funding call (full body)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes</code></td><td>EU funding programmes directory: the EC classification + Brubru coverage</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes/{acronym}</code></td><td>Look up one EU funding programme in the classification</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/entrepreneur-instruments</code></td><td>EU financial instruments for entrepreneurs, by delivery intermediary (EIC Fund, EISMEA, EEN, EDIH)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup, scale-up &amp; SME funding: EIC, COSME/EISMEA, Innovation Fund (stage-tagged)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups/{topic_id}</code></td><td>EU startup funding: one call (full body), by its F&amp;T topic_id</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/tenders</code></td><td>EU public procurement tenders (TED: Tenders Electronic Daily)</td></tr>
@@ -933,7 +934,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </tbody>
 </table>
 
-<h2 id="proprietary">Brubru proprietary EU intelligence <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">10 endpoints</span></h2>
+<h2 id="proprietary">Brubru proprietary EU intelligence <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">11 endpoints</span></h2>
 <table class="endpoint-table">
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -947,6 +948,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/catalan/{celex}</code></td><td>One Catalan translation by CELEX: optional inlined body</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/guides</code></td><td>List Brubru's curated EU-policy knowledge guides: the chatbot's grounding layer</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/guides/{guide_id}</code></td><td>Look up one knowledge guide by its slug: full markdown body</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/proprietary/textile-circularity</code></td><td>Live status of EU textile-circularity law (Textile EPR, ESPR, PPWR, ...): curated, Cellar-resolved</td></tr>
 </tbody>
 </table>
 
