@@ -7,6 +7,13 @@
 - **Type:** Directive
 - **Legal basis:** Article 50(1), Article 50(2)(g) and Article 114 TFEU (internal market + right of establishment)
 - **Procedure:** ordinary legislative procedure (2022/0051(COD))
+- **Commission proposal:** COM(2022) 71 final, 23 February 2022
+- **EP lead committee:** JURI (Legal Affairs)
+- **EP rapporteur:** Lara Wolters (S&D, Netherlands)
+- **Responsible DG:** DG JUST (Justice and Consumers)
+- **Key milestones:** trilogue agreement December 2023; Council formal approval March 2024 (scope narrowed from the original proposal); EP first-reading plenary adoption April 2024
+- **Corrigendum:** CELEX 32024L1760R(03), published 10 March 2026 (OJ L), technical corrections
+- **Related acts:** CSRD (32022L2464), EU Taxonomy (32020R0852), Conflict Minerals (32017R0821), Deforestation Regulation (32023R1115), Forced Labour Regulation (2022/0269(COD))
 - **Signed:** Brussels, 13 June 2024 (R. Metsola for the Parliament; M. Michel for the Council)
 - **OJ reference:** OJ L, 2024/1760, 5.7.2024
 - **ELI:** http://data.europa.eu/eli/dir/2024/1760/oj
@@ -26,6 +33,30 @@ CSDDD is the EU's mandatory horizontal due diligence law. It requires large comp
 Whereas CSRD (Directive (EU) 2022/2464) forces companies to REPORT sustainability information, CSDDD forces them to DO due diligence, to act on findings, and to compensate victims when they don't. Together with CSRD, the SFDR (Regulation (EU) 2019/2088) and the Taxonomy Regulation (Regulation (EU) 2020/852), CSDDD closes the EU sustainable-finance and corporate-conduct framework.
 
 CSDDD is heavily contested. The originally-adopted 2024 text was already narrower than the 2022 Commission proposal (COM(2022) 71 final). Stop-the-clock (Directive (EU) 2025/794) postponed transposition and Wave 1 application by one year in April 2025, and a substantive Omnibus I proposal tabled by the Commission on 26 February 2025 (COM(2025) 81 final and COM(2025) 82 final) proposes to narrow scope further — limit routine due diligence to own operations and direct suppliers, delete or soften Article 22 climate transition plan enforcement, and delete the Article 29 harmonised civil-liability regime. The substantive Omnibus is still under co-legislator negotiation in mid-2026.
+
+
+## Omnibus I scope reduction (2026)
+
+The Commission's Omnibus I "simplification" package narrowed the CSDDD scope
+sharply. Updated SOMO datahub figures (April 2026):
+
+- **974 EU corporate groups** now in scope, a fall of about 71% against the
+  original CSDDD scope
+- **473 non-EU parent groups** in scope through their EU subsidiaries
+- By Member State: **Germany 280**, with sharp drops across all the large
+  member states
+- By third country: **US 182**, **UK 69**, **Switzerland 47**, **China 13**
+- **Review clause: July 2031** — scope is revisited at that point
+
+Source: Andreas Rasche (Copenhagen Business School), SOMO datahub, 15 April
+2026, commenting that "due diligence cannot remain a 'big players only'
+exercise".
+
+Policy implication: at 974 EU groups, 280 of them German, the effect of the
+CSDDD on supply chains and human-rights outcomes is materially diluted against
+the original 2024 scope. The July 2031 review is the next natural window to
+broaden it.
+
 
 ## Structure
 

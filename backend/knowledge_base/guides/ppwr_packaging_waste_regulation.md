@@ -4,6 +4,9 @@
 - Short name: PPWR (Packaging and Packaging Waste Regulation)
 - Full title: Regulation (EU) 2025/40 of the European Parliament and of the Council of 19 December 2024 on packaging and packaging waste, amending Regulation (EU) 2019/1020 and Directive (EU) 2019/904, and repealing Directive 94/62/EC
 - CELEX: 32025R0040
+- Procedure: 2022/0396(COD) — ordinary legislative procedure (agreed in trilogue)
+- Responsible Commissioner: Jessika Roswall (Environment, Water Resilience and Competitive Circular Economy)
+- Type: Regulation — directly applicable; supersedes the prior directive-level harmonisation under 94/62/EC (CELEX 31994L0062)
 - OJ reference: OJ L, 2025/40, 22 January 2025
 - EP procedural reference: PE/73/2024/REV/1
 - Commission proposal: COM(2022) 677 final (30 November 2022)
@@ -234,3 +237,35 @@ The power to adopt delegated acts (covering, among others, the Article 5 heavy-m
 - REACH (Regulation (EC) No 1907/2006) – primary chemical-safety framework for substances in packaging; PPWR's PFAS and heavy-metal rules operate alongside it
 - Market Surveillance Regulation (EU) 2019/1020 – amended by PPWR Article 66 to bring packaging within its scope
 - Food Contact Materials Regulation (EC) No 1935/2004 – governs contact-sensitive packaging exemptions throughout the PPWR
+
+
+## HoReCa, reuse and single-use restrictions
+
+- HoReCa (hotels, restaurants, catering) packaging carries specific reuse and
+  refill obligations.
+- Restricted single-use formats include single-portion HoReCa packaging
+  (condiments, sauces, sugar) and accommodation-sector small toiletries under
+  100 ml.
+- Member States must set up monitoring programmes and report progress to the
+  Commission annually.
+- Quantitative reduction targets run to **65% by 2040** for the most demanding
+  categories (Article 43).
+
+## Declaration of conformity
+
+A copy of the declaration of conformity must accompany the packaging or be made
+electronically accessible, for example through a QR code link.
+
+## Cross-link with the Waste Shipment Regulation (DIWASS)
+
+The **DIWASS platform** (Digital Information for Waste Shipments) went live on
+**21 May 2026** under the new Waste Shipment Regulation. Packaging waste moving
+between Member States is documented through it, so PPWR reporting duties and
+waste-shipment notification duties now share a single digital trail.
+
+Cross-border EPR coordination runs through **EUROPEN** and **PROs Europe**; a
+Commission implementing act sets the harmonised format.
+
+| Date | Milestone |
+|---|---|
+| 1 January 2035 | Recyclable-at-scale grading regime fully binding |
