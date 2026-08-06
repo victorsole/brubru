@@ -669,21 +669,9 @@ class MultiProviderService:
         gemini_key: Optional[str] = None
     ):
         self.providers: List[AIProvider] = []
-        # Sonnet-primary slot: consulted FIRST when prefer_claude=True (most
-        # Brubru queries). Distinct from the base-chain Sonnet entry below
-        # which is fallback 1. Was named `haiku_provider` until 5 May 2026.
-        self.sonnet_primary_provider: Optional[AIProvider] = None
-
-        # Daily spend cap for the Sonnet-primary slot ($10/day soft cap).
-        # When exceeded, prefer_claude=True traffic falls back to the base chain
-        # (Mistral first). Was named `_haiku_daily_*` until 5 May 2026.
-        self._sonnet_daily_cap_usd = 10.00
-        self._sonnet_daily_tokens = 0
-        self._sonnet_daily_date = date.today()
 
         # Free open-model chain (10 June 2026 migration, see
         # memory/project_chat_oss_migration.md). List order = fallback priority.
-        # NOTE: sonnet_primary_provider is intentionally left None so generate()
         # iterates this chain in order instead of routing to Claude first.
 
         # 1. Cerebras (OPEN-SOURCE PRIMARY — gpt-oss-120b, ~60K TPM fits Brubru's
@@ -790,124 +778,12 @@ class MultiProviderService:
         Raises:
             RuntimeError: If all providers fail
         """
-        # Route knowledge-heavy queries to Claude Sonnet (primary slot) for
-        # better extraction quality on injected guide content.
-        if prefer_claude and self.sonnet_primary_provider:
-            # Reset daily counter if new day
-            today = date.today()
-            if today != self._sonnet_daily_date:
-                self._sonnet_daily_tokens = 0
-                self._sonnet_daily_date = today
+        # The Sonnet-primary routing branch that used to sit here is gone with
+        # the provider. It was already dead (the slot was permanently None),
+        # but it was also a ready-made hook for re-adding a paid provider, and
+        # it carried its own $10/day spend cap as if that were a safety net.
+        # `prefer_claude` remains in the signature for callers and is a no-op.
 
-            # Estimate cost: Sonnet = $3.00/1M input + $15.00/1M output
-            # Average query ~5K tokens. $10/day cap = ~50-100 queries/day
-            estimated_daily_cost = (self._sonnet_daily_tokens / 1_000_000) * 15.00
-            if estimated_daily_cost >= self._sonnet_daily_cap_usd:
-                logger.warning(
-                    f"Claude Sonnet daily cap reached (${estimated_daily_cost:.2f}/"
-                    f"${self._sonnet_daily_cap_usd:.2f}). Falling back to Mistral."
-                )
-            else:
-                try:
-                    logger.info("Routing to Claude Sonnet (knowledge guide matched)")
-                    start = datetime.now()
-                    response = await self.sonnet_primary_provider.generate(
-                        system_prompt=system_prompt,
-                        messages=messages,
-                        max_tokens=max_tokens,
-                        temperature=temperature
-                    )
-                    elapsed = (datetime.now() - start).total_seconds()
-                    self._sonnet_daily_tokens += response.tokens_used
-                    logger.info(
-                        f"Claude Sonnet succeeded in {elapsed:.2f}s "
-                        f"({response.tokens_used} tokens, "
-                        f"daily: {self._sonnet_daily_tokens} tokens)"
-                    )
-                    return response
-                except Exception as e:
-                    logger.warning(f"Claude Sonnet primary failed, falling back to chain: {e}")
-
-        errors = []
-
-        for provider in self.providers:
-            try:
-                logger.info(f"Attempting generation with {provider.name}")
-                start = datetime.now()
-
-                # Same ceiling as generate_stream: no single link in a
-                # seven-link chain may hold the caller.
-                response = await asyncio.wait_for(
-                    provider.generate(
-                        system_prompt=system_prompt,
-                        messages=messages,
-                        max_tokens=max_tokens,
-                        temperature=temperature
-                    ),
-                    timeout=PROVIDER_TIMEOUT_S,
-                )
-
-                elapsed = (datetime.now() - start).total_seconds()
-                logger.info(
-                    f"{provider.name} succeeded in {elapsed:.2f}s "
-                    f"({response.tokens_used} tokens)"
-                )
-
-                return response
-
-            # The anthropic.* handlers that used to sit here were removed with
-            # the provider. Leaving them would have been worse than untidy:
-            # with the import gone, Python evaluating `except anthropic.X`
-            # while unwinding ANY provider error raises NameError, so a routine
-            # Cerebras 429 would have taken down every request.
-
-            except openai.APIConnectionError as e:
-                logger.warning(f"{provider.name} connection error: {e}")
-                errors.append(f"{provider.name}: Connection error")
-
-            except openai.RateLimitError as e:
-                logger.warning(f"{provider.name} rate limited: {e}")
-                errors.append(f"{provider.name}: Rate limited")
-
-            except openai.APIStatusError as e:
-                logger.warning(f"{provider.name} API error {e.status_code}: {e.message}")
-                errors.append(f"{provider.name}: API error {e.status_code}")
-
-            except Exception as e:
-                logger.warning(f"{provider.name} unexpected error: {type(e).__name__}: {e}")
-                errors.append(f"{provider.name}: {type(e).__name__}")
-
-        # All providers failed
-        error_summary = "; ".join(errors)
-        logger.error(f"All AI providers failed: {error_summary}")
-        raise RuntimeError(f"All AI providers failed: {error_summary}")
-
-    async def generate_stream(
-        self,
-        system_prompt: str,
-        messages: List[Dict[str, Any]],
-        max_tokens: int = 4000,
-        temperature: float = 0.3,
-        telemetry: Optional[Dict[str, Any]] = None,
-    ):
-        """Stream text from the first provider in the chain that works.
-
-        OpenAI-compatible providers (Groq, Cerebras) stream token deltas
-        natively; the others (Gemini, Mistral, Anthropic, OpenAI) fall back to a
-        single full-text chunk via generate(). Fallback semantics mirror
-        generate(): a connect/429 error BEFORE any output falls through to the
-        next provider; a mid-stream error AFTER output has started cannot rewind,
-        so it re-raises rather than garble the answer with a second provider.
-
-        telemetry: a CALLER-OWNED dict. On success it receives `provider`,
-        `model`, `tokens_used` (0 when the provider sends no usage block) and
-        `attempts` (the providers tried and why each failed). It is passed in
-        rather than stored on self because production runs a single uvicorn
-        worker with many concurrent streams: instance state would let one
-        request read another's provider. Until 6 Aug 2026 nothing reported
-        this at all, so 22% of assistant rows had model=NULL and the slowest
-        defect in the product could not be attributed to a provider.
-        """
         errors: List[str] = []
         for provider in self.providers:
             produced = False

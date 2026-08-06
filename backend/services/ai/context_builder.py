@@ -3541,6 +3541,37 @@ class ContextBuilder:
         "dit", "dat", "deze", "die", "hetzelfde", "ervan",
     )
 
+    # Words capitalised by grammar rather than because they name something.
+    _CAPS_NOISE = frozenset({
+        "what", "when", "where", "which", "who", "whom", "how", "why",
+        "and", "the", "is", "are", "do", "does", "did", "can", "could",
+        "should", "would", "will", "answer", "explain", "tell", "show",
+        "give", "list", "also", "but", "for", "about", "please",
+        "quan", "quin", "quina", "que", "cual", "cuales", "quelle", "quel",
+        "quali", "quale", "wat", "wanneer", "welke", "hoe", "come", "como",
+        "si", "es", "el", "la", "le", "il", "de", "het",
+    })
+
+    @classmethod
+    def _carries_own_topic(cls, user_message: str) -> bool:
+        """True when a short question names its own subject.
+
+        A bare acronym or a proper noun IS a topic: "What is CBAM?", "Explain
+        REACH.", "What about Xylella fastidiosa?" and "Is L-cysteine authorised
+        as feed?" are all short, all yield no extractable entity, and all are
+        clean topic switches that must NOT inherit the previous subject.
+        """
+        # Acronym, excluding the ones that are just context ("EU", "AI").
+        if re.search(r"\b(?!EU\b|UE\b|AI\b)[A-Z]{3,10}\b", user_message):
+            return True
+        # Capitalised word that is not the sentence opener and not grammar.
+        for idx, tok in enumerate(re.findall(r"[A-Za-zÀ-ÿ][\w'’-]*", user_message)):
+            if idx == 0:
+                continue  # the first word is capitalised by convention
+            if tok[:1].isupper() and len(tok) >= 4 and tok.lower() not in cls._CAPS_NOISE:
+                return True
+        return False
+
     def _augment_query_with_history(
         self,
         user_message: str,
@@ -3561,15 +3592,30 @@ class ContextBuilder:
         if not conversation_history or not user_message:
             return user_message
 
+        # mep_names is deliberately NOT an anchor. The extractor routinely
+        # returns sentence fragments as people ("Who is the"), and trusting it
+        # here suppressed augmentation on exactly the follow-ups that need it:
+        # "Who is the rapporteur?" was left un-augmented for that reason.
         has_anchor = any((
             getattr(entities, "celex_numbers", None),
             getattr(entities, "procedure_references", None),
             getattr(entities, "committee_codes", None),
-            getattr(entities, "mep_names", None),
             getattr(entities, "policy_areas", None),
             getattr(entities, "funding_programmes", None),
         ))
         if has_anchor:
+            return user_message
+
+        # Opening with a conjunction is an explicit continuation signal, and it
+        # outranks the topic heuristics below: "And for SMEs?" is the previous
+        # act applied to SMEs, not a new subject, even though "SMEs" would
+        # otherwise read as a proper noun.
+        opens_with_continuation = any(
+            user_message.strip().lower().startswith(c)
+            for c in ("and ", "also ", "but ", "et ", "y ", "i ", "e ",
+                      "en ", "und ", "ook ", "a mes ", "ademas ")
+        )
+        if not opens_with_continuation and self._carries_own_topic(user_message):
             return user_message
 
         # Accent-fold before matching: users type "aixo" and "esto" as often
