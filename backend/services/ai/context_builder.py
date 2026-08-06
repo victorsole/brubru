@@ -45,6 +45,22 @@ from core.database import SessionLocal
 logger = logging.getLogger(__name__)
 
 
+def _enum_str(value, default: str) -> str:
+    """Return the string form of a column that may be an Enum or a plain string.
+
+    committee_work_items stores procedure_type / committee_role / status as plain
+    TEXT (the scraper writes 'DEA', 'LEAD', 'IN_COMMITTEE'), but this module read
+    them as `.value` on an Enum. On a str that raises AttributeError, and because
+    the surrounding try/except swallowed it and returned [], committee work items
+    NEVER reached chat context for any user. Found 5 Aug 2026 while populating a
+    real user's Committee Work tab.
+    """
+    if value is None:
+        return default
+    return getattr(value, "value", value)
+
+
+
 # Phase C: Source Tier Hierarchy for citation trustworthiness
 # Tier 1 = Most authoritative, Tier 5 = Least authoritative
 SOURCE_TIERS = {
@@ -200,6 +216,97 @@ def _extract_agency_codes(text: str) -> List[str]:
             seen.add(code)
             out.append(code)
     return out
+
+
+# Identity fields a knowledge guide carries in its QUICK FACTS block. These are
+# the guide's stable "what is this act" facts, as opposed to the dated LATEST
+# bullets that accumulate above them. Matched case-insensitively at the start of
+# a markdown bullet, tolerating bold markers: "- **CELEX**:" / "- CELEX:".
+_GUIDE_IDENTITY_FIELDS = (
+    "celex", "eli", "full name", "official title", "type", "status",
+    "procedure", "legal basis", "commission proposal", "ep adoption",
+    "council adoption", "entry into force", "applies from", "application date",
+    "deadline", "transposition", "lead ep committee", "lead ep committees",
+    "committee", "rapporteur", "rapporteurs", "co-rapporteur", "co-rapporteurs",
+    "responsible commissioner", "commissioner", "lead dg", "dg",
+    "max penalty", "penalties", "oj reference", "brubru deep-dive",
+)
+
+_GUIDE_IDENTITY_RE = re.compile(
+    r"^[ \t]*[-*][ \t]+\*{0,2}(" + "|".join(re.escape(f) for f in _GUIDE_IDENTITY_FIELDS) + r")\*{0,2}[ \t]*:",
+    re.IGNORECASE,
+)
+
+
+def guide_excerpt(content: str, budget: int = 4000, identity_reserve: int = 1000) -> str:
+    """Truncate a knowledge guide to `budget` chars WITHOUT losing its identity facts.
+
+    Why this exists (28 July 2026). Guides are loaded at 8,000 chars but this
+    module re-truncated them to 4,000 with a plain slice. Guides accumulate a
+    dated "LATEST" bullet at the TOP of QUICK FACTS on every refresh, and those
+    bullets are long. Measured across all 535 guides carrying a QUICK FACTS
+    block: 102 (19%) had QUICK FACTS running past the 4,000-char cap, and 6 lost
+    their own CELEX line entirely. The flagship `ai_act_regulation` guide keeps
+    `CELEX: 32024R1689` at char 6,057 — it never reached the model, so the chat
+    was answering AI Act questions with the act's own identifier truncated away.
+
+    Strategy: keep the plain head slice (so the newest LATEST bullets still lead,
+    which is what recency-sensitive answers need), but reserve a slice of the
+    same budget for identity bullets that fall past the cut, and append those.
+    Total stays within `budget`, so the prompt does not grow.
+
+    Guides shorter than `budget` are returned untouched — no behaviour change for
+    the ~81% of guides that already fit.
+
+    SCOPE IS DELIBERATELY THE QUICK FACTS BLOCK ONLY. Later `##` sections of a
+    guide describe OTHER documents (committee own-initiative reports, related
+    procedures) and carry their own `- **Rapporteur:** ...` bullets. Rescuing
+    those would strand a foreign name next to the act's identity facts — on
+    `ai_act_regulation` an unscoped scan lifted the AFCO draft-report rapporteur
+    (Kefalogiannis) to sit beside the AI Act, whose rapporteurs are Benifei and
+    Tudorache. That is precisely the fabrication this function exists to prevent.
+    """
+    if not content:
+        return ""
+    if len(content) <= budget:
+        return content
+
+    # Restrict the rescue to the QUICK FACTS block — the guide's own identity
+    # section. Mirrors KnowledgeLoader._extract_quick_facts.
+    qf = re.search(r"##\s*QUICK\s*FACTS\s*\n(.*?)(?=\n##\s|\Z)", content, re.DOTALL | re.IGNORECASE)
+    if not qf:
+        return content[:budget]
+    scan_from = max(budget, qf.start())
+    scan_region = content[scan_from:qf.end()]
+
+    marker = "\n[... guide truncated; key identifiers preserved below ...]\n"
+    # Never let the rescued block crowd out the head. Capped at half the budget
+    # so a small `budget` cannot overflow (at budget=4000 this is a no-op: the
+    # 1,000-char reserve is well under the 1,970 ceiling).
+    reserve = min(identity_reserve, max(0, (budget - len(marker)) // 2))
+    if reserve <= 0:
+        return content[:budget]
+
+    # Identity bullets living beyond the plain cut-off, in document order.
+    rescued: List[str] = []
+    used = 0
+    for line in scan_region.splitlines():
+        if not _GUIDE_IDENTITY_RE.match(line):
+            continue
+        line = line.rstrip()
+        # Skip anything already visible in the head slice.
+        if line.strip() in content[:budget]:
+            continue
+        if used + len(line) + 1 > reserve:
+            break
+        rescued.append(line)
+        used += len(line) + 1
+
+    if not rescued:
+        return content[:budget]
+
+    head_budget = max(0, budget - used - len(marker))
+    return content[:head_budget] + marker + "\n".join(rescued)
 
 
 def _resolve_event_location(institution: Optional[str], title: Optional[str], week_type: Optional[str]) -> str:
@@ -4488,11 +4595,11 @@ class ContextBuilder:
                     'committee_code': item.committee_code,
                     'committee_name': committee_name,
                     'title': item.title,
-                    'procedure_type': item.procedure_type.value if item.procedure_type else 'INI',
-                    'committee_role': item.committee_role.value if item.committee_role else 'lead',
+                    'procedure_type': _enum_str(item.procedure_type, 'INI'),
+                    'committee_role': _enum_str(item.committee_role, 'lead'),
                     'relevance_score': item.relevance_score,
                     'rapporteur': item.rapporteur_name,
-                    'status': item.status.value if item.status else 'unknown',
+                    'status': _enum_str(item.status, 'unknown'),
                     'oeil_url': item.oeil_url,
                     'ep_page_url': item.ep_page_url,
                     'last_updated': item.last_updated.isoformat() if item.last_updated else None,
@@ -10476,7 +10583,10 @@ class ContextBuilder:
                 staleness = item.get('staleness_caveat')
                 if staleness:
                     sections.append(f"  {staleness}")
-                sections.append(f"  {item['content'][:4000]}")
+                # QUICK-FACTS-aware truncation: a plain [:4000] slice dropped the
+                # guide's own CELEX / procedure / rapporteur lines on guides whose
+                # accumulated LATEST bullets overflow the cap (19% of guides).
+                sections.append(f"  {guide_excerpt(item['content'], 4000)}")
                 sections.append("")
 
         # TODAY BLOCK (on-demand, date-anchored) — injected near the top so it
