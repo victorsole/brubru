@@ -13228,6 +13228,47 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'imballaggi e rifiuti di imballaggio': ['ppwr_packaging_waste_regulation'],
     'verpakking en verpakkingsafval': ['ppwr_packaging_waste_regulation'],
 
+    # Brubru's knowledge of itself. Chat is the first thing a user meets and is
+    # meant to be the guide to the product, but until now it had to improvise
+    # walkthroughs of our own features, which is the one hallucination a user
+    # can disprove in a single click. These triggers are deliberately at the
+    # END of the dict: Python keeps the LAST duplicate key, so overrides added
+    # near the top are silently dead (see scripts/audit_guide_triggers.py).
+    'what can brubru do': ['brubru_product_tour'],
+    'what is brubru': ['brubru_product_tour'],
+    'what does brubru do': ['brubru_product_tour'],
+    'how does brubru work': ['brubru_product_tour'],
+    'how do i use brubru': ['brubru_product_tour'],
+    'what can you do': ['brubru_product_tour'],
+    'who are you': ['brubru_product_tour'],
+    'where do i start': ['brubru_product_tour'],
+    'getting started': ['brubru_product_tour'],
+    'which feature': ['brubru_product_tour', 'brubru_meub_subtabs'],
+    'which tool': ['brubru_product_tour'],
+    'brubru features': ['brubru_product_tour', 'brubru_features'],
+    'brubru plans': ['brubru_product_tour'],
+    'free trial': ['brubru_product_tour'],
+    'que puc fer amb brubru': ['brubru_product_tour'],
+    'que es brubru': ['brubru_product_tour'],
+    'que puedo hacer con brubru': ['brubru_product_tour'],
+    'que fait brubru': ['brubru_product_tour'],
+    'cosa fa brubru': ['brubru_product_tour'],
+    'wat doet brubru': ['brubru_product_tour'],
+    'my eu bubble': ['brubru_meub_subtabs', 'brubru_product_tour'],
+    'sub-tab': ['brubru_meub_subtabs'],
+    'subtabs': ['brubru_meub_subtabs'],
+    'tracked files': ['brubru_meub_subtabs'],
+    'policy interests': ['brubru_meub_subtabs'],
+    'stakeholder mapping': ['brubru_meub_subtabs'],
+    'strategy docs': ['brubru_meub_subtabs'],
+    'brubru databases': ['brubru_meub_subtabs'],
+    'research and evidence': ['brubru_meub_subtabs'],
+    'council watch': ['brubru_meub_subtabs'],
+    'mep watch': ['brubru_meub_subtabs'],
+    'plenary order of business': ['brubru_meub_subtabs'],
+    'how do i track a file': ['brubru_meub_subtabs'],
+    'track a legislative file': ['brubru_meub_subtabs'],
+
 }
 
 

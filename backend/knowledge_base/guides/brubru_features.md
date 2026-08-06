@@ -3,7 +3,8 @@
 ## QUICK FACTS
 - Topic: Brubru platform features and EU institutional data sources
 - Data sources: OEIL (Legislative Observatory), EUR-Lex (Official Journal), Legislative Train Schedule, EPRS (Research Service)
-- Key features: My EU Bubble (RSS aggregator), Amendator (amendment editor with Akoma Ntoso XML), EU Law Comply, AI chat
+- Key features: My EU Bubble (the cockpit, 25 sub-tabs), Amendator (amendment editor with Akoma Ntoso XML), Chat, EU Law Comply, Tenderator, API
+- For what each product and sub-tab does, see brubru_product_tour and brubru_meub_subtabs; this guide covers the data sources behind them
 - Procedure reference format: YYYY/NNNN(XXX) -- e.g. 2024/0176(COD)
 - CELEX format: SYYYY[T]NNNN -- e.g. 32024R1689 (AI Act)
 - Common procedure types: COD (ordinary legislative), CNS (consultation), APP (consent), INI (own-initiative), RSP (resolution), BUD (budgetary)
