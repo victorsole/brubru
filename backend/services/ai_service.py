@@ -634,7 +634,14 @@ class AIService:
     """
 
     # Model configurations
-    MODEL_SONNET = "claude-sonnet-4-20250514"
+    # Chat does not run on a single fixed model: every request is served by
+    # whichever link of the open-model chain answers first, and the real id is
+    # reported per-request via the "meta" event and saved on the message row.
+    # This label used to be "claude-sonnet-4-20250514", a model that is
+    # deprecated AND returns 404 for our key -- so /api/chat/health advertised
+    # a dead Anthropic model as the generator long after chat stopped using it.
+    MODEL_CHAIN_LABEL = "multi-provider-open-model-chain"
+    MODEL_SONNET = MODEL_CHAIN_LABEL  # back-compat alias for existing callers
     MODEL_OPUS = "claude-opus-4-20250514"
 
     # Token limits
@@ -3558,15 +3565,13 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         input_tokens = message_tokens + history_tokens + context_tokens
         output_tokens = self.max_output_tokens
 
-        # Claude pricing (approximate)
-        # Sonnet: $3/M input, $15/M output
-        # Opus: $15/M input, $75/M output
-        if 'sonnet' in self.model.lower():
-            input_cost_per_million = 3.0
-            output_cost_per_million = 15.0
-        else:  # Opus
-            input_cost_per_million = 15.0
-            output_cost_per_million = 75.0
+        # Chat runs on the free open-model chain (Cerebras / Gemini / Groq /
+        # NVIDIA / Mistral), so the marginal cost of a chat answer is zero.
+        # This used to apply Anthropic Sonnet/Opus per-million rates to every
+        # estimate, which overstated chat cost by the entire bill after the
+        # June 2026 migration. OpenAI is the only paid link and sits last.
+        input_cost_per_million = 0.0
+        output_cost_per_million = 0.0
 
         input_cost = (input_tokens / 1_000_000) * input_cost_per_million
         output_cost = (output_tokens / 1_000_000) * output_cost_per_million
