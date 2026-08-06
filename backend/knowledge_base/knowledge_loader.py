@@ -14173,6 +14173,21 @@ class KnowledgeLoader:
         Returns:
             List of matching guides with context snippets, ordered by relevance
         """
+        # Bridge non-English vocabulary into the English trigger corpus before
+        # matching. Only 2.3% of the 11,462 triggers are non-English, so a
+        # Spanish, Catalan, Italian, Dutch or French question matched nothing
+        # and the model answered with no grounding at all. The bridge APPENDS
+        # English equivalents, so an English query is byte-identical to before
+        # and a foreign one can only gain candidates.
+        try:
+            from knowledge_base.query_language_bridge import bridge_query
+            bridged = bridge_query(query)
+            if bridged != query:
+                logger.info("[KB-BRIDGE] %r -> %r", query[:60], bridged[:110])
+                query = bridged
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[KB-BRIDGE] failed, using query as-is: %s", e)
+
         query_lower = query.lower()
         triggered_guides: List[str] = []  # Ordered: longer/more-specific triggers win first
         triggered_seen: set = set()
