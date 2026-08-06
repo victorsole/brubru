@@ -309,14 +309,24 @@ class ReferenceDataService:
         summary = self.loader.get_dg_structure_summary(dg_code)
 
         if summary:
-            context = f"**{summary['full_name']} ({summary['dg_code']})**\n\n"
-            if summary.get('commissioner'):
-                context += f"- Commissioner: {summary['commissioner']}\n"
+            # These three keys never existed on the summary dict, which emits
+            # dg_name / executive_vice_president / deputy_directors_general.
+            # 'full_name' was read unguarded, so every DG lookup raised
+            # KeyError and was swallowed upstream: no DG structure has ever
+            # reached the model.
+            context = f"**{summary.get('dg_name') or summary['dg_code']} ({summary['dg_code']})**\n\n"
+            if summary.get('executive_vice_president'):
+                context += f"- Executive Vice-President: {summary['executive_vice_president']}\n"
             if summary.get('director_general'):
                 context += f"- Director-General: {summary['director_general']}\n"
-            if summary.get('deputy_dg'):
-                context += f"- Deputy Director-General: {summary['deputy_dg']}\n"
-            context += f"- Structure: {summary['num_directorates']} Directorates, {summary['num_units']} Units\n"
+            deputies = [d.get('name') for d in summary.get('deputy_directors_general') or [] if d.get('name')]
+            if deputies:
+                label = "Deputy Directors-General" if len(deputies) > 1 else "Deputy Director-General"
+                context += f"- {label}: {', '.join(deputies)}\n"
+            context += (
+                f"- Structure: {summary.get('num_directorates', 0)} Directorates, "
+                f"{summary.get('num_units', 0)} Units\n"
+            )
             return context
 
         return None

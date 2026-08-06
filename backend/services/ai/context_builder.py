@@ -8042,24 +8042,24 @@ class ContextBuilder:
         """
         context_parts = []
 
-        try:
-            # Try calendar context
-            calendar_context = self.reference_data_service.build_calendar_context(query)
-            if calendar_context:
-                context_parts.append(calendar_context)
+        # Each source is guarded on its own. A single try around both meant one
+        # failing source discarded the other's output as well: while
+        # find_person_in_commission was raising on every query, the calendar
+        # context was built successfully and then thrown away with it.
+        for label, build in (
+            ("calendar", self.reference_data_service.build_calendar_context),
+            ("institution", self.reference_data_service.build_institution_context),
+        ):
+            try:
+                part = build(query)
+                if part:
+                    context_parts.append(part)
+            except Exception as e:
+                logger.error(
+                    "Failed to build %s reference context: %s", label, e, exc_info=True
+                )
 
-            # Try institution context
-            institution_context = self.reference_data_service.build_institution_context(query)
-            if institution_context:
-                context_parts.append(institution_context)
-
-            if context_parts:
-                return "\n\n".join(context_parts)
-
-        except Exception as e:
-            logger.error(f"Failed to build reference data context: {str(e)}")
-
-        return None
+        return "\n\n".join(context_parts) if context_parts else None
 
     async def _fetch_via_toolbox(
         self,

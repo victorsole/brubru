@@ -13848,6 +13848,29 @@ class KnowledgeLoader:
             })
         return sorted(dgs, key=lambda x: x['dg_code'])
 
+    @staticmethod
+    def _person_name(entry: Any) -> str:
+        """
+        Read a person's name from an organigramme entry of either shape.
+
+        The scraped organigrammes are not shape-consistent: a person is
+        sometimes a dict {"name": ...} and sometimes the bare name string. For
+        director_general the STRING form is the norm (50 of 53 DGs), and the
+        two readers of that field each got it wrong in a different direction:
+        find_person_in_commission called .get() unconditionally and raised
+        AttributeError on the first DG it touched, while
+        get_dg_structure_summary guarded with isinstance and returned None,
+        silently dropping the Director-General for almost every DG.
+
+        Returns '' when there is no usable name, so callers can test falsiness
+        instead of repeating the shape check.
+        """
+        if isinstance(entry, str):
+            return entry
+        if isinstance(entry, dict):
+            return entry.get('name') or ''
+        return ''
+
     def find_person_in_commission(self, name: str) -> List[Dict[str, Any]]:
         """
         Find a person across all Commission DGs.
@@ -13864,12 +13887,16 @@ class KnowledgeLoader:
         name_lower = name.lower()
         matches = []
 
+        _person_name = self._person_name
+
         for dg_code, org in self.organigrammes.items():
+            if not isinstance(org, dict):
+                continue
+
             # Check Director-General
             if 'director_general' in org:
-                dg_info = org['director_general']
-                dg_name = dg_info.get('name', '')
-                if name_lower in dg_name.lower():
+                dg_name = _person_name(org['director_general'])
+                if dg_name and name_lower in dg_name.lower():
                     matches.append({
                         'name': dg_name,
                         'position': 'Director-General',
@@ -13879,26 +13906,28 @@ class KnowledgeLoader:
 
             # Check Deputy Directors-General
             for ddg in org.get('deputy_directors_general', []):
-                ddg_name = ddg.get('name', '')
+                ddg_name = _person_name(ddg)
                 if name_lower in ddg_name.lower():
                     matches.append({
                         'name': ddg_name,
                         'position': 'Deputy Director-General',
                         'dg': dg_code,
                         'dg_name': org.get('dg_name', ''),
-                        'responsibilities': ddg.get('responsibilities')
+                        'responsibilities': (
+                            ddg.get('responsibilities') if isinstance(ddg, dict) else None
+                        )
                     })
 
             # Check Principal Advisers
             for adviser in org.get('principal_advisers', []):
-                adviser_name = adviser.get('name', '')
+                adviser_name = _person_name(adviser)
                 if name_lower in adviser_name.lower() and adviser_name.lower() != 'not shown':
                     matches.append({
                         'name': adviser_name,
                         'position': 'Principal Adviser',
                         'dg': dg_code,
                         'dg_name': org.get('dg_name', ''),
-                        'area': adviser.get('area')
+                        'area': adviser.get('area') if isinstance(adviser, dict) else None
                     })
 
             # Search in directorates
@@ -14006,17 +14035,20 @@ class KnowledgeLoader:
         if not org:
             return None
 
-        # Get director general name
-        dg_info = org.get('director_general', {})
-        dg_name = dg_info.get('name') if isinstance(dg_info, dict) else None
+        # Get director general name. Accepts the bare-string form, which is
+        # what 50 of 53 DGs actually carry.
+        dg_name = self._person_name(org.get('director_general')) or None
 
         # Get deputy DGs
         deputy_dgs = []
         for ddg in org.get('deputy_directors_general', []):
-            if 'name' in ddg:
+            ddg_name = self._person_name(ddg)
+            if ddg_name:
                 deputy_dgs.append({
-                    'name': ddg['name'],
-                    'responsibilities': ddg.get('responsibilities')
+                    'name': ddg_name,
+                    'responsibilities': (
+                        ddg.get('responsibilities') if isinstance(ddg, dict) else None
+                    )
                 })
 
         # Count units across directorates
