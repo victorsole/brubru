@@ -4,24 +4,33 @@ Multi-Provider AI Service with Fallback Chain
 Provides resilient AI chat with automatic failover.
 
 Since the 10 June 2026 OSS migration (memory/project_chat_oss_migration.md) the
-chat generator runs on a stacked chain of FREE open-model tiers, in this order:
+chat generator runs on a stacked chain of FREE tiers, in this order:
 
-    Cerebras gpt-oss-120b (OPEN, PRIMARY — 60K TPM fits Brubru's ~19K-token
-    prompt) → Mistral (free, EU, open-weight, reliable catch) → Gemini (free,
-    daily quota) → Groq (open but 12K free TPM 413s on Brubru's prompt; idle
-    unless the prompt is trimmed) → Anthropic Sonnet (OPPORTUNISTIC — only when
-    the free chain is exhausted AND funded) → OpenAI (paid last resort)
+    Cerebras gpt-oss-120b (OPEN, PRIMARY, streams, ~0.8s)
+      → Gemini 2.5-flash (free tier, streams, full context)
+      → Groq llama-3.3-70b (OPEN; 12K free TPM 413s on Brubru's prompt)
+      → NVIDIA llama-3.3-70b (OPEN, full-context backstop, slow)
+      → Mistral (free, EU, open-weight; reads only ~30% of injected context)
+      → OpenAI (paid last resort)
 
-The chain order in `self.providers` IS the priority. `prefer_claude` is now a
-no-op (the legacy `sonnet_primary_provider` slot is left None), so `generate()`
-simply iterates the chain and returns the first provider that succeeds; a
-rate-limit (429) or error on a free tier degrades to the next provider, never
-to paid usage unless the whole free chain is down.
+NO ANTHROPIC. Removed 6 August 2026 by explicit decision: too expensive, and
+the open models are what Brubru runs on. The provider class was deleted, not
+merely unregistered, so it cannot come back through an env var. Do not re-add
+it here or anywhere in the chat path.
+
+The chain order in `self.providers` IS the priority. `prefer_claude` is a
+no-op, so `generate()` iterates the chain and returns the first provider that
+succeeds; a rate-limit (429) or error on a free tier degrades to the next.
+
+Every SDK client sets max_retries=0. The chain IS the retry: retrying inside
+one provider while five alternatives sit idle turned an instant Cerebras 429
+into a 122-second wait, which was essentially the whole of Brubru's former
+126-second answer latency. See feedback_provider_chain_max_retries_zero.
 
 Each provider implements the same interface, allowing seamless switching.
 
-Cost: €0 at current volume — Groq/Cerebras free tiers (open models) + Gemini/
-Mistral free tiers. Anthropic/OpenAI are reached only as a last resort.
+Cost: €0 at current volume on the open/free tiers. OpenAI is the only paid
+link and sits last.
 """
 
 import asyncio
@@ -42,8 +51,6 @@ FIRST_TOKEN_TIMEOUT_S = float(os.getenv("FIRST_TOKEN_TIMEOUT_S", "30"))
 from datetime import datetime, date
 from dataclasses import dataclass, field
 
-from anthropic import AsyncAnthropic
-import anthropic
 from openai import AsyncOpenAI
 import openai
 
@@ -169,110 +176,6 @@ class MistralProvider(AIProvider):
         )
 
 
-class AnthropicSonnetPrimaryProvider(AIProvider):
-    """Anthropic Claude Sonnet provider — runtime PRIMARY for knowledge-heavy
-    queries (those that matched a Brubru knowledge guide). Routed FIRST when
-    `prefer_claude=True` is passed to `MultiProviderService.generate()`.
-
-    Subject to a $10/day soft cap (see `_sonnet_daily_cap_usd` on the service);
-    when the cap is reached for the day, traffic falls back to Mistral as the
-    cap-day primary.
-
-    Distinct from `AnthropicProvider` (fallback 1 in the base chain) only in
-    routing role; both call the same Sonnet model. The legacy class name
-    `AnthropicHaikuProvider` was renamed on 5 May 2026 because the actual
-    model has been Sonnet since 23 March 2026 — keeping the old "Haiku" name
-    was misleading future readers."""
-
-    MODEL = "claude-sonnet-4-20250514"
-
-    def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or settings.ANTHROPIC_API_KEY
-        self.client = AsyncAnthropic(api_key=self.api_key) if self.api_key else None
-
-    @property
-    def name(self) -> str:
-        # Public identifier flowing into ChatMessage.provider + telemetry.
-        # Renamed from "Anthropic-Haiku" on 5 May 2026 to reflect actual model.
-        return "Anthropic-Sonnet-Primary"
-
-    @property
-    def is_available(self) -> bool:
-        return bool(self.api_key and self.client)
-
-    async def generate(
-        self,
-        system_prompt: str,
-        messages: List[Dict[str, Any]],
-        max_tokens: int = 4000,
-        temperature: float = 0.3
-    ) -> ProviderResponse:
-        if not self.is_available:
-            raise RuntimeError("Anthropic Sonnet (primary) provider not configured")
-
-        response = await self.client.messages.create(
-            model=self.MODEL,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            system=system_prompt,
-            messages=messages
-        )
-
-        content = response.content[0].text if response.content else ""
-        tokens = response.usage.input_tokens + response.usage.output_tokens
-
-        return ProviderResponse(
-            message=content,
-            tokens_used=tokens,
-            model=self.MODEL,
-            provider=self.name
-        )
-
-
-class AnthropicProvider(AIProvider):
-    """Anthropic Claude Sonnet provider (fallback 1)"""
-
-    MODEL = "claude-sonnet-4-20250514"
-
-    def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or settings.ANTHROPIC_API_KEY
-        self.client = AsyncAnthropic(api_key=self.api_key) if self.api_key else None
-
-    @property
-    def name(self) -> str:
-        return "Anthropic"
-
-    @property
-    def is_available(self) -> bool:
-        return bool(self.api_key and self.client)
-
-    async def generate(
-        self,
-        system_prompt: str,
-        messages: List[Dict[str, Any]],
-        max_tokens: int = 4000,
-        temperature: float = 0.3
-    ) -> ProviderResponse:
-        if not self.is_available:
-            raise RuntimeError("Anthropic provider not configured")
-
-        response = await self.client.messages.create(
-            model=self.MODEL,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            system=system_prompt,
-            messages=messages
-        )
-
-        content = response.content[0].text if response.content else ""
-        tokens = response.usage.input_tokens + response.usage.output_tokens
-
-        return ProviderResponse(
-            message=content,
-            tokens_used=tokens,
-            model=self.MODEL,
-            provider=self.name
-        )
 
 
 class OpenAIProvider(AIProvider):
@@ -831,14 +734,16 @@ class MultiProviderService:
             self.providers.append(mistral)
             logger.info("Mistral provider available (DEGRADED: ~30% context, last-resort)")
 
-        # 6. Anthropic Sonnet (OPPORTUNISTIC — only reached when the free chain
-        #    is exhausted; fails fast when unfunded, then the chain continues).
-        anthropic = AnthropicProvider(anthropic_key)
-        if anthropic.is_available:
-            self.providers.append(anthropic)
-            logger.info("Anthropic Sonnet provider available (opportunistic, when funded)")
+        # NO Anthropic. Removed from the chain on 6 August 2026 by explicit
+        # decision: it is too expensive, and the open-model chain above is what
+        # Brubru runs on. Despite being documented as "opportunistic, only when
+        # the free chain is exhausted", it had served 41 of 341 assistant
+        # messages over 60 days -- 12% of traffic -- at an average of 37,352
+        # tokens each, while the same measurement showed its configured model
+        # returning 404. Do not re-add it. The provider class is gone, not just
+        # unregistered, so it cannot be revived by setting an env var.
 
-        # 7. OpenAI (paid last resort).
+        # 6. OpenAI (paid last resort).
         openai_provider = OpenAIProvider(openai_key)
         if openai_provider.is_available:
             self.providers.append(openai_provider)
@@ -950,17 +855,11 @@ class MultiProviderService:
 
                 return response
 
-            except anthropic.APIConnectionError as e:
-                logger.warning(f"{provider.name} connection error: {e}")
-                errors.append(f"{provider.name}: Connection error")
-
-            except anthropic.RateLimitError as e:
-                logger.warning(f"{provider.name} rate limited: {e}")
-                errors.append(f"{provider.name}: Rate limited")
-
-            except anthropic.APIStatusError as e:
-                logger.warning(f"{provider.name} API error {e.status_code}: {e.message}")
-                errors.append(f"{provider.name}: API error {e.status_code}")
+            # The anthropic.* handlers that used to sit here were removed with
+            # the provider. Leaving them would have been worse than untidy:
+            # with the import gone, Python evaluating `except anthropic.X`
+            # while unwinding ANY provider error raises NameError, so a routine
+            # Cerebras 429 would have taken down every request.
 
             except openai.APIConnectionError as e:
                 logger.warning(f"{provider.name} connection error: {e}")
