@@ -1031,9 +1031,16 @@ class ContextBuilder:
 
         logger.info(f"Building context for query: {user_message[:100]}...")
 
+        # Entities and the history-augmented retrieval query are computed FIRST
+        # so that even the semantic pass below sees a follow-up's real topic.
+        entities = self.extract_entities(user_message)
+        retrieval_query = self._augment_query_with_history(
+            user_message, conversation_history, entities
+        )
+
         # 1. Semantic/hybrid search for relevant documents
         search_results = await self.hybrid_search.search(
-            query=user_message,
+            query=retrieval_query,
             limit=self.max_search_results,
             use_recency_boost=True,
             use_authority_boost=True
@@ -1050,8 +1057,7 @@ class ContextBuilder:
             for result in search_results.results
         ]
 
-        # 2. Extract entities from query
-        entities = self.extract_entities(user_message)
+        # (entities extracted above, before the semantic pass)
 
         # 2b. Detect drafting/action intent (user wants to PRODUCE something)
         drafting_intent = detect_drafting_intent(user_message)
@@ -1066,25 +1072,30 @@ class ContextBuilder:
         # Prepare tasks to run concurrently
         tasks = []
 
-        # Legislative Train files (always run)
-        tasks.append(self._fetch_legislative_train_files(query=user_message, entities=entities))
+        # Every text-similarity retrieval below runs on `retrieval_query`, not
+        # on the raw message: for a context-bare follow-up it carries the topic
+        # forward from the previous turns. Multi-turn only started working on
+        # 3 Aug 2026, so until then every follow-up was a first message and
+        # this did not matter. It does now. Applying it to the guide lookup
+        # ALONE was not enough -- verified on production 6 Aug: turn 1 asked
+        # about geographical indications for spirit drinks, turn 2 asked "When
+        # did it enter into force?", and the answer came back about the AI Act
+        # because the web/EPRS/eu_laws lookups were still running on the bare
+        # sentence. Entity-keyed fetches (CELEX, procedure, MEP, committee)
+        # keep using the extracted entities and are unaffected.
+        # (retrieval_query computed above, before the semantic pass)
 
-        # Internal knowledge base (always run).
-        # Retrieval runs on the message PLUS, for a context-bare follow-up,
-        # the topic carried over from the previous turns. Multi-turn only
-        # started working on 3 Aug 2026, so until now every follow-up was a
-        # first message and this did not matter. It does now: "When did it
-        # enter into force? Answer only about the act we just discussed"
-        # retrieved two countervailing-duty guides on Indian and Chinese
-        # trade, because the words in that sentence are all it had.
-        retrieval_query = self._augment_query_with_history(user_message, conversation_history, entities)
+        # Legislative Train files (always run)
+        tasks.append(self._fetch_legislative_train_files(query=retrieval_query, entities=entities))
+
+        # Internal knowledge base (always run)
         tasks.append(self._query_internal_knowledge(retrieval_query, drafting_intent=drafting_intent))
 
         # EPRS publications (always run)
-        tasks.append(self._search_eprs_publications(query=user_message, entities=entities))
+        tasks.append(self._search_eprs_publications(query=retrieval_query, entities=entities))
 
         # Local EU laws database (always run)
-        tasks.append(self._fetch_eu_laws_from_database(query=user_message, entities=entities))
+        tasks.append(self._fetch_eu_laws_from_database(query=retrieval_query, entities=entities))
 
         # Helper functions for empty results
         async def empty_result():
@@ -1095,7 +1106,7 @@ class ContextBuilder:
 
         # RSS entries (conditional)
         if use_rss and self.rss_manager:
-            tasks.append(self._fetch_recent_rss(query=user_message, entities=entities, days=self.rss_lookback_days))
+            tasks.append(self._fetch_recent_rss(query=retrieval_query, entities=entities, days=self.rss_lookback_days))
         else:
             tasks.append(empty_result())
 
@@ -1165,30 +1176,30 @@ class ContextBuilder:
 
         # Real-time web search (Tavily) for current events and breaking news
         if self.enable_web_search and self.tavily_client:
-            tasks.append(self._fetch_web_search(query=user_message))
+            tasks.append(self._fetch_web_search(query=retrieval_query))
         else:
             tasks.append(empty_result())
 
         # Beresol open reports and monitors (Brubru's company)
         if self.beresol_loader:
-            tasks.append(self._fetch_beresol_content(query=user_message))
+            tasks.append(self._fetch_beresol_content(query=retrieval_query))
         else:
             tasks.append(empty_result())
 
         # EP Committee Work in Progress items
-        tasks.append(self._fetch_committee_work_items(query=user_message, entities=entities))
+        tasks.append(self._fetch_committee_work_items(query=retrieval_query, entities=entities))
 
         # EP Committee Meeting Minutes
-        tasks.append(self._fetch_committee_minutes(query=user_message, entities=entities))
+        tasks.append(self._fetch_committee_minutes(query=retrieval_query, entities=entities))
 
         # Phase 9: Fetch EC Public Consultations (Have Your Say portal)
-        tasks.append(self._fetch_public_consultations(query=user_message, entities=entities))
+        tasks.append(self._fetch_public_consultations(query=retrieval_query, entities=entities))
 
         # EC Commission Documents (Yellow/Blue tier only)
-        tasks.append(self._fetch_commission_documents(query=user_message, entities=entities, user_id=user_id))
+        tasks.append(self._fetch_commission_documents(query=retrieval_query, entities=entities, user_id=user_id))
 
         # MCP Toolbox supplementary DB queries (non-blocking)
-        tasks.append(self._fetch_via_toolbox(query=user_message, entities=entities))
+        tasks.append(self._fetch_via_toolbox(query=retrieval_query, entities=entities))
 
         # User uploaded documents (personalised AI context)
         if user_id:
@@ -1212,7 +1223,7 @@ class ContextBuilder:
             tasks.append(empty_result())
 
         # EU Calendar Events (institutional calendar with exact dates)
-        tasks.append(self._fetch_eu_calendar_events(query=user_message, entities=entities))
+        tasks.append(self._fetch_eu_calendar_events(query=retrieval_query, entities=entities))
 
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
