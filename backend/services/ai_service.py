@@ -596,6 +596,9 @@ _CA_DECISIVE = frozenset({
     # verb forms
     "tindra", "tindran", "hauran", "haura", "poden", "podra",
     "estableix", "aplicar", "seguir", "complir",
+    # EU-work nouns whose Spanish form differs after folding: ES uses
+    # "ponente" / "enmienda", so these are Catalan-only in practice.
+    "ponent", "ponents", "esmena", "esmenes",
     "soc", "som", "sou", "ets", "escric", "voldria", "podriem",
     # -cio nouns: the Catalan singular folds to "-cio" where Spanish folds to
     # "-cion" and French keeps "-tion". Listed explicitly rather than matched by
@@ -609,6 +612,34 @@ _CA_DECISIVE = frozenset({
 # five Brubru languages: Spanish forms "-ciones", Italian "-zioni", French
 # "-tions". Safe as a suffix test where the singular is not.
 _CA_DECISIVE_SUFFIX = ("cions",)
+
+# Italian-exclusive tokens, accent-folded, same contract as _CA_DECISIVE: none
+# of these collide with the EN/FR/ES/CA/NL forms after folding.
+#
+# Why this exists (training run, 6 Aug 2026): IT had a 10-word marker set and
+# no decisive list, so four real Italian queries out of eight were misread.
+# "Ci sono fondi europei per l'Albania?" matched only "per", which is in BOTH
+# the CA and IT sets, producing an exact tie that fell to Catalan purely
+# because CA is declared before IT in _LANG_MARKERS. "credo che tutti questi
+# aspetti vadano approfonditi" matched nothing at all and defaulted to English.
+_IT_DECISIVE = frozenset({
+    # articles and prepositions with no cross-language collision after folding
+    "il", "lo", "gli", "dei", "degli", "delle", "della", "dello", "dell",
+    "nel", "nella", "nelle", "negli", "sul", "sulla", "sulle", "sui",
+    "dal", "dalla", "col", "coi", "agli", "alle", "allo",
+    # pronouns, determiners, connectors
+    # "quelle" is deliberately absent: it is Italian AND French ("quelle est
+    # la position...") and stole a French query the moment it was added.
+    "che", "chi", "questi", "questo", "quella", "quello", "quali",
+    "anche", "perche", "molto", "molti", "tutti", "tutte", "tuoi", "tue",
+    "loro", "essi", "cui", "oltre", "invece", "ancora", "sempre",
+    # verb forms
+    "sono", "essere", "viene", "vengono", "prevede", "riguarda", "vorrei",
+    "puo", "possono", "deve", "devono", "vadano", "esprimi", "cerco",
+    # nouns/adjectives whose Spanish or Catalan form differs after folding
+    "finanziamenti", "fondi", "approfondite", "approfonditi", "generiche",
+    "tramite", "piattaforme", "aspetti", "premesse", "difesa",
+})
 
 
 def _detect_query_language(text: str) -> str:
@@ -629,6 +660,15 @@ def _detect_query_language(text: str) -> str:
     if "·" in text:
         return "CA"
 
+    # Inverted punctuation is Spanish orthography and appears in no other
+    # Brubru language, so it is decisive in the same way the interpunct is for
+    # Catalan. Without it "¿Qué establece la Directiva de la UE sobre salarios
+    # mínimos adecuados?" scored FR and ES dead level (both matched only "la"),
+    # and the tie fell to FR purely because FR is declared first in
+    # _LANG_MARKERS. The user asked in Spanish and was answered in French.
+    if "¿" in text or "¡" in text:
+        return "ES"
+
     # Fold diacritics once, so the marker sets below stay pure ASCII and the
     # detector is not defeated by a user typing "perque" for "perqu<e-grave>".
     folded = "".join(
@@ -642,10 +682,18 @@ def _detect_query_language(text: str) -> str:
     # Catalan-exclusive token, decisive on its own. Runs BEFORE scoring, because
     # the bag-of-words pass can hand a Catalan query to Dutch on the strength of
     # "de" alone (audit, 5 Aug 2026). See _CA_DECISIVE for the exclusion rules.
-    if any(w in _CA_DECISIVE for w in words) or any(
-        w.endswith(_CA_DECISIVE_SUFFIX) for w in words
-    ):
-        return "CA"
+    _ca_hits = sum(1 for w in words if w in _CA_DECISIVE) + sum(
+        1 for w in words if w.endswith(_CA_DECISIVE_SUFFIX)
+    )
+    _it_hits = sum(1 for w in words if w in _IT_DECISIVE)
+    # Compared rather than short-circuited: an Italian sentence can clip a
+    # single word from the Catalan list, and returning on first hit handed it
+    # to Catalan outright.
+    if _ca_hits or _it_hits:
+        if _ca_hits > _it_hits:
+            return "CA"
+        if _it_hits > _ca_hits:
+            return "IT"
 
     scores = {lang: sum(1 for w in words if w in markers) / len(words)
               for lang, markers in _LANG_MARKERS.items()}
@@ -658,6 +706,7 @@ def _detect_query_language(text: str) -> str:
             "amb", "aquesta", "aquest", "aquests", "aquestes", "dels", "pel",
             "als", "perque", "aixo", "quin", "quina", "quins", "quines",
             "hi", "seva", "meva", "nostra", "fins", "troba", "llengua",
+            "ponent", "ponents", "esmena", "esmenes", "dossiers",
         }
         es_only = {"con", "por", "tambien", "porque", "asi",
                    "solicitud", "cual", "donde"}
@@ -680,6 +729,26 @@ def _detect_query_language(text: str) -> str:
             scores["IT"] += 0.05
         elif es > it:
             scores["ES"] += 0.05
+    # FR/ES disambiguation. These two share "la", "de" and "una"/"une"-shaped
+    # function words, and a query carrying nothing else scored an exact tie
+    # that dict order silently handed to French. Spanish is one of the most
+    # common query languages in production, so the tie needed arbitrating on
+    # evidence rather than declaration order.
+    if scores.get("FR", 0) > 0 and scores.get("ES", 0) > 0:
+        fr_only = {"le", "les", "des", "une", "est", "dans", "pour", "avec",
+                   "cette", "du", "au", "aux", "quelle", "quels", "quelles",
+                   "sur", "sont", "ainsi", "aussi", "tres", "ceux", "leur"}
+        es_only_vs_fr = {"el", "los", "las", "por", "con", "para", "esta",
+                         "cual", "cuales", "como", "sobre", "tambien", "asi",
+                         "segun", "muy", "cuanto", "donde", "quienes",
+                         "establece", "espanol", "espana"}
+        fr = sum(1 for w in words if w in fr_only)
+        es = sum(1 for w in words if w in es_only_vs_fr)
+        if es > fr:
+            scores["ES"] += 0.05
+        elif fr > es:
+            scores["FR"] += 0.05
+
     best = max(scores, key=scores.get)
     return best if scores[best] > 0.02 else "EN"
 
