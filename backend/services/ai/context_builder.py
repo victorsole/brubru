@@ -15,6 +15,7 @@ Critical function: build_context_for_query()
 import logging
 import re
 import asyncio
+import unicodedata
 from typing import List, Dict, Any, Optional, Set, Tuple
 from datetime import date, datetime, timedelta
 from dataclasses import dataclass, field
@@ -1068,8 +1069,16 @@ class ContextBuilder:
         # Legislative Train files (always run)
         tasks.append(self._fetch_legislative_train_files(query=user_message, entities=entities))
 
-        # Internal knowledge base (always run)
-        tasks.append(self._query_internal_knowledge(user_message, drafting_intent=drafting_intent))
+        # Internal knowledge base (always run).
+        # Retrieval runs on the message PLUS, for a context-bare follow-up,
+        # the topic carried over from the previous turns. Multi-turn only
+        # started working on 3 Aug 2026, so until now every follow-up was a
+        # first message and this did not matter. It does now: "When did it
+        # enter into force? Answer only about the act we just discussed"
+        # retrieved two countervailing-duty guides on Indian and Chinese
+        # trade, because the words in that sentence are all it had.
+        retrieval_query = self._augment_query_with_history(user_message, conversation_history, entities)
+        tasks.append(self._query_internal_knowledge(retrieval_query, drafting_intent=drafting_intent))
 
         # EPRS publications (always run)
         tasks.append(self._search_eprs_publications(query=user_message, entities=entities))
@@ -3501,6 +3510,93 @@ class ContextBuilder:
         except Exception as e:
             logger.error(f"Failed to fetch recent RSS: {str(e)}")
             return []
+
+    # Anaphors that signal a message leaning on the previous turn for its
+    # topic, in Brubru's six languages. Matched at the START of the message
+    # or as a bare object ("about it", "sobre això").
+    _FOLLOWUP_MARKERS = (
+        # EN
+        "it", "this", "that", "they", "them", "these", "those", "its", "their",
+        "the act", "the file", "the same", "there",
+        # ES
+        "eso", "esto", "esta", "este", "ese", "ella", "ello", "lo mismo", "ahí",
+        # CA
+        "això", "aquest", "aquesta", "aquell", "el mateix", "aquí",
+        # FR
+        "ce", "cet", "cette", "celui", "celle", "cela", "ça", "le même",
+        # IT
+        "questo", "questa", "quello", "quella", "cio", "ciò", "lo stesso",
+        # NL
+        "dit", "dat", "deze", "die", "hetzelfde", "ervan",
+    )
+
+    def _augment_query_with_history(
+        self,
+        user_message: str,
+        conversation_history: Optional[List[Dict[str, str]]],
+        entities: "ExtractedEntities",
+    ) -> str:
+        """Prepend the previous turn's topic to a context-bare follow-up.
+
+        Returns `user_message` unchanged for anything that carries its own
+        topic. Augmenting unconditionally would be worse than not augmenting
+        at all: a genuine change of subject would keep dragging the old topic
+        into retrieval and bury the new one.
+
+        A message is treated as context-bare when the entity extractor found
+        nothing to anchor on AND the message is either short or opens with an
+        anaphor.
+        """
+        if not conversation_history or not user_message:
+            return user_message
+
+        has_anchor = any((
+            getattr(entities, "celex_numbers", None),
+            getattr(entities, "procedure_references", None),
+            getattr(entities, "committee_codes", None),
+            getattr(entities, "mep_names", None),
+            getattr(entities, "policy_areas", None),
+            getattr(entities, "funding_programmes", None),
+        ))
+        if has_anchor:
+            return user_message
+
+        # Accent-fold before matching: users type "aixo" and "esto" as often
+        # as "això" and "éso", and an unfolded list would miss them.
+        stripped = "".join(
+            c for c in unicodedata.normalize("NFD", user_message.strip().lower())
+            if unicodedata.category(c) != "Mn"
+        )
+        words = stripped.split()
+        padded = f" {stripped} "
+        has_anaphor = any(
+            f" {unicodedata.normalize('NFD', m).encode('ascii', 'ignore').decode()} " in padded
+            for m in self._FOLLOWUP_MARKERS
+        )
+        # Augment only for a message that either leans on a previous turn
+        # (anaphor) or is too short to carry a topic at all. A 13-word
+        # question about a brand-new subject must NOT drag the old topic in:
+        # "What are the rules on geographical indications for spirit drinks"
+        # has no anchor entity either, and length alone would have augmented it.
+        if not (has_anaphor or len(words) <= 6):
+            return user_message
+
+        # Take the most recent USER turns; assistant text is long and would
+        # swamp the query with its own vocabulary.
+        prior = [
+            (m.get("content") or "").strip()
+            for m in conversation_history
+            if (m.get("role") == "user") and (m.get("content") or "").strip()
+        ][-2:]
+        if not prior:
+            return user_message
+
+        augmented = " ".join(prior + [user_message])
+        logger.info(
+            "[RETRIEVAL] context-bare follow-up augmented with %d prior turn(s): %r -> %r",
+            len(prior), user_message[:60], augmented[:120],
+        )
+        return augmented
 
     async def _query_internal_knowledge(
         self,
