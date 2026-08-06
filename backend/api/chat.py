@@ -15,6 +15,7 @@ Endpoints:
 import functools
 import json
 import logging
+import os
 import uuid as uuid_mod
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timezone
@@ -862,10 +863,26 @@ async def health_check():
         loop = asyncio.get_event_loop()
         chat_count = await loop.run_in_executor(None, _count_chats)
 
+        # The running commit, so "is my fix actually live?" is one cheap curl
+        # rather than a 130-second chat probe or a reading of the deploy log.
+        # A green deploy log proves nothing; this proves what is executing.
+        # Railway injects RAILWAY_GIT_COMMIT_SHA on every build.
+        commit = (
+            os.getenv("RAILWAY_GIT_COMMIT_SHA")
+            or os.getenv("GIT_COMMIT_SHA")
+            or "unknown"
+        )
         return {
             'status': 'healthy',
             'service': 'chat',
+            # The generator model is chosen per request from the free
+            # open-model chain; this field reported a hardcoded Anthropic id
+            # that has not been chat's primary since June.
+            'generator': 'multi-provider open-model chain',
+            'chain': get_ai_service().multi_provider.available_providers
+                     if getattr(get_ai_service(), 'multi_provider', None) else [],
             'model': model_info['model'],
+            'commit': commit[:12],
             'conversations': chat_count,
             'timestamp': datetime.now().isoformat()
         }
