@@ -109,7 +109,7 @@ const generateSmartSuggestions = (
 };
 
 export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, onSmartSuggestionClick, onActionClick }: MessageListProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expandedSources, setExpandedSources] = useState<Set<string>>(new Set());
   const [feedbackGiven, setFeedbackGiven] = useState<Map<string, 'positive' | 'negative' | 'hallucination'>>(new Map());
@@ -194,13 +194,34 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
     handleFeedback(messageId, 'hallucination', messageContent, hallucinationText);
   };
 
-  // Link CELEX numbers to EUR-Lex (only in text content, not inside HTML tags/attributes)
+  // EUR-Lex serves the 24 official EU languages. Catalan is not one of them,
+  // so a Catalan reader gets the Spanish text, which is the closest official
+  // version rather than an arbitrary English default. Everything else maps
+  // straight through. Hardcoding EN meant a French, Spanish, Italian or Dutch
+  // user's every legislative link opened in English.
+  const eurlexLang = (): string => {
+    const code = (i18n.language || 'en').slice(0, 2).toLowerCase();
+    const map: Record<string, string> = {
+      en: 'EN', fr: 'FR', nl: 'NL', es: 'ES', it: 'IT', ca: 'ES',
+    };
+    return map[code] || 'EN';
+  };
+
+  // Link CELEX numbers to EUR-Lex (only in text content, not inside HTML tags/attributes).
+  // The type position takes ONE OR TWO letters: adopted acts are R/L/D/H/X
+  // (32024R1781) but Commission proposals carry two (52026PC0429, 52020DC0098).
+  // The single-letter form silently skipped every proposal, which is the same
+  // defect fixed on the backend on 5 Aug -- the two layers had drifted apart.
   const linkCelexNumbers = (text: string): string => {
+    const lang = eurlexLang();
     return text.replace(
-      /(<[^>]*>)|(\b[0-9]{5}[A-Z][0-9]{4,}\b)/g,
-      (_match, htmlTag, celex) => {
-        if (htmlTag) return htmlTag; // Return HTML tags unchanged
-        return `<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${celex}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--celex">${celex}</a>`;
+      /(<a\b[^>]*>[\s\S]*?<\/a>)|(<[^>]*>)|(\b[0-9]{5}[A-Z]{1,2}[0-9]{4,}\b)/g,
+      (_match, anchor, htmlTag, celex) => {
+        // Skip whole anchors: linkifying text already inside one produces
+        // nested <a> elements, which browsers unnest into broken markup.
+        if (anchor) return anchor;
+        if (htmlTag) return htmlTag;
+        return `<a href="https://eur-lex.europa.eu/legal-content/${lang}/TXT/?uri=CELEX:${celex}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--celex">${celex}</a>`;
       }
     );
   };
@@ -208,8 +229,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
   // Link procedure references to OEIL + EU Law Tracker (only in text content, not inside HTML tags/attributes)
   const linkProcedureReferences = (text: string): string => {
     return text.replace(
-      /(<[^>]*>)|(\b\d{4}\/\d{4}\([A-Z]{2,5}\)\b)/g,
-      (_match, htmlTag, procRef) => {
+      /(<a\b[^>]*>[\s\S]*?<\/a>)|(<[^>]*>)|(\b\d{4}\/\d{4}\([A-Z]{2,5}\)\b)/g,
+      (_match, anchor, htmlTag, procRef) => {
+        if (anchor) return anchor;   // never nest inside an existing link
         if (htmlTag) return htmlTag; // Return HTML tags unchanged
         const eultUrl = getEultUrl(procRef);
         const eultLink = eultUrl
@@ -220,12 +242,12 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
     );
   };
 
-  // Link MEP names (simplified - would need MEP ID lookup in production)
-  const linkMEPNames = (text: string): string => {
-    // Pattern for "MEP Name" format - basic implementation
-    // In production, would need to match against actual MEP database
-    return text;
-  };
+  // MEP names are linked SERVER-SIDE by ai_service._linkify_mep_names, which
+  // has the actual MEP ids from the context. There used to be a client-side
+  // linkMEPNames() here that returned its input untouched -- a stub that read
+  // as coverage while doing nothing. Since the backend's linkifier only ran on
+  // the non-streaming path until 6 Aug 2026, MEP names were in practice linked
+  // nowhere at all. Removed rather than left as a false promise.
 
   // Link committee codes (ENVI, ITRE, etc.) to EP committee pages
   // Only links codes that match real EP committees
@@ -239,8 +261,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
   const linkCommitteeCodes = (text: string): string => {
     // Match "CODE committee" pattern (only in text content, not inside HTML tags)
     let result = text.replace(
-      /(<[^>]*>)|(\b([A-Z]{4})\s+(?:committee|Committee)\b)/g,
-      (match, htmlTag, _full, code) => {
+      /(<a\b[^>]*>[\s\S]*?<\/a>)|(<[^>]*>)|(\b([A-Z]{4})\s+(?:committee|Committee)\b)/g,
+      (match, anchor, htmlTag, _full, code) => {
+        if (anchor) return anchor;
         if (htmlTag) return htmlTag;
         if (!code || !EP_COMMITTEE_CODES.has(code)) return match;
         return `<a href="https://www.europarl.europa.eu/committees/en/${code}/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">${code} committee</a>`;
@@ -249,8 +272,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
 
     // Also match standalone committee codes in parentheses: (ENVI)
     result = result.replace(
-      /(<[^>]*>)|(\(([A-Z]{4})\))/g,
-      (match, htmlTag, _full, code) => {
+      /(<a\b[^>]*>[\s\S]*?<\/a>)|(<[^>]*>)|(\(([A-Z]{4})\))/g,
+      (match, anchor, htmlTag, _full, code) => {
+        if (anchor) return anchor;
         if (htmlTag) return htmlTag;
         if (!code || !EP_COMMITTEE_CODES.has(code)) return match;
         return `(<a href="https://www.europarl.europa.eu/committees/en/${code}/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">${code}</a>)`;
@@ -287,7 +311,6 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
     processedText = linkCelexNumbers(processedText);
     processedText = linkProcedureReferences(processedText);
     processedText = linkCommitteeCodes(processedText);
-    processedText = linkMEPNames(processedText);
 
     return processedText;
   };
@@ -431,11 +454,22 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
               return renderContentWithCitations(message.content, message.citations);
             })()}
 
-            {/* Context Indicator */}
-            {message.role === 'assistant' && message.contextsUsed !== undefined && message.contextsUsed > 0 && (
+            {/* Context Indicator.
+                Gated on the CITATIONS, not on contextsUsed. It used to require
+                `contextsUsed > 0`, a field only the non-streaming handler ever
+                set -- and the UI only calls the streaming one. So every
+                streamed answer rendered its [1] [2] markers with no sources
+                panel and no way to reach one, which is exactly the complaint
+                that opened the 5 Aug audit ("Show me the references in this
+                text: [1], [2], etc"). The count falls back to the number of
+                citations when contextsUsed is absent. */}
+            {message.role === 'assistant' && ((message.citations?.length ?? 0) > 0 || (message.contextsUsed ?? 0) > 0) && (
               <div className="message-list__context-indicator">
                 <span className="message-list__context-icon mdi mdi-magnify"></span>
-                <span>Used {message.contextsUsed} EU document{message.contextsUsed > 1 ? 's' : ''}</span>
+                {(() => {
+                  const n = message.contextsUsed ?? message.citations?.length ?? 0;
+                  return <span>{t('chat.usedDocuments', { count: n, defaultValue: `Used ${n} EU document${n === 1 ? '' : 's'}` })}</span>;
+                })()}
                 {message.searchTimeMs && (
                   <span className="message-list__context-time">
                     ({message.searchTimeMs}ms search)

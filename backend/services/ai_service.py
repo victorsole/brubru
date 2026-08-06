@@ -326,6 +326,17 @@ _SAFE_REFUSAL_TEXT = {
 
 
 # ---------------------------------------------------------------------------
+# Hosts whose markdown links survive post-processing: the official EU domains
+# plus Brubru's own surfaces. Everything else the model invents is flattened to
+# plain text, because an invented URL is worse than no URL. Deliberately
+# host-anchored (after :// or a dot) so "noteur-lex.example.com" cannot pass.
+_TRUSTED_LINK_HOST_RE = re.compile(
+    r"https?://(?:[a-z0-9-]+\.)*"
+    r"(?:europa\.eu|europarl\.europa\.eu|brubru\.beresol\.eu|beresol\.eu)"
+    r"(?:[/?#]|$)",
+    re.IGNORECASE,
+)
+
 # Quality signal regexes (Playbook D: structured logging)
 # Kept at module level so the same patterns are used in ai_service runtime
 # and in scripts/eval_quality.py for consistency.
@@ -1934,10 +1945,11 @@ When answering:
 - Suggest related topics or next steps if helpful
 
 Formatting rules:
-- NEVER create markdown hyperlinks in your responses - our system will add links automatically
-- Do NOT format text as [text](url) - just use plain text or **bold** for emphasis
-- MEP names and other entities will be automatically linked by our backend
-- Exception: You CAN use footnote citations like [1], [2] ONLY when citing specific sources from the EU CONTEXT. Never invent citation numbers.
+- Markdown links are allowed for OFFICIAL EU sources and Brubru's own pages: eur-lex.europa.eu, europarl.europa.eu, oeil, curia, consilium, any *.europa.eu page, and brubru.beresol.eu. Reproduce those URLs exactly as they appear in the EU CONTEXT.
+- Do NOT link to any other domain. A link to a blog, consultancy, vendor or news site will be removed, so write those as plain text.
+- Never invent a URL. If you do not have the exact link from the EU CONTEXT, name the source in plain text instead.
+- MEP names are linked automatically by our backend; do not link them yourself.
+- Footnote citations like [1], [2] are for sources present in the EU CONTEXT. Never invent citation numbers.
 
 IMPORTANT - Legislation acronyms:
 - DO NOT create hyperlinks for legislation acronyms (CBAM, GDPR, AI Act, DSA, DMA, etc.)
@@ -2762,29 +2774,41 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         # Negative lookahead to exclude [number] patterns
 
         def replace_link(match):
-            link_text = match.group(1)
-            # Return just the text without the link
+            link_text, url = match.group(1), match.group(2)
+            # Keep links to authoritative EU sources and to Brubru's own
+            # surfaces; flatten everything else.
+            #
+            # Stripping ALL of them (the behaviour until 6 Aug 2026) directly
+            # contradicted two instructions the model is given: the context
+            # block states "Any markdown links in the guides below are VERIFIED.
+            # Reproduce them exactly ... Do NOT strip the URLs", and the prompt
+            # requires hyperlinking every COM/CELEX/procedure reference. The
+            # stripper won, so a guide's verified deep-dive, OEIL page or EP
+            # document URL was flattened to dead text and only bare CELEX
+            # numbers got re-linked afterwards. That is also why an answer could
+            # name a Brubru feature four times and link it zero times.
+            if _TRUSTED_LINK_HOST_RE.search(url or ''):
+                return match.group(0)
             return link_text
 
         # Match [text](url) but not [number]
         # Use a more specific pattern that requires at least one non-digit character in brackets
-        pattern = r'\[([^\]]+)\]\(https?://[^\)]+\)'
+        pattern = r'\[([^\]]+)\]\((https?://[^\)]+)\)'
 
         cleaned_text = re.sub(pattern, replace_link, text)
 
-        # Log if we removed any links
+        # Log if we removed any links. `pattern` captures (text, url), so
+        # findall yields TUPLES -- passing one to re.escape raises TypeError.
         if cleaned_text != text:
-            removed_links = re.findall(pattern, text)
-            removed_count = len(removed_links)
-            logger.info(f"Removed {removed_count} AI-generated markdown links")
-            print(f"\n{'='*70}")
-            print(f"[LINK REMOVAL] Removed {removed_count} AI-generated markdown links")
-            for i, link in enumerate(removed_links, 1):
-                # Show the full markdown link that was removed
-                full_match = re.search(r'\[' + re.escape(link) + r'\]\([^\)]+\)', text)
-                if full_match:
-                    print(f"[LINK REMOVAL] Link {i}: {full_match.group()[:150]}...")
-            print(f"{'='*70}\n")
+            untrusted = [
+                (lt, url) for lt, url in re.findall(pattern, text)
+                if not _TRUSTED_LINK_HOST_RE.search(url or '')
+            ]
+            logger.info(
+                "Flattened %d untrusted markdown link(s): %s",
+                len(untrusted),
+                ", ".join(u[:80] for _, u in untrusted[:5]) or "-",
+            )
 
         return cleaned_text
 

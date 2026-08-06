@@ -675,7 +675,11 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                   setMessages((prev) =>
                     prev.map((msg) =>
                       msg.id === streamingMessageId
-                        ? { ...msg, citations: withIds }
+                        // contextsUsed drives the "Used N EU documents" line.
+                        // Only the non-streaming handler ever set it, and the
+                        // UI never calls that one, so the sources panel was
+                        // unreachable on every real answer.
+                        ? { ...msg, citations: withIds, contextsUsed: withIds.length }
                         : msg
                     )
                   );
