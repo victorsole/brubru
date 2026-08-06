@@ -12,6 +12,7 @@ Endpoints:
 - GET /api/chat/citations/{chat_id} - Get citations for conversation
 """
 
+import functools
 import json
 import logging
 import uuid as uuid_mod
@@ -603,6 +604,12 @@ async def stream_message(
         async def generate():
             full_response = ""
             stream_citations: list = []
+            # Provider telemetry, consumed from the "meta" event below and
+            # written onto the saved assistant row. Before 6 Aug 2026 the
+            # streaming path saved model/provider/tokens as NULL, so 22% of
+            # assistant messages were unattributable and the 126-second
+            # latency could not be traced to a provider.
+            meta: dict = {}
 
             # The conversation id, before any text. The non-streaming path
             # returns it in the response body, but the SSE path never sent it,
@@ -620,6 +627,10 @@ async def stream_message(
                 is_pre_user=is_pre_user,
                 document_ids=request.document_ids,
                 nav_context=request.nav_context,
+                # Authoritative user, from the JWT. Without it the streaming
+                # path cannot load the user's private guide, cannot know which
+                # procedures they already track, and cannot attribute analytics.
+                user_id=request.user_id,
             ):
                 # Status/entity events are JSON -- pass through as SSE but don't save to DB
                 if chunk.startswith("{"):
@@ -647,6 +658,20 @@ async def stream_message(
                                 stream_citations = found
                             yield f"data: {chunk}\n\n"
                             continue
+                        # Router-only event: captured for persistence and
+                        # deliberately NOT forwarded, so adding it needs no
+                        # frontend change and cannot surface as raw JSON in a
+                        # stale bundle.
+                        if parsed.get("type") == "meta":
+                            meta = parsed
+                            logger.info(
+                                "[stream-meta] provider=%s model=%s tokens=%s "
+                                "context_ms=%s llm_ms=%s attempts=%s",
+                                parsed.get("provider"), parsed.get("model"),
+                                parsed.get("tokens_used"), parsed.get("context_ms"),
+                                parsed.get("llm_ms"), parsed.get("attempts"),
+                            )
+                            continue
                         if parsed.get("type") in ("status", "entities", "actions"):
                             yield f"data: {chunk}\n\n"
                             continue
@@ -660,13 +685,23 @@ async def stream_message(
                 safe_chunk = chunk.replace('\n', '\\n')
                 yield f"data: {safe_chunk}\n\n"
 
-            # Save messages to database after streaming completes
-            _save_messages(
-                chat_id,
-                request.message,
-                full_response,
-                citations=stream_citations or None,
-                user_id=request.user_id,
+            # Save messages to database after streaming completes.
+            # Runs in a thread: production is a SINGLE uvicorn worker and a
+            # sync ORM write here blocks the event loop for every other
+            # in-flight stream.
+            await asyncio.get_event_loop().run_in_executor(
+                None,
+                functools.partial(
+                    _save_messages,
+                    chat_id,
+                    request.message,
+                    full_response,
+                    citations=stream_citations or None,
+                    tokens_used=meta.get("tokens_used") or 0,
+                    model=meta.get("model") or "",
+                    provider=meta.get("provider") or "",
+                    user_id=request.user_id,
+                ),
             )
 
             yield f"data: [DONE]\n\n"

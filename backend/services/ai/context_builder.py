@@ -11552,6 +11552,19 @@ class ContextBuilder:
         """
         Build context and return with citation metadata.
 
+        DEPRECATED, 6 August 2026. Do NOT call this from a chat path.
+
+        It takes no `user_id`, so everything personalised is silently dropped:
+        the private-guide block (gated on user_id in build_context_for_query),
+        tracked-procedure awareness, and analytics attribution. It also returns
+        only a formatted STRING, so the caller loses the structured ContextData
+        that guide-document link injection and MEP linkification need.
+
+        Both chat() and chat_stream() now call build_context_for_query(...) +
+        format_context_for_ai(...) + _build_citations_from_context(...) so the
+        two paths cannot drift again. Kept only for non-chat callers; use the
+        three-call form for anything user-facing.
+
         Args:
             user_message: User query
             conversation_history: Previous messages

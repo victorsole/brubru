@@ -449,6 +449,20 @@ class _OpenAICompatibleProvider(AIProvider):
         stream = await self.client.chat.completions.create(**kwargs)
         in_think = False
         async for chunk in stream:
+            # Opportunistic usage capture. Providers that attach a usage block
+            # to the final chunk let us record real token counts for a streamed
+            # answer; those that do not simply leave it unset. Recorded on the
+            # instance and lifted by MultiProviderService into the caller's
+            # telemetry dict.
+            _usage = getattr(chunk, "usage", None)
+            if _usage is not None:
+                try:
+                    self._last_stream_tokens = (
+                        (getattr(_usage, "prompt_tokens", 0) or 0)
+                        + (getattr(_usage, "completion_tokens", 0) or 0)
+                    )
+                except Exception:  # noqa: BLE001
+                    pass
             if not chunk.choices:
                 continue
             piece = getattr(chunk.choices[0].delta, "content", None)
@@ -890,6 +904,7 @@ class MultiProviderService:
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
         temperature: float = 0.3,
+        telemetry: Optional[Dict[str, Any]] = None,
     ):
         """Stream text from the first provider in the chain that works.
 
@@ -899,17 +914,28 @@ class MultiProviderService:
         generate(): a connect/429 error BEFORE any output falls through to the
         next provider; a mid-stream error AFTER output has started cannot rewind,
         so it re-raises rather than garble the answer with a second provider.
+
+        telemetry: a CALLER-OWNED dict. On success it receives `provider`,
+        `model`, `tokens_used` (0 when the provider sends no usage block) and
+        `attempts` (the providers tried and why each failed). It is passed in
+        rather than stored on self because production runs a single uvicorn
+        worker with many concurrent streams: instance state would let one
+        request read another's provider. Until 6 Aug 2026 nothing reported
+        this at all, so 22% of assistant rows had model=NULL and the slowest
+        defect in the product could not be attributed to a provider.
         """
         errors: List[str] = []
         for provider in self.providers:
             produced = False
             try:
                 if isinstance(provider, _OpenAICompatibleProvider):
+                    provider._last_stream_tokens = 0
                     async for delta in provider.generate_stream(
                         system_prompt, messages, max_tokens, temperature
                     ):
                         produced = True
                         yield delta
+                    _tokens = getattr(provider, "_last_stream_tokens", 0) or 0
                 else:
                     resp = await provider.generate(
                         system_prompt, messages, max_tokens, temperature
@@ -917,8 +943,14 @@ class MultiProviderService:
                     if resp.message:
                         produced = True
                         yield resp.message
+                    _tokens = getattr(resp, "tokens_used", 0) or 0
                 if produced:
                     logger.info(f"[stream] {provider.name} produced response")
+                    if telemetry is not None:
+                        telemetry["provider"] = provider.name
+                        telemetry["model"] = getattr(provider, "model", "") or ""
+                        telemetry["tokens_used"] = _tokens
+                        telemetry["attempts"] = list(errors)
                     return
                 raise RuntimeError("empty output")
             except Exception as e:
@@ -929,6 +961,8 @@ class MultiProviderService:
                 logger.warning(f"[stream] {provider.name} unavailable, trying next: {e}")
                 continue
 
+        if telemetry is not None:
+            telemetry["attempts"] = list(errors)
         raise RuntimeError(f"All AI providers failed (stream): {'; '.join(errors)}")
 
     def get_status(self) -> Dict[str, Any]:

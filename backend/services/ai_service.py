@@ -658,6 +658,12 @@ class AIService:
         self.temperature = temperature
         self.max_output_tokens = max_output_tokens
         self.use_fallback = use_fallback
+        # Wall-clock budget for the anti-hallucination validator's provider
+        # call. Overridable via CHAT_VALIDATOR_TIMEOUT_S.
+        try:
+            self.validator_timeout_s = float(os.getenv("CHAT_VALIDATOR_TIMEOUT_S", "25"))
+        except (TypeError, ValueError):
+            self.validator_timeout_s = 25.0
 
         # Initialise multi-provider service for fallback
         if use_fallback:
@@ -958,60 +964,14 @@ class AIService:
         # response with a safe refusal template that names the violation types.
         # See memory/project_chat_ai_architecture_evolution.md and
         # memory/feedback_biotech_act_andriukaitis_incident_2026_05_28.md.
-        try:
-            from services.ai.validator_settings import (
-                VALIDATOR_ENABLED,
-                VALIDATOR_SHADOW_MODE,
-                VALIDATOR_CRITICAL_ACTION,
-            )
-            # Fix A: skip the validator (a 2nd provider call) unless the answer
-            # has a checkable-fabrication surface. Halves provider load on the
-            # common low-risk answer, preserving the override on risky ones.
-            if VALIDATOR_ENABLED and use_context and _response_needs_validation(assistant_message):
-                from services.ai.response_validator import get_response_validator
-                _validator = get_response_validator()
-                if _validator.is_available:
-                    _validation = await _validator.validate(
-                        query=user_message,
-                        context_blocks=context_str,
-                        response=assistant_message,
-                    )
-                    logger.info(
-                        "[VALIDATOR] passed=%s severity=%s violations=%d latency_ms=%d error=%s",
-                        _validation.passed,
-                        _validation.severity,
-                        len(_validation.violations),
-                        _validation.latency_ms,
-                        _validation.error or "-",
-                    )
-                    asyncio.create_task(
-                        self._log_chat_validation(
-                            query=user_message,
-                            response=assistant_message,
-                            context_length=len(context_str),
-                            generator=provider_used,
-                            language=_detect_query_language(user_message),
-                            result=_validation,
-                            shadow_mode=VALIDATOR_SHADOW_MODE,
-                            user_id=user_id,
-                        )
-                    )
-                    if (
-                        not VALIDATOR_SHADOW_MODE
-                        and _validation.should_override
-                        and VALIDATOR_CRITICAL_ACTION == "override"
-                    ):
-                        logger.warning(
-                            "[VALIDATOR] critical violation -- swapping in safe refusal template (types=%s)",
-                            ",".join(v.type for v in _validation.violations) or "-",
-                        )
-                        assistant_message = self._build_safe_refusal_response(
-                            query=user_message,
-                            violations=_validation.violations,
-                            context_str=context_str,
-                        )
-        except Exception as _e:  # noqa: BLE001
-            logger.warning("validator pass failed (non-fatal): %s", _e)
+        assistant_message = await self._validate_and_maybe_override(
+            message=assistant_message,
+            user_message=user_message,
+            context_str=context_str,
+            provider_used=provider_used,
+            user_id=user_id,
+            use_context=use_context,
+        )
 
         total_time_ms = (datetime.now() - start_time).total_seconds() * 1000
 
@@ -1205,6 +1165,102 @@ class AIService:
             drafted_document=drafted_dict,
         )
 
+    async def _validate_and_maybe_override(
+        self,
+        *,
+        message: str,
+        user_message: str,
+        context_str: str,
+        provider_used: str,
+        user_id: Optional[str],
+        use_context: bool,
+    ) -> str:
+        """Run the anti-hallucination validator; return the final answer text.
+
+        Returns `message` unchanged unless the validator returns a critical
+        verdict AND override is configured, in which case a safe refusal
+        template replaces it. Never raises: a validator failure must not cost
+        the user their answer.
+
+        Shared by chat() and chat_stream(). Until 6 August 2026 this pass
+        existed only on the non-streaming path, which the UI never calls, so
+        the validator has been enabled in production since 28 May 2026 and has
+        never once run for a real user.
+        """
+        if not message:
+            return message
+        try:
+            from services.ai.validator_settings import (
+                VALIDATOR_ENABLED,
+                VALIDATOR_SHADOW_MODE,
+                VALIDATOR_CRITICAL_ACTION,
+            )
+            # Skip the second provider call unless the answer has a
+            # checkable-fabrication surface.
+            if not (VALIDATOR_ENABLED and use_context and _response_needs_validation(message)):
+                return message
+
+            from services.ai.response_validator import get_response_validator
+            _validator = get_response_validator()
+            if not _validator.is_available:
+                return message
+
+            # Bounded: the validator is a SECOND provider call on the same
+            # saturated free-tier chain. On the streaming path it runs after
+            # the user already has the answer, so an unbounded wait would hold
+            # the SSE connection (and the message's DB write) open behind a
+            # queued provider. Past the budget we keep the answer as-is.
+            _validation = await asyncio.wait_for(
+                _validator.validate(
+                    query=user_message,
+                    context_blocks=context_str,
+                    response=message,
+                ),
+                timeout=self.validator_timeout_s,
+            )
+            logger.info(
+                "[VALIDATOR] passed=%s severity=%s violations=%d latency_ms=%d error=%s",
+                _validation.passed,
+                _validation.severity,
+                len(_validation.violations),
+                _validation.latency_ms,
+                _validation.error or "-",
+            )
+            asyncio.create_task(
+                self._log_chat_validation(
+                    query=user_message,
+                    response=message,
+                    context_length=len(context_str),
+                    generator=provider_used,
+                    language=_detect_query_language(user_message),
+                    result=_validation,
+                    shadow_mode=VALIDATOR_SHADOW_MODE,
+                    user_id=user_id,
+                )
+            )
+            if (
+                not VALIDATOR_SHADOW_MODE
+                and _validation.should_override
+                and VALIDATOR_CRITICAL_ACTION == "override"
+            ):
+                logger.warning(
+                    "[VALIDATOR] critical violation -- swapping in safe refusal template (types=%s)",
+                    ",".join(v.type for v in _validation.violations) or "-",
+                )
+                return self._build_safe_refusal_response(
+                    query=user_message,
+                    violations=_validation.violations,
+                    context_str=context_str,
+                )
+        except asyncio.TimeoutError:
+            logger.warning(
+                "[VALIDATOR] exceeded %ss budget -- answer kept unvalidated",
+                self.validator_timeout_s,
+            )
+        except Exception as _e:  # noqa: BLE001
+            logger.warning("validator pass failed (non-fatal): %s", _e)
+        return message
+
     def _post_process_text(
         self,
         message: str,
@@ -1263,7 +1319,8 @@ class AIService:
         use_context: bool = True,
         is_pre_user: bool = False,
         document_ids: Optional[List[str]] = None,
-        nav_context: Optional[str] = None
+        nav_context: Optional[str] = None,
+        user_id: Optional[str] = None,
     ) -> AsyncGenerator[str, None]:
         """
         Stream chat response with dynamic status events.
@@ -1276,6 +1333,15 @@ class AIService:
             use_context: Whether to inject EU context
             is_pre_user: Whether user is anonymous
             document_ids: Document IDs for status detection
+            user_id: Authenticated user, from the JWT. Required for the
+                personalised layers: the private-guide block resolves
+                `users.private_guide_slug` from it, tracked-procedure
+                awareness reads the user's carriage tracks, and the
+                validator/analytics rows are attributed with it. Until
+                6 Aug 2026 this parameter did not exist, so the streaming
+                path -- the only path the UI uses -- was user-blind and
+                56 users with `private_guide_status='ready'` never once
+                received their own guide.
 
         Yields:
             JSON status events ({"type":"status","message":"..."}) and text chunks
@@ -1375,6 +1441,9 @@ class AIService:
         # Assigned from the context task below when use_context is on; must
         # exist either way because post-processing reads it unconditionally.
         stream_citations: List[Dict] = []
+        context_data: Any = None
+        mep_data: Dict[str, Dict[str, str]] = {}
+        context_ms = 0.0
         if use_context:
             status_queue: asyncio.Queue = asyncio.Queue()
 
@@ -1395,15 +1464,47 @@ class AIService:
             rank_message = f"Ranking sources on {topic}..." if topic else "Ranking sources..."
 
             async def _build_context_with_progress():
-                """Run context building and emit progress events to queue."""
+                """Run context building and emit progress events to queue.
+
+                Mirrors the non-streaming path in chat() exactly: build the
+                structured ContextData, format it, then derive citations from
+                it. The old implementation called build_context_with_citations,
+                which takes no user_id and returns only a string -- so the
+                streaming path lost BOTH the personalised context (private
+                guides, tracked procedures) and the structured object that
+                guide-document link injection and MEP linkification need.
+                """
                 await status_queue.put(kb_message)
-                context, citations = await self.context_builder.build_context_with_citations(
+                cdata = await self.context_builder.build_context_for_query(
                     user_message=user_message,
-                    conversation_history=self._convert_to_dict(conversation_history)
+                    conversation_history=self._convert_to_dict(conversation_history),
+                    user_id=user_id,
                 )
                 await status_queue.put(rank_message)
+                context = self.context_builder.format_context_for_ai(cdata)
+
+                # Localised EU-vocabulary glossary, same as chat(). Fail-soft:
+                # any error yields no glossary rather than breaking the answer.
+                try:
+                    from services.vocabularies.glossary_injector import (
+                        build_glossary_block as _build_glossary_block,
+                        detect_language as _detect_language,
+                    )
+                    _glossary_db = SessionLocal()
+                    try:
+                        _glossary = _build_glossary_block(
+                            context, _glossary_db, _detect_language(user_message)
+                        )
+                    finally:
+                        _glossary_db.close()
+                    if _glossary:
+                        context = _glossary + "\n\n" + context
+                except Exception as _e:  # noqa: BLE001
+                    logger.warning("[euvoc-glossary] stream injection failed: %s", _e)
+
+                citations = self._build_citations_from_context(cdata)
                 await status_queue.put(None)  # Signal completion
-                return context, citations
+                return context, citations, cdata
 
             # Run context building as a task so we can drain status events
             context_task = asyncio.create_task(_build_context_with_progress())
@@ -1421,7 +1522,11 @@ class AIService:
 
             # Keep the citations: the streaming path needs them to tell an
             # orphan [N] marker from a real one during post-processing.
-            context_str, stream_citations = await context_task
+            # context_data carries the structured object that guide-document
+            # link injection and MEP linkification read.
+            context_str, stream_citations, context_data = await context_task
+            mep_data = self._extract_mep_data(context_data)
+            context_ms = (datetime.now() - start_time).total_seconds() * 1000
 
         # Signal context building done, AI composing
         yield json.dumps({"type": "status", "message": "Composing response..."})
@@ -1469,6 +1574,11 @@ class AIService:
         # run once the response is complete (see _post_process_text).
         streamed_parts: List[str] = []
         stream_failed = False
+        # Caller-owned telemetry: which provider actually answered, on which
+        # model, after how many failed attempts. Without this the streaming
+        # path persisted model=NULL and latency could not be attributed.
+        telemetry: Dict[str, Any] = {}
+        llm_started = datetime.now()
 
         if self.use_fallback and self.multi_provider:
             try:
@@ -1477,6 +1587,7 @@ class AIService:
                     messages=messages,
                     max_tokens=self.max_output_tokens,
                     temperature=self.temperature,
+                    telemetry=telemetry,
                 ):
                     streamed_parts.append(piece)
                     yield piece
@@ -1509,12 +1620,27 @@ class AIService:
                     raw_message,
                     citations=stream_citations,
                     context_str=context_str,
-                    # The streaming path builds a context STRING, not the
-                    # structured ContextData object, so guide-document link
-                    # injection is skipped here. Unifying the two context
-                    # builds is the follow-up owned by the Chat session.
-                    context_data=None,
+                    # Unified 6 Aug 2026: the streaming path now builds the
+                    # structured ContextData, so guide-document link injection
+                    # runs here exactly as it does in chat().
+                    context_data=context_data,
                     user_query=user_message,
+                )
+                # MEP profile links, previously non-streaming only.
+                if mep_data:
+                    cleaned = self._linkify_mep_names(cleaned, mep_data)
+                # Anti-hallucination validator. Enabled in production since
+                # 28 May 2026 but, until today, only on the path the UI never
+                # calls. It runs after the tokens have reached the user, so a
+                # critical verdict arrives as a "replace" that swaps the answer
+                # for a safe refusal.
+                cleaned = await self._validate_and_maybe_override(
+                    message=cleaned,
+                    user_message=user_message,
+                    context_str=context_str,
+                    provider_used=telemetry.get("provider", "") or "stream",
+                    user_id=user_id,
+                    use_context=use_context,
                 )
                 if cleaned != raw_message:
                     logger.info(
@@ -1539,11 +1665,37 @@ class AIService:
                     "citations": stream_citations,
                 })
 
+        # Provider telemetry. Deliberately emitted as an SSE event that the
+        # ROUTER consumes and never forwards to the browser, so persisting
+        # model/provider/tokens needs no frontend change and cannot render as
+        # raw JSON in a stale bundle (see
+        # memory/feedback_sse_event_ships_frontend_first).
+        yield json.dumps({
+            "type": "meta",
+            "provider": telemetry.get("provider", ""),
+            "model": telemetry.get("model", ""),
+            "tokens_used": telemetry.get("tokens_used", 0),
+            "attempts": telemetry.get("attempts", []),
+            "context_ms": round(context_ms, 1),
+            "llm_ms": round((datetime.now() - llm_started).total_seconds() * 1000, 1),
+        })
+
         # After streaming completes, compute and emit action buttons
         if use_context:
             try:
                 has_train_match = self._check_train_match(entities.procedure_references) if entities.procedure_references else False
-                tracked_refs = set()  # Streaming path doesn't have user_id; tracked_refs unavailable
+                # The streaming path now carries user_id, so "already tracked"
+                # is known and the Track button stops being offered for files
+                # the user has already added. Run the sync ORM query in a
+                # thread: production is a SINGLE uvicorn worker, and blocking
+                # the loop here would stall every other in-flight request
+                # (see memory/feedback_cron_subprocess_blocks_event_loop).
+                if user_id:
+                    tracked_refs = await asyncio.get_event_loop().run_in_executor(
+                        None, self._get_tracked_procedure_refs, user_id
+                    )
+                else:
+                    tracked_refs = set()
                 actions = compute_actions(
                     entities=entities,
                     drafting_intent=drafting,
@@ -3206,83 +3358,105 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         return text
 
-    def _build_citations_from_context(self, context_data: Any) -> List[Dict[str, str]]:
+    def _build_citations_from_context(self, context_data: Any) -> List[Dict[str, Any]]:
         """
-        Build citations list from context data.
+        Build the citation list from context data. THE single citation builder.
 
-        Args:
-            context_data: ContextData object
+        Shape is what the frontend Citation type reads: id / type / title / url
+        / metadata, plus `source_tier` which _extract_source_tiers() aggregates
+        for analytics.
 
-        Returns:
-            List of citation dictionaries
+        Unified 6 August 2026. Before that there were two builders that
+        disagreed: this one (used by chat()) covered 5 context fields and set no
+        source_tier, while context_builder.build_context_with_citations (used by
+        chat_stream()) covered 9 fields with tiers but a different key shape and
+        no ids. Collapsing the streaming path onto the shorter builder would
+        have silently dropped news, web-search, calendar, tender and Beresol
+        sources from every streamed answer, so the union is built here instead.
         """
-        citations = []
+        from services.ai.context_builder import get_source_tier
 
-        # Add search results
-        if hasattr(context_data, 'relevant_documents'):
-            for doc in context_data.relevant_documents:
-                citations.append({
-                    'type': 'search_result',
-                    'title': doc['metadata'].get('title', 'Untitled'),
-                    'url': doc['metadata'].get('url', ''),
-                    'metadata': {
-                        'source': doc.get('collection', ''),
-                        'score': str(doc.get('score', 0)),
-                    }
-                })
+        citations: List[Dict[str, Any]] = []
 
-        # Add legislation
-        if hasattr(context_data, 'legislation_details'):
-            for leg in context_data.legislation_details:
-                citations.append({
-                    'type': 'legislation',
-                    'title': leg.get('title', ''),
-                    'url': leg.get('url', ''),
-                    'metadata': {
-                        'celex': leg.get('celex', ''),
-                        'date': leg.get('date', ''),
-                    }
-                })
+        def add(kind: str, title: str, url: str, **meta: Any) -> None:
+            citations.append({
+                'type': kind,
+                'title': title or 'Untitled',
+                'url': url or '',
+                'source_tier': get_source_tier(kind),
+                'metadata': {k: ('' if v is None else str(v)) for k, v in meta.items()},
+            })
 
-        # Add procedures
-        if hasattr(context_data, 'procedure_details'):
-            for proc in context_data.procedure_details:
-                citations.append({
-                    'type': 'procedure',
-                    'title': proc.get('title', ''),
-                    'url': proc.get('url', ''),
-                    'metadata': {
-                        'reference': proc.get('reference', ''),
-                        'stage': proc.get('stage', ''),
-                    }
-                })
+        for doc in getattr(context_data, 'relevant_documents', None) or []:
+            md = doc.get('metadata') or {}
+            add('search_result', md.get('title', 'Untitled'), md.get('url', ''),
+                source=doc.get('collection', ''), score=doc.get('score', 0))
 
-        # Add MEP profiles
-        if hasattr(context_data, 'mep_profiles'):
-            for mep in context_data.mep_profiles:
-                citations.append({
-                    'type': 'mep',
-                    'title': mep.get('name', ''),
-                    'url': mep.get('profile_url', ''),
-                    'metadata': {
-                        'country': mep.get('country', ''),
-                        'group': mep.get('political_group', ''),
-                    }
-                })
+        for leg in getattr(context_data, 'legislation_details', None) or []:
+            add('legislation', leg.get('title', ''), leg.get('url', ''),
+                celex=leg.get('celex', ''), date=leg.get('date', ''))
 
-        # Add committee info
-        if hasattr(context_data, 'committee_info'):
-            for committee in context_data.committee_info:
-                citations.append({
-                    'type': 'committee',
-                    'title': f"{committee.get('name', '')} ({committee.get('code', '')})",
-                    'url': committee.get('url', ''),
-                    'metadata': {
-                        'members': str(committee.get('member_count', 0)),
-                    }
-                })
+        for proc in getattr(context_data, 'procedure_details', None) or []:
+            add('procedure', proc.get('title', ''), proc.get('url', ''),
+                reference=proc.get('reference', ''),
+                status=proc.get('status', ''), stage=proc.get('stage', ''))
 
-        # Add sequential id fields so frontend can match [1], [2] markers
+        for mep in getattr(context_data, 'mep_profiles', None) or []:
+            add('mep', mep.get('name', ''),
+                mep.get('url') or mep.get('profile_url', ''),
+                country=mep.get('country', ''),
+                group=mep.get('political_group', ''))
+
+        for cm in getattr(context_data, 'committee_info', None) or []:
+            add('committee',
+                f"{cm.get('name', '')} ({cm.get('code', '')})".strip(),
+                cm.get('url', ''), members=cm.get('member_count', 0))
+
+        for entry in getattr(context_data, 'recent_rss_entries', None) or []:
+            add('news', entry.get('title', ''), entry.get('link', ''),
+                published=entry.get('published'), source=entry.get('source', ''))
+
+        for result in getattr(context_data, 'web_search_results', None) or []:
+            if result.get('source') == 'tavily_ai_answer':
+                continue  # the AI summary is not a citable source
+            add('web_search', result.get('title', ''), result.get('url', ''),
+                published=result.get('published_date'), source='tavily')
+
+        for item in getattr(context_data, 'beresol_content', None) or []:
+            if item.get('type') == 'beresol_report':
+                add('beresol_report', item.get('title', ''), item.get('source_url', ''),
+                    author=item.get('author', ''), date=item.get('date'),
+                    policy_area=item.get('policy_area', ''),
+                    publisher=item.get('publisher', ''))
+            elif item.get('type') == 'beresol_monitor':
+                add('beresol_monitor', item.get('name', ''), item.get('source_url', ''),
+                    description=item.get('description', ''),
+                    policy_area=item.get('policy_area', ''),
+                    publisher=item.get('publisher', ''))
+
+        for event in getattr(context_data, 'eu_calendar_events', None) or []:
+            add('eu_calendar', event.get('title', 'Unknown event'),
+                event.get('source_url') or event.get('agenda_url', ''),
+                institution=event.get('institution', ''),
+                date=event.get('start_date'),
+                event_type=event.get('event_type', ''))
+
+        tender_ctx = getattr(context_data, 'tender_context', None)
+        if tender_ctx is not None:
+            for tender in getattr(tender_ctx, 'tenders', None) or []:
+                add('tender', tender.get('title', 'Unknown tender'),
+                    tender.get('ted_url', ''),
+                    publication_number=tender.get('publication_number', ''),
+                    buyer_country=tender.get('buyer_country', ''),
+                    value=tender.get('estimated_value'))
+            for match in getattr(tender_ctx, 'user_matches', None) or []:
+                tender = match.get('tender', {}) or {}
+                add('tender_match', tender.get('title', 'Unknown tender'),
+                    tender.get('ted_url', ''),
+                    publication_number=tender.get('publication_number', ''),
+                    match_score=match.get('match_score'))
+
+        # Sequential ids so the frontend can resolve [1], [2] markers.
         for i, citation in enumerate(citations):
             citation['id'] = i + 1
 
