@@ -3,11 +3,12 @@
 
 Brubru's own data products (not mirrored EU institutional sources). One
 sub-router per source:
-    /guides             Curated EU-policy knowledge guides (the chatbot's grounding)
-    /catalan            The EU acquis translated into Catalan (Softcatalà NMT / Sonnet)
-    /canon              Brubru deep-dive HTML reports: EU Canon + law deep-dives
-    /brussels-lobbies   Curated Brussels lobby register snapshot
-    /tender-docs        Funding-application template library + Comply cross-fetch
+    /guides                Curated EU-policy knowledge guides (the chatbot's grounding)
+    /catalan               The EU acquis translated into Catalan (Softcatalà NMT / Sonnet)
+    /canon                 Brubru deep-dive HTML reports: EU Canon + law deep-dives
+    /brussels-lobbies      Curated Brussels lobby register snapshot
+    /tender-docs           Funding-application template library + Comply cross-fetch
+    /textile-circularity   Curated, live-resolved EU textile/waste/ecodesign corpus (LIFE DPP-TEX)
 
 Same 1:1 mapping the "Legislative data" domain follows (Postman collection
 "Brubru Proprietary Databases" -> sub-folders -> URL segments).
@@ -30,6 +31,7 @@ from . import catalan as _catalan
 from . import canon as _canon
 from . import brussels_lobbies as _brussels_lobbies
 from . import tender_docs as _tender_docs
+from . import textile_circularity as _textile_circularity
 
 router = APIRouter(prefix="/proprietary")
 router.include_router(_guides.router)
@@ -37,3 +39,4 @@ router.include_router(_catalan.router)
 router.include_router(_canon.router)
 router.include_router(_brussels_lobbies.router)
 router.include_router(_tender_docs.router)
+router.include_router(_textile_circularity.router)

@@ -281,6 +281,51 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
             "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1W",
         },
+        {
+            "dcat_uri": f"{BRUBRU_BASE}/datasets/textile-circularity-corpus",
+            "title": "EU textile-circularity law corpus (live-resolved)",
+            "description": {
+                "en": (
+                    "Curated corpus of the EU law that governs the textile / "
+                    "waste / ecodesign product lifecycle — the Textile EPR / "
+                    "Waste Framework Directive, ESPR, PPWR, Waste Shipments "
+                    "Regulation, Critical Raw Materials Act and CBAM, plus the "
+                    "delegated acts and proposals still moving. Titles, ELI and "
+                    "in-force status are resolved live from the Publications "
+                    "Office (Cellar) so a digital product passport always shows "
+                    "the norm in force. Built for the LIFE DPP-TEX project."
+                ),
+                "ca": (
+                    "Corpus curat de la legislació de la UE sobre el cicle de "
+                    "vida tèxtil / residus / disseny ecològic — RAP tèxtil, "
+                    "ESPR, PPWR, trasllats de residus, matèries primeres "
+                    "fonamentals i CBAM, més els actes delegats en tràmit. "
+                    "Títols, ELI i estat de vigència resolts en directe des de "
+                    "Cellar. Projecte LIFE DPP-TEX."
+                ),
+                "es": (
+                    "Corpus curado de la legislación de la UE sobre el ciclo de "
+                    "vida textil / residuos / diseño ecológico, con títulos, ELI "
+                    "y estado de vigencia resueltos en directo desde Cellar. "
+                    "Proyecto LIFE DPP-TEX."
+                ),
+            },
+            "dcat_theme": [
+                EUROVOC_THEMES["law"],
+                EUROVOC_THEMES["regulation"],
+                EUROVOC_THEMES["european_union"],
+            ],
+            "distribution": [
+                {
+                    "title": "v2 API: textile-circularity corpus (JSON)",
+                    "access_url": "https://brubru.beresol.eu/api/v2/proprietary/textile-circularity",
+                    "media_type": "application/json",
+                    "format": "JSON",
+                },
+            ],
+            "license": LICENSE_CC_BY_4,
+            "accrual_periodicity": "P1D",
+        },
     ]
 
 
