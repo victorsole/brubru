@@ -127,6 +127,11 @@ _CONTEXT_BLOCK_LABEL_RE = re.compile(
 # feature Brubru has not shipped cannot reach the user. A test asserts the
 # prose and this tuple stay in agreement; when a tab is added or renamed,
 # change it here and in the prompt in the same commit.
+LANG_NAMES = {
+    "EN": "English", "ES": "Spanish", "FR": "French",
+    "IT": "Italian", "NL": "Dutch", "CA": "Catalan",
+}
+
 MEUB_SUBTABS = (
     "Overview", "Policy Interests", "My Documents", "News", "My Tracked Files",
     "My OJ", "Amendments", "Comparator", "Legislative Train: state of play",
@@ -927,15 +932,17 @@ class AIService:
             context_str = memory_context
 
         # Build system prompt
+        _qlang = _detect_query_language(user_message)
         system_prompt = self._build_system_prompt(
             is_pre_user=is_pre_user,
-            query_lang=_detect_query_language(user_message),
+            query_lang=_qlang,
         )
 
         # Build messages
         messages = self._build_messages(
             user_message=user_message,
             context=context_str,
+            query_lang=_qlang,
             conversation_history=conversation_history,
             documents=document_content
         )
@@ -1650,13 +1657,15 @@ class AIService:
                 document_content = []
 
         # Build prompts
+        _qlang = _detect_query_language(user_message)
         system_prompt = self._build_system_prompt(
             is_pre_user=is_pre_user,
-            query_lang=_detect_query_language(user_message),
+            query_lang=_qlang,
         )
         messages = self._build_messages(
             user_message=user_message,
             context=context_str,
+            query_lang=_qlang,
             conversation_history=conversation_history,
             documents=document_content or None,
         )
@@ -2202,12 +2211,8 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
         # to infer it produced a Catalan question answered entirely in English
         # (audit, 5 Aug 2026: T1-ca detected CA correctly yet the answer came
         # back in English, because the rule asked the model to decide).
-        _LANG_NAMES = {
-            "EN": "English", "ES": "Spanish", "FR": "French",
-            "IT": "Italian", "NL": "Dutch", "CA": "Catalan",
-        }
         prompt = prompt.replace(
-            '{{QUERY_LANG_NAME}}', _LANG_NAMES.get(query_lang, "English")
+            '{{QUERY_LANG_NAME}}', LANG_NAMES.get(query_lang, "English")
         )
 
         return prompt
@@ -2217,21 +2222,30 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
         user_message: str,
         context: str,
         conversation_history: Optional[List[ChatMessage]] = None,
-        documents: Optional[List[Dict[str, Any]]] = None
+        documents: Optional[List[Dict[str, Any]]] = None,
+        query_lang: str = "EN",
     ) -> List[Dict[str, Any]]:
         """
-        Build messages array for Claude API.
+        Build messages array for the model.
 
         Args:
             user_message: Current user message
             context: EU context string
             conversation_history: Previous messages
             documents: List of document content blocks
+            query_lang: Detected language of the query, restated at the very end
+                of the user turn. The system prompt already names it, but a long
+                context block in another language beats a distant instruction:
+                a Terraqui user asking "who am I and which organisation do I work
+                for?" in ENGLISH got a Catalan answer, because their 19,708-char
+                private guide is written in Catalan. Recency wins, so the
+                reminder goes last.
 
         Returns:
             Messages array
         """
         messages = []
+        lang_name = LANG_NAMES.get(query_lang, "English")
 
         # Add conversation history
         if conversation_history:
@@ -2259,7 +2273,7 @@ Maximum one feature mention per response. Keep it natural, not salesy."""
 
 USER QUESTION: {user_message}
 
-Please analyze the uploaded documents above along with the EU context provided. Include citations [1], [2], etc. when referencing specific sources."""
+Please analyse the uploaded documents above along with the EU context provided. Include citations [1], [2], etc. when referencing specific sources. Write the entire answer in {lang_name}, whatever language the context or the documents happen to be written in."""
             else:
                 text_content = f"""Please analyze the uploaded documents above and answer: {user_message}"""
 
@@ -2282,7 +2296,7 @@ Please analyze the uploaded documents above along with the EU context provided. 
 
 USER QUESTION: {user_message}
 
-Please answer using the EU context provided above. Include citations [1], [2], etc. when referencing specific sources."""
+Please answer using the EU context provided above. Include citations [1], [2], etc. when referencing specific sources. Write the entire answer in {lang_name}, whatever language the context happens to be written in."""
             else:
                 user_content = user_message
 
