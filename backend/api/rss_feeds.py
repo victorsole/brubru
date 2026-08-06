@@ -226,7 +226,7 @@ async def list_feeds(
     description="Get detailed information about specific RSS feed"
 )
 async def get_feed(
-    feed_id: str,
+    feed_id: UUID,
     db: Session = Depends(get_db)
 ) -> RSSFeedInfo:
     """Get RSS feed details"""
@@ -328,7 +328,7 @@ async def get_entries(
     description="Get detailed RSS entry"
 )
 async def get_entry(
-    entry_id: str,
+    entry_id: UUID,
     db: Session = Depends(get_db)
 ) -> RSSEntryInfo:
     """Get RSS entry details"""
@@ -606,7 +606,7 @@ async def get_statistics(
     description="Manually trigger feed refresh"
 )
 async def refresh_feed(
-    feed_id: str,
+    feed_id: UUID,
     processor: RSSProcessor = Depends(get_rss_processor),
     db: Session = Depends(get_db)
 ):
@@ -673,7 +673,7 @@ class EnrichmentResponse(BaseModel):
     description="On-demand AI enrichment for RSS entry (policy areas, entities, sentiment)"
 )
 async def enrich_entry(
-    entry_id: str,
+    entry_id: UUID,
     db: Session = Depends(get_db)
 ) -> EnrichmentResponse:
     """

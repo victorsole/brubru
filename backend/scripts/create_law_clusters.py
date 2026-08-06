@@ -336,6 +336,206 @@ LAW_PACKAGES = {
         'date_from': 2025
     },
 
+    'csrd_corporate_sustainability_reporting': {
+        'name': 'CSRD - Corporate Sustainability Reporting Directive',
+        'primary_celex': '32022L2464',
+        'description': (
+            'Directive (EU) 2022/2464 amending Directive 2013/34/EU, Directive '
+            '2004/109/EC, Directive 2006/43/EC and Regulation (EU) No 537/2014 '
+            'as regards corporate sustainability reporting. Replaces the earlier '
+            'Non-Financial Reporting Directive 2014/95/EU. Requires large '
+            'undertakings, listed SMEs (except micro), and large third-country '
+            'undertakings operating in the Union to disclose standardised '
+            'sustainability information as a dedicated section of the management '
+            'report, prepared under mandatory European Sustainability Reporting '
+            'Standards (ESRS) adopted by Commission delegated act, assured by an '
+            'independent third party (limited assurance from year 1, potentially '
+            'reasonable assurance from 2028), and digitally tagged in ESEF format. '
+            'Codifies the double materiality principle: reporting covers both '
+            'impacts of the undertaking on people and planet and impacts of '
+            'sustainability matters on the undertaking. Content covers business '
+            'model + transition plan compatible with 1.5 degrees Celsius / '
+            'climate neutrality by 2050, absolute GHG reduction targets for 2030 '
+            'and 2050, governance and incentives, due diligence, principal risks, '
+            'and indicators covering the whole value chain with a 3-year grace '
+            'period. First set of 12 ESRS (2 cross-cutting + 5 environmental + '
+            '4 social + 1 governance) adopted by Commission Delegated Regulation '
+            '(EU) 2023/2772 on 31 July 2023. Sector-specific ESRS deferred to '
+            '30 June 2026. Phased application by wave: Wave 1 (former NFRD PIEs '
+            'above 500 employees) FY2024, Wave 2 (all other large undertakings) '
+            'FY2025 shifted to FY2027 by Directive (EU) 2025/794, Wave 3 (listed '
+            'SMEs) FY2026 shifted to FY2028, Wave 4 (third-country undertakings '
+            'with EU turnover above 150 million euros) FY2028. Transposition '
+            'deadline 6 July 2024.'
+        ),
+        'applicability': (
+            'Every large undertaking in the Union meeting 2 of 3 thresholds '
+            '(balance sheet above 25 million euros, net turnover above 50 million '
+            'euros, more than 250 employees); every small or medium-sized '
+            'undertaking except micro whose transferable securities are admitted '
+            'to trading on an EU regulated market; every parent undertaking of a '
+            'large group; every credit institution and insurance undertaking '
+            'meeting the size thresholds regardless of legal form; every '
+            'third-country undertaking generating more than 150 million euros of '
+            'net turnover in the Union in each of the last two consecutive '
+            'financial years and having at least one EU subsidiary that is a '
+            'large or listed undertaking or one EU branch with net turnover above '
+            '40 million euros. Approximately 50,000 undertakings originally, '
+            'expected to fall to roughly 7,000 if the substantive Omnibus I '
+            'proposal (raising the employee threshold to 1,000) is adopted. '
+            'Assurance market open to statutory auditors by default and to '
+            'independent assurance services providers where Member States open it. '
+            'Enforced by national competent authorities under Directive '
+            '2004/109/EC for listed issuers and under national company law for '
+            'others; sanctions must be effective, proportionate and dissuasive.'
+        ),
+        'policy_area': 'Financial Services',
+        'priority_level': 'high',
+        'keywords': [
+            'csrd', 'corporate sustainability reporting directive',
+            'corporate sustainability reporting',
+            '2022/2464', '32022l2464', 'directive 2022/2464',
+            'directive (eu) 2022/2464',
+            'nfrd', 'non-financial reporting directive',
+            '2014/95', 'directive 2014/95',
+            'esrs', 'european sustainability reporting standards',
+            '2023/2772', 'delegated regulation 2023/2772',
+            'efrag', 'sustainability reporting board',
+            'double materiality', 'impact materiality', 'financial materiality',
+            'sustainability reporting', 'sustainability disclosure',
+            'sustainability statement', 'sustainability report',
+            'sustainability assurance', 'assurance of sustainability',
+            'limited assurance', 'reasonable assurance',
+            'assurance services provider', 'independent assurance',
+            'accounting directive', '2013/34', 'directive 2013/34',
+            'article 19a', 'article 29a', 'article 29b', 'article 29c',
+            'article 29d', 'article 40a',
+            'transparency directive', '2004/109', 'directive 2004/109',
+            'statutory audit directive', '2006/43', 'directive 2006/43',
+            'audit regulation', '537/2014', 'regulation 537/2014',
+            'taxonomy regulation', '2020/852', 'regulation 2020/852',
+            'sfdr', 'sustainable finance disclosure',
+            '2019/2088', 'regulation 2019/2088',
+            'transition plan', 'climate transition plan',
+            'paris agreement', 'climate neutrality 2050', '1.5 degrees',
+            'scope 1', 'scope 2', 'scope 3', 'ghg emissions',
+            'greenhouse gas emissions', 'absolute emission reduction',
+            'value chain reporting', 'value chain due diligence',
+            'sector-specific esrs', 'sector esrs',
+            'vsme', 'voluntary sme standard', 'lsme', 'listed sme standard',
+            'esef', 'single electronic reporting format',
+            'xbrl', 'digital tagging', 'digital taxonomy',
+            'omnibus', 'omnibus i', 'omnibus package',
+            'stop-the-clock', 'stop the clock', '2025/794',
+            'wave 1', 'wave 2', 'wave 3', 'wave 4',
+            'esg reporting', 'sustainability information',
+            'esrs e1', 'esrs e2', 'esrs e3', 'esrs e4', 'esrs e5',
+            'esrs s1', 'esrs s2', 'esrs s3', 'esrs s4', 'esrs g1',
+            'sustainability matters',
+            'sustainability targets',
+        ],
+        'date_from': 2022
+    },
+
+    'csddd_corporate_sustainability_due_diligence': {
+        'name': 'CSDDD - Corporate Sustainability Due Diligence Directive',
+        'primary_celex': '32024L1760',
+        'description': (
+            'Directive (EU) 2024/1760 on corporate sustainability due diligence, '
+            'amending Directive (EU) 2019/1937 (Whistleblower Protection) and '
+            'Regulation (EU) 2023/2859 (European Single Access Point). Requires '
+            'large EU and non-EU companies operating in the Union to identify, '
+            'prevent, mitigate, remedy and publicly account for adverse human '
+            'rights and environmental impacts across their own operations, their '
+            'subsidiaries and their business partners in the chain of activities '
+            '(upstream + restricted downstream), and to adopt a climate '
+            'transition plan compatible with 1.5 degrees Celsius and 2050 '
+            'climate neutrality. Sets an 8-step due diligence process in '
+            'Article 5 (integrate, identify + assess, prioritise, prevent + '
+            'mitigate, remediate, engage stakeholders, complaints mechanism, '
+            'monitor + publicly communicate). Pecuniary penalties capped at no '
+            'less than 5 percent of net worldwide turnover (Article 27). '
+            'Article 29 civil liability regime with overriding mandatory '
+            'application; trade unions and NGOs may bring representative '
+            'actions. Phased application by wave: Wave 1 (>5000 employees, '
+            '>1.5 billion euros turnover) originally 26 July 2027, postponed to '
+            '26 July 2028 by Directive (EU) 2025/794 Stop-the-clock; Wave 2 '
+            '(>3000 employees, >900 million euros) 26 July 2029; Wave 3 (all '
+            'other in-scope companies) 26 July 2030. Transposition deadline '
+            'postponed by one year to 26 July 2027. Substantive Omnibus I '
+            'proposal (COM(2025) 81 final, 26 February 2025) still under '
+            'negotiation may narrow due diligence to direct suppliers, delete '
+            'the civil liability regime and soften the Article 22 climate '
+            'transition plan.'
+        ),
+        'applicability': (
+            'EU companies with more than 1,000 employees on average and net '
+            'worldwide turnover above 450 million euros; ultimate parent '
+            'companies of groups meeting those thresholds on a consolidated '
+            'basis; franchising or licensing companies with royalties above '
+            '22.5 million euros in the Union and turnover above 80 million '
+            'euros; third-country companies with net Union turnover above 450 '
+            'million euros in the financial year preceding the last, and their '
+            'ultimate parents. Thresholds must be met for two consecutive '
+            'financial years. Approximately 6,000 EU companies and 900 non-EU '
+            'companies estimated in scope at full roll-out. Pure holding '
+            'companies exemptible if a designated Union subsidiary fulfils the '
+            'obligations. AIFs and UCITS explicitly excluded. Chain of '
+            'activities excludes distribution of dual-use export-controlled '
+            'items, weapons, munitions and war materials once export is '
+            'authorised, and excludes downstream financial services beyond '
+            'direct clients.'
+        ),
+        'policy_area': 'Financial Services',
+        'priority_level': 'high',
+        'keywords': [
+            'csddd', 'cs3d', 'corporate sustainability due diligence',
+            'corporate sustainability due diligence directive',
+            '2024/1760', '32024l1760', '32024r1760',
+            'directive 2024/1760', 'directive (eu) 2024/1760',
+            'human rights due diligence', 'hrdd',
+            'environmental due diligence',
+            'value chain due diligence', 'chain of activities',
+            'business partner', 'upstream business partner', 'downstream business partner',
+            'adverse impact', 'adverse human rights impact', 'adverse environmental impact',
+            'risk-based due diligence', 'meaningful engagement',
+            'prevention and mitigation', 'prevent and mitigate',
+            'bringing to an end', 'cease adverse impact',
+            'remediation', 'stakeholder engagement',
+            'notification mechanism', 'complaints procedure',
+            'transition plan', 'climate transition plan',
+            'article 22', 'article 27', 'article 29',
+            '1.5 degrees celsius', 'paris agreement',
+            'climate neutrality 2050',
+            'civil liability', 'article 29 civil liability',
+            'overriding mandatory application', 'rome ii',
+            'representative action', 'ngo representative',
+            'trade union standing',
+            'pecuniary penalty', 'penalty cap 5 percent',
+            'supervisory authority', 'european network of supervisory authorities',
+            'authorised representative',
+            'substantiated concerns',
+            'transposition 26 july 2026', 'transposition 26 july 2027',
+            'wave 1 csddd', 'wave 2 csddd', 'wave 3 csddd',
+            'omnibus', 'omnibus i', 'stop-the-clock',
+            '2025/794', 'directive 2025/794',
+            'com(2025) 81', '52025pc0081',
+            'lieferkettengesetz', 'loi de vigilance',
+            'un guiding principles', 'ohchr ungp',
+            'oecd guidelines', 'oecd due diligence guidance',
+            'child labour', 'forced labour',
+            'nfrd', 'csrd',
+            'directive 2013/34', '2013/34',
+            'directive 2019/1937', 'whistleblower protection',
+            'regulation 2023/2859', 'european single access point',
+            'esap',
+            'annex human rights',
+            'international bill of human rights',
+            'ilo core conventions',
+        ],
+        'date_from': 2024
+    },
+
     'green_deal': {
         'name': 'European Green Deal Package',
         'primary_celex': None,  # Collection of laws, no single primary

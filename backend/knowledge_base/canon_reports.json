@@ -1,7 +1,7 @@
 {
   "schema": "brubru-canon-reports/1",
   "site": "https://brubru.beresol.eu",
-  "count": 24,
+  "count": 49,
   "reports": [
     {
       "slug": "2000-141_orphan",
@@ -9,17 +9,83 @@
       "title": "Orphan Medicinal Products Regulation explained: Regulation (EC) No 141/2000",
       "summary": "Complete guide to Regulation (EC) No 141/2000 on Orphan Medicinal Products: how the EU created a designation procedure and incentive framework for rare-disease medicines, including 10-year market exclusivity, protocol assistance and centralised-procedure fee waivers.",
       "celex": "32000R0141",
-      "doc_type": "Regulation",
+      "doc_type": "Regulation (EC) No",
       "publication_date": "2000-01-22",
       "legal_family": "eu_pharmaceutical",
       "languages": [
-        "en"
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
       ],
       "public_url": "https://brubru.beresol.eu/eucanon/2000-141_orphan/index.html",
       "lang_urls": {
-        "en": "https://brubru.beresol.eu/eucanon/2000-141_orphan/index.html"
+        "en": "https://brubru.beresol.eu/eucanon/2000-141_orphan/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2000-141_orphan/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2000-141_orphan/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2000-141_orphan/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2000-141_orphan/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2000-141_orphan/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000R0141"
+    },
+    {
+      "slug": "2001-83_community_code",
+      "report_type": "canon",
+      "title": "Directive 2001/83/EC: the Community Code on Medicinal Products explained",
+      "summary": "Complete guide to Directive 2001/83/EC, the Community Code on medicinal products for human use: codification of 11 prior directives, 14 Titles, 130 articles, national/mutual-recognition/decentralised MA procedures, manufacturing, labelling, pharmacovigilance and the 2023 pharma reform.",
+      "celex": "32001L0083",
+      "doc_type": "Directive",
+      "publication_date": "2001-11-28",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2001-83_community_code/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2001-83_community_code/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2001-83_community_code/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2001-83_community_code/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2001-83_community_code/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2001-83_community_code/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2001-83_community_code/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32001L0083"
+    },
+    {
+      "slug": "2004-24_herbal",
+      "report_type": "canon",
+      "title": "Traditional Herbal Medicines: a plain-language explainer | Brubru EU Canon",
+      "summary": "A plain-language explainer of the EU traditional-use registration for herbal medicines: the 30 and 15 year rule, the HMPC, Community herbal monographs, and how each Member State transposed it.",
+      "celex": "32004L0024",
+      "doc_type": "Directive",
+      "publication_date": "2004-04-30",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2004-24_herbal/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2004-24_herbal/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2004-24_herbal/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2004-24_herbal/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2004-24_herbal/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2004-24_herbal/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2004-24_herbal/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32004L0024"
     },
     {
       "slug": "2004-726_ema",
@@ -27,15 +93,25 @@
       "title": "Regulation (EC) No 726/2004: EMA and the Centralised Procedure explained",
       "summary": "Complete guide to Regulation (EC) No 726/2004 (EMA Regulation): the centralised marketing authorisation procedure, CHMP 210-day clock, 8+2+1 data protection, EMA governance, 7 scientific committees, and the 2023 pharma reform.",
       "celex": "32004R0726",
-      "doc_type": "Regulation",
+      "doc_type": "Regulation (EC) No",
       "publication_date": "2004-04-30",
       "legal_family": "eu_pharmaceutical",
       "languages": [
-        "en"
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
       ],
       "public_url": "https://brubru.beresol.eu/eucanon/2004-726_ema/index.html",
       "lang_urls": {
-        "en": "https://brubru.beresol.eu/eucanon/2004-726_ema/index.html"
+        "en": "https://brubru.beresol.eu/eucanon/2004-726_ema/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2004-726_ema/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2004-726_ema/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2004-726_ema/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2004-726_ema/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2004-726_ema/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32004R0726"
     },
@@ -45,15 +121,25 @@
       "title": "The Paediatric Medicines Regulation explained: Regulation (EC) No 1901/2006",
       "summary": "Complete guide to Regulation (EC) No 1901/2006 on medicinal products for paediatric use: how the EU created the obligations-and-rewards bargain that finally brought medicines research to children, covering PIPs, waivers, deferrals, PUMA, the three patent rewards and the PDCO.",
       "celex": "32006R1901",
-      "doc_type": "Regulation",
+      "doc_type": "Regulation (EC) No",
       "publication_date": "2006-12-27",
       "legal_family": "eu_pharmaceutical",
       "languages": [
-        "en"
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
       ],
       "public_url": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/index.html",
       "lang_urls": {
-        "en": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/index.html"
+        "en": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2006-1901_paediatric/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006R1901"
     },
@@ -63,17 +149,139 @@
       "title": "Advanced Therapy Medicinal Products Regulation explained: Regulation (EC) No 1394/2007",
       "summary": "Complete guide to Regulation (EC) No 1394/2007 on Advanced Therapy Medicinal Products (ATMPs): how the EU created a tailored authorisation regime for gene therapy, somatic cell therapy and tissue-engineered products, with the EMA CAT as the expert committee, mandatory centralised procedure, 30-year traceability and SME incentives.",
       "celex": "32007R1394",
-      "doc_type": "Regulation",
+      "doc_type": "Regulation (EC) No",
       "publication_date": "2007-12-10",
       "legal_family": "eu_pharmaceutical",
       "languages": [
-        "en"
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
       ],
       "public_url": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/index.html",
       "lang_urls": {
-        "en": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/index.html"
+        "en": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2007-1394_atmp/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32007R1394"
+    },
+    {
+      "slug": "2009-138_solvency2",
+      "report_type": "canon",
+      "title": "Directive 2009/138/EC: Solvency II explained | Brubru EU Canon",
+      "summary": "Complete guide to Solvency II (Directive 2009/138/EC): the EU prudential supervisory framework for insurance and reinsurance. Three Pillars, 312 articles, 99.5% VaR SCR, MCR corridor, ORSA, SFCR, group supervision and the Omnibus II transposition timeline.",
+      "celex": "32009L0138",
+      "doc_type": "Directive",
+      "publication_date": "2009-11-25",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2009-138_solvency2/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32009L0138"
+    },
+    {
+      "slug": "2010-84_pharmacovigilance",
+      "report_type": "canon",
+      "title": "The Pharmacovigilance Directive: a plain-language explainer | Brubru EU Canon",
+      "summary": "A plain-language explainer of the 2010 EU pharmacovigilance overhaul: the PRAC, EudraVigilance reporting, risk management plans, the black triangle, PSUR single assessment, the urgent Union procedure, and how Member States transposed it.",
+      "celex": "32010L0084",
+      "doc_type": "Directive",
+      "publication_date": "2010-12-31",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2010-84_pharmacovigilance/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32010L0084"
+    },
+    {
+      "slug": "2011-62_falsified_medicines",
+      "report_type": "canon",
+      "title": "The Falsified Medicines Directive: a plain-language explainer | Brubru EU Canon",
+      "summary": "A plain-language explainer of the EU Falsified Medicines Directive: the unique identifier and anti-tampering safety features, the EMVS, active-substance controls, the online-pharmacy logo, and how Member States transposed it.",
+      "celex": "32011L0062",
+      "doc_type": "Directive",
+      "publication_date": "2011-06-08",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2011-62_falsified_medicines/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0062"
+    },
+    {
+      "slug": "2012-26_pv_amend",
+      "report_type": "canon",
+      "title": "Pharmacovigilance Amendments: a plain-language explainer | Brubru EU Canon",
+      "summary": "A plain-language explainer of the 2012 EU pharmacovigilance amendments, the post-Mediator follow-up: automatic triggering of the urgent Union procedure, mandatory disclosure of safety-driven withdrawals, and how Member States transposed it.",
+      "celex": "32012L0026",
+      "doc_type": "Directive",
+      "publication_date": "2012-10-25",
+      "legal_family": "eu_pharmaceutical",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2012-26_pv_amend/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32012L0026"
     },
     {
       "slug": "2013-575_crr",
@@ -109,17 +317,55 @@
       "title": "Clinical Trials Regulation (EU) 536/2014 explained: CTIS, CTR authorisation procedure",
       "summary": "Complete guide to Regulation (EU) 536/2014 (the Clinical Trials Regulation): one EU portal, coordinated assessment, single decision per Member State. Applicable from 31 January 2022 once CTIS went live. 99 articles, 19 chapters.",
       "celex": "32014R0536",
-      "doc_type": "Regulation",
+      "doc_type": "Regulation (EU) No",
       "publication_date": "2014-05-27",
       "legal_family": "eu_pharmaceutical",
       "languages": [
-        "en"
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
       ],
       "public_url": "https://brubru.beresol.eu/eucanon/2014-536_ctr/index.html",
       "lang_urls": {
-        "en": "https://brubru.beresol.eu/eucanon/2014-536_ctr/index.html"
+        "en": "https://brubru.beresol.eu/eucanon/2014-536_ctr/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2014-536_ctr/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2014-536_ctr/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2014-536_ctr/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2014-536_ctr/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2014-536_ctr/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0536"
+    },
+    {
+      "slug": "2014-65_mifid2",
+      "report_type": "canon",
+      "title": "MiFID II (Directive 2014/65/EU): EU financial markets framework explained",
+      "summary": "Complete guide to MiFID II (Directive 2014/65/EU): venue taxonomy (regulated market, MTF, OTF), investment firm authorisation, algorithmic trading Art 17, investor protection (suitability, best execution), commodity position limits, data reporting services, and the 2024 review.",
+      "celex": "32014L0065",
+      "doc_type": "Directive",
+      "publication_date": "2014-05-15",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2014-65_mifid2/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0065"
     },
     {
       "slug": "2016-429_animal_health_law",
@@ -150,6 +396,90 @@
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0429"
     },
     {
+      "slug": "2016-633_nimes_airport",
+      "report_type": "canon",
+      "title": "Nimes Airport State Aid Decision explained: Commission Decision (EU) 2016/633",
+      "summary": "Complete guide to Commission Decision (EU) 2016/633 on Nimes airport State aid: how the EU found France granted unlawful aid to Ryanair and AMS through below-cost airport and marketing agreements, ordered recovery of EUR 5-7 million, and declared airport operator subsidies compatible.",
+      "celex": "32016D0633",
+      "doc_type": "Commission Decision",
+      "publication_date": "2014-07-23",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2016-633_nimes_airport/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016D0633"
+    },
+    {
+      "slug": "2016-679_gdpr",
+      "report_type": "canon",
+      "title": "GDPR explained: Regulation (EU) 2016/679 | Brubru EU Canon",
+      "summary": "Complete guide to the General Data Protection Regulation (GDPR): scope, the seven principles, six legal bases, data subject rights, DPO, DPIA, breach notification, international transfers, fines up to EUR 20 million or 4% of global turnover.",
+      "celex": "32016R0679",
+      "doc_type": "Regulation",
+      "publication_date": "2016-04-27",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2016-679_gdpr/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
+    },
+    {
+      "slug": "2017-1283_apple_state_aid",
+      "report_type": "canon",
+      "title": "Apple / Ireland State Aid Decision explained: Commission Decision (EU) 2017/1283",
+      "summary": "Complete guide to Commission Decision (EU) 2017/1283 on State aid SA.38373: how the European Commission found that Ireland granted unlawful State aid to Apple through advance tax rulings, ordered recovery of up to EUR 13 billion, and was upheld by the Court of Justice in 2024.",
+      "celex": "32017D1283",
+      "doc_type": "Commission Decision",
+      "publication_date": "2016-08-30",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2017-1283_apple_state_aid/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017D1283"
+    },
+    {
       "slug": "2017-625_official_controls",
       "report_type": "canon",
       "title": "The Official Controls Regulation explained: Regulation (EU) 2017/625",
@@ -178,6 +508,62 @@
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0625"
     },
     {
+      "slug": "2018-1972_eecc",
+      "report_type": "canon",
+      "title": "Directive (EU) 2018/1972: the European Electronic Communications Code explained",
+      "summary": "Complete guide to Directive (EU) 2018/1972, the European Electronic Communications Code: recast of the 2002 telecoms package, 127 articles, very high capacity networks, spectrum rights, SMP remedies, co-investment, end-user rights, BEREC governance, and transposition by all 27 Member States.",
+      "celex": "32018L1972",
+      "doc_type": "Directive",
+      "publication_date": "2018-12-11",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2018-1972_eecc/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32018L1972"
+    },
+    {
+      "slug": "2018-859_amazon_state_aid",
+      "report_type": "canon",
+      "title": "Amazon Luxembourg State Aid Decision explained: Commission Decision (EU) 2018/859",
+      "summary": "Complete guide to Commission Decision (EU) 2018/859 on Amazon Luxembourg: how the Commission found that an advance tax ruling on intra-group royalties constituted illegal State aid, the arm",
+      "celex": "32018D0859",
+      "doc_type": "Commission Decision",
+      "publication_date": "2017-10-04",
+      "legal_family": "state_aid_tax_ruling_annulled_cjeu_c457-21p_2023",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2018-859_amazon_state_aid/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32018D0859"
+    },
+    {
       "slug": "2019-2175_esas_review",
       "report_type": "canon",
       "title": "The ESAs Review: Regulation (EU) 2019/2175 | Brubru EU Canon",
@@ -204,6 +590,34 @@
         "nl": "https://brubru.beresol.eu/eucanon/2019-2175_esas_review/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R2175"
+    },
+    {
+      "slug": "2020-1412_tirrenia",
+      "report_type": "canon",
+      "title": "Tirrenia / CIN State Aid Decision (EU) 2020/1412 | Brubru EU Canon",
+      "summary": "Plain-language deep-dive on Commission Decision (EU) 2020/1412, Italy",
+      "celex": "32020D1412",
+      "doc_type": "Commission Decision",
+      "publication_date": "2020-03-02",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2020-1412_tirrenia/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020D1412"
     },
     {
       "slug": "2020-776_china_egypt_glass_fibre",
@@ -262,6 +676,146 @@
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R2011"
     },
     {
+      "slug": "2022-1925_dma",
+      "report_type": "canon",
+      "title": "Digital Markets Act explained: Regulation (EU) 2022/1925",
+      "summary": "Complete guide to the Digital Markets Act (DMA), Regulation (EU) 2022/1925: gatekeeper designation, the 10 core platform service categories, Article 5/6/7 obligations, enforcement by the Commission alone, and what it means for business users and consumers.",
+      "celex": "32022R1925",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2022-09-14",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-1925_dma/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-1925_dma/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-1925_dma/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-1925_dma/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-1925_dma/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-1925_dma/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-1925_dma/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925"
+    },
+    {
+      "slug": "2022-2065_dsa",
+      "report_type": "canon",
+      "title": "Digital Services Act explained: Regulation (EU) 2022/2065",
+      "summary": "Complete guide to the Digital Services Act (DSA): tiered due diligence obligations for all intermediary services, notice-and-action, dark patterns ban, VLOP/VLOSE systemic risk regime, independent audits and Commission enforcement with fines up to 6% of global turnover.",
+      "celex": "32022R2065",
+      "doc_type": "Regulation",
+      "publication_date": "2022-10-19",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-2065_dsa/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2065"
+    },
+    {
+      "slug": "2022-2464_csrd",
+      "report_type": "canon",
+      "title": "Corporate Sustainability Reporting Directive (CSRD): Directive (EU) 2022/2464 - Brubru",
+      "summary": "Plain-language guide to Directive (EU) 2022/2464, the CSRD: mandatory double-materiality sustainability reporting, ESRS, assurance, digital tagging, the four application waves, and the Omnibus stop-the-clock postponement.",
+      "celex": "32022L2464",
+      "doc_type": "Directive",
+      "publication_date": "2022-12-14",
+      "legal_family": "eu_sustainability_reporting_and_due_diligence",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-2464_csrd/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2464"
+    },
+    {
+      "slug": "2022-2554_dora",
+      "report_type": "canon",
+      "title": "DORA: the EU's first horizontal cybersecurity rulebook for finance | Brubru EU Canon",
+      "summary": "Complete plain-language guide to Regulation (EU) 2022/2554 (DORA). Five pillars, the Oversight Framework for critical ICT third-party providers, 22,000 financial entities in scope, and the 17 January 2025 application date.",
+      "celex": "32022R2554",
+      "doc_type": "Regulation",
+      "publication_date": "2022-12-14",
+      "legal_family": "digital_finance_resilience",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-2554_dora/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-2554_dora/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-2554_dora/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-2554_dora/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-2554_dora/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-2554_dora/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554"
+    },
+    {
+      "slug": "2022-2555_nis2",
+      "report_type": "canon",
+      "title": "NIS2 Directive explained: Directive (EU) 2022/2555 on Network and Information Security",
+      "summary": "Complete guide to the NIS2 Directive (EU) 2022/2555: scope, essential vs important entities, the 10 minimum cybersecurity measures, incident reporting in 24h/72h/1 month, supervision, enforcement, and fines up to EUR 10m or 2% of global turnover.",
+      "celex": "32022L2555",
+      "doc_type": "Directive",
+      "publication_date": "2022-12-14",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2022-2555_nis2/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555"
+    },
+    {
       "slug": "2022-433_india_indonesia_stainless_steel",
       "report_type": "canon",
       "title": "EU Anti-Subsidy Duties on Stainless Steel from India and Indonesia (Reg 2022/433)",
@@ -318,6 +872,62 @@
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114"
     },
     {
+      "slug": "2023-1683_la_rochelle_airport",
+      "report_type": "canon",
+      "title": "La Rochelle Airport State Aid Decision 2023/1683 explained | Brubru EU Canon",
+      "summary": "Complete guide to Commission Decision (EU) 2023/1683 on State aid SA.26494: La Rochelle airport funding, Ryanair and Jet2 marketing agreements, the Market Economy Operator test, incremental profitability analysis, and recovery orders.",
+      "celex": "32023D1683",
+      "doc_type": "Commission Decision",
+      "publication_date": "2022-07-26",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2023-1683_la_rochelle_airport/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023D1683"
+    },
+    {
+      "slug": "2023-956_cbam",
+      "report_type": "canon",
+      "title": "CBAM explained: EU Carbon Border Adjustment Mechanism (Reg 2023/956)",
+      "summary": "Complete guide to Regulation (EU) 2023/956 establishing the Carbon Border Adjustment Mechanism (CBAM). Six covered sectors, two-phase timeline, how CBAM certificates work, and the link to EU ETS free-allocation phase-out.",
+      "celex": "32023R0956",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2023-05-10",
+      "legal_family": "carbon_pricing_climate",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2023-956_cbam/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2023-956_cbam/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2023-956_cbam/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2023-956_cbam/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2023-956_cbam/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2023-956_cbam/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2023-956_cbam/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R0956"
+    },
+    {
       "slug": "2024-1689_aiact",
       "report_type": "canon",
       "title": "The EU AI Act explained: Regulation (EU) 2024/1689",
@@ -346,6 +956,34 @@
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
     },
     {
+      "slug": "2024-1760_csddd",
+      "report_type": "canon",
+      "title": "Corporate Sustainability Due Diligence Directive (CSDDD): Directive (EU) 2024/1760 - Brubru",
+      "summary": "Plain-language guide to Directive (EU) 2024/1760, the CSDDD: mandatory human rights and environmental due diligence, the chain of activities, the climate transition plan, penalties, civil liability, and the Stop-the-clock postponement.",
+      "celex": "32024L1760",
+      "doc_type": "Directive",
+      "publication_date": "2024-06-13",
+      "legal_family": "eu_sustainability_reporting_and_due_diligence",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2024-1760_csddd/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1760"
+    },
+    {
       "slug": "2024-2754_china_bev_duties",
       "report_type": "canon",
       "title": "EU Anti-Subsidy Duties on Chinese Battery Electric Vehicles (Reg 2024/2754)",
@@ -372,6 +1010,118 @@
         "nl": "https://brubru.beresol.eu/eucanon/2024-2754_china_bev_duties/nl.html"
       },
       "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2754"
+    },
+    {
+      "slug": "2025-1892_wfd_textiles",
+      "report_type": "canon",
+      "title": "Textile EPR and Food Waste: Directive (EU) 2025/1892 - Brubru",
+      "summary": "Plain-language guide to Directive (EU) 2025/1892, amending the Waste Framework Directive: extended producer responsibility for textiles and footwear, plus the EU",
+      "celex": "32025L1892",
+      "doc_type": "Directive",
+      "publication_date": null,
+      "legal_family": "waste_circular_economy",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2025-1892_wfd_textiles/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L1892"
+    },
+    {
+      "slug": "2025-1963_cineca",
+      "report_type": "canon",
+      "title": "Cineca State Aid SA.39639 explained: Commission Decision (EU) 2025/1963",
+      "summary": "Complete guide to Commission Decision (EU) 2025/1963 on the Cineca case (SA.39639): how the Commission found no State aid in Italy",
+      "celex": "32025D1963",
+      "doc_type": "Commission Decision",
+      "publication_date": "2024-11-21",
+      "legal_family": null,
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2025-1963_cineca/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025D1963"
+    },
+    {
+      "slug": "2025-327_ehds",
+      "report_type": "canon",
+      "title": "European Health Data Space (EHDS): Regulation (EU) 2025/327",
+      "summary": "Plain-language guide to Regulation (EU) 2025/327: six patient rights over health data, MyHealth@EU and HealthData@EU, EHR system certification, and fines up to 4% of turnover.",
+      "celex": "32025R0327",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2025-02-11",
+      "legal_family": "eu_health_digital",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2025-327_ehds/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2025-327_ehds/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2025-327_ehds/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2025-327_ehds/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2025-327_ehds/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2025-327_ehds/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2025-327_ehds/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0327"
+    },
+    {
+      "slug": "2025-40_ppwr",
+      "report_type": "canon",
+      "title": "PPWR: EU Packaging and Packaging Waste Regulation (2025/40) - Brubru",
+      "summary": "Plain-language guide to Regulation (EU) 2025/40: recyclability grades, PFAS limits, deposit return systems, reuse targets and a 12 August 2026 application date.",
+      "celex": "32025R0040",
+      "doc_type": "Regulation (EU)",
+      "publication_date": "2024-12-19",
+      "legal_family": "eu_circular_economy_packaging",
+      "languages": [
+        "en",
+        "es",
+        "ca",
+        "fr",
+        "it",
+        "nl"
+      ],
+      "public_url": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/index.html",
+      "lang_urls": {
+        "en": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/index.html",
+        "es": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/es.html",
+        "ca": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/ca.html",
+        "fr": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/fr.html",
+        "it": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/it.html",
+        "nl": "https://brubru.beresol.eu/eucanon/2025-40_ppwr/nl.html"
+      },
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0040"
     },
     {
       "slug": "2025-500_morocco_aluminium_wheels",

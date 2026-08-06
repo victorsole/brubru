@@ -50,6 +50,8 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32025R0327': '/eucanon/2025-327_ehds/',
   '32025R0040': '/eucanon/2025-40_ppwr/',
   '32025L1892': '/eucanon/2025-1892_wfd_textiles/',
+  '32022L2464': '/eucanon/2022-2464_csrd/',
+  '32024L1760': '/eucanon/2024-1760_csddd/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -92,6 +94,10 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'European Health Data Space (Regulation (EU) 2025/327)': '/eucanon/2025-327_ehds/',
   'PPWR - Packaging and Packaging Waste Regulation': '/eucanon/2025-40_ppwr/',
   'Packaging and Packaging Waste Regulation (Regulation (EU) 2025/40)': '/eucanon/2025-40_ppwr/',
+  'CSRD - Corporate Sustainability Reporting Directive': '/eucanon/2022-2464_csrd/',
+  'Corporate Sustainability Reporting Directive (Directive (EU) 2022/2464)': '/eucanon/2022-2464_csrd/',
+  'CSDDD - Corporate Sustainability Due Diligence Directive': '/eucanon/2024-1760_csddd/',
+  'Corporate Sustainability Due Diligence Directive (Directive (EU) 2024/1760)': '/eucanon/2024-1760_csddd/',
 };
 
 export interface EucanonLookupInput {
