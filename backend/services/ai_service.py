@@ -136,6 +136,67 @@ MEUB_SUBTABS = (
     "Predictions", "Brubru Databases", "Research & Evidence",
     "Stakeholder Mapping", "Strategy Docs", "Tender Docs",
 )
+# The same sub-tabs as the UI actually renders them in Brubru's six languages,
+# generated from frontend/src/i18n/locales/*.json (bubble.tabs plus the
+# top-level bubble.* tab keys). The guard below needs these because the tab
+# labels ARE translated: without them a correct Catalan answer naming "Els
+# meus expedients en seguiment" would be rewritten as an invented feature,
+# which is a worse failure than the one the guard exists to prevent. Regenerate
+# alongside any locale change.
+MEUB_SUBTAB_LOCALISED = (
+    "Actualidad", "Actualitat", "Actualité", "Amendementen", "Amendements",
+    "Amendments", "Analisi di posizione", "Analyse de position",
+    "Anàlisi de posició", "Análisis de posición", "Bases de dades de Brubru",
+    "Bases de datos de Brubru", "Bases de données Brubru",
+    "Beleidsinteresses", "Brubru Databases", "Brubru-databanken",
+    "Cartographie des acteurs", "Comparador", "Comparateur", "Comparator",
+    "Comparatore", "Consultas Públicas de la UE",
+    "Consultations Publiques de l'UE", "Consultazioni Pubbliche dell'UE",
+    "Consultes Públiques de la UE", "Council Watch", "Database di Brubru",
+    "Documenti di strategia", "Documentos de estrategia",
+    "Documents d'estratègia", "Documents de stratégie", "EP-leden-monitor",
+    "EU Openbare Raadplegingen", "EU Public Consultations", "El meu DOUE",
+    "El meu calendari UE", "Els meus documents", "Els meus expedients",
+    "Els meus expedients en seguiment", "Emendamenti", "Enmiendas",
+    "Esmenes", "I miei documenti", "I miei fascicoli",
+    "I miei fascicoli monitorati", "Il mio calendario UE",
+    "Incontri di lobbying", "Intereses Políticos", "Interessi Politici",
+    "Interessos Polítics", "Interrogazioni parlamentari",
+    "Intérêts Politiques", "Investigación y evidencia", "La mia GU",
+    "Legislative Tracker", "Legislative Train: state of play",
+    "Lobby Meetings", "Lobbyontmoetingen", "MEP Watch", "Mapa d'actors",
+    "Mapa de actores", "Mappa degli attori", "Mes documents", "Mes dossiers",
+    "Mes dossiers suivis", "Mi DOUE", "Mi calendario UE", "Mijn EU-kalender",
+    "Mijn PB", "Mijn documenten", "Mijn dossiers", "Mijn gevolgde dossiers",
+    "Mis documentos", "Mis expedientes", "Mis expedientes en seguimiento",
+    "Mon JO", "Mon calendrier UE", "Monitoraggio del Consiglio",
+    "Monitoraggio eurodeputati", "My Documents", "My EU Calendar",
+    "My Files", "My OJ", "My Tracked Files", "News", "Nieuws", "Notizie",
+    "Onderzoek & bewijs", "Orden del día del Pleno",
+    "Ordine del giorno della plenaria", "Ordre del dia del Ple",
+    "Ordre du jour de la plénière", "Overview", "Overzicht", "Panoramica",
+    "Parlementaire vragen", "Parliamentary Questions", "Plenaire agenda",
+    "Plenary Order of Business", "Policy Interests", "Positie-analyse",
+    "Position Analysis", "Predicciones", "Prediccions", "Predictions",
+    "Preguntas parlamentarias", "Preguntes parlamentàries", "Previsioni",
+    "Prédictions", "Questions parlementaires", "Raad-monitor",
+    "Rastreador legislativo", "Rastrejador legislatiu",
+    "Recerca i evidència", "Recherche et données probantes",
+    "Research & Evidence", "Resum", "Resumen", "Reuniones de lobby",
+    "Reunions de lobby", "Ricerca ed evidenze", "Réunions de lobbying",
+    "Seguiment d'eurodiputats", "Seguiment del Consell",
+    "Seguimiento de eurodiputados", "Seguimiento del Consejo",
+    "Stakeholder Mapping", "Stakeholderkaart", "Stemmingen",
+    "Strategie­documenten", "Strategy Docs", "Suivi des députés",
+    "Suivi du Conseil", "Tender Docs", "Tracker legislativo",
+    "Tracker législatif", "Train législatif", "Transcripciones",
+    "Transcripcions", "Transcripties", "Transcriptions", "Transcripts",
+    "Trascrizioni", "Tren legislatiu", "Tren legislativo",
+    "Treno legislativo", "Vergelijker", "Voorspellingen", "Votaciones",
+    "Votacions", "Votazioni", "Votes", "Vue d'ensemble", "Wetgevingstracker",
+    "Wetgevingstrein",
+)
+
 BRUBRU_PRODUCTS = (
     "My EU Bubble", "Amendator", "Chat", "EU Law Comply", "Tenderator", "API",
 )
@@ -2857,6 +2918,7 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             return s
 
         subtabs = {_norm(s) for s in MEUB_SUBTABS}
+        subtabs |= {_norm(s) for s in MEUB_SUBTAB_LOCALISED}
         products = {_norm(p): p for p in BRUBRU_PRODUCTS}
 
         def _resolve(name: str, whole: str) -> str:
@@ -2870,10 +2932,36 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             logger.info("[FEATURE-GUARD] dropped invented feature reference: %r", name)
             return "My EU Bubble"
 
-        # "My EU Bubble > X" / "My EU Bubble -> X"
+        # "My EU Bubble > X". The tab name runs into the rest of the sentence,
+        # so take the LONGEST canonical prefix of what follows rather than
+        # everything up to the next full stop. Reading to the punctuation ate
+        # the trailing clause of "Recerca i evidència per als estudis" and
+        # condemned a correct Catalan tab name as invented.
+        def _arrow(m: re.Match) -> str:
+            head, rest = m.group(1), m.group(2)
+            words = rest.split()
+            for n in range(min(8, len(words)), 0, -1):
+                if _norm(" ".join(words[:n])) in subtabs:
+                    return m.group(0)
+            run = []
+            for w in words:
+                if re.match(r"^\*{0,2}[A-Z0-9][\w&:’'\-‑]*[.,;]?\*{0,2}$", w):
+                    run.append(w)
+                else:
+                    break
+            if not run:
+                return m.group(0)
+            logger.info(
+                "[FEATURE-GUARD] dropped invented feature reference: %r", " ".join(run)
+            )
+            tail = " ".join(words[len(run):])
+            # Keep any sentence punctuation that was riding on the last word.
+            end = "." if run[-1].endswith(".") else ""
+            return f"{head}{end}" + (f" {tail}" if tail else "")
+
         text = re.sub(
-            r"My EU Bubble\s*(?:>|→|-&gt;|->)\s*\*{0,2}([^*\n.,;()]{2,45})\*{0,2}",
-            lambda m: _resolve(m.group(1), m.group(0)),
+            r"(My EU Bubble)\s*(?:>|→|-&gt;|->)\s*([^\n]{0,90})",
+            _arrow,
             text,
         )
         # "X (My EU Bubble)". The name is whatever sits immediately before the
