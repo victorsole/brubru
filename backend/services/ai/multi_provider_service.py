@@ -636,6 +636,72 @@ class GeminiProvider(AIProvider):
         )
 
 
+
+class AnthropicProvider(AIProvider):
+    """Anthropic Claude Sonnet — NON-CHAT fallback only.
+
+    Deliberately absent from the chat chain (cost decision, 6 Aug 2026: it was
+    serving 12% of chat traffic at ~37,352 tokens an answer). It is reachable
+    only through get_extended_provider_service(), which backs the non-chat
+    services -- AI summaries, content analysis, proactive notifications -- and
+    puts it LAST, after every free tier. Do not add it to get_multi_provider_service().
+    """
+
+    # claude-sonnet-4-20250514 was configured here and returns 404 for our key:
+    # it is deprecated (retires 15 June 2026) and its documented drop-in
+    # replacement is claude-sonnet-5. Because the id was dead, the non-chat
+    # services hardwired to Anthropic were failing silently.
+    MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5")
+
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or settings.ANTHROPIC_API_KEY
+        self.client = None
+        if self.api_key:
+            # Imported lazily so the chat path never loads the SDK.
+            from anthropic import AsyncAnthropic
+            self.client = AsyncAnthropic(api_key=self.api_key, max_retries=0,
+                                         timeout=PROVIDER_TIMEOUT_S)
+
+    @property
+    def name(self) -> str:
+        return "Anthropic"
+
+    @property
+    def is_available(self) -> bool:
+        return bool(self.api_key and self.client)
+
+    async def generate(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.3
+    ) -> ProviderResponse:
+        if not self.is_available:
+            raise RuntimeError("Anthropic provider not configured")
+
+        # `temperature` is REJECTED on Sonnet 5 and the other current models
+        # (400: "`temperature` is deprecated for this model"). The parameter
+        # stays in the signature because every provider in the chain shares one
+        # interface; it is simply not forwarded. Steer this model by prompt.
+        response = await self.client.messages.create(
+            model=self.MODEL,
+            max_tokens=max_tokens,
+            system=system_prompt,
+            messages=messages
+        )
+
+        content = response.content[0].text if response.content else ""
+        tokens = response.usage.input_tokens + response.usage.output_tokens
+
+        return ProviderResponse(
+            message=content,
+            tokens_used=tokens,
+            model=self.MODEL,
+            provider=self.name
+        )
+
+
 class MultiProviderService:
     """
     Orchestrates AI providers with automatic fallback.
@@ -999,10 +1065,44 @@ _multi_provider_service: Optional[MultiProviderService] = None
 
 
 def get_multi_provider_service() -> MultiProviderService:
-    """Get global multi-provider service instance"""
+    """The CHAT chain: free open models only, no Anthropic.
+
+    Everything a user talks to runs on this. Do not add a paid provider here.
+    """
     global _multi_provider_service
 
     if _multi_provider_service is None:
         _multi_provider_service = MultiProviderService()
 
     return _multi_provider_service
+
+
+_extended_provider_service: Optional[MultiProviderService] = None
+
+
+def get_extended_provider_service() -> MultiProviderService:
+    """The NON-CHAT chain: the same free open models, with Anthropic LAST.
+
+    For background work that is not a user conversation -- AI summaries,
+    content analysis, proactive notifications. Those services were hardwired
+    straight to Anthropic with no fallback at all; this gives them the free
+    tiers first and keeps Anthropic as a genuine last resort rather than the
+    default.
+
+    Separate instance rather than a flag, so there is no way for a chat request
+    to reach the paid provider through shared state.
+    """
+    global _extended_provider_service
+
+    if _extended_provider_service is None:
+        svc = MultiProviderService()
+        anthropic_provider = AnthropicProvider()
+        if anthropic_provider.is_available:
+            svc.providers = list(svc.providers) + [anthropic_provider]
+            logger.info(
+                "Extended (non-chat) chain: %s",
+                ", ".join(p.name for p in svc.providers),
+            )
+        _extended_provider_service = svc
+
+    return _extended_provider_service
