@@ -3854,9 +3854,17 @@ class ContextBuilder:
             if query_lower in title:
                 score += 4.0
 
-            # Trigger-matched guides get a bonus
+            # Trigger-matched guides get a large bonus.
+            #
+            # A keyword trigger is a CURATED, hand-written mapping from a phrase
+            # to the one guide that answers it. Incidental word overlap is not
+            # remotely as good a signal, yet at +2.0 a trigger lost to any guide
+            # with two word hits in its QUICK FACTS (3.0 each). Measured 6 Aug
+            # 2026: "What is the CSRD?" fired the CSRD trigger and still ranked
+            # eu_taxonomy_sustainable_finance first, so the act's own guide was
+            # not what the model read.
             if guide.get('trigger_matched'):
-                score += 2.0
+                score += 8.0
 
             # Specificity bonus: longer quick_facts = more detailed guide
             if len(qf) > 200:

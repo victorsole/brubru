@@ -13187,6 +13187,47 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'inwerkingtreding augustus 2026': ['eu_legislation_milestones_aug_sep_2026'],
     'textielafval richtlijn': ['textile_epr_waste_framework_directive_2025_1892'],
     'doelstellingen voedselverspilling': ['textile_epr_waste_framework_directive_2025_1892'],
+
+    # === LAST-WINS OVERRIDES (added 6 Aug 2026) ==============================
+    # Python keeps the LAST duplicate key in a dict literal. This file has 396
+    # duplicated keys shadowing 449 entries, so anything added near the TOP is
+    # silently dead. These sit at the end deliberately.
+    #
+    # Fixing three acts whose guides were unreachable, and one mis-routing:
+    # 'csrd' pointed at eu_taxonomy_sustainable_finance, which is a different
+    # instrument entirely. Where two guides cover the same act (a separate
+    # clean-up), both are listed so the richer one is not lost.
+    'csrd': ['csrd_corporate_sustainability_reporting'],
+    'corporate sustainability reporting': ['csrd_corporate_sustainability_reporting'],
+    'sustainability reporting directive': ['csrd_corporate_sustainability_reporting'],
+    'esrs': ['csrd_corporate_sustainability_reporting'],
+    '2022/2464': ['csrd_corporate_sustainability_reporting'],
+    '32022l2464': ['csrd_corporate_sustainability_reporting'],
+    'informe de sostenibilidad corporativa': ['csrd_corporate_sustainability_reporting'],
+    'informe de sostenibilitat corporativa': ['csrd_corporate_sustainability_reporting'],
+    'rapport de durabilite des entreprises': ['csrd_corporate_sustainability_reporting'],
+    'rendicontazione societaria di sostenibilita': ['csrd_corporate_sustainability_reporting'],
+    'duurzaamheidsrapportering': ['csrd_corporate_sustainability_reporting'],
+
+    'csddd': ['csddd_corporate_sustainability_due_diligence', 'corporate_sustainability_due_diligence'],
+    'cs3d': ['csddd_corporate_sustainability_due_diligence', 'corporate_sustainability_due_diligence'],
+    '2024/1760': ['csddd_corporate_sustainability_due_diligence', 'corporate_sustainability_due_diligence'],
+    '32024l1760': ['csddd_corporate_sustainability_due_diligence', 'corporate_sustainability_due_diligence'],
+    'diligencia debida': ['csddd_corporate_sustainability_due_diligence'],
+    'diligencia deguda': ['csddd_corporate_sustainability_due_diligence'],
+    'devoir de vigilance': ['csddd_corporate_sustainability_due_diligence'],
+    'dovere di diligenza': ['csddd_corporate_sustainability_due_diligence'],
+    'passende zorgvuldigheid': ['csddd_corporate_sustainability_due_diligence'],
+
+    'ppwr': ['ppwr_packaging_waste_regulation', 'eu_packaging_packaging_waste_2025_40'],
+    '2025/40': ['ppwr_packaging_waste_regulation', 'eu_packaging_packaging_waste_2025_40'],
+    '32025r0040': ['ppwr_packaging_waste_regulation', 'eu_packaging_packaging_waste_2025_40'],
+    'envases y residuos de envases': ['ppwr_packaging_waste_regulation'],
+    'envasos i residus denvasos': ['ppwr_packaging_waste_regulation'],
+    'emballages et dechets demballages': ['ppwr_packaging_waste_regulation'],
+    'imballaggi e rifiuti di imballaggio': ['ppwr_packaging_waste_regulation'],
+    'verpakking en verpakkingsafval': ['ppwr_packaging_waste_regulation'],
+
 }
 
 
