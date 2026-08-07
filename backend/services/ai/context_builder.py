@@ -898,6 +898,15 @@ class ContextData:
     # Layer 2d (May 2026 batch #41-50 follow-up): Transparency Register meetings
     transparency_meetings_block: Optional[str] = None
 
+    # EP written/oral questions (7 Aug 2026). Brubru has held these all along
+    # and Parliamentary Questions is a My EU Bubble sub-tab, but the chat
+    # context builder never fetched them, so a question named by reference was
+    # answered from training memory. Asked about E-004916/2025 (Military
+    # Schengen and sovereignty, tabled by Moreira de Sá and others), chat
+    # invented a question about German authorities transferring people across
+    # borders and cited a document reference that does not correspond to it.
+    parliamentary_questions_block: Optional[str] = None
+
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
     # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
@@ -1968,6 +1977,9 @@ class ContextBuilder:
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
+        parliamentary_questions_block = self._fetch_parliamentary_questions_block(
+            user_message
+        )
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2059,6 +2071,7 @@ class ContextBuilder:
             transparency_meetings_block=transparency_meetings_block,
             private_guide_block=private_guide_block,
             reference_data_context=reference_data_context,
+            parliamentary_questions_block=parliamentary_questions_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -7176,6 +7189,123 @@ class ContextBuilder:
             "date_hint": date_hint,
         }
 
+    # EP question references look like "E-004916/2025" or "P-001237/2026",
+    # and users write them with or without the dash.
+    _PQ_REF_RE = re.compile(r"\b([EPOep])[-\s]?(\d{6})\s*/\s*(\d{4})\b")
+    _PQ_TOPIC_RE = re.compile(
+        r"parliamentary question|written question|oral question|question for written"
+        r"|pregunta parlament|question parlementaire|interrogazione|parlementaire vraag",
+        re.IGNORECASE,
+    )
+
+    def _fetch_parliamentary_questions_block(self, user_message: str) -> Optional[str]:
+        """EP written and oral questions, by reference or by topic.
+
+        Added 7 August 2026. Brubru has held these all along and Parliamentary
+        Questions is a My EU Bubble sub-tab, but nothing ever put them in the
+        chat context. Asked what E-004916/2025 was about, chat produced a
+        confident summary of an entirely different question and attributed it
+        to a document reference that does not exist for that file. The subject
+        line and full text were sitting in the database the whole time.
+
+        Deliberately synchronous: it is one indexed lookup, and the callers of
+        the other reference-data blocks are synchronous too.
+        """
+        if not user_message:
+            return None
+
+        refs = self._PQ_REF_RE.findall(user_message)
+        wants_topic = bool(self._PQ_TOPIC_RE.search(user_message))
+        if not refs and not wants_topic:
+            return None
+
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                if refs:
+                    wanted = [f"{p.upper()}-{num}/{yr}" for p, num, yr in refs][:3]
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT question_reference, question_type, subject,
+                               text_question, text_answer, submitted_date,
+                               answered_date, asking_mep_names,
+                               answering_commissioner, source_url, answer_url
+                        FROM parliamentary_questions
+                        WHERE question_reference = ANY(:refs)
+                        LIMIT 3
+                        """
+                    ), {"refs": wanted}).fetchall()
+                else:
+                    # Topic query: strip the trigger words so the ILIKE runs on
+                    # the subject matter rather than on "parliamentary question".
+                    topic = self._PQ_TOPIC_RE.sub(" ", user_message)
+                    topic = re.sub(r"[^\w\s]", " ", topic)
+                    terms = [w for w in topic.split() if len(w) > 4][:4]
+                    if not terms:
+                        return None
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT question_reference, question_type, subject,
+                               text_question, text_answer, submitted_date,
+                               answered_date, asking_mep_names,
+                               answering_commissioner, source_url, answer_url
+                        FROM parliamentary_questions
+                        WHERE subject ILIKE ANY(:pats)
+                        ORDER BY submitted_date DESC NULLS LAST
+                        LIMIT 4
+                        """
+                    ), {"pats": [f"%{t}%" for t in terms]}).fetchall()
+            finally:
+                db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[PQ] parliamentary question lookup failed: %s", e)
+            return None
+
+        if not rows:
+            # Say nothing rather than nothing-found: an explicit "not on file"
+            # line stops the model reaching for training memory to fill in.
+            if refs:
+                asked = ", ".join(f"{p.upper()}-{n}/{y}" for p, n, y in refs[:3])
+                return (
+                    "[EP PARLIAMENTARY QUESTIONS]\n"
+                    f"{asked}: NOT on file in Brubru's record. Do not describe its "
+                    "contents; point the user to europarl.europa.eu/doceo and to "
+                    "Parliamentary Questions (My EU Bubble).\n"
+                )
+            return None
+
+        out = ["[EP PARLIAMENTARY QUESTIONS]"]
+        for r in rows:
+            (ref, qtype, subject, qtext, atext, submitted, answered,
+             askers, commissioner, src, ans_url) = r
+            out.append(f"- REFERENCE: {ref}  TYPE: {qtype or 'written'}")
+            out.append(f"  SUBJECT: {(subject or '').strip()[:300]}")
+            if askers:
+                names = askers if isinstance(askers, str) else ", ".join(askers)
+                out.append(f"  TABLED BY: {names[:220]}")
+            if submitted:
+                out.append(f"  SUBMITTED: {submitted}")
+            if qtext:
+                body = re.sub(r"\s+", " ", str(qtext)).strip()
+                out.append(f"  QUESTION TEXT: {body[:900]}")
+            if atext:
+                ans = re.sub(r"\s+", " ", str(atext)).strip()
+                out.append(f"  ANSWER ({commissioner or 'Commission'}"
+                           f"{', ' + str(answered) if answered else ''}): {ans[:700]}")
+            elif answered is None:
+                out.append("  ANSWER: not yet answered on Brubru's record.")
+            if src:
+                out.append(f"  SOURCE: {src}")
+            if ans_url:
+                out.append(f"  ANSWER URL: {ans_url}")
+        out.append(
+            "Report ONLY what these rows contain. Do not infer the subject of a "
+            "question from its reference number, and do not cite a document "
+            "reference that is not printed above."
+        )
+        return "\n".join(out) + "\n"
+
     async def _fetch_committee_transcript_block(
         self,
         intent: Dict[str, Any],
@@ -10874,6 +11004,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'committee_transcript_block', None):
             sections.append(context_data.committee_transcript_block)
+            sections.append("")
+        if getattr(context_data, 'parliamentary_questions_block', None):
+            sections.append(context_data.parliamentary_questions_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)

@@ -682,10 +682,25 @@ def _detect_query_language(text: str) -> str:
     # Catalan-exclusive token, decisive on its own. Runs BEFORE scoring, because
     # the bag-of-words pass can hand a Catalan query to Dutch on the strength of
     # "de" alone (audit, 5 Aug 2026). See _CA_DECISIVE for the exclusion rules.
-    _ca_hits = sum(1 for w in words if w in _CA_DECISIVE) + sum(
+    # Short decisive tokens collide with EU acronyms, which are written in
+    # capitals. "ETS" (Emissions Trading System) folds to "ets", which is
+    # Catalan for "you are", so "What is procedure 2026/0211(COD) on ETS heat
+    # and fuel benchmark values?" was detected as Catalan and answered entirely
+    # in Catalan. An acronym in capitals is never the Catalan word, so a token
+    # of three characters or fewer only counts when the user actually wrote it
+    # in lower case.
+    raw_words = re.findall(r"\b\w+\b", text)
+    _acronyms = {w.lower() for w in raw_words if len(w) <= 3 and w.isupper()}
+
+    def _decisive(w: str, table) -> bool:
+        if w in _acronyms:
+            return False
+        return w in table
+
+    _ca_hits = sum(1 for w in words if _decisive(w, _CA_DECISIVE)) + sum(
         1 for w in words if w.endswith(_CA_DECISIVE_SUFFIX)
     )
-    _it_hits = sum(1 for w in words if w in _IT_DECISIVE)
+    _it_hits = sum(1 for w in words if _decisive(w, _IT_DECISIVE))
     # Compared rather than short-circuited: an Italian sentence can clip a
     # single word from the Catalan list, and returning on first hit handed it
     # to Catalan outright.
