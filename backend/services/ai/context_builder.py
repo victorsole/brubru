@@ -925,6 +925,10 @@ class ContextData:
     # amendment count and the PE reference when it could not read the table.
     amendment_documents_block: Optional[str] = None
 
+    # Constraint injected when the user names a competitor (7 Aug 2026): chat
+    # was asserting what rival products lack, with citation markers attached.
+    competitor_guard_block: Optional[str] = None
+
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
     # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
@@ -2001,6 +2005,7 @@ class ContextBuilder:
         roll_call_block = self._fetch_roll_call_block(user_message)
         lobby_meetings_block = self._fetch_lobby_meetings_block(user_message)
         amendment_documents_block = self._fetch_amendment_documents_block(user_message)
+        competitor_guard_block = self._build_competitor_guard_block(user_message)
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2096,6 +2101,7 @@ class ContextBuilder:
             roll_call_block=roll_call_block,
             lobby_meetings_block=lobby_meetings_block,
             amendment_documents_block=amendment_documents_block,
+            competitor_guard_block=competitor_guard_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -7330,6 +7336,55 @@ class ContextBuilder:
         )
         return "\n".join(out) + "\n"
 
+    # Named competitors, and the comparison verbs that pull the model into a
+    # two-column table about someone else's product.
+    _COMPETITOR_RE = re.compile(
+        r"\b(politico(?:\s+pro)?|contexte|agence\s+europe|euractiv(?:\s+pro)?|mlex|"
+        r"dods|vote\s?watch|eubusiness|borderlex|montel|argus\s+media|"
+        r"lobbyfacts|integrity\s?watch)\b",
+        re.IGNORECASE,
+    )
+    _COMPARE_RE = re.compile(
+        r"compare|comparison|versus|\bvs\b|better than|instead of|different from|"
+        r"can't get from|cannot get from|why (?:use|choose)|worth switching",
+        re.IGNORECASE,
+    )
+
+    def _build_competitor_guard_block(self, user_message: str) -> Optional[str]:
+        """Stop chat asserting what a rival product does not do.
+
+        Asked what Brubru offers that Politico Pro does not, chat produced a
+        two-column table whose right-hand column read "no amendment drafting
+        tool", "no API for machine-readable data", "limited access to primary
+        documents", each tagged with a citation marker as though Brubru's
+        records supported it. Brubru holds no data on any competitor's feature
+        set, so those are unsourceable claims about a named third party.
+
+        The system prompt was given this rule twice, in progressively blunter
+        wording, and the comparison table came back both times: the pull of the
+        question's format beat an instruction sitting thousands of tokens
+        earlier. A context block sits next to the question instead, which is
+        the position that has actually changed behaviour elsewhere in this
+        file.
+        """
+        if not user_message:
+            return None
+        who = self._COMPETITOR_RE.search(user_message)
+        if not who or not self._COMPARE_RE.search(user_message):
+            return None
+        name = who.group(1)
+        return (
+            "[COMPARISON REQUEST -- ANSWER CONSTRAINT]\n"
+            f"The user named {name}. Brubru holds NO data on that product, so "
+            "you cannot describe what it does, does not do, or cannot match.\n"
+            "- Do NOT build a two-column table.\n"
+            "- Do NOT write any column, heading, bullet or clause about "
+            f"{name}'s capabilities, and never attach a citation marker to one.\n"
+            "- DO give a plain list of what Brubru does, named by feature, and "
+            "close by inviting the user to compare that against whatever they "
+            "use today. Their tool, their judgement.\n"
+        )
+
     _AMDT_INTENT_RE = re.compile(
         r"amendment|amendements|esmen|enmienda|emendament|amendementen|\bPE\s?\d{3}",
         re.IGNORECASE,
@@ -11418,6 +11473,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'amendment_documents_block', None):
             sections.append(context_data.amendment_documents_block)
+            sections.append("")
+        if getattr(context_data, 'competitor_guard_block', None):
+            sections.append(context_data.competitor_guard_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
