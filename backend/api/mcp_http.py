@@ -183,7 +183,14 @@ def _err(req_id: Any, code: int, message: str, data: Any = None) -> Dict[str, An
 
 
 def _tool_text_result(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """Wrap a handler return-value as an MCP `tools/call` result."""
+    """Wrap a handler return-value as an MCP `tools/call` result.
+
+    Carries BOTH representations: `content` (text JSON — every MCP client reads
+    this) and `structuredContent` (the raw object — MCP spec 2025-06-18; OpenAI
+    Deep Research / ChatGPT inspect it directly, e.g. the `search` results array).
+    structuredContent must be a JSON object, so non-dict payloads are wrapped.
+    """
+    structured = payload if isinstance(payload, dict) else {"result": payload}
     return {
         "content": [
             {
@@ -191,6 +198,7 @@ def _tool_text_result(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "text": json.dumps(payload, ensure_ascii=False, default=str),
             }
         ],
+        "structuredContent": structured,
         "isError": False,
     }
 

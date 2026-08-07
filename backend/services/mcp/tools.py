@@ -572,6 +572,120 @@ def _handle_search_knowledge_guides(query: str) -> Dict[str, Any]:
     }
 
 
+# ---------------------------------------------------------------------------
+# OpenAI Deep Research / "company knowledge" standard tools: search + fetch.
+# ChatGPT's Deep Research and company-knowledge connectors require a tool named
+# `search(query)` returning {results:[{id,title,url}]} and a `fetch(id)`
+# returning the full document {id,title,text,url,metadata}. We map both onto
+# Brubru's knowledge guides + eu_laws so Brubru is usable as a ChatGPT knowledge
+# source. The richer `ask_brubru` tool stays for hosts that allow arbitrary tools.
+# ---------------------------------------------------------------------------
+
+_GUIDE_URL_BASE = "https://brubru.beresol.eu/api/v2/proprietary/guides/"
+
+
+def _first_heading(content: str, fallback: str) -> str:
+    """First real title line: skip blanks, YAML frontmatter fences and Markdown
+    horizontal rules ('---', '***', '___') so we never title a guide '---'."""
+    for line in (content or "").lstrip().splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        if set(s) <= {"-", "*", "_"}:  # ---, ***, ___ (frontmatter / rule)
+            continue
+        if s.lower().startswith("title:"):  # YAML frontmatter title
+            val = s.split(":", 1)[1].strip().strip('"\'')
+            if val:
+                return val
+            continue
+        title = s.lstrip("#").strip()
+        if title:
+            return title
+    return fallback
+
+
+def _handle_search(query: str = "", limit: int = 10) -> Dict[str, Any]:
+    """OpenAI Deep Research `search`: {results:[{id,title,url}]} over guides + laws."""
+    q = (query or "").strip()
+    results: List[Dict[str, Any]] = []
+    if not q:
+        return {"results": results}
+    try:
+        from knowledge_base.knowledge_loader import KnowledgeLoader
+
+        loader = KnowledgeLoader()
+        loader.load_all()
+        for g in loader.search_guides(q)[:5]:
+            gid = g["id"]
+            content = loader.guides.get(gid, "")
+            results.append({
+                "id": f"guide:{gid}",
+                "title": _first_heading(content, gid),
+                "url": _GUIDE_URL_BASE + gid,
+            })
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        for law in _handle_search_eu_legislation(q, limit=5).get("laws", []):
+            celex = law.get("celex")
+            if not celex:
+                continue
+            results.append({
+                "id": f"law:{celex}",
+                "title": law.get("title") or celex,
+                "url": law.get("url"),
+            })
+    except Exception:  # noqa: BLE001
+        pass
+    cap = max(1, min(int(limit or 10), 20))
+    return {"results": results[:cap]}
+
+
+def _handle_fetch(id: str = "") -> Dict[str, Any]:  # noqa: A002 (name fixed by the OpenAI schema)
+    """OpenAI Deep Research `fetch`: {id,title,text,url,metadata} for one result id."""
+    rid = (id or "").strip()
+    if rid.startswith("guide:"):
+        gid = rid.split(":", 1)[1]
+        try:
+            from knowledge_base.knowledge_loader import KnowledgeLoader
+
+            loader = KnowledgeLoader()
+            loader.load_all()
+            content = loader.guides.get(gid)
+            if content:
+                return {
+                    "id": rid,
+                    "title": _first_heading(content, gid),
+                    "text": content,
+                    "url": _GUIDE_URL_BASE + gid,
+                    "metadata": {"type": "knowledge_guide", "guide_id": gid},
+                }
+        except Exception:  # noqa: BLE001
+            pass
+        return {"id": rid, "title": gid, "text": "", "url": _GUIDE_URL_BASE + gid,
+                "metadata": {"type": "knowledge_guide", "error": "not_found"}}
+    if rid.startswith("law:"):
+        celex = rid.split(":", 1)[1]
+        url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+        db = _get_db()
+        try:
+            row = db.execute(
+                text("SELECT title, COALESCE(doc_type_normalized, doc_type) FROM eu_laws WHERE celex = :c LIMIT 1"),
+                {"c": celex},
+            ).fetchone()
+        finally:
+            db.close()
+        if row:
+            title = row[0] or celex
+            body = (f"{title}\n\nDocument type: {row[1] or 'n/a'}\nCELEX: {celex}\n"
+                    f"Full text on EUR-Lex: {url}")
+            return {"id": rid, "title": title, "text": body, "url": url,
+                    "metadata": {"type": "eu_law", "celex": celex, "doc_type": row[1]}}
+        return {"id": rid, "title": celex, "text": f"See EUR-Lex: {url}", "url": url,
+                "metadata": {"type": "eu_law", "celex": celex}}
+    return {"id": rid, "title": rid, "text": "", "url": None, "metadata": {"error": "unknown_id"}}
+
+
 def _handle_get_procedure_status(reference: str) -> Dict[str, Any]:
     db = _get_db()
     try:
@@ -954,6 +1068,47 @@ TOOLS: List[McpTool] = [
         scope="read:knowledge",
         cost_micro=COST_LIGHT_MCP,
         handler=lambda path="", params=None, **_: _handle_query_brubru_api(path, params),
+    ),
+    # OpenAI Deep Research / ChatGPT "company knowledge" standard pair. Names are
+    # fixed by OpenAI's schema ("search" + "fetch"). search returns lightweight
+    # {id,title,url} hits; fetch returns the full document for a chosen id.
+    McpTool(
+        name="search",
+        description=(
+            "Search Brubru's EU policy knowledge (curated guides + EU legislation) and "
+            "return a ranked list of results, each with an id, title and URL. Follow up "
+            "with `fetch` on a result id to read the full document. This is the standard "
+            "search entry point for Deep Research / company-knowledge use; for a single "
+            "combined answer, `ask_brubru` is richer."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search terms, e.g. 'AI Act obligations' or 'CBAM steel'."},
+            },
+            "required": ["query"],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda query="", limit=10, **_: _handle_search(query, limit),
+    ),
+    McpTool(
+        name="fetch",
+        description=(
+            "Fetch the full text of one Brubru knowledge result by its id (as returned "
+            "by `search` — 'guide:<slug>' for a policy guide or 'law:<CELEX>' for an EU "
+            "law). Returns id, title, full text, URL and metadata."
+        ),
+        input_schema={
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "description": "A result id from `search`, e.g. 'guide:ai_act_regulation' or 'law:32016R0679'."},
+            },
+            "required": ["id"],
+        },
+        scope="read:knowledge",
+        cost_micro=COST_LIGHT_MCP,
+        handler=lambda id="", **_: _handle_fetch(id),
     ),
 ]
 
