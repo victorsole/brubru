@@ -1510,6 +1510,9 @@ class AIService:
             )
 
         message = self._linkify_legislation(message)
+        # After the acronym pass, so an acronym that already became a link is
+        # treated as a link segment here and is not touched again.
+        message = self._linkify_references(message)
         return message
 
     async def chat_stream(
@@ -3123,6 +3126,56 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             text,
         )
         return text
+
+    # COM(2025)102 / COM (2025) 102, and OEIL procedure refs 2025/0102(COD).
+    _COM_REF_RE = re.compile(r"\bCOM\s?\(\s?(\d{4})\s?\)\s?(\d{1,4})\b")
+    _PROC_REF_RE = re.compile(r"\b(\d{4})/(\d{4})\s?\(\s?(COD|CNS|APP|INI|RSP|DEA|NLE|BUD|ACI|REG|IMM)\s?\)")
+    _BARE_CELEX_RE = re.compile(r"(?<![:/\w])(3\d{4}[A-Z]{1,2}\d{4})\b")
+
+    def _linkify_references(self, text: str) -> str:
+        """Hyperlink COM, procedure and bare CELEX references.
+
+        The system prompt has always demanded that every legislative reference
+        be a link, on the grounds that a bare reference is of little use to a
+        professional. It was simply not happening: across four production
+        answers on 7 August 2026, ZERO of one COM reference and zero of three
+        procedure references were linked, including an answer that named
+        COM(2025)102 and 2025/0102(COD) and linked neither.
+
+        Asking the model was the wrong mechanism. The URL patterns are fixed,
+        so the links are generated here instead, exactly as _linkify_legislation
+        already does for acronyms.
+
+        Segments that are already a markdown link or a bare URL are left alone,
+        so nothing is double-linked and no existing href is rewritten.
+        """
+        if not text:
+            return text
+
+        def _com(m: re.Match) -> str:
+            year, num = m.group(1), m.group(2)
+            return (f"[{m.group(0)}](https://eur-lex.europa.eu/legal-content/EN/TXT/"
+                    f"?uri=COM:{year}:{int(num)}:FIN)")
+
+        def _proc(m: re.Match) -> str:
+            ref = f"{m.group(1)}/{m.group(2)}({m.group(3)})"
+            return (f"[{m.group(0)}](https://oeil.secure.europarl.europa.eu/oeil/en/"
+                    f"procedure-file?reference={ref})")
+
+        def _celex(m: re.Match) -> str:
+            return (f"[{m.group(1)}](https://eur-lex.europa.eu/legal-content/EN/TXT/"
+                    f"?uri=CELEX:{m.group(1)})")
+
+        # Split into link/non-link segments; only the odd-index pieces are
+        # existing markdown links or URLs, which must survive untouched.
+        parts = re.split(r"(\[[^\]]*\]\([^)]*\)|https?://\S+)", text)
+        for i in range(0, len(parts), 2):
+            seg = parts[i]
+            seg = self._COM_REF_RE.sub(_com, seg)
+            seg = self._PROC_REF_RE.sub(_proc, seg)
+            seg = self._BARE_CELEX_RE.sub(_celex, seg)
+            parts[i] = seg
+        return "".join(parts)
 
     def _linkify_legislation(self, text: str) -> str:
         """
