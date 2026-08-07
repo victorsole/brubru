@@ -52,6 +52,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32025L1892': '/eucanon/2025-1892_wfd_textiles/',
   '32022L2464': '/eucanon/2022-2464_csrd/',
   '32024L1760': '/eucanon/2024-1760_csddd/',
+  '32023R1542': '/eucanon/2023-1542_batteries/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -98,6 +99,8 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Corporate Sustainability Reporting Directive (Directive (EU) 2022/2464)': '/eucanon/2022-2464_csrd/',
   'CSDDD - Corporate Sustainability Due Diligence Directive': '/eucanon/2024-1760_csddd/',
   'Corporate Sustainability Due Diligence Directive (Directive (EU) 2024/1760)': '/eucanon/2024-1760_csddd/',
+  'EU Batteries Regulation (Reg 2023/1542)': '/eucanon/2023-1542_batteries/',
+  'Batteries Regulation (Regulation (EU) 2023/1542)': '/eucanon/2023-1542_batteries/',
 };
 
 export interface EucanonLookupInput {

@@ -638,6 +638,82 @@ LAW_PACKAGES = {
         'date_from': 2024
     },
 
+    'batteries_regulation': {
+        'name': 'EU Batteries Regulation (Reg 2023/1542)',
+        'primary_celex': '32023R1542',
+        'description': (
+            'Regulation (EU) 2023/1542 concerning batteries and waste '
+            'batteries, repealing Directive 2006/66/EC and amending the Waste '
+            'Framework Directive 2008/98/EC and the market surveillance '
+            'Regulation (EU) 2019/1020. The first EU law to regulate a product '
+            'across its entire life cycle in a single instrument, from '
+            'sustainable and responsible sourcing of raw materials through '
+            'manufacturing, carbon footprint, performance and durability, '
+            'safety, labelling and information, to collection, recycling '
+            'efficiency and the recovery of critical raw materials at '
+            'end of life. Covers five battery categories: portable, light means '
+            'of transport (LMT), starting-lighting-ignition (SLI), industrial '
+            'and electric vehicle (EV) batteries. Introduces a mandatory carbon '
+            'footprint declaration, minimum recycled-content thresholds for '
+            'cobalt, lead, lithium and nickel, supply-chain due diligence '
+            'obligations for larger economic operators, removability and '
+            'replaceability rules for portable and LMT batteries, and a digital '
+            'battery passport with a QR code for LMT, industrial and EV '
+            'batteries. Legal bases Article 114 TFEU (internal market) and '
+            'Article 192(1) TFEU (environment). Entered into force 17 August '
+            '2023; most provisions apply from 18 February 2024, with staggered '
+            'dates running to 2036 for the toughest sustainability and '
+            'end-of-life targets.'
+        ),
+        'applicability': (
+            'All economic operators placing batteries on the Union market or '
+            'putting them into service, regardless of whether the battery is '
+            'produced in the Union or imported, sold on its own or incorporated '
+            'into appliances, light means of transport, vehicles or other '
+            'products. Manufacturers, importers, distributors, authorised '
+            'representatives and producers (for extended producer '
+            'responsibility) all carry obligations. Supply-chain due diligence '
+            'applies to economic operators with net turnover above 40 million '
+            'euros (with group and small-and-medium-sized-enterprise carve-'
+            'outs). Producer responsibility organisations, waste operators and '
+            'recyclers are bound by the collection, treatment and recycling-'
+            'efficiency duties.'
+        ),
+        'policy_area': 'Environment',
+        'priority_level': 'high',
+        'keywords': [
+            'batteries regulation', 'eu batteries regulation',
+            'battery regulation', 'batteries and waste batteries',
+            '2023/1542', '32023r1542', 'regulation 2023/1542',
+            'regulation (eu) 2023/1542',
+            'directive 2006/66', '2006/66/ec', '32006l0066',
+            'batteries directive', 'waste batteries',
+            'portable battery', 'lmt battery', 'light means of transport',
+            'sli battery', 'starting lighting ignition',
+            'industrial battery', 'electric vehicle battery', 'ev battery',
+            'battery passport', 'digital battery passport', 'battery qr code',
+            'carbon footprint declaration', 'battery carbon footprint',
+            'recycled content', 'recycled cobalt', 'recycled lithium',
+            'recycled nickel', 'recycled lead',
+            'critical raw materials battery', 'raw material recovery',
+            'recycling efficiency', 'material recovery target',
+            'collection target batteries', 'collection rate',
+            'extended producer responsibility', 'epr battery',
+            'producer responsibility organisation',
+            'removability', 'replaceability', 'removable battery',
+            'battery due diligence', 'supply chain due diligence battery',
+            'responsible sourcing', 'cobalt', 'lithium', 'nickel', 'natural graphite',
+            'second life battery', 'repurposing', 'state of health',
+            'conformity assessment battery', 'ce marking battery',
+            'waste framework directive', '2008/98/ec',
+            'market surveillance', 'regulation 2019/1020',
+            'green deal', 'circular economy', 'battery value chain',
+            'strategic action plan on batteries', 'crma battery',
+            '2020/0353', 'gigafactory', 'battery recycling',
+        ],
+        'date_from': 2023
+    },
+
     'china_egypt_gff_countervailing_duties': {
         'name': 'China and Egypt GFF Countervailing Duties (Reg 2020/776)',
         'primary_celex': '32020R0776',
