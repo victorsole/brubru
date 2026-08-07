@@ -557,7 +557,18 @@ def _greeting_response(user_message: str) -> Optional[str]:
 # Lightweight language markers for query/response language detection.
 # Matches eval_quality.py so runtime and offline scoring agree.
 _LANG_MARKERS = {
-    "EN": {"the", "and", "of", "is", "for", "in", "to", "with", "this", "that"},
+    # English carries interrogatives and auxiliaries as well as articles. With
+    # only the ten function words, a short question could match NOTHING in
+    # English while matching one word in another language and losing outright:
+    # "Which lobbyists met MEPs about procedure 2023/0448(COD)?" scored 0 for EN
+    # and 1 for NL, because English "met" is also Dutch for "with", and the
+    # answer came back in Dutch. Every word added here is absent from the other
+    # five Brubru languages after accent folding ("on" and "no" are excluded
+    # precisely because they are not).
+    "EN": {"the", "and", "of", "is", "for", "in", "to", "with", "this", "that",
+           "which", "what", "who", "how", "when", "where", "why", "about",
+           "are", "was", "does", "do", "can", "has", "have", "from", "at",
+           "not", "but", "would", "should", "there", "their", "been"},
     "FR": {"le", "la", "les", "des", "une", "est", "dans", "pour", "avec", "cette"},
     "ES": {"el", "la", "los", "las", "una", "del", "por", "con", "esta", "para"},
     "CA": {"el", "la", "els", "les", "una", "del", "per", "amb", "aquesta", "dels"},

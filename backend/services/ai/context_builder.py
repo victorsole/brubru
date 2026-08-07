@@ -916,6 +916,11 @@ class ContextData:
     # them with an invented verbatim quote attributed to the MEP.
     roll_call_block: Optional[str] = None
 
+    # Transparency Register meetings (7 Aug 2026). Lobby Meetings is a My EU
+    # Bubble sub-tab, and chat named the Commission and the Parliament as the
+    # lobbyists an MEP had met, then declared nothing else was on record.
+    lobby_meetings_block: Optional[str] = None
+
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
     # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
@@ -1990,6 +1995,7 @@ class ContextBuilder:
             user_message
         )
         roll_call_block = self._fetch_roll_call_block(user_message)
+        lobby_meetings_block = self._fetch_lobby_meetings_block(user_message)
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2083,6 +2089,7 @@ class ContextBuilder:
             reference_data_context=reference_data_context,
             parliamentary_questions_block=parliamentary_questions_block,
             roll_call_block=roll_call_block,
+            lobby_meetings_block=lobby_meetings_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -7317,6 +7324,103 @@ class ContextBuilder:
         )
         return "\n".join(out) + "\n"
 
+    _LOBBY_INTENT_RE = re.compile(
+        r"lobb(?:y|ied|yist|ying)|transparency register|who met|which organisations? "
+        r"(?:has|have|did)|meetings? with|reuni(?:ó|o)n(?:s|es)? amb|incontr",
+        re.IGNORECASE,
+    )
+
+    def _fetch_lobby_meetings_block(self, user_message: str) -> Optional[str]:
+        """Transparency Register meetings between MEPs and organisations.
+
+        Added 7 August 2026. Lobby Meetings is a My EU Bubble sub-tab and the
+        chat context builder could not read the table, so "which organisations
+        has MEP X met" was answered by naming the EU institutions themselves as
+        the lobbyists and then asserting nothing else was on record. The real
+        meetings were on file.
+
+        484 of the 1,245 rows carry the literal string "Past meetings" in
+        mep_name: a scraped section header captured as a person, with the
+        meeting subject concatenated onto the organisation. Those rows are
+        excluded here rather than shown, on the same principle as the seed
+        fixtures: a production-shared table needs its garbage filterable at
+        query time. The scraper itself still needs fixing.
+        """
+        if not user_message or not self._LOBBY_INTENT_RE.search(user_message):
+            return None
+
+        proc = re.search(r"\b(\d{4}/\d{4}\([A-Z]{3}\))", user_message)
+        stop = {"MEP", "MEPs", "EU", "European", "Parliament", "Commission",
+                "Council", "Which", "Who", "What", "Register", "Transparency"}
+        names = [w.strip(".,?!'\"") for w in re.findall(r"\b[A-Z][\w’'-]{2,}", user_message)]
+        names = [n for n in names if n not in stop]
+        if not proc and not names:
+            return None
+
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                rows = []
+                if proc:
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT mep_name, role, committee, meeting_date,
+                               organisation, transparency_register_id, procedure_ref
+                        FROM mep_lobby_meetings
+                        WHERE procedure_ref = :p AND mep_name <> 'Past meetings'
+                        ORDER BY meeting_date DESC NULLS LAST LIMIT 12
+                        """
+                    ), {"p": proc.group(1)}).fetchall()
+                if not rows and names:
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT mep_name, role, committee, meeting_date,
+                               organisation, transparency_register_id, procedure_ref
+                        FROM mep_lobby_meetings
+                        WHERE mep_name <> 'Past meetings'
+                          AND (mep_name ILIKE ANY(:pats)
+                               OR organisation ILIKE ANY(:pats))
+                        ORDER BY meeting_date DESC NULLS LAST LIMIT 12
+                        """
+                    ), {"pats": [f"%{n}%" for n in names[:4]]}).fetchall()
+            finally:
+                db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[LOBBY] meeting lookup failed: %s", e)
+            return None
+
+        who = proc.group(1) if proc else ", ".join(names[:3])
+        if not rows:
+            return (
+                "[TRANSPARENCY REGISTER MEETINGS]\n"
+                f"No registered meeting on file for {who}. Say so plainly. Do NOT "
+                "name the Commission, the Parliament or any institution as a "
+                "lobbyist, and do NOT infer meetings from a file's subject "
+                "matter. Point to Lobby Meetings (My EU Bubble) and to the "
+                "Transparency Register.\n"
+            )
+
+        out = ["[TRANSPARENCY REGISTER MEETINGS]"]
+        for mep, role, cttee, date, org, trid, pref in rows:
+            bits = [f"- {mep}"]
+            if role:
+                bits.append(f"({role}{', ' + cttee if cttee else ''})")
+            bits.append(f"met {org}")
+            if trid:
+                bits.append(f"[TR {trid}]")
+            if date:
+                bits.append(f"on {str(date)[:10]}")
+            if pref:
+                bits.append(f"re {pref}")
+            out.append(" ".join(bits))
+        out.append(
+            "These are the registered meetings on file. Organisations listed are "
+            "the outside parties; EU institutions are not lobbyists. Do not add "
+            "meetings that are not listed above."
+        )
+        return "\n".join(out) + "\n"
+
     _VOTE_INTENT_RE = re.compile(
         r"\bhow did\b.*\bvote\b|\bvoted?\b.*\b(for|against|in favour)\b"
         r"|voting record|roll[- ]call|com(?:o|e) (?:ha )?vot|c[oó]mo vot[oó]|ha votat",
@@ -11172,6 +11276,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'roll_call_block', None):
             sections.append(context_data.roll_call_block)
+            sections.append("")
+        if getattr(context_data, 'lobby_meetings_block', None):
+            sections.append(context_data.lobby_meetings_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
