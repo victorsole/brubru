@@ -84,12 +84,12 @@
       "note": "Prova di 14 giorni, senza carta per esplorare. Apre My EU Bubble.",
       "meta": "Cos'è Brubru e cosa può fare per me?",
       "peek": {
-        "tracker": "Monitoraggio legislativo",
-        "lobby": "Incontri di lobby",
-        "calendar": "Calendario UE",
+        "tracker": "I miei fascicoli monitorati",
+        "lobby": "Incontri di lobbying",
+        "calendar": "Il mio calendario UE",
         "amendments": "Emendamenti",
-        "compliance": "Conformità",
-        "tenders": "Gare d'appalto"
+        "compliance": "EU Law Comply",
+        "tenders": "Tenderator"
       }
     },
     "suggestWalkThrough": "Spiegami cosa significa questo per il mio lavoro.",

@@ -3135,6 +3135,16 @@ Please answer using the EU context provided above. Include citations [1], [2], e
     _COM_REF_RE = re.compile(r"\bCOM\s?\(\s?(\d{4})\s?\)\s?(\d{1,4})\b")
     _PROC_REF_RE = re.compile(r"\b(\d{4})/(\d{4})\s?\(\s?(COD|CNS|APP|INI|RSP|DEA|NLE|BUD|ACI|REG|IMM)\s?\)")
     _BARE_CELEX_RE = re.compile(r"(?<![:/\w])(3\d{4}[A-Z]{1,2}\d{4})\b")
+    # "Regulation (EU) 2024/795", "Directive (EU) 2022/2041",
+    # "Regulation (EU, Euratom) 2018/1046", "Decision (EU) 2025/1050".
+    # This is how a professional writes a law in prose, and it was the one form
+    # left unlinked: watching a real answer render in the browser, STEP was a
+    # link and "Regulation (EU) 2024/795" beside it was plain text.
+    _ACT_NAME_RE = re.compile(
+        r"\b(Regulation|Directive|Decision)\s+\((?:EU|EC|CE|UE)(?:,\s?Euratom)?\)\s+"
+        r"(\d{4})/(\d{1,4})\b"
+    )
+    _ACT_LETTER = {"regulation": "R", "directive": "L", "decision": "D"}
 
     def _linkify_references(self, text: str) -> str:
         """Hyperlink COM, procedure and bare CELEX references.
@@ -3170,6 +3180,13 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             return (f"[{m.group(1)}](https://eur-lex.europa.eu/legal-content/EN/TXT/"
                     f"?uri=CELEX:{m.group(1)})")
 
+        def _act(m: re.Match) -> str:
+            kind, year, num = m.group(1), m.group(2), m.group(3)
+            letter = self._ACT_LETTER[kind.lower()]
+            celex = f"3{year}{letter}{int(num):04d}"
+            return (f"[{m.group(0)}](https://eur-lex.europa.eu/legal-content/EN/TXT/"
+                    f"?uri=CELEX:{celex})")
+
         # Split into link/non-link segments; only the odd-index pieces are
         # existing markdown links or URLs, which must survive untouched.
         parts = re.split(r"(\[[^\]]*\]\([^)]*\)|https?://\S+)", text)
@@ -3177,6 +3194,7 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             seg = parts[i]
             seg = self._COM_REF_RE.sub(_com, seg)
             seg = self._PROC_REF_RE.sub(_proc, seg)
+            seg = self._ACT_NAME_RE.sub(_act, seg)
             seg = self._BARE_CELEX_RE.sub(_celex, seg)
             parts[i] = seg
         return "".join(parts)

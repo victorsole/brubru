@@ -84,12 +84,12 @@
       "note": "Essai de 14 jours, sans carte pour explorer. Ouvre My EU Bubble.",
       "meta": "Qu'est-ce que Brubru et que peut-il faire pour moi ?",
       "peek": {
-        "tracker": "Suivi législatif",
+        "tracker": "Mes dossiers suivis",
         "lobby": "Réunions de lobbying",
-        "calendar": "Calendrier UE",
+        "calendar": "Mon calendrier UE",
         "amendments": "Amendements",
-        "compliance": "Conformité",
-        "tenders": "Appels d'offres"
+        "compliance": "EU Law Comply",
+        "tenders": "Tenderator"
       }
     },
     "suggestWalkThrough": "Expliquez-moi ce que cela signifie pour mon travail.",

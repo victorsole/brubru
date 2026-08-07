@@ -84,12 +84,12 @@
       "note": "Proef van 14 dagen, geen kaart om rond te kijken. Opent My EU Bubble.",
       "meta": "Wat is Brubru en wat kan het voor mij doen?",
       "peek": {
-        "tracker": "Wetgevingstracker",
-        "lobby": "Lobbygesprekken",
-        "calendar": "EU-kalender",
+        "tracker": "Mijn gevolgde dossiers",
+        "lobby": "Lobbyontmoetingen",
+        "calendar": "Mijn EU-kalender",
         "amendments": "Amendementen",
-        "compliance": "Naleving",
-        "tenders": "Aanbestedingen"
+        "compliance": "EU Law Comply",
+        "tenders": "Tenderator"
       }
     },
     "suggestWalkThrough": "Leg me uit wat dit betekent voor mijn werk.",

@@ -84,12 +84,12 @@
       "note": "Prova de 14 dies, sense targeta per explorar. Obre My EU Bubble.",
       "meta": "Què és Brubru i què pot fer per mi?",
       "peek": {
-        "tracker": "Seguiment legislatiu",
+        "tracker": "Els meus expedients en seguiment",
         "lobby": "Reunions de lobby",
-        "calendar": "Calendari UE",
+        "calendar": "El meu calendari UE",
         "amendments": "Esmenes",
-        "compliance": "Compliment",
-        "tenders": "Licitacions"
+        "compliance": "EU Law Comply",
+        "tenders": "Tenderator"
       }
     },
     "suggestWalkThrough": "Explica'm què implica això per a la meva feina.",
