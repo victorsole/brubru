@@ -65,6 +65,7 @@ const ROUTE_META = {
   '/eucanon/2016-429_animal_health_law/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2023-1114_mica/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2024-1689_aiact/': { priority: 0.9, changefreq: 'monthly' },
+  '/eucanon/2023-1542_batteries/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2025-500_morocco_aluminium_wheels/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2017-625_official_controls/': { priority: 0.9, changefreq: 'monthly' },
   '/eucanon/2021-2011_optical_fibre_cables/': { priority: 0.9, changefreq: 'monthly' },
