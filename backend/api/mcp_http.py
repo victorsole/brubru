@@ -58,7 +58,14 @@ from services.billing.api_meter import (
     refund,
     sandbox_consume,
 )
-from services.mcp.tools import TOOLS, McpTool, find_tool, invoke_tool, list_tools_for_mcp
+from services.mcp.tools import (
+    TOOLS,
+    McpTool,
+    find_tool,
+    invoke_tool,
+    list_tools_for_mcp,
+    set_gateway_caller_key,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -257,6 +264,7 @@ async def _dispatch_tools_call(
     user: User,
     client_ip: Optional[str],
     request_id: str,
+    caller_key: Optional[str] = None,
 ) -> Dict[str, Any]:
     tool_name = params.get("name") if params else None
     arguments = params.get("arguments") if params else None
@@ -279,6 +287,12 @@ async def _dispatch_tools_call(
     is_sandbox = bool(getattr(api_key, "is_sandbox", False))
     cost = int(tool.cost_micro)
     is_admin = getattr(user, "role", None) == "admin"
+
+    # Gateway self-call key: forward the caller's own key ONLY for admins (their
+    # v2 self-calls are debit-exempt, so the gateway stays single-billed). This
+    # lets the generic gateway work with no BRUBRU_INTERNAL_API_KEY set. Cleared
+    # for non-admins so their key is never used for an internal call.
+    set_gateway_caller_key(caller_key if (is_admin and caller_key) else "")
 
     # Billing
     if is_admin:
@@ -450,6 +464,7 @@ async def mcp_endpoint(
                 user,
                 client_ip,
                 request_id=str(uuid.uuid4()),
+                caller_key=plaintext,
             )
 
         return _err(req_id, -32601, f"Method not found: {method!r}")

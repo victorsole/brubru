@@ -312,11 +312,34 @@ def _handle_search_consultations(query: str = "", limit: int = 15) -> Dict[str, 
 # Generic gateway — reach ANY of Brubru's v2 endpoints through 2 tools, so the
 # whole API is callable without hundreds of per-endpoint tools. Runs a blocking
 # self-HTTP call (urllib, stdlib) which is safe because mcp_http runs tool
-# handlers off the event loop. Uses a server-side service key (admin, billing-
-# exempt) — the MCP caller was already authed + billed at the tool layer.
+# handlers off the event loop.
+#
+# The self-call needs an API key that is billing-exempt, so the gateway call is
+# charged ONCE (at the MCP tool layer), not twice. Two ways it gets one:
+#   1. BRUBRU_INTERNAL_API_KEY env var — a dedicated admin/service key (the
+#      production path; covers gateway calls from any caller).
+#   2. The caller's OWN key, forwarded by mcp_http *only when the caller is an
+#      admin* (admin v2 calls are debit-exempt, so no double-billing). This lets
+#      an operator use the gateway with zero server config.
+# Set via set_gateway_caller_key() before invoke_tool(); read in _self_get().
 # ---------------------------------------------------------------------------
 
+import contextvars as _contextvars
+
 _V2_PREFIX = "/api/v2/"
+
+# Forwarded caller key for the gateway self-call (admin-only; see above). A
+# ContextVar so it is per-request and propagates into the worker thread that
+# anyio.to_thread.run_sync uses to run the handler.
+_GATEWAY_CALLER_KEY: "_contextvars.ContextVar[str]" = _contextvars.ContextVar(
+    "mcp_gateway_caller_key", default=""
+)
+
+
+def set_gateway_caller_key(key: str) -> None:
+    """mcp_http calls this before dispatch to forward an ADMIN caller's key to
+    the gateway self-call. No-op safe with an empty string."""
+    _GATEWAY_CALLER_KEY.set(key or "")
 
 
 def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) -> Dict[str, Any]:
@@ -331,10 +354,15 @@ def _self_get(path: str, params: Optional[Dict[str, Any]], authed: bool = True) 
     url = base + path + (("?" + qs) if qs else "")
     req = urllib.request.Request(url, method="GET")
     if authed:
-        key = os.environ.get("BRUBRU_INTERNAL_API_KEY", "")
+        # Production path: dedicated admin/service key. Fallback: the admin
+        # caller's own key, forwarded by mcp_http (admin v2 calls are debit-
+        # exempt, so still single-billed). See the section header above.
+        key = os.environ.get("BRUBRU_INTERNAL_API_KEY", "") or _GATEWAY_CALLER_KEY.get("")
         if not key:
             return {"error": "gateway_unconfigured",
-                    "detail": "Set BRUBRU_INTERNAL_API_KEY on the server to enable the gateway."}
+                    "detail": ("The gateway needs a billing-exempt key. Either set "
+                               "BRUBRU_INTERNAL_API_KEY on the server, or call as an admin "
+                               "(your key is then forwarded automatically).")}
         req.add_header("X-API-Key", key)
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
