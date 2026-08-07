@@ -82,11 +82,11 @@ const PRE_USER_QUERY_LIMIT = 3;
  */
 const buildTrialWallMessage = (limit: number): string =>
   `You have used your ${limit} free queries. Start a free trial to keep asking, and to open the rest of Brubru:\n\n`
-  + '- **My EU Bubble** -- your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
-  + '- **Amendator** -- draft EU legislative amendments in proper EP format\n'
-  + '- **EU Law Comply** -- compliance gap analysis against the acts that bind you\n'
-  + '- **Tenderator** -- EU tenders and funding calls matched to what you do\n'
-  + '- **API** -- the same EU data behind everything above, straight into your own tools\n\n'
+  + '- **My EU Bubble**, your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
+  + '- **Amendator**, to draft EU legislative amendments in proper EP format\n'
+  + '- **EU Law Comply**, for compliance gap analysis against the acts that bind you\n'
+  + '- **Tenderator**, for EU tenders and funding calls matched to what you do\n'
+  + '- **API**, the same EU data behind everything above, straight into your own tools\n\n'
   + '[Start your 14-day free trial](/signup)';
 
 // Two identical sends inside this window are treated as one double-fire, not
@@ -125,11 +125,11 @@ const getProgressiveCTA = (queryNumber: number): string | null => {
   // this was the third hardcoded copy and also named a product that does not
   // exist ("Document Generator") while omitting Tenderator and the API.
   return '\n\n---\n\n**The rest of Brubru:**\n\n'
-    + '- **My EU Bubble** -- your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
-    + '- **Amendator** -- draft EU legislative amendments in proper EP format\n'
-    + '- **EU Law Comply** -- compliance gap analysis against the acts that bind you\n'
-    + '- **Tenderator** -- EU tenders and funding calls matched to what you do\n'
-    + '- **API** -- the same EU data behind everything above, straight into your own tools\n\n'
+    + '- **My EU Bubble**, your cockpit: track files, news, votes, calendar, committee work, predictions and stakeholder maps\n'
+    + '- **Amendator**, to draft EU legislative amendments in proper EP format\n'
+    + '- **EU Law Comply**, for compliance gap analysis against the acts that bind you\n'
+    + '- **Tenderator**, for EU tenders and funding calls matched to what you do\n'
+    + '- **API**, the same EU data behind everything above, straight into your own tools\n\n'
     + '[Start your 14-day free trial](/signup)';
 };
 

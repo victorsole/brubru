@@ -724,7 +724,7 @@
   "subscription": {
     "hero": {
       "title": "Elige tu Plan Brubru",
-      "subtitle": "Inteligencia politica de la UE modular -- elige lo que necesitas",
+      "subtitle": "Inteligencia politica de la UE modular, elige lo que necesitas",
       "description": "Empieza con modulos individuales o ahorra con paquetes. Todos los planes incluyen 14 dias de prueba gratuita."
     },
     "toggle": {
@@ -758,7 +758,7 @@
     },
     "advocate": {
       "name": "Advocate",
-      "badge": "ADVOCATE -- MAS POPULAR",
+      "badge": "ADVOCATE · MAS POPULAR",
       "priceMonthly": "59",
       "priceAnnual": "42",
       "annualTotal": "499",
@@ -773,7 +773,7 @@
     },
     "professional": {
       "name": "Professional",
-      "badge": "PROFESSIONAL -- MEJOR VALOR",
+      "badge": "PROFESSIONAL · MEJOR VALOR",
       "priceMonthly": "99",
       "priceAnnual": "67",
       "annualTotal": "799",
@@ -789,7 +789,7 @@
     },
     "ep": {
       "name": "EP Plan",
-      "badge": "EP PLAN -- PARA APAs Y MEPs",
+      "badge": "EP PLAN · PARA APAs Y MEPs",
       "priceMonthly": "49",
       "priceAnnual": "45",
       "annualTotal": "539",
@@ -909,7 +909,7 @@
     },
     "cta": {
       "title": "Listo para empezar?",
-      "subtitle": "Empieza tu prueba gratuita de 14 dias hoy -- sin tarjeta de credito",
+      "subtitle": "Empieza tu prueba gratuita de 14 dias hoy, sin tarjeta de credito",
       "button": "Empezar Prueba Gratuita",
       "contact": "O contactanos para necesidades empresariales"
     },
@@ -2927,7 +2927,7 @@
     "goToMyFiles": "Ve a la pestaña «Mis expedientes» para seguir procedimientos legislativos.",
     "lockedTitle": "Las predicciones requieren suscripción",
     "lockedText": "Conoce las probabilidades de que tu legislación se apruebe. Descubre cómo es probable que voten los eurodiputados y los Estados miembros. Planifica tu acción de incidencia con datos.",
-    "subscribeFrom": "Suscríbete -- desde 39 EUR/mes",
+    "subscribeFrom": "Suscríbete desde 39 EUR/mes",
     "lockedNote": "Disponible con los planes Starter, Advocate y Professional",
     "analysingSignals": "Analizando señales legislativas...",
     "generate": "Prever",
@@ -3116,7 +3116,7 @@
     "bestAlliesDesc": "Eurodiputados cuyas enmiendas se alinean más con tu posición, clasificados por puntuación media.",
     "yourUniquePositions": "Tus posiciones únicas ({{n}})",
     "blindSpots": "Puntos ciegos ({{n}})",
-    "noBlindSpots": "Sin puntos ciegos -- cubres todos los elementos que los eurodiputados han abordado.",
+    "noBlindSpots": "Sin puntos ciegos: cubres todos los elementos que los eurodiputados han abordado.",
     "amCount": "{{n}} enm.",
     "supportive": "A favor",
     "mixed": "Mixto",

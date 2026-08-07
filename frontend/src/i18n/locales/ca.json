@@ -724,7 +724,7 @@
   "subscription": {
     "hero": {
       "title": "Tria el teu Pla Brubru",
-      "subtitle": "Intel·ligencia politica de la UE modular -- tria el que necessites",
+      "subtitle": "Intel·ligencia politica de la UE modular, tria el que necessites",
       "description": "Comenca amb moduls individuals o estalvia amb paquets. Tots els plans inclouen 14 dies de prova gratuita."
     },
     "toggle": {
@@ -758,7 +758,7 @@
     },
     "advocate": {
       "name": "Advocate",
-      "badge": "ADVOCATE -- MES POPULAR",
+      "badge": "ADVOCATE · MES POPULAR",
       "priceMonthly": "59",
       "priceAnnual": "42",
       "annualTotal": "499",
@@ -773,7 +773,7 @@
     },
     "professional": {
       "name": "Professional",
-      "badge": "PROFESSIONAL -- MILLOR VALOR",
+      "badge": "PROFESSIONAL · MILLOR VALOR",
       "priceMonthly": "99",
       "priceAnnual": "67",
       "annualTotal": "799",
@@ -789,7 +789,7 @@
     },
     "ep": {
       "name": "EP Plan",
-      "badge": "EP PLAN -- PER A APAs I MEPs",
+      "badge": "EP PLAN · PER A APAs I MEPs",
       "priceMonthly": "49",
       "priceAnnual": "45",
       "annualTotal": "539",
@@ -909,7 +909,7 @@
     },
     "cta": {
       "title": "A punt per comenar?",
-      "subtitle": "Comenca la teva prova gratuita de 14 dies avui -- sense targeta de credit",
+      "subtitle": "Comenca la teva prova gratuita de 14 dies avui, sense targeta de credit",
       "button": "Comenar Prova Gratuita",
       "contact": "O contacta'ns per necessitats empresarials"
     },
@@ -2927,7 +2927,7 @@
     "goToMyFiles": "Vés a la pestanya «Els meus expedients» per seguir procediments legislatius.",
     "lockedTitle": "Les prediccions requereixen subscripció",
     "lockedText": "Coneix les probabilitats que la teva legislació s'aprovi. Descobreix com és probable que votin els eurodiputats i els Estats membres. Planifica la teva incidència amb dades.",
-    "subscribeFrom": "Subscriu-te -- des de 39 EUR/mes",
+    "subscribeFrom": "Subscriu-te des de 39 EUR/mes",
     "lockedNote": "Disponible amb els plans Starter, Advocate i Professional",
     "analysingSignals": "Analitzant senyals legislatius...",
     "generate": "Preveu",
@@ -3116,7 +3116,7 @@
     "bestAlliesDesc": "Eurodiputats les esmenes dels quals més s'alineen amb la teva posició, classificats per puntuació mitjana.",
     "yourUniquePositions": "Les teves posicions úniques ({{n}})",
     "blindSpots": "Punts cecs ({{n}})",
-    "noBlindSpots": "Sense punts cecs -- cobreixes tots els elements que els eurodiputats han abordat.",
+    "noBlindSpots": "Sense punts cecs: cobreixes tots els elements que els eurodiputats han abordat.",
     "amCount": "{{n}} esm.",
     "supportive": "A favor",
     "mixed": "Mixt",

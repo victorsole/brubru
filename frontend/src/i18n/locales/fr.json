@@ -724,7 +724,7 @@
   "subscription": {
     "hero": {
       "title": "Choisissez votre Plan Brubru",
-      "subtitle": "Intelligence politique UE modulaire -- choisissez ce dont vous avez besoin",
+      "subtitle": "Intelligence politique UE modulaire, choisissez ce dont vous avez besoin",
       "description": "Commencez avec des modules individuels ou economisez avec des packs. Tous les plans incluent 14 jours d'essai gratuit."
     },
     "toggle": {
@@ -758,7 +758,7 @@
     },
     "advocate": {
       "name": "Advocate",
-      "badge": "ADVOCATE -- LE PLUS POPULAIRE",
+      "badge": "ADVOCATE · LE PLUS POPULAIRE",
       "priceMonthly": "59",
       "priceAnnual": "42",
       "annualTotal": "499",
@@ -773,7 +773,7 @@
     },
     "professional": {
       "name": "Professional",
-      "badge": "PROFESSIONAL -- MEILLEURE VALEUR",
+      "badge": "PROFESSIONAL · MEILLEURE VALEUR",
       "priceMonthly": "99",
       "priceAnnual": "67",
       "annualTotal": "799",
@@ -789,7 +789,7 @@
     },
     "ep": {
       "name": "EP Plan",
-      "badge": "EP PLAN -- POUR APAs ET MEPs",
+      "badge": "EP PLAN · POUR APAs ET MEPs",
       "priceMonthly": "49",
       "priceAnnual": "45",
       "annualTotal": "539",
@@ -909,7 +909,7 @@
     },
     "cta": {
       "title": "Pret a commencer?",
-      "subtitle": "Commencez votre essai gratuit de 14 jours aujourd'hui -- sans carte de credit",
+      "subtitle": "Commencez votre essai gratuit de 14 jours aujourd'hui, sans carte de credit",
       "button": "Commencer l'Essai Gratuit",
       "contact": "Ou contactez-nous pour des besoins entreprise"
     },
@@ -2927,7 +2927,7 @@
     "goToMyFiles": "Allez à l'onglet « Mes dossiers » pour suivre des procédures législatives.",
     "lockedTitle": "Les prédictions nécessitent un abonnement",
     "lockedText": "Connaissez les probabilités d'adoption de votre législation. Découvrez comment les eurodéputés et les États membres sont susceptibles de voter. Planifiez votre plaidoyer avec des données.",
-    "subscribeFrom": "S'abonner -- à partir de 39 EUR/mois",
+    "subscribeFrom": "S'abonner à partir de 39 EUR/mois",
     "lockedNote": "Disponible avec les plans Starter, Advocate et Professional",
     "analysingSignals": "Analyse des signaux législatifs...",
     "generate": "Prévoir",
@@ -3116,7 +3116,7 @@
     "bestAlliesDesc": "Eurodéputés dont les amendements s'alignent le mieux avec votre position, classés par score moyen.",
     "yourUniquePositions": "Vos positions uniques ({{n}})",
     "blindSpots": "Angles morts ({{n}})",
-    "noBlindSpots": "Aucun angle mort -- vous couvrez tous les éléments ciblés par les eurodéputés.",
+    "noBlindSpots": "Aucun angle mort: vous couvrez tous les éléments ciblés par les eurodéputés.",
     "amCount": "{{n}} am.",
     "supportive": "Favorable",
     "mixed": "Mixte",

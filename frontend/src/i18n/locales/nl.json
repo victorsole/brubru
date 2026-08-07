@@ -724,7 +724,7 @@
   "subscription": {
     "hero": {
       "title": "Kies je Brubru Plan",
-      "subtitle": "Modulaire EU-beleidsintelligentie -- kies wat je nodig hebt",
+      "subtitle": "Modulaire EU-beleidsintelligentie, kies wat je nodig hebt",
       "description": "Begin met individuele modules of bespaar met bundels. Alle plannen bevatten 14 dagen gratis proefperiode."
     },
     "toggle": {
@@ -758,7 +758,7 @@
     },
     "advocate": {
       "name": "Advocate",
-      "badge": "ADVOCATE -- MEEST POPULAIR",
+      "badge": "ADVOCATE · MEEST POPULAIR",
       "priceMonthly": "59",
       "priceAnnual": "42",
       "annualTotal": "499",
@@ -773,7 +773,7 @@
     },
     "professional": {
       "name": "Professional",
-      "badge": "PROFESSIONAL -- BESTE WAARDE",
+      "badge": "PROFESSIONAL · BESTE WAARDE",
       "priceMonthly": "99",
       "priceAnnual": "67",
       "annualTotal": "799",
@@ -789,7 +789,7 @@
     },
     "ep": {
       "name": "EP Plan",
-      "badge": "EP PLAN -- VOOR APA's EN MEP's",
+      "badge": "EP PLAN · VOOR APA's EN MEP's",
       "priceMonthly": "49",
       "priceAnnual": "45",
       "annualTotal": "539",
@@ -909,7 +909,7 @@
     },
     "cta": {
       "title": "Klaar om te beginnen?",
-      "subtitle": "Begin vandaag je gratis proefperiode van 14 dagen -- geen creditcard nodig",
+      "subtitle": "Begin vandaag je gratis proefperiode van 14 dagen, geen creditcard nodig",
       "button": "Start Gratis Proef",
       "contact": "Of neem contact op voor zakelijke behoeften"
     },
@@ -2036,7 +2036,7 @@
     "goToMyFiles": "Ga naar het tabblad „Mijn dossiers\" om wetgevingsprocedures te volgen.",
     "lockedTitle": "Voorspellingen vereisen een abonnement",
     "lockedText": "Ken de kansen op aanneming van uw wetgeving. Zie hoe Europarlementariërs en lidstaten waarschijnlijk zullen stemmen. Plan uw belangenbehartiging met datagedreven inzichten.",
-    "subscribeFrom": "Abonneren -- vanaf 39 EUR/maand",
+    "subscribeFrom": "Abonneren vanaf 39 EUR/maand",
     "lockedNote": "Beschikbaar met Starter-, Advocate- en Professional-plannen",
     "analysingSignals": "Wetgevingssignalen analyseren...",
     "generate": "Voorspel",
@@ -2225,7 +2225,7 @@
     "bestAlliesDesc": "Europarlementariërs wier amendementen het sterkst aansluiten bij uw standpunt, gerangschikt op gemiddelde score.",
     "yourUniquePositions": "Uw unieke standpunten ({{n}})",
     "blindSpots": "Blinde vlekken ({{n}})",
-    "noBlindSpots": "Geen blinde vlekken -- u dekt alle elementen die Europarlementariërs hebben aangepakt.",
+    "noBlindSpots": "Geen blinde vlekken: u dekt alle elementen die Europarlementariërs hebben aangepakt.",
     "amCount": "{{n}} am.",
     "supportive": "Steunend",
     "mixed": "Gemengd",

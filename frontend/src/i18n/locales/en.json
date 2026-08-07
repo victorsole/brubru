@@ -724,7 +724,7 @@
   "subscription": {
     "hero": {
       "title": "Choose Your Brubru Plan",
-      "subtitle": "Modular EU policy intelligence -- pick what you need",
+      "subtitle": "Modular EU policy intelligence, pick what you need",
       "description": "Start with individual modules or save with bundles. All plans include a 14-day free trial."
     },
     "toggle": {
@@ -758,7 +758,7 @@
     },
     "advocate": {
       "name": "Advocate",
-      "badge": "ADVOCATE -- MOST POPULAR",
+      "badge": "ADVOCATE · MOST POPULAR",
       "priceMonthly": "59",
       "priceAnnual": "42",
       "annualTotal": "499",
@@ -773,7 +773,7 @@
     },
     "professional": {
       "name": "Professional",
-      "badge": "PROFESSIONAL -- BEST VALUE",
+      "badge": "PROFESSIONAL · BEST VALUE",
       "priceMonthly": "99",
       "priceAnnual": "67",
       "annualTotal": "799",
@@ -789,7 +789,7 @@
     },
     "ep": {
       "name": "EP Plan",
-      "badge": "EP PLAN -- FOR APAs & MEPs",
+      "badge": "EP PLAN · FOR APAs & MEPs",
       "priceMonthly": "49",
       "priceAnnual": "45",
       "annualTotal": "539",
@@ -909,7 +909,7 @@
     },
     "cta": {
       "title": "Ready to get started?",
-      "subtitle": "Start your 14-day free trial today -- no credit card required",
+      "subtitle": "Start your 14-day free trial today, no credit card required",
       "button": "Start Free Trial",
       "contact": "Or contact us for enterprise needs"
     },
@@ -2927,7 +2927,7 @@
     "goToMyFiles": "Go to \"My Files\" tab to track legislative procedures.",
     "lockedTitle": "Predictions require a subscription",
     "lockedText": "Know the odds of your legislation passing. See how MEPs and member states are likely to vote. Plan your advocacy with data-driven insights.",
-    "subscribeFrom": "Subscribe -- from EUR 39/month",
+    "subscribeFrom": "Subscribe from EUR 39/month",
     "lockedNote": "Available with Starter, Advocate, and Professional plans",
     "analysingSignals": "Analysing legislative signals...",
     "generate": "Forecast",
@@ -3116,7 +3116,7 @@
     "bestAlliesDesc": "MEPs whose amendments most closely align with your position, ranked by average score.",
     "yourUniquePositions": "Your Unique Positions ({{n}})",
     "blindSpots": "Blind Spots ({{n}})",
-    "noBlindSpots": "No blind spots -- you cover all elements MEPs have targeted.",
+    "noBlindSpots": "No blind spots: you cover all elements MEPs have targeted.",
     "amCount": "{{n}} am.",
     "supportive": "Supportive",
     "mixed": "Mixed",
