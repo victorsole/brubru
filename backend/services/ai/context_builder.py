@@ -907,6 +907,15 @@ class ContextData:
     # borders and cited a document reference that does not correspond to it.
     parliamentary_questions_block: Optional[str] = None
 
+    # Individual MEP roll-call votes (7 Aug 2026). 143,338 records existed and
+    # chat could not read one of them, so "how did MEP X vote" was answered by
+    # guessing the political group's line. It is right often enough to look
+    # trustworthy and wrong exactly when it matters: David Casa (PPE) and Barry
+    # Andrews (Renew) both voted AGAINST the 28th tax regime resolution against
+    # their group majority, and chat reported both as voting in favour, one of
+    # them with an invented verbatim quote attributed to the MEP.
+    roll_call_block: Optional[str] = None
+
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
     # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
@@ -1980,6 +1989,7 @@ class ContextBuilder:
         parliamentary_questions_block = self._fetch_parliamentary_questions_block(
             user_message
         )
+        roll_call_block = self._fetch_roll_call_block(user_message)
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2072,6 +2082,7 @@ class ContextBuilder:
             private_guide_block=private_guide_block,
             reference_data_context=reference_data_context,
             parliamentary_questions_block=parliamentary_questions_block,
+            roll_call_block=roll_call_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -7306,6 +7317,157 @@ class ContextBuilder:
         )
         return "\n".join(out) + "\n"
 
+    _VOTE_INTENT_RE = re.compile(
+        r"\bhow did\b.*\bvote\b|\bvoted?\b.*\b(for|against|in favour)\b"
+        r"|voting record|roll[- ]call|com(?:o|e) (?:ha )?vot|c[oó]mo vot[oó]|ha votat",
+        re.IGNORECASE,
+    )
+
+    def _fetch_roll_call_block(self, user_message: str) -> Optional[str]:
+        """How a named MEP actually voted, from ep_roll_call_records.
+
+        Added 7 August 2026 after the individual-vote fabrication. Without this
+        the model answered from the political group's line, which is right for
+        the ~90% who follow the whip and confidently wrong for the rebels, who
+        are the only interesting case. It also manufactured the evidence: one
+        answer quoted a written explanation of vote that does not exist.
+
+        Names in ep_roll_call_records are SURNAMES only ("Casa", "Andrews"), so
+        the surname is matched rather than the full name the user types.
+        """
+        if not user_message or not self._VOTE_INTENT_RE.search(user_message):
+            return None
+
+        # Capitalised tokens are the candidate surnames. Strip the honorifics
+        # and institution words that are also capitalised.
+        stop = {"MEP", "EP", "European", "Parliament", "Commission", "Council",
+                "EU", "How", "What", "Did", "The", "Regulation", "Directive",
+                "Act", "Resolution", "Report", "Group", "Member"}
+        cands = [w.strip(".,?!'\"") for w in re.findall(r"\b[A-Z][\w’'-]{2,}", user_message)]
+        cands = [c for c in cands if c not in stop][-3:]
+        if not cands:
+            return None
+
+        # Topic words locate the vote itself. The candidate surnames must be
+        # excluded or they end up in the title match: "MEP David Casa" put
+        # "David" in the topic, and no vote title contains it, so an ILIKE ALL
+        # matched nothing at all.
+        _names_lower = {c.lower() for c in cands}
+        _noise = {"votes", "voted", "vote", "resolution", "parliament", "european",
+                  "how", "did", "the", "on", "of", "mep", "meps", "and", "for"}
+        # Three characters, not five. The old threshold dropped "tax", which is
+        # the only word separating "The 28th Regime: a new legal framework for
+        # innovative companies" from "Feasibility of a 28th TAX regime", two
+        # different files with different votes. Losing it sent the answer to the
+        # wrong roll-call.
+        topic = [w for w in re.sub(r"[^\w\s]", " ", user_message).split()
+                 if len(w) >= 3
+                 and w.lower() not in _noise
+                 and w.lower() not in _names_lower]
+        if not topic:
+            return None
+
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                # ONE vote, not several. A single file carries many roll-calls
+                # (the resolution plus each amendment), and matching them all
+                # returned the same MEP as both FOR and AGAINST with a tally
+                # borrowed from a different vote.
+                # Score candidates on how many topic words the title carries,
+                # rather than taking whichever vote has the most MEP records.
+                # Record count picked the biggest roll-call on a merely similar
+                # title, which is how "28th tax regime" was answered with the
+                # numbers from the separate 28th Regime company-law file.
+                cand_votes = db.execute(_sql_text(
+                    """
+                    SELECT v.id, v.title, v.ta_reference, v.procedure_ref,
+                           v.vote_date, v.level,
+                           (SELECT count(*) FROM ep_roll_call_records x
+                             WHERE x.vote_id = v.id) AS n
+                    FROM ep_roll_call_votes v
+                    WHERE v.title ILIKE ANY(:topic)
+                    ORDER BY v.vote_date DESC NULLS LAST
+                    LIMIT 40
+                    """
+                ), {"topic": [f"%{t}%" for t in topic[:6]]}).fetchall()
+                if not cand_votes:
+                    return None
+                terms = [t.lower() for t in topic[:6]]
+
+                def _rank(v):
+                    tl = (v[1] or "").lower()
+                    hits = sum(1 for t in terms if t in tl)
+                    # Plenary before committee: "how did X vote" means the
+                    # house vote unless the user says committee.
+                    plenary = 1 if (v[5] or "") == "plenary" else 0
+                    return (hits, plenary, v[6] or 0)
+
+                vote = max(cand_votes, key=_rank)
+                vote_id = vote[0]
+                # Surnames come last, so try the last capitalised token first and
+                # stop at the first that actually appears in this roll-call.
+                # Otherwise "MEP David Casa" also matched an unrelated MEP whose
+                # surname is David.
+                rows = []
+                for cand in reversed(cands):
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT r.mep_name, r.political_group, r.vote_choice
+                        FROM ep_roll_call_records r
+                        WHERE r.vote_id = :vid AND r.mep_name = :name
+                        """
+                    ), {"vid": vote_id, "name": cand}).fetchall()
+                    if rows:
+                        break
+                tally = db.execute(_sql_text(
+                    """
+                    SELECT vote_choice, count(*) FROM ep_roll_call_records
+                    WHERE vote_id = :vid GROUP BY vote_choice
+                    """
+                ), {"vid": vote_id}).fetchall()
+            finally:
+                db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[ROLLCALL] lookup failed: %s", e)
+            return None
+        title, ta, proc, when = vote[1], vote[2], vote[3], vote[4]
+
+        if not rows:
+            return (
+                "[EP ROLL-CALL VOTE]\n"
+                f"No roll-call record on file for {', '.join(cands)} on this vote. "
+                "Do NOT infer how they voted from their political group's position, "
+                "and do NOT quote an explanation of vote. Say the individual record "
+                "is not on file and point to the Votes tab (My EU Bubble) and to "
+                "europarl.europa.eu/plenary/en/votes.html.\n"
+            )
+
+        choice = {"+": "FOR", "-": "AGAINST", "0": "ABSTENTION"}
+        out = ["[EP ROLL-CALL VOTE]"]
+        out.append(f"VOTE: {(title or '')[:180]}")
+        if ta:
+            out.append(f"ADOPTED TEXT: {ta}")
+        if proc:
+            out.append(f"PROCEDURE: {proc}")
+        if when:
+            out.append(f"DATE: {when}")
+        if tally:
+            counts = {c: n for c, n in tally}
+            out.append(
+                f"TALLY: {counts.get('+', 0)} for / {counts.get('-', 0)} against / "
+                f"{counts.get('0', 0)} abstentions")
+        out.append("INDIVIDUAL RECORDS (authoritative, from the roll-call):")
+        for name, grp, ch in rows:
+            out.append(f"- {name} ({grp or 'n/a'}): {choice.get(ch, ch)}")
+        out.append(
+            "These are the recorded votes. An MEP can vote against their own "
+            "group, so never substitute the group's line for the record above, "
+            "and never invent an explanation of vote."
+        )
+        return "\n".join(out) + "\n"
+
     async def _fetch_committee_transcript_block(
         self,
         intent: Dict[str, Any],
@@ -11007,6 +11169,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'parliamentary_questions_block', None):
             sections.append(context_data.parliamentary_questions_block)
+            sections.append("")
+        if getattr(context_data, 'roll_call_block', None):
+            sections.append(context_data.roll_call_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
