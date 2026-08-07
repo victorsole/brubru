@@ -12015,9 +12015,23 @@ class ContextBuilder:
 
             for result in context_data.web_search_results:
                 if result.get('source') == 'tavily_ai_answer':
-                    # AI-generated summary
-                    sections.append(f"WEB SUMMARY:")
-                    sections.append(f"  {result['content']}")
+                    # AI-generated summary. Capped like every other web result:
+                    # this was the ONLY block in the whole context injected
+                    # untruncated, and on 7 Aug 2026 it reached 20,426
+                    # characters, 5,106 tokens, 42% of the entire context, on a
+                    # question about the Critical Medicines Act rapporteur that
+                    # Brubru answers from its own verified guides.
+                    #
+                    # That is the lowest-trust source in the hierarchy taking
+                    # the largest share of the budget, and it compounds: the
+                    # extra tokens push the request past the fast providers'
+                    # rate limits onto Mistral, which reads roughly 30% of the
+                    # context, so the verified guides are the first thing lost.
+                    # A fabricated MEP voting record earlier the same day cited
+                    # a "WEB SUMMARY" entry as its source.
+                    _summary = (result.get('content') or '')[:1500]
+                    sections.append(f"WEB SUMMARY (unverified web content, lowest source tier):")
+                    sections.append(f"  {_summary}")
                     sections.append("")
                 else:
                     # Regular web result
