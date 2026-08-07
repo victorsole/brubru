@@ -921,6 +921,10 @@ class ContextData:
     # lobbyists an MEP had met, then declared nothing else was on record.
     lobby_meetings_block: Optional[str] = None
 
+    # Committee amendment documents (7 Aug 2026). Chat invented both the
+    # amendment count and the PE reference when it could not read the table.
+    amendment_documents_block: Optional[str] = None
+
     # Private user/org bespoke knowledge bundle (20 May 2026).
     # Always-on for the authenticated user when users.private_guide_status='ready'.
     # Loaded from backend/knowledge_base/private_guides/{slug}/ (gitignored).
@@ -1996,6 +2000,7 @@ class ContextBuilder:
         )
         roll_call_block = self._fetch_roll_call_block(user_message)
         lobby_meetings_block = self._fetch_lobby_meetings_block(user_message)
+        amendment_documents_block = self._fetch_amendment_documents_block(user_message)
 
         # Calculate metadata
         search_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -2090,6 +2095,7 @@ class ContextBuilder:
             parliamentary_questions_block=parliamentary_questions_block,
             roll_call_block=roll_call_block,
             lobby_meetings_block=lobby_meetings_block,
+            amendment_documents_block=amendment_documents_block,
             query=user_message,
             search_time_ms=search_time,
             total_sources=total_sources
@@ -7324,6 +7330,136 @@ class ContextBuilder:
         )
         return "\n".join(out) + "\n"
 
+    _AMDT_INTENT_RE = re.compile(
+        r"amendment|amendements|esmen|enmienda|emendament|amendementen|\bPE\s?\d{3}",
+        re.IGNORECASE,
+    )
+
+    def _fetch_amendment_documents_block(self, user_message: str) -> Optional[str]:
+        """Committee amendment documents: PE reference, count, committee, link.
+
+        Added 7 August 2026. amendment_documents held 1,326 rows and chat could
+        not read one, so it invented the two things professionals actually act
+        on. Asked how many amendments were tabled on 2025/0380(COD) it answered
+        "111" when the record says 101, and asked for the PE reference on
+        2025/0312(COD) it produced "PE 785", which is not even a well-formed PE
+        number, with a footnote marker as though it were sourced.
+
+        The system prompt already forbids inventing PE numbers and tallies. It
+        was being ignored because the real values were nowhere in context; a
+        rule cannot compete with an empty context.
+        """
+        if not user_message or not self._AMDT_INTENT_RE.search(user_message):
+            return None
+
+        proc = re.search(r"\b(\d{4}/\d{4}\([A-Z]{3}\))", user_message)
+        pe = re.search(r"\bPE\s?(\d{3})[.,]?(\d{3})\b", user_message, re.IGNORECASE)
+        if not proc and not pe:
+            return None
+
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                if proc:
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT procedure_reference, committee_code, pe_reference,
+                               document_type, document_date, rapporteur_name,
+                               total_amendments, doceo_url, status
+                        FROM amendment_documents
+                        WHERE procedure_reference = :p
+                        ORDER BY document_date DESC NULLS LAST LIMIT 8
+                        """
+                    ), {"p": proc.group(1)}).fetchall()
+                else:
+                    rows = db.execute(_sql_text(
+                        """
+                        SELECT procedure_reference, committee_code, pe_reference,
+                               document_type, document_date, rapporteur_name,
+                               total_amendments, doceo_url, status
+                        FROM amendment_documents
+                        WHERE replace(replace(pe_reference,'.',''),' ','') = :pe
+                        LIMIT 4
+                        """
+                    ), {"pe": f"PE{pe.group(1)}{pe.group(2)}"}).fetchall()
+            finally:
+                db.close()
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[AMDT] amendment document lookup failed: %s", e)
+            return None
+
+        what = proc.group(1) if proc else f"PE{pe.group(1)}.{pe.group(2)}"
+        if not rows:
+            return (
+                "[COMMITTEE AMENDMENT DOCUMENTS]\n"
+                f"No amendment document on file for {what}. Do NOT state a number "
+                "of amendments and do NOT produce a PE reference: both must come "
+                "from the record. Say the document is not on file and point to "
+                "Amendments (My EU Bubble) and the committee page.\n"
+            )
+
+        # Spelled out because the counts are NOT commensurable. A file usually
+        # carries a draft report (the rapporteur's own amendments) alongside the
+        # AM document (amendments tabled by other MEPs). For 2025/0380(COD)
+        # that is 10 and 101, and the file-level total of 111 that Position
+        # Analysis reports is the two added together.
+        types = {"AM": "Amendments tabled in committee by MEPs",
+                 "AD": "Amendments in another committee's opinion",
+                 "PR": "Rapporteur's own amendments in the draft report"}
+        out = ["[COMMITTEE AMENDMENT DOCUMENTS]"]
+
+        # State the answer outright, because TWO Brubru blocks report a figure
+        # under the words "amendments tabled" and they disagree. This block
+        # counts the AM document (101 for 2025/0380(COD)); the Position
+        # Analysis block counts every amendment document on the file and
+        # reports 111. Neither is wrong, but a user asking "how many amendments
+        # were tabled in committee" wants the AM figure, and without a stated
+        # answer the model picks whichever it read last or reconciles the two
+        # mid-sentence.
+        am = [r for r in rows if (r[3] or "") == "AM"]
+        if am:
+            head = am[0]
+            out.append(
+                f"ANSWER TO 'how many amendments were tabled in committee': "
+                f"{head[6]} in {head[1] or 'committee'} "
+                f"({head[2] or 'no PE reference'}). Lead with this figure. If a "
+                "Position Analysis block also gives a file-level total, that "
+                "total counts every amendment document on the file including "
+                "the draft report, so name it as the file-level total rather "
+                "than contradicting or averaging the two."
+            )
+        for pref, cttee, peref, dtype, date, rapp, total, url, status in rows:
+            bits = [f"- {pref}", f"{types.get(dtype, dtype or 'document')}"]
+            if cttee:
+                bits.append(f"in {cttee}")
+            if peref:
+                bits.append(f"| PE reference {peref}")
+            if total is not None:
+                bits.append(f"| {total} amendments")
+            if date:
+                bits.append(f"| {str(date)[:10]}")
+            if rapp:
+                bits.append(f"| rapporteur {rapp}")
+            out.append(" ".join(bits))
+            if url:
+                out.append(f"    {url}")
+            if status and status != "parsed":
+                out.append(f"    (parse status: {status}, the count may be incomplete)")
+        out.append(
+            "Amendment counts and PE references above are the record. Quote them "
+            "exactly, INCLUDING THE PUNCTUATION: write PE785.330, never "
+            "'PE 785 330', because a reference with spaces substituted for the "
+            "full stop finds nothing in the Parliament's document search and "
+            "the user cannot look it up. Never round, adjust or invent either. "
+            "NEVER ADD THE COUNTS "
+            "TOGETHER: each line counts a different document, and 'amendments "
+            "tabled in committee' means the AM line alone. Report each document "
+            "on its own line with its committee, and give the doceo link where "
+            "one is shown so the user can open the document."
+        )
+        return "\n".join(out) + "\n"
+
     _LOBBY_INTENT_RE = re.compile(
         r"lobb(?:y|ied|yist|ying)|transparency register|who met|which organisations? "
         r"(?:has|have|did)|meetings? with|reuni(?:ó|o)n(?:s|es)? amb|incontr",
@@ -11279,6 +11415,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'lobby_meetings_block', None):
             sections.append(context_data.lobby_meetings_block)
+            sections.append("")
+        if getattr(context_data, 'amendment_documents_block', None):
+            sections.append(context_data.amendment_documents_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
