@@ -22,6 +22,13 @@
 
 .footer--sidebar-open {
   margin-left: 300px;
+  /* The margin alone pushed a width:100% footer 300px past the viewport, so
+     every chat page with the sidebar open carried 300px of horizontal scroll:
+     documentElement.scrollWidth measured 1812 against a 1512 viewport, and the
+     page sat scrolled right by exactly the sidebar width, clipping the left
+     edge of every answer behind the sidebar. Shrink by the same amount that is
+     added, so the footer ends where the viewport does. */
+  width: calc(100% - 300px);
 }
 
 .footer__container {
@@ -254,6 +261,10 @@
 @media (max-width: 767px) {
   .footer {
     margin-left: 0 !important;
+    /* Reset the desktop calc too: the sidebar overlays on mobile rather than
+       displacing content, so a footer 300px narrower than the screen would be
+       the mirror image of the overflow bug it fixes. */
+    width: 100% !important;
   }
 
   /* Hide the marketing footer on the chat app page on mobile — every pixel

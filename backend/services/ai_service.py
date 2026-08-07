@@ -3140,11 +3140,29 @@ Please answer using the EU context provided above. Include citations [1], [2], e
     # This is how a professional writes a law in prose, and it was the one form
     # left unlinked: watching a real answer render in the browser, STEP was a
     # link and "Regulation (EU) 2024/795" beside it was plain text.
+    # All six Brubru languages. An English-only pattern left every non-English
+    # answer with no act links at all: a Catalan answer opened "Directiva (UE)
+    # 2022/2041 del Parlament Europeu i del Consell" in plain text while the
+    # English answer beside it linked the same act.
     _ACT_NAME_RE = re.compile(
-        r"\b(Regulation|Directive|Decision)\s+\((?:EU|EC|CE|UE)(?:,\s?Euratom)?\)\s+"
-        r"(\d{4})/(\d{1,4})\b"
+        r"\b(Regulation|Directive|Decision"
+        r"|Reglamento|Directiva|Decisi[oó]n"
+        r"|Reglament|Decisi[oó]"
+        r"|R[eè]glement|D[eé]cision"
+        r"|Regolamento|Direttiva|Decisione"
+        r"|Verordening|Richtlijn|Besluit)"
+        r"\s+\((?:EU|EC|CE|UE)(?:,\s?Euratom)?\)\s+(\d{4})/(\d{1,4})\b",
+        re.IGNORECASE,
     )
-    _ACT_LETTER = {"regulation": "R", "directive": "L", "decision": "D"}
+    _ACT_LETTER = {
+        "regulation": "R", "reglamento": "R", "reglament": "R",
+        "règlement": "R", "reglement": "R", "regolamento": "R",
+        "verordening": "R",
+        "directive": "L", "directiva": "L", "direttiva": "L",
+        "richtlijn": "L",
+        "decision": "D", "decisión": "D", "decisio": "D", "decisió": "D",
+        "décision": "D", "decisione": "D", "besluit": "D",
+    }
 
     def _linkify_references(self, text: str) -> str:
         """Hyperlink COM, procedure and bare CELEX references.
@@ -3182,7 +3200,9 @@ Please answer using the EU context provided above. Include citations [1], [2], e
 
         def _act(m: re.Match) -> str:
             kind, year, num = m.group(1), m.group(2), m.group(3)
-            letter = self._ACT_LETTER[kind.lower()]
+            letter = self._ACT_LETTER.get(kind.lower())
+            if not letter:
+                return m.group(0)
             celex = f"3{year}{letter}{int(num):04d}"
             return (f"[{m.group(0)}](https://eur-lex.europa.eu/legal-content/EN/TXT/"
                     f"?uri=CELEX:{celex})")
