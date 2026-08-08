@@ -277,7 +277,9 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
                   </div>
                 )}
 
-                {finding.confidence_score && (
+                {/* != null, not truthiness: a genuine 0% confidence is meaningful and
+                    must not be hidden. The API normalises this to 0-100. */}
+                {finding.confidence_score != null && (
                   <div className="compliance-report__confidence">
                     {t('comply.report.confidence')} {Math.round(finding.confidence_score)}%
                   </div>

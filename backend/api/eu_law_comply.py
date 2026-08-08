@@ -46,6 +46,22 @@ CRITICALITY_ORDER = case(
 )
 
 
+def _confidence_pct(value) -> Optional[float]:
+    """Return a gap finding's confidence as a 0-100 percentage.
+
+    gap_findings.confidence_score is documented as 0-100 but the LLM prompt in
+    gap_analyzer.py asks for 0.0-1.0, so every row written before 8 Aug 2026 holds a
+    fraction. The frontend rendered `Math.round(score)%`, which turned 0.9 into "1%"
+    and 0.2 into "0%" -- every confidence in the product was displayed as 0 or 1 per
+    cent. Normalise on the way out so both the legacy fractions and any future 0-100
+    values render correctly.
+    """
+    if value is None:
+        return None
+    v = float(value)
+    return round(v * 100, 1) if v <= 1.0 else round(v, 1)
+
+
 # ============================================================================
 # BACKGROUND TASKS
 # ============================================================================
@@ -886,7 +902,7 @@ async def get_analysis_results(
                 'law_title': law.title,
                 'law_celex': law.celex,
                 'status': finding.status,
-                'confidence_score': float(finding.confidence_score) if finding.confidence_score else None,
+                'confidence_score': _confidence_pct(finding.confidence_score),
                 'evidence_text': finding.evidence_text,
                 'evidence_source': finding.evidence_source,
                 'gap_description': finding.gap_description,
@@ -1275,7 +1291,7 @@ async def get_compliance_maturity(
         "table answers (e.g. ethics_personal_data=true → GDPR clusters).\n\n"
         "**When to use it**\n"
         "Populating the right-rail Comply panel in the Tender Docs editor: "
-        "live cross-fetch into the existing 53-cluster catalogue.\n\n"
+        "live cross-fetch into the EU Law Comply cluster catalogue.\n\n"
         "**Input**\n"
         "Query: `template_id` (required), `funding_mode`, `ethics_personal_data`, "
         "`ethics_clinical_studies`, `ethics_dual_use`, `ethics_animals` (booleans).\n\n"
@@ -1375,46 +1391,65 @@ def resolve_clusters_by_topic(
     # friendly) → actual policy_area values present in law_clusters (full, EU-
     # taxonomy). Substring-only match produced false positives (e.g. "AI" matched
     # "AffAIrs"); this map fixes that.
+    # The right-hand values MUST be values that actually occur in
+    # law_clusters.policy_area, and since 8 Aug 2026 those are constrained to the 34
+    # canonical areas in knowledge_base/policy_taxonomy.json (see
+    # scripts/normalise_cluster_policy_areas.py). Before that normalisation this map
+    # still pointed at granular values that no longer existed after canon seeding, so
+    # e.g. "CSRD" -> "Financial Services and Markets" matched nothing while the CSRD
+    # cluster sat under "Financial Services". If you add a target here, check the value
+    # against `SELECT DISTINCT policy_area FROM law_clusters` before committing.
     target_to_policy_areas: Dict[str, List[str]] = {
-        "AI": ["Digital Policy and Digital Economy", "Digital Policy and Platform Regulation"],
+        "AI": ["Digital Policy and Digital Economy"],
         "Artificial Intelligence": ["Digital Policy and Digital Economy"],
         "AI Act": ["Digital Policy and Digital Economy"],
-        "GDPR": ["Data Protection and Privacy"],
-        "Data Protection": ["Data Protection and Privacy"],
-        "GDPR Special Categories": ["Data Protection and Privacy"],
-        "Health Data": ["Data Protection and Privacy", "Public Health and Pharmaceuticals"],
-        "Cybersecurity": ["Cybersecurity and Digital Infrastructure"],
+        "GDPR": ["Justice and Fundamental Rights"],
+        "Data Protection": ["Justice and Fundamental Rights"],
+        "GDPR Special Categories": ["Justice and Fundamental Rights"],
+        "Health Data": ["Justice and Fundamental Rights", "Health"],
+        "Cybersecurity": ["Digital Policy and Digital Economy"],
         "Product Safety": ["Trade and Economic Security", "Health"],
-        "Medical Devices": ["Public Health and Pharmaceuticals", "Health"],
-        "IVDR": ["Public Health and Pharmaceuticals"],
-        "Clinical Trials": ["Public Health and Pharmaceuticals"],
-        "Bioethics": ["Public Health and Pharmaceuticals", "Health"],
+        "Medical Devices": ["Health"],
+        "IVDR": ["Health"],
+        "Clinical Trials": ["Health"],
+        "Bioethics": ["Health"],
         "Dual-Use": ["Trade and Economic Security"],
         "Export Controls": ["Trade and Economic Security"],
-        "Foreign Subsidies": ["Competition and State Aid", "Trade and Economic Security"],
-        "Sustainable Finance (SFDR)": ["Financial Services and Markets", "Financial Services and Insurance"],
-        "AIFMD": ["Financial Services and Markets"],
-        "Anti-Money Laundering": ["Financial Services and Insurance"],
+        "Foreign Subsidies": ["Competition", "Trade and Economic Security"],
+        "Sustainable Finance (SFDR)": ["Economic and Financial Affairs"],
+        "AIFMD": ["Economic and Financial Affairs"],
+        "Anti-Money Laundering": ["Economic and Financial Affairs"],
         "Environment": ["Environment"],
         "Energy": ["Climate Action", "Environment"],
-        "CSRD": ["Climate Action", "Financial Services and Markets"],
+        "CSRD": ["Climate Action", "Economic and Financial Affairs"],
         "Climate": ["Climate Action"],
         "Education": [],
-        "Fundamental Rights": ["Migration and Home Affairs"],
+        "Fundamental Rights": ["Justice and Fundamental Rights"],
         "Research Integrity": [],
         "Animal Research": [],
         "Data Act": ["Digital Policy and Digital Economy"],
         "Defence": ["Trade and Economic Security"],
         # v2 templates (Move 3, Jun 2026): CEF, CREA, CERV, DIGITAL, ERASMUS+, LIFE
-        "Audiovisual": ["Digital Policy and Platform Regulation"],
+        "Audiovisual": ["Digital Policy and Digital Economy"],
         "Climate Action": ["Climate Action"],
-        "Connectivity (5G, 6G)": ["Digital Policy and Telecommunications", "Cybersecurity and Digital Infrastructure"],
-        "Copyright": ["Digital Policy and Platform Regulation"],
-        "Digital Infrastructure": ["Cybersecurity and Digital Infrastructure", "Digital Policy and Telecommunications"],
+        "Connectivity (5G, 6G)": [
+            "Communication Networks, Content and Technology",
+            "Digital Policy and Digital Economy",
+        ],
+        "Copyright": ["Digital Policy and Digital Economy"],
+        "Digital Infrastructure": [
+            "Digital Policy and Digital Economy",
+            "Communication Networks, Content and Technology",
+        ],
         "Trans-European Networks": ["Transport"],
         "Transport": ["Transport"],
         # Move 4 (Jun 2026): ESF+ agency procurement
-        "Public Procurement": ["Trade and Economic Security", "Competition and State Aid"],
+        "Public Procurement": ["Trade and Economic Security", "Competition"],
+        # Textiles / circular economy (Aug 2026): DPP-TEX cluster 58.
+        "Textiles": ["Environment"],
+        "Circular Economy": ["Environment"],
+        "Ecodesign": ["Environment"],
+        "Digital Product Passport": ["Environment"],
         # No current LawCluster for these: leave to the fallback (silent zero match).
         # "Gender Equality": [],
         # "Non-Discrimination": [],

@@ -28,6 +28,26 @@ logger = logging.getLogger(__name__)
 # Initialize OpenAI client
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
+# Mirrors the valid_gap_status CHECK constraint on gap_findings.status.
+VALID_GAP_STATUSES = {'met', 'partial', 'gap', 'not_applicable'}
+
+
+def _normalise_confidence(value) -> Optional[float]:
+    """Coerce an LLM confidence to a 0-100 float, or None if unusable.
+
+    The prompt asks for 0.0-1.0 while the column is documented as 0-100. Accept either,
+    store 0-100, and drop anything non-numeric rather than letting it reach the DB.
+    """
+    if value is None:
+        return None
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return None
+    if v < 0:
+        return None
+    return round(v * 100, 2) if v <= 1.0 else round(min(v, 100.0), 2)
+
 
 class GapAnalyzer:
     """
@@ -152,12 +172,28 @@ class GapAnalyzer:
             requirement, relevant_chunks
         )
         
+        # The LLM's JSON goes straight into columns carrying CHECK constraints, so a
+        # single unexpected status value ('partially_met', 'n/a', ...) raises on commit
+        # and takes the WHOLE analysis down, not just one finding. Coerce before writing.
+        status = str(llm_result.get('status', '')).strip().lower().replace(' ', '_')
+        if status not in VALID_GAP_STATUSES:
+            logger.warning(
+                f"LLM returned unrecognised status {llm_result.get('status')!r} for "
+                f"requirement {requirement.id}; recording as 'gap' for manual review"
+            )
+            status = 'gap'
+
+        # Store confidence on a 0-100 scale to match the column's documented range.
+        # The prompt asks for 0.0-1.0, so scale it here rather than leaving two
+        # incompatible scales in one column.
+        confidence = _normalise_confidence(llm_result.get('confidence'))
+
         # Create gap finding
         finding = GapFinding(
             analysis_id=analysis_id,
             requirement_id=requirement.id,
-            status=llm_result['status'],
-            confidence_score=llm_result['confidence'],
+            status=status,
+            confidence_score=confidence,
             evidence_text=llm_result.get('evidence_text'),
             evidence_source=llm_result.get('evidence_source'),
             gap_description=llm_result.get('gap_description'),
