@@ -3358,7 +3358,7 @@
     "addOutlook": "Outlook",
     "downloadIcs": "Download .ics (Apple, other)",
     "title": "My EU Calendar",
-    "intro": "Every EU institutional date in one place — plenary sittings, Council meetings, committee hearings and consultation deadlines — filtered to your interests. Click any event for details, or add it to your own calendar.",
+    "intro": "Every EU institutional date in one place: plenary sittings, Council meetings, committee hearings and consultation deadlines, filtered to your interests. Click any event for details, or add it to your own calendar.",
     "wd": {
       "mon": "Mon",
       "tue": "Tue",
@@ -4354,7 +4354,7 @@
       "webTitle": "In claude.ai (web) or the Desktop app",
       "webBody": "Open Settings → Connectors → Add custom connector. Paste the URL below (it already carries your API key) and leave the OAuth fields blank. Mint a key at brubru.beresol.eu/api and swap it in place of brubru_live_YOUR_KEY.",
       "webUrlLabel": "Connector URL (includes your key)",
-      "cfgTitle": "Or — Claude Desktop config file"
+      "cfgTitle": "Or: Claude Desktop config file"
     },
     "cursor": {
       "title": "Cursor",
@@ -4883,12 +4883,12 @@
     "open": "Open"
   },
   "glossary": {
-    "COD": "Ordinary legislative procedure — a new EU law decided jointly by Parliament and Council",
-    "CNS": "Consultation procedure — Council decides after consulting Parliament",
-    "APP": "Consent procedure — Parliament must approve without amending",
+    "COD": "Ordinary legislative procedure: a new EU law decided jointly by Parliament and Council",
+    "CNS": "Consultation procedure: Council decides after consulting Parliament",
+    "APP": "Consent procedure: Parliament must approve without amending",
     "NLE": "Consent to an international agreement",
-    "INL": "Legislative-initiative report — Parliament asks the Commission to propose a law",
-    "INI": "Own-initiative report — Parliament's political position, not binding law",
+    "INL": "Legislative-initiative report: Parliament asks the Commission to propose a law",
+    "INI": "Own-initiative report: Parliament's political position, not binding law",
     "RSP": "Resolution on a topical subject",
     "RSO": "Resolution on an internal Parliament matter",
     "DEA": "Scrutiny of a delegated act",
@@ -4897,7 +4897,7 @@
     "DEC": "Budgetary discharge",
     "IMM": "Parliamentary immunity matter",
     "REG": "Parliament's Rules of Procedure",
-    "QMV": "Qualified majority voting — 55% of member states representing at least 65% of the EU population",
+    "QMV": "Qualified majority voting: 55% of member states representing at least 65% of the EU population",
     "OEIL": "The Parliament's Legislative Observatory (procedure files)",
     "CELEX": "EUR-Lex's unique identifier for an EU legal document",
     "PI": "Your Policy Interests"

@@ -342,13 +342,27 @@ button {
   line-height: var(--line-height-normal);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-input[type="url"],
-textarea,
-select {
+/* Base input styling, at ZERO specificity.
+ *
+ * `input[type="search"]` scores (0,1,1), which beats a component's own single
+ * class (0,1,0). Every component that styled an input through one class was
+ * therefore silently losing its padding to this rule. Where the component also
+ * drew a leading magnifier at `position: absolute; left: 0.75rem`, the text
+ * started underneath the icon and the placeholder rendered as "(icon)earch
+ * events..." — reproduced in My Tracked Files, Policy Interests and My EU
+ * Calendar, and latent anywhere else the pattern is used.
+ *
+ * Wrapping the selectors in `:where()` drops this block to (0,0,0), so it
+ * still supplies defaults for unstyled inputs while any component class wins.
+ * That is what every one of those components already intended.
+ */
+:where(input[type="text"]),
+:where(input[type="email"]),
+:where(input[type="password"]),
+:where(input[type="search"]),
+:where(input[type="url"]),
+:where(textarea),
+:where(select) {
   width: 100%;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-border);

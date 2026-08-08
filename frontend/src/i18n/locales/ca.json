@@ -4354,7 +4354,7 @@
       "webTitle": "A claude.ai (web) o a l'app d'escriptori",
       "webBody": "Obre Configuració → Connectors → Afegeix un connector personalitzat. Enganxa l'URL de sota (ja inclou la teva clau API) i deixa en blanc els camps d'OAuth. Genera una clau a brubru.beresol.eu/api i substitueix brubru_live_YOUR_KEY.",
       "webUrlLabel": "URL del connector (inclou la teva clau)",
-      "cfgTitle": "O — fitxer de configuració de Claude Desktop"
+      "cfgTitle": "O: fitxer de configuració de Claude Desktop"
     },
     "cursor": {
       "title": "Cursor",

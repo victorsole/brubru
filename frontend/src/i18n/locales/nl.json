@@ -3463,7 +3463,7 @@
       "webTitle": "In claude.ai (web) of de desktop-app",
       "webBody": "Open Instellingen → Connectors → Aangepaste connector toevoegen. Plak de onderstaande URL (bevat al je API-sleutel) en laat de OAuth-velden leeg. Genereer een sleutel op brubru.beresol.eu/api en vervang brubru_live_YOUR_KEY.",
       "webUrlLabel": "Connector-URL (bevat je sleutel)",
-      "cfgTitle": "Of — Claude Desktop-configuratiebestand"
+      "cfgTitle": "Of: Claude Desktop-configuratiebestand"
     },
     "cursor": {
       "title": "Cursor",

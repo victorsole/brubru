@@ -63,10 +63,21 @@ class InstitutionType(str, Enum):
 
 
 class EventType(str, Enum):
+    """Mirror of models.eu_calendar.EventTypeEnum.
+
+    These two enums must stay in step. Migration 203 added
+    `external_activities` (the EP's constituency weeks, the fourth working-week
+    type) to the database enum and the ORM, but not here — so every
+    /api/eu-calendar/ response containing a constituency week failed Pydantic
+    validation and the endpoint returned 500. My EU Calendar showed nothing for
+    any month containing one, roughly nine weeks a year.
+    """
+
     PLENARY_SESSION = "plenary_session"
     COMMITTEE_WEEK = "committee_week"
     COMMITTEE_MEETING = "committee_meeting"
     GROUP_WEEK = "group_week"
+    EXTERNAL_ACTIVITIES = "external_activities"
     RECESS = "recess"
     COUNCIL_MEETING = "council_meeting"
     INFORMAL_MEETING = "informal_meeting"

@@ -36,9 +36,11 @@ export function PlenaryAgendaTab() {
 
   return (
     <div className="plen-tab">
+      {/* The title uses the same string as the sidebar, which reads
+          "Plenary Order of Business" (no dash). */}
       <MeubHeader
         icon={mdiGavel}
-        title={t('bubble.plen.title', 'Plenary - Order of Business')}
+        title={t('bubble.tabs.plenaryAgenda', 'Plenary Order of Business')}
         subtitle={t('bubble.plen.subtitle', 'Upcoming plenary sittings and the dossiers recently adopted on your interests.')}
       />
 

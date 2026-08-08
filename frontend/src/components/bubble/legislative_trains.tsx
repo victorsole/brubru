@@ -173,9 +173,12 @@ export const LegislativeTrains = () => {
   return (
     <div className="legislative-trains">
       {/* Header */}
+      {/* The title uses the same string the sidebar uses. Its own
+          'trains.title' read "EU Legislative Trains" while the navigation
+          read "Legislative Train: state of play". */}
       <MeubHeader
         icon={mdiTrain}
-        title={t('trains.title')}
+        title={t('bubble.tabs.legislativeTrain', 'Legislative Train: state of play')}
         subtitle={t('trains.subtitle', "The Commission's full legislative programme, grouped by political priority. Browse every dossier and track the ones you care about. For just the files you already follow, see My Tracked Files.")}
         aside={(
           <div className="legislative-trains__stats">

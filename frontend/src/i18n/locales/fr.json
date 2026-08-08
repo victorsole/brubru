@@ -4354,7 +4354,7 @@
       "webTitle": "Dans claude.ai (web) ou l'app de bureau",
       "webBody": "Ouvrez Paramètres → Connecteurs → Ajouter un connecteur personnalisé. Collez l'URL ci-dessous (elle contient déjà votre clé API) et laissez les champs OAuth vides. Générez une clé sur brubru.beresol.eu/api et remplacez brubru_live_YOUR_KEY.",
       "webUrlLabel": "URL du connecteur (contient votre clé)",
-      "cfgTitle": "Ou — fichier de configuration Claude Desktop"
+      "cfgTitle": "Ou: fichier de configuration Claude Desktop"
     },
     "cursor": {
       "title": "Cursor",

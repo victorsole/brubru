@@ -242,10 +242,11 @@ export const AmendmentsTab = () => {
       {/* My Amendments sub-tab (existing content) */}
       {activeSubTab === 'my-amendments' && (
       <>
-      {/* Header */}
+      {/* Header. The title uses the same string as the sidebar: it read
+          "My Amendments" here and "Amendments" in the navigation. */}
       <MeubHeader
         icon={mdiFileEdit}
-        title={t('amendmentsTab.myAmendments')}
+        title={t('bubble.amendments', 'Amendments')}
         aside={
           <>
             <div className="amendments-tab__summary">
