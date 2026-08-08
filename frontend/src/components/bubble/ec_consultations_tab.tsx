@@ -9,7 +9,8 @@
  * Created: January 2026
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
@@ -84,6 +85,9 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showDetail, setShowDetail] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openedConsultationRef = useRef<string | null>(null);
+  const [openedFromLink, setOpenedFromLink] = useState(false);
 
   // Load data on mount
   useEffect(() => {
@@ -91,6 +95,37 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
     fetchReferenceData();
     fetchTrackedConsultations();
   }, []);
+
+  // Deep-link: ?consultation=<id> opens that consultation's detail modal
+  // directly. Mirrors the ?file=<id> pattern in My Tracked Files, and is how
+  // an Overview "Voice opportunities" line lands on the right consultation.
+  useEffect(() => {
+    const id = searchParams.get('consultation');
+    if (!id || openedConsultationRef.current === id) return;
+    openedConsultationRef.current = id;
+    void fetchConsultationDetail(id).then(() => {
+      setShowDetail(true);
+      setOpenedFromLink(true);
+    });
+  }, [searchParams, fetchConsultationDetail]);
+
+  // Once the modal is closed, strip the `consultation` param. Without this the
+  // user is stuck with the long URL and the modal reopens on every visit.
+  //
+  // The guard is `openedFromLink`, set only after the detail has actually
+  // loaded and the modal is showing. Guarding on the ref instead would strip
+  // the param in the same commit that reads it (the ref is assigned
+  // synchronously, `showDetail` only flips once the fetch resolves), which
+  // cancels the deep link before it ever opens.
+  useEffect(() => {
+    if (!openedFromLink || showDetail) return;
+    setOpenedFromLink(false);
+    openedConsultationRef.current = null;
+    if (!searchParams.get('consultation')) return;
+    const next = new URLSearchParams(searchParams);
+    next.delete('consultation');
+    setSearchParams(next, { replace: true });
+  }, [openedFromLink, showDetail, searchParams, setSearchParams]);
 
   // Handle search
   const handleSearch = useCallback(() => {

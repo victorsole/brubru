@@ -25,7 +25,9 @@ import {
   mdiAccountCircleOutline,
   mdiChevronUp,
   mdiChevronDown,
+  mdiChevronRight,
   mdiDragVertical,
+  mdiOpenInNew,
 } from '@mdi/js';
 
 import {
@@ -39,9 +41,16 @@ import {
   type VoiceOpportunityItem,
 } from '../../hooks/use_dashboard';
 import { useAuth } from '../../hooks/use_auth';
+import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { ProactiveOpener } from '../shared/proactive_opener';
+import { LegislativeFileDetail } from './legislative_file_detail';
 import './dashboard_cockpit.css';
 import { uiDateLocale } from '../../i18n/config';
+
+// Canonical EUR-Lex deep link for a CELEX that came from the database. Matches
+// the pattern already used in parliamentary_questions_tab / consultation_detail.
+const eurLexUrl = (celex: string) =>
+  `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${encodeURIComponent(celex)}`;
 
 const formatDate = (iso?: string | null) => {
   if (!iso) return '';
@@ -306,10 +315,65 @@ const TileShell = ({
   );
 };
 
-const renderNewThisWeekItem = (item: NewThisWeekItem) => (
-  <li key={item.carriage_id} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+/**
+ * One cockpit line.
+ *
+ * Every item that has a real destination becomes a real control: an in-app
+ * button when the destination lives inside Brubru (the legislative file modal,
+ * a sibling tab), an anchor when it lives outside (EUR-Lex, an institutional
+ * source page). Items with no destination stay plain text — we never dress
+ * something up as clickable when there is nowhere to go.
+ *
+ * The inner markup uses spans, not divs: the row body sits inside a <button>
+ * or an <a>, both of which take phrasing content only. The classes carry an
+ * explicit `display`, so the elements render exactly as before.
+ */
+const CockpitRow = ({
+  href,
+  onOpen,
+  children,
+}: {
+  href?: string | null;
+  onOpen?: () => void;
+  children: React.ReactNode;
+}) => {
+  if (!href && !onOpen) {
+    return <li className="dashboard-cockpit__item">{children}</li>;
+  }
+  const body = (
+    <>
+      <span className="dashboard-cockpit__item-body">{children}</span>
+      <Icon
+        path={href ? mdiOpenInNew : mdiChevronRight}
+        size={href ? 0.6 : 0.75}
+        className="dashboard-cockpit__item-go"
+      />
+    </>
+  );
+  return (
+    <li className="dashboard-cockpit__item dashboard-cockpit__item--clickable">
+      {href ? (
+        <a
+          className="dashboard-cockpit__item-hit"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {body}
+        </a>
+      ) : (
+        <button type="button" className="dashboard-cockpit__item-hit" onClick={onOpen}>
+          {body}
+        </button>
+      )}
+    </li>
+  );
+};
+
+const renderNewThisWeekItem = (item: NewThisWeekItem, openFile: (id: string) => void) => (
+  <CockpitRow key={item.carriage_id} onOpen={() => openFile(item.carriage_id)}>
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       {item.procedure_ref && (
         <span className="dashboard-cockpit__item-pill">
           {item.procedure_ref}
@@ -328,14 +392,20 @@ const renderNewThisWeekItem = (item: NewThisWeekItem) => (
           {tag}
         </span>
       ))}
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
-const renderTrackedFileMovingItem = (item: TrackedFileMovingItem) => (
-  <li key={`${item.carriage_id}-${item.changed_at ?? ''}`} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+const renderTrackedFileMovingItem = (
+  item: TrackedFileMovingItem,
+  openFile: (id: string) => void,
+) => (
+  <CockpitRow
+    key={`${item.carriage_id}-${item.changed_at ?? ''}`}
+    onOpen={() => openFile(item.carriage_id)}
+  >
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       {item.procedure_ref && (
         <span className="dashboard-cockpit__item-pill">
           {item.procedure_ref}
@@ -357,28 +427,34 @@ const renderTrackedFileMovingItem = (item: TrackedFileMovingItem) => (
           {formatDate(item.changed_at)}
         </span>
       )}
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
-const renderPositionStressItem = (item: PositionStressItem) => (
-  <li key={`${item.carriage_id}-${item.detected_at ?? ''}`} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+const renderPositionStressItem = (
+  item: PositionStressItem,
+  openFile: (id: string) => void,
+) => (
+  <CockpitRow
+    key={`${item.carriage_id}-${item.detected_at ?? ''}`}
+    onOpen={() => openFile(item.carriage_id)}
+  >
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       {item.procedure_ref && (
         <span className="dashboard-cockpit__item-pill">
           {item.procedure_ref}
         </span>
       )}
       <span className="dashboard-cockpit__item-detail">{item.detail}</span>
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
 const renderCalendarEventItem = (item: CalendarEventItem) => (
-  <li key={item.event_id} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+  <CockpitRow key={item.event_id} href={item.source_url}>
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       <span className="dashboard-cockpit__item-pill">
         {formatDate(item.start_date)}
         {item.end_date && item.end_date !== item.start_date
@@ -395,14 +471,14 @@ const renderCalendarEventItem = (item: CalendarEventItem) => (
           {formatStatus(item.event_type)}
         </span>
       )}
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
 const renderComplianceItem = (item: ComplianceSignalItem) => (
-  <li key={item.eu_law_id} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+  <CockpitRow key={item.eu_law_id} href={item.celex ? eurLexUrl(item.celex) : null}>
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       {item.celex && (
         <span className="dashboard-cockpit__item-pill">{item.celex}</span>
       )}
@@ -416,14 +492,20 @@ const renderComplianceItem = (item: ComplianceSignalItem) => (
           adopted {formatDate(item.adopted_on)}
         </span>
       )}
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
-const renderVoiceItem = (item: VoiceOpportunityItem) => (
-  <li key={item.consultation_id} className="dashboard-cockpit__item">
-    <div className="dashboard-cockpit__item-title">{item.title}</div>
-    <div className="dashboard-cockpit__item-meta">
+const renderVoiceItem = (
+  item: VoiceOpportunityItem,
+  openConsultation: (id: string) => void,
+) => (
+  <CockpitRow
+    key={item.consultation_id}
+    onOpen={() => openConsultation(item.consultation_id)}
+  >
+    <span className="dashboard-cockpit__item-title">{item.title}</span>
+    <span className="dashboard-cockpit__item-meta">
       {item.initiative_id && (
         <span className="dashboard-cockpit__item-pill">
           {item.initiative_id}
@@ -437,8 +519,8 @@ const renderVoiceItem = (item: VoiceOpportunityItem) => (
             : ''}
         </span>
       )}
-    </div>
-  </li>
+    </span>
+  </CockpitRow>
 );
 
 export const DashboardCockpit = () => {
@@ -446,6 +528,20 @@ export const DashboardCockpit = () => {
   const navigate = useNavigate();
   const { data, isLoading, error, fetchTiles } = useDashboard();
   const { isAuthenticated, user } = useAuth();
+  const fetchFileDetail = useLegislativeTrains((s) => s.fetchFileDetail);
+
+  // Opening a cockpit line is the same gesture as opening it from My Tracked
+  // Files: the shared legislative-file modal, mounted once at the bottom of
+  // this component. Consultations have their own modal, which lives in the
+  // consultations tab, so we deep-link there and let it open on arrival.
+  const openFile = (carriageId: string) => {
+    void fetchFileDetail(carriageId);
+  };
+  const openConsultation = (consultationId: string) => {
+    navigate(
+      `/my-eu-bubble?tab=consultations&consultation=${encodeURIComponent(consultationId)}`,
+    );
+  };
   const profileSignature = `${user?.policy_interests ?? ''}|${(user?.sectors || []).join(',')}|${user?.country ?? ''}|${user?.organization ?? ''}|${user?.role_title ?? ''}`;
 
   useEffect(() => {
@@ -540,17 +636,23 @@ export const DashboardCockpit = () => {
   const renderItems = (key: TileKey) => {
     switch (key) {
       case 'new_this_week':
-        return t.new_this_week.items.map(renderNewThisWeekItem);
+        return t.new_this_week.items.map((i) => renderNewThisWeekItem(i, openFile));
       case 'tracked_files_moving':
-        return t.tracked_files_moving.items.map(renderTrackedFileMovingItem);
+        return t.tracked_files_moving.items.map((i) =>
+          renderTrackedFileMovingItem(i, openFile),
+        );
       case 'positions_under_stress':
-        return t.positions_under_stress.items.map(renderPositionStressItem);
+        return t.positions_under_stress.items.map((i) =>
+          renderPositionStressItem(i, openFile),
+        );
       case 'next_seven_days':
         return t.next_seven_days.items.map(renderCalendarEventItem);
       case 'compliance_signals':
         return t.compliance_signals.items.map(renderComplianceItem);
       case 'voice_opportunities':
-        return t.voice_opportunities.items.map(renderVoiceItem);
+        return t.voice_opportunities.items.map((i) =>
+          renderVoiceItem(i, openConsultation),
+        );
       default:
         return null;
     }
@@ -603,6 +705,13 @@ export const DashboardCockpit = () => {
           );
         })}
       </div>
+
+      {/* Shared legislative-file modal, opened by clicking any file line above.
+          Reads `selectedFile` from the legislative-trains store and renders
+          nothing when empty, so mounting it here is free. My Tracked Files and
+          the Legislative Train mount their own; those tabs never render at the
+          same time as Overview, so there is never a second copy on screen. */}
+      <LegislativeFileDetail />
     </section>
   );
 };

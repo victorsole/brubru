@@ -208,6 +208,80 @@
   padding-bottom: 0;
 }
 
+/* ---- Clickable rows ----
+   A cockpit line that has a destination is a real button (in-app modal) or a
+   real anchor (external source). The hit area spans the whole row so the
+   target is the line, not the words. */
+
+.dashboard-cockpit__item--clickable {
+  padding: 0;
+}
+
+.dashboard-cockpit__item-hit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.5rem 0.55rem 0.4rem;
+  margin: 0 -0.5rem 0 -0.4rem;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dashboard-cockpit__item--clickable:last-child .dashboard-cockpit__item-hit {
+  padding-bottom: 0.2rem;
+}
+
+.dashboard-cockpit__item-body {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-cockpit__item-go {
+  flex-shrink: 0;
+  color: #b3c0cf;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.dashboard-cockpit__item-hit:hover,
+.dashboard-cockpit__item-hit:focus-visible {
+  background: rgba(6, 147, 227, 0.07);
+}
+
+.dashboard-cockpit__item-hit:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 1px;
+}
+
+.dashboard-cockpit__item-hit:hover .dashboard-cockpit__item-title,
+.dashboard-cockpit__item-hit:focus-visible .dashboard-cockpit__item-title {
+  color: #0570a8;
+}
+
+.dashboard-cockpit__item-hit:hover .dashboard-cockpit__item-go,
+.dashboard-cockpit__item-hit:focus-visible .dashboard-cockpit__item-go {
+  color: #0693e3;
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-cockpit__item-hit,
+  .dashboard-cockpit__item-go {
+    transition: none;
+  }
+  .dashboard-cockpit__item-hit:hover .dashboard-cockpit__item-go {
+    transform: none;
+  }
+}
+
 .dashboard-cockpit__item-title {
   font-size: 0.9rem;
   font-weight: 500;
