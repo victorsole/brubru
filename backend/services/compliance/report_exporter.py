@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 from pathlib import Path
 from datetime import datetime
+from sqlalchemy import case
 from sqlalchemy.orm import Session
 
 try:
@@ -95,7 +96,15 @@ class ReportExporter:
             GapFinding.analysis_id == analysis_id
         ).order_by(
             GapFinding.priority,
-            LawRequirement.criticality.desc()
+            # criticality is free text: DESC sorts alphabetically and puts 'recommended'
+            # above 'critical'. Order by severity explicitly. Mirrors CRITICALITY_ORDER
+            # in api/eu_law_comply.py.
+            case(
+                (LawRequirement.criticality == 'critical', 0),
+                (LawRequirement.criticality == 'important', 1),
+                (LawRequirement.criticality == 'recommended', 2),
+                else_=3,
+            )
         ).all()
         
         # Create document

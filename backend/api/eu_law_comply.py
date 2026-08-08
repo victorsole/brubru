@@ -6,7 +6,7 @@ Handles compliance checking, gap analysis, and requirement extraction for EU law
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func
+from sqlalchemy import and_, or_, func, case
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 import logging
@@ -31,6 +31,19 @@ from services.compliance.report_exporter import ReportExporter
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/eu-law-comply", tags=["eu-law-comply"])
+
+
+# Severity ordering. `criticality` is a free-text column, so ORDER BY criticality DESC
+# sorts ALPHABETICALLY -- which put 'recommended' first and buried 'critical' last, the
+# exact inverse of what a compliance user needs. Always order by this expression, never
+# by the raw column. The vocabulary is normalised to these three values by
+# scripts/normalise_requirement_criticality.py; anything unrecognised sorts last.
+CRITICALITY_ORDER = case(
+    (LawRequirement.criticality == 'critical', 0),
+    (LawRequirement.criticality == 'important', 1),
+    (LawRequirement.criticality == 'recommended', 2),
+    else_=3,
+)
 
 
 # ============================================================================
@@ -140,18 +153,26 @@ def list_clusters(
 
         clusters = query.order_by(LawCluster.id).all()
 
-        # Enrich with counts
+        # Counts come from two grouped queries, not two per cluster. The previous
+        # implementation issued 2*N COUNT round-trips (122 for 61 clusters), which cost
+        # ~3.4s in production and ~24s against a remote DB from a dev machine, on the
+        # endpoint that renders the EU Law Comply landing page. Keep this aggregated.
+        law_counts = dict(
+            db.query(ClusterLaw.cluster_id, func.count(ClusterLaw.law_id))
+            .group_by(ClusterLaw.cluster_id)
+            .all()
+        )
+        requirement_counts = dict(
+            db.query(LawRequirement.cluster_id, func.count(LawRequirement.id))
+            .filter(LawRequirement.cluster_id.isnot(None))
+            .group_by(LawRequirement.cluster_id)
+            .all()
+        )
+
         result = []
         for cluster in clusters:
-            # Count laws in cluster
-            law_count = db.query(func.count(ClusterLaw.law_id)).filter(
-                ClusterLaw.cluster_id == cluster.id
-            ).scalar()
-
-            # Count requirements for this cluster
-            requirement_count = db.query(func.count(LawRequirement.id)).filter(
-                LawRequirement.cluster_id == cluster.id
-            ).scalar()
+            law_count = law_counts.get(cluster.id, 0)
+            requirement_count = requirement_counts.get(cluster.id, 0)
 
             result.append({
                 'id': cluster.id,
@@ -368,7 +389,8 @@ async def get_cluster_requirements(
             query = query.filter(LawRequirement.criticality == criticality)
 
         requirements_with_laws = query.order_by(
-            LawRequirement.criticality.desc(),
+            CRITICALITY_ORDER,
+            LawRequirement.deadline.asc().nullslast(),
             LawRequirement.article
         ).all()
 
@@ -851,7 +873,7 @@ async def get_analysis_results(
             GapFinding.analysis_id == analysis_id
         ).order_by(
             GapFinding.priority,
-            LawRequirement.criticality.desc()
+            CRITICALITY_ORDER
         ).all()
 
         findings = []
