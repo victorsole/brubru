@@ -394,3 +394,288 @@
   font-size: 0.68rem;
   font-weight: 700;
 }
+
+/* ===========================================================================
+   Compact catalogue (rebuild, 8 Aug 2026)
+   ---------------------------------------------------------------------------
+   Cards were unbounded, so height was driven by however much legal scope a
+   seeder had written: a China BEV card ran ~900px of CN codes beside a 377px
+   one and the grid read as rubble. These rules clamp every card to the same
+   height and move description/scope to the cluster page where they belong.
+   Overrides earlier rules in this file by source order -- keep this block last.
+   =========================================================================== */
+
+.law-browser__grid {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.cluster-card {
+  padding: 1.15rem 1.25rem;
+  border-width: 1px;
+  border-radius: 10px;
+  min-height: 186px;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.cluster-card__title {
+  font-size: 1.02rem;
+  line-height: 1.32;
+  margin: 0;
+  /* two lines max, then ellipsis: titles run to "India and Indonesia Stainless
+     Steel Countervailing Duties (Reg 2022/433)" and must not set card height */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cluster-card__policy-area {
+  margin: 0;
+  font-size: 0.76rem;
+  padding: 0.16rem 0.5rem;
+  align-self: flex-start;
+}
+
+.cluster-card__description {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  margin: 0;
+  color: #56606d;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.cluster-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.7rem;
+  border-top: 1px solid #e8edf3;
+}
+
+.cluster-card__stats {
+  display: flex;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  flex-wrap: wrap;
+}
+
+.cluster-card__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: #5a6472;
+  white-space: nowrap;
+}
+
+.cluster-card__eucanon-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #4a5aa8;
+  background: #eef1fb;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.cluster-card__eucanon-icon:hover {
+  background: #dfe4f7;
+}
+
+.cluster-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #4a3f9e;
+  background: #ece9fb;
+  border-radius: 20px;
+  padding: 0.16rem 0.55rem;
+}
+
+/* Section head: title and count on one row instead of two stacked blocks. */
+.law-browser__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.law-browser__section-head .law-browser__section-title {
+  margin: 0;
+}
+
+.law-browser__results-count {
+  margin: 0;
+  padding: 0;
+  font-size: 0.83rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+}
+
+.law-browser__section {
+  margin-bottom: 1.75rem;
+}
+
+.law-browser__section-title {
+  font-size: 1.05rem;
+  margin-bottom: 0.9rem;
+}
+
+.law-browser__show-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.7rem 1rem;
+  background: #f4f6fb;
+  border: 1px dashed #c7d0e4;
+  border-radius: 10px;
+  color: #45507a;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.law-browser__show-more:hover {
+  background: #eaeefa;
+  border-color: #a9b6d8;
+}
+
+.law-browser__search {
+  position: relative;
+}
+
+.law-browser__search-clear {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8a93a3;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+.law-browser__search-clear:hover { color: #4a5568; }
+
+.law-browser__filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+/* 900px: two 3-col grids would cram to ~245px each between 768 and 1024.
+   auto-fill on a 290px min handles it, but pin the gap so cards keep breathing. */
+@media (max-width: 900px) {
+  .law-browser__grid { gap: 0.85rem; }
+}
+
+@media (max-width: 767px) {
+  .law-browser__grid { grid-template-columns: 1fr; }
+  .cluster-card { min-height: 0; }
+  .law-browser__filter-label-text { display: none; }
+}
+
+/* Scope the magnifier positioning to the leading icon only. The clear button
+   added in the rebuild also contains a .mdi, and the unscoped
+   `.law-browser__search .mdi { position:absolute; left:1rem }` rule dragged it
+   on top of the search text. */
+.law-browser__search > .mdi-magnify {
+  position: absolute;
+  left: 0.85rem;
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+.law-browser__search-clear .mdi {
+  position: static;
+  left: auto;
+  font-size: 1.1rem;
+}
+
+.law-browser__search-input {
+  padding: 0.75rem 2.25rem 0.75rem 2.6rem;
+  font-size: 0.92rem;
+  border-width: 1px;
+  border-radius: 10px;
+}
+
+/* The global design-system rule
+     input[type="text"], input[type="email"], ... { padding: var(--space-3) var(--space-4) }
+   has specificity (0,1,1) and beats a bare `.law-browser__search-input` (0,1,0).
+   That is why the component's `padding-left: 3rem` never applied and the
+   magnifier icon has always sat on top of the placeholder text. Qualify the
+   selector with the wrapper + element so it wins (0,2,1). Any component input
+   that needs its own padding in this codebase needs the same treatment. */
+.law-browser__search input.law-browser__search-input {
+  padding: 0.75rem 2.25rem 0.75rem 2.6rem;
+  border-radius: 10px;
+}
+
+/* Deterministic card box.
+   -webkit-line-clamp alone was not enough: the card is a flex column with a
+   min-height, so flex distributed the leftover space and the description got
+   clipped mid-glyph against the footer divider instead of ellipsising, and
+   one-line vs two-line titles produced three different card heights (203 /
+   222 / 244px). Pin the title and description to a fixed number of lines so
+   every card is the same height and the text always ends in an ellipsis. */
+.cluster-card__title {
+  font-size: 1.02rem;
+  line-height: 1.32;
+  height: calc(1.02rem * 1.32 * 2);   /* exactly two lines */
+  flex: 0 0 auto;
+}
+
+.cluster-card__description {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  height: calc(0.86rem * 1.45 * 2);   /* exactly two lines */
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  flex: 0 0 auto;
+  margin-bottom: 0.35rem;
+}
+
+.cluster-card {
+  min-height: 0;
+  height: 100%;
+}
+
+/* Mobile: single column, so a taller card costs nothing and full titles read
+   better than clipped ones. */
+@media (max-width: 767px) {
+  .cluster-card__title,
+  .cluster-card__description {
+    height: auto;
+  }
+  .cluster-card__title { -webkit-line-clamp: 3; line-clamp: 3; }
+  .cluster-card__description { -webkit-line-clamp: 3; line-clamp: 3; }
+}

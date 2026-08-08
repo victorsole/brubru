@@ -18,6 +18,9 @@ import {
   mdiTrophyOutline,
   mdiArrowRight,
   mdiCheckCircleOutline,
+  mdiChevronDown,
+  mdiChevronUp,
+  mdiAlertCircleOutline,
 } from '@mdi/js';
 
 import { useAuth } from '../../hooks/use_auth';
@@ -80,13 +83,24 @@ const recommendationPath = (axis: string): string => {
   }
 };
 
-export const ComplianceMaturity = () => {
+interface ComplianceMaturityProps {
+  /**
+   * Render collapsed by default, showing only the one-line summary until the
+   * user opens it. The EU Law Comply landing page passes this: the expanded
+   * card is 714px tall (852px on mobile) and sat above the first cluster, so
+   * the page opened with a full screen of chrome and no product.
+   */
+  collapsible?: boolean;
+}
+
+export const ComplianceMaturity = ({ collapsible = false }: ComplianceMaturityProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState<MaturityData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(!collapsible);
 
   const load = () => {
     if (!isAuthenticated) return;
@@ -135,13 +149,16 @@ export const ComplianceMaturity = () => {
   }
   if (error) {
     return (
-      <section className="compliance-maturity compliance-maturity--loading">
-        <p style={{ color: '#b56500' }}>{error}</p>
+      <section
+        className="compliance-maturity compliance-maturity--loading compliance-maturity--error"
+        role="alert"
+      >
+        <Icon path={mdiAlertCircleOutline} size={1} color="#b56500" />
+        <p className="compliance-maturity__error-text">{error}</p>
         <button
           type="button"
           className="compliance-maturity__rec-cta"
           onClick={load}
-          style={{ marginTop: '0.5rem' }}
         >
           {t('maturity.tryAgain', 'Try again')}
         </button>
@@ -155,10 +172,28 @@ export const ComplianceMaturity = () => {
 
   return (
     <section
-      className="compliance-maturity"
+      className={`compliance-maturity${collapsible ? ' compliance-maturity--collapsible' : ''}${
+        collapsible && !isOpen ? ' compliance-maturity--collapsed' : ''
+      }`}
       aria-label={t('shared.yourMaturityScore', 'Your compliance maturity score')}
     >
-      <header className="compliance-maturity__header">
+      <header
+        className="compliance-maturity__header"
+        onClick={collapsible ? () => setIsOpen((v) => !v) : undefined}
+        role={collapsible ? 'button' : undefined}
+        tabIndex={collapsible ? 0 : undefined}
+        aria-expanded={collapsible ? isOpen : undefined}
+        onKeyDown={
+          collapsible
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsOpen((v) => !v);
+                }
+              }
+            : undefined
+        }
+      >
         <Icon path={mdiTrophyOutline} size={1.1} color={tierColour} />
         <div className="compliance-maturity__header-text">
           <h2>{t('shared.yourMaturity', 'Your compliance maturity')}</h2>
@@ -171,8 +206,38 @@ export const ComplianceMaturity = () => {
           <span className="compliance-maturity__score-value">{data.score}</span>
           <span className="compliance-maturity__score-max">/{data.max_score}</span>
         </div>
+        {collapsible && (
+          <Icon
+            path={isOpen ? mdiChevronUp : mdiChevronDown}
+            size={1}
+            className="compliance-maturity__chevron"
+          />
+        )}
       </header>
 
+      {!isOpen && (
+        <div className="compliance-maturity__collapsed-summary">
+          {sortedAxes.map((axis) => (
+            <span key={axis.name} className="compliance-maturity__mini-axis">
+              <span className="compliance-maturity__mini-label">
+                {t(`maturity.axis.${axis.name}`, AXIS_LABEL[axis.name] || axis.name)}
+              </span>
+              <span className="compliance-maturity__mini-bar">
+                <span
+                  className="compliance-maturity__mini-fill"
+                  style={{
+                    width: `${Math.round((axis.score / axis.max_score) * 100)}%`,
+                    background: tierColour,
+                  }}
+                />
+              </span>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {isOpen && (
+      <>
       <div className="compliance-maturity__tier-badge" style={{ background: tierColour }}>
         {t(`maturity.tier.${data.tier}`, data.tier)}
       </div>
@@ -247,6 +312,8 @@ export const ComplianceMaturity = () => {
         <div className="compliance-maturity__intro">
           {t('maturity.zeroExplainer', 'You are at zero because Brubru does not yet have signals on your activity. The recommendations above each unlock 5-10 points the moment you act on them.')}
         </div>
+      )}
+      </>
       )}
     </section>
   );

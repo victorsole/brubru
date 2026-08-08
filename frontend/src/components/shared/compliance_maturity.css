@@ -8,12 +8,50 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+/* Keep the card opaque. This previously set background to rgba(0,0,0,0.025),
+   which overrode the base card's solid #fff -- and because EU Law Comply puts a
+   full-bleed EU Parliament photograph behind the page, the loading and error
+   text rendered on top of the photo and was effectively unreadable. Any state
+   variant of this card must stay opaque. */
 .compliance-maturity--loading {
-  background: rgba(0, 0, 0, 0.025);
-  color: #666;
+  background: #fff;
+  color: #4a4a4a;
   font-size: 0.9rem;
   text-align: center;
-  padding: 1rem 1.2rem;
+  padding: 1.1rem 1.2rem;
+}
+
+.compliance-maturity--error {
+  background: #fffaf3;
+  border-color: #e8c48a;
+  border-left: 4px solid #b56500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.compliance-maturity__error-text {
+  color: #7a4600;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.compliance-maturity--error .compliance-maturity__rec-cta {
+  margin-top: 0;
+  flex-shrink: 0;
+  background: #b56500;
+  border-color: #b56500;
+  color: #fff;
+}
+
+.compliance-maturity--error .compliance-maturity__rec-cta:hover {
+  background: #96560a;
+  border-color: #96560a;
 }
 
 .compliance-maturity__header {
@@ -217,4 +255,83 @@
   font-size: 0.85rem;
   color: #444;
   line-height: 1.45;
+}
+
+/* ---------------------------------------------------------------------------
+   Collapsible variant (EU Law Comply landing page, 8 Aug 2026).
+   Expanded the card is 714px tall on desktop and 852px on mobile, and it sat
+   above the first cluster card -- so the page opened with a full screen of
+   chrome and zero product. Collapsed it is a single row plus four mini bars,
+   which keeps the score glanceable without owning the fold.
+   --------------------------------------------------------------------------- */
+
+.compliance-maturity--collapsible .compliance-maturity__header {
+  cursor: pointer;
+  user-select: none;
+  align-items: center;
+}
+
+.compliance-maturity--collapsible .compliance-maturity__header:hover {
+  opacity: 0.85;
+}
+
+.compliance-maturity--collapsible .compliance-maturity__header:focus-visible {
+  outline: 2px solid #563ea3;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.compliance-maturity__chevron {
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+  color: #6b6b6b;
+}
+
+.compliance-maturity--collapsed {
+  padding-bottom: 1rem;
+}
+
+.compliance-maturity__collapsed-summary {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.compliance-maturity__mini-axis {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.compliance-maturity__mini-label {
+  font-size: 0.78rem;
+  color: #5a5a5a;
+  white-space: nowrap;
+}
+
+.compliance-maturity__mini-bar {
+  flex: 1;
+  height: 5px;
+  background: #ececec;
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 40px;
+}
+
+.compliance-maturity__mini-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+
+@media (max-width: 767px) {
+  .compliance-maturity__collapsed-summary {
+    gap: 0.6rem 1rem;
+  }
+  .compliance-maturity__mini-axis {
+    flex: 1 1 100%;
+  }
 }

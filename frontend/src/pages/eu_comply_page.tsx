@@ -68,6 +68,21 @@ export interface GapFinding {
 
 type ViewState = 'select' | 'upload' | 'results';
 
+const ACCEPTED_EXTENSIONS = ['.pdf', '.docx', '.doc', '.txt'];
+
+const formatBytes = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const fileIcon = (name: string): string => {
+  const n = name.toLowerCase();
+  if (n.endsWith('.pdf')) return 'mdi-file-pdf-box';
+  if (n.endsWith('.docx') || n.endsWith('.doc')) return 'mdi-file-word-box';
+  return 'mdi-file-document-outline';
+};
+
 interface EUComplyPageProps {
   isSidebarOpen?: boolean;
   setIsSidebarOpen?: (open: boolean) => void;
@@ -80,8 +95,14 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
   const [selectedCluster, setSelectedCluster] = useState<LawCluster | null>(null);
   const [analysisResult, setAnalysisResult] = useState<ComplianceAnalysis | null>(null);
   const [uploadedDocuments, setUploadedDocuments] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState(true);
+  // Closed by default. The sidebar holds ~25% of the page width for the entire
+  // scroll length, and for every user without a past analysis it renders
+  // "No compliance analyses yet" -- an empty column beside the actual product.
+  // The header toggle opens it, and that state is remembered per session.
+  const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState('');
   const [isMobile, setIsMobile] = useState(false);
 
@@ -111,10 +132,35 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
     setViewState('upload');
     setAnalysisResult(null);
     setUploadedDocuments([]);
+    setUploadError(null);
   };
 
-  const handleDocumentUpload = (files: File[]) => {
-    setUploadedDocuments(files);
+  // Append rather than replace, and drop anything the backend would reject with
+  // a 400 anyway (it validates the same extension list). Dedupe on name+size so
+  // dropping the same file twice does not queue it twice.
+  const addFiles = (incoming: File[]) => {
+    const accepted = incoming.filter((f) =>
+      ACCEPTED_EXTENSIONS.some((ext) => f.name.toLowerCase().endsWith(ext))
+    );
+    const rejected = incoming.length - accepted.length;
+    if (rejected > 0) {
+      setUploadError(
+        t('comply.unsupportedFiles', {
+          defaultValue: '{{count}} file(s) skipped. Only PDF, DOCX and TXT can be analysed.',
+          count: rejected,
+        })
+      );
+    } else {
+      setUploadError(null);
+    }
+    setUploadedDocuments((prev) => {
+      const seen = new Set(prev.map((f) => `${f.name}:${f.size}`));
+      return [...prev, ...accepted.filter((f) => !seen.has(`${f.name}:${f.size}`))];
+    });
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedDocuments((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleAnalyzeCompliance = async () => {
@@ -151,7 +197,13 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       const analysisId = initialResult.id;
       const token = useAuth.getState().token;
       let attempts = 0;
-      const maxAttempts = 60; // 2 minutes max
+      // The backend checks requirements one at a time, ~4s each (two OpenAI
+      // calls per requirement). The old 60-attempt / 2-minute ceiling only fit
+      // clusters up to ~28 requirements, so 30 of the 62 packages -- including
+      // GDPR at 401 -- reported "Analysis timed out" while the backend was
+      // still running and would go on to complete successfully. Poll for 15
+      // minutes; the analysis is recoverable from history either way.
+      const maxAttempts = 450; // 15 minutes at 2s
 
       while (attempts < maxAttempts) {
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -190,6 +242,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
     setSelectedCluster(null);
     setAnalysisResult(null);
     setUploadedDocuments([]);
+    setUploadError(null);
   };
 
   const handleBackToUpload = () => {
@@ -255,7 +308,14 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
         </>
       )}
 
-      <div className="eu-comply-page__layout">
+      {/* The layout grid is `1fr 350px`. When the history sidebar is closed the
+          second column still reserved 350px, leaving a dead strip beside the
+          content. Collapse to a single column unless the sidebar is showing. */}
+      <div
+        className={`eu-comply-page__layout${
+          !isMobile && isHistorySidebarOpen ? '' : ' eu-comply-page__layout--full'
+        }`}
+      >
         <div className="eu-comply-page__container">
           {/* Header */}
           <div className="eu-comply-page__header">
@@ -285,9 +345,9 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
             </div>
           </div>
 
-        {/* Compliance Maturity card — only on the selection landing view,
-            so it does not clutter the analysis flow. */}
-        {viewState === 'select' && <ComplianceMaturity />}
+        {/* Compliance Maturity — only on the selection landing view, and
+            collapsed, so the score stays glanceable without owning the fold. */}
+        {viewState === 'select' && <ComplianceMaturity collapsible />}
 
         {/* Main Content */}
         {viewState === 'select' && (
@@ -304,55 +364,115 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
               {t('comply.backToClusters')}
             </button>
 
-            <div className="eu-comply-page__cluster-info">
-              <h2>{selectedCluster.name}</h2>
-              <div className="eu-comply-page__cluster-stats">
-                <div className="eu-comply-page__stat">
-                  <span className="mdi mdi-file-document-multiple"></span>
-                  <span>{selectedCluster.law_count} {t('comply.relatedLaws')}</span>
-                </div>
-                <div className="eu-comply-page__stat">
+            {/* Workspace header: the facts a user needs to confirm they picked
+                the right package, as chips rather than three stacked paragraphs.
+                The full scope text is behind a disclosure -- it runs to CN-code
+                length on several clusters and used to push the upload control
+                below the fold. */}
+            <div className="comply-workspace__head">
+              <h2 className="comply-workspace__title">{selectedCluster.name}</h2>
+              <div className="comply-workspace__chips">
+                <span className="comply-workspace__chip">
+                  <span className="mdi mdi-label-outline"></span>
+                  {selectedCluster.policy_area}
+                </span>
+                <span className="comply-workspace__chip">
+                  <span className="mdi mdi-file-document-multiple-outline"></span>
+                  {selectedCluster.law_count} {t('comply.relatedLaws')}
+                </span>
+                <span className="comply-workspace__chip comply-workspace__chip--accent">
                   <span className="mdi mdi-gavel"></span>
-                  <span>{selectedCluster.requirement_count} {t('comply.requirements')}</span>
-                </div>
+                  {selectedCluster.requirement_count} {t('comply.requirements')}
+                </span>
               </div>
-              <p className="eu-comply-page__cluster-description">
+              <p className="comply-workspace__description">
                 {selectedCluster.description}
               </p>
-              <p className="eu-comply-page__cluster-applicability">
-                <strong>{t('comply.appliesTo')}</strong> {selectedCluster.applicability}
-              </p>
+              {selectedCluster.applicability && (
+                <details className="comply-workspace__scope">
+                  <summary>{t('comply.appliesTo')}</summary>
+                  <p>{selectedCluster.applicability}</p>
+                </details>
+              )}
             </div>
 
-            <div className="eu-comply-page__upload-box">
-              <h3>{t('comply.uploadCompanyDocs')}</h3>
-              <p>{t('comply.uploadHint')}</p>
-
+            {/* Drag-and-drop zone. This was a raw <input type="file">, which is
+                unstyleable across browsers and read as an unfinished form. */}
+            <div
+              className={`comply-dropzone${isDragging ? ' comply-dropzone--active' : ''}${
+                uploadedDocuments.length ? ' comply-dropzone--compact' : ''
+              }`}
+              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                addFiles(Array.from(e.dataTransfer.files || []));
+              }}
+            >
               <input
+                id="comply-file-input"
                 type="file"
-                accept=".pdf,.docx,.txt"
+                accept=".pdf,.docx,.doc,.txt"
                 multiple
+                className="comply-dropzone__input"
                 onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  handleDocumentUpload(files);
+                  addFiles(Array.from(e.target.files || []));
+                  e.target.value = '';
                 }}
-                style={{ marginBottom: '1rem' }}
               />
+              <label htmlFor="comply-file-input" className="comply-dropzone__label">
+                <span className="mdi mdi-cloud-upload-outline comply-dropzone__icon"></span>
+                <span className="comply-dropzone__primary">
+                  {t('comply.dropzoneTitle', 'Drag your policy documents here')}
+                </span>
+                <span className="comply-dropzone__secondary">
+                  {t('comply.dropzoneBrowse', 'or click to browse')}
+                </span>
+                <span className="comply-dropzone__formats">
+                  {t('comply.dropzoneFormats', 'PDF, DOCX or TXT')}
+                </span>
+              </label>
+            </div>
 
-              {uploadedDocuments.length > 0 && (
-                <div className="eu-comply-page__uploaded-files">
-                  <h4>{t('comply.uploadedFiles')}</h4>
-                  <ul>
-                    {uploadedDocuments.map((file, idx) => (
-                      <li key={idx}>
-                        <span className="mdi mdi-file-document"></span>
-                        {file.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            {uploadError && (
+              <p className="comply-dropzone__error" role="alert">
+                <span className="mdi mdi-alert-circle-outline"></span>
+                {uploadError}
+              </p>
+            )}
 
+            {uploadedDocuments.length > 0 && (
+              <ul className="comply-filelist">
+                {uploadedDocuments.map((file, idx) => (
+                  <li className="comply-filelist__item" key={`${file.name}-${idx}`}>
+                    <span className={`mdi ${fileIcon(file.name)} comply-filelist__icon`}></span>
+                    <span className="comply-filelist__name" title={file.name}>{file.name}</span>
+                    <span className="comply-filelist__size">{formatBytes(file.size)}</span>
+                    <button
+                      type="button"
+                      className="comply-filelist__remove"
+                      onClick={() => removeFile(idx)}
+                      aria-label={t('comply.removeFile', { defaultValue: 'Remove {{name}}', name: file.name })}
+                    >
+                      <span className="mdi mdi-close"></span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="comply-actionbar">
+              <div className="comply-actionbar__summary">
+                {uploadedDocuments.length === 0
+                  ? t('comply.actionbarEmpty', 'Add at least one document to run the analysis')
+                  : t('comply.actionbarReady', {
+                      defaultValue:
+                        '{{docs}} document(s) will be checked against {{reqs}} requirements',
+                      docs: uploadedDocuments.length,
+                      reqs: selectedCluster.requirement_count,
+                    })}
+              </div>
               <button
                 className="eu-comply-page__analyze-button"
                 onClick={handleAnalyzeCompliance}
@@ -371,6 +491,17 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
                 )}
               </button>
             </div>
+
+            {isAnalyzing && (
+              <p className="comply-actionbar__note">
+                <span className="mdi mdi-information-outline"></span>
+                {t('comply.analysingNote', {
+                  defaultValue:
+                    'Checking {{reqs}} requirements one by one. Large packages can take several minutes; you can leave this page and reopen the analysis from your history.',
+                  reqs: selectedCluster.requirement_count,
+                })}
+              </p>
+            )}
           </div>
         )}
 
