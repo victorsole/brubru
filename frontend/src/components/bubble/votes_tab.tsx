@@ -726,7 +726,13 @@ export const VotesTab = () => {
           </div>
         ) : (
           <div className="votes-grid">
-            {vlItems.map((vl, i) => <VotingListCard key={vl.reference || `${vl.procedure_ref}-${i}`} vl={vl} />)}
+            {/* The index is always part of the key. `reference` is not unique:
+                several rows carry the literal string "Voting list" rather than
+                a document reference, which collided and made React log
+                "two children with the same key" and reuse the wrong card. */}
+            {vlItems.map((vl, i) => (
+              <VotingListCard key={`${vl.reference || vl.procedure_ref || 'vl'}-${i}`} vl={vl} />
+            ))}
           </div>
         )
       ) : items.length === 0 ? (
