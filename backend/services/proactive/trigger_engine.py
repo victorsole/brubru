@@ -23,7 +23,9 @@ once we persist the deliveries — see migration 074 ``is_proactive`` flag).
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass, field
+from functools import lru_cache
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Dict, List, Literal, Optional
 
@@ -98,7 +100,12 @@ INSTITUTION_LABELS = {
 # or missing languages fall back to EN. The composed message STRUCTURE is
 # identical in every language (same sentences, same data slots): only the
 # language varies. EN templates reproduce the historical hardcoded strings
-# byte for byte.
+# byte for byte, with one deliberate exception: nf_summary_* / tm_summary_*
+# no longer interpolate file titles. Official EU legal titles run 150-400
+# characters each, so three of them joined into one sentence produced a
+# ~1,200-character paragraph on the briefing card. Those titles now travel in
+# ProactiveBriefing.items, one openable line per file, and these four strings
+# are the short lead-in to that list.
 #
 # Keys use .format()-style placeholders. Placeholder data (DB titles, refs)
 # is always passed as format arguments, never substituted into the template
@@ -119,8 +126,8 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
         # new_file_match
         "nf_title_one": "A new legislative file landed in your policy areas",
         "nf_title_many": "{count} new legislative files landed in your policy areas this week",
-        "nf_summary_one": "In the last week, one file matched your interests: {title}.",
-        "nf_summary_many": "Recent matches include: {titles}.",
+        "nf_summary_one": "The file that matched:",
+        "nf_summary_many": "The most recent matches:",
         "nf_query": (
             "Brief me on the EU legislative files added in the last week "
             "that match my policy interests."
@@ -128,9 +135,9 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
         # tracked_file_movement
         "tm_status_unknown": "an unknown status",
         "tm_title_one": "One of your tracked files moved to {status}",
-        "tm_summary_one": "{title} changed status this week.",
+        "tm_summary_one": "The file that moved:",
         "tm_title_many": "{count} of your tracked files moved this week",
-        "tm_summary_many": "Status changes on: {titles}.",
+        "tm_summary_many": "The files that moved:",
         "tm_query": (
             "Summarise the status changes on the files I track in the last "
             "week and what they mean for the procedure timeline."
@@ -233,17 +240,17 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
                    "d'octubre", "de novembre", "de desembre"],
         "nf_title_one": "Ha arribat un nou expedient legislatiu a les teves àrees polítiques",
         "nf_title_many": "{count} nous expedients legislatius han arribat a les teves àrees polítiques aquesta setmana",
-        "nf_summary_one": "Durant la darrera setmana, un expedient ha coincidit amb els teus interessos: {title}.",
-        "nf_summary_many": "Entre les coincidències recents hi ha: {titles}.",
+        "nf_summary_one": "L'expedient que ha coincidit:",
+        "nf_summary_many": "Les coincidències més recents:",
         "nf_query": (
             "Fes-me un resum dels expedients legislatius de la UE afegits "
             "la darrera setmana que coincideixen amb els meus interessos polítics."
         ),
         "tm_status_unknown": "un estat desconegut",
         "tm_title_one": "Un dels expedients que segueixes ha canviat d'estat: {status}",
-        "tm_summary_one": "{title} ha canviat d'estat aquesta setmana.",
+        "tm_summary_one": "L'expedient que s'ha mogut:",
         "tm_title_many": "{count} dels expedients que segueixes s'han mogut aquesta setmana",
-        "tm_summary_many": "Canvis d'estat a: {titles}.",
+        "tm_summary_many": "Els expedients que s'han mogut:",
         "tm_query": (
             "Resumeix els canvis d'estat dels expedients que segueixo durant "
             "la darrera setmana i què impliquen per al calendari del procediment."
@@ -342,17 +349,17 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
                    "de diciembre"],
         "nf_title_one": "Ha llegado un nuevo expediente legislativo a tus áreas políticas",
         "nf_title_many": "{count} nuevos expedientes legislativos han llegado a tus áreas políticas esta semana",
-        "nf_summary_one": "En la última semana, un expediente ha coincidido con tus intereses: {title}.",
-        "nf_summary_many": "Entre las coincidencias recientes están: {titles}.",
+        "nf_summary_one": "El expediente que ha coincidido:",
+        "nf_summary_many": "Las coincidencias más recientes:",
         "nf_query": (
             "Hazme un resumen de los expedientes legislativos de la UE "
             "añadidos en la última semana que coinciden con mis intereses políticos."
         ),
         "tm_status_unknown": "un estado desconocido",
         "tm_title_one": "Uno de los expedientes que sigues ha cambiado de estado: {status}",
-        "tm_summary_one": "{title} ha cambiado de estado esta semana.",
+        "tm_summary_one": "El expediente que se ha movido:",
         "tm_title_many": "{count} de los expedientes que sigues se han movido esta semana",
-        "tm_summary_many": "Cambios de estado en: {titles}.",
+        "tm_summary_many": "Los expedientes que se han movido:",
         "tm_query": (
             "Resume los cambios de estado de los expedientes que sigo en la "
             "última semana y qué implican para el calendario del procedimiento."
@@ -450,17 +457,17 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
                    "décembre"],
         "nf_title_one": "Un nouveau dossier législatif est arrivé dans vos domaines politiques",
         "nf_title_many": "{count} nouveaux dossiers législatifs sont arrivés dans vos domaines politiques cette semaine",
-        "nf_summary_one": "Au cours de la dernière semaine, un dossier a correspondu à vos intérêts : {title}.",
-        "nf_summary_many": "Parmi les correspondances récentes : {titles}.",
+        "nf_summary_one": "Le dossier correspondant :",
+        "nf_summary_many": "Les correspondances les plus récentes :",
         "nf_query": (
             "Faites-moi un point sur les dossiers législatifs de l'UE ajoutés "
             "la semaine dernière qui correspondent à mes intérêts politiques."
         ),
         "tm_status_unknown": "un statut inconnu",
         "tm_title_one": "Un de vos dossiers suivis a changé de statut : {status}",
-        "tm_summary_one": "{title} a changé de statut cette semaine.",
+        "tm_summary_one": "Le dossier qui a évolué :",
         "tm_title_many": "{count} de vos dossiers suivis ont évolué cette semaine",
-        "tm_summary_many": "Changements de statut sur : {titles}.",
+        "tm_summary_many": "Les dossiers qui ont évolué :",
         "tm_query": (
             "Résumez les changements de statut des dossiers que je suis au "
             "cours de la dernière semaine et ce qu'ils signifient pour le "
@@ -561,17 +568,17 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
                    "novembre", "dicembre"],
         "nf_title_one": "Un nuovo fascicolo legislativo è arrivato nelle tue aree politiche",
         "nf_title_many": "{count} nuovi fascicoli legislativi sono arrivati nelle tue aree politiche questa settimana",
-        "nf_summary_one": "Nell'ultima settimana, un fascicolo ha corrisposto ai tuoi interessi: {title}.",
-        "nf_summary_many": "Tra le corrispondenze recenti: {titles}.",
+        "nf_summary_one": "Il fascicolo corrispondente:",
+        "nf_summary_many": "Le corrispondenze più recenti:",
         "nf_query": (
             "Fammi un riepilogo dei fascicoli legislativi dell'UE aggiunti "
             "nell'ultima settimana che corrispondono ai miei interessi politici."
         ),
         "tm_status_unknown": "uno stato sconosciuto",
         "tm_title_one": "Uno dei fascicoli che segui ha cambiato stato: {status}",
-        "tm_summary_one": "{title} ha cambiato stato questa settimana.",
+        "tm_summary_one": "Il fascicolo che si è mosso:",
         "tm_title_many": "{count} dei fascicoli che segui si sono mossi questa settimana",
-        "tm_summary_many": "Cambiamenti di stato su: {titles}.",
+        "tm_summary_many": "I fascicoli che si sono mossi:",
         "tm_query": (
             "Riassumi i cambiamenti di stato dei fascicoli che seguo "
             "nell'ultima settimana e cosa significano per il calendario della "
@@ -670,8 +677,8 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
                    "december"],
         "nf_title_one": "Er is een nieuw wetgevingsdossier binnengekomen in jouw beleidsterreinen",
         "nf_title_many": "{count} nieuwe wetgevingsdossiers binnengekomen in jouw beleidsterreinen deze week",
-        "nf_summary_one": "In de afgelopen week kwam één dossier overeen met je interesses: {title}.",
-        "nf_summary_many": "Recente overeenkomsten zijn onder meer: {titles}.",
+        "nf_summary_one": "Het dossier dat overeenkwam:",
+        "nf_summary_many": "De meest recente overeenkomsten:",
         "nf_query": (
             "Geef me een briefing over de EU-wetgevingsdossiers die de "
             "afgelopen week zijn toegevoegd en die overeenkomen met mijn "
@@ -679,9 +686,9 @@ TRIGGER_I18N: Dict[str, Dict[str, Any]] = {
         ),
         "tm_status_unknown": "een onbekende status",
         "tm_title_one": "Een van je gevolgde dossiers is nu {status}",
-        "tm_summary_one": "{title} is deze week van status veranderd.",
+        "tm_summary_one": "Het dossier dat is verschoven:",
         "tm_title_many": "{count} van je gevolgde dossiers zijn deze week in beweging gekomen",
-        "tm_summary_many": "Statuswijzigingen bij: {titles}.",
+        "tm_summary_many": "De dossiers die zijn verschoven:",
         "tm_query": (
             "Vat de statuswijzigingen samen van de dossiers die ik volg in "
             "de afgelopen week en wat ze betekenen voor de proceduretijdlijn."
@@ -784,6 +791,12 @@ class ProactiveBriefing:
     suggested_query: str
     evidence_refs: List[str] = field(default_factory=list)
     drill_down_path: Optional[str] = None
+    # The concrete rows behind the briefing, one dict per file:
+    # {"title", "ref", "carriage_id", "detail"}. Triggers that name specific
+    # files fill this so the card can list them as separate, openable lines.
+    # Anything the summary would otherwise have to cram into one sentence
+    # belongs here. Empty for triggers with nothing itemisable to show.
+    items: List[Dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -793,7 +806,196 @@ class ProactiveBriefing:
             "suggested_query": self.suggested_query,
             "evidence_refs": self.evidence_refs,
             "drill_down_path": self.drill_down_path,
+            "items": self.items,
         }
+
+
+# Some legislative_carriages titles are stored with the CELEX glued on the
+# front: "CELEX:32019R0005R(03): Corrigendum to Regulation (EU) 2019/5 of ...".
+# That is a database identifier, not prose, and reading it as the opening
+# words of a sentence is exactly what made the briefing card unreadable. Lift
+# it out so it can be shown as a reference pill beside a clean title.
+_CELEX_PREFIX = re.compile(
+    r"^CELEX:\s*([0-9]{5}[A-Z]{1,2}[0-9]{4}(?:R\(\d{2}\))?)\s*:\s*"
+)
+
+
+def _split_celex_prefix(title: str) -> tuple[str, Optional[str]]:
+    """Return (clean title, CELEX) — CELEX is None when there is no prefix."""
+    if not title:
+        return title, None
+    match = _CELEX_PREFIX.match(title)
+    if not match:
+        return title, None
+    remainder = title[match.end():].strip()
+    # Never hand back an empty title: if the row is nothing but a CELEX, the
+    # original string is still the most useful thing to show.
+    return (remainder or title), match.group(1)
+
+
+# The instrument designation at the head of an official EU legal title:
+# "Council Decision (EU) 2026/1544 of 17 November 2025 on ...". This is the
+# part a policy professional actually scans for, and it is the only part short
+# enough to sit on one line. Everything after it is the subject clause, which
+# routinely runs several hundred characters, so it stays in `title` (tooltip)
+# and in the file modal rather than on the card.
+_INSTRUMENT = re.compile(
+    r"^(Corrigendum to\s+)?"
+    r"((?:Commission|Council|European\s+Parliament|Delegated|Implementing)?\s*"
+    r"(?:Regulation|Directive|Decision|Recommendation|Opinion|Resolution))\s*"
+    r"\((EU|EC|EEC|Euratom)(?:,\s*Euratom)?\)\s*(?:No\s*)?([\d/]+)",
+    re.IGNORECASE,
+)
+
+# Longest a fallback short title may run before it is clipped on a word
+# boundary. Titles that carry no instrument designation ("Critical Medicines
+# Act", "Situation in Cuba") are usually already short and pass through whole.
+_SHORT_TITLE_MAX = 70
+
+
+# The acronym KB holds one entry per language for the same instrument
+# ("GDPR", "RGPD", "AVG" all point at 32016R0679), distinguished only by the
+# language its full_title is written in. These are the instrument words that
+# identify a language UNAMBIGUOUSLY: "Directive" is shared by EN and FR and
+# "Directiva" by ES and CA, so neither can classify an entry on its own. An
+# entry whose title starts with an ambiguous word stays unclassified and is
+# only used as a last resort — better a correct English acronym than a
+# confidently wrong Catalan one.
+_ACRONYM_LANG_WORDS: Dict[str, tuple] = {
+    "en": ("regulation", "decision"),
+    "es": ("reglamento", "decisión"),
+    "ca": ("reglament", "decisió"),
+    "fr": ("règlement", "décision"),
+    "it": ("regolamento", "direttiva", "decisione"),
+    "nl": ("verordening", "richtlijn", "besluit"),
+}
+
+
+@lru_cache(maxsize=1)
+def _celex_to_acronym() -> Dict[str, Dict[str, str]]:
+    """CELEX -> {language: acronym} from the legislation acronym KB.
+
+    The KB is keyed by alias ("GDPR" -> {celex, full_title, ...}); we need the
+    inverse, split by language so a Dutch user gets "AVG" and an English one
+    "GDPR". Entries whose language cannot be determined land under "" and are
+    used only when nothing better exists.
+    """
+    try:
+        from services.parsers.law_alias_resolver import _load_acronyms
+    except Exception:  # pragma: no cover - KB is optional at runtime
+        return {}
+    out: Dict[str, Dict[str, str]] = {}
+    try:
+        for alias, payload in (_load_acronyms() or {}).items():
+            celex = (payload or {}).get("celex")
+            if not celex or not alias:
+                continue
+            head = ((payload or {}).get("full_title") or "").strip().lower()
+            lang = ""
+            for code, words in _ACRONYM_LANG_WORDS.items():
+                if head.startswith(words):
+                    lang = code
+                    break
+            bucket = out.setdefault(celex, {})
+            # First alias for a language wins; the KB lists the canonical form
+            # first and later duplicates are spelling variants.
+            bucket.setdefault(lang, alias)
+    except Exception as exc:  # pragma: no cover
+        logger.warning("could not build CELEX->acronym map: %s", exc)
+        return {}
+    return out
+
+
+def _acronym_for(celex: str, lang: str) -> Optional[str]:
+    """The acronym for this CELEX in the user's language, else English."""
+    bucket = _celex_to_acronym().get(celex)
+    if not bucket:
+        return None
+    for key in (lang, "en", ""):
+        if bucket.get(key):
+            return bucket[key]
+    return next(iter(bucket.values()), None)
+
+
+def _curated_alias(
+    ref: Optional[str], celex: Optional[str], lang: str = "en"
+) -> Optional[str]:
+    """The name a Brussels professional would actually use for this file.
+
+    Two curated sources, both already in the repo and both keyed on a stable
+    identifier, so nothing here is guessed:
+      1. procedure_aliases.json, by OEIL procedure reference
+         ("2021/0106(COD)" -> "Artificial Intelligence Act")
+      2. the legislation acronym KB, by CELEX ("32016R0679" -> "GDPR")
+    Returns None when neither knows the file, which is the common case for
+    routine acts: the caller then falls back to the instrument designation.
+    """
+    if ref:
+        try:
+            from services.parsers.procedure_alias_resolver import _load_procedures
+
+            entry = (_load_procedures() or {}).get(ref)
+            curated = (entry or {}).get("title")
+            if curated:
+                return curated
+        except Exception as exc:  # pragma: no cover
+            logger.warning("procedure alias lookup failed for %s: %s", ref, exc)
+    if celex:
+        alias = _acronym_for(celex, lang)
+        if alias:
+            return alias
+    return None
+
+
+def _short_title(title: str) -> str:
+    """A one-line label for a file: the instrument designation where the title
+    has one, otherwise the title itself, clipped on a word boundary."""
+    if not title:
+        return title
+    match = _INSTRUMENT.match(title)
+    if match:
+        prefix = (match.group(1) or "").strip()
+        instrument = " ".join(match.group(2).split())
+        return " ".join(
+            part
+            for part in (prefix, instrument, f"({match.group(3)})", match.group(4))
+            if part
+        )
+    if len(title) <= _SHORT_TITLE_MAX:
+        return title
+    return title[:_SHORT_TITLE_MAX].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+
+
+def _file_item(
+    title: str,
+    ref: Optional[str],
+    carriage_id: Any,
+    detail: Optional[str] = None,
+    areas: Optional[List[str]] = None,
+    lang: str = "en",
+) -> Dict[str, Any]:
+    """One openable file line for ProactiveBriefing.items.
+
+    `short_title` is what a card should render; `title` is the full official
+    title, for tooltips, accessible names and any consumer that wants it.
+    `areas` comes from the carriage's own policy_areas column, so the topic
+    shown beside a file is structured data, never parsed out of the prose.
+    """
+    clean_title, celex = _split_celex_prefix(title or "")
+    return {
+        "title": clean_title,
+        # Curated alias first (what people actually call the file), then the
+        # instrument designation. Never the full title: those run 150-400
+        # characters and swamp the card.
+        "short_title": _curated_alias(ref, celex, lang) or _short_title(clean_title),
+        # Prefer the procedure reference; fall back to the CELEX we lifted out
+        # of the title so the identifier is never simply lost. Not rendered on
+        # the briefing card — the file modal carries it.
+        "ref": ref or celex,
+        "carriage_id": str(carriage_id) if carriage_id else None,
+        "detail": detail,
+        "areas": [a for a in (areas or []) if a][:2],
+    }
 
 
 def _policy_interests(user: User) -> List[str]:
@@ -815,7 +1017,7 @@ def _briefing_new_file_match(
         rows = db.execute(
             text(
                 """
-                SELECT title, oeil_procedure_ref
+                SELECT id, title, oeil_procedure_ref, policy_areas
                 FROM legislative_carriages
                 WHERE first_seen >= :cutoff
                   AND EXISTS (
@@ -841,18 +1043,30 @@ def _briefing_new_file_match(
     if not rows:
         return None
 
-    titles = [r["title"] for r in rows]
     refs = [r["oeil_procedure_ref"] for r in rows if r.get("oeil_procedure_ref")]
     count = len(rows)
 
+    # The file titles are official EU legal titles: routinely 150-400
+    # characters each. Joining them into the summary produced a ~1,200-char
+    # paragraph nobody could read. They go out as items instead, one openable
+    # line per file, and the summary is a short lead-in to that list.
+    items = [
+        _file_item(
+            r["title"],
+            r["oeil_procedure_ref"],
+            r["id"],
+            areas=r.get("policy_areas"),
+            lang=lang,
+        )
+        for r in rows
+    ]
+
     if count == 1:
         title = _t(lang, "nf_title_one")
-        summary = _t(lang, "nf_summary_one").format(title=titles[0])
+        summary = _t(lang, "nf_summary_one")
     else:
         title = _t(lang, "nf_title_many").format(count=count)
-        summary = _t(lang, "nf_summary_many").format(
-            titles="; ".join(titles[:3])
-        )
+        summary = _t(lang, "nf_summary_many")
 
     return ProactiveBriefing(
         trigger_source="new_file_match",
@@ -861,6 +1075,7 @@ def _briefing_new_file_match(
         suggested_query=_t(lang, "nf_query"),
         evidence_refs=refs,
         drill_down_path="/my-eu-bubble?tab=my_files",
+        items=items,
     )
 
 
@@ -875,7 +1090,9 @@ def _briefing_tracked_file_movement(
             text(
                 """
                 SELECT
+                    lc.id AS carriage_id,
                     lc.title,
+                    lc.policy_areas,
                     lc.oeil_procedure_ref AS procedure_ref,
                     h.status AS new_status,
                     h.changed_at
@@ -900,22 +1117,38 @@ def _briefing_tracked_file_movement(
 
     refs = [r["procedure_ref"] for r in rows if r.get("procedure_ref")]
     count = len(rows)
-    if count == 1:
-        r = rows[0]
-        status_text = (
+
+    def _status_of(row) -> str:
+        return (
             _localise_status(
-                lang, str(r["new_status"]).replace("_", " ").lower()
+                lang, str(row["new_status"]).replace("_", " ").lower()
             )
-            if r.get("new_status")
+            if row.get("new_status")
             else _t(lang, "tm_status_unknown")
         )
-        title = _t(lang, "tm_title_one").format(status=status_text)
-        summary = _t(lang, "tm_summary_one").format(title=r["title"])
+
+    # One openable line per file, carrying the status it moved to, rather than
+    # every title concatenated into the summary sentence.
+    items = [
+        _file_item(
+            r["title"],
+            r["procedure_ref"],
+            r["carriage_id"],
+            detail=_status_of(r),
+            # The status is the point of this briefing, so it takes the pill
+            # slot; one policy area rides alongside it for topic.
+            areas=(r.get("policy_areas") or [])[:1],
+            lang=lang,
+        )
+        for r in rows
+    ]
+
+    if count == 1:
+        title = _t(lang, "tm_title_one").format(status=_status_of(rows[0]))
+        summary = _t(lang, "tm_summary_one")
     else:
         title = _t(lang, "tm_title_many").format(count=count)
-        summary = _t(lang, "tm_summary_many").format(
-            titles="; ".join(r["title"] for r in rows[:3])
-        )
+        summary = _t(lang, "tm_summary_many")
 
     return ProactiveBriefing(
         trigger_source="tracked_file_movement",
@@ -924,6 +1157,7 @@ def _briefing_tracked_file_movement(
         suggested_query=_t(lang, "tm_query"),
         evidence_refs=refs,
         drill_down_path="/my-eu-bubble?tab=my_files",
+        items=items,
     )
 
 

@@ -660,7 +660,10 @@ export const DashboardCockpit = () => {
 
   return (
     <section className="dashboard-cockpit">
-      <ProactiveOpener surface="dashboard" />
+      {/* The briefing cards name specific files. This surface already mounts
+          the file modal below, so they open in place rather than sending the
+          user off to My Tracked Files. */}
+      <ProactiveOpener surface="dashboard" onOpenFile={openFile} />
 
       {completeness && completeness.score < 1 && (
         <div className="dashboard-cockpit__banner">

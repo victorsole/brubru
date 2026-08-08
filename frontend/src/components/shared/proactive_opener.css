@@ -71,6 +71,135 @@
   line-height: 1.45;
 }
 
+/* ---- The files a briefing names ----
+   One line per file. Official EU legal titles run to several hundred
+   characters, so each title is clamped to two lines with the full text on
+   hover; the reference and status sit underneath as pills. Lines that carry a
+   file id are real buttons that open that file. */
+
+.proactive-opener__items {
+  margin: 0 0 0.7rem 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.proactive-opener__item {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.proactive-opener__item:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.proactive-opener__item-hit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.45rem;
+  margin: 0 -0.45rem;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.proactive-opener__item-body {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+/* One line. The label is already short (curated alias or instrument
+   designation); anything longer than the row is the full title leaking
+   through, and truncating it here keeps the card scannable. */
+.proactive-opener__item-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.35;
+}
+
+.proactive-opener__item-meta {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.proactive-opener__item-pill {
+  padding: 0.1rem 0.45rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  color: #444;
+  white-space: nowrap;
+}
+
+.proactive-opener__item-pill--detail {
+  background: rgba(76, 175, 80, 0.12);
+  color: #2e7d32;
+  text-transform: capitalize;
+}
+
+.proactive-opener__item-pill--area {
+  background: rgba(108, 92, 231, 0.12);
+  color: #563ea3;
+}
+
+.proactive-opener__item-go {
+  flex-shrink: 0;
+  color: #b3c0cf;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.proactive-opener__item-hit:hover,
+.proactive-opener__item-hit:focus-visible {
+  background: rgba(6, 147, 227, 0.07);
+}
+
+.proactive-opener__item-hit:focus-visible {
+  outline: 2px solid #0693e3;
+  outline-offset: 1px;
+}
+
+.proactive-opener__item-hit:hover .proactive-opener__item-title,
+.proactive-opener__item-hit:focus-visible .proactive-opener__item-title {
+  color: #0570a8;
+}
+
+.proactive-opener__item-hit:hover .proactive-opener__item-go,
+.proactive-opener__item-hit:focus-visible .proactive-opener__item-go {
+  color: #0693e3;
+  transform: translateX(2px);
+}
+
+/* Non-clickable lines keep the same rhythm as clickable ones. */
+.proactive-opener__item:not(.proactive-opener__item--clickable) {
+  padding: 0.5rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proactive-opener__item-hit,
+  .proactive-opener__item-go {
+    transition: none;
+  }
+  .proactive-opener__item-hit:hover .proactive-opener__item-go {
+    transform: none;
+  }
+}
+
 .proactive-opener__card-actions {
   display: flex;
   flex-wrap: wrap;

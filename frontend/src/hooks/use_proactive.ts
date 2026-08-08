@@ -21,6 +21,25 @@ export type ProactiveTriggerSource =
   | 'conversation_recall'
   | 'weekly_digest';
 
+/**
+ * One file behind a briefing. Briefings that name specific files send these
+ * so the card can list them as separate, openable lines — `summary` is the
+ * short lead-in to the list, never a substitute for it.
+ */
+export interface ProactiveBriefingItem {
+  /** Full official title. Tooltip and accessible name, never the card label. */
+  title: string;
+  /** One-line label: curated alias where one exists, else the instrument. */
+  short_title?: string;
+  /** Procedure ref or CELEX. Available to consumers; not shown on the card. */
+  ref: string | null;
+  carriage_id: string | null;
+  /** Status the file moved to, for movement briefings. */
+  detail: string | null;
+  /** Policy areas from the carriage's own column, at most two. */
+  areas?: string[];
+}
+
 export interface ProactiveBriefing {
   trigger_source: ProactiveTriggerSource;
   title: string;
@@ -28,6 +47,7 @@ export interface ProactiveBriefing {
   suggested_query: string;
   evidence_refs: string[];
   drill_down_path: string | null;
+  items?: ProactiveBriefingItem[];
 }
 
 interface ProactivePendingResponse {

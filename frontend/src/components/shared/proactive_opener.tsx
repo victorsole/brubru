@@ -14,6 +14,7 @@ import Icon from '@mdi/react';
 import {
   mdiBellRingOutline,
   mdiArrowRight,
+  mdiChevronRight,
   mdiClose,
   mdiMessageOutline,
 } from '@mdi/js';
@@ -22,6 +23,7 @@ import { useAuth } from '../../hooks/use_auth';
 import {
   useProactive,
   type ProactiveBriefing,
+  type ProactiveBriefingItem,
   type ProactiveTriggerSource,
 } from '../../hooks/use_proactive';
 import './proactive_opener.css';
@@ -77,9 +79,16 @@ const isStubBriefing = (b: ProactiveBriefing): boolean => {
 interface ProactiveOpenerProps {
   /** Where the opener is mounted, used for styling variants. */
   surface?: 'chat' | 'dashboard';
+  /**
+   * How to open one of the files a briefing names. The dashboard passes a
+   * handler that opens the shared legislative-file modal in place, because it
+   * already mounts that modal. Without one (Chat), the file opens in My
+   * Tracked Files via its ?file= deep link, so the gesture works either way.
+   */
+  onOpenFile?: (carriageId: string) => void;
 }
 
-export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
+export const ProactiveOpener = ({ surface = 'chat', onOpenFile }: ProactiveOpenerProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
@@ -112,6 +121,19 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
     );
   };
 
+  // Open one named file. In place where the modal is available, otherwise via
+  // the My Tracked Files deep link (ids are lower-cased: that tab matches on
+  // the lower-cased file id).
+  const openItem = (item: ProactiveBriefingItem) => {
+    if (!item.carriage_id) return;
+    const id = item.carriage_id.toLowerCase();
+    if (onOpenFile) {
+      onOpenFile(id);
+      return;
+    }
+    navigate(`/my-eu-bubble?tab=my_files&file=${encodeURIComponent(id)}`);
+  };
+
   return (
     <section
       className={`proactive-opener proactive-opener--${surface}`}
@@ -135,7 +157,75 @@ export const ProactiveOpener = ({ surface = 'chat' }: ProactiveOpenerProps) => {
                 : t('proactive.briefing', 'Briefing')}
             </div>
             <h4 className="proactive-opener__card-title">{b.title}</h4>
-            <p className="proactive-opener__card-summary">{b.summary}</p>
+            {b.summary && (
+              <p className="proactive-opener__card-summary">{b.summary}</p>
+            )}
+            {(b.items?.length ?? 0) > 0 && (
+              <ul className="proactive-opener__items">
+                {b.items!.map((item, idx) => {
+                  const openable = !!item.carriage_id;
+                  // The card shows the short label; the full official title is
+                  // the tooltip and the accessible name. Never the reference:
+                  // codes belong in the file modal, not on the front door.
+                  const areas = item.areas ?? [];
+                  const body = (
+                    <>
+                      <span className="proactive-opener__item-body">
+                        <span className="proactive-opener__item-title" title={item.title}>
+                          {item.short_title || item.title}
+                        </span>
+                        {(item.detail || areas.length > 0) && (
+                          <span className="proactive-opener__item-meta">
+                            {item.detail && (
+                              <span className="proactive-opener__item-pill proactive-opener__item-pill--detail">
+                                {item.detail}
+                              </span>
+                            )}
+                            {areas.map((area) => (
+                              <span
+                                key={area}
+                                className="proactive-opener__item-pill proactive-opener__item-pill--area"
+                              >
+                                {area}
+                              </span>
+                            ))}
+                          </span>
+                        )}
+                      </span>
+                      {openable && (
+                        <Icon
+                          path={mdiChevronRight}
+                          size={0.75}
+                          className="proactive-opener__item-go"
+                        />
+                      )}
+                    </>
+                  );
+                  return (
+                    <li
+                      key={item.carriage_id || `${item.ref ?? ''}-${idx}`}
+                      className={
+                        openable
+                          ? 'proactive-opener__item proactive-opener__item--clickable'
+                          : 'proactive-opener__item'
+                      }
+                    >
+                      {openable ? (
+                        <button
+                          type="button"
+                          className="proactive-opener__item-hit"
+                          onClick={() => openItem(item)}
+                        >
+                          {body}
+                        </button>
+                      ) : (
+                        body
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
             <div className="proactive-opener__card-actions">
               <button
                 type="button"

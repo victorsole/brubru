@@ -10,7 +10,7 @@ The triggers themselves live in ``services/proactive/trigger_engine.py``.
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -33,6 +33,10 @@ class ProactiveBriefingResponse(BaseModel):
     suggested_query: str
     evidence_refs: List[str] = []
     drill_down_path: Optional[str] = None
+    # One entry per file behind the briefing: {title, ref, carriage_id,
+    # detail}. Render these as separate lines; do not fold them back into a
+    # sentence. Empty for triggers that name no specific file.
+    items: List[Dict[str, Any]] = []
 
 
 class ProactivePendingResponse(BaseModel):
@@ -61,8 +65,11 @@ class ProactivePendingResponse(BaseModel):
         "**You get back**\n\n"
         "An array of 0-3 briefings, each with `trigger_source`, `title`, "
         "`summary`, `suggested_query`, optional `evidence_refs` (procedure "
-        "refs) and `drill_down_path`. Empty array if Brubru has nothing to "
-        "surface — never fabricates."
+        "refs) and `drill_down_path`. Briefings that name specific files also "
+        "carry `items`: one entry per file with `title`, `ref`, `carriage_id` "
+        "and `detail`. Render those as separate lines — `summary` is a short "
+        "lead-in to the list, not a substitute for it. Empty array if Brubru "
+        "has nothing to surface — never fabricates."
     ),
 )
 async def get_pending_proactive(
