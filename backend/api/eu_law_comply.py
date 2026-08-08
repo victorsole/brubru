@@ -926,7 +926,7 @@ async def get_analysis_results(
             'requirements_met': analysis.requirements_met,
             'requirements_partial': analysis.requirements_partial,
             'requirements_gap': analysis.requirements_gap,
-            'compliance_score': float(analysis.compliance_score) if analysis.compliance_score else None,
+            'compliance_score': float(analysis.compliance_score) if analysis.compliance_score is not None else None,
             'gap_findings': findings,
             'created_at': analysis.started_at.isoformat() if analysis.started_at else None,
             'completed_at': analysis.completed_at.isoformat() if analysis.completed_at else None
@@ -1087,7 +1087,7 @@ async def get_user_analysis_history(
                 'cluster_name': cluster.name,
                 'cluster_id': cluster.id,
                 'status': analysis.status,
-                'compliance_score': float(analysis.compliance_score) if analysis.compliance_score else None,
+                'compliance_score': float(analysis.compliance_score) if analysis.compliance_score is not None else None,
                 'requirements_met': analysis.requirements_met,
                 'requirements_gap': analysis.requirements_gap,
                 'created_at': analysis.started_at.isoformat() if analysis.started_at else None,

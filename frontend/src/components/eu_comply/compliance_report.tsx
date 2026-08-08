@@ -1,8 +1,8 @@
 // frontend/src/components/eu_comply/compliance_report.tsx
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ComplianceAnalysis, GapFinding } from '../../pages/eu_comply_page';
 import { useAuth } from '../../hooks/use_auth';
+import { FindingsTable } from './findings_table';
 import './compliance_report.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -12,12 +12,8 @@ interface ComplianceReportProps {
   onAskChatbot: (finding: GapFinding) => void;
 }
 
-type FilterType = 'all' | 'met' | 'partial' | 'gap';
-
 export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportProps) => {
   const { t } = useTranslation();
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [expandedFindings, setExpandedFindings] = useState<Set<number>>(new Set());
 
   const getStatusIcon = (status: string): string => {
     switch (status) {
@@ -45,35 +41,8 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
     }
   };
 
-  const getCriticalityColor = (criticality: string): string => {
-    switch (criticality) {
-      case 'critical':
-        return 'criticality-critical';
-      case 'important':
-        return 'criticality-important';
-      case 'recommended':
-        return 'criticality-recommended';
-      default:
-        return 'criticality-recommended';
-    }
-  };
 
-  const toggleExpanded = (findingId: number) => {
-    const newExpanded = new Set(expandedFindings);
-    if (newExpanded.has(findingId)) {
-      newExpanded.delete(findingId);
-    } else {
-      newExpanded.add(findingId);
-    }
-    setExpandedFindings(newExpanded);
-  };
 
-  const getFilteredFindings = (): GapFinding[] => {
-    if (activeFilter === 'all') {
-      return analysis.gap_findings;
-    }
-    return analysis.gap_findings.filter(f => f.status === activeFilter);
-  };
 
   const handleExportReport = async () => {
     try {
@@ -106,7 +75,6 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
     }
   };
 
-  const filteredFindings = getFilteredFindings();
 
   return (
     <div className="compliance-report">
@@ -161,141 +129,14 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="compliance-report__filters">
-        <button
-          className={`compliance-report__filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
-          onClick={() => setActiveFilter('all')}
-        >
-          {t('comply.report.filterAll')} ({analysis.total_requirements})
-        </button>
-        <button
-          className={`compliance-report__filter-btn ${activeFilter === 'met' ? 'active' : ''}`}
-          onClick={() => setActiveFilter('met')}
-        >
-          <span className={`mdi ${getStatusIcon('met')}`}></span>
-          {t('comply.report.filterMet')} ({analysis.requirements_met})
-        </button>
-        <button
-          className={`compliance-report__filter-btn ${activeFilter === 'partial' ? 'active' : ''}`}
-          onClick={() => setActiveFilter('partial')}
-        >
-          <span className={`mdi ${getStatusIcon('partial')}`}></span>
-          {t('comply.report.filterPartial')} ({analysis.requirements_partial})
-        </button>
-        <button
-          className={`compliance-report__filter-btn ${activeFilter === 'gap' ? 'active' : ''}`}
-          onClick={() => setActiveFilter('gap')}
-        >
-          <span className={`mdi ${getStatusIcon('gap')}`}></span>
-          {t('comply.report.filterGap')} ({analysis.requirements_gap})
-        </button>
-      </div>
-
-      {/* Findings List */}
-      <div className="compliance-report__findings">
-        {filteredFindings.map(finding => (
-          <div
-            key={finding.id}
-            className={`compliance-report__finding ${getStatusColor(finding.status)}`}
-          >
-            <div className="compliance-report__finding-header">
-              <div className="compliance-report__finding-status">
-                <span className={`mdi ${getStatusIcon(finding.status)}`}></span>
-                <span className="compliance-report__finding-article">
-                  {finding.article_number}
-                </span>
-                <span className={`compliance-report__finding-criticality ${getCriticalityColor(finding.criticality)}`}>
-                  {finding.criticality === 'critical' ? t('comply.report.criticalityCritical') : finding.criticality === 'important' ? t('comply.report.criticalityImportant') : t('comply.report.criticalityRecommended')}
-                </span>
-              </div>
-              <button
-                className="compliance-report__finding-toggle"
-                onClick={() => toggleExpanded(finding.id)}
-              >
-                <span className={`mdi ${expandedFindings.has(finding.id) ? 'mdi-chevron-up' : 'mdi-chevron-down'}`}></span>
-              </button>
-            </div>
-
-            <div className="compliance-report__finding-requirement">
-              {finding.requirement_text}
-            </div>
-
-            {finding.deadline_date && (
-              <div className="compliance-report__finding-deadline">
-                <span className="mdi mdi-calendar-clock"></span>
-                {t('comply.report.deadline')} {new Date(finding.deadline_date).toLocaleDateString()}
-              </div>
-            )}
-
-            {expandedFindings.has(finding.id) && (
-              <div className="compliance-report__finding-details">
-                {finding.evidence_text && (
-                  <div className="compliance-report__evidence">
-                    <h4>
-                      <span className="mdi mdi-file-document-outline"></span>
-                      {t('comply.report.evidenceFound')}
-                    </h4>
-                    <p>{finding.evidence_text}</p>
-                    {finding.evidence_source && (
-                      <div className="compliance-report__evidence-source">
-                        {t('comply.report.evidenceSource')} {finding.evidence_source}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {finding.gap_description && (
-                  <div className="compliance-report__gap">
-                    <h4>
-                      <span className="mdi mdi-alert-outline"></span>
-                      {t('comply.report.gapAnalysis')}
-                    </h4>
-                    <p>{finding.gap_description}</p>
-                  </div>
-                )}
-
-                {finding.recommendation && (
-                  <div className="compliance-report__recommendation">
-                    <h4>
-                      <span className="mdi mdi-lightbulb-outline"></span>
-                      {t('comply.report.recommendation')}
-                    </h4>
-                    <p>{finding.recommendation}</p>
-                  </div>
-                )}
-
-                {finding.status !== 'met' && (
-                  <div className="compliance-report__actions">
-                    <button
-                      className="compliance-report__ask-chatbot-btn"
-                      onClick={() => onAskChatbot(finding)}
-                    >
-                      <span className="mdi mdi-chat-question-outline"></span>
-                      {t('comply.report.askChatbot')}
-                    </button>
-                  </div>
-                )}
-
-                {/* != null, not truthiness: a genuine 0% confidence is meaningful and
-                    must not be hidden. The API normalises this to 0-100. */}
-                {finding.confidence_score != null && (
-                  <div className="compliance-report__confidence">
-                    {t('comply.report.confidence')} {Math.round(finding.confidence_score)}%
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-
-        {filteredFindings.length === 0 && (
-          <div className="compliance-report__no-findings">
-            <span className="mdi mdi-file-search-outline"></span>
-            <p>{t('comply.report.noFindings')}</p>
-          </div>
-        )}
-      </div>
+      {/* Tabular cited review. Replaces the per-finding accordion: each
+          obligation is one row, the verdict is readable without expanding
+          anything, and the evidence column says explicitly when nothing in the
+          uploaded documents addressed the requirement. */}
+      <FindingsTable
+        findings={analysis.gap_findings || []}
+        onAskChatbot={onAskChatbot}
+      />
 
       {/* Export Button */}
       <div className="compliance-report__footer">

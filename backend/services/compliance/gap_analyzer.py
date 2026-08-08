@@ -11,22 +11,78 @@ Process:
 5. Create action plan with priorities and recommendations
 """
 
+import json
 import logging
+import math
+import re
 from typing import List, Dict, Optional
 from datetime import datetime
 from sqlalchemy.orm import Session
-from openai import OpenAI
-import numpy as np
 
-from core.config import settings
 from models.eu_law import LawRequirement
 from models.compliance import ComplianceAnalysis, GapFinding
 from .document_processor import DocumentProcessor
 
 logger = logging.getLogger(__name__)
 
-# Initialize OpenAI client
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+
+class GapAnalysisUnavailable(RuntimeError):
+    """The model could not be reached or returned nothing usable.
+
+    Distinct from "the requirement is not met". Conflating the two is what let
+    an unfunded API key present itself to users as 0% compliance.
+    """
+
+
+_TOKEN_RE = re.compile(r"[a-z0-9]+")
+
+# Very common words carry no retrieval signal and skew TF-IDF towards long
+# chunks. Deliberately short: legal text is domain-specific enough that an
+# aggressive stoplist removes real signal.
+_STOPWORDS = frozenset("""
+a an and are as at be by for from has have in is it its of on or shall that the
+their they this to was were which with within must may not
+""".split())
+
+
+def _tokenise(text: str) -> List[str]:
+    return [t for t in _TOKEN_RE.findall((text or "").lower())
+            if len(t) > 2 and t not in _STOPWORDS]
+
+
+def _parse_json_object(raw: str) -> Optional[dict]:
+    """Extract a JSON object from a model response.
+
+    The free chain has no response_format=json_object equivalent, so models
+    wrap output in prose or ```json fences. Try the whole string, then the
+    outermost balanced braces.
+    """
+    if not raw:
+        return None
+    s = raw.strip()
+    if s.startswith("```"):
+        s = re.sub(r"^```[a-zA-Z]*\s*", "", s)
+        s = re.sub(r"\s*```$", "", s).strip()
+    try:
+        parsed = json.loads(s)
+        return parsed if isinstance(parsed, dict) else None
+    except (ValueError, TypeError):
+        pass
+    start, depth = s.find("{"), 0
+    if start == -1:
+        return None
+    for i in range(start, len(s)):
+        if s[i] == "{":
+            depth += 1
+        elif s[i] == "}":
+            depth -= 1
+            if depth == 0:
+                try:
+                    parsed = json.loads(s[start:i + 1])
+                    return parsed if isinstance(parsed, dict) else None
+                except (ValueError, TypeError):
+                    return None
+    return None
 
 # Mirrors the valid_gap_status CHECK constraint on gap_findings.status.
 VALID_GAP_STATUSES = {'met', 'partial', 'gap', 'not_applicable'}
@@ -57,6 +113,9 @@ class GapAnalyzer:
     def __init__(self, db: Session):
         self.db = db
         self.doc_processor = DocumentProcessor()
+        self._chunks: List[str] = []
+        self._idf: Dict[str, float] = {}
+        self._doc_vectors: List[Dict[str, float]] = []
     
     async def analyze_compliance(
         self,
@@ -95,17 +154,27 @@ class GapAnalyzer:
 
             logger.info(f"Processed {len(document_paths)} documents, {len(all_chunks)} chunks")
 
+            # Index once, then query per requirement.
+            self._build_index(all_chunks)
+
             # Track statistics
             requirements_met = 0
             requirements_partial = 0
             requirements_gap = 0
             requirements_na = 0
+            analysis_errors = 0
 
             # Analyze each requirement
             for requirement in requirements:
-                finding = await self._analyze_requirement(
-                    requirement, all_chunks, analysis_id
-                )
+                try:
+                    finding = await self._analyze_requirement(
+                        requirement, all_chunks, analysis_id
+                    )
+                except GapAnalysisUnavailable:
+                    # Do not invent a verdict. Count it and carry on so one bad
+                    # response does not lose the whole run.
+                    analysis_errors += 1
+                    continue
                 self.db.add(finding)
 
                 # Update counts
@@ -117,6 +186,24 @@ class GapAnalyzer:
                     requirements_gap += 1
                 else:
                     requirements_na += 1
+
+            # If the model never answered, this is a failed run, not a company
+            # that complies with nothing. Reporting 0% here is worse than
+            # reporting nothing: it is a confident, wrong, client-facing number.
+            if analysis_errors and requirements_met + requirements_partial + requirements_gap + requirements_na == 0:
+                logger.error(
+                    f"Analysis {analysis_id}: all {analysis_errors} requirements failed to "
+                    f"analyse. Marking failed rather than reporting 0% compliance."
+                )
+                analysis.status = 'failed'
+                analysis.total_requirements = len(requirements)
+                analysis.completed_at = datetime.utcnow()
+                analysis.analysis_params = {
+                    'error': 'model_unavailable',
+                    'failed_requirements': analysis_errors,
+                }
+                self.db.commit()
+                return
 
             # Calculate compliance score (met + 0.5*partial) / (total - na)
             total_applicable = requirements_met + requirements_partial + requirements_gap
@@ -133,6 +220,14 @@ class GapAnalyzer:
             analysis.compliance_score = compliance_score
             analysis.status = 'completed'
             analysis.completed_at = datetime.utcnow()
+            if analysis_errors:
+                # Partial run: surfaced so the score is read in context rather
+                # than as a verdict over the full requirement set.
+                analysis.analysis_params = {
+                    'partial': True,
+                    'failed_requirements': analysis_errors,
+                    'analysed_requirements': len(requirements) - analysis_errors,
+                }
 
             self.db.commit()
 
@@ -160,12 +255,8 @@ class GapAnalyzer:
         Phase 1: Semantic search for relevant chunks
         Phase 2: LLM analysis to determine compliance status
         """
-        # Phase 1: Semantic search
-        relevant_chunks = await self._semantic_search(
-            requirement.requirement_text,
-            document_chunks,
-            top_k=5
-        )
+        # Phase 1: lexical retrieval against the index built once per analysis
+        relevant_chunks = self._search(requirement.requirement_text, top_k=5)
         
         # Phase 2: LLM analysis
         llm_result = await self._llm_gap_analysis(
@@ -206,53 +297,63 @@ class GapAnalyzer:
         
         return finding
     
-    async def _semantic_search(
-        self,
-        query: str,
-        chunks: List[str],
-        top_k: int = 5
-    ) -> List[str]:
-        """
-        Find most relevant document chunks using embeddings.
+    def _build_index(self, chunks: List[str]) -> None:
+        """Build a TF-IDF index over the document chunks, once per analysis.
 
-        Uses OpenAI text-embedding-3-small for efficiency.
+        This replaces per-requirement OpenAI embedding calls. Two reasons:
+
+        1. It was billing-dependent. When the OpenAI balance hit zero the
+           embedding call raised, the except branch silently returned
+           `chunks[:top_k]` -- the FIRST five chunks of the document,
+           regardless of the requirement -- and the analysis carried on as if
+           retrieval had worked.
+        2. It re-embedded every chunk once per requirement. For the 401
+           requirements in the GDPR package that is 401 full passes over the
+           document to answer 401 questions about the same text.
+
+        TF-IDF over a handful of policy documents is a fair match for this
+        task: requirement text and policy text share concrete vocabulary
+        ("authorised representative", "producer register", "unsold"). numpy is
+        already a hard dependency in requirements-light.
         """
-        if not chunks:
+        self._chunks = chunks
+        docs_tokens = [_tokenise(c) for c in chunks]
+        df: Dict[str, int] = {}
+        for toks in docs_tokens:
+            for term in set(toks):
+                df[term] = df.get(term, 0) + 1
+        n = max(len(chunks), 1)
+        self._idf = {t: math.log((n + 1) / (c + 1)) + 1.0 for t, c in df.items()}
+        self._doc_vectors = []
+        for toks in docs_tokens:
+            tf: Dict[str, float] = {}
+            for term in toks:
+                tf[term] = tf.get(term, 0.0) + 1.0
+            vec = {t: (1.0 + math.log(c)) * self._idf.get(t, 0.0) for t, c in tf.items()}
+            norm = math.sqrt(sum(v * v for v in vec.values())) or 1.0
+            self._doc_vectors.append({t: v / norm for t, v in vec.items()})
+
+    def _search(self, query: str, top_k: int = 5) -> List[str]:
+        """Return the top-k chunks most lexically similar to the requirement."""
+        if not self._chunks:
             return []
+        q_tokens = _tokenise(query)
+        if not q_tokens:
+            return self._chunks[:top_k]
+        qtf: Dict[str, float] = {}
+        for term in q_tokens:
+            qtf[term] = qtf.get(term, 0.0) + 1.0
+        qvec = {t: (1.0 + math.log(c)) * self._idf.get(t, 0.0) for t, c in qtf.items()}
+        qnorm = math.sqrt(sum(v * v for v in qvec.values())) or 1.0
+        qvec = {t: v / qnorm for t, v in qvec.items()}
 
-        try:
-            # Get embedding for query (requirement)
-            query_response = client.embeddings.create(
-                model="text-embedding-3-small",
-                input=query
-            )
-            query_embedding = np.array(query_response.data[0].embedding)
-
-            # Get embeddings for chunks (batch for efficiency)
-            truncated_chunks = [chunk[:8000] for chunk in chunks]
-            chunk_response = client.embeddings.create(
-                model="text-embedding-3-small",
-                input=truncated_chunks
-            )
-            chunk_embeddings = [np.array(item.embedding) for item in chunk_response.data]
-
-            # Calculate cosine similarities
-            similarities = [
-                np.dot(query_embedding, chunk_emb) /
-                (np.linalg.norm(query_embedding) * np.linalg.norm(chunk_emb))
-                for chunk_emb in chunk_embeddings
-            ]
-
-            # Get top-k chunks
-            top_indices = np.argsort(similarities)[-top_k:][::-1]
-            relevant_chunks = [chunks[i] for i in top_indices]
-
-            return relevant_chunks
-
-        except Exception as e:
-            logger.error(f"Semantic search failed: {str(e)}")
-            # Fallback: return first k chunks
-            return chunks[:top_k]
+        scores = []
+        for i, dvec in enumerate(self._doc_vectors):
+            # Iterate the shorter vector; cosine of two unit vectors is the dot.
+            small, large = (qvec, dvec) if len(qvec) <= len(dvec) else (dvec, qvec)
+            scores.append((sum(v * large.get(t, 0.0) for t, v in small.items()), i))
+        scores.sort(reverse=True)
+        return [self._chunks[i] for score, i in scores[:top_k] if score > 0] or self._chunks[:top_k]
     
     async def _llm_gap_analysis(
         self,
@@ -304,35 +405,41 @@ Respond in JSON:
   "estimated_effort": "quick|moderate|significant"
 }}"""
 
+        # Runs on the shared free open-model chain, not OpenAI. The previous
+        # implementation called gpt-4o-mini directly; when the OpenAI balance
+        # reached zero every single call raised, the except branch below
+        # returned a synthetic 'gap' for every requirement, and the analysis
+        # still completed and reported a 0% compliance score. A client reading
+        # that would conclude they comply with nothing. See the analysis_errors
+        # accounting in analyze_compliance: a run where the model never
+        # answered is now recorded as failed, not as zero compliance.
         try:
-            import json
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",  # Cost-effective for bulk analysis
-                messages=[
-                    {"role": "system", "content": "You are an EU compliance expert analyzing company documentation. Always respond with valid JSON only."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.1,
+            from services.ai.multi_provider_service import get_multi_provider_service
+
+            service = get_multi_provider_service()
+            response = await service.generate(
+                system_prompt=(
+                    "You are an EU compliance expert analysing company documentation "
+                    "against a legal requirement. Respond with a single valid JSON "
+                    "object and nothing else: no prose, no markdown fences."
+                ),
+                messages=[{"role": "user", "content": prompt}],
                 max_tokens=800,
-                response_format={"type": "json_object"}
+                temperature=0.1,
             )
-
-            result = json.loads(response.choices[0].message.content.strip())
-
+            result = _parse_json_object(response.message)
+            if result is None:
+                raise ValueError(
+                    f"provider {response.provider} returned no parseable JSON object"
+                )
             return result
 
         except Exception as e:
             logger.error(f"LLM gap analysis failed: {str(e)}")
-            # Fallback: mark as unknown
-            return {
-                'status': 'gap',
-                'confidence': 0.3,
-                'evidence_text': None,
-                'evidence_source': None,
-                'gap_description': 'Unable to analyze - please review manually',
-                'recommendation': 'Manual review required',
-                'estimated_effort': 'moderate'
-            }
+            # Signal the failure to the caller instead of returning a verdict.
+            # Returning status='gap' here is what made a dead API key look like
+            # a compliance finding.
+            raise GapAnalysisUnavailable(str(e)) from e
     
     def _calculate_priority(self, requirement: LawRequirement, status: str) -> int:
         """

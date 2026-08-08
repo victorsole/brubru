@@ -14,7 +14,9 @@ interface ComplianceAnalysis {
   cluster_name?: string;
   compliance_score?: number;
   status: 'processing' | 'completed' | 'failed';
-  started_at: string;
+  // The API serialises this as `created_at` (from analysis.started_at).
+  created_at?: string;
+  started_at?: string;
   completed_at?: string;
   requirements_met?: number;
   requirements_gap?: number;
@@ -65,7 +67,11 @@ export const UsageHistory = ({
       }
 
       const data = await response.json();
-      setAnalyses(Array.isArray(data) ? data : []);
+      // GET /eu-law-comply/history returns { analyses, total_count, limit, offset },
+      // not a bare array. The previous `Array.isArray(data) ? data : []` therefore
+      // ALWAYS fell through to [], so this sidebar reported "No compliance analyses
+      // yet" to every user regardless of how many they had. Accept both shapes.
+      setAnalyses(Array.isArray(data) ? data : (data?.analyses ?? []));
     } catch (err) {
       console.error('Error fetching history:', err);
       setError('Failed to load history');
@@ -109,7 +115,8 @@ export const UsageHistory = ({
     return 'usage-history__score--poor';
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '';
     return new Date(dateString).toLocaleDateString(uiDateLocale(), {
       day: '2-digit',
       month: 'short',
@@ -183,7 +190,12 @@ export const UsageHistory = ({
               )}
 
               {/* Compliance Score (only for completed analyses) */}
-              {analysis.status === 'completed' && analysis.compliance_score !== undefined && (
+              {/* `!= null` catches BOTH null and undefined. The API sends JSON
+                  null for an analysis with no score, and `null !== undefined`
+                  is true -- so this branch used to run and `null.toFixed(1)`
+                  threw, unmounting the whole sidebar. That was invisible while
+                  the list was always empty from the response-shape bug above. */}
+              {analysis.status === 'completed' && analysis.compliance_score != null && (
                 <div className="usage-history__score-container">
                   <div className={`usage-history__score ${getScoreClass(analysis.compliance_score)}`}>
                     {analysis.compliance_score.toFixed(1)}%
@@ -200,7 +212,7 @@ export const UsageHistory = ({
 
               {/* Date */}
               <span className="usage-history__date">
-                {formatDate(analysis.started_at)}
+                {formatDate(analysis.created_at || analysis.started_at)}
               </span>
             </div>
           ))}

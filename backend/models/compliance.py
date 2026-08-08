@@ -85,7 +85,7 @@ class ComplianceAnalysis(Base):
             'requirements_met': self.requirements_met,
             'requirements_partial': self.requirements_partial,
             'requirements_gap': self.requirements_gap,
-            'compliance_score': float(self.compliance_score) if self.compliance_score else None,
+            'compliance_score': float(self.compliance_score) if self.compliance_score is not None else None,
             'started_at': self.started_at.isoformat() if self.started_at else None,
             'completed_at': self.completed_at.isoformat() if self.completed_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None
