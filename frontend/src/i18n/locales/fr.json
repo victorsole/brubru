@@ -981,7 +981,8 @@
       "tue": "mar",
       "wed": "mer"
     },
-    "dismiss": "Ignorer"
+    "dismiss": "Ignorer",
+    "openNamed": "Ouvrir {{name}}"
   },
   "landing": {
     "nav": {

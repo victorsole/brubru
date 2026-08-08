@@ -1872,7 +1872,8 @@
       "tue": "mar",
       "wed": "mer"
     },
-    "dismiss": "Ignora"
+    "dismiss": "Ignora",
+    "openNamed": "Apri {{name}}"
   },
   "landing": {
     "nav": {

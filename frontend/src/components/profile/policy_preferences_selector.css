@@ -18,6 +18,10 @@
   pointer-events: none;
 }
 
+/* See my_tracked_files_tab.css: globals.css `input[type="search"]` (0,1,1)
+   outranks a lone component class and resets the left padding, putting the
+   placeholder underneath the magnifier. Scope to the wrapper to win. */
+.policy-preferences__search .policy-preferences__search-input,
 .policy-preferences__search-input {
   width: 100%;
   padding: 0.7rem 2.4rem 0.7rem 2.5rem;

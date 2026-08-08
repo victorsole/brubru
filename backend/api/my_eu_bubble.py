@@ -47,6 +47,25 @@ from schemas.rss_schemas import (
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
 from api.admin_auth import get_current_admin_user
+from services.legislative.title_display import (
+    curated_alias,
+    short_title as parse_short_title,
+    split_celex_prefix,
+)
+
+
+def _display_short_title(carriage) -> str:
+    """The name to put in a heading for this file.
+
+    Same cascade the briefing cards use, so one file is called one thing
+    everywhere: the cached short_title, else a curated alias, else the
+    instrument designation parsed off the official title.
+    """
+    cached = (getattr(carriage, "short_title", None) or "").strip()
+    if cached:
+        return cached
+    clean_title, celex = split_celex_prefix(carriage.title or "")
+    return curated_alias(carriage.oeil_procedure_ref, celex) or parse_short_title(clean_title)
 
 logger = logging.getLogger(__name__)
 
@@ -1445,6 +1464,13 @@ async def get_legislative_file(
             "file_id": carriage.file_id,
             "train_id": str(carriage.train_id) if carriage.train_id else None,
             "title": carriage.title,
+            # Human-readable short name for the modal heading. The official
+            # title runs 150-500 characters and sometimes opens with the raw
+            # "CELEX:...:" database prefix, which made the modal header a wall
+            # of legal prose. Falls back to the curated alias or the parsed
+            # instrument designation when the cache is empty, so this is never
+            # null for a titled file. `title` is unchanged and still shown.
+            "short_title": _display_short_title(carriage),
             "description": carriage.description,
 
             # Status

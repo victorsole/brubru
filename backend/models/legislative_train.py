@@ -165,6 +165,12 @@ class LegislativeCarriage(Base):
 
     # Basic info
     title = Column(String, nullable=False)
+    # Human-readable short name for headings and list rows (migration 204).
+    # A curated alias, or a subject line synthesised from `title` and checked
+    # against it. NULL means callers fall back to the instrument designation
+    # parsed by services/legislative/title_display.py. Written by
+    # scripts/backfill_carriage_short_titles.py.
+    short_title = Column(Text)
     description = Column(Text)
 
     # Status tracking

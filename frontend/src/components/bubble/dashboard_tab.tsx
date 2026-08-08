@@ -20,8 +20,13 @@ import {
   mdiArrowRight, mdiCreation, mdiInformationOutline,
 } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
+import { useProactive } from '../../hooks/use_proactive';
 import { DashboardCockpit } from './dashboard_cockpit';
 import './dashboard_tab.css';
+
+/** Loose match for "the greeting chip and the briefing card say the same thing". */
+const sameThing = (a: string, b: string) =>
+  a.trim().toLowerCase().replace(/\s+/g, ' ') === b.trim().toLowerCase().replace(/\s+/g, ' ');
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -54,7 +59,7 @@ const NAV_GROUPS: { titleKey: string; fallback: string; descKey: string; descFal
     { tab: 'mep_watch', labelKey: 'bubble.tabs.mepWatch', fallback: 'MEP Watch', icon: mdiAccountTieOutline },
     { tab: 'plenary_agenda', labelKey: 'bubble.tabs.plenaryAgenda', fallback: 'Plenary Order of Business', icon: mdiGavel },
     { tab: 'parliamentary_questions', labelKey: 'bubble.tabs.parliamentaryQuestions', fallback: 'Parliamentary Questions', icon: mdiCommentQuestionOutline },
-    { tab: 'consultations', labelKey: 'bubble.tabs.consultations', fallback: 'EC Public Consultations', icon: mdiCalendarCollapseHorizontal },
+    { tab: 'consultations', labelKey: 'bubble.tabs.consultations', fallback: 'EU Public Consultations', icon: mdiCalendarCollapseHorizontal },
     { tab: 'lobby_meetings', labelKey: 'bubble.tabs.lobbyMeetings', fallback: 'Lobby Meetings', icon: mdiHandshakeOutline },
   ] },
   { titleKey: 'bubble.sections.strategy', fallback: 'Analysis & Strategy',
@@ -75,6 +80,16 @@ export const DashboardTab = () => {
   const [greeting, setGreeting] = useState<string | null>(null);
   const [hooks, setHooks] = useState<PolicyHook[]>([]);
   const [digest, setDigest] = useState<DigestSection[]>([]);
+  const briefings = useProactive((s) => s.briefings);
+
+  // The greeting chips and the briefing cards are computed from the same
+  // signals, so they were rendering the same sentence twice, 100px apart
+  // ("3 new legislative files landed in your policy areas this week" as both a
+  // chip and a card title). The cards are the richer surface — they list the
+  // files and open them — so a chip that merely restates a card is dropped.
+  const visibleHooks = hooks.filter(
+    (hook) => !briefings.some((b) => sameThing(b.title, hook.label)),
+  );
 
   useEffect(() => {
     if (!token) return;
@@ -108,9 +123,9 @@ export const DashboardTab = () => {
       {/* 1. Greeting (Chat-style) */}
       <section className="ov-greeting">
         <p className="ov-greeting__text">{greeting || fallbackGreeting()}</p>
-        {hooks.length > 0 && (
+        {visibleHooks.length > 0 && (
           <div className="ov-hooks">
-            {hooks.map((hook, i) => (
+            {visibleHooks.map((hook, i) => (
               <button key={`${hook.source}-${i}`} className="ov-hook" onClick={() => openHook(hook)}>
                 <Icon path={mdiCreation} size={0.6} /> {hook.label}
               </button>

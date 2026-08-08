@@ -981,7 +981,8 @@
       "fri": "Fri",
       "sat": "Sat"
     },
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "openNamed": "Open {{name}}"
   },
   "landing": {
     "nav": {

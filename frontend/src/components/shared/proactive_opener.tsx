@@ -26,6 +26,7 @@ import {
   type ProactiveBriefingItem,
   type ProactiveTriggerSource,
 } from '../../hooks/use_proactive';
+import { destinationName } from '../../utils/destination_label';
 import './proactive_opener.css';
 
 // Label maps hold i18n keys + English defaults; resolved with t() at render
@@ -45,14 +46,19 @@ const TRIGGER_LABEL: Record<ProactiveTriggerSource, I18nLabel> = {
   weekly_digest: { key: 'proactive.triggerWeeklyDigest', defaultValue: 'Your week on Brubru' },
 };
 
-const OPEN_LABEL: Record<ProactiveTriggerSource, I18nLabel> = {
-  morning_brief: { key: 'proactive.openCalendar', defaultValue: 'Open My EU Calendar' },
-  new_file_match: { key: 'proactive.openMyFiles', defaultValue: 'Open My Files' },
-  tracked_file_movement: { key: 'proactive.openMyFiles', defaultValue: 'Open My Files' },
-  amendment_surge: { key: 'proactive.openAmendments', defaultValue: 'Open Amendments' },
-  learn_about_you: { key: 'proactive.openProfile', defaultValue: 'Open profile' },
-  conversation_recall: { key: 'proactive.openChatHistory', defaultValue: 'Open chat history' },
-  weekly_digest: { key: 'proactive.openDashboard', defaultValue: 'Open dashboard' },
+// Where each briefing's secondary CTA goes, named by the CANONICAL label of
+// that destination. The card used to say "Open My Files" while the sidebar
+// said "My Tracked Files"; composing from the tab's own key keeps one name
+// per destination across the whole product. See TILE_DESTINATION in
+// dashboard_cockpit.tsx, which does the same for the cockpit tiles.
+const OPEN_DESTINATION: Record<ProactiveTriggerSource, I18nLabel> = {
+  morning_brief: { key: 'bubble.tabs.euCalendar', defaultValue: 'My EU Calendar' },
+  new_file_match: { key: 'bubble.tabs.myTrackedFiles', defaultValue: 'My Tracked Files' },
+  tracked_file_movement: { key: 'bubble.tabs.myTrackedFiles', defaultValue: 'My Tracked Files' },
+  amendment_surge: { key: 'bubble.amendments', defaultValue: 'Amendments' },
+  learn_about_you: { key: 'bubble.feat.profile', defaultValue: 'Profile' },
+  conversation_recall: { key: 'chat.history', defaultValue: 'Chat history' },
+  weekly_digest: { key: 'bubble.tabs.overview', defaultValue: 'Overview' },
 };
 
 // Primary CTA label. Defaults to "Tell me more" (which opens Chat with the
@@ -148,7 +154,7 @@ export const ProactiveOpener = ({ surface = 'chat', onOpenFile }: ProactiveOpene
         {visible.map((b) => {
           const triggerLabel = TRIGGER_LABEL[b.trigger_source];
           const primaryLabel = PRIMARY_LABEL[b.trigger_source];
-          const openLabel = OPEN_LABEL[b.trigger_source];
+          const openDest = OPEN_DESTINATION[b.trigger_source];
           return (
           <article key={b.title} className="proactive-opener__card">
             <div className="proactive-opener__card-tag">
@@ -244,7 +250,12 @@ export const ProactiveOpener = ({ surface = 'chat', onOpenFile }: ProactiveOpene
                   className="proactive-opener__cta proactive-opener__cta--secondary"
                   onClick={() => navigate(b.drill_down_path as string)}
                 >
-                  {openLabel ? t(openLabel.key, openLabel.defaultValue) : t('proactive.open', 'Open')}
+                  {openDest
+                    ? t('common.openNamed', {
+                        name: destinationName(t(openDest.key, openDest.defaultValue)),
+                        defaultValue: `Open ${destinationName(openDest.defaultValue)}`,
+                      })
+                    : t('proactive.open', 'Open')}
                 </button>
               )}
               <button

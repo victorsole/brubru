@@ -981,7 +981,8 @@
       "tue": "mar",
       "wed": "mié"
     },
-    "dismiss": "Descartar"
+    "dismiss": "Descartar",
+    "openNamed": "Abrir {{name}}"
   },
   "landing": {
     "nav": {

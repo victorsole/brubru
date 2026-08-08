@@ -981,7 +981,8 @@
       "tue": "dt",
       "wed": "dc"
     },
-    "dismiss": "Descarta"
+    "dismiss": "Descarta",
+    "openNamed": "Obre {{name}}"
   },
   "landing": {
     "nav": {

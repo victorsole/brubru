@@ -89,7 +89,13 @@ export interface LegislativeFileDetail {
   id: string;
   file_id: string;
   train_id?: string;
+  /** Full official title. Always present; the legal name of the act. */
   title: string;
+  /**
+   * Human-readable short name for headings. Null when none could be resolved,
+   * in which case show `title`. Never replaces `title` in legal contexts.
+   */
+  short_title?: string | null;
   description?: string;
   current_status: string;
   status_history?: any[];

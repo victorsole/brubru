@@ -139,6 +139,16 @@ class LegislativeCarriage(BaseModel):
 
     # Basic info
     title: str = Field(..., description="File title")
+    short_title: Optional[str] = Field(
+        None,
+        description=(
+            "Human-readable short name (max ~60 chars) for headings and list "
+            "rows: a curated alias, or a subject line synthesised from the "
+            "official title and checked against it. Null means the caller "
+            "should fall back to the instrument designation parsed from "
+            "`title`. Never a substitute for `title` in legal contexts."
+        ),
+    )
     description: Optional[str] = Field(None, description="File description")
 
     # Status tracking

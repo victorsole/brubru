@@ -54,6 +54,26 @@
   min-width: 0;
 }
 
+/* Heading block: short name, CELEX chip, official title. */
+.legislative-file-modal__heading {
+  min-width: 0;
+  flex: 1;
+}
+
+/* The full official title, kept but demoted: two lines at most, so a
+   400-character legal title cannot push the modal body off screen. */
+.legislative-file-modal__official-title {
+  margin: 0.3rem 0 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .legislative-file-modal__header-right {
   display: flex;
   align-items: center;

@@ -37,6 +37,28 @@ def _q(db: Session, sql: str, params: dict) -> List[dict]:
         return []
 
 
+def _dedupe(items: List[dict]) -> List[dict]:
+    """Collapse rows that render identically.
+
+    One file can carry several roll-call votes, and one committee meeting
+    several documents of the same kind, so the raw rows produced repeated
+    lines: "Political repression and humanitarian situation in Cuba" twice in
+    a row, "Amendments: Generational renewal in agriculture" twice. The digest
+    is a glance, not a log — the drill-through goes to the full surface — so
+    only the first (most recent, since every query orders by date DESC) line
+    of each title is kept.
+    """
+    seen = set()
+    out: List[dict] = []
+    for item in items:
+        key = " ".join((item.get("title") or "").lower().split())
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+    return out
+
+
 def workspace_digest(db: Session, user) -> dict:
     """Sections of items touching the user's tracked files / interests."""
     interests = list(_interest_list(user))
@@ -163,6 +185,9 @@ def workspace_digest(db: Session, user) -> dict:
                 "drill": "/my-eu-bubble?tab=news",
                 "items": [{"title": r["title"], "date": r["d"], "url": r["source_url"]} for r in rows],
             })
+
+    for section in sections:
+        section["items"] = _dedupe(section["items"])
 
     return {
         "has_tracked_files": bool(procs or celex or tracked_pa),

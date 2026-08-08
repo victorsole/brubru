@@ -981,7 +981,8 @@
       "tue": "di",
       "wed": "wo"
     },
-    "dismiss": "Sluiten"
+    "dismiss": "Sluiten",
+    "openNamed": "{{name}} openen"
   },
   "landing": {
     "nav": {

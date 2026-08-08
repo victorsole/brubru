@@ -44,6 +44,7 @@ import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { ProactiveOpener } from '../shared/proactive_opener';
 import { LegislativeFileDetail } from './legislative_file_detail';
+import { destinationName } from '../../utils/destination_label';
 import './dashboard_cockpit.css';
 import { uiDateLocale } from '../../i18n/config';
 
@@ -107,14 +108,23 @@ const TILE_LABELS: Record<string, string> = {
   voice_opportunities: 'Voice opportunities',
 };
 
-const TILE_OPEN_LABELS: Record<string, string> = {
-  new_this_week: 'Open Legislative Tracker',
-  tracked_files_moving: 'Open My Files',
-  positions_under_stress: 'Open Position Analysis',
-  next_seven_days: 'Open My EU Calendar',
-  compliance_signals: 'Open EU Law Comply',
-  voice_opportunities: 'Open EC Consultations',
+// Where each tile drills to, named by the CANONICAL label of that
+// destination rather than by a string of its own. These CTAs used to carry
+// hand-written names that had drifted away from the navigation: the sidebar
+// said "Legislative Train: state of play" while the tile said "Open
+// Legislative Tracker", and "My Tracked Files" was offered as "Open My
+// Files" — three names for one place, in all six languages. Composing the
+// label from the tab's own key means there is one name per destination and
+// the drift cannot come back.
+const TILE_DESTINATION: Record<string, { key: string; fallback: string }> = {
+  new_this_week: { key: 'bubble.tabs.legislativeTrain', fallback: 'Legislative Train' },
+  tracked_files_moving: { key: 'bubble.tabs.myTrackedFiles', fallback: 'My Tracked Files' },
+  positions_under_stress: { key: 'bubble.tabs.positionAnalysis', fallback: 'Position Analysis' },
+  next_seven_days: { key: 'bubble.tabs.euCalendar', fallback: 'My EU Calendar' },
+  compliance_signals: { key: 'bubble.feat.eulawcomply', fallback: 'EU Law Comply' },
+  voice_opportunities: { key: 'bubble.tabs.consultations', fallback: 'EU Public Consultations' },
 };
+
 
 const TILE_KEYS = [
   'new_this_week',
@@ -294,7 +304,14 @@ const TileShell = ({
                 className="dashboard-cockpit__tile-action"
                 onClick={onDrill}
               >
-                {t('cockpit.tileOpen.' + tileKey, TILE_OPEN_LABELS[tileKey] || 'Open')}
+                {(() => {
+                  const dest = TILE_DESTINATION[tileKey];
+                  if (!dest) return t('proactive.open', 'Open');
+                  return t('common.openNamed', {
+                    name: destinationName(t(dest.key, dest.fallback)),
+                    defaultValue: `Open ${destinationName(dest.fallback)}`,
+                  });
+                })()}
                 <Icon path={mdiArrowRight} size={0.7} />
               </button>
               {chatPrompt && (
@@ -479,9 +496,8 @@ const renderComplianceItem = (item: ComplianceSignalItem) => (
   <CockpitRow key={item.eu_law_id} href={item.celex ? eurLexUrl(item.celex) : null}>
     <span className="dashboard-cockpit__item-title">{item.title}</span>
     <span className="dashboard-cockpit__item-meta">
-      {item.celex && (
-        <span className="dashboard-cockpit__item-pill">{item.celex}</span>
-      )}
+      {/* No CELEX pill. It is a database identifier that means nothing to a
+          reader, and the row itself already links to the act on EUR-Lex. */}
       {item.policy_area && (
         <span className="dashboard-cockpit__item-pill dashboard-cockpit__item-pill--interest">
           {item.policy_area}

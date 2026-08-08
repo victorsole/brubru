@@ -115,6 +115,24 @@ export const LegislativeFileDetail = () => {
   // Don't render if no file selected
   if (!selectedFile) return null;
 
+  // Heading and official title, derived once.
+  //
+  // Some carriage titles carry the CELEX glued to the front
+  // ("CELEX:32019R0005R(03): Corrigendum to ..."). That is a database
+  // identifier, not part of the act's name, so it is stripped here the same
+  // way services/legislative/title_display.py strips it server-side. It is not
+  // shown anywhere in the header: a CELEX means nothing to a reader, and the
+  // cross-references section below already links out to the act by it.
+  const celexPrefix = selectedFile.title.match(
+    /^CELEX:\s*[0-9]{5}[A-Z]{1,2}[0-9]{4}(?:R\(\d{2}\))?\s*:\s*/,
+  );
+  const officialTitle = celexPrefix
+    ? selectedFile.title.slice(celexPrefix[0].length).trim() || selectedFile.title
+    : selectedFile.title;
+  const headerTitle = selectedFile.short_title?.trim() || officialTitle;
+  // Only repeat the official title when it says more than the heading does.
+  const headerSubtitle = headerTitle === officialTitle ? null : officialTitle;
+
   // If this file has a published Brubru deep-dive, surface a link to it so the
   // modal becomes the jumping-off point to the exhaustive analysis. Matched by
   // OEIL procedure ref via the shared deep-dive map (reusable for every file).
@@ -163,9 +181,20 @@ export const LegislativeFileDetail = () => {
       <div className="legislative-file-modal__content">
         {/* Header */}
         <div className="legislative-file-modal__header">
+          {/* The heading is the short name; the full official title sits
+              beneath it. Rendering `title` as the heading put 400-500
+              characters of legal prose (opening with the raw
+              "CELEX:32019R0005R(03):" database prefix) across the top of the
+              modal. Nothing is hidden: the official title is still here, and
+              the CELEX is its own reference chip. */}
           <div className="legislative-file-modal__header-left">
             <Icon path={mdiFileDocument} size={1.2} />
-            <h2>{selectedFile.title}</h2>
+            <div className="legislative-file-modal__heading">
+              <h2>{headerTitle}</h2>
+              {headerSubtitle && (
+                <p className="legislative-file-modal__official-title">{headerSubtitle}</p>
+              )}
+            </div>
           </div>
           <div className="legislative-file-modal__header-right">
             {deepDive && (

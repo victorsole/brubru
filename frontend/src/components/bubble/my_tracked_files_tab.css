@@ -429,6 +429,13 @@
   pointer-events: none;
 }
 
+/* Specificity note: globals.css styles `input[type="search"]` (0,1,1), which
+   outranks a lone component class (0,1,0) and was resetting padding to
+   var(--space-4) = 1rem. The magnifier sits at left: 0.75rem, so the text
+   started underneath it and the placeholder rendered as "(icon)earch your
+   files...". Scoping to the wrapper (0,2,0) puts the component back in
+   charge. Any search input with a leading icon needs this. */
+.my-tracked-files-tab__search .my-tracked-files-tab__search-input,
 .my-tracked-files-tab__search-input {
   width: 100%;
   padding: 0.6rem 2.3rem 0.6rem 2.4rem;
