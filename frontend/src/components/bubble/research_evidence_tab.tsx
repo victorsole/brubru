@@ -12,6 +12,7 @@
  * 6 languages, no em-dashes. Shares the Brubru Databases stylesheet.
  */
 import { useEffect, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -98,7 +99,7 @@ export function ResearchEvidenceTab() {
         subtitle={t('db.researchHint2', 'EU research and evidence, tailored to your interests. Open recent documents and get an AI summary of any of them.')}
       />
 
-      {!cat ? <div className="db-loading">{t('db.loading', 'Loading...')}</div> : (
+      {!cat ? <ListSkeleton count={5} /> : (
         <div className="db-section">
           <div className="db-policy__controls">
             <div className="db-toggle">
@@ -161,7 +162,7 @@ function ResearchCard({ src, i, t }: { src: ResearchSource; i: number; t: any })
       <AnimatePresence initial={false}>
         {open && src.has_feed && (
           <motion.div className="db-res-feed" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
-            {loadingFeed && <div className="db-loading">{t('db.loading', 'Loading...')}</div>}
+            {loadingFeed && <ListSkeleton count={5} />}
             {items && items.length === 0 && !loadingFeed && (
               <div className="db-note"><Icon path={mdiInformationOutline} size={0.7} /><span>{t('db.noDocs', 'No recent documents to show. Use the portal link above.')}</span></div>
             )}

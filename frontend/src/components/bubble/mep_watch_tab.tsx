@@ -4,6 +4,7 @@
  * questions and open their EP profile.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -71,7 +72,7 @@ export function MepWatchTab() {
       </div>
 
       {loading ? (
-        <div className="mepw-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+        <ListSkeleton count={5} />
       ) : items.length === 0 ? (
         <div className="mepw-tab__empty">{t('bubble.mepw.none', 'No MEP activity matches your interests yet.')}</div>
       ) : (

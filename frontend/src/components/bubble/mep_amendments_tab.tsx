@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import Icon from '@mdi/react';
@@ -614,7 +615,7 @@ export const MEPAmendmentsTab = ({ initialProcedure }: { initialProcedure?: stri
           </div>
 
           {!pickerLoaded ? (
-            <div className="mep-amendments-tab__loading">{t('mepAmendmentsTab.loadingAmendmentData')}</div>
+            <div className="mep-amendments-tab__loading"><ListSkeleton count={4} /></div>
           ) : amVisibleCount === 0 ? (
             <div className="mep-amendments-tab__empty">
               <Icon path={mdiAccountGroupOutline} size={2} />
@@ -661,7 +662,7 @@ export const MEPAmendmentsTab = ({ initialProcedure }: { initialProcedure?: stri
 
       {/* Loading state */}
       {loadingStatus === 'loading' && statsLoadingStatus === 'loading' && (
-        <div className="mep-amendments-tab__loading">{t('mepAmendmentsTab.loadingAmendmentData')}</div>
+        <div className="mep-amendments-tab__loading"><ListSkeleton count={4} /></div>
       )}
 
       {/* Content (only shown when a procedure is selected and stats loaded) */}

@@ -8,6 +8,7 @@
  * No Anthropic. 1040px cap, 6 languages, no em-dashes.
  */
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { PendingNote } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
@@ -101,7 +102,7 @@ export function StakeholderMapTab() {
           {/* All scope, Cards: the full browsable directory (independent of the graph) */}
           {view === 'cards' && !mine && <DirectoryView onPick={setPick} t={t} />}
 
-          {!(view === 'cards' && !mine) && loading && <div className="db-loading">{t('sm.loading', 'Building the map...')}</div>}
+          {!(view === 'cards' && !mine) && loading && <PendingNote message={t('sm.loading', 'Building the map…')} />}
           {!(view === 'cards' && !mine) && !loading && graph && graph.nodes.length <= 1 && (
             <div className="db-note"><Icon path={mdiInformationOutline} size={0.7} />
               <span>{t('sm.empty', 'No actors yet. Track a file (or set your policy interests) and the map fills in.')}</span></div>

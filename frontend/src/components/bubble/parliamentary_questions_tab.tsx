@@ -7,6 +7,7 @@
  * institution it targets, awaiting/answered status, and an AI "why this matters".
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -116,7 +117,7 @@ export function ParliamentaryQuestionsTab() {
       </div>
 
       {loading ? (
-        <div className="parlq-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+        <ListSkeleton count={5} />
       ) : items.length === 0 ? (
         <div className="parlq-tab__empty">{t('bubble.parlq.none', 'No questions match your interests yet.')}</div>
       ) : (

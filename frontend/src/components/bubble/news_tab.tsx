@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { MeubHeader } from './meub_header';
@@ -313,7 +314,7 @@ export const NewsTab = () => {
       </div>
 
       {loading ? (
-        <p className="news-muted news-empty">{t('common.loading', 'Loading…')}</p>
+        <ListSkeleton count={6} lines={3} />
       ) : error ? (
         <div className="news-empty news-error">
           <Icon path={mdiAlertCircleOutline} size={2} />

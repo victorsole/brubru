@@ -6,6 +6,7 @@
  * Surfaces the existing committee transcription pipeline; no ASR in the client.
  */
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -253,7 +254,7 @@ export function TranscriptsTab() {
 
       {/* Catalog */}
       {loading ? (
-        <div className="transcripts-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+        <ListSkeleton count={4} lines={3} />
       ) : items.length === 0 ? (
         <div className="transcripts-tab__empty">{t('bubble.transcripts.empty', 'No transcripts yet. Transcribe a suggested recording above.')}</div>
       ) : (
@@ -552,7 +553,7 @@ function TranscriptDetailModal({ detail, onClose, onSave, instClass, bodyBadge, 
             </div>
             <div className="transcript-summary__body">
               {sumLoading ? (
-                <div className="transcripts-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+                <ListSkeleton count={4} lines={3} />
               ) : sumErr ? (
                 <p className="transcripts-tab__hint"><Icon path={mdiAlertCircleOutline} size={0.7} /> {sumErr}</p>
               ) : summaryText ? (

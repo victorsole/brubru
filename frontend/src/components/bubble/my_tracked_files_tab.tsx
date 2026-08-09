@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -1029,9 +1030,7 @@ export const MyTrackedFilesTab = () => {
             </div>
 
             {isLoadingTrackedFiles ? (
-          <div className="my-tracked-files-tab__loading">
-            {t('myFilesTab.loadingTracked')}
-          </div>
+          <div className="my-tracked-files-tab__loading"><ListSkeleton count={5} lines={3} /></div>
         ) : trackedFiles.length === 0 ? (
           <div className="my-tracked-files-tab__empty">
             <Icon path={mdiFileDocumentOutline} size={2} color="#ccc" />

@@ -3,6 +3,7 @@
  * user's topics: configuration meetings + outcomes/press, PI-filtered.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -113,7 +114,7 @@ export function CouncilWatchTab() {
       )}
 
       {loading ? (
-        <div className="cwatch-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+        <ListSkeleton count={5} />
       ) : items.length === 0 ? (
         <div className="cwatch-tab__empty">{t('bubble.cwatch.none', 'No Council activity matches your interests yet.')}</div>
       ) : (

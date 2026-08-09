@@ -18,6 +18,7 @@
  * (canon manifest, deep_dive_map, the regenerated guides index, the Catalan dirs).
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -239,7 +240,7 @@ export function DatabasesTab() {
 
 // -------------------------------------------------------------- EU Canon
 function CanonLibrary({ data, t, lang }: { data: CanonResult | null; t: any; lang: string }) {
-  if (!data) return <div className="db-loading">{t('db.loading', 'Loading...')}</div>;
+  if (!data) return <ListSkeleton count={6} lines={3} />;
   const langKey = (lang || 'en').slice(0, 2);
   return (
     <div className="db-section">
@@ -557,7 +558,7 @@ function KnowledgeGuides({ data, list, changelog, t }: {
     });
   }, [guides, query, category]);
 
-  if (!data) return <div className="db-loading">{t('db.loading', 'Loading...')}</div>;
+  if (!data) return <ListSkeleton count={6} lines={3} />;
 
   return (
     <div className="db-section">
@@ -693,7 +694,7 @@ function KnowledgeGuides({ data, list, changelog, t }: {
 
 // -------------------------------------------------------------- Dret europeu en català
 function CatalanLibrary({ data, t }: { data: CatalanResult | null; t: any }) {
-  if (!data) return <div className="db-loading">{t('db.loading', 'Loading...')}</div>;
+  if (!data) return <ListSkeleton count={6} lines={3} />;
   return (
     <div className="db-section">
       <LibHero
@@ -887,7 +888,7 @@ function BeresolMonitors({ t }: { t: any }) {
       <AnimatePresence mode="wait">
         {sel && (
           <motion.div key={sel} className="db-monitor-detail" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
-            {loadingDetail && <div className="db-loading">{t('db.loading', 'Loading...')}</div>}
+            {loadingDetail && <ListSkeleton count={4} />}
             {detail && detail.available && (
               <>
                 <div className="db-monitor-detail__head">

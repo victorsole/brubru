@@ -13,12 +13,13 @@
  * Data: /api/lobby-meetings.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
-  mdiHandshakeOutline, mdiMagnify, mdiClose, mdiLoading, mdiOfficeBuildingOutline,
+  mdiHandshakeOutline, mdiMagnify, mdiClose, mdiOfficeBuildingOutline,
   mdiDomain, mdiCalendarClock, mdiOpenInNew, mdiAccountTieOutline, mdiChartTimelineVariant,
   mdiAccountVoice, mdiCompareHorizontal, mdiFileDocumentOutline, mdiEarth, mdiCardAccountDetailsOutline,
   mdiChartBoxOutline, mdiCashMultiple, mdiScaleBalance, mdiTrophyOutline, mdiAccountTie, mdiMapMarkerOutline,
@@ -258,7 +259,7 @@ export function LobbyMeetingsTab() {
         )}
 
         {loading ? (
-          <div className="lobby-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+          <ListSkeleton count={5} />
         ) : items.length === 0 ? (
           <div className="lobby-tab__empty">{t('bubble.lobby.none', 'No lobby meetings match your interests yet.')}</div>
         ) : (
@@ -313,7 +314,7 @@ export function LobbyMeetingsTab() {
         )}
 
         {loading ? (
-          <div className="lobby-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+          <ListSkeleton count={5} />
         ) : !pres || pres.items.length === 0 ? (
           <div className="lobby-tab__empty">{t('bubble.lobby.noneEp', 'No MEP meetings match your interests yet.')}</div>
         ) : (
@@ -350,7 +351,7 @@ export function LobbyMeetingsTab() {
       {/* ===== COMPARISON ===== */}
       {view === 'comparison' && (<>
         {loading ? (
-          <div className="lobby-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+          <ListSkeleton count={5} />
         ) : !cmp ? (
           <div className="lobby-tab__empty">{t('bubble.lobby.noCmp', 'Not enough data to compare yet.')}</div>
         ) : (
@@ -400,7 +401,7 @@ export function LobbyMeetingsTab() {
       {/* ===== FOOTPRINT (Tier 0: factual signals, no verdicts) ===== */}
       {view === 'footprint' && (<>
         {loading ? (
-          <div className="lobby-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+          <ListSkeleton count={5} />
         ) : !foot ? (
           <div className="lobby-tab__empty">{t('bubble.lobby.noFoot', 'Not enough data for a footprint yet.')}</div>
         ) : (
@@ -598,7 +599,7 @@ export function LobbyMeetingsTab() {
         <div className="lobby-modal" role="dialog" aria-modal="true" onClick={() => { setOrg(null); setOrgLoading(false); }}>
           <div className="lobby-modal__panel lobby-modal__panel--wide" onClick={(e) => e.stopPropagation()}>
             {orgLoading || !org ? (
-              <div className="lobby-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+              <ListSkeleton count={5} />
             ) : (() => {
               const maxOM = Math.max(1, ...org.timeline.map((m) => m.count));
               return (<>

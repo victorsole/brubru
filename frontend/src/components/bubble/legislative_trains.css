@@ -1,6 +1,11 @@
 .legislative-trains { padding: 1.5rem; max-width: 1500px; margin: 0 auto; }
 
-.legislative-trains__loading,
+/* The skeleton list must span the column the trains will fill, so this no
+   longer shares the centred empty-state rule below. */
+.legislative-trains__loading {
+  padding: 0.5rem 0 2rem;
+}
+
 .legislative-trains__empty {
   display: flex;
   flex-direction: column;

@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
@@ -381,7 +382,7 @@ export const AmendmentsTab = () => {
       {/* Amendments List */}
       <div className="amendments-tab__content">
         {isLoading ? (
-          <div className="amendments-tab__loading">{t('amendmentsTab.loadingAmendments')}</div>
+          <div className="amendments-tab__loading"><ListSkeleton count={5} /></div>
         ) : filteredAmendments.length === 0 ? (
           <div className="amendments-tab__empty">
             <p>{t('amendmentsTab.noAmendmentsFound')}</p>

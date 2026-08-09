@@ -6,6 +6,7 @@
  */
 
 import { useEffect } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiTrain, mdiFileDocument, mdiRobotOutline, mdiCheckCircle, mdiChevronDown, mdiChevronUp, mdiStar, mdiStarOutline } from '@mdi/js';
@@ -161,10 +162,13 @@ export const LegislativeTrains = () => {
   };
 
   if (isLoadingTrains) {
+    // Measured at 3.75s on a warm connection, so this is the longest wait in
+    // My EU Bubble. A card-shaped placeholder holds the layout the trains will
+    // occupy instead of collapsing to one line and jumping when they land.
     return (
       <div className="legislative-trains">
         <div className="legislative-trains__loading">
-          {t('trains.loading') /* fallback to existing key */}
+          <ListSkeleton count={5} lines={3} label={t('trains.loading', 'Loading legislative trains…')} />
         </div>
       </div>
     );

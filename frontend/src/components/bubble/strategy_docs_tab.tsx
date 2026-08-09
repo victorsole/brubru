@@ -8,6 +8,7 @@
  * picker. No Anthropic; the editor's AI co-writer stays Mistral-first.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -141,7 +142,7 @@ export function StrategyDocsTab() {
         </div>
       </div>
 
-      {loading ? <div className="db-loading">{t('sd.loading', 'Loading...')}</div> : (
+      {loading ? <ListSkeleton count={4} /> : (
         filtered.length === 0 ? (
           <div className="sd-empty">
             <Icon path={mdiBullseyeArrow} size={1.6} />
