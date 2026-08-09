@@ -342,6 +342,103 @@ button {
   line-height: var(--line-height-normal);
 }
 
+/* Buttons.
+ *
+ * `.btn`, `.btn--primary` and friends were only ever defined scoped under
+ * `.landing` (landing_page.css). Every other surface using them rendered a
+ * completely unstyled button: no background, no padding, no radius. That
+ * included the primary "Log In" and "Sign up" calls to action, the claim page,
+ * the feedback form and all of the admin panel, where the main CTA read as
+ * plain text 45px wide.
+ *
+ * These are the base definitions, unscoped. `.landing .btn` keeps a higher
+ * specificity, so the landing page is unchanged, and the modifiers already
+ * defined elsewhere (.btn--oauth*, .btn--danger, .btn--icon) still win where
+ * they are more specific.
+ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text);
+  transition: background var(--transition-fast), color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--color-accent-blue, #0693e3);
+  color: #ffffff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #0577b9;
+}
+
+.btn--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.btn--outline {
+  background: transparent;
+  border-color: currentColor;
+}
+
+.btn--outline:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text);
+}
+
+.btn--success {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+.btn--active {
+  background: var(--color-accent-blue, #0693e3);
+  color: #ffffff;
+}
+
+.btn--small {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.btn--full {
+  width: 100%;
+}
+
 /* Base input styling, at ZERO specificity.
  *
  * `input[type="search"]` scores (0,1,1), which beats a component's own single
