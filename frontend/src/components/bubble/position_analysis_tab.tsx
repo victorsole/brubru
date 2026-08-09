@@ -6,6 +6,7 @@
 // lobbying overlay, predicted-vs-actual votes, an action bridge, and a clear
 // separation of EVIDENCED facts from INFERRED predictions.
 import * as React from 'react';
+import { ListSkeleton, RowSkeleton } from '../shared/skeleton';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -399,7 +400,7 @@ const STANCE_TXT: Record<string, string> = {
 // file, set against the file outcome. Org-anchored, sourced, hedged - no causation.
 function OutcomeAlignment({ data, loading }: { data: AlignmentResult | null; loading: boolean }) {
   const { t } = useTranslation();
-  if (loading) return <div className="pos-loading">{t('positionTab.loadingPosition')}</div>;
+  if (loading) return <RowSkeleton count={4} />;
   if (!data) return <div className="pos-empty">{t('positionTab.alignNone', 'No lobbying data for this file yet.')}</div>;
   // No rapporteur/shadow lobbying meetings recorded for this file -> nothing to align.
   if (data.coverage.lobbying_orgs === 0) {
@@ -593,7 +594,7 @@ export const PositionAnalysisTab: React.FC = () => {
         </div>
 
         {listError && <div className="pos-error">{listError}</div>}
-        {data === null && <div className="pos-loading">{t('positionTab.loadingTracked')}</div>}
+        {data === null && <ListSkeleton count={5} />}
 
         {data && (
           <>

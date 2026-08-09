@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState, useRef, useMemo } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -827,7 +828,7 @@ export const DocumentsTab = () => {
       {/* Document Grid */}
       <div className="documents-tab__content">
         {isLoadingDocuments ? (
-          <div className="documents-tab__loading">{t('documentsTab.loading')}</div>
+          <div className="documents-tab__loading"><ListSkeleton count={5} /></div>
         ) : filteredDocuments.length === 0 ? (
           <div className="documents-tab__empty">
             <p>{t('documentsTab.noDocs')}</p>

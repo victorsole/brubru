@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -442,7 +443,7 @@ const DetailModal = ({ vote, onClose }: { vote: Vote; onClose: () => void }) => 
                 placeholder={(isCouncil ? t('votes.council.searchState', 'Search member state') : t('votes.searchMep', 'Search MEP or group')) as string} />
             </div>
           </div>
-          {loading ? <p className="votes-muted">{t('common.loading', 'Loading…')}</p> : records.length === 0 ? (
+          {loading ? <ListSkeleton count={4} /> : records.length === 0 ? (
             <p className="votes-muted">{t('votes.council.noBreakdown', 'Council act adopted — no per-member-state breakdown published for this item.')}</p>
           ) : (
             <div className="votes-rcv">
@@ -768,7 +769,7 @@ export const VotesTab = () => {
       )}
 
       {loading ? (
-        <p className="votes-muted votes-tab__empty">{t('common.loading', 'Loading…')}</p>
+        <ListSkeleton count={6} lines={3} />
       ) : isVL ? (
         vlItems.length === 0 ? (
           <div className="votes-tab__empty">

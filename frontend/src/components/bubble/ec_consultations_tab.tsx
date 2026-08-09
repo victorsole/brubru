@@ -10,6 +10,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -25,7 +26,6 @@ import {
   mdiBookmarkOutline,
   mdiBookmark,
   mdiClockAlertOutline,
-  mdiRefresh,
 } from '@mdi/js';
 
 import {
@@ -314,12 +314,7 @@ export const ECConsultationsTab: React.FC<ECConsultationsTabProps> = ({ classNam
 
       {/* Loading */}
       {isLoadingConsultations ? (
-        <div className="ec-consultations-tab__loading">
-          <Icon path={mdiRefresh} size={1.5} spin />
-          <span style={{ marginLeft: '0.5rem' }}>
-            {t('common.loading', 'Loading...')}
-          </span>
-        </div>
+        <ListSkeleton count={6} lines={3} />
       ) : consultations.length === 0 ? (
         /* Empty state */
         <div className="ec-consultations-tab__empty">

@@ -69,3 +69,74 @@ export const CitationSkeleton = () => (
     <Skeleton variant="text" width="60px" height="12px" />
   </div>
 );
+
+// MEUB shapes. Nearly every sub-tab is a list of cards, so the placeholder that
+// actually reduces perceived wait is one shaped like the cards that will
+// replace it -- not a centred "Loading..." line, which reads as an empty state
+// and makes the layout jump when content lands.
+
+export const CardSkeleton = ({ lines = 2 }: { lines?: number }) => (
+  <div className="skeleton-card">
+    <div className="skeleton-card__header">
+      <Skeleton variant="text" width="34%" height="13px" />
+      <Skeleton variant="rectangular" width="66px" height="18px" />
+    </div>
+    <Skeleton variant="text" width="92%" height="15px" />
+    {Array.from({ length: Math.max(0, lines - 1) }).map((_, i) => (
+      <Skeleton key={i} variant="text" width={`${78 - i * 12}%`} height="13px" />
+    ))}
+  </div>
+);
+
+interface ListSkeletonProps {
+  /** How many placeholder cards to draw. Match the page size you request. */
+  count?: number;
+  lines?: number;
+  /** Announced to screen readers in place of the visual shimmer. */
+  label?: string;
+}
+
+export const ListSkeleton = ({ count = 4, lines = 2, label }: ListSkeletonProps) => {
+  const { t } = useTranslation();
+  return (
+    <div
+      className="skeleton-list"
+      role="status"
+      aria-busy="true"
+      aria-label={label || t('common.loading', 'Loading…')}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <CardSkeleton key={i} lines={lines} />
+      ))}
+    </div>
+  );
+};
+
+export const RowSkeleton = ({ count = 3 }: { count?: number }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="skeleton-rows" role="status" aria-busy="true" aria-label={t('common.loading', 'Loading…')}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div className="skeleton-rows__row" key={i}>
+          <Skeleton variant="text" width="6.5rem" height="13px" />
+          <Skeleton variant="text" width={`${70 - i * 8}%`} height="13px" />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * For work that is computed rather than listed -- building a graph, running an
+ * analysis -- where a card-shaped placeholder would be a lie about what is
+ * coming. Keeps the explanatory message, adds motion so a long wait does not
+ * read as a freeze, and announces itself.
+ */
+export const PendingNote = ({ message }: { message: string }) => (
+  <div className="skeleton-pending" role="status" aria-busy="true">
+    <span className="skeleton-pending__dots" aria-hidden="true">
+      <i /><i /><i />
+    </span>
+    <span className="skeleton-pending__label">{message}</span>
+  </div>
+);

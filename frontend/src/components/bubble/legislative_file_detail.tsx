@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { RowSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -106,6 +107,7 @@ export const LegislativeFileDetail = () => {
   // references of the items on their agenda, so a dossier's diary is a real
   // query: 223 procedures have at least one scheduled or past meeting.
   const [meetings, setMeetings] = useState<FileMeeting[]>([]);
+  const [isLoadingMeetings, setIsLoadingMeetings] = useState(false);
 
   const fetchMeetings = async (procedureRef: string) => {
     // A year back and two years forward: far enough to catch the whole of a
@@ -115,6 +117,7 @@ export const LegislativeFileDetail = () => {
     from.setFullYear(from.getFullYear() - 1);
     const to = new Date();
     to.setFullYear(to.getFullYear() + 2);
+    setIsLoadingMeetings(true);
     try {
       const response = await axios.get(`${API_BASE}/api/eu-calendar/events`, {
         params: {
@@ -139,6 +142,8 @@ export const LegislativeFileDetail = () => {
       setMeetings(rows);
     } catch {
       setMeetings([]);
+    } finally {
+      setIsLoadingMeetings(false);
     }
   };
 
@@ -424,11 +429,14 @@ export const LegislativeFileDetail = () => {
             )}
 
             {/* Meetings on this file */}
-            {meetings.length > 0 && (
+            {(isLoadingMeetings || meetings.length > 0) && (
               <div className="legislative-file-detail__section">
                 <h3 className="legislative-file-detail__section-title">
                   {t('fileDetail.meetings', 'Meetings on this file')}
                 </h3>
+                {isLoadingMeetings ? (
+                  <RowSkeleton count={3} />
+                ) : (
                 <div className="legislative-file-detail__meetings">
                   {meetings.map((meeting) => {
                     const when = new Date(meeting.start_date);
@@ -454,6 +462,7 @@ export const LegislativeFileDetail = () => {
                     );
                   })}
                 </div>
+                )}
               </div>
             )}
 

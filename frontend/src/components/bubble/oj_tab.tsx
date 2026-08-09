@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import { MeubHeader } from './meub_header';
@@ -253,7 +254,7 @@ export const OJTab = () => {
       )}
 
       {loading ? (
-        <p className="oj-muted oj-empty">{t('common.loading', 'Loading…')}</p>
+        <ListSkeleton count={6} />
       ) : !data || data.items.length === 0 ? (
         <div className="oj-empty">
           <Icon path={mdiNewspaperVariantOutline} size={2} />

@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
@@ -627,9 +628,12 @@ export const DashboardCockpit = () => {
   }
 
   if (isLoading && !data) {
+    // The cockpit is the first thing a user sees on opening My EU Bubble, and
+    // it waits on the slowest fan-out in the product. Rows shaped like the
+    // ones that will arrive beat a single centred line.
     return (
       <section className="dashboard-cockpit dashboard-cockpit--loading">
-        <p>{i18nT('dashboard.loadingCockpit')}</p>
+        <ListSkeleton count={4} lines={3} label={i18nT('dashboard.loadingCockpit')} />
       </section>
     );
   }

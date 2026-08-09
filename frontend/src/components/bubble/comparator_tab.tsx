@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { RowSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { mdiCompareHorizontal } from '@mdi/js';
@@ -824,7 +825,7 @@ export const ComparatorTab = () => {
                 ×
               </button>
             </div>
-            {myFilesLoading && <p className="comparator-muted">{t('comparator.loadingDots')}</p>}
+            {myFilesLoading && <RowSkeleton count={4} />}
             {!myFilesLoading && myFilesHits && myFilesHits.length === 0 && (
               <p className="comparator-muted">{t('comparator.noTrackedFiles')}</p>
             )}

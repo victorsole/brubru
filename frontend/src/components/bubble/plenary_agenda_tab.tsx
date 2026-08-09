@@ -3,11 +3,12 @@
  * dossiers plenary recently adopted on the user's interests, PI-filtered.
  */
 import { useEffect, useState, useCallback } from 'react';
+import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
 import {
-  mdiGavel, mdiMagnify, mdiLoading, mdiCalendarStar, mdiFileDocumentCheckOutline, mdiOpenInNew,
+  mdiGavel, mdiMagnify, mdiCalendarStar, mdiFileDocumentCheckOutline, mdiOpenInNew,
   mdiSitemapOutline,
 } from '@mdi/js';
 import { plenaryAgendaService } from '../../services/plenary_agenda_service';
@@ -56,7 +57,7 @@ export function PlenaryAgendaTab() {
       </div>
 
       {loading ? (
-        <div className="plen-tab__empty"><Icon path={mdiLoading} size={1} spin /></div>
+        <ListSkeleton count={4} lines={3} />
       ) : !data ? (
         <div className="plen-tab__empty">{t('bubble.plen.none', 'No plenary data yet.')}</div>
       ) : (
