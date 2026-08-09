@@ -76,6 +76,35 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
   };
 
 
+  // A failed run has no score. `Math.round(null)` is 0, so without this guard the
+  // report renders "0% Overall Compliance / 0 met / 0 partial / 0 gaps" over an
+  // empty table -- indistinguishable from a company that genuinely complies with
+  // nothing. That is the same fabrication the backend was fixed to stop
+  // producing; it must not be reintroduced at the rendering layer.
+  const hasScore = analysis.compliance_score != null && Number.isFinite(analysis.compliance_score);
+  if (analysis.status === 'failed' || !hasScore) {
+    return (
+      <div className="compliance-report">
+        <div className="compliance-report__header">
+          <h2>{t('comply.report.title')}</h2>
+          <div className="compliance-report__cluster-name">{analysis.cluster?.name}</div>
+        </div>
+        <div className="compliance-report__failed" role="alert">
+          <span className="mdi mdi-alert-circle-outline"></span>
+          <div>
+            <strong>
+              {t('comply.report.analysisFailedTitle', 'This analysis did not complete')}
+            </strong>
+            <p>
+              {t('comply.report.analysisFailedBody',
+                'No compliance score was produced, so there is nothing to report. This is not a score of zero. Run the analysis again; if it keeps failing, the analysis service is unavailable.')}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="compliance-report">
       <div className="compliance-report__header">
