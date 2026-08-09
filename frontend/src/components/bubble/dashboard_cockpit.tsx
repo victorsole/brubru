@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { chatReturnParams } from '../../utils/chat_return';
 import { ListSkeleton } from '../shared/skeleton';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -219,7 +220,10 @@ const TileShell = ({
   const onDrill = () => navigate(drillPath);
   const onChat = () => {
     if (!chatPrompt) return;
-    navigate(`/chat?q=${encodeURIComponent(chatPrompt)}&autofire=1`);
+    const params = new URLSearchParams({ q: chatPrompt, autofire: '1' });
+    Object.entries(chatReturnParams('/my-eu-bubble?tab=dashboard', t('bubble.tabs.overview', 'Overview')))
+      .forEach(([k, v]) => params.set(k, v));
+    navigate(`/chat?${params.toString()}`);
   };
   const onCta = () => {
     if (emptyState) navigate(emptyState.cta_path);

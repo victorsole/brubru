@@ -182,3 +182,39 @@
     gap: var(--space-6);
   }
 }
+
+/* Return link, shown only when Chat was opened from another product via an
+   "Ask Brubru" button. Sits above the conversation so the way back is visible
+   before the answer arrives, not after scrolling it. */
+.main-page__return {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0 1rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  max-width: min(calc(100% - 2rem), calc(100vw - 2rem));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.main-page__return:hover,
+.main-page__return:focus-visible {
+  border-color: var(--color-accent-blue, #0693e3);
+  color: var(--color-accent-blue, #0693e3);
+}
+
+@media (max-width: 767px) {
+  .main-page__return {
+    margin-left: 0.75rem;
+    max-width: calc(100vw - 1.5rem);
+  }
+}

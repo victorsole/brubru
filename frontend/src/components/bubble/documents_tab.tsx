@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState, useRef, useMemo } from 'react';
+import { chatReturnParams } from '../../utils/chat_return';
 import { ListSkeleton } from '../shared/skeleton';
 import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -602,7 +603,10 @@ export const DocumentsTab = () => {
     if (doc.document_type !== 'amendment_carriage' && doc.document_type !== 'uploaded' && !doc.include_in_ai_context) {
       updateDocument(doc.id, { include_in_ai_context: true });
     }
-    navigate('/chat', {
+    const params = new URLSearchParams(
+      chatReturnParams('/my-eu-bubble?tab=documents', t('bubble.tabs.documents', 'My Documents')),
+    );
+    navigate(`/chat?${params.toString()}`, {
       state: {
         initialQuestion: `Use my document "${doc.title}" to answer the next question.`,
         source: 'documents_tab',
