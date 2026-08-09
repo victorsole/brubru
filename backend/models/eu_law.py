@@ -131,6 +131,11 @@ class LawCluster(Base):
     policy_area = Column(String(100), index=True)
     priority_level = Column(String(20))  # "high", "medium", "low"
 
+    # Explicit startup-focus flag (migration 205). Set this on new clusters.
+    # The ?startup_focused= filter previously used `id > 11`, which silently
+    # reclassified every cluster seeded after id 21 as a startup package.
+    is_startup_focused = Column(Boolean, nullable=False, server_default="false")
+
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     def __repr__(self):

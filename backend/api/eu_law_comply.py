@@ -124,6 +124,20 @@ async def run_compliance_analysis_task(
 
     finally:
         db.close()
+        # The uploads were written with NamedTemporaryFile(delete=False) so they
+        # would survive until the background task read them. Nothing deleted
+        # them afterwards, so every analysis left its documents behind in the
+        # system temp directory -- user-uploaded compliance material, kept
+        # indefinitely on the container. Clean up here: this is the last point
+        # that holds the paths, and it runs on the success and failure paths
+        # alike.
+        for path in document_paths or []:
+            try:
+                os.unlink(path)
+            except FileNotFoundError:
+                pass
+            except OSError as exc:
+                logger.warning(f"Could not remove temp upload {path}: {exc}")
 
 
 # ============================================================================
@@ -141,7 +155,7 @@ def list_clusters(
     List all law clusters.
 
     Query Parameters:
-    - startup_focused: Filter for startup packages (IDs 12-21) if True
+    - startup_focused: Filter on the startup-oriented compliance packages
     - policy_area: Filter by policy area
 
     Returns list of clusters with law count and requirement count.
@@ -156,12 +170,12 @@ def list_clusters(
 
         query = db.query(LawCluster)
 
-        # Filter by startup-focused
+        # Filter on the explicit flag (migration 205), never on the id. This was
+        # `LawCluster.id > 11`, hardcoded when clusters 12-21 happened to be the
+        # ten startup packages; every cluster seeded afterwards (ids 22-62) fell
+        # on the wrong side of it, so this returned 51 "startup packages".
         if startup_focused is not None:
-            if startup_focused:
-                query = query.filter(LawCluster.id > 11)  # Startup packages: 12-21
-            else:
-                query = query.filter(LawCluster.id <= 11)  # General packages: 1-11
+            query = query.filter(LawCluster.is_startup_focused.is_(bool(startup_focused)))
 
         # Filter by policy area
         if policy_area:
@@ -598,6 +612,48 @@ async def search_laws(
         )
 
 
+# NOTE ON ORDER: /laws/stats MUST stay above /laws/{celex}. FastAPI matches routes in
+# registration order, so with {celex} first, GET /laws/stats bound to that route with
+# celex="stats" and returned 404 -- the stats endpoint was unreachable in production.
+# Any new literal /laws/<word> route goes above the {celex} one too.
+@router.get("/laws/stats")
+async def get_law_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get statistics about the EU law database.
+
+    Returns counts by policy area, document type, and year.
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        if current_user.subscription_tier not in ['yellow', 'blue']:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="EU Law Comply is available for Yellow and Blue tier users only"
+            )
+
+        search_service = EULawSearchService(db)
+
+        return {
+            'total_laws': db.query(EULaw).count(),
+            'by_policy_area': search_service.get_policy_area_stats(),
+            'by_doc_type': search_service.get_doc_type_stats(),
+            'by_year': search_service.get_year_stats(year_from=2015),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting law stats: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve statistics"
+        )
+
+
 @router.get("/laws/{celex}")
 async def get_law_by_celex(
     celex: str,
@@ -664,44 +720,6 @@ async def get_law_by_celex(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve law"
-        )
-
-
-@router.get("/laws/stats")
-async def get_law_stats(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    """
-    Get statistics about the EU law database.
-
-    Returns counts by policy area, document type, and year.
-    """
-    from services.eu_law_search import EULawSearchService
-
-    try:
-        if current_user.subscription_tier not in ['yellow', 'blue']:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="EU Law Comply is available for Yellow and Blue tier users only"
-            )
-
-        search_service = EULawSearchService(db)
-
-        return {
-            'total_laws': db.query(EULaw).count(),
-            'by_policy_area': search_service.get_policy_area_stats(),
-            'by_doc_type': search_service.get_doc_type_stats(),
-            'by_year': search_service.get_year_stats(year_from=2015),
-        }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting law stats: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve statistics"
         )
 
 

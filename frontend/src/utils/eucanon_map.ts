@@ -52,6 +52,7 @@ export const EUCANON_BY_CELEX: Record<string, string> = {
   '32025L1892': '/eucanon/2025-1892_wfd_textiles/',
   '32022L2464': '/eucanon/2022-2464_csrd/',
   '32024L1760': '/eucanon/2024-1760_csddd/',
+  '32023R1542': '/eucanon/2023-1542_batteries/',
 };
 
 export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
@@ -82,10 +83,21 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Cineca State Aid Decision (Decision (EU) 2025/1963)': '/eucanon/2025-1963_cineca/',
   'Tirrenia State Aid Decision (Decision (EU) 2020/1412)': '/eucanon/2020-1412_tirrenia/',
   'Textile EPR and Food Waste Package': '/eucanon/2025-1892_wfd_textiles/',
+  // These four canon clusters were merged into their package clusters on
+  // 8 Aug 2026 (scripts/merge_duplicate_clusters.py), because EU Law Comply was
+  // offering two entries for the same law with very different depth. The
+  // GET /clusters payload carries no primary_celex, so getEucanonUrl resolves by
+  // NAME -- deleting these names alone would have silently killed the explainer
+  // link on the surviving cards. Both spellings are kept: the retired canon
+  // names for any cached client, and the package names that are live now.
   'GDPR (Regulation (EU) 2016/679)': '/eucanon/2016-679_gdpr/',
+  'GDPR Package (Data Protection)': '/eucanon/2016-679_gdpr/',
   'Digital Services Act (Regulation (EU) 2022/2065)': '/eucanon/2022-2065_dsa/',
+  'Digital Services Act Package': '/eucanon/2022-2065_dsa/',
   'Digital Markets Act (Regulation (EU) 2022/1925)': '/eucanon/2022-1925_dma/',
+  'Digital Markets Act Package': '/eucanon/2022-1925_dma/',
   'NIS2 Directive (Directive (EU) 2022/2555)': '/eucanon/2022-2555_nis2/',
+  'NIS2 Directive (Cybersecurity)': '/eucanon/2022-2555_nis2/',
   'CBAM Package (Carbon Border Adjustment Mechanism)': '/eucanon/2023-956_cbam/',
   'CBAM (Regulation (EU) 2023/956)': '/eucanon/2023-956_cbam/',
   'DORA - Digital Operational Resilience Act': '/eucanon/2022-2554_dora/',
@@ -98,6 +110,8 @@ export const EUCANON_BY_CLUSTER_NAME: Record<string, string> = {
   'Corporate Sustainability Reporting Directive (Directive (EU) 2022/2464)': '/eucanon/2022-2464_csrd/',
   'CSDDD - Corporate Sustainability Due Diligence Directive': '/eucanon/2024-1760_csddd/',
   'Corporate Sustainability Due Diligence Directive (Directive (EU) 2024/1760)': '/eucanon/2024-1760_csddd/',
+  'EU Batteries Regulation (Reg 2023/1542)': '/eucanon/2023-1542_batteries/',
+  'Batteries Regulation (Regulation (EU) 2023/1542)': '/eucanon/2023-1542_batteries/',
 };
 
 export interface EucanonLookupInput {
