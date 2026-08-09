@@ -2738,7 +2738,24 @@
       "errorExport": "Impossibile esportare il rapporto. Riprova.",
       "criticalityCritical": "critico",
       "criticalityImportant": "importante",
-      "criticalityRecommended": "raccomandato"
+      "criticalityRecommended": "raccomandato",
+      "status": "Stato",
+      "article": "Articolo",
+      "obligation": "Obbligo",
+      "criticality": "Criticità",
+      "action": "Azione",
+      "allCriticalities": "Tutte le criticità",
+      "searchFindings": "Cerca obblighi",
+      "needsAttention": "Richiede attenzione",
+      "nothingToReview": "Nulla richiede la vostra attenzione in questa analisi.",
+      "noEvidence": "Nulla trovato nei vostri documenti",
+      "noEvidenceLong": "Nessun passaggio dei documenti caricati affronta questo obbligo.",
+      "citedInDoc": "Citato nel documento",
+      "lowConfidence": "Bassa affidabilità, verificare manualmente",
+      "lowConfidenceExplain": "L'analisi non era sicura di questo esito. Consideratelo un invito a verificare voi stessi il testo originale, non una conclusione.",
+      "lowConfidenceNote": "{{count}} risultato(i) sono inclusi perché l'analisi era sicura per meno del {{pct}}%, non perché sia stata rilevata una lacuna. Verificateli voi stessi.",
+      "remediation": "Rimedio",
+      "remediationNote": "Salvato su questo obbligo, quindi resta dopo un ricaricamento e una nuova esecuzione dell'analisi."
     },
     "plan": {
       "title": "Piano d'azione",
@@ -2763,7 +2780,15 @@
       "mediumDesc": "Conformità standard; pianifica l'implementazione",
       "lowDesc": "Lacune minori; gestiscile appena possibile",
       "optionalDesc": "Buone pratiche raccomandate"
-    }
+    },
+    "dropzoneTitle": "Trascinate qui i vostri documenti di policy",
+    "dropzoneBrowse": "oppure fate clic per sfogliare",
+    "dropzoneFormats": "PDF, DOCX o TXT",
+    "removeFile": "Rimuovi {{name}}",
+    "unsupportedFiles": "{{count}} file ignorati. È possibile analizzare solo PDF, DOCX e TXT.",
+    "actionbarEmpty": "Aggiungete almeno un documento per eseguire l'analisi",
+    "actionbarReady": "{{docs}} documento(i) saranno confrontati con {{reqs}} requisiti",
+    "analysingNote": "Verifica di {{reqs}} requisiti uno per uno. I pacchetti di grandi dimensioni possono richiedere alcuni minuti; potete lasciare questa pagina e riaprire l'analisi dalla cronologia."
   },
   "featurePreview": {
     "alreadyHaveAccount": "Hai già un account?",
@@ -5313,5 +5338,12 @@
     "finish": "Fine",
     "closeAria": "Chiudi il tour",
     "progressOf": "{{current}} di {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Scarica ciò che stai vedendo come file Excel",
+    "done": "Scaricate {{n}} righe",
+    "doneCapped": "Scaricate le prime {{n}} righe",
+    "failed": "Qui non c’è ancora nulla da esportare"
   }
 }

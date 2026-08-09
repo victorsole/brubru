@@ -1847,7 +1847,24 @@
       "errorExport": "Rapport kon niet worden geëxporteerd. Probeer opnieuw.",
       "criticalityCritical": "kritiek",
       "criticalityImportant": "belangrijk",
-      "criticalityRecommended": "aanbevolen"
+      "criticalityRecommended": "aanbevolen",
+      "status": "Status",
+      "article": "Artikel",
+      "obligation": "Verplichting",
+      "criticality": "Kritikaliteit",
+      "action": "Actie",
+      "allCriticalities": "Alle kritikaliteiten",
+      "searchFindings": "Zoek verplichtingen",
+      "needsAttention": "Vraagt om aandacht",
+      "nothingToReview": "Niets vraagt om uw aandacht in deze analyse.",
+      "noEvidence": "Niets gevonden in uw documenten",
+      "noEvidenceLong": "Geen enkele passage in de documenten die u hebt geüpload gaat over deze verplichting.",
+      "citedInDoc": "Geciteerd in document",
+      "lowConfidence": "Lage zekerheid, controleer handmatig",
+      "lowConfidenceExplain": "De analyse was niet zeker van dit oordeel. Beschouw het als aanleiding om de brontekst zelf te controleren, niet als een conclusie.",
+      "lowConfidenceNote": "{{count}} bevinding(en) zijn opgenomen omdat de analyse voor minder dan {{pct}}% zeker was, niet omdat er een tekortkoming is gevonden. Controleer deze zelf.",
+      "remediation": "Herstel",
+      "remediationNote": "Opgeslagen bij deze verplichting, zodat het een herlaadbeurt en een nieuwe analyse overleeft."
     },
     "plan": {
       "title": "Actieplan",
@@ -1872,7 +1889,15 @@
       "mediumDesc": "Standaardnaleving; plan de implementatie",
       "lowDesc": "Kleine hiaten; pak ze aan wanneer mogelijk",
       "optionalDesc": "Aanbevolen best practices"
-    }
+    },
+    "dropzoneTitle": "Sleep uw beleidsdocumenten hierheen",
+    "dropzoneBrowse": "of klik om te bladeren",
+    "dropzoneFormats": "PDF, DOCX of TXT",
+    "removeFile": "{{name}} verwijderen",
+    "unsupportedFiles": "{{count}} bestand(en) overgeslagen. Alleen PDF, DOCX en TXT kunnen worden geanalyseerd.",
+    "actionbarEmpty": "Voeg ten minste één document toe om de analyse uit te voeren",
+    "actionbarReady": "{{docs}} document(en) worden getoetst aan {{reqs}} vereisten",
+    "analysingNote": "Bezig met het toetsen van {{reqs}} vereisten, één voor één. Grote pakketten kunnen enkele minuten duren; u kunt deze pagina verlaten en de analyse later openen vanuit uw geschiedenis."
   },
   "featurePreview": {
     "alreadyHaveAccount": "Heeft u al een account?",
@@ -5313,5 +5338,12 @@
     "finish": "Voltooien",
     "closeAria": "Rondleiding sluiten",
     "progressOf": "{{current}} van {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Download wat je ziet als Excel-bestand",
+    "done": "{{n}} rijen gedownload",
+    "doneCapped": "De eerste {{n}} rijen gedownload",
+    "failed": "Hier valt nog niets te exporteren"
   }
 }

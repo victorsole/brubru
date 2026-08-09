@@ -1847,7 +1847,24 @@
       "errorExport": "Failed to export report. Please try again.",
       "criticalityCritical": "critical",
       "criticalityImportant": "important",
-      "criticalityRecommended": "recommended"
+      "criticalityRecommended": "recommended",
+      "status": "Status",
+      "article": "Article",
+      "obligation": "Obligation",
+      "criticality": "Criticality",
+      "action": "Action",
+      "allCriticalities": "All criticalities",
+      "searchFindings": "Search obligations",
+      "needsAttention": "Needs attention",
+      "nothingToReview": "Nothing needs your attention in this analysis.",
+      "noEvidence": "Nothing found in your documents",
+      "noEvidenceLong": "No passage in the documents you uploaded addresses this obligation.",
+      "citedInDoc": "Cited in document",
+      "lowConfidence": "Low confidence, review manually",
+      "lowConfidenceExplain": "The analysis was not confident about this verdict. Treat it as a prompt to check the source text yourself, not as a conclusion.",
+      "lowConfidenceNote": "{{count}} finding(s) are included because the analysis was under {{pct}}% confident, not because a gap was found. Review these yourself.",
+      "remediation": "Remediation",
+      "remediationNote": "Saved against this obligation, so it survives a reload and a re-run of the analysis."
     },
     "plan": {
       "title": "Action Plan",
@@ -1872,7 +1889,15 @@
       "mediumDesc": "Standard compliance, plan implementation",
       "lowDesc": "Minor gaps, address when possible",
       "optionalDesc": "Recommended best practices"
-    }
+    },
+    "dropzoneTitle": "Drag your policy documents here",
+    "dropzoneBrowse": "or click to browse",
+    "dropzoneFormats": "PDF, DOCX or TXT",
+    "removeFile": "Remove {{name}}",
+    "unsupportedFiles": "{{count}} file(s) skipped. Only PDF, DOCX and TXT can be analysed.",
+    "actionbarEmpty": "Add at least one document to run the analysis",
+    "actionbarReady": "{{docs}} document(s) will be checked against {{reqs}} requirements",
+    "analysingNote": "Checking {{reqs}} requirements one by one. Large packages can take several minutes; you can leave this page and reopen the analysis from your history."
   },
   "tenderator": {
     "title": "Tenderator",
@@ -5313,5 +5338,12 @@
     "finish": "Finish",
     "closeAria": "Close tour",
     "progressOf": "{{current}} of {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Download what you are seeing as an Excel file",
+    "done": "Downloaded {{n}} rows",
+    "doneCapped": "Downloaded the first {{n}} rows",
+    "failed": "Nothing to export here yet"
   }
 }

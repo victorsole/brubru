@@ -1847,7 +1847,24 @@
       "errorExport": "Échec de l'export du rapport. Réessayez.",
       "criticalityCritical": "critique",
       "criticalityImportant": "important",
-      "criticalityRecommended": "recommandé"
+      "criticalityRecommended": "recommandé",
+      "status": "Statut",
+      "article": "Article",
+      "obligation": "Obligation",
+      "criticality": "Criticité",
+      "action": "Action",
+      "allCriticalities": "Toutes les criticités",
+      "searchFindings": "Rechercher des obligations",
+      "needsAttention": "Requiert votre attention",
+      "nothingToReview": "Rien ne requiert votre attention dans cette analyse.",
+      "noEvidence": "Rien trouvé dans vos documents",
+      "noEvidenceLong": "Aucun passage des documents que vous avez téléversés ne traite de cette obligation.",
+      "citedInDoc": "Cité dans le document",
+      "lowConfidence": "Faible confiance, à vérifier manuellement",
+      "lowConfidenceExplain": "L'analyse n'était pas sûre de ce verdict. Considérez-le comme une invitation à vérifier vous-même le texte source, non comme une conclusion.",
+      "lowConfidenceNote": "{{count}} constat(s) sont inclus parce que l'analyse était sûre à moins de {{pct}}%, et non parce qu'un écart a été détecté. Vérifiez-les vous-même.",
+      "remediation": "Mise en conformité",
+      "remediationNote": "Enregistré sur cette obligation, ce qui le préserve après un rechargement et une nouvelle exécution de l'analyse."
     },
     "plan": {
       "title": "Plan d'action",
@@ -1872,7 +1889,15 @@
       "mediumDesc": "Conformité standard ; planifier la mise en œuvre",
       "lowDesc": "Écarts mineurs ; à traiter dès que possible",
       "optionalDesc": "Bonnes pratiques recommandées"
-    }
+    },
+    "dropzoneTitle": "Déposez ici vos documents de politique interne",
+    "dropzoneBrowse": "ou cliquez pour parcourir",
+    "dropzoneFormats": "PDF, DOCX ou TXT",
+    "removeFile": "Supprimer {{name}}",
+    "unsupportedFiles": "{{count}} fichier(s) ignoré(s). Seuls les PDF, DOCX et TXT peuvent être analysés.",
+    "actionbarEmpty": "Ajoutez au moins un document pour lancer l'analyse",
+    "actionbarReady": "{{docs}} document(s) seront vérifiés au regard de {{reqs}} exigences",
+    "analysingNote": "Vérification de {{reqs}} exigences une par une. Les paquets volumineux peuvent prendre plusieurs minutes; vous pouvez quitter cette page et rouvrir l'analyse depuis votre historique."
   },
   "tenderator": {
     "title": "Tenderator",
@@ -5313,5 +5338,12 @@
     "finish": "Terminer",
     "closeAria": "Fermer la visite",
     "progressOf": "{{current}} sur {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Télécharger ce que vous voyez au format Excel",
+    "done": "{{n}} lignes téléchargées",
+    "doneCapped": "Les {{n}} premières lignes téléchargées",
+    "failed": "Rien à exporter ici pour l'instant"
   }
 }

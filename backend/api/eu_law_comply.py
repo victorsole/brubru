@@ -1203,22 +1203,32 @@ def set_finding_action(
     else:
         due = None
 
+    # Look the action up by the OBLIGATION, not the finding. gap_findings are
+    # recreated on every analysis run, so keying on finding_id meant triage
+    # entered against one run was invisible to the next -- it survived a reload
+    # but not a re-run, which is the case that matters. See migration 207.
     action = (
         db.query(ComplianceAction)
-        .filter(ComplianceAction.gap_finding_id == finding_id,
-                ComplianceAction.user_id == current_user.id)
+        .filter(ComplianceAction.user_id == current_user.id,
+                ComplianceAction.cluster_id == _analysis.cluster_id,
+                ComplianceAction.requirement_id == requirement.id)
         .first()
     )
     if not action:
         action = ComplianceAction(
-            gap_finding_id=finding_id,
             user_id=current_user.id,
+            requirement_id=requirement.id,
+            cluster_id=_analysis.cluster_id,
+            gap_finding_id=finding_id,
             # action_title is NOT NULL; derive it from the obligation so the row
             # is readable on its own, e.g. in an export or an admin view.
-            action_title=(requirement.article or f"Finding {finding_id}")[:200],
+            action_title=(requirement.article or f"Requirement {requirement.id}")[:200],
             action_description=(requirement.requirement_text or "")[:2000] or None,
         )
         db.add(action)
+    else:
+        # Re-point at the finding it was last touched from.
+        action.gap_finding_id = finding_id
 
     action.status = new_status
     if 'assigned_to' in payload:
@@ -1270,14 +1280,20 @@ def get_analysis_actions(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Analysis {analysis_id} not found")
 
+    # Join actions to THIS run's findings through requirement_id, so state
+    # entered against an earlier run of the same cluster still shows up. Keying
+    # the response on gap_finding_id keeps the frontend contract unchanged.
     rows = (
-        db.query(ComplianceAction)
-        .join(GapFinding, GapFinding.id == ComplianceAction.gap_finding_id)
+        db.query(ComplianceAction, GapFinding.id)
+        .join(GapFinding, GapFinding.requirement_id == ComplianceAction.requirement_id)
         .filter(GapFinding.analysis_id == analysis_id,
                 ComplianceAction.user_id == current_user.id)
         .all()
     )
-    return {"actions": {a.gap_finding_id: a.to_dict() for a in rows}, "count": len(rows)}
+    actions = {}
+    for action, finding_id in rows:
+        actions[finding_id] = action.to_dict()
+    return {"actions": actions, "count": len(actions)}
 
 
 # ============================================================================

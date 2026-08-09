@@ -175,8 +175,17 @@ class ComplianceAction(Base):
     __tablename__ = "compliance_actions"
 
     id = Column(Integer, primary_key=True, index=True)
+    # Pointer at the most recent finding this action was touched from. Useful
+    # for tracing, never for identity: gap_findings are recreated on every
+    # analysis run, so keying triage state here loses it the moment the user
+    # re-runs the analysis (migration 207).
     gap_finding_id = Column(Integer, ForeignKey('gap_findings.id', ondelete='CASCADE'), nullable=False, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+
+    # The durable identity: one action per obligation, per user, per package.
+    # This is what a re-run looks the state up by.
+    requirement_id = Column(Integer, ForeignKey('law_requirements.id', ondelete='CASCADE'), index=True)
+    cluster_id = Column(Integer, ForeignKey('law_clusters.id', ondelete='CASCADE'))
 
     # Action details
     action_title = Column(String(200), nullable=False)
@@ -215,6 +224,7 @@ class ComplianceAction(Base):
         return {
             'id': self.id,
             'gap_finding_id': self.gap_finding_id,
+            'requirement_id': self.requirement_id,
             'action_title': self.action_title,
             'action_description': self.action_description,
             'status': self.status,

@@ -1847,7 +1847,24 @@
       "errorExport": "No se pudo exportar el informe. Inténtalo de nuevo.",
       "criticalityCritical": "crítico",
       "criticalityImportant": "importante",
-      "criticalityRecommended": "recomendado"
+      "criticalityRecommended": "recomendado",
+      "status": "Estado",
+      "article": "Artículo",
+      "obligation": "Obligación",
+      "criticality": "Criticidad",
+      "action": "Acción",
+      "allCriticalities": "Todas las criticidades",
+      "searchFindings": "Buscar obligaciones",
+      "needsAttention": "Requiere atención",
+      "nothingToReview": "Nada requiere su atención en este análisis.",
+      "noEvidence": "No se encontró nada en sus documentos",
+      "noEvidenceLong": "Ningún pasaje de los documentos que ha subido aborda esta obligación.",
+      "citedInDoc": "Citado en el documento",
+      "lowConfidence": "Confianza baja, revise manualmente",
+      "lowConfidenceExplain": "El análisis no tuvo confianza en este veredicto. Trátelo como un aviso para comprobar usted mismo el texto original, no como una conclusión.",
+      "lowConfidenceNote": "{{count}} hallazgo(s) se incluyen porque el análisis tuvo menos del {{pct}}% de confianza, no porque se detectara una brecha. Revíselos usted mismo.",
+      "remediation": "Subsanación",
+      "remediationNote": "Se guarda en esta obligación, por lo que se mantiene al recargar y al volver a ejecutar el análisis."
     },
     "plan": {
       "title": "Plan de acción",
@@ -1872,7 +1889,15 @@
       "mediumDesc": "Cumplimiento estándar; planifica la implementación",
       "lowDesc": "Brechas menores; abórdalas cuando sea posible",
       "optionalDesc": "Buenas prácticas recomendadas"
-    }
+    },
+    "dropzoneTitle": "Arrastre aquí sus documentos de políticas",
+    "dropzoneBrowse": "o haga clic para examinar",
+    "dropzoneFormats": "PDF, DOCX o TXT",
+    "removeFile": "Eliminar {{name}}",
+    "unsupportedFiles": "{{count}} archivo(s) omitido(s). Solo se pueden analizar PDF, DOCX y TXT.",
+    "actionbarEmpty": "Añada al menos un documento para ejecutar el análisis",
+    "actionbarReady": "{{docs}} documento(s) se contrastarán con {{reqs}} requisitos",
+    "analysingNote": "Comprobando {{reqs}} requisitos uno a uno. Los paquetes grandes pueden tardar varios minutos; puede salir de esta página y volver a abrir el análisis desde su historial."
   },
   "tenderator": {
     "title": "Tenderator",
@@ -5313,5 +5338,12 @@
     "finish": "Finalizar",
     "closeAria": "Cerrar la visita",
     "progressOf": "{{current}} de {{total}}"
+  },
+  "export": {
+    "label": "Excel",
+    "title": "Descargar lo que estás viendo como archivo de Excel",
+    "done": "Descargadas {{n}} filas",
+    "doneCapped": "Descargadas las primeras {{n}} filas",
+    "failed": "Aquí todavía no hay nada que exportar"
   }
 }
